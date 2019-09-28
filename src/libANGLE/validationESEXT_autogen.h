@@ -1347,6 +1347,47 @@ bool ValidateFramebufferTextureMultiviewOVR(Context *context,
                                             GLsizei numViews);
 
 // GL_OVR_multiview2
+
+// GL_QCOM_extended_get
+bool ValidateExtGetBufferPointervQCOM(Context *context, GLenum target, void **params);
+bool ValidateExtGetBuffersQCOM(Context *context,
+                               GLuint *buffers,
+                               GLint maxBuffers,
+                               GLint *numBuffers);
+bool ValidateExtGetFramebuffersQCOM(Context *context,
+                                    GLuint *framebuffers,
+                                    GLint maxFramebuffers,
+                                    GLint *numFramebuffers);
+bool ValidateExtGetRenderbuffersQCOM(Context *context,
+                                     GLuint *renderbuffers,
+                                     GLint maxRenderbuffers,
+                                     GLint *numRenderbuffers);
+bool ValidateExtGetTexLevelParameterivQCOM(Context *context,
+                                           GLuint texture,
+                                           GLenum face,
+                                           GLint level,
+                                           GLenum pname,
+                                           GLint *params);
+bool ValidateExtGetTexSubImageQCOM(Context *context,
+                                   GLenum target,
+                                   GLint level,
+                                   GLint xoffset,
+                                   GLint yoffset,
+                                   GLint zoffset,
+                                   GLsizei width,
+                                   GLsizei height,
+                                   GLsizei depth,
+                                   GLenum format,
+                                   GLenum type,
+                                   void *texels);
+bool ValidateExtGetTexturesQCOM(Context *context,
+                                GLuint *textures,
+                                GLint maxTextures,
+                                GLint *numTextures);
+bool ValidateExtTexObjectStateOverrideiQCOM(Context *context,
+                                            GLenum target,
+                                            GLenum pname,
+                                            GLint param);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ESEXT_AUTOGEN_H_

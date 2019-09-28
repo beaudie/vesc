@@ -4523,6 +4523,66 @@ void GL_APIENTRY glFramebufferTextureMultiviewOVR(GLenum target,
 
 // GL_OVR_multiview2
 
+// GL_QCOM_extended_get
+void GL_APIENTRY glExtGetBufferPointervQCOM(GLenum target, void **params)
+{
+    return gl::ExtGetBufferPointervQCOM(target, params);
+}
+
+void GL_APIENTRY glExtGetBuffersQCOM(GLuint *buffers, GLint maxBuffers, GLint *numBuffers)
+{
+    return gl::ExtGetBuffersQCOM(buffers, maxBuffers, numBuffers);
+}
+
+void GL_APIENTRY glExtGetFramebuffersQCOM(GLuint *framebuffers,
+                                          GLint maxFramebuffers,
+                                          GLint *numFramebuffers)
+{
+    return gl::ExtGetFramebuffersQCOM(framebuffers, maxFramebuffers, numFramebuffers);
+}
+
+void GL_APIENTRY glExtGetRenderbuffersQCOM(GLuint *renderbuffers,
+                                           GLint maxRenderbuffers,
+                                           GLint *numRenderbuffers)
+{
+    return gl::ExtGetRenderbuffersQCOM(renderbuffers, maxRenderbuffers, numRenderbuffers);
+}
+
+void GL_APIENTRY glExtGetTexLevelParameterivQCOM(GLuint texture,
+                                                 GLenum face,
+                                                 GLint level,
+                                                 GLenum pname,
+                                                 GLint *params)
+{
+    return gl::ExtGetTexLevelParameterivQCOM(texture, face, level, pname, params);
+}
+
+void GL_APIENTRY glExtGetTexSubImageQCOM(GLenum target,
+                                         GLint level,
+                                         GLint xoffset,
+                                         GLint yoffset,
+                                         GLint zoffset,
+                                         GLsizei width,
+                                         GLsizei height,
+                                         GLsizei depth,
+                                         GLenum format,
+                                         GLenum type,
+                                         void *texels)
+{
+    return gl::ExtGetTexSubImageQCOM(target, level, xoffset, yoffset, zoffset, width, height, depth,
+                                     format, type, texels);
+}
+
+void GL_APIENTRY glExtGetTexturesQCOM(GLuint *textures, GLint maxTextures, GLint *numTextures)
+{
+    return gl::ExtGetTexturesQCOM(textures, maxTextures, numTextures);
+}
+
+void GL_APIENTRY glExtTexObjectStateOverrideiQCOM(GLenum target, GLenum pname, GLint param)
+{
+    return gl::ExtTexObjectStateOverrideiQCOM(target, pname, param);
+}
+
 // EGL_ANGLE_explicit_context
 void GL_APIENTRY glActiveShaderProgramContextANGLE(GLeglContext ctx,
                                                    GLuint pipeline,
@@ -5531,6 +5591,82 @@ void GL_APIENTRY glEndQueryEXTContextANGLE(GLeglContext ctx, GLenum target)
 void GL_APIENTRY glEndTransformFeedbackContextANGLE(GLeglContext ctx)
 {
     return gl::EndTransformFeedbackContextANGLE(ctx);
+}
+
+void GL_APIENTRY glExtGetBufferPointervQCOMContextANGLE(GLeglContext ctx,
+                                                        GLenum target,
+                                                        void **params)
+{
+    return gl::ExtGetBufferPointervQCOMContextANGLE(ctx, target, params);
+}
+
+void GL_APIENTRY glExtGetBuffersQCOMContextANGLE(GLeglContext ctx,
+                                                 GLuint *buffers,
+                                                 GLint maxBuffers,
+                                                 GLint *numBuffers)
+{
+    return gl::ExtGetBuffersQCOMContextANGLE(ctx, buffers, maxBuffers, numBuffers);
+}
+
+void GL_APIENTRY glExtGetFramebuffersQCOMContextANGLE(GLeglContext ctx,
+                                                      GLuint *framebuffers,
+                                                      GLint maxFramebuffers,
+                                                      GLint *numFramebuffers)
+{
+    return gl::ExtGetFramebuffersQCOMContextANGLE(ctx, framebuffers, maxFramebuffers,
+                                                  numFramebuffers);
+}
+
+void GL_APIENTRY glExtGetRenderbuffersQCOMContextANGLE(GLeglContext ctx,
+                                                       GLuint *renderbuffers,
+                                                       GLint maxRenderbuffers,
+                                                       GLint *numRenderbuffers)
+{
+    return gl::ExtGetRenderbuffersQCOMContextANGLE(ctx, renderbuffers, maxRenderbuffers,
+                                                   numRenderbuffers);
+}
+
+void GL_APIENTRY glExtGetTexLevelParameterivQCOMContextANGLE(GLeglContext ctx,
+                                                             GLuint texture,
+                                                             GLenum face,
+                                                             GLint level,
+                                                             GLenum pname,
+                                                             GLint *params)
+{
+    return gl::ExtGetTexLevelParameterivQCOMContextANGLE(ctx, texture, face, level, pname, params);
+}
+
+void GL_APIENTRY glExtGetTexSubImageQCOMContextANGLE(GLeglContext ctx,
+                                                     GLenum target,
+                                                     GLint level,
+                                                     GLint xoffset,
+                                                     GLint yoffset,
+                                                     GLint zoffset,
+                                                     GLsizei width,
+                                                     GLsizei height,
+                                                     GLsizei depth,
+                                                     GLenum format,
+                                                     GLenum type,
+                                                     void *texels)
+{
+    return gl::ExtGetTexSubImageQCOMContextANGLE(ctx, target, level, xoffset, yoffset, zoffset,
+                                                 width, height, depth, format, type, texels);
+}
+
+void GL_APIENTRY glExtGetTexturesQCOMContextANGLE(GLeglContext ctx,
+                                                  GLuint *textures,
+                                                  GLint maxTextures,
+                                                  GLint *numTextures)
+{
+    return gl::ExtGetTexturesQCOMContextANGLE(ctx, textures, maxTextures, numTextures);
+}
+
+void GL_APIENTRY glExtTexObjectStateOverrideiQCOMContextANGLE(GLeglContext ctx,
+                                                              GLenum target,
+                                                              GLenum pname,
+                                                              GLint param)
+{
+    return gl::ExtTexObjectStateOverrideiQCOMContextANGLE(ctx, target, pname, param);
 }
 
 GLsync GL_APIENTRY glFenceSyncContextANGLE(GLeglContext ctx, GLenum condition, GLbitfield flags)

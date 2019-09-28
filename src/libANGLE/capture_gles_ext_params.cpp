@@ -3154,4 +3154,123 @@ void CaptureGenVertexArraysOES_arraysPacked(const Context *context,
     UNIMPLEMENTED();
 }
 
+// GL_QCOM_extended_get
+void CaptureExtGetBufferPointervQCOM_params(const Context *context,
+                                            bool isCallValid,
+                                            GLenum target,
+                                            void **params,
+                                            angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureExtGetBuffersQCOM_buffers(const Context *context,
+                                      bool isCallValid,
+                                      GLuint *buffers,
+                                      GLint maxBuffers,
+                                      GLint *numBuffers,
+                                      angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureExtGetBuffersQCOM_numBuffers(const Context *context,
+                                         bool isCallValid,
+                                         GLuint *buffers,
+                                         GLint maxBuffers,
+                                         GLint *numBuffers,
+                                         angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureExtGetFramebuffersQCOM_framebuffers(const Context *context,
+                                                bool isCallValid,
+                                                GLuint *framebuffers,
+                                                GLint maxFramebuffers,
+                                                GLint *numFramebuffers,
+                                                angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureExtGetFramebuffersQCOM_numFramebuffers(const Context *context,
+                                                   bool isCallValid,
+                                                   GLuint *framebuffers,
+                                                   GLint maxFramebuffers,
+                                                   GLint *numFramebuffers,
+                                                   angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureExtGetRenderbuffersQCOM_renderbuffers(const Context *context,
+                                                  bool isCallValid,
+                                                  GLuint *renderbuffers,
+                                                  GLint maxRenderbuffers,
+                                                  GLint *numRenderbuffers,
+                                                  angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureExtGetRenderbuffersQCOM_numRenderbuffers(const Context *context,
+                                                     bool isCallValid,
+                                                     GLuint *renderbuffers,
+                                                     GLint maxRenderbuffers,
+                                                     GLint *numRenderbuffers,
+                                                     angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureExtGetTexLevelParameterivQCOM_params(const Context *context,
+                                                 bool isCallValid,
+                                                 GLuint texture,
+                                                 GLenum face,
+                                                 GLint level,
+                                                 GLenum pname,
+                                                 GLint *params,
+                                                 angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureExtGetTexSubImageQCOM_texels(const Context *context,
+                                         bool isCallValid,
+                                         GLenum target,
+                                         GLint level,
+                                         GLint xoffset,
+                                         GLint yoffset,
+                                         GLint zoffset,
+                                         GLsizei width,
+                                         GLsizei height,
+                                         GLsizei depth,
+                                         GLenum format,
+                                         GLenum type,
+                                         void *texels,
+                                         angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureExtGetTexturesQCOM_textures(const Context *context,
+                                        bool isCallValid,
+                                        GLuint *textures,
+                                        GLint maxTextures,
+                                        GLint *numTextures,
+                                        angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureExtGetTexturesQCOM_numTextures(const Context *context,
+                                           bool isCallValid,
+                                           GLuint *textures,
+                                           GLint maxTextures,
+                                           GLint *numTextures,
+                                           angle::ParamCapture *paramCapture)
+{
+    UNIMPLEMENTED();
+}
 }  // namespace gl

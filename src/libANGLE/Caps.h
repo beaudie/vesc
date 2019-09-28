@@ -535,6 +535,9 @@ struct Extensions
 
     // GL_ANGLE_base_vertex_base_instance
     bool baseVertexBaseInstance = false;
+
+    // GL_QCOM_extended_get
+    bool extendedGetQCOM = false;
 };
 
 struct ExtensionInfo

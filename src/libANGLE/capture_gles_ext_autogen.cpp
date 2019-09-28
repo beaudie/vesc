@@ -6059,4 +6059,200 @@ CallCapture CaptureFramebufferTextureMultiviewOVR(const Context *context,
     return CallCapture(gl::EntryPoint::FramebufferTextureMultiviewOVR, std::move(paramBuffer));
 }
 
+CallCapture CaptureExtGetBufferPointervQCOM(const Context *context,
+                                            bool isCallValid,
+                                            GLenum target,
+                                            void **params)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addEnumParam("target", GLenumGroup::DefaultGroup, ParamType::TGLenum, target);
+
+    ParamCapture paramsParam("params", ParamType::TvoidPointerPointer);
+    InitParamValue(ParamType::TvoidPointerPointer, params, &paramsParam.value);
+    CaptureExtGetBufferPointervQCOM_params(context, isCallValid, target, params, &paramsParam);
+    paramBuffer.addParam(std::move(paramsParam));
+
+    return CallCapture(gl::EntryPoint::ExtGetBufferPointervQCOM, std::move(paramBuffer));
+}
+
+CallCapture CaptureExtGetBuffersQCOM(const Context *context,
+                                     bool isCallValid,
+                                     GLuint *buffers,
+                                     GLint maxBuffers,
+                                     GLint *numBuffers)
+{
+    ParamBuffer paramBuffer;
+
+    ParamCapture buffersParam("buffers", ParamType::TGLuintPointer);
+    InitParamValue(ParamType::TGLuintPointer, buffers, &buffersParam.value);
+    CaptureExtGetBuffersQCOM_buffers(context, isCallValid, buffers, maxBuffers, numBuffers,
+                                     &buffersParam);
+    paramBuffer.addParam(std::move(buffersParam));
+
+    paramBuffer.addValueParam("maxBuffers", ParamType::TGLint, maxBuffers);
+
+    ParamCapture numBuffersParam("numBuffers", ParamType::TGLintPointer);
+    InitParamValue(ParamType::TGLintPointer, numBuffers, &numBuffersParam.value);
+    CaptureExtGetBuffersQCOM_numBuffers(context, isCallValid, buffers, maxBuffers, numBuffers,
+                                        &numBuffersParam);
+    paramBuffer.addParam(std::move(numBuffersParam));
+
+    return CallCapture(gl::EntryPoint::ExtGetBuffersQCOM, std::move(paramBuffer));
+}
+
+CallCapture CaptureExtGetFramebuffersQCOM(const Context *context,
+                                          bool isCallValid,
+                                          GLuint *framebuffers,
+                                          GLint maxFramebuffers,
+                                          GLint *numFramebuffers)
+{
+    ParamBuffer paramBuffer;
+
+    ParamCapture framebuffersParam("framebuffers", ParamType::TGLuintPointer);
+    InitParamValue(ParamType::TGLuintPointer, framebuffers, &framebuffersParam.value);
+    CaptureExtGetFramebuffersQCOM_framebuffers(context, isCallValid, framebuffers, maxFramebuffers,
+                                               numFramebuffers, &framebuffersParam);
+    paramBuffer.addParam(std::move(framebuffersParam));
+
+    paramBuffer.addValueParam("maxFramebuffers", ParamType::TGLint, maxFramebuffers);
+
+    ParamCapture numFramebuffersParam("numFramebuffers", ParamType::TGLintPointer);
+    InitParamValue(ParamType::TGLintPointer, numFramebuffers, &numFramebuffersParam.value);
+    CaptureExtGetFramebuffersQCOM_numFramebuffers(context, isCallValid, framebuffers,
+                                                  maxFramebuffers, numFramebuffers,
+                                                  &numFramebuffersParam);
+    paramBuffer.addParam(std::move(numFramebuffersParam));
+
+    return CallCapture(gl::EntryPoint::ExtGetFramebuffersQCOM, std::move(paramBuffer));
+}
+
+CallCapture CaptureExtGetRenderbuffersQCOM(const Context *context,
+                                           bool isCallValid,
+                                           GLuint *renderbuffers,
+                                           GLint maxRenderbuffers,
+                                           GLint *numRenderbuffers)
+{
+    ParamBuffer paramBuffer;
+
+    ParamCapture renderbuffersParam("renderbuffers", ParamType::TGLuintPointer);
+    InitParamValue(ParamType::TGLuintPointer, renderbuffers, &renderbuffersParam.value);
+    CaptureExtGetRenderbuffersQCOM_renderbuffers(context, isCallValid, renderbuffers,
+                                                 maxRenderbuffers, numRenderbuffers,
+                                                 &renderbuffersParam);
+    paramBuffer.addParam(std::move(renderbuffersParam));
+
+    paramBuffer.addValueParam("maxRenderbuffers", ParamType::TGLint, maxRenderbuffers);
+
+    ParamCapture numRenderbuffersParam("numRenderbuffers", ParamType::TGLintPointer);
+    InitParamValue(ParamType::TGLintPointer, numRenderbuffers, &numRenderbuffersParam.value);
+    CaptureExtGetRenderbuffersQCOM_numRenderbuffers(context, isCallValid, renderbuffers,
+                                                    maxRenderbuffers, numRenderbuffers,
+                                                    &numRenderbuffersParam);
+    paramBuffer.addParam(std::move(numRenderbuffersParam));
+
+    return CallCapture(gl::EntryPoint::ExtGetRenderbuffersQCOM, std::move(paramBuffer));
+}
+
+CallCapture CaptureExtGetTexLevelParameterivQCOM(const Context *context,
+                                                 bool isCallValid,
+                                                 GLuint texture,
+                                                 GLenum face,
+                                                 GLint level,
+                                                 GLenum pname,
+                                                 GLint *params)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addValueParam("texture", ParamType::TGLuint, texture);
+    paramBuffer.addEnumParam("face", GLenumGroup::DefaultGroup, ParamType::TGLenum, face);
+    paramBuffer.addValueParam("level", ParamType::TGLint, level);
+    paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
+
+    ParamCapture paramsParam("params", ParamType::TGLintPointer);
+    InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
+    CaptureExtGetTexLevelParameterivQCOM_params(context, isCallValid, texture, face, level, pname,
+                                                params, &paramsParam);
+    paramBuffer.addParam(std::move(paramsParam));
+
+    return CallCapture(gl::EntryPoint::ExtGetTexLevelParameterivQCOM, std::move(paramBuffer));
+}
+
+CallCapture CaptureExtGetTexSubImageQCOM(const Context *context,
+                                         bool isCallValid,
+                                         GLenum target,
+                                         GLint level,
+                                         GLint xoffset,
+                                         GLint yoffset,
+                                         GLint zoffset,
+                                         GLsizei width,
+                                         GLsizei height,
+                                         GLsizei depth,
+                                         GLenum format,
+                                         GLenum type,
+                                         void *texels)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addEnumParam("target", GLenumGroup::DefaultGroup, ParamType::TGLenum, target);
+    paramBuffer.addValueParam("level", ParamType::TGLint, level);
+    paramBuffer.addValueParam("xoffset", ParamType::TGLint, xoffset);
+    paramBuffer.addValueParam("yoffset", ParamType::TGLint, yoffset);
+    paramBuffer.addValueParam("zoffset", ParamType::TGLint, zoffset);
+    paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
+    paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
+    paramBuffer.addValueParam("depth", ParamType::TGLsizei, depth);
+    paramBuffer.addEnumParam("format", GLenumGroup::PixelFormat, ParamType::TGLenum, format);
+    paramBuffer.addEnumParam("type", GLenumGroup::PixelType, ParamType::TGLenum, type);
+
+    ParamCapture texelsParam("texels", ParamType::TvoidPointer);
+    InitParamValue(ParamType::TvoidPointer, texels, &texelsParam.value);
+    CaptureExtGetTexSubImageQCOM_texels(context, isCallValid, target, level, xoffset, yoffset,
+                                        zoffset, width, height, depth, format, type, texels,
+                                        &texelsParam);
+    paramBuffer.addParam(std::move(texelsParam));
+
+    return CallCapture(gl::EntryPoint::ExtGetTexSubImageQCOM, std::move(paramBuffer));
+}
+
+CallCapture CaptureExtGetTexturesQCOM(const Context *context,
+                                      bool isCallValid,
+                                      GLuint *textures,
+                                      GLint maxTextures,
+                                      GLint *numTextures)
+{
+    ParamBuffer paramBuffer;
+
+    ParamCapture texturesParam("textures", ParamType::TGLuintPointer);
+    InitParamValue(ParamType::TGLuintPointer, textures, &texturesParam.value);
+    CaptureExtGetTexturesQCOM_textures(context, isCallValid, textures, maxTextures, numTextures,
+                                       &texturesParam);
+    paramBuffer.addParam(std::move(texturesParam));
+
+    paramBuffer.addValueParam("maxTextures", ParamType::TGLint, maxTextures);
+
+    ParamCapture numTexturesParam("numTextures", ParamType::TGLintPointer);
+    InitParamValue(ParamType::TGLintPointer, numTextures, &numTexturesParam.value);
+    CaptureExtGetTexturesQCOM_numTextures(context, isCallValid, textures, maxTextures, numTextures,
+                                          &numTexturesParam);
+    paramBuffer.addParam(std::move(numTexturesParam));
+
+    return CallCapture(gl::EntryPoint::ExtGetTexturesQCOM, std::move(paramBuffer));
+}
+
+CallCapture CaptureExtTexObjectStateOverrideiQCOM(const Context *context,
+                                                  bool isCallValid,
+                                                  GLenum target,
+                                                  GLenum pname,
+                                                  GLint param)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addEnumParam("target", GLenumGroup::DefaultGroup, ParamType::TGLenum, target);
+    paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
+    paramBuffer.addValueParam("param", ParamType::TGLint, param);
+
+    return CallCapture(gl::EntryPoint::ExtTexObjectStateOverrideiQCOM, std::move(paramBuffer));
+}
+
 }  // namespace gl

@@ -612,6 +612,22 @@ const char *GetEntryPointName(EntryPoint ep)
             return "glEvalPoint1";
         case EntryPoint::EvalPoint2:
             return "glEvalPoint2";
+        case EntryPoint::ExtGetBufferPointervQCOM:
+            return "glExtGetBufferPointervQCOM";
+        case EntryPoint::ExtGetBuffersQCOM:
+            return "glExtGetBuffersQCOM";
+        case EntryPoint::ExtGetFramebuffersQCOM:
+            return "glExtGetFramebuffersQCOM";
+        case EntryPoint::ExtGetRenderbuffersQCOM:
+            return "glExtGetRenderbuffersQCOM";
+        case EntryPoint::ExtGetTexLevelParameterivQCOM:
+            return "glExtGetTexLevelParameterivQCOM";
+        case EntryPoint::ExtGetTexSubImageQCOM:
+            return "glExtGetTexSubImageQCOM";
+        case EntryPoint::ExtGetTexturesQCOM:
+            return "glExtGetTexturesQCOM";
+        case EntryPoint::ExtTexObjectStateOverrideiQCOM:
+            return "glExtTexObjectStateOverrideiQCOM";
         case EntryPoint::FeedbackBuffer:
             return "glFeedbackBuffer";
         case EntryPoint::FenceSync:

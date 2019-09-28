@@ -8956,6 +8956,65 @@ void Context::onPostSwap() const
     mFrameCapture->onEndFrame(this);
 }
 
+// GL_QCOM_extended_get
+void Context::extGetBufferPointerv(GLenum target, void **params)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::extGetBuffers(GLuint *buffers, GLint maxBuffers, GLint *numBuffers)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::extGetFramebuffers(GLuint *framebuffers,
+                                 GLint maxFramebuffers,
+                                 GLint *numFramebuffers)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::extGetRenderbuffers(GLuint *renderbuffers,
+                                  GLint maxRenderbuffers,
+                                  GLint *numRenderbuffers)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::extGetTexLevelParameteriv(GLuint texture,
+                                        GLenum face,
+                                        GLint level,
+                                        GLenum pname,
+                                        GLint *params)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::extGetTexSubImage(GLenum target,
+                                GLint level,
+                                GLint xoffset,
+                                GLint yoffset,
+                                GLint zoffset,
+                                GLsizei width,
+                                GLsizei height,
+                                GLsizei depth,
+                                GLenum format,
+                                GLenum type,
+                                void *texels)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::extGetTextures(GLuint *textures, GLint maxTextures, GLint *numTextures)
+{
+    UNIMPLEMENTED();
+}
+
+void Context::extTexObjectStateOverridei(GLenum target, GLenum pname, GLint param)
+{
+    UNIMPLEMENTED();
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Context *context) : mContext(context) {}
 

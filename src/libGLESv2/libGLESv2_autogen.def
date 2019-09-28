@@ -781,6 +781,16 @@ EXPORTS
 
     ; GL_OVR_multiview2
 
+    ; GL_QCOM_extended_get
+    glExtGetBufferPointervQCOM
+    glExtGetBuffersQCOM
+    glExtGetFramebuffersQCOM
+    glExtGetRenderbuffersQCOM
+    glExtGetTexLevelParameterivQCOM
+    glExtGetTexSubImageQCOM
+    glExtGetTexturesQCOM
+    glExtTexObjectStateOverrideiQCOM
+
     ; EGL_ANGLE_explicit_context
     glActiveShaderProgramContextANGLE
     glActiveTextureContextANGLE
@@ -938,6 +948,14 @@ EXPORTS
     glEndQueryContextANGLE
     glEndQueryEXTContextANGLE
     glEndTransformFeedbackContextANGLE
+    glExtGetBufferPointervQCOMContextANGLE
+    glExtGetBuffersQCOMContextANGLE
+    glExtGetFramebuffersQCOMContextANGLE
+    glExtGetRenderbuffersQCOMContextANGLE
+    glExtGetTexLevelParameterivQCOMContextANGLE
+    glExtGetTexSubImageQCOMContextANGLE
+    glExtGetTexturesQCOMContextANGLE
+    glExtTexObjectStateOverrideiQCOMContextANGLE
     glFenceSyncContextANGLE
     glFinishContextANGLE
     glFinishFenceNVContextANGLE

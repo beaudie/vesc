@@ -7179,6 +7179,204 @@ void GL_APIENTRY FramebufferTextureMultiviewOVR(GLenum target,
 
 // GL_OVR_multiview2
 
+// GL_QCOM_extended_get
+void GL_APIENTRY ExtGetBufferPointervQCOM(GLenum target, void **params)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glExtGetBufferPointervQCOM",
+          "context = %d, GLenum target = %s, void **params = 0x%016" PRIxPTR "", CID(context),
+          GLenumToString(GLenumGroup::DefaultGroup, target), (uintptr_t)params);
+
+    if (context)
+    {
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateExtGetBufferPointervQCOM(context, target, params));
+        if (isCallValid)
+        {
+            context->extGetBufferPointerv(target, params);
+        }
+        ANGLE_CAPTURE(ExtGetBufferPointervQCOM, isCallValid, context, target, params);
+    }
+}
+
+void GL_APIENTRY ExtGetBuffersQCOM(GLuint *buffers, GLint maxBuffers, GLint *numBuffers)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glExtGetBuffersQCOM",
+          "context = %d, GLuint *buffers = 0x%016" PRIxPTR
+          ", GLint maxBuffers = %d, GLint *numBuffers = 0x%016" PRIxPTR "",
+          CID(context), (uintptr_t)buffers, maxBuffers, (uintptr_t)numBuffers);
+
+    if (context)
+    {
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateExtGetBuffersQCOM(context, buffers, maxBuffers, numBuffers));
+        if (isCallValid)
+        {
+            context->extGetBuffers(buffers, maxBuffers, numBuffers);
+        }
+        ANGLE_CAPTURE(ExtGetBuffersQCOM, isCallValid, context, buffers, maxBuffers, numBuffers);
+    }
+}
+
+void GL_APIENTRY ExtGetFramebuffersQCOM(GLuint *framebuffers,
+                                        GLint maxFramebuffers,
+                                        GLint *numFramebuffers)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glExtGetFramebuffersQCOM",
+          "context = %d, GLuint *framebuffers = 0x%016" PRIxPTR
+          ", GLint maxFramebuffers = %d, GLint *numFramebuffers = 0x%016" PRIxPTR "",
+          CID(context), (uintptr_t)framebuffers, maxFramebuffers, (uintptr_t)numFramebuffers);
+
+    if (context)
+    {
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateExtGetFramebuffersQCOM(context, framebuffers, maxFramebuffers,
+                                                           numFramebuffers));
+        if (isCallValid)
+        {
+            context->extGetFramebuffers(framebuffers, maxFramebuffers, numFramebuffers);
+        }
+        ANGLE_CAPTURE(ExtGetFramebuffersQCOM, isCallValid, context, framebuffers, maxFramebuffers,
+                      numFramebuffers);
+    }
+}
+
+void GL_APIENTRY ExtGetRenderbuffersQCOM(GLuint *renderbuffers,
+                                         GLint maxRenderbuffers,
+                                         GLint *numRenderbuffers)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glExtGetRenderbuffersQCOM",
+          "context = %d, GLuint *renderbuffers = 0x%016" PRIxPTR
+          ", GLint maxRenderbuffers = %d, GLint *numRenderbuffers = 0x%016" PRIxPTR "",
+          CID(context), (uintptr_t)renderbuffers, maxRenderbuffers, (uintptr_t)numRenderbuffers);
+
+    if (context)
+    {
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateExtGetRenderbuffersQCOM(context, renderbuffers,
+                                                            maxRenderbuffers, numRenderbuffers));
+        if (isCallValid)
+        {
+            context->extGetRenderbuffers(renderbuffers, maxRenderbuffers, numRenderbuffers);
+        }
+        ANGLE_CAPTURE(ExtGetRenderbuffersQCOM, isCallValid, context, renderbuffers,
+                      maxRenderbuffers, numRenderbuffers);
+    }
+}
+
+void GL_APIENTRY
+ExtGetTexLevelParameterivQCOM(GLuint texture, GLenum face, GLint level, GLenum pname, GLint *params)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glExtGetTexLevelParameterivQCOM",
+          "context = %d, GLuint texture = %u, GLenum face = %s, GLint level = %d, GLenum pname = "
+          "%s, GLint *params = 0x%016" PRIxPTR "",
+          CID(context), texture, GLenumToString(GLenumGroup::DefaultGroup, face), level,
+          GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
+
+    if (context)
+    {
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateExtGetTexLevelParameterivQCOM(context, texture, face, level, pname, params));
+        if (isCallValid)
+        {
+            context->extGetTexLevelParameteriv(texture, face, level, pname, params);
+        }
+        ANGLE_CAPTURE(ExtGetTexLevelParameterivQCOM, isCallValid, context, texture, face, level,
+                      pname, params);
+    }
+}
+
+void GL_APIENTRY ExtGetTexSubImageQCOM(GLenum target,
+                                       GLint level,
+                                       GLint xoffset,
+                                       GLint yoffset,
+                                       GLint zoffset,
+                                       GLsizei width,
+                                       GLsizei height,
+                                       GLsizei depth,
+                                       GLenum format,
+                                       GLenum type,
+                                       void *texels)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glExtGetTexSubImageQCOM",
+          "context = %d, GLenum target = %s, GLint level = %d, GLint xoffset = %d, GLint yoffset = "
+          "%d, GLint zoffset = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, "
+          "GLenum format = %s, GLenum type = %s, void *texels = 0x%016" PRIxPTR "",
+          CID(context), GLenumToString(GLenumGroup::DefaultGroup, target), level, xoffset, yoffset,
+          zoffset, width, height, depth, GLenumToString(GLenumGroup::PixelFormat, format),
+          GLenumToString(GLenumGroup::PixelType, type), (uintptr_t)texels);
+
+    if (context)
+    {
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateExtGetTexSubImageQCOM(context, target, level, xoffset, yoffset, zoffset, width,
+                                           height, depth, format, type, texels));
+        if (isCallValid)
+        {
+            context->extGetTexSubImage(target, level, xoffset, yoffset, zoffset, width, height,
+                                       depth, format, type, texels);
+        }
+        ANGLE_CAPTURE(ExtGetTexSubImageQCOM, isCallValid, context, target, level, xoffset, yoffset,
+                      zoffset, width, height, depth, format, type, texels);
+    }
+}
+
+void GL_APIENTRY ExtGetTexturesQCOM(GLuint *textures, GLint maxTextures, GLint *numTextures)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glExtGetTexturesQCOM",
+          "context = %d, GLuint *textures = 0x%016" PRIxPTR
+          ", GLint maxTextures = %d, GLint *numTextures = 0x%016" PRIxPTR "",
+          CID(context), (uintptr_t)textures, maxTextures, (uintptr_t)numTextures);
+
+    if (context)
+    {
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateExtGetTexturesQCOM(context, textures, maxTextures, numTextures));
+        if (isCallValid)
+        {
+            context->extGetTextures(textures, maxTextures, numTextures);
+        }
+        ANGLE_CAPTURE(ExtGetTexturesQCOM, isCallValid, context, textures, maxTextures, numTextures);
+    }
+}
+
+void GL_APIENTRY ExtTexObjectStateOverrideiQCOM(GLenum target, GLenum pname, GLint param)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glExtTexObjectStateOverrideiQCOM",
+          "context = %d, GLenum target = %s, GLenum pname = %s, GLint param = %d", CID(context),
+          GLenumToString(GLenumGroup::DefaultGroup, target),
+          GLenumToString(GLenumGroup::DefaultGroup, pname), param);
+
+    if (context)
+    {
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateExtTexObjectStateOverrideiQCOM(context, target, pname, param));
+        if (isCallValid)
+        {
+            context->extTexObjectStateOverridei(target, pname, param);
+        }
+        ANGLE_CAPTURE(ExtTexObjectStateOverrideiQCOM, isCallValid, context, target, pname, param);
+    }
+}
+
 // EGL_ANGLE_explicit_context
 void GL_APIENTRY ActiveShaderProgramContextANGLE(GLeglContext ctx, GLuint pipeline, GLuint program)
 {
@@ -10610,6 +10808,229 @@ void GL_APIENTRY EndTransformFeedbackContextANGLE(GLeglContext ctx)
             context->endTransformFeedback();
         }
         ANGLE_CAPTURE(EndTransformFeedback, isCallValid, context);
+    }
+}
+
+void GL_APIENTRY ExtGetBufferPointervQCOMContextANGLE(GLeglContext ctx,
+                                                      GLenum target,
+                                                      void **params)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glExtGetBufferPointervQCOM",
+          "context = %d, GLenum target = %s, void **params = 0x%016" PRIxPTR "", CID(context),
+          GLenumToString(GLenumGroup::DefaultGroup, target), (uintptr_t)params);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateExtGetBufferPointervQCOM(context, target, params));
+        if (isCallValid)
+        {
+            context->extGetBufferPointerv(target, params);
+        }
+        ANGLE_CAPTURE(ExtGetBufferPointervQCOM, isCallValid, context, target, params);
+    }
+}
+
+void GL_APIENTRY ExtGetBuffersQCOMContextANGLE(GLeglContext ctx,
+                                               GLuint *buffers,
+                                               GLint maxBuffers,
+                                               GLint *numBuffers)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glExtGetBuffersQCOM",
+          "context = %d, GLuint *buffers = 0x%016" PRIxPTR
+          ", GLint maxBuffers = %d, GLint *numBuffers = 0x%016" PRIxPTR "",
+          CID(context), (uintptr_t)buffers, maxBuffers, (uintptr_t)numBuffers);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateExtGetBuffersQCOM(context, buffers, maxBuffers, numBuffers));
+        if (isCallValid)
+        {
+            context->extGetBuffers(buffers, maxBuffers, numBuffers);
+        }
+        ANGLE_CAPTURE(ExtGetBuffersQCOM, isCallValid, context, buffers, maxBuffers, numBuffers);
+    }
+}
+
+void GL_APIENTRY ExtGetFramebuffersQCOMContextANGLE(GLeglContext ctx,
+                                                    GLuint *framebuffers,
+                                                    GLint maxFramebuffers,
+                                                    GLint *numFramebuffers)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glExtGetFramebuffersQCOM",
+          "context = %d, GLuint *framebuffers = 0x%016" PRIxPTR
+          ", GLint maxFramebuffers = %d, GLint *numFramebuffers = 0x%016" PRIxPTR "",
+          CID(context), (uintptr_t)framebuffers, maxFramebuffers, (uintptr_t)numFramebuffers);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateExtGetFramebuffersQCOM(context, framebuffers, maxFramebuffers,
+                                                           numFramebuffers));
+        if (isCallValid)
+        {
+            context->extGetFramebuffers(framebuffers, maxFramebuffers, numFramebuffers);
+        }
+        ANGLE_CAPTURE(ExtGetFramebuffersQCOM, isCallValid, context, framebuffers, maxFramebuffers,
+                      numFramebuffers);
+    }
+}
+
+void GL_APIENTRY ExtGetRenderbuffersQCOMContextANGLE(GLeglContext ctx,
+                                                     GLuint *renderbuffers,
+                                                     GLint maxRenderbuffers,
+                                                     GLint *numRenderbuffers)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glExtGetRenderbuffersQCOM",
+          "context = %d, GLuint *renderbuffers = 0x%016" PRIxPTR
+          ", GLint maxRenderbuffers = %d, GLint *numRenderbuffers = 0x%016" PRIxPTR "",
+          CID(context), (uintptr_t)renderbuffers, maxRenderbuffers, (uintptr_t)numRenderbuffers);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateExtGetRenderbuffersQCOM(context, renderbuffers,
+                                                            maxRenderbuffers, numRenderbuffers));
+        if (isCallValid)
+        {
+            context->extGetRenderbuffers(renderbuffers, maxRenderbuffers, numRenderbuffers);
+        }
+        ANGLE_CAPTURE(ExtGetRenderbuffersQCOM, isCallValid, context, renderbuffers,
+                      maxRenderbuffers, numRenderbuffers);
+    }
+}
+
+void GL_APIENTRY ExtGetTexLevelParameterivQCOMContextANGLE(GLeglContext ctx,
+                                                           GLuint texture,
+                                                           GLenum face,
+                                                           GLint level,
+                                                           GLenum pname,
+                                                           GLint *params)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glExtGetTexLevelParameterivQCOM",
+          "context = %d, GLuint texture = %u, GLenum face = %s, GLint level = %d, GLenum pname = "
+          "%s, GLint *params = 0x%016" PRIxPTR "",
+          CID(context), texture, GLenumToString(GLenumGroup::DefaultGroup, face), level,
+          GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateExtGetTexLevelParameterivQCOM(context, texture, face, level, pname, params));
+        if (isCallValid)
+        {
+            context->extGetTexLevelParameteriv(texture, face, level, pname, params);
+        }
+        ANGLE_CAPTURE(ExtGetTexLevelParameterivQCOM, isCallValid, context, texture, face, level,
+                      pname, params);
+    }
+}
+
+void GL_APIENTRY ExtGetTexSubImageQCOMContextANGLE(GLeglContext ctx,
+                                                   GLenum target,
+                                                   GLint level,
+                                                   GLint xoffset,
+                                                   GLint yoffset,
+                                                   GLint zoffset,
+                                                   GLsizei width,
+                                                   GLsizei height,
+                                                   GLsizei depth,
+                                                   GLenum format,
+                                                   GLenum type,
+                                                   void *texels)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glExtGetTexSubImageQCOM",
+          "context = %d, GLenum target = %s, GLint level = %d, GLint xoffset = %d, GLint yoffset = "
+          "%d, GLint zoffset = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, "
+          "GLenum format = %s, GLenum type = %s, void *texels = 0x%016" PRIxPTR "",
+          CID(context), GLenumToString(GLenumGroup::DefaultGroup, target), level, xoffset, yoffset,
+          zoffset, width, height, depth, GLenumToString(GLenumGroup::PixelFormat, format),
+          GLenumToString(GLenumGroup::PixelType, type), (uintptr_t)texels);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateExtGetTexSubImageQCOM(context, target, level, xoffset, yoffset, zoffset, width,
+                                           height, depth, format, type, texels));
+        if (isCallValid)
+        {
+            context->extGetTexSubImage(target, level, xoffset, yoffset, zoffset, width, height,
+                                       depth, format, type, texels);
+        }
+        ANGLE_CAPTURE(ExtGetTexSubImageQCOM, isCallValid, context, target, level, xoffset, yoffset,
+                      zoffset, width, height, depth, format, type, texels);
+    }
+}
+
+void GL_APIENTRY ExtGetTexturesQCOMContextANGLE(GLeglContext ctx,
+                                                GLuint *textures,
+                                                GLint maxTextures,
+                                                GLint *numTextures)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glExtGetTexturesQCOM",
+          "context = %d, GLuint *textures = 0x%016" PRIxPTR
+          ", GLint maxTextures = %d, GLint *numTextures = 0x%016" PRIxPTR "",
+          CID(context), (uintptr_t)textures, maxTextures, (uintptr_t)numTextures);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateExtGetTexturesQCOM(context, textures, maxTextures, numTextures));
+        if (isCallValid)
+        {
+            context->extGetTextures(textures, maxTextures, numTextures);
+        }
+        ANGLE_CAPTURE(ExtGetTexturesQCOM, isCallValid, context, textures, maxTextures, numTextures);
+    }
+}
+
+void GL_APIENTRY ExtTexObjectStateOverrideiQCOMContextANGLE(GLeglContext ctx,
+                                                            GLenum target,
+                                                            GLenum pname,
+                                                            GLint param)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glExtTexObjectStateOverrideiQCOM",
+          "context = %d, GLenum target = %s, GLenum pname = %s, GLint param = %d", CID(context),
+          GLenumToString(GLenumGroup::DefaultGroup, target),
+          GLenumToString(GLenumGroup::DefaultGroup, pname), param);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateExtTexObjectStateOverrideiQCOM(context, target, pname, param));
+        if (isCallValid)
+        {
+            context->extTexObjectStateOverridei(target, pname, param);
+        }
+        ANGLE_CAPTURE(ExtTexObjectStateOverrideiQCOM, isCallValid, context, target, pname, param);
     }
 }
 

@@ -384,6 +384,7 @@ libangle_sources = [
   "src/libANGLE/validationES31.h",
   "src/libANGLE/validationES3_autogen.h",
   "src/libANGLE/validationES3.h",
+  "src/libANGLE/validationESEXT.cpp",
   "src/libANGLE/validationESEXT_autogen.h",
   "src/libANGLE/validationESEXT.h",
   "src/libANGLE/validationGL1.cpp",

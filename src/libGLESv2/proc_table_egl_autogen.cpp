@@ -446,6 +446,24 @@ ProcEntry g_procTable[] = {
     {"glEndQueryEXTContextANGLE", P(gl::EndQueryEXTContextANGLE)},
     {"glEndTransformFeedback", P(gl::EndTransformFeedback)},
     {"glEndTransformFeedbackContextANGLE", P(gl::EndTransformFeedbackContextANGLE)},
+    {"glExtGetBufferPointervQCOM", P(gl::ExtGetBufferPointervQCOM)},
+    {"glExtGetBufferPointervQCOMContextANGLE", P(gl::ExtGetBufferPointervQCOMContextANGLE)},
+    {"glExtGetBuffersQCOM", P(gl::ExtGetBuffersQCOM)},
+    {"glExtGetBuffersQCOMContextANGLE", P(gl::ExtGetBuffersQCOMContextANGLE)},
+    {"glExtGetFramebuffersQCOM", P(gl::ExtGetFramebuffersQCOM)},
+    {"glExtGetFramebuffersQCOMContextANGLE", P(gl::ExtGetFramebuffersQCOMContextANGLE)},
+    {"glExtGetRenderbuffersQCOM", P(gl::ExtGetRenderbuffersQCOM)},
+    {"glExtGetRenderbuffersQCOMContextANGLE", P(gl::ExtGetRenderbuffersQCOMContextANGLE)},
+    {"glExtGetTexLevelParameterivQCOM", P(gl::ExtGetTexLevelParameterivQCOM)},
+    {"glExtGetTexLevelParameterivQCOMContextANGLE",
+     P(gl::ExtGetTexLevelParameterivQCOMContextANGLE)},
+    {"glExtGetTexSubImageQCOM", P(gl::ExtGetTexSubImageQCOM)},
+    {"glExtGetTexSubImageQCOMContextANGLE", P(gl::ExtGetTexSubImageQCOMContextANGLE)},
+    {"glExtGetTexturesQCOM", P(gl::ExtGetTexturesQCOM)},
+    {"glExtGetTexturesQCOMContextANGLE", P(gl::ExtGetTexturesQCOMContextANGLE)},
+    {"glExtTexObjectStateOverrideiQCOM", P(gl::ExtTexObjectStateOverrideiQCOM)},
+    {"glExtTexObjectStateOverrideiQCOMContextANGLE",
+     P(gl::ExtTexObjectStateOverrideiQCOMContextANGLE)},
     {"glFenceSync", P(gl::FenceSync)},
     {"glFenceSyncContextANGLE", P(gl::FenceSyncContextANGLE)},
     {"glFinish", P(gl::Finish)},
@@ -1512,5 +1530,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1414;
+size_t g_numProcs = 1430;
 }  // namespace egl

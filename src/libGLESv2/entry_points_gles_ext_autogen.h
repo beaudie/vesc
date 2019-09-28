@@ -1123,6 +1123,40 @@ ANGLE_EXPORT void GL_APIENTRY FramebufferTextureMultiviewOVR(GLenum target,
 
 // GL_OVR_multiview2
 
+// GL_QCOM_extended_get
+ANGLE_EXPORT void GL_APIENTRY ExtGetBufferPointervQCOM(GLenum target, void **params);
+ANGLE_EXPORT void GL_APIENTRY ExtGetBuffersQCOM(GLuint *buffers,
+                                                GLint maxBuffers,
+                                                GLint *numBuffers);
+ANGLE_EXPORT void GL_APIENTRY ExtGetFramebuffersQCOM(GLuint *framebuffers,
+                                                     GLint maxFramebuffers,
+                                                     GLint *numFramebuffers);
+ANGLE_EXPORT void GL_APIENTRY ExtGetRenderbuffersQCOM(GLuint *renderbuffers,
+                                                      GLint maxRenderbuffers,
+                                                      GLint *numRenderbuffers);
+ANGLE_EXPORT void GL_APIENTRY ExtGetTexLevelParameterivQCOM(GLuint texture,
+                                                            GLenum face,
+                                                            GLint level,
+                                                            GLenum pname,
+                                                            GLint *params);
+ANGLE_EXPORT void GL_APIENTRY ExtGetTexSubImageQCOM(GLenum target,
+                                                    GLint level,
+                                                    GLint xoffset,
+                                                    GLint yoffset,
+                                                    GLint zoffset,
+                                                    GLsizei width,
+                                                    GLsizei height,
+                                                    GLsizei depth,
+                                                    GLenum format,
+                                                    GLenum type,
+                                                    void *texels);
+ANGLE_EXPORT void GL_APIENTRY ExtGetTexturesQCOM(GLuint *textures,
+                                                 GLint maxTextures,
+                                                 GLint *numTextures);
+ANGLE_EXPORT void GL_APIENTRY ExtTexObjectStateOverrideiQCOM(GLenum target,
+                                                             GLenum pname,
+                                                             GLint param);
+
 // EGL_ANGLE_explicit_context
 ANGLE_EXPORT void GL_APIENTRY ActiveShaderProgramContextANGLE(GLeglContext ctx,
                                                               GLuint pipeline,
@@ -1612,6 +1646,47 @@ ANGLE_EXPORT void GL_APIENTRY EnableVertexAttribArrayContextANGLE(GLeglContext c
 ANGLE_EXPORT void GL_APIENTRY EndQueryContextANGLE(GLeglContext ctx, GLenum target);
 ANGLE_EXPORT void GL_APIENTRY EndQueryEXTContextANGLE(GLeglContext ctx, GLenum target);
 ANGLE_EXPORT void GL_APIENTRY EndTransformFeedbackContextANGLE(GLeglContext ctx);
+ANGLE_EXPORT void GL_APIENTRY ExtGetBufferPointervQCOMContextANGLE(GLeglContext ctx,
+                                                                   GLenum target,
+                                                                   void **params);
+ANGLE_EXPORT void GL_APIENTRY ExtGetBuffersQCOMContextANGLE(GLeglContext ctx,
+                                                            GLuint *buffers,
+                                                            GLint maxBuffers,
+                                                            GLint *numBuffers);
+ANGLE_EXPORT void GL_APIENTRY ExtGetFramebuffersQCOMContextANGLE(GLeglContext ctx,
+                                                                 GLuint *framebuffers,
+                                                                 GLint maxFramebuffers,
+                                                                 GLint *numFramebuffers);
+ANGLE_EXPORT void GL_APIENTRY ExtGetRenderbuffersQCOMContextANGLE(GLeglContext ctx,
+                                                                  GLuint *renderbuffers,
+                                                                  GLint maxRenderbuffers,
+                                                                  GLint *numRenderbuffers);
+ANGLE_EXPORT void GL_APIENTRY ExtGetTexLevelParameterivQCOMContextANGLE(GLeglContext ctx,
+                                                                        GLuint texture,
+                                                                        GLenum face,
+                                                                        GLint level,
+                                                                        GLenum pname,
+                                                                        GLint *params);
+ANGLE_EXPORT void GL_APIENTRY ExtGetTexSubImageQCOMContextANGLE(GLeglContext ctx,
+                                                                GLenum target,
+                                                                GLint level,
+                                                                GLint xoffset,
+                                                                GLint yoffset,
+                                                                GLint zoffset,
+                                                                GLsizei width,
+                                                                GLsizei height,
+                                                                GLsizei depth,
+                                                                GLenum format,
+                                                                GLenum type,
+                                                                void *texels);
+ANGLE_EXPORT void GL_APIENTRY ExtGetTexturesQCOMContextANGLE(GLeglContext ctx,
+                                                             GLuint *textures,
+                                                             GLint maxTextures,
+                                                             GLint *numTextures);
+ANGLE_EXPORT void GL_APIENTRY ExtTexObjectStateOverrideiQCOMContextANGLE(GLeglContext ctx,
+                                                                         GLenum target,
+                                                                         GLenum pname,
+                                                                         GLint param);
 ANGLE_EXPORT GLsync GL_APIENTRY FenceSyncContextANGLE(GLeglContext ctx,
                                                       GLenum condition,
                                                       GLbitfield flags);

@@ -50,9 +50,11 @@ gles1_extensions = [
 
 gles_extensions = [
     # ES2+
+    "GL_ANGLE_base_vertex_base_instance",
     "GL_ANGLE_framebuffer_blit",
     "GL_ANGLE_framebuffer_multisample",
     "GL_ANGLE_instanced_arrays",
+    "GL_ANGLE_multi_draw",
     "GL_ANGLE_provoking_vertex",
     "GL_ANGLE_texture_multisample",
     "GL_ANGLE_translated_shader_source",
@@ -73,6 +75,7 @@ gles_extensions = [
     "GL_EXT_semaphore_fd",
     "GL_EXT_texture_storage",
     "GL_KHR_debug",
+    "GL_KHR_parallel_shader_compile",
     "GL_NV_fence",
     "GL_OES_EGL_image",
     "GL_OES_get_program_binary",
@@ -83,9 +86,7 @@ gles_extensions = [
     "GL_OES_vertex_array_object",
     "GL_OVR_multiview",
     "GL_OVR_multiview2",
-    "GL_KHR_parallel_shader_compile",
-    "GL_ANGLE_multi_draw",
-    "GL_ANGLE_base_vertex_base_instance",
+    "GL_QCOM_extended_get",
 ]
 
 supported_extensions = sorted(angle_extensions + gles1_extensions + gles_extensions)
@@ -123,7 +124,7 @@ supported_egl_extensions = [
 ]
 
 # Strip these suffixes from Context entry point names. NV is excluded (for now).
-strip_suffixes = ["ANGLE", "EXT", "KHR", "OES", "CHROMIUM"]
+strip_suffixes = ["ANGLE", "CHROMIUM", "EXT", "KHR", "OES", "OVR", "QCOM"]
 
 # The EGL_ANGLE_explicit_context extension is generated differently from other extensions.
 # Toggle generation here.

@@ -439,6 +439,19 @@
     /* GL_OVR_multiview */                                                                         \
     void framebufferTextureMultiview(GLenum target, GLenum attachment, TextureID texturePacked,    \
                                      GLint level, GLint baseViewIndex, GLsizei numViews);          \
-    /* GL_OVR_multiview2 */
+    /* GL_OVR_multiview2 */                                                                        \
+    /* GL_QCOM_extended_get */                                                                     \
+    void extGetBufferPointerv(GLenum target, void **params);                                       \
+    void extGetBuffers(GLuint *buffers, GLint maxBuffers, GLint *numBuffers);                      \
+    void extGetFramebuffers(GLuint *framebuffers, GLint maxFramebuffers, GLint *numFramebuffers);  \
+    void extGetRenderbuffers(GLuint *renderbuffers, GLint maxRenderbuffers,                        \
+                             GLint *numRenderbuffers);                                             \
+    void extGetTexLevelParameteriv(GLuint texture, GLenum face, GLint level, GLenum pname,         \
+                                   GLint *params);                                                 \
+    void extGetTexSubImage(GLenum target, GLint level, GLint xoffset, GLint yoffset,               \
+                           GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,            \
+                           GLenum format, GLenum type, void *texels);                              \
+    void extGetTextures(GLuint *textures, GLint maxTextures, GLint *numTextures);                  \
+    void extTexObjectStateOverridei(GLenum target, GLenum pname, GLint param);
 
 #endif  // ANGLE_CONTEXT_API_EXT_AUTOGEN_H_
