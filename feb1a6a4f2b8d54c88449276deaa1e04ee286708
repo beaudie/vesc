@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6653631c_924d699c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-30T16:43:37Z",
+      "side": 1,
+      "message": "No, I don\u0027t think there was a prior hidden problem. This change was required because previously we didn\u0027t need to mark all resources as used by the graph. Now that I changed how buffers and images get deleted, we need to store accesses to every resource.\n\nChanged comment.",
+      "parentUuid": "aef2b1d0_2ff361c2",
+      "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eedd259f_aaae3bbe",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 15
@@ -30,6 +48,24 @@
       "writtenOn": "2019-09-30T00:36:01Z",
       "side": 1,
       "message": "Why doesn\u0027t the framebuffer need to be marked as in use here anymore?",
+      "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f17afac5_8de8be07",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-30T16:43:37Z",
+      "side": 1,
+      "message": "it\u0027ll get marked as soon as we start recording commands. It was getting double-marked.",
+      "parentUuid": "eedd259f_aaae3bbe",
       "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7cb22a6e_3b858505",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1762,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-30T16:43:37Z",
+      "side": 1,
+      "message": "onGraphAccess because the buffer accesses aren\u0027t getting recorded anywhere else.\n\nI don\u0027t actually follow your question. There may be duplicates if the same buffer is used for two bindings. We can maybe optimize this later. Just looking for functionality right now. I don\u0027t think there\u0027s any underlying bug in the command graph.\n\nIn general the graph is a mess, and I hope to clean it up soon-ish.",
+      "parentUuid": "0a549afc_5a7ff86d",
+      "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14ef7a1a_75975c38",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 15
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "6163d352_0f8a9328",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-30T16:43:37Z",
+      "side": 1,
+      "message": "This syntax makes it really easy to write code... see how I use this collection function:\n\nrenderer-\u003ecollectGarbage(\u0026mUse, \u0026mImage, \u0026mImageView);\n\nvs\n\nstd::vector\u003cGarbageObject\u003e garbage;\ngarbage.emplace_back(std::move(GetGarbage(mImage));\ngarbage.emplace_back(std::move(GetGarbage(mImageView));\nrenderer-\u003ecollectGarbage(std::move(garbage));\n\nThe pattern you\u0027re seeing here is for variable arguments with templates. It\u0027s somewhat fancy but nothing new: https://en.cppreference.com/w/cpp/language/parameter_pack\n\nIdeally the compiler would generate the same code in both cases. It certainly has enough information at compile time to do so.",
+      "parentUuid": "14ef7a1a_75975c38",
+      "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dab2c777_761dd7cf",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 15
@@ -81,6 +153,24 @@
       "writtenOn": "2019-09-30T00:36:01Z",
       "side": 1,
       "message": "This feels awkward to me, since the caller is indicating that they are done with the resource, but this is then creating a new SharedResourceUse and marking it used for them.\n\nThis relates to SharedResourceUse::init() doing mUse-\u003ecounter++, rather than just allocating the new ResourceUse object, leading to other oddities like in isCurrentlyInGraph():\n\n    // The base counter value for an live resource is \"1\". Any value greater than one indicates\n    // the resource is in use by a vk::CommandGraph.\n    ANGLE_INLINE bool isCurrentlyInGraph() const\n    {\n        ASSERT(valid());\n        return mUse-\u003ecounter \u003e 1;\n    }\n\n\nWhat happens if SharedResourceUse::init() doesn\u0027t increment the counter?",
+      "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c18df5e6_a1b997cb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-30T16:43:37Z",
+      "side": 1,
+      "message": "Sorry you find it confusing. I don\u0027t have any ideas on how to make this better right now. My question for you: how would you determine if a resource is not in use if we don\u0027t increment the counter in init()?",
+      "parentUuid": "dab2c777_761dd7cf",
       "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
