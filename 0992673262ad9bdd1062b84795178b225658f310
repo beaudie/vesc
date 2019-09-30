@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "253fd59e_8007c5e7",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1681,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-09-30T20:07:52Z",
+      "side": 1,
+      "message": "Just to clarify: you\u0027re just talking about cleaning up this script (i.e. won\u0027t fix anything).  Correct?",
+      "parentUuid": "9846bc14_be3a883a",
+      "range": {
+        "startLine": 1681,
+        "startChar": 40,
+        "endLine": 1681,
+        "endChar": 81
+      },
+      "revId": "0992673262ad9bdd1062b84795178b225658f310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60f7c220_432947f5",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 2
@@ -105,6 +129,30 @@
       "writtenOn": "2019-09-30T18:57:19Z",
       "side": 1,
       "message": "getPointerv is not missing. it\u0027s just been moved to GL 3.2.",
+      "range": {
+        "startLine": 48,
+        "startChar": 9,
+        "endLine": 48,
+        "endChar": 20
+      },
+      "revId": "0992673262ad9bdd1062b84795178b225658f310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "222d0465_1d2959e6",
+        "filename": "src/libANGLE/Context_gles_3_2_autogen.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-09-30T20:07:52Z",
+      "side": 1,
+      "message": "Not sure you\u0027re understanding.  The old 1.x function was not brought to 2.0/3.x.  The new 3.2 function has the same signature, but has a different use with different valid values for pname.\n\nI assume I can combine the validation for GLES 1 and GLES 3.2 into 1 function.  However, what the script produces doesn\u0027t leave a symbol available for GLES 1 compilation.",
+      "parentUuid": "f779b092_8bd7a67a",
       "range": {
         "startLine": 48,
         "startChar": 9,
