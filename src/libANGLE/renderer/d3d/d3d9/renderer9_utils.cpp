@@ -21,6 +21,9 @@
 
 #include "third_party/systeminfo/SystemInfo.h"
 
+#define D3D9_FEATURE_ENABLED_ON_CONDITION(feature, cond) \
+    FEATURE_ENABLED_ON_CONDITION(features, feature, cond)
+
 namespace rx
 {
 
@@ -805,15 +808,15 @@ void MakeValidSize(bool isImage,
 
 void InitializeFeatures(angle::FeaturesD3D *features)
 {
-    features->mrtPerfWorkaround.enabled                = true;
-    features->setDataFasterThanImageUpload.enabled     = false;
-    features->useInstancedPointSpriteEmulation.enabled = false;
+    D3D9_FEATURE_ENABLED_ON_CONDITION(mrtPerfWorkaround, true)
+    D3D9_FEATURE_ENABLED_ON_CONDITION(setDataFasterThanImageUpload, true)
+    D3D9_FEATURE_ENABLED_ON_CONDITION(useInstancedPointSpriteEmulation, true)
 
     // TODO(jmadill): Disable workaround when we have a fixed compiler DLL.
-    features->expandIntegerPowExpressions.enabled = true;
+    D3D9_FEATURE_ENABLED_ON_CONDITION(expandIntegerPowExpressions, true)
 
     // Never clear for robust resource init.  This matches Chrome's texture clearning behaviour.
-    features->allowClearForRobustResourceInit.enabled = false;
+    D3D9_FEATURE_ENABLED_ON_CONDITION(allowClearForRobustResourceInit, true)
 
     // Call platform hooks for testing overrides.
     auto *platform = ANGLEPlatformCurrent();
