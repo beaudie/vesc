@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cbabfb9c_d966a641",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-09-30T15:26:37Z",
+      "side": 1,
+      "message": "I believe the intent is that swiftshader will become part of CI once it\u0027s passing reliably.",
+      "parentUuid": "cf32fd65_7d2fa0eb",
+      "revId": "cbe63b9a4c59bbee03dd824c594f73cfdada5367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "118eddf1_ee2fad39",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 1
