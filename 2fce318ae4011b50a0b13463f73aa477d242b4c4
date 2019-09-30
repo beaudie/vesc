@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b11adf34_b872c483",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-30T16:58:03Z",
+      "side": 1,
+      "message": "Why is this change needed? Seems like it now would allow unbalanced array braces. Is it now parsing input?",
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70af2878_6e10076e",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-30T16:58:03Z",
+      "side": 1,
+      "message": "EXT_blend_func_extended says we should write -1 in this case.  I think GL_INVALID_INDEX is correct.",
+      "range": {
+        "startLine": 673,
+        "startChar": 12,
+        "endLine": 673,
+        "endChar": 36
+      },
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78cde894_9abf7d91",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-30T16:58:03Z",
+      "side": 1,
+      "message": "We shouldn\u0027t modify the frontend state from a backend, what are we attempting to fix here?\n\nIf all variables need a location for the queries, we could assign them somewhere in program linking in the frontend.",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 544,
+        "endChar": 27
+      },
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d413d0a_b9c8aa26",
+        "filename": "src/tests/gl_tests/BlendFuncExtendedTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-30T16:58:03Z",
+      "side": 1,
+      "message": "Could you refactor this a little? Something like:\n\n    struct testCase\n    {\n        std::string unusedLocationName;\n        std::string fragData0LocationName;\n        std::string fragData1LocationName;\n    };\n\n    testCase testCases[4]\n    {\n        { \"FragData[0]\", \"FragData\", \"FragData[1]\"},\n        // .. etc ..\n    };\n\n    for (const testCase\u0026 case : testCases)\n    {\n        mProgram \u003d\n            CompileProgram(essl3_shaders::vs::Simple(), kFragColorShader, [\u0026](GLuint program) {\n                glBindFragDataLocationEXT(program, kUnusedLocation, case.unusedLocationName);\n                glBindFragDataLocationEXT(program, kFragData0Location, case.fragData0LocationName);\n                glBindFragDataLocationEXT(program, kFragData1Location, case.fragData1LocationName);\n            });\n\n        // ... etc ...\n    }",
+      "range": {
+        "startLine": 479,
+        "startChar": 0,
+        "endLine": 526,
+        "endChar": 9
+      },
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
