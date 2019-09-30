@@ -475,6 +475,7 @@ template_sources_includes_gl32 = """#include "libGL/entry_points_{}_autogen.h"
 #include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"
 #include "libANGLE/validationES31.h"
+#include "libANGLE/validationES32.h"
 #include "libANGLE/validationESEXT.h"
 #include "libANGLE/validationGL{}{}_autogen.h"
 #include "libANGLE/entry_points_utils.h"
@@ -1011,8 +1012,13 @@ def path_to(folder, file):
     return os.path.join(script_relative(".."), "src", folder, file)
 
 
-def get_entry_points(all_commands, commands, is_explicit_context, is_wgl, all_param_types,
-                     cmd_packed_gl_enums):
+def get_entry_points(all_commands,
+                     commands,
+                     is_explicit_context,
+                     is_wgl,
+                     all_param_types,
+                     cmd_packed_gl_enums,
+                     is_gles1=False):
     decls = []
     defs = []
     export_defs = []
@@ -1035,12 +1041,15 @@ def get_entry_points(all_commands, commands, is_explicit_context, is_wgl, all_pa
         proto_text = "".join(proto.itertext())
         decls.append(
             format_entry_point_decl(cmd_name, proto_text, param_text, is_explicit_context))
-        defs.append(
-            format_entry_point_def(command, cmd_name, proto_text, param_text, is_explicit_context,
-                                   cmd_packed_gl_enums))
+        if not is_gles1 or cmd_name not in gles1_overloaded:
+            defs.append(
+                format_entry_point_def(command, cmd_name, proto_text, param_text,
+                                       is_explicit_context, cmd_packed_gl_enums))
 
-        export_defs.append(
-            format_libgles_entry_point_def(cmd_name, proto_text, param_text, is_explicit_context))
+        if not is_gles1 or cmd_name not in gles1_overloaded:
+            export_defs.append(
+                format_libgles_entry_point_def(cmd_name, proto_text, param_text,
+                                               is_explicit_context))
 
         validation_protos.append(
             format_validation_proto(cmd_name, param_text, cmd_packed_gl_enums))
@@ -1090,8 +1099,10 @@ def get_glext_decls(all_commands, gles_commands, version, is_explicit_context):
         proto = command.find('proto')
         cmd_name = proto.find('name').text
 
+        #if cmd_name not in gles_commands and cmd_name not in gles1_overloaded:
         if cmd_name not in gles_commands:
-            continue
+            if not is_gles1 or cmd_name not in gles1_overloaded:
+                continue
 
         param_text = ["".join(param.itertext()) for param in command.findall('param')]
         proto_text = "".join(proto.itertext())
@@ -1204,7 +1215,8 @@ def write_context_api_decls(template, decls, api):
 
 
 def write_glext_explicit_context_inc(version, ptrs, protos):
-    folder_version = version if version != "31" else "3"
+    possible_versions = ["31", "32"]
+    folder_version = version if version not in possible_versions else "3"
 
     content = template_glext_explicit_context_inc.format(
         script_name=os.path.basename(sys.argv[0]),
@@ -1624,6 +1636,7 @@ def main():
             '../src/libANGLE/Context_gles_2_0_autogen.h',
             '../src/libANGLE/Context_gles_3_0_autogen.h',
             '../src/libANGLE/Context_gles_3_1_autogen.h',
+            '../src/libANGLE/Context_gles_3_2_autogen.h',
             '../src/libANGLE/Context_gles_ext_autogen.h',
             '../src/libANGLE/capture_gles_1_0_autogen.cpp',
             '../src/libANGLE/capture_gles_1_0_autogen.h',
@@ -1633,6 +1646,8 @@ def main():
             '../src/libANGLE/capture_gles_3_0_autogen.h',
             '../src/libANGLE/capture_gles_3_1_autogen.cpp',
             '../src/libANGLE/capture_gles_3_1_autogen.h',
+            '../src/libANGLE/capture_gles_3_2_autogen.cpp',
+            '../src/libANGLE/capture_gles_3_2_autogen.h',
             '../src/libANGLE/capture_gles_ext_autogen.cpp',
             '../src/libANGLE/capture_gles_ext_autogen.h',
             '../src/libANGLE/frame_capture_replay_autogen.cpp',
@@ -1643,6 +1658,7 @@ def main():
             '../src/libANGLE/validationES1_autogen.h',
             '../src/libANGLE/validationES2_autogen.h',
             '../src/libANGLE/validationES31_autogen.h',
+            '../src/libANGLE/validationES32_autogen.h',
             '../src/libANGLE/validationES3_autogen.h',
             '../src/libANGLE/validationESEXT_autogen.h',
             '../src/libANGLE/validationGL1_autogen.h',
@@ -1672,6 +1688,8 @@ def main():
             '../src/libGLESv2/entry_points_gles_3_0_autogen.h',
             '../src/libGLESv2/entry_points_gles_3_1_autogen.cpp',
             '../src/libGLESv2/entry_points_gles_3_1_autogen.h',
+            '../src/libGLESv2/entry_points_gles_3_2_autogen.cpp',
+            '../src/libGLESv2/entry_points_gles_3_2_autogen.h',
             '../src/libGLESv2/entry_points_gles_ext_autogen.cpp',
             '../src/libGLESv2/entry_points_gles_ext_autogen.h',
             '../src/libGLESv2/libGLESv2_autogen.cpp',
@@ -1735,7 +1753,7 @@ def main():
     glesdecls = {}
     glesdecls['core'] = {}
     glesdecls['exts'] = {}
-    for ver in [(1, 0), (2, 0), (3, 0), (3, 1)]:
+    for ver in [(1, 0), (2, 0), (3, 0), (3, 1), (3, 2)]:
         glesdecls['core'][ver] = []
     for ver in ['GLES1 Extensions', 'GLES2+ Extensions', 'ANGLE Extensions']:
         glesdecls['exts'][ver] = {}
@@ -1752,7 +1770,7 @@ def main():
 
     # First run through the main GLES entry points.  Since ES2+ is the primary use
     # case, we go through those first and then add ES1-only APIs at the end.
-    for major_version, minor_version in [[2, 0], [3, 0], [3, 1], [1, 0]]:
+    for major_version, minor_version in [[2, 0], [3, 0], [3, 1], [3, 2], [1, 0]]:
         version = "{}_{}".format(major_version, minor_version)
         annotation = "GLES_{}".format(version)
         name_prefix = "GL_ES_VERSION_"
@@ -1771,8 +1789,17 @@ def main():
         all_commands_no_suffix.extend(xml.commands[version])
         all_commands_with_suffix.extend(xml.commands[version])
 
+        # For GLES1, need to add gles1_overloaded commands for most files:
+        if is_gles1:
+            for command in all_commands:
+                proto = command.find('proto')
+                cmd_name = proto.find('name').text
+                if cmd_name in gles1_overloaded:
+                    gles_commands.append(cmd_name)
+
         decls, defs, libgles_defs, validation_protos, capture_protos, capture_methods, capture_pointer_funcs = get_entry_points(
-            all_commands, gles_commands, False, False, all_gles_param_types, cmd_packed_gl_enums)
+            all_commands, gles_commands, False, False, all_gles_param_types, cmd_packed_gl_enums,
+            is_gles1)
 
         # Write the version as a comment before the first EP.
         libgles_defs.insert(0, "\n// OpenGL ES %s" % comment)
@@ -1903,7 +1930,7 @@ def main():
         libgles_ep_exports += get_exports(cmds, lambda x: "%sContextANGLE" % x)
 
         # Generate .inc files for extension function pointers and declarations
-        for major, minor in [[2, 0], [3, 0], [3, 1], [1, 0]]:
+        for major, minor in [[2, 0], [3, 0], [3, 1], [3, 2], [1, 0]]:
             annotation = "{}_{}".format(major, minor)
 
             major_if_not_one = major if major != 1 else ""
@@ -2033,6 +2060,7 @@ def main():
     #include <GLES/glext.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
+    #include <GLES3/gl32.h>
     """
 
     source_includes = template_sources_includes.format(
@@ -2042,10 +2070,12 @@ def main():
     #include "libANGLE/capture_gles_2_0_autogen.h"
     #include "libANGLE/capture_gles_3_0_autogen.h"
     #include "libANGLE/capture_gles_3_1_autogen.h"
+    #include "libANGLE/capture_gles_3_2_autogen.h"
     #include "libANGLE/validationES1.h"
     #include "libANGLE/validationES2.h"
     #include "libANGLE/validationES3.h"
     #include "libANGLE/validationES31.h"
+    #include "libANGLE/validationES32.h"
     """
 
     write_file("gles_ext", "GLES extension", template_entry_point_header,
@@ -2103,6 +2133,7 @@ def main():
     #include "libGLESv2/entry_points_gles_2_0_autogen.h"
     #include "libGLESv2/entry_points_gles_3_0_autogen.h"
     #include "libGLESv2/entry_points_gles_3_1_autogen.h"
+    #include "libGLESv2/entry_points_gles_3_2_autogen.h"
     #include "libGLESv2/entry_points_gles_ext_autogen.h"
 
     #include "common/event_tracer.h"
