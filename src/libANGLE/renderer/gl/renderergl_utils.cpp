@@ -32,8 +32,12 @@
 
 using angle::CheckedNumeric;
 
+#define GL_FEATURE_ENABLED_ON_CONDITION(feature, cond) \
+    FEATURE_ENABLED_ON_CONDITION(features, feature, cond)
+
 namespace rx
 {
+
 VendorID GetVendorID(const FunctionsGL *functions)
 {
     std::string nativeVendorString(reinterpret_cast<const char *>(functions->getString(GL_VENDOR)));
@@ -1447,123 +1451,139 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     VendorID vendor = GetVendorID(functions);
     uint32_t device = GetDeviceID(functions);
 
-    // Don't use 1-bit alpha formats on desktop GL with AMD or Intel drivers.
-    features->avoid1BitAlphaTextureFormats.enabled =
-        functions->standard == STANDARD_GL_DESKTOP && (IsAMD(vendor));
+    // Don't use 1-bit alpha formats on desktop GL with AMD drivers.
+    GL_FEATURE_ENABLED_ON_CONDITION(avoid1BitAlphaTextureFormats,
+                                    functions->standard == STANDARD_GL_DESKTOP && (IsAMD(vendor)))
 
-    features->rgba4IsNotSupportedForColorRendering.enabled =
-        functions->standard == STANDARD_GL_DESKTOP && IsIntel(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(rgba4IsNotSupportedForColorRendering,
+                                    functions->standard == STANDARD_GL_DESKTOP && IsIntel(vendor))
 
-    features->emulateAbsIntFunction.enabled = IsIntel(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(emulateAbsIntFunction, IsIntel(vendor))
 
-    features->addAndTrueToLoopCondition.enabled = IsIntel(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(addAndTrueToLoopCondition, IsIntel(vendor))
 
-    features->emulateIsnanFloat.enabled = IsIntel(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(emulateIsnanFloat, IsIntel(vendor))
 
-    features->doesSRGBClearsOnLinearFramebufferAttachments.enabled =
-        functions->standard == STANDARD_GL_DESKTOP && (IsIntel(vendor) || IsAMD(vendor));
+    GL_FEATURE_ENABLED_ON_CONDITION(
+        doesSRGBClearsOnLinearFramebufferAttachments,
+        functions->standard == STANDARD_GL_DESKTOP && (IsIntel(vendor) || IsAMD(vendor)))
 
-    features->emulateMaxVertexAttribStride.enabled =
-        IsLinux() && functions->standard == STANDARD_GL_DESKTOP && IsAMD(vendor);
-    features->useUnusedBlocksWithStandardOrSharedLayout.enabled = IsLinux() && IsAMD(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(
+        emulateMaxVertexAttribStride,
+        IsLinux() && functions->standard == STANDARD_GL_DESKTOP && IsAMD(vendor))
+    GL_FEATURE_ENABLED_ON_CONDITION(
+        useUnusedBlocksWithStandardOrSharedLayout,
+        (IsApple() && functions->standard == STANDARD_GL_DESKTOP) || (IsLinux() && IsAMD(vendor)))
 
-    features->doWhileGLSLCausesGPUHang.enabled                  = IsApple();
-    features->useUnusedBlocksWithStandardOrSharedLayout.enabled = IsApple();
-    features->rewriteFloatUnaryMinusOperator.enabled            = IsApple() && IsIntel(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(doWhileGLSLCausesGPUHang, IsApple())
+    GL_FEATURE_ENABLED_ON_CONDITION(rewriteFloatUnaryMinusOperator, IsApple() && IsIntel(vendor))
 
-    features->addBaseVertexToVertexID.enabled = IsApple() && IsAMD(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(addBaseVertexToVertexID, IsApple() && IsAMD(vendor))
 
     // Triggers a bug on Marshmallow Adreno (4xx?) driver.
     // http://anglebug.com/2046
-    features->dontInitializeUninitializedLocals.enabled = IsAndroid() && IsQualcomm(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(dontInitializeUninitializedLocals,
+                                    IsAndroid() && IsQualcomm(vendor))
 
-    features->finishDoesNotCauseQueriesToBeAvailable.enabled =
-        functions->standard == STANDARD_GL_DESKTOP && IsNvidia(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(finishDoesNotCauseQueriesToBeAvailable,
+                                    functions->standard == STANDARD_GL_DESKTOP && IsNvidia(vendor))
 
     // TODO(cwallez): Disable this workaround for MacOSX versions 10.9 or later.
-    features->alwaysCallUseProgramAfterLink.enabled = true;
+    GL_FEATURE_ENABLED_ON_CONDITION(alwaysCallUseProgramAfterLink, true)
 
-    features->unpackOverlappingRowsSeparatelyUnpackBuffer.enabled = IsNvidia(vendor);
-    features->packOverlappingRowsSeparatelyPackBuffer.enabled     = IsNvidia(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(unpackOverlappingRowsSeparatelyUnpackBuffer, IsNvidia(vendor))
+    GL_FEATURE_ENABLED_ON_CONDITION(packOverlappingRowsSeparatelyPackBuffer, IsNvidia(vendor))
 
-    features->initializeCurrentVertexAttributes.enabled = IsNvidia(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(initializeCurrentVertexAttributes, IsNvidia(vendor))
 
-    features->unpackLastRowSeparatelyForPaddingInclusion.enabled = IsApple() || IsNvidia(vendor);
-    features->packLastRowSeparatelyForPaddingInclusion.enabled   = IsApple() || IsNvidia(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(unpackLastRowSeparatelyForPaddingInclusion,
+                                    IsApple() || IsNvidia(vendor))
+    GL_FEATURE_ENABLED_ON_CONDITION(packLastRowSeparatelyForPaddingInclusion,
+                                    IsApple() || IsNvidia(vendor))
 
-    features->removeInvariantAndCentroidForESSL3.enabled =
+    GL_FEATURE_ENABLED_ON_CONDITION(
+        removeInvariantAndCentroidForESSL3,
         functions->isAtMostGL(gl::Version(4, 1)) ||
-        (functions->standard == STANDARD_GL_DESKTOP && IsAMD(vendor));
+            (functions->standard == STANDARD_GL_DESKTOP && IsAMD(vendor)))
 
     // TODO(oetuaho): Make this specific to the affected driver versions. Versions that came after
     // 364 are known to be affected, at least up to 375.
-    features->emulateAtan2Float.enabled = IsNvidia(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(emulateAtan2Float, IsNvidia(vendor))
 
-    features->reapplyUBOBindingsAfterUsingBinaryProgram.enabled = IsAMD(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(reapplyUBOBindingsAfterUsingBinaryProgram,
+                                    IsAMD(vendor) || IsAndroid())
 
-    features->rewriteVectorScalarArithmetic.enabled = IsNvidia(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(rewriteVectorScalarArithmetic, IsNvidia(vendor))
 
     // TODO(oetuaho): Make this specific to the affected driver versions. Versions at least up to
     // 390 are known to be affected. Versions after that are expected not to be affected.
-    features->clampFragDepth.enabled = IsNvidia(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(clampFragDepth, IsNvidia(vendor))
 
     // TODO(oetuaho): Make this specific to the affected driver versions. Versions since 397.31 are
     // not affected.
-    features->rewriteRepeatedAssignToSwizzled.enabled = IsNvidia(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(rewriteRepeatedAssignToSwizzled, IsNvidia(vendor))
 
     // TODO(jmadill): Narrow workaround range for specific devices.
-    features->reapplyUBOBindingsAfterUsingBinaryProgram.enabled = IsAndroid();
 
-    features->clampPointSize.enabled = IsAndroid() || IsNvidia(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(clampPointSize, IsAndroid() || IsNvidia(vendor))
 
-    features->dontUseLoopsToInitializeVariables.enabled = IsAndroid() && !IsNvidia(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(dontUseLoopsToInitializeVariables,
+                                    IsAndroid() && !IsNvidia(vendor))
 
-    features->disableBlendFuncExtended.enabled = IsAMD(vendor) || IsIntel(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(disableBlendFuncExtended, IsAMD(vendor) || IsIntel(vendor))
 
-    features->unsizedsRGBReadPixelsDoesntTransform.enabled = IsAndroid() && IsQualcomm(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(unsizedsRGBReadPixelsDoesntTransform,
+                                    IsAndroid() && IsQualcomm(vendor))
 
-    features->queryCounterBitsGeneratesErrors.enabled = IsNexus5X(vendor, device);
+    GL_FEATURE_ENABLED_ON_CONDITION(queryCounterBitsGeneratesErrors, IsNexus5X(vendor, device))
 
-    features->dontRelinkProgramsInParallel.enabled =
-        IsAndroid() || (IsWindows() && IsIntel(vendor));
+    GL_FEATURE_ENABLED_ON_CONDITION(dontRelinkProgramsInParallel,
+                                    IsAndroid() || (IsWindows() && IsIntel(vendor)))
 
     // TODO(jie.a.chen@intel.com): Clean up the bugs.
     // anglebug.com/3031
     // crbug.com/922936
-    features->disableWorkerContexts.enabled =
-        (IsWindows() && (IsIntel(vendor) || IsAMD(vendor))) || (IsLinux() && IsNvidia(vendor));
+    GL_FEATURE_ENABLED_ON_CONDITION(
+        disableWorkerContexts,
+        (IsWindows() && (IsIntel(vendor) || IsAMD(vendor))) || (IsLinux() && IsNvidia(vendor)))
 
-    features->limitMaxTextureSizeTo4096.enabled = IsAndroid() || (IsIntel(vendor) && IsLinux());
-    features->limitMaxMSAASamplesTo4.enabled    = IsAndroid();
-    features->limitMax3dArrayTextureSizeTo1024.enabled = IsIntel(vendor) && IsLinux();
+    GL_FEATURE_ENABLED_ON_CONDITION(limitMaxTextureSizeTo4096,
+                                    IsAndroid() || (IsIntel(vendor) && IsLinux()))
+    GL_FEATURE_ENABLED_ON_CONDITION(limitMaxMSAASamplesTo4, IsAndroid())
+    GL_FEATURE_ENABLED_ON_CONDITION(limitMax3dArrayTextureSizeTo1024, IsIntel(vendor) && IsLinux())
 
-    features->allowClearForRobustResourceInit.enabled = IsApple();
+    GL_FEATURE_ENABLED_ON_CONDITION(allowClearForRobustResourceInit, IsApple())
 
     // The WebGL conformance/uniforms/out-of-bounds-uniform-array-access test has been seen to fail
     // on AMD and Android devices.
-    features->clampArrayAccess.enabled = IsAndroid() || IsAMD(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(clampArrayAccess, IsAndroid() || IsAMD(vendor))
 
-    features->resetTexImage2DBaseLevel.enabled =
-        IsApple() && IsIntel(vendor) && GetMacOSVersion() >= OSVersion(10, 12, 4);
+    GL_FEATURE_ENABLED_ON_CONDITION(
+        resetTexImage2DBaseLevel,
+        IsApple() && IsIntel(vendor) && GetMacOSVersion() >= OSVersion(10, 12, 4))
 
-    features->clearToZeroOrOneBroken.enabled =
-        IsApple() && IsIntel(vendor) && GetMacOSVersion() < OSVersion(10, 12, 6);
+    GL_FEATURE_ENABLED_ON_CONDITION(
+        clearToZeroOrOneBroken,
+        IsApple() && IsIntel(vendor) && GetMacOSVersion() < OSVersion(10, 12, 6))
 
-    features->adjustSrcDstRegionBlitFramebuffer.enabled =
-        IsLinux() || (IsAndroid() && IsNvidia(vendor)) || (IsWindows() && IsNvidia(vendor));
+    GL_FEATURE_ENABLED_ON_CONDITION(
+        adjustSrcDstRegionBlitFramebuffer,
+        IsLinux() || (IsAndroid() && IsNvidia(vendor)) || (IsWindows() && IsNvidia(vendor)))
 
-    features->clipSrcRegionBlitFramebuffer.enabled = IsApple();
+    GL_FEATURE_ENABLED_ON_CONDITION(clipSrcRegionBlitFramebuffer, IsApple())
 
-    features->resettingTexturesGeneratesErrors.enabled =
-        IsApple() || (IsWindows() && IsAMD(device));
+    GL_FEATURE_ENABLED_ON_CONDITION(resettingTexturesGeneratesErrors,
+                                    IsApple() || (IsWindows() && IsAMD(device)))
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
 {
     VendorID vendor = GetVendorID(functions);
 
-    features->disableProgramCachingForTransformFeedback.enabled = IsAndroid() && IsQualcomm(vendor);
-    features->syncFramebufferBindingsOnTexImage.enabled         = IsWindows() && IsIntel(vendor);
+    GL_FEATURE_ENABLED_ON_CONDITION(disableProgramCachingForTransformFeedback,
+                                    IsAndroid() && IsQualcomm(vendor))
+    GL_FEATURE_ENABLED_ON_CONDITION(syncFramebufferBindingsOnTexImage,
+                                    IsWindows() && IsIntel(vendor))
 }
 
 }  // namespace nativegl_gl

@@ -31,6 +31,9 @@
 #include "platform/FeaturesD3D.h"
 #include "platform/Platform.h"
 
+#define D3D11_FEATURE_ENABLED_ON_CONDITION(feature, cond) \
+    FEATURE_ENABLED_ON_CONDITION(features, feature, cond)
+
 namespace rx
 {
 
@@ -2382,67 +2385,80 @@ void InitializeFeatures(const Renderer11DeviceCaps &deviceCaps,
                         const DXGI_ADAPTER_DESC &adapterDesc,
                         angle::FeaturesD3D *features)
 {
-    bool is9_3 = (deviceCaps.featureLevel <= D3D_FEATURE_LEVEL_9_3);
+    bool isFeatureLevel9_3 = (deviceCaps.featureLevel <= D3D_FEATURE_LEVEL_9_3);
 
-    features->mrtPerfWorkaround.enabled                = true;
-    features->setDataFasterThanImageUpload.enabled     = true;
-    features->zeroMaxLodWorkaround.enabled             = is9_3;
-    features->useInstancedPointSpriteEmulation.enabled = is9_3;
+    D3D11_FEATURE_ENABLED_ON_CONDITION(mrtPerfWorkaround, true)
+    D3D11_FEATURE_ENABLED_ON_CONDITION(setDataFasterThanImageUpload, true)
+    D3D11_FEATURE_ENABLED_ON_CONDITION(zeroMaxLodWorkaround, isFeatureLevel9_3)
+    D3D11_FEATURE_ENABLED_ON_CONDITION(useInstancedPointSpriteEmulation, isFeatureLevel9_3)
 
     // TODO(jmadill): Narrow problematic driver range.
-    if (IsNvidia(adapterDesc.VendorId))
+    bool isNvidia = IsNvidia(adapterDesc.VendorId);
+    if (isNvidia)
     {
-        if (deviceCaps.driverVersion.valid())
+        bool driverVersionValid = deviceCaps.driverVersion.valid();
+        if (driverVersionValid)
         {
             WORD part1 = HIWORD(deviceCaps.driverVersion.value().LowPart);
             WORD part2 = LOWORD(deviceCaps.driverVersion.value().LowPart);
 
             // Disable the workaround to fix a second driver bug on newer NVIDIA.
-            features->depthStencilBlitExtraCopy.enabled = (part1 <= 13u && part2 < 6881);
+            D3D11_FEATURE_ENABLED_ON_CONDITION(
+                depthStencilBlitExtraCopy,
+                (part1 <= 13u && part2 < 6881) && isNvidia && driverVersionValid)
         }
         else
         {
-            features->depthStencilBlitExtraCopy.enabled = true;
+            D3D11_FEATURE_ENABLED_ON_CONDITION(depthStencilBlitExtraCopy,
+                                               isNvidia && !driverVersionValid)
         }
     }
 
     // TODO(jmadill): Disable workaround when we have a fixed compiler DLL.
-    features->expandIntegerPowExpressions.enabled = true;
+    D3D11_FEATURE_ENABLED_ON_CONDITION(expandIntegerPowExpressions, true)
 
-    features->flushAfterEndingTransformFeedback.enabled = IsNvidia(adapterDesc.VendorId);
-    features->getDimensionsIgnoresBaseLevel.enabled     = IsNvidia(adapterDesc.VendorId);
-    features->skipVSConstantRegisterZero.enabled        = IsNvidia(adapterDesc.VendorId);
-    features->forceAtomicValueResolution.enabled        = IsNvidia(adapterDesc.VendorId);
+    D3D11_FEATURE_ENABLED_ON_CONDITION(flushAfterEndingTransformFeedback,
+                                       IsNvidia(adapterDesc.VendorId))
+    D3D11_FEATURE_ENABLED_ON_CONDITION(getDimensionsIgnoresBaseLevel,
+                                       IsNvidia(adapterDesc.VendorId))
+    D3D11_FEATURE_ENABLED_ON_CONDITION(skipVSConstantRegisterZero, IsNvidia(adapterDesc.VendorId))
+    D3D11_FEATURE_ENABLED_ON_CONDITION(forceAtomicValueResolution, IsNvidia(adapterDesc.VendorId))
 
-    if (IsIntel(adapterDesc.VendorId))
+    bool isIntel = IsIntel(adapterDesc.VendorId);
+    if (isIntel)
     {
         IntelDriverVersion capsVersion = d3d11_gl::GetIntelDriverVersion(deviceCaps.driverVersion);
 
-        features->preAddTexelFetchOffsets.enabled           = true;
-        features->useSystemMemoryForConstantBuffers.enabled = true;
-        features->disableB5G6R5Support.enabled          = capsVersion < IntelDriverVersion(4539);
-        features->addDummyTextureNoRenderTarget.enabled = capsVersion < IntelDriverVersion(4815);
-        if (IsSkylake(adapterDesc.DeviceId))
-        {
-            features->callClearTwice.enabled    = capsVersion < IntelDriverVersion(4771);
-            features->emulateIsnanFloat.enabled = capsVersion < IntelDriverVersion(4542);
-        }
-        else if (IsBroadwell(adapterDesc.DeviceId) || IsHaswell(adapterDesc.DeviceId))
-        {
-            features->rewriteUnaryMinusOperator.enabled = capsVersion < IntelDriverVersion(4624);
+        D3D11_FEATURE_ENABLED_ON_CONDITION(preAddTexelFetchOffsets, isIntel)
+        D3D11_FEATURE_ENABLED_ON_CONDITION(useSystemMemoryForConstantBuffers, isIntel)
+        D3D11_FEATURE_ENABLED_ON_CONDITION(disableB5G6R5Support,
+                                           capsVersion < IntelDriverVersion(4539) && isIntel)
+        D3D11_FEATURE_ENABLED_ON_CONDITION(addDummyTextureNoRenderTarget,
+                                           capsVersion < IntelDriverVersion(4815) && isIntel)
 
+        bool isSkylake   = IsSkylake(adapterDesc.DeviceId);
+        bool isBroadwell = IsBroadwell(adapterDesc.DeviceId);
+        bool isHaswell   = IsHaswell(adapterDesc.DeviceId);
+        D3D11_FEATURE_ENABLED_ON_CONDITION(
+            callClearTwice, capsVersion < IntelDriverVersion(4771) && isIntel && isSkylake)
+        D3D11_FEATURE_ENABLED_ON_CONDITION(
+            emulateIsnanFloat, capsVersion < IntelDriverVersion(4542) && isIntel && isSkylake)
+        D3D11_FEATURE_ENABLED_ON_CONDITION(
+            rewriteUnaryMinusOperator,
+            capsVersion < IntelDriverVersion(4624) && isIntel && (isBroadwell || isHaswell))
+
+        if (isBroadwell || isHaswell)
+        {
             // Haswell drivers occasionally corrupt (small?) (vertex?) texture data uploads.
             features->setDataFasterThanImageUpload.enabled = false;
+            features->setDataFasterThanImageUpload.condition = "!(isBroadwell || isHaswell)";
         }
     }
 
-    if (IsAMD(adapterDesc.VendorId))
-    {
-        features->disableB5G6R5Support.enabled = true;
-    }
+    D3D11_FEATURE_ENABLED_ON_CONDITION(disableB5G6R5Support, IsAMD(adapterDesc.VendorId))
 
     // TODO(jmadill): Disable when we have a fixed driver version.
-    features->emulateTinyStencilTextures.enabled = IsAMD(adapterDesc.VendorId);
+    D3D11_FEATURE_ENABLED_ON_CONDITION(emulateTinyStencilTextures, IsAMD(adapterDesc.VendorId))
 
     // The tiny stencil texture workaround involves using CopySubresource or UpdateSubresource on a
     // depth stencil texture.  This is not allowed until feature level 10.1 but since it is not
@@ -2451,15 +2467,17 @@ void InitializeFeatures(const Renderer11DeviceCaps &deviceCaps,
     if (deviceCaps.featureLevel < D3D_FEATURE_LEVEL_10_1)
     {
         features->emulateTinyStencilTextures.enabled = false;
+        features->emulateTinyStencilTextures.condition =
+            "!(deviceCaps.featureLevel < D3D_FEATURE_LEVEL_10_1)";
     }
 
     // If the VPAndRTArrayIndexFromAnyShaderFeedingRasterizer feature is not available, we have to
     // select the viewport / RT array index in the geometry shader.
-    features->selectViewInGeometryShader.enabled =
-        (deviceCaps.supportsVpRtIndexWriteFromVertexShader == false);
+    D3D11_FEATURE_ENABLED_ON_CONDITION(selectViewInGeometryShader,
+                                       (deviceCaps.supportsVpRtIndexWriteFromVertexShader == false))
 
     // Never clear for robust resource init.  This matches Chrome's texture clearning behaviour.
-    features->allowClearForRobustResourceInit.enabled = false;
+    D3D11_FEATURE_ENABLED_ON_CONDITION(allowClearForRobustResourceInit, false)
 
     // Call platform hooks for testing overrides.
     auto *platform = ANGLEPlatformCurrent();
