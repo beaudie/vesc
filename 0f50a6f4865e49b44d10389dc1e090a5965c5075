@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4b99ef5_cb4d2665",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-30T17:51:58Z",
+      "side": 1,
+      "message": "There is an early return above, should this be higher up?",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 282,
+        "endChar": 54
+      },
+      "revId": "0f50a6f4865e49b44d10389dc1e090a5965c5075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa9c62bd_4d611fe0",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-30T17:51:58Z",
+      "side": 1,
+      "message": "This vector is only used to append (in this function) and clear (in ProgramVk::reset).  Do we need to be storing the buffers in a vector at all?  We could do the \"buffer-\u003eonGraphAccess(contextVk-\u003egetCommandGraph());\" as we iterate over them below.",
+      "range": {
+        "startLine": 1225,
+        "startChar": 4,
+        "endLine": 1225,
+        "endChar": 27
+      },
+      "revId": "0f50a6f4865e49b44d10389dc1e090a5965c5075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
