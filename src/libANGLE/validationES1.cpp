@@ -833,6 +833,7 @@ bool ValidateGetMaterialxv(Context *context, GLenum face, MaterialParameter pnam
     return ValidateMaterialQuery(context, face, pname);
 }
 
+#if 0
 bool ValidateGetPointerv(Context *context, GLenum pname, void **params)
 {
     ANGLE_VALIDATE_IS_GLES1(context);
@@ -849,6 +850,7 @@ bool ValidateGetPointerv(Context *context, GLenum pname, void **params)
             return false;
     }
 }
+#endif
 
 bool ValidateGetTexEnvfv(Context *context,
                          TextureEnvTarget target,
