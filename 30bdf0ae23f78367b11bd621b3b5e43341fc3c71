@@ -22,6 +22,30 @@
       "revId": "30bdf0ae23f78367b11bd621b3b5e43341fc3c71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d3969ee_82870e27",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1226816
+      },
+      "writtenOn": "2019-09-30T20:51:33Z",
+      "side": 1,
+      "message": "Done, in patchset 3. It means dropping the static_assert fallback altogether, then.",
+      "parentUuid": "b12a0381_5bb0b6aa",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "30bdf0ae23f78367b11bd621b3b5e43341fc3c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
