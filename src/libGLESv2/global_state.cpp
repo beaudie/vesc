@@ -35,9 +35,15 @@ namespace
 {
 static TLSIndex threadTLS = TLS_INVALID_INDEX;
 Debug *g_Debug            = nullptr;
+
+#if defined(__clang__)
+__attribute__((require_constant_initialization)) std::atomic<std::mutex *> g_Mutex;
+#else
 std::atomic<std::mutex *> g_Mutex;
+// If trivially constructible, will likely be constant initialized.
 static_assert(std::is_trivially_constructible<decltype(g_Mutex)>::value,
               "global mutex is not trivially constructible");
+#endif
 static_assert(std::is_trivially_destructible<decltype(g_Mutex)>::value,
               "global mutex is not trivially destructible");
 
