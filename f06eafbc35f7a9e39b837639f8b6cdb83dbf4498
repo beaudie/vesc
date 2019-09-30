@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4bb8b04_e301fb97",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-30T17:46:29Z",
+      "side": 1,
+      "message": "take a look at ANGLE_NO_DISCARD in angleutils.h. Can you add ANGLE_REQUIRE_CONSTANT_INIT and use the same patterns as ANGLE_NO_DISCARD?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "f06eafbc35f7a9e39b837639f8b6cdb83dbf4498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
