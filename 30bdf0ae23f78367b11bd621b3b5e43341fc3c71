@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b12a0381_5bb0b6aa",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-30T19:01:54Z",
+      "side": 1,
+      "message": "can you remove this #if defined? I\u0027m hoping your guards on the helper are enough.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "30bdf0ae23f78367b11bd621b3b5e43341fc3c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
