@@ -33,6 +33,9 @@
 #include "libANGLE/trace.h"
 #include "platform/Platform.h"
 
+#define VK_FEATURE_ENABLED_ON_CONDITION(feature, cond) \
+    FEATURE_ENABLED_ON_CONDITION((&mFeatures), feature, cond)
+
 // Consts
 namespace
 {
@@ -1243,129 +1246,104 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
 {
     // Use OpenGL line rasterization rules by default.
     // TODO(jmadill): Fix Android support. http://anglebug.com/2830
-#if defined(ANGLE_PLATFORM_ANDROID)
-    mFeatures.basicGLLineRasterization.enabled = false;
-#else
-    mFeatures.basicGLLineRasterization.enabled = true;
-#endif  // defined(ANGLE_PLATFORM_ANDROID)
+    VK_FEATURE_ENABLED_ON_CONDITION(basicGLLineRasterization, IsAndroid())
 
-    if ((mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0)) ||
-        ExtensionFound(VK_KHR_MAINTENANCE1_EXTENSION_NAME, deviceExtensionNames))
-    {
-        // TODO(lucferron): Currently disabled on Intel only since many tests are failing and need
-        // investigation. http://anglebug.com/2728
-        mFeatures.flipViewportY.enabled = !IsIntel(mPhysicalDeviceProperties.vendorID);
-    }
+    // TODO(lucferron): Currently disabled on Intel only since many tests are failing and need
+    // investigation. http://anglebug.com/2728
+    VK_FEATURE_ENABLED_ON_CONDITION(
+        flipViewportY, !IsIntel(mPhysicalDeviceProperties.vendorID) &&
+                               (mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0)) ||
+                           ExtensionFound(VK_KHR_MAINTENANCE1_EXTENSION_NAME, deviceExtensionNames))
 
 #ifdef ANGLE_PLATFORM_WINDOWS
     // http://anglebug.com/2838
-    mFeatures.extraCopyBufferRegion.enabled = IsIntel(mPhysicalDeviceProperties.vendorID);
+    VK_FEATURE_ENABLED_ON_CONDITION(extraCopyBufferRegion,
+                                    IsIntel(mPhysicalDeviceProperties.vendorID))
 
     // http://anglebug.com/3055
-    mFeatures.forceCPUPathForCubeMapCopy.enabled = IsIntel(mPhysicalDeviceProperties.vendorID);
+    VK_FEATURE_ENABLED_ON_CONDITION(forceCPUPathForCubeMapCopy,
+                                    IsIntel(mPhysicalDeviceProperties.vendorID))
 #endif
-
-    angle::PlatformMethods *platform = ANGLEPlatformCurrent();
-    platform->overrideFeaturesVk(platform, &mFeatures);
 
     // Work around incorrect NVIDIA point size range clamping.
     // TODO(jmadill): Narrow driver range once fixed. http://anglebug.com/2970
-    if (IsNvidia(mPhysicalDeviceProperties.vendorID))
-    {
-        mFeatures.clampPointSize.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(clampPointSize, IsNvidia(mPhysicalDeviceProperties.vendorID))
 
 #if defined(ANGLE_PLATFORM_ANDROID)
     // Work around ineffective compute-graphics barriers on Nexus 5X.
     // TODO(syoussefi): Figure out which other vendors and driver versions are affected.
     // http://anglebug.com/3019
-    mFeatures.flushAfterVertexConversion.enabled =
-        IsNexus5X(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
+    VK_FEATURE_ENABLED_ON_CONDITION(
+        flushAfterVertexConversion,
+        IsNexus5X(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID))
 #endif
 
-    if (ExtensionFound(VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME, deviceExtensionNames))
-    {
-        mFeatures.supportsIncrementalPresent.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(
+        supportsIncrementalPresent,
+        ExtensionFound(VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME, deviceExtensionNames))
 
 #if defined(ANGLE_PLATFORM_ANDROID)
-    mFeatures.supportsAndroidHardwareBuffer.enabled =
+    VK_FEATURE_ENABLED_ON_CONDITION(
+        supportsAndroidHardwareBuffer,
         ExtensionFound(VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME,
                        deviceExtensionNames) &&
-        ExtensionFound(VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME, deviceExtensionNames);
+            ExtensionFound(VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME, deviceExtensionNames))
 #endif
 
-    if (ExtensionFound(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME, deviceExtensionNames))
-    {
-        mFeatures.supportsExternalMemoryFd.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(
+        supportsExternalMemoryFd,
+        ExtensionFound(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME, deviceExtensionNames))
 
-    if (ExtensionFound(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME, deviceExtensionNames))
-    {
-        mFeatures.supportsExternalSemaphoreFd.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(
+        supportsExternalSemaphoreFd,
+        ExtensionFound(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME, deviceExtensionNames))
 
-    if (ExtensionFound(VK_EXT_SHADER_STENCIL_EXPORT_EXTENSION_NAME, deviceExtensionNames))
-    {
-        mFeatures.supportsShaderStencilExport.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(
+        supportsShaderStencilExport,
+        ExtensionFound(VK_EXT_SHADER_STENCIL_EXPORT_EXTENSION_NAME, deviceExtensionNames))
 
     // TODO(syoussefi): when the code path using the extension is implemented, this should be
     // conditioned to the extension not being present as well.  http://anglebug.com/3206
-    if (mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
-    {
-        mFeatures.emulateTransformFeedback.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(emulateTransformFeedback,
+                                    mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
 
-    if (IsLinux() && IsIntel(mPhysicalDeviceProperties.vendorID))
-    {
-        mFeatures.disableFifoPresentMode.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(disableFifoPresentMode,
+                                    IsLinux() && IsIntel(mPhysicalDeviceProperties.vendorID))
 
-    if (IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
-    {
-        if (vk::CommandBuffer::ExecutesInline())
-        {
-            mFeatures.restartRenderPassAfterLoadOpClear.enabled = true;
-        }
+    VK_FEATURE_ENABLED_ON_CONDITION(restartRenderPassAfterLoadOpClear,
+                                    IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID) &&
+                                        vk::CommandBuffer::ExecutesInline())
 
-        mFeatures.bindEmptyForUnusedDescriptorSets.enabled = true;
+    VK_FEATURE_ENABLED_ON_CONDITION(bindEmptyForUnusedDescriptorSets,
+                                    IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
 
-        mFeatures.forceOldRewriteStructSamplers.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(forceOldRewriteStructSamplers,
+                                    IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
 
-    if (IsWindows() && IsIntel(mPhysicalDeviceProperties.vendorID))
-    {
-        mFeatures.forceNonZeroScissor.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(forceNonZeroScissor,
+                                    IsWindows() && IsIntel(mPhysicalDeviceProperties.vendorID))
 
-    if (IsIntel(mPhysicalDeviceProperties.vendorID) ||
-        (IsWindows() && IsAMD(mPhysicalDeviceProperties.vendorID)))
-    {
-        mFeatures.perFrameWindowSizeQuery.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(perFrameWindowSizeQuery,
+                                    IsIntel(mPhysicalDeviceProperties.vendorID) ||
+                                        (IsWindows() && IsAMD(mPhysicalDeviceProperties.vendorID)))
 
-    if (IsWindows() && IsAMD(mPhysicalDeviceProperties.vendorID))
-    {
-        // Disabled on AMD/windows due to buggy behavior.
-        mFeatures.disallowSeamfulCubeMapEmulation.enabled = true;
-    }
+    // Disabled on AMD/windows due to buggy behavior.
+    VK_FEATURE_ENABLED_ON_CONDITION(disallowSeamfulCubeMapEmulation,
+                                    IsWindows() && IsAMD(mPhysicalDeviceProperties.vendorID))
 
-    if (IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
-    {
-        mFeatures.forceD16TexFilter.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(forceD16TexFilter,
+                                    IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
 
-    if (IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
-    {
-        mFeatures.disableFlippingBlitWithCommand.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(disableFlippingBlitWithCommand,
+                                    IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
 
-    if (IsPixel2(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID) ||
-        IsPixel1XL(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID))
-    {
-        mFeatures.transientCommandBuffer.enabled = true;
-    }
+    VK_FEATURE_ENABLED_ON_CONDITION(
+        transientCommandBuffer,
+        IsPixel2(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID) ||
+            IsPixel1XL(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID))
+
+    angle::PlatformMethods *platform = ANGLEPlatformCurrent();
+    platform->overrideFeaturesVk(platform, &mFeatures);
 }
 
 void RendererVk::initPipelineCacheVkKey()
