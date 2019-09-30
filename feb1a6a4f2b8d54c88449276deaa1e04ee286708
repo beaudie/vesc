@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aef2b1d0_2ff361c2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-30T00:36:01Z",
+      "side": 1,
+      "message": "It looks like there are a few places using getStateCache() similarly to what you\u0027re changing here.   Is the current state cache not working correctly?   Is there (or should there be) a bug chasing this?",
+      "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eedd259f_aaae3bbe",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-30T00:36:01Z",
+      "side": 1,
+      "message": "Why doesn\u0027t the framebuffer need to be marked as in use here anymore?",
+      "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a549afc_5a7ff86d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1762,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-30T00:36:01Z",
+      "side": 1,
+      "message": "Why onGraphAccess() here instead of updateCurrentAccessNodes()?   \n\nIt looks like this would result in each buffer generating a SharedResourceUse for each descriptor set, meaning that every descriptor set uses every buffer (I think?).   I still have a lot of vulkan to learn; was this a bug in our current command graph implementation?",
+      "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14ef7a1a_75975c38",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-30T00:36:01Z",
+      "side": 1,
+      "message": "I haven\u0027t seen this pattern before.   It looks like this is recursively adding each object to the list, since the objects are passed in as separate parameters, rather than building a list and passing in the single list.\n\nIs there a reason you took this approach, rather than passing in a vector and iterating through that?",
+      "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dab2c777_761dd7cf",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-30T00:36:01Z",
+      "side": 1,
+      "message": "This feels awkward to me, since the caller is indicating that they are done with the resource, but this is then creating a new SharedResourceUse and marking it used for them.\n\nThis relates to SharedResourceUse::init() doing mUse-\u003ecounter++, rather than just allocating the new ResourceUse object, leading to other oddities like in isCurrentlyInGraph():\n\n    // The base counter value for an live resource is \"1\". Any value greater than one indicates\n    // the resource is in use by a vk::CommandGraph.\n    ANGLE_INLINE bool isCurrentlyInGraph() const\n    {\n        ASSERT(valid());\n        return mUse-\u003ecounter \u003e 1;\n    }\n\n\nWhat happens if SharedResourceUse::init() doesn\u0027t increment the counter?",
+      "revId": "feb1a6a4f2b8d54c88449276deaa1e04ee286708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
