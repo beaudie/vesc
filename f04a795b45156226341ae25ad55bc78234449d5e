@@ -236,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "a8c794ac_e14be781",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-30T16:22:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6870c088_5c8e288c",
+      "range": {
+        "startLine": 688,
+        "startChar": 11,
+        "endLine": 688,
+        "endChar": 60
+      },
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d9b18e4_58d5138f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 22
