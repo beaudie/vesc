@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "b7306c2a_22a4e0ef",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-01T17:31:09Z",
+      "side": 1,
+      "message": "Sorry, that should read, we do need to call onGraphAccess with the *descriptor set* update",
+      "parentUuid": "495c4727_4518a9d8",
+      "range": {
+        "startLine": 1225,
+        "startChar": 4,
+        "endLine": 1225,
+        "endChar": 27
+      },
+      "revId": "0f50a6f4865e49b44d10389dc1e090a5965c5075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a8f3dbe_1cc2ffe3",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 16
