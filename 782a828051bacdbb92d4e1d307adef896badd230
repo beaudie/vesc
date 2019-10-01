@@ -71,6 +71,23 @@
     },
     {
       "key": {
+        "uuid": "310b02da_84fd9fa7",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-01T22:10:50Z",
+      "side": 1,
+      "message": "Dead comment?",
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce819dda_0c46ef33",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndexIndirectLineLoop.comp",
         "patchSetId": 19
