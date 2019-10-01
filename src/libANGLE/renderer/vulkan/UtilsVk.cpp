@@ -545,6 +545,24 @@ angle::Result UtilsVk::ensureConvertIndexIndirectLineLoopResourcesInitialized(Co
                                       sizeof(ConvertIndexIndirectLineLoopShaderParams));
 }
 
+angle::Result UtilsVk::ensureConvertArrayIndirectLineLoopResourcesInitialized(ContextVk *contextVk)
+{
+    if (mPipelineLayouts[Function::ConvertArrayIndirectLineLoopBuffer].valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    VkDescriptorPoolSize setSizes[3] = {
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},  // cmd buffer
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},  // dest cmd buffer
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},  // dest index buffer
+    };
+
+    return ensureResourcesInitialized(contextVk, Function::ConvertArrayIndirectLineLoopBuffer,
+                                      setSizes, ArraySize(setSizes),
+                                      sizeof(ConvertArrayIndirectLineLoopShaderParams));
+}
+
 angle::Result UtilsVk::ensureConvertVertexResourcesInitialized(ContextVk *contextVk)
 {
     if (mPipelineLayouts[Function::ConvertVertexBuffer].valid())
@@ -1004,6 +1022,69 @@ angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
     ANGLE_TRY(setupProgram(contextVk, Function::ConvertIndexIndirectLineLoopBuffer, shader, nullptr,
                            &mConvertIndexPrograms[flags], nullptr, descriptorSet, &shaderParams,
                            sizeof(ConvertIndexIndirectLineLoopShaderParams), commandBuffer));
+
+    commandBuffer->dispatch(1, 1, 1);
+
+    descriptorPoolBinding.reset();
+
+    return angle::Result::Continue;
+}
+
+angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
+    ContextVk *contextVk,
+    vk::BufferHelper *srcIndirectBuffer,
+    vk::BufferHelper *destIndirectBuffer,
+    vk::BufferHelper *destIndexBuffer,
+    const ConvertLineLoopArrayIndirectParameters &params)
+{
+    ANGLE_TRY(ensureConvertArrayIndirectLineLoopResourcesInitialized(contextVk));
+
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(destIndexBuffer->recordCommands(contextVk, &commandBuffer));
+
+    // Tell src we are going to read from it and dest it's being written to.
+    srcIndirectBuffer->onReadByBuffer(contextVk, destIndexBuffer, VK_ACCESS_SHADER_READ_BIT,
+                                      VK_ACCESS_SHADER_WRITE_BIT);
+
+    ANGLE_TRY(destIndirectBuffer->recordCommands(contextVk, &commandBuffer));
+
+    srcIndirectBuffer->onReadByBuffer(contextVk, destIndirectBuffer, VK_ACCESS_SHADER_READ_BIT,
+                                      VK_ACCESS_SHADER_WRITE_BIT);
+
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    ANGLE_TRY(allocateDescriptorSet(contextVk, Function::ConvertArrayIndirectLineLoopBuffer,
+                                    &descriptorPoolBinding, &descriptorSet));
+
+    std::array<VkDescriptorBufferInfo, 3> buffers = {{
+        {srcIndirectBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {destIndirectBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {destIndexBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+    }};
+
+    VkWriteDescriptorSet writeInfo = {};
+    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfo.dstSet               = descriptorSet;
+    writeInfo.dstBinding           = kConvertIndexDestinationBinding;
+    writeInfo.descriptorCount      = 3;
+    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    writeInfo.pBufferInfo          = buffers.data();
+
+    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+
+    ConvertArrayIndirectLineLoopShaderParams shaderParams = {params.indirectBufferOffset >> 2,
+                                                             params.dstIndirectBufferOffset >> 2,
+                                                             params.dstIndexBufferOffset >> 2};
+
+    uint32_t flags = 0;
+
+    vk::RefCounted<vk::ShaderAndSerial> *shader = nullptr;
+    ANGLE_TRY(contextVk->getShaderLibrary().getConvertArrayIndirectLineLoop_comp(contextVk, flags,
+                                                                                 &shader));
+
+    ANGLE_TRY(setupProgram(contextVk, Function::ConvertArrayIndirectLineLoopBuffer, shader, nullptr,
+                           &mConvertIndexPrograms[flags], nullptr, descriptorSet, &shaderParams,
+                           sizeof(ConvertArrayIndirectLineLoopShaderParams), commandBuffer));
 
     commandBuffer->dispatch(1, 1, 1);
 

@@ -214,17 +214,52 @@ angle::Result VertexArrayVk::convertIndexBufferIndirectGPU(ContextVk *contextVk,
                                                             dest, src, params);
 }
 
-angle::Result VertexArrayVk::handleLineLoopIndirect(ContextVk *contextVk,
-                                                    BufferVk *indirectBufferVk,
-                                                    gl::DrawElementsType glIndexType,
-                                                    VkDeviceSize indirectBufferOffset,
-                                                    vk::BufferHelper **indirectBufferOut,
-                                                    VkDeviceSize *indirectBufferOffsetOut)
+angle::Result VertexArrayVk::handleLineLoopIndexIndirect(ContextVk *contextVk,
+                                                         BufferVk *indirectBufferVk,
+                                                         gl::DrawElementsType glIndexType,
+                                                         VkDeviceSize indirectBufferOffset,
+                                                         vk::BufferHelper **indirectBufferOut,
+                                                         VkDeviceSize *indirectBufferOffsetOut)
 {
     ANGLE_TRY(mLineLoopHelper.streamIndicesIndirect(
         contextVk, glIndexType, mCurrentElementArrayBuffer, &indirectBufferVk->getBuffer(),
         indirectBufferOffset, &mCurrentElementArrayBuffer, &mCurrentElementArrayBufferOffset,
         indirectBufferOut, indirectBufferOffsetOut));
+
+    return angle::Result::Continue;
+}
+
+angle::Result VertexArrayVk::handleLineLoopArrayIndirect(const gl::Context *context,
+                                                         BufferVk *indirectBufferVk,
+                                                         VkDeviceSize indirectBufferOffset,
+                                                         vk::BufferHelper **indirectBufferOut,
+                                                         VkDeviceSize *indirectBufferOffsetOut)
+{
+    size_t vertexCount   = 0;
+    ContextVk *contextVk = vk::GetImpl(context);
+    const gl::AttributesMask activeAttribs =
+        context->getStateCache().getActiveBufferedAttribsMask();
+
+    const auto &attribs  = mState.getVertexAttributes();
+    const auto &bindings = mState.getVertexBindings();
+
+    for (size_t attribIndex : activeAttribs)
+    {
+        const gl::VertexAttribute &attrib = attribs[attribIndex];
+        ASSERT(attrib.enabled);
+        size_t bufSize                   = this->getCurrentArrayBuffers()[attribIndex]->getSize();
+        const gl::VertexBinding &binding = bindings[attrib.bindingIndex];
+        size_t stride                    = binding.getStride();
+        size_t maxVertexCount            = bufSize / stride;
+        if (maxVertexCount > vertexCount)
+        {
+            vertexCount = maxVertexCount;
+        }
+    }
+    ANGLE_TRY(mLineLoopHelper.streamArrayIndirect(
+        contextVk, vertexCount + 1, &indirectBufferVk->getBuffer(), indirectBufferOffset,
+        &mCurrentElementArrayBuffer, &mCurrentElementArrayBufferOffset, indirectBufferOut,
+        indirectBufferOffsetOut));
 
     return angle::Result::Continue;
 }
