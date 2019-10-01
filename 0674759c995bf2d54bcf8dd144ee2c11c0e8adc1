@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2740dd95_9aef9ec2",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-01T18:09:38Z",
+      "side": 1,
+      "message": "What user configs support 11 on 12?\n\nI suggest we break this into a separate extension that requires angle_d3d. It\u0027s separate enough and sometimes won\u0027t always be available. Would be good to expose it only when it is expected to be available.\n\nAlso we\u0027ll need to double check our enum allocation spreadsheet to verify we can reserve the right value for this enum.\n\nAlso minor request but enums should be ALL_UPPER_CASE.",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 53
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
