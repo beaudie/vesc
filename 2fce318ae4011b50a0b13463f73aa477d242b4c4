@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6819015f_9b6449d1",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-01T03:49:05Z",
+      "side": 1,
+      "message": "I\u0027m using this in getInputResourceIndex() and getOutputResourceIndex(), which may have a name passed in with or without the array notation on the end.   For example:\n\nvariableName\nvariableName[0]\n\nBoth need to be treated the same so I call StripLastArrayIndex() to strip it without knowing if the array notation exists or not.   If the caller passes in unbalanced braces, we\u0027ll fail to strip the index, fail to find the desired variable name, and then return invalid index, which should be the expected behavior.\n\nThe only other place it\u0027s called is here:\n\nvoid ProgramVk::initDefaultUniformLayoutMapping(gl::ShaderMap\u003csh::BlockLayoutMap\u003e \u0026layoutMap)\n{\n[[[...]]]\n                std::string uniformName \u003d uniform.name;\n                if (uniform.isArray())\n                {\n                    // Gets the uniform name without the [0] at the end.\n                    uniformName \u003d gl::StripLastArrayIndex(uniformName);\n                }\n\nThis could potentially have unbalanced braces (assuming some other validation hasn\u0027t caught it yet).   I\u0027ll add an assert here to catch when StripLastArrayIndex() doesn\u0027t strip anything:\n\n                std::string uniformName \u003d uniform.name;\n                if (uniform.isArray())\n                {\n                    // Gets the uniform name without the [0] at the end.\n                    uniformName \u003d gl::StripLastArrayIndex(uniformName);\n                    ASSERT(uniformName.size() !\u003d uniform.name.size());  \u003c\u003c---- new\n                }\n\nUnfortunately, that won\u0027t catch real shaders with issues (since asserts aren\u0027t enabled in release builds), but neither would the original assert, so I think it should be ok.",
+      "parentUuid": "b11adf34_b872c483",
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70af2878_6e10076e",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 14
@@ -39,6 +57,30 @@
       "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73c27c51_2a453c2b",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-01T03:49:05Z",
+      "side": 1,
+      "message": "Good catch.",
+      "parentUuid": "70af2878_6e10076e",
+      "range": {
+        "startLine": 673,
+        "startChar": 12,
+        "endLine": 673,
+        "endChar": 36
+      },
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "aeee9b1d_1e49a335",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-01T03:49:05Z",
+      "side": 1,
+      "message": "Right, the important part is setting the ShaderVariable::location value so it can be used later when the resource location is queried.\n\nWithout this, the following tests fail:\n\ndEQP-GLES31.functional.program_interface_query.program_output.location.vertex_fragment.var\ndEQP-GLES31.functional.program_interface_query.program_output.location.vertex_fragment.var_array\ndEQP-GLES31.functional.program_interface_query.program_output.location.separable_fragment.var\ndEQP-GLES31.functional.program_interface_query.program_output.location.separable_fragment.var_array\n\n\nLooking closer, it seems Program::linkOutputVariables() can handle this for us by updating AssignOutputLocations() to update the ShaderVariable::location value when it finds a good location.   Let me know what you think about this approach.",
+      "parentUuid": "78cde894_9abf7d91",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 544,
+        "endChar": 27
+      },
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d413d0a_b9c8aa26",
         "filename": "src/tests/gl_tests/BlendFuncExtendedTest.cpp",
         "patchSetId": 14
@@ -76,6 +142,30 @@
       "writtenOn": "2019-09-30T16:58:03Z",
       "side": 1,
       "message": "Could you refactor this a little? Something like:\n\n    struct testCase\n    {\n        std::string unusedLocationName;\n        std::string fragData0LocationName;\n        std::string fragData1LocationName;\n    };\n\n    testCase testCases[4]\n    {\n        { \"FragData[0]\", \"FragData\", \"FragData[1]\"},\n        // .. etc ..\n    };\n\n    for (const testCase\u0026 case : testCases)\n    {\n        mProgram \u003d\n            CompileProgram(essl3_shaders::vs::Simple(), kFragColorShader, [\u0026](GLuint program) {\n                glBindFragDataLocationEXT(program, kUnusedLocation, case.unusedLocationName);\n                glBindFragDataLocationEXT(program, kFragData0Location, case.fragData0LocationName);\n                glBindFragDataLocationEXT(program, kFragData1Location, case.fragData1LocationName);\n            });\n\n        // ... etc ...\n    }",
+      "range": {
+        "startLine": 479,
+        "startChar": 0,
+        "endLine": 526,
+        "endChar": 9
+      },
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d61fa3a0_50e29cd6",
+        "filename": "src/tests/gl_tests/BlendFuncExtendedTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-01T03:49:05Z",
+      "side": 1,
+      "message": "That does look much nicer.   To save a little face, this was originally taken from command_buffer/tests/gl_ext_blend_func_extended_unittest.cc.",
+      "parentUuid": "5d413d0a_b9c8aa26",
       "range": {
         "startLine": 479,
         "startChar": 0,
