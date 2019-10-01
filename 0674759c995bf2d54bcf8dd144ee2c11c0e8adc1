@@ -22,6 +22,144 @@
       "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "279c9990_bf7a7445",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T18:12:48Z",
+      "side": 1,
+      "message": "nit: Keep it all caps",
+      "range": {
+        "startLine": 67,
+        "startChar": 38,
+        "endLine": 67,
+        "endChar": 40
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c26495a_5ade93ef",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T18:12:48Z",
+      "side": 1,
+      "message": "Does this necessarily have to be a device type?  Can it be another TRUE/FALSE attribute like EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE?",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 48
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d7cb92d_5574e4af",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T18:12:48Z",
+      "side": 1,
+      "message": "nit: tabs -\u003e spaces",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 2
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3ed1691_5b054911",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T18:12:48Z",
+      "side": 1,
+      "message": "nit: tabs",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 1
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f55e72be_e38fb97a",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T18:12:48Z",
+      "side": 1,
+      "message": "You\u0027ll need an error case like this for using 11on12 when requesting D3D9.",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 54
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c4eb236_c8f4d7cb",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T18:12:48Z",
+      "side": 1,
+      "message": "nit: tabs",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 1
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
