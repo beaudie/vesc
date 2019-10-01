@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51194a29_87a7519a",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-10-01T21:39:47Z",
+      "side": 1,
+      "message": "Could you explain this condition, for example, why not win64 as well?\nUnfortunately, we only have a Linux presubmit bot, so we can\u0027t thoroughly test it.\nI don\u0027t want developers not being able to upload CLs on Windows if this is broken somehow.",
+      "range": {
+        "startLine": 110,
+        "startChar": 28,
+        "endLine": 110,
+        "endChar": 78
+      },
+      "revId": "7fe5ef6ee38ef2810a63c5e3bff87cfd10473947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
