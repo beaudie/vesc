@@ -49,6 +49,7 @@ angle_vulkan_internal_shaders = [
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000009.inc",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.0000000A.inc",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.0000000B.inc",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ConvertArrayIndirectLineLoop.comp.00000000.inc",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000000.inc",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000001.inc",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000002.inc",
