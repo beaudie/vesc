@@ -1088,17 +1088,30 @@ angle::Result BlitGL::getBlitProgram(const gl::Context *context,
         std::string fsInputVariableQualifier;
         std::string fsOutputVariableQualifier;
         std::string sampleFunction;
-        if (sourceComponentType != GL_UNSIGNED_INT && destComponentType != GL_UNSIGNED_INT &&
-            (sourceTextureType == gl::TextureType::_2D ||
-             sourceTextureType == gl::TextureType::External))
+        if (sourceComponentType != GL_UNSIGNED_INT && destComponentType != GL_UNSIGNED_INT)
         {
-            // Simple case, float-to-float with 2D or external textures.  Only needs ESSL/GLSL 100
+            // Simple case, float-to-float.  Only needs ESSL/GLSL 100
             version                   = "100";
             vsInputVariableQualifier  = "attribute";
             vsOutputVariableQualifier = "varying";
             fsInputVariableQualifier  = "varying";
             fsOutputVariableQualifier = "";
-            sampleFunction            = "texture2D";
+
+            switch (sourceTextureType)
+            {
+                case gl::TextureType::_2D:
+                case gl::TextureType::External:
+                    sampleFunction = "texture2D";
+                    break;
+
+                case gl::TextureType::Rectangle:
+                    sampleFunction = "texture2DRect";
+                    break;
+
+                default:
+                    UNREACHABLE();
+                    break;
+            }
         }
         else
         {
@@ -1169,6 +1182,11 @@ angle::Result BlitGL::getBlitProgram(const gl::Context *context,
                     samplerType = "samplerExternalOES";
                     break;
 
+                case gl::TextureType::Rectangle:
+                    ASSERT(sourceComponentType != GL_UNSIGNED_INT);
+                    samplerType = "sampler2DRect";
+                    break;
+
                 default:
                     UNREACHABLE();
                     break;
@@ -1191,6 +1209,10 @@ angle::Result BlitGL::getBlitProgram(const gl::Context *context,
             {
                 case gl::TextureType::External:
                     extensionRequirements = "#extension GL_OES_EGL_image_external : require";
+                    break;
+
+                case gl::TextureType::Rectangle:
+                    extensionRequirements = "#extension GL_ARB_texture_rectangle : require";
                     break;
 
                 default:
@@ -1239,12 +1261,30 @@ angle::Result BlitGL::getBlitProgram(const gl::Context *context,
             fsSourceStream << "void main()\n";
             fsSourceStream << "{\n";
 
-            // discard if the texcoord is outside (0, 1)^2 so the blitframebuffer workaround
-            // doesn't write when the point sampled is outside of the source framebuffer.
-            fsSourceStream << "    if (clamp(v_texcoord, vec2(0.0), vec2(1.0)) != v_texcoord)\n";
-            fsSourceStream << "    {\n";
-            fsSourceStream << "        discard;\n";
-            fsSourceStream << "    }\n";
+            std::string maxTexcoord;
+            switch (sourceTextureType)
+            {
+                case gl::TextureType::Rectangle:
+                    // Valid texcoords are within source texture size
+                    maxTexcoord = "vec2(textureSize(u_source_texture))";
+                    break;
+
+                default:
+                    // Valid texcoords are in [0, 1]
+                    maxTexcoord = "vec2(1.0)";
+                    break;
+            }
+
+            if (sourceTextureType != gl::TextureType::Rectangle)
+            {
+                // discard if the texcoord is invalid so the blitframebuffer workaround doesn't
+                // write when the point sampled is outside of the source framebuffer.
+                fsSourceStream << "    if (clamp(v_texcoord, vec2(0.0), " << maxTexcoord
+                               << ") != v_texcoord)\n";
+                fsSourceStream << "    {\n";
+                fsSourceStream << "        discard;\n";
+                fsSourceStream << "    }\n";
+            }
 
             // Sampling code depends on the input data type
             fsSourceStream << "    " << samplerResultType << " color = " << sampleFunction
