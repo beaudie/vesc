@@ -598,6 +598,7 @@ using ImageViewVector = std::vector<ImageView>;
 // A vector of vector of image views.  Primary index is layer, secondary index is level.
 using LayerLevelImageViewVector = std::vector<ImageViewVector>;
 
+bool HasBothDepthAndStencilAspects(VkImageAspectFlags aspectFlags);
 }  // namespace vk
 
 // List of function pointers for used extensions.

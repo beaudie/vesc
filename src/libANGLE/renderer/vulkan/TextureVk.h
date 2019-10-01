@@ -179,20 +179,6 @@ class TextureVk : public TextureImpl
     }
 
   private:
-    struct TextureVkViews final : angle::NonCopyable
-    {
-        TextureVkViews();
-        ~TextureVkViews();
-
-        void release(ContextVk *contextVk);
-
-        vk::ImageView mDrawBaseLevelImageView;
-        vk::ImageView mReadBaseLevelImageView;
-        vk::ImageView mReadMipmapImageView;
-        vk::ImageView mFetchBaseLevelImageView;
-        vk::ImageView mFetchMipmapImageView;
-    };
-
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
     gl::ImageIndex getNativeImageIndex(const gl::ImageIndex &inputImageIndex) const;
@@ -305,7 +291,6 @@ class TextureVk : public TextureImpl
                             const gl::Extents &extents,
                             const uint32_t levelCount);
     void releaseImage(ContextVk *contextVk);
-    void releaseImageViews(ContextVk *contextVk);
     void releaseStagingBuffer(ContextVk *contextVk);
     uint32_t getLevelCount() const;
     angle::Result initImageViews(ContextVk *contextVk,
@@ -313,18 +298,7 @@ class TextureVk : public TextureImpl
                                  const bool sized,
                                  uint32_t levelCount,
                                  uint32_t layerCount);
-    angle::Result initImageViewImpl(ContextVk *contextVk,
-                                    const vk::Format &format,
-                                    uint32_t levelCount,
-                                    uint32_t layerCount,
-                                    TextureVkViews *views,
-                                    VkImageAspectFlags aspectFlags,
-                                    gl::SwizzleState mappedSwizzle);
     angle::Result initLayerRenderTargets(ContextVk *contextVk, GLuint layerCount);
-    vk::ImageView *getLevelImageViewImpl(vk::ImageViewVector *imageViews, size_t level);
-    vk::ImageView *getLayerLevelImageViewImpl(vk::LayerLevelImageViewVector *imageViews,
-                                              size_t layer,
-                                              size_t level);
 
     angle::Result ensureImageInitializedImpl(ContextVk *contextVk,
                                              const gl::Extents &baseLevelExtents,
@@ -333,7 +307,7 @@ class TextureVk : public TextureImpl
 
     void onStagingBufferChange() { onStateChange(angle::SubjectMessage::SubjectChanged); }
 
-    const TextureVkViews *getTextureViews() const;
+    const vk::ImageViews *getTextureViews() const;
 
     angle::Result changeLevels(ContextVk *contextVk, GLuint baseLevel, GLuint maxLevel);
 
@@ -350,17 +324,6 @@ class TextureVk : public TextureImpl
     uint32_t mImageLevelOffset;
 
     vk::ImageHelper *mImage;
-
-    // Read views.
-    TextureVkViews mDefaultViews;
-    TextureVkViews mStencilViews;
-    // Draw views.
-    vk::LayerLevelImageViewVector mLayerLevelDrawImageViews;
-    // Fetch views.
-    vk::ImageViewVector mLayerFetchImageView;
-    // Storage image views.
-    vk::ImageViewVector mLevelStorageImageViews;
-    vk::LayerLevelImageViewVector mLayerLevelStorageImageViews;
 
     vk::Sampler mSampler;
     RenderTargetVk mRenderTarget;

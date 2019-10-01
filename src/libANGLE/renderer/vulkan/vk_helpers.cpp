@@ -258,6 +258,12 @@ void HandlePrimitiveRestart(gl::DrawElementsType glIndexType,
             UNREACHABLE();
     }
 }
+
+uint32_t GetImageLayerCountForView(const vk::ImageHelper &image)
+{
+    // Depth > 1 means this is a 3D texture and depth is our layer count
+    return image.getExtents().depth > 1 ? image.getExtents().depth : image.getLayerCount();
+}
 }  // anonymous namespace
 
 // DynamicBuffer implementation.
@@ -2753,6 +2759,238 @@ bool ImageHelper::isUpdateStaged(uint32_t level, uint32_t layer)
     }
 
     return false;
+}
+
+void ImageHelper::releaseImageViews(ContextVk *contextVk)
+{
+    mDefaultViews.release(contextVk);
+    mStencilViews.release(contextVk);
+
+    for (vk::ImageViewVector &layerViews : mLayerLevelDrawImageViews)
+    {
+        for (vk::ImageView &imageView : layerViews)
+        {
+            contextVk->addGarbage(&imageView);
+        }
+    }
+    mLayerLevelDrawImageViews.clear();
+    for (vk::ImageView &imageView : mLayerFetchImageView)
+    {
+        contextVk->addGarbage(&imageView);
+    }
+    mLayerFetchImageView.clear();
+    for (vk::ImageView &imageView : mLevelStorageImageViews)
+    {
+        contextVk->addGarbage(&imageView);
+    }
+    mLevelStorageImageViews.clear();
+    for (vk::ImageViewVector &layerViews : mLayerLevelStorageImageViews)
+    {
+        for (vk::ImageView &imageView : layerViews)
+        {
+            contextVk->addGarbage(&imageView);
+        }
+    }
+    mLayerLevelStorageImageViews.clear();
+}
+
+angle::Result ImageHelper::initImageViews(ContextVk *contextVk,
+                                          gl::TextureType textureType,
+                                          const vk::Format &format,
+                                          uint32_t baseLevel,
+                                          uint32_t levelCount,
+                                          uint32_t baseLayer,
+                                          uint32_t layerCount,
+                                          bool stencilImageViews,
+                                          VkImageAspectFlags aspectFlags,
+                                          gl::SwizzleState mappedSwizzle)
+{
+    ImageViews &views = stencilImageViews ? mStencilViews : mDefaultViews;
+
+    ANGLE_TRY(initLayerImageView(contextVk, textureType, aspectFlags, mappedSwizzle,
+                                 &views.readMipmapImageView, baseLevel, levelCount, baseLayer,
+                                 layerCount));
+    ANGLE_TRY(initLayerImageView(contextVk, textureType, aspectFlags, mappedSwizzle,
+                                 &views.readBaseLevelImageView, baseLevel, 1, baseLayer,
+                                 layerCount));
+    if (textureType == gl::TextureType::CubeMap || textureType == gl::TextureType::_2DArray ||
+        textureType == gl::TextureType::_2DMultisampleArray)
+    {
+        gl::TextureType arrayType = vk::Get2DTextureType(layerCount, mSamples);
+
+        ANGLE_TRY(initLayerImageView(contextVk, arrayType, aspectFlags, mappedSwizzle,
+                                     &views.fetchMipmapImageView, baseLevel, levelCount, baseLayer,
+                                     layerCount));
+        ANGLE_TRY(initLayerImageView(contextVk, arrayType, aspectFlags, mappedSwizzle,
+                                     &views.fetchBaseLevelImageView, baseLevel, 1, baseLayer,
+                                     layerCount));
+    }
+    if (!format.imageFormat().isBlock)
+    {
+        ANGLE_TRY(initLayerImageView(contextVk, textureType, aspectFlags, gl::SwizzleState(),
+                                     &views.drawBaseLevelImageView, baseLevel, 1, baseLayer,
+                                     layerCount));
+    }
+
+    return angle::Result::Continue;
+}
+
+const ImageViews *ImageHelper::getTextureViews(bool isStencilMode) const
+{
+    VkImageAspectFlags aspectFlags = getAspectFlags();
+    if (HasBothDepthAndStencilAspects(aspectFlags) && isStencilMode)
+    {
+        return &mStencilViews;
+    }
+    return &mDefaultViews;
+}
+
+const vk::ImageView &ImageHelper::getReadImageView(bool mipmaps, bool stencilMode) const
+{
+    ASSERT(valid());
+    const ImageViews *activeView = getTextureViews(stencilMode);
+
+    if (!mipmaps)
+    {
+        return activeView->readBaseLevelImageView;
+    }
+
+    return activeView->readMipmapImageView;
+}
+
+const vk::ImageView &ImageHelper::getFetchImageView(bool mipmaps, bool stencilMode) const
+{
+    if (!mDefaultViews.fetchBaseLevelImageView.valid())
+    {
+        return getReadImageView(mipmaps, stencilMode);
+    }
+
+    ASSERT(valid());
+    const ImageViews *activeView = getTextureViews(stencilMode);
+
+    if (!mipmaps)
+    {
+        return activeView->fetchBaseLevelImageView;
+    }
+
+    return activeView->fetchMipmapImageView;
+}
+
+vk::ImageView *ImageHelper::getLayerLevelImageViewImpl(vk::LayerLevelImageViewVector *imageViews,
+                                                       uint32_t layer,
+                                                       uint32_t level)
+{
+    ASSERT(valid());
+    ASSERT(!mFormat->imageFormat().isBlock);
+
+    uint32_t layerCount = GetImageLayerCountForView(*this);
+
+    // Lazily allocate the storage for image views
+    if (imageViews->empty())
+    {
+        imageViews->resize(layerCount);
+    }
+    ASSERT(imageViews->size() > layer);
+
+    return getLevelImageViewImpl(&(*imageViews)[layer], level);
+}
+
+vk::ImageView *ImageHelper::getLevelImageViewImpl(vk::ImageViewVector *imageViews, size_t level)
+{
+    // Lazily allocate the storage for image views
+    if (imageViews->empty())
+    {
+        imageViews->resize(getLevelCount());
+    }
+    ASSERT(imageViews->size() > level);
+
+    return &(*imageViews)[level];
+}
+
+angle::Result ImageHelper::getLayerLevelDrawImageView(vk::Context *context,
+                                                      uint32_t layer,
+                                                      uint32_t level,
+                                                      const vk::ImageView **imageViewOut)
+{
+    vk::ImageView *imageView = getLayerLevelImageViewImpl(&mLayerLevelDrawImageViews, layer, level);
+    *imageViewOut            = imageView;
+    if (imageView->valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    uint32_t layerCount = GetImageLayerCountForView(*this);
+
+    // Lazily allocate the image view itself.
+    // Note that these views are specifically made to be used as color attachments, and therefore
+    // don't have swizzle.
+    gl::TextureType viewType = vk::Get2DTextureType(layerCount, getSamples());
+    return initLayerImageView(context, viewType, getAspectFlags(), gl::SwizzleState(), imageView,
+                              level, 1, layer, 1);
+}
+
+angle::Result ImageHelper::getLayerLevelStorageImageView(ContextVk *contextVk,
+                                                         gl::TextureType viewType,
+                                                         bool allLayers,
+                                                         uint32_t layer,
+                                                         uint32_t level,
+                                                         const vk::ImageView **imageViewOut)
+{
+    uint32_t layerCount = 1;
+
+    vk::ImageView *imageView = nullptr;
+
+    if (allLayers)
+    {
+        // Ignore the layer parameter and create a view with all layers of the level.
+        imageView = getLevelImageViewImpl(&mLevelStorageImageViews, level);
+
+        // If layered, the view has the same type as the texture.
+        layerCount = getLayerCount();
+    }
+    else
+    {
+        // Create a view of the selected layer.
+        imageView = getLayerLevelImageViewImpl(&mLayerLevelStorageImageViews, layer, level);
+
+        // If viewing a single layer, the image is always 2D.  Note that GLES doesn't support
+        // multisampled storage images.
+        viewType = gl::TextureType::_2D;
+    }
+
+    *imageViewOut = imageView;
+    if (imageView->valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    // Create the view.  Note that storage images are not affected by swizzle parameters.
+    return initLayerImageView(contextVk, viewType, getAspectFlags(), gl::SwizzleState(), imageView,
+                              level, 1, layer, layerCount);
+}
+
+const vk::ImageView *ImageHelper::getDrawBaseLevelImageView(bool stencilMode) const
+{
+    return &getTextureViews(stencilMode)->drawBaseLevelImageView;
+}
+
+const vk::ImageView *ImageHelper::getFetchBaseLevelImageView(bool stencilMode) const
+{
+    return &getTextureViews(stencilMode)->fetchBaseLevelImageView;
+}
+
+// ImageViews implementation.
+ImageViews::ImageViews() {}
+ImageViews::~ImageViews() {}
+
+// TODO(jmadill): Use ImageHelper lifetime. http://anglebug.com/2464
+void ImageViews::release(ContextVk *contextVk)
+{
+    contextVk->addGarbage(&drawBaseLevelImageView);
+    contextVk->addGarbage(&readBaseLevelImageView);
+    contextVk->addGarbage(&readMipmapImageView);
+    contextVk->addGarbage(&fetchBaseLevelImageView);
+    contextVk->addGarbage(&fetchMipmapImageView);
 }
 
 // ImageHelper::SubresourceUpdate implementation

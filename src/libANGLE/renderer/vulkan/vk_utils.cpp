@@ -585,6 +585,12 @@ std::string GetMappedSamplerName(const std::string &originalName)
     return samplerName;
 }
 
+bool HasBothDepthAndStencilAspects(VkImageAspectFlags aspectFlags)
+{
+    constexpr VkImageAspectFlags kDepthStencilAspects =
+        VK_IMAGE_ASPECT_STENCIL_BIT | VK_IMAGE_ASPECT_DEPTH_BIT;
+    return (aspectFlags & kDepthStencilAspects) == kDepthStencilAspects;
+}
 }  // namespace vk
 
 // VK_EXT_debug_utils

@@ -642,6 +642,20 @@ enum class ImageLayout
     EnumCount   = 11,
 };
 
+struct ImageViews final : angle::NonCopyable
+{
+    ImageViews();
+    ~ImageViews();
+
+    void release(ContextVk *contextVk);
+
+    vk::ImageView drawBaseLevelImageView;
+    vk::ImageView readBaseLevelImageView;
+    vk::ImageView readMipmapImageView;
+    vk::ImageView fetchBaseLevelImageView;
+    vk::ImageView fetchMipmapImageView;
+};
+
 class ImageHelper final : public CommandGraphResource
 {
   public:
@@ -701,6 +715,18 @@ class ImageHelper final : public CommandGraphResource
                                 ImageView *imageViewOut,
                                 uint32_t baseMipLevel,
                                 uint32_t levelCount);
+
+    angle::Result initImageViews(ContextVk *contextVk,
+                                 gl::TextureType textureType,
+                                 const vk::Format &format,
+                                 uint32_t baseLevel,
+                                 uint32_t levelCount,
+                                 uint32_t baseLayer,
+                                 uint32_t layerCount,
+                                 bool stencilImageViews,
+                                 VkImageAspectFlags aspectFlags,
+                                 gl::SwizzleState mappedSwizzle);
+
     // Create a 2D[Array] for staging purposes.  Used by:
     //
     // - TextureVk::copySubImageImplWithDraw
@@ -870,6 +896,23 @@ class ImageHelper final : public CommandGraphResource
     uint32_t getBaseLevel();
     void setBaseAndMaxLevels(uint32_t baseLevel, uint32_t maxLevel);
 
+    const vk::ImageView &getReadImageView(bool mipmaps, bool stencilMode) const;
+    const vk::ImageView &getFetchImageView(bool mipmaps, bool stencilMode) const;
+
+    angle::Result getLayerLevelDrawImageView(vk::Context *context,
+                                             uint32_t layer,
+                                             uint32_t level,
+                                             const vk::ImageView **imageViewOut);
+
+    angle::Result getLayerLevelStorageImageView(ContextVk *contextVk,
+                                                gl::TextureType viewType,
+                                                bool allLayers,
+                                                uint32_t layer,
+                                                uint32_t level,
+                                                const vk::ImageView **imageViewOut);
+    const vk::ImageView *getDrawBaseLevelImageView(bool stencilMode) const;
+    const vk::ImageView *getFetchBaseLevelImageView(bool stencilMode) const;
+
   private:
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                    ImageLayout newLayout,
@@ -896,6 +939,13 @@ class ImageHelper final : public CommandGraphResource
                            uint32_t baseArrayLayer,
                            uint32_t layerCount,
                            CommandBuffer *commandBuffer);
+
+    void releaseImageViews(ContextVk *contextVk);
+    const ImageViews *getTextureViews(bool isStencilMode) const;
+    vk::ImageView *getLevelImageViewImpl(vk::ImageViewVector *imageViews, size_t level);
+    vk::ImageView *getLayerLevelImageViewImpl(vk::LayerLevelImageViewVector *imageViews,
+                                              uint32_t layer,
+                                              uint32_t level);
 
     enum class UpdateSource
     {
@@ -970,6 +1020,17 @@ class ImageHelper final : public CommandGraphResource
     // Staging buffer
     DynamicBuffer mStagingBuffer;
     std::vector<SubresourceUpdate> mSubresourceUpdates;
+
+    // Standard image views.
+    ImageViews mDefaultViews;
+    ImageViews mStencilViews;
+    // Level/layer draw image views.
+    vk::LayerLevelImageViewVector mLayerLevelDrawImageViews;
+    // Layer fetch image views.
+    vk::ImageViewVector mLayerFetchImageView;
+    // Storage image views.
+    vk::ImageViewVector mLevelStorageImageViews;
+    vk::LayerLevelImageViewVector mLayerLevelStorageImageViews;
 };
 
 class FramebufferHelper : public CommandGraphResource
