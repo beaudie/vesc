@@ -722,6 +722,11 @@ angle::Result ContextVk::initialize()
     return angle::Result::Continue;
 }
 
+bool ContextVk::shouldFlush(const gl::Context *context)
+{
+    return shouldFlushImpl();
+}
+
 angle::Result ContextVk::flush(const gl::Context *context)
 {
     return flushImpl(nullptr);
@@ -2870,6 +2875,11 @@ void ContextVk::insertWaitSemaphore(const vk::Semaphore *waitSemaphore)
 {
     ASSERT(waitSemaphore);
     mWaitSemaphores.push_back(waitSemaphore->getHandle());
+}
+
+bool ContextVk::shouldFlushImpl()
+{
+    return getRenderer()->shouldCleanupGarbage();
 }
 
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)

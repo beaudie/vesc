@@ -108,12 +108,5 @@
 3817 VULKAN : KHR-GLES3.copy_tex_image_conversions.required.cubemap_posz_cubemap_posy = FAIL
 3817 VULKAN : KHR-GLES3.copy_tex_image_conversions.required.cubemap_posz_cubemap_posz = FAIL
 
-// Failing due to Vulkan validation error re: "Number of currently valid memory objects is not less than the maximum allowed" error.
-3818 VULKAN : KHR-GLES3.copy_tex_image_conversions.forbidden.renderbuffer_cubemap_negy = FAIL
-3818 VULKAN : KHR-GLES3.copy_tex_image_conversions.forbidden.renderbuffer_cubemap_negz = FAIL
-3818 VULKAN : KHR-GLES3.copy_tex_image_conversions.forbidden.renderbuffer_cubemap_posx = FAIL
-3818 VULKAN : KHR-GLES3.copy_tex_image_conversions.forbidden.renderbuffer_cubemap_posy = FAIL
-3818 VULKAN : KHR-GLES3.copy_tex_image_conversions.forbidden.renderbuffer_cubemap_posz = FAIL
-
 // Require 3D textures.
 3188 VULKAN : KHR-GLES3.packed_pixels.varied_rectangle.* = SKIP

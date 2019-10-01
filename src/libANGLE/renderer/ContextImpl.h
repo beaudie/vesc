@@ -38,6 +38,7 @@ class ContextImpl : public GLImplFactory
     virtual angle::Result initialize() = 0;
 
     // Flush and finish.
+    virtual bool shouldFlush(const gl::Context *context)     = 0;
     virtual angle::Result flush(const gl::Context *context)  = 0;
     virtual angle::Result finish(const gl::Context *context) = 0;
 

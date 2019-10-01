@@ -89,6 +89,7 @@ class ContextGL : public ContextImpl
     OverlayImpl *createOverlay(const gl::OverlayState &state) override;
 
     // Flush and finish.
+    bool shouldFlush(const gl::Context *context) override;
     angle::Result flush(const gl::Context *context) override;
     angle::Result finish(const gl::Context *context) override;
 

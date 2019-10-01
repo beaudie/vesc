@@ -108,6 +108,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     void onDestroy(const gl::Context *context) override;
 
     // Flush and finish.
+    bool shouldFlush(const gl::Context *context) override;
     angle::Result flush(const gl::Context *context) override;
     angle::Result finish(const gl::Context *context) override;
 
@@ -324,6 +325,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     void insertWaitSemaphore(const vk::Semaphore *waitSemaphore);
 
+    bool shouldFlushImpl();
     angle::Result flushImpl(const vk::Semaphore *semaphore);
     angle::Result finishImpl();
 

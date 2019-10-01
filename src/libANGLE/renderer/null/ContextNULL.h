@@ -41,6 +41,7 @@ class ContextNULL : public ContextImpl
     angle::Result initialize() override;
 
     // Flush and finish.
+    bool shouldFlush(const gl::Context *context) override;
     angle::Result flush(const gl::Context *context) override;
     angle::Result finish(const gl::Context *context) override;
 

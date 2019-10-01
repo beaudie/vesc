@@ -113,6 +113,11 @@ angle::Result ContextNULL::initialize()
     return angle::Result::Continue;
 }
 
+bool ContextNULL::shouldFlush(const gl::Context *context)
+{
+    return false;
+}
+
 angle::Result ContextNULL::flush(const gl::Context *context)
 {
     return angle::Result::Continue;

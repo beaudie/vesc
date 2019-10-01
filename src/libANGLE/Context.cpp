@@ -5963,12 +5963,24 @@ void Context::compileShader(ShaderProgramID shader)
     shaderObject->compile(this);
 }
 
+void handleDeletedResource(Context *context)
+{
+    // Check if we need to trigger some garbage collection since the App has indicated it's done
+    // with this resource.
+    if (context->getImplementation()->shouldFlush(context))
+    {
+        (void)context->getImplementation()->flush(context);
+    }
+}
+
 void Context::deleteBuffers(GLsizei n, const BufferID *buffers)
 {
     for (int i = 0; i < n; i++)
     {
         deleteBuffer(buffers[i]);
     }
+
+    handleDeletedResource(this);
 }
 
 void Context::deleteFramebuffers(GLsizei n, const FramebufferID *framebuffers)
@@ -5980,6 +5992,8 @@ void Context::deleteFramebuffers(GLsizei n, const FramebufferID *framebuffers)
             deleteFramebuffer(framebuffers[i]);
         }
     }
+
+    handleDeletedResource(this);
 }
 
 void Context::deleteRenderbuffers(GLsizei n, const RenderbufferID *renderbuffers)
@@ -5988,6 +6002,8 @@ void Context::deleteRenderbuffers(GLsizei n, const RenderbufferID *renderbuffers
     {
         deleteRenderbuffer(renderbuffers[i]);
     }
+
+    handleDeletedResource(this);
 }
 
 void Context::deleteTextures(GLsizei n, const TextureID *textures)
@@ -5999,6 +6015,8 @@ void Context::deleteTextures(GLsizei n, const TextureID *textures)
             deleteTexture(textures[i]);
         }
     }
+
+    handleDeletedResource(this);
 }
 
 void Context::detachShader(ShaderProgramID program, ShaderProgramID shader)

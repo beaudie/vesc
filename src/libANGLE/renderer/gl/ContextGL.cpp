@@ -197,6 +197,11 @@ OverlayImpl *ContextGL::createOverlay(const gl::OverlayState &state)
     return new OverlayImpl(state);
 }
 
+bool ContextGL::shouldFlush(const gl::Context *context)
+{
+    return false;
+}
+
 angle::Result ContextGL::flush(const gl::Context *context)
 {
     return mRenderer->flush();
