@@ -46,6 +46,30 @@
       "revId": "7fe5ef6ee38ef2810a63c5e3bff87cfd10473947",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56999865_78ac7a59",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-10-01T21:55:59Z",
+      "side": 1,
+      "message": "LGTM, then.",
+      "parentUuid": "39e3ce01_f8b08946",
+      "range": {
+        "startLine": 110,
+        "startChar": 28,
+        "endLine": 110,
+        "endChar": 78
+      },
+      "revId": "7fe5ef6ee38ef2810a63c5e3bff87cfd10473947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
