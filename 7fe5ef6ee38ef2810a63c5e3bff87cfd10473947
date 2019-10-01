@@ -22,6 +22,30 @@
       "revId": "7fe5ef6ee38ef2810a63c5e3bff87cfd10473947",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39e3ce01_f8b08946",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2019-10-01T21:52:33Z",
+      "side": 1,
+      "message": "\u0027win32\u0027 is just the string that Python returns when run on any Windows version https://docs.python.org/3/library/sys.html#sys.platform. The \u002732\u0027 isn\u0027t actually at all related to the bitness of the installation. I tested this locally on a 64-bit Windows workstation, and it works.",
+      "parentUuid": "51194a29_87a7519a",
+      "range": {
+        "startLine": 110,
+        "startChar": 28,
+        "endLine": 110,
+        "endChar": 78
+      },
+      "revId": "7fe5ef6ee38ef2810a63c5e3bff87cfd10473947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
