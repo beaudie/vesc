@@ -69,6 +69,13 @@ class UtilsVk : angle::NonCopyable
         uint32_t is32Bit                 = 0;
     };
 
+    struct ConvertLineLoopArrayIndirectParameters
+    {
+        uint32_t indirectBufferOffset    = 0;
+        uint32_t dstIndirectBufferOffset = 0;
+        uint32_t dstIndexBufferOffset    = 0;
+    };
+
     struct ConvertVertexParameters
     {
         size_t vertexCount;
@@ -167,6 +174,13 @@ class UtilsVk : angle::NonCopyable
         vk::BufferHelper *src,
         const ConvertLineLoopIndexIndirectParameters &params);
 
+    angle::Result convertLineLoopArrayIndirectBuffer(
+        ContextVk *contextVk,
+        vk::BufferHelper *srcIndirectBuffer,
+        vk::BufferHelper *destIndirectBuffer,
+        vk::BufferHelper *destIndexBuffer,
+        const ConvertLineLoopArrayIndirectParameters &params);
+
     angle::Result convertVertexBuffer(ContextVk *contextVk,
                                       vk::BufferHelper *dest,
                                       vk::BufferHelper *src,
@@ -254,6 +268,13 @@ class UtilsVk : angle::NonCopyable
         uint32_t dstCmdOffsetDiv4 = 0;
         uint32_t dstOffsetDiv4    = 0;
         uint32_t isRestartEnabled = 0;
+    };
+
+    struct ConvertArrayIndirectLineLoopShaderParams
+    {
+        uint32_t cmdOffsetDiv4    = 0;
+        uint32_t dstCmdOffsetDiv4 = 0;
+        uint32_t dstOffsetDiv4    = 0;
     };
 
     struct ConvertVertexShaderParams
@@ -358,9 +379,10 @@ class UtilsVk : angle::NonCopyable
         OverlayDraw                = 8,
         ConvertIndexIndirectBuffer = 9,
         ConvertIndexIndirectLineLoopBuffer = 10,
+        ConvertArrayIndirectLineLoopBuffer = 11,
 
-        InvalidEnum = 11,
-        EnumCount   = 11,
+        InvalidEnum = 12,
+        EnumCount   = 12,
     };
 
     // Common function that creates the pipeline for the specified function, binds it and prepares
@@ -396,6 +418,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureConvertIndexResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureConvertIndexIndirectResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureConvertIndexIndirectLineLoopResourcesInitialized(ContextVk *contextVk);
+    angle::Result ensureConvertArrayIndirectLineLoopResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureConvertVertexResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureImageClearResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureImageCopyResourcesInitialized(ContextVk *contextVk);

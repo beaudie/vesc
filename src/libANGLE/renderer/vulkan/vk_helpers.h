@@ -436,6 +436,15 @@ class LineLoopHelper final : angle::NonCopyable
                                         vk::BufferHelper **indirectBufferOut,
                                         VkDeviceSize *indirectBufferOffsetOut);
 
+    angle::Result streamArrayIndirect(ContextVk *contextVk,
+                                      size_t vertexCount,
+                                      vk::BufferHelper *arrayIndirectBuffer,
+                                      VkDeviceSize arrayIndirectBufferOffset,
+                                      vk::BufferHelper **indexBufferOut,
+                                      VkDeviceSize *indexBufferOffsetOut,
+                                      vk::BufferHelper **indexIndirectBufferOut,
+                                      VkDeviceSize *indexIndirectBufferOffsetOut);
+
     void release(ContextVk *contextVk);
     void destroy(VkDevice device);
 
