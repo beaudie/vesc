@@ -157,22 +157,25 @@ class BlitGL : angle::NonCopyable
         GLint unMultiplyAlphaLocation = -1;
     };
 
-    enum class BlitProgramType
+    enum class BlitProgramType_
     {
         FLOAT_TO_FLOAT,
         FLOAT_TO_FLOAT_EXTERNAL,
+        FLOAT_TO_FLOAT_RECTANGLE,
         FLOAT_TO_UINT,
         FLOAT_TO_UINT_EXTERNAL,
+        FLOAT_TO_UINT_RECTANGLE,
         UINT_TO_UINT,
     };
 
-    static BlitProgramType getBlitProgramType(gl::TextureType sourceTextureType,
-                                              GLenum sourceComponentType,
-                                              GLenum destComponentType);
     angle::Result getBlitProgram(const gl::Context *context,
-                                 BlitProgramType type,
+                                 gl::TextureType sourceTextureType,
+                                 GLenum sourceComponentType,
+                                 GLenum destComponentType,
                                  BlitProgram **program);
 
+    // SourceType, SourceComponentType, DestComponentType
+    using BlitProgramType = std::tuple<gl::TextureType, GLenum, GLenum>;
     std::map<BlitProgramType, BlitProgram> mBlitPrograms;
 
     GLuint mScratchTextures[2];
