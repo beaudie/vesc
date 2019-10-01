@@ -68,6 +68,11 @@ enum Format
 constexpr size_t kArrayLen = 0x0000000C;
 }  // namespace BufferUtils_comp
 
+namespace ConvertArrayIndirectLineLoop_comp
+{
+constexpr size_t kArrayLen = 0x00000001;
+}  // namespace ConvertArrayIndirectLineLoop_comp
+
 namespace ConvertIndex_comp
 {
 enum flags
@@ -214,6 +219,9 @@ class ShaderLibrary final : angle::NonCopyable
     angle::Result getBufferUtils_comp(Context *context,
                                       uint32_t shaderFlags,
                                       RefCounted<ShaderAndSerial> **shaderOut);
+    angle::Result getConvertArrayIndirectLineLoop_comp(Context *context,
+                                                       uint32_t shaderFlags,
+                                                       RefCounted<ShaderAndSerial> **shaderOut);
     angle::Result getConvertIndex_comp(Context *context,
                                        uint32_t shaderFlags,
                                        RefCounted<ShaderAndSerial> **shaderOut);
@@ -246,6 +254,8 @@ class ShaderLibrary final : angle::NonCopyable
         [InternalShader::BlitResolveStencilNoExport_comp::kArrayLen];
     RefCounted<ShaderAndSerial>
         mBufferUtils_comp_shaders[InternalShader::BufferUtils_comp::kArrayLen];
+    RefCounted<ShaderAndSerial> mConvertArrayIndirectLineLoop_comp_shaders
+        [InternalShader::ConvertArrayIndirectLineLoop_comp::kArrayLen];
     RefCounted<ShaderAndSerial>
         mConvertIndex_comp_shaders[InternalShader::ConvertIndex_comp::kArrayLen];
     RefCounted<ShaderAndSerial> mConvertIndexIndirectLineLoop_comp_shaders
