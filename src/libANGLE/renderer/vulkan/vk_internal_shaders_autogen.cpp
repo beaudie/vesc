@@ -56,6 +56,7 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000009.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.0000000A.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.0000000B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertArrayIndirectLineLoop.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000001.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000002.inc"
@@ -210,6 +211,10 @@ constexpr ShaderBlob kBufferUtils_comp_shaders[] = {
     {kBufferUtils_comp_00000009, sizeof(kBufferUtils_comp_00000009)},
     {kBufferUtils_comp_0000000A, sizeof(kBufferUtils_comp_0000000A)},
     {kBufferUtils_comp_0000000B, sizeof(kBufferUtils_comp_0000000B)},
+};
+constexpr ShaderBlob kConvertArrayIndirectLineLoop_comp_shaders[] = {
+    {kConvertArrayIndirectLineLoop_comp_00000000,
+     sizeof(kConvertArrayIndirectLineLoop_comp_00000000)},
 };
 constexpr ShaderBlob kConvertIndex_comp_shaders[] = {
     {kConvertIndex_comp_00000000, sizeof(kConvertIndex_comp_00000000)},
@@ -377,6 +382,10 @@ void ShaderLibrary::destroy(VkDevice device)
     {
         shader.get().destroy(device);
     }
+    for (RefCounted<ShaderAndSerial> &shader : mConvertArrayIndirectLineLoop_comp_shaders)
+    {
+        shader.get().destroy(device);
+    }
     for (RefCounted<ShaderAndSerial> &shader : mConvertIndex_comp_shaders)
     {
         shader.get().destroy(device);
@@ -435,6 +444,16 @@ angle::Result ShaderLibrary::getBufferUtils_comp(Context *context,
 {
     return GetShader(context, mBufferUtils_comp_shaders, kBufferUtils_comp_shaders,
                      ArraySize(kBufferUtils_comp_shaders), shaderFlags, shaderOut);
+}
+
+angle::Result ShaderLibrary::getConvertArrayIndirectLineLoop_comp(
+    Context *context,
+    uint32_t shaderFlags,
+    RefCounted<ShaderAndSerial> **shaderOut)
+{
+    return GetShader(context, mConvertArrayIndirectLineLoop_comp_shaders,
+                     kConvertArrayIndirectLineLoop_comp_shaders,
+                     ArraySize(kConvertArrayIndirectLineLoop_comp_shaders), shaderFlags, shaderOut);
 }
 
 angle::Result ShaderLibrary::getConvertIndex_comp(Context *context,
