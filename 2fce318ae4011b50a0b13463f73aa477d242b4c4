@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "c8009c74_2ccbbaec",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T18:04:40Z",
+      "side": 1,
+      "message": "Thanks for the writeup.  FWIW, we do enable asserts in release builds for our testing within Chrome infra.",
+      "parentUuid": "6819015f_9b6449d1",
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70af2878_6e10076e",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 14
@@ -131,6 +149,30 @@
     },
     {
       "key": {
+        "uuid": "03bfe23b_002bd819",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T18:04:40Z",
+      "side": 1,
+      "message": "What it comes down to is if this location is only needed for communicating information within the Vulkan backend, we should store this mapping somewhere in ProgramVk.  If this information is needed for the frontend queries for all backends then that approach SGTM.",
+      "parentUuid": "aeee9b1d_1e49a335",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 544,
+        "endChar": 27
+      },
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d413d0a_b9c8aa26",
         "filename": "src/tests/gl_tests/BlendFuncExtendedTest.cpp",
         "patchSetId": 14
@@ -175,6 +217,30 @@
       "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9cec85e_8565ac4a",
+        "filename": "src/tests/gl_tests/BlendFuncExtendedTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T18:04:40Z",
+      "side": 1,
+      "message": "I figured, I\u0027ve seen this Chrome test before, fairly messy.",
+      "parentUuid": "d61fa3a0_50e29cd6",
+      "range": {
+        "startLine": 479,
+        "startChar": 0,
+        "endLine": 526,
+        "endChar": 9
+      },
+      "revId": "2fce318ae4011b50a0b13463f73aa477d242b4c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
