@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f6778083_8cc236ba",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-01T17:30:19Z",
+      "side": 1,
+      "message": "You\u0027re right, but startNewCommands calls onWriteImpl which calls onGraphAccess. There was actually a double access before.",
+      "parentUuid": "d4b99ef5_cb4d2665",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 282,
+        "endChar": 54
+      },
+      "revId": "0f50a6f4865e49b44d10389dc1e090a5965c5075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa9c62bd_4d611fe0",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 16
@@ -41,6 +65,53 @@
         "startChar": 4,
         "endLine": 1225,
         "endChar": 27
+      },
+      "revId": "0f50a6f4865e49b44d10389dc1e090a5965c5075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "495c4727_4518a9d8",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-01T17:30:19Z",
+      "side": 1,
+      "message": "The use below (ref) is called when descriptor sets are updated. Say for example when we start a new command buffer. The usage here is called at a different time. For example when uniforms or xfb are dirty. We do need to call onGraphAccess with the uniform update and I wasn\u0027t able to find a simple list of used buffers at that point in the code. It would probably be possible to scan the bindings again down there but I thought this would be simpler and faster.",
+      "parentUuid": "fa9c62bd_4d611fe0",
+      "range": {
+        "startLine": 1225,
+        "startChar": 4,
+        "endLine": 1225,
+        "endChar": 27
+      },
+      "revId": "0f50a6f4865e49b44d10389dc1e090a5965c5075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a8f3dbe_1cc2ffe3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-01T17:30:19Z",
+      "side": 1,
+      "message": "ref.\n\nthere was a bug here where this should have been outside the loop.",
+      "range": {
+        "startLine": 1759,
+        "startChar": 0,
+        "endLine": 1763,
+        "endChar": 9
       },
       "revId": "0f50a6f4865e49b44d10389dc1e090a5965c5075",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
