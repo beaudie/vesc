@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "876ac00d_8b4d1672",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T15:38:40Z",
+      "side": 1,
+      "message": "nit: remove this",
+      "range": {
+        "startLine": 932,
+        "startChar": 4,
+        "endLine": 932,
+        "endChar": 94
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51a584d7_95d22d1e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T15:38:40Z",
+      "side": 1,
+      "message": "Do we need to handle client-side indirect buffers?",
+      "range": {
+        "startLine": 1755,
+        "startChar": 4,
+        "endLine": 1755,
+        "endChar": 81
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44f5a915_2a81419f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T15:38:40Z",
+      "side": 1,
+      "message": "nit: indirectBufferVk",
+      "range": {
+        "startLine": 1771,
+        "startChar": 16,
+        "endLine": 1771,
+        "endChar": 35
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce819dda_0c46ef33",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndexIndirectLineLoop.comp",
+        "patchSetId": 19
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T15:38:40Z",
+      "side": 1,
+      "message": "nit: A comment explaining how it\u0027s reading two indices at once and masking them out would be great.\n\nAlso might be slightly more readable to do something like:\n\n    uint srcShift \u003d (index \u0026 0x1) \u003c\u003c 4;\n    const uint srcMask \u003d 0xFFFF;\n    uint value \u003d (srcBlock \u003e\u003e srcShift) \u0026 srcMask;",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 60
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bab07e91_8774d253",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndexIndirectLineLoop.comp",
+        "patchSetId": 19
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T15:38:40Z",
+      "side": 1,
+      "message": "Same for this,",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 33
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95df906c_ada36edf",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-01T15:38:40Z",
+      "side": 1,
+      "message": "Remove this line",
+      "range": {
+        "startLine": 638,
+        "startChar": 0,
+        "endLine": 638,
+        "endChar": 95
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
