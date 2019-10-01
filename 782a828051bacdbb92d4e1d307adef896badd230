@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0b70cf8e_1c92d250",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-01T23:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "876ac00d_8b4d1672",
+      "range": {
+        "startLine": 932,
+        "startChar": 4,
+        "endLine": 932,
+        "endChar": 94
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51a584d7_95d22d1e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 19
@@ -45,6 +69,30 @@
       "revId": "782a828051bacdbb92d4e1d307adef896badd230",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed4bbc65_6fcff1ac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-01T23:45:06Z",
+      "side": 1,
+      "message": "My understanding is no, we do not have client-side buffers when doing indirect.\nFrom the 3.1 spec:\nDrawElementsIndirect requires that all data sourced for the command, including the DrawElementsIndirectCommand structure, be in buffer objects,\nand may not be called when the default vertex array object is bound.",
+      "parentUuid": "51a584d7_95d22d1e",
+      "range": {
+        "startLine": 1755,
+        "startChar": 4,
+        "endLine": 1755,
+        "endChar": 81
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "feba75f3_bcc17a75",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-01T23:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44f5a915_2a81419f",
+      "range": {
+        "startLine": 1771,
+        "startChar": 16,
+        "endLine": 1771,
+        "endChar": 35
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "310b02da_84fd9fa7",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 19
@@ -85,6 +157,24 @@
       "revId": "782a828051bacdbb92d4e1d307adef896badd230",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3173d529_9f5feb76",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-01T23:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "310b02da_84fd9fa7",
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "967179f0_3ef83b9c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndexIndirectLineLoop.comp",
+        "patchSetId": 19
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-01T23:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce819dda_0c46ef33",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 60
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bab07e91_8774d253",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndexIndirectLineLoop.comp",
         "patchSetId": 19
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "57cb420e_8b8e83a4",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndexIndirectLineLoop.comp",
+        "patchSetId": 19
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-01T23:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bab07e91_8774d253",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 33
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95df906c_ada36edf",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 19
@@ -154,6 +292,30 @@
       "revId": "782a828051bacdbb92d4e1d307adef896badd230",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c757412c_c0d10911",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-01T23:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95df906c_ada36edf",
+      "range": {
+        "startLine": 638,
+        "startChar": 0,
+        "endLine": 638,
+        "endChar": 95
+      },
+      "revId": "782a828051bacdbb92d4e1d307adef896badd230",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
