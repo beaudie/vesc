@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a05794c2_143368fd",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-01T16:15:51Z",
+      "side": 1,
+      "message": "to fit with ANGLE style, can we call this ANGLE_FEATURE_CONDITION or something with an ANGLE_ prefix?",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 36
+      },
+      "revId": "7dd47c94e5b5c05496d59a7c6c2ca587a11caca2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "75379d9b_c2f33a07",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 4
