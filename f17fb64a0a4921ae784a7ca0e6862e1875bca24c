@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e032c25c_ef8b15d0",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3259,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-01T21:09:03Z",
+      "side": 1,
+      "message": "It looks like we have 2 blocks where we are disabling extensions for ES 3.0+, since (getClientVersion() \u003c ES_3_0) is the same as (getClientVersion() \u003e ES_2_0).   Can these get combined before they get too much larger or is there a reason to keep them separate like this?",
+      "revId": "f17fb64a0a4921ae784a7ca0e6862e1875bca24c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
