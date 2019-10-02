@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "91ab7637_e4d382dc",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5966,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-02T18:15:49Z",
+      "side": 1,
+      "message": "See my reply to Jamie\u0027s comment, since they are addressing the same thing.",
+      "parentUuid": "970d223a_5f63262c",
+      "revId": "6cdb20c39a88ca8c5a94bfb60d597dad1946282d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "138b9b9f_a48a87f6",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2019-10-02T13:44:22Z",
       "side": 1,
       "message": "Because things are asynchronous I think it might be good to make this smaller. Maybe 0.5 or maybe even 0.25? Make sure there is enough buffer that flushed work has time to finish well before we get to limit.",
+      "range": {
+        "startLine": 293,
+        "startChar": 63,
+        "endLine": 293,
+        "endChar": 66
+      },
+      "revId": "6cdb20c39a88ca8c5a94bfb60d597dad1946282d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5fb6d63_d7403552",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-02T18:15:49Z",
+      "side": 1,
+      "message": "0.25 sounds good to me.\n\nIs there something we can/should do for ourselves to make it clearer when we are hitting this case when it\u0027s time for performance tuning in case we should tweak this a bit more?",
+      "parentUuid": "138b9b9f_a48a87f6",
       "range": {
         "startLine": 293,
         "startChar": 63,
