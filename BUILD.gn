@@ -516,6 +516,10 @@ config("angle_backend_config") {
   if (angle_enable_null) {
     defines += [ "ANGLE_ENABLE_NULL" ]
   }
+
+  if (angle_enable_vulkan) {
+    configs = [ "src/libANGLE/renderer/vulkan:angle_vulkan_backend_config" ]
+  }
 }
 
 config("libANGLE_config") {
