@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9540b209_da65610a",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-02T21:07:27Z",
+      "side": 1,
+      "message": "Did you test before landing this change? https://chromium-review.googlesource.com/c/angle/angle/+/1832496\nIn case the tests hit the CPU readback path instead",
+      "revId": "851ed49156cedfde2560bb24809d0542796582e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
