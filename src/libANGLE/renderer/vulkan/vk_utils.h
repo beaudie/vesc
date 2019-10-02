@@ -642,6 +642,8 @@ namespace gl_vk
 {
 VkRect2D GetRect(const gl::Rectangle &source);
 VkFilter GetFilter(const GLenum filter);
+float GetSamplerMinLod(const gl::SamplerState &samplerState, GLfloat minLod);
+float GetSamplerMaxLod(const gl::SamplerState &samplerState, GLfloat maxLod);
 VkSamplerMipmapMode GetSamplerMipmapMode(const GLenum filter);
 VkSamplerAddressMode GetSamplerAddressMode(const GLenum wrap);
 VkPrimitiveTopology GetPrimitiveTopology(gl::PrimitiveMode mode);
