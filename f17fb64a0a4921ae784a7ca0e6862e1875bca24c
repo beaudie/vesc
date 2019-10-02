@@ -16,6 +16,24 @@
       "revId": "f17fb64a0a4921ae784a7ca0e6862e1875bca24c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7e981da_fc23774c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3259,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-02T13:31:36Z",
+      "side": 1,
+      "message": "They are opposite checks.  This section is disabling ES 3.0 extensions when we are in ES 2.0, the other block is for disabling 2.0 extensions when we are in 3.0+.",
+      "parentUuid": "e032c25c_ef8b15d0",
+      "revId": "f17fb64a0a4921ae784a7ca0e6862e1875bca24c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
