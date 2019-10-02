@@ -94,6 +94,54 @@
     },
     {
       "key": {
+        "uuid": "8fa3e014_714c6f22",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-10-02T01:04:03Z",
+      "side": 1,
+      "message": "A TRUE/FALSE attribute is preferable to me. This way, it would be possible to make an 11on12 Warp device. You can\u0027t do that if 11on12 is a device type.",
+      "parentUuid": "2c26495a_5ade93ef",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 48
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fa43f9b_b7b3b5ce",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-10-02T01:04:03Z",
+      "side": 1,
+      "message": "@Jamie, 11on12 is available on all Win10+ releases. \n\nEGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_WARP_ANGLE is an example of a flag that is also not available everywhere. \u0027Basic Renderer\u0027, as a device type, only appears on Win8+ releases. \n\nDo we need to split EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_WARP_ANGLE into its own extension as well, or is it sufficient to detect availability via ANGLE failing to create?",
+      "parentUuid": "2740dd95_9aef9ec2",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 53
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3ed1691_5b054911",
         "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
         "patchSetId": 8
