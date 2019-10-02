@@ -2697,6 +2697,25 @@ angle::Result State::syncTextures(const Context *context)
     return angle::Result::Continue;
 }
 
+angle::Result State::syncImages(const Context *context)
+{
+    if (mDirtyImages.none())
+        return angle::Result::Continue;
+
+    for (size_t imageUnitIndex : mDirtyImages)
+    {
+        Texture *texture = mImageUnits[imageUnitIndex].texture.get();
+        if (texture && texture->hasAnyDirtyBit())
+        {
+            ANGLE_TRY(texture->syncState(context));
+        }
+    }
+
+    mDirtyBits.set(DIRTY_BIT_IMAGE_BINDINGS);
+
+    return angle::Result::Continue;
+}
+
 angle::Result State::syncSamplers(const Context *context)
 {
     if (mDirtySamplers.none())
@@ -2900,6 +2919,12 @@ void State::onImageStateChange(const Context *context, size_t unit)
     {
         const ImageUnit &image = mImageUnits[unit];
         ASSERT(image.texture.get());
+        if (image.texture->hasAnyDirtyBit())
+        {
+            mDirtyImages.set(unit);
+            mDirtyObjects.set(DIRTY_OBJECT_IMAGES);
+        }
+
         if (mRobustResourceInit && image.texture->initState() == InitState::MayNeedInit)
         {
             mDirtyObjects.set(DIRTY_OBJECT_IMAGES_INIT);
