@@ -22,6 +22,29 @@
       "revId": "c5cc24e3c6e690f09f9a1345748229270a1c06ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "285cde13_888f303c",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2714,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-02T18:50:58Z",
+      "side": 1,
+      "message": "Should this be mDirtyImages.reset() to match the other sync functions?",
+      "range": {
+        "startLine": 2714,
+        "startChar": 4,
+        "endLine": 2714,
+        "endChar": 45
+      },
+      "revId": "c5cc24e3c6e690f09f9a1345748229270a1c06ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
