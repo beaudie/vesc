@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de982d8f_37e0d34d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2817,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-02T18:02:07Z",
+      "side": 1,
+      "message": "I don\u0027t think this is necessary. We don\u0027t do this for texture deatch. I think when a texture is deleted the binding will null itself.",
+      "range": {
+        "startLine": 2809,
+        "startChar": 0,
+        "endLine": 2817,
+        "endChar": 5
+      },
+      "revId": "c5cc24e3c6e690f09f9a1345748229270a1c06ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
