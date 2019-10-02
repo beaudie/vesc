@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3525cca_cdc5e235",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-02T21:11:59Z",
+      "side": 1,
+      "message": "I\u0027m confused, why rename and extend this enum, isn\u0027t it now unused?",
+      "revId": "32a1b114bffac03805f2714d4453b64da148d864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
