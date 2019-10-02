@@ -142,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "5ad586a5_ec46ab0b",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-02T02:59:12Z",
+      "side": 1,
+      "message": "Well, the WARP thing looks like it suffers from the the same issue. I\u0027d recommend we split off 11-on-12 and only expose the extension on Win10+. I\u0027d recommend just leaving the WARP thing alone as it\u0027s already been baked in a while.",
+      "parentUuid": "9fa43f9b_b7b3b5ce",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 53
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3ed1691_5b054911",
         "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
         "patchSetId": 8
