@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e12e607b_808895e9",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2817,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-10-02T19:51:33Z",
+      "side": 1,
+      "message": "the reason we have this issue is that the image observers are left dangling and unnotified when there is a change in image-texture binding. At a later point when we are deleting the image binding the bound texture is already gone and we assert in method \"State::onImageStateChange\" at line \"ASSERT(image.texture.get());\"",
+      "parentUuid": "de982d8f_37e0d34d",
+      "range": {
+        "startLine": 2809,
+        "startChar": 0,
+        "endLine": 2817,
+        "endChar": 5
+      },
+      "revId": "c5cc24e3c6e690f09f9a1345748229270a1c06ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "285cde13_888f303c",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 1
