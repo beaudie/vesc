@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "970d223a_5f63262c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5966,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-02T13:44:22Z",
+      "side": 1,
+      "message": "Should this be in ContextVk? That would avoid having to add this to every renderer.",
+      "revId": "6cdb20c39a88ca8c5a94bfb60d597dad1946282d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "138b9b9f_a48a87f6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-02T13:44:22Z",
+      "side": 1,
+      "message": "Because things are asynchronous I think it might be good to make this smaller. Maybe 0.5 or maybe even 0.25? Make sure there is enough buffer that flushed work has time to finish well before we get to limit.",
+      "range": {
+        "startLine": 293,
+        "startChar": 63,
+        "endLine": 293,
+        "endChar": 66
+      },
+      "revId": "6cdb20c39a88ca8c5a94bfb60d597dad1946282d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
