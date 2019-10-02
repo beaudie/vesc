@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adb5f4fd_aa5581e5",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-02T15:08:36Z",
+      "side": 1,
+      "message": "Add a comment with a link to the bug saying it\u0027s temporary",
+      "revId": "18580185527d1cba131baf8190801cfb49eff305",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
