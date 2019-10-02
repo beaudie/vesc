@@ -726,6 +726,24 @@ VkSamplerAddressMode GetSamplerAddressMode(const GLenum wrap)
     }
 }
 
+// From the Vulkan spec (1.1.123):
+//
+//   There are no Vulkan filter modes that directly correspond to OpenGL
+//   minification filters of GL_LINEAR or GL_NEAREST, but they can be emulated using
+//   VK_SAMPLER_MIPMAP_MODE_NEAREST, minLod = 0, and maxLod = 0.25, and using
+//   minFilter = VK_FILTER_LINEAR or minFilter = VK_FILTER_NEAREST, respectively.
+//
+// Therefore, the two helpers below implement this secret handshake with the driver.
+
+float GetSamplerMinLod(const gl::SamplerState &samplerState, GLfloat minLod)
+{
+    return gl::IsMipmapFiltered(samplerState) ? minLod : 0.0f;
+}
+float GetSamplerMaxLod(const gl::SamplerState &samplerState, GLfloat maxLod)
+{
+    return gl::IsMipmapFiltered(samplerState) ? maxLod : 0.25f;
+}
+
 VkRect2D GetRect(const gl::Rectangle &source)
 {
     return {{source.x, source.y},
