@@ -64,10 +64,12 @@ angle::Result SamplerVk::syncState(const gl::Context *context, const bool dirty)
     samplerInfo.maxAnisotropy           = maxAnisotropy;
     samplerInfo.compareEnable           = mState.getCompareMode() == GL_COMPARE_REF_TO_TEXTURE;
     samplerInfo.compareOp               = gl_vk::GetCompareOp(mState.getCompareFunc());
-    samplerInfo.minLod                  = mState.getMinLod();
-    samplerInfo.maxLod                  = mState.getMaxLod();
     samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
+
+    // Use maxLod to control miplevels if mip mapping is disabled.
+    samplerInfo.minLod = gl::IsMipmapFiltered(mState) ? mState.getMinLod() : 0.0f;
+    samplerInfo.maxLod = gl::IsMipmapFiltered(mState) ? mState.getMaxLod() : 0.0f;
 
     ANGLE_VK_TRY(contextVk, mSampler.init(contextVk->getDevice(), samplerInfo));
     // Regenerate the serial on a sampler change.
