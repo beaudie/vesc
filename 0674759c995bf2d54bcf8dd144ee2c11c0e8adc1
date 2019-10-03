@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "6bfa5c5d_05f1b31a",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-03T21:29:05Z",
+      "side": 1,
+      "message": "I understand, and we shouldn\u0027t try creating a D3D12 device to confirm if it will work but we can at least require Win10 to improve the chances of device creation succeeding later.",
+      "parentUuid": "a93c1471_e76715e3",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 53
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3ed1691_5b054911",
         "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
         "patchSetId": 8
