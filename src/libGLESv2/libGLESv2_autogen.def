@@ -448,6 +448,7 @@ EXPORTS
     glProvokingVertexANGLE
 
     ; GL_ANGLE_request_extension
+    glDisableExtensionANGLE
     glRequestExtensionANGLE
 
     ; GL_ANGLE_robust_client_memory
@@ -903,6 +904,7 @@ EXPORTS
     glDetachShaderContextANGLE
     glDisableContextANGLE
     glDisableClientStateContextANGLE
+    glDisableExtensionANGLEContextANGLE
     glDisableVertexAttribArrayContextANGLE
     glDiscardFramebufferEXTContextANGLE
     glDispatchComputeContextANGLE
