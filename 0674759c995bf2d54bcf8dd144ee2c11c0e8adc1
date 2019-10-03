@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "a93c1471_e76715e3",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-10-03T20:43:22Z",
+      "side": 1,
+      "message": "\u003e If we require Win10+ to expose it, it\u0027s still more precise than all Windows.\n\nMy point is the check in GenerateClientExtensions would be more than just \"are we running on Win10\".  We have to create a D3D12 device and check if it succeeds. Creating a device loads additional DLLs and drivers that wouldn\u0027t otherwise be loaded, thus negatively impacting startup time. And that\u0027s true even if the user of ANGLE (such as Chromium) isn\u0027t even interested in D3D12 at all.",
+      "parentUuid": "f42b719c_94c2d0b7",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 53
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3ed1691_5b054911",
         "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
         "patchSetId": 8
