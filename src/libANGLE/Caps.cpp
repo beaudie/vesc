@@ -734,6 +734,12 @@ const ExtensionInfoMap &GetExtensionInfoMap()
             return info;
         };
 
+        auto enableableDisablableExtension = [&](ExtensionInfo::ExtensionBool member) {
+            ExtensionInfo info = enableableExtension(member);
+            info.Disablable    = true;
+            return info;
+        };
+
         auto esOnlyExtension = [](ExtensionInfo::ExtensionBool member) {
             ExtensionInfo info;
             info.ExtensionsMember = member;
@@ -851,7 +857,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_client_arrays"] = esOnlyExtension(&Extensions::clientArrays);
         map["GL_ANGLE_robust_resource_initialization"] = esOnlyExtension(&Extensions::robustResourceInitialization);
         map["GL_ANGLE_program_cache_control"] = esOnlyExtension(&Extensions::programCacheControl);
-        map["GL_ANGLE_texture_rectangle"] = enableableExtension(&Extensions::textureRectangle);
+        map["GL_ANGLE_texture_rectangle"] = enableableDisablableExtension(&Extensions::textureRectangle);
         map["GL_EXT_geometry_shader"] = enableableExtension(&Extensions::geometryShader);
         map["GL_ANGLE_explicit_context_gles1"] = enableableExtension(&Extensions::explicitContextGles1);
         map["GL_ANGLE_explicit_context"] = enableableExtension(&Extensions::explicitContext);

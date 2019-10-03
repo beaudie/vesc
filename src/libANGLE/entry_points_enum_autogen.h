@@ -242,6 +242,7 @@ enum class EntryPoint
     DetachShader,
     Disable,
     DisableClientState,
+    DisableExtensionANGLE,
     DisableVertexArrayAttrib,
     DisableVertexAttribArray,
     Disablei,
