@@ -300,6 +300,7 @@ State::State(ContextID contextIn,
       mFramebufferSRGB(true),
       mRobustResourceInit(robustResourceInit),
       mProgramBinaryCacheEnabled(programBinaryCacheEnabled),
+      mTextureRectangleEnabled(true),
       mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max()),
       mOverlay(overlay)
 {}
@@ -942,6 +943,9 @@ void State::setEnableFeature(GLenum feature, bool enabled)
         case GL_FRAMEBUFFER_SRGB_EXT:
             setFramebufferSRGB(enabled);
             break;
+        case GL_TEXTURE_RECTANGLE_ANGLE:
+            mTextureRectangleEnabled = enabled;
+            break;
 
         // GLES1 emulation
         case GL_ALPHA_TEST:
@@ -1049,6 +1053,8 @@ bool State::getEnableFeature(GLenum feature) const
             return mRobustResourceInit;
         case GL_PROGRAM_CACHE_ENABLED_ANGLE:
             return mProgramBinaryCacheEnabled;
+        case GL_TEXTURE_RECTANGLE_ANGLE:
+            return mTextureRectangleEnabled;
 
         // GLES1 emulation
         case GL_ALPHA_TEST:
@@ -1921,6 +1927,9 @@ void State::getBooleanv(GLenum pname, GLboolean *params)
             break;
         case GL_PROGRAM_CACHE_ENABLED_ANGLE:
             *params = mProgramBinaryCacheEnabled ? GL_TRUE : GL_FALSE;
+            break;
+        case GL_TEXTURE_RECTANGLE_ANGLE:
+            *params = mTextureRectangleEnabled ? GL_TRUE : GL_FALSE;
             break;
         case GL_LIGHT_MODEL_TWO_SIDE:
             *params = IsLightModelTwoSided(&mGLES1State);

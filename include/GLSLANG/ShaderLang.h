@@ -304,6 +304,11 @@ const ShCompileOptions SH_USE_OLD_REWRITE_STRUCT_SAMPLERS = UINT64_C(1) << 47;
 // when angle_BaseVertex is available.
 const ShCompileOptions SH_ADD_BASE_VERTEX_TO_VERTEX_ID = UINT64_C(1) << 48;
 
+// This flag allows disabling ARB_texture_rectangle on a per-compile basis. This is necessary
+// for WebGL contexts becuase ARB_texture_rectangle may be necessary for the WebGL implementation
+// internally but shouldn't be exposed to WebGL user code.
+const ShCompileOptions SH_DISABLE_ARB_TEXTURE_RECTANGLE = UINT64_C(1) << 49;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {
