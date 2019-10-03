@@ -128,6 +128,24 @@
       "revId": "b7ba0fb40d2b986b01ef4368b5eec01c99c1ac32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "086460b3_8f401327",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-03T14:37:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48d2c132_8a7353c9",
+      "revId": "b7ba0fb40d2b986b01ef4368b5eec01c99c1ac32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
