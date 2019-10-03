@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "27755075_0451ab20",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-10-03T17:30:58Z",
+      "side": 1,
+      "message": "Unfortunately, DX12 support is more involved than checking what version of Windows you\u0027re running. Event though the API first appeared on Win10, not all hardware has DX12 capable drivers. To determine support for sure, you need to create a D3D12 device and check if succeeds.\n\nLooking through the code, these extension appear to be probed for in GenerateClientExtensions, which happens when you make a context. Adding a DX12 device creation call in this code path seems onerous when you consider that not all clients of ANGLE may be interested in DX12 or 11on12. \n\nUnless there is an extension probing method I am not considering, it seems best if we have clients of ANGLE attempt 11on12 and, if it fails, attempt something else.  \n\nJamie/Geoff, what do you think?",
+      "parentUuid": "5ad586a5_ec46ab0b",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 53
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3ed1691_5b054911",
         "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
         "patchSetId": 8
