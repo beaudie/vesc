@@ -1479,11 +1479,11 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     samplerInfo.maxAnisotropy           = maxAnisotropy;
     samplerInfo.compareEnable           = compareEnable;
     samplerInfo.compareOp               = compareOp;
-    samplerInfo.minLod                  = samplerState.getMinLod();
     samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
 
     // Use maxLod to control miplevels if mip mapping is disabled.
+    samplerInfo.minLod = gl::IsMipmapFiltered(samplerState) ? samplerState.getMinLod() : 0.0f;
     samplerInfo.maxLod = gl::IsMipmapFiltered(samplerState) ? samplerState.getMaxLod() : 0.0f;
 
     ANGLE_VK_TRY(contextVk, mSampler.init(contextVk->getDevice(), samplerInfo));
