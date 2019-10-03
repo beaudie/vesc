@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4d055db_dc3c7771",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-03T21:22:56Z",
+      "side": 1,
+      "message": "nit: http://anglebug.com/2162",
+      "range": {
+        "startLine": 1312,
+        "startChar": 25,
+        "endLine": 1312,
+        "endChar": 34
+      },
+      "revId": "7cf0aca1836d700cad518217829996d5afa35722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ff14480_60a6811f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-03T21:22:56Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 346,
+        "startChar": 25,
+        "endLine": 346,
+        "endChar": 34
+      },
+      "revId": "7cf0aca1836d700cad518217829996d5afa35722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
