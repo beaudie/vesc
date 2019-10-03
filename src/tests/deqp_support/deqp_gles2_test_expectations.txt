@@ -30,7 +30,10 @@
 //  91531 NEXUS5X GLES : conformance_more_* = SKIP
 
 // Skip these tests due to timeouts
-1034 : dEQP-GLES2.functional.flush_finish.* = SKIP
+1034 D3D11 : dEQP-GLES2.functional.flush_finish.* = SKIP
+1034 D3D9 : dEQP-GLES2.functional.flush_finish.* = SKIP
+1034 GLES : dEQP-GLES2.functional.flush_finish.* = SKIP
+1034 OPENGL : dEQP-GLES2.functional.flush_finish.* = SKIP
 
 // Failures related to not supporting separate depth/stencil masks on D3D11.
 1655 D3D11 : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil_depth_funcs.stencil_* = FAIL
