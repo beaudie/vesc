@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "f42b719c_94c2d0b7",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-03T18:44:23Z",
+      "side": 1,
+      "message": "I think it\u0027s still preferable to make a new extension, it\u0027s not very sustainable for us to keep adding new parameters to this one.\n\nIf we require Win10+ to expose it, it\u0027s still more precise than all Windows.",
+      "parentUuid": "27755075_0451ab20",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 53
+      },
+      "revId": "0674759c995bf2d54bcf8dd144ee2c11c0e8adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3ed1691_5b054911",
         "filename": "extensions/EGL_ANGLE_platform_angle_d3d.txt",
         "patchSetId": 8
