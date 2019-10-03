@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5a1a3a2_b263af5e",
+        "filename": "src/libANGLE/renderer/gl/RenderbufferGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-03T14:19:51Z",
+      "side": 0,
+      "message": "Is this not necessary anymore?",
+      "revId": "7dd034469ac990197594712bedbac24e675a7f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
