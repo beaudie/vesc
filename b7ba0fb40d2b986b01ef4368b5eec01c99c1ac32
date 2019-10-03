@@ -110,6 +110,24 @@
       "revId": "b7ba0fb40d2b986b01ef4368b5eec01c99c1ac32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48d2c132_8a7353c9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-03T01:45:36Z",
+      "side": 1,
+      "message": "I wanted to, but this wasn\u0027t a gl::Context, it was actually a vk::Context that doesn\u0027t have much to it:\n\n[[[... vk_utils.h ...]]]\nclass Context : angle::NonCopyable\n{\n  public:\n    Context(RendererVk *renderer);\n    virtual ~Context();\n\n    virtual void handleError(VkResult result,\n                             const char *file,\n                             const char *function,\n                             unsigned int line) \u003d 0;\n    VkDevice getDevice() const;\n    RendererVk *getRenderer() const { return mRenderer; }\n\n  protected:\n    RendererVk *const mRenderer;\n};\n\nUpdating to the ContextVk (that\u0027s already being passed in anyway) felt better to me.",
+      "parentUuid": "c443e3fb_a984ea71",
+      "revId": "b7ba0fb40d2b986b01ef4368b5eec01c99c1ac32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
