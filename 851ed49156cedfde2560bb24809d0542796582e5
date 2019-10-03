@@ -16,6 +16,24 @@
       "revId": "851ed49156cedfde2560bb24809d0542796582e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79ca6a47_7dc06b5c",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-03T14:14:06Z",
+      "side": 1,
+      "message": "The tryjobs were run before that change landed but I forgot to revert that as part of this patch!  Fixed.",
+      "parentUuid": "9540b209_da65610a",
+      "revId": "851ed49156cedfde2560bb24809d0542796582e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
