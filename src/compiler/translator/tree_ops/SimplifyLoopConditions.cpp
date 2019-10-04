@@ -218,9 +218,8 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
             //   {
             //     init;
             //     bool s0 = expr;
-            //     while (s0) {
+            //     for (; s0; exprB) {
             //       { body; }
-            //       exprB;
             //       s0 = expr;
             //     }
             //   }
@@ -246,29 +245,24 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
             loopScopeSequence->push_back(
                 CreateTempInitDeclarationNode(conditionVariable, conditionInitializer));
 
-            // Insert "{ body; }" in the while loop
-            TIntermBlock *whileLoopBody = new TIntermBlock();
+            // Insert "{ body; }" in the new loop
+            TIntermBlock *newLoopBody = new TIntermBlock();
             if (node->getBody())
             {
-                whileLoopBody->getSequence()->push_back(node->getBody());
+                newLoopBody->getSequence()->push_back(node->getBody());
             }
-            // Insert "exprB;" in the while loop
-            if (node->getExpression())
-            {
-                whileLoopBody->getSequence()->push_back(node->getExpression());
-            }
-            // Insert "s0 = expr;" in the while loop
+            // Insert "s0 = expr;" in the new loop
             if (node->getCondition())
             {
-                whileLoopBody->getSequence()->push_back(
+                newLoopBody->getSequence()->push_back(
                     CreateTempAssignmentNode(conditionVariable, node->getCondition()->deepCopy()));
             }
 
-            // Create "while(s0) { whileLoopBody }"
-            TIntermLoop *whileLoop =
-                new TIntermLoop(ELoopWhile, nullptr, CreateTempSymbolNode(conditionVariable),
-                                nullptr, whileLoopBody);
-            loopScope->getSequence()->push_back(whileLoop);
+            // Create "for (; s0; exprB) { newLoopBody }"
+            TIntermLoop *newForLoop =
+                new TIntermLoop(ELoopFor, nullptr, CreateTempSymbolNode(conditionVariable),
+                                node->getExpression(), newLoopBody);
+            loopScope->getSequence()->push_back(newForLoop);
             queueReplacement(loopScope, OriginalNode::IS_DROPPED);
 
             // After this the old body node will be traversed and loops inside it may be
