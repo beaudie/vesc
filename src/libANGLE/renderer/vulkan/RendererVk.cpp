@@ -1216,6 +1216,7 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     }
 
     // Limit to ES2.0 if there are any blockers for 3.0.
+    // TODO: http://anglebug.com/3972 Limit to GLES 2.0 if flat shading can't be emulated
 
     // If the command buffer doesn't support queries, we can't support ES3.
     if (!vk::CommandBuffer::SupportsQueries(mPhysicalDeviceFeatures))
@@ -1235,6 +1236,21 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     // feedback.  TODO(syoussefi): this should be conditioned to the extension not being present as
     // well, when that code path is implemented.  http://anglebug.com/3206
     if (!mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
+    {
+        maxVersion = std::max(maxVersion, gl::Version(2, 0));
+    }
+
+    // Limit to GLES 2.0 if maxPerStageDescriptorUniformBuffers is too low.
+    // Table 6.31 MAX_VERTEX_UNIFORM_BLOCKS minimum value = 12
+    // Table 6.32 MAX_FRAGMENT_UNIFORM_BLOCKS minimum value = 12
+    if (mPhysicalDeviceProperties.limits.maxPerStageDescriptorUniformBuffers < 12)
+    {
+        maxVersion = std::max(maxVersion, gl::Version(2, 0));
+    }
+
+    // Limit to GLES 2.0 if maxVertexOutputComponents is too low.
+    // Table 6.31 MAX VERTEX OUTPUT COMPONENTS minimum value = 64
+    if (mPhysicalDeviceProperties.limits.maxVertexOutputComponents < 64)
     {
         maxVersion = std::max(maxVersion, gl::Version(2, 0));
     }
