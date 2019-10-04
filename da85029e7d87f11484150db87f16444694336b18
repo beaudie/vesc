@@ -16,6 +16,24 @@
       "revId": "da85029e7d87f11484150db87f16444694336b18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4166ce3_0a0e6e50",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2019-10-04T17:20:28Z",
+      "side": 1,
+      "message": "That would prevent SwiftShader from ever being used for a GLES 3.0 Context. Are there no other way?",
+      "parentUuid": "486ad5dd_f430f727",
+      "revId": "da85029e7d87f11484150db87f16444694336b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
