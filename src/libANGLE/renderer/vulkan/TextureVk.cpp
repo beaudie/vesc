@@ -1231,6 +1231,7 @@ angle::Result TextureVk::changeLevels(ContextVk *contextVk, GLuint baseLevel, GL
             // We need to adjust the source Vulkan level to reflect the previous base level.
             // vk level 0 previously aligned with whatever the base level was.
             uint32_t srcLevelVK = level - previousBaseLevel;
+            ASSERT(srcLevelVK <= mImage->getLevelCount());
 
             // Adjust offset and depth based on our knowledge of image type here
             gl::Box area(0, 0, 0, extents.width, extents.height, extents.depth);
@@ -1743,13 +1744,15 @@ angle::Result TextureVk::initImageViewImpl(ContextVk *contextVk,
                                            VkImageAspectFlags aspectFlags,
                                            gl::SwizzleState mappedSwizzle)
 {
-    // TODO(cnorthrop): May be missing non-zero base level http://anglebug.com/3948
-    uint32_t baseLevel = getNativeImageLevel(0);
+    uint32_t baseLevel = getNativeImageLevel(mState.getEffectiveBaseLevel());
     uint32_t baseLayer = getNativeImageLayer(0);
 
+    uint32_t effectiveLevelCount = levelCount - baseLevel;
+    ASSERT(effectiveLevelCount <= levelCount);
+
     ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags, mappedSwizzle,
-                                         &view->mReadImageView, baseLevel, levelCount, baseLayer,
-                                         layerCount));
+                                         &view->mReadImageView, baseLevel, effectiveLevelCount,
+                                         baseLayer, layerCount));
     if (mState.getType() == gl::TextureType::CubeMap ||
         mState.getType() == gl::TextureType::_2DArray ||
         mState.getType() == gl::TextureType::_2DMultisampleArray)
@@ -1757,7 +1760,7 @@ angle::Result TextureVk::initImageViewImpl(ContextVk *contextVk,
         gl::TextureType arrayType = vk::Get2DTextureType(layerCount, mImage->getSamples());
 
         ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, aspectFlags, mappedSwizzle,
-                                             &view->mFetchImageView, baseLevel, levelCount,
+                                             &view->mFetchImageView, baseLevel, effectiveLevelCount,
                                              baseLayer, layerCount));
     }
     if (!format.imageFormat().isBlock)
