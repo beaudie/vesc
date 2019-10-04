@@ -604,6 +604,9 @@ void GraphicsPipelineDesc::initDefaults()
     mScissor.offset.y      = 0;
     mScissor.extent.width  = 0;
     mScissor.extent.height = 0;
+
+    mInputAssemblyAndColorBlendStateInfo.vertexConvention =
+        static_cast<uint8_t>(gl::ProvokingVertexConvention::LastVertexConvention);
 }
 
 angle::Result GraphicsPipelineDesc::initializePipeline(
@@ -920,6 +923,15 @@ void GraphicsPipelineDesc::updatePrimitiveRestartEnabled(GraphicsPipelineTransit
     mInputAssemblyAndColorBlendStateInfo.primitive.restartEnable =
         static_cast<uint16_t>(primitiveRestartEnabled);
     transition->set(ANGLE_GET_TRANSITION_BIT(mInputAssemblyAndColorBlendStateInfo, primitive));
+}
+
+void GraphicsPipelineDesc::updateProvokingVertexConvention(
+    GraphicsPipelineTransitionBits *transition,
+    gl::ProvokingVertexConvention provokingVertex)
+{
+    mInputAssemblyAndColorBlendStateInfo.vertexConvention = static_cast<uint8_t>(provokingVertex);
+    transition->set(
+        ANGLE_GET_TRANSITION_BIT(mInputAssemblyAndColorBlendStateInfo, vertexConvention));
 }
 
 void GraphicsPipelineDesc::setCullMode(VkCullModeFlagBits cullMode)

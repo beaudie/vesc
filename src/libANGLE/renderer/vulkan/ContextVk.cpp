@@ -507,6 +507,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mCurrentGraphicsPipeline(nullptr),
       mCurrentComputePipeline(nullptr),
       mCurrentDrawMode(gl::PrimitiveMode::InvalidEnum),
+      mProvokingVertexConvention(gl::ProvokingVertexConvention::LastVertexConvention),
       mCurrentWindowSurface(nullptr),
       mVertexArray(nullptr),
       mDrawFramebuffer(nullptr),
@@ -741,6 +742,16 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    DirtyBits dirtyBitMask,
                                    vk::CommandBuffer **commandBufferOut)
 {
+    // To apply Provoking Vertex, geometry shader will be attached.
+    // Vulkan pipeline needs to be upodated
+    if (context->getState().getProvokingVertex() != mProvokingVertexConvention)
+    {
+        mProvokingVertexConvention = context->getState().getProvokingVertex();
+        invalidateCurrentGraphicsPipeline();
+        mGraphicsPipelineDesc->updateProvokingVertexConvention(&mGraphicsPipelineTransition,
+                                                               mProvokingVertexConvention);
+    }
+
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
     {
