@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4097f2c9_fac6bbb6",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-04T12:54:01Z",
+      "side": 1,
+      "message": "suggestion: make this also set MIPMAP_MODE_NEAREST if filtering is GL_LINEAR.",
+      "range": {
+        "startLine": 58,
+        "startChar": 49,
+        "endLine": 58,
+        "endChar": 69
+      },
+      "revId": "1a0ee8f9bd6728526bd6ba4b36f1bab3360ad564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
