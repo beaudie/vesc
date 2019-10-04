@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3df4dd5f_d8af252d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-04T16:25:47Z",
+      "side": 1,
+      "message": "To help readability, can this be a local variable named \u0027effectiveLevelCount\u0027?",
+      "range": {
+        "startLine": 1751,
+        "startChar": 75,
+        "endLine": 1751,
+        "endChar": 97
+      },
+      "revId": "4963caeee2fab82b58feb74562122fc79779da76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
