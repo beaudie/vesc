@@ -46,6 +46,30 @@
       "revId": "50ee52bb3629839dd7d37aaafc60c1323e740500",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd05be0f_181d2538",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-04T18:06:48Z",
+      "side": 1,
+      "message": "It\u0027s totally fine to use the front-end caps. They should be \u003d\u003d in almost all cases.",
+      "parentUuid": "177bc013_ce29d8fa",
+      "range": {
+        "startLine": 688,
+        "startChar": 16,
+        "endLine": 688,
+        "endChar": 87
+      },
+      "revId": "50ee52bb3629839dd7d37aaafc60c1323e740500",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
