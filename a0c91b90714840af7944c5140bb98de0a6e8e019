@@ -22,6 +22,30 @@
       "revId": "a0c91b90714840af7944c5140bb98de0a6e8e019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c696c4a0_a22a52e8",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-04T19:23:32Z",
+      "side": 1,
+      "message": "Done, went with _use_copy_compiler_dll as GN likes the \"use\" verb.",
+      "parentUuid": "0f9b82ca_91bfb2a6",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 19
+      },
+      "revId": "a0c91b90714840af7944c5140bb98de0a6e8e019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
