@@ -46,6 +46,30 @@
       "revId": "d341c9701c3a6a0a56db17dc193a2c3d4e49dc04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e50d7f7c_027b1a39",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2019-10-04T23:01:24Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "1abf3da0_535bfc71",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 49
+      },
+      "revId": "d341c9701c3a6a0a56db17dc193a2c3d4e49dc04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
