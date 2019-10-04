@@ -1645,12 +1645,7 @@ angle::Result TextureVk::getLayerLevelStorageImageView(ContextVk *contextVk,
     }
     else
     {
-        // Create a view of the selected layer.
-        imageView = getLayerLevelImageViewImpl(&mLayerLevelStorageImageViews, singleLayer, level);
-
-        // If viewing a single layer, the image is always 2D.  Note that GLES doesn't support
-        // multisampled storage images.
-        viewType = gl::TextureType::_2D;
+        return getLayerLevelDrawImageView(contextVk, singleLayer, level, imageViewOut);
     }
 
     *imageViewOut = imageView;
