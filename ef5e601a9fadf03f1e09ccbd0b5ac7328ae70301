@@ -22,6 +22,30 @@
       "revId": "ef5e601a9fadf03f1e09ccbd0b5ac7328ae70301",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5c21fea_0629be71",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndirectLineLoop.comp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T17:03:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09309884_2288bc29",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 31
+      },
+      "revId": "ef5e601a9fadf03f1e09ccbd0b5ac7328ae70301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
