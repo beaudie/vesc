@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d56bf54_56498b1f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-04T19:07:37Z",
+      "side": 1,
+      "message": "general style note: for empty initializations like this you can omit it.",
+      "range": {
+        "startLine": 439,
+        "startChar": 6,
+        "endLine": 439,
+        "endChar": 19
+      },
+      "revId": "0468d4edc61517f8cd078f5fcf9b4c406adc40bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af3e6c43_5f8b1fb2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-04T19:07:37Z",
+      "side": 1,
+      "message": "general style note: for simple types avoid auto whenever possible.",
+      "range": {
+        "startLine": 572,
+        "startChar": 15,
+        "endLine": 572,
+        "endChar": 19
+      },
+      "revId": "0468d4edc61517f8cd078f5fcf9b4c406adc40bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e731fde4_30e0797e",
+        "filename": "src/tests/gl_tests/ProvokingVertexTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-04T19:07:37Z",
+      "side": 1,
+      "message": "can you tag this with a bug ID where this can get fixed?",
+      "range": {
+        "startLine": 152,
+        "startChar": 23,
+        "endLine": 152,
+        "endChar": 31
+      },
+      "revId": "0468d4edc61517f8cd078f5fcf9b4c406adc40bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45d81526_47d057f0",
+        "filename": "src/tests/gl_tests/ProvokingVertexTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-04T19:07:37Z",
+      "side": 1,
+      "message": "same here, maybe use a separate skip for this and use a bug tag so we don\u0027t lose track of it.",
+      "range": {
+        "startLine": 264,
+        "startChar": 36,
+        "endLine": 264,
+        "endChar": 44
+      },
+      "revId": "0468d4edc61517f8cd078f5fcf9b4c406adc40bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
