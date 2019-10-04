@@ -16,6 +16,24 @@
       "revId": "b0196cb11b2eb5af5048de9623433b7e59d26dd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1975a859_358be009",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-04T15:59:10Z",
+      "side": 1,
+      "message": "I tried a couple of iterations of that, but nothing looked/felt as clean as this.  The repeated comment does suck, I agree.  We can circle back once I clear out remaining ES3 items.",
+      "parentUuid": "22b109bf_577d469b",
+      "revId": "b0196cb11b2eb5af5048de9623433b7e59d26dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
