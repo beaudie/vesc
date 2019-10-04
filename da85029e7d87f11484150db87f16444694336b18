@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "486ad5dd_f430f727",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-04T17:15:23Z",
+      "side": 1,
+      "message": "can you also add a limit to GLES 2.0 if geometry shaders are not supported? We\u0027ll need that for flat shading.",
+      "revId": "da85029e7d87f11484150db87f16444694336b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
