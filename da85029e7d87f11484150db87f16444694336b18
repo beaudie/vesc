@@ -70,6 +70,24 @@
       "revId": "da85029e7d87f11484150db87f16444694336b18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81717eb6_aa3d2ac1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-04T21:02:29Z",
+      "side": 1,
+      "message": "I\u0027ve opened anglebug.com/3972 to chase this and BlockedOn anglebug.com/3430.   I\u0027ve also added a TODO in the code here pointing to 3972.",
+      "parentUuid": "c280932d_ea5bf8a2",
+      "revId": "da85029e7d87f11484150db87f16444694336b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
