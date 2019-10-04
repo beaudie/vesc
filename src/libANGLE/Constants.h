@@ -72,7 +72,14 @@ enum
     IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS = 8,
 
     // Implementation upper limits, real maximums depend on the hardware.
-    IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS = 64
+    IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS = 64,
+
+    // OpenGL ES 3.0+ Minimum Values
+    // Table 6.31 MAX_VERTEX_UNIFORM_BLOCKS minimum value = 12
+    // Table 6.32 MAX_FRAGMENT_UNIFORM_BLOCKS minimum value = 12
+    MIN_SHADER_UNIFORM_BLOCKS = 12,
+    // Table 6.31 MAX_VERTEX_OUTPUT_COMPONENTS minimum value = 64
+    MIN_VERTEX_OUTPUT_COMPONENTS = 64
 };
 
 namespace limits

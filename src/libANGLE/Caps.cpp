@@ -1017,14 +1017,14 @@ Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensi
         caps.maxVertexAttributes                            = 16;
         caps.maxShaderUniformComponents[ShaderType::Vertex] = 1024;
         caps.maxVertexUniformVectors                        = 256;
-        caps.maxShaderUniformBlocks[ShaderType::Vertex]     = 12;
-        caps.maxVertexOutputComponents                      = 64;
+        caps.maxShaderUniformBlocks[ShaderType::Vertex]     = MIN_SHADER_UNIFORM_BLOCKS;
+        caps.maxVertexOutputComponents                      = MIN_VERTEX_OUTPUT_COMPONENTS;
         caps.maxShaderTextureImageUnits[ShaderType::Vertex] = 16;
 
         // Table 6.32
         caps.maxShaderUniformComponents[ShaderType::Fragment] = 896;
         caps.maxFragmentUniformVectors                        = 224;
-        caps.maxShaderUniformBlocks[ShaderType::Fragment]     = 12;
+        caps.maxShaderUniformBlocks[ShaderType::Fragment]     = MIN_SHADER_UNIFORM_BLOCKS;
         caps.maxFragmentInputComponents                       = 60;
         caps.maxShaderTextureImageUnits[ShaderType::Fragment] = 16;
         caps.minProgramTexelOffset                            = -8;
@@ -1081,7 +1081,7 @@ Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensi
         caps.maxComputeWorkGroupCount                           = {{65535, 65535, 65535}};
         caps.maxComputeWorkGroupSize                            = {{128, 128, 64}};
         caps.maxComputeWorkGroupInvocations                     = 12;
-        caps.maxShaderUniformBlocks[ShaderType::Compute]        = 12;
+        caps.maxShaderUniformBlocks[ShaderType::Compute]        = MIN_SHADER_UNIFORM_BLOCKS;
         caps.maxShaderTextureImageUnits[ShaderType::Compute]    = 16;
         caps.maxComputeSharedMemorySize                         = 16384;
         caps.maxShaderUniformComponents[ShaderType::Compute]    = 1024;
@@ -1122,7 +1122,7 @@ Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensi
 
         // Table 20.43gs (GL_EXT_geometry_shader)
         caps.maxShaderUniformComponents[ShaderType::Geometry]    = 1024;
-        caps.maxShaderUniformBlocks[ShaderType::Geometry]        = 12;
+        caps.maxShaderUniformBlocks[ShaderType::Geometry]        = MIN_SHADER_UNIFORM_BLOCKS;
         caps.maxGeometryInputComponents                          = 64;
         caps.maxGeometryOutputComponents                         = 64;
         caps.maxGeometryOutputVertices                           = 256;
