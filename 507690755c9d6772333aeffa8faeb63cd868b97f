@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8be7b1a5_e2c3e513",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03edd41a_875aa999",
+      "range": {
+        "startLine": 923,
+        "startChar": 1,
+        "endLine": 927,
+        "endChar": 62
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9146e42_c30c5085",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a1a73df_95ac4bc5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9146e42_c30c5085",
+      "range": {
+        "startLine": 930,
+        "startChar": 25,
+        "endLine": 930,
+        "endChar": 55
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "cac4b53e_13c836e9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19e2a777_49e4dddb",
+      "range": {
+        "startLine": 942,
+        "startChar": 28,
+        "endLine": 942,
+        "endChar": 55
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e3a7715a_82f20de8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e6374c43_c6abb4b5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3a7715a_82f20de8",
+      "range": {
+        "startLine": 954,
+        "startChar": 0,
+        "endLine": 958,
+        "endChar": 62
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96e047ae_8e2bf941",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 7
@@ -105,6 +201,30 @@
       "writtenOn": "2019-10-04T13:53:15Z",
       "side": 1,
       "message": "there\u0027s a lot here that\u0027s duplicated with other functions. any possible code sharing?",
+      "range": {
+        "startLine": 1051,
+        "startChar": 23,
+        "endLine": 1051,
+        "endChar": 57
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4731911_2efac548",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "I can mostly combine lineloop and indexindirect, they use the same resources, just different shaders.\nI looked at splitting up into helper functions but there are so many bits shared (commandBuffer, pipeline function) and things different (number of resources, shader, shader params) that it seemed like I was adding a lot of overhead trying to reduce the number of duplicate lines.",
+      "parentUuid": "96e047ae_8e2bf941",
       "range": {
         "startLine": 1051,
         "startChar": 23,
@@ -157,6 +277,30 @@
     },
     {
       "key": {
+        "uuid": "5cf1181c_66b7da6c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertArrayIndirectLineLoop.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1335ecd4_01811485",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 2
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc624c19_7adb0be8",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertArrayIndirectLineLoop.comp",
         "patchSetId": 7
@@ -177,6 +321,30 @@
       "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f9ed8e0_46ace3ec",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertArrayIndirectLineLoop.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc624c19_7adb0be8",
+      "range": {
+        "startLine": 19,
+        "startChar": 9,
+        "endLine": 19,
+        "endChar": 25
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -203,6 +371,30 @@
     },
     {
       "key": {
+        "uuid": "7e73a113_ded55cc7",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertArrayIndirectLineLoop.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6152d8b2_b82f53bc",
+      "range": {
+        "startLine": 37,
+        "startChar": 9,
+        "endLine": 37,
+        "endChar": 38
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1cd73da_faaacb87",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertArrayIndirectLineLoop.comp",
         "patchSetId": 7
@@ -223,6 +415,30 @@
       "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11c8c1d8_d7f7dbc4",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertArrayIndirectLineLoop.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1cd73da_faaacb87",
+      "range": {
+        "startLine": 44,
+        "startChar": 83,
+        "endLine": 44,
+        "endChar": 100
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -249,6 +465,30 @@
     },
     {
       "key": {
+        "uuid": "45a63a7a_abcaac01",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertArrayIndirectLineLoop.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46a58303_3a4c5491",
+      "range": {
+        "startLine": 81,
+        "startChar": 19,
+        "endLine": 81,
+        "endChar": 32
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c66c4ff7_3bfab29b",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
         "patchSetId": 7
@@ -269,6 +509,30 @@
       "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "887e1cdb_5d875906",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-04T16:48:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c66c4ff7_3bfab29b",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 1
+      },
+      "revId": "507690755c9d6772333aeffa8faeb63cd868b97f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
