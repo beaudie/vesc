@@ -405,6 +405,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     const gl::OverlayType *getOverlay() const { return mState.getOverlay(); }
 
+    gl::ProvokingVertexConvention getProvokingVertex() const { return mProvokingVertexConvention; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -645,6 +647,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     vk::PipelineHelper *mCurrentGraphicsPipeline;
     vk::PipelineAndSerial *mCurrentComputePipeline;
     gl::PrimitiveMode mCurrentDrawMode;
+    gl::ProvokingVertexConvention mProvokingVertexConvention;
 
     WindowSurfaceVk *mCurrentWindowSurface;
 

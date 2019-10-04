@@ -447,6 +447,7 @@ void RendererVk::ensureCapsInitialized() const
         mNativeCaps.maxShaderAtomicCounterBuffers[gl::ShaderType::Geometry] =
             maxCombinedAtomicCounterBuffers;
         mNativeCaps.maxGeometryShaderInvocations = limitsVk.maxGeometryShaderInvocations;
+        mNativeExtensions.provokingVertex        = true;
     }
 }
 

@@ -13,8 +13,10 @@
 #include <array>
 
 #include "common/utilities.h"
+#include "libANGLE/VaryingPacking.h"
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/DynamicVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -210,6 +212,9 @@ class ProgramVk : public ProgramImpl
         return mAtomicCounterBufferBindingsOffset;
     }
     uint32_t getImageBindingsOffset() const { return mImageBindingsOffset; }
+    gl::PrimitiveMode GetGeometryShaderTypeFromDrawMode(gl::PrimitiveMode drawMode);
+    bool useFlatInterpolation(ContextVk *contextVk);
+    ANGLE_INLINE bool isFlatInterpolationEnabled() { return mUsesFlatInterpolation; }
 
     class ShaderInfo;
     ANGLE_INLINE angle::Result initShaders(ContextVk *contextVk,
@@ -237,6 +242,15 @@ class ProgramVk : public ProgramImpl
 
         ShaderInfo &shaderInfo =
             enableLineRasterEmulation ? mLineRasterShaderInfo : mDefaultShaderInfo;
+
+        if (isFlatInterpolationEnabled())
+        {
+            mShaderSources[gl::ShaderType::Geometry] = mDynamicVk.generateGeometryShader(
+                mode, enableLineRasterEmulation, mState.getProgramInputs().size(),
+                contextVk->getProvokingVertex());
+
+            shaderInfo.clear(contextVk);
+        }
 
         return initShaders(contextVk, enableLineRasterEmulation, &shaderInfo, shaderProgramOut);
     }
@@ -305,6 +319,7 @@ class ProgramVk : public ProgramImpl
                                   const gl::ShaderMap<std::string> &shaderSources,
                                   bool enableLineRasterEmulation);
         void release(ContextVk *contextVk);
+        void clear(ContextVk *contextVk);
 
         ANGLE_INLINE bool valid() const
         {
@@ -336,6 +351,10 @@ class ProgramVk : public ProgramImpl
     // cache management. It can also allow fewer descriptors for shaders which use fewer
     // textures/buffers.
     vk::DescriptorSetLayoutArray<vk::DynamicDescriptorPool> mDynamicDescriptorPools;
+
+    // To emulate flat shading using geometry shader
+    DynamicVk mDynamicVk;
+    bool mUsesFlatInterpolation;
 };
 
 }  // namespace rx

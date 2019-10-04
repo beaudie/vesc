@@ -21,6 +21,7 @@ class ProvokingVertexTest : public ANGLETest
   protected:
     ProvokingVertexTest()
         : mProgram(0),
+          mProgramTransformFeedback(0),
           mFramebuffer(0),
           mTexture(0),
           mTransformFeedback(0),
@@ -58,7 +59,11 @@ class ProvokingVertexTest : public ANGLETest
 
         std::vector<std::string> tfVaryings;
         tfVaryings.push_back("attrib");
-        mProgram = CompileProgramWithTransformFeedback(kVS, kFS, tfVaryings, GL_SEPARATE_ATTRIBS);
+        mProgramTransformFeedback =
+            CompileProgramWithTransformFeedback(kVS, kFS, tfVaryings, GL_SEPARATE_ATTRIBS);
+        ASSERT_NE(0u, mProgramTransformFeedback);
+
+        mProgram = CompileProgram(kVS, kFS);
         ASSERT_NE(0u, mProgram);
 
         glGenTextures(1, &mTexture);
@@ -82,6 +87,12 @@ class ProvokingVertexTest : public ANGLETest
         {
             glDeleteProgram(mProgram);
             mProgram = 0;
+        }
+
+        if (mProgramTransformFeedback != 0)
+        {
+            glDeleteProgram(mProgramTransformFeedback);
+            mProgramTransformFeedback = 0;
         }
 
         if (mFramebuffer != 0)
@@ -110,6 +121,7 @@ class ProvokingVertexTest : public ANGLETest
     }
 
     GLuint mProgram;
+    GLuint mProgramTransformFeedback;
     GLuint mFramebuffer;
     GLuint mTexture;
     GLuint mTransformFeedback;
@@ -137,6 +149,11 @@ TEST_P(ProvokingVertexTest, FlatTriWithTransformFeedback)
 {
     // TODO(cwallez) figure out why it is broken on AMD on Mac
     ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD());
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    GLint intAttribLocation = glGetAttribLocation(mProgramTransformFeedback, "intAttrib");
+    ASSERT_NE(-1, intAttribLocation);
+    glEnableVertexAttribArray(intAttribLocation);
 
     glGenTransformFeedbacks(1, &mTransformFeedback);
     glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, mTransformFeedback);
@@ -148,11 +165,11 @@ TEST_P(ProvokingVertexTest, FlatTriWithTransformFeedback)
     glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mBuffer);
 
     GLint vertexData[] = {1, 2, 3, 1, 2, 3};
-    glVertexAttribIPointer(mIntAttribLocation, 1, GL_INT, 0, vertexData);
+    glVertexAttribIPointer(intAttribLocation, 1, GL_INT, 0, vertexData);
 
-    glUseProgram(mProgram);
+    glUseProgram(mProgramTransformFeedback);
     glBeginTransformFeedback(GL_TRIANGLES);
-    drawQuad(mProgram, "position", 0.5f);
+    drawQuad(mProgramTransformFeedback, "position", 0.5f);
     glEndTransformFeedback();
     glUseProgram(0);
 
@@ -244,7 +261,7 @@ TEST_P(ProvokingVertexTest, FlatTriStrip)
 TEST_P(ProvokingVertexTest, FlatTriStripPrimitiveRestart)
 {
     // TODO(jmadill): Implement on the D3D back-end.
-    ANGLE_SKIP_TEST_IF(IsD3D11());
+    ANGLE_SKIP_TEST_IF(IsD3D11() || IsVulkan());
 
     GLint indexData[]      = {0, 1, 2, -1, 1, 2, 3, 4, -1, 3, 4, 5};
     GLint vertexData[]     = {1, 2, 3, 4, 5, 6};
@@ -327,7 +344,7 @@ TEST_P(ProvokingVertexTest, ANGLEProvokingVertex)
     fnExpectId(2);
 
     const bool hasExt = IsGLExtensionEnabled("GL_ANGLE_provoking_vertex");
-    if (IsD3D11())
+    if (IsD3D11() || IsVulkan())
     {
         EXPECT_TRUE(hasExt);
     }
@@ -338,6 +355,10 @@ TEST_P(ProvokingVertexTest, ANGLEProvokingVertex)
     }
 }
 
-ANGLE_INSTANTIATE_TEST(ProvokingVertexTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST(ProvokingVertexTest,
+                       ES3_D3D11(),
+                       ES3_OPENGL(),
+                       ES3_OPENGLES(),
+                       ES3_VULKAN());
 
 }  // anonymous namespace
