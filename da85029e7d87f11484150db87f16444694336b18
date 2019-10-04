@@ -52,6 +52,24 @@
       "revId": "da85029e7d87f11484150db87f16444694336b18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c280932d_ea5bf8a2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2019-10-04T17:46:55Z",
+      "side": 1,
+      "message": "Before we do this (disabling GLES 3.0 based on geometry shaders), could be spec out some Vulkan extension for flat shading and disable GLES 3.0 based on Geometry shaders OR that new extension. If that\u0027s really an issue with no workaround, we probably need an extension for it.\n\nNot that it\u0027s likely, but this would mean that flat shading + geometry shader wouldn\u0027t work in ANGLE if you do it this way.",
+      "parentUuid": "48b146ae_11f32941",
+      "revId": "da85029e7d87f11484150db87f16444694336b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
