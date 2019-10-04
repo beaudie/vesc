@@ -32,6 +32,8 @@ _vulkan_backend_sources = [
   "DeviceVk.h",
   "DisplayVk.cpp",
   "DisplayVk.h",
+  "DynamicVk.cpp",
+  "DynamicVk.h",
   "FenceNVVk.cpp",
   "FenceNVVk.h",
   "FramebufferVk.cpp",

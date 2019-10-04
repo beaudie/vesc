@@ -417,6 +417,14 @@ void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
     }
 }
 
+void ProgramVk::ShaderInfo::clear(ContextVk *contextVk)
+{
+    for (vk::RefCounted<vk::ShaderAndSerial> &shader : mShaders)
+    {
+        shader.get().destroy(contextVk->getDevice());
+    }
+}
+
 // ProgramVk implementation.
 ProgramVk::DefaultUniformBlock::DefaultUniformBlock() {}
 
@@ -427,7 +435,9 @@ ProgramVk::ProgramVk(const gl::ProgramState &state)
       mDynamicBufferOffsets{},
       mStorageBlockBindingsOffset(0),
       mAtomicCounterBufferBindingsOffset(0),
-      mImageBindingsOffset(0)
+      mImageBindingsOffset(0),
+      mDynamicVk(),
+      mUsesFlatInterpolation(false)
 {}
 
 ProgramVk::~ProgramVk() = default;
@@ -436,6 +446,8 @@ void ProgramVk::destroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     reset(contextVk);
+    mDynamicVk.clear();
+    mUsesFlatInterpolation = false;
 }
 
 void ProgramVk::reset(ContextVk *contextVk)
@@ -555,11 +567,69 @@ void ProgramVk::setSeparable(bool separable)
     // Nohting to do here yet.
 }
 
+bool HasFlatInterpolationVarying(const std::vector<sh::ShaderVariable> &varyings)
+{
+    for (const auto &varying : varyings)
+    {
+        if (varying.interpolation == sh::INTERPOLATION_FLAT)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool FindFlatInterpolationVaryingPerShader(gl::Shader *shader)
+{
+    ASSERT(shader);
+    switch (shader->getType())
+    {
+        case gl::ShaderType::Vertex:
+            return HasFlatInterpolationVarying(shader->getOutputVaryings());
+        case gl::ShaderType::Fragment:
+            return HasFlatInterpolationVarying(shader->getInputVaryings());
+        case gl::ShaderType::Geometry:
+            return HasFlatInterpolationVarying(shader->getInputVaryings()) ||
+                   HasFlatInterpolationVarying(shader->getOutputVaryings());
+        default:
+            UNREACHABLE();
+            return false;
+    }
+}
+
+bool FindFlatInterpolationVarying(const gl::ShaderMap<gl::Shader *> &shaders)
+{
+    for (gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)
+    {
+        gl::Shader *shader = shaders[shaderType];
+        if (!shader)
+        {
+            continue;
+        }
+        if (FindFlatInterpolationVaryingPerShader(shader))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+ANGLE_INLINE bool ProgramVk::useFlatInterpolation(ContextVk *contextVk)
+{
+    // Implementation in http://anglebug.com/3430 cannot support flat shading with transformfeedback
+    return contextVk->getRenderer()->getPhysicalDeviceFeatures().geometryShader &&
+           FindFlatInterpolationVarying(mState.getAttachedShaders()) &&
+           mState.getLinkedTransformFeedbackVaryings().empty();
+}
+
 std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                            const gl::ProgramLinkedResources &resources,
                                            gl::InfoLog &infoLog)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+
+    mUsesFlatInterpolation = useFlatInterpolation(contextVk);
+
     // Link resources before calling GetShaderSource to make sure they are ready for the set/binding
     // assignment done in that function.
     linkResources(resources);
@@ -568,6 +638,12 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                     &mShaderSources);
 
     reset(contextVk);
+
+    if (isFlatInterpolationEnabled())
+    {
+        ASSERT(!mState.hasLinkedShaderStage(gl::ShaderType::Geometry));
+        mDynamicVk.generateGeometryShaderPreamble(resources.varyingPacking);
+    }
 
     angle::Result status = initDefaultUniformBlocks(context);
     if (status != angle::Result::Continue)
@@ -1766,4 +1842,34 @@ angle::Result ProgramVk::updateDescriptorSets(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
+
+gl::PrimitiveMode ProgramVk::GetGeometryShaderTypeFromDrawMode(gl::PrimitiveMode drawMode)
+{
+    switch (drawMode)
+    {
+        // Uses the point sprite geometry shader.
+        case gl::PrimitiveMode::Points:
+            return gl::PrimitiveMode::Points;
+
+        // All line drawing uses the same geometry shader.
+        case gl::PrimitiveMode::Lines:
+        case gl::PrimitiveMode::LineStrip:
+        case gl::PrimitiveMode::LineLoop:
+            return gl::PrimitiveMode::Lines;
+
+        // The triangle fan primitive is emulated with strips in D3D11.
+        case gl::PrimitiveMode::Triangles:
+        case gl::PrimitiveMode::TriangleFan:
+            return gl::PrimitiveMode::Triangles;
+
+        // Special case for triangle strips.
+        case gl::PrimitiveMode::TriangleStrip:
+            return gl::PrimitiveMode::TriangleStrip;
+
+        default:
+            UNREACHABLE();
+            return gl::PrimitiveMode::InvalidEnum;
+    }
+}
+
 }  // namespace rx
