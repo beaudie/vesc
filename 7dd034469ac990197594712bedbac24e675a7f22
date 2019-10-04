@@ -16,6 +16,24 @@
       "revId": "7dd034469ac990197594712bedbac24e675a7f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78f35b91_7d70de2d",
+        "filename": "src/libANGLE/renderer/gl/RenderbufferGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-04T14:31:24Z",
+      "side": 0,
+      "message": "Correct.  Before we had to specifically handle an error case but now that we always check for errors, there is no need.",
+      "parentUuid": "d5a1a3a2_b263af5e",
+      "revId": "7dd034469ac990197594712bedbac24e675a7f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
