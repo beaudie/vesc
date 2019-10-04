@@ -568,9 +568,6 @@
 2672 VULKAN : dEQP-GLES3.functional.draw.draw_elements_instanced.line_loop.* = SKIP
 2672 VULKAN : dEQP-GLES3.functional.draw.random.* = SKIP
 
-// textureSize querying from LOD > 0 is failing
-3948 VULKAN : dEQP-GLES3.functional.shaders.texture_functions.texturesize.* = SKIP
-
 // Misc unimplemented:
 
 // - Primitive restart with line loops:
