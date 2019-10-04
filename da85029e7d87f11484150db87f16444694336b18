@@ -34,6 +34,24 @@
       "revId": "da85029e7d87f11484150db87f16444694336b18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48b146ae_11f32941",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-04T17:24:10Z",
+      "side": 1,
+      "message": "Not likely, no. See http://anglebug.com/3430 . Sorry about that. Maybe should have been communicated earlier.",
+      "parentUuid": "f4166ce3_0a0e6e50",
+      "revId": "da85029e7d87f11484150db87f16444694336b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
