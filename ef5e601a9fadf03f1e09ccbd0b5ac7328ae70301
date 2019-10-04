@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09309884_2288bc29",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndirectLineLoop.comp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-04T16:56:13Z",
+      "side": 1,
+      "message": "nit: ConvertIndirectLineLoop.comp",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 31
+      },
+      "revId": "ef5e601a9fadf03f1e09ccbd0b5ac7328ae70301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
