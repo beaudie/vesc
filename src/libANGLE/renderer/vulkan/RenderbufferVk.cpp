@@ -84,7 +84,7 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
         // Clear the renderbuffer if it has emulated channels.
         mImage->stageClearIfEmulatedFormat(gl::ImageIndex::Make2D(0), vkFormat);
 
-        mRenderTarget.init(mImage, &mImageViews.getDrawImageView(), 0, 0);
+        mRenderTarget.init(mImage, mImageViews.getDrawImageViewNoAccess(), &mImageViews, 0, 0);
     }
 
     return angle::Result::Continue;
@@ -175,8 +175,8 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     ANGLE_TRY(mImageViews.initDrawView(contextVk, viewType, *mImage, mImage->getFormat(),
                                        imageVk->getImageLevel(), 1, imageVk->getImageLayer(), 1));
 
-    mRenderTarget.init(mImage, &mImageViews.getDrawImageView(), imageVk->getImageLevel(),
-                       imageVk->getImageLayer());
+    mRenderTarget.init(mImage, mImageViews.getDrawImageViewNoAccess(), &mImageViews,
+                       imageVk->getImageLevel(), imageVk->getImageLayer());
 
     return angle::Result::Continue;
 }
@@ -216,10 +216,10 @@ void RenderbufferVk::releaseAndDeleteImage(ContextVk *contextVk)
 
 void RenderbufferVk::releaseImage(ContextVk *contextVk)
 {
+    RendererVk *renderer = contextVk->getRenderer();
+
     if (mImage && mOwnsImage)
     {
-        RendererVk *renderer = contextVk->getRenderer();
-
         mImage->releaseImage(renderer);
         mImage->releaseStagingBuffer(renderer);
     }
@@ -228,7 +228,7 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
         mImage = nullptr;
     }
 
-    mImageViews.release(contextVk);
+    mImageViews.release(renderer);
 }
 
 }  // namespace rx

@@ -109,7 +109,7 @@ class FramebufferVk : public FramebufferImpl
 
     const gl::DrawBufferMask &getEmulatedAlphaAttachmentMask() const;
     RenderTargetVk *getColorDrawRenderTarget(size_t colorIndex) const;
-    RenderTargetVk *getColorReadRenderTarget() const;
+    RenderTargetVk *getColorReadRenderTarget(ContextVk *contextVk) const;
 
     // This will clear the current write operation if it is complete.
     bool appendToStartedRenderPass(vk::CommandGraph *graph,

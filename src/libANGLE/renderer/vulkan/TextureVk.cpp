@@ -372,7 +372,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
     const gl::Offset modifiedDestOffset(destOffset.x + clippedSourceArea.x - sourceArea.x,
                                         destOffset.y + clippedSourceArea.y - sourceArea.y, zOffset);
 
-    RenderTargetVk *colorReadRT = framebufferVk->getColorReadRenderTarget();
+    RenderTargetVk *colorReadRT = framebufferVk->getColorReadRenderTarget(contextVk);
 
     const vk::Format &srcFormat  = colorReadRT->getImageFormat();
     const vk::Format &destFormat = renderer->getFormat(internalFormat.sizedInternalFormat);
@@ -398,7 +398,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
 
         return copySubImageImplWithDraw(contextVk, offsetImageIndex, modifiedDestOffset, destFormat,
                                         0, clippedSourceArea, isViewportFlipY, false, false, false,
-                                        &colorReadRT->getImage(), colorReadRT->getReadImageView());
+                                        &colorReadRT->getImage(), colorReadRT->getImageView());
     }
 
     // Do a CPU readback that does the conversion, and then stage the change to the pixel buffer.
@@ -447,7 +447,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
         return copySubImageImplWithDraw(contextVk, offsetImageIndex, destOffset, destVkFormat,
                                         sourceLevel, sourceArea, false, unpackFlipY,
                                         unpackPremultiplyAlpha, unpackUnmultiplyAlpha,
-                                        &source->getImage(), &source->getFetchImageView());
+                                        &source->getImage(), &source->getFetchImageView(contextVk));
     }
 
     if (sourceLevel != 0)
@@ -880,8 +880,8 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
     mImage->initStagingBuffer(contextVk->getRenderer(), format, vk::kStagingBufferFlags,
                               mStagingBufferInitialSize);
 
-    mRenderTarget.init(mImage, &mImageViews.getDrawImageView(), getNativeImageLevel(0),
-                       getNativeImageLayer(0));
+    mRenderTarget.init(mImage, mImageViews.getDrawImageViewNoAccess(), &mImageViews,
+                       getNativeImageLevel(0), getNativeImageLayer(0));
 
     // Force re-creation of layered render targets next time they are needed
     mLayerRenderTargets.clear();
@@ -1305,7 +1305,7 @@ angle::Result TextureVk::initLayerRenderTargets(ContextVk *contextVk, GLuint lay
     {
         const vk::ImageView *drawView;
         ANGLE_TRY(getLevelLayerImageView(contextVk, 0, layerIndex, &drawView));
-        mLayerRenderTargets[layerIndex].init(mImage, drawView, getNativeImageLevel(0),
+        mLayerRenderTargets[layerIndex].init(mImage, drawView, &mImageViews, getNativeImageLevel(0),
                                              getNativeImageLayer(layerIndex));
     }
     return angle::Result::Continue;
@@ -1350,7 +1350,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
             uint32_t layerCount =
                 mState.getType() == gl::TextureType::_2D ? 1 : mImage->getLayerCount();
 
-            mImageViews.release(contextVk);
+            mImageViews.release(contextVk->getRenderer());
             const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
             ANGLE_TRY(initImageViews(contextVk, mImage->getFormat(),
@@ -1445,30 +1445,33 @@ void TextureVk::releaseOwnershipOfImage(const gl::Context *context)
     releaseAndDeleteImage(contextVk);
 }
 
-const vk::ImageView &TextureVk::getReadImageView() const
+const vk::ImageView &TextureVk::getReadImageView(ContextVk *contextVk) const
 {
     ASSERT(mImage->valid());
 
-    if (mState.isStencilMode() && mImageViews.getStencilReadImageView().valid())
+    vk::CommandGraph *graph = contextVk->getCommandGraph();
+
+    if (mState.isStencilMode() && mImageViews.hasStencilReadImageView())
     {
-        return mImageViews.getStencilReadImageView();
+        return mImageViews.getStencilReadImageView(graph);
     }
 
-    return mImageViews.getReadImageView();
+    return mImageViews.getReadImageView(graph);
 }
 
-const vk::ImageView &TextureVk::getFetchImageView() const
+const vk::ImageView &TextureVk::getFetchImageView(ContextVk *contextVk) const
 {
     ASSERT(mImage->valid());
 
+    vk::CommandGraph *graph = contextVk->getCommandGraph();
+
     // We don't currently support fetch for depth/stencil cube map textures.
-    ASSERT(!mImageViews.getStencilReadImageView().valid() ||
-           !mImageViews.getFetchImageView().valid());
-    return (mImageViews.getFetchImageView().valid() ? mImageViews.getFetchImageView()
-                                                    : mImageViews.getReadImageView());
+    ASSERT(!mImageViews.hasStencilReadImageView() || !mImageViews.hasFetchImageView());
+    return (mImageViews.hasFetchImageView() ? mImageViews.getFetchImageView(graph)
+                                            : mImageViews.getReadImageView(graph));
 }
 
-angle::Result TextureVk::getLevelLayerImageView(vk::Context *context,
+angle::Result TextureVk::getLevelLayerImageView(ContextVk *contextVk,
                                                 size_t level,
                                                 size_t layer,
                                                 const vk::ImageView **imageViewOut)
@@ -1478,7 +1481,7 @@ angle::Result TextureVk::getLevelLayerImageView(vk::Context *context,
     uint32_t nativeLevel = getNativeImageLevel(static_cast<uint32_t>(level));
     uint32_t nativeLayer = getNativeImageLayer(static_cast<uint32_t>(layer));
 
-    return mImageViews.getLevelLayerDrawImageView(context, *mImage, nativeLevel, nativeLayer,
+    return mImageViews.getLevelLayerDrawImageView(contextVk, *mImage, nativeLevel, nativeLayer,
                                                   imageViewOut);
 }
 
@@ -1596,11 +1599,13 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
 
 void TextureVk::releaseImage(ContextVk *contextVk)
 {
+    RendererVk *renderer = contextVk->getRenderer();
+
     if (mImage)
     {
         if (mOwnsImage)
         {
-            mImage->releaseImage(contextVk->getRenderer());
+            mImage->releaseImage(renderer);
         }
         else
         {
@@ -1608,7 +1613,7 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         }
     }
 
-    mImageViews.release(contextVk);
+    mImageViews.release(renderer);
 
     mLayerRenderTargets.clear();
 
