@@ -24,7 +24,7 @@ egl::Error DeviceVk::initialize()
     return egl::NoError();
 }
 
-egl::Error DeviceVk::getDevice(void **outValue)
+egl::Error DeviceVk::getAttribute(DisplayImpl *owningDisplay, EGLint attribute, void **outValue)
 {
     UNIMPLEMENTED();
     return egl::EglBadAccess();
