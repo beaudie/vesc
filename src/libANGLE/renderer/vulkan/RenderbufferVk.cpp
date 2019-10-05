@@ -78,17 +78,13 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
         VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
         ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
 
-        VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
-
-        // Note that LUMA textures are not color-renderable, so a read-view with swizzle is not
-        // needed.
-        ANGLE_TRY(mImage->initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
-                                        &mImageView, 0, 1));
+        ANGLE_TRY(mImageViews.initDrawView(contextVk, gl::TextureType::_2D, *mImage,
+                                           mImage->getFormat(), 0, 1, 0, 1));
 
         // Clear the renderbuffer if it has emulated channels.
         mImage->stageClearIfEmulatedFormat(gl::ImageIndex::Make2D(0), vkFormat);
 
-        mRenderTarget.init(mImage, &mImageView, 0, 0);
+        mRenderTarget.init(mImage, &mImageViews.getDrawImageView(), 0, 0);
     }
 
     return angle::Result::Continue;
@@ -176,11 +172,11 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
                                         imageVk->getImage()->getSamples());
     }
 
-    ANGLE_TRY(mImage->initLayerImageView(contextVk, viewType, aspect, gl::SwizzleState(),
-                                         &mImageView, imageVk->getImageLevel(), 1,
-                                         imageVk->getImageLayer(), 1));
+    ANGLE_TRY(mImageViews.initDrawView(contextVk, viewType, *mImage, mImage->getFormat(),
+                                       imageVk->getImageLevel(), 1, imageVk->getImageLayer(), 1));
 
-    mRenderTarget.init(mImage, &mImageView, imageVk->getImageLevel(), imageVk->getImageLayer());
+    mRenderTarget.init(mImage, &mImageViews.getDrawImageView(), imageVk->getImageLevel(),
+                       imageVk->getImageLayer());
 
     return angle::Result::Continue;
 }
@@ -232,7 +228,7 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
         mImage = nullptr;
     }
 
-    contextVk->addGarbage(&mImageView);
+    mImageViews.release(contextVk);
 }
 
 }  // namespace rx
