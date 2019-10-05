@@ -45,6 +45,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     void init(vk::ImageHelper *image,
               const vk::ImageView *imageView,
+              vk::ImageViewHelper *imageViews,
               uint32_t levelIndex,
               uint32_t layerIndex);
     void reset();
@@ -68,8 +69,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     vk::ImageHelper *getImageForWrite(ContextVk *contextVk,
                                       vk::CommandGraphResource *writingResource) const;
 
-    const vk::ImageView *getDrawImageView() const;
-    const vk::ImageView *getReadImageView() const;
+    const vk::ImageView *getImageView() const;
 
     const vk::Format &getImageFormat() const;
     gl::Extents getExtents() const;
@@ -82,11 +82,15 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     angle::Result flushStagedUpdates(ContextVk *contextVk);
 
+    void onImageViewAccess(ContextVk *contextVk) const;
+
   private:
     vk::ImageHelper *mImage;
     // Note that the draw and read image views are the same, given the requirements of a render
     // target. Note that for cube maps we use 2D array views.
     const vk::ImageView *mImageView;
+    // A reference to the view helper so that we can track usage and lifetime.
+    const vk::ImageViewHelper *mImageViews;
     uint32_t mLevelIndex;
     uint32_t mLayerIndex;
 };

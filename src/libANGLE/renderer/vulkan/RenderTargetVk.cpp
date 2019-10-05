@@ -18,7 +18,7 @@
 namespace rx
 {
 RenderTargetVk::RenderTargetVk()
-    : mImage(nullptr), mImageView(nullptr), mLevelIndex(0), mLayerIndex(0)
+    : mImage(nullptr), mImageView(nullptr), mImageViews(nullptr), mLevelIndex(0), mLayerIndex(0)
 {}
 
 RenderTargetVk::~RenderTargetVk() {}
@@ -26,17 +26,26 @@ RenderTargetVk::~RenderTargetVk() {}
 RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
     : mImage(other.mImage),
       mImageView(other.mImageView),
+      mImageViews(other.mImageViews),
       mLevelIndex(other.mLevelIndex),
       mLayerIndex(other.mLayerIndex)
-{}
+{
+    other.mImage      = nullptr;
+    other.mImageView  = nullptr;
+    other.mImageViews = nullptr;
+    other.mLevelIndex = 0;
+    other.mLayerIndex = 0;
+}
 
 void RenderTargetVk::init(vk::ImageHelper *image,
                           const vk::ImageView *imageView,
+                          vk::ImageViewHelper *imageViews,
                           uint32_t levelIndex,
                           uint32_t layerIndex)
 {
     mImage      = image;
     mImageView  = imageView;
+    mImageViews = imageViews;
     mLevelIndex = levelIndex;
     mLayerIndex = layerIndex;
 }
@@ -45,6 +54,7 @@ void RenderTargetVk::reset()
 {
     mImage      = nullptr;
     mImageView  = nullptr;
+    mImageViews = nullptr;
     mLevelIndex = 0;
     mLayerIndex = 0;
 }
@@ -62,6 +72,8 @@ angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk,
 
     // Set up dependencies between the RT resource and the Framebuffer.
     mImage->addWriteDependency(contextVk, framebufferVk);
+
+    onImageViewAccess(contextVk);
 
     return angle::Result::Continue;
 }
@@ -82,6 +94,8 @@ angle::Result RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk,
     // Set up dependencies between the RT resource and the Framebuffer.
     mImage->addWriteDependency(contextVk, framebufferVk);
 
+    onImageViewAccess(contextVk);
+
     return angle::Result::Continue;
 }
 
@@ -97,15 +111,10 @@ const vk::ImageHelper &RenderTargetVk::getImage() const
     return *mImage;
 }
 
-const vk::ImageView *RenderTargetVk::getDrawImageView() const
+const vk::ImageView *RenderTargetVk::getImageView() const
 {
     ASSERT(mImageView && mImageView->valid());
     return mImageView;
-}
-
-const vk::ImageView *RenderTargetVk::getReadImageView() const
-{
-    return getDrawImageView();
 }
 
 const vk::Format &RenderTargetVk::getImageFormat() const
@@ -150,9 +159,8 @@ vk::ImageHelper *RenderTargetVk::getImageForRead(ContextVk *contextVk,
     // However, this needs context to be available here, or all call sites changed
     // to perform the layout transition and set the dependency.
     mImage->addWriteDependency(contextVk, readingResource);
-
     mImage->changeLayout(mImage->getAspectFlags(), layout, commandBuffer);
-
+    onImageViewAccess(contextVk);
     return mImage;
 }
 
@@ -161,6 +169,7 @@ vk::ImageHelper *RenderTargetVk::getImageForWrite(ContextVk *contextVk,
 {
     ASSERT(mImage && mImage->valid());
     mImage->addWriteDependency(contextVk, writingResource);
+    onImageViewAccess(contextVk);
     return mImage;
 }
 
@@ -176,4 +185,8 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk)
                                       mLayerIndex + 1, commandBuffer);
 }
 
+void RenderTargetVk::onImageViewAccess(ContextVk *contextVk) const
+{
+    mImageViews->onGraphAccess(contextVk->getCommandGraph());
+}
 }  // namespace rx
