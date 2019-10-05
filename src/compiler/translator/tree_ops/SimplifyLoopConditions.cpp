@@ -34,15 +34,31 @@ class SimplifyLoopConditionsTraverser : public TLValueTrackingTraverser
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
     bool visitTernary(Visit visit, TIntermTernary *node) override;
     bool visitDeclaration(Visit visit, TIntermDeclaration *node) override;
+    bool visitBranch(Visit visit, TIntermBranch *node) override;
 
     bool foundLoopToChange() const { return mFoundLoopToChange; }
 
   protected:
+    void fixupLoopBranches(TIntermBlock *body,
+                           TVariable *condVar,
+                           TIntermTyped *cond,
+                           TIntermTyped *expr);
+
     // Marked to true once an operation that needs to be hoisted out of a loop expression has been
     // found.
     bool mFoundLoopToChange;
     bool mInsideLoopInitConditionOrExpression;
     IntermNodePatternMatcher mConditionsToSimplify;
+
+    int mCurrentLoopDepth = 0;
+    struct BranchFixupState
+    {
+        int loopDepth = -1;
+        TVariable *condVar;
+        TIntermTyped *cond;
+        TIntermTyped *expr;
+    };
+    BranchFixupState mBranchFixupState = {};
 };
 
 SimplifyLoopConditionsTraverser::SimplifyLoopConditionsTraverser(
@@ -122,6 +138,8 @@ bool SimplifyLoopConditionsTraverser::visitDeclaration(Visit visit, TIntermDecla
 
 void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
 {
+    mCurrentLoopDepth++;
+
     // Mark that we're inside a loop condition or expression, and determine if the loop needs to be
     // transformed.
 
@@ -168,6 +186,8 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
             TIntermBlock *newBody = new TIntermBlock();
             if (node->getBody())
             {
+                fixupLoopBranches(node->getBody(), conditionVariable, node->getCondition(),
+                                  nullptr);
                 newBody->getSequence()->push_back(node->getBody());
             }
             newBody->getSequence()->push_back(
@@ -198,6 +218,8 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
             TIntermBlock *newBody = new TIntermBlock();
             if (node->getBody())
             {
+                fixupLoopBranches(node->getBody(), conditionVariable, node->getCondition(),
+                                  nullptr);
                 newBody->getSequence()->push_back(node->getBody());
             }
             newBody->getSequence()->push_back(
@@ -250,6 +272,8 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
             TIntermBlock *whileLoopBody = new TIntermBlock();
             if (node->getBody())
             {
+                fixupLoopBranches(node->getBody(), conditionVariable, node->getCondition(),
+                                  node->getExpression());
                 whileLoopBody->getSequence()->push_back(node->getBody());
             }
             // Insert "exprB;" in the while loop
@@ -268,7 +292,7 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
             TIntermLoop *whileLoop =
                 new TIntermLoop(ELoopWhile, nullptr, CreateTempSymbolNode(conditionVariable),
                                 nullptr, whileLoopBody);
-            loopScope->getSequence()->push_back(whileLoop);
+            loopScopeSequence->push_back(whileLoop);
             queueReplacement(loopScope, OriginalNode::IS_DROPPED);
 
             // After this the old body node will be traversed and loops inside it may be
@@ -283,6 +307,54 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
     // We traverse the body of the loop even if the loop is transformed.
     if (node->getBody())
         node->getBody()->traverse(this);
+
+    mCurrentLoopDepth--;
+}
+
+bool SimplifyLoopConditionsTraverser::visitBranch(Visit visit, TIntermBranch *node)
+{
+    if (node->getFlowOp() == EOpContinue || node->getFlowOp() == EOpBreak)
+    {
+        if (mBranchFixupState.loopDepth != mCurrentLoopDepth)
+        {
+            return true;
+        }
+        if (!mBranchFixupState.expr && node->getFlowOp() == EOpBreak)
+        {
+            return true;
+        }
+
+        TIntermBlock *block            = new TIntermBlock();
+        TIntermSequence *blockSequence = block->getSequence();
+
+        if (mBranchFixupState.expr)
+        {
+            blockSequence->push_back(mBranchFixupState.expr->deepCopy());
+        }
+        if (node->getFlowOp() == EOpContinue)
+        {
+            blockSequence->push_back(CreateTempAssignmentNode(mBranchFixupState.condVar,
+                                                              mBranchFixupState.cond->deepCopy()));
+        }
+        blockSequence->push_back(node);
+
+        queueReplacement(block, OriginalNode::IS_DROPPED);
+    }
+
+    return true;
+}
+
+void SimplifyLoopConditionsTraverser::fixupLoopBranches(TIntermBlock *body,
+                                                        TVariable *condVar,
+                                                        TIntermTyped *cond,
+                                                        TIntermTyped *expr)
+{
+    BranchFixupState prevState = mBranchFixupState;
+    {
+        mBranchFixupState = {mCurrentLoopDepth, condVar, cond, expr};
+        body->traverse(this);
+    }
+    mBranchFixupState = prevState;
 }
 
 }  // namespace
