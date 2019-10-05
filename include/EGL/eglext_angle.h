@@ -243,6 +243,12 @@ EGLAPI EGLBoolean EGLAPIENTRY eglQueryDisplayAttribANGLE(EGLDisplay dpy, EGLint 
 #define EGL_CONTEXT_OPENGL_BACKWARDS_COMPATIBLE_ANGLE 0x3483
 #endif /* EGL_ANGLE_create_context_backwards_compatible */
 
+#ifndef EGL_ANGLE_device_cgl
+#define EGL_ANGLE_device_cgl 1
+#define EGL_CGLCONTEXT_DEVICE_ATTRIB_ANGLE 0x3485
+#define EGL_CGLPIXELFORMAT_DEVICE_ATTRIB_ANGLE 0x3486
+#endif
+
 // clang-format on
 
 #endif  // INCLUDE_EGL_EGLEXT_ANGLE_

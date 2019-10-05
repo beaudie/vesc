@@ -20,6 +20,8 @@ class Device;
 
 namespace rx
 {
+class DisplayImpl;
+
 class DeviceImpl : angle::NonCopyable
 {
   public:
@@ -28,7 +30,9 @@ class DeviceImpl : angle::NonCopyable
 
     virtual egl::Error initialize() = 0;
 
-    virtual egl::Error getDevice(void **outValue)                               = 0;
+    virtual egl::Error getAttribute(DisplayImpl *owningDisplay,
+                                    EGLint attribute,
+                                    void **outValue)                            = 0;
     virtual EGLint getType()                                                    = 0;
     virtual void generateExtensions(egl::DeviceExtensions *outExtensions) const = 0;
 };

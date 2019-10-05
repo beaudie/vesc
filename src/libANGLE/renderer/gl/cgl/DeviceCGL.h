@@ -1,25 +1,24 @@
 //
-// Copyright 2015 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2019 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
 
-// DeviceD3D.h: D3D implementation of egl::Device
+// DeviceCGL.h: CGL implementation of egl::Device
 
-#ifndef LIBANGLE_RENDERER_D3D_DEVICED3D_H_
-#define LIBANGLE_RENDERER_D3D_DEVICED3D_H_
+#ifndef LIBANGLE_RENDERER_GL_CGL_DEVICECGL_H_
+#define LIBANGLE_RENDERER_GL_CGL_DEVICECGL_H_
 
 #include "libANGLE/Device.h"
 #include "libANGLE/renderer/DeviceImpl.h"
-#include "libANGLE/renderer/d3d/RendererD3D.h"
 
 namespace rx
 {
-class DeviceD3D : public DeviceImpl
+class DeviceCGL : public DeviceImpl
 {
   public:
-    DeviceD3D(EGLint deviceType, void *nativeDevice);
-    ~DeviceD3D() override;
+    DeviceCGL();
+    ~DeviceCGL() override;
 
     egl::Error initialize() override;
     egl::Error getAttribute(DisplayImpl *owningDisplay, EGLint attribute, void **outValue) override;
@@ -27,11 +26,9 @@ class DeviceD3D : public DeviceImpl
     void generateExtensions(egl::DeviceExtensions *outExtensions) const override;
 
   private:
-    void *mDevice;
-    EGLint mDeviceType;
-    bool mIsInitialized;
+    bool mIsInitialized = false;
 };
 
 }  // namespace rx
 
-#endif  // LIBANGLE_RENDERER_D3D_DEVICED3D_H_
+#endif  // LIBANGLE_RENDERER_GL_CGL_DEVICECGL_H_

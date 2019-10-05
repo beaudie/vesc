@@ -293,13 +293,29 @@ EGLBoolean EGLAPIENTRY EGL_QueryDeviceAttribEXT(EGLDeviceEXT device,
     {
         case EGL_D3D11_DEVICE_ANGLE:
         case EGL_D3D9_DEVICE_ANGLE:
-            if (!dev->getExtensions().deviceD3D || dev->getType() != attribute)
+            if (!dev->getExtensions().deviceD3D)
             {
                 thread->setError(EglBadAttribute(), GetDebug(), "eglQueryDeviceAttribEXT",
                                  GetDeviceIfValid(dev));
                 return EGL_FALSE;
             }
-            error = dev->getDevice(value);
+            error = dev->getAttribute(attribute, value);
+            if (error.isError())
+            {
+                thread->setError(error, GetDebug(), "eglQueryDeviceAttribEXT",
+                                 GetDeviceIfValid(dev));
+                return EGL_FALSE;
+            }
+            break;
+        case EGL_CGLCONTEXT_DEVICE_ATTRIB_ANGLE:
+        case EGL_CGLPIXELFORMAT_DEVICE_ATTRIB_ANGLE:
+            if (!dev->getExtensions().deviceCGL)
+            {
+                thread->setError(EglBadAttribute(), GetDebug(), "eglQueryDeviceAttribEXT",
+                                 GetDeviceIfValid(dev));
+                return EGL_FALSE;
+            }
+            error = dev->getAttribute(attribute, value);
             if (error.isError())
             {
                 thread->setError(error, GetDebug(), "eglQueryDeviceAttribEXT",
