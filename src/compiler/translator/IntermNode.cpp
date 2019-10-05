@@ -269,7 +269,7 @@ bool TIntermLoop::replaceChildNode(TIntermNode *original, TIntermNode *replaceme
 }
 
 TIntermBranch::TIntermBranch(const TIntermBranch &node)
-    : TIntermBranch(node.mFlowOp, node.mExpression->deepCopy())
+    : TIntermBranch(node.mFlowOp, node.mExpression ? node.mExpression->deepCopy() : nullptr)
 {}
 
 size_t TIntermBranch::getChildCount() const
