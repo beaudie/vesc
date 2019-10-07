@@ -1256,7 +1256,7 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
 
     // Use OpenGL line rasterization rules by default.
     // TODO(jmadill): Fix Android support. http://anglebug.com/2830
-    ANGLE_FEATURE_CONDITION((&mFeatures), basicGLLineRasterization, !IsAndroid())
+    ANGLE_FEATURE_CONDITION((&mFeatures), basicGLLineRasterization, false)
 
     // TODO(lucferron): Currently disabled on Intel only since many tests are failing and need
     // investigation. http://anglebug.com/2728
