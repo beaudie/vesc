@@ -700,7 +700,8 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
         const gl::VertexBinding &binding = bindings[attrib.bindingIndex];
 
         const vk::Format &vertexFormat = renderer->getFormat(attrib.format->id);
-        GLuint stride                  = vertexFormat.bufferFormat().pixelBytes;
+        // GLuint stride                  = binding.getStride();
+        GLuint stride = vertexFormat.bufferFormat().pixelBytes;
 
         ASSERT(GetVertexInputAlignment(vertexFormat) <= vk::kVertexBufferAlignment);
 
@@ -719,7 +720,7 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
                     bufferVk      = vk::GetImpl(binding.getBuffer().get());
                     void *buffSrc = nullptr;
                     ANGLE_TRY(bufferVk->mapImpl(contextVk, &buffSrc));
-                    src = reinterpret_cast<const uint8_t *>(buffSrc);
+                    src = reinterpret_cast<const uint8_t *>(buffSrc) + binding.getOffset();
                 }
                 // Divisor will be set to 1 & so update buffer to have 1 attrib per instance
                 size_t bytesToAllocate = instanceCount * stride;

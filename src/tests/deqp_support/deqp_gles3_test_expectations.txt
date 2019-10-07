@@ -563,18 +563,10 @@
 3430 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.struct.u* = FAIL
 3430 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.struct.float_uvec2_vec3 = FAIL
 
-// Instanced rendering:
-2672 VULKAN : dEQP-GLES3.functional.draw.draw_arrays_instanced.line_loop.* = SKIP
-2672 VULKAN : dEQP-GLES3.functional.draw.draw_elements_instanced.line_loop.* = SKIP
-2672 VULKAN : dEQP-GLES3.functional.draw.random.* = SKIP
-
 // textureSize querying from LOD > 0 is failing
 3948 VULKAN : dEQP-GLES3.functional.shaders.texture_functions.texturesize.* = SKIP
 
 // Misc unimplemented:
-
-// - Primitive restart with line loops:
-2672 VULKAN : dEQP-GLES3.functional.primitive_restart.*.line_loop.*instanced = SKIP
 
 // Failures on newer NVIDIA drivers (411.95) and passes on older drivers (388.16).  Passes on 418.12 on Linux.
 2976 VULKAN NVIDIA : dEQP-GLES3.functional.shaders.invariance.* = FAIL
