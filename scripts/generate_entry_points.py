@@ -17,12 +17,6 @@ gles1_no_context_decl_extensions = [
     "GL_OES_framebuffer_object",
 ]
 
-# List of GLES1 API calls that have had their semantics changed in later GLES versions, but the
-# name was kept the same
-gles1_overloaded = [
-    "glGetPointerv",
-]
-
 # This is a list of exceptions for entry points which don't want to have
 # the EVENT macro. This is required for some debug marker entry points.
 no_event_marker_exceptions_list = sorted([
@@ -1053,17 +1047,13 @@ def get_entry_points(all_commands, commands, is_explicit_context, is_wgl, all_pa
     return decls, defs, export_defs, validation_protos, capture_protos, capture_methods, capture_pointer_funcs
 
 
-def get_decls(formatter, all_commands, gles_commands, already_included, overloaded,
-              cmd_packed_gl_enums):
+def get_decls(formatter, all_commands, gles_commands, already_included, cmd_packed_gl_enums):
     decls = []
     for command in all_commands:
         proto = command.find('proto')
         cmd_name = proto.find('name').text
 
         if cmd_name not in gles_commands:
-            continue
-
-        if cmd_name in overloaded:
             continue
 
         name_no_suffix = strip_suffix(cmd_name)
@@ -1800,10 +1790,8 @@ def main():
         write_file(annotation, "GLES " + comment, template_entry_point_source, "\n".join(defs),
                    "cpp", source_includes, "libGLESv2", "gl.xml")
 
-        gles_overloaded = gles1_overloaded if is_gles1 else []
         glesdecls['core'][(major_version, minor_version)] = get_decls(
-            context_decl_format, all_commands, gles_commands, [], gles_overloaded,
-            cmd_packed_gl_enums)
+            context_decl_format, all_commands, gles_commands, [], cmd_packed_gl_enums)
 
         validation_annotation = "ES%s%s" % (major_version, minor_if_not_zero)
         write_validation_header(validation_annotation, "ES %s" % comment, validation_protos,
@@ -1867,14 +1855,14 @@ def main():
                 extension_name not in gles1_no_context_decl_extensions):
             glesdecls['exts']['GLES1 Extensions'][extension_name] = get_decls(
                 context_decl_format, all_commands, ext_cmd_names, all_commands_no_suffix,
-                gles1_overloaded, cmd_packed_gl_enums)
+                cmd_packed_gl_enums)
         if extension_name in registry_xml.gles_extensions:
             glesdecls['exts']['GLES2+ Extensions'][extension_name] = get_decls(
-                context_decl_format, all_commands, ext_cmd_names, all_commands_no_suffix, [],
+                context_decl_format, all_commands, ext_cmd_names, all_commands_no_suffix,
                 cmd_packed_gl_enums)
         if extension_name in registry_xml.angle_extensions:
             glesdecls['exts']['ANGLE Extensions'][extension_name] = get_decls(
-                context_decl_format, all_commands, ext_cmd_names, all_commands_no_suffix, [],
+                context_decl_format, all_commands, ext_cmd_names, all_commands_no_suffix,
                 cmd_packed_gl_enums)
 
     for name in extension_commands:
@@ -1994,7 +1982,7 @@ def main():
                    "cpp", source_includes, "libGL", "gl.xml")
 
         gldecls['core'][(major_version, minor_version)] = get_decls(
-            context_decl_format, all_commands32, just_libgl_commands, all_commands_no_suffix, [],
+            context_decl_format, all_commands32, just_libgl_commands, all_commands_no_suffix,
             cmd_packed_gl_enums)
 
         # Validation files

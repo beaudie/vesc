@@ -39,6 +39,7 @@
     void getLightxv(GLenum light, LightParameter pnamePacked, GLfixed *params);                  \
     void getMaterialfv(GLenum face, MaterialParameter pnamePacked, GLfloat *params);             \
     void getMaterialxv(GLenum face, MaterialParameter pnamePacked, GLfixed *params);             \
+    void getPointerv(GLenum pname, void **params);                                               \
     void getTexEnvfv(TextureEnvTarget targetPacked, TextureEnvParameter pnamePacked,             \
                      GLfloat *params);                                                           \
     void getTexEnviv(TextureEnvTarget targetPacked, TextureEnvParameter pnamePacked,             \

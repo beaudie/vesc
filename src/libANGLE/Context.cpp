@@ -1936,7 +1936,7 @@ void Context::getInteger64vImpl(GLenum pname, GLint64 *params)
     }
 }
 
-void Context::getPointerv(GLenum pname, void **params) const
+void Context::getPointerv(GLenum pname, void **params)
 {
     mState.getPointerv(this, pname, params);
 }

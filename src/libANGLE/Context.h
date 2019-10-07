@@ -404,7 +404,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void getFloatvImpl(GLenum pname, GLfloat *params);
     void getIntegervImpl(GLenum pname, GLint *params);
     void getInteger64vImpl(GLenum pname, GLint64 *params);
-    void getPointerv(GLenum pname, void **params) const;
 
     // Framebuffers are owned by the Context, so these methods do not pass through
     FramebufferID createFramebuffer();
