@@ -322,6 +322,8 @@ if (build_angle_gles1_conform_tests) {
         # Upstream tests do null pointer arithmetic, so disable those warnings.
         "-Wno-null-pointer-arithmetic",
       ]
+    } else {
+      cflags += [ "/wd4101" ]  # unreferenced local variable
     }
   }
 
