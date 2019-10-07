@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ab939ae_fe0a87cf",
+        "filename": "extensions/ANGLE_request_extension.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-07T13:36:10Z",
+      "side": 1,
+      "message": "For texture rectangle, is it important that it not be requestable and/or start enabled? I\u0027m wondering if we can make the sets of enableable/disableable extensions the same. Maybe we can just start with some enabled.",
+      "range": {
+        "startLine": 87,
+        "startChar": 15,
+        "endLine": 88,
+        "endChar": 49
+      },
+      "revId": "40a5e6e09456d8fc840f8104de8ff144b6f22340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a55fc30_894e6a2a",
+        "filename": "src/libANGLE/gl_enum_utils_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-07T13:36:10Z",
+      "side": 1,
+      "message": "wonder why this popped up.",
+      "range": {
+        "startLine": 1810,
+        "startChar": 28,
+        "endLine": 1810,
+        "endChar": 73
+      },
+      "revId": "40a5e6e09456d8fc840f8104de8ff144b6f22340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceb524b1_a3c439ff",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4907,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-07T13:36:10Z",
+      "side": 1,
+      "message": "maybe add a bit of description here with a link to the bug.",
+      "range": {
+        "startLine": 4907,
+        "startChar": 2,
+        "endLine": 4907,
+        "endChar": 56
+      },
+      "revId": "40a5e6e09456d8fc840f8104de8ff144b6f22340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
