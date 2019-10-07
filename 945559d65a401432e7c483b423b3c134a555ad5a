@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca05662e_85e4d72a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:39:56Z",
+      "side": 1,
+      "message": "We reserve a couple uniform buffers for emulation, and we\u0027ll need to take that into account.  See kTotalReservedPerStageUniformBuffers in vk_caps_utils.cpp, we\u0027ll need to turn that into a constant in the header so it can be used here too.",
+      "range": {
+        "startLine": 1242,
+        "startChar": 0,
+        "endLine": 1249,
+        "endChar": 5
+      },
+      "revId": "945559d65a401432e7c483b423b3c134a555ad5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a5a4ec3_301f8a22",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:39:56Z",
+      "side": 1,
+      "message": "Same as above but kReservedVaryingCount",
+      "range": {
+        "startLine": 1251,
+        "startChar": 0,
+        "endLine": 1256,
+        "endChar": 5
+      },
+      "revId": "945559d65a401432e7c483b423b3c134a555ad5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
