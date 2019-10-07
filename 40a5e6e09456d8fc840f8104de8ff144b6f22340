@@ -68,6 +68,30 @@
       "revId": "40a5e6e09456d8fc840f8104de8ff144b6f22340",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe0fa539_e2854261",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4907,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:30:34Z",
+      "side": 1,
+      "message": "Let\u0027s flesh this out, can you add another bool to ExtensionInfo for \u0027disableable\u0027 and an enableableDisableableExtension type to GetExtensionInfoMap?  We can then validate it like the requestable ones.",
+      "parentUuid": "ceb524b1_a3c439ff",
+      "range": {
+        "startLine": 4907,
+        "startChar": 2,
+        "endLine": 4907,
+        "endChar": 56
+      },
+      "revId": "40a5e6e09456d8fc840f8104de8ff144b6f22340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
