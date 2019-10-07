@@ -22,6 +22,30 @@
       "revId": "4598e3e7de187bde2b7cc6c33f1109d7f5b4a603",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de0930db_466cc2d0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-07T22:46:47Z",
+      "side": 1,
+      "message": "n/m, this is good. we just might want to put spec minimums as a shared header (other backends use them too)",
+      "parentUuid": "930ea269_8eb01f11",
+      "range": {
+        "startLine": 1246,
+        "startChar": 30,
+        "endLine": 1247,
+        "endChar": 64
+      },
+      "revId": "4598e3e7de187bde2b7cc6c33f1109d7f5b4a603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
