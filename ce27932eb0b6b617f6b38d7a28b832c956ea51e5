@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e196e930_7586812a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-07T13:23:34Z",
+      "side": 1,
+      "message": "These don\u0027t seem to equate to each other: the p \u003d\u003d 4 test wouldn\u0027t translate to p \u003e\u003d 8. And the second one refers to gl_FragColor++ which the original didn\u0027t have.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 3
+      },
+      "revId": "ce27932eb0b6b617f6b38d7a28b832c956ea51e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
