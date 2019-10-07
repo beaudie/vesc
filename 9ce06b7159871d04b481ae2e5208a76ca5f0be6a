@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f1aa5e1_e152d914",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:18:23Z",
+      "side": 1,
+      "message": "Let\u0027s use a more descriptive name, how about CheckAttachmentSampleCounts.",
+      "range": {
+        "startLine": 143,
+        "startChar": 5,
+        "endLine": 143,
+        "endChar": 6
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7292b6ff_bb1f825c",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:18:23Z",
+      "side": 1,
+      "message": "nit: put this in an else with an ASSERT(sampleType \u003d\u003d AttachmentSampleType::Emulated)",
+      "range": {
+        "startLine": 1666,
+        "startChar": 8,
+        "endLine": 1666,
+        "endChar": 52
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c3ad83e_9170d958",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1845,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:18:23Z",
+      "side": 1,
+      "message": "Could you comment on what\u0027s happening here?",
+      "range": {
+        "startLine": 1845,
+        "startChar": 12,
+        "endLine": 1845,
+        "endChar": 55
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16cf99b4_da566b37",
+        "filename": "src/libANGLE/renderer/TextureImpl.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:18:23Z",
+      "side": 1,
+      "message": "I think only TextureD3D needs to inherit from angle::ObserverInterface.",
+      "range": {
+        "startLine": 46,
+        "startChar": 20,
+        "endLine": 46,
+        "endChar": 51
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "318084e5_3b60a398",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:18:23Z",
+      "side": 1,
+      "message": "nit: prefix not needed.",
+      "range": {
+        "startLine": 84,
+        "startChar": 39,
+        "endLine": 84,
+        "endChar": 43
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7201f473_aad284f9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2540,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:18:23Z",
+      "side": 1,
+      "message": "This is fine but was there a reason for needing this now?",
+      "range": {
+        "startLine": 2540,
+        "startChar": 34,
+        "endLine": 2540,
+        "endChar": 99
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee36df63_1f65ad27",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:18:23Z",
+      "side": 1,
+      "message": "I think this could always return the resource samples, that seems to be what we care about in both cases.",
+      "range": {
+        "startLine": 575,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 9
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61a7db6c_85dbcf63",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:18:23Z",
+      "side": 1,
+      "message": "nit: requires GL_OES_rgb8_rgba8",
+      "range": {
+        "startLine": 133,
+        "startChar": 60,
+        "endLine": 133,
+        "endChar": 68
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd97bbd0_92e73676",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:18:23Z",
+      "side": 1,
+      "message": "For ES3-only tests, add a new fixture:\n\n  class MultisampledRenderToTextureES3Test : public MultisampledRenderToTextureTest {};\n\nAnd instantiate it with ES3 backends at the bottom.",
+      "range": {
+        "startLine": 587,
+        "startChar": 39,
+        "endLine": 587,
+        "endChar": 44
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f41dd0b3_6859fbea",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:18:23Z",
+      "side": 1,
+      "message": "Enable this for all our backends so that they start getting tested as soon as we enable the extension.",
+      "range": {
+        "startLine": 720,
+        "startChar": 56,
+        "endLine": 720,
+        "endChar": 80
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
