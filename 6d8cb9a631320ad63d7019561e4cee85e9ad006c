@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17476206_9ff7bf32",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-07T16:10:08Z",
+      "side": 1,
+      "message": "How is srcLevelVK staying positive here when the base level changes (assuming that\u0027s a requirement)?   It looks like for any previousBaseLevel \u003e 0, if the base level has changed and level\u003d0, we will end up with a negative srcLevelVK here.",
+      "revId": "6d8cb9a631320ad63d7019561e4cee85e9ad006c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
