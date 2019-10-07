@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7e6252d5_4d44f445",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-07T21:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f1aa5e1_e152d914",
+      "range": {
+        "startLine": 143,
+        "startChar": 5,
+        "endLine": 143,
+        "endChar": 6
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7292b6ff_bb1f825c",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 15
@@ -45,6 +69,30 @@
       "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b936c4b_6e5cd498",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-07T21:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7292b6ff_bb1f825c",
+      "range": {
+        "startLine": 1666,
+        "startChar": 8,
+        "endLine": 1666,
+        "endChar": 52
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a8dc5b3d_319550c7",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1845,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-07T21:54:49Z",
+      "side": 1,
+      "message": "This onSubjectStateChange message gets bubbled up everytime the underlying storage object is changed (usually in the case were resolveAndReleaseTexture is called). I am piggy backing onto this existing method that invalidates the textures caches and also propagates the message forward to the attached framebuffer to also invalidate its caches, so that on the next call it can retrieve the latest texture.",
+      "parentUuid": "7c3ad83e_9170d958",
+      "range": {
+        "startLine": 1845,
+        "startChar": 12,
+        "endLine": 1845,
+        "endChar": 55
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16cf99b4_da566b37",
         "filename": "src/libANGLE/renderer/TextureImpl.h",
         "patchSetId": 15
@@ -91,6 +163,30 @@
       "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6284e32a_6481e539",
+        "filename": "src/libANGLE/renderer/TextureImpl.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-07T21:54:49Z",
+      "side": 1,
+      "message": "I think TextureImpl also needs this, as Texture inherits from TextureImpl. I am using Texture signalDirtyStorage to notify the framebuffer that the internal contents have changed. \n\nSo this observer hierarchy looks like this.\nTextureStorage11 -\u003e TextureD3D -\u003e Texture -\u003e framebuffer. \n\nI don\u0027t believe TextureD3D has a direct observer relationship with the framebuffer. \n\nLet me know if I\u0027ve misunderstood.",
+      "parentUuid": "16cf99b4_da566b37",
+      "range": {
+        "startLine": 46,
+        "startChar": 20,
+        "endLine": 46,
+        "endChar": 51
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "03510c29_935e55f3",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-07T21:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "318084e5_3b60a398",
+      "range": {
+        "startLine": 84,
+        "startChar": 39,
+        "endLine": 84,
+        "endChar": 43
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7201f473_aad284f9",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 15
@@ -137,6 +257,30 @@
       "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1031aa0f_50cfbb4f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2540,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-07T21:54:49Z",
+      "side": 1,
+      "message": "This was for consistency between the description created by this rendertarget and the one that is created in TextureStorage11_2DMultisample. \n\nI think I had originally found that this discrepancy might have resulted in something not drawing antialiased, but I removed this line and ran a few tests and it seems to be working.\n\nI\u0027ll leave it in since you said it was fine. Let me know if you rather have it removed.",
+      "parentUuid": "7201f473_aad284f9",
+      "range": {
+        "startLine": 2540,
+        "startChar": 34,
+        "endLine": 2540,
+        "endChar": 99
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "6d8ce495_cb9cb13c",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-07T21:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee36df63_1f65ad27",
+      "range": {
+        "startLine": 575,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 9
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61a7db6c_85dbcf63",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 15
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "2249f11f_14e800be",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-07T21:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61a7db6c_85dbcf63",
+      "range": {
+        "startLine": 133,
+        "startChar": 60,
+        "endLine": 133,
+        "endChar": 68
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd97bbd0_92e73676",
         "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
         "patchSetId": 15
@@ -206,6 +398,30 @@
       "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29d720cf_d95f3174",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-07T21:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd97bbd0_92e73676",
+      "range": {
+        "startLine": 587,
+        "startChar": 39,
+        "endLine": 587,
+        "endChar": 44
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
