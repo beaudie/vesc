@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "930ea269_8eb01f11",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-07T22:45:35Z",
+      "side": 1,
+      "message": "can you put the reserved counts into a shared header and use them?",
+      "range": {
+        "startLine": 1246,
+        "startChar": 30,
+        "endLine": 1247,
+        "endChar": 64
+      },
+      "revId": "4598e3e7de187bde2b7cc6c33f1109d7f5b4a603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
