@@ -114,6 +114,7 @@ typedef void (GL_APIENTRYP PFNGLGENFRAMEBUFFERSOESCONTEXTANGLEPROC)(GLeglContext
 typedef void (GL_APIENTRYP PFNGLGENRENDERBUFFERSOESCONTEXTANGLEPROC)(GLeglContext ctx, GLsizei n, GLuint *renderbuffers);
 typedef void (GL_APIENTRYP PFNGLGENERATEMIPMAPOESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target);
 typedef void (GL_APIENTRYP PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVOESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target, GLenum attachment, GLenum pname, GLint *params);
+typedef void (GL_APIENTRYP PFNGLGETPOINTERVCONTEXTANGLEPROC)(GLeglContext ctx, GLenum pname, void **params);
 typedef void (GL_APIENTRYP PFNGLGETRENDERBUFFERPARAMETERIVOESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target, GLenum pname, GLint *params);
 typedef void (GL_APIENTRYP PFNGLGETTEXGENFVOESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum coord, GLenum pname, GLfloat *params);
 typedef void (GL_APIENTRYP PFNGLGETTEXGENIVOESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum coord, GLenum pname, GLint *params);
@@ -239,6 +240,7 @@ GL_API void GL_APIENTRY glGenFramebuffersOESContextANGLE(GLeglContext ctx, GLsiz
 GL_API void GL_APIENTRY glGenRenderbuffersOESContextANGLE(GLeglContext ctx, GLsizei n, GLuint *renderbuffers);
 GL_API void GL_APIENTRY glGenerateMipmapOESContextANGLE(GLeglContext ctx, GLenum target);
 GL_API void GL_APIENTRY glGetFramebufferAttachmentParameterivOESContextANGLE(GLeglContext ctx, GLenum target, GLenum attachment, GLenum pname, GLint *params);
+GL_API void GL_APIENTRY glGetPointervContextANGLE(GLeglContext ctx, GLenum pname, void **params);
 GL_API void GL_APIENTRY glGetRenderbufferParameterivOESContextANGLE(GLeglContext ctx, GLenum target, GLenum pname, GLint *params);
 GL_API void GL_APIENTRY glGetTexGenfvOESContextANGLE(GLeglContext ctx, GLenum coord, GLenum pname, GLfloat *params);
 GL_API void GL_APIENTRY glGetTexGenivOESContextANGLE(GLeglContext ctx, GLenum coord, GLenum pname, GLint *params);
