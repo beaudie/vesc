@@ -70,6 +70,30 @@
       "revId": "50ee52bb3629839dd7d37aaafc60c1323e740500",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcf840ce_3fcb7d29",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-07T19:42:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd05be0f_181d2538",
+      "range": {
+        "startLine": 688,
+        "startChar": 16,
+        "endLine": 688,
+        "endChar": 87
+      },
+      "revId": "50ee52bb3629839dd7d37aaafc60c1323e740500",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
