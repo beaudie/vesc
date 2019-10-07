@@ -291,12 +291,12 @@ static_assert(kPackedColorBlendAttachmentStateSize == 4, "Size check failed");
 
 struct PrimitiveState final
 {
-    uint16_t topology : 15;
-    uint16_t restartEnable : 1;
+    uint8_t topology : 7;
+    uint8_t restartEnable : 1;
 };
 
 constexpr size_t kPrimitiveStateSize = sizeof(PrimitiveState);
-static_assert(kPrimitiveStateSize == 2, "Size check failed");
+static_assert(kPrimitiveStateSize == 1, "Size check failed");
 
 struct PackedInputAssemblyAndColorBlendStateInfo final
 {
@@ -306,6 +306,7 @@ struct PackedInputAssemblyAndColorBlendStateInfo final
     LogicOpState logic;
     uint8_t blendEnableMask;
     PrimitiveState primitive;
+    uint8_t vertexConvention;
 };
 
 constexpr size_t kPackedInputAssemblyAndColorBlendStateSize =
@@ -377,6 +378,12 @@ class GraphicsPipelineDesc final
     void updateTopology(GraphicsPipelineTransitionBits *transition, gl::PrimitiveMode drawMode);
     void updatePrimitiveRestartEnabled(GraphicsPipelineTransitionBits *transition,
                                        bool primitiveRestartEnabled);
+
+    // Vulkan implementation for provoking vertex
+    // Will make and attach new geometry shader to convert vertex ordering
+    // In this case, shader pipeline state needs to be updated
+    void updateProvokingVertexConvention(GraphicsPipelineTransitionBits *transition,
+                                         gl::ProvokingVertexConvention provokingVertex);
 
     // Raster states
     void setCullMode(VkCullModeFlagBits cullMode);

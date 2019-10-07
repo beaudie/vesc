@@ -535,13 +535,6 @@
 // MAX_FRAGMENT_INPUT_COMPONENTS is 0
 3676 VULKAN : dEQP-GLES3.functional.state_query.integers.max_fragment_input_components_get* = FAIL
 
-// Formats:
-3677 VULKAN : dEQP-GLES3.functional.fragment_out.basic.int.* = FAIL
-3677 VULKAN : dEQP-GLES3.functional.fragment_out.basic.uint.* = FAIL
-3677 VULKAN : dEQP-GLES3.functional.fragment_out.array.int* = FAIL
-3677 VULKAN : dEQP-GLES3.functional.fragment_out.array.uint* = FAIL
-3677 VULKAN : dEQP-GLES3.functional.fragment_out.random.* = FAIL
-
 // Depth/Stencil textures:
 2905 VULKAN : dEQP-GLES3.functional.fbo.depth.depth_write_clamp.depth_component32f = FAIL
 2905 VULKAN : dEQP-GLES3.functional.fbo.depth.depth_write_clamp.depth32f_stencil8 = FAIL
@@ -556,12 +549,6 @@
 // Polygon offset:
 3970 VULKAN NVIDIA : dEQP-GLES3.functional.polygon_offset.float32_result_depth_clamp = FAIL
 3970 VULKAN NVIDIA : dEQP-GLES3.functional.polygon_offset.float32_factor_1_slope = FAIL
-
-// Flat shading:
-3430 VULKAN : dEQP-GLES3.functional.rasterization.flatshading.* = FAIL
-3430 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.basic_types.u* = FAIL
-3430 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.struct.u* = FAIL
-3430 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.struct.float_uvec2_vec3 = FAIL
 
 // Instanced rendering:
 2672 VULKAN : dEQP-GLES3.functional.draw.draw_arrays_instanced.line_loop.* = SKIP
