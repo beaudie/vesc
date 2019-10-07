@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9c82cfe_d574ca39",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:44:08Z",
+      "side": 1,
+      "message": "This mask becomes a no-op now.",
+      "range": {
+        "startLine": 1286,
+        "startChar": 46,
+        "endLine": 1286,
+        "endChar": 58
+      },
+      "revId": "32a1f81f167d01450d2e86910d1a787007288bb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc2aa50a_b7db9352",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:44:08Z",
+      "side": 1,
+      "message": "Shift should not be needed.",
+      "range": {
+        "startLine": 1312,
+        "startChar": 50,
+        "endLine": 1312,
+        "endChar": 54
+      },
+      "revId": "32a1f81f167d01450d2e86910d1a787007288bb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a44721c6_9efe877a",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-07T15:44:08Z",
+      "side": 1,
+      "message": "Masking is not needed either anymore.",
+      "range": {
+        "startLine": 1312,
+        "startChar": 56,
+        "endLine": 1312,
+        "endChar": 68
+      },
+      "revId": "32a1f81f167d01450d2e86910d1a787007288bb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
