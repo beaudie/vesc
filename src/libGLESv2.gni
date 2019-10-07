@@ -80,7 +80,7 @@ if (is_linux || is_android || is_fuchsia) {
   ]
 }
 
-if (is_mac) {
+if (is_mac || is_ios) {
   angle_system_utils_sources += [
     "src/common/system_utils_mac.cpp",
     "src/common/system_utils_posix.cpp",

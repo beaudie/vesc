@@ -109,7 +109,7 @@ angle_test("angle_unittests") {
   }
 }
 
-if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
+if (is_win || is_linux || is_mac || is_android || is_fuchsia || is_ios) {
   import("angle_end2end_tests.gni")
 
   angle_test("angle_end2end_tests") {
@@ -164,7 +164,7 @@ if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
   }
 }
 
-if (is_win || is_linux || is_mac || is_android) {
+if (is_win || is_linux || is_mac || is_android || is_ios) {
   import("angle_white_box_tests.gni")
 
   angle_test("angle_white_box_tests") {
@@ -200,7 +200,7 @@ if (is_win || is_linux || is_mac || is_android) {
   }
 }
 
-if (is_win || is_linux || is_android || is_mac) {
+if (is_win || is_linux || is_android || is_mac || is_ios) {
   import("angle_perftests.gni")
 
   # This test suite is for perf tests that use ANGLE's internals in some direct way.
@@ -238,7 +238,7 @@ if (is_win || is_linux || is_android || is_mac) {
   }
 }
 
-if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
+if (is_win || is_linux || is_android || is_mac || is_fuchsia || is_ios) {
   import("angle_perftests.gni")
 
   # This test suite is designed to run against a generic GL implementation.

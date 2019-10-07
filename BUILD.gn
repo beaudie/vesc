@@ -642,13 +642,20 @@ angle_source_set("libANGLE_base") {
         "Xext",
       ]
     }
-    if (is_mac) {
+    if (is_mac || is_ios) {
       sources += libangle_gl_cgl_sources
       libs += [
-        "Cocoa.framework",
         "IOSurface.framework",
-        "OpenGL.framework",
         "QuartzCore.framework",
+      ]
+    }
+    if (is_ios) {
+      libs += [ "OpenGLES.framework" ]
+    }
+    if (is_mac) {
+      libs += [
+        "Cocoa.framework",
+        "OpenGL.framework",
       ]
     }
     if (is_android) {
