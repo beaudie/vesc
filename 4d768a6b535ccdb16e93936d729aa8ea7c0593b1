@@ -22,6 +22,30 @@
       "revId": "4d768a6b535ccdb16e93936d729aa8ea7c0593b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7aaeef1_3dc8fde3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-07T22:42:48Z",
+      "side": 1,
+      "message": "No, we don\u0027t support 3.2 yet. To be forthcoming.",
+      "parentUuid": "e989fbb3_8a89a93f",
+      "range": {
+        "startLine": 1941,
+        "startChar": 3,
+        "endLine": 1941,
+        "endChar": 44
+      },
+      "revId": "4d768a6b535ccdb16e93936d729aa8ea7c0593b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
