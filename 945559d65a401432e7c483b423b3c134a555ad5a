@@ -141,6 +141,30 @@
       "revId": "945559d65a401432e7c483b423b3c134a555ad5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44f39a7a_cbbdfe2d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-07T22:44:05Z",
+      "side": 1,
+      "message": "With this latest patchset, I\u0027m just comparing directly to mNativeCaps.maxVertexOutputComponents which already does the *4 (after accounting for kReservedVaryingCount), so I think it should be good.",
+      "parentUuid": "0cada00f_63779e5d",
+      "range": {
+        "startLine": 1251,
+        "startChar": 0,
+        "endLine": 1256,
+        "endChar": 5
+      },
+      "revId": "945559d65a401432e7c483b423b3c134a555ad5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
