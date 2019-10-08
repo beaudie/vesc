@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "42563522_fdbc6cc5",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1845,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-08T20:28:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "971aad69_ce025b9a",
+      "range": {
+        "startLine": 1845,
+        "startChar": 12,
+        "endLine": 1845,
+        "endChar": 55
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16cf99b4_da566b37",
         "filename": "src/libANGLE/renderer/TextureImpl.h",
         "patchSetId": 15
@@ -226,6 +250,30 @@
       "side": 1,
       "message": "Texture and TextureImpl are separate without inheritance between them so I still think that ObserverInterface can be only on TextureD3D.  The message would originate from TextureStorage11 -\u003e TextureD3D::onSubjectStateChange -\u003e (because TextureImpl inherits from Subject and Texture inherits from ObserverInterface) -\u003e Texture::onSubjectStateChange",
       "parentUuid": "6284e32a_6481e539",
+      "range": {
+        "startLine": 46,
+        "startChar": 20,
+        "endLine": 46,
+        "endChar": 51
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "82dfc861_ce68e822",
+        "filename": "src/libANGLE/renderer/TextureImpl.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-10-08T20:28:29Z",
+      "side": 1,
+      "message": "Ahh I see, that makes sense!\nDone",
+      "parentUuid": "16fcf56a_0caebea7",
       "range": {
         "startLine": 46,
         "startChar": 20,
