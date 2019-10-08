@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "0bfc1f0d_1f3d4c9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T14:58:49Z",
+      "side": 1,
+      "message": "The root cause of your problems is the special casing for glGetPointerv. You\u0027ll need to do something like this CL. Note there are a bunch of other duplicated functions between API versions (e.g. glDrawArrays) that already work fine.",
+      "parentUuid": "c793221a_a72611db",
+      "revId": "4d768a6b535ccdb16e93936d729aa8ea7c0593b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e989fbb3_8a89a93f",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
