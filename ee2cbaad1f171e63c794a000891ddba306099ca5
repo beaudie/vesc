@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6d01d91_31a87ffc",
+        "filename": "src/libANGLE/Constants.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T21:39:19Z",
+      "side": 1,
+      "message": "can you maybe put this in the limits block defined below, using constexpr kConstant naming?",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 37
+      },
+      "revId": "ee2cbaad1f171e63c794a000891ddba306099ca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
