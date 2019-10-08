@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "beba777d_3e15dca3",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d11on12.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T19:27:43Z",
+      "side": 1,
+      "message": "this enum is reserved, see\n\nhttps://github.com/KhronosGroup/EGL-Registry/blob/master/api/egl.xml#L622\n\nI allocated you 0x3488. Does D3D11on12 support device types selection like D3D11on12onWarp?",
+      "range": {
+        "startLine": 54,
+        "startChar": 52,
+        "endLine": 54,
+        "endChar": 58
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f9aa98b_4f036dd6",
+        "filename": "src/common/platform.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T19:27:43Z",
+      "side": 1,
+      "message": "Do you know which sdk these were introduced in? Did we test this on the bots yet? We\u0027re still on a very old SDK but we\u0027re in the process up upgrading in http://crbug.com/1006238 .",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 26
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18c77f27_a0a76e8f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T19:27:43Z",
+      "side": 1,
+      "message": "nit: can you provide the full type here for readability?",
+      "range": {
+        "startLine": 717,
+        "startChar": 18,
+        "endLine": 717,
+        "endChar": 23
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "519bfba3_d6d26f7b",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T19:27:43Z",
+      "side": 1,
+      "message": "nit: for readability, can you unpack the ?: operator?",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 772,
+        "endChar": 74
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeaef3b4_2c7d55a7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T19:27:43Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 781,
+        "startChar": 0,
+        "endLine": 783,
+        "endChar": 96
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1ad458c_eac18d28",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T19:27:43Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 795,
+        "startChar": 0,
+        "endLine": 798,
+        "endChar": 93
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a882a113_b20044fc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T19:27:43Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 807,
+        "startChar": 0,
+        "endLine": 810,
+        "endChar": 74
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
