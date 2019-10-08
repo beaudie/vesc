@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73f3838e_b96ef55e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-10-08T20:55:55Z",
+      "side": 1,
+      "message": "Eric, could you add \"Bug:\" here?",
+      "revId": "a7c5537e89f086f2e3dcf7083468a17c005ce157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc283302_6d0f4e43",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-10-08T20:55:55Z",
+      "side": 1,
+      "message": "Geoff, does this group exist?\nI thought it\u0027s angle-team@google.com",
+      "range": {
+        "startLine": 9,
+        "startChar": 8,
+        "endLine": 9,
+        "endChar": 37
+      },
+      "revId": "a7c5537e89f086f2e3dcf7083468a17c005ce157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
