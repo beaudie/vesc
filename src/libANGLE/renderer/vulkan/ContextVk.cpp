@@ -2516,6 +2516,7 @@ angle::Result ContextVk::dispatchCompute(const gl::Context *context,
     ANGLE_TRY(setupDispatch(context, &commandBuffer));
 
     commandBuffer->dispatch(numGroupsX, numGroupsY, numGroupsZ);
+    ANGLE_TRY(finishImpl());
 
     return angle::Result::Continue;
 }
