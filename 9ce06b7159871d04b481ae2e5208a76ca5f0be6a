@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "971aad69_ce025b9a",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1845,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-08T19:16:28Z",
+      "side": 1,
+      "message": "sgtm, could you put some of this comment into the code too?",
+      "parentUuid": "a8dc5b3d_319550c7",
+      "range": {
+        "startLine": 1845,
+        "startChar": 12,
+        "endLine": 1845,
+        "endChar": 55
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16cf99b4_da566b37",
         "filename": "src/libANGLE/renderer/TextureImpl.h",
         "patchSetId": 15
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "I think TextureImpl also needs this, as Texture inherits from TextureImpl. I am using Texture signalDirtyStorage to notify the framebuffer that the internal contents have changed. \n\nSo this observer hierarchy looks like this.\nTextureStorage11 -\u003e TextureD3D -\u003e Texture -\u003e framebuffer. \n\nI don\u0027t believe TextureD3D has a direct observer relationship with the framebuffer. \n\nLet me know if I\u0027ve misunderstood.",
       "parentUuid": "16cf99b4_da566b37",
+      "range": {
+        "startLine": 46,
+        "startChar": 20,
+        "endLine": 46,
+        "endChar": 51
+      },
+      "revId": "9ce06b7159871d04b481ae2e5208a76ca5f0be6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "16fcf56a_0caebea7",
+        "filename": "src/libANGLE/renderer/TextureImpl.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-08T19:16:28Z",
+      "side": 1,
+      "message": "Texture and TextureImpl are separate without inheritance between them so I still think that ObserverInterface can be only on TextureD3D.  The message would originate from TextureStorage11 -\u003e TextureD3D::onSubjectStateChange -\u003e (because TextureImpl inherits from Subject and Texture inherits from ObserverInterface) -\u003e Texture::onSubjectStateChange",
+      "parentUuid": "6284e32a_6481e539",
       "range": {
         "startLine": 46,
         "startChar": 20,
