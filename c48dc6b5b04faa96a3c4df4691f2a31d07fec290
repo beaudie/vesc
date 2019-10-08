@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8816ff58_be4fc606",
+        "filename": "extensions/EGL_ANGLE_device_cgl.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-08T17:50:29Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "273b9a37_0a317638",
+      "range": {
+        "startLine": 63,
+        "startChar": 8,
+        "endLine": 63,
+        "endChar": 42
+      },
+      "revId": "c48dc6b5b04faa96a3c4df4691f2a31d07fec290",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11868223_948a5b34",
         "filename": "extensions/EGL_ANGLE_device_cgl.txt",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "c48dc6b5b04faa96a3c4df4691f2a31d07fec290",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a254d95_44a4e6ed",
+        "filename": "extensions/EGL_ANGLE_device_cgl.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-08T17:50:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11868223_948a5b34",
+      "range": {
+        "startLine": 64,
+        "startChar": 8,
+        "endLine": 64,
+        "endChar": 46
+      },
+      "revId": "c48dc6b5b04faa96a3c4df4691f2a31d07fec290",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "291d6792_8ce40d6d",
+        "filename": "src/libANGLE/renderer/DeviceImpl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-08T17:50:29Z",
+      "side": 1,
+      "message": "Done, here and throughout.",
+      "parentUuid": "ad947d41_94442b5f",
+      "range": {
+        "startLine": 33,
+        "startChar": 36,
+        "endLine": 33,
+        "endChar": 63
+      },
+      "revId": "c48dc6b5b04faa96a3c4df4691f2a31d07fec290",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7702d2b1_f85189b4",
         "filename": "src/libANGLE/renderer/gl/cgl/DeviceCGL.cpp",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "c48dc6b5b04faa96a3c4df4691f2a31d07fec290",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99db5d41_7b69b619",
+        "filename": "src/libANGLE/renderer/gl/cgl/DeviceCGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-08T17:50:29Z",
+      "side": 1,
+      "message": "Fair enough. Removed.",
+      "parentUuid": "7702d2b1_f85189b4",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 26
+      },
+      "revId": "c48dc6b5b04faa96a3c4df4691f2a31d07fec290",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "284f9504_d8e2b179",
+        "filename": "src/libANGLE/renderer/gl/cgl/DeviceCGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-08T17:50:29Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "94544c65_1b5756ce",
+      "range": {
+        "startLine": 30,
+        "startChar": 26,
+        "endLine": 30,
+        "endChar": 67
+      },
+      "revId": "c48dc6b5b04faa96a3c4df4691f2a31d07fec290",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "595d134a_d962d7e8",
         "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
         "patchSetId": 2
@@ -137,6 +257,30 @@
       "revId": "c48dc6b5b04faa96a3c4df4691f2a31d07fec290",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "966760bc_f68c8d0f",
+        "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-08T17:50:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "595d134a_d962d7e8",
+      "range": {
+        "startLine": 318,
+        "startChar": 12,
+        "endLine": 324,
+        "endChar": 13
+      },
+      "revId": "c48dc6b5b04faa96a3c4df4691f2a31d07fec290",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
