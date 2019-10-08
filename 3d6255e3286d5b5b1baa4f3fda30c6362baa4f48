@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42c8a57c_a26f5354",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-08T01:31:38Z",
+      "side": 1,
+      "message": "Note, these were allocated out of ANGLE\u0027s enum block and documented in the internal enum allocation doc.",
+      "revId": "3d6255e3286d5b5b1baa4f3fda30c6362baa4f48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
