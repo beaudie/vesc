@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "153038e8_aeff0cde",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-08T14:53:54Z",
+      "side": 1,
+      "message": "I\u0027m not sure this CL makes 3.2 easier.  I\u0027ve found there are auto-generated files where glGetPointerv is needed in both 1.0 and 3.2, and files where it isn\u0027t.  Similarly, there are hand-edited files where I have one shared version of a function that supports both 1.0 and 3.2.\n\nI just pushed another version of my CL.  Can we look at that to see what we think?",
+      "revId": "4d768a6b535ccdb16e93936d729aa8ea7c0593b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e989fbb3_8a89a93f",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
