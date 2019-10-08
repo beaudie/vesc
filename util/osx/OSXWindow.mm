@@ -655,6 +655,9 @@ bool OSXWindow::initialize(const std::string &name, int width, int height)
     }
     [mView setWantsLayer:YES];
 
+    // Disable scaling for this view.
+    mView.layer.contentsScale = 1;
+
     [mWindow setContentView:mView];
     [mWindow setTitle:[NSString stringWithUTF8String:name.c_str()]];
     [mWindow setAcceptsMouseMovedEvents:YES];
