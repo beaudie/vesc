@@ -69,8 +69,10 @@ angle::Result CheckError(const gl::Context *context,
                          const char *function,
                          unsigned int line);
 
-#define ANGLE_GL_TRY_ALWAYS_CHECK(context, call)                      \
-    (ClearErrors(context, __FILE__, __FUNCTION__, __LINE__), (call)); \
+#define ANGLE_GL_CLEAR_ERRORS(context) ClearErrors(context, __FILE__, __FUNCTION__, __LINE__)
+
+#define ANGLE_GL_TRY_ALWAYS_CHECK(context, call) \
+    (ANGLE_GL_CLEAR_ERRORS(context), (call));    \
     ANGLE_TRY(CheckError(context, #call, __FILE__, __FUNCTION__, __LINE__))
 
 #if defined(ANGLE_ENABLE_ASSERTS)
