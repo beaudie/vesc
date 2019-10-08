@@ -176,6 +176,7 @@ IGNORED_INCLUDES = {
     b'compiler/translator/TranslatorGLSL.h',
     b'compiler/translator/TranslatorHLSL.h',
     b'compiler/translator/TranslatorVulkan.h',
+    b'compiler/translator/TranslatorMetal.h',
     b'libANGLE/renderer/d3d/DeviceD3D.h',
     b'libANGLE/renderer/d3d/DisplayD3D.h',
     b'libANGLE/renderer/d3d/RenderTargetD3D.h',
@@ -190,6 +191,7 @@ IGNORED_INCLUDES = {
     b'libANGLE/renderer/vulkan/fuchsia/DisplayVkFuchsia.h',
     b'libANGLE/renderer/vulkan/win32/DisplayVkWin32.h',
     b'libANGLE/renderer/vulkan/xcb/DisplayVkXcb.h',
+    b'libANGLE/renderer/metal/DisplayMtl.h',
     b'kernel/image.h',
 }
 
