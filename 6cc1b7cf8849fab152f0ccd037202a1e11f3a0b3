@@ -1,0 +1,222 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d658389_22db434c",
+        "filename": ".gitignore",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T16:45:31Z",
+      "side": 1,
+      "message": "nit: can you sort this alphabetically?",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 28
+      },
+      "revId": "6cc1b7cf8849fab152f0ccd037202a1e11f3a0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a09ab2a9_b56e4e5f",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T16:45:31Z",
+      "side": 1,
+      "message": "nit: can you put this in angle_metal_config to be consistent with the Vulkan back-end?",
+      "range": {
+        "startLine": 532,
+        "startChar": 0,
+        "endLine": 534,
+        "endChar": 3
+      },
+      "revId": "6cc1b7cf8849fab152f0ccd037202a1e11f3a0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56dd7878_dbe76cf1",
+        "filename": "build_overrides/angle.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T16:45:31Z",
+      "side": 1,
+      "message": "thanks for adding this. I\u0027ll make a CL in chromium to update this as well.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "6cc1b7cf8849fab152f0ccd037202a1e11f3a0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcf45556_0f42db15",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T16:45:31Z",
+      "side": 1,
+      "message": "nit: can you sort alphabetically?",
+      "range": {
+        "startLine": 179,
+        "startChar": 26,
+        "endLine": 179,
+        "endChar": 41
+      },
+      "revId": "6cc1b7cf8849fab152f0ccd037202a1e11f3a0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8c1b0d3_3b7576f8",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T16:45:31Z",
+      "side": 1,
+      "message": "nit: Metal format table (for consistency)",
+      "range": {
+        "startLine": 116,
+        "startChar": 11,
+        "endLine": 116,
+        "endChar": 17
+      },
+      "revId": "6cc1b7cf8849fab152f0ccd037202a1e11f3a0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62d59711_51d1b2b9",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T16:45:31Z",
+      "side": 1,
+      "message": "could you separate out exposing these extensions into a split patch?",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 0
+      },
+      "revId": "6cc1b7cf8849fab152f0ccd037202a1e11f3a0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66262212_8de1e3fb",
+        "filename": "src/libANGLE/renderer/metal/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T16:45:31Z",
+      "side": 1,
+      "message": "can you make an angle_metal_backend_config that defines ANGLE_ENABLE_METAL? similar to the Vulkan back-end.",
+      "range": {
+        "startLine": 60,
+        "startChar": 18,
+        "endLine": 60,
+        "endChar": 37
+      },
+      "revId": "6cc1b7cf8849fab152f0ccd037202a1e11f3a0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "927bf010_84934b26",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T16:45:31Z",
+      "side": 1,
+      "message": "nit: for all your new files, could you please add a top-level comment giving a short (one-sentence) description of the file\u0027s intent? See other files in the repo for examples.",
+      "revId": "6cc1b7cf8849fab152f0ccd037202a1e11f3a0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04981d56_e4e9fc10",
+        "filename": "third_party/spirv-cross/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T16:45:31Z",
+      "side": 1,
+      "message": "Nice work on this. Maybe we can upstream it to the official SPIRV-Cross repo. I can help with that.",
+      "revId": "6cc1b7cf8849fab152f0ccd037202a1e11f3a0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b869b9ad_5eb74623",
+        "filename": "third_party/spirv-cross/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-08T16:45:31Z",
+      "side": 1,
+      "message": "nit: can you sort this alphabetically?",
+      "range": {
+        "startLine": 42,
+        "startChar": 12,
+        "endLine": 42,
+        "endChar": 17
+      },
+      "revId": "6cc1b7cf8849fab152f0ccd037202a1e11f3a0b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
