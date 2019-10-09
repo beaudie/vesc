@@ -93,6 +93,9 @@ declare_args() {
   angle_enable_null = true
   angle_enable_essl = true
   angle_enable_glsl = true
+
+  # TODO(hqle): change this to true for mac & ios once Metal backend is complete.
+  angle_enable_metal = false
 }
 
 declare_args() {

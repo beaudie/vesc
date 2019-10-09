@@ -79,6 +79,10 @@
 #    endif
 #endif  // defined(ANGLE_ENABLE_VULKAN)
 
+#if defined(ANGLE_ENABLE_METAL)
+#    include "libANGLE/renderer/metal/DisplayMtl.h"
+#endif  // defined(ANGLE_ENABLE_METAL)
+
 namespace egl
 {
 
@@ -182,6 +186,9 @@ EGLAttrib GetDisplayTypeFromEnvironment()
     return EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE;
 #elif defined(ANGLE_ENABLE_VULKAN) && defined(ANGLE_PLATFORM_ANDROID)
     return EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE;
+#elif defined(ANGLE_ENABLE_METAL)
+    // TODO(hqle): Metal renderer doesn't have dedicated enum yet. Use default value.
+    return EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
 #elif defined(ANGLE_ENABLE_OPENGL)
 #    if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_USE_OZONE)
     return EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE;
@@ -211,6 +218,15 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
     switch (displayType)
     {
         case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
+#if defined(ANGLE_PLATFORM_APPLE)
+#    if defined(ANGLE_ENABLE_METAL)
+            // TODO(hqle): Metal doesn't have dedicated enum yet, so we handle
+            // default case here.
+            impl = new rx::DisplayMtl(state);
+            break;
+#    endif
+#endif
+            // No display available
             UNREACHABLE();
             break;
 
