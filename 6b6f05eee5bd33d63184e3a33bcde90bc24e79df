@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8c6487a1_1a402867",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-09T16:49:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7f41423_966eb054",
+      "range": {
+        "startLine": 97,
+        "startChar": 4,
+        "endLine": 97,
+        "endChar": 8
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "10b9fdf7_89e89571",
         "filename": "gni/angle.gni",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-09T12:10:54Z",
       "side": 1,
       "message": "you can enable this on mac to build the source files. it won\u0027t run any tests so should let the bots stay green.",
+      "range": {
+        "startLine": 98,
+        "startChar": 2,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5bd53ce_5789c38b",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-09T16:49:15Z",
+      "side": 1,
+      "message": "I left it disabled for now, since there is a min macos requirement for metal. I think we can deal with this in another CL",
+      "parentUuid": "10b9fdf7_89e89571",
       "range": {
         "startLine": 98,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c265fe51_bec65963",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-09T16:49:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0997dc84_0521c908",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 25
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8fa17c18_2b1a27c7",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 4
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "938c9029_a4679a7c",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-09T16:49:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fa17c18_2b1a27c7",
+      "range": {
+        "startLine": 191,
+        "startChar": 11,
+        "endLine": 191,
+        "endChar": 48
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dcadfe0b_50b9803f",
         "filename": "src/libANGLE/renderer/metal/Metal_platform.h",
         "patchSetId": 4
@@ -105,6 +201,30 @@
       "writtenOn": "2019-10-09T12:10:54Z",
       "side": 1,
       "message": "if you want we can just rename FixedToFloat and FloatToFixed to GLFixedToFloat and FloatToGLFixed so you can remove this header.",
+      "range": {
+        "startLine": 15,
+        "startChar": 10,
+        "endLine": 27,
+        "endChar": 6
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa8a30f9_31f56181",
+        "filename": "src/libANGLE/renderer/metal/Metal_platform.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-09T16:49:15Z",
+      "side": 1,
+      "message": "I don\u0027t want to affect other parts\u0027 code much for now. Maybe in another CL?",
+      "parentUuid": "dcadfe0b_50b9803f",
       "range": {
         "startLine": 15,
         "startChar": 10,
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "a6e88014_b474cb55",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-09T16:49:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27e479ed_005cc427",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 37
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01971a37_31d89675",
         "filename": "src/libANGLE/renderer/metal/mtl_common.h",
         "patchSetId": 4
@@ -160,6 +304,30 @@
       "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "040ec021_5f0e2dd0",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-09T16:49:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01971a37_31d89675",
+      "range": {
+        "startLine": 55,
+        "startChar": 8,
+        "endLine": 55,
+        "endChar": 32
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
