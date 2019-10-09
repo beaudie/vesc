@@ -13,6 +13,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <cstdarg>
+#include <cstring>
 
 #include "common/platform.h"
 
@@ -26,6 +27,194 @@
 
 namespace angle
 {
+namespace
+{
+struct ScopedPipe
+{
+    ~ScopedPipe()
+    {
+        closeEndPoint(0);
+        closeEndPoint(1);
+    }
+    void closeEndPoint(int index)
+    {
+        if (fds[index] >= 0)
+        {
+            close(fds[index]);
+            fds[index] = -1;
+        }
+    }
+    int fds[2] = {
+        -1,
+        -1,
+    };
+};
+
+void ReadEntireFile(int fd, std::string *out)
+{
+    out->clear();
+
+    while (true)
+    {
+        char buffer[256];
+        ssize_t bytesRead = read(fd, buffer, sizeof(buffer));
+
+        // If interrupted, retry.
+        if (bytesRead < 0 && errno == EINTR)
+        {
+            continue;
+        }
+
+        // If failed, or nothing to read, we are done.
+        if (bytesRead <= 0)
+        {
+            break;
+        }
+
+        out->append(buffer, bytesRead);
+    }
+}
+
+class PosixProcess : public Process
+{
+  public:
+    PosixProcess(const std::vector<const char *> &commandLineArgs,
+                 bool captureStdOut,
+                 bool captureStdErr)
+    {
+#if !defined(ANGLE_PLATFORM_FUCHSIA)
+        if (commandLineArgs.empty() || args.back() != nullptr)
+        {
+            return;
+        }
+
+        // Create pipes for stdout and stderr.
+        if (captureStdOut && pipe(mStdoutPipe.fds) != 0)
+        {
+            return;
+        }
+        if (captureStdErr && pipe(mStderrPipe.fds) != 0)
+        {
+            return;
+        }
+
+        pid_t pid = fork();
+        if (pid < 0)
+        {
+            return;
+        }
+
+        mStarted = true;
+
+        if (pid == 0)
+        {
+            // Child.  Execute the application.
+
+            // Redirect stdout and stderr to the pipe fds.
+            if (captureStdOut)
+            {
+                if (dup2(stdoutPipe.fds[1], STDOUT_FILENO) < 0)
+                {
+                    _exit(errno);
+                }
+            }
+            if (captureStdErr)
+            {
+                if (dup2(stderrPipe.fds[1], STDERR_FILENO) < 0)
+                {
+                    _exit(errno);
+                }
+            }
+
+            // Execute the application, which doesn't return unless failed.  Note: execv takes argv
+            // as `char * const *` for historical reasons.  It is safe to const_cast it:
+            //
+            // http://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+            //
+            // > The statement about argv[] and envp[] being constants is included to make explicit
+            // to future writers of language bindings that these objects are completely constant.
+            // Due to a limitation of the ISO C standard, it is not possible to state that idea in
+            // standard C. Specifying two levels of const- qualification for the argv[] and envp[]
+            // parameters for the exec functions may seem to be the natural choice, given that these
+            // functions do not modify either the array of pointers or the characters to which the
+            // function points, but this would disallow existing correct code. Instead, only the
+            // array of pointers is noted as constant.
+            execv(args[0], const_cast<char *const *>(args.data()));
+            _exit(errno);
+        }
+
+        // Parent.  Read child output from the pipes and clean it up.
+
+        // Close the write end of the pipes, so EOF can be generated when child exits.
+        stdoutPipe.closeEndPoint(1);
+        stderrPipe.closeEndPoint(1);
+
+        // Read back the output of the child.
+        if (stdoutOut)
+        {
+            ReadEntireFile(stdoutPipe.fds[0], stdoutOut);
+        }
+        if (stderrOut)
+        {
+            ReadEntireFile(stderrPipe.fds[0], stderrOut);
+        }
+
+        // Cleanup the child.
+        int status = 0;
+        do
+        {
+            pid_t changedPid = waitpid(pid, &status, 0);
+            if (changedPid < 0 && errno == EINTR)
+            {
+                continue;
+            }
+            if (changedPid < 0)
+            {
+                return false;
+            }
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+
+        // Retrieve the error code.
+        if (exitCodeOut)
+        {
+            *exitCodeOut = WEXITSTATUS(status);
+        }
+
+        return true;
+#endif  // defined(ANGLE_PLATFORM_FUCHSIA)
+    }
+
+    ~PosixProcess() override {}
+
+    bool started() override { return mStarted; }
+
+    bool finish() override { return false; }
+
+    bool finished() override { return false; }
+
+    int getExitCode() override { return 0; }
+
+    bool kill() override { return false; }
+
+  private:
+    bool mStarted = false;
+    ScopedPipe mStdoutPipe;
+    ScopedPipe mStderrPipe;
+};
+
+std::string TempFileName()
+{
+#if defined(OS_MACOSX)
+    constexpr size_t kBufferSize = 1000;
+    char buffer[kBufferSize]     = {};
+    snprintf(buffer, ".%s.XXXXXX", base::mac::BaseBundleID());
+    return std::string(buffer);
+#else
+    return std::string(".angle.XXXXXX");
+#endif
+}
+}  // anonymous namespace
+
 void Sleep(unsigned int milliseconds)
 {
     // On Windows Sleep(0) yields while it isn't guaranteed by Posix's sleep
@@ -93,5 +282,75 @@ bool StabilizeCPUForBenchmarking()
 #else  // defined(ANGLE_PLATFORM_FUCHSIA)
     return false;
 #endif
+}
+
+bool GetTempDir(char *tempDirOut, uint32_t maxDirNameLen)
+{
+    const char *tmp = getenv("TMPDIR");
+    if (tmp)
+    {
+        strncpy(tempDirOut, tmp, maxDirNameLen);
+        return true;
+    }
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+    // TODO(jmadill): Android support. http://anglebug.com/3162
+    // return PathService::Get(DIR_CACHE, path);
+    return false;
+#else
+    strncpy(tempDirOut, "/tmp", maxDirNameLen);
+    return true;
+#endif
+}
+
+bool CreateTemporaryFileInDir(const char *dir, char *tempFileNameOut, uint32_t maxFileNameLen)
+{
+    std::string tempFile = TempFileName();
+    sprintf(tempFileNameOut, "%s/%s", dir, tempFile.c_str());
+    int fd = mkstemp(tempFileNameOut);
+    close(fd);
+    return fd != -1;
+}
+
+bool DeleteFile(const char *path)
+{
+    return unlink(path) == 0;
+}
+
+Process *LaunchProcess(const std::vector<const char *> &args,
+                       bool captureStdout,
+                       bool captureStderr)
+{
+    return new PosixProcess(args, captureStdout, captureStderr);
+}
+
+bool RunApp(const std::vector<const char *> &args,
+            std::string *stdoutOut,
+            std::string *stderrOut,
+            int *exitCodeOut)
+{}
+
+int NumberOfProcessors()
+{
+    // sysconf returns the number of "logical" (not "physical") processors on both
+    // Mac and Linux.  So we get the number of max available "logical" processors.
+    //
+    // Note that the number of "currently online" processors may be fewer than the
+    // returned value of NumberOfProcessors(). On some platforms, the kernel may
+    // make some processors offline intermittently, to save power when system
+    // loading is low.
+    //
+    // One common use case that needs to know the processor count is to create
+    // optimal number of threads for optimization. It should make plan according
+    // to the number of "max available" processors instead of "currently online"
+    // ones. The kernel should be smart enough to make all processors online when
+    // it has sufficient number of threads waiting to run.
+    long res = sysconf(_SC_NPROCESSORS_CONF);
+    if (res == -1)
+    {
+        return 1;
+    }
+
+    return static_cast<int>(res);
 }
 }  // namespace angle
