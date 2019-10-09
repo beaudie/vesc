@@ -9,9 +9,11 @@
 #ifndef UTIL_TEST_UTILS_H_
 #define UTIL_TEST_UTILS_H_
 
+#include <functional>
 #include <string>
 #include <vector>
 
+#include "common/angleutils.h"
 #include "util/util_export.h"
 
 namespace angle
@@ -31,8 +33,65 @@ ANGLE_UTIL_EXPORT bool StabilizeCPUForBenchmarking();
 ANGLE_UTIL_EXPORT void InitCrashHandler();
 ANGLE_UTIL_EXPORT void TerminateCrashHandler();
 
+// Set a crash handler to print stack traces.
+using CrashCallback = std::function<void()>;
+ANGLE_UTIL_EXPORT void InitCrashHandler(CrashCallback *callback);
+ANGLE_UTIL_EXPORT void TerminateCrashHandler();
+
 // Print a stack back trace.
 ANGLE_UTIL_EXPORT void PrintStackBacktrace();
+
+// Get temporary directory.
+ANGLE_UTIL_EXPORT bool GetTempDir(std::string *tempDirOut);
+
+// Creates a temporary file. The full path is placed in |path|, and the
+// function returns true if was successful in creating the file. The file will
+// be empty and all handles closed after this function returns.
+ANGLE_UTIL_EXPORT bool CreateTemporaryFile(std::string *tempFileNameOut);
+
+// Same as CreateTemporaryFile but the file is created in |dir|.
+ANGLE_UTIL_EXPORT bool CreateTemporaryFileInDir(const std::string &dir,
+                                                std::string *tempFileNameOut);
+
+// Deletes a file or directory.
+ANGLE_UTIL_EXPORT bool DeleteFile(const char *path);
+
+// Reads a file contents into a string.
+ANGLE_UTIL_EXPORT bool ReadEntireFileToString(const std::string &filePath,
+                                              std::string *contentsOut);
+
+class ANGLE_UTIL_EXPORT Process : angle::NonCopyable
+{
+  public:
+    virtual bool started()                         = 0;
+    virtual bool finished()                        = 0;
+    virtual bool finish()                          = 0;
+    virtual bool kill()                            = 0;
+    virtual int getExitCode()                      = 0;
+    virtual double getElapsedTimeSeconds()         = 0;
+    virtual void getStdout(std::string *stdoutOut) = 0;
+    virtual void getStderr(std::string *stderrOut) = 0;
+
+    // Ensure deletion happens in the 'util' shared module.
+    static void Delete(Process **process);
+
+  protected:
+    virtual ~Process() {}
+};
+
+// Launch a process and optionally get the output. Uses a vector of c strings as command line
+// arguments to the child process. Returns a Process handle which can be used to retrieve
+// the stdout and stderr outputs as well as the exit code.
+//
+// Pass false for stdoutOut/stderrOut if you don't need to capture them.
+//
+// On success, returns a Process pointer with started() == true.
+// On failure, returns a Process pointer with started() == false.
+ANGLE_UTIL_EXPORT Process *LaunchProcess(const std::vector<const char *> &args,
+                                         bool captureStdout,
+                                         bool captureStderr);
+
+ANGLE_UTIL_EXPORT int NumberOfProcessors();
 
 }  // namespace angle
 
