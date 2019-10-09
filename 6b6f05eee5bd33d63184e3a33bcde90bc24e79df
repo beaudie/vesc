@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "d353c864_ef801cd8",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T17:01:29Z",
+      "side": 1,
+      "message": "It would be great to get compilation testing in this CL on our bots before landing. Could you leave a comment in here what the minimum requirements are? Maybe we could do a quick test to see if our bots are happy with this version by setting angle_enable_metal \u003d is_mac.",
+      "parentUuid": "c5bd53ce_5789c38b",
+      "range": {
+        "startLine": 98,
+        "startChar": 2,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0997dc84_0521c908",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 4
@@ -225,6 +249,30 @@
       "side": 1,
       "message": "I don\u0027t want to affect other parts\u0027 code much for now. Maybe in another CL?",
       "parentUuid": "dcadfe0b_50b9803f",
+      "range": {
+        "startLine": 15,
+        "startChar": 10,
+        "endLine": 27,
+        "endChar": 6
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f240d85_1656af05",
+        "filename": "src/libANGLE/renderer/metal/Metal_platform.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T17:01:29Z",
+      "side": 1,
+      "message": "Sure, can do this as a follow-up.",
+      "parentUuid": "fa8a30f9_31f56181",
       "range": {
         "startLine": 15,
         "startChar": 10,
