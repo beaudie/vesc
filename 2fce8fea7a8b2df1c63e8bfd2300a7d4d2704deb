@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32d3796f_fe39a6ce",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1902,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T20:51:39Z",
+      "side": 1,
+      "message": "nit: you can use versions here.",
+      "range": {
+        "startLine": 1902,
+        "startChar": 28,
+        "endLine": 1902,
+        "endChar": 69
+      },
+      "revId": "2fce8fea7a8b2df1c63e8bfd2300a7d4d2704deb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
