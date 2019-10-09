@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cabd2dd8_70c52b7b",
+        "filename": "src/libANGLE/renderer/d3d/DeviceD3D.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-09T02:47:50Z",
+      "side": 1,
+      "message": "OK, understood. Going to leave this here since it is harmless and what would be needed if we decided to turn on such a warning in the future.",
+      "parentUuid": "843a07fb_c6f31c64",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 25
+      },
+      "revId": "a6e615510c196bfd98536a0b80cf3b75ec47c103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df122264_c15438b6",
         "filename": "src/libANGLE/renderer/gl/cgl/DeviceCGL.cpp",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "0ad99ed6_fe5692c7",
+        "filename": "src/libANGLE/renderer/gl/cgl/DeviceCGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-09T02:47:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df122264_c15438b6",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "a6e615510c196bfd98536a0b80cf3b75ec47c103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43ea5146_1c4848fc",
         "filename": "src/libANGLE/renderer/gl/cgl/DeviceCGL.h",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "a6e615510c196bfd98536a0b80cf3b75ec47c103",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25df4758_4552951f",
+        "filename": "src/libANGLE/renderer/gl/cgl/DeviceCGL.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-09T02:47:50Z",
+      "side": 1,
+      "message": "Thanks for catching that. I have no idea where I copied this notice from. Changed.",
+      "parentUuid": "43ea5146_1c4848fc",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "a6e615510c196bfd98536a0b80cf3b75ec47c103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
