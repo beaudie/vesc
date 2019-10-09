@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "460c3041_6c918daf",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-09T17:50:25Z",
+      "side": 1,
+      "message": "Let\u0027s give this an explicit value like the others.",
+      "range": {
+        "startLine": 75,
+        "startChar": 24,
+        "endLine": 75,
+        "endChar": 25
+      },
+      "revId": "1f8344524c518cfdb1aa6c52003a71b6bd967725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c2574fa_0d2cb8ea",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-09T17:50:25Z",
+      "side": 1,
+      "message": "Context client versions aren\u0027t passed to display creation.  You may also want to implement getMaxSupportedESVersion which would limit the maximum version passed to context creation.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "1f8344524c518cfdb1aa6c52003a71b6bd967725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9aab633c_dc1003ff",
+        "filename": "src/libANGLE/renderer/metal/Metal_platform.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-09T17:50:25Z",
+      "side": 1,
+      "message": "I think we would be better off just renaming those functions. Fixed32ToFloat32 is an option.",
+      "revId": "1f8344524c518cfdb1aa6c52003a71b6bd967725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b75497e_53d3e875",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-09T17:50:25Z",
+      "side": 1,
+      "message": "nit: newline at the end of the file.",
+      "revId": "1f8344524c518cfdb1aa6c52003a71b6bd967725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
