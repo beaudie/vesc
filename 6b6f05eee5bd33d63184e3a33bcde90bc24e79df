@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "f10e98b4_fe52804a",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-09T17:54:17Z",
+      "side": 1,
+      "message": "In order to compile metal, the bot has to pass 2 args: angle_enable_metal\u003dtrue and mac_deployment_target\u003dat least 10.11\nLast time i checked, chromium default mac_deployment_target\u003d10.10, so without manually setting it to higher through arg, it will throw errors about Metal functionalities not available during compilation.\nNot only that, 10.11 only has Metal 1.1. In later CL I will have some code making use of Metal 2.0+ features such as array of textures, normalized integer vertex attributes, both are needed for ES 2.0. Metal 2.1 is needed for invariant vertex output. Metal 2.0 will require mac 10.13.\nAnw, if we just want to test compilation in this CL without Metal. I can removed Metal header inclusion from this CL. Then we can enable the flag without setting mac_deployment_target.\nI’m not sure what is the best way to handle this deployment target once Metal is fully implemented.",
+      "parentUuid": "d353c864_ef801cd8",
+      "range": {
+        "startLine": 98,
+        "startChar": 2,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0997dc84_0521c908",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 4
