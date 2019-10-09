@@ -94,6 +94,29 @@
     },
     {
       "key": {
+        "uuid": "c9791166_bd280c09",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1777,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T17:35:36Z",
+      "side": 1,
+      "message": "also you can replace this with just\n\nif major_version \u003d\u003d 1:\n   name_prefix \u003d \"GL_VERSION_ES_CM_\"",
+      "range": {
+        "startLine": 1774,
+        "startChar": 0,
+        "endLine": 1777,
+        "endChar": 0
+      },
+      "revId": "d463eac76d2f9096e761660cc9c4e57751b02345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "df2f5b10_44c2d7cc",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 2
