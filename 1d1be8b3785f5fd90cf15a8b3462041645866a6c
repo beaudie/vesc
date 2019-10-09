@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2dbfeee3_642017be",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d11on12.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-10-09T23:58:55Z",
+      "side": 1,
+      "message": "Changed value to 0x3488. \n\nAlso D3D11on12 does support WARP devices and I\u0027ve added that capability to Renderer11 and made note of it in the extension document. Other device selections besides WARP and hardware will generate an EGL_BAD_ATTRIBUTE and not create the display.",
+      "parentUuid": "beba777d_3e15dca3",
+      "range": {
+        "startLine": 54,
+        "startChar": 52,
+        "endLine": 54,
+        "endChar": 58
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f9aa98b_4f036dd6",
         "filename": "src/common/platform.h",
         "patchSetId": 11
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-08T19:27:43Z",
       "side": 1,
       "message": "Do you know which sdk these were introduced in? Did we test this on the bots yet? We\u0027re still on a very old SDK but we\u0027re in the process up upgrading in http://crbug.com/1006238 .",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 26
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b065422b_39f26b9b",
+        "filename": "src/common/platform.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-10-09T23:58:55Z",
+      "side": 1,
+      "message": "It looks like things are building ok on the try bots including some extra win7 tryjobs I added in.",
+      "parentUuid": "3f9aa98b_4f036dd6",
       "range": {
         "startLine": 62,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a984dd05_667a1acc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-10-09T23:58:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "18c77f27_a0a76e8f",
+      "range": {
+        "startLine": 717,
+        "startChar": 18,
+        "endLine": 717,
+        "endChar": 23
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "519bfba3_d6d26f7b",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 11
@@ -91,6 +163,30 @@
       "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "857aa5e8_26f31a25",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-10-09T23:58:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "519bfba3_d6d26f7b",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 772,
+        "endChar": 74
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "6ad3174d_34c8ab2f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-10-09T23:58:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aeaef3b4_2c7d55a7",
+      "range": {
+        "startLine": 781,
+        "startChar": 0,
+        "endLine": 783,
+        "endChar": 96
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1ad458c_eac18d28",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 11
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "c30dbc03_8a1560c0",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-10-09T23:58:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b1ad458c_eac18d28",
+      "range": {
+        "startLine": 795,
+        "startChar": 0,
+        "endLine": 798,
+        "endChar": 93
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a882a113_b20044fc",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 11
@@ -160,6 +304,30 @@
       "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e95bf71c_1f97dcbf",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-10-09T23:58:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a882a113_b20044fc",
+      "range": {
+        "startLine": 807,
+        "startChar": 0,
+        "endLine": 810,
+        "endChar": 74
+      },
+      "revId": "1d1be8b3785f5fd90cf15a8b3462041645866a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
