@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "44767f9d_6d884028",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T19:35:51Z",
+      "side": 1,
+      "message": "There\u0027s also some API_AVAILABLE tags that we can use to fix this, though I haven\u0027t fully understood how it works:\n\nhttps://developer.apple.com/documentation/swift/objective-c_and_c_code_customization/marking_api_availability_in_objective-c",
+      "parentUuid": "4b48d89d_445b2ab8",
+      "range": {
+        "startLine": 98,
+        "startChar": 2,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0997dc84_0521c908",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 4
