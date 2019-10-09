@@ -75,6 +75,11 @@ bool CompressedSubTextureFormatRequiresExactSize(GLenum internalFormat)
            IsETC2EACFormat(internalFormat);
 }
 
+bool CompressedTextureFormatRequiresWholeMipSize(GLenum internalFormat)
+{
+    return CompressedFormatRequiresWholeImage(internalFormat);
+}
+
 bool DifferenceCanOverflow(GLint a, GLint b)
 {
     CheckedNumeric<GLint> checkedA(a);
@@ -894,6 +899,15 @@ bool ValidCompressedSubImageSize(const Context *context,
         return false;
     }
 
+    bool fillsEntireMip =
+        xoffset == 0 && yoffset == 0 && static_cast<size_t>(width) == textureWidth &&
+        static_cast<size_t>(height) == textureHeight && static_cast<size_t>(depth) == textureDepth;
+
+    if (CompressedTextureFormatRequiresWholeMipSize(internalFormat))
+    {
+        return fillsEntireMip;
+    }
+
     if (CompressedSubTextureFormatRequiresExactSize(internalFormat))
     {
         if (xoffset % formatInfo.compressedBlockWidth != 0 ||
@@ -905,10 +919,6 @@ bool ValidCompressedSubImageSize(const Context *context,
 
         // Allowed to either have data that is a multiple of block size or is smaller than the block
         // size but fills the entire mip
-        bool fillsEntireMip = xoffset == 0 && yoffset == 0 &&
-                              static_cast<size_t>(width) == textureWidth &&
-                              static_cast<size_t>(height) == textureHeight &&
-                              static_cast<size_t>(depth) == textureDepth;
         bool sizeMultipleOfBlockSize = (width % formatInfo.compressedBlockWidth) == 0 &&
                                        (height % formatInfo.compressedBlockHeight) == 0 &&
                                        (depth % formatInfo.compressedBlockDepth) == 0;
