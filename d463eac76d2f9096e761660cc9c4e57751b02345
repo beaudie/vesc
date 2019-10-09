@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56506817_4edb524d",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T17:34:43Z",
+      "side": 1,
+      "message": "this should go away.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 0
+      },
+      "revId": "d463eac76d2f9096e761660cc9c4e57751b02345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93b67b67_772186d2",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T17:34:43Z",
+      "side": 1,
+      "message": "what happens if you remove all this is_gles1 stuff from this?",
+      "range": {
+        "startLine": 1034,
+        "startChar": 0,
+        "endLine": 1040,
+        "endChar": 24
+      },
+      "revId": "d463eac76d2f9096e761660cc9c4e57751b02345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45d5da4b_9480e618",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T17:34:43Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 1046,
+        "startChar": 0,
+        "endLine": 1047,
+        "endChar": 20
+      },
+      "revId": "d463eac76d2f9096e761660cc9c4e57751b02345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1a3047e_fdbcb686",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T17:34:43Z",
+      "side": 1,
+      "message": "and restore this to the prior incarnation",
+      "range": {
+        "startLine": 1100,
+        "startChar": 0,
+        "endLine": 1102,
+        "endChar": 0
+      },
+      "revId": "d463eac76d2f9096e761660cc9c4e57751b02345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df2f5b10_44c2d7cc",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T17:34:43Z",
+      "side": 1,
+      "message": "and this",
+      "range": {
+        "startLine": 1790,
+        "startChar": 12,
+        "endLine": 1790,
+        "endChar": 20
+      },
+      "revId": "d463eac76d2f9096e761660cc9c4e57751b02345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3d2ebd5_7e040a55",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1919,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T17:34:43Z",
+      "side": 1,
+      "message": "could you pull this into a temporary and use it in the three places it can be referenced? note 1.0 should stay at the end.",
+      "range": {
+        "startLine": 1919,
+        "startChar": 28,
+        "endLine": 1919,
+        "endChar": 68
+      },
+      "revId": "d463eac76d2f9096e761660cc9c4e57751b02345",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
