@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "4b48d89d_445b2ab8",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-09T18:54:30Z",
+      "side": 1,
+      "message": "Thanks, this is great info. I took a look at how Dawn worked around this problem. See\n\nhttps://cs.chromium.org/chromium/src/third_party/dawn/BUILD.gn?l\u003d46\n\nCan you try suppressing \"-Wno-unguarded-availability\" in this CL in internal_config in BUILD.gn?\n\nIn your subsequent CL you can implement something like this to prevent running Metal on older OSes:\n\nhttps://cs.chromium.org/chromium/src/third_party/dawn/src/dawn_native/metal/BackendMTL.mm?q\u003dIsMetalSupported+\u0026g\u003d0\u0026l\u003d153",
+      "parentUuid": "f10e98b4_fe52804a",
+      "range": {
+        "startLine": 98,
+        "startChar": 2,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0997dc84_0521c908",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 4
