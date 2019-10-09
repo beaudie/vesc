@@ -93,6 +93,11 @@ declare_args() {
   angle_enable_null = true
   angle_enable_essl = true
   angle_enable_glsl = true
+
+  # TODO(hqle): change this to true when is_mac and mac_deployment_target >= 10.13
+  # or is_ios and ios_deployment_target >= 11.0
+  # http://anglebug.com/3246
+  angle_enable_metal = false
 }
 
 declare_args() {

@@ -79,6 +79,10 @@
 #    endif
 #endif  // defined(ANGLE_ENABLE_VULKAN)
 
+#if defined(ANGLE_ENABLE_METAL)
+#    include "libANGLE/renderer/metal/DisplayMtl.h"
+#endif  // defined(ANGLE_ENABLE_METAL)
+
 namespace egl
 {
 
@@ -182,6 +186,8 @@ EGLAttrib GetDisplayTypeFromEnvironment()
     return EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE;
 #elif defined(ANGLE_ENABLE_VULKAN) && defined(ANGLE_PLATFORM_ANDROID)
     return EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE;
+#elif defined(ANGLE_ENABLE_METAL)
+    return EGL_PLATFORM_ANGLE_TYPE_METAL_ANGLE;
 #elif defined(ANGLE_ENABLE_OPENGL)
 #    if defined(ANGLE_PLATFORM_ANDROID) || defined(ANGLE_USE_OZONE)
     return EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE;
@@ -282,7 +288,14 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
             UNREACHABLE();
 #endif  // defined(ANGLE_ENABLE_VULKAN)
             break;
-
+        case EGL_PLATFORM_ANGLE_TYPE_METAL_ANGLE:
+#if defined(ANGLE_ENABLE_METAL)
+            impl = new rx::DisplayMtl(state);
+#else
+            // No display available
+            UNREACHABLE();
+#endif
+            break;
         case EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE:
 #if defined(ANGLE_ENABLE_NULL)
             impl = new rx::DisplayNULL(state);
@@ -1243,6 +1256,10 @@ static ClientExtensions GenerateClientExtensions()
 #if defined(ANGLE_ENABLE_VULKAN)
     extensions.platformANGLEVulkan                = true;
     extensions.platformANGLEDeviceTypeSwiftShader = true;
+#endif
+
+#if defined(ANGLE_ENABLE_METAL)
+    extensions.platformANGLEMetal                 = true;
 #endif
 
 #if defined(ANGLE_USE_X11)
