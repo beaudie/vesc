@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70d24672_02d1642e",
+        "filename": "src/libANGLE/Constants.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-10T15:18:17Z",
+      "side": 1,
+      "message": "This is going to make dirty bits less efficient. Can we hold off on this for now?\n\nSee https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/Program.h?q\u003dIMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d949",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 55
+      },
+      "revId": "239fde02a11b47ec753dd30f9e52b1b832fc193d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "120dee1b_f5315057",
+        "filename": "src/libANGLE/Constants.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-10T15:18:17Z",
+      "side": 1,
+      "message": "IIRC some bad tests try to create max sized textures and run out of memory or time out. If they pass bots that\u0027s probably okay, just be careful.",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 47
+      },
+      "revId": "239fde02a11b47ec753dd30f9e52b1b832fc193d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c9d516d_0de95a9f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3443,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-10T15:18:17Z",
+      "side": 1,
+      "message": "nit: ANGLE_LOG_, ANGLE_LIMIT_CAP, etc.",
+      "range": {
+        "startLine": 3443,
+        "startChar": 12,
+        "endLine": 3443,
+        "endChar": 27
+      },
+      "revId": "239fde02a11b47ec753dd30f9e52b1b832fc193d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
