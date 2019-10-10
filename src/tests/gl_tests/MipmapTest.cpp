@@ -940,10 +940,6 @@ TEST_P(MipmapTestES3, MipmapForDeepTextureArray)
 // Then tests if the mipmaps are rendered correctly for all two layers.
 TEST_P(MipmapTestES3, MipmapsForTexture3D)
 {
-    // TODO(cnorthrop): Enabled the group to cover texture base level, but this test
-    // needs some triage: http://anglebug.com/3950
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     int px = getWindowWidth() / 2;
     int py = getWindowHeight() / 2;
 
