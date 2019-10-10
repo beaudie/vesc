@@ -17,6 +17,9 @@ vars = {
   # We overload Chromium's 'src-internal' for infra simplicity.
   'checkout_src_internal': False,
 
+  # Version of Chromium our Chromium-based DEPS are mirrored from.
+  'chromium_revision': '43eb5958f7db40c57c94e21bea771589d2de9599',
+
   # Current revision of dEQP.
   'deqp_revision': 'd3eef28e67ce6795ba3a2124aaa977819729d45f',
 
