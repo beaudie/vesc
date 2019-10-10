@@ -22,6 +22,30 @@
       "revId": "cad8192cf17fb3295e441605306fb5b813128dbb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc194f0c_b1c701e8",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d11on12.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-10-10T00:16:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2d72887d_ba271dff",
+      "range": {
+        "startLine": 69,
+        "startChar": 45,
+        "endLine": 69,
+        "endChar": 46
+      },
+      "revId": "cad8192cf17fb3295e441605306fb5b813128dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
