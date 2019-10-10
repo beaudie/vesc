@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d72887d_ba271dff",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d11on12.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-10T00:07:10Z",
+      "side": 1,
+      "message": "tiny nit: can you trim the trailing whitespace in this document?",
+      "range": {
+        "startLine": 69,
+        "startChar": 45,
+        "endLine": 69,
+        "endChar": 46
+      },
+      "revId": "cad8192cf17fb3295e441605306fb5b813128dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
