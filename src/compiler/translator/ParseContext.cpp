@@ -4024,6 +4024,16 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
         {
             error(location, "array index for gl_FragData must be constant zero", "[");
         }
+        else if (mShaderVersion >= 300 && baseExpression->isArray())
+        {
+            TType elementType = baseExpression->getType();
+            elementType.toArrayElementType();
+            if (elementType.isSampler())
+            {
+                error(location, "array index for samplers must be constant integral expressions",
+                      "[");
+            }
+        }
     }
 
     if (indexConstantUnion)
