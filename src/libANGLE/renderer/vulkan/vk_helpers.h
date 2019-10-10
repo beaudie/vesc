@@ -911,6 +911,14 @@ class ImageHelper final : public Resource
                                         GLenum type,
                                         void *pixels);
 
+    angle::Result readPixelsForGetImage3D(ContextVk *contextVk,
+                                        const gl::PixelPackState &packState,
+                                        gl::Buffer *packBuffer,
+                                        uint32_t level,
+                                        GLenum format,
+                                        GLenum type,
+                                        void *pixels);
+
     angle::Result readPixels(ContextVk *contextVk,
                              const gl::Rectangle &area,
                              const PackPixelsParams &packPixelsParams,
