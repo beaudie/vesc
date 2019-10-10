@@ -291,9 +291,10 @@ class TextureVk : public TextureImpl
                                               GLuint layer,
                                               GLuint firstMipLevel,
                                               GLuint maxMipLevel,
-                                              size_t sourceWidth,
-                                              size_t sourceHeight,
-                                              size_t sourceRowPitch,
+                                              const size_t sourceWidth,
+                                              const size_t sourceHeight,
+                                              const size_t sourceDepth,
+                                              const size_t sourceRowPitch,
                                               uint8_t *sourceData);
 
     angle::Result copySubImageImpl(const gl::Context *context,
