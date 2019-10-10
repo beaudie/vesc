@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "23400e09_1622e31b",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-10T04:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44767f9d_6d884028",
+      "range": {
+        "startLine": 98,
+        "startChar": 2,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "6b6f05eee5bd33d63184e3a33bcde90bc24e79df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0997dc84_0521c908",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 4

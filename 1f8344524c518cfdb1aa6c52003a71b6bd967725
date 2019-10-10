@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a4e24597_76a1dc53",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-10T04:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "460c3041_6c918daf",
+      "range": {
+        "startLine": 75,
+        "startChar": 24,
+        "endLine": 75,
+        "endChar": 25
+      },
+      "revId": "1f8344524c518cfdb1aa6c52003a71b6bd967725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c2574fa_0d2cb8ea",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "f3eeed3f_0da29541",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-10T04:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c2574fa_0d2cb8ea",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "1f8344524c518cfdb1aa6c52003a71b6bd967725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aab633c_dc1003ff",
         "filename": "src/libANGLE/renderer/metal/Metal_platform.h",
         "patchSetId": 6
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "68afafbf_cc4a9460",
+        "filename": "src/libANGLE/renderer/metal/Metal_platform.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-10T04:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aab633c_dc1003ff",
+      "revId": "1f8344524c518cfdb1aa6c52003a71b6bd967725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b75497e_53d3e875",
         "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
         "patchSetId": 6
@@ -79,6 +145,24 @@
       "revId": "1f8344524c518cfdb1aa6c52003a71b6bd967725",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b84859b1_cc80fa2c",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-10T04:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b75497e_53d3e875",
+      "revId": "1f8344524c518cfdb1aa6c52003a71b6bd967725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
