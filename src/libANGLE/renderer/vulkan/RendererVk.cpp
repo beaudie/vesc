@@ -1484,30 +1484,27 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
     // Get the size of the cache.
     size_t pipelineCacheSize = 0;
     VkResult result          = mPipelineCache.getCacheData(mDevice, &pipelineCacheSize, nullptr);
-    if (result != VK_INCOMPLETE)
-    {
-        ANGLE_VK_TRY(displayVk, result);
-    }
+    ANGLE_VK_TRY(displayVk, result);
 
     angle::MemoryBuffer *pipelineCacheData = nullptr;
     ANGLE_VK_CHECK_ALLOC(displayVk,
                          displayVk->getScratchBuffer(pipelineCacheSize, &pipelineCacheData));
 
-    size_t originalPipelineCacheSize = pipelineCacheSize;
     result = mPipelineCache.getCacheData(mDevice, &pipelineCacheSize, pipelineCacheData->data());
-    // Note: currently we don't accept incomplete as we don't expect it (the full size of cache
-    // was determined just above), so receiving it hints at an implementation bug we would want
-    // to know about early.
-    ASSERT(result != VK_INCOMPLETE);
-    ANGLE_VK_TRY(displayVk, result);
+    // Make sure we at least got the header
+    // Table 9.1. Layout for pipeline cache header version VK_PIPELINE_CACHE_HEADER_VERSION_ONE
+    if ((result != VK_INCOMPLETE) || (pipelineCacheSize < (16 + VK_UUID_SIZE)))
+    {
+        ANGLE_VK_TRY(displayVk, result);
+    }
 
     // If vkGetPipelineCacheData ends up writing fewer bytes than requested, zero out the rest of
     // the buffer to avoid leaking garbage memory.
-    ASSERT(pipelineCacheSize <= originalPipelineCacheSize);
-    if (pipelineCacheSize < originalPipelineCacheSize)
+    ASSERT(pipelineCacheSize <= pipelineCacheData->size());
+    if (pipelineCacheSize < pipelineCacheData->size())
     {
         memset(pipelineCacheData->data() + pipelineCacheSize, 0,
-               originalPipelineCacheSize - pipelineCacheSize);
+               pipelineCacheData->size() - pipelineCacheSize);
     }
 
     displayVk->getBlobCache()->putApplication(mPipelineCacheVkBlobKey, *pipelineCacheData);
