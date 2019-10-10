@@ -44,11 +44,6 @@ vars = {
 
 deps = {
 
-  '{angle_root}/angle-internal': {
-    'url': 'https://chrome-internal.googlesource.com/angle/angle-internal.git@f682552d8131422e91f45661a7af83e885ff70ce',
-    'condition': 'checkout_src_internal',
-  },
-
   '{angle_root}/build': {
     'url': '{chromium_git}/chromium/src/build.git@fd0d28db8039e2aaf9fa35e53e3af6dc9ead8055',
     'condition': 'not build_with_chromium',
@@ -77,6 +72,12 @@ deps = {
   '{angle_root}/third_party/fuchsia-sdk': {
     'url': '{chromium_git}/chromium/src/third_party/fuchsia-sdk.git@5fd29151cf35c0813c33cc368a7c78389e3f5caa',
     'condition': 'checkout_fuchsia and not build_with_chromium',
+  },
+
+  # Closed-source OpenGL ES 1.1 Conformance tests.
+  '{angle_root}/third_party/gles1_conform': {
+    'url': '{chrome_git}/angle/es-cts.git@dc9f502f709c9cd88d7f8d3974f1c77aa246958e',
+    'condition': 'checkout_src_internal',
   },
 
   # glmark2 is a GPL3-licensed OpenGL ES 2.0 benchmark. We use it for testing.
