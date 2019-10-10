@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50c75cb3_4385d3b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-10T22:46:07Z",
+      "side": 1,
+      "message": "can you just set copy.imageOffset \u003d offset/copy.imageExtent \u003d extent?",
+      "range": {
+        "startLine": 2378,
+        "startChar": 0,
+        "endLine": 2383,
+        "endChar": 56
+      },
+      "revId": "313dae9824c7c37b873e4d2fb26a01df78162715",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
