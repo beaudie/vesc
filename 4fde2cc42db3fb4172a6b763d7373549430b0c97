@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "f8c8a7cc_b8696460",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-10T12:16:23Z",
+      "side": 1,
+      "message": "should probably update this commit message",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "4fde2cc42db3fb4172a6b763d7373549430b0c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e49eb2ca_8ee531c7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -13,6 +36,30 @@
       "writtenOn": "2019-10-10T07:32:05Z",
       "side": 1,
       "message": "I don\u0027t understand this comment well regarding how most barriers can be omitted. This might be the root cause of bug.",
+      "range": {
+        "startLine": 2539,
+        "startChar": 0,
+        "endLine": 2543,
+        "endChar": 47
+      },
+      "revId": "4fde2cc42db3fb4172a6b763d7373549430b0c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c249ee4f_1cdb896b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2543,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-10T12:16:23Z",
+      "side": 1,
+      "message": "I don\u0027t fully understand either.",
+      "parentUuid": "e49eb2ca_8ee531c7",
       "range": {
         "startLine": 2539,
         "startChar": 0,
@@ -45,6 +92,30 @@
       "revId": "4fde2cc42db3fb4172a6b763d7373549430b0c97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c88aff86_d71ef20a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2567,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-10T12:16:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9615a652_cabd4f25",
+      "range": {
+        "startLine": 2554,
+        "startChar": 0,
+        "endLine": 2567,
+        "endChar": 5
+      },
+      "revId": "4fde2cc42db3fb4172a6b763d7373549430b0c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
