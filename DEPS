@@ -20,6 +20,9 @@ vars = {
   # TOOD(ynovikov): Use checkout_angle_internal custom variable instead.
   'checkout_src_internal': False,
 
+  # Version of Chromium our Chromium-based DEPS are mirrored from.
+  'chromium_revision': '43eb5958f7db40c57c94e21bea771589d2de9599',
+
   # Current revision of dEQP.
   'deqp_revision': 'd3eef28e67ce6795ba3a2124aaa977819729d45f',
 
