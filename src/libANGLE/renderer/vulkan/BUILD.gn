@@ -85,6 +85,7 @@ _vulkan_backend_sources = [
   "vk_cache_utils.h",
   "vk_caps_utils.cpp",
   "vk_caps_utils.h",
+  "$angle_root/third_party/SwiftShader/include/vulkan/vk_ext_provoking_vertex.h",
   "vk_format_table_autogen.cpp",
   "vk_format_utils.h",
   "vk_format_utils.cpp",
@@ -249,6 +250,7 @@ group("angle_vulkan") {
 
 config("angle_vulkan_backend_config") {
   defines = [ "ANGLE_ENABLE_VULKAN" ]
+  include_dirs = [ "$angle_root/third_party/SwiftShader/include" ]
   if (angle_enable_custom_vulkan_cmd_buffers) {
     defines += [ "ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS=1" ]
   }
