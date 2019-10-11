@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93887d9e_a06cb480",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-11T13:16:19Z",
+      "side": 1,
+      "message": "This allows the 2darray tests to pass but I\u0027m not certain it\u0027s the best/right fix. The glExtents.depth for array textures was causing all kinds of errors, though, and we\u0027re only ever copying a single layer at a time so some action needs to be taken here to limit the depth being copied.\nThis works for these tests but will see how it does overall. For 3d textures may need a bit more intelligence.",
+      "revId": "475a5f2735e9795567ab578a59127c5aa780dd87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
