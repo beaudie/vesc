@@ -886,7 +886,7 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     angle_deqp_gtest(target_name) {
       forward_variables_from(invoker, "*")
 
-      defines += [ "ANGLE_DEQP_DATA_DIR=\"data\"" ]
+      defines += [ "ANGLE_DEQP_DATA_DIR=\"external/graphicsfuzz/data\"" ]
 
       mustpass_name = "${_api}-master.txt"
       data = [
