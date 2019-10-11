@@ -72,7 +72,13 @@ DeviceImpl *DisplayMtl::createDevice()
 
 egl::Error DisplayMtl::waitClient(const gl::Context *context)
 {
-    UNIMPLEMENTED();
+    auto contextMtl      = GetImplAs<ContextMtl>(context);
+    angle::Result result = contextMtl->finishCommandBuffer();
+
+    if (result != angle::Result::Continue)
+    {
+        return egl::EglBadAccess();
+    }
     return egl::NoError();
 }
 
@@ -86,10 +92,7 @@ SurfaceImpl *DisplayMtl::createWindowSurface(const egl::SurfaceState &state,
                                              EGLNativeWindowType window,
                                              const egl::AttributeMap &attribs)
 {
-    EGLint width  = attribs.getAsInt(EGL_WIDTH, 0);
-    EGLint height = attribs.getAsInt(EGL_HEIGHT, 0);
-
-    return new SurfaceMtl(state, window, width, height);
+    return new SurfaceMtl(this, state, window, attribs);
 }
 
 SurfaceImpl *DisplayMtl::createPbufferSurface(const egl::SurfaceState &state,
@@ -144,8 +147,7 @@ StreamProducerImpl *DisplayMtl::createStreamProducerD3DTexture(
 
 gl::Version DisplayMtl::getMaxSupportedESVersion() const
 {
-    UNIMPLEMENTED();
-    return gl::Version(1, 0);
+    return mtl::kMaxSupportedGLVersion;
 }
 
 gl::Version DisplayMtl::getMaxConformantESVersion() const
@@ -171,7 +173,10 @@ egl::Error DisplayMtl::makeCurrent(egl::Surface *drawSurface,
     return egl::NoError();
 }
 
-void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const {}
+void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const
+{
+    outExtensions->flexibleSurfaceCompatibility = true;
+}
 
 void DisplayMtl::generateCaps(egl::Caps *outCaps) const {}
 
@@ -179,16 +184,90 @@ void DisplayMtl::populateFeatureList(angle::FeatureList *features) {}
 
 egl::ConfigSet DisplayMtl::generateConfigs()
 {
-    UNIMPLEMENTED();
+    // NOTE(hqle): generate more config permutations
     egl::ConfigSet configs;
+
+    const gl::Version &maxVersion = getMaxSupportedESVersion();
+    ASSERT(maxVersion >= gl::Version(2, 0));
+    bool supportsES3 = maxVersion >= gl::Version(3, 0);
+
+    egl::Config config;
+
+    // Native stuff
+    config.nativeVisualID   = 0;
+    config.nativeVisualType = 0;
+    config.nativeRenderable = EGL_TRUE;
+
+    config.colorBufferType = EGL_RGB_BUFFER;
+    config.luminanceSize   = 0;
+    config.alphaMaskSize   = 0;
+
+    config.transparentType = EGL_NONE;
+
+    // Pbuffer
+    config.maxPBufferWidth  = 4096;
+    config.maxPBufferHeight = 4096;
+    config.maxPBufferPixels = 4096 * 4096;
+
+    // Caveat
+    config.configCaveat = EGL_NONE;
+
+    // Misc
+    config.sampleBuffers     = 0;
+    config.samples           = 0;
+    config.level             = 0;
+    config.bindToTextureRGB  = EGL_FALSE;
+    config.bindToTextureRGBA = EGL_FALSE;
+
+    config.surfaceType = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
+
+    config.minSwapInterval = 1;
+    config.maxSwapInterval = 1;
+
+    config.renderTargetFormat = GL_RGBA8;
+    config.depthStencilFormat = GL_DEPTH24_STENCIL8;
+
+    config.conformant     = EGL_OPENGL_ES2_BIT | (supportsES3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
+    config.renderableType = config.conformant;
+
+    config.matchNativePixmap = EGL_NONE;
+
+    config.colorComponentType = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+
+    // Buffer sizes
+    config.redSize    = 8;
+    config.greenSize  = 8;
+    config.blueSize   = 8;
+    config.alphaSize  = 8;
+    config.bufferSize = config.redSize + config.greenSize + config.blueSize + config.alphaSize;
+
+    // With DS
+    config.depthSize   = 24;
+    config.stencilSize = 8;
+    configs.add(config);
+
+    // With D
+    config.depthSize   = 24;
+    config.stencilSize = 0;
+    configs.add(config);
+
+    // With S
+    config.depthSize   = 0;
+    config.stencilSize = 8;
+    configs.add(config);
+
+    // No DS
+    config.depthSize   = 0;
+    config.stencilSize = 0;
+    configs.add(config);
 
     return configs;
 }
 
 bool DisplayMtl::isValidNativeWindow(EGLNativeWindowType window) const
 {
-    UNIMPLEMENTED();
-    return false;
+    NSObject *layer = (__bridge NSObject *)(window);
+    return [layer isKindOfClass:[CALayer class]];
 }
 
 }  // namespace rx

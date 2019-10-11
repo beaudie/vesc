@@ -28,5 +28,10 @@ id<MTLDevice> Context::getMetalDevice() const
     return mRendererMtl->getMetalDevice();
 }
 
+mtl::CommandQueue &Context::cmdQueue()
+{
+    return mRendererMtl->cmdQueue();
+}
+
 }  // namespace mtl
 }  // namespace rx
