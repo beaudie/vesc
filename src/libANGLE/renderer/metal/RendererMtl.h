@@ -12,8 +12,11 @@
 #import <Metal/Metal.h>
 
 #include "common/PackedEnums.h"
-#include "libANGLE/Caps.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/metal/StateCacheMtl.h"
+#include "libANGLE/renderer/metal/UtilsMtl.h"
+#include "libANGLE/renderer/metal/mtl_command_buffer.h"
+#include "libANGLE/renderer/metal/mtl_utils.h"
 
 namespace egl
 {
@@ -38,10 +41,38 @@ class RendererMtl final : angle::NonCopyable
     std::string getRendererDescription() const;
     const gl::Limitations &getNativeLimitations() const;
 
-    id<MTLDevice> getMetalDevice() const { return nil; }
+    id<MTLDevice> getMetalDevice() const { return mMetalDevice; }
+
+    mtl::CommandQueue &cmdQueue() { return mCmdQueue; }
+    UtilsMtl &getUtils() { return mUtils; }
+    StateCacheMtl &getStateCache() { return mStateCache; }
+
+    id<MTLDepthStencilState> getDepthStencilState(const mtl::DepthStencilDesc &desc)
+    {
+        return mStateCache.getDepthStencilState(getMetalDevice(), desc);
+    }
+    id<MTLSamplerState> getSamplerState(const mtl::SamplerDesc &desc)
+    {
+        return mStateCache.getSamplerState(getMetalDevice(), desc);
+    }
+
+    mtl::TextureRef getNullTexture(const gl::Context *context, gl::TextureType type);
 
   private:
-    gl::Limitations mNativeLimitations;
+    void ensureCapsInitialized() const;
+
+    mtl::AutoObjCPtr<id<MTLDevice>> mMetalDevice = nil;
+
+    mtl::CommandQueue mCmdQueue;
+
+    StateCacheMtl mStateCache;
+    UtilsMtl mUtils;
+
+    static const size_t kNumTexturesType = static_cast<size_t>(gl::TextureType::EnumCount);
+    mtl::TextureRef mNullTextures[kNumTexturesType];
+
+    mutable bool mCapsInitialized;
+    mutable gl::Limitations mNativeLimitations;
 };
 }  // namespace rx
 
