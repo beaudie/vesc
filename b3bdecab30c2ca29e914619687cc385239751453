@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97b61990_81def5a4",
+        "filename": "scripts/roll_deps.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-10-11T20:45:25Z",
+      "side": 1,
+      "message": "Since you\u0027ve removed DONT_AUTOROLL_THESE and have disabled some places which use these results, I\u0027m inclined to clean up this script by removing all the functionality related to FindAddedDeps and FindRemovedDeps and leave only CalculateChangedDeps functionality - this will make this script much easier to understand and maintain.",
+      "range": {
+        "startLine": 706,
+        "startChar": 0,
+        "endLine": 711,
+        "endChar": 87
+      },
+      "revId": "b3bdecab30c2ca29e914619687cc385239751453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
