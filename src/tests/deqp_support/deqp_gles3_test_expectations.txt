@@ -103,9 +103,6 @@
 2222 D3D11 NVIDIA : dEQP-GLES3.functional.texture.mipmap.cube.min_lod.linear_nearest = FAIL
 2222 D3D11 NVIDIA : dEQP-GLES3.functional.texture.mipmap.cube.min_lod.nearest_nearest = FAIL
 
-// Failing everywhere
-2322 : dEQP-GLES3.functional.shaders.metamorphic.* = FAIL
-
 // Vertex attribute aliasing is not supported on D3D
 3467 D3D9 : dEQP-GLES3.functional.attribute_location.bind_aliasing.cond* = FAIL
 3467 D3D9 : dEQP-GLES3.functional.attribute_location.bind_aliasing.max_cond* = FAIL
