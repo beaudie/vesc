@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "955c9a45_50018235",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1495,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-11T20:33:06Z",
+      "side": 1,
+      "message": "Perhaps append \"Vulkan Spec \" to the start of this comment for context.\nCould potentially add the direct spec link if it fits on a line by itself w/o being wrapped:\nhttps://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/chap9.html#pipelines-cache",
+      "revId": "97f04dd1a1fd7224b683e97680ef4b9563f42dd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
