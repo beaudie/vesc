@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "69da11a1_81808aad",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-11T12:20:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "05fde997_1a86c450",
+      "range": {
+        "startLine": 116,
+        "startChar": 11,
+        "endLine": 116,
+        "endChar": 17
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "145ee4e4_bf3c9656",
         "filename": "src/libANGLE/renderer/metal/mtl_format_table_autogen.mm",
         "patchSetId": 3
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "d89f7e9c_c195aefe",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_table_autogen.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-11T12:20:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "145ee4e4_bf3c9656",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 35
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a2960dd_d71b7770",
         "filename": "src/libANGLE/renderer/metal/mtl_format_table_autogen.mm",
         "patchSetId": 3
@@ -83,6 +131,30 @@
       "writtenOn": "2019-10-11T11:32:13Z",
       "side": 1,
       "message": "always avoid goto.",
+      "range": {
+        "startLine": 354,
+        "startChar": 8,
+        "endLine": 354,
+        "endChar": 24
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a50d1ed_4b24a828",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_table_autogen.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-11T12:20:38Z",
+      "side": 1,
+      "message": "Hmph, OK. I thought auto generated files are not subjects to style guides.\nActually, this function is not that hard to read.\nBut nvm,",
+      "parentUuid": "4a2960dd_d71b7770",
       "range": {
         "startLine": 354,
         "startChar": 8,
@@ -118,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "96fef68e_07e2ee7e",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-11T12:20:38Z",
+      "side": 1,
+      "message": "initAndConvertToCompatibleFormatIfNotSupported() is used in SurfaceMtl.mtl to determine runtime support of depth24stencil8 based on id\u003cMTLDevice\u003e capabilities.\nThe 3 overloads I created to conveniently pass 3 different similar format enums without having to convert them manually for example, let say in future, I encountered a case that the code only know GLenum sizedInternalFormat instead of angle::FormatID, instead of calling a function to convert to angle::FormatID and then call init(). I could just call overloadded init() with GLenum parameter directly.\nOf course, current code might not use some overloaded versions, if I removed them then if future I ever encounter the above example case, then I have to rewrite again.\nBut nevermind, I admit that at first I only implemented init(), but later along the way I discovered some formats require runtime check like packed depth24stencil8. At that point, init() was already used in many places, due to laziness, I added initAndConvertToCompatibleFormatIfNotSupported() with id\u003cMTLDevice\u003e param, and only use it in those places requiring runtime format checks.",
+      "parentUuid": "9d218905_d5296f3c",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 90
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "96ee86bf_efb323e7",
         "filename": "src/libANGLE/renderer/metal/mtl_format_utils.h",
         "patchSetId": 3
@@ -129,6 +225,30 @@
       "writtenOn": "2019-10-11T11:32:13Z",
       "side": 1,
       "message": "I don\u0027t see where you put these into tables. Is that in the next patch set as well? I\u0027m wondering if this could be cleaner just using the same class for vertex and non-vertex formats. But would probably depend on how you use them.",
+      "range": {
+        "startLine": 70,
+        "startChar": 7,
+        "endLine": 70,
+        "endChar": 19
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dfeff61_e64a68a9",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-11T12:20:38Z",
+      "side": 1,
+      "message": "It\u0027s in mtl_format_map.json. The json file contains both \"image\" and \"vertex\" map.\nMetal has two different enums for vertex and pixel format. We cannot use both in same class like vulkan.",
+      "parentUuid": "96ee86bf_efb323e7",
       "range": {
         "startLine": 70,
         "startChar": 7,
@@ -164,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "44cfac74_9a0d9b93",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-11T12:20:38Z",
+      "side": 1,
+      "message": "Yes, the plan is using the feature set tables. But writing a table with detailed supports for each GPU family is a chore to me. So for now, I just enable some extensions and let angle function gl::GenerateMinimumTextureCaps() auto deduces the support for the formats, of course with some manual overrides from the code here due to that angle function doesn\u0027t work accurately.\nBy right, angle should do this correctly since extensions already have detailed spec on what formats they provide, and angle has been dealing with these specs for longer than I do.\nBut some formats like RGB8_SRGB I don\u0027t get why angle function requires ES version to be 3.0 in order for format to be supported, even though I turned on SRGB extension.\n\nNote that the extensions I turned on here are only temporary for gl::GenerateMinimumTextureCaps() deduction. After this call, ContextMtl will do a verification by calling extensions.setTextureExtensionSupport(textureCaps) to compute the real texture extensions based on textureCaps resulted from GenerateMinimumTextureCaps() + manual overrides.\n\nanw, IMO this detailed format support is really a chore. The basic code implementation even if not accurate as Apple\u0027s table, it will still support all ES 2.0 formats correctly. I think it should be left to future commit, instead of doing everything in an already big commit like this.",
+      "parentUuid": "25ffb535_d57b617b",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 98
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f91a9994_d4008785",
         "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
         "patchSetId": 3
@@ -184,6 +328,30 @@
       "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5a9f0aa_dac4ab06",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-11T12:20:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f91a9994_d4008785",
+      "range": {
+        "startLine": 308,
+        "startChar": 4,
+        "endLine": 308,
+        "endChar": 22
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
