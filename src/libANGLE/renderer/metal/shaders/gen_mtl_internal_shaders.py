@@ -25,7 +25,9 @@ template_header_boilerplate = """// GENERATED FILE - DO NOT EDIT.
 def main():
     # auto_script parameters.
     if len(sys.argv) > 1:
-        inputs = ['master_source.metal']
+        inputs = [
+            'master_source.metal', 'blit.metal', 'clear.metal', 'gen_indices.metal', 'common.h'
+        ]
         outputs = ['compiled/mtl_default_shaders.inc', 'mtl_default_shaders_src_autogen.inc']
 
         if sys.argv[1] == 'inputs':

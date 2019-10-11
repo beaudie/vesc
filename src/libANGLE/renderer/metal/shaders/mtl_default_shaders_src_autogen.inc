@@ -82,7 +82,7 @@ struct BlitParams
     float2 srcTexCoords[4];
     int srcLevel;
     bool srcLuminance;
-    bool dstFlipY;
+    bool dstFlipViewportY;
     bool dstLuminance;
 };
 
@@ -99,9 +99,11 @@ vertex BlitVSOut blitVS(unsigned int vid [[ vertex_id ]],
     output.position = float4(gCorners[vid], 0.0, 1.0);
     output.texCoords = options.srcTexCoords[gTexcoordsIndices[vid]];
 
-    if (options.dstFlipY)
+    if (!options.dstFlipViewportY)
     {
-        output.position = -output.position;
+
+
+        output.position.y = -output.position.y;
     }
 
     return output;

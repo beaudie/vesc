@@ -18,11 +18,41 @@
 #include "libANGLE/Observer.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/BufferImpl.h"
+#include "libANGLE/renderer/Format.h"
+#include "libANGLE/renderer/metal/mtl_buffer_pool.h"
+#include "libANGLE/renderer/metal/mtl_resources.h"
 
 namespace rx
 {
 
-class BufferMtl : public BufferImpl
+// Conversion buffers hold translated index and vertex data.
+struct ConversionBufferMtl
+{
+    ConversionBufferMtl(const gl::Context *context, size_t initialSize, size_t alignment);
+    ~ConversionBufferMtl();
+
+    // One state value determines if we need to re-stream vertex data.
+    bool dirty;
+
+    // The conversion is stored in a dynamic buffer.
+    mtl::BufferPool data;
+};
+
+class BufferHolderMtl
+{
+  public:
+    virtual ~BufferHolderMtl() = default;
+
+    // Due to the complication of synchronizing accesses between CPU and GPU,
+    // a mtl::Buffer might be under used by GPU but CPU wants to modify its content through
+    // map() method, this could lead to GPU stalling. The more efficient method is maintain
+    // a queue of mtl::Buffer and only let CPU modifies a free mtl::Buffer.
+    // So, in order to let GPU use the most recent modified content, one must call this method
+    // right before the draw call to retrieved the most up-to-date mtl::Buffer.
+    virtual mtl::BufferRef getCurrentBuffer(const gl::Context *context) = 0;
+};
+
+class BufferMtl : public BufferImpl, public BufferHolderMtl
 {
   public:
     BufferMtl(const gl::BufferState &state);
@@ -58,6 +88,85 @@ class BufferMtl : public BufferImpl
                                 size_t count,
                                 bool primitiveRestartEnabled,
                                 gl::IndexRange *outRange) override;
+
+    // Override BufferHolderMtl
+    mtl::BufferRef getCurrentBuffer(const gl::Context *context) override;
+
+    angle::Result getFirstLastIndices(const gl::Context *context,
+                                      gl::DrawElementsType type,
+                                      size_t offset,
+                                      size_t count,
+                                      std::pair<uint32_t, uint32_t> *outIndices) const;
+
+    const uint8_t *getClientShadowCopyData(const gl::Context *context);
+
+    ConversionBufferMtl *getVertexConversionBuffer(const gl::Context *context,
+                                                   angle::FormatID formatID,
+                                                   GLuint stride,
+                                                   size_t offset);
+
+    ConversionBufferMtl *getIndexConversionBuffer(const gl::Context *context,
+                                                  gl::DrawElementsType type,
+                                                  size_t offset);
+
+    size_t size() const { return mState.getSize(); }
+
+  private:
+    angle::Result setSubDataImpl(const gl::Context *context,
+                                 const void *data,
+                                 size_t size,
+                                 size_t offset);
+
+    angle::Result commitShadowCopy(const gl::Context *context);
+
+    void markConversionBuffersDirty();
+
+    // Client side shadow buffer
+    angle::MemoryBuffer mShadowCopy;
+
+    // Most recent updated GPU buffer
+    mtl::BufferRef mBuffer;
+
+    // GPU side buffers pool
+    mtl::BufferPool mBufferPool;
+
+    struct VertexConversionBuffer : public ConversionBufferMtl
+    {
+        VertexConversionBuffer(const gl::Context *context,
+                               angle::FormatID formatIDIn,
+                               GLuint strideIn,
+                               size_t offsetIn);
+
+        // The conversion is identified by the triple of {format, stride, offset}.
+        angle::FormatID formatID;
+        GLuint stride;
+        size_t offset;
+    };
+
+    struct IndexConversionBuffer : public ConversionBufferMtl
+    {
+        IndexConversionBuffer(const gl::Context *context,
+                              gl::DrawElementsType type,
+                              size_t offsetIn);
+        gl::DrawElementsType type;
+        size_t offset;
+    };
+
+    // A cache of converted vertex data.
+    std::vector<VertexConversionBuffer> mVertexConversionBuffers;
+
+    std::vector<IndexConversionBuffer> mIndexConversionBuffers;
+};
+
+class SimpleWeakBufferHolderMtl : public BufferHolderMtl
+{
+  public:
+    void set(mtl::BufferRef buffer) { mBuffer = buffer; }
+
+    mtl::BufferRef getCurrentBuffer(const gl::Context *context) override { return mBuffer.lock(); }
+
+  private:
+    mtl::BufferWeakRef mBuffer;
 };
 
 }  // namespace rx
