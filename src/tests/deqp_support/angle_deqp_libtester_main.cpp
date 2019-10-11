@@ -49,8 +49,7 @@ bool FindDataDir(std::string *dataDirOut)
     for (const char *dataPath : kDataPaths)
     {
         std::stringstream dirStream;
-        dirStream << angle::GetExecutableDirectory() << "/" << dataPath << "/"
-                  << ANGLE_DEQP_DATA_DIR;
+        dirStream << angle::GetExecutableDirectory() << "/" << dataPath << "/data";
         std::string candidateDataDir = dirStream.str();
 
         if (angle::IsDirectory(candidateDataDir.c_str()))
