@@ -19,22 +19,41 @@ _metal_backend_sources = [
   "DisplayMtl.mm",
   "FrameBufferMtl.h",
   "FrameBufferMtl.mm",
+  "GlslangWrapper.h",
+  "GlslangWrapper.mm",
   "ProgramMtl.h",
   "ProgramMtl.mm",
   "RenderBufferMtl.h",
   "RenderBufferMtl.mm",
+  "RenderTargetMtl.h",
+  "RenderTargetMtl.mm",
   "RendererMtl.h",
   "RendererMtl.mm",
   "ShaderMtl.h",
   "ShaderMtl.mm",
+  "StateCacheMtl.h",
+  "StateCacheMtl.mm",
   "SurfaceMtl.h",
   "SurfaceMtl.mm",
   "TextureMtl.h",
   "TextureMtl.mm",
+  "UtilsMtl.h",
+  "UtilsMtl.mm",
   "VertexArrayMtl.h",
   "VertexArrayMtl.mm",
+  "mtl_buffer_pool.h",
+  "mtl_buffer_pool.mm",
+  "mtl_command_buffer.h",
+  "mtl_command_buffer.mm",
   "mtl_common.h",
   "mtl_common.mm",
+  "mtl_format_table_autogen.mm",
+  "mtl_format_utils.h",
+  "mtl_format_utils.mm",
+  "mtl_resources.h",
+  "mtl_resources.mm",
+  "mtl_utils.h",
+  "mtl_utils.mm",
 ]
 
 config("angle_metal_backend_config") {
@@ -55,6 +74,11 @@ angle_source_set("angle_metal_backend") {
 
   public_deps = [
     "${angle_root}:libANGLE_headers",
+  ]
+
+  deps = [
+    "${angle_glslang_dir}:glslang_default_resource_limits_sources",
+    "${angle_glslang_dir}:glslang_sources",
   ]
 
   objc_flags = [
