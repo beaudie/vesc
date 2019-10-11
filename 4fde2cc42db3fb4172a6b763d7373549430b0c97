@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a0b0d881_73abad70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-10-11T01:12:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8c8a7cc_b8696460",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "4fde2cc42db3fb4172a6b763d7373549430b0c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e49eb2ca_8ee531c7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
