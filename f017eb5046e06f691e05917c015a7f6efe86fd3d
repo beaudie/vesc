@@ -46,6 +46,30 @@
       "revId": "f017eb5046e06f691e05917c015a7f6efe86fd3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47445b9a_7efc17ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T14:18:32Z",
+      "side": 1,
+      "message": "I was more thinking along the lines of something like: the \u0027stored\u0027 queue serial didn\u0027t change over time but the \u0027latest\u0027 queue serial did.\n\nSort of a fallout of changing how isResourceInUse works and removing getStoredQueueSerial.\n\nAnyway, thanks for fixing. Something in the commit message wouldn\u0027t hurt.",
+      "parentUuid": "95988155_425d6e64",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 5
+      },
+      "revId": "f017eb5046e06f691e05917c015a7f6efe86fd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
