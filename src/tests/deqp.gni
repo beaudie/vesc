@@ -1725,7 +1725,8 @@ deqp_framework_common_sources = [
   "$deqp_path/framework/common/tcuRasterizationVerifier.hpp",
   "$deqp_path/framework/common/tcuRenderTarget.cpp",
   "$deqp_path/framework/common/tcuRenderTarget.hpp",
-  "$deqp_path/framework/common/tcuResource.cpp",
+
+  # "$deqp_path/framework/common/tcuResource.cpp", # 2322 Override for additional "data" directories
   "$deqp_path/framework/common/tcuResource.hpp",
   "$deqp_path/framework/common/tcuResultCollector.cpp",
   "$deqp_path/framework/common/tcuResultCollector.hpp",
@@ -1841,6 +1842,8 @@ deqp_framework_common_sources = [
   "$deqp_path/framework/referencerenderer/rrVertexAttrib.hpp",
   "$deqp_path/framework/referencerenderer/rrVertexPacket.cpp",
   "$deqp_path/framework/referencerenderer/rrVertexPacket.hpp",
+
+  "deqp_support/tcuResource_override.cpp",  # 2322 Override for additional "data" directories
 ]
 
 deqp_framework_qphelper_sources = [
