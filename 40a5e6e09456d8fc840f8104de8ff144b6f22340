@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c49b761a_be4fc8f6",
+        "filename": "extensions/ANGLE_request_extension.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-10-11T22:47:35Z",
+      "side": 1,
+      "message": "I think it would be great if all enableable extensions were disablable. But it would need a lot of testing, and I don\u0027t have any use cases for disabling other extensions. It\u0027ll be easy to make more extensions disablable as needs arise, as it\u0027s now a single line change in Caps.cpp (plus testing).",
+      "parentUuid": "6ab939ae_fe0a87cf",
+      "range": {
+        "startLine": 87,
+        "startChar": 15,
+        "endLine": 88,
+        "endChar": 49
+      },
+      "revId": "40a5e6e09456d8fc840f8104de8ff144b6f22340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a55fc30_894e6a2a",
         "filename": "src/libANGLE/gl_enum_utils_autogen.cpp",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-07T13:36:10Z",
       "side": 1,
       "message": "wonder why this popped up.",
+      "range": {
+        "startLine": 1810,
+        "startChar": 28,
+        "endLine": 1810,
+        "endChar": 73
+      },
+      "revId": "40a5e6e09456d8fc840f8104de8ff144b6f22340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9468c1d2_fe21ab2b",
+        "filename": "src/libANGLE/gl_enum_utils_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-10-11T22:47:35Z",
+      "side": 1,
+      "message": "No idea. Maybe someone forgot to run one of the scripts?",
+      "parentUuid": "0a55fc30_894e6a2a",
       "range": {
         "startLine": 1810,
         "startChar": 28,
@@ -92,6 +140,30 @@
       "revId": "40a5e6e09456d8fc840f8104de8ff144b6f22340",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1df7e383_0988ba61",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4907,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-10-11T22:47:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe0fa539_e2854261",
+      "range": {
+        "startLine": 4907,
+        "startChar": 2,
+        "endLine": 4907,
+        "endChar": 56
+      },
+      "revId": "40a5e6e09456d8fc840f8104de8ff144b6f22340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
