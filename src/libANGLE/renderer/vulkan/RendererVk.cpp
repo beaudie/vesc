@@ -1033,6 +1033,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     enabledFeatures.features.fragmentStoresAndAtomics =
         mPhysicalDeviceFeatures.fragmentStoresAndAtomics;
     enabledFeatures.features.geometryShader = mPhysicalDeviceFeatures.geometryShader;
+    enabledFeatures.features.shaderTessellationAndGeometryPointSize =
+        mPhysicalDeviceFeatures.shaderTessellationAndGeometryPointSize;
     if (!vk::CommandBuffer::ExecutesInline())
     {
         enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
