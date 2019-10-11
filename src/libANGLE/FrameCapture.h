@@ -204,12 +204,14 @@ void CaptureCallToFrameCapture(CaptureFuncT captureFunc,
                                gl::Context *context,
                                ArgsT... captureParams)
 {
+#if ANGLE_CAPTURE_ENABLED
     FrameCapture *frameCapture = context->getFrameCapture();
     if (!frameCapture->enabled())
         return;
 
     CallCapture call = captureFunc(context, isCallValid, captureParams...);
     frameCapture->captureCall(context, std::move(call));
+#endif
 }
 
 template <typename T>

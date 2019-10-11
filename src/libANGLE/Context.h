@@ -570,7 +570,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     const angle::FrontendFeatures &getFrontendFeatures() const;
 
+#if ANGLE_CAPTURE_ENABLED
     angle::FrameCapture *getFrameCapture() { return mFrameCapture.get(); }
+#endif
 
     void onPostSwap() const;
 
@@ -724,8 +726,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     std::shared_ptr<angle::WorkerThreadPool> mThreadPool;
 
-    // Note: we use a raw pointer here so we can exclude frame capture sources from the build.
+#if ANGLE_CAPTURE_ENABLED
     std::unique_ptr<angle::FrameCapture> mFrameCapture;
+#endif
 
     OverlayType mOverlay;
 };

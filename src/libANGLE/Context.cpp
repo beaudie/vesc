@@ -349,7 +349,9 @@ Context::Context(egl::Display *display,
       mScratchBuffer(1000u),
       mZeroFilledBuffer(1000u),
       mThreadPool(nullptr),
+#if ANGLE_CAPTURE_ENABLED
       mFrameCapture(new angle::FrameCapture),
+#endif  // ANGLE_CAPTURE_ENABLED
       mOverlay(mImplementation.get())
 {
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
@@ -552,7 +554,9 @@ void Context::initialize()
 egl::Error Context::onDestroy(const egl::Display *display)
 {
     // Dump frame capture if enabled.
+#if ANGLE_CAPTURE_ENABLED
     mFrameCapture->onEndFrame(this);
+#endif  // ANGLE_CAPTURE_ENABLED
 
     if (mGLES1Renderer)
     {
@@ -9150,7 +9154,9 @@ egl::Error Context::unsetDefaultFramebuffer()
 void Context::onPostSwap() const
 {
     // Dump frame capture if enabled.
+#if ANGLE_CAPTURE_ENABLED
     mFrameCapture->onEndFrame(this);
+#endif  // ANGLE_CAPTURE_ENABLED
 }
 
 // ErrorSet implementation.
