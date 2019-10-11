@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e268238a_599e2da6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T16:27:20Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 993,
+        "startChar": 7,
+        "endLine": 993,
+        "endChar": 14
+      },
+      "revId": "7e8007fdf0c0727f286bd21e51fd058c12bb1376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97c89efa_65f96582",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2715,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T16:27:20Z",
+      "side": 1,
+      "message": "nit: can you use full bug tags for bug links in the code? http://anglebug.com/3949 . makes it easier to click through.",
+      "range": {
+        "startLine": 2715,
+        "startChar": 7,
+        "endLine": 2715,
+        "endChar": 14
+      },
+      "revId": "7e8007fdf0c0727f286bd21e51fd058c12bb1376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
