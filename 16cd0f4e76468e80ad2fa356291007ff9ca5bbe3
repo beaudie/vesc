@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fdb80d56_a8a11d43",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-11T19:14:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c2057ea_4e08ad5e",
+      "range": {
+        "startLine": 903,
+        "startChar": 4,
+        "endLine": 903,
+        "endChar": 56
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11c0aaf0_a9e15ac6",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-11T17:00:25Z",
       "side": 1,
       "message": "nit: imageIndex.hasLayer()",
+      "range": {
+        "startLine": 1255,
+        "startChar": 41,
+        "endLine": 1255,
+        "endChar": 43
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a09d97b_b1bb0e07",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-11T19:14:49Z",
+      "side": 1,
+      "message": "Since this function handles layered and unlayered types, we can\u0027t use that helper.  I updated this to check for \u003e\u003d 0 instead of -1, which was misleading.",
+      "parentUuid": "11c0aaf0_a9e15ac6",
       "range": {
         "startLine": 1255,
         "startChar": 41,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9512077d_94c8eb45",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-11T19:14:49Z",
+      "side": 1,
+      "message": "Whoops, yes, quick prototype cast, forgot to circle back.  Done.",
+      "parentUuid": "1283dfbe_1abd6b9e",
+      "range": {
+        "startLine": 1265,
+        "startChar": 40,
+        "endLine": 1265,
+        "endChar": 47
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc4b8670_0db7004c",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "f9f3e8bc_28e1f315",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1709,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-11T19:14:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc4b8670_0db7004c",
+      "range": {
+        "startLine": 1709,
+        "startChar": 4,
+        "endLine": 1709,
+        "endChar": 56
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "927d4435_bc3d0f9e",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 3
@@ -114,6 +210,30 @@
       "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48219f1e_24fac0b7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-11T19:14:49Z",
+      "side": 1,
+      "message": "Yep, done.",
+      "parentUuid": "927d4435_bc3d0f9e",
+      "range": {
+        "startLine": 337,
+        "startChar": 4,
+        "endLine": 337,
+        "endChar": 33
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
