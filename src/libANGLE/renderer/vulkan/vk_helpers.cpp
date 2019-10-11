@@ -2371,15 +2371,19 @@ angle::Result ImageHelper::stageSubresourceUpdateFromBuffer(ContextVk *contextVk
     copy.bufferOffset                    = stagingOffset;
     copy.bufferRowLength                 = glExtents.width;
     copy.bufferImageHeight               = glExtents.height;
-    copy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.imageSubresource.aspectMask     = getAspectFlags();
     copy.imageSubresource.mipLevel       = mipLevel;
     copy.imageSubresource.baseArrayLayer = baseArrayLayer;
     copy.imageSubresource.layerCount     = layerCount;
 
-    ASSERT(getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT);
+    ASSERT(getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT ||
+           getAspectFlags() == VK_IMAGE_ASPECT_DEPTH_BIT ||
+           getAspectFlags() == VK_IMAGE_ASPECT_STENCIL_BIT);
 
     gl_vk::GetOffset(offset, &copy.imageOffset);
     gl_vk::GetExtent(glExtents, &copy.imageExtent);
+    // Restrict depth to actual image extents
+    copy.imageExtent.depth = mExtents.depth;
 
     mSubresourceUpdates.emplace_back(bufferHelper, copy);
 
