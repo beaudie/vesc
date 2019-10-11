@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c2057ea_4e08ad5e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T17:00:25Z",
+      "side": 1,
+      "message": "style nit: you can use a range-for loop here.",
+      "range": {
+        "startLine": 903,
+        "startChar": 4,
+        "endLine": 903,
+        "endChar": 56
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11c0aaf0_a9e15ac6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T17:00:25Z",
+      "side": 1,
+      "message": "nit: imageIndex.hasLayer()",
+      "range": {
+        "startLine": 1255,
+        "startChar": 41,
+        "endLine": 1255,
+        "endChar": 43
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1283dfbe_1abd6b9e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T17:00:25Z",
+      "side": 1,
+      "message": "style nit: use c++-style casts\n\nhttps://google.github.io/styleguide/cppguide.html#Casting",
+      "range": {
+        "startLine": 1265,
+        "startChar": 40,
+        "endLine": 1265,
+        "endChar": 47
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc4b8670_0db7004c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1709,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T17:00:25Z",
+      "side": 1,
+      "message": "nit: you can use a range-for loop here.",
+      "range": {
+        "startLine": 1709,
+        "startChar": 4,
+        "endLine": 1709,
+        "endChar": 56
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "927d4435_bc3d0f9e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T17:00:25Z",
+      "side": 1,
+      "message": "can you remove this guy now?",
+      "range": {
+        "startLine": 337,
+        "startChar": 4,
+        "endLine": 337,
+        "endChar": 33
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
