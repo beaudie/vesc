@@ -16,6 +16,24 @@
       "revId": "475a5f2735e9795567ab578a59127c5aa780dd87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28e9495a_dd2c3c6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-11T14:01:14Z",
+      "side": 1,
+      "message": "Yep, if you rebase after 1854020 lands, those should clear up.",
+      "parentUuid": "93887d9e_a06cb480",
+      "revId": "475a5f2735e9795567ab578a59127c5aa780dd87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
