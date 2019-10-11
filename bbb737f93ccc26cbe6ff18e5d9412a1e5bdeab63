@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45dfde00_dee50d24",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-11T15:05:32Z",
+      "side": 1,
+      "message": "Don\u0027t think this will work.\nCopying depth/stencil data doesn\u0027t work the same as color data. You have to copy the depth and stencil components individually into their own packed buffers.\nSee ImageHelper::stageSubresourceUpdate for example of copying depth/stencil data from a buffer to a depth/stencil image. Kind of do the reverse to go from image to buffer.",
+      "revId": "bbb737f93ccc26cbe6ff18e5d9412a1e5bdeab63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
