@@ -249,6 +249,7 @@ group("angle_vulkan") {
 
 config("angle_vulkan_backend_config") {
   defines = [ "ANGLE_ENABLE_VULKAN" ]
+  include_dirs = [ "$angle_root/third_party/SwiftShader/include/vulkan" ]
   if (angle_enable_custom_vulkan_cmd_buffers) {
     defines += [ "ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS=1" ]
   }
