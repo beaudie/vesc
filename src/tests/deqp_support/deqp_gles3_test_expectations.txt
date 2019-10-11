@@ -549,13 +549,6 @@
 // Flat shading:
 3430 VULKAN : dEQP-GLES3.functional.rasterization.flatshading.* = FAIL
 
-// Instanced rendering:
-2672 VULKAN : dEQP-GLES3.functional.draw.draw_arrays_instanced.line_loop.* = SKIP
-2672 VULKAN : dEQP-GLES3.functional.draw.draw_elements_instanced.line_loop.* = SKIP
-2672 VULKAN : dEQP-GLES3.functional.draw.random.* = SKIP
-// - Primitive restart with line loops:
-2672 VULKAN : dEQP-GLES3.functional.primitive_restart.*.line_loop.*instanced = SKIP
-
 // Misc unimplemented:
 
 // Failures on newer NVIDIA drivers (411.95) and passes on older drivers (388.16).  Passes on 418.12 on Linux.
