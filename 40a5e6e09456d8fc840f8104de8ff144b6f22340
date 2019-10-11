@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "63c98eed_990b05f3",
+        "filename": "src/libANGLE/gl_enum_utils_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T23:17:38Z",
+      "side": 1,
+      "message": "I see the issue. registry_xml should be part of the listed \u0027inputs\u0027in gen_gl_enum_utils.py. If you have time to file a bug for this I can fix it. (Or you can fix it in a split patch)",
+      "parentUuid": "9468c1d2_fe21ab2b",
+      "range": {
+        "startLine": 1810,
+        "startChar": 28,
+        "endLine": 1810,
+        "endChar": 73
+      },
+      "revId": "40a5e6e09456d8fc840f8104de8ff144b6f22340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ceb524b1_a3c439ff",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 6
