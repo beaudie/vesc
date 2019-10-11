@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "9507d10c_f68eafc6",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_table_autogen.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T14:12:34Z",
+      "side": 1,
+      "message": "Yeah, autogen files still are subject to the style guide AFAIK. Thanks for addressing.",
+      "parentUuid": "3a50d1ed_4b24a828",
+      "range": {
+        "startLine": 354,
+        "startChar": 8,
+        "endLine": 354,
+        "endChar": 24
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d218905_d5296f3c",
         "filename": "src/libANGLE/renderer/metal/mtl_format_utils.h",
         "patchSetId": 3
@@ -214,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "7d6145a6_71d12adf",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T14:12:34Z",
+      "side": 1,
+      "message": "Okay. If you don\u0027t mind I\u0027d prefer if you removed the unused ones. It keeps the code simpler if we can support a single query path.",
+      "parentUuid": "96fef68e_07e2ee7e",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 90
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "96ee86bf_efb323e7",
         "filename": "src/libANGLE/renderer/metal/mtl_format_utils.h",
         "patchSetId": 3
@@ -249,6 +297,30 @@
       "side": 1,
       "message": "It\u0027s in mtl_format_map.json. The json file contains both \"image\" and \"vertex\" map.\nMetal has two different enums for vertex and pixel format. We cannot use both in same class like vulkan.",
       "parentUuid": "96ee86bf_efb323e7",
+      "range": {
+        "startLine": 70,
+        "startChar": 7,
+        "endLine": 70,
+        "endChar": 19
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf2b6e05_cc93883e",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T14:12:34Z",
+      "side": 1,
+      "message": "Ah. What I didn\u0027t see at first is that you\u0027re you\u0027re storing mtl::Format by value and initializing the mtl::Format each query.\n\nI think it\u0027s worth putting in the time now to refactor these and use something more similar to the Vulkan format table. You would keep an array of mtl::Format in a mtl::FormatTable. You would merge FormatBase / Format / Format, keeping the union of all 3 as data, and initialize them all at the same time at startup. Instead of storing mtl::Format by value you would store a const * to the value in the format table.\n\nHope this isn\u0027t too much work, I do think it would help the code be a bit faster and cleaner.",
+      "parentUuid": "1dfeff61_e64a68a9",
       "range": {
         "startLine": 70,
         "startChar": 7,
@@ -320,6 +392,30 @@
       "side": 1,
       "message": "Furthermore, the table provided by Apple is in PDF format, not XML format.",
       "parentUuid": "44cfac74_9a0d9b93",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 98
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8034c7d_4b4f6edf",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T14:12:34Z",
+      "side": 1,
+      "message": "OK, that sounds reasonable. Can you leave a comment here explaining the work to be done: converting the PDF tables into a json document, then using an generator script to turn the json into cpp tables, similar to gen_vk_mandatory_format_support_table, then using that table here.\n\nA lot of the rules about texture support are very finely tuned. So I would expect some things like SRGB not to function perfectly using the method you have here. As you say we can leave this for now. If you have time after the back-end lands maybe you could come back to this when you\u0027re bored. :)",
+      "parentUuid": "4d26f3b8_59177887",
       "range": {
         "startLine": 117,
         "startChar": 0,
