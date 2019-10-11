@@ -991,7 +991,7 @@ angle::Result TextureVk::copyImageDataToBuffer(ContextVk *contextVk,
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
 
     // Transition the image to readable layout
-    mImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferSrc, commandBuffer);
+    mImage->changeLayout(mImage->getAspectFlags(), vk::ImageLayout::TransferSrc, commandBuffer);
 
     // Allocate staging buffer data
     ANGLE_TRY(mImage->allocateStagingMemory(contextVk, sourceCopyAllocationSize, outDataPtr,
@@ -1007,7 +1007,7 @@ angle::Result TextureVk::copyImageDataToBuffer(ContextVk *contextVk,
     region.imageOffset.x                   = sourceArea.x;
     region.imageOffset.y                   = sourceArea.y;
     region.imageOffset.z                   = sourceArea.z;
-    region.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    region.imageSubresource.aspectMask     = mImage->getAspectFlags();
     region.imageSubresource.baseArrayLayer = baseLayer;
     region.imageSubresource.layerCount     = layerCount;
     region.imageSubresource.mipLevel       = static_cast<uint32_t>(sourceLevel);
