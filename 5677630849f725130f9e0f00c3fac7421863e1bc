@@ -308,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "4d26f3b8_59177887",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-11T12:24:38Z",
+      "side": 1,
+      "message": "Furthermore, the table provided by Apple is in PDF format, not XML format.",
+      "parentUuid": "44cfac74_9a0d9b93",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 98
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f91a9994_d4008785",
         "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
         "patchSetId": 3
