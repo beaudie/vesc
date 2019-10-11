@@ -891,8 +891,47 @@ if (build_angle_deqp_tests && !is_fuchsia) {
       mustpass_name = "${_api}-master.txt"
       data = [
         "$deqp_path/data/",
+        "$root_out_dir/data/gles3/graphicsfuzz/",
+      ]
+      deps = [
+        ":angle_deqp_graphicsfuzz_bubblesort_flag_data",
+        ":angle_deqp_graphicsfuzz_data",
+        ":angle_deqp_graphicsfuzz_synthetic_data",
       ]
     }
+  }
+
+  # The graphicsfuzz dEQP tests don't expect a root prefix of "external/graphicsfuzz".
+  # This means we need an extra copy step to make them happy.
+  copy("angle_deqp_graphicsfuzz_data") {
+    sources = [
+      "$deqp_path/external/graphicsfuzz/data/gles3/graphicsfuzz/vertexShader.glsl",
+    ]
+    outputs = [
+      "$root_out_dir/data/gles3/graphicsfuzz/{{source_file_part}}",
+    ]
+  }
+  copy("angle_deqp_graphicsfuzz_synthetic_data") {
+    sources = [
+      "$deqp_path/external/graphicsfuzz/data/gles3/graphicsfuzz/synthetic/recipient.frag",
+      "$deqp_path/external/graphicsfuzz/data/gles3/graphicsfuzz/synthetic/variant_1.frag",
+      "$deqp_path/external/graphicsfuzz/data/gles3/graphicsfuzz/synthetic/variant_2.frag",
+      "$deqp_path/external/graphicsfuzz/data/gles3/graphicsfuzz/synthetic/variant_3.frag",
+      "$deqp_path/external/graphicsfuzz/data/gles3/graphicsfuzz/synthetic/variant_4.frag",
+    ]
+    outputs = [
+      "$root_out_dir/data/gles3/graphicsfuzz/synthetic/{{source_file_part}}",
+    ]
+  }
+  copy("angle_deqp_graphicsfuzz_bubblesort_flag_data") {
+    sources = [
+      "$deqp_path/external/graphicsfuzz/data/gles3/graphicsfuzz/bubblesort_flag/recipient.frag",
+      "$deqp_path/external/graphicsfuzz/data/gles3/graphicsfuzz/bubblesort_flag/variant_1.frag",
+      "$deqp_path/external/graphicsfuzz/data/gles3/graphicsfuzz/bubblesort_flag/variant_2.frag",
+    ]
+    outputs = [
+      "$root_out_dir/data/gles3/graphicsfuzz/bubblesort_flag/{{source_file_part}}",
+    ]
   }
 
   angle_deqp_core_gtest("gles2") {
