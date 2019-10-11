@@ -10,8 +10,13 @@
 
 #import <Metal/Metal.h>
 #import <QuartzCore/CALayer.h>
+#import <QuartzCore/CAMetalLayer.h>
 
 #include "libANGLE/renderer/SurfaceImpl.h"
+#include "libANGLE/renderer/metal/RenderTargetMtl.h"
+#include "libANGLE/renderer/metal/StateCacheMtl.h"
+#include "libANGLE/renderer/metal/mtl_format_utils.h"
+#include "libANGLE/renderer/metal/mtl_resources.h"
 
 namespace rx
 {
@@ -62,6 +67,27 @@ class SurfaceMtl : public SurfaceImpl
                                             const gl::ImageIndex &imageIndex,
                                             GLsizei samples,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
+
+  private:
+    angle::Result swapImpl(const gl::Context *context);
+    angle::Result ensureRenderTargetsCreated(const gl::Context *context);
+    angle::Result obtainNextDrawable(const gl::Context *context);
+
+    mtl::AutoObjCObj<CAMetalLayer> mMetalLayer = nil;
+    CALayer *mLayer;
+    mtl::AutoObjCPtr<id<CAMetalDrawable>> mCurrentDrawable = nil;
+    mtl::TextureRef mDrawableTexture;
+    mtl::TextureRef mDepthTexture;
+    mtl::TextureRef mStencilTexture;
+    bool mUsePackedDepthStencil = false;
+
+    mtl::Format mColorFormat;
+    mtl::Format mDepthFormat;
+    mtl::Format mStencilFormat;
+
+    RenderTargetMtl mColorRenderTarget;
+    RenderTargetMtl mDepthRenderTarget;
+    RenderTargetMtl mStencilRenderTarget;
 };
 
 }  // namespace rx
