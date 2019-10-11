@@ -16,6 +16,24 @@
       "revId": "bbb737f93ccc26cbe6ff18e5d9412a1e5bdeab63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "044d3d4f_baa148aa",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-11T16:16:34Z",
+      "side": 1,
+      "message": "Yes, good point. Since this is passing all of the current tests of interest, which seem to have the limitation of using just depth or stencil textures without mixed DS, my thought is to add an assert here to make sure that aspect equals COLOR, DEPTH or STENCIL.\nI\u0027ve also added comments to update this code to handle DS textures and our end2end test to include a DS test. I\u0027ll keep 3949 open to track that work.",
+      "parentUuid": "45dfde00_dee50d24",
+      "revId": "bbb737f93ccc26cbe6ff18e5d9412a1e5bdeab63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
