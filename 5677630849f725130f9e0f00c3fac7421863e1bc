@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "05fde997_1a86c450",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T11:32:41Z",
+      "side": 1,
+      "message": "Sorry, \u0027Metal format table\u0027",
+      "parentUuid": "00cdbf7b_dad4a9f0",
+      "range": {
+        "startLine": 116,
+        "startChar": 11,
+        "endLine": 116,
+        "endChar": 17
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "145ee4e4_bf3c9656",
         "filename": "src/libANGLE/renderer/metal/mtl_format_table_autogen.mm",
         "patchSetId": 3
