@@ -22,6 +22,30 @@
       "revId": "f017eb5046e06f691e05917c015a7f6efe86fd3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95988155_425d6e64",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-10-11T14:01:29Z",
+      "side": 1,
+      "message": "the \"ANGLE_TRY(contextVk-\u003eflushImpl(nullptr));\" call was conditioned on the resource actually being in use but \"ANGLE_TRY(contextVk-\u003efinishToSerial(mBuffer.getLatestSerial()));\" was outside causing an unconditional \"wait\"\n\ndid you want me to paste this in the commit message or was it just for your info?",
+      "parentUuid": "f9ec07cf_5f27c967",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 5
+      },
+      "revId": "f017eb5046e06f691e05917c015a7f6efe86fd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
