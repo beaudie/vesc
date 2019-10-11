@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "9cb3a407_37ee126f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T20:14:51Z",
+      "side": 1,
+      "message": "Sorry, misread level as layer. I didn\u0027t realize we ever used level index -1.",
+      "parentUuid": "9a09d97b_b1bb0e07",
+      "range": {
+        "startLine": 1255,
+        "startChar": 41,
+        "endLine": 1255,
+        "endChar": 43
+      },
+      "revId": "16cd0f4e76468e80ad2fa356291007ff9ca5bbe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1283dfbe_1abd6b9e",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 3
