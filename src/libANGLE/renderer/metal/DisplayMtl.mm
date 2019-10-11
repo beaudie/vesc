@@ -76,7 +76,13 @@ DeviceImpl *DisplayMtl::createDevice()
 
 egl::Error DisplayMtl::waitClient(const gl::Context *context)
 {
-    UNIMPLEMENTED();
+    auto contextMtl      = GetImplAs<ContextMtl>(context);
+    angle::Result result = contextMtl->finishCommandBuffer();
+
+    if (result != angle::Result::Continue)
+    {
+        return egl::EglBadAccess();
+    }
     return egl::NoError();
 }
 
@@ -148,8 +154,7 @@ StreamProducerImpl *DisplayMtl::createStreamProducerD3DTexture(
 
 gl::Version DisplayMtl::getMaxSupportedESVersion() const
 {
-    UNIMPLEMENTED();
-    return gl::Version(1, 0);
+    return kMaxSupportedGLVersion;
 }
 
 gl::Version DisplayMtl::getMaxConformantESVersion() const
@@ -159,6 +164,7 @@ gl::Version DisplayMtl::getMaxConformantESVersion() const
 
 EGLSyncImpl *DisplayMtl::createSync(const egl::AttributeMap &attribs)
 {
+    // TODO(hqle)
     UNIMPLEMENTED();
     return nullptr;
 }
@@ -172,27 +178,93 @@ egl::Error DisplayMtl::makeCurrent(egl::Surface *drawSurface,
         return egl::NoError();
     }
 
+    // TODO(hqle)
+
     return egl::NoError();
 }
 
-void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const {}
+void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const
+{
+    // TODO(hqle)
+}
 
 void DisplayMtl::generateCaps(egl::Caps *outCaps) const {}
 
-void DisplayMtl::populateFeatureList(angle::FeatureList *features) {}
+void DisplayMtl::populateFeatureList(angle::FeatureList *features)
+{
+    // TODO(hqle)
+}
 
 egl::ConfigSet DisplayMtl::generateConfigs()
 {
-    UNIMPLEMENTED();
+    // TODO(hqle): generate more config permutations
     egl::ConfigSet configs;
 
+    const gl::Version &maxVersion = getMaxSupportedESVersion();
+    ASSERT(maxVersion >= gl::Version(2, 0));
+    bool supportsES3 = maxVersion >= gl::Version(3, 0);
+
+    egl::Config config;
+
+    // Native stuff
+    config.nativeVisualID   = 0;
+    config.nativeVisualType = 0;
+    config.nativeRenderable = EGL_TRUE;
+
+    // Buffer sizes
+    config.redSize     = 8;
+    config.greenSize   = 8;
+    config.blueSize    = 8;
+    config.alphaSize   = 8;
+    config.depthSize   = 24;
+    config.stencilSize = 8;
+
+    config.colorBufferType = EGL_RGB_BUFFER;
+    config.luminanceSize   = 0;
+    config.alphaMaskSize   = 0;
+
+    config.bufferSize = config.redSize + config.greenSize + config.blueSize + config.alphaSize;
+
+    config.transparentType = EGL_NONE;
+
+    // Pbuffer
+    config.maxPBufferWidth  = 4096;
+    config.maxPBufferHeight = 4096;
+    config.maxPBufferPixels = 4096 * 4096;
+
+    // Caveat
+    config.configCaveat = EGL_NONE;
+
+    // Misc
+    config.sampleBuffers     = 0;
+    config.samples           = 0;
+    config.level             = 0;
+    config.bindToTextureRGB  = EGL_FALSE;
+    config.bindToTextureRGBA = EGL_FALSE;
+
+    config.surfaceType = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
+
+    config.minSwapInterval = 1;
+    config.maxSwapInterval = 1;
+
+    config.renderTargetFormat = GL_RGBA8;
+    config.depthStencilFormat = GL_DEPTH24_STENCIL8;
+
+    config.conformant     = EGL_OPENGL_ES2_BIT | (supportsES3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
+    config.renderableType = config.conformant;
+
+    config.matchNativePixmap = EGL_NONE;
+
+    config.colorComponentType = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+
+    configs.add(config);
     return configs;
 }
 
 bool DisplayMtl::isValidNativeWindow(EGLNativeWindowType window) const
 {
-    UNIMPLEMENTED();
-    return false;
+    NSObject *layer = (__bridge NSObject *)(window);
+    return [layer isKindOfClass:[CALayer class]];
 }
 
 }  // namespace rx
