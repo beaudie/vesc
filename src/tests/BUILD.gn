@@ -891,6 +891,7 @@ if (build_angle_deqp_tests && !is_fuchsia) {
       mustpass_name = "${_api}-master.txt"
       data = [
         "$deqp_path/data/",
+        "$deqp_path/external/graphicsfuzz/data/",
       ]
     }
   }
