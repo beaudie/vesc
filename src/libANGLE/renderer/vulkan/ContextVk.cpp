@@ -1652,14 +1652,19 @@ angle::Result ContextVk::drawArraysInstanced(const gl::Context *context,
                                              GLsizei count,
                                              GLsizei instances)
 {
+    vk::CommandBuffer *commandBuffer = nullptr;
+
     if (mode == gl::PrimitiveMode::LineLoop)
     {
-        // TODO - http://anglebug.com/2672
-        ANGLE_VK_UNREACHABLE(this);
-        return angle::Result::Stop;
+        uint32_t clampedVertexCount = gl::GetClampedVertexCount<uint32_t>(count);
+        uint32_t numIndices;
+        ANGLE_TRY(setupLineLoopDraw(context, mode, first, clampedVertexCount,
+                                    gl::DrawElementsType::InvalidEnum, nullptr, &commandBuffer,
+                                    &numIndices));
+        commandBuffer->drawIndexedInstanced(numIndices, instances);
+        return angle::Result::Continue;
     }
 
-    vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(setupDraw(context, mode, first, count, instances, gl::DrawElementsType::InvalidEnum,
                         nullptr, mNonIndexedDirtyBitsMask, &commandBuffer));
     commandBuffer->drawInstanced(gl::GetClampedVertexCount<uint32_t>(count), instances, first);
@@ -1673,14 +1678,19 @@ angle::Result ContextVk::drawArraysInstancedBaseInstance(const gl::Context *cont
                                                          GLsizei instances,
                                                          GLuint baseInstance)
 {
+    vk::CommandBuffer *commandBuffer = nullptr;
+
     if (mode == gl::PrimitiveMode::LineLoop)
     {
-        // TODO - http://anglebug.com/2672
-        ANGLE_VK_UNREACHABLE(this);
-        return angle::Result::Stop;
+        uint32_t clampedVertexCount = gl::GetClampedVertexCount<uint32_t>(count);
+        uint32_t numIndices;
+        ANGLE_TRY(setupLineLoopDraw(context, mode, first, clampedVertexCount,
+                                    gl::DrawElementsType::InvalidEnum, nullptr, &commandBuffer,
+                                    &numIndices));
+        commandBuffer->drawInstancedBaseInstance(numIndices, instances, 0, baseInstance);
+        return angle::Result::Continue;
     }
 
-    vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(setupDraw(context, mode, first, count, instances, gl::DrawElementsType::InvalidEnum,
                         nullptr, mNonIndexedDirtyBitsMask, &commandBuffer));
     commandBuffer->drawInstancedBaseInstance(gl::GetClampedVertexCount<uint32_t>(count), instances,
@@ -1718,15 +1728,20 @@ angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
                                                const void *indices,
                                                GLsizei instances)
 {
+    vk::CommandBuffer *commandBuffer = nullptr;
+
     if (mode == gl::PrimitiveMode::LineLoop)
     {
-        // TODO - http://anglebug.com/2672
-        ANGLE_VK_UNREACHABLE(this);
-        return angle::Result::Stop;
+        uint32_t indexCount;
+        ANGLE_TRY(
+            setupLineLoopDraw(context, mode, 0, count, type, indices, &commandBuffer, &indexCount));
+        count = indexCount;
+    }
+    else
+    {
+        ANGLE_TRY(setupIndexedDraw(context, mode, count, instances, type, indices, &commandBuffer));
     }
 
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(setupIndexedDraw(context, mode, count, instances, type, indices, &commandBuffer));
     commandBuffer->drawIndexedInstanced(count, instances);
     return angle::Result::Continue;
 }
@@ -1740,14 +1755,18 @@ angle::Result ContextVk::drawElementsInstancedBaseVertexBaseInstance(const gl::C
                                                                      GLint baseVertex,
                                                                      GLuint baseInstance)
 {
+    vk::CommandBuffer *commandBuffer = nullptr;
+
     if (mode == gl::PrimitiveMode::LineLoop)
     {
-        // TODO - http://anglebug.com/2672
-        ANGLE_VK_UNREACHABLE(this);
-        return angle::Result::Stop;
+        uint32_t indexCount;
+        ANGLE_TRY(
+            setupLineLoopDraw(context, mode, 0, count, type, indices, &commandBuffer, &indexCount));
+        commandBuffer->drawIndexedInstancedBaseVertexBaseInstance(indexCount, instances, 0,
+                                                                  baseVertex, baseInstance);
+        return angle::Result::Continue;
     }
 
-    vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(setupIndexedDraw(context, mode, count, instances, type, indices, &commandBuffer));
     commandBuffer->drawIndexedInstancedBaseVertexBaseInstance(count, instances, 0, baseVertex,
                                                               baseInstance);
