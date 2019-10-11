@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00cdbf7b_dad4a9f0",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T11:32:13Z",
+      "side": 1,
+      "message": "nit: would call this Meta format table",
+      "range": {
+        "startLine": 116,
+        "startChar": 11,
+        "endLine": 116,
+        "endChar": 17
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "145ee4e4_bf3c9656",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_table_autogen.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T11:32:13Z",
+      "side": 1,
+      "message": "I\u0027d suggest you combine the two switch cases into one. It does make for some repeated actual format assignments and #ifdefs, but it should improve performance slightly. It should be easy to do in auto-generation.",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 35
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a2960dd_d71b7770",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_table_autogen.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T11:32:13Z",
+      "side": 1,
+      "message": "always avoid goto.",
+      "range": {
+        "startLine": 354,
+        "startChar": 8,
+        "endLine": 354,
+        "endChar": 24
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d218905_d5296f3c",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T11:32:13Z",
+      "side": 1,
+      "message": "There\u0027s quite a few similar overloads here. I\u0027m wondering if it would make the code better to remove some of them. I couldn\u0027t find where they were used in the next patch set, maybe you could give me a pointer so I could help assess if we could clean this up?",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 90
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96ee86bf_efb323e7",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T11:32:13Z",
+      "side": 1,
+      "message": "I don\u0027t see where you put these into tables. Is that in the next patch set as well? I\u0027m wondering if this could be cleaner just using the same class for vertex and non-vertex formats. But would probably depend on how you use them.",
+      "range": {
+        "startLine": 70,
+        "startChar": 7,
+        "endLine": 70,
+        "endChar": 19
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25ffb535_d57b617b",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T11:32:13Z",
+      "side": 1,
+      "message": "The best way I\u0027ve come up with to handle documentation based support is by encoding the documentation into a data table in ANGLE. See Vulkan\u0027s \u0027gen_vk_mandatory_format_support_table.py\u0027. \n\nIs this the source-of-truth? https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf\n\nYou could use the Apple \"Pixel Format Capabilities\" tables to compute the texture format caps. \n\nI think this would be a bit more maintainable going forward with new versions of Metal, etc. Probably would be a bit cleaner too.",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 98
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f91a9994_d4008785",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T11:32:13Z",
+      "side": 1,
+      "message": "nit: you should be able to use ANGLE_UNUSED_VARIABLE if this emits a warning.",
+      "range": {
+        "startLine": 308,
+        "startChar": 4,
+        "endLine": 308,
+        "endChar": 22
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acc31a3b_f1bc960d",
+        "filename": "src/libANGLE/renderer/metal/shaders/blit.metal",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-11T11:32:13Z",
+      "side": 1,
+      "message": "nit: can you go through and remove the (c) from the copyright notices new files you added? It\u0027s not recommended any more.",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "5677630849f725130f9e0f00c3fac7421863e1bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
