@@ -1864,4 +1864,9 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
     }
 }
 
+void Texture::bindImageTexture()
+{
+    mDirtyBits.set(DIRTY_BIT_IMAGE_TEXTURE);
+}
+
 }  // namespace gl

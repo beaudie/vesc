@@ -136,6 +136,14 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                         getParamPtr<CopyBufferToImageParams>(currentCommand);
                     vkCmdCopyBufferToImage(cmdBuffer, params->srcBuffer, params->dstImage,
                                            params->dstImageLayout, 1, &params->region);
+                    printf(
+                        "CopyBufferToImage, %p -> %p, bufoffset: %d, mipleve: %d, image: (%d, %d, "
+                        "%d) -> (%d, %d, %d)\n",
+                        (void *)params->srcBuffer, (void *)params->dstImage,
+                        (int)params->region.bufferOffset, params->region.imageSubresource.mipLevel,
+                        params->region.imageOffset.x, params->region.imageOffset.y,
+                        params->region.imageOffset.z, params->region.imageExtent.width,
+                        params->region.imageExtent.height, params->region.imageExtent.depth);
                     break;
                 }
                 case CommandID::CopyImage:
@@ -151,6 +159,14 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                         getParamPtr<CopyImageToBufferParams>(currentCommand);
                     vkCmdCopyImageToBuffer(cmdBuffer, params->srcImage, params->srcImageLayout,
                                            params->dstBuffer, 1, &params->region);
+                    printf(
+                        "CopyImageToBuffer, %p -> %p, bufoffset: %d, mipleve: %d, image: (%d, %d, "
+                        "%d) -> (%d, %d, %d)\n",
+                        (void *)params->srcImage, (void *)params->dstBuffer,
+                        (int)params->region.bufferOffset, params->region.imageSubresource.mipLevel,
+                        params->region.imageOffset.x, params->region.imageOffset.y,
+                        params->region.imageOffset.z, params->region.imageExtent.width,
+                        params->region.imageExtent.height, params->region.imageExtent.depth);
                     break;
                 }
                 case CommandID::Dispatch:
