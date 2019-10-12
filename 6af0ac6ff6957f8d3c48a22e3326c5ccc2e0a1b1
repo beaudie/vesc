@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae1d7b7_a782ca2c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2019-10-12T05:11:56Z",
+      "side": 1,
+      "message": "I noticed that you have deleted such a logic but what is the reason?",
+      "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
