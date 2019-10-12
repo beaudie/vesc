@@ -116,6 +116,7 @@ bool HasBothDepthAndStencilAspects(VkImageAspectFlags aspectFlags)
 TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
     : TextureImpl(state),
       mOwnsImage(false),
+      mIsStorageImage(false),
       mImageNativeType(gl::TextureType::InvalidEnum),
       mImageLayerOffset(0),
       mImageLevelOffset(0),
@@ -737,10 +738,6 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
     {
         releaseImage(contextVk);
     }
-
-    gl::Format glFormat(internalFormat);
-    ANGLE_TRY(
-        initImage(contextVk, format, glFormat.info->sized, size, static_cast<uint32_t>(levels)));
     return angle::Result::Continue;
 }
 
@@ -1340,6 +1337,14 @@ angle::Result TextureVk::syncState(const gl::Context *context,
                                    const gl::Texture::DirtyBits &dirtyBits)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+    bool needRedefineImage = false;
+
+    // Create a new image if the storage state is enabled for the first time.
+    if (dirtyBits.test(gl::Texture::DIRTY_BIT_IMAGE_TEXTURE))
+    {
+        needRedefineImage = !mIsStorageImage && mImage && mImage->valid();
+        mIsStorageImage   = true;
+    }
 
     // Set base and max level before initializing the image
     if (dirtyBits.test(gl::Texture::DIRTY_BIT_MAX_LEVEL) ||
@@ -1347,6 +1352,74 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     {
         ANGLE_TRY(
             changeLevels(contextVk, mState.getEffectiveBaseLevel(), mState.getEffectiveMaxLevel()));
+    }
+
+    if (needRedefineImage && mImage && mImage->valid())
+    {
+        vk::CommandBuffer *commandBuffer = nullptr;
+        ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+        ANGLE_TRY(mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0),
+                                             mImage->getLevelCount(), getNativeImageLayer(0),
+                                             mImage->getLayerCount(), commandBuffer));
+
+        // Get the staging buffer
+        vk::BufferHelper *stagingBufferHandle = nullptr;
+        VkDeviceSize stagingBufferOffset      = 0;
+        ANGLE_TRY(mImage->allocateStagingMemory(contextVk, 0, nullptr, &stagingBufferHandle,
+                                                &stagingBufferOffset, nullptr));
+        printf("allocated bufoffset: %d\n", (int)stagingBufferOffset);
+
+        uint32_t levelCount =
+            std::max<GLuint>(mState.getMipmapMaxLevel() + 1, mImage->getLevelCount());
+        // If the staging buffer has already been created.
+        bool stagingBufferEmpty = stagingBufferOffset == 0;
+        stagingBufferOffset     = 0;
+        for (uint32_t level = mState.getEffectiveBaseLevel(); level < levelCount; level++)
+        {
+            const gl::ImageDesc &levelDesc =
+                mState.getImageDesc(gl::TextureTypeToTarget(mState.getType(), 0), level);
+            // Stage an update to the new image
+            size_t bufferSize = levelDesc.size.width * levelDesc.size.height *
+                                levelDesc.size.depth * levelDesc.format.info->pixelBytes *
+                                mImage->getLayerCount();
+            // Gather Vulkan dimensions based on our knowledge of image type here
+            VkOffset3D vkOffset = {0};
+            VkExtent3D vkExtent;
+            uint32_t layerCountDontCare;
+            gl_vk::GetExtentsAndLayerCount(mState.getType(), levelDesc.size, &vkExtent,
+                                           &layerCountDontCare);
+
+            // If staging buffer is empty (the texture is used as frame buffer), copy the content
+            // from image to the staging buffer, and then from staging buffer to the new image.
+            // Otherwise, copy from the staging buffer directly to the new image.
+            if (stagingBufferEmpty)
+            {
+                gl::Box area(vkOffset.x, vkOffset.y, vkOffset.z, vkExtent.width, vkExtent.height,
+                             vkExtent.depth);
+                ANGLE_TRY(copyImageDataToBuffer(contextVk, level, mImage->getLayerCount(), 0, area,
+                                                &stagingBufferHandle, &stagingBufferOffset,
+                                                nullptr));
+            }
+
+            ANGLE_TRY(mImage->stageSubresourceUpdateFromBuffer(
+                contextVk, bufferSize, level, 0, mImage->getLayerCount(), vkExtent, vkOffset,
+                stagingBufferHandle, stagingBufferOffset));
+            printf(
+                "redefine, copy from buffer bufSize: %d, level: %d, layerCount: %d, size: "
+                "%dx%dx%d, offset: %d\n",
+                (int)bufferSize, level, mImage->getLayerCount(), vkExtent.width, vkExtent.height,
+                vkExtent.depth, (int)stagingBufferOffset);
+            if (!stagingBufferEmpty)
+            {
+                stagingBufferOffset += bufferSize;
+            }
+        }
+
+        // Inform the front end that we've updated the staging buffer
+        onStagingBufferChange();
+        // Now that we've staged all the updates, release the current image so that it will be
+        // recreated with the correct number of mip levels, base level, and max level.
+        releaseImage(contextVk);
     }
 
     // Initialize the image storage and flush the pixel buffer.
@@ -1615,7 +1688,8 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     // If the image has storage support, add it for ES3.1 image support.
     if (renderer->hasImageFormatFeatureBits(format.vkImageFormat,
-                                            VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT))
+                                            VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT) &&
+        mIsStorageImage)
     {
         imageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
     }
