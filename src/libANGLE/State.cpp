@@ -2882,6 +2882,10 @@ void State::setImageUnit(const Context *context,
     mDirtyBits.set(DIRTY_BIT_IMAGE_BINDINGS);
 
     onImageStateChange(context, unit);
+    if (texture)
+    {
+        texture->bindImageTexture();
+    }
 }
 
 // Handle a dirty texture event.

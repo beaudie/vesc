@@ -3508,6 +3508,95 @@ void main()
     glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 }
 
+// Test that render pipeline and compute pipeline access to the same texture.
+// Steps:
+//   1. Clear the texture to White, and DrawArrays.
+//   2. DispatchCompute to set the image's first pixel to Red.
+//   3. DrawArrays and check data.
+TEST_P(ComputeShaderTest, DrawDispatchDrawPreserve)
+{
+    const char kCSSource[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1) in;
+layout(rgba8, binding = 0) writeonly uniform highp image2D image;
+void main()
+{
+    imageStore(image, ivec2(0, 0), vec4(1.0, 0.0, 0.0, 1.0));
+})";
+
+    const char kVSSource[] = R"(#version 310 es
+layout (location = 0) in vec2 pos;
+in vec4 inTex;
+out vec4 texCoord;
+void main(void) {
+    texCoord = inTex;
+    gl_Position = vec4(pos, 0.0, 1.0);
+})";
+
+    const char kFSSource[] = R"(#version 310 es
+precision highp float;
+uniform sampler2D tex;
+in vec4 texCoord;
+out vec4 fragColor;
+void main(void) {
+    fragColor = texture(tex, texCoord.xy);
+})";
+    GLuint aPosLoc         = 0;
+    ANGLE_GL_PROGRAM(program, kVSSource, kFSSource);
+    glBindAttribLocation(program, aPosLoc, "pos");
+
+    GLuint *data = new GLuint[4 * getWindowWidth() * getWindowHeight()];
+    memset(data, 0xff, 4 * getWindowWidth() * getWindowHeight());
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 2, GL_RGBA8, getWindowWidth(), getWindowHeight());
+    // Clear the texture to White.
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, getWindowWidth(), getWindowHeight(), GL_RGBA,
+                    GL_UNSIGNED_BYTE, data);
+    glTexSubImage2D(GL_TEXTURE_2D, 1, 0, 0, getWindowWidth() / 2, getWindowHeight() / 2, GL_RGBA,
+                    GL_UNSIGNED_BYTE, data);
+    delete[] data;
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glUseProgram(program);
+    GLfloat vertices[]  = {-1, -1, 1, -1, -1, 1, 1, 1};
+    GLfloat texCoords[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
+    GLint pos           = glGetAttribLocation(program, "pos");
+    glEnableVertexAttribArray(pos);
+    glVertexAttribPointer(pos, 2, GL_FLOAT, GL_FALSE, 0, vertices);
+    GLint posTex = glGetAttribLocation(program, "inTex");
+    glEnableVertexAttribArray(posTex);
+    glVertexAttribPointer(posTex, 2, GL_FLOAT, GL_FALSE, 0, texCoords);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    EXPECT_GL_NO_ERROR();
+    // Draw with level 0, the whole frame buffer should be White.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+    EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor::white);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, getWindowHeight() - 1, GLColor::white);
+
+    // Clear the texture level 0's (0, 0) position to Red.
+    glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
+    ANGLE_GL_COMPUTE_PROGRAM(csProgram, kCSSource);
+    glUseProgram(csProgram);
+    glDispatchCompute(1, 1, 1);
+    glMemoryBarrier(GL_TEXTURE_FETCH_BARRIER_BIT);
+    EXPECT_GL_NO_ERROR();
+    glFinish();
+
+    glUseProgram(program);
+    // Draw with level 0.
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor::white);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, getWindowHeight() - 1, GLColor::white);
+    // Draw with level 1.
+    glViewport(0, 0, getWindowWidth() / 2, getWindowHeight() / 2);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+    EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor::white);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2 - 1, getWindowHeight() / 2 - 1, GLColor::white);
+}
+
 ANGLE_INSTANTIATE_TEST(ComputeShaderTest,
                        ES31_OPENGL(),
                        ES31_OPENGLES(),
