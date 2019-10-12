@@ -2880,6 +2880,7 @@ void State::setImageUnit(const Context *context,
     mImageUnits[unit].access  = access;
     mImageUnits[unit].format  = format;
     mDirtyBits.set(DIRTY_BIT_IMAGE_BINDINGS);
+    texture->bindImageTexture();
 
     onImageStateChange(context, unit);
 }
