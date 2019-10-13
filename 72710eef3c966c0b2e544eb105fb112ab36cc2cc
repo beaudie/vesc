@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4f211c_6b3520b0",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-13T12:24:04Z",
+      "side": 1,
+      "message": "This variable is not used atm. Since I don\u0027t see any equivalent of Vulkan\u0027s flushBuffer() in metal yet. Will see what is the best way to notify GPU of the data portion change.\nCurrently I just commit/flush the whole buffer.",
+      "range": {
+        "startLine": 25,
+        "startChar": 6,
+        "endLine": 25,
+        "endChar": 34
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
