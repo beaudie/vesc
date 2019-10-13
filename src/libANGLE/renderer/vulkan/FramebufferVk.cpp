@@ -523,7 +523,7 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
     }
 
     ANGLE_TRY(readPixelsImpl(contextVk, flippedArea, params, VK_IMAGE_ASPECT_COLOR_BIT,
-                             getColorReadRenderTarget(),
+                             getColorReadRenderTarget(contextVk),
                              static_cast<uint8_t *>(pixels) + outputSkipBytes));
     mReadPixelBuffer.releaseInFlightBuffers(contextVk);
     return angle::Result::Continue;
@@ -541,10 +541,11 @@ RenderTargetVk *FramebufferVk::getColorDrawRenderTarget(size_t colorIndex) const
     return renderTarget;
 }
 
-RenderTargetVk *FramebufferVk::getColorReadRenderTarget() const
+RenderTargetVk *FramebufferVk::getColorReadRenderTarget(ContextVk *contextVk) const
 {
     RenderTargetVk *renderTarget = mRenderTargetCache.getColorRead(mState);
     ASSERT(renderTarget && renderTarget->getImage().valid());
+    renderTarget->onImageViewAccess(contextVk);
     return renderTarget;
 }
 
@@ -776,7 +777,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
 
     if (blitColorBuffer)
     {
-        RenderTargetVk *readRenderTarget = srcFramebufferVk->getColorReadRenderTarget();
+        RenderTargetVk *readRenderTarget = srcFramebufferVk->getColorReadRenderTarget(contextVk);
         params.srcLayer                  = readRenderTarget->getLayerIndex();
 
         // Multisampled images are not allowed to have mips.
@@ -1578,10 +1579,12 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
 
 gl::Extents FramebufferVk::getReadImageExtents() const
 {
-    ASSERT(getColorReadRenderTarget()->getExtents().width == mState.getDimensions().width);
-    ASSERT(getColorReadRenderTarget()->getExtents().height == mState.getDimensions().height);
+    RenderTargetVk *readRenderTarget = mRenderTargetCache.getColorRead(mState);
 
-    return getColorReadRenderTarget()->getExtents();
+    ASSERT(readRenderTarget->getExtents().width == mState.getDimensions().width);
+    ASSERT(readRenderTarget->getExtents().height == mState.getDimensions().height);
+
+    return readRenderTarget->getExtents();
 }
 
 gl::Rectangle FramebufferVk::getCompleteRenderArea() const
