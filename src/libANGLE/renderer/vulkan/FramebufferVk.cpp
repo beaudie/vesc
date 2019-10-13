@@ -820,8 +820,10 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         // Otherwise use a shader to do blit or resolve.
         else
         {
+            const vk::ImageView *readImageView = nullptr;
+            ANGLE_TRY(readRenderTarget->getImageView(contextVk, &readImageView));
             ANGLE_TRY(utilsVk.colorBlitResolve(contextVk, this, &readRenderTarget->getImage(),
-                                               readRenderTarget->getReadImageView(), params));
+                                               readImageView, params));
         }
     }
 
@@ -1208,7 +1210,11 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
-        attachments.push_back(colorRenderTarget->getDrawImageView()->getHandle());
+
+        const vk::ImageView *imageView = nullptr;
+        ANGLE_TRY(colorRenderTarget->getImageView(contextVk, &imageView));
+
+        attachments.push_back(imageView->getHandle());
 
         ASSERT(attachmentsSize.empty() || attachmentsSize == colorRenderTarget->getExtents());
         attachmentsSize = colorRenderTarget->getExtents();
@@ -1217,7 +1223,10 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
     RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
     if (depthStencilRenderTarget)
     {
-        attachments.push_back(depthStencilRenderTarget->getDrawImageView()->getHandle());
+        const vk::ImageView *imageView = nullptr;
+        ANGLE_TRY(depthStencilRenderTarget->getImageView(contextVk, &imageView));
+
+        attachments.push_back(imageView->getHandle());
 
         ASSERT(attachmentsSize.empty() ||
                attachmentsSize == depthStencilRenderTarget->getExtents());
