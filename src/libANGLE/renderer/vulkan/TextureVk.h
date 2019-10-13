@@ -154,10 +154,10 @@ class TextureVk : public TextureImpl
 
     void releaseOwnershipOfImage(const gl::Context *context);
 
-    const vk::ImageView &getReadImageView() const;
+    const vk::ImageView &getReadImageView(ContextVk *contextVk) const;
     // A special view for cube maps as a 2D array, used with shaders that do texelFetch() and for
     // seamful cube map emulation.
-    const vk::ImageView &getFetchImageView() const;
+    const vk::ImageView &getFetchImageView(ContextVk *contextVk) const;
     angle::Result getStorageImageView(ContextVk *contextVk,
                                       bool allLayers,
                                       size_t level,
@@ -295,7 +295,7 @@ class TextureVk : public TextureImpl
                                  uint32_t levelCount,
                                  uint32_t layerCount);
     angle::Result initRenderTargets(ContextVk *contextVk, GLuint layerCount, GLuint levelIndex);
-    angle::Result getLevelLayerImageView(vk::Context *context,
+    angle::Result getLevelLayerImageView(ContextVk *contextVk,
                                          size_t level,
                                          size_t layer,
                                          const vk::ImageView **imageViewOut);

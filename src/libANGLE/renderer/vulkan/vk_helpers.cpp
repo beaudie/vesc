@@ -2464,6 +2464,8 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     PackPixelsParams params(clippedRectangle, copyFormat, static_cast<GLuint>(outputRowPitch),
                             isViewportFlipEnabled, nullptr, 0);
 
+    RenderTargetVk *readRenderTarget = framebufferVk->getColorReadRenderTarget(contextVk);
+
     // 2- copy the source image region to the pixel buffer using a cpu readback
     if (loadFunction.requiresConversion)
     {
@@ -2475,9 +2477,9 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
         ANGLE_VK_CHECK_ALLOC(contextVk, context->getScratchBuffer(bufferSize, &memoryBuffer));
 
         // Read into the scratch buffer
-        ANGLE_TRY(framebufferVk->readPixelsImpl(
-            contextVk, clippedRectangle, params, VK_IMAGE_ASPECT_COLOR_BIT,
-            framebufferVk->getColorReadRenderTarget(), memoryBuffer->data()));
+        ANGLE_TRY(framebufferVk->readPixelsImpl(contextVk, clippedRectangle, params,
+                                                VK_IMAGE_ASPECT_COLOR_BIT, readRenderTarget,
+                                                memoryBuffer->data()));
 
         // Load from scratch buffer to our pixel buffer
         loadFunction.loadFunction(clippedRectangle.width, clippedRectangle.height, 1,
@@ -2487,9 +2489,9 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     else
     {
         // We read directly from the framebuffer into our pixel buffer.
-        ANGLE_TRY(framebufferVk->readPixelsImpl(
-            contextVk, clippedRectangle, params, VK_IMAGE_ASPECT_COLOR_BIT,
-            framebufferVk->getColorReadRenderTarget(), stagingPointer));
+        ANGLE_TRY(framebufferVk->readPixelsImpl(contextVk, clippedRectangle, params,
+                                                VK_IMAGE_ASPECT_COLOR_BIT, readRenderTarget,
+                                                stagingPointer));
     }
 
     // 3- enqueue the destination image subresource update
@@ -2888,7 +2890,10 @@ void FramebufferHelper::release(ContextVk *contextVk)
 }
 
 // ImageViewHelper implementation.
-ImageViewHelper::ImageViewHelper() = default;
+ImageViewHelper::ImageViewHelper()
+{
+    mUse.init();
+}
 
 ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
 {
@@ -2899,17 +2904,22 @@ ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
     std::swap(mLayerLevelDrawImageViews, other.mLayerLevelDrawImageViews);
 }
 
-ImageViewHelper::~ImageViewHelper() = default;
-
-void ImageViewHelper::release(ContextVk *contextVk)
+ImageViewHelper::~ImageViewHelper()
 {
-    contextVk->addGarbage(&mReadImageView);
-    contextVk->addGarbage(&mFetchImageView);
-    contextVk->addGarbage(&mStencilReadImageView);
+    mUse.release();
+}
+
+void ImageViewHelper::release(RendererVk *renderer)
+{
+    std::vector<GarbageObject> garbage;
+
+    garbage.emplace_back(GetGarbage(&mReadImageView));
+    garbage.emplace_back(GetGarbage(&mFetchImageView));
+    garbage.emplace_back(GetGarbage(&mStencilReadImageView));
 
     for (vk::ImageView &imageView : mLevelDrawImageViews)
     {
-        contextVk->addGarbage(&imageView);
+        garbage.emplace_back(GetGarbage(&imageView));
     }
     mLevelDrawImageViews.clear();
 
@@ -2917,10 +2927,15 @@ void ImageViewHelper::release(ContextVk *contextVk)
     {
         for (vk::ImageView &imageView : layerViews)
         {
-            contextVk->addGarbage(&imageView);
+            garbage.emplace_back(GetGarbage(&imageView));
         }
     }
     mLayerLevelDrawImageViews.clear();
+
+    renderer->collectGarbage(std::move(mUse), std::move(garbage));
+
+    // Ensure the resource use is always valid.
+    mUse.init();
 }
 
 void ImageViewHelper::destroy(VkDevice device)
@@ -2993,6 +3008,8 @@ angle::Result ImageViewHelper::getLevelDrawImageView(ContextVk *contextVk,
                                                      uint32_t layer,
                                                      const ImageView **imageViewOut)
 {
+    onGraphAccess(contextVk->getCommandGraph());
+
     ImageView *imageView = GetLevelImageView(&mLevelDrawImageViews, level, 1);
 
     *imageViewOut = imageView;
@@ -3006,7 +3023,7 @@ angle::Result ImageViewHelper::getLevelDrawImageView(ContextVk *contextVk,
                                     imageView, level, 1, layer, image.getLayerCount());
 }
 
-angle::Result ImageViewHelper::getLevelLayerDrawImageView(Context *context,
+angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
                                                           const ImageHelper &image,
                                                           uint32_t level,
                                                           uint32_t layer,
@@ -3014,6 +3031,8 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(Context *context,
 {
     ASSERT(image.valid());
     ASSERT(!image.getFormat().imageFormat().isBlock);
+
+    onGraphAccess(contextVk->getCommandGraph());
 
     uint32_t layerCount = GetImageLayerCountForView(image);
 
@@ -3037,7 +3056,7 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(Context *context,
     // Note that these views are specifically made to be used as color attachments, and therefore
     // don't have swizzle.
     gl::TextureType viewType = vk::Get2DTextureType(1, image.getSamples());
-    return image.initLayerImageView(context, viewType, image.getAspectFlags(), gl::SwizzleState(),
+    return image.initLayerImageView(contextVk, viewType, image.getAspectFlags(), gl::SwizzleState(),
                                     imageView, level, 1, layer, 1);
 }
 
