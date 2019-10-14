@@ -6,6 +6,9 @@
 
 import("../../../../gni/angle.gni")
 
+import("//build/config/mac/mac_sdk.gni")
+
+assert(is_mac)
 assert(angle_enable_metal)
 
 _metal_backend_sources = [
@@ -65,7 +68,14 @@ angle_source_set("angle_metal_backend") {
   cflags_objc += objc_flags
   cflags_objcc += objc_flags
 
-  libs += [ "Metal.framework" ]
+  if (mac_sdk_version == "10.10") {
+    ldflags += [
+      "-weak_framework",
+      "Metal",
+    ]
+  } else {
+    libs += [ "Metal.framework" ]
+  }
 
   if (is_mac) {
     libs += [
