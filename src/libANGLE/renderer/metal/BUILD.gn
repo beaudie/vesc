@@ -65,7 +65,10 @@ angle_source_set("angle_metal_backend") {
   cflags_objc += objc_flags
   cflags_objcc += objc_flags
 
-  libs += [ "Metal.framework" ]
+  libs += [
+    "-weak_framework",
+    "Metal.framework",
+  ]
 
   if (is_mac) {
     libs += [
