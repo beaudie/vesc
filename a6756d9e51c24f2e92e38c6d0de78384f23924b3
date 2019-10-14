@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22756c5a_4e96cebc",
+        "filename": "src/libANGLE/renderer/metal/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1144624
+      },
+      "writtenOn": "2019-10-14T20:48:03Z",
+      "side": 1,
+      "message": "I\u0027m not sure this condition is right. Instead, unconditionally weak_link Metal.framework, because I think the 10.10 testers use builds produced with the 10.14 SDK.",
+      "revId": "a6756d9e51c24f2e92e38c6d0de78384f23924b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
