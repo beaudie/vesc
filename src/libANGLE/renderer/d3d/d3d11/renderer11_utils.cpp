@@ -1657,8 +1657,9 @@ void GenerateCaps(ID3D11Device *device,
     extensions->provokingVertex          = true;
     extensions->blendFuncExtended        = true;
     extensions->maxDualSourceDrawBuffers = 1;
-    extensions->texture3DOES                     = true;
-    extensions->baseVertexBaseInstance           = true;
+    extensions->texture3DOES             = true;
+    extensions->baseVertexBaseInstance   = true;
+    extensions->webglVideoTexture        = true;
 
     // D3D11 cannot support reading depth texture as a luminance texture.
     // It treats it as a red-channel-only texture.
