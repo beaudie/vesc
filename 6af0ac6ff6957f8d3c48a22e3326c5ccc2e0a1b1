@@ -77,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "bc2e919e_a1e3e1b5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:59:51Z",
+      "side": 1,
+      "message": "I think we might be missing a setReadDependency call. Look in this file for other examples of \u0027addReadDependency\u0027.",
+      "parentUuid": "e244784a_1f282f44",
+      "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d55b565a_098dee31",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
