@@ -134,6 +134,13 @@ ANGLE_INLINE bool ValidateBindTexture(Context *context, TextureType target, Text
 
     if (texture.value == 0)
     {
+        // Bind Video Texture may destroy native bound texture so
+        // we cannot support zero texture for this type.
+        if (target == gl::TextureType::VideoTexture)
+        {
+            return false;
+        }
+
         return true;
     }
 

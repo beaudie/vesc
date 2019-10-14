@@ -398,6 +398,10 @@ void State::initialize(Context *context)
     {
         mSamplerTextures[TextureType::External].resize(caps.maxCombinedTextureImageUnits);
     }
+    if (nativeExtensions.webglVideoTexture)
+    {
+        mSamplerTextures[TextureType::VideoTexture].resize(caps.maxCombinedTextureImageUnits);
+    }
     mCompleteTextureBindings.reserve(caps.maxCombinedTextureImageUnits);
     for (uint32_t textureIndex = 0; textureIndex < caps.maxCombinedTextureImageUnits;
          ++textureIndex)
@@ -1179,7 +1183,8 @@ void State::detachTexture(const Context *context, const TextureMap &zeroTextures
         for (size_t bindingIndex = 0; bindingIndex < textureVector.size(); ++bindingIndex)
         {
             BindingPointer<Texture> &binding = textureVector[bindingIndex];
-            if (binding.id() == texture)
+            // Video Texture doesn't have zero texture.
+            if (binding.id() == texture && type != TextureType::VideoTexture)
             {
                 // Zero textures are the "default" textures instead of NULL
                 Texture *zeroTexture = zeroTextures[type].get();
