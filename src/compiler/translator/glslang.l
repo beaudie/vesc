@@ -95,6 +95,7 @@ static int ES2_extension_ES3_keyword_else_reserved(TParseContext *context, TExte
 static int ES3_extension_keyword_else_ident(TParseContext *context, TExtension extension, int token);
 static int ES2_ident_ES3_reserved_ES3_1_extension_keyword(TParseContext *context, TExtension extension, int token);
 static int ES3_extension_and_ES3_1_keyword_ES3_reserved_else_ident(TParseContext *context, TExtension extension, int token);
+static int WEBGL_video_texture_extension(TParseContext *context, int token);
 static int uint_constant(TParseContext *context);
 static int int_constant(TParseContext *context);
 static int float_constant(yyscan_t yyscanner);
@@ -212,6 +213,7 @@ O           [0-7]
 "sampler2DShadow"      { return ES2_reserved_ES3_keyword(context, SAMPLER2DSHADOW); }
 "samplerCubeShadow"    { return ES2_ident_ES3_keyword(context, SAMPLERCUBESHADOW); }
 "sampler2DArrayShadow" { return ES2_ident_ES3_keyword(context, SAMPLER2DARRAYSHADOW); }
+"samplerVideoWEBGL"    { return WEBGL_video_texture_extension(context, SAMPLERVIDEOWEBGL); }
 "__samplerExternal2DY2YEXT"   { return ES3_extension_keyword_else_ident(context, TExtension::EXT_YUV_target, SAMPLEREXTERNAL2DY2YEXT); }
 "sampler2DMSArray"     { return ES2_ident_ES3_reserved_ES3_1_extension_keyword(context, TExtension::OES_texture_storage_multisample_2d_array, SAMPLER2DMSARRAY); }
 "isampler2DMSArray"    { return ES2_ident_ES3_reserved_ES3_1_extension_keyword(context, TExtension::OES_texture_storage_multisample_2d_array, ISAMPLER2DMSARRAY); }
@@ -554,6 +556,22 @@ int ES2_and_ES3_ident_ES3_1_keyword(TParseContext *context, int token)
     }
 
     return token;
+}
+
+int WEBGL_video_texture_extension(TParseContext *context, int token)
+{
+    // Available with WEBGL_video_texture_extension
+    if (context->isExtensionEnabled(TExtension::WEBGL_video_texture))
+    {
+        return token;
+    }
+
+    // Otherwise can be used as an identifier/type name
+    struct yyguts_t* yyg = (struct yyguts_t*) context->getScanner();
+    yyscan_t yyscanner = (yyscan_t) context->getScanner();
+
+    yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
+    return check_type(yyscanner);
 }
 
 int ES2_extension_ES3_keyword_else_reserved(TParseContext *context, TExtension extension, int token)
