@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efee299d_94b5e6b9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-14T15:40:30Z",
+      "side": 1,
+      "message": "Based on Jesse\u0027s feedback it would be interesting to catch the case here when we get INCOMPLETE, and re-call w/ nullptr to re-query the size. Then log the original and second sizes. If they\u0027re different, could re-attempt w/ larger of the 2 values.\nCould theoretically put this in a loop for repeated size queries until it converges. That feels like overkill, but if size was changing multiple times, that would be very interesting to get proof of an report to IHV(s).",
+      "revId": "7ab497a0c03121f719e876cd4a07496fe1fdccf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
