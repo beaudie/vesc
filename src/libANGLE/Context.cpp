@@ -387,6 +387,12 @@ void Context::initialize()
     // In order that access to these initial textures not be lost, they are treated as texture
     // objects all of whose names are 0.
 
+    // Create video texture will destroy last bound texture object on correspond native texture target.
+    // For zero textures, to keep TEXTURE_2D and TEXTURE_CUBE_MAP works on OpenGLES 2.0.24 and previous
+    // version, zero video texture must create before creating zert textures for TEXTURE_2D and TEXTURE_CUBE_MAP. 
+    Texture *zeroTextureVideoImage = new Texture(mImplementation.get(), {0}, TextureType::VideoImage);
+    mZeroTextures[TextureType::VideoImage].set(this, zeroTextureVideoImage);
+
     Texture *zeroTexture2D = new Texture(mImplementation.get(), {0}, TextureType::_2D);
     mZeroTextures[TextureType::_2D].set(this, zeroTexture2D);
 
@@ -1103,7 +1109,6 @@ void Context::bindTexture(TextureType target, TextureID handle)
             mState.mTextureManager->checkTextureAllocation(mImplementation.get(), handle, target);
     }
 
-    ASSERT(texture);
     mState.setSamplerTexture(this, target, texture);
     mStateCache.onActiveTextureChange(this);
 }
@@ -8823,6 +8828,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
         {TextureType::External, exts.eglImageExternal || exts.eglStreamConsumerExternal},
         {TextureType::Rectangle, exts.textureRectangle},
         {TextureType::CubeMap, true},
+        {TextureType::VideoImage, exts.webglVideoTexture},
     }};
 }
 
