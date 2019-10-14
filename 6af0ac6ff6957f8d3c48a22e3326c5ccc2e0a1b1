@@ -34,6 +34,23 @@
       "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e244784a_1f282f44",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-14T03:09:51Z",
+      "side": 1,
+      "message": "It records a copyImageToBuffer call, and line 1184 records a copyBufferToImage.\nBut I see in some cases, the copyBufferToImage is called before copyImageToBuffer in driver, this causes incorrect image content.\nThe copyImageDataToBuffer starts a commands, and later in ensureImageInitializedImpl it starts a new commands, and these two commands have no dependency, so how can we make sure the copyImageToBuffer is called first?",
+      "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
