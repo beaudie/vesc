@@ -1803,6 +1803,7 @@ void Renderer9::applyUniforms(ProgramD3D *programD3D)
             case GL_SAMPLER_2D:
             case GL_SAMPLER_CUBE:
             case GL_SAMPLER_EXTERNAL_OES:
+            case GL_SAMPLER_VIDEO_IMAGE_WEBGL:
                 break;
             case GL_BOOL:
             case GL_BOOL_VEC2:
