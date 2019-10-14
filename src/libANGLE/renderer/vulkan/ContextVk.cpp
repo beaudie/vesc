@@ -871,25 +871,6 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
     vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
     indirectBuffer->onRead(this, framebuffer, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
 
-    if (mVertexArray->getStreamingVertexAttribsMask().any())
-    {
-        // We have instanced vertex attributes that need to be emulated for Vulkan Flush all work so
-        // that we can read the indirect data.
-        ANGLE_TRY(finishImpl());
-        ANGLE_TRY(indirectBuffer->invalidate(this, 0, sizeof(VkDrawIndexedIndirectCommand)));
-        uint8_t *buffPtr;
-        ANGLE_TRY(indirectBuffer->map(this, &buffPtr));
-        const VkDrawIndexedIndirectCommand *indirectData =
-            reinterpret_cast<VkDrawIndexedIndirectCommand *>(buffPtr + indirectBufferOffset);
-        // We only care about the number of vertices and instanceCount in order to figure out what
-        // to do with the instanced data. Vertex/Index count and instanceCount are in the same spot
-        // for both indirect draw arrays as well as indirect draw elements.
-        vertexCount   = indirectData->indexCount;
-        instanceCount = indirectData->instanceCount;
-
-        indirectBuffer->unmap(getDevice());
-    }
-
     ANGLE_TRY(setupDraw(context, mode, firstVertex, vertexCount, instanceCount,
                         gl::DrawElementsType::InvalidEnum, nullptr, dirtyBitMask,
                         commandBufferOut));
@@ -1777,7 +1758,29 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
     gl::Buffer *indirectBuffer            = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     vk::BufferHelper *currentIndirectBuf  = &vk::GetImpl(indirectBuffer)->getBuffer();
     VkDeviceSize currentIndirectBufOffset = reinterpret_cast<VkDeviceSize>(indirect);
-    vk::CommandBuffer *commandBuffer      = nullptr;
+
+    if (mVertexArray->getStreamingVertexAttribsMask().any())
+    {
+        vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+        currentIndirectBuf->onRead(this, framebuffer, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+
+        // We have instanced vertex attributes that need to be emulated for Vulkan.
+        // invalidate any cache and map the buffer so that we can read the indirect data.
+        // Mapping the buffer will cause a flush.
+        ANGLE_TRY(currentIndirectBuf->invalidate(this, 0, sizeof(VkDrawIndirectCommand)));
+        uint8_t *buffPtr;
+        ANGLE_TRY(currentIndirectBuf->map(this, &buffPtr));
+        const VkDrawIndirectCommand *indirectData =
+            reinterpret_cast<VkDrawIndirectCommand *>(buffPtr + currentIndirectBufOffset);
+
+        ANGLE_TRY(drawArraysInstanced(context, mode, indirectData->firstVertex,
+                                      indirectData->vertexCount, indirectData->instanceCount));
+
+        currentIndirectBuf->unmap(getDevice());
+        return angle::Result::Continue;
+    }
+
+    vk::CommandBuffer *commandBuffer = nullptr;
 
     if (mode == gl::PrimitiveMode::LineLoop)
     {
@@ -1809,6 +1812,27 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
     gl::Buffer *indirectBuffer            = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     ASSERT(indirectBuffer);
     vk::BufferHelper *currentIndirectBuf = &vk::GetImpl(indirectBuffer)->getBuffer();
+
+    if (mVertexArray->getStreamingVertexAttribsMask().any())
+    {
+        vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+        currentIndirectBuf->onRead(this, framebuffer, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+
+        // We have instanced vertex attributes that need to be emulated for Vulkan.
+        // invalidate any cache and map the buffer so that we can read the indirect data.
+        // Mapping the buffer will cause a flush.
+        ANGLE_TRY(currentIndirectBuf->invalidate(this, 0, sizeof(VkDrawIndexedIndirectCommand)));
+        uint8_t *buffPtr;
+        ANGLE_TRY(currentIndirectBuf->map(this, &buffPtr));
+        const VkDrawIndexedIndirectCommand *indirectData =
+            reinterpret_cast<VkDrawIndexedIndirectCommand *>(buffPtr + currentIndirectBufOffset);
+
+        ANGLE_TRY(drawElementsInstanced(context, mode, indirectData->indexCount, type, nullptr,
+                                        indirectData->instanceCount));
+
+        currentIndirectBuf->unmap(getDevice());
+        return angle::Result::Continue;
+    }
 
     if (type == gl::DrawElementsType::UnsignedByte && mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
     {
