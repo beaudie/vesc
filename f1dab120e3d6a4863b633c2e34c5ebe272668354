@@ -283,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "8d91b5d6_7e1e24e7",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T22:35:48Z",
+      "side": 1,
+      "message": "Yeah, taking a closer look I see it might be possible that the state notification gets called in a lot of places. Including some that are not gl::Texture calls. Like the SRV queries. So it makes sense to use the pattern. Thanks for the explanation.",
+      "parentUuid": "d6f18f08_0b39b073",
+      "range": {
+        "startLine": 190,
+        "startChar": 4,
+        "endLine": 190,
+        "endChar": 54
+      },
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e293589e_a380645e",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 17
