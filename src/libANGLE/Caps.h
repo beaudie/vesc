@@ -544,6 +544,9 @@ struct Extensions
 
     // GL_ANGLE_get_image
     bool getImageANGLE = false;
+
+    // WEBGL_video_texture
+    bool webglVideoTexture = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct
