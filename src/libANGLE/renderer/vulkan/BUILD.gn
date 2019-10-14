@@ -258,13 +258,12 @@ angle_source_set("angle_vulkan_backend") {
   libs = []
   deps = [
     ":angle_vulkan",
-    "$angle_glslang_dir:glslang_default_resource_limits_sources",
-    "$angle_glslang_dir:glslang_sources",
     "$angle_root:angle_image_util",
     "$angle_spirv_tools_dir:spvtools_val",
   ]
   public_deps = [
     "$angle_root:libANGLE_headers",
+    "$angle_root:libangle_glslang_wrapper_headers",
     "$angle_root/third_party/vulkan-headers/src:vulkan_headers",
   ]
   public_configs = [ ":angle_vulkan_backend_config" ]
