@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "229d5491_c0e12f53",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T17:19:51Z",
+      "side": 1,
+      "message": "nit: can you wrap you CL description to 71 chars?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70e2e7b3_0597f161",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 3974,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T17:19:51Z",
+      "side": 1,
+      "message": "I think this is a complicated way of writing renderbufferObject-\u003egetSamples. I\u0027d suggest we just omit it to keep the code simpler. I actually would recommend we go back and remove kDefaultRenderToTextureSamples. I don\u0027t think there\u0027s anywhere it would be anything other than \"0\".",
+      "range": {
+        "startLine": 3973,
+        "startChar": 0,
+        "endLine": 3974,
+        "endChar": 94
+      },
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e910e9c_493177bf",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T17:19:51Z",
+      "side": 1,
+      "message": "what exactly is an emulated sample count? Some comments here would help.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 0
+      },
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6782a048_20a9a0a7",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1850,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T17:19:51Z",
+      "side": 1,
+      "message": "This stuff is all a bit tricky. I was wondering if we could make it easier to follow. I tried and didn\u0027t come up with anything useful. Just thought I\u0027d mention for posterity. :)",
+      "range": {
+        "startLine": 1844,
+        "startChar": 8,
+        "endLine": 1850,
+        "endChar": 19
+      },
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af3cced_b7505507",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T17:19:51Z",
+      "side": 1,
+      "message": "for instance, here you could directly call onStateChange.",
+      "range": {
+        "startLine": 906,
+        "startChar": 31,
+        "endLine": 906,
+        "endChar": 68
+      },
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03f37288_3ff2bc3e",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T17:19:51Z",
+      "side": 1,
+      "message": "same here. are there places where it is more difficult to do this callback?",
+      "range": {
+        "startLine": 949,
+        "startChar": 31,
+        "endLine": 949,
+        "endChar": 68
+      },
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c248120_f3afb248",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T17:19:51Z",
+      "side": 1,
+      "message": "It\u0027s a bit tricky but I recommend removing this guy if possible. It\u0027s really useful for doing callbacks in places where we don\u0027t know who our call is affecting. In this case it looks like at least in several places (the release calls) you already know in TextureD3D that your release calls will trigger a state change notification. In those places its easier to follow the code if we just directly notify the gl::Texture.",
+      "range": {
+        "startLine": 190,
+        "startChar": 4,
+        "endLine": 190,
+        "endChar": 54
+      },
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e293589e_a380645e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T17:19:51Z",
+      "side": 1,
+      "message": "this seems out of place to me. We should have synchronized the framebuffer status in the front-end before entering the back-end. It\u0027s a bit of a layering violation. I\u0027d recommend we just remove it.",
+      "range": {
+        "startLine": 1517,
+        "startChar": 0,
+        "endLine": 1521,
+        "endChar": 5
+      },
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0677550_5b43156f",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T17:19:51Z",
+      "side": 1,
+      "message": "Bear with me, kinda bikeshedding, but intrinsic doesn\u0027t seem to occur in the extension spec:\n\nhttps://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_multisampled_render_to_texture.txt\n\nIs there a terminology from the spec we can reuse here? Not sure what it means.",
+      "range": {
+        "startLine": 611,
+        "startChar": 45,
+        "endLine": 611,
+        "endChar": 58
+      },
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35f91211_d72e380a",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T17:19:51Z",
+      "side": 1,
+      "message": "Thanks for all the tests!",
+      "revId": "f1dab120e3d6a4863b633c2e34c5ebe272668354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
