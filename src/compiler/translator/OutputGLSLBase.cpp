@@ -992,7 +992,7 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
             {
                 if (node->getOp() == EOpCallBuiltInFunction)
                 {
-                    out << translateTextureFunction(node->getFunction()->name());
+                    out << translateTextureFunction(node->getFunction()->name(), mCompileOptions);
                 }
                 else
                 {
@@ -1222,6 +1222,13 @@ void TOutputGLSLBase::visitPreprocessorDirective(TIntermPreprocessorDirective *n
 
 ImmutableString TOutputGLSLBase::getTypeName(const TType &type)
 {
+    if (type.getBasicType() == EbtSamplerVideoWEBGL)
+    {
+        // TODO(http://anglebug.com/3889): translate SamplerVideoWEBGL into different token
+        // when necessary (e.g. on Android devices)
+        return ImmutableString("sampler2D");
+    }
+
     return GetTypeName(type, mHashFunction, &mNameMap);
 }
 

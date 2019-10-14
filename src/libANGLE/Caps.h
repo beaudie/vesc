@@ -557,6 +557,8 @@ struct Extensions
     {
         return (drawElementsBaseVertexOES || drawElementsBaseVertexEXT);
     }
+    // WEBGL_video_texture
+    bool webglVideoTexture = false;
 };
 
 // Pointer to a boolean memeber of the Extensions struct

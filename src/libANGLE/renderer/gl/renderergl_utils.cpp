@@ -1113,7 +1113,7 @@ void GenerateCaps(const FunctionsGL *functions,
                                     functions->hasGLExtension("GL_ARB_pixel_buffer_object") ||
                                     functions->hasGLExtension("GL_EXT_pixel_buffer_object") ||
                                     functions->hasGLESExtension("GL_NV_pixel_buffer_object");
-    extensions->glSync = nativegl::SupportsFenceSync(functions);
+    extensions->glSync    = nativegl::SupportsFenceSync(functions);
     extensions->mapBuffer = functions->isAtLeastGL(gl::Version(1, 5)) ||
                             functions->isAtLeastGLES(gl::Version(3, 0)) ||
                             functions->hasGLESExtension("GL_OES_mapbuffer");
@@ -1153,6 +1153,10 @@ void GenerateCaps(const FunctionsGL *functions,
                                    functions->hasGLESExtension("GL_EXT_shader_texture_lod");
     extensions->fragDepth = functions->standard == STANDARD_GL_DESKTOP ||
                             functions->hasGLESExtension("GL_EXT_frag_depth");
+
+    // Support video texture extension on non Android backends.
+    // TODO(crbug.com/776222): support Android and Apple devices.
+    extensions->webglVideoTexture = !IsAndroid() && !IsApple();
 
     if (functions->hasGLExtension("GL_ARB_shader_viewport_layer_array") ||
         functions->hasGLExtension("GL_NV_viewport_array2"))
@@ -1705,7 +1709,7 @@ bool UseTexImage2D(gl::TextureType textureType)
     return textureType == gl::TextureType::_2D || textureType == gl::TextureType::CubeMap ||
            textureType == gl::TextureType::Rectangle ||
            textureType == gl::TextureType::_2DMultisample ||
-           textureType == gl::TextureType::External;
+           textureType == gl::TextureType::External || textureType == gl::TextureType::VideoImage;
 }
 
 bool UseTexImage3D(gl::TextureType textureType)
@@ -1738,6 +1742,18 @@ GLenum GetTextureBindingQuery(gl::TextureType textureType)
             UNREACHABLE();
             return 0;
     }
+}
+
+GLenum GetTextureBindingTarget(gl::TextureType textureType)
+{
+    // TODO(http://anglebug.com/3889: support external image and rectangle)
+    return textureType == gl::TextureType::VideoImage ? GL_TEXTURE_2D : ToGLenum(textureType);
+}
+
+GLenum GetTextureBindingTarget(gl::TextureTarget textureTarget)
+{
+    // TODO(http://anglebug.com/3889: support external image and rectangle)
+    return textureTarget == gl::TextureTarget::VideoImage ? GL_TEXTURE_2D : ToGLenum(textureTarget);
 }
 
 GLenum GetBufferBindingQuery(gl::BufferBinding bufferBinding)
@@ -1779,6 +1795,18 @@ std::string GetBufferBindingString(gl::BufferBinding bufferBinding)
     std::ostringstream os;
     os << bufferBinding << "_BINDING";
     return os.str();
+}
+
+gl::TextureType GetNativeTextureType(gl::TextureType type)
+{
+    if (type != gl::TextureType::VideoImage)
+    {
+        return type;
+    }
+
+    // TODO(http://anglebug.com/3889): need to figure out rectangle texture and
+    // external image when these backend are implemented.
+    return gl::TextureType::_2D;
 }
 
 }  // namespace nativegl
