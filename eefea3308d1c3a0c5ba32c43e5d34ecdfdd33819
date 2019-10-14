@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b70f603_8cacb6ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T13:03:23Z",
+      "side": 1,
+      "message": "nit: omit the \u0027Request to\u0027",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 11
+      },
+      "revId": "eefea3308d1c3a0c5ba32c43e5d34ecdfdd33819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62a382b5_d00acceb",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T13:03:23Z",
+      "side": 1,
+      "message": "can you try removing this? It seems like it should be redundant.",
+      "range": {
+        "startLine": 621,
+        "startChar": 0,
+        "endLine": 623,
+        "endChar": 3
+      },
+      "revId": "eefea3308d1c3a0c5ba32c43e5d34ecdfdd33819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c00de3b6_5b571318",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T13:03:23Z",
+      "side": 1,
+      "message": "Could you rename the Vulkan GlslangWrapper.cpp to GlslangWrapperVk? So we don\u0027t end up with duplicate file names with Metal.",
+      "revId": "eefea3308d1c3a0c5ba32c43e5d34ecdfdd33819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2df6507e_fd5dc5bb",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T13:03:23Z",
+      "side": 1,
+      "message": "Can you indicate here the file is shared between Vulkan and Metal?",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 61
+      },
+      "revId": "eefea3308d1c3a0c5ba32c43e5d34ecdfdd33819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c86ece3_42cd8533",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T13:03:23Z",
+      "side": 1,
+      "message": "I\u0027d recommend you remove the \u0027class\u0027 wrapper entirely. You can rename the methods to GlslangInitialize, GlslangGetShaderSource, GlslangGetShaderCode, etc, and make GetShaderCodeImpl private to the cpp file.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 1
+      },
+      "revId": "eefea3308d1c3a0c5ba32c43e5d34ecdfdd33819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50201d97_5b8eb5c1",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T13:03:23Z",
+      "side": 1,
+      "message": "Strongly typed enums are a new cpp feature that makes the code a bit safer. You\u0027d use a pattern like:\n\nenum class GlslangError\n{\n   InvalidShader\n};",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 6
+      },
+      "revId": "eefea3308d1c3a0c5ba32c43e5d34ecdfdd33819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d92bf032_02735743",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T13:03:23Z",
+      "side": 1,
+      "message": "A couple suggestions here:\n\n* name this GlslangOptions to fit with the class flattening mentioned above.\n* define the callback type as  \u0027using GlslangErrorCallback \u003d std::function\u003c...\u003e;\u0027\n* instead of making the callback part of the options, pass it to the functions. This is a bit more consistent with how we use vk::Context, etc.\n* make sure each option has a default initialization value.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 0
+      },
+      "revId": "eefea3308d1c3a0c5ba32c43e5d34ecdfdd33819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3b86b7f_9474a480",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T13:03:23Z",
+      "side": 1,
+      "message": "instead of defining these sources here, can you define them in BUILD.gn directly? This file is only needed to share sources with Skia, and Skia doesn\u0027t build the Vulkan (or Metal) back-ends.",
+      "range": {
+        "startLine": 864,
+        "startChar": 0,
+        "endLine": 870,
+        "endChar": 0
+      },
+      "revId": "eefea3308d1c3a0c5ba32c43e5d34ecdfdd33819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
