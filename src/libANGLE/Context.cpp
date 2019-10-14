@@ -447,6 +447,13 @@ void Context::initialize()
         mZeroTextures[TextureType::External].set(this, zeroTextureExternal);
     }
 
+    if (mSupportedExtensions.webglVideoTexture)
+    {
+        Texture *zeroTextureVideoWEBGL =
+            new Texture(mImplementation.get(), {0}, TextureType::VideoTexture);
+        mZeroTextures[TextureType::VideoTexture].set(this, zeroTextureVideoWEBGL);
+    }
+
     mState.initializeZeroTextures(this, mZeroTextures);
 
     bindVertexArray({0});
@@ -9561,6 +9568,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
         {TextureType::External, exts.eglImageExternal || exts.eglStreamConsumerExternal},
         {TextureType::Rectangle, exts.textureRectangle},
         {TextureType::CubeMap, true},
+        {TextureType::VideoTexture, exts.webglVideoTexture},
     }};
 }
 

@@ -386,9 +386,9 @@ void StateManagerGL::bindBufferBase(gl::BufferBinding target, size_t index, GLui
     if (binding.buffer != buffer || binding.offset != static_cast<size_t>(-1) ||
         binding.size != static_cast<size_t>(-1))
     {
-        binding.buffer = buffer;
-        binding.offset = static_cast<size_t>(-1);
-        binding.size   = static_cast<size_t>(-1);
+        binding.buffer   = buffer;
+        binding.offset   = static_cast<size_t>(-1);
+        binding.size     = static_cast<size_t>(-1);
         mBuffers[target] = buffer;
         mFunctions->bindBufferBase(gl::ToGLenum(target), static_cast<GLuint>(index), buffer);
     }
@@ -406,9 +406,9 @@ void StateManagerGL::bindBufferRange(gl::BufferBinding target,
     auto &binding = mIndexedBuffers[target][index];
     if (binding.buffer != buffer || binding.offset != offset || binding.size != size)
     {
-        binding.buffer = buffer;
-        binding.offset = offset;
-        binding.size   = size;
+        binding.buffer   = buffer;
+        binding.offset   = offset;
+        binding.size     = size;
         mBuffers[target] = buffer;
         mFunctions->bindBufferRange(gl::ToGLenum(target), static_cast<GLuint>(index), buffer,
                                     offset, size);
@@ -429,7 +429,16 @@ void StateManagerGL::bindTexture(gl::TextureType type, GLuint texture)
     if (mTextures[type][mTextureUnitIndex] != texture)
     {
         mTextures[type][mTextureUnitIndex] = texture;
-        mFunctions->bindTexture(ToGLenum(type), texture);
+        if (type == gl::TextureType::VideoTexture)
+        {
+            // TODO(http://anglebug.com/3889: Implement binding when back resource is external
+            // image).
+            mFunctions->bindTexture(GL_TEXTURE_2D, texture);
+        }
+        else
+        {
+            mFunctions->bindTexture(ToGLenum(type), texture);
+        }
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
     }
 }

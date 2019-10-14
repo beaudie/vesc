@@ -40,6 +40,8 @@ GLint TextureTargetToLayer(TextureTarget target)
             return ImageIndex::kEntireLevel;
         case TextureTarget::_2D:
             return ImageIndex::kEntireLevel;
+        case TextureTarget::VideoTexture:
+            return ImageIndex::kEntireLevel;
         case TextureTarget::_2DArray:
             return ImageIndex::kEntireLevel;
         case TextureTarget::_2DMultisample:

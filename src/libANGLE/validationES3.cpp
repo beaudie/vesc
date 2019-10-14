@@ -400,6 +400,7 @@ bool ValidateES3TexImageParametersBase(Context *context,
     {
         case TextureType::_2D:
         case TextureType::External:
+        case TextureType::VideoTexture:
             if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
                 static_cast<GLuint>(height) > (caps.max2DTextureSize >> level))
             {
