@@ -2,6 +2,948 @@
   "comments": [
     {
       "key": {
+        "uuid": "44826ddb_eaef58d0",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "Thanks for the detailed comment.\n\nUsing inheritance is a good pattern. What you want to avoid are virtual functions because they destroy inlining and generally degrade performance. Could you do something like\n\n  mtl::BufferRef getCurrentBuffer() {\n     return mIsWeakReference ? mRef.weak.lock() : mRef.simple;\n  }\n\nprotected:\n  union SimpleOrWeakRef {\n     mtl::BufferRef simple;\n     mtl::BufferWeakRef weak;\n  };\n  bool mIsWeakReference;\n  SimpleOrWeakRef mRef;\n\n?",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 2
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51cbc1ff_5a920939",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "also would recommend you move these outside the class.",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 6
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e2ef062_ffc77c63",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "style-wise, you can omit all the unreferenced parameter fixes. We won\u0027t ever support the warning for unused parameters. It would be way too difficult.",
+      "range": {
+        "startLine": 250,
+        "startChar": 4,
+        "endLine": 250,
+        "endChar": 18
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e954506_46811b47",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "style comment: try to avoid default arguments for ANGLE. We prefer making all parameters explicit.",
+      "range": {
+        "startLine": 227,
+        "startChar": 21,
+        "endLine": 227,
+        "endChar": 60
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0ff3587_552c3f2a",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "I recommend you extract these nested types as well.",
+      "range": {
+        "startLine": 340,
+        "startChar": 0,
+        "endLine": 358,
+        "endChar": 0
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3e2ba0c_9679ccbf",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "same here. you can extract the type and leave the member variable.",
+      "range": {
+        "startLine": 359,
+        "startChar": 11,
+        "endLine": 359,
+        "endChar": 27
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "705c9cb7_5d088dec",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: spelling",
+      "range": {
+        "startLine": 132,
+        "startChar": 23,
+        "endLine": 132,
+        "endChar": 34
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff39d536_f87ca4b1",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: These functions don\u0027t seem to be necessary right now. Can we remove them?",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 784,
+        "endChar": 0
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf4bd1fe_63f7b6e9",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "does it makes sense to make a utils helper function for this?",
+      "range": {
+        "startLine": 1017,
+        "startChar": 0,
+        "endLine": 1031,
+        "endChar": 9
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b33a4c7_7d598ad8",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "is it necessary to keep a shadow copy of the default attributes?",
+      "range": {
+        "startLine": 1110,
+        "startChar": 2,
+        "endLine": 1110,
+        "endChar": 96
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80068e1f_569f8639",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "The split between RendererVk/DisplayVk is sort of an artifact of bad code design. Could you merge RendererMtl into DisplayMtl and use DisplayMtl everywhere you\u0027re using RendererMtl? Sorry, should probably have suggested this in the prior patch.",
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0999ffbf_5392f483",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: avoid default arguments, as mentioned in another comment.",
+      "range": {
+        "startLine": 27,
+        "startChar": 28,
+        "endLine": 29,
+        "endChar": 66
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25758677_61d74d8e",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "can you use RenderTargetCache here? If there\u0027s something missing in RenderTargetCache maybe I can help add it.",
+      "range": {
+        "startLine": 134,
+        "startChar": 3,
+        "endLine": 134,
+        "endChar": 73
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b33f32d3_e4a1f10b",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "is it possible to make a FeatureMtl class that you populate on startup and check that here? Similar to FeatureVk? It\u0027s preferable to avoid as many compile-time conditionals as possible.",
+      "range": {
+        "startLine": 246,
+        "startChar": 5,
+        "endLine": 246,
+        "endChar": 44
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c65947a7_87a466a3",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "same as other comments - use angle::MemoryBuffer or std::vector.",
+      "range": {
+        "startLine": 704,
+        "startChar": 9,
+        "endLine": 704,
+        "endChar": 27
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07d47883_068cdf37",
+        "filename": "src/libANGLE/renderer/metal/GlslangWrapper.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "As mentioned in another CL, I think you can dispense with the \"wrapper class\" idiom and just use helper functions.",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 23
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcfdde9f_fece2c35",
+        "filename": "src/libANGLE/renderer/metal/GlslangWrapper.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "As mentioned in another CL, can we call these files GlslangWrapperMtl.h/cpp? To keep them uniquely named from Vulkan.",
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "415014f9_0a56340c",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: extract types.",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 6
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94dc2454_adeabf4c",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: use using syntax.",
+      "range": {
+        "startLine": 165,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 11
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e974c67a_3497f454",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: use explicit types for this and above",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 8
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7cfdbe8_9eea7a7f",
+        "filename": "src/libANGLE/renderer/metal/StateCacheMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "Kinda bike shedding, but I suggest we use a naming pattern like mtl::StateCache instead of mtl::StateCacheMtl. The \"Mtl\" suffix is usually reserved for implementations of the Impl interface classes: BufferMtl, TextureMtl, etc. That would mean renaming these files to StateCache.h/cpp.",
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1252ecd_40f73165",
+        "filename": "src/libANGLE/renderer/metal/StateCacheMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "can you also give this a constructor that memsets everything to \"0\"?",
+      "range": {
+        "startLine": 29,
+        "startChar": 7,
+        "endLine": 29,
+        "endChar": 18
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5259f044_03f9534d",
+        "filename": "src/libANGLE/renderer/metal/StateCacheMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "It\u0027s preferably generally to put anything not important for performance in the cpp to minimize binary size and recompile time. Could you move these into StateCache.cpp?",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 58
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97f95cad_bb5afa20",
+        "filename": "src/libANGLE/renderer/metal/StateCacheMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "maybe make this a part of FeaturesMtl as well.",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 48
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01545c46_85d2a6ff",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "maybe make a new define for ANGLE_ENABLE_METAL_FRAME_CAPTURE that defaults to ANGLE_ENABLE_ASSERTS. Potentially you could control this via GN as well.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05976df4_05a115da",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: can you use explicit type for these (and below) as the type isn\u0027t clear to the reader?",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 9
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "556ba603_5302ba27",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "this is an ES 3.0 feature in any case. You can throw in an UNIMPLEMENTED() or UNREACHABLE() if you want.",
+      "range": {
+        "startLine": 368,
+        "startChar": 8,
+        "endLine": 368,
+        "endChar": 83
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ded9026b_32e0587a",
+        "filename": "src/libANGLE/renderer/metal/UtilsMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "Another naming request: can we call these class and files mtl::ShaderLibrary/ShaderLibrary.cpp/.h? I\u0027ll put up a CL to renaming the Vulkan classes. Utils is just too vague.",
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f424fce_ef1b05e1",
+        "filename": "src/libANGLE/renderer/metal/UtilsMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "I also suggest you extract these structs into the namespace, instead of using nesting. Just makes them easier to work with.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 6
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ff12c08_e60c03af",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "is this something you\u0027re using for debugging? Maybe add a comment with your intent.",
+      "range": {
+        "startLine": 18,
+        "startChar": 8,
+        "endLine": 18,
+        "endChar": 36
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aca73e6_4b357907",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "can you use explicit types for these? makes it easier to read.",
+      "range": {
+        "startLine": 141,
+        "startChar": 9,
+        "endLine": 141,
+        "endChar": 14
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6df846f_433d9130",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "same for these",
+      "range": {
+        "startLine": 165,
+        "startChar": 9,
+        "endLine": 165,
+        "endChar": 13
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99a2f53d_a025b66f",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: to flatten this, switch the condition.\n\nif (!dirty)\n return\n\n...",
+      "range": {
+        "startLine": 269,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 13
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d184d0_a696c0a1",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "can you use an explicit type here? same comment reasoning.",
+      "range": {
+        "startLine": 278,
+        "startChar": 8,
+        "endLine": 278,
+        "endChar": 12
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fd6bd24_cc1eec45",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "same comment here about helper functions over macros.",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 283,
+        "endChar": 50
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec083ccb_33f56205",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "I don\u0027t think this should be a goal. It\u0027s quite tricky. I\u0027d recommend you just drop the TODO.",
+      "range": {
+        "startLine": 359,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 41
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13158c47_1d5598d8",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "It\u0027s very undefined behaviour if the user gives us any kind of invalid pointer. ANGLE does check for nullptr already though so you can change this to an ASSERT.",
+      "range": {
+        "startLine": 373,
+        "startChar": 12,
+        "endLine": 373,
+        "endChar": 32
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f33d849_512d3bb5",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "is this ref necessary? If so, use ANGLE_UNUSED_VARIABLE. otherwise drop it.",
+      "range": {
+        "startLine": 379,
+        "startChar": 12,
+        "endLine": 379,
+        "endChar": 32
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d27a7638_e9d625d4",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "you can make this an ASSERT if you want.",
+      "range": {
+        "startLine": 459,
+        "startChar": 0,
+        "endLine": 460,
+        "endChar": 20
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75d3780f_7e60e721",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "maybe make this a part of FeatureMtl as suggested elsewhere.",
+      "range": {
+        "startLine": 487,
+        "startChar": 4,
+        "endLine": 487,
+        "endChar": 31
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78d0beb1_21c2c06c",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: can you make this explicit?",
+      "range": {
+        "startLine": 541,
+        "startChar": 10,
+        "endLine": 541,
+        "endChar": 14
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b1337ea_2fd3fe2f",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: naming. dynamic buffer -\u003e buffer pool. There\u0027s a couple instances in these comments.",
+      "range": {
+        "startLine": 28,
+        "startChar": 3,
+        "endLine": 28,
+        "endChar": 18
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5a4f211c_6b3520b0",
         "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.mm",
         "patchSetId": 10
@@ -18,6 +960,467 @@
         "startChar": 6,
         "endLine": 25,
         "endChar": 34
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc137187_3e48dbf5",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "Metal might handle this automatically. Vulkan is often the most manual API to use. You can remove it if it is not used. It would clean up the code slightly.",
+      "parentUuid": "5a4f211c_6b3520b0",
+      "range": {
+        "startLine": 25,
+        "startChar": 6,
+        "endLine": 25,
+        "endChar": 34
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82b0adce_6341f4bb",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "can you add some short comments as to what the functions do?",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 66
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfddc62c_85efdabc",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "general style comment: prefer using \u003cname\u003e \u003d \u003ctype\u003e syntax as it is more modern and more readable.",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 59
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fdbf49b_51621b60",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "std::deque is probably not what you want. I think internally it uses a linked list. I\u0027d recommend you just use std::vector here. A few extra lines of code to do the deletion calls is not that bad, and in return you get a much less opaque type.\n\nAlso I think you can call these mQueueCmdBuffers/Tmp, we probably will always be storing Metal command buffers here.",
+      "range": {
+        "startLine": 72,
+        "startChar": 9,
+        "endLine": 72,
+        "endChar": 14
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d4e26a9_d2a98f92",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "how did you end up with std::atomic for serials? Are you doing multi-threading in your testing? Or is this a defensive measure?\n\nAt least I think for serials you could define a mtl::Serial or rx::SerialMtl class that is just a \u0027using\u0027 pattern.",
+      "range": {
+        "startLine": 76,
+        "startChar": 9,
+        "endLine": 76,
+        "endChar": 15
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe892f86_49bfbcbc",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "general comment: can you extract as many nested classes as possible into public classes? I\u0027ve found it\u0027s usually easier to work with non-nested classes.",
+      "range": {
+        "startLine": 161,
+        "startChar": 4,
+        "endLine": 203,
+        "endChar": 0
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3068bb79_42d6d4fc",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: !mQueuedCmdBuffers.empty()",
+      "range": {
+        "startLine": 78,
+        "startChar": 49,
+        "endLine": 78,
+        "endChar": 78
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99f7b7b8_a9360b88",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "could this be a helper function? Again I\u0027m not as familiar with ObjC and templates. Try to avoid macros whenever possible. They\u0027re quite tricky to debug.",
+      "range": {
+        "startLine": 424,
+        "startChar": 8,
+        "endLine": 424,
+        "endChar": 42
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bf149de_c59034a8",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "can you put all these in the mtl:: namespace to keep them isolated?",
+      "range": {
+        "startLine": 47,
+        "startChar": 19,
+        "endLine": 47,
+        "endChar": 37
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d4085cf_00100c45",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: prefer \u0027using\u0027 to \u0027typedef\u0027 as mentioned elsewhere",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 8
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "365a0e1f_9a5dde5f",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "You\u0027re using a shared_ptr to a Texture, and internally each Texture is a Resource that has a shared_ptr to a Ref. I kinda wish there was some way to use a single sharing mechanism. I\u0027m not familiar enough with the code to know if that\u0027s possible. Maybe at worse you can leave a couple comments explaining some of the use case.",
+      "range": {
+        "startLine": 40,
+        "startChar": 13,
+        "endLine": 40,
+        "endChar": 23
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8aa564b_dceb38ee",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: no need to use \u0027mCmd\u0027 prefix for basic structs. Just cmBufferQueueSerial/cpuReadMemDirty.",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 38
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a350f79_74537fb6",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "can you make this a small helper function? I\u0027m not as familiar with ObjC.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 76
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ee8d556_c950bf6f",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "using TextureRef by value is going to copy a shared_ptr. This could internally trigger heap memory allocations. Try passing Refs by const \u0026 when possible.",
+      "range": {
+        "startLine": 32,
+        "startChar": 40,
+        "endLine": 32,
+        "endChar": 51
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5e888eb_793e3a0d",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "is this an implementation error? maybe you should just change this to an ASSERT.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 5
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fbcb201_92db49b2",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "does metal allow you to use STL types like std::vector? I\u0027d use that here. or angle::MemoryBuffer. This will let you use an RAII pattern.",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 71
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a401df3_a22eae32",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 77
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82231bcf_a26000f8",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "you will be able to use TRY macros here too.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 0
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d382474_af4735b9",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "nit: can you use an explicit type here? It would make it clearer to the reader.",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 9
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71574d17_4c17d3d0",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:06:07Z",
+      "side": 1,
+      "message": "this function looks useful. Can you move it into common/utilities.h/cpp?",
+      "range": {
+        "startLine": 403,
+        "startChar": 5,
+        "endLine": 403,
+        "endChar": 27
       },
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
