@@ -514,6 +514,9 @@ bool ValidTextureTarget(const Context *context, TextureType type)
         case TextureType::_2DMultisampleArray:
             return context->getExtensions().textureStorageMultisample2DArray;
 
+        case TextureType::VideoTexture:
+            return context->getExtensions().webglVideoTexture;
+
         default:
             return false;
     }
@@ -581,6 +584,8 @@ bool ValidTexture2DDestinationTarget(const Context *context, TextureTarget targe
             return true;
         case TextureTarget::Rectangle:
             return context->getExtensions().textureRectangle;
+        case TextureTarget::VideoTexture:
+            return context->getExtensions().webglVideoTexture;
         default:
             return false;
     }
@@ -780,6 +785,7 @@ bool ValidMipLevel(const Context *context, TextureType type, GLint level)
 
         case TextureType::External:
         case TextureType::Rectangle:
+        case TextureType::VideoTexture:
             return level == 0;
 
         case TextureType::_3D:
@@ -5708,6 +5714,10 @@ bool ValidateTexParameterBase(Context *context,
             {
                 context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                 return false;
+            }
+            if (target == TextureType::VideoTexture && !context->getExtensions().webglVideoTexture)
+            {
+                context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
             }
             break;
 
