@@ -34,6 +34,24 @@
       "revId": "a6756d9e51c24f2e92e38c6d0de78384f23924b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f575240e_7f83c2b5",
+        "filename": "src/libANGLE/renderer/metal/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1160249
+      },
+      "writtenOn": "2019-10-14T20:55:36Z",
+      "side": 1,
+      "message": "I *thought* that a 10.10 deployment target could result in it being weak linked automatically, but, nope, I was confusing that with something else (just verified).",
+      "parentUuid": "22756c5a_4e96cebc",
+      "revId": "a6756d9e51c24f2e92e38c6d0de78384f23924b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
