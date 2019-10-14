@@ -441,6 +441,15 @@ void Context::initialize()
         mZeroTextures[TextureType::External].set(this, zeroTextureExternal);
     }
 
+    // This will destroy native 2D image. Ensure state manager aware this when binding
+    // this texture type.
+    if (mSupportedExtensions.webglVideoTexture)
+    {
+        Texture *zeroTextureVideoImage =
+            new Texture(mImplementation.get(), {0}, TextureType::VideoImage);
+        mZeroTextures[TextureType::VideoImage].set(this, zeroTextureVideoImage);
+    }
+
     mState.initializeZeroTextures(this, mZeroTextures);
 
     bindVertexArray({0});
@@ -8853,6 +8862,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
         {TextureType::External, exts.eglImageExternal || exts.eglStreamConsumerExternal},
         {TextureType::Rectangle, exts.textureRectangle},
         {TextureType::CubeMap, true},
+        {TextureType::VideoImage, exts.webglVideoTexture},
     }};
 }
 
