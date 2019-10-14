@@ -4,6 +4,7 @@
 #
 # This file houses the build configuration for the ANGLE Metal back-end.
 
+import("//build/config/mac/mac_sdk.gni")
 import("../../../../gni/angle.gni")
 
 assert(angle_enable_metal)
@@ -65,7 +66,14 @@ angle_source_set("angle_metal_backend") {
   cflags_objc += objc_flags
   cflags_objcc += objc_flags
 
-  libs += [ "Metal.framework" ]
+  if (mac_sdk_version == "10.10") {
+    ldflags += [
+      "-weak_framework",
+      "Metal",
+    ]
+  } else {
+    libs += [ "Metal.framework" ]
+  }
 
   if (is_mac) {
     libs += [
