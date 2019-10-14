@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "6e98c8be_1b74623d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:57:06Z",
+      "side": 1,
+      "message": "I like the code reuse here. You should notice that other member functions use lower case start initials. Can you please use that style? See style guide:\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#naming\n\nAlso as a suggestion I\u0027d call this \u0027copyImageDataToStagingBuffer\u0027",
+      "range": {
+        "startLine": 1143,
+        "startChar": 25,
+        "endLine": 1143,
+        "endChar": 51
+      },
+      "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ae1d7b7_a782ca2c",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
@@ -48,6 +71,52 @@
       "writtenOn": "2019-10-14T03:09:51Z",
       "side": 1,
       "message": "It records a copyImageToBuffer call, and line 1184 records a copyBufferToImage.\nBut I see in some cases, the copyBufferToImage is called before copyImageToBuffer in driver, this causes incorrect image content.\nThe copyImageDataToBuffer starts a commands, and later in ensureImageInitializedImpl it starts a new commands, and these two commands have no dependency, so how can we make sure the copyImageToBuffer is called first?",
+      "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d55b565a_098dee31",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:57:06Z",
+      "side": 1,
+      "message": "I see in generateMipmap you\u0027re calling ensureImageInitializedImpl directly because you want to either use a) the enabled level count or b) the full mip chain. I think you could get better code reuse if you add an extra parameter to ensureImageInitialized:\n\nenum class ImageMipLevels\n{\n   EnabledLevels,\n   FullMipChain,\n};\n\nangle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels);\n\nuint32_t Texturevk::getMipLevelCount(ImageMipLevels mipLevels)\n{\n  switch (mipLevels)\n  {\n     ...\n  }\n}",
+      "range": {
+        "startLine": 1337,
+        "startChar": 25,
+        "endLine": 1337,
+        "endChar": 47
+      },
+      "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b4ff6e6_af5cf402",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1818,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-14T16:57:06Z",
+      "side": 1,
+      "message": "nit: you probably don\u0027t need to define a new function here. you can call mState.getEnabledLevelCount directly.",
+      "range": {
+        "startLine": 1814,
+        "startChar": 0,
+        "endLine": 1818,
+        "endChar": 1
+      },
       "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
