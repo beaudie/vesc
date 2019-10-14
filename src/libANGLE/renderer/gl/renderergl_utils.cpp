@@ -1148,6 +1148,10 @@ void GenerateCaps(const FunctionsGL *functions,
     extensions->fragDepth = functions->standard == STANDARD_GL_DESKTOP ||
                             functions->hasGLESExtension("GL_EXT_frag_depth");
 
+    // Support video texture extension on non Android backends.
+    // TODO(crbug.com/776222): support Android.
+    extensions->webglVideoTexture = !IsAndroid();
+
     if (functions->hasGLExtension("GL_ARB_shader_viewport_layer_array") ||
         functions->hasGLExtension("GL_NV_viewport_array2"))
     {
