@@ -573,9 +573,19 @@ config("libANGLE_config") {
 
 angle_source_set("libANGLE_headers") {
   sources = libangle_headers
+
   public_deps = [
     ":angle_common",
     ":angle_translator_headers",
+  ]
+}
+
+angle_source_set("angle_glslang_wrapper") {
+  sources = libangle_glslang_wrapper_sources
+  deps = [
+    ":libANGLE_headers",
+    "${angle_glslang_dir}:glslang_default_resource_limits_sources",
+    "${angle_glslang_dir}:glslang_sources",
   ]
 }
 
@@ -607,6 +617,10 @@ angle_source_set("libANGLE_base") {
 
   if (angle_enable_metal) {
     public_deps += [ "src/libANGLE/renderer/metal:angle_metal_backend" ]
+  }
+
+  if (angle_enable_vulkan || angle_enable_metal) {
+    public_deps += [ ":angle_glslang_wrapper" ]
   }
 
   # Enable extra Chromium style warnings for libANGLE.
