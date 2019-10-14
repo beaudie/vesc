@@ -1103,7 +1103,6 @@ void Context::bindTexture(TextureType target, TextureID handle)
             mState.mTextureManager->checkTextureAllocation(mImplementation.get(), handle, target);
     }
 
-    ASSERT(texture);
     mState.setSamplerTexture(this, target, texture);
     mStateCache.onActiveTextureChange(this);
 }
@@ -8823,6 +8822,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
         {TextureType::External, exts.eglImageExternal || exts.eglStreamConsumerExternal},
         {TextureType::Rectangle, exts.textureRectangle},
         {TextureType::CubeMap, true},
+        {TextureType::VideoImage, exts.webglVideoTexture},
     }};
 }
 
