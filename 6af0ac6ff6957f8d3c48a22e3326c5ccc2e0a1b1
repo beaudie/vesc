@@ -113,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "f2e5f815_2099745e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-15T07:51:38Z",
+      "side": 1,
+      "message": "Or can stageSubresourceUpdateFromImage be used? we can extend the functionality to copy old image to new image.\nSo that there is only one step copy, but not two",
+      "parentUuid": "d954b17a_71e2646f",
+      "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d55b565a_098dee31",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
