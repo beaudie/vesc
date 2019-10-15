@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fd7feb5_f0b7e6f7",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-15T21:20:54Z",
+      "side": 1,
+      "message": "You can take all of these out (or rebase). My fix for these tests landed:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1855964",
+      "revId": "38a739e00aa73ad55471b5ad92a98fb75f15f256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
