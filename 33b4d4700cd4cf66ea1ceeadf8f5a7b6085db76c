@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5d98b52_7dd12bda",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-10-15T16:37:16Z",
+      "side": 1,
+      "message": "Never returns true?",
+      "range": {
+        "startLine": 208,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 21
+      },
+      "revId": "33b4d4700cd4cf66ea1ceeadf8f5a7b6085db76c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
