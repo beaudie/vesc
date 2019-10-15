@@ -3835,7 +3835,7 @@ void Renderer11::generateCaps(gl::Caps *outCaps,
                               gl::Limitations *outLimitations) const
 {
     d3d11_gl::GenerateCaps(mDevice, mDeviceContext, mRenderer11DeviceCaps, getFeatures(), outCaps,
-                           outTextureCaps, outExtensions, outLimitations);
+                           outTextureCaps, outExtensions, outLimitations, mDescription);
 }
 
 void Renderer11::initializeFeatures(angle::FeaturesD3D *features) const

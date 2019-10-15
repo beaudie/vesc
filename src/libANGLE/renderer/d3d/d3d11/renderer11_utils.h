@@ -78,7 +78,8 @@ void GenerateCaps(ID3D11Device *device,
                   gl::Caps *caps,
                   gl::TextureCapsMap *textureCapsMap,
                   gl::Extensions *extensions,
-                  gl::Limitations *limitations);
+                  gl::Limitations *limitations,
+                  const char *description);
 
 void GetSamplePosition(GLsizei sampleCount, size_t index, GLfloat *xy);
 
