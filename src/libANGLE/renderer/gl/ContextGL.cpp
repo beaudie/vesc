@@ -682,6 +682,11 @@ std::string ContextGL::getRendererDescription() const
     return mRenderer->getRendererDescription();
 }
 
+std::string ContextGL::getImplementationFlavor() const
+{
+    return "GL";
+}
+
 void ContextGL::insertEventMarker(GLsizei length, const char *marker)
 {
     mRenderer->insertEventMarker(length, marker);

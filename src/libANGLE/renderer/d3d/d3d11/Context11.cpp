@@ -449,6 +449,11 @@ std::string Context11::getRendererDescription() const
     return mRenderer->getRendererDescription();
 }
 
+std::string Context11::getImplementationFlavor() const
+{
+    return "D3D11";
+}
+
 void Context11::insertEventMarker(GLsizei length, const char *marker)
 {
     mRenderer->getAnnotator()->setMarker(marker);

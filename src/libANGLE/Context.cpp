@@ -647,8 +647,8 @@ egl::Error Context::makeCurrent(egl::Display *display,
 
     if (!mHasBeenCurrent)
     {
-        initialize();
         initRendererString();
+        initialize();
         initVersionStrings();
         initExtensionStrings();
 
@@ -3487,6 +3487,12 @@ void Context::initCaps()
     mState.mCaps = mImplementation->getNativeCaps();
 
     mSupportedExtensions = generateSupportedExtensions();
+    std::string rendererString(reinterpret_cast<const char *>(mRendererString));
+    if (mImplementation->getImplementationFlavor().find("D3D11") != std::string::npos &&
+        rendererString.find("Adreno") != std::string::npos)
+    {
+        mSupportedExtensions.multisampledRenderToTexture = false;
+    }
     mState.mExtensions   = mSupportedExtensions;
 
     mState.mLimitations = mImplementation->getNativeLimitations();

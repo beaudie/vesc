@@ -155,6 +155,10 @@ std::string ContextMtl::getRendererDescription() const
 {
     return getRenderer()->getRendererDescription();
 }
+std::string ContextMtl::getImplementationFlavor() const
+{
+    return "Mtl";
+}
 
 // EXT_debug_marker
 void ContextMtl::insertEventMarker(GLsizei length, const char *marker) {}

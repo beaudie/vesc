@@ -1810,6 +1810,11 @@ std::string ContextVk::getRendererDescription() const
     return mRenderer->getRendererDescription();
 }
 
+std::string ContextVk::getImplementationFlavor() const
+{
+    return "Vk";
+}
+
 void ContextVk::insertEventMarker(GLsizei length, const char *marker)
 {
     std::string markerStr(marker, length <= 0 ? strlen(marker) : length);

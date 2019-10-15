@@ -265,6 +265,11 @@ std::string Context9::getRendererDescription() const
     return mRenderer->getRendererDescription();
 }
 
+std::string Context9::getImplementationFlavor() const
+{
+    return "D3D9";
+}
+
 void Context9::insertEventMarker(GLsizei length, const char *marker)
 {
     mRenderer->getAnnotator()->setMarker(marker);
