@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a421797f_04337b9a",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T18:44:06Z",
+      "side": 1,
+      "message": "Can we a) file an issue to upstream this fix to Khronos and b) put this in angle_vulkan_backend_config for now? Seems like it belongs in there.",
+      "range": {
+        "startLine": 571,
+        "startChar": 0,
+        "endLine": 573,
+        "endChar": 5
+      },
+      "revId": "cda2cdd25641f50d3205729471aeccaccce6af2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
