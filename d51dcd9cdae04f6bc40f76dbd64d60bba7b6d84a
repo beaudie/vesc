@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "85f19209_9d3c89dd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T17:03:18Z",
+      "side": 1,
+      "message": "The thought occurred to me as well. I think it\u0027s out of scope for this CL. Personally I\u0027d be okay with someone introducing type safe layer/level indexes in the code. It might be tricky to plumb through all the way.",
+      "parentUuid": "a8a3f5fe_e129e49b",
+      "revId": "d51dcd9cdae04f6bc40f76dbd64d60bba7b6d84a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2fc1d806_b3db36cf",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "d51dcd9cdae04f6bc40f76dbd64d60bba7b6d84a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78130d81_0c111e49",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T17:03:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fc1d806_b3db36cf",
+      "revId": "d51dcd9cdae04f6bc40f76dbd64d60bba7b6d84a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

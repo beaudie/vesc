@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de201c3d_0eec6e3b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T17:03:18Z",
+      "side": 0,
+      "message": "original code that was moved.",
+      "range": {
+        "startLine": 1513,
+        "startChar": 26,
+        "endLine": 1513,
+        "endChar": 47
+      },
+      "revId": "da1f90aa77b4fc5dcb6a5d17def690d3b01e9c1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

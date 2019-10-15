@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "24279393_f01baef4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T17:03:18Z",
+      "side": 1,
+      "message": "It\u0027s a good question. It\u0027s called this way to avoid std::vector reallocations. If we had a reallocation all the existing pointers to ImageViews would become invalidated. That might be a problem right now as some of them are cached. I\u0027ll leave a comment here with a few details.\n\nOne of the calls does look fishy (the one that passes in \"1\" for levelCount). I wonder if that\u0027s a subtle bug.",
+      "parentUuid": "9a45e56d_64f43b9e",
+      "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d569e75a_569266f2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2019-10-15T16:13:30Z",
       "side": 1,
       "message": "Do you need to do an layerViews.clear() here?",
+      "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3fb9395_bbc9df7b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2921,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T17:03:18Z",
+      "side": 1,
+      "message": "It\u0027s redundant with the clear() below. Clearing the outer vector should suffice.",
+      "parentUuid": "d569e75a_569266f2",
       "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "4f7ab4f7_8d88310b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2943,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T17:03:18Z",
+      "side": 1,
+      "message": "Same comment.",
+      "parentUuid": "3bda2336_5b487d2c",
+      "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c8514ce_e0a538f7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7
@@ -64,6 +118,24 @@
       "writtenOn": "2019-10-15T00:00:28Z",
       "side": 1,
       "message": "Should you file a bug to track this?",
+      "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af851797_a776348a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2980,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T17:03:18Z",
+      "side": 1,
+      "message": "Yes! Thanks for catching this. Filed http://anglebug.com/4004 and updated comment. I forgot to do that originally.",
+      "parentUuid": "6c8514ce_e0a538f7",
       "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
