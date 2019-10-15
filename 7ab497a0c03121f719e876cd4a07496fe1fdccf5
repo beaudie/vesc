@@ -16,6 +16,24 @@
       "revId": "7ab497a0c03121f719e876cd4a07496fe1fdccf5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d9b08e4_5e9eb3d5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-15T15:16:41Z",
+      "side": 1,
+      "message": "I added an ERR() log if we hit VK_INCOMPLETE, and left the crash so we can see the logs that hit the error on the test farm.   The tests will stay flaky, but hopefully this will help us see what\u0027s going on when it happens.   This shouldn\u0027t affect normal users, since they should never give VK_INCOMPLETE anyway (and don\u0027t seem to be either).",
+      "parentUuid": "efee299d_94b5e6b9",
+      "revId": "7ab497a0c03121f719e876cd4a07496fe1fdccf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
