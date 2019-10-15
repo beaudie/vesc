@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "cec9a97c_dd08f56b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T17:03:45Z",
+      "side": 1,
+      "message": "Filed http://anglebug.com/4008 .",
+      "parentUuid": "24279393_f01baef4",
+      "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d569e75a_569266f2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7
