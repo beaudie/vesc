@@ -296,12 +296,37 @@ class WindowsProcess : public Process
             startInfo.dwFlags |= STARTF_USESTDHANDLES;
         }
 
+        // Create job object. Job objects allow is to automatically force child processes to exit
+        // if the parent process is unexpectedly killed. This should prevent ghost processes from
+        // hanging around.
+        mJobHandle = ::CreateJobObjectA(nullptr, nullptr);
+        if (mJobHandle == NULL)
+        {
+            std::cerr << "Error creating job object: " << GetLastError() << "\n";
+            return;
+        }
+
+        JOBOBJECT_EXTENDED_LIMIT_INFORMATION limitInfo = {};
+        limitInfo.BasicLimitInformation.LimitFlags     = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
+        if (::SetInformationJobObject(mJobHandle, JobObjectExtendedLimitInformation, &limitInfo,
+                                      sizeof(limitInfo)) == FALSE)
+        {
+            std::cerr << "Error setting job information: " << GetLastError() << "\n";
+            return;
+        }
+
         // Create the child process.
         if (::CreateProcessA(nullptr, commandLineString.data(), nullptr, nullptr,
                              TRUE,  // Handles are inherited.
                              0, nullptr, nullptr, &startInfo, &mProcessInfo) == FALSE)
         {
             std::cerr << "CreateProcessA Error code: " << GetLastError() << "\n";
+            return;
+        }
+
+        if (::AssignProcessToJobObject(mJobHandle, mProcessInfo.hProcess) == FALSE)
+        {
+            std::cerr << "AssignProcessToJobObject failed: " << GetLastError() << "\n";
             return;
         }
 
@@ -322,6 +347,10 @@ class WindowsProcess : public Process
         if (mProcessInfo.hThread != INVALID_HANDLE_VALUE)
         {
             ::CloseHandle(mProcessInfo.hThread);
+        }
+        if (mJobHandle != nullptr)
+        {
+            ::CloseHandle(mJobHandle);
         }
     }
 
@@ -428,6 +457,7 @@ class WindowsProcess : public Process
     ScopedPipe mStdoutPipe;
     ScopedPipe mStderrPipe;
     PROCESS_INFORMATION mProcessInfo = {};
+    HANDLE mJobHandle                = nullptr;
 };
 }  // anonymous namespace
 
