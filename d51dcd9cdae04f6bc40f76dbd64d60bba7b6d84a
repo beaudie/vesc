@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fac7a67d_f3a1e80c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-15T17:16:58Z",
+      "side": 1,
+      "message": "I agree (out of scope for this CL and potentially tricky to plumb).  Maybe that\u0027ll be something for me to do down the road.",
+      "parentUuid": "85f19209_9d3c89dd",
+      "revId": "d51dcd9cdae04f6bc40f76dbd64d60bba7b6d84a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fc1d806_b3db36cf",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 8
