@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c8514ce_e0a538f7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2980,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-15T00:00:28Z",
+      "side": 1,
+      "message": "Should you file a bug to track this?",
+      "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
