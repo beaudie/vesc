@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ed96439_23f7e3ce",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T21:01:06Z",
+      "side": 1,
+      "message": "We prefer to avoid default arguments in ANGLE code. Please specify these explicitly.",
+      "range": {
+        "startLine": 175,
+        "startChar": 7,
+        "endLine": 175,
+        "endChar": 72
+      },
+      "revId": "823d1c44b38f79480ce3be25283f7116f2c9cce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2668dfc7_16f8ed00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T21:01:06Z",
+      "side": 1,
+      "message": "nit: you can put this in TextureVk.h in the rx::namespace.",
+      "range": {
+        "startLine": 645,
+        "startChar": 0,
+        "endLine": 652,
+        "endChar": 0
+      },
+      "revId": "823d1c44b38f79480ce3be25283f7116f2c9cce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -155,6 +155,24 @@
     },
     {
       "key": {
+        "uuid": "7fbb29ad_eb1485fe",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T21:01:06Z",
+      "side": 1,
+      "message": "Maybe use the same pattern Cody did: he starts recording on the image to change the layout to transfer so we can copy the image data to the buffer. Don\u0027t you need to change layout anyway?",
+      "parentUuid": "f2e5f815_2099745e",
+      "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d55b565a_098dee31",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
