@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b7d5495_e363ac5f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1767,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-15T21:42:04Z",
+      "side": 1,
+      "message": "This comment seems incorrect now. We\u0027re not actually flushing here anymore.",
+      "revId": "05c06fc3af4aea1f0668bb5d7de76cd6f7878459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6264b22a_e624cee6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-15T21:42:04Z",
+      "side": 1,
+      "message": "Need to update this comment as well.",
+      "revId": "05c06fc3af4aea1f0668bb5d7de76cd6f7878459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
