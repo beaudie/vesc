@@ -256,6 +256,30 @@
     },
     {
       "key": {
+        "uuid": "fd02c4f5_a156639d",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4e76f14e_2a2b2b8b",
+      "range": {
+        "startLine": 1110,
+        "startChar": 2,
+        "endLine": 1110,
+        "endChar": 96
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80068e1f_569f8639",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 10
@@ -285,6 +309,24 @@
       "side": 1,
       "message": "I understand, but at least it makes sense to split in this Metal codebase. Since if I move the RendererMtl code to DisplayMtl, it means the DisplayMtl has to house Metal\u0027s objective-C pointer to MTLDevice object. And this pointer has to be declared in DisplayMtl.h.\nThat header is in turn included by C++ file Display.cpp. Since C++ file (without .mm extension) won\u0027t understand objective-C syntax, the compiler will complain.\nOne solution is declare an opaque pointer member to a forward declared DisplayMtlImpl in the header. But isn\u0027t that the same as splitting the code into RendererMtl(in place of DisplayMtlImpl) and DisplayMtl?",
       "parentUuid": "80068e1f_569f8639",
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e9bd282_34505b22",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "OK, I understand. I\u0027ll think about this for a sec. I think what we can do is instead expose functions like \"CreateMetalDisplay()\" that are implemented in DisplayMtl.cpp. Then we don\u0027t need to include the full DisplayMtl header in Display.cpp. We just need to define the prototype for CreateMetalDisplay().",
+      "parentUuid": "03fb78a6_613c49e3",
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -349,6 +391,30 @@
       "side": 1,
       "message": "I will see what I can do. At first I don\u0027t use RenderTargetCache because it assumes depth and stencil has to be the same buffer, I cannot retrieve separate depth and stencil buffer from it. From the documents, Metal uses separate texture attachments in RenderPass descriptor for depth and stencil.\nThe official documents never say anything about this depth and stencil has to be in the same buffer.\nOnly until I tested the sample apps, the Metal runtime notified me that if render pass has both depth and stencil attachment, it must be reference to a same depth stencil texture.\nSo maybe RenderTargetCache is usable after all.",
       "parentUuid": "25758677_61d74d8e",
+      "range": {
+        "startLine": 134,
+        "startChar": 3,
+        "endLine": 134,
+        "endChar": 73
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8fb7025_90993cc4",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "OK, good to know. Sounds like you can probably use RenderTargetCache.",
+      "parentUuid": "dce42759_10727940",
       "range": {
         "startLine": 134,
         "startChar": 3,
@@ -580,6 +646,30 @@
     },
     {
       "key": {
+        "uuid": "bd6cfa30_7881cd5b",
+        "filename": "src/libANGLE/renderer/metal/StateCacheMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "Ack, again a comment wouldn\u0027t hurt.",
+      "parentUuid": "8af77913_37a6c5b5",
+      "range": {
+        "startLine": 29,
+        "startChar": 7,
+        "endLine": 29,
+        "endChar": 18
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5259f044_03f9534d",
         "filename": "src/libANGLE/renderer/metal/StateCacheMtl.h",
         "patchSetId": 10
@@ -647,6 +737,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a09c6b4_29368667",
+        "filename": "src/libANGLE/renderer/metal/StateCacheMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d9a97b88_b8deb778",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 48
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1198,6 +1312,30 @@
     },
     {
       "key": {
+        "uuid": "ecee450b_2bee3e32",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "OK, let me read that and get back to you. I could be wrong.",
+      "parentUuid": "9a070444_bcb7b43f",
+      "range": {
+        "startLine": 72,
+        "startChar": 9,
+        "endLine": 72,
+        "endChar": 14
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d4e26a9_d2a98f92",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
         "patchSetId": 10
@@ -1245,6 +1383,30 @@
     },
     {
       "key": {
+        "uuid": "edeeab25_11e85f73",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "Ah. Right now we lock in the front-end code for any multithreaded scenarios. You should be safe to use normal ints instead of atomics. I don\u0027t think we\u0027ll be changing this any time soon so I think we should go ahead and use normal ints.",
+      "parentUuid": "393bd84d_8bd69f49",
+      "range": {
+        "startLine": 76,
+        "startChar": 9,
+        "endLine": 76,
+        "endChar": 15
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe892f86_49bfbcbc",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
         "patchSetId": 10
@@ -1280,6 +1442,30 @@
       "side": 1,
       "message": "I think this is unneeded code anymore. But anw, actually I thought the inner struct actually will have a namespace (i.e. its parent class name), so it can keep its pure English name instead of having postix like Mtl.\nBut nvm, that\u0027s just my 2c.",
       "parentUuid": "fe892f86_49bfbcbc",
+      "range": {
+        "startLine": 161,
+        "startChar": 4,
+        "endLine": 203,
+        "endChar": 0
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ffc9b82_98dc26f3",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "Understood. If you can remove the code, great. For other nested structs, the suffix is okay. It allows people to forward-declare them if necessary.",
+      "parentUuid": "452f524c_71a2ad6f",
       "range": {
         "startLine": 161,
         "startChar": 4,
@@ -1431,6 +1617,30 @@
     },
     {
       "key": {
+        "uuid": "8b54249d_200c209e",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "Okay, maybe just leave or one two comments explaining the use cases like you did here. SGTM",
+      "parentUuid": "94cfbada_36050325",
+      "range": {
+        "startLine": 40,
+        "startChar": 13,
+        "endLine": 40,
+        "endChar": 23
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8aa564b_dceb38ee",
         "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
         "patchSetId": 10
@@ -1547,6 +1757,30 @@
     },
     {
       "key": {
+        "uuid": "b63fd11b_53d1a6b5",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "Ack, maybe leave a comment?",
+      "parentUuid": "6263a0d9_3b383da0",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 5
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6fbcb201_92db49b2",
         "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
         "patchSetId": 10
@@ -1582,6 +1816,30 @@
       "side": 1,
       "message": "OK, this is an old code. Actually I think I switched to std::unique_ptr recently. I didn\u0027t use std::vector, because std::vector doesn\u0027t notify caller about failed memory alloc unless exceptions are turned on.",
       "parentUuid": "6fbcb201_92db49b2",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 71
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0788ab10_64f2d77f",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-15T12:58:21Z",
+      "side": 1,
+      "message": "I suggest using angle::MemoryBuffer. It does notify.",
+      "parentUuid": "dcc38f9b_ae3afaaa",
       "range": {
         "startLine": 47,
         "startChar": 4,
