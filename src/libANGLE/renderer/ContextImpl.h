@@ -146,6 +146,7 @@ class ContextImpl : public GLImplFactory
     // Vendor and description strings.
     virtual std::string getVendorString() const        = 0;
     virtual std::string getRendererDescription() const = 0;
+    virtual std::string getImplementationFlavor() const = 0;
 
     // EXT_debug_marker
     virtual void insertEventMarker(GLsizei length, const char *marker) = 0;

@@ -168,6 +168,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     // Vendor and description strings.
     std::string getVendorString() const override;
     std::string getRendererDescription() const override;
+    std::string getImplementationFlavor() const override;
 
     // EXT_debug_marker
     void insertEventMarker(GLsizei length, const char *marker) override;

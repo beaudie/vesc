@@ -284,6 +284,11 @@ std::string ContextNULL::getRendererDescription() const
     return "NULL";
 }
 
+std::string ContextNULL::getImplementationFlavor() const
+{
+    return "NULL";
+}
+
 void ContextNULL::insertEventMarker(GLsizei length, const char *marker) {}
 
 void ContextNULL::pushGroupMarker(GLsizei length, const char *marker) {}
