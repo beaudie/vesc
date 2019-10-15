@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8a3f5fe_e129e49b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-15T16:13:30Z",
+      "side": 1,
+      "message": "Nit: Looking at how the parameter order changed from \"layer, level\" to \"level, layer\", and that both values are the same type, I\u0027m wondering if there\u0027s any way of making these parameters type-safe so that the compiler can catch somebody using them in the wrong order.  Perhaps not, but figured I\u0027d ask.",
+      "revId": "d51dcd9cdae04f6bc40f76dbd64d60bba7b6d84a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fc1d806_b3db36cf",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-15T16:13:30Z",
+      "side": 1,
+      "message": "Nit: Some comments for these data members would be helpful",
+      "revId": "d51dcd9cdae04f6bc40f76dbd64d60bba7b6d84a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

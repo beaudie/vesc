@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a45e56d_64f43b9e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-15T16:13:30Z",
+      "side": 1,
+      "message": "Looking at how this is called (below), levelCount can be smaller than level (e.g. levelCount can be 1 and level \u003e 1).  Would it be better to have one parameter (level) and have resize(level) so that you don\u0027t need this assert?",
+      "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d569e75a_569266f2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2921,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-15T16:13:30Z",
+      "side": 1,
+      "message": "Do you need to do an layerViews.clear() here?",
+      "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bda2336_5b487d2c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2943,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-15T16:13:30Z",
+      "side": 1,
+      "message": "Do you need to do an layerViews.clear() here?",
+      "revId": "fa6386df1275c1c1648061a223bbe9239cb12a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c8514ce_e0a538f7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7
