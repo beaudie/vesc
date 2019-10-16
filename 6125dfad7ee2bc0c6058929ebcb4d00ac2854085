@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac97679b_7713a35f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T11:48:30Z",
+      "side": 1,
+      "message": "Can you describe your change in this title, and move this comment to a line in the description?",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 55
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cd55f2b_11accca7",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T11:48:30Z",
+      "side": 1,
+      "message": "nit: how about onBindAsTextureImage?",
+      "range": {
+        "startLine": 412,
+        "startChar": 9,
+        "endLine": 412,
+        "endChar": 25
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec073cc8_a85388cd",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T11:48:30Z",
+      "side": 1,
+      "message": "I don\u0027t know if I would implement this as a dirty bit. I\u0027d suggest instead just storing a bool in TextureState: mBoundAsImageTexture. This bool is true if onBindAsImageTexture has ever been called. The bool stays true once set. In TextureVk we store the usage flags of the Texture we created. In TextureVk::syncState, we can check the bool and redefine the image if necessary.",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 32
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbc3e5f2_a67d2b8b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1392,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T11:48:30Z",
+      "side": 1,
+      "message": "there\u0027s some very similar code in TextureVk::changeLevels. Can you move that into a shared helper?",
+      "range": {
+        "startLine": 1369,
+        "startChar": 0,
+        "endLine": 1392,
+        "endChar": 59
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "504e18e9_887a7133",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T11:48:30Z",
+      "side": 1,
+      "message": "This looks strange to me. It might be why the Pixel 2 is failing. I think you should be using image barriers somewhere in here instead of emulating a GL barrier.",
+      "range": {
+        "startLine": 1399,
+        "startChar": 29,
+        "endLine": 1399,
+        "endChar": 42
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1983b3b3_a951c2fc",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T11:48:30Z",
+      "side": 1,
+      "message": "Can you check that these tests don\u0027t regress in SwiftShader? --use-angle\u003dswiftshader.",
+      "range": {
+        "startLine": 578,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 0
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
