@@ -141,6 +141,30 @@
       "revId": "90253ef46d8ff58d42fdf61c93a8c5837a42af3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13f9dc16_f7f4de77",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-16T16:26:27Z",
+      "side": 1,
+      "message": "I\u0027m sorry, I\u0027m not seeing it.\nYou are talking about changing the if at line 561, right?\nIf so, then we hit the else when either the divisor needs to be emulated OR there is no bufferGL.\nIf it\u0027s the divisor case, I need to check if there was a bufferGL and use that. Right?",
+      "parentUuid": "9da0f727_69b7810f",
+      "range": {
+        "startLine": 620,
+        "startChar": 0,
+        "endLine": 627,
+        "endChar": 21
+      },
+      "revId": "90253ef46d8ff58d42fdf61c93a8c5837a42af3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
