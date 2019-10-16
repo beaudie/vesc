@@ -191,6 +191,24 @@
     },
     {
       "key": {
+        "uuid": "e7d94454_0c64c4e7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2019-10-16T02:18:13Z",
+      "side": 1,
+      "message": "In addition, in the copyImageDataToBuffer(), the mImage changed layout to TransferSrc. I have tried adding dependency before calling commandBuffer-\u003ecopyImageToBuffer by 2 methods but all of them are failed. The first one is mImage-\u003eaddReadDependency(), it has an assert. Another one is (*bufferOut)-\u003eonWrite(), it will cause a lot mipmap related end2end tests failed.",
+      "parentUuid": "75ee6ed0_eda7d569",
+      "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d55b565a_098dee31",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
