@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74abfc2c_c8ad43b6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3838,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T17:11:18Z",
+      "side": 1,
+      "message": "nit: the function\u0027s convention is to pass inputs first followed by outputs. could you adjust the order to keep that?",
+      "range": {
+        "startLine": 3838,
+        "startChar": 74,
+        "endLine": 3838,
+        "endChar": 86
+      },
+      "revId": "2ab1f5619e4140a79567db3c776b019266e398f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5af4f132_8d6e2da0",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T17:11:18Z",
+      "side": 1,
+      "message": "nit: you can use strstr instead of making a new std::string.\n\nhttp://www.cplusplus.com/reference/cstring/strstr/",
+      "range": {
+        "startLine": 1663,
+        "startChar": 4,
+        "endLine": 1664,
+        "endChar": 59
+      },
+      "revId": "2ab1f5619e4140a79567db3c776b019266e398f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
