@@ -574,3 +574,15 @@
 
 // Fixed in later driver versions.
 2727 VULKAN ANDROID : dEQP-GLES3.functional.shaders.builtin_variable.pointcoord = FAIL
+
+// Swiftshader failures:
+4011 VULKAN SWIFTSHADER : dEQP-GLES3.functional.fbo.blit.* = FAIL
+4012 VULKAN SWIFTSHADER : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.* = FAIL
+4013 VULKAN SWIFTSHADER : dEQP-GLES3.functional.fbo.invalidate.* = FAIL
+4014 VULKAN SWIFTSHADER : dEQP-GLES3.functional.fbo.msaa.* = FAIL
+4015 VULKAN SWIFTSHADER : dEQP-GLES3.functional.fbo.render.* = FAIL
+4016 VULKAN SWIFTSHADER : dEQP-GLES3.functional.fragment_ops.interaction* = FAIL
+// The following is supposed to be fixed (remove the following line after these tests no longer fail in conformance runs):
+4017 VULKAN SWIFTSHADER : dEQP-GLES3.functional.shaders.builtin_functions.precision* = FAIL
+4018 VULKAN SWIFTSHADER : dEQP-GLES3.functional.uniform_api.value.assigned.by* = FAIL
+4020 VULKAN SWIFTSHADER : dEQP-GLES3.functional.*shaders.texture* = SKIP

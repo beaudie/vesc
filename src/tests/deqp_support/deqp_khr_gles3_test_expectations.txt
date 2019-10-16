@@ -31,6 +31,9 @@
 
 // For now we only log Vulkan test expectations. More back-ends can follow as we need them.
 
+// Swiftshader failures:
+4019 VULKAN SWIFTSHADER : dEQP-GLES3.shaders.indexing.matrix_subscript.mat* = FAIL
+
 // Depth/stencil related failures due to Vulkan driver bugs.
 3683 VULKAN ANDROID : KHR-GLES3.packed_depth_stencil.*.depth24_stencil8 = FAIL
 3683 VULKAN ANDROID : KHR-GLES3.packed_depth_stencil.*.depth32f_stencil8 = FAIL
