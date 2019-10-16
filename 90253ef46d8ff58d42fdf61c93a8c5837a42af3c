@@ -117,6 +117,30 @@
       "revId": "90253ef46d8ff58d42fdf61c93a8c5837a42af3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9da0f727_69b7810f",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T16:08:39Z",
+      "side": 1,
+      "message": "Don\u0027t think so. You\u0027re using the streaming buffers.",
+      "parentUuid": "19fed547_76897c37",
+      "range": {
+        "startLine": 620,
+        "startChar": 0,
+        "endLine": 627,
+        "endChar": 21
+      },
+      "revId": "90253ef46d8ff58d42fdf61c93a8c5837a42af3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
