@@ -1151,6 +1151,32 @@ TEST_P(ProgramBinariesAcrossPlatforms, CreateAndReloadBinary)
     destroyEGLWindow(&eglWindow);
 }
 
+// Test that uses many uniforms in the shaders
+TEST_P(ProgramBinaryES3Test, UnusedSampler)
+{
+    constexpr char kVS[] = R"(#ifdef GL_ES
+	precision highp float;
+	#endif
+	attribute vec4 position;
+	void main()
+	{
+        gl_Position = position;
+	})";
+    constexpr char kFS[] = R"(#ifdef GL_ES
+	precision mediump float;
+	#endif
+	uniform sampler2D diffuse;
+
+	void main()
+	{
+		vec4 tmp = texture2D(diffuse, vec2(0, 0));
+	        gl_FragColor = vec4(0,0,0,1);
+        })";
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    GLint sampler = glGetUniformLocation(program, "diffuse");
+    // sampler is not used.
+    EXPECT_EQ(sampler, -1);
+}
 // clang-format off
 ANGLE_INSTANTIATE_TEST(ProgramBinariesAcrossPlatforms,
                        //                     | Save the program   | Load the program      | Expected
