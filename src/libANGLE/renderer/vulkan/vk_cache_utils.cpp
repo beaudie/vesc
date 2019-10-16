@@ -789,6 +789,19 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     rasterState.depthBiasClamp          = rasterAndMS.depthBiasClamp;
     rasterState.depthBiasSlopeFactor    = rasterAndMS.depthBiasSlopeFactor;
     rasterState.lineWidth               = rasterAndMS.lineWidth;
+    // contextVk->getFeatures().basicGLLineRasterization.enabled &&gl::IsLineMode(mode);
+    VkPipelineRasterizationLineStateCreateInfoEXT rasterLineState = {};
+    rasterLineState.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT;
+    // TODO: Just hard-coding this check here for now. Need a cleaner way to turn this on.
+    if (contextVk->getFeatures().bresenhamLineRasterization.enabled &&
+        (inputAssemblyState.topology == VK_PRIMITIVE_TOPOLOGY_LINE_LIST ||
+         inputAssemblyState.topology == VK_PRIMITIVE_TOPOLOGY_LINE_STRIP ||
+         inputAssemblyState.topology == VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY ||
+         inputAssemblyState.topology == VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY))
+    {
+        rasterLineState.lineRasterizationMode = VK_LINE_RASTERIZATION_MODE_BRESENHAM_EXT;
+        rasterState.pNext                     = &rasterLineState;
+    }
 
     // Multisample state.
     multisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
