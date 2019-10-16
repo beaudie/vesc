@@ -1034,10 +1034,6 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
     }
 
-    VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT divisorFeatures = {};
-    divisorFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT;
-    divisorFeatures.vertexAttributeInstanceRateDivisor = true;
-
     float zeroPriority                      = 0.0f;
     VkDeviceQueueCreateInfo queueCreateInfo = {};
     queueCreateInfo.sType                   = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -1056,10 +1052,14 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     createInfo.enabledLayerCount    = static_cast<uint32_t>(enabledDeviceLayerNames.size());
     createInfo.ppEnabledLayerNames  = enabledDeviceLayerNames.data();
 
+    VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT divisorFeatures = {};
+    divisorFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT;
     if (vkGetPhysicalDeviceProperties2KHR &&
         ExtensionFound(VK_EXT_VERTEX_ATTRIBUTE_DIVISOR_EXTENSION_NAME, deviceExtensionNames))
     {
         enabledDeviceExtensions.push_back(VK_EXT_VERTEX_ATTRIBUTE_DIVISOR_EXTENSION_NAME);
+        divisorFeatures.vertexAttributeInstanceRateDivisor = true;
+
         enabledFeatures.pNext = &divisorFeatures;
 
         VkPhysicalDeviceVertexAttributeDivisorPropertiesEXT divisorProperties = {};
@@ -1079,10 +1079,27 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
         createInfo.pNext = &enabledFeatures;
     }
-    else
+
+    mLineRasterizationFeatures = {};
+    mLineRasterizationFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_FEATURES_EXT;
+    ASSERT(mLineRasterizationFeatures.bresenhamLines == VK_FALSE);
+    if (vkGetPhysicalDeviceFeatures2KHR &&
+        ExtensionFound(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME, deviceExtensionNames))
     {
-        createInfo.pEnabledFeatures = &enabledFeatures.features;
+        enabledDeviceExtensions.push_back(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME);
+        // Query line rasterization capabilities
+        VkPhysicalDeviceFeatures2KHR availableFeatures = {};
+        availableFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+        availableFeatures.pNext = &mLineRasterizationFeatures;
+
+        vkGetPhysicalDeviceFeatures2KHR(mPhysicalDevice, &availableFeatures);
+        AppendToPNextChain(reinterpret_cast<vk::CommonStructHeader *>(&createInfo),
+                           &mLineRasterizationFeatures);
     }
+
+    // Enable all available features
+    createInfo.pEnabledFeatures = &enabledFeatures.features;
 
     if (vkGetPhysicalDeviceProperties2KHR)
     {
@@ -1285,9 +1302,17 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
     bool isNvidia   = IsNvidia(mPhysicalDeviceProperties.vendorID);
     bool isQualcomm = IsQualcomm(mPhysicalDeviceProperties.vendorID);
 
-    // Use OpenGL line rasterization rules by default.
-    // TODO(jmadill): Fix Android support. http://anglebug.com/2830
-    ANGLE_FEATURE_CONDITION((&mFeatures), basicGLLineRasterization, !IsAndroid())
+    if (mLineRasterizationFeatures.bresenhamLines)
+    {
+        // TODO: Currently turning this on whenever available, may need to adjust that
+        ANGLE_FEATURE_CONDITION((&mFeatures), bresenhamLineRasterization, true)
+    }
+    else
+    {
+        // Use OpenGL line rasterization rules if extension not available default.
+        // TODO(jmadill): Fix Android support. http://anglebug.com/2830
+        ANGLE_FEATURE_CONDITION((&mFeatures), basicGLLineRasterization, !IsAndroid())
+    }
 
     // TODO(lucferron): Currently disabled on Intel only since many tests are failing and need
     // investigation. http://anglebug.com/2728
