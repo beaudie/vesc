@@ -173,6 +173,24 @@
     },
     {
       "key": {
+        "uuid": "75ee6ed0_eda7d569",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2019-10-16T01:54:11Z",
+      "side": 1,
+      "message": "The image layout is already changed when calling copyBufferToImage in mImage-\u003eflushStagedUpdates().",
+      "parentUuid": "7fbb29ad_eb1485fe",
+      "revId": "6af0ac6ff6957f8d3c48a22e3326c5ccc2e0a1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d55b565a_098dee31",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
