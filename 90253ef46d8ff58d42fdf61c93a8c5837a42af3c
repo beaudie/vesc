@@ -22,6 +22,29 @@
       "revId": "90253ef46d8ff58d42fdf61c93a8c5837a42af3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79c5dca4_9a92d90a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T12:15:53Z",
+      "side": 1,
+      "message": "also I think you could structure this a bit differently. what happens if you change the if (bufferGL) statement to if (!isStreaming)",
+      "range": {
+        "startLine": 620,
+        "startChar": 0,
+        "endLine": 627,
+        "endChar": 21
+      },
+      "revId": "90253ef46d8ff58d42fdf61c93a8c5837a42af3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
