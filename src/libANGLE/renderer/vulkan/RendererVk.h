@@ -240,6 +240,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
     VkPhysicalDeviceSubgroupProperties mPhysicalDeviceSubgroupProperties;
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
+    VkPhysicalDeviceLineRasterizationFeaturesEXT mLineRasterizationFeatures;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
     std::mutex mQueueMutex;
     VkQueue mQueue;
