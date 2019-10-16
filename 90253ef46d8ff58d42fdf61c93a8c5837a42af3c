@@ -165,6 +165,30 @@
       "revId": "90253ef46d8ff58d42fdf61c93a8c5837a42af3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92213d05_8cb711ec",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T16:43:13Z",
+      "side": 1,
+      "message": "Sorry, don\u0027t quite follow what you\u0027re asking. You shouldn\u0027t need to set mCurrentArrayBuffers[attribIndex] if you\u0027re emulating the buffer. It will be overwritten later.",
+      "parentUuid": "13f9dc16_f7f4de77",
+      "range": {
+        "startLine": 620,
+        "startChar": 0,
+        "endLine": 627,
+        "endChar": 21
+      },
+      "revId": "90253ef46d8ff58d42fdf61c93a8c5837a42af3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
