@@ -22,6 +22,57 @@
       "revId": "33b4d4700cd4cf66ea1ceeadf8f5a7b6085db76c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78d9e8cb_ad9cce14",
+        "filename": "util/windows/test_utils_win.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-16T20:31:57Z",
+      "side": 1,
+      "message": "The outside while loop is doing nothing since ReadFromFile always returns false",
+      "revId": "33b4d4700cd4cf66ea1ceeadf8f5a7b6085db76c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbfde817_927285e1",
+        "filename": "util/windows/test_utils_win.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-16T20:31:57Z",
+      "side": 1,
+      "message": "return -1?",
+      "revId": "33b4d4700cd4cf66ea1ceeadf8f5a7b6085db76c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7f0b32b_dd235830",
+        "filename": "util/windows/test_utils_win.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-16T20:31:57Z",
+      "side": 1,
+      "message": "The ProcessHandle constructor could take these args and call/own std::unique_ptr\u003cProcess\u003e LaunchProcess(...)",
+      "revId": "33b4d4700cd4cf66ea1ceeadf8f5a7b6085db76c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
