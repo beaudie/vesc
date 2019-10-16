@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "428501eb_2edfe477",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-16T12:19:25Z",
+      "side": 1,
+      "message": "sorry, I was getting mixed up. I was thinking you would be calling map on the BufferVk itself, not the BufferHelper. You could consider working with the BufferVk if it makes the code cleaner, otherwise scratch that.",
+      "parentUuid": "eadf1c13_959da50c",
+      "range": {
+        "startLine": 881,
+        "startChar": 34,
+        "endLine": 881,
+        "endChar": 37
+      },
+      "revId": "90253ef46d8ff58d42fdf61c93a8c5837a42af3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79c5dca4_9a92d90a",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 15
