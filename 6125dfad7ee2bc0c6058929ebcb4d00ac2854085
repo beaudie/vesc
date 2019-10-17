@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "8159a917_e42ff45f",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-17T04:33:07Z",
+      "side": 1,
+      "message": "I am worried about it, because TextureVk::syncState is called when there is texture/image dirty bits set. for example\ngl::State::onProgramExecutableChange\n{\n    if (image-\u003ehasAnyDirtyBit())\n    {\n        ANGLE_TRY(image-\u003esyncState(context));\n    }\n}\ngl::State::syncDirtyObjects\n{\n    for (size_t dirtyObject : dirtyObjects)\n    {\n        ANGLE_TRY((this-\u003e*kDirtyObjectHandlers[dirtyObject])(context));\n    }\n}\n\nSo without this bit, we have to change current logic",
+      "parentUuid": "ec073cc8_a85388cd",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 32
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dbc3e5f2_a67d2b8b",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 9
