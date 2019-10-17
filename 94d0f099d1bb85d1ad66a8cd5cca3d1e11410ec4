@@ -22,6 +22,30 @@
       "revId": "94d0f099d1bb85d1ad66a8cd5cca3d1e11410ec4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4baf976_6fec263e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-17T01:17:40Z",
+      "side": 1,
+      "message": "Thanks Jamie.\nPrevious we thought the stagingBuffer has not read/write node, so we cannot add dependency directly.\nbut now, after your suggestion, I think we can do like this:\n\nCopyImageToBuffer\nmImage-\u003estageSubresourceUpdateFromBuffer\nstagingBufferHandle-\u003eonWrite(contextVk, mImage, 0, VK_ACCESS_TRANSFER_WRITE_BIT);\nreleaseImage()\n\nensureImageInitialized\nstagingBufferHandle-\u003eonRead(contextVk, mImage, VK_ACCESS_TRANSFER_READ_BIT);",
+      "parentUuid": "a721ccfb_2843880f",
+      "range": {
+        "startLine": 1156,
+        "startChar": 0,
+        "endLine": 1158,
+        "endChar": 0
+      },
+      "revId": "94d0f099d1bb85d1ad66a8cd5cca3d1e11410ec4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
