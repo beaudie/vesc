@@ -457,7 +457,7 @@ inline bool IsNexus5X()
 // Check whether the system is a Pixel 2 device.
 inline bool IsPixel2()
 {
-    return IsAndroidDevice("Pixel 2");
+    return IsAndroidDevice("Pixel 2") || IsAndroidDevice("Pixel 2 XL");
 }
 
 // Check whether the active GPU is a specific device based on the string device ID.
