@@ -24,3 +24,5 @@ if (host_os == "mac" && use_system_xcode == "") {
 
   use_system_xcode = _result != 1
 }
+
+enable_java_templates = false
