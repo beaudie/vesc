@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d612e1fa_faddfa7c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T18:19:32Z",
+      "side": 1,
+      "message": "you should check against VK_TRUE/VK_FALSE. \n\nAlso Alexis was somehow finding that our emulation gets disabled somehow by this CL when it shouldn\u0027t have. Not sure how.",
+      "range": {
+        "startLine": 1305,
+        "startChar": 8,
+        "endLine": 1305,
+        "endChar": 49
+      },
+      "revId": "7555aff4aae648718d9427b6747e1f7ff8cf212f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "431c4016_4c48d73a",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
