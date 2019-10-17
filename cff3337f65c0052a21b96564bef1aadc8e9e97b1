@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ec3ee56_c07af9e1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-17T17:34:13Z",
+      "side": 1,
+      "message": "Dead code has a way to lingering, so this should probably have a TODO to re-enable it if we think it\u0027s worth keeping checked in or just remove it entirely.",
+      "revId": "cff3337f65c0052a21b96564bef1aadc8e9e97b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d491084e_aa87b00a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-17T17:34:13Z",
+      "side": 1,
+      "message": "From a caller\u0027s point of view, this feels like an unintended side-effect of just getting a pointer.   For example, in TextureVk::copySubImageImpl() when this is called, copySubImageImplWithTransfer() will call addReadDependency() which does the onGraphAccess() work.\n\nIf the onGraphAccess() calls were missing, I think those should be added as explicit calls where they are missing, rather than duplicating the onGraphAccess() work in here.",
+      "revId": "cff3337f65c0052a21b96564bef1aadc8e9e97b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f02f148_4045164b",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-17T17:34:13Z",
+      "side": 1,
+      "message": "This should probably be named onImageViewGraphAccess to indicate it\u0027s updating the command graph.",
+      "revId": "cff3337f65c0052a21b96564bef1aadc8e9e97b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a5e3832_40c92f38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-17T17:34:13Z",
+      "side": 1,
+      "message": "Hm, same as above.   Why does every get add the resource to the graph each time?   How much is this growing the command graph?",
+      "revId": "cff3337f65c0052a21b96564bef1aadc8e9e97b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
