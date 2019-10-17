@@ -22,6 +22,30 @@
       "revId": "48aa52f7305a0dc0e611c8cfa0031629054ba3e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b6144df_3cd09543",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-17T18:44:04Z",
+      "side": 0,
+      "message": "The problem I have with that is that it makes this a warning on ChromOS for ESSL3 as well. This has always been an error on all platforms for ESSL3 so I broke it back out into separate cases to keep is as an ESSL3 error in all cases.",
+      "parentUuid": "f03a66cd_2cdcbde6",
+      "range": {
+        "startLine": 681,
+        "startChar": 0,
+        "endLine": 681,
+        "endChar": 26
+      },
+      "revId": "48aa52f7305a0dc0e611c8cfa0031629054ba3e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
