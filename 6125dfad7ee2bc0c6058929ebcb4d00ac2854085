@@ -305,6 +305,30 @@
       "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8de93fd8_36d59224",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-17T04:47:57Z",
+      "side": 1,
+      "message": "The VK_KHR_display is caused by my local patch :(\nHowever, I don\u0027t have X11 on my Linux board, so cannot run it now :(",
+      "parentUuid": "80b3092e_d78c0151",
+      "range": {
+        "startLine": 578,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 0
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
