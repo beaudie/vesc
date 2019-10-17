@@ -46,6 +46,30 @@
       "revId": "48aa52f7305a0dc0e611c8cfa0031629054ba3e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2df3d13_48ae5a5a",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T18:54:14Z",
+      "side": 0,
+      "message": "That is fair. SGTM on your current design.",
+      "parentUuid": "3b6144df_3cd09543",
+      "range": {
+        "startLine": 681,
+        "startChar": 0,
+        "endLine": 681,
+        "endChar": 26
+      },
+      "revId": "48aa52f7305a0dc0e611c8cfa0031629054ba3e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
