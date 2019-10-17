@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e9898623_dc868c6d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-17T00:52:15Z",
+      "side": 1,
+      "message": "Sure",
+      "parentUuid": "ac97679b_7713a35f",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 55
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2cd55f2b_11accca7",
         "filename": "src/libANGLE/Texture.h",
         "patchSetId": 9
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-16T11:48:30Z",
       "side": 1,
       "message": "nit: how about onBindAsTextureImage?",
+      "range": {
+        "startLine": 412,
+        "startChar": 9,
+        "endLine": 412,
+        "endChar": 25
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9e0780b_7f3e3e41",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-17T00:52:15Z",
+      "side": 1,
+      "message": "no problem",
+      "parentUuid": "2cd55f2b_11accca7",
       "range": {
         "startLine": 412,
         "startChar": 9,
@@ -82,6 +130,30 @@
       "writtenOn": "2019-10-16T11:48:30Z",
       "side": 1,
       "message": "there\u0027s some very similar code in TextureVk::changeLevels. Can you move that into a shared helper?",
+      "range": {
+        "startLine": 1369,
+        "startChar": 0,
+        "endLine": 1392,
+        "endChar": 59
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c9da823_6be7469e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1392,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-17T00:52:15Z",
+      "side": 1,
+      "message": "yes, I will wait for https://chromium-review.googlesource.com/c/angle/angle/+/1750627\nthen I will refine the codes",
+      "parentUuid": "dbc3e5f2_a67d2b8b",
       "range": {
         "startLine": 1369,
         "startChar": 0,
@@ -141,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "1f66c17c_1afab961",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-17T00:52:15Z",
+      "side": 1,
+      "message": "Do you mean the dEQP-GLES3.functional.texture.specification.texstorage3d tests? these tests don\u0027t recreate image, so the failure is not related to here. But I believe it is because of the STORAGE bit missing in vkImage.\n\nAbout the image barrier, I will reply on another CL",
+      "parentUuid": "d6f1c598_dc91aaa1",
+      "range": {
+        "startLine": 1399,
+        "startChar": 29,
+        "endLine": 1399,
+        "endChar": 42
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1983b3b3_a951c2fc",
         "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
         "patchSetId": 9
@@ -152,6 +248,30 @@
       "writtenOn": "2019-10-16T11:48:30Z",
       "side": 1,
       "message": "Can you check that these tests don\u0027t regress in SwiftShader? --use-angle\u003dswiftshader.",
+      "range": {
+        "startLine": 578,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 0
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80b3092e_d78c0151",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-17T00:52:15Z",
+      "side": 1,
+      "message": "I currently cannot run with swiftshader:\n\n./angle_deqp_gles3_tests  --use-angle\u003dswiftshader --gtest_filter\u003ddEQP.GLES3/functional_texture_specification_texstorage3d_format_rgb16f_3d\nNote: Google Test filter \u003d dEQP.GLES3/functional_texture_specification_texstorage3d_format_rgb16f_3d\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 1 test from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 1 test from dEQP\nWriting test log into TestResults.qpa\n[ RUN      ] dEQP.GLES3/functional_texture_specification_texstorage3d_format_rgb16f_3d\ndEQP-GLES3.functional.texture.specification.texstorage3d.format.rgb16f_3d\n../../src/tests/deqp_support/angle_deqp_gtest.cpp:45: Failure\nFailed\nVerifyExtensionsPresent(108): Extension not supported: VK_KHR_display\nERR: VerifyExtensionsPresent(108): Extension not supported: VK_KHR_display\n../../src/tests/deqp_support/angle_deqp_gtest.cpp:45: Failure\nFailed\n\n\nHowever, these tests will not redefine image, so I think the impact is minor",
+      "parentUuid": "1983b3b3_a951c2fc",
       "range": {
         "startLine": 578,
         "startChar": 0,
