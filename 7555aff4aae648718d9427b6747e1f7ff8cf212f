@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "53cbdc4d_06adf919",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T18:22:00Z",
+      "side": 1,
+      "message": "ah, you\u0027re calling initFeatures before you initialize the extension info. looks like a bug.",
+      "range": {
+        "startLine": 964,
+        "startChar": 3,
+        "endLine": 964,
+        "endChar": 39
+      },
+      "revId": "7555aff4aae648718d9427b6747e1f7ff8cf212f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d612e1fa_faddfa7c",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
