@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "0d324560_8ef8a58d",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T11:55:14Z",
+      "side": 1,
+      "message": "Good point. You\u0027re right. How about DIRTY_BIT_BOUND_AS_IMAGE? Maybe you could make sure to only trigger this dirty bit the first time a Texture is bound as an image.",
+      "parentUuid": "8159a917_e42ff45f",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 32
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dbc3e5f2_a67d2b8b",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 9
@@ -320,6 +344,30 @@
       "side": 1,
       "message": "The VK_KHR_display is caused by my local patch :(\nHowever, I don\u0027t have X11 on my Linux board, so cannot run it now :(",
       "parentUuid": "80b3092e_d78c0151",
+      "range": {
+        "startLine": 578,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 0
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a65913d_c20ad770",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T11:55:14Z",
+      "side": 1,
+      "message": "I tested myself and they seem to pass. So that\u0027s good.\n\nIf you guys don\u0027t have access to a Linux or Windows workstation I\u0027d recommend you ask your management for resources. Some access to a standard desktop platform will be necessary for debugging unexpected ANGLE failures.",
+      "parentUuid": "8de93fd8_36d59224",
       "range": {
         "startLine": 578,
         "startChar": 0,
