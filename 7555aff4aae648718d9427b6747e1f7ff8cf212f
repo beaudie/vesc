@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "431c4016_4c48d73a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T12:07:11Z",
+      "side": 1,
+      "message": "I think it\u0027s fine the way you have it here. Can remove the TODO.",
+      "range": {
+        "startLine": 1307,
+        "startChar": 8,
+        "endLine": 1307,
+        "endChar": 86
+      },
+      "revId": "7555aff4aae648718d9427b6747e1f7ff8cf212f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21f7d1ca_320eff16",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T12:07:11Z",
+      "side": 1,
+      "message": "nit: by default",
+      "range": {
+        "startLine": 1312,
+        "startChar": 64,
+        "endLine": 1312,
+        "endChar": 74
+      },
+      "revId": "7555aff4aae648718d9427b6747e1f7ff8cf212f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4cf6312_adf48bae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T12:07:11Z",
+      "side": 1,
+      "message": "nit: might as well remove all the TODOs and commented out code so we can land this. Looks fine the way it is.",
+      "range": {
+        "startLine": 792,
+        "startChar": 0,
+        "endLine": 795,
+        "endChar": 90
+      },
+      "revId": "7555aff4aae648718d9427b6747e1f7ff8cf212f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97206087_95af2b46",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T12:07:11Z",
+      "side": 1,
+      "message": "I think we can just remove these ifs an unconditionally enable bresenham if the feature is enabled. I don\u0027t see it being an error:\n\nhttps://renderdoc.org/vkspec_chunked/chap26.html#primsrast-lines-bresenham\n\nCould be wrong of course. But worth checking.",
+      "range": {
+        "startLine": 796,
+        "startChar": 3,
+        "endLine": 801,
+        "endChar": 5
+      },
+      "revId": "7555aff4aae648718d9427b6747e1f7ff8cf212f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05296bce_c63edc00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T12:07:11Z",
+      "side": 1,
+      "message": "Is it possible to clean up some of the existing code to use this new helper?",
+      "range": {
+        "startLine": 263,
+        "startChar": 5,
+        "endLine": 263,
+        "endChar": 23
+      },
+      "revId": "7555aff4aae648718d9427b6747e1f7ff8cf212f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
