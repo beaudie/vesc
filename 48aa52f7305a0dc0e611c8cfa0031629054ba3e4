@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f03a66cd_2cdcbde6",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-17T15:35:52Z",
+      "side": 0,
+      "message": "I would probably keep the same code you have here with the one token and just set valid \u003d false behind your guards. With a comment and link to the anglebug.",
+      "range": {
+        "startLine": 681,
+        "startChar": 0,
+        "endLine": 681,
+        "endChar": 26
+      },
+      "revId": "48aa52f7305a0dc0e611c8cfa0031629054ba3e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
