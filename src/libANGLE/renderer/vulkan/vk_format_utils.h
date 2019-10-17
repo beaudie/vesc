@@ -58,13 +58,19 @@ struct Format final : private angle::NonCopyable
     bool valid() const { return internalFormat != 0; }
 
     // The ANGLE format is the front-end format.
-    const angle::Format &angleFormat() const { return angle::Format::Get(angleFormatID); }
+    const angle::Format &intendedFormat() const { return angle::Format::Get(intendedFormatID); }
 
     // The Image format is the VkFormat used to implement the front-end format for VkImages.
-    const angle::Format &imageFormat() const { return angle::Format::Get(imageFormatID); }
+    const angle::Format &actualImageFormat() const
+    {
+        return angle::Format::Get(actualImageFormatID);
+    }
 
     // The Buffer format is the VkFormat used to implement the front-end format for VkBuffers.
-    const angle::Format &bufferFormat() const { return angle::Format::Get(bufferFormatID); }
+    const angle::Format &actualBufferFormat() const
+    {
+        return angle::Format::Get(actualBufferFormatID);
+    }
 
     // Returns OpenGL format information for the front-end format.
     const gl::InternalFormat &getInternalFormatInfo(GLenum type) const
@@ -85,11 +91,11 @@ struct Format final : private angle::NonCopyable
     void initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *info, int numInfo);
     void initBufferFallback(RendererVk *renderer, const BufferFormatInitInfo *info, int numInfo);
 
-    angle::FormatID angleFormatID;
+    angle::FormatID intendedFormatID;
     GLenum internalFormat;
-    angle::FormatID imageFormatID;
+    angle::FormatID actualImageFormatID;
     VkFormat vkImageFormat;
-    angle::FormatID bufferFormatID;
+    angle::FormatID actualBufferFormatID;
     VkFormat vkBufferFormat;
 
     InitializeTextureDataFunction imageInitializerFunction;
