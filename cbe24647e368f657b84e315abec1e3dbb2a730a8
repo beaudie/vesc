@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b43a1c4_c6dd00cf",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-18T16:52:08Z",
+      "side": 1,
+      "message": "I don\u0027t think this list is complete now.\nI noticed the following failures with swiftshader when I was testing my lineloop code.\nOther devices pass. As far as I could tell all the buffers swiftshader had looked okay, but it appears to be getting the wrong data somehow.\n[  FAILED  ] dEQP.GLES3/functional_draw_random_31, where GetParam() \u003d 43864\n[  FAILED  ] dEQP.GLES3/functional_draw_random_43, where GetParam() \u003d 43874\n[  FAILED  ] dEQP.GLES3/functional_draw_random_44, where GetParam() \u003d 43875\n[  FAILED  ] dEQP.GLES3/functional_draw_random_81, where GetParam() \u003d 43899\n[  FAILED  ] dEQP.GLES3/functional_draw_random_84, where GetParam() \u003d 43902\n[  FAILED  ] dEQP.GLES3/functional_draw_random_105, where GetParam() \u003d 43919\n[  FAILED  ] dEQP.GLES3/functional_draw_random_114, where GetParam() \u003d 43926\n[  FAILED  ] dEQP.GLES3/functional_draw_random_120, where GetParam() \u003d 43932\n[  FAILED  ] dEQP.GLES3/functional_draw_random_135, where GetParam() \u003d 43940\n[  FAILED  ] dEQP.GLES3/functional_draw_random_143, where GetParam() \u003d 43946\n[  FAILED  ] dEQP.GLES3/functional_draw_random_155, where GetParam() \u003d 43955\n[  FAILED  ] dEQP.GLES3/functional_draw_random_206, where GetParam() \u003d 43991\n\nThis could be a follow-up CL too.",
+      "revId": "cbe24647e368f657b84e315abec1e3dbb2a730a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
