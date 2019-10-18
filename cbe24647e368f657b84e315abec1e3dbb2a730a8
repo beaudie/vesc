@@ -52,6 +52,24 @@
       "revId": "cbe24647e368f657b84e315abec1e3dbb2a730a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "384af7df_faaebe73",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-18T17:44:10Z",
+      "side": 1,
+      "message": "Looks like I had an older swiftshader.",
+      "parentUuid": "d6197067_7d2af050",
+      "revId": "cbe24647e368f657b84e315abec1e3dbb2a730a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
