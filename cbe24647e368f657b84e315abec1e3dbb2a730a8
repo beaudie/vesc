@@ -34,6 +34,24 @@
       "revId": "cbe24647e368f657b84e315abec1e3dbb2a730a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6197067_7d2af050",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-18T16:57:37Z",
+      "side": 1,
+      "message": "Yeah, just those 4 are what I\u0027m seeing failing.  What GPU did you see those fail on, and when?",
+      "parentUuid": "d909d35f_3e043dfd",
+      "revId": "cbe24647e368f657b84e315abec1e3dbb2a730a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
