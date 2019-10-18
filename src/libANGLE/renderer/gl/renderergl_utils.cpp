@@ -1576,6 +1576,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, rgbDXT1TexturesSampleZeroAlpha, IsApple())
 
     ANGLE_FEATURE_CONDITION(features, unfoldShortCircuits, IsApple())
+
+    ANGLE_FEATURE_CONDITION(features, removeDynamicIndexingOfSwizzledVector, false)
+    // IsApple() || IsAndroid() || (IsWindows() && isIntel) || (IsLinux() && !isIntel))
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
