@@ -172,6 +172,7 @@ class VaryingPacking final : angle::NonCopyable
     const Register &operator[](unsigned int index) const { return mRegisterMap[index]; }
 
     const std::vector<PackedVaryingRegister> &getRegisterList() const { return mRegisterList; }
+    const std::vector<PackedVarying> &getPackedVaryings() const { return mPackedVaryings; }
     unsigned int getMaxSemanticIndex() const
     {
         return static_cast<unsigned int>(mRegisterList.size());

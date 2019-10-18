@@ -530,11 +530,11 @@
 // General Vulkan failures
 
 // Tests failing due to the "flat" qualifier in the shader:
-3677 VULKAN : dEQP-GLES3.functional.fragment_out.basic.int.* = FAIL
-3677 VULKAN : dEQP-GLES3.functional.fragment_out.basic.uint.* = FAIL
-3677 VULKAN : dEQP-GLES3.functional.fragment_out.array.int* = FAIL
-3677 VULKAN : dEQP-GLES3.functional.fragment_out.array.uint* = FAIL
-3677 VULKAN : dEQP-GLES3.functional.fragment_out.random.* = FAIL
+3677 PIXEL2 VULKAN : dEQP-GLES3.functional.fragment_out.basic.int.* = FAIL
+3677 PIXEL2 VULKAN : dEQP-GLES3.functional.fragment_out.basic.uint.* = FAIL
+3677 PIXEL2 VULKAN : dEQP-GLES3.functional.fragment_out.array.int* = FAIL
+3677 PIXEL2 VULKAN : dEQP-GLES3.functional.fragment_out.array.uint* = FAIL
+3677 PIXEL2 VULKAN : dEQP-GLES3.functional.fragment_out.random.* = FAIL
 
 // NVIDIA Depth/Stencil textures:
 3970 VULKAN NVIDIA : dEQP-GLES3.functional.fbo.depth.depth_write_clamp.depth_component32f = FAIL
@@ -547,7 +547,7 @@
 3970 VULKAN NVIDIA : dEQP-GLES3.functional.polygon_offset.float32_factor_1_slope = FAIL
 
 // Flat shading:
-3430 VULKAN : dEQP-GLES3.functional.rasterization.flatshading.* = FAIL
+3430 PIXEL2 VULKAN : dEQP-GLES3.functional.rasterization.flatshading.* = FAIL
 
 // Misc unimplemented:
 
