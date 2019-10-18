@@ -355,6 +355,12 @@ struct FeaturesGL : FeatureSetBase
         "Mac incorrectly executes both sides of && and || expressions when they should "
         "short-circuit.",
         &members, "http://anglebug.com/482"};
+
+    // Dynamic indexing of swizzled l-values doesn't work correctly on various platforms.
+    Feature removeDynamicIndexingOfSwizzledVector = {
+        "remove_dynamic_indexing_of_swizzled_vector", FeatureCategory::OpenGLWorkarounds,
+        "Dynamic indexing of swizzled l-values doesn't work correctly on Mac.", &members,
+        "http://crbug.com/709351"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

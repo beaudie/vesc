@@ -261,7 +261,8 @@ TIntermFunctionDefinition *GetIndexFunctionDefinition(const TType &type,
 class RemoveDynamicIndexingTraverser : public TLValueTrackingTraverser
 {
   public:
-    RemoveDynamicIndexingTraverser(TSymbolTable *symbolTable,
+    RemoveDynamicIndexingTraverser(std::function<bool(TIntermBinary *)> &&matcher,
+                                   TSymbolTable *symbolTable,
                                    PerformanceDiagnostics *perfDiagnostics);
 
     bool visitBinary(Visit visit, TIntermBinary *node) override;
@@ -287,15 +288,18 @@ class RemoveDynamicIndexingTraverser : public TLValueTrackingTraverser
     // where V is an array of vectors, j++ will only be evaluated once.
     bool mRemoveIndexSideEffectsInSubtree;
 
+    std::function<bool(TIntermBinary *)> mMatcher;
     PerformanceDiagnostics *mPerfDiagnostics;
 };
 
 RemoveDynamicIndexingTraverser::RemoveDynamicIndexingTraverser(
+    std::function<bool(TIntermBinary *)> &&matcher,
     TSymbolTable *symbolTable,
     PerformanceDiagnostics *perfDiagnostics)
     : TLValueTrackingTraverser(true, false, false, symbolTable),
       mUsedTreeInsertion(false),
       mRemoveIndexSideEffectsInSubtree(false),
+      mMatcher(matcher),
       mPerfDiagnostics(perfDiagnostics)
 {}
 
@@ -376,12 +380,15 @@ bool RemoveDynamicIndexingTraverser::visitBinary(Visit visit, TIntermBinary *nod
             TIntermSymbol *tempIndex = CreateTempSymbolNode(indexVariable);
             queueReplacementWithParent(node, node->getRight(), tempIndex, OriginalNode::IS_DROPPED);
         }
-        else if (IntermNodePatternMatcher::IsDynamicIndexingOfNonSSBOVectorOrMatrix(node))
+        else if (mMatcher(node))
         {
-            mPerfDiagnostics->warning(node->getLine(),
-                                      "Performance: dynamic indexing of vectors and "
-                                      "matrices is emulated and can be slow.",
-                                      "[]");
+            if (mPerfDiagnostics)
+            {
+                mPerfDiagnostics->warning(node->getLine(),
+                                          "Performance: dynamic indexing of vectors and "
+                                          "matrices is emulated and can be slow.",
+                                          "[]");
+            }
             bool write = isLValueRequiredHere();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
@@ -430,8 +437,7 @@ bool RemoveDynamicIndexingTraverser::visitBinary(Visit visit, TIntermBinary *nod
                 }
 
                 TIntermBinary *leftBinary = node->getLeft()->getAsBinaryNode();
-                if (leftBinary != nullptr &&
-                    IntermNodePatternMatcher::IsDynamicIndexingOfNonSSBOVectorOrMatrix(leftBinary))
+                if (leftBinary != nullptr && mMatcher(leftBinary))
                 {
                     // This is a case like:
                     // mat2 m;
@@ -520,14 +526,13 @@ void RemoveDynamicIndexingTraverser::nextIteration()
     mRemoveIndexSideEffectsInSubtree = false;
 }
 
-}  // namespace
-
-bool RemoveDynamicIndexing(TCompiler *compiler,
-                           TIntermNode *root,
-                           TSymbolTable *symbolTable,
-                           PerformanceDiagnostics *perfDiagnostics)
+bool RemoveDynamicIndexingIf(std::function<bool(TIntermBinary *)> &&matcher,
+                             TCompiler *compiler,
+                             TIntermNode *root,
+                             TSymbolTable *symbolTable,
+                             PerformanceDiagnostics *perfDiagnostics)
 {
-    RemoveDynamicIndexingTraverser traverser(symbolTable, perfDiagnostics);
+    RemoveDynamicIndexingTraverser traverser(std::move(matcher), symbolTable, perfDiagnostics);
     do
     {
         traverser.nextIteration();
@@ -544,6 +549,33 @@ bool RemoveDynamicIndexing(TCompiler *compiler,
     // superficial reading of the code.
     traverser.insertHelperDefinitions(root);
     return compiler->validateAST(root);
+}
+
+}  // namespace
+
+ANGLE_NO_DISCARD bool RemoveDynamicIndexingOfNonSSBOVectorOrMatrix(
+    TCompiler *compiler,
+    TIntermNode *root,
+    TSymbolTable *symbolTable,
+    PerformanceDiagnostics *perfDiagnostics)
+{
+    return RemoveDynamicIndexingIf(
+        [](TIntermBinary *node) {
+            return IntermNodePatternMatcher::IsDynamicIndexingOfNonSSBOVectorOrMatrix(node);
+        },
+        compiler, root, symbolTable, perfDiagnostics);
+}
+
+ANGLE_NO_DISCARD bool RemoveDynamicIndexingOfSwizzledVector(TCompiler *compiler,
+                                                            TIntermNode *root,
+                                                            TSymbolTable *symbolTable,
+                                                            PerformanceDiagnostics *perfDiagnostics)
+{
+    return RemoveDynamicIndexingIf(
+        [](TIntermBinary *node) {
+            return IntermNodePatternMatcher::IsDynamicIndexingOfSwizzledVector(node);
+        },
+        compiler, root, symbolTable, perfDiagnostics);
 }
 
 }  // namespace sh
