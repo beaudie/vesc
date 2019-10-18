@@ -16,6 +16,24 @@
       "revId": "cbe24647e368f657b84e315abec1e3dbb2a730a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d909d35f_3e043dfd",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-18T16:55:18Z",
+      "side": 1,
+      "message": "In Tim\u0027s latest run, all that fails matches the list that I added.  I think that\u0027s what matched my laptop.  I\u0027ll try again ...",
+      "parentUuid": "0b43a1c4_c6dd00cf",
+      "revId": "cbe24647e368f657b84e315abec1e3dbb2a730a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
