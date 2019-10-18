@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "20ff7655_4f2035a5",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-18T01:09:59Z",
+      "side": 1,
+      "message": "yes, only dirty for the first time bound can at least reduce some CPU overhead",
+      "parentUuid": "0d324560_8ef8a58d",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 32
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dbc3e5f2_a67d2b8b",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 9
@@ -368,6 +392,30 @@
       "side": 1,
       "message": "I tested myself and they seem to pass. So that\u0027s good.\n\nIf you guys don\u0027t have access to a Linux or Windows workstation I\u0027d recommend you ask your management for resources. Some access to a standard desktop platform will be necessary for debugging unexpected ANGLE failures.",
       "parentUuid": "8de93fd8_36d59224",
+      "range": {
+        "startLine": 578,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 0
+      },
+      "revId": "6125dfad7ee2bc0c6058929ebcb4d00ac2854085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14ae5515_b8397395",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-18T01:09:59Z",
+      "side": 1,
+      "message": "yes, we have AMD/NV graphics cards on hand, will setup the platform soon.\nbut we don\u0027t have Adreno devices, do you have any recommendation? we need the BSP that supports at least Vulkan",
+      "parentUuid": "7a65913d_c20ad770",
       "range": {
         "startLine": 578,
         "startChar": 0,
