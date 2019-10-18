@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dec3659e_c54099bc",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-18T18:00:44Z",
+      "side": 1,
+      "message": "you could also make a helper IsPixel2OrXL?",
+      "range": {
+        "startLine": 35,
+        "startChar": 5,
+        "endLine": 35,
+        "endChar": 15
+      },
+      "revId": "bdab74739fb0ea4b7ccefcfe0513a7dc6c87b655",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
