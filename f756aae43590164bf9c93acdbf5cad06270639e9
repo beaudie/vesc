@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d477aa1_b2f7d123",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-18T18:13:06Z",
+      "side": 1,
+      "message": "Hear me out. I think we should remove the data defs above and make all copy rules explicit. I took a look at the CMake. They copy all the data to a temporary directory. So there would be a few advantages:\n\n * we\u0027d most closely match CMake\n * we wouldn\u0027t need as many crazy shenanigans to detect the data directory in ANGLE\n * the data dirs would be consistent for KHR/graphicsfuzz/normal dEQP tests and any new tests\n\nDownsides:\n\n * we don\u0027t have the ability to copy folders and each file must be named manually\n\nThis is mostly a one time cost that I was happy to skip when writing these files. At this point it\u0027s worth spending the ten minutes to convert \u0027ls\u0027 output into GN copy rules. WDYT?",
+      "range": {
+        "startLine": 906,
+        "startChar": 2,
+        "endLine": 906,
+        "endChar": 6
+      },
+      "revId": "f756aae43590164bf9c93acdbf5cad06270639e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
