@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "6e3991b4_cb75fb70",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-18T17:48:17Z",
+      "side": 1,
+      "message": "call it actualFormat for consistency?",
+      "range": {
+        "startLine": 986,
+        "startChar": 29,
+        "endLine": 986,
+        "endChar": 43
+      },
+      "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75dfb7e6_cd1d6d82",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-18T17:48:17Z",
+      "side": 1,
+      "message": "How do you know that this should be intendedFormat rather than actualImageFormat()?\nvoid ImageHelper::stageSubresourceRobustClear(const gl::ImageIndex \u0026index,\n                                              const angle::Format \u0026format)\nWe are in the Vulkan renderer, I would have thought we\u0027d want to work with actual formats unless interfacing with the front-end.",
+      "range": {
+        "startLine": 192,
+        "startChar": 12,
+        "endLine": 192,
+        "endChar": 89
+      },
+      "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25a771ff_4681bde8",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 2
