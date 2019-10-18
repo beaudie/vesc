@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be1879cc_0aa88580",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-18T16:30:57Z",
+      "side": 1,
+      "message": "No \"-\" (i.e. \"Bug: angleproject:4025\")",
+      "revId": "7afc403e7ccf52370cccd4176965bd43d19d2475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
