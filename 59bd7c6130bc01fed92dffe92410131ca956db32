@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "90208ad6_1fc097dc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-19T13:32:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e3991b4_cb75fb70",
+      "range": {
+        "startLine": 986,
+        "startChar": 29,
+        "endLine": 986,
+        "endChar": 43
+      },
+      "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75dfb7e6_cd1d6d82",
         "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b8399724_f3c22b5f",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-19T13:32:34Z",
+      "side": 1,
+      "message": "I took a look at the clear code. We don\u0027t need to clear the emulated channels. Say we\u0027re emulating S8 with D24S8. We don\u0027t need to clear the depth channel.",
+      "parentUuid": "75dfb7e6_cd1d6d82",
+      "range": {
+        "startLine": 192,
+        "startChar": 12,
+        "endLine": 192,
+        "endChar": 89
+      },
+      "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25a771ff_4681bde8",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 2
@@ -62,6 +110,24 @@
       "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e4a8d12_384621ac",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-19T13:32:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25a771ff_4681bde8",
+      "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "06330860_115cbedf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-19T13:32:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ae1e4f3_c7bb67ed",
+      "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e94ad9b_bdd13ce1",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
         "patchSetId": 2
@@ -96,6 +180,24 @@
       "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3794fe7e_b3ed146e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-19T13:32:34Z",
+      "side": 1,
+      "message": "Done\n\nNo, we only support GLES types. Potentially we might support desktop GL down the line.",
+      "parentUuid": "2e94ad9b_bdd13ce1",
+      "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +218,24 @@
     },
     {
       "key": {
+        "uuid": "6b92d4a0_b21b7b9c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-19T13:32:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "785a99af_ee56fc92",
+      "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91f1a0df_5c6101f2",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
         "patchSetId": 2
@@ -130,6 +250,24 @@
       "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "883e4c84_f7ad4f1c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-19T13:32:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91f1a0df_5c6101f2",
+      "revId": "59bd7c6130bc01fed92dffe92410131ca956db32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
