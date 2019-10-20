@@ -10,6 +10,7 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/angle_test_configs.h"
+#include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
 
 using namespace angle;
@@ -231,6 +232,55 @@ TEST_P(EGLSyncTest, BasicOperations)
     }
 
     EXPECT_EGL_TRUE(eglDestroySyncKHR(display, sync));
+}
+
+// Tests that deleting an object on one Context doesn't destroy it ahead-of-time.
+TEST_P(EGLSyncTest, DeleteTextureOnSharedContext)
+{
+    EGLWindow *eglWindow = getEGLWindow();
+
+    // Initialize a shared context.
+    EGLDisplay display  = eglWindow->getDisplay();
+    EGLSurface surface  = eglWindow->getSurface();
+    EGLContext context1 = eglWindow->getContext();
+    EGLContext context2 = eglCreateContext(display, eglWindow->getConfig(), context1, nullptr);
+    ASSERT_NE(context2, EGL_NO_CONTEXT);
+
+    // Create a texture on first context.
+    constexpr GLsizei kTexSize                  = 2;
+    const GLColor kTexData[kTexSize * kTexSize] = {GLColor::red, GLColor::green, GLColor::blue,
+                                                   GLColor::yellow};
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTexSize, kTexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 kTexData);
+
+    // Make shared context current and draw with the texture.
+    ASSERT_EGL_TRUE(eglMakeCurrent(display, surface, surface, context2));
+
+    glBindTexture(GL_TEXTURE_2D, tex);
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+    glUseProgram(program);
+    GLint uniLoc = glGetUniformLocation(program, essl1_shaders::Texture2DUniform());
+    glUniform1i(uniLoc, tex);
+
+    // Initialize an EGLSync and trigger a server wait.
+    EGLSync sync = eglCreateSync(display, EGL_SYNC_FENCE, nullptr);
+    ASSERT_NE(sync, EGL_NO_SYNC);
+    EXPECT_EGL_TRUE(eglWaitSync(display, sync, 0));
+
+    // Enqueue a draw operation after the server wait.
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    // Delete the texture in the shared context to orphan it.
+    tex.reset();
+
+    // Do not read back the data to keep the commands in the graph.
+
+    eglDestroyContext(display, context2);
+    eglDestroySync(display, sync);
 }
 
 ANGLE_INSTANTIATE_TEST(EGLSyncTest,

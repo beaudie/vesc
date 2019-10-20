@@ -444,6 +444,8 @@ class ANGLETestBase
         return mCurrentParams->getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE;
     }
 
+    void initOSWindow();
+
   private:
     void checkD3D11SDKLayersMessages();
 
@@ -454,8 +456,6 @@ class ANGLETestBase
                   bool useVertexBuffer,
                   bool useInstancedDrawCalls,
                   GLuint numInstances);
-
-    void initOSWindow();
 
     struct TestFixture
     {
