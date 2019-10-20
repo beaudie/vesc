@@ -16,6 +16,24 @@
       "revId": "3f3a6e3610f16b875c3debae350b9c25e7384328",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e85150e_8afa7e7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2998,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-20T20:13:30Z",
+      "side": 0,
+      "message": "My bad. Shouldn\u0027t have deleted this.",
+      "parentUuid": "0f550d0a_64d35878",
+      "revId": "3f3a6e3610f16b875c3debae350b9c25e7384328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
