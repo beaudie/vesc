@@ -154,6 +154,29 @@
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d344a68_0425c857",
+        "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-21T06:33:26Z",
+      "side": 1,
+      "message": "I only see Sampler in fragment shader:). Please modify your test name to match your test.\nAnd please add another test to verify the compile will fail if GL_WEBGL_video_texture is not required and \u0027samplerVideoWEBGL\u0027 is used.",
+      "range": {
+        "startLine": 32,
+        "startChar": 30,
+        "endLine": 32,
+        "endChar": 73
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
