@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcf610b9_3db1295e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2951,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-21T16:16:04Z",
+      "side": 1,
+      "message": "It\u0027s been a while since I watched this function in the debugger.  As I recall, this function/loop can run multiple times before the commands are flushed.  Is there any problem with calling this that many times?",
+      "revId": "50836abd3a67efee83289398d87f7d7cb1a9cff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8f3a075_2f2fa98a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3120,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-21T16:16:04Z",
+      "side": 1,
+      "message": "Do you need to call this if !mSampler-\u003evalid()?  Or do you need to call it anyway to help with the command graph?",
+      "revId": "50836abd3a67efee83289398d87f7d7cb1a9cff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
