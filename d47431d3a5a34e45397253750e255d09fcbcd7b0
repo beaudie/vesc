@@ -59,6 +59,24 @@
     },
     {
       "key": {
+        "uuid": "2b6b09d9_b11002a8",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-21T06:56:35Z",
+      "side": 1,
+      "message": "Big thanks , I think it should work.",
+      "parentUuid": "71cebbb6_139137f7",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fd7e9122_5bcdfa57",
         "filename": "src/compiler/translator/builtin_function_declarations.txt",
         "patchSetId": 5
@@ -265,6 +283,30 @@
       "writtenOn": "2019-10-21T06:50:04Z",
       "side": 1,
       "message": "Do you mean WEBGL_video_texture can be supported on all OpenGL and OpenGL ES contexts?\n\nIf so, then the extension should always be enabled. The only difference is we may translate samplerVideoWEBGL into different built-in types on some Android devices, which should actually be an another extension.",
+      "range": {
+        "startLine": 1153,
+        "startChar": 36,
+        "endLine": 1153,
+        "endChar": 49
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4a933e3_2314d6f0",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-21T06:56:35Z",
+      "side": 1,
+      "message": "Sure. What I want to do with this line is that Android is not supported this extension now.",
+      "parentUuid": "69ba1166_2c414020",
       "range": {
         "startLine": 1153,
         "startChar": 36,
