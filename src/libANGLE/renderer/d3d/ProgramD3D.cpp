@@ -1900,7 +1900,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Conte
     auto pixelTask    = std::make_shared<GetPixelExecutableTask>(this);
     auto geometryTask = std::make_shared<GetGeometryExecutableTask>(this, context->getState());
     bool useGS        = usesGeometryShader(context->getState(), gl::PrimitiveMode::Points);
-    gl::Shader *vertexShader = mState.getAttachedShader(gl::ShaderType::Vertex);
+    gl::Shader *vertexShader         = mState.getAttachedShader(gl::ShaderType::Vertex);
     gl::Shader *fragmentShader       = mState.getAttachedShader(gl::ShaderType::Fragment);
     const ShaderD3D *vertexShaderD3D = vertexShader ? GetImplAs<ShaderD3D>(vertexShader) : nullptr;
     const ShaderD3D *fragmentShaderD3D =
