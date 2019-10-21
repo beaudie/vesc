@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b00943f_98dc5414",
+        "filename": "src/compiler/translator/Initialize.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-21T06:14:18Z",
+      "side": 1,
+      "message": "Should it be \u0027EBhUndefined\u0027?",
+      "range": {
+        "startLine": 102,
+        "startChar": 55,
+        "endLine": 102,
+        "endChar": 64
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd7e9122_5bcdfa57",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-21T06:14:18Z",
+      "side": 1,
+      "message": "Do you need to support \u0027texture(samplerVideoWEBGL, vec2)\u0027 for \u0027ESSL3_BUILTINS\u0027? And add a corresponding test case for texture.",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c356765_aa2249af",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-21T06:14:18Z",
+      "side": 1,
+      "message": "Be careful the copying sentence.",
+      "range": {
+        "startLine": 59,
+        "startChar": 50,
+        "endLine": 59,
+        "endChar": 93
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c567b4b_3f580bdd",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-21T06:14:18Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 95,
+        "startChar": 24,
+        "endLine": 95,
+        "endChar": 39
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d411f8cf_3627f6ec",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-21T06:14:18Z",
+      "side": 1,
+      "message": "Please use the correct description.",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 34
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fd61792_46b91c96",
+        "filename": "src/tests/compiler_tests/SamplerVideoWEBGL_test.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-21T06:14:18Z",
+      "side": 1,
+      "message": "Copyright 2019",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ebe10eb_624ddb52",
+        "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-21T06:14:18Z",
+      "side": 1,
+      "message": "2019",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
