@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa156de2_d533f771",
+        "filename": "src/compiler/translator/tree_ops/RemoveDynamicIndexing.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-21T23:44:51Z",
+      "side": 1,
+      "message": "this is clever. Can you use a \"using\" declaration to make this type easier to reference?",
+      "range": {
+        "startLine": 291,
+        "startChar": 4,
+        "endLine": 291,
+        "endChar": 41
+      },
+      "revId": "35405711df7ceea581c49402a345d7eda13f3672",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7a4a4c2_04d0f457",
+        "filename": "src/compiler/translator/tree_ops/RemoveDynamicIndexing.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-21T23:44:51Z",
+      "side": 1,
+      "message": "nit: make this a temporary. same below.",
+      "range": {
+        "startLine": 563,
+        "startChar": 2,
+        "endLine": 565,
+        "endChar": 10
+      },
+      "revId": "35405711df7ceea581c49402a345d7eda13f3672",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89731916_9876bcdf",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7273,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-21T23:44:51Z",
+      "side": 1,
+      "message": "nit: can remove this extra blank line.",
+      "revId": "35405711df7ceea581c49402a345d7eda13f3672",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
