@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "847d8b23_1b9de90e",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-21T01:49:08Z",
+      "side": 1,
+      "message": "Use \u0027various platforms\u0027 or \u0027Mac/Android/Windows\u0027 to keep consistent with your above description.",
+      "range": {
+        "startLine": 362,
+        "startChar": 73,
+        "endLine": 362,
+        "endChar": 76
+      },
+      "revId": "f7d59be98ca33c78ecf228a1202328826cc4e155",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
