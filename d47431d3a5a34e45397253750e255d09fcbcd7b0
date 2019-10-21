@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f8571da0_1d9fba6e",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "We should increase the version here if we are making any changes in this file.",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8b00943f_98dc5414",
         "filename": "src/compiler/translator/Initialize.cpp",
         "patchSetId": 5
@@ -25,6 +42,23 @@
     },
     {
       "key": {
+        "uuid": "71cebbb6_139137f7",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "I purpose another method instead of using a traverser.\n\nIn https://cs.chromium.org/chromium/src/third_party/angle/src/compiler/translator/OutputGLSLBase.cpp?l\u003d1224, you can add the following code to directly translate \"SamplerVideoWEBGL\" into \"Sampler2D\", and in the future to translate other things when it is implemented on Android.\n\nImmutableString TOutputGLSLBase::getTypeName(const TType \u0026type)\n{\n    if (type.getBasicType() \u003d\u003d EbtSamplerVideoWEBGL)\n    {\n        // TODO: translate SamplerVideoWEBGL into different token when necessary (e.g. on some\n        // Android devices)\n        return ImmutableString(\"sampler2D\");\n    }\n\n    return GetTypeName(type, mHashFunction, \u0026mNameMap);\n}\n\nI\u0027ve tried locally that the end2end test in this CL can pass.",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fd7e9122_5bcdfa57",
         "filename": "src/compiler/translator/builtin_function_declarations.txt",
         "patchSetId": 5
@@ -36,6 +70,46 @@
       "writtenOn": "2019-10-21T06:14:18Z",
       "side": 1,
       "message": "Do you need to support \u0027texture(samplerVideoWEBGL, vec2)\u0027 for \u0027ESSL3_BUILTINS\u0027? And add a corresponding test case for texture.",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a16cde6_7abb846f",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 5
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "According to this if-statement SamplerVideoWEBGL can be used regardless of any ES context versions, so maybe ES2_extension() is not a good name for it?",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f9b4663_1821683f",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "This comment should be updated.",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 17
+      },
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -111,6 +185,98 @@
     },
     {
       "key": {
+        "uuid": "bd2ac46b_bf3701df",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "This comment should be updated.",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 8,
+        "endChar": 99
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9ed7d7f_d208eb80",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "This macro should be updated.",
+      "range": {
+        "startLine": 12,
+        "startChar": 8,
+        "endLine": 12,
+        "endChar": 70
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "424e57ef_08cca95c",
+        "filename": "src/compiler/translator/util.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "Merge them into one line?",
+      "range": {
+        "startLine": 364,
+        "startChar": 8,
+        "endLine": 364,
+        "endChar": 23
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69ba1166_2c414020",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "Do you mean WEBGL_video_texture can be supported on all OpenGL and OpenGL ES contexts?\n\nIf so, then the extension should always be enabled. The only difference is we may translate samplerVideoWEBGL into different built-in types on some Android devices, which should actually be an another extension.",
+      "range": {
+        "startLine": 1153,
+        "startChar": 36,
+        "endLine": 1153,
+        "endChar": 49
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5fd61792_46b91c96",
         "filename": "src/tests/compiler_tests/SamplerVideoWEBGL_test.cpp",
         "patchSetId": 5
@@ -128,6 +294,23 @@
         "endLine": 2,
         "endChar": 21
       },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "934d9cb1_f3492b43",
+        "filename": "src/tests/compiler_tests/SamplerVideoWEBGL_test.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "You also need a test to verify it is a compile error if samplerVideoWEBGL is used withou declaring GL_WEBGL_video_texture.",
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -157,6 +340,29 @@
     },
     {
       "key": {
+        "uuid": "acd75401_cbe55d1b",
+        "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "I prefer calling the tests \"WEBGLVideoTextureTest because maybe we need to have more tests besides the one on samplerVideWEBGL.",
+      "range": {
+        "startLine": 16,
+        "startChar": 6,
+        "endLine": 16,
+        "endChar": 28
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0d344a68_0425c857",
         "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
         "patchSetId": 5
@@ -174,6 +380,23 @@
         "endLine": 32,
         "endChar": 73
       },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d891c61_2eedda9f",
+        "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-21T06:50:04Z",
+      "side": 1,
+      "message": "Sampler can also be the parameter of user-defined functions. Could you add a test to verify our translation is correct when a function parameter is in samplerVideoWEBGL type?",
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
