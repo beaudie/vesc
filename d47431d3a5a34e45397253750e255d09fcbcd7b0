@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b570db15_d29cb1f4",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8571da0_1d9fba6e",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b00943f_98dc5414",
         "filename": "src/compiler/translator/Initialize.cpp",
         "patchSetId": 5
@@ -39,6 +57,30 @@
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8a104c3_ebfdca21",
+        "filename": "src/compiler/translator/Initialize.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b00943f_98dc5414",
+      "range": {
+        "startLine": 102,
+        "startChar": 55,
+        "endLine": 102,
+        "endChar": 64
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -77,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "8ee2a4ef_3f1e1e96",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "It works. Thank you! Done.",
+      "parentUuid": "2b6b09d9_b11002a8",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd7e9122_5bcdfa57",
         "filename": "src/compiler/translator/builtin_function_declarations.txt",
         "patchSetId": 5
@@ -94,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "03c5c39a_691855d0",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd7e9122_5bcdfa57",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a16cde6_7abb846f",
         "filename": "src/compiler/translator/glslang.l",
         "patchSetId": 5
@@ -105,6 +183,24 @@
       "writtenOn": "2019-10-21T06:50:04Z",
       "side": 1,
       "message": "According to this if-statement SamplerVideoWEBGL can be used regardless of any ES context versions, so maybe ES2_extension() is not a good name for it?",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f7fc688_cf387b56",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 5
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "PTAL the new name.",
+      "parentUuid": "0a16cde6_7abb846f",
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -134,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "587658f4_a4eaa423",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f9b4663_1821683f",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c356765_aa2249af",
         "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.cpp",
         "patchSetId": 5
@@ -154,6 +274,30 @@
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f600373_80b2a1b3",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c356765_aa2249af",
+      "range": {
+        "startLine": 59,
+        "startChar": 50,
+        "endLine": 59,
+        "endChar": 93
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -180,6 +324,30 @@
     },
     {
       "key": {
+        "uuid": "8b05725a_4c6b3a9e",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c567b4b_3f580bdd",
+      "range": {
+        "startLine": 95,
+        "startChar": 24,
+        "endLine": 95,
+        "endChar": 39
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d411f8cf_3627f6ec",
         "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h",
         "patchSetId": 5
@@ -200,6 +368,30 @@
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1808502c_e992100d",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d411f8cf_3627f6ec",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 34
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -226,6 +418,30 @@
     },
     {
       "key": {
+        "uuid": "3d469097_8acd0339",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd2ac46b_bf3701df",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 8,
+        "endChar": 99
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9ed7d7f_d208eb80",
         "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h",
         "patchSetId": 5
@@ -249,6 +465,30 @@
     },
     {
       "key": {
+        "uuid": "5ea8579d_b015f682",
+        "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9ed7d7f_d208eb80",
+      "range": {
+        "startLine": 12,
+        "startChar": 8,
+        "endLine": 12,
+        "endChar": 70
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "424e57ef_08cca95c",
         "filename": "src/compiler/translator/util.cpp",
         "patchSetId": 5
@@ -269,6 +509,30 @@
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "316829a6_3cd71337",
+        "filename": "src/compiler/translator/util.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "424e57ef_08cca95c",
+      "range": {
+        "startLine": 364,
+        "startChar": 8,
+        "endLine": 364,
+        "endChar": 23
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -319,6 +583,30 @@
     },
     {
       "key": {
+        "uuid": "d8fa95f8_e7414a7c",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Edit commit message. Hope it can describe this line better. PTAL.",
+      "parentUuid": "c4a933e3_2314d6f0",
+      "range": {
+        "startLine": 1153,
+        "startChar": 36,
+        "endLine": 1153,
+        "endChar": 49
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5fd61792_46b91c96",
         "filename": "src/tests/compiler_tests/SamplerVideoWEBGL_test.cpp",
         "patchSetId": 5
@@ -342,6 +630,30 @@
     },
     {
       "key": {
+        "uuid": "b38f1d27_b798ab01",
+        "filename": "src/tests/compiler_tests/SamplerVideoWEBGL_test.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fd61792_46b91c96",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "934d9cb1_f3492b43",
         "filename": "src/tests/compiler_tests/SamplerVideoWEBGL_test.cpp",
         "patchSetId": 5
@@ -353,6 +665,24 @@
       "writtenOn": "2019-10-21T06:50:04Z",
       "side": 1,
       "message": "You also need a test to verify it is a compile error if samplerVideoWEBGL is used withou declaring GL_WEBGL_video_texture.",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3533a7a0_fbb11068",
+        "filename": "src/tests/compiler_tests/SamplerVideoWEBGL_test.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Add more tests.",
+      "parentUuid": "934d9cb1_f3492b43",
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -382,6 +712,30 @@
     },
     {
       "key": {
+        "uuid": "df4981db_a9228448",
+        "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ebe10eb_624ddb52",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "acd75401_cbe55d1b",
         "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
         "patchSetId": 5
@@ -402,6 +756,30 @@
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34481c91_e6510232",
+        "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acd75401_cbe55d1b",
+      "range": {
+        "startLine": 16,
+        "startChar": 6,
+        "endLine": 16,
+        "endChar": 28
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -428,6 +806,30 @@
     },
     {
       "key": {
+        "uuid": "4ee473a3_218128f5",
+        "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "This is verified in unittest. Need I add the same test in end2end tests?",
+      "parentUuid": "0d344a68_0425c857",
+      "range": {
+        "startLine": 32,
+        "startChar": 30,
+        "endLine": 32,
+        "endChar": 73
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8d891c61_2eedda9f",
         "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
         "patchSetId": 5
@@ -439,6 +841,24 @@
       "writtenOn": "2019-10-21T06:50:04Z",
       "side": 1,
       "message": "Sampler can also be the parameter of user-defined functions. Could you add a test to verify our translation is correct when a function parameter is in samplerVideoWEBGL type?",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e27a29ae_36ff5df8",
+        "filename": "src/tests/gl_tests/SamplerVideoWEBGLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-22T09:16:16Z",
+      "side": 1,
+      "message": "Added more tests, PTAL",
+      "parentUuid": "8d891c61_2eedda9f",
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
