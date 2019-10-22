@@ -39,6 +39,57 @@
       "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78ed48fd_ab854154",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-10-22T19:56:37Z",
+      "side": 1,
+      "message": "if there are 2 contexts contributing to the same frame, how is it handled?",
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac5c1a87_947aa821",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-10-22T19:56:37Z",
+      "side": 1,
+      "message": "is this thread-safe? or are we limiting first implementation to single threaded usecases?",
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7b2d75b_f5ddce49",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-10-22T19:56:37Z",
+      "side": 1,
+      "message": "are shaders treated as binary blobs for capture/replay?",
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
