@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de695b72_24add9e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-22T12:57:06Z",
+      "side": 1,
+      "message": "nit: can you keep the subject one line? i.e.\n\nFix EXT_multisample_render_to_texture perf regression",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 34
+      },
+      "revId": "79bba273ddbf8c6ba8c1b163f717c29890a193bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
