@@ -240,11 +240,11 @@ class GarbageObject
     static GarbageObject Get(WrappedObject<DerivedT, HandleT> *object)
     {
         return GarbageObject(HandleTypeHelper<DerivedT>::kHandleType,
-                             reinterpret_cast<GarbageHandle>(object->release()));
+                             (GarbageHandle)(object->release()));
     }
 
   private:
-    VK_DEFINE_HANDLE(GarbageHandle)
+    VK_DEFINE_NON_DISPATCHABLE_HANDLE(GarbageHandle)
     GarbageObject(HandleType handleType, GarbageHandle handle);
 
     HandleType mHandleType;
