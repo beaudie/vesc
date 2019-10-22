@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40c23c83_1ff6158b",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-22T16:47:39Z",
+      "side": 1,
+      "message": "The version string is printed as part of the renderer string here.  Is there a reason we need more?",
+      "range": {
+        "startLine": 499,
+        "startChar": 29,
+        "endLine": 499,
+        "endChar": 91
+      },
+      "revId": "30b052aa9985ca0227dbb48ffaf36b64450ef2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
