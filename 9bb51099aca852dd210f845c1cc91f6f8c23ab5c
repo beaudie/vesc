@@ -16,6 +16,24 @@
       "revId": "9bb51099aca852dd210f845c1cc91f6f8c23ab5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "355e9b75_000ba1a6",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1579,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-22T16:57:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f97b2a4_b4eab796",
+      "revId": "9bb51099aca852dd210f845c1cc91f6f8c23ab5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
