@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5cde3d5_39d2dfe4",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-22T22:20:01Z",
+      "side": 1,
+      "message": "current-\u003ecurrently or some alternate rewording",
+      "revId": "039645c50f700afe7c3e6a4b3103fcff4b7f689b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c70ba9d_9ba284f3",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-22T22:20:01Z",
+      "side": 1,
+      "message": "indentify-\u003eidentify",
+      "revId": "039645c50f700afe7c3e6a4b3103fcff4b7f689b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85fd62ea_b2684152",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-22T22:20:01Z",
+      "side": 1,
+      "message": "Would be good to include usage examples with these last two for clarity, such as \"ANGLE_CAPTURE_FRAME_END\u003d\u003c#\u003e\" ... This variable can override the default to \u003c#\u003e frames.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 94
+      },
+      "revId": "039645c50f700afe7c3e6a4b3103fcff4b7f689b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
