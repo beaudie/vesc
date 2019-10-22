@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad1599a6_f45d6a27",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-22T15:12:34Z",
+      "side": 1,
+      "message": "Can you change this to maxLevel?",
+      "range": {
+        "startLine": 505,
+        "startChar": 51,
+        "endLine": 505,
+        "endChar": 69
+      },
+      "revId": "46d757ae14a6b7d8bda2e650994821b32cc591c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d44ea740_c15cf316",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-22T15:12:34Z",
+      "side": 1,
+      "message": "On first glance, it looks like this will allow holes in the mipchain and we\u0027ll count later mip levels.  From chatting with Jamie, that\u0027s not the case.  We\u0027ll either have one or more sequential mip levels, or maxLevel mip levels, but not a sparse mip chain.  Can you add a comment to that effect?",
+      "range": {
+        "startLine": 509,
+        "startChar": 12,
+        "endLine": 509,
+        "endChar": 24
+      },
+      "revId": "46d757ae14a6b7d8bda2e650994821b32cc591c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29c505a9_028a0411",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-22T15:12:34Z",
+      "side": 1,
+      "message": "This is a bit ugly, but I can see why you\u0027re doing it.  Maybe we can refactor changeLevels at some point so this can be removed.",
+      "range": {
+        "startLine": 1097,
+        "startChar": 8,
+        "endLine": 1097,
+        "endChar": 24
+      },
+      "revId": "46d757ae14a6b7d8bda2e650994821b32cc591c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
