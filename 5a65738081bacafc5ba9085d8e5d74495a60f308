@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecc3b9b7_eee363f0",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-22T16:33:32Z",
+      "side": 1,
+      "message": "Capture was working on Android.  Do you mean the environment controls below aren\u0027t supported on Android yet?  I can fix that. :)",
+      "range": {
+        "startLine": 10,
+        "startChar": 43,
+        "endLine": 10,
+        "endChar": 52
+      },
+      "revId": "5a65738081bacafc5ba9085d8e5d74495a60f308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8992424_1c3d84d2",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-22T16:33:32Z",
+      "side": 1,
+      "message": "source",
+      "range": {
+        "startLine": 26,
+        "startChar": 49,
+        "endLine": 26,
+        "endChar": 56
+      },
+      "revId": "5a65738081bacafc5ba9085d8e5d74495a60f308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d90275ce_67544a7f",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-22T16:33:32Z",
+      "side": 1,
+      "message": "This may come in later CLs, but providing a template and build command would go a long way to making this seamless.",
+      "range": {
+        "startLine": 27,
+        "startChar": 55,
+        "endLine": 27,
+        "endChar": 62
+      },
+      "revId": "5a65738081bacafc5ba9085d8e5d74495a60f308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
