@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "574dc58a_0dd03c1f",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-22T18:03:22Z",
+      "side": 1,
+      "message": "Tested this locally on Linux, it needs to include end slash:\n\n  samples/capture_replay/",
+      "range": {
+        "startLine": 45,
+        "startChar": 50,
+        "endLine": 45,
+        "endChar": 72
+      },
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7a6247f_59d60674",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-22T18:03:22Z",
+      "side": 1,
+      "message": "To complete the example, could add a section below here showing modifications to samples/BUILD.gn.  i.e. enabling this section:\n\ncapture_replay(\"my_sample\") {\n  sources \u003d [\n    \"capture_replay/angle_capture_context1_frame000.cpp\",\n    \"capture_replay/angle_capture_context1_frame001.cpp\",\n    \"capture_replay/angle_capture_context1_frame002.cpp\",\n    \"capture_replay/angle_capture_context1_frame003.cpp\",\n    \"capture_replay/angle_capture_context1_frame004.cpp\",\n  ]\n}\n\nAnd then disabling capture again with \n\n```\n$ gn args out/Debug\nangle_with_capture_by_default \u003d false\n```\n\nFollowed by build and run:\n```\n$ autoninja -C out/Debug\n$ ./out/Debug/my_sample\n```",
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
