@@ -244,7 +244,7 @@ class GarbageObject
     }
 
   private:
-    VK_DEFINE_HANDLE(GarbageHandle)
+    VK_DEFINE_NON_DISPATCHABLE_HANDLE(GarbageHandle)
     GarbageObject(HandleType handleType, GarbageHandle handle);
 
     HandleType mHandleType;
