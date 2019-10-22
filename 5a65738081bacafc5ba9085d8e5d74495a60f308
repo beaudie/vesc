@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "7db50878_c9ba144a",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-22T16:40:48Z",
+      "side": 1,
+      "message": "This is fixed in the third CL.",
+      "parentUuid": "c8992424_1c3d84d2",
+      "range": {
+        "startLine": 26,
+        "startChar": 49,
+        "endLine": 26,
+        "endChar": 56
+      },
+      "revId": "5a65738081bacafc5ba9085d8e5d74495a60f308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d90275ce_67544a7f",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 1
