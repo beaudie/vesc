@@ -1333,6 +1333,20 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
     return angle::Result::Stop;
 }
 
+inline static bool isFormatColorWritable(const angle::Format &format, const gl::BlendState &blend)
+{
+    return (blend.colorMaskRed && format.redBits != 0) ||
+           (blend.colorMaskGreen && format.greenBits != 0) ||
+           (blend.colorMaskBlue && format.blueBits != 0) ||
+           (blend.colorMaskAlpha && format.alphaBits != 0);
+}
+inline static bool isFormatDepthStencilWritable(const angle::Format &format,
+                                                const gl::DepthStencilState &depthStencil)
+{
+    return (depthStencil.depthTest && depthStencil.depthMask && format.depthBits != 0) ||
+           (depthStencil.stencilTest && depthStencil.stencilMask != 0 && format.stencilBits != 0);
+}
+
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                 const gl::Rectangle &renderArea,
                                                 vk::CommandBuffer **commandBufferOut)
@@ -1351,18 +1365,24 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
+
         ASSERT(colorRenderTarget);
+        if (isFormatColorWritable(colorRenderTarget->getImageFormat().intendedFormat(),
+                                  contextVk->getState().getBlendState()))
+        {
+            ANGLE_TRY(colorRenderTarget->onColorDraw(contextVk, &mFramebuffer, writeCommands));
 
-        ANGLE_TRY(colorRenderTarget->onColorDraw(contextVk, &mFramebuffer, writeCommands));
-
-        renderPassAttachmentOps.initWithLoadStore(attachmentClearValues.size(),
-                                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-        attachmentClearValues.emplace_back(kUninitializedClearValue);
+            renderPassAttachmentOps.initWithLoadStore(attachmentClearValues.size(),
+                                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+            attachmentClearValues.emplace_back(kUninitializedClearValue);
+        }
     }
 
     RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
-    if (depthStencilRenderTarget)
+    if (depthStencilRenderTarget &&
+        isFormatDepthStencilWritable(depthStencilRenderTarget->getImageFormat().intendedFormat(),
+                                     contextVk->getState().getDepthStencilState()))
     {
         ANGLE_TRY(
             depthStencilRenderTarget->onDepthStencilDraw(contextVk, &mFramebuffer, writeCommands));
@@ -1373,9 +1393,19 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         attachmentClearValues.emplace_back(kUninitializedClearValue);
     }
 
-    return mFramebuffer.beginRenderPass(contextVk, *framebuffer, renderArea, mRenderPassDesc,
-                                        renderPassAttachmentOps, attachmentClearValues,
-                                        commandBufferOut);
+    if (!attachmentClearValues.empty())
+    {
+        return mFramebuffer.beginRenderPass(contextVk, *framebuffer, renderArea, mRenderPassDesc,
+                                            renderPassAttachmentOps, attachmentClearValues,
+                                            commandBufferOut);
+    }
+    else
+    {
+        // This is incorrect and causes asserts
+        // Creating a dummy empty render pass here crashes the icd
+        // Creating a render pass normally also crashes
+        return angle::Result::Continue;
+    }
 }
 
 void FramebufferVk::updateActiveColorMasks(size_t colorIndexGL, bool r, bool g, bool b, bool a)

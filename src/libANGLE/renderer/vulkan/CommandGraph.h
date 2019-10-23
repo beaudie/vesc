@@ -389,6 +389,11 @@ class CommandGraphResource : angle::NonCopyable
     // Sets up dependency relations. 'this' resource is the resource being written to.
     void addWriteDependency(ContextVk *contextVk, CommandGraphResource *writingResource);
 
+    inline bool hasImmediateWriteDependency(const CommandGraphResource *other)
+    {
+        return mCurrentWritingNode == other->mCurrentWritingNode;
+    }
+
     // Sets up dependency relations. 'this' resource is the resource being read.
     void addReadDependency(ContextVk *contextVk, CommandGraphResource *readingResource);
 

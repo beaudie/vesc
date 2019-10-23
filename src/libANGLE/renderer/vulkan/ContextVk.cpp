@@ -2949,6 +2949,14 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
             textureLayout = vk::ImageLayout::ComputeShaderReadOnly;
         }
 
+        // If we were just writing to this texture but the application hasn't updated the
+        // framebuffer, we need to split this node in order to avoid erroneously putting reads in
+        // the same node as the previous writes, which could create a cycle
+        if (image.hasImmediateWriteDependency(mDrawFramebuffer->getFramebuffer()))
+        {
+            mDrawFramebuffer->getFramebuffer()->finishCurrentCommands(this);
+        }
+
         // Ensure the image is in read-only layout
         if (image.isLayoutChangeNecessary(textureLayout))
         {
