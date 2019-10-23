@@ -695,6 +695,40 @@ void GetExtentsAndLayerCount(gl::TextureType textureType,
                              const gl::Extents &extents,
                              VkExtent3D *extentsOut,
                              uint32_t *layerCountOut);
+
+struct ColorWriteMaskCache
+{
+    bool red : 1;
+    bool green : 1;
+    bool blue : 1;
+    bool alpha : 1;
+};
+struct DepthStencilWriteMaskCache
+{
+    struct
+    {
+        bool depthTest : 1;
+        bool depthMask : 1;
+        bool stencilTest : 1;
+    } bools;
+    GLuint stencilMaskFront;
+    GLuint stencilMaskBack;
+};
+
+ANGLE_INLINE ColorWriteMaskCache createColorMaskCache(const gl::BlendState &blendState)
+{
+    return {blendState.colorMaskRed, blendState.colorMaskGreen, blendState.colorMaskBlue,
+            blendState.colorMaskAlpha};
+}
+
+ANGLE_INLINE DepthStencilWriteMaskCache
+createDepthStencilMaskCache(const gl::DepthStencilState &depthStencilState)
+{
+    return {
+        {depthStencilState.depthTest, depthStencilState.depthMask, depthStencilState.stencilTest},
+        depthStencilState.stencilWritemask,
+        depthStencilState.stencilBackWritemask};
+}
 }  // namespace gl_vk
 
 namespace vk_gl

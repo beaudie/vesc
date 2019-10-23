@@ -18,6 +18,7 @@
 #include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace angle
 {
@@ -434,6 +435,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         DIRTY_BIT_SHADER_RESOURCES,  // excluding textures, which are handled separately.
         DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
         DIRTY_BIT_DESCRIPTOR_SETS,
+        DIRTY_BIT_RENDERPASS_SPLIT,  // when we need to force a renderpass split due to a rendering
+                                     // feedback loop
         DIRTY_BIT_MAX,
     };
 
@@ -557,6 +560,10 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                     vk::CommandBuffer **commandBufferOut,
                                     uint32_t *numIndicesOut);
     angle::Result setupDispatch(const gl::Context *context, vk::CommandBuffer **commandBufferOut);
+
+    void SplitRPIfColorMaskRequires(gl::Framebuffer *framebuffer, const gl::BlendState &blendState);
+    void SplitRPIfDepthStencilMaskRequires(gl::Framebuffer *framebuffer,
+                                           const gl::DepthStencilState &blendState);
 
     void updateViewport(FramebufferVk *framebufferVk,
                         const gl::Rectangle &viewport,
@@ -711,6 +718,26 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     VkClearValue mClearColorValue;
     VkClearValue mClearDepthStencilValue;
     VkColorComponentFlags mClearColorMask;
+
+    gl_vk::ColorWriteMaskCache mColorMaskCache;
+    gl_vk::DepthStencilWriteMaskCache mDepthStencilMaskCache;
+
+    ANGLE_INLINE bool colorMaskNeedsUpdate(const gl::BlendState &blendState)
+    {
+        return blendState.colorMaskRed != mColorMaskCache.red ||
+               blendState.colorMaskGreen != mColorMaskCache.green ||
+               blendState.colorMaskBlue != mColorMaskCache.blue ||
+               blendState.colorMaskAlpha != mColorMaskCache.alpha;
+    }
+
+    ANGLE_INLINE bool depthStencilMaskNeedsUpdate(const gl::DepthStencilState &depthStencilState)
+    {
+        return depthStencilState.depthTest != mDepthStencilMaskCache.bools.depthTest ||
+               depthStencilState.depthMask != mDepthStencilMaskCache.bools.depthMask ||
+               depthStencilState.stencilTest != mDepthStencilMaskCache.bools.stencilTest ||
+               depthStencilState.stencilWritemask != mDepthStencilMaskCache.stencilMaskFront ||
+               depthStencilState.stencilBackWritemask != mDepthStencilMaskCache.stencilMaskBack;
+    }
 
     IncompleteTextureSet mIncompleteTextures;
 
