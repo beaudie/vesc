@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5af20f9e_42018e88",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2019-10-23T02:12:28Z",
+      "side": 1,
+      "message": "It can\u0027t change to maxLevel. Please consider the end2end test MipmapTest.DefineValidExtraLevelAndUseItLater, the extra level will be ignored. And in MipmapTestES3.GenerateMipmapMaxLevel, if max level was changed to 1, level 2 would not retain and become blue as level 0 after generateMipmap() and set the max level to 2.",
+      "parentUuid": "ad1599a6_f45d6a27",
+      "range": {
+        "startLine": 505,
+        "startChar": 51,
+        "endLine": 505,
+        "endChar": 69
+      },
+      "revId": "46d757ae14a6b7d8bda2e650994821b32cc591c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d44ea740_c15cf316",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 12
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6afdad45_1edc4917",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2019-10-23T02:12:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d44ea740_c15cf316",
+      "range": {
+        "startLine": 509,
+        "startChar": 12,
+        "endLine": 509,
+        "endChar": 24
+      },
+      "revId": "46d757ae14a6b7d8bda2e650994821b32cc591c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "29c505a9_028a0411",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 12
@@ -68,6 +116,30 @@
       "revId": "46d757ae14a6b7d8bda2e650994821b32cc591c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa45003f_738ccdd8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2019-10-23T02:12:28Z",
+      "side": 1,
+      "message": "I will add a comment here for TODO.",
+      "parentUuid": "29c505a9_028a0411",
+      "range": {
+        "startLine": 1097,
+        "startChar": 8,
+        "endLine": 1097,
+        "endChar": 24
+      },
+      "revId": "46d757ae14a6b7d8bda2e650994821b32cc591c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
