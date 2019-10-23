@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d9876036_ac1150f0",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-23T01:49:30Z",
+      "side": 1,
+      "message": "Maybe it\u0027s not needed. I think Android will use ESSL instead of GLSL.",
+      "range": {
+        "startLine": 1226,
+        "startChar": 0,
+        "endLine": 1227,
+        "endChar": 51
+      },
+      "revId": "850b334062c5f868174e72469e23bb15e48d8ec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6aa1bd67_1fc5a58a",
         "filename": "src/compiler/translator/glslang.l",
         "patchSetId": 7
@@ -34,6 +57,29 @@
       "revId": "850b334062c5f868174e72469e23bb15e48d8ec8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ad48473_57303254",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 7
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-23T01:49:30Z",
+      "side": 1,
+      "message": "Put this at the beginning of the body.",
+      "range": {
+        "startLine": 566,
+        "startChar": 0,
+        "endLine": 570,
+        "endChar": 5
+      },
+      "revId": "850b334062c5f868174e72469e23bb15e48d8ec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
