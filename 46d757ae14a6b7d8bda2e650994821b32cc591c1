@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bf28def6_e2e8b980",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-23T13:37:57Z",
+      "side": 1,
+      "message": "Okay, I see.  I took \"enabled level count\" to mean something different.  The comments help.",
+      "parentUuid": "5af20f9e_42018e88",
+      "range": {
+        "startLine": 505,
+        "startChar": 51,
+        "endLine": 505,
+        "endChar": 69
+      },
+      "revId": "46d757ae14a6b7d8bda2e650994821b32cc591c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d44ea740_c15cf316",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 12
