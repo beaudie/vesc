@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75d01082_cffe1e62",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 9
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-23T01:41:13Z",
+      "side": 1,
+      "message": "Where is the definition of \"extension\"? I don\u0027t think we can build ANGLE successfully with this CL.",
+      "range": {
+        "startLine": 567,
+        "startChar": 36,
+        "endLine": 567,
+        "endChar": 45
+      },
+      "revId": "9ddd4b18e9217609b5a41b7a45b6c233a95bc4dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
