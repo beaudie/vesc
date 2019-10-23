@@ -1038,20 +1038,59 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     std::sort(enabledDeviceExtensions.begin(), enabledDeviceExtensions.end(), StrLess);
     ANGLE_VK_TRY(displayVk, VerifyExtensionsPresent(deviceExtensionNames, enabledDeviceExtensions));
 
-    // Select additional features to be enabled
+    // Select additional features to be enabled.
     VkPhysicalDeviceFeatures2KHR enabledFeatures = {};
     enabledFeatures.sType                        = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
     enabledFeatures.features.independentBlend    = mPhysicalDeviceFeatures.independentBlend;
     enabledFeatures.features.robustBufferAccess  = mPhysicalDeviceFeatures.robustBufferAccess;
     enabledFeatures.features.samplerAnisotropy   = mPhysicalDeviceFeatures.samplerAnisotropy;
-    enabledFeatures.features.vertexPipelineStoresAndAtomics =
-        mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics;
     enabledFeatures.features.fragmentStoresAndAtomics =
         mPhysicalDeviceFeatures.fragmentStoresAndAtomics;
     enabledFeatures.features.geometryShader = mPhysicalDeviceFeatures.geometryShader;
+
     if (!vk::CommandBuffer::ExecutesInline())
     {
         enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
+    }
+
+    bool supportsTransformFeedbackExt = getFeatures().supportsTransformFeedbackExtension.enabled;
+    if (supportsTransformFeedbackExt)
+    {
+        enabledDeviceExtensions.push_back(VK_EXT_TRANSFORM_FEEDBACK_EXTENSION_NAME);
+
+        VkPhysicalDeviceTransformFeedbackFeaturesEXT xfbFeature = {};
+        xfbFeature.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_FEATURES_EXT;
+        xfbFeature.transformFeedback = true;
+        AppendToPNextChain(reinterpret_cast<vk::CommonStructHeader *>(&enabledFeatures),
+                           &xfbFeature);
+    }
+    else
+    {
+        // Needed to emulate transform feedback.
+        enabledFeatures.features.vertexPipelineStoresAndAtomics =
+            mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics;
+        // TODO (syoussefi): refactor to "get" feature/properties of divisor and transform feedback
+        // much earlier.  Then pass the transform feedback properties to initFeatures (or better
+        // yet, just cache it like the core properties are). In initFeature, make sure the limits
+        // match the minimum of GLES, like geometryStreams should be 4 at least (I believe that
+        // matches the separate attributes transform feedback output?). The properties can also be
+        // used in vk_caps_utils probably to set the limits.
+        //
+        // Without some features, we cannot use the extension.  Like if transformFeedbackQueries is
+        // not there, we can't do xfb queries, so no point in the extesion.  Without
+        // transformFeedbackStreamsLinesTriangles, we should be ok for GLES 3.1, but not 3.2 as it
+        // wants all sorts of output from GS to be capturable.
+        //
+        // Not sure if transformFeedbackRasterizationStreamSelect and associated stuff are really
+        // relevant. AFAIU, GLES just binds the xfb buffer as a vertex array and draws from it.  How
+        // does it know how much to draw?  Vulkan has vkCmdDrawIndirectByteCountEXT as optional
+        // (transformFeedbackDraw property) but if GLES application is not using a special draw
+        // call, it would be hard to decide to use that. Still a mystery to me where the draw count
+        // comes from.  Anyway, if this function is necessary, we can't do 3.2 without it.
+        //
+        // For 3.1, we could use the CPU-calculated values for queries, draw size etc, so it could
+        // be ok if some of those features are missing.  Could be a mess to use the extension like
+        // that to support up-to-3.1 though, so may be not worth it.
     }
 
     VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT divisorFeatures = {};
@@ -1108,6 +1147,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     mCurrentQueueFamilyIndex = queueFamilyIndex;
 
     vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, 0, &mQueue);
+
+    if (supportsTransformFeedbackExt)
+    {
+        InitTransformFeedbackEXTFunctions(mDevice);
+    }
 
     // Initialize the vulkan pipeline cache.
     bool success = false;
@@ -1245,10 +1289,11 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
         maxVersion = std::max(maxVersion, gl::Version(2, 0));
     }
 
-    // If vertexPipelineStoresAndAtomics is not supported, we can't currently support transform
-    // feedback.  TODO(syoussefi): this should be conditioned to the extension not being present as
-    // well, when that code path is implemented.  http://anglebug.com/3206
-    if (!mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
+    // If the Vulkan transform feedback extension is not present, we use an emulation path that
+    // requires the vertexPipelineStoresAndAtomics feature. Without the extension or this feature,
+    // we can't currently support transform feedback.
+    if (!mFeatures.supportsTransformFeedbackExtension.enabled &&
+        !mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
     {
         maxVersion = std::max(maxVersion, gl::Version(2, 0));
     }
@@ -1354,10 +1399,9 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
         (&mFeatures), supportsShaderStencilExport,
         ExtensionFound(VK_EXT_SHADER_STENCIL_EXPORT_EXTENSION_NAME, deviceExtensionNames));
 
-    // TODO(syoussefi): when the code path using the extension is implemented, this should be
-    // conditioned to the extension not being present as well.  http://anglebug.com/3206
-    ANGLE_FEATURE_CONDITION((&mFeatures), emulateTransformFeedback,
-                            mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(
+        (&mFeatures), supportsTransformFeedbackExtension,
+        ExtensionFound(VK_EXT_TRANSFORM_FEEDBACK_EXTENSION_NAME, deviceExtensionNames));
 
     ANGLE_FEATURE_CONDITION((&mFeatures), disableFifoPresentMode, IsLinux() && isIntel);
 

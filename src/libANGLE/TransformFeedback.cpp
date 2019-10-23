@@ -108,6 +108,7 @@ void TransformFeedback::onDestroy(const Context *context)
     {
         mState.mIndexedBuffers[i].set(context, nullptr, 0, 0);
     }
+    mImplementation->onDestroy(context);
 }
 
 TransformFeedback::~TransformFeedback()
@@ -175,7 +176,8 @@ angle::Result TransformFeedback::end(const Context *context)
 
 angle::Result TransformFeedback::pause(const Context *context)
 {
-    ANGLE_TRY(mImplementation->pause(context));
+    size_t xfbBufferCount = mState.mProgram->getState().getTransformFeedbackBufferCount();
+    ANGLE_TRY(mImplementation->pause(context, xfbBufferCount));
     mState.mPaused = true;
     return angle::Result::Continue;
 }
