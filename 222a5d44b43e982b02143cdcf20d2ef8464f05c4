@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d04d4a10_27bc8ef0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-23T16:20:30Z",
+      "side": 1,
+      "message": "can you leave a comment here detailing why we need the c cast?",
+      "range": {
+        "startLine": 243,
+        "startChar": 30,
+        "endLine": 243,
+        "endChar": 43
+      },
+      "revId": "222a5d44b43e982b02143cdcf20d2ef8464f05c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
