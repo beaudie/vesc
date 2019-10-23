@@ -486,6 +486,8 @@ std::string RendererGL::getRendererDescription() const
         reinterpret_cast<const char *>(mFunctions->getString(GL_VENDOR)));
     std::string nativeRendererString(
         reinterpret_cast<const char *>(mFunctions->getString(GL_RENDERER)));
+    std::string nativeVersionString(
+        reinterpret_cast<const char *>(mFunctions->getString(GL_VERSION)));
 
     std::ostringstream rendererString;
     rendererString << nativeVendorString << ", " << nativeRendererString << ", OpenGL";
