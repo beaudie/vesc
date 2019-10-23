@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0594edde_16d355cd",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-23T02:05:59Z",
+      "side": 1,
+      "message": "If that, how about we make this function \u0027virtual\u0027? And we can override this function in OutputESSL?\nI am ok with current change. Another thing that I\u0027m not sure that if the desktop also supports OpenGL ES. Should we check the platform to distinguish?",
+      "parentUuid": "56baaf37_b8270fa1",
+      "range": {
+        "startLine": 1226,
+        "startChar": 0,
+        "endLine": 1227,
+        "endChar": 51
+      },
+      "revId": "850b334062c5f868174e72469e23bb15e48d8ec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6aa1bd67_1fc5a58a",
         "filename": "src/compiler/translator/glslang.l",
         "patchSetId": 7
