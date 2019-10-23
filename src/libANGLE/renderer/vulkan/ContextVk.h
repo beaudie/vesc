@@ -18,6 +18,7 @@
 #include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace angle
 {
@@ -558,6 +559,10 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                     uint32_t *numIndicesOut);
     angle::Result setupDispatch(const gl::Context *context, vk::CommandBuffer **commandBufferOut);
 
+    void splitRPIfColorMaskRequires(gl::Framebuffer *framebuffer, const gl::BlendState &blendState);
+    void splitRPIfDepthStencilMaskRequires(gl::Framebuffer *framebuffer,
+                                           const gl::DepthStencilState &blendState);
+
     void updateViewport(FramebufferVk *framebufferVk,
                         const gl::Rectangle &viewport,
                         float nearPlane,
@@ -711,6 +716,11 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     VkClearValue mClearColorValue;
     VkClearValue mClearDepthStencilValue;
     VkColorComponentFlags mClearColorMask;
+
+    gl_vk::ColorWriteMaskCache mColorMaskCache;
+    gl_vk::DepthStencilWriteMaskCache mDepthStencilMaskCache;
+
+    bool mMayNeedRenderPassSplit;
 
     IncompleteTextureSet mIncompleteTextures;
 

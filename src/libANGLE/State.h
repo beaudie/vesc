@@ -650,6 +650,7 @@ class State : angle::NonCopyable
 
     const ImageUnit &getImageUnit(size_t unit) const { return mImageUnits[unit]; }
     const ActiveTexturePointerArray &getActiveTexturesCache() const { return mActiveTexturesCache; }
+    const std::set<GLuint> &getActiveTexturesIds() const { return mActiveTextureIds; }
     ComponentTypeMask getCurrentValuesTypeMask() const { return mCurrentValuesTypeMask; }
 
     // "onActiveTextureChange" is called when a texture binding changes.
@@ -862,6 +863,7 @@ class State : angle::NonCopyable
     // Also stores a notification channel to the texture itself to handle texture change events.
     ActiveTexturePointerArray mActiveTexturesCache;
     std::vector<angle::ObserverBinding> mCompleteTextureBindings;
+    std::set<GLuint> mActiveTextureIds;
 
     ActiveTextureMask mTexturesIncompatibleWithSamplers;
 

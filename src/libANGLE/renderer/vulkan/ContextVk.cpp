@@ -506,6 +506,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mCurrentDrawElementsType(gl::DrawElementsType::InvalidEnum),
       mXfbBaseVertex(0),
       mClearColorMask(kAllColorChannelsMask),
+      mMayNeedRenderPassSplit(false),
       mFlipYForCurrentSurface(false),
       mIsAnyHostVisibleBufferWritten(false),
       mEmulateSeamfulCubeMapSampling(false),
@@ -751,6 +752,20 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     }
 
+    bool removeMaskedAttachments = false;
+    if (mMayNeedRenderPassSplit || mGraphicsDirtyBits[DIRTY_BIT_TEXTURES])
+    {
+        // TODO: anglebug.com/4076
+        if (context->getState().getDrawFramebuffer()->formsRenderingFeedbackLoopWith(
+                context->getState()))
+        {
+            removeMaskedAttachments = true;
+            onRenderPassFinished();
+            mDrawFramebuffer->getFramebuffer()->finishCurrentCommands(this);
+        }
+        mMayNeedRenderPassSplit = false;
+    }
+
     // This could be improved using a dirty bit. But currently it's slower to use a handler
     // function than an inlined if. We should probably replace the dirty bit dispatch table
     // with a switch with inlined handler functions.
@@ -763,8 +778,8 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         if (!mDrawFramebuffer->appendToStartedRenderPass(&mCommandGraph, scissoredRenderArea,
                                                          &mRenderPassCommandBuffer))
         {
-            ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, scissoredRenderArea,
-                                                           &mRenderPassCommandBuffer));
+            ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(
+                this, scissoredRenderArea, removeMaskedAttachments, &mRenderPassCommandBuffer));
         }
     }
 
@@ -790,7 +805,6 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     }
 
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
-
     if (dirtyBits.none())
         return angle::Result::Continue;
 
@@ -2109,6 +2123,30 @@ void ContextVk::updateScissor(const gl::State &glState)
     framebufferVk->onScissorChange(this);
 }
 
+void ContextVk::splitRPIfColorMaskRequires(gl::Framebuffer *framebuffer,
+                                           const gl::BlendState &blendState)
+{
+    gl_vk::ColorWriteMaskCache newCache = gl_vk::createColorMaskCache(blendState);
+    FramebufferVk *framebufferVk        = vk::GetImpl(framebuffer);
+    if (framebufferVk->blendRequiresNewRenderPass(mColorMaskCache, newCache))
+    {
+        mMayNeedRenderPassSplit = true;
+    }
+    mColorMaskCache = newCache;
+}
+void ContextVk::splitRPIfDepthStencilMaskRequires(gl::Framebuffer *framebuffer,
+                                                  const gl::DepthStencilState &depthStencilState)
+{
+    gl_vk::DepthStencilWriteMaskCache newCache =
+        gl_vk::createDepthStencilMaskCache(depthStencilState);
+    FramebufferVk *framebufferVk = vk::GetImpl(framebuffer);
+    if (framebufferVk->depthStencilRequiresNewRenderPass(mDepthStencilMaskCache, newCache))
+    {
+        mMayNeedRenderPassSplit = true;
+    }
+    mDepthStencilMaskCache = newCache;
+}
+
 angle::Result ContextVk::syncState(const gl::Context *context,
                                    const gl::State::DirtyBits &dirtyBits,
                                    const gl::State::DirtyBits &bitMask)
@@ -2158,6 +2196,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                                             glState.getBlendState());
                 break;
             case gl::State::DIRTY_BIT_COLOR_MASK:
+                splitRPIfColorMaskRequires(glState.getDrawFramebuffer(), glState.getBlendState());
                 updateColorMask(glState.getBlendState());
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
@@ -2177,6 +2216,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateSampleMask(glState);
                 break;
             case gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED:
+                splitRPIfDepthStencilMaskRequires(glState.getDrawFramebuffer(),
+                                                  glState.getDepthStencilState());
                 mGraphicsPipelineDesc->updateDepthTestEnabled(&mGraphicsPipelineTransition,
                                                               glState.getDepthStencilState(),
                                                               glState.getDrawFramebuffer());
@@ -2186,6 +2227,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                                        glState.getDepthStencilState());
                 break;
             case gl::State::DIRTY_BIT_DEPTH_MASK:
+                splitRPIfDepthStencilMaskRequires(glState.getDrawFramebuffer(),
+                                                  glState.getDepthStencilState());
                 mGraphicsPipelineDesc->updateDepthWriteEnabled(&mGraphicsPipelineTransition,
                                                                glState.getDepthStencilState(),
                                                                glState.getDrawFramebuffer());
@@ -2214,11 +2257,15 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                                             glState.getDepthStencilState());
                 break;
             case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT:
+                splitRPIfDepthStencilMaskRequires(glState.getDrawFramebuffer(),
+                                                  glState.getDepthStencilState());
                 mGraphicsPipelineDesc->updateStencilFrontWriteMask(&mGraphicsPipelineTransition,
                                                                    glState.getDepthStencilState(),
                                                                    glState.getDrawFramebuffer());
                 break;
             case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_BACK:
+                splitRPIfDepthStencilMaskRequires(glState.getDrawFramebuffer(),
+                                                  glState.getDepthStencilState());
                 mGraphicsPipelineDesc->updateStencilBackWriteMask(&mGraphicsPipelineTransition,
                                                                   glState.getDepthStencilState(),
                                                                   glState.getDrawFramebuffer());

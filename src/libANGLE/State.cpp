@@ -21,6 +21,7 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Query.h"
+#include "libANGLE/Texture.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
@@ -516,6 +517,10 @@ ANGLE_INLINE void State::unsetActiveTextures(ActiveTextureMask textureMask)
     // Unset any relevant bound textures.
     for (size_t textureIndex : mProgram->getActiveSamplersMask())
     {
+        if (mActiveTexturesCache[textureIndex] != nullptr)
+        {
+            mActiveTextureIds.erase(static_cast<GLuint>(textureIndex));
+        }
         mActiveTexturesCache[textureIndex] = nullptr;
         mCompleteTextureBindings[textureIndex].reset();
     }
@@ -528,11 +533,20 @@ ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
 {
     if (!texture->isSamplerComplete(context, sampler))
     {
+        if (mActiveTexturesCache[textureIndex] != nullptr)
+        {
+            mActiveTextureIds.erase(static_cast<GLuint>(textureIndex));
+        }
         mActiveTexturesCache[textureIndex] = nullptr;
     }
     else
     {
+        if (mActiveTexturesCache[textureIndex] != nullptr)
+        {
+            mActiveTextureIds.erase(static_cast<GLuint>(textureIndex));
+        }
         mActiveTexturesCache[textureIndex] = texture;
+        mActiveTextureIds.insert(texture->getId());
 
         if (texture->hasAnyDirtyBit())
         {
@@ -572,6 +586,10 @@ ANGLE_INLINE void State::updateActiveTexture(const Context *context,
 
     if (!texture)
     {
+        if (mActiveTexturesCache[textureIndex] != nullptr)
+        {
+            mActiveTextureIds.erase(static_cast<GLuint>(textureIndex));
+        }
         mActiveTexturesCache[textureIndex] = nullptr;
         mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
         return;

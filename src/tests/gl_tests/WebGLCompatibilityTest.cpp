@@ -3570,6 +3570,7 @@ void main() {
 // Based on WebGL test conformance2/rendering/depth-stencil-feedback-loop.html
 TEST_P(WebGL2CompatibilityTest, RenderingFeedbackLoopWithDepthStencil)
 {
+    ANGLE_SKIP_TEST_IF(IsVulkan());  // anglebug.com/4076
     constexpr char kVS[] =
         R"(#version 300 es
 in vec4 aPosition;

@@ -4931,9 +4931,16 @@ void Context::clearStencil(GLint s)
 
 void Context::colorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
 {
-    mState.setColorMask(ConvertToBool(red), ConvertToBool(green), ConvertToBool(blue),
-                        ConvertToBool(alpha));
-    mStateCache.onColorMaskChange(this);
+    const BlendState &blendState = mState.getBlendState();
+    if (ConvertToBool(red) != blendState.colorMaskRed ||
+        ConvertToBool(green) != blendState.colorMaskGreen ||
+        ConvertToBool(blue) != blendState.colorMaskBlue ||
+        ConvertToBool(alpha) != blendState.colorMaskAlpha)
+    {
+        mState.setColorMask(ConvertToBool(red), ConvertToBool(green), ConvertToBool(blue),
+                            ConvertToBool(alpha));
+        mStateCache.onColorMaskChange(this);
+    }
 }
 
 void Context::colorMaski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a)

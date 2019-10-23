@@ -2008,13 +2008,17 @@ FramebufferAttachment *Framebuffer::getAttachmentFromSubjectIndex(angle::Subject
     }
 }
 
-bool Framebuffer::formsRenderingFeedbackLoopWith(const Context *context) const
+bool Framebuffer::formsRenderingFeedbackLoopWith(const State &state) const
 {
-    const State &state     = context->getState();
     const Program *program = state.getProgram();
 
     // TODO(jmadill): Default framebuffer feedback loops.
     if (mState.isDefault())
+    {
+        return false;
+    }
+
+    if (program == nullptr)
     {
         return false;
     }
@@ -2027,47 +2031,37 @@ bool Framebuffer::formsRenderingFeedbackLoopWith(const Context *context) const
     const bool checkStencil =
         (stencil && stencil->type() == GL_TEXTURE) && (!depth || *stencil != *depth);
 
-    const gl::ActiveTextureMask &activeTextures   = program->getActiveSamplersMask();
-    const gl::ActiveTexturePointerArray &textures = state.getActiveTexturesCache();
+    const std::set<GLuint> &activeTextureIds = state.getActiveTexturesIds();
 
-    for (size_t textureUnit : activeTextures)
+    // Depth and stencil attachment form feedback loops
+    // Regardless of if enabled or masked.
+    if (checkDepth)
     {
-        Texture *texture = textures[textureUnit];
-
-        if (texture == nullptr)
+        if (activeTextureIds.find(depth->id()) != activeTextureIds.end())
         {
-            continue;
+            return true;
         }
+    }
 
-        // Depth and stencil attachment form feedback loops
-        // Regardless of if enabled or masked.
-        if (checkDepth)
+    if (checkStencil)
+    {
+        if (activeTextureIds.find(stencil->id()) != activeTextureIds.end())
         {
-            if (texture->getId() == depth->id())
-            {
-                return true;
-            }
+            return true;
         }
+    }
 
-        if (checkStencil)
+    // Check if any color attachment forms a feedback loop.
+    for (size_t drawIndex : mColorAttachmentBits)
+    {
+        const FramebufferAttachment &attachment = mState.mColorAttachments[drawIndex];
+        ASSERT(attachment.isAttached());
+
+        if (attachment.type() == GL_TEXTURE &&
+            activeTextureIds.find(attachment.id()) != activeTextureIds.end())
         {
-            if (texture->getId() == stencil->id())
-            {
-                return true;
-            }
-        }
-
-        // Check if any color attachment forms a feedback loop.
-        for (size_t drawIndex : mColorAttachmentBits)
-        {
-            const FramebufferAttachment &attachment = mState.mColorAttachments[drawIndex];
-            ASSERT(attachment.isAttached());
-
-            if (attachment.isTextureWithId(texture->id()))
-            {
-                // TODO(jmadill): Check for appropriate overlap.
-                return true;
-            }
+            // TODO(jmadill): Check for appropriate overlap.
+            return true;
         }
     }
 
