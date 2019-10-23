@@ -2894,6 +2894,51 @@ void ContextVk::handleError(VkResult errorCode,
     mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
 }
 
+static bool isFormatColorWritable(const angle::Format &format, const gl::BlendState &blend)
+{
+    return (blend.colorMaskRed && format.redBits != 0) ||
+           (blend.colorMaskGreen && format.greenBits != 0) ||
+           (blend.colorMaskBlue && format.blueBits != 0) ||
+           (blend.colorMaskAlpha && format.alphaBits != 0);
+}
+static bool isFormatDepthStencilWritable(const angle::Format &format,
+                                         const gl::DepthStencilState &depthStencil)
+{
+    return (depthStencil.depthTest && depthStencil.depthMask && format.depthBits != 0) ||
+           (depthStencil.stencilTest && depthStencil.stencilMask != 0 && format.stencilBits != 0);
+}
+
+static bool isImageColorAttachment(const vk::ImageHelper &image,
+                                   const rx::FramebufferVk *framebuffer)
+{
+    ASSERT(framebuffer);
+    for (size_t colorIndexGL : framebuffer->getState().getEnabledDrawBuffers())
+    {
+        ASSERT(framebuffer->getColorDrawRenderTarget(colorIndexGL));
+        if (image.getImage().getHandle() ==
+            framebuffer->getColorDrawRenderTarget(colorIndexGL)->getImage().getImage().getHandle())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+static bool isImageDepthStencilAttachment(const vk::ImageHelper &image,
+                                          const rx::FramebufferVk *framebuffer)
+{
+    ASSERT(framebuffer);
+    if (framebuffer->getDepthStencilRenderTarget())
+    {
+        return image.getImage().getHandle() ==
+               framebuffer->getDepthStencilRenderTarget()->getImage().getImage().getHandle();
+    }
+    else
+    {
+        return false;
+    }
+}
+
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
                                               vk::CommandGraphResource *recorder)
 {
@@ -2961,7 +3006,21 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
         }
 
         textureVk->onImageViewGraphAccess(&mCommandGraph);
-        image.addReadDependency(this, recorder);
+
+        bool isColorAttachmentMasked = isImageColorAttachment(image, mDrawFramebuffer) &&
+                                       !isFormatColorWritable(image.getFormat().actualImageFormat(),
+                                                              getState().getBlendState());
+        bool isDepthStencilAttachmentMasked =
+            isImageDepthStencilAttachment(image, mDrawFramebuffer) &&
+            !isFormatDepthStencilWritable(image.getFormat().actualImageFormat(),
+                                          getState().getDepthStencilState());
+
+        // If the texture is an attachment, and all possible writes to this render target are masked
+        // off, then there is no dependency
+        if (!isColorAttachmentMasked && !isDepthStencilAttachmentMasked)
+        {
+            image.addReadDependency(this, recorder);
+        }
 
         mActiveTextures[textureUnit].texture = textureVk;
         mActiveTextures[textureUnit].sampler = samplerVk;
