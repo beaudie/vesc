@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "9866a6cd_aee40266",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-23T13:29:46Z",
+      "side": 1,
+      "message": "Actually, rather than rebuild to run the trace without capture, can use the new env var:\n\n  $ ANGLE_CAPTURE_ENABLED\u003d0 out/Debug/my_sample\n\nAnd the you\u0027ve got a complete recipe for testing out trace/replay.",
+      "parentUuid": "c7a6247f_59d60674",
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "78ed48fd_ab854154",
         "filename": "samples/BUILD.gn",
         "patchSetId": 5
