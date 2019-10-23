@@ -1333,10 +1333,69 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
     return angle::Result::Stop;
 }
 
+ANGLE_INLINE static bool isFormatWritableWithBlend(const angle::Format &format,
+                                                   const gl_vk::ColorWriteMaskCache &mask)
+{
+    return (mask.red && format.redBits != 0) || (mask.green && format.greenBits != 0) ||
+           (mask.blue && format.blueBits != 0) || (mask.alpha && format.alphaBits != 0);
+}
+ANGLE_INLINE static bool isFormatWritableWithDepthStencil(
+    const angle::Format &format,
+    const gl_vk::DepthStencilWriteMaskCache &mask)
+{
+    return (mask.bools.depthTest && mask.bools.depthMask && format.depthBits != 0) ||
+           (mask.bools.stencilTest && (mask.stencilMaskFront != 0 || mask.stencilMaskBack != 0) &&
+            format.stencilBits != 0);
+}
+
+bool FramebufferVk::blendRequiresNewRenderPass(const gl_vk::ColorWriteMaskCache &begin,
+                                               const gl_vk::ColorWriteMaskCache &end) const
+{
+    const auto &colorRenderTargets = mRenderTargetCache.getColors();
+    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+    {
+        RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
+        ASSERT(colorRenderTarget);
+
+        const angle::Format &format = colorRenderTarget->getImageFormat().intendedFormat();
+
+        if (isFormatWritableWithBlend(format, begin) != isFormatWritableWithBlend(format, end))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool FramebufferVk::depthStencilRequiresNewRenderPass(
+    const gl_vk::DepthStencilWriteMaskCache &begin,
+    const gl_vk::DepthStencilWriteMaskCache &end) const
+{
+    RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
+    if (depthStencilRenderTarget)
+    {
+
+        const angle::Format &format = depthStencilRenderTarget->getImageFormat().intendedFormat();
+
+        if (isFormatWritableWithDepthStencil(format, begin) !=
+            isFormatWritableWithDepthStencil(format, end))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                 const gl::Rectangle &renderArea,
                                                 vk::CommandBuffer **commandBufferOut)
 {
+    bool removeMaskedAttachments =
+        contextVk->getState().getDrawFramebuffer()->formsRenderingFeedbackLoopWith(
+            contextVk->getState());
+
     vk::Framebuffer *framebuffer = nullptr;
     ANGLE_TRY(getFramebuffer(contextVk, &framebuffer));
 
@@ -1353,24 +1412,34 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
 
-        ANGLE_TRY(colorRenderTarget->onColorDraw(contextVk, &mFramebuffer, writeCommands));
-
-        renderPassAttachmentOps.initWithLoadStore(attachmentClearValues.size(),
-                                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-        attachmentClearValues.emplace_back(kUninitializedClearValue);
+        if (!removeMaskedAttachments ||
+            isFormatWritableWithBlend(
+                colorRenderTarget->getImageFormat().intendedFormat(),
+                gl_vk::createColorMaskCache(contextVk->getState().getBlendState())))
+        {
+            ANGLE_TRY(colorRenderTarget->onColorDraw(contextVk, &mFramebuffer, writeCommands));
+            renderPassAttachmentOps.initWithLoadStore(attachmentClearValues.size(),
+                                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                                      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+            attachmentClearValues.emplace_back(kUninitializedClearValue);
+        }
     }
 
     RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
     if (depthStencilRenderTarget)
     {
-        ANGLE_TRY(
-            depthStencilRenderTarget->onDepthStencilDraw(contextVk, &mFramebuffer, writeCommands));
-
-        renderPassAttachmentOps.initWithLoadStore(attachmentClearValues.size(),
-                                                  VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-                                                  VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-        attachmentClearValues.emplace_back(kUninitializedClearValue);
+        if (!removeMaskedAttachments ||
+            isFormatWritableWithDepthStencil(
+                depthStencilRenderTarget->getImageFormat().intendedFormat(),
+                gl_vk::createDepthStencilMaskCache(contextVk->getState().getDepthStencilState())))
+        {
+            ANGLE_TRY(depthStencilRenderTarget->onDepthStencilDraw(contextVk, &mFramebuffer,
+                                                                   writeCommands));
+            renderPassAttachmentOps.initWithLoadStore(
+                attachmentClearValues.size(), VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+                VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+            attachmentClearValues.emplace_back(kUninitializedClearValue);
+        }
     }
 
     return mFramebuffer.beginRenderPass(contextVk, *framebuffer, renderArea, mRenderPassDesc,

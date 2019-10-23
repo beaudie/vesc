@@ -121,6 +121,11 @@ class FramebufferVk : public FramebufferImpl
 
     vk::FramebufferHelper *getFramebuffer() { return &mFramebuffer; }
 
+    bool blendRequiresNewRenderPass(const gl_vk::ColorWriteMaskCache &begin,
+                                    const gl_vk::ColorWriteMaskCache &end) const;
+    bool depthStencilRequiresNewRenderPass(const gl_vk::DepthStencilWriteMaskCache &begin,
+                                           const gl_vk::DepthStencilWriteMaskCache &end) const;
+
     angle::Result startNewRenderPass(ContextVk *context,
                                      const gl::Rectangle &renderArea,
                                      vk::CommandBuffer **commandBufferOut);
