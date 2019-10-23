@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "56baaf37_b8270fa1",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-10-23T01:53:00Z",
+      "side": 1,
+      "message": "It is needed for Android because TOutputESSL inherits TOutputGLSLBase:\nhttps://cs.chromium.org/chromium/src/third_party/angle/src/compiler/translator/OutputESSL.h?l\u003d15",
+      "parentUuid": "d9876036_ac1150f0",
+      "range": {
+        "startLine": 1226,
+        "startChar": 0,
+        "endLine": 1227,
+        "endChar": 51
+      },
+      "revId": "850b334062c5f868174e72469e23bb15e48d8ec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6aa1bd67_1fc5a58a",
         "filename": "src/compiler/translator/glslang.l",
         "patchSetId": 7
