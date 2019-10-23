@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1c711048_61b72fba",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-23T03:43:42Z",
+      "side": 1,
+      "message": "It\u0027s untested on Android. Maybe we could test once these CLs land? file http://anglebug.com/4036",
+      "parentUuid": "ecc3b9b7_eee363f0",
+      "range": {
+        "startLine": 10,
+        "startChar": 43,
+        "endLine": 10,
+        "endChar": 52
+      },
+      "revId": "5a65738081bacafc5ba9085d8e5d74495a60f308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8992424_1c3d84d2",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 1
@@ -83,6 +107,30 @@
       "writtenOn": "2019-10-22T16:33:32Z",
       "side": 1,
       "message": "This may come in later CLs, but providing a template and build command would go a long way to making this seamless.",
+      "range": {
+        "startLine": 27,
+        "startChar": 55,
+        "endLine": 27,
+        "endChar": 62
+      },
+      "revId": "5a65738081bacafc5ba9085d8e5d74495a60f308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b75ee2b_3323de54",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-23T03:43:42Z",
+      "side": 1,
+      "message": "It does come in later CLs. Will defer until then.",
+      "parentUuid": "d90275ce_67544a7f",
       "range": {
         "startLine": 27,
         "startChar": 55,
