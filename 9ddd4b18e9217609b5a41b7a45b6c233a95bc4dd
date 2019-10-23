@@ -22,6 +22,30 @@
       "revId": "9ddd4b18e9217609b5a41b7a45b6c233a95bc4dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db4c51f4_7d335be9",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 9
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-23T02:37:43Z",
+      "side": 1,
+      "message": "It indeed pass the compile and tests... And it indeed tell me the truth that run_code_generation.py doesn\u0027t do everything, it dosen\u0027t invoke generate_parser.sh. Thanks for catching this. Done.",
+      "parentUuid": "75d01082_cffe1e62",
+      "range": {
+        "startLine": 567,
+        "startChar": 36,
+        "endLine": 567,
+        "endChar": 45
+      },
+      "revId": "9ddd4b18e9217609b5a41b7a45b6c233a95bc4dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
