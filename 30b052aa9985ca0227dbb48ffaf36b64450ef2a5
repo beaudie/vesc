@@ -22,6 +22,30 @@
       "revId": "30b052aa9985ca0227dbb48ffaf36b64450ef2a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d146d13_5d3a8be1",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1271180
+      },
+      "writtenOn": "2019-10-23T02:18:16Z",
+      "side": 1,
+      "message": "In WebGL conformance test, it\u0027s necessary to know the exact driver vendor and version to differentiate some driver-specific issues. And GL_RENDERER/GL_VERSION are the most straightforward way to get this information. But with ANGLE\u0027s OpenGL backend, although we can parse the GL_RENDERER string to extract the driver vendor, the driver version is not exposed because GL_VERSION should be the version of OpenGL. So here\u0027s a workaround to let external user retrieve enough information from the GL_RENDERER string.",
+      "parentUuid": "40c23c83_1ff6158b",
+      "range": {
+        "startLine": 499,
+        "startChar": 29,
+        "endLine": 499,
+        "endChar": 91
+      },
+      "revId": "30b052aa9985ca0227dbb48ffaf36b64450ef2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
