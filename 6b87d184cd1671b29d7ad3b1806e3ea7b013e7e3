@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "87defe26_ffeeca0f",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-23T19:27:38Z",
+      "side": 1,
+      "message": "Updated the code to force a slash.",
+      "parentUuid": "574dc58a_0dd03c1f",
+      "range": {
+        "startLine": 45,
+        "startChar": 50,
+        "endLine": 45,
+        "endChar": 72
+      },
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7a6247f_59d60674",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 5
@@ -78,6 +102,24 @@
     },
     {
       "key": {
+        "uuid": "71c0c115_7ee194e8",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-23T19:27:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "262349e3_e9120c8c",
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78ed48fd_ab854154",
         "filename": "samples/BUILD.gn",
         "patchSetId": 5
@@ -89,6 +131,24 @@
       "writtenOn": "2019-10-22T19:56:37Z",
       "side": 1,
       "message": "if there are 2 contexts contributing to the same frame, how is it handled?",
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bd3d5bf_0e0e516e",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-23T19:27:38Z",
+      "side": 1,
+      "message": "This example is limited to one context. If we were capturing two right now they\u0027re write to two different cpp files. The core issue is EGL capture (http://anglebug.com/4035).\n\nTo properly handle EGL capture we should switch from tracking \"context1\", \"context2\" etc to \"thread1\", \"thread2\", etc. With GL and EGL calls interspersed.\n\nFor now we\u0027re keeping it simple and assuming we\u0027re just a single context.",
+      "parentUuid": "78ed48fd_ab854154",
       "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -112,6 +172,24 @@
     },
     {
       "key": {
+        "uuid": "4cfe1409_345502ee",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-23T19:27:38Z",
+      "side": 1,
+      "message": "In general the frame capture is all behind a mutex. ANGLE itself uses a front-end mutex right now before each entry point.\n\nThis specific class should be safe even without a mutex. It only uses stack-based storage. No globals.",
+      "parentUuid": "ac5c1a87_947aa821",
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7b2d75b_f5ddce49",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 5
@@ -123,6 +201,24 @@
       "writtenOn": "2019-10-22T19:56:37Z",
       "side": 1,
       "message": "are shaders treated as binary blobs for capture/replay?",
+      "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42ace34b_fdb863e0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-23T19:27:38Z",
+      "side": 1,
+      "message": "Shaders can be captured as strings. Currently kInlineDataThreshold controls if we capture data into a binary data file or into strings in the cpp file. This is pretty tuneable and we\u0027re open to feedback.",
+      "parentUuid": "e7b2d75b_f5ddce49",
       "revId": "6b87d184cd1671b29d7ad3b1806e3ea7b013e7e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
