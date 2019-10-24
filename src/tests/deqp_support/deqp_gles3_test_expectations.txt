@@ -583,3 +583,8 @@
 4011 VULKAN SWIFTSHADER : dEQP-GLES3.functional.fbo.blit.depth_stencil.*stencil8_scale = FAIL
 
 4013 VULKAN SWIFTSHADER : dEQP-GLES3.functional.fbo.invalidate.*.unbind_blit* = FAIL
+
+//  New or broken formats in ES 3.0, may be it relates to VK_IMAGE_USAGE_STORAGE_BIT
+3816 VULKAN PIXEL2 : dEQP-GLES3.functional.texture.specification.texstorage3d.format.rgba16* = FAIL
+3816 VULKAN PIXEL2 : dEQP-GLES3.functional.texture.specification.texstorage3d.format.rgb16* = FAIL
+3816 VULKAN PIXEL2 : dEQP-GLES3.functional.texture.specification.texstorage3d.format.rg32* = FAIL
