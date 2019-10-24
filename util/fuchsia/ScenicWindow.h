@@ -32,7 +32,7 @@ class ANGLE_UTIL_EXPORT ScenicWindow : public OSWindow
 {
   public:
     ScenicWindow();
-    ~ScenicWindow();
+    ~ScenicWindow() override;
 
     // OSWindow:
     bool initialize(const std::string &name, int width, int height) override;
