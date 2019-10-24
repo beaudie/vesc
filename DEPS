@@ -71,8 +71,8 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
-  'third_party/deqp/src': {
-    'url': '{chromium_git}/external/deqp@{deqp_revision}',
+  'third_party/vk-gl-cts/src': {
+    'url': '{chromium_git}/external/github.com/KhronosGroup/VK-GL-CTS@{deqp_revision}',
   },
 
   'third_party/fuchsia-sdk': {
