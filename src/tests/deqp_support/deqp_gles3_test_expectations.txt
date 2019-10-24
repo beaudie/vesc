@@ -574,6 +574,6 @@
 
 // Fails only with SwiftShader:
 
-4037 VULKAN SWIFTSHADER : dEQP-GLES3.functional.fbo.blit.depth_stencil.*stencil8_scale = FAIL
-
-4013 VULKAN SWIFTSHADER : dEQP-GLES3.functional.fbo.invalidate.*.unbind_blit* = FAIL
+4037 SWIFTSHADER : dEQP-GLES3.functional.fbo.blit.depth_stencil.*stencil8_scale = FAIL
+4013 SWIFTSHADER : dEQP-GLES3.functional.fbo.invalidate.*.unbind_blit* = FAIL
+4045 SWIFTSHADER : dEQP-GLES3.functional.uniform_api.*.sampler2D_samplerCube*

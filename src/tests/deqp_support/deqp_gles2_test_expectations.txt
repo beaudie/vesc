@@ -382,3 +382,6 @@
 2976 VULKAN NVIDIA : dEQP-GLES2.functional.shaders.invariance.* = FAIL
 // Fails on 431.02 NVIDIA driver
 3748 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fbo.render.repeated_clear.* = FAIL
+
+// Swiftshader Failures
+4045 SWIFTSHADER : dEQP-GLES2.functional.uniform_api.value.assigned.by_*.render.*.sampler2D_samplerCube_*
