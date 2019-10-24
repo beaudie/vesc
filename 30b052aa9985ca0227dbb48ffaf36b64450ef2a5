@@ -94,6 +94,30 @@
       "revId": "30b052aa9985ca0227dbb48ffaf36b64450ef2a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9378a2f8_c5a0ca54",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-24T16:33:47Z",
+      "side": 1,
+      "message": "We don\u0027t currently have any code that cares about the version string printed here so we might as well replace it with the nativeVersionString instead of duplicating it like this.  Could you remove the old code that printed the version?  Then we don\u0027t need to modify any of Chrome\u0027s parsing code.",
+      "parentUuid": "ccb017e4_9ba258f4",
+      "range": {
+        "startLine": 499,
+        "startChar": 29,
+        "endLine": 499,
+        "endChar": 91
+      },
+      "revId": "30b052aa9985ca0227dbb48ffaf36b64450ef2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
