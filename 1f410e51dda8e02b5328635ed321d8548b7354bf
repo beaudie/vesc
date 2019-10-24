@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad88307e_0dd02248",
+        "filename": "extensions/ANGLE_get_image.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-10-24T19:29:47Z",
+      "side": 1,
+      "message": "GetTexSubImageANGLE(...) and GetRenderbufferSubImage*ANGLE(...) are not useful to us?",
+      "revId": "1f410e51dda8e02b5328635ed321d8548b7354bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
