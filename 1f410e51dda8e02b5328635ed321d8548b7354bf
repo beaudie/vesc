@@ -16,6 +16,24 @@
       "revId": "1f410e51dda8e02b5328635ed321d8548b7354bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf815697_536241b4",
+        "filename": "extensions/ANGLE_get_image.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-24T20:27:43Z",
+      "side": 1,
+      "message": "I don\u0027t think so. We only need full images for capture/replay.",
+      "parentUuid": "ad88307e_0dd02248",
+      "revId": "1f410e51dda8e02b5328635ed321d8548b7354bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
