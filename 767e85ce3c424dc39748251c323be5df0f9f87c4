@@ -16,6 +16,24 @@
       "revId": "767e85ce3c424dc39748251c323be5df0f9f87c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9966f009_7dc66afa",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-24T10:34:59Z",
+      "side": 1,
+      "message": "So without any previous staging buffer read/write status, we cannot simply add read/write again.\nFor the dependency between step 1 and step 2, we should use memory barrier, so probably only contextVk-\u003ememoryBarrier() works",
+      "parentUuid": "47cd2738_9686ba0c",
+      "revId": "767e85ce3c424dc39748251c323be5df0f9f87c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
