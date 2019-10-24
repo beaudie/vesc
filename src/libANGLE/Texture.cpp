@@ -99,6 +99,7 @@ TextureState::TextureState(TextureType type)
       mBaseLevel(0),
       mMaxLevel(1000),
       mDepthStencilTextureMode(GL_DEPTH_COMPONENT),
+      mBoundAsImageTexture(false),
       mImmutableFormat(false),
       mImmutableLevels(0),
       mUsage(GL_NONE),
@@ -1883,6 +1884,15 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
             return;
         default:
             return;
+    }
+}
+
+void Texture::onBindImageTexture()
+{
+    if (!mState.mBoundAsImageTexture)
+    {
+        mDirtyBits.set(DIRTY_BIT_BOUND_AS_IMAGE);
+        mState.mBoundAsImageTexture = true;
     }
 }
 
