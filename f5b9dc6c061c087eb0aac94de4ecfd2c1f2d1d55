@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cfc4b58_993f81bb",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3599,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-24T16:38:30Z",
+      "side": 1,
+      "message": "I am concerned that the WebGL2 test will start failing, this code is a copy of https://github.com/KhronosGroup/WebGL/blob/master/sdk/tests/conformance2/rendering/depth-stencil-feedback-loop.html#L96\n\nThat said, this CL passed the WebGL2 conformance tests.  Let\u0027s just be prepared for it to fail somewhere.",
+      "range": {
+        "startLine": 3599,
+        "startChar": 54,
+        "endLine": 3599,
+        "endChar": 73
+      },
+      "revId": "f5b9dc6c061c087eb0aac94de4ecfd2c1f2d1d55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
