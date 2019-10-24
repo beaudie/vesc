@@ -873,7 +873,7 @@ class ProgramD3D::LoadBinaryTask : public ProgramD3D::GetExecutableTask
 {
   public:
     LoadBinaryTask(ProgramD3D *program, gl::BinaryInputStream *stream, gl::InfoLog &infoLog)
-        : ProgramD3D::GetExecutableTask(program), mProgram(program), mInfoLog(infoLog)
+        : ProgramD3D::GetExecutableTask(program)
     {
         ASSERT(mProgram);
         ASSERT(stream);
@@ -901,9 +901,6 @@ class ProgramD3D::LoadBinaryTask : public ProgramD3D::GetExecutableTask
     }
 
   private:
-    ProgramD3D *mProgram;
-    gl::InfoLog &mInfoLog;
-
     bool mDataCopySucceeded;
     angle::MemoryBuffer mStreamData;
 };
