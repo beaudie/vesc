@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47cd2738_9686ba0c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-24T10:32:13Z",
+      "side": 1,
+      "message": "There is one problem with Texture2DTestES3.GenerateMipmapAndBaseLevelLUMA/ES3_Vulkan, its API:\nglGenerateMipmap\nglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);\ndrawQuad\n\nin glGenerateMipmap, we redefine the image, in glDraw, we redefine the image again (because base level is changed), so the image and staging buffer is like this:\n1. glGenerateMipmap: copy old image to staging buffer (onWrite)\n2. glGenerateMipmap: copy staging buffer to new image (onRead)\n3. glDraw: copy new image to staging buffer (onWrite)\n4. glDraw: copy staging buffer to another new image (onRead)\nSo the problem is in step 3, the staging buffer both reads from and write to the same image.\nHowever, without the onWrite and onRead dependency setting, sometimes step 2 will be executed before step 1",
+      "revId": "767e85ce3c424dc39748251c323be5df0f9f87c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
