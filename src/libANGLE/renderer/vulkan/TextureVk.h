@@ -343,6 +343,8 @@ class TextureVk : public TextureImpl
 
     angle::Result changeLevels(ContextVk *contextVk, GLuint baseLevel, GLuint maxLevel);
 
+    angle::Result updateBaseMaxLevels(ContextVk *contextVk, GLuint baseLevel, GLuint maxLevel);
+
     bool mOwnsImage;
 
     gl::TextureType mImageNativeType;
@@ -378,6 +380,9 @@ class TextureVk : public TextureImpl
 
     // Overridden in some tests.
     size_t mStagingBufferInitialSize;
+
+    // The created vkImage usage flag.
+    VkImageUsageFlags mImageUsageFlags;
 };
 
 }  // namespace rx
