@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-deqp_path = "../../third_party/deqp/src"
+deqp_path = "../../third_party/vk-gl-cts/src"
 
 deqp_include_dirs = [
   "$deqp_path/executor",
