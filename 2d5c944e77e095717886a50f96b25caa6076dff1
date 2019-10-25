@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b0ecf7e_9c9af440",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-25T17:08:32Z",
+      "side": 1,
+      "message": "There is a warning because the validation layers don\u0027t exist on mac? Is that true? Is there a way to get validation layers from swiftshader?",
+      "revId": "2d5c944e77e095717886a50f96b25caa6076dff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a5ebe22_70f2e722",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-25T17:08:32Z",
+      "side": 1,
+      "message": "Not sure how to properly handle this, but it fails to build with the mock ICD",
+      "revId": "2d5c944e77e095717886a50f96b25caa6076dff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42f9add3_ffc16b28",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-10-25T17:08:32Z",
+      "side": 1,
+      "message": "Does it matter that these are duplicated in metal:angle_metal_backend_config?",
+      "revId": "2d5c944e77e095717886a50f96b25caa6076dff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
