@@ -78,8 +78,9 @@ Chrome with the latest ANGLE changes.
 We also use additional auto-rollers to roll third party libraries into ANGLE once per day:
 
  * [SPIRV-Headers into ANGLE](https://autoroll.skia.org/r/spirv-headers-angle-autoroll),
- * [SPIRV-Tools into ANGLE](https://autoroll.skia.org/r/spirv-tools-angle-autoroll) and
- * [glslang into ANGLE](https://autoroll.skia.org/r/glslang-angle-autoroll)
+ * [SPIRV-Tools into ANGLE](https://autoroll.skia.org/r/spirv-tools-angle-autoroll),
+ * [glslang into ANGLE](https://autoroll.skia.org/r/glslang-angle-autoroll) and
+ * [SwiftShader into ANGLE](https://autoroll.skia.org/r/swiftshader-angle-autoroll)
 
 Please ensure these rollers are also healthy and unblocked.
 
