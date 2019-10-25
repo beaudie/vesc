@@ -308,14 +308,22 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
             return false;
         }
 
-        // OSX does not support ES 3.1 features.
-        if (param.majorVersion == 3 && param.minorVersion > 0)
+        switch (param.getRenderer())
         {
-            return false;
+            case EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:
+                // ES 3.1+ back-end is not supported properly.
+                if (param.eglParameters.majorVersion == 3 && param.eglParameters.minorVersion > 0)
+                {
+                    return false;
+                }
+                return true;
+            case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
+                // OSX does not support native vulkan
+                return param.eglParameters.deviceType ==
+                       EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE;
+            default:
+                return false;
         }
-
-        // Currently we only support the OpenGL back-end on OSX.
-        return (param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE);
     }
 
     if (IsFuchsia())

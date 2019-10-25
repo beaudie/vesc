@@ -76,6 +76,8 @@
 #        include "libANGLE/renderer/vulkan/android/DisplayVkAndroid.h"
 #    elif defined(ANGLE_PLATFORM_FUCHSIA)
 #        include "libANGLE/renderer/vulkan/fuchsia/DisplayVkFuchsia.h"
+#    elif defined(ANGLE_PLATFORM_APPLE)
+#        include "libANGLE/renderer/vulkan/macOS/DisplayVkMacOS.h"
 #    else
 #        error Unsupported Vulkan platform.
 #    endif
@@ -288,6 +290,8 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
             impl = new rx::DisplayVkAndroid(state);
 #    elif defined(ANGLE_PLATFORM_FUCHSIA)
             impl = new rx::DisplayVkFuchsia(state);
+#    elif defined(ANGLE_PLATFORM_APPLE)
+            impl = new rx::DisplayVkMacOS(state);
 #    else
 #        error Unsupported Vulkan platform.
 #    endif
@@ -1269,7 +1273,10 @@ static ClientExtensions GenerateClientExtensions()
 #endif
 
 #if defined(ANGLE_ENABLE_VULKAN)
-    extensions.platformANGLEVulkan                = true;
+    extensions.platformANGLEVulkan = true;
+#endif
+
+#if defined(ANGLE_ENABLE_SWIFTSHADER)
     extensions.platformANGLEDeviceTypeSwiftShader = true;
 #endif
 

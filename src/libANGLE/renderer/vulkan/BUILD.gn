@@ -15,11 +15,6 @@ declare_args() {
 
   # Enable Vulkan GPU trace event capability
   angle_enable_vulkan_gpu_trace_events = false
-
-  # Currently SwiftShader's Vulkan front-end doesn't build on Android.
-  # SwiftShader is not needed on Fuchsia because Vulkan is supported on all
-  # devices that run Fuchsia.
-  angle_swiftshader = !is_android && !is_fuchsia
 }
 
 _vulkan_backend_sources = [
@@ -136,6 +131,15 @@ if (is_fuchsia) {
   ]
 }
 
+if (is_mac) {
+  _vulkan_backend_sources += [
+    "macOS/DisplayVkMacOS.mm",
+    "macOS/DisplayVkMacOS.h",
+    "macOS/WindowSurfaceVkMacOS.mm",
+    "macOS/WindowSurfaceVkMacOS.h",
+  ]
+}
+
 config("vulkan_config") {
   _sws_icd = "./libvk_swiftshader_icd.json"
   if (is_win) {
@@ -147,6 +151,9 @@ config("vulkan_config") {
     "ANGLE_VK_MOCK_ICD_JSON=\"$angle_data_dir/VkICD_mock_icd.json\"",
     "ANGLE_VK_SWIFTSHADER_ICD_JSON=\"${_sws_icd}\"",
   ]
+  if (is_mac) {
+    defines += [ "VK_USE_PLATFORM_MACOS_MVK" ]
+  }
   if (is_android) {
     libs = [ "vulkan" ]
   }
@@ -155,7 +162,7 @@ config("vulkan_config") {
   }
 }
 
-if (angle_swiftshader) {
+if (angle_enable_swiftshader) {
   copy("angle_swiftshader_icd_rename") {
     sources = [
       "$swiftshader_dir/src/Vulkan/vk_swiftshader_icd.json",
@@ -216,7 +223,9 @@ group("angle_vulkan") {
   data_deps = []
   if (!is_android && !is_fuchsia) {
     deps += [ "$angle_root/third_party/vulkan-loader/src:libvulkan" ]
-    data_deps += [ "$angle_root/third_party/vulkan-tools/src:VkICD_mock_icd" ]
+    if (!is_mac) {
+      data_deps += [ "$angle_root/third_party/vulkan-tools/src:VkICD_mock_icd" ]
+    }
     public_configs +=
         [ "$angle_root/third_party/vulkan-loader/src:vulkan_loader_config" ]
   }
@@ -239,7 +248,7 @@ group("angle_vulkan") {
     }
   }
 
-  if (angle_swiftshader) {
+  if (angle_enable_swiftshader) {
     data_deps += [
       ":angle_swiftshader_icd",
       "$swiftshader_dir/src/Vulkan:swiftshader_libvulkan",
@@ -249,12 +258,18 @@ group("angle_vulkan") {
 
 config("angle_vulkan_backend_config") {
   defines = [ "ANGLE_ENABLE_VULKAN" ]
+  if (angle_enable_swiftshader) {
+    defines += [ "ANGLE_ENABLE_SWIFTSHADER" ]
+  }
   if (angle_enable_custom_vulkan_cmd_buffers) {
     defines += [ "ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS=1" ]
   }
 
   if (angle_enable_vulkan_gpu_trace_events) {
     defines += [ "ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS=1" ]
+  }
+  if (is_mac) {
+    defines += [ "VK_USE_PLATFORM_METAL_EXT" ]
   }
 }
 
