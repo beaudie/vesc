@@ -1,0 +1,8 @@
+{
+  "src/tests/deqp_data.gni":
+    "109ab5fecb544a2cdc94943d57b82810",
+  "src/tests/deqp_support/BUILD.gn":
+    "c716cb10425bdc6b4863f3a39b42e21b",
+  "src/tests/gen_deqp_gni.py":
+    "3ebfec5cb04a53f1321f5d1d9e75c40e"
+}
