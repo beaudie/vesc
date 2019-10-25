@@ -20,6 +20,7 @@ class GlslangWrapperVk
 {
   public:
     static void GetShaderSource(bool useOldRewriteStructSamplers,
+                                bool emulateTransformFeedback,
                                 const gl::ProgramState &programState,
                                 const gl::ProgramLinkedResources &resources,
                                 gl::ShaderMap<std::string> *shaderSourcesOut);

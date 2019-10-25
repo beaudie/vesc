@@ -41,6 +41,7 @@ enum class CommandGraphResourceType
     GraphBarrier,
     DebugMarker,
     HostAvailabilityOperation,
+    TransformFeedback
 };
 
 // Certain functionality cannot be put in secondary command buffers, so they are special-cased in
@@ -60,6 +61,8 @@ enum class CommandGraphNodeFunction
     PushDebugMarker,
     PopDebugMarker,
     HostAvailabilityOperation,
+    BeginTransformFeedback,
+    EndTransformFeedback
 };
 
 // Receives notifications when a render pass command buffer is no longer able to record. Can be
@@ -195,6 +198,8 @@ class CommandGraphNode final : angle::NonCopyable
     void setFenceSync(const vk::Event &event);
     void setDebugMarker(GLenum source, std::string &&marker);
     const std::string &getDebugMarker() const { return mDebugMarker; }
+    void setXfbCounterBuffer(size_t validBufferCount,
+                             const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBuffers);
 
     ANGLE_INLINE void addGlobalMemoryBarrier(VkFlags srcAccess,
                                              VkFlags dstAccess,
@@ -248,6 +253,9 @@ class CommandGraphNode final : angle::NonCopyable
     // Debug markers:
     GLenum mDebugMarkerSource;
     std::string mDebugMarker;
+    // TransformFeedbackExt:
+    size_t mXfbValidCounterBufferCount;
+    gl::TransformFeedbackBuffersArray<VkBuffer> mXfbCounterBufferHandles;
 
     // Parents are commands that must be submitted before 'this' CommandNode can be submitted.
     std::vector<CommandGraphNode *> mParents;
@@ -524,6 +532,11 @@ class CommandGraph final : angle::NonCopyable
     void popDebugMarker();
     // Host-visible buffer write availability operation:
     void makeHostVisibleBufferWriteAvailable();
+    // TransformFeedback
+    void beginTransformFeedback(size_t bufferCount,
+                                const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBuffers);
+    void endTransformFeedback(size_t bufferCount,
+                              const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBuffers);
 
     void onResourceUse(const SharedResourceUse &resourceUse);
     void releaseResourceUses();

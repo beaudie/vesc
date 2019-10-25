@@ -587,8 +587,10 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                                     vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsShaderResources(const gl::Context *context,
                                                      vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsTransformFeedbackBuffers(const gl::Context *context,
-                                                              vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsTransformFeedbackBuffersEmul(const gl::Context *context,
+                                                                  vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsTransformFeedbackBuffersExt(const gl::Context *context,
+                                                                 vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsDescriptorSets(const gl::Context *context,
                                                     vk::CommandBuffer *commandBuffer);
 
