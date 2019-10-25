@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fc7c47b1_815635fc",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. I don\u0027t think union can be used though. Since BufferRef and BufferWeakRef are non-trivial type.",
+      "parentUuid": "44826ddb_eaef58d0",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 2
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51cbc1ff_5a920939",
         "filename": "src/libANGLE/renderer/metal/BufferMtl.h",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9badef9a_0c4eee4c",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "IndexConversionBuffer has been moved outside. VertexConversionBuffer I would keep inside since the outside code doesn\u0027t use it directly.",
+      "parentUuid": "51cbc1ff_5a920939",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 6
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ddd9e0e4_8835af59",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e2ef062_ffc77c63",
+      "range": {
+        "startLine": 250,
+        "startChar": 4,
+        "endLine": 250,
+        "endChar": 18
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e954506_46811b47",
         "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
         "patchSetId": 10
@@ -91,6 +163,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c36fef5_64bb7b09",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e954506_46811b47",
+      "range": {
+        "startLine": 227,
+        "startChar": 21,
+        "endLine": 227,
+        "endChar": 60
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "c7589178_96804bb1",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0ff3587_552c3f2a",
+      "range": {
+        "startLine": 340,
+        "startChar": 0,
+        "endLine": 358,
+        "endChar": 0
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e3e2ba0c_9679ccbf",
         "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
         "patchSetId": 10
@@ -137,6 +257,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdfce3fa_e62f362d",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3e2ba0c_9679ccbf",
+      "range": {
+        "startLine": 359,
+        "startChar": 11,
+        "endLine": 359,
+        "endChar": 27
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "5c2a8a0d_b513f420",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "705c9cb7_5d088dec",
+      "range": {
+        "startLine": 132,
+        "startChar": 23,
+        "endLine": 132,
+        "endChar": 34
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff39d536_f87ca4b1",
         "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
         "patchSetId": 10
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "08135789_fb189f61",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. The first version is being used, so keeping it.",
+      "parentUuid": "ff39d536_f87ca4b1",
+      "range": {
+        "startLine": 769,
+        "startChar": 0,
+        "endLine": 784,
+        "endChar": 0
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf4bd1fe_63f7b6e9",
         "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
         "patchSetId": 10
@@ -206,6 +398,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86d55a4d_172021d4",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. Removed utils function.",
+      "parentUuid": "bf4bd1fe_63f7b6e9",
+      "range": {
+        "startLine": 1017,
+        "startChar": 0,
+        "endLine": 1031,
+        "endChar": 9
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -333,6 +549,24 @@
     },
     {
       "key": {
+        "uuid": "d46b1ee4_e93498db",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "RendererMtl has been merged into DisplayMtl. In my subsequent comments if mistakenly mentioning renderer, it will mean DisplayMtl.",
+      "parentUuid": "6e9bd282_34505b22",
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0999ffbf_5392f483",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
         "patchSetId": 10
@@ -353,6 +587,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a66da42_9013560d",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0999ffbf_5392f483",
+      "range": {
+        "startLine": 27,
+        "startChar": 28,
+        "endLine": 29,
+        "endChar": 66
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -427,6 +685,30 @@
     },
     {
       "key": {
+        "uuid": "1374a730_75836dbd",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Update: Cannot use RenderTargetCache for now. since it only supports packed depth stencil buffer. On iOS devices, metal supports separate depth \u0026 stencil, furthermore, it doesn\u0027t support packed depth24stencil8, so using separate depth \u0026 stencil will save space instead of using the fallback format depth32stencil8x24. \nIn contrast, on macos computers, metal only permits packed depth stencil, and depth24stenil8 is supported on this platform.\nWill leave this as TODO in future CL when RenderTargetCache is updated to support separate depth \u0026 stencil.",
+      "parentUuid": "c8fb7025_90993cc4",
+      "range": {
+        "startLine": 134,
+        "startChar": 3,
+        "endLine": 134,
+        "endChar": 73
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b33f32d3_e4a1f10b",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 10
@@ -447,6 +729,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d499b208_60c22a4b",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "This is runtime requirement from Apple. It is not stated in the official docs. However, when running the sample apps, Metal runtime throws exception when I try to use separate depth \u0026 stencil buffers. This could be set as a flag in a limitations struct. However, who know in future Apple might change the runtime behavior.\n\nUpdate: I actually checked the behavior on both macos and ios device. On ios device, Apple allows the depth and stencil buffers to be separate. Furthermore, on ios, packed depth24stencil8 is not supported. If packed depth stencil is required, then the only format supported is depth32stencil8 which is 64 bit texture actually, and it is waste of space of devices when they can just use separate depth32 and stencil8 buffers. So RenderTargetCache cannot be used either, because it assumes depth \u0026 stencil is packed.\nFor now, I will use a limitation flag indicating separate depth \u0026 stencil is supported or not. Until RenderTargetCache is updated to support separate depth \u0026 stencil I will use my own rendertarget cache implementation here.",
+      "parentUuid": "b33f32d3_e4a1f10b",
+      "range": {
+        "startLine": 246,
+        "startChar": 5,
+        "endLine": 246,
+        "endChar": 44
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -473,6 +779,30 @@
     },
     {
       "key": {
+        "uuid": "c12ce8e0_f69fa041",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c65947a7_87a466a3",
+      "range": {
+        "startLine": 704,
+        "startChar": 9,
+        "endLine": 704,
+        "endChar": 27
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "07d47883_068cdf37",
         "filename": "src/libANGLE/renderer/metal/GlslangWrapper.h",
         "patchSetId": 10
@@ -496,6 +826,30 @@
     },
     {
       "key": {
+        "uuid": "cd75d888_3ea36b45",
+        "filename": "src/libANGLE/renderer/metal/GlslangWrapper.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. See mtl_glslang_utils.h/.mm",
+      "parentUuid": "07d47883_068cdf37",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 23
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fcfdde9f_fece2c35",
         "filename": "src/libANGLE/renderer/metal/GlslangWrapper.mm",
         "patchSetId": 10
@@ -510,6 +864,24 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fc1f6d0_54c13fe1",
+        "filename": "src/libANGLE/renderer/metal/GlslangWrapper.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. See mtl_glslang_utils.mm",
+      "parentUuid": "fcfdde9f_fece2c35",
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -536,6 +908,30 @@
     },
     {
       "key": {
+        "uuid": "19ca243b_24c9f55a",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Sorry, what do you mean?",
+      "parentUuid": "415014f9_0a56340c",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 6
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94dc2454_adeabf4c",
         "filename": "src/libANGLE/renderer/metal/ProgramMtl.h",
         "patchSetId": 10
@@ -556,6 +952,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb389fc8_449cddfa",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "94dc2454_adeabf4c",
+      "range": {
+        "startLine": 165,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 11
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -582,6 +1002,30 @@
     },
     {
       "key": {
+        "uuid": "4cbc0363_32c461d0",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e974c67a_3497f454",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 8
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7cfdbe8_9eea7a7f",
         "filename": "src/libANGLE/renderer/metal/StateCacheMtl.h",
         "patchSetId": 10
@@ -596,6 +1040,24 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9f2488c_c5b12562",
+        "filename": "src/libANGLE/renderer/metal/StateCacheMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. This file is renamed to mtl_state_cache.h",
+      "parentUuid": "a7cfdbe8_9eea7a7f",
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -787,6 +1249,30 @@
     },
     {
       "key": {
+        "uuid": "58ecd0a9_3eb098a6",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "I set this flag default to false in release build. This is quite aggressive frame capture. If turning on, it will capture every frame. Xcode can capture frames without enabling this code, all just by simply clicking a capture button.\nThis code is only for finely controlling which frame to capture. Useful when I want to capture the very first frame rendered (Xcode cannot do that due to button click timing).",
+      "parentUuid": "01545c46_85d2a6ff",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05976df4_05a115da",
         "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
         "patchSetId": 10
@@ -807,6 +1293,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2c47019_7af84307",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Come on. This is standard lib function. They are supposed to know at least where to look.",
+      "parentUuid": "05976df4_05a115da",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 9
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -833,6 +1343,30 @@
     },
     {
       "key": {
+        "uuid": "0b3f8f80_f47ff03c",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Changed to NOTE",
+      "parentUuid": "556ba603_5302ba27",
+      "range": {
+        "startLine": 368,
+        "startChar": 8,
+        "endLine": 368,
+        "endChar": 83
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ded9026b_32e0587a",
         "filename": "src/libANGLE/renderer/metal/UtilsMtl.h",
         "patchSetId": 10
@@ -847,6 +1381,24 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "866ac121_f50c2706",
+        "filename": "src/libANGLE/renderer/metal/UtilsMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Changed class name to RenderUtils. File has been renamed to mtl_render_utils.h/.mm",
+      "parentUuid": "ded9026b_32e0587a",
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -873,6 +1425,30 @@
     },
     {
       "key": {
+        "uuid": "11a62f1b_18e3b329",
+        "filename": "src/libANGLE/renderer/metal/UtilsMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. See mtl_render_utils.h",
+      "parentUuid": "4f424fce_ef1b05e1",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 6
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ff12c08_e60c03af",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 10
@@ -893,6 +1469,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d9ff2f5_dcdc7453",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "7ff12c08_e60c03af",
+      "range": {
+        "startLine": 18,
+        "startChar": 8,
+        "endLine": 18,
+        "endChar": 36
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -919,6 +1519,30 @@
     },
     {
       "key": {
+        "uuid": "4fd219ae_591f5532",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0aca73e6_4b357907",
+      "range": {
+        "startLine": 141,
+        "startChar": 9,
+        "endLine": 141,
+        "endChar": 14
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6df846f_433d9130",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 10
@@ -939,6 +1563,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89c97062_9847927b",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. anw, readers could read the declaration of mCurrentArrayBuffers in the header counterpart of this file.",
+      "parentUuid": "e6df846f_433d9130",
+      "range": {
+        "startLine": 165,
+        "startChar": 9,
+        "endLine": 165,
+        "endChar": 13
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -965,6 +1613,30 @@
     },
     {
       "key": {
+        "uuid": "c8a3cde5_3dcf4a4d",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Thanks, that could be cleaner. However, for now, I avoid doing it since I don\u0027t want to duplicate the output parameters assignment upon returning.",
+      "parentUuid": "99a2f53d_a025b66f",
+      "range": {
+        "startLine": 269,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 13
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6d184d0_a696c0a1",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 10
@@ -985,6 +1657,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b7b75a2_c2c47812",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Come on. vertexDescOut is a pointer declared in this function\u0027s parameters. It is just declared a few lines above. The readers should easily see its type there.",
+      "parentUuid": "e6d184d0_a696c0a1",
+      "range": {
+        "startLine": 278,
+        "startChar": 8,
+        "endLine": 278,
+        "endChar": 12
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1011,6 +1707,30 @@
     },
     {
       "key": {
+        "uuid": "27bafd20_af04191c",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. I mistakenly named the helper function: setDefaultVertexBufferLayout. It should have had an uppercase first letter like: SetDefaultVertexBufferLayout.\nChanged in local code. But cannot upload, still hanging.",
+      "parentUuid": "2fd6bd24_cc1eec45",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 283,
+        "endChar": 50
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec083ccb_33f56205",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 10
@@ -1031,6 +1751,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0ac270b_07dbfd03",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec083ccb_33f56205",
+      "range": {
+        "startLine": 359,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 41
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1057,6 +1801,30 @@
     },
     {
       "key": {
+        "uuid": "73f4c65c_05baaf17",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13158c47_1d5598d8",
+      "range": {
+        "startLine": 373,
+        "startChar": 12,
+        "endLine": 373,
+        "endChar": 32
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f33d849_512d3bb5",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 10
@@ -1077,6 +1845,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bded9f0a_a7a4e0a2",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f33d849_512d3bb5",
+      "range": {
+        "startLine": 379,
+        "startChar": 12,
+        "endLine": 379,
+        "endChar": 32
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1103,6 +1895,30 @@
     },
     {
       "key": {
+        "uuid": "33ff114c_402ecdad",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d27a7638_e9d625d4",
+      "range": {
+        "startLine": 459,
+        "startChar": 0,
+        "endLine": 460,
+        "endChar": 20
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75d3780f_7e60e721",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 10
@@ -1123,6 +1939,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7640ed25_af41d921",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "I will do it in future. For now, I just remove convertIndexBufferCPU() from the code.",
+      "parentUuid": "75d3780f_7e60e721",
+      "range": {
+        "startLine": 487,
+        "startChar": 4,
+        "endLine": 487,
+        "endChar": 31
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1149,6 +1989,30 @@
     },
     {
       "key": {
+        "uuid": "74057dfb_c5d22162",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "This code is removed.",
+      "parentUuid": "78d0beb1_21c2c06c",
+      "range": {
+        "startLine": 541,
+        "startChar": 10,
+        "endLine": 541,
+        "endChar": 14
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b1337ea_2fd3fe2f",
         "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.h",
         "patchSetId": 10
@@ -1169,6 +2033,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06585f07_f86be828",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b1337ea_2fd3fe2f",
+      "range": {
+        "startLine": 28,
+        "startChar": 3,
+        "endLine": 28,
+        "endChar": 18
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1219,6 +2107,30 @@
     },
     {
       "key": {
+        "uuid": "2e4716d1_57c6272f",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc137187_3e48dbf5",
+      "range": {
+        "startLine": 25,
+        "startChar": 6,
+        "endLine": 25,
+        "endChar": 34
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82b0adce_6341f4bb",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
         "patchSetId": 10
@@ -1242,6 +2154,30 @@
     },
     {
       "key": {
+        "uuid": "6d449b4d_bec13657",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82b0adce_6341f4bb",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 66
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfddc62c_85efdabc",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
         "patchSetId": 10
@@ -1262,6 +2198,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84a82d8d_1f2afdc5",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfddc62c_85efdabc",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 59
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1407,6 +2367,30 @@
     },
     {
       "key": {
+        "uuid": "c0205f5e_14e65bd5",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "I will keep it as atomic for now. We can profile the performance in future to see if any optimization is needed. Metal reporting finished command buffer actually happens on a separate thread from the thread that the reading of last finished command buffer\u0027s id takes place. So atomic is necessary since integer reading is not guaranteed to be atomic.",
+      "parentUuid": "edeeab25_11e85f73",
+      "range": {
+        "startLine": 76,
+        "startChar": 9,
+        "endLine": 76,
+        "endChar": 15
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe892f86_49bfbcbc",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
         "patchSetId": 10
@@ -1478,6 +2462,30 @@
     },
     {
       "key": {
+        "uuid": "1cce0700_6a64a0ed",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "9ffc9b82_98dc26f3",
+      "range": {
+        "startLine": 161,
+        "startChar": 4,
+        "endLine": 203,
+        "endChar": 0
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3068bb79_42d6d4fc",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
         "patchSetId": 10
@@ -1498,6 +2506,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "367009b2_65063cc0",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3068bb79_42d6d4fc",
+      "range": {
+        "startLine": 78,
+        "startChar": 49,
+        "endLine": 78,
+        "endChar": 78
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1524,6 +2556,30 @@
     },
     {
       "key": {
+        "uuid": "759fdab1_ee020b8d",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. initWriteDependencyAndStoreAction() replaces this.",
+      "parentUuid": "99f7b7b8_a9360b88",
+      "range": {
+        "startLine": 424,
+        "startChar": 8,
+        "endLine": 424,
+        "endChar": 42
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5bf149de_c59034a8",
         "filename": "src/libANGLE/renderer/metal/mtl_common.h",
         "patchSetId": 10
@@ -1547,6 +2603,30 @@
     },
     {
       "key": {
+        "uuid": "e8aedf85_45905ac3",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done. Moved inside mtl. See below.",
+      "parentUuid": "5bf149de_c59034a8",
+      "range": {
+        "startLine": 47,
+        "startChar": 19,
+        "endLine": 47,
+        "endChar": 37
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d4085cf_00100c45",
         "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
         "patchSetId": 10
@@ -1567,6 +2647,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9ee56d3_245835ac",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d4085cf_00100c45",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 8
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1641,6 +2745,30 @@
     },
     {
       "key": {
+        "uuid": "49702b26_81c86638",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b54249d_200c209e",
+      "range": {
+        "startLine": 40,
+        "startChar": 13,
+        "endLine": 40,
+        "endChar": 23
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8aa564b_dceb38ee",
         "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
         "patchSetId": 10
@@ -1661,6 +2789,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e5c6f6b_434bf7a3",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8aa564b_dceb38ee",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 38
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1687,6 +2839,30 @@
     },
     {
       "key": {
+        "uuid": "28b50b17_28eaa74d",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a350f79_74537fb6",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 76
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ee8d556_c950bf6f",
         "filename": "src/libANGLE/renderer/metal/mtl_utils.h",
         "patchSetId": 10
@@ -1707,6 +2883,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2617277_3e55f52c",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ee8d556_c950bf6f",
+      "range": {
+        "startLine": 32,
+        "startChar": 40,
+        "endLine": 32,
+        "endChar": 51
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1852,6 +3052,30 @@
     },
     {
       "key": {
+        "uuid": "a23fa604_75d1f68d",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0788ab10_64f2d77f",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 71
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a401df3_a22eae32",
         "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
         "patchSetId": 10
@@ -1872,6 +3096,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e313880_20c243c1",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a401df3_a22eae32",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 77
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1898,6 +3146,30 @@
     },
     {
       "key": {
+        "uuid": "371c306d_a3def028",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82231bcf_a26000f8",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 0
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d382474_af4735b9",
         "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
         "patchSetId": 10
@@ -1921,6 +3193,30 @@
     },
     {
       "key": {
+        "uuid": "977a4034_6808c07c",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "It\u0027s Apple convention, they have a family of functions like \u003ctype\u003eMake(). So by looking at the function name, you know the return type is MTLRegion.",
+      "parentUuid": "4d382474_af4735b9",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 9
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71574d17_4c17d3d0",
         "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
         "patchSetId": 10
@@ -1941,6 +3237,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63d698cd_61ca9f44",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71574d17_4c17d3d0",
+      "range": {
+        "startLine": 403,
+        "startChar": 5,
+        "endLine": 403,
+        "endChar": 27
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

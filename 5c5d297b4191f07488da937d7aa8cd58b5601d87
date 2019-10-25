@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9bfde0f_4aa5c688",
+        "filename": "src/common/apple_platform_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "This is special Objective-C directive. I cannot use in an ordinary function like template. So macro is the only way here.",
+      "range": {
+        "startLine": 22,
+        "startChar": 9,
+        "endLine": 22,
+        "endChar": 18
+      },
+      "revId": "5c5d297b4191f07488da937d7aa8cd58b5601d87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f9ed0255_e24528ed",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "This code is moved from mtl_utils.mm",
+      "range": {
+        "startLine": 632,
+        "startChar": 5,
+        "endLine": 632,
+        "endChar": 18
+      },
+      "revId": "5c5d297b4191f07488da937d7aa8cd58b5601d87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c5a80b1_103b09f1",
+        "filename": "src/libANGLE/renderer/metal/StateCacheMtl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "File has been renamed to mtl_render_utils.h",
+      "revId": "5c5d297b4191f07488da937d7aa8cd58b5601d87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "42b85eb4_02111f81",
+        "filename": "src/libANGLE/renderer/metal/mtl_glslang_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "I may removed this and use pure functions instead of static class functions in next CL where the actual translator\u0027s code is contained. This is just stub code.",
+      "range": {
+        "startLine": 21,
+        "startChar": 6,
+        "endLine": 21,
+        "endChar": 18
+      },
+      "revId": "5c5d297b4191f07488da937d7aa8cd58b5601d87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "33e2d58a_90b04633",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "This file is renamed from UtilsMtl.h",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 12
+      },
+      "revId": "5c5d297b4191f07488da937d7aa8cd58b5601d87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21e8eddd_867a4ed6",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "This file is renamed from UtilsMtl.mm",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 12
+      },
+      "revId": "5c5d297b4191f07488da937d7aa8cd58b5601d87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0a8e0acb_0aefddba",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "Previously, this could be translated to actual PrimitiveTopologyClass like triangle, point, or line. However, if that specific class is used, then in the test where the code draws GL_TRIANGLES but assigns a value to gl_PointSize in vertex shader, metal will throw exception. Since point size cannot be assigned when using triangle class.\nSo unspecified class is OK for that case.\nSpecific topology class is only required in layered rendering.",
+      "range": {
+        "startLine": 387,
+        "startChar": 7,
+        "endLine": 387,
+        "endChar": 9
+      },
+      "revId": "5c5d297b4191f07488da937d7aa8cd58b5601d87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2d02f54_184c5056",
+        "filename": "src/libANGLE/renderer/metal/shaders/blit.metal",
+        "patchSetId": 14
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "This was supposed to be this formula: (color.r * 0.3) + (color.g * 0.59) + (color.b * 0.11);\nBut seems like ANGLE expects the luminance conversion is using red channel only. I noticed it during running end2end_tests.",
+      "range": {
+        "startLine": 66,
+        "startChar": 24,
+        "endLine": 66,
+        "endChar": 27
+      },
+      "revId": "5c5d297b4191f07488da937d7aa8cd58b5601d87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b567bbd8_3e7ebb87",
+        "filename": "src/libANGLE/renderer/metal/shaders/mtl_default_shaders_src_autogen.inc",
+        "patchSetId": 14
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T16:47:31Z",
+      "side": 1,
+      "message": "mtl_default_shaders_src_autogen.inc is just a big string containing all source code of all internal shaders. This is useful to debug internal shaders using xcode. Since compiled binary form cannot be debugged.",
+      "range": {
+        "startLine": 32,
+        "startChar": 7,
+        "endLine": 32,
+        "endChar": 12
+      },
+      "revId": "5c5d297b4191f07488da937d7aa8cd58b5601d87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
