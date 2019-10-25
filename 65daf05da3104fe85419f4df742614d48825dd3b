@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3698c172_e5cd6e2b",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-25T00:48:46Z",
+      "side": 1,
+      "message": "Would it be less code to use a pre-link callback like in this case?\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/tests/gl_tests/VertexAttributeTest.cpp#1368\n\ncolorLocation can also be auto-assigned a location.",
+      "revId": "65daf05da3104fe85419f4df742614d48825dd3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
