@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b02442dc_ad3ebfef",
+        "filename": "src/compiler/translator/OutputGLSLBase.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-25T21:28:52Z",
+      "side": 1,
+      "message": "Please use format TODO(crbug.com/angleproject/XXYYZZ) or TODO(shaobo.yan@intel.com).",
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a516198_013a4013",
+        "filename": "src/compiler/translator/util.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-25T21:28:52Z",
+      "side": 1,
+      "message": "Doesn\u0027t this need a TODO as well to generalize this for other platforms?",
+      "range": {
+        "startLine": 363,
+        "startChar": 25,
+        "endLine": 363,
+        "endChar": 34
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d424fc9f_e19b6d12",
+        "filename": "src/tests/compiler_tests/SamplerVideoWEBGL_test.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-25T21:28:52Z",
+      "side": 1,
+      "message": "Sorry, but this looks wrong. The point of samplerVideoWebGL is that it may abstract over multiple different texture types, not just texture2D.\n\nI\u0027ve just posted the following pull request updating the extension specification:\n  https://github.com/KhronosGroup/WebGL/pull/2951\n\nCould you please review it and provide your feedback?\n\nIf it looks okay, could you please update this pull request to use textureVideoWEBGL in ESSL 1.00 shaders? It\u0027s fine to continue to use the overloaded \"texture\" function in ESSL 3.00 shaders.\n\nThanks.",
+      "range": {
+        "startLine": 80,
+        "startChar": 28,
+        "endLine": 80,
+        "endChar": 37
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4faf5dd0_4b27ff57",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-25T21:28:52Z",
+      "side": 1,
+      "message": "Same issue here.",
+      "range": {
+        "startLine": 64,
+        "startChar": 19,
+        "endLine": 64,
+        "endChar": 28
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b332de7a_47bd3cde",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-25T21:28:52Z",
+      "side": 1,
+      "message": "This test should be using the synthetic GL_TEXTURE_VIDEO_IMAGE_WEBGL binding point - which it doesn\u0027t look like is implemented in this pull request.",
+      "range": {
+        "startLine": 71,
+        "startChar": 18,
+        "endLine": 71,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0deb5fc7_a474b14d",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-25T21:28:52Z",
+      "side": 1,
+      "message": "Same concern here.",
+      "range": {
+        "startLine": 103,
+        "startChar": 11,
+        "endLine": 103,
+        "endChar": 20
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb47d6f1_6767d19d",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-25T21:28:52Z",
+      "side": 1,
+      "message": "Same concern here.",
+      "range": {
+        "startLine": 115,
+        "startChar": 18,
+        "endLine": 115,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6da3da3_3144664f",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-25T21:28:52Z",
+      "side": 1,
+      "message": "Same concern here - though the ESSL 3.00 shader looks good.",
+      "range": {
+        "startLine": 153,
+        "startChar": 18,
+        "endLine": 153,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
