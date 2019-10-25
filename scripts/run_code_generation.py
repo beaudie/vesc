@@ -117,6 +117,8 @@ generators = {
         'src/libANGLE/renderer/metal/gen_mtl_format_table.py',
     'Metal default shaders':
         'src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py',
+    'dEQP GN/GNI File':
+        'src/tests/gen_deqp_gni.py',
 }
 
 
