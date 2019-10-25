@@ -93,7 +93,12 @@ declare_args() {
   angle_enable_vulkan =
       angle_has_build &&
       ((is_win && !angle_is_winuwp) || (is_linux && use_x11 && !is_chromeos) ||
-       (is_android && ndk_api_level_at_least_26) || is_fuchsia)
+       (is_android && ndk_api_level_at_least_26) || is_fuchsia || is_mac)
+
+  # Currently SwiftShader's Vulkan front-end doesn't build on Android.
+  # SwiftShader is not needed on Fuchsia because Vulkan is supported on all
+  # devices that run Fuchsia.
+  angle_enable_swiftshader = !is_android && !is_fuchsia
   angle_enable_null = true
   angle_enable_essl = true
   angle_enable_glsl = true
@@ -110,7 +115,7 @@ declare_args() {
   # Disable the layers in ubsan builds because of really slow builds.
   angle_enable_vulkan_validation_layers =
       angle_enable_vulkan && !is_ubsan && !is_tsan && !is_asan &&
-      (is_debug || dcheck_always_on)
+      (is_debug || dcheck_always_on) && !is_mac
 
   # Disable overlay by default
   angle_enable_overlay = false
