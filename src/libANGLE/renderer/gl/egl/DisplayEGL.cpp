@@ -153,6 +153,9 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->noConfigContext = mEGL->hasExtension("EGL_KHR_no_config_context");
 
+    outExtensions->surfacelessContext =
+        eglVersion >= gl::Version(1, 5) || mEGL->hasExtension("EGL_KHR_surfaceless_context");
+
     DisplayGL::generateExtensions(outExtensions);
 }
 
