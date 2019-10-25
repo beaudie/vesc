@@ -24,7 +24,7 @@ vars = {
   'chromium_revision': '9325340209749c1ff4eb198a8f7176c0a16dea6d',
 
   # Current revision of dEQP.
-  'deqp_revision': 'd3eef28e67ce6795ba3a2124aaa977819729d45f',
+  'deqp_revision': '54ec6f2b1390bf33ea10424dca610f8bcbfefa06',
 
   # Current revision of glslang, the Khronos SPIRV compiler.
   'glslang_revision': '7662586844f46f8f454f1db4a26e1d705a302e36',
@@ -71,8 +71,8 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
-  'third_party/deqp/src': {
-    'url': '{chromium_git}/external/deqp@{deqp_revision}',
+  'third_party/vk-gl-cts/src': {
+    'url': '{chromium_git}/external/github.com/KhronosGroup/VK-GL-CTS@{deqp_revision}',
   },
 
   'third_party/fuchsia-sdk': {
