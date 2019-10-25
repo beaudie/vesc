@@ -14,16 +14,13 @@
 namespace rx
 {
 
-class FunctionsGL;
-class StateManagerGL;
-
 class TransformFeedbackGL : public TransformFeedbackImpl
 {
   public:
-    TransformFeedbackGL(const gl::TransformFeedbackState &state,
-                        const FunctionsGL *functions,
-                        StateManagerGL *stateManager);
+    TransformFeedbackGL(const gl::TransformFeedbackState &state, GLuint transformFeedbackID);
     ~TransformFeedbackGL() override;
+
+    void onDestroy(const gl::Context *context) override;
 
     angle::Result begin(const gl::Context *context, gl::PrimitiveMode primitiveMode) override;
     angle::Result end(const gl::Context *context) override;
@@ -36,20 +33,17 @@ class TransformFeedbackGL : public TransformFeedbackImpl
 
     GLuint getTransformFeedbackID() const;
 
-    void syncActiveState(const gl::Context *context,
-                         bool active,
-                         gl::PrimitiveMode primitiveMode) const;
-    void syncPausedState(bool paused) const;
+    angle::Result syncActiveState(const gl::Context *context,
+                                  bool active,
+                                  gl::PrimitiveMode primitiveMode);
+    angle::Result syncPausedState(const gl::Context *context, bool paused);
 
   private:
-    const FunctionsGL *mFunctions;
-    StateManagerGL *mStateManager;
-
     GLuint mTransformFeedbackID;
 
-    mutable bool mIsActive;
-    mutable bool mIsPaused;
-    mutable GLuint mActiveProgram;
+    bool mIsActive;
+    bool mIsPaused;
+    GLuint mActiveProgram;
 };
 }  // namespace rx
 

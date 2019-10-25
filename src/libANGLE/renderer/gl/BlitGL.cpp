@@ -95,7 +95,7 @@ class ScopedGLState : angle::NonCopyable
         stateManager->setPolygonOffsetFillEnabled(false);
         stateManager->setRasterizerDiscardEnabled(false);
 
-        stateManager->pauseTransformFeedback();
+        ANGLE_TRY(stateManager->pauseTransformFeedback(context));
         return stateManager->pauseAllQueries(context);
     }
 

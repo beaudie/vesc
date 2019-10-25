@@ -149,7 +149,12 @@ SyncImpl *ContextGL::createSync()
 
 TransformFeedbackImpl *ContextGL::createTransformFeedback(const gl::TransformFeedbackState &state)
 {
-    return new TransformFeedbackGL(state, getFunctions(), getStateManager());
+    const FunctionsGL *functions = getFunctions();
+
+    GLuint transformFeedback = 0;
+    functions->genTransformFeedbacks(1, &transformFeedback);
+
+    return new TransformFeedbackGL(state, transformFeedback);
 }
 
 SamplerImpl *ContextGL::createSampler(const gl::SamplerState &state)
@@ -725,8 +730,7 @@ angle::Result ContextGL::syncState(const gl::Context *context,
                                    const gl::State::DirtyBits &dirtyBits,
                                    const gl::State::DirtyBits &bitMask)
 {
-    mRenderer->getStateManager()->syncState(context, dirtyBits, bitMask);
-    return angle::Result::Continue;
+    return mRenderer->getStateManager()->syncState(context, dirtyBits, bitMask);
 }
 
 GLint ContextGL::getGPUDisjoint()

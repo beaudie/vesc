@@ -318,13 +318,14 @@ void StateManagerGL::deleteRenderbuffer(GLuint rbo)
     }
 }
 
-void StateManagerGL::deleteTransformFeedback(GLuint transformFeedback)
+angle::Result StateManagerGL::deleteTransformFeedback(const gl::Context *context,
+                                                      GLuint transformFeedback)
 {
     if (transformFeedback != 0)
     {
         if (mTransformFeedback == transformFeedback)
         {
-            bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+            ANGLE_TRY(bindTransformFeedback(context, GL_TRANSFORM_FEEDBACK, 0));
         }
 
         if (mCurrentTransformFeedback != nullptr &&
@@ -333,8 +334,10 @@ void StateManagerGL::deleteTransformFeedback(GLuint transformFeedback)
             mCurrentTransformFeedback = nullptr;
         }
 
-        mFunctions->deleteTransformFeedbacks(1, &transformFeedback);
+        ANGLE_GL_TRY(context, mFunctions->deleteTransformFeedbacks(1, &transformFeedback));
     }
+
+    return angle::Result::Continue;
 }
 
 void StateManagerGL::useProgram(GLuint program)
@@ -636,7 +639,9 @@ void StateManagerGL::bindRenderbuffer(GLenum type, GLuint renderbuffer)
     }
 }
 
-void StateManagerGL::bindTransformFeedback(GLenum type, GLuint transformFeedback)
+angle::Result StateManagerGL::bindTransformFeedback(const gl::Context *context,
+                                                    GLenum type,
+                                                    GLuint transformFeedback)
 {
     ASSERT(type == GL_TRANSFORM_FEEDBACK);
     if (mTransformFeedback != transformFeedback)
@@ -647,14 +652,17 @@ void StateManagerGL::bindTransformFeedback(GLenum type, GLuint transformFeedback
         if (mCurrentTransformFeedback != nullptr &&
             mCurrentTransformFeedback->getTransformFeedbackID() != transformFeedback)
         {
-            mCurrentTransformFeedback->syncPausedState(true);
-            mCurrentTransformFeedback = nullptr;
+            TransformFeedbackGL *prevCurrentTransformFeedback = mCurrentTransformFeedback;
+            mCurrentTransformFeedback                         = nullptr;
+            ANGLE_TRY(prevCurrentTransformFeedback->syncPausedState(context, true));
         }
 
         mTransformFeedback = transformFeedback;
-        mFunctions->bindTransformFeedback(type, mTransformFeedback);
+        ANGLE_GL_TRY(context, mFunctions->bindTransformFeedback(type, mTransformFeedback));
         onTransformFeedbackStateChange();
     }
+
+    return angle::Result::Continue;
 }
 
 void StateManagerGL::onTransformFeedbackStateChange()
@@ -702,13 +710,14 @@ void StateManagerGL::updateDispatchIndirectBufferBinding(const gl::Context *cont
     }
 }
 
-void StateManagerGL::pauseTransformFeedback()
+angle::Result StateManagerGL::pauseTransformFeedback(const gl::Context *context)
 {
     if (mCurrentTransformFeedback != nullptr)
     {
-        mCurrentTransformFeedback->syncPausedState(true);
+        ANGLE_TRY(mCurrentTransformFeedback->syncPausedState(context, true));
         onTransformFeedbackStateChange();
     }
+    return angle::Result::Continue;
 }
 
 angle::Result StateManagerGL::pauseAllQueries(const gl::Context *context)
@@ -1530,16 +1539,16 @@ void StateManagerGL::setClearStencil(GLint clearStencil)
     }
 }
 
-void StateManagerGL::syncState(const gl::Context *context,
-                               const gl::State::DirtyBits &glDirtyBits,
-                               const gl::State::DirtyBits &bitMask)
+angle::Result StateManagerGL::syncState(const gl::Context *context,
+                                        const gl::State::DirtyBits &glDirtyBits,
+                                        const gl::State::DirtyBits &bitMask)
 {
     const gl::State &state = context->getState();
 
     const gl::State::DirtyBits glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits) & bitMask;
     if (!glAndLocalDirtyBits.any())
     {
-        return;
+        return angle::Result::Continue;
     }
 
     // TODO(jmadill): Investigate only syncing vertex state for active attributes
@@ -1829,7 +1838,7 @@ void StateManagerGL::syncState(const gl::Context *context,
                 updateProgramImageBindings(context);
                 break;
             case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
-                syncTransformFeedbackState(context);
+                ANGLE_TRY(syncTransformFeedbackState(context));
                 break;
             case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
                 updateProgramStorageBufferBindings(context);
@@ -1897,6 +1906,7 @@ void StateManagerGL::syncState(const gl::Context *context,
     }
 
     mLocalDirtyBits &= ~(bitMask);
+    return angle::Result::Continue;
 }
 
 void StateManagerGL::setFramebufferSRGBEnabled(const gl::Context *context, bool enabled)
@@ -2140,7 +2150,7 @@ void StateManagerGL::syncSamplersState(const gl::Context *context)
     }
 }
 
-void StateManagerGL::syncTransformFeedbackState(const gl::Context *context)
+angle::Result StateManagerGL::syncTransformFeedbackState(const gl::Context *context)
 {
     // Set the current transform feedback state
     gl::TransformFeedback *transformFeedback = context->getState().getCurrentTransformFeedback();
@@ -2148,17 +2158,20 @@ void StateManagerGL::syncTransformFeedbackState(const gl::Context *context)
     {
         TransformFeedbackGL *transformFeedbackGL =
             GetImplAs<TransformFeedbackGL>(transformFeedback);
-        bindTransformFeedback(GL_TRANSFORM_FEEDBACK, transformFeedbackGL->getTransformFeedbackID());
-        transformFeedbackGL->syncActiveState(context, transformFeedback->isActive(),
-                                             transformFeedback->getPrimitiveMode());
-        transformFeedbackGL->syncPausedState(transformFeedback->isPaused());
+        ANGLE_TRY(bindTransformFeedback(context, GL_TRANSFORM_FEEDBACK,
+                                        transformFeedbackGL->getTransformFeedbackID()));
+        ANGLE_TRY(transformFeedbackGL->syncActiveState(context, transformFeedback->isActive(),
+                                                       transformFeedback->getPrimitiveMode()));
+        ANGLE_TRY(transformFeedbackGL->syncPausedState(context, transformFeedback->isPaused()));
         mCurrentTransformFeedback = transformFeedbackGL;
     }
     else
     {
-        bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+        ANGLE_TRY(bindTransformFeedback(context, GL_TRANSFORM_FEEDBACK, 0));
         mCurrentTransformFeedback = nullptr;
     }
+
+    return angle::Result::Continue;
 }
 
 void StateManagerGL::validateState() const

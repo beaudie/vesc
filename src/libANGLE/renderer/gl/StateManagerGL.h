@@ -50,7 +50,7 @@ class StateManagerGL final : angle::NonCopyable
     void deleteBuffer(GLuint buffer);
     void deleteFramebuffer(GLuint fbo);
     void deleteRenderbuffer(GLuint rbo);
-    void deleteTransformFeedback(GLuint transformFeedback);
+    angle::Result deleteTransformFeedback(const gl::Context *context, GLuint transformFeedback);
 
     void useProgram(GLuint program);
     void forceUseProgram(GLuint program);
@@ -75,7 +75,9 @@ class StateManagerGL final : angle::NonCopyable
                           GLenum format);
     void bindFramebuffer(GLenum type, GLuint framebuffer);
     void bindRenderbuffer(GLenum type, GLuint renderbuffer);
-    void bindTransformFeedback(GLenum type, GLuint transformFeedback);
+    angle::Result bindTransformFeedback(const gl::Context *context,
+                                        GLenum type,
+                                        GLuint transformFeedback);
     void onTransformFeedbackStateChange();
     void beginQuery(gl::QueryType type, QueryGL *queryObject, GLuint queryId);
     void endQuery(gl::QueryType type, QueryGL *queryObject, GLuint queryId);
@@ -156,16 +158,16 @@ class StateManagerGL final : angle::NonCopyable
 
     void setProvokingVertex(GLenum mode);
 
-    void pauseTransformFeedback();
+    angle::Result pauseTransformFeedback(const gl::Context *context);
     angle::Result pauseAllQueries(const gl::Context *context);
     angle::Result pauseQuery(const gl::Context *context, gl::QueryType type);
     angle::Result resumeAllQueries(const gl::Context *context);
     angle::Result resumeQuery(const gl::Context *context, gl::QueryType type);
     angle::Result onMakeCurrent(const gl::Context *context);
 
-    void syncState(const gl::Context *context,
-                   const gl::State::DirtyBits &glDirtyBits,
-                   const gl::State::DirtyBits &bitMask);
+    angle::Result syncState(const gl::Context *context,
+                            const gl::State::DirtyBits &glDirtyBits,
+                            const gl::State::DirtyBits &bitMask);
 
     ANGLE_INLINE void updateMultiviewBaseViewLayerIndexUniform(
         const gl::Program *program,
@@ -202,7 +204,7 @@ class StateManagerGL final : angle::NonCopyable
     void updateDrawIndirectBufferBinding(const gl::Context *context);
 
     void syncSamplersState(const gl::Context *context);
-    void syncTransformFeedbackState(const gl::Context *context);
+    angle::Result syncTransformFeedbackState(const gl::Context *context);
 
     void updateMultiviewBaseViewLayerIndexUniformImpl(
         const gl::Program *program,
