@@ -65,6 +65,29 @@
     },
     {
       "key": {
+        "uuid": "867ddd7c_927c83b2",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-25T17:17:22Z",
+      "side": 1,
+      "message": "use unique_ptr instead of MemoryBuffer since I want to swap the pointers between prev and destination buffer pointers after each iteration.",
+      "range": {
+        "startLine": 325,
+        "startChar": 13,
+        "endLine": 325,
+        "endChar": 23
+      },
+      "revId": "5c5d297b4191f07488da937d7aa8cd58b5601d87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42b85eb4_02111f81",
         "filename": "src/libANGLE/renderer/metal/mtl_glslang_utils.h",
         "patchSetId": 14
