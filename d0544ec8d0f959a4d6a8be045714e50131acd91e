@@ -22,6 +22,30 @@
       "revId": "d0544ec8d0f959a4d6a8be045714e50131acd91e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7567bd33_e72976a0",
+        "filename": "util/test_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-26T00:54:19Z",
+      "side": 1,
+      "message": "I wondered about that too. I don\u0027t think it\u0027s the root cause. See my minimal repro in https://crbug.com/1015810#c6 . I wasn\u0027t using a handle helper class at all and it still had the cfi error.",
+      "parentUuid": "023a6eb9_360f5feb",
+      "range": {
+        "startLine": 81,
+        "startChar": 16,
+        "endLine": 81,
+        "endChar": 17
+      },
+      "revId": "d0544ec8d0f959a4d6a8be045714e50131acd91e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
