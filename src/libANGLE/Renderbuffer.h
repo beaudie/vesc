@@ -115,6 +115,14 @@ class Renderbuffer final : public RefCountObject<RenderbufferID>,
     InitState initState(const ImageIndex &imageIndex) const override;
     void setInitState(const ImageIndex &imageIndex, InitState initState) override;
 
+    GLenum getImplementationColorReadFormat(const Context *context) const;
+    GLenum getImplementationColorReadType(const Context *context) const;
+
+    angle::Result getRenderbufferImage(const Context *context,
+                                       GLenum format,
+                                       GLenum type,
+                                       void *pixels);
+
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
 

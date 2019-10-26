@@ -188,6 +188,16 @@ class TextureImpl : public FramebufferAttachmentObjectImpl, public angle::Subjec
     virtual angle::Result syncState(const gl::Context *context,
                                     const gl::Texture::DirtyBits &dirtyBits) = 0;
 
+    virtual GLenum getColorReadFormat(const gl::Context *context);
+    virtual GLenum getColorReadType(const gl::Context *context);
+
+    virtual angle::Result getTexImage(const gl::Context *context,
+                                      gl::TextureTarget target,
+                                      GLint level,
+                                      GLenum format,
+                                      GLenum type,
+                                      void *pixels);
+
   protected:
     const gl::TextureState &mState;
 };
