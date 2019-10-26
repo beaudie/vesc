@@ -21,7 +21,7 @@ vars = {
   'checkout_src_internal': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '60074bf9e0d443e5ef8e2c78694ce71bf419de3f',
+  'chromium_revision': '3d374fff51f3c0432f7fad04043ff0e318bfec83',
 
   # Current revision of dEQP.
   'deqp_revision': 'd3eef28e67ce6795ba3a2124aaa977819729d45f',
@@ -55,7 +55,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@a193dcc6972da816f06d8e3ea82ee9181e398b21',
+    'url': '{chromium_git}/chromium/src/build.git@5ffa0f30c92229be2408ab24dcd74ff6b06978a7',
     'condition': 'not build_with_chromium',
   },
 
@@ -65,7 +65,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@f712af4fd9133068c6d9244cd87fca28979695c0',
+    'url': '{chromium_git}/chromium/src/testing@34597bd01c1bff2911fe88154640f508911ed433',
     'condition': 'not build_with_chromium',
   },
 
@@ -117,7 +117,7 @@ deps = {
   },
 
   'third_party/jsoncpp': {
-    'url': '{chromium_git}/chromium/src/third_party/jsoncpp@571788934b5ee8643d53e5d054534abbe6006168',
+    'url': '{chromium_git}/chromium/src/third_party/jsoncpp@b3edce86d20838861d84657bf206e7a8dc36fce5',
     'condition': 'not build_with_chromium',
    },
 
@@ -189,7 +189,7 @@ deps = {
   },
 
   'third_party/yasm': {
-    'url': '{chromium_git}/chromium/src/third_party/yasm@cc10bc0f1d96a4bae0e775f2ac2b6ac5b08078c6',
+    'url': '{chromium_git}/chromium/src/third_party/yasm@02a8d2167f476660411ea7e1ee6fbd21dda44e96',
     'condition': 'not build_with_chromium',
   },
 
