@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c59aa081_bd7d1fee",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-26T00:58:32Z",
+      "side": 1,
+      "message": "micro-nit: for ANGLE consistency we like #if !defined() over #ifndef, allows seamless chaining of ifs.\n\nAlso can you comment as to our findings about how the info becomes a test result?",
+      "range": {
+        "startLine": 271,
+        "startChar": 1,
+        "endLine": 271,
+        "endChar": 8
+      },
+      "revId": "7fe0ad85d1f702318c2adeed70acc90beecd689b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
