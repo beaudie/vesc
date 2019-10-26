@@ -21,7 +21,7 @@ vars = {
   'checkout_src_internal': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '60074bf9e0d443e5ef8e2c78694ce71bf419de3f',
+  'chromium_revision': '3d374fff51f3c0432f7fad04043ff0e318bfec83',
 
   # Current revision of dEQP.
   'deqp_revision': 'd3eef28e67ce6795ba3a2124aaa977819729d45f',
@@ -32,6 +32,14 @@ vars = {
   # Current revision of googletest.
   # Note: this dep cannot be auto-rolled b/c of nesting.
   'googletest_revision': 'f2fb48c3b3d79a75a88a99fba6576b25d42ec528',
+
+  # Current revision of jsoncpp.
+  # Note: this dep cannot be auto-rolled b/c of nesting.
+  'jsoncpp_revision': '645250b6690785be60ab6780ce4b58698d884d11',
+
+  # Current revision of patched-yasm.
+  # Note: this dep cannot be auto-rolled b/c of nesting.
+  'patched_yasm_revision': '720b70524a4424b15fc57e82263568c8ba0496ad',
 
   # Current revision fo the SPIRV-Headers Vulkan support library.
   'spirv_headers_revision': 'af64a9e826bf5bb5fcd2434dd71be1e41e922563',
@@ -55,7 +63,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@a193dcc6972da816f06d8e3ea82ee9181e398b21',
+    'url': '{chromium_git}/chromium/src/build.git@5ffa0f30c92229be2408ab24dcd74ff6b06978a7',
     'condition': 'not build_with_chromium',
   },
 
@@ -65,7 +73,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@f712af4fd9133068c6d9244cd87fca28979695c0',
+    'url': '{chromium_git}/chromium/src/testing@34597bd01c1bff2911fe88154640f508911ed433',
     'condition': 'not build_with_chromium',
   },
 
@@ -117,12 +125,7 @@ deps = {
   },
 
   'third_party/jsoncpp': {
-    'url': '{chromium_git}/chromium/src/third_party/jsoncpp@571788934b5ee8643d53e5d054534abbe6006168',
-    'condition': 'not build_with_chromium',
-   },
-
-  'third_party/jsoncpp/source': {
-    'url' : '{chromium_git}/external/github.com/open-source-parsers/jsoncpp.git@645250b6690785be60ab6780ce4b58698d884d11',
+    'url': '{chromium_git}/chromium/src/third_party/jsoncpp@b3edce86d20838861d84657bf206e7a8dc36fce5',
     'condition': 'not build_with_chromium',
    },
 
@@ -189,12 +192,7 @@ deps = {
   },
 
   'third_party/yasm': {
-    'url': '{chromium_git}/chromium/src/third_party/yasm@cc10bc0f1d96a4bae0e775f2ac2b6ac5b08078c6',
-    'condition': 'not build_with_chromium',
-  },
-
-  'third_party/yasm/source/patched-yasm': {
-    'url': '{chromium_git}/chromium/deps/yasm/patched-yasm.git@720b70524a4424b15fc57e82263568c8ba0496ad',
+    'url': '{chromium_git}/chromium/src/third_party/yasm@729c7833c377c13f78be221de0740ec5cf4f24f1',
     'condition': 'not build_with_chromium',
   },
 
@@ -359,4 +357,6 @@ recursedeps = [
   # buildtools provides clang_format.
   'buildtools',
   'third_party/googletest',
+  'third_party/jsoncpp',
+  'third_party/yasm',
 ]
