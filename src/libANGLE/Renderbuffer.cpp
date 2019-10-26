@@ -280,4 +280,21 @@ rx::FramebufferAttachmentObjectImpl *Renderbuffer::getAttachmentImpl() const
     return mImplementation.get();
 }
 
+GLenum Renderbuffer::getImplementationColorReadFormat(const Context *context) const
+{
+    return mImplementation->getColorReadFormat(context);
+}
+
+GLenum Renderbuffer::getImplementationColorReadType(const Context *context) const
+{
+    return mImplementation->getColorReadFormat(context);
+}
+
+angle::Result Renderbuffer::getRenderbufferImage(const Context *context,
+                                                 GLenum format,
+                                                 GLenum type,
+                                                 void *pixels)
+{
+    return mImplementation->getRenderbufferImage(context, format, type, pixels);
+}
 }  // namespace gl

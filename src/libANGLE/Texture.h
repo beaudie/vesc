@@ -423,6 +423,16 @@ class Texture final : public RefCountObject<TextureID>,
 
     bool isSamplerComplete(const Context *context, const Sampler *optionalSampler);
 
+    GLenum getImplementationColorReadFormat(const Context *context) const;
+    GLenum getImplementationColorReadType(const Context *context) const;
+
+    angle::Result getTexImage(const Context *context,
+                              TextureTarget target,
+                              GLint level,
+                              GLenum format,
+                              GLenum type,
+                              void *pixels);
+
     rx::TextureImpl *getImplementation() const { return mTexture; }
 
     // FramebufferAttachmentObject implementation
