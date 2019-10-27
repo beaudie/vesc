@@ -899,6 +899,13 @@ class ImageHelper final : public CommandGraphResource
                                              PackPixelsParams *paramsOut,
                                              GLuint *skipBytesOut);
 
+    angle::Result readPixelsForGetImage(ContextVk *contextVk,
+                                        uint32_t level,
+                                        uint32_t layer,
+                                        GLenum format,
+                                        GLenum type,
+                                        void *pixels);
+
     angle::Result readPixels(ContextVk *contextVk,
                              const gl::Rectangle &area,
                              const PackPixelsParams &packPixelsParams,
