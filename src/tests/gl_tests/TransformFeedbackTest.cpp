@@ -124,6 +124,9 @@ TEST_P(TransformFeedbackTest, ZeroSizedViewport)
 // old position)
 TEST_P(TransformFeedbackTest, BufferRebinding)
 {
+    // Remove this when http://anglebug.com/3206 is fixed.
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
     glDisable(GL_DEPTH_TEST);
 
     // Set the program's transform feedback varyings (just gl_Position)

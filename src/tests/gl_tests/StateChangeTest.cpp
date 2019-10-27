@@ -3759,6 +3759,9 @@ TEST_P(WebGL2ValidationStateChangeTest, TransformFeedbackNegativeAPI)
 {
     ANGLE_SKIP_TEST_IF(IsAMD() && IsOSX());
 
+    // Remove this when http://anglebug.com/3206 is fixed.
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
     constexpr char kFS[] = R"(#version 300 es
 precision mediump float;
 uniform block { vec4 color; };
