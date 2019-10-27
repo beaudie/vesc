@@ -566,7 +566,8 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     // assignment done in that function.
     linkResources(resources);
 
-    GlslangWrapperVk::GetShaderSource(contextVk->useOldRewriteStructSamplers(), mState, resources,
+    GlslangWrapperVk::GetShaderSource(contextVk->useOldRewriteStructSamplers(),
+                                      contextVk->getRenderer()->getFeatures(), mState, resources,
                                       &mShaderSources);
 
     reset(contextVk);
@@ -606,7 +607,8 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
     if (mState.hasLinkedShaderStage(gl::ShaderType::Vertex) && transformFeedback &&
         !mState.getLinkedTransformFeedbackVaryings().empty())
     {
-        vk::GetImpl(transformFeedback)->updateDescriptorSetLayout(mState, &uniformsAndXfbSetDesc);
+        TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(transformFeedback);
+        transformFeedbackVk->updateDescriptorSetLayout(contextVk, mState, &uniformsAndXfbSetDesc);
     }
 
     ANGLE_TRY(renderer->getDescriptorSetLayout(
