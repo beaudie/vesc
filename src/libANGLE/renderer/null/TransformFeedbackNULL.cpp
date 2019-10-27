@@ -31,7 +31,7 @@ angle::Result TransformFeedbackNULL::end(const gl::Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result TransformFeedbackNULL::pause(const gl::Context *context)
+angle::Result TransformFeedbackNULL::pause(const gl::Context *context, size_t xfbBufferCount)
 {
     return angle::Result::Continue;
 }

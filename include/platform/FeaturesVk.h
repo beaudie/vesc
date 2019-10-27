@@ -121,12 +121,12 @@ struct FeaturesVk : FeatureSetBase
         "supports_shader_stencil_export", FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_EXT_shader_stencil_export extension", &members};
 
-    // Where VK_EXT_transform_feedback is not support, an emulation path is used.
-    // http://anglebug.com/3205
-    Feature emulateTransformFeedback = {
-        "emulate_transform_feedback", FeatureCategory::VulkanFeatures,
-        "Emulate transform feedback as the VK_EXT_transform_feedback is not present.", &members,
-        "http://anglebug.com/3205"};
+    // Where VK_EXT_transform_feedback is supported, it's preferred over an emulation path.
+    // http://anglebug.com/3206
+    Feature supportsTransformFeedbackExtension = {
+        "supports_transform_feedback_extension", FeatureCategory::VulkanFeatures,
+        "Transform feedback uses the VK_EXT_transform_feedback extension.", &members,
+        "http://anglebug.com/3206"};
 
     // VK_PRESENT_MODE_FIFO_KHR causes random timeouts on Linux Intel. http://anglebug.com/3153
     Feature disableFifoPresentMode = {

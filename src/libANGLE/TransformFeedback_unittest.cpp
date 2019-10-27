@@ -91,7 +91,7 @@ TEST_F(TransformFeedbackTest, SideEffectsOfPauseAndResume)
     EXPECT_EQ(angle::Result::Continue,
               mFeedback->begin(nullptr, gl::PrimitiveMode::Triangles, nullptr));
     EXPECT_FALSE(mFeedback->isPaused());
-    EXPECT_CALL(*mImpl, pause(nullptr));
+    EXPECT_CALL(*mImpl, pause(nullptr, 0));
     EXPECT_EQ(angle::Result::Continue, mFeedback->pause(nullptr));
     EXPECT_TRUE(mFeedback->isPaused());
     EXPECT_CALL(*mImpl, resume(nullptr));
