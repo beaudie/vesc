@@ -28,12 +28,13 @@ class DescriptorSetLayoutDesc;
 class TransformFeedbackVk : public TransformFeedbackImpl
 {
   public:
-    TransformFeedbackVk(const gl::TransformFeedbackState &state);
+    TransformFeedbackVk(const gl::TransformFeedbackState &state, bool emulationMode);
     ~TransformFeedbackVk() override;
+    void onDestroy(const gl::Context *context) override;
 
     angle::Result begin(const gl::Context *context, gl::PrimitiveMode primitiveMode) override;
     angle::Result end(const gl::Context *context) override;
-    angle::Result pause(const gl::Context *context) override;
+    angle::Result pause(const gl::Context *context, size_t xfbBufferCount) override;
     angle::Result resume(const gl::Context *context) override;
 
     angle::Result bindIndexedBuffer(const gl::Context *context,
@@ -58,6 +59,16 @@ class TransformFeedbackVk : public TransformFeedbackImpl
                           int32_t *offsetsOut,
                           size_t offsetsSize) const;
 
+    const gl::TransformFeedbackBuffersArray<VkDeviceSize> &getCurrentBufferOffsets() const
+    {
+        return mBufferOffsets;
+    }
+
+    const gl::TransformFeedbackBuffersArray<VkDeviceSize> &getCurrentBufferSizes() const
+    {
+        return mBufferSizes;
+    }
+
   private:
     void onBeginOrEnd(const gl::Context *context);
     void writeDescriptorSet(ContextVk *contextVk,
@@ -76,7 +87,13 @@ class TransformFeedbackVk : public TransformFeedbackImpl
         // offset.
         VkDeviceSize alignedOffset = 0;
     };
+    bool mEmulationMode;
+    size_t mPausedBufferCount;
     gl::TransformFeedbackBuffersArray<BoundBufferRange> mBoundBufferRanges;
+    gl::TransformFeedbackBuffersArray<VkDeviceSize> mBufferOffsets;
+    gl::TransformFeedbackBuffersArray<VkDeviceSize> mBufferSizes;
+    // Counter buffer used for pause and resume.
+    gl::TransformFeedbackBuffersArray<vk::BufferHelper> mCounterBuffer;
 };
 
 }  // namespace rx

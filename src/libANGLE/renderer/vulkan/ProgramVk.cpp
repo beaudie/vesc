@@ -566,8 +566,10 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     // assignment done in that function.
     linkResources(resources);
 
-    GlslangWrapperVk::GetShaderSource(contextVk->useOldRewriteStructSamplers(), mState, resources,
-                                      &mShaderSources);
+    GlslangWrapperVk::GetShaderSource(
+        contextVk->useOldRewriteStructSamplers(),
+        !contextVk->getRenderer()->getFeatures().supportsTransformFeedbackExtension.enabled, mState,
+        resources, &mShaderSources);
 
     reset(contextVk);
 
