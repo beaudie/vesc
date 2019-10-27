@@ -46,8 +46,9 @@ angle::CheckedNumeric<GLsizeiptr> GetVerticesNeededForDraw(PrimitiveMode primiti
     }
 }
 
-TransformFeedbackState::TransformFeedbackState(size_t maxIndexedBuffers)
-    : mLabel(),
+TransformFeedbackState::TransformFeedbackState(size_t maxIndexedBuffers, TransformFeedbackID id)
+    : mId(id),
+      mLabel(),
       mActive(false),
       mPrimitiveMode(PrimitiveMode::InvalidEnum),
       mPaused(false),
@@ -58,6 +59,11 @@ TransformFeedbackState::TransformFeedbackState(size_t maxIndexedBuffers)
 {}
 
 TransformFeedbackState::~TransformFeedbackState() {}
+
+const TransformFeedbackID TransformFeedbackState::getTransformFeedbackId() const
+{
+    return mId;
+}
 
 const OffsetBindingPointer<Buffer> &TransformFeedbackState::getIndexedBuffer(size_t idx) const
 {
@@ -88,7 +94,7 @@ TransformFeedback::TransformFeedback(rx::GLImplFactory *implFactory,
                                      TransformFeedbackID id,
                                      const Caps &caps)
     : RefCountObject(id),
-      mState(caps.maxTransformFeedbackSeparateAttributes),
+      mState(caps.maxTransformFeedbackSeparateAttributes, id),
       mImplementation(implFactory->createTransformFeedback(mState))
 {
     ASSERT(mImplementation != nullptr);
