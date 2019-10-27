@@ -13,6 +13,11 @@
 
 #include "libANGLE/renderer/ProgramImpl.h"
 
+namespace angle
+{
+struct FeaturesVk;
+}
+
 namespace rx
 {
 enum class GlslangError
@@ -35,6 +40,10 @@ struct GlslangSourceOptions
     uint32_t xfbBindingIndexStart = 16;
 };
 
+// Uniforms set index:
+constexpr uint32_t kANGLEPositionLocationOffset    = 1;
+constexpr uint32_t kXfbANGLEPositionLocationOffset = 2;
+
 using GlslangErrorCallback = std::function<angle::Result(GlslangError)>;
 
 void GlslangInitialize();
@@ -47,6 +56,7 @@ std::string GlslangGetMappedSamplerName(const std::string &originalName);
 // resources (textures, buffers, xfb, etc)
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             bool useOldRewriteStructSamplers,
+                            bool supportsTransformFeedbackExtension,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut);
