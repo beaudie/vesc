@@ -36,12 +36,13 @@ GlslangSourceOptions CreateSourceOptions()
 
 // static
 void GlslangWrapperVk::GetShaderSource(bool useOldRewriteStructSamplers,
+                                       bool emulateTransformFeedback,
                                        const gl::ProgramState &programState,
                                        const gl::ProgramLinkedResources &resources,
                                        gl::ShaderMap<std::string> *shaderSourcesOut)
 {
-    GlslangGetShaderSource(CreateSourceOptions(), useOldRewriteStructSamplers, programState,
-                           resources, shaderSourcesOut);
+    GlslangGetShaderSource(CreateSourceOptions(), useOldRewriteStructSamplers,
+                           emulateTransformFeedback, programState, resources, shaderSourcesOut);
 }
 
 // static

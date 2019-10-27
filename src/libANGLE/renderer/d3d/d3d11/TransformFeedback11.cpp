@@ -58,7 +58,7 @@ angle::Result TransformFeedback11::end(const gl::Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result TransformFeedback11::pause(const gl::Context *context)
+angle::Result TransformFeedback11::pause(const gl::Context *context, size_t xfbBufferCount)
 {
     mRenderer->getStateManager()->invalidateTransformFeedback();
     return angle::Result::Continue;

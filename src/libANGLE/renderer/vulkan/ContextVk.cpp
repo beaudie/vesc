@@ -562,8 +562,16 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsDriverUniforms;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_SHADER_RESOURCES] =
         &ContextVk::handleDirtyGraphicsShaderResources;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS] =
-        &ContextVk::handleDirtyGraphicsTransformFeedbackBuffers;
+    if (mRenderer->getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        mGraphicsDirtyBitHandlers[DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS] =
+            &ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExt;
+    }
+    else
+    {
+        mGraphicsDirtyBitHandlers[DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS] =
+            &ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmul;
+    }
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
         &ContextVk::handleDirtyGraphicsDescriptorSets;
 
@@ -1174,7 +1182,7 @@ angle::Result ContextVk::handleDirtyComputeShaderResources(const gl::Context *co
     return handleDirtyShaderResourcesImpl(context, commandBuffer, &mDispatcher);
 }
 
-angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffers(
+angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmul(
     const gl::Context *context,
     vk::CommandBuffer *commandBuffer)
 {
@@ -1182,6 +1190,52 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffers(
     {
         ANGLE_TRY(mProgram->updateTransformFeedbackDescriptorSet(
             this, mDrawFramebuffer->getFramebuffer()));
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExt(
+    const gl::Context *context,
+    vk::CommandBuffer *commandBuffer)
+{
+    if (mProgram->hasTransformFeedbackOutput() && mState.isTransformFeedbackActive())
+    {
+        size_t bufferIndex = 0;
+        TransformFeedbackVk *transformFeedbackVk =
+            vk::GetImpl(mState.getCurrentTransformFeedback());
+
+        size_t bufferCount = mProgram->getState().getTransformFeedbackBufferCount();
+        gl::TransformFeedbackBuffersArray<VkBuffer> bufferHandles;
+        for (bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+        {
+            const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
+                mState.getCurrentTransformFeedback()->getIndexedBuffer(bufferIndex);
+            gl::Buffer *buffer = bufferBinding.get();
+            ASSERT(buffer != nullptr);
+
+            vk::BufferHelper &bufferHelper = vk::GetImpl(buffer)->getBuffer();
+            bufferHandles[bufferIndex]     = bufferHelper.getBuffer().getHandle();
+        }
+
+        const gl::TransformFeedbackBuffersArray<VkDeviceSize> &bufferOffsets =
+            transformFeedbackVk->getCurrentBufferOffsets();
+        const gl::TransformFeedbackBuffersArray<VkDeviceSize> &bufferSizes =
+            transformFeedbackVk->getCurrentBufferSizes();
+
+        commandBuffer->bindTransformFeedbackBuffers(bufferCount, bufferHandles.data(),
+                                                    bufferOffsets.data(), bufferSizes.data());
+
+        vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+        for (bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+        {
+            const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
+                mState.getCurrentTransformFeedback()->getIndexedBuffer(bufferIndex);
+            gl::Buffer *buffer = bufferBinding.get();
+            ASSERT(buffer != nullptr);
+
+            vk::BufferHelper &bufferHelper = vk::GetImpl(buffer)->getBuffer();
+            bufferHelper.onWrite(this, framebuffer, 0, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT);
+        }
     }
     return angle::Result::Continue;
 }
@@ -2512,7 +2566,8 @@ SyncImpl *ContextVk::createSync()
 
 TransformFeedbackImpl *ContextVk::createTransformFeedback(const gl::TransformFeedbackState &state)
 {
-    return new TransformFeedbackVk(state);
+    return new TransformFeedbackVk(
+        state, !mRenderer->getFeatures().supportsTransformFeedbackExtension.enabled);
 }
 
 SamplerImpl *ContextVk::createSampler(const gl::SamplerState &state)
@@ -2596,7 +2651,10 @@ void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
 void ContextVk::invalidateCurrentTransformFeedbackBuffers()
 {
     mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
-    mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+    if (!mRenderer->getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+    }
 }
 
 void ContextVk::onTransformFeedbackPauseResume()
