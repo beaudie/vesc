@@ -20,6 +20,7 @@ class TransformFeedbackNULL : public TransformFeedbackImpl
   public:
     TransformFeedbackNULL(const gl::TransformFeedbackState &state);
     ~TransformFeedbackNULL() override;
+    void onDestroy(const gl::Context *context) override {}
 
     angle::Result begin(const gl::Context *context, gl::PrimitiveMode primitiveMode) override;
     angle::Result end(const gl::Context *context) override;

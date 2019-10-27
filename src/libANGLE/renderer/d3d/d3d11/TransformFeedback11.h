@@ -26,6 +26,7 @@ class TransformFeedback11 : public TransformFeedbackImpl
   public:
     TransformFeedback11(const gl::TransformFeedbackState &state, Renderer11 *renderer);
     ~TransformFeedback11() override;
+    void onDestroy(const gl::Context *context) override {}
 
     angle::Result begin(const gl::Context *context, gl::PrimitiveMode primitiveMode) override;
     angle::Result end(const gl::Context *context) override;
