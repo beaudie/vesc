@@ -7,6 +7,7 @@
 //
 
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
+#include "platform/FeaturesVk.h"
 
 // glslang has issues with some specific warnings.
 ANGLE_DISABLE_EXTRA_SEMI_WARNING
@@ -106,6 +107,14 @@ void GetBuiltInResourcesFromCaps(const gl::Caps &caps, TBuiltInResource *outBuil
     outBuiltInResources->maxVertexUniformVectors          = caps.maxVertexUniformVectors;
 }
 
+// Information used for Xfb layout qualifier
+struct xfbBufferInfo
+{
+    GLuint index;
+    GLuint offset;
+    GLuint stride;
+};
+
 class IntermediateShaderSource final : angle::NonCopyable
 {
   public:
@@ -122,6 +131,18 @@ class IntermediateShaderSource final : angle::NonCopyable
     //     layout(extra, args)
     //
     void insertLayoutSpecifier(const std::string &name, const std::string &specifier);
+
+    // Find @@ LAYOUT-name(extra, args) @@ and replace it with:
+    //
+    //     layout(specifier, extra, args, xfb)
+    //
+    // or if |specifier| is empty:
+    //
+    //     layout(extra, args, xfb)
+    //
+    void insertXfbLayoutSpecifier(const std::string &name,
+                                  const std::string &specifier,
+                                  const xfbBufferInfo &xfbBuffer);
 
     // Find @@ QUALIFIER-name(other qualifiers) @@ and replace it with:
     //
@@ -319,6 +340,30 @@ void IntermediateShaderSource::insertLayoutSpecifier(const std::string &name,
     }
 }
 
+void IntermediateShaderSource::insertXfbLayoutSpecifier(const std::string &name,
+                                                        const std::string &specifier,
+                                                        const xfbBufferInfo &xfbBuffer)
+{
+    std::string xfbIndices;
+    std::string xfbOffsets;
+    std::string xfbStrides;
+
+    for (Token &block : mTokens)
+    {
+        if (block.type == TokenType::Layout && block.text == name)
+        {
+            const char *separator = specifier.empty() || block.args.empty() ? "" : ", ";
+
+            block.type = TokenType::Text;
+            block.text = "layout(xfb_buffer = " + Str(xfbBuffer.index) +
+                         ", xfb_offset = " + Str(xfbBuffer.offset) +
+                         ", xfb_stride = " + Str(xfbBuffer.stride) + ", " + block.args + separator +
+                         specifier + ")";
+            break;
+        }
+    }
+}
+
 void IntermediateShaderSource::insertQualifierSpecifier(const std::string &name,
                                                         const std::string &specifier)
 {
@@ -464,9 +509,9 @@ std::string GenerateTransformFeedbackVaryingOutput(const gl::TransformFeedbackVa
     return result.str();
 }
 
-void GenerateTransformFeedbackOutputs(const GlslangSourceOptions &options,
-                                      const gl::ProgramState &programState,
-                                      IntermediateShaderSource *vertexShader)
+void GenerateTransformFeedbackEmulationOutputs(const GlslangSourceOptions &options,
+                                               const gl::ProgramState &programState,
+                                               IntermediateShaderSource *vertexShader)
 {
     const std::vector<gl::TransformFeedbackVarying> &varyings =
         programState.getLinkedTransformFeedbackVaryings();
@@ -511,6 +556,107 @@ void GenerateTransformFeedbackOutputs(const GlslangSourceOptions &options,
     xfbOut += "}\n";
 
     vertexShader->insertTransformFeedbackDeclaration(std::move(xfbDecl));
+    vertexShader->insertTransformFeedbackOutput(std::move(xfbOut));
+}
+
+void GenerateTransformFeedbackExtensionOutputs(const gl::ProgramState &programState,
+                                               IntermediateShaderSource *vertexShader,
+                                               std::map<std::string, xfbBufferInfo> &xfbBufferMap,
+                                               const gl::ProgramLinkedResources &resources)
+{
+    const std::vector<gl::TransformFeedbackVarying> &varyings =
+        programState.getLinkedTransformFeedbackVaryings();
+    const std::vector<GLsizei> &varyingStrides = programState.getTransformFeedbackStrides();
+    const bool isInterleaved =
+        programState.getTransformFeedbackBufferMode() == GL_INTERLEAVED_ATTRIBS;
+
+    std::string xfbDecl;
+    bool hasBuiltInVaryings = false;
+    uint32_t currentOffset  = 0;
+    uint32_t currentStride  = 0;
+    uint32_t bufferIndex    = 0;
+    std::string varyingType;
+    std::string xfbIndices;
+    std::string xfbOffsets;
+    std::string xfbStrides;
+
+    for (uint32_t varyingIndex = 0; varyingIndex < varyings.size(); ++varyingIndex)
+    {
+        if (isInterleaved)
+        {
+            bufferIndex = 0;
+            currentOffset += (varyingIndex > 0)
+                                 ? varyings[varyingIndex - 1].size() *
+                                       gl::VariableExternalSize(varyings[varyingIndex - 1].type)
+                                 : 0;
+            currentStride = varyingStrides[0];
+        }
+        else
+        {
+            bufferIndex   = varyingIndex;
+            currentOffset = 0;
+            currentStride = varyingStrides[varyingIndex];
+        }
+
+        if (varyings[varyingIndex].isBuiltIn())
+        {
+            if (!hasBuiltInVaryings)
+            {
+                xfbDecl += "out gl_PerVertex\n{\n";
+                hasBuiltInVaryings = true;
+            }
+            xfbIndices  = Str(bufferIndex);
+            xfbOffsets  = Str(currentOffset);
+            xfbStrides  = Str(currentStride);
+            varyingType = varyings[varyingIndex].getVaryingTypeString();
+
+            // Since builtIn varyings are not in RegisterList, we can add layout qualifier here.
+            xfbDecl += "layout(xfb_buffer = " + xfbIndices + ", xfb_offset = " + xfbOffsets +
+                       ", xfb_stride = " + xfbStrides + ") " + varyingType + " " +
+                       varyings[varyingIndex].name + ";\n";
+        }
+        else
+        {
+            // Layout qualifier for non builtin varying will be written later, so we just save
+            // Xfb layout qualifier information into the xfbBufferMap.
+            xfbBufferInfo bufferInfo;
+            bufferInfo.index  = bufferIndex;
+            bufferInfo.offset = currentOffset;
+            bufferInfo.stride = currentStride;
+            xfbBufferMap.insert(make_pair(varyings[varyingIndex].name, bufferInfo));
+        }
+    }
+
+    if (hasBuiltInVaryings)
+    {
+        for (const sh::ShaderVariable &varying : resources.varyingPacking.getInputVaryings())
+        {
+            if (varying.isBuiltIn())
+            {
+                bool isTransformFeedbackVarying = false;
+                for (uint32_t varyingIndex = 0; varyingIndex < varyings.size(); ++varyingIndex)
+                {
+                    if (varyings[varyingIndex].name.compare(varying.name) == 0)
+                    {
+                        isTransformFeedbackVarying = true;
+                        break;
+                    }
+                }
+                if (!isTransformFeedbackVarying)
+                {
+                    xfbDecl += varying.getVaryingTypeString() + " " + varying.name + ";\n";
+                }
+            }
+        }
+    }
+
+    if (hasBuiltInVaryings)
+    {
+        xfbDecl += "\n};";
+    }
+    vertexShader->insertTransformFeedbackDeclaration(std::move(xfbDecl));
+
+    std::string xfbOut = "";
     vertexShader->insertTransformFeedbackOutput(std::move(xfbOut));
 }
 
@@ -573,7 +719,8 @@ void AssignOutputLocations(const gl::ProgramState &programState,
 void AssignVaryingLocations(const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             IntermediateShaderSource *outStageSource,
-                            IntermediateShaderSource *inStageSource)
+                            IntermediateShaderSource *inStageSource,
+                            std::map<std::string, xfbBufferInfo> &xfbBufferMap)
 {
     // Assign varying locations.
     for (const gl::PackedVaryingRegister &varyingReg : resources.varyingPacking.getRegisterList())
@@ -621,7 +768,16 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
                 continue;
         }
 
-        outStageSource->insertLayoutSpecifier(name, locationString);
+        std::map<std::string, xfbBufferInfo>::iterator iter;
+        iter = xfbBufferMap.find(name);
+        if (iter != xfbBufferMap.end())
+        {
+            outStageSource->insertXfbLayoutSpecifier(name, locationString, iter->second);
+        }
+        else
+        {
+            outStageSource->insertLayoutSpecifier(name, locationString);
+        }
         inStageSource->insertLayoutSpecifier(name, locationString);
 
         const char *outQualifier = "out";
@@ -1045,6 +1201,7 @@ std::string GlslangGetMappedSamplerName(const std::string &originalName)
 
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             bool useOldRewriteStructSamplers,
+                            const angle::FeaturesVk &features,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut)
@@ -1063,38 +1220,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     IntermediateShaderSource *vertexSource   = &intermediateSources[gl::ShaderType::Vertex];
     IntermediateShaderSource *fragmentSource = &intermediateSources[gl::ShaderType::Fragment];
     IntermediateShaderSource *geometrySource = &intermediateSources[gl::ShaderType::Geometry];
-
-    if (!geometrySource->empty())
-    {
-        AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, geometrySource, fragmentSource);
-        if (!vertexSource->empty())
-        {
-            AssignAttributeLocations(programState, vertexSource);
-            AssignVaryingLocations(programState, resources, vertexSource, geometrySource);
-        }
-    }
-    else if (!vertexSource->empty())
-    {
-        AssignAttributeLocations(programState, vertexSource);
-        AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, vertexSource, fragmentSource);
-    }
-    else if (!fragmentSource->empty())
-    {
-        AssignAttributeLocations(programState, fragmentSource);
-        AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, vertexSource, fragmentSource);
-    }
-    AssignUniformBindings(options, &intermediateSources);
-    AssignTextureBindings(options, useOldRewriteStructSamplers, programState, &intermediateSources);
-    AssignNonTextureBindings(options, programState, &intermediateSources);
-
-    for (const auto shaderType : gl::kAllGraphicsShaderTypes)
-    {
-        CleanupUnusedEntities(useOldRewriteStructSamplers, programState, resources, shaderType,
-                              &intermediateSources);
-    }
+    std::map<std::string, xfbBufferInfo> xfbBufferMap;
 
     // Write transform feedback output code.
     if (!vertexSource->empty())
@@ -1106,8 +1232,50 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         }
         else
         {
-            GenerateTransformFeedbackOutputs(options, programState, vertexSource);
+            if (features.supportsTransformFeedbackExtension.enabled)
+            {
+                GenerateTransformFeedbackExtensionOutputs(programState, vertexSource, xfbBufferMap,
+                                                          resources);
+            }
+            else
+            {
+                GenerateTransformFeedbackEmulationOutputs(options, programState, vertexSource);
+            }
         }
+    }
+
+    if (!geometrySource->empty())
+    {
+        AssignOutputLocations(programState, fragmentSource);
+        AssignVaryingLocations(programState, resources, geometrySource, fragmentSource,
+                               xfbBufferMap);
+        if (!vertexSource->empty())
+        {
+            AssignAttributeLocations(programState, vertexSource);
+            AssignVaryingLocations(programState, resources, vertexSource, geometrySource,
+                                   xfbBufferMap);
+        }
+    }
+    else if (!vertexSource->empty())
+    {
+        AssignAttributeLocations(programState, vertexSource);
+        AssignOutputLocations(programState, fragmentSource);
+        AssignVaryingLocations(programState, resources, vertexSource, fragmentSource, xfbBufferMap);
+    }
+    else if (!fragmentSource->empty())
+    {
+        AssignAttributeLocations(programState, fragmentSource);
+        AssignOutputLocations(programState, fragmentSource);
+        AssignVaryingLocations(programState, resources, vertexSource, fragmentSource, xfbBufferMap);
+    }
+    AssignUniformBindings(options, &intermediateSources);
+    AssignTextureBindings(options, useOldRewriteStructSamplers, programState, &intermediateSources);
+    AssignNonTextureBindings(options, programState, &intermediateSources);
+
+    for (const auto shaderType : gl::kAllGraphicsShaderTypes)
+    {
+        CleanupUnusedEntities(useOldRewriteStructSamplers, programState, resources, shaderType,
+                              &intermediateSources);
     }
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())

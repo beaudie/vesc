@@ -32,9 +32,10 @@ class Program;
 class TransformFeedbackState final : angle::NonCopyable
 {
   public:
-    TransformFeedbackState(size_t maxIndexedBuffers);
+    TransformFeedbackState(size_t maxIndexedBuffers, TransformFeedbackID id);
     ~TransformFeedbackState();
 
+    const TransformFeedbackID getTransformFeedbackId() const;
     const OffsetBindingPointer<Buffer> &getIndexedBuffer(size_t idx) const;
     const std::vector<OffsetBindingPointer<Buffer>> &getIndexedBuffers() const;
     const Program *getBoundProgram() const { return mProgram; }
@@ -44,6 +45,7 @@ class TransformFeedbackState final : angle::NonCopyable
   private:
     friend class TransformFeedback;
 
+    TransformFeedbackID mId;
     std::string mLabel;
 
     bool mActive;
