@@ -207,6 +207,63 @@ void ExecuteCommands(PrimaryCommandBuffer *primCmdBuffer, priv::CommandBuffer *s
 }
 
 ANGLE_MAYBE_UNUSED
+void InsertBeginTransformFeedback(PrimaryCommandBuffer *primCmdBuffer,
+                                  priv::SecondaryCommandBuffer &commandBuffer)
+{
+    if (commandBuffer.hasActiveUnpausedTransformFeedback())
+    {
+        priv::TransformFeedbackCounterBuffers counterBuffers =
+            commandBuffer.getTransformFeedbackCounterBuffersInfo();
+
+        uint32_t counterBufferSize =
+            (counterBuffers.rebindBuffer) ? 0 : counterBuffers.validBufferCount;
+
+        vkCmdBeginTransformFeedbackEXT(primCmdBuffer->getHandle(), 0, counterBufferSize,
+                                       counterBuffers.handles.data(), nullptr);
+    }
+}
+
+ANGLE_MAYBE_UNUSED
+void InsertEndTransformFeedback(PrimaryCommandBuffer *primCmdBuffer,
+                                priv::SecondaryCommandBuffer &commandBuffer)
+{
+    if (commandBuffer.hasActiveUnpausedTransformFeedback())
+    {
+        priv::TransformFeedbackCounterBuffers counterBuffers =
+            commandBuffer.getTransformFeedbackCounterBuffersInfo();
+
+        vkCmdEndTransformFeedbackEXT(primCmdBuffer->getHandle(), 0, counterBuffers.validBufferCount,
+                                     counterBuffers.handles.data(), nullptr);
+    }
+}
+
+ANGLE_MAYBE_UNUSED
+void InsertCounterBufferPipelineBarier(PrimaryCommandBuffer *primCmdBuffer,
+                                       priv::SecondaryCommandBuffer &commandBuffer)
+{
+    if (commandBuffer.hasActiveUnpausedTransformFeedback())
+    {
+        priv::TransformFeedbackCounterBuffers counterBuffers =
+            commandBuffer.getTransformFeedbackCounterBuffersInfo();
+
+        VkBufferMemoryBarrier bufferBarrier = {};
+        bufferBarrier.sType                 = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+        bufferBarrier.pNext                 = nullptr;
+        bufferBarrier.srcAccessMask         = VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT;
+        bufferBarrier.dstAccessMask         = VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT;
+        bufferBarrier.srcQueueFamilyIndex   = VK_QUEUE_FAMILY_IGNORED;
+        bufferBarrier.dstQueueFamilyIndex   = VK_QUEUE_FAMILY_IGNORED;
+        bufferBarrier.buffer                = counterBuffers.handles[0];
+        bufferBarrier.offset                = 0;
+        bufferBarrier.size                  = VK_WHOLE_SIZE;
+
+        vkCmdPipelineBarrier(
+            primCmdBuffer->getHandle(), VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT,
+            VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, 0u, 0u, nullptr, 1u, &bufferBarrier, 0u, nullptr);
+    }
+}
+
+ANGLE_MAYBE_UNUSED
 std::string DumpCommands(const priv::SecondaryCommandBuffer &commandBuffer, const char *separator)
 {
     return commandBuffer.dumpCommands(separator);
@@ -604,8 +661,11 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                 beginInfo.pClearValues = mRenderPassClearValues.data();
 
                 primaryCommandBuffer->beginRenderPass(beginInfo, kRenderPassContents);
+                InsertBeginTransformFeedback(primaryCommandBuffer, mInsideRenderPassCommands);
                 ExecuteCommands(primaryCommandBuffer, &mInsideRenderPassCommands);
+                InsertEndTransformFeedback(primaryCommandBuffer, mInsideRenderPassCommands);
                 primaryCommandBuffer->endRenderPass();
+                InsertCounterBufferPipelineBarier(primaryCommandBuffer, mInsideRenderPassCommands);
             }
             break;
 

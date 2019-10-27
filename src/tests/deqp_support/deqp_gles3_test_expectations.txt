@@ -532,6 +532,16 @@
 
 // General Vulkan failures
 
+// Transform feedback tests failing due to gl_position.z modification for Vulkan coordinates system
+3206 VULKAN : dEQP-GLES3.functional.transform_feedback.position.* = FAIL
+3206 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.points.6 = FAIL
+3206 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.points.7 = FAIL
+3206 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.lines.3 = FAIL
+3206 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.lines.5 = FAIL
+3206 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.lines.10 = FAIL
+3206 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.triangles.2 = FAIL
+3206 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.triangles.8 = FAIL
+
 // Tests failing due to the "flat" qualifier in the shader:
 3677 VULKAN : dEQP-GLES3.functional.fragment_out.basic.int.* = FAIL
 3677 VULKAN : dEQP-GLES3.functional.fragment_out.basic.uint.* = FAIL
