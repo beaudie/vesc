@@ -129,6 +129,30 @@
     },
     {
       "key": {
+        "uuid": "07056895_89e391b1",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-27T02:37:36Z",
+      "side": 1,
+      "message": "kbr@, Thanks for your reviewing! Per my previous understanding, GL_TEXTURE_VIDEO_IMAGE_WEBGL doesn\u0027t introduce any new native texture type(In the beginning, maps to 2D texturen and external_oes_image), so I think we can add this map logic in blink part. But it seems that you think this part should be in ANGLE too. Should I upload another CL for that part or handle this in this CL?",
+      "parentUuid": "b332de7a_47bd3cde",
+      "range": {
+        "startLine": 71,
+        "startChar": 18,
+        "endLine": 71,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0deb5fc7_a474b14d",
         "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
         "patchSetId": 12
