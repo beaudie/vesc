@@ -47,6 +47,7 @@ std::string GlslangGetMappedSamplerName(const std::string &originalName);
 // resources (textures, buffers, xfb, etc)
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             bool useOldRewriteStructSamplers,
+                            bool emulateTransformFeedback,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut);

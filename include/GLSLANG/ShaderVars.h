@@ -120,6 +120,8 @@ struct ShaderVariable
     bool isBuiltIn() const;
     bool isEmulatedBuiltIn() const;
 
+    std::string getVaryingTypeString() const;
+
     GLenum type;
     GLenum precision;
     std::string name;

@@ -23,10 +23,11 @@ class MockTransformFeedbackImpl : public TransformFeedbackImpl
         : TransformFeedbackImpl(state)
     {}
     ~MockTransformFeedbackImpl() { destructor(); }
+    MOCK_METHOD1(onDestroy, void(const gl::Context *));
 
     MOCK_METHOD2(begin, angle::Result(const gl::Context *, gl::PrimitiveMode));
     MOCK_METHOD1(end, angle::Result(const gl::Context *));
-    MOCK_METHOD1(pause, angle::Result(const gl::Context *));
+    MOCK_METHOD2(pause, angle::Result(const gl::Context *, size_t xfbBufferCount));
     MOCK_METHOD1(resume, angle::Result(const gl::Context *));
 
     MOCK_METHOD3(bindIndexedBuffer,
