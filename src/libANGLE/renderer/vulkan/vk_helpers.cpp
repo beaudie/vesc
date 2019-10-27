@@ -2987,6 +2987,40 @@ angle::Result ImageHelper::GetReadPixelsParams(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
+                                                 uint32_t level,
+                                                 uint32_t layer,
+                                                 GLenum format,
+                                                 GLenum type,
+                                                 void *pixels)
+{
+    const angle::Format &angleFormat = GetFormatFromFormatType(format, type);
+
+    // Depth/stencil readback is not yet implemented.
+    // TODO(http://anglebug.com/4058): Depth/stencil readback.
+    if (angleFormat.depthBits > 0 || angleFormat.stencilBits > 0)
+    {
+        UNIMPLEMENTED();
+        return angle::Result::Continue;
+    }
+
+    PackPixelsParams params;
+    GLuint outputSkipBytes = 0;
+
+    uint32_t levelSize = std::max(1u, mExtents.width >> level);
+    gl::Rectangle area(0, 0, levelSize, levelSize);
+
+    ANGLE_TRY(GetReadPixelsParams(contextVk, format, type, area, area, &params, &outputSkipBytes));
+
+    // Use a temporary staging buffer. Could be optimized.
+    vk::RendererScoped<vk::DynamicBuffer> stagingBuffer(contextVk->getRenderer());
+    stagingBuffer.get().init(contextVk->getRenderer(), VK_BUFFER_USAGE_TRANSFER_DST_BIT, 1,
+                             kStagingBufferSize, true);
+
+    return readPixels(contextVk, area, params, VK_IMAGE_ASPECT_COLOR_BIT, level, 0,
+                      static_cast<uint8_t *>(pixels) + outputSkipBytes, &stagingBuffer.get());
+}
+
 angle::Result ImageHelper::readPixels(ContextVk *contextVk,
                                       const gl::Rectangle &area,
                                       const PackPixelsParams &packPixelsParams,
