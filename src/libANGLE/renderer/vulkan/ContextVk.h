@@ -290,7 +290,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     void onHostVisibleBufferWrite() { mIsAnyHostVisibleBufferWritten = true; }
 
     void invalidateCurrentTransformFeedbackBuffers();
-    void onTransformFeedbackPauseResume();
+    void invalidateCurrentTransformFeedbackState();
+    void onTransformFeedbackStateChanged();
 
     vk::DynamicQueryPool *getQueryPool(gl::QueryType queryType);
 
@@ -400,6 +401,10 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     const gl::OverlayType *getOverlay() const { return mState.getOverlay(); }
 
+    // Create if there is no corresponding transformFeedback counter buffer for
+    // (transformFeedbackID,bufferIndex) then return it.
+    vk::BufferHelper *checkCounterBufferAllocation(gl::TransformFeedbackID id, size_t index);
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -412,6 +417,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         DIRTY_BIT_DRIVER_UNIFORMS,
         DIRTY_BIT_SHADER_RESOURCES,  // excluding textures, which are handled separately.
         DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
+        DIRTY_BIT_TRANSFORM_FEEDBACK_STATE,
         DIRTY_BIT_DESCRIPTOR_SETS,
         DIRTY_BIT_MAX,
     };
@@ -420,6 +426,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     using DirtyBitHandler = angle::Result (ContextVk::*)(const gl::Context *,
                                                          vk::CommandBuffer *commandBuffer);
+
+    using XfbBufferHelpers =
+        std::array<vk::BufferHelper *, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS>;
 
     struct DriverUniformsDescriptorSet
     {
@@ -582,8 +591,14 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                                     vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsShaderResources(const gl::Context *context,
                                                      vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsTransformFeedbackBuffers(const gl::Context *context,
-                                                              vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsTransformFeedbackBuffersEmulation(
+        const gl::Context *context,
+        vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsTransformFeedbackBuffersExtension(
+        const gl::Context *context,
+        vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsTransformFeedbackState(const gl::Context *context,
+                                                            vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsDescriptorSets(const gl::Context *context,
                                                     vk::CommandBuffer *commandBuffer);
 
@@ -638,6 +653,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     bool shouldUseOldRewriteStructSamplers() const;
     void clearAllGarbage();
     angle::Result ensureSubmitFenceInitialized();
+    angle::Result initCounterBuffer(vk::BufferHelper *bufferHelper);
 
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
@@ -774,6 +790,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     SerialFactory mTextureSerialFactory;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
+
+    // Buffer helpers for transform feedback counter buffer
+    std::map<GLuint, XfbBufferHelpers> mTransformFeedbackCounterBufferHelperMap;
 };
 }  // namespace rx
 
