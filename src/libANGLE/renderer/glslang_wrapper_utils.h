@@ -13,6 +13,11 @@
 
 #include "libANGLE/renderer/ProgramImpl.h"
 
+namespace angle
+{
+struct FeaturesVk;
+}
+
 namespace rx
 {
 enum class GlslangError
@@ -47,6 +52,7 @@ std::string GlslangGetMappedSamplerName(const std::string &originalName);
 // resources (textures, buffers, xfb, etc)
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             bool useOldRewriteStructSamplers,
+                            bool supportsTransformFeedbackExtension,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut);

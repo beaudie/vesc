@@ -34,6 +34,7 @@ enum class CommandID : uint16_t
     BindDescriptorSets,
     BindGraphicsPipeline,
     BindIndexBuffer,
+    BindTransformFeedbackBuffers,
     BindVertexBuffers,
     BlitImage,
     ClearAttachments,
@@ -98,6 +99,13 @@ struct BindIndexBufferParams
     VkIndexType indexType;
 };
 VERIFY_4_BYTE_ALIGNMENT(BindIndexBufferParams)
+
+struct BindTransformFeedbackBuffersParams
+{
+    // ANGLE always has firstBinding of 0 so not storing that currently
+    uint32_t bindingCount;
+};
+VERIFY_4_BYTE_ALIGNMENT(BindTransformFeedbackBuffersParams)
 
 struct BindVertexBuffersParams
 {
@@ -374,6 +382,13 @@ struct CommandHeader
     uint16_t size;
 };
 
+struct TransformFeedbackCounterBuffers
+{
+    gl::TransformFeedbackBuffersArray<VkBuffer> handles;
+    uint32_t validBufferCount;
+    bool rebindBuffer;
+};
+
 static_assert(sizeof(CommandHeader) == 4, "Check CommandHeader size");
 
 template <typename DestT, typename T>
@@ -416,6 +431,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void bindGraphicsPipeline(const Pipeline &pipeline);
 
     void bindIndexBuffer(const Buffer &buffer, VkDeviceSize offset, VkIndexType indexType);
+
+    void bindTransformFeedbackBuffers(size_t bindingCount,
+                                      const VkBuffer *buffers,
+                                      const VkDeviceSize *offsets,
+                                      const VkDeviceSize *sizes);
 
     void bindVertexBuffers(uint32_t firstBinding,
                            uint32_t bindingCount,
@@ -510,6 +530,10 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                     VkDeviceSize size,
                     uint32_t data);
 
+    TransformFeedbackCounterBuffers &getTransformFeedbackCounterBuffersInfo();
+
+    bool hasActiveUnpausedTransformFeedback() const;
+
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags dstStageMask,
                       const VkImageMemoryBarrier *imageMemoryBarrier);
@@ -544,6 +568,10 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                       VkImageLayout dstImageLayout,
                       uint32_t regionCount,
                       const VkImageResolve *regions);
+
+    void setActiveTransformFeedbackInfo(size_t xfbCounterBufferCount,
+                                        const VkBuffer *buffers,
+                                        bool isNewBuffer);
 
     void setEvent(VkEvent event, VkPipelineStageFlags stageMask);
 
@@ -677,10 +705,15 @@ class SecondaryCommandBuffer final : angle::NonCopyable
 
     uint8_t *mCurrentWritePointer;
     size_t mCurrentBytesRemaining;
+    bool mHasActiveUnpausedTransformFeedback;
+    TransformFeedbackCounterBuffers mTransformFeedbackbCounterBuffers;
 };
 
 ANGLE_INLINE SecondaryCommandBuffer::SecondaryCommandBuffer()
-    : mAllocator(nullptr), mCurrentWritePointer(nullptr), mCurrentBytesRemaining(0)
+    : mAllocator(nullptr),
+      mCurrentWritePointer(nullptr),
+      mCurrentBytesRemaining(0),
+      mHasActiveUnpausedTransformFeedback(false)
 {}
 ANGLE_INLINE SecondaryCommandBuffer::~SecondaryCommandBuffer() {}
 
@@ -741,6 +774,26 @@ ANGLE_INLINE void SecondaryCommandBuffer::bindIndexBuffer(const Buffer &buffer,
     paramStruct->buffer    = buffer.getHandle();
     paramStruct->offset    = offset;
     paramStruct->indexType = indexType;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::bindTransformFeedbackBuffers(size_t bindingCount,
+                                                                       const VkBuffer *buffers,
+                                                                       const VkDeviceSize *offsets,
+                                                                       const VkDeviceSize *sizes)
+{
+    uint8_t *writePtr;
+    size_t buffersSize = bindingCount * sizeof(VkBuffer);
+    size_t offsetsSize = bindingCount * sizeof(VkDeviceSize);
+    size_t sizesSize   = offsetsSize;
+    BindTransformFeedbackBuffersParams *paramStruct =
+        initCommand<BindTransformFeedbackBuffersParams>(CommandID::BindTransformFeedbackBuffers,
+                                                        buffersSize + offsetsSize + sizesSize,
+                                                        &writePtr);
+    // Copy params
+    paramStruct->bindingCount = static_cast<uint32_t>(bindingCount);
+    writePtr                  = storePointerParameter(writePtr, buffers, buffersSize);
+    writePtr                  = storePointerParameter(writePtr, offsets, offsetsSize);
+    storePointerParameter(writePtr, sizes, sizesSize);
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::bindVertexBuffers(uint32_t firstBinding,
@@ -1020,6 +1073,17 @@ ANGLE_INLINE void SecondaryCommandBuffer::fillBuffer(const Buffer &dstBuffer,
     paramStruct->data             = data;
 }
 
+ANGLE_INLINE TransformFeedbackCounterBuffers &
+SecondaryCommandBuffer::getTransformFeedbackCounterBuffersInfo()
+{
+    return mTransformFeedbackbCounterBuffers;
+}
+
+ANGLE_INLINE bool SecondaryCommandBuffer::hasActiveUnpausedTransformFeedback() const
+{
+    return mHasActiveUnpausedTransformFeedback;
+}
+
 ANGLE_INLINE void SecondaryCommandBuffer::imageBarrier(
     VkPipelineStageFlags srcStageMask,
     VkPipelineStageFlags dstStageMask,
@@ -1121,6 +1185,21 @@ ANGLE_INLINE void SecondaryCommandBuffer::resolveImage(const Image &srcImage,
     paramStruct->srcImage           = srcImage.getHandle();
     paramStruct->dstImage           = dstImage.getHandle();
     paramStruct->region             = regions[0];
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setActiveTransformFeedbackInfo(
+    size_t validBufferCount,
+    const VkBuffer *Counterbuffers,
+    bool rebindBuffer)
+{
+    mHasActiveUnpausedTransformFeedback                = true;
+    mTransformFeedbackbCounterBuffers.validBufferCount = static_cast<uint32_t>(validBufferCount);
+    mTransformFeedbackbCounterBuffers.rebindBuffer     = rebindBuffer;
+
+    for (size_t index = 0; index < validBufferCount; index++)
+    {
+        mTransformFeedbackbCounterBuffers.handles[index] = Counterbuffers[index];
+    }
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::setEvent(VkEvent event, VkPipelineStageFlags stageMask)
