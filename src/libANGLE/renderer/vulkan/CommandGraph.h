@@ -77,6 +77,13 @@ class RenderPassOwner
     CommandBuffer *mRenderPassCommandBuffer = nullptr;
 };
 
+struct TransformFeedbackCounterBuffers
+{
+    gl::TransformFeedbackBuffersArray<VkBuffer> handles;
+    uint32_t validBufferCount;
+    bool rebindBuffer;
+};
+
 // Only used internally in the command graph. Kept in the header for better inlining performance.
 class CommandGraphNode final : angle::NonCopyable
 {
@@ -205,6 +212,20 @@ class CommandGraphNode final : angle::NonCopyable
         mGlobalMemoryBarrierStages |= stages;
     }
 
+    ANGLE_INLINE void setActiveTransformFeedbackInfo(size_t validBufferCount,
+                                                     const VkBuffer *counterBuffers,
+                                                     bool rebindBuffer)
+    {
+        mHasActiveUnpausedTransformFeedback               = true;
+        mTransformFeedbackCounterBuffers.validBufferCount = static_cast<uint32_t>(validBufferCount);
+        mTransformFeedbackCounterBuffers.rebindBuffer     = rebindBuffer;
+
+        for (size_t index = 0; index < validBufferCount; index++)
+        {
+            mTransformFeedbackCounterBuffers.handles[index] = counterBuffers[index];
+        }
+    }
+
     // This can only be set for RenderPass nodes. Each RenderPass node can have at most one owner.
     void setRenderPassOwner(RenderPassOwner *owner)
     {
@@ -269,6 +290,10 @@ class CommandGraphNode final : angle::NonCopyable
 
     // Render pass command buffer notifications.
     RenderPassOwner *mRenderPassOwner;
+
+    // Active transform feedback state
+    bool mHasActiveUnpausedTransformFeedback;
+    TransformFeedbackCounterBuffers mTransformFeedbackCounterBuffers;
 };
 
 // Tracks how a resource is used in a command graph and in a VkQueue. The reference count indicates
@@ -453,6 +478,11 @@ class CommandGraphResource : angle::NonCopyable
 
     // Store a deferred memory barrier. Will be recorded into a primary command buffer at submit.
     void addGlobalMemoryBarrier(VkFlags srcAccess, VkFlags dstAccess, VkPipelineStageFlags stages);
+
+    // Sets active transform feedback information to current writing node.
+    void setActiveTransformFeedbackInfo(size_t validBufferCount,
+                                        const VkBuffer *counterBuffers,
+                                        bool rebindBuffer);
 
   protected:
     explicit CommandGraphResource(CommandGraphResourceType resourceType);
@@ -719,6 +749,16 @@ ANGLE_INLINE void CommandGraphResource::addGlobalMemoryBarrier(VkFlags srcAccess
 {
     ASSERT(mCurrentWritingNode);
     mCurrentWritingNode->addGlobalMemoryBarrier(srcAccess, dstAccess, stages);
+}
+
+ANGLE_INLINE void CommandGraphResource::setActiveTransformFeedbackInfo(
+    size_t validBufferCount,
+    const VkBuffer *counterBuffers,
+    bool rebindBuffer)
+{
+    ASSERT(mCurrentWritingNode);
+    mCurrentWritingNode->setActiveTransformFeedbackInfo(validBufferCount, counterBuffers,
+                                                        rebindBuffer);
 }
 
 ANGLE_INLINE bool CommandGraphResource::hasChildlessWritingNode() const
