@@ -138,6 +138,17 @@ const char *GetResourceTypeName(CommandGraphResourceType resourceType,
                     UNREACHABLE();
                     return "HostAvailabilityOperation";
             }
+        case CommandGraphResourceType::TransformFeedback:
+            switch (function)
+            {
+                case CommandGraphNodeFunction::BeginTransformFeedback:
+                    return "BeginTransformFeedback";
+                case CommandGraphNodeFunction::EndTransformFeedback:
+                    return "EndTransformFeedback";
+                default:
+                    UNREACHABLE();
+                    return "TransformFeedbackExt";
+            }
         default:
             UNREACHABLE();
             return "";
@@ -370,7 +381,9 @@ void CommandGraphResource::onWriteImpl(ContextVk *contextVk, CommandGraphNode *w
 // CommandGraphNode implementation.
 CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
                                    angle::PoolAllocator *poolAllocator)
-    : mRenderPassClearValues{},
+    : mXfbValidCounterBufferCount(0),
+      mXfbCounterBufferHandles{},
+      mRenderPassClearValues{},
       mFunction(function),
       mPoolAllocator(poolAllocator),
       mQueryPool(VK_NULL_HANDLE),
@@ -512,6 +525,19 @@ void CommandGraphNode::setDebugMarker(GLenum source, std::string &&marker)
            mFunction == CommandGraphNodeFunction::PushDebugMarker);
     mDebugMarkerSource = source;
     mDebugMarker       = std::move(marker);
+}
+
+void CommandGraphNode::setXfbCounterBuffer(
+    size_t validBufferCount,
+    const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBuffers)
+{
+    ASSERT(mFunction == CommandGraphNodeFunction::BeginTransformFeedback ||
+           mFunction == CommandGraphNodeFunction::EndTransformFeedback);
+    mXfbValidCounterBufferCount = static_cast<uint32_t>(validBufferCount);
+    for (size_t i = 0; i < validBufferCount; ++i)
+    {
+        mXfbCounterBufferHandles[i] = counterBuffers[i];
+    }
 }
 
 // Do not call this in anything but testing code, since it's slow.
@@ -714,6 +740,27 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
 
                 primaryCommandBuffer->memoryBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                                     VK_PIPELINE_STAGE_HOST_BIT, &memoryBarrier);
+            }
+            break;
+        case CommandGraphNodeFunction::BeginTransformFeedback:
+            ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
+
+            if (vkCmdBeginTransformFeedbackEXT)
+            {
+                vkCmdBeginTransformFeedbackEXT(primaryCommandBuffer->getHandle(), 0,
+                                               mXfbValidCounterBufferCount,
+                                               &mXfbCounterBufferHandles[0], nullptr);
+            }
+            break;
+
+        case CommandGraphNodeFunction::EndTransformFeedback:
+            ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
+
+            if (vkCmdEndTransformFeedbackEXT)
+            {
+                vkCmdEndTransformFeedbackEXT(primaryCommandBuffer->getHandle(), 0,
+                                             mXfbValidCounterBufferCount,
+                                             &mXfbCounterBufferHandles[0], nullptr);
             }
             break;
 
@@ -1102,6 +1149,25 @@ void CommandGraph::makeHostVisibleBufferWriteAvailable()
 {
     allocateBarrierNode(CommandGraphNodeFunction::HostAvailabilityOperation,
                         CommandGraphResourceType::HostAvailabilityOperation, 0);
+}
+
+void CommandGraph::beginTransformFeedback(
+    size_t bufferCount,
+    const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBuffers)
+{
+    CommandGraphNode *newNode =
+        allocateBarrierNode(CommandGraphNodeFunction::BeginTransformFeedback,
+                            CommandGraphResourceType::TransformFeedback, 0);
+    newNode->setXfbCounterBuffer(bufferCount, counterBuffers);
+}
+
+void CommandGraph::endTransformFeedback(
+    size_t bufferCount,
+    const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBuffers)
+{
+    CommandGraphNode *newNode = allocateBarrierNode(CommandGraphNodeFunction::EndTransformFeedback,
+                                                    CommandGraphResourceType::TransformFeedback, 0);
+    newNode->setXfbCounterBuffer(bufferCount, counterBuffers);
 }
 
 // Dumps the command graph into a dot file that works with graphviz.

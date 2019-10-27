@@ -20,10 +20,11 @@ class TransformFeedbackImpl : angle::NonCopyable
   public:
     TransformFeedbackImpl(const gl::TransformFeedbackState &state) : mState(state) {}
     virtual ~TransformFeedbackImpl() {}
+    virtual void onDestroy(const gl::Context *context) = 0;
 
     virtual angle::Result begin(const gl::Context *context, gl::PrimitiveMode primitiveMode) = 0;
     virtual angle::Result end(const gl::Context *context)                                    = 0;
-    virtual angle::Result pause(const gl::Context *context)                                  = 0;
+    virtual angle::Result pause(const gl::Context *context, size_t xfbBufferCount)           = 0;
     virtual angle::Result resume(const gl::Context *context)                                 = 0;
 
     virtual angle::Result bindIndexedBuffer(
