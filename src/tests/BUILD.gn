@@ -165,6 +165,13 @@ if (is_win || is_linux || is_mac || is_android) {
       "${angle_root}:translator",
     ]
 
+    # the gl_enum_util_source_set is already included in libGLESv2 dependencies if it is a
+    # debug build or if tracing has been enabled. We need to include it in the
+    # white box test dependencies for all build types
+    if (!(angle_enable_trace || is_debug)) {
+      deps += [ "${angle_root}:gl_enum_util_source_set" ]
+    }
+
     if (angle_enable_vulkan) {
       sources += angle_white_box_tests_vulkan_sources
       deps += [
