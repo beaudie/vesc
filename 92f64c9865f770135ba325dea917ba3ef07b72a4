@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "6aa0c061_24b7828c",
+        "filename": "DEPS",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-28T14:45:43Z",
+      "side": 1,
+      "message": "I\u0027d still like \"dEQP\" here somewhere, since \"VK-GL-CTS\" doesn\u0027t really mean much to people and everyone will sill continue to refer to it as (and grep for) dEQP rather than CTS.",
+      "parentUuid": "14a61ce5_f1ac63de",
+      "range": {
+        "startLine": 26,
+        "startChar": 24,
+        "endLine": 26,
+        "endChar": 28
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "17084ffd_d1da648b",
         "filename": "DEPS",
         "patchSetId": 5
