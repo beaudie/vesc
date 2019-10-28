@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d56b66fd_234e8659",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1115160
+      },
+      "writtenOn": "2019-10-28T23:05:49Z",
+      "side": 1,
+      "message": "Can you just rename this to D3D11On12CreateDevice please? (note the capital O in \u0027On\u0027)\n\nThat should make it \"just work\" for UWP. Right now D3D11CreateDevice and D3D12CreateDevice skip lines 728-787 and fall back to the versions defined in d3d11.h and d3d12.h on UWP, but that isn\u0027t working for D3D11On12CreateDevice because it\u0027s misspelled.\n\nThanks!",
+      "range": {
+        "startLine": 727,
+        "startChar": 8,
+        "endLine": 727,
+        "endChar": 68
+      },
+      "revId": "cc9031d2aaf5bc54d65f0663e7ce52a1104dc58a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
