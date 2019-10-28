@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbf18a74_abc0869c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-28T14:43:23Z",
+      "side": 1,
+      "message": "This comment refers to the contents of copyImageDataToStagingBuffer.  And I\u0027m guessing it needs to live outside the function so you can queue up several before inserting the barrier.  Can you update the comment to refer to it?  Otherwise, the functions listed look out of place.",
+      "range": {
+        "startLine": 1070,
+        "startChar": 38,
+        "endLine": 1070,
+        "endChar": 97
+      },
+      "revId": "a743252757a5762fbc4e871ceb0421216a252ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7757670_b52f1cb9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-28T14:43:23Z",
+      "side": 1,
+      "message": "Rather than add a bool to bypass the gating logic, can you split out the logic into a wrapper function?  The wrapper function can be updateBaseMaxLevel, which can call into changeLevels.",
+      "range": {
+        "startLine": 1158,
+        "startChar": 49,
+        "endLine": 1158,
+        "endChar": 66
+      },
+      "revId": "a743252757a5762fbc4e871ceb0421216a252ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61878e43_5d129e15",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-28T14:43:23Z",
+      "side": 1,
+      "message": "Same here, can you update this comment?",
+      "range": {
+        "startLine": 1229,
+        "startChar": 33,
+        "endLine": 1229,
+        "endChar": 93
+      },
+      "revId": "a743252757a5762fbc4e871ceb0421216a252ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
