@@ -876,6 +876,30 @@
     },
     {
       "key": {
+        "uuid": "33d370ec_a6b08e79",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T18:17:38Z",
+      "side": 1,
+      "message": "Update: an Apple dev confirmed that the recommended practice is to use packed D32S8. He said he\u0027d ask internally as well. I think the best resolution is that we use D32S8 packed and the RenderTargetCache. I\u0027m fine if we leave that as a follow-up.",
+      "parentUuid": "8a64de3a_7deb70c3",
+      "range": {
+        "startLine": 246,
+        "startChar": 5,
+        "endLine": 246,
+        "endChar": 44
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c65947a7_87a466a3",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 10
