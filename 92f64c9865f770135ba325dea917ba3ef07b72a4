@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "352ddd3b_a585af8c",
+        "filename": "DEPS",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-28T16:01:27Z",
+      "side": 1,
+      "message": "I\u0027m also thinking about this from an Android perspective, where CTS and dEQP are different things: dEQP is part of CTS, but not vice-versa.   It\u0027s unfortunate that Android and Khronos both use \"CTS\" in their naming, especially since one includes the other.\n\nColloquially, people will still refer to this code as \"dEQP\" to avoid any confusion with Android\u0027s CTS during discussions.   As a newbie, it\u0027s confusing to hear terms without ever seeing them referenced anywhere in the code base.   In this case, I think something like this would be helpful:\n\n# Current revision of VK-GL-CTS (dEQP)",
+      "parentUuid": "be89c55f_76d78337",
+      "range": {
+        "startLine": 26,
+        "startChar": 24,
+        "endLine": 26,
+        "endChar": 28
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "17084ffd_d1da648b",
         "filename": "DEPS",
         "patchSetId": 5
