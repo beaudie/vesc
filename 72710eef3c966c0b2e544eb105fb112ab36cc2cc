@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "c89aef90_727c6bd6",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:44:17Z",
+      "side": 1,
+      "message": "That\u0027s fine. I like moving all classes outside as I find it is rare that the encapsulation helps.",
+      "parentUuid": "9badef9a_0c4eee4c",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 6
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e2ef062_ffc77c63",
         "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
         "patchSetId": 10
@@ -225,6 +249,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "e0ff3587_552c3f2a",
+      "range": {
+        "startLine": 340,
+        "startChar": 0,
+        "endLine": 358,
+        "endChar": 0
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cfc63354_596579f3",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:44:17Z",
+      "side": 1,
+      "message": "Same comment here. Pretty minor request. If you must keep the types in the classes, please follow the ordering guidelines here:\n\nhttps://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "parentUuid": "c7589178_96804bb1",
       "range": {
         "startLine": 340,
         "startChar": 0,
@@ -413,6 +461,30 @@
       "side": 1,
       "message": "Done. Removed utils function.",
       "parentUuid": "bf4bd1fe_63f7b6e9",
+      "range": {
+        "startLine": 1017,
+        "startChar": 0,
+        "endLine": 1031,
+        "endChar": 9
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fdbf07c7_bad47c47",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:44:17Z",
+      "side": 1,
+      "message": "Question - there doesn\u0027t seem to be a change here. Did you mean to include a helper?",
+      "parentUuid": "86d55a4d_172021d4",
       "range": {
         "startLine": 1017,
         "startChar": 0,
@@ -709,6 +781,30 @@
     },
     {
       "key": {
+        "uuid": "ab79a5bf_19cad467",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:44:17Z",
+      "side": 1,
+      "message": "Ack. Can you please leave links to the ANGLE docs that describe these limitations?",
+      "parentUuid": "1374a730_75836dbd",
+      "range": {
+        "startLine": 134,
+        "startChar": 3,
+        "endLine": 134,
+        "endChar": 73
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b33f32d3_e4a1f10b",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 10
@@ -744,6 +840,30 @@
       "side": 1,
       "message": "This is runtime requirement from Apple. It is not stated in the official docs. However, when running the sample apps, Metal runtime throws exception when I try to use separate depth \u0026 stencil buffers. This could be set as a flag in a limitations struct. However, who know in future Apple might change the runtime behavior.\n\nUpdate: I actually checked the behavior on both macos and ios device. On ios device, Apple allows the depth and stencil buffers to be separate. Furthermore, on ios, packed depth24stencil8 is not supported. If packed depth stencil is required, then the only format supported is depth32stencil8 which is 64 bit texture actually, and it is waste of space of devices when they can just use separate depth32 and stencil8 buffers. So RenderTargetCache cannot be used either, because it assumes depth \u0026 stencil is packed.\nFor now, I will use a limitation flag indicating separate depth \u0026 stencil is supported or not. Until RenderTargetCache is updated to support separate depth \u0026 stencil I will use my own rendertarget cache implementation here.",
       "parentUuid": "b33f32d3_e4a1f10b",
+      "range": {
+        "startLine": 246,
+        "startChar": 5,
+        "endLine": 246,
+        "endChar": 44
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a64de3a_7deb70c3",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:44:17Z",
+      "side": 1,
+      "message": "Hm. This is good to know. I\u0027m curious to know what other Metal developers would do here. I suspect packed depth/stencil is preferable even if it seems like a waste of space. Can you leave a note describing your findings in the code?",
+      "parentUuid": "d499b208_60c22a4b",
       "range": {
         "startLine": 246,
         "startChar": 5,
@@ -920,6 +1040,30 @@
       "side": 1,
       "message": "Sorry, what do you mean?",
       "parentUuid": "415014f9_0a56340c",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 6
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90e69787_9b60d5b8",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:44:17Z",
+      "side": 1,
+      "message": "Was the same suggestion as in other places - move the type outside the class. Mostly optional.",
+      "parentUuid": "19ca243b_24c9f55a",
       "range": {
         "startLine": 145,
         "startChar": 0,
@@ -1684,6 +1828,30 @@
     },
     {
       "key": {
+        "uuid": "07831051_2ab7421f",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:44:17Z",
+      "side": 1,
+      "message": "I was going based on the style guide:\n\nhttps://google.github.io/styleguide/cppguide.html#Type_deduction\n\n\"use type deduction only to make the code clearer or safer, and do not use it merely to avoid the inconvenience of writing an explicit type\"\n\nIMO it\u0027s cleaner with the explicit type. Very minor thing.",
+      "parentUuid": "9b7b75a2_c2c47812",
+      "range": {
+        "startLine": 278,
+        "startChar": 8,
+        "endLine": 278,
+        "endChar": 12
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fd6bd24_cc1eec45",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 10
@@ -2293,6 +2461,30 @@
       "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11160295_2685ed06",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:44:17Z",
+      "side": 1,
+      "message": "Cool. Looks like I had some incorrect assumptions. dequeue is almost as fast as vector for random and back ops and way faster for front ops.\n\nReference: https://baptiste-wicht.com/posts/2012/12/cpp-benchmark-vector-list-deque.html",
+      "parentUuid": "ecee450b_2bee3e32",
+      "range": {
+        "startLine": 72,
+        "startChar": 9,
+        "endLine": 72,
+        "endChar": 14
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -2969,6 +3161,30 @@
       "side": 1,
       "message": "Ack, maybe leave a comment?",
       "parentUuid": "6263a0d9_3b383da0",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 5
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3dc1c50e_9a38f906",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:44:17Z",
+      "side": 1,
+      "message": "Re-nit for comment.",
+      "parentUuid": "b63fd11b_53d1a6b5",
       "range": {
         "startLine": 33,
         "startChar": 0,
