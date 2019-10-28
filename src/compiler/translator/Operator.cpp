@@ -245,9 +245,9 @@ const char *GetOperatorString(TOperator op)
             return "refract";
 
         case EOpDFdx:
-            return "dFdx";
+            return "dFdxFine";
         case EOpDFdy:
-            return "dFdy";
+            return "dFdyFine";
         case EOpFwidth:
             return "fwidth";
 
