@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c343814_547517ef",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "This is not necessary. e.g.\n\nbool isTrue \u003d true;\nreturn isTrue ? true : false",
+      "range": {
+        "startLine": 648,
+        "startChar": 54,
+        "endLine": 649,
+        "endChar": 61
+      },
+      "revId": "7f84fe6b6a4eb5640f70730740e817af95ba57f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55f4cc7f_f51abdac",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "I see that you duplicated this function from D3D11. Can you instead make it a shared method in renderer_utils.h/cpp?",
+      "range": {
+        "startLine": 1850,
+        "startChar": 0,
+        "endLine": 1877,
+        "endChar": 1
+      },
+      "revId": "7f84fe6b6a4eb5640f70730740e817af95ba57f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f008e9d5_43fffe3e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "you can get rid of this and merge it into PackedInputAssemblyAndColorBlendStateInfo",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 296,
+        "endChar": 2
+      },
+      "revId": "7f84fe6b6a4eb5640f70730740e817af95ba57f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

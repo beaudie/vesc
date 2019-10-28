@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef7cd226_582b9a1a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "You shouldn\u0027t need to keep this state. The front-end can handle filtering redundant changes.",
+      "range": {
+        "startLine": 514,
+        "startChar": 6,
+        "endLine": 514,
+        "endChar": 32
+      },
+      "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a74f24d_3583e55b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "You can handle this in case gl::State::DIRTY_BIT_PROVOKING_VERTEX. That should give better performance.",
+      "range": {
+        "startLine": 749,
+        "startChar": 0,
+        "endLine": 757,
+        "endChar": 5
+      },
+      "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1198447a_f8d9aa46",
+        "filename": "src/libANGLE/renderer/vulkan/DynamicVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "nit: naming (\u0027k\u0027)\n\nCan you put all these constants in the top in a namespace {} block? See other files for examples.",
+      "range": {
+        "startLine": 28,
+        "startChar": 22,
+        "endLine": 28,
+        "endChar": 37
+      },
+      "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb6929e8_a574091e",
+        "filename": "src/libANGLE/renderer/vulkan/DynamicVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "I think auto is going to do a copy. I suggest you make it explicit and use \"const StructType \u0026\".",
+      "range": {
+        "startLine": 411,
+        "startChar": 13,
+        "endLine": 411,
+        "endChar": 17
+      },
+      "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e633fda6_3ffcde06",
+        "filename": "src/libANGLE/renderer/vulkan/DynamicVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "spelling: \u0027Structure\u0027",
+      "range": {
+        "startLine": 413,
+        "startChar": 12,
+        "endLine": 413,
+        "endChar": 41
+      },
+      "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcab6e5e_9eec45b4",
+        "filename": "src/libANGLE/renderer/vulkan/DynamicVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "I see this shares some common design for \"DynamicHLSL\" in the D3D11 back-end. Going forward I would suggest we break from that design. \n\nThat would mean renaming this class to be something like FlatShadingHelper or ProvokingVertexHelper. Maybe we could even make these functions static helper functions and store the limited state in ProgramVk directly. As far as I can see there\u0027s just the \u0027link-time\u0027 string and the varying struct list.",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 16
+      },
+      "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1cc1f6f_e5798c3d",
+        "filename": "src/libANGLE/renderer/vulkan/DynamicVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "Can you put this implementation in the cpp?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 16
+      },
+      "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b24c8268_859af7e0",
+        "filename": "src/libANGLE/renderer/vulkan/DynamicVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T17:14:53Z",
+      "side": 1,
+      "message": "How about you just call this generateGeometryShader?",
+      "range": {
+        "startLine": 39,
+        "startChar": 9,
+        "endLine": 39,
+        "endChar": 39
+      },
+      "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
