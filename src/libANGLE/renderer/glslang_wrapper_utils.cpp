@@ -1115,6 +1115,38 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
     }
 }
+//
+// constexpr char kLineRasterEmulation[] = R"(
+//    vec4 flippedFragCoord = vec4(gl_FragCoord);
+//    (flippedFragCoord.y = (((gl_FragCoord.y - ANGLEUniforms.halfRenderAreaHeight) *
+//    ANGLEUniforms.viewportYScale) + ANGLEUniforms.halfRenderAreaHeight)); vec2 s903 =
+//    (((((ANGLEPosition.xy / ANGLEPosition.w) * 0.5) + 0.5) * ANGLEUniforms.viewport.zw) +
+//    ANGLEUniforms.viewport.xy); vec2 s904 = abs((s903 - flippedFragCoord.xy)); vec2 s905 = ((s904
+//    * s904) * 2.0); vec2 s906 = ((s905 + s905.yx) - s904); if (((s906.x > 9.9999997e-06) &&
+//    (s906.y > 9.9999997e-06)))
+//    {
+//        discard;
+//    }
+//)";
+
+constexpr char kLineRasterEmulation[] = R"(
+    vec4 flippedFragCoord = vec4(gl_FragCoord);
+    (flippedFragCoord.y = (((gl_FragCoord.y - ANGLEUniforms.halfRenderAreaHeight) * ANGLEUniforms.viewportYScale) + ANGLEUniforms.halfRenderAreaHeight));
+    vec2 p = (((((ANGLEPosition.xy) * 0.5) + 0.5) * ANGLEUniforms.viewport.zw) + ANGLEUniforms.viewport.xy);
+    vec2 ddx = dFdx(p);
+    vec2 ddy = dFdy(p);
+    vec2 d = dFdx(p) + dFdy(p); // dot(ddx, ddx) > dot(ddy, ddy) ? ddx : ddy; // 
+    vec2 f = flippedFragCoord.xy;
+    vec2 p_ = p.yx;
+    vec2 d_ = d.yx;
+    vec2 f_ = f.yx;
+
+    vec2 i = abs(p - f + (d/d_) * (f_ - p_));
+
+    if (i.x > 0.500001 && i.y > 0.500001)
+    {
+        discard;
+    })";
 
 angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
                                         const gl::Caps &glCaps,
@@ -1137,6 +1169,11 @@ angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
                             angle::ReplaceSubstring(&patchedSources[gl::ShaderType::Fragment],
                                                     kVersionDefine, kLineRasterDefine),
                             GlslangError::InvalidShader);
+
+        ANGLE_VK_CHECK(context,
+                       angle::ReplaceSubstring(&patchedSources[gl::ShaderType::Fragment],
+                                               "#define EMULATION", kLineRasterEmulation),
+                       VK_ERROR_INVALID_SHADER_NV);
 
         if (!shaderSources[gl::ShaderType::Geometry].empty())
         {

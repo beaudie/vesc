@@ -567,130 +567,134 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
                                               const TVariable *driverUniforms,
                                               bool usesFragCoord)
 {
-    TVariable *anglePosition = AddANGLEPositionVaryingDeclaration(root, symbolTable, EvqVaryingIn);
+    /*TVariable *anglePosition = */ AddANGLEPositionVaryingDeclaration(root, symbolTable,
+                                                                       EvqVaryingIn);
 
-    const TType *vec2Type = StaticType::GetBasic<EbtFloat, 2>();
+    // const TType *vec2Type = StaticType::GetBasic<EbtFloat, 2>();
 
-    // Create a swizzle to "ANGLEUniforms.viewport.xy".
-    TIntermBinary *viewportRef   = CreateDriverUniformRef(driverUniforms, kViewport);
-    TVector<int> swizzleOffsetXY = {0, 1};
-    TIntermSwizzle *viewportXY   = new TIntermSwizzle(viewportRef->deepCopy(), swizzleOffsetXY);
+    //// Create a swizzle to "ANGLEUniforms.viewport.xy".
+    // TIntermBinary *viewportRef   = CreateDriverUniformRef(driverUniforms, kViewport);
+    // TVector<int> swizzleOffsetXY = {0, 1};
+    // TIntermSwizzle *viewportXY   = new TIntermSwizzle(viewportRef->deepCopy(), swizzleOffsetXY);
 
-    // Create a swizzle to "ANGLEUniforms.viewport.zw".
-    TVector<int> swizzleOffsetZW = {2, 3};
-    TIntermSwizzle *viewportZW   = new TIntermSwizzle(viewportRef, swizzleOffsetZW);
+    //// Create a swizzle to "ANGLEUniforms.viewport.zw".
+    // TVector<int> swizzleOffsetZW = {2, 3};
+    // TIntermSwizzle *viewportZW   = new TIntermSwizzle(viewportRef, swizzleOffsetZW);
 
-    // ANGLEPosition * 0.5
-    TIntermSymbol *position       = new TIntermSymbol(anglePosition);
-    TIntermConstantUnion *oneHalf = CreateFloatNode(0.5f);
-    TIntermBinary *halfPosition   = new TIntermBinary(EOpVectorTimesScalar, position, oneHalf);
+    //// ANGLEPosition * 0.5
+    // TIntermSymbol *position       = new TIntermSymbol(anglePosition);
+    // TIntermConstantUnion *oneHalf = CreateFloatNode(0.5f);
+    // TIntermBinary *halfPosition   = new TIntermBinary(EOpVectorTimesScalar, position, oneHalf);
 
-    // (ANGLEPosition * 0.5) + 0.5
-    TIntermBinary *offsetHalfPosition =
-        new TIntermBinary(EOpAdd, halfPosition, oneHalf->deepCopy());
+    //// (ANGLEPosition * 0.5) + 0.5
+    // TIntermBinary *offsetHalfPosition =
+    //    new TIntermBinary(EOpAdd, halfPosition, oneHalf->deepCopy());
 
-    // ((ANGLEPosition * 0.5) + 0.5) * ANGLEUniforms.viewport.zw
-    TIntermBinary *scaledPosition = new TIntermBinary(EOpMul, offsetHalfPosition, viewportZW);
+    //// ((ANGLEPosition * 0.5) + 0.5) * ANGLEUniforms.viewport.zw
+    // TIntermBinary *scaledPosition = new TIntermBinary(EOpMul, offsetHalfPosition, viewportZW);
 
-    // ((ANGLEPosition * 0.5) + 0.5) * ANGLEUniforms.viewport + ANGLEUniforms.viewport.xy
-    TIntermBinary *windowPosition = new TIntermBinary(EOpAdd, scaledPosition, viewportXY);
+    //// ((ANGLEPosition * 0.5) + 0.5) * ANGLEUniforms.viewport + ANGLEUniforms.viewport.xy
+    // TIntermBinary *windowPosition = new TIntermBinary(EOpAdd, scaledPosition, viewportXY);
 
-    // Assign to a temporary "b".
-    TVariable *bTemp          = CreateTempVariable(symbolTable, vec2Type);
-    TIntermDeclaration *bDecl = CreateTempInitDeclarationNode(bTemp, windowPosition);
+    //// Assign to a temporary "b".
+    // TVariable *bTemp          = CreateTempVariable(symbolTable, vec2Type);
+    // TIntermDeclaration *bDecl = CreateTempInitDeclarationNode(bTemp, windowPosition);
 
-    // gl_FragCoord.xy
-    const TVariable *fragCoord  = BuiltInVariable::gl_FragCoord();
-    TIntermSymbol *fragCoordRef = new TIntermSymbol(fragCoord);
-    TIntermSwizzle *fragCoordXY = new TIntermSwizzle(fragCoordRef, swizzleOffsetXY);
+    //// gl_FragCoord.xy
+    // const TVariable *fragCoord  = BuiltInVariable::gl_FragCoord();
+    // TIntermSymbol *fragCoordRef = new TIntermSymbol(fragCoord);
+    // TIntermSwizzle *fragCoordXY = new TIntermSwizzle(fragCoordRef, swizzleOffsetXY);
 
-    // b - gl_FragCoord.xy
-    TIntermSymbol *bRef           = CreateTempSymbolNode(bTemp);
-    TIntermBinary *differenceExpr = new TIntermBinary(EOpSub, bRef, fragCoordXY);
+    //// b - gl_FragCoord.xy
+    // TIntermSymbol *bRef           = CreateTempSymbolNode(bTemp);
+    // TIntermBinary *differenceExpr = new TIntermBinary(EOpSub, bRef, fragCoordXY);
 
-    // abs(b - gl_FragCoord.xy)
-    TIntermUnary *baAbs = new TIntermUnary(EOpAbs, differenceExpr, nullptr);
+    //// abs(b - gl_FragCoord.xy)
+    // TIntermUnary *baAbs = new TIntermUnary(EOpAbs, differenceExpr, nullptr);
 
-    // Assign to a temporary "ba".
-    TVariable *baTemp          = CreateTempVariable(symbolTable, vec2Type);
-    TIntermDeclaration *baDecl = CreateTempInitDeclarationNode(baTemp, baAbs);
-    TIntermSymbol *ba          = CreateTempSymbolNode(baTemp);
+    //// Assign to a temporary "ba".
+    // TVariable *baTemp          = CreateTempVariable(symbolTable, vec2Type);
+    // TIntermDeclaration *baDecl = CreateTempInitDeclarationNode(baTemp, baAbs);
+    // TIntermSymbol *ba          = CreateTempSymbolNode(baTemp);
 
-    // ba * ba
-    TIntermBinary *baSq = new TIntermBinary(EOpMul, ba, ba->deepCopy());
+    //// ba * ba
+    // TIntermBinary *baSq = new TIntermBinary(EOpMul, ba, ba->deepCopy());
 
-    // 2.0 * ba * ba
-    TIntermTyped *two      = CreateFloatNode(2.0f);
-    TIntermBinary *twoBaSq = new TIntermBinary(EOpVectorTimesScalar, baSq, two);
+    //// 2.0 * ba * ba
+    // TIntermTyped *two      = CreateFloatNode(2.0f);
+    // TIntermBinary *twoBaSq = new TIntermBinary(EOpVectorTimesScalar, baSq, two);
 
-    // Assign to a temporary "ba2".
-    TVariable *ba2Temp          = CreateTempVariable(symbolTable, vec2Type);
-    TIntermDeclaration *ba2Decl = CreateTempInitDeclarationNode(ba2Temp, twoBaSq);
+    //// Assign to a temporary "ba2".
+    // TVariable *ba2Temp          = CreateTempVariable(symbolTable, vec2Type);
+    // TIntermDeclaration *ba2Decl = CreateTempInitDeclarationNode(ba2Temp, twoBaSq);
 
-    // Create a swizzle to "ba2.yx".
-    TVector<int> swizzleOffsetYX = {1, 0};
-    TIntermSymbol *ba2           = CreateTempSymbolNode(ba2Temp);
-    TIntermSwizzle *ba2YX        = new TIntermSwizzle(ba2, swizzleOffsetYX);
+    //// Create a swizzle to "ba2.yx".
+    // TVector<int> swizzleOffsetYX = {1, 0};
+    // TIntermSymbol *ba2           = CreateTempSymbolNode(ba2Temp);
+    // TIntermSwizzle *ba2YX        = new TIntermSwizzle(ba2, swizzleOffsetYX);
 
-    // ba2 + ba2.yx - ba
-    TIntermBinary *ba2PlusBaYX2 = new TIntermBinary(EOpAdd, ba2->deepCopy(), ba2YX);
-    TIntermBinary *bpInit       = new TIntermBinary(EOpSub, ba2PlusBaYX2, ba->deepCopy());
+    //// ba2 + ba2.yx - ba
+    // TIntermBinary *ba2PlusBaYX2 = new TIntermBinary(EOpAdd, ba2->deepCopy(), ba2YX);
+    // TIntermBinary *bpInit       = new TIntermBinary(EOpSub, ba2PlusBaYX2, ba->deepCopy());
 
-    // Assign to a temporary "bp".
-    TVariable *bpTemp          = CreateTempVariable(symbolTable, vec2Type);
-    TIntermDeclaration *bpDecl = CreateTempInitDeclarationNode(bpTemp, bpInit);
-    TIntermSymbol *bp          = CreateTempSymbolNode(bpTemp);
+    //// Assign to a temporary "bp".
+    // TVariable *bpTemp          = CreateTempVariable(symbolTable, vec2Type);
+    // TIntermDeclaration *bpDecl = CreateTempInitDeclarationNode(bpTemp, bpInit);
+    // TIntermSymbol *bp          = CreateTempSymbolNode(bpTemp);
 
-    // Create a swizzle to "bp.x".
-    TVector<int> swizzleOffsetX = {0};
-    TIntermSwizzle *bpX         = new TIntermSwizzle(bp, swizzleOffsetX);
+    //// Create a swizzle to "bp.x".
+    // TVector<int> swizzleOffsetX = {0};
+    // TIntermSwizzle *bpX         = new TIntermSwizzle(bp, swizzleOffsetX);
 
-    // Using a small epsilon value ensures that we don't suffer from numerical instability when
-    // lines are exactly vertical or horizontal.
-    static constexpr float kEpisilon = 0.00001f;
-    TIntermConstantUnion *epsilon    = CreateFloatNode(kEpisilon);
+    //// Using a small epsilon value ensures that we don't suffer from numerical instability when
+    //// lines are exactly vertical or horizontal.
+    // static constexpr float kEpisilon = 0.00001f;
+    // TIntermConstantUnion *epsilon    = CreateFloatNode(kEpisilon);
 
-    // bp.x > epsilon
-    TIntermBinary *checkX = new TIntermBinary(EOpGreaterThan, bpX, epsilon);
+    //// bp.x > epsilon
+    // TIntermBinary *checkX = new TIntermBinary(EOpGreaterThan, bpX, epsilon);
 
-    // Create a swizzle to "bp.y".
-    TVector<int> swizzleOffsetY = {1};
-    TIntermSwizzle *bpY         = new TIntermSwizzle(bp->deepCopy(), swizzleOffsetY);
+    //// Create a swizzle to "bp.y".
+    // TVector<int> swizzleOffsetY = {1};
+    // TIntermSwizzle *bpY         = new TIntermSwizzle(bp->deepCopy(), swizzleOffsetY);
 
-    // bp.y > epsilon
-    TIntermBinary *checkY = new TIntermBinary(EOpGreaterThan, bpY, epsilon->deepCopy());
+    //// bp.y > epsilon
+    // TIntermBinary *checkY = new TIntermBinary(EOpGreaterThan, bpY, epsilon->deepCopy());
 
-    // (bp.x > epsilon) && (bp.y > epsilon)
-    TIntermBinary *checkXY = new TIntermBinary(EOpLogicalAnd, checkX, checkY);
+    //// (bp.x > epsilon) && (bp.y > epsilon)
+    // TIntermBinary *checkXY = new TIntermBinary(EOpLogicalAnd, checkX, checkY);
 
-    // discard
-    TIntermBranch *discard     = new TIntermBranch(EOpKill, nullptr);
-    TIntermBlock *discardBlock = new TIntermBlock;
-    discardBlock->appendStatement(discard);
+    //// discard
+    // TIntermBranch *discard     = new TIntermBranch(EOpKill, nullptr);
+    // TIntermBlock *discardBlock = new TIntermBlock;
+    // discardBlock->appendStatement(discard);
 
-    // if ((bp.x > epsilon) && (bp.y > epsilon)) discard;
-    TIntermIfElse *ifStatement = new TIntermIfElse(checkXY, discardBlock, nullptr);
+    //// if ((bp.x > epsilon) && (bp.y > epsilon)) discard;
+    // TIntermIfElse *ifStatement = new TIntermIfElse(checkXY, discardBlock, nullptr);
 
     // Ensure the line raster code runs at the beginning of main().
     TIntermFunctionDefinition *main = FindMain(root);
     TIntermSequence *mainSequence   = main->getBody()->getSequence();
     ASSERT(mainSequence);
 
-    std::array<TIntermNode *, 6> nodes = {
-        {bDecl, baDecl, ba2Decl, bpDecl, ifStatement, GenerateEndIf()}};
-    mainSequence->insert(mainSequence->begin(), nodes.begin(), nodes.end());
+    // std::array<TIntermNode *, 6> nodes = {
+    //    {bDecl, baDecl, ba2Decl, bpDecl, ifStatement, GenerateEndIf()}};
+    // mainSequence->insert(mainSequence->begin(), nodes.begin(), nodes.end());
 
-    // If the shader does not use frag coord, we should insert it inside the ifdef.
-    if (!usesFragCoord)
-    {
-        if (!InsertFragCoordCorrection(compiler, root, mainSequence, symbolTable, driverUniforms))
-        {
-            return false;
-        }
-    }
+    //// If the shader does not use frag coord, we should insert it inside the ifdef.
+    // if (!usesFragCoord)
+    //{
+    //    if (!InsertFragCoordCorrection(compiler, root, mainSequence, symbolTable, driverUniforms))
+    //    {
+    //        return false;
+    //    }
+    //}
 
+    mainSequence->insert(mainSequence->begin(), GenerateEndIf());
+    mainSequence->insert(mainSequence->begin(),
+                         new TIntermPreprocessorDirective(PreprocessorDirective::Define,
+                                                          ImmutableString("EMULATION")));
     mainSequence->insert(mainSequence->begin(), GenerateLineRasterIfDef());
-
     return compiler->validateAST(root);
 }
 
