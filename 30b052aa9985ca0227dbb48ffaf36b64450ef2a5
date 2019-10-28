@@ -118,6 +118,30 @@
       "revId": "30b052aa9985ca0227dbb48ffaf36b64450ef2a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef1a8110_e2cfdea6",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1271180
+      },
+      "writtenOn": "2019-10-28T10:03:05Z",
+      "side": 1,
+      "message": "Sorry for late reply. Plese have a look at the new patch. I removed the whole old string of OpenGL\u0027s version, replaced with native version string.",
+      "parentUuid": "9378a2f8_c5a0ca54",
+      "range": {
+        "startLine": 499,
+        "startChar": 29,
+        "endLine": 499,
+        "endChar": 91
+      },
+      "revId": "30b052aa9985ca0227dbb48ffaf36b64450ef2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
