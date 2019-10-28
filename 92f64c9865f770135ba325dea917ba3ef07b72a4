@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "7223fe23_05b24d10",
+        "filename": "DEPS",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T16:38:56Z",
+      "side": 1,
+      "message": "Yeah, fair points.",
+      "parentUuid": "3e96bb9f_7ca29291",
+      "range": {
+        "startLine": 26,
+        "startChar": 24,
+        "endLine": 26,
+        "endChar": 28
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17084ffd_d1da648b",
         "filename": "DEPS",
         "patchSetId": 5
