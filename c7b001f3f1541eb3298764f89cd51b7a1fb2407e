@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f85c46a0_c35f86db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3039,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-28T15:06:09Z",
+      "side": 1,
+      "message": "It looks like this is only used inside of the if(isMultisampled) block. Can it be moved inside of there too?",
+      "revId": "c7b001f3f1541eb3298764f89cd51b7a1fb2407e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
