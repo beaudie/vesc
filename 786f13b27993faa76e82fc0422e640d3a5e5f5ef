@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0859db25_8c0b34dc",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4845,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T16:48:29Z",
+      "side": 1,
+      "message": "nit: we prefer c++ style block comments. (// on each line)",
+      "range": {
+        "startLine": 4845,
+        "startChar": 4,
+        "endLine": 4845,
+        "endChar": 35
+      },
+      "revId": "786f13b27993faa76e82fc0422e640d3a5e5f5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a86474df_11fb0b46",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4869,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T16:48:29Z",
+      "side": 1,
+      "message": "nit: prefer the explicit type for this simple type",
+      "range": {
+        "startLine": 4869,
+        "startChar": 10,
+        "endLine": 4869,
+        "endChar": 15
+      },
+      "revId": "786f13b27993faa76e82fc0422e640d3a5e5f5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
