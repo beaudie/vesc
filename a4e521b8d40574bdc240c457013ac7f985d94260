@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0d836dd_f7301e92",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-28T15:46:53Z",
+      "side": 1,
+      "message": "*Type",
+      "range": {
+        "startLine": 290,
+        "startChar": 28,
+        "endLine": 290,
+        "endChar": 46
+      },
+      "revId": "a4e521b8d40574bdc240c457013ac7f985d94260",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
