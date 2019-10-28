@@ -1,0 +1,418 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c75ad308_330bf93c",
+        "filename": "src/libANGLE/TransformFeedback.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "nit: can put this in\n\nif (mImplementation) {}",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 19
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd25d877_a60b8e1b",
+        "filename": "src/libANGLE/TransformFeedback.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "The buffer count is available from TransformFeedbackImpl::mState. Same as it is here. So you don\u0027t need to pass it in.",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 5
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2462f34_481d8f62",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "setTransformFeedbackCounterBuffer? XFB can be nice in some places. Don\u0027t think it\u0027s needed here.",
+      "range": {
+        "startLine": 528,
+        "startChar": 23,
+        "endLine": 528,
+        "endChar": 42
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97e6c764_bf0b90b1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "I don\u0027t see why you need a special node for these. Why can\u0027t you record them into mOutsideRenderPassCommands?",
+      "range": {
+        "startLine": 743,
+        "startChar": 9,
+        "endLine": 763,
+        "endChar": 18
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5efde08_98fee6a1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "nit: graphics is redundant here. \n\n\u0027handleDirtyTransformFeedbackEmulation\u0027/\u0027handleDirtyTransformFeedbackExtension\u0027",
+      "range": {
+        "startLine": 573,
+        "startChar": 24,
+        "endLine": 573,
+        "endChar": 71
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6925aa5_0a4ab3de",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "reference to call chain.",
+      "range": {
+        "startLine": 810,
+        "startChar": 8,
+        "endLine": 810,
+        "endChar": 40
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02fafe63_3a565feb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "nit: for a pattern like this it\u0027s a bit cleaner to early return. i.e.\n\nif (!mProgram.hasOutput || !mState.active())\n    return;\n\n....",
+      "range": {
+        "startLine": 1201,
+        "startChar": 3,
+        "endLine": 1202,
+        "endChar": 5
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "397a0e2d_e085b9ff",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "this should probably be cached in TransformFeedbackVk and updated in a begin call.",
+      "range": {
+        "startLine": 1206,
+        "startChar": 0,
+        "endLine": 1218,
+        "endChar": 9
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03dc8eb9_3c34be6d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "this should already be handled in the call to TransformFeedbackVk::addFramebufferDependency that gets triggered from setupDraw above.",
+      "range": {
+        "startLine": 1228,
+        "startChar": 0,
+        "endLine": 1238,
+        "endChar": 9
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "558c38e2_de27571b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "can you instead just pass FeaturesVk to this function?",
+      "range": {
+        "startLine": 570,
+        "startChar": 8,
+        "endLine": 571,
+        "endChar": 93
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f279ac05_6079b4e9",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "It\u0027s not right to call both release and destroy. Release will defer the destruction if the objects are not in use. destroy will always immediately destroy them. Seems correct to call release.",
+      "range": {
+        "startLine": 38,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 68
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0324c260_102c889b",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "contextVk",
+      "range": {
+        "startLine": 58,
+        "startChar": 8,
+        "endLine": 58,
+        "endChar": 28
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d508b1e2_256326d7",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "nit: cache above",
+      "range": {
+        "startLine": 78,
+        "startChar": 7,
+        "endLine": 78,
+        "endChar": 52
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36dfca24_af602c82",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "and use here",
+      "range": {
+        "startLine": 85,
+        "startChar": 8,
+        "endLine": 85,
+        "endChar": 28
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd0d7213_2c95fb1b",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "same for the rest.",
+      "range": {
+        "startLine": 127,
+        "startChar": 8,
+        "endLine": 127,
+        "endChar": 52
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "556c7499_e8e305c7",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "you shouldn\u0027t need to cache this. it\u0027s available always from a context parameter.",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 24
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "993ba390_1abd962b",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "this also seems like it shouldn\u0027t be necessary. it should be available from the mState object.",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 30
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83c05f32_80445f62",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T14:47:17Z",
+      "side": 1,
+      "message": "It\u0027s slightly bad that we store this information both in SoA and AoS. Can you redesign the emulation path to use SoA?",
+      "range": {
+        "startLine": 93,
+        "startChar": 3,
+        "endLine": 94,
+        "endChar": 65
+      },
+      "revId": "1c472894e4b65366bf2b98c0a6c74d4981d74121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
