@@ -34,7 +34,7 @@ SurfaceImpl *DisplayVkWin32::createWindowSurfaceVk(const egl::SurfaceState &stat
 
 egl::ConfigSet DisplayVkWin32::generateConfigs()
 {
-    constexpr GLenum kColorFormats[] = {GL_BGRA8_EXT, GL_BGRX8_ANGLEX};
+    constexpr GLenum kColorFormats[] = {GL_RGB565, GL_BGRA8_EXT, GL_BGRX8_ANGLEX};
     return egl_vk::GenerateConfigs(kColorFormats, egl_vk::kConfigDepthStencilFormats, this);
 }
 
