@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e71b5881_e397302e",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-28T23:49:21Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem right. Shouldn\u0027t it be RequireESOrExtANDExt or something like that.\nES3.0 includes everything necessary to support sized depth/stencil.",
+      "range": {
+        "startLine": 1058,
+        "startChar": 304,
+        "endLine": 1058,
+        "endChar": 320
+      },
+      "revId": "7db1d6286c38191c94b8aea1f486fa3508f3934d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
