@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d0c91da5_702dc342",
+        "filename": ".gitignore",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-28T16:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc2b9c06_3aa6b430",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 21
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fb6a19a_5f0488c2",
         "filename": "/COMMIT_MSG",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc7298c4_e83f2b0d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-28T16:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fb6a19a_5f0488c2",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -143,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "3e96bb9f_7ca29291",
+        "filename": "DEPS",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-28T16:26:53Z",
+      "side": 1,
+      "message": "Done\n\nBTW, deqp is use a LOT in the source base. I\u0027m not planning to change all the references.\ngit grep deqp | wc -l\n2177",
+      "parentUuid": "be89c55f_76d78337",
+      "range": {
+        "startLine": 26,
+        "startChar": 24,
+        "endLine": 26,
+        "endChar": 28
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17084ffd_d1da648b",
         "filename": "DEPS",
         "patchSetId": 5
@@ -163,6 +235,30 @@
       "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8279ac8_84735d18",
+        "filename": "DEPS",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-28T16:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17084ffd_d1da648b",
+      "range": {
+        "startLine": 27,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 16
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -189,6 +285,30 @@
     },
     {
       "key": {
+        "uuid": "9506bad0_0cb0a7fc",
+        "filename": "DEPS",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-28T16:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85be3b7c_30efdc09",
+      "range": {
+        "startLine": 78,
+        "startChar": 15,
+        "endLine": 78,
+        "endChar": 24
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "433b7d25_f1130d1c",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 5
@@ -209,6 +329,30 @@
       "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9857116f_8fdee3fd",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-28T16:26:53Z",
+      "side": 1,
+      "message": "KHR test/util: third_party\\VK-GL-CTS\\src\\external\\openglcts\\modules\\common\\glcSpirvUtils.cpp\nnow unconditionally uses glslang.",
+      "parentUuid": "433b7d25_f1130d1c",
+      "range": {
+        "startLine": 951,
+        "startChar": 7,
+        "endLine": 951,
+        "endChar": 45
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -235,6 +379,30 @@
     },
     {
       "key": {
+        "uuid": "ff5bdbea_007544b2",
+        "filename": "src/tests/deqp.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-28T16:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8ffec08_e99b1dab",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 13
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03deab93_9d3bce2e",
         "filename": "src/tests/deqp.gni",
         "patchSetId": 5
@@ -255,6 +423,30 @@
       "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a89fddc_10dad2c2",
+        "filename": "src/tests/deqp.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-28T16:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03deab93_9d3bce2e",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 62
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
