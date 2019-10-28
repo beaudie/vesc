@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f6ce94a_e063c85f",
+        "filename": "third_party/vk-gl-cts/README.angle",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T16:51:40Z",
+      "side": 1,
+      "message": "I think the folder for this guy has the wrong case. Be careful about that.",
+      "revId": "c328aec2a1e14d26a97b9c7c748e7dd850fae460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
