@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc6da1ca_f8ba6724",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3012,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-28T20:39:32Z",
+      "side": 1,
+      "message": "Why are you able to assume that the image dimensions are square?",
+      "revId": "43f6cf514dfe6f72fc5a59178f5c17193a1e869f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
