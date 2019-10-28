@@ -153,6 +153,30 @@
     },
     {
       "key": {
+        "uuid": "5ab079d3_22344c15",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-28T21:46:43Z",
+      "side": 1,
+      "message": "On macOS, these video textures will actually be GL_TEXTURE_RECTANGLE_ARB type textures, so the abstraction has to be able to handle this possibility. It\u0027s for this reason that the tests should be written using the abstraction. Could you please handle this in this CL? Thanks.",
+      "parentUuid": "07056895_89e391b1",
+      "range": {
+        "startLine": 71,
+        "startChar": 18,
+        "endLine": 71,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0deb5fc7_a474b14d",
         "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
         "patchSetId": 12
