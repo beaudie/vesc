@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc2b9c06_3aa6b430",
+        "filename": ".gitignore",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T13:53:40Z",
+      "side": 1,
+      "message": "You can remove this now that you added the other one.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 21
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fb6a19a_5f0488c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T13:53:40Z",
+      "side": 1,
+      "message": "can you include some more communication here? Stuff like\n\n\u0027Switch from Android dEQP to Khronos GL CTS\n\nThis change moves from...\u0027\n\netc.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14a61ce5_f1ac63de",
+        "filename": "DEPS",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T13:53:40Z",
+      "side": 1,
+      "message": "nit: might as well update all references to VK-GL-CTS",
+      "range": {
+        "startLine": 26,
+        "startChar": 24,
+        "endLine": 26,
+        "endChar": 28
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17084ffd_d1da648b",
+        "filename": "DEPS",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T13:53:40Z",
+      "side": 1,
+      "message": "and this to vk_gl_cts_revision",
+      "range": {
+        "startLine": 27,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 16
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85be3b7c_30efdc09",
+        "filename": "DEPS",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T13:53:40Z",
+      "side": 1,
+      "message": "nit: might as well use VK-GL-CTS to mirror the repo.",
+      "range": {
+        "startLine": 78,
+        "startChar": 15,
+        "endLine": 78,
+        "endChar": 24
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "433b7d25_f1130d1c",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T13:53:40Z",
+      "side": 1,
+      "message": "just checking - we need glslang as well as spvtools? Usually programs don\u0027t use glslang.",
+      "range": {
+        "startLine": 951,
+        "startChar": 7,
+        "endLine": 951,
+        "endChar": 45
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8ffec08_e99b1dab",
+        "filename": "src/tests/deqp.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T13:53:40Z",
+      "side": 1,
+      "message": "you shouldn\u0027t need this, you can use angle_glslang_dir. See build_overrides/angle.gni.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 13
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03deab93_9d3bce2e",
+        "filename": "src/tests/deqp.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-28T13:53:40Z",
+      "side": 1,
+      "message": "you don\u0027t need this, use angle_spirv_tools_dir",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 62
+      },
+      "revId": "92f64c9865f770135ba325dea917ba3ef07b72a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
