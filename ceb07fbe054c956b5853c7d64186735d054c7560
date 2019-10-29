@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "d6fa3542_886f8584",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-29T02:08:41Z",
+      "side": 1,
+      "message": "FeaturesMtl means runtime can change the flags inside that struct, right? I don\u0027t think the limits here can be changed.",
+      "parentUuid": "0f7a1473_84f5e89d",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 31,
+        "endChar": 22
+      },
+      "revId": "ceb07fbe054c956b5853c7d64186735d054c7560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a0b2e90_9c2171a6",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.h",
         "patchSetId": 15
