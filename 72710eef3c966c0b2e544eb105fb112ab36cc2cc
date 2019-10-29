@@ -900,6 +900,30 @@
     },
     {
       "key": {
+        "uuid": "fc68585b_cbb56e0e",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-29T06:33:30Z",
+      "side": 1,
+      "message": "Could you ask Apple dev why https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf says that BGRA8Unorm is only supported on macos if depth24Stencil8PixelFormatSupported capability property is true, yet BGRA8Unorm can be used to create swapchain\u0027s surface regardless of that property? In fact, it is the default format of swapchain\u0027s surface.\nI asked them via email and forums, but no response yet.\nThanks,",
+      "parentUuid": "33d370ec_a6b08e79",
+      "range": {
+        "startLine": 246,
+        "startChar": 5,
+        "endLine": 246,
+        "endChar": 44
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c65947a7_87a466a3",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 10
