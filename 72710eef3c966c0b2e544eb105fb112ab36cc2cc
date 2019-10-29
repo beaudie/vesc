@@ -497,6 +497,30 @@
     },
     {
       "key": {
+        "uuid": "8eaea17d_c327606d",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-29T15:22:57Z",
+      "side": 1,
+      "message": "Originally i created a helper function in mtl_utils.mm to convert gl cull mode to mtl cull mode. However, metal doesn\u0027t have equivalent FrontAndBack mode, so a separate boolean value indicating cull everything has to be introduced here. So I abandoned that utils function.\nAlso, it\u0027s inconvenient to return 2 values from a helper function (MTLCullMode and boolean flag). Furthermore, only this method uses/does the conversion, so helper function doesn\u0027t make sense to me.",
+      "parentUuid": "fdbf07c7_bad47c47",
+      "range": {
+        "startLine": 1017,
+        "startChar": 0,
+        "endLine": 1031,
+        "endChar": 9
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b33a4c7_7d598ad8",
         "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
         "patchSetId": 10
@@ -793,6 +817,30 @@
       "side": 1,
       "message": "Ack. Can you please leave links to the ANGLE docs that describe these limitations?",
       "parentUuid": "1374a730_75836dbd",
+      "range": {
+        "startLine": 134,
+        "startChar": 3,
+        "endLine": 134,
+        "endChar": 73
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "717acaab_24ed4ea0",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-29T15:22:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab79a5bf_19cad467",
       "range": {
         "startLine": 134,
         "startChar": 3,
@@ -1912,6 +1960,30 @@
       "side": 1,
       "message": "I was going based on the style guide:\n\nhttps://google.github.io/styleguide/cppguide.html#Type_deduction\n\n\"use type deduction only to make the code clearer or safer, and do not use it merely to avoid the inconvenience of writing an explicit type\"\n\nIMO it\u0027s cleaner with the explicit type. Very minor thing.",
       "parentUuid": "9b7b75a2_c2c47812",
+      "range": {
+        "startLine": 278,
+        "startChar": 8,
+        "endLine": 278,
+        "endChar": 12
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e8ea6044_c2b04e16",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-29T15:22:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07831051_2ab7421f",
       "range": {
         "startLine": 278,
         "startChar": 8,
@@ -3257,6 +3329,30 @@
       "side": 1,
       "message": "Re-nit for comment.",
       "parentUuid": "b63fd11b_53d1a6b5",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 5
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "38ced038_7e150e3b",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-10-29T15:22:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dc1c50e_9a38f906",
       "range": {
         "startLine": 33,
         "startChar": 0,
