@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7f149ef_4ff1ec42",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-10-29T17:38:13Z",
+      "side": 1,
+      "message": "This isn\u0027t neccessary, we set it here: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/gl/egl/android/DisplayAndroid.cpp?g\u003d0\u0026l\u003d588",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 93
+      },
+      "revId": "a97e810a926d7a515a3c06bb064a0f665c6d9ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
