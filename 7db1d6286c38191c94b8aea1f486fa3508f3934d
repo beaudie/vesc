@@ -46,6 +46,30 @@
       "revId": "7db1d6286c38191c94b8aea1f486fa3508f3934d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "416240eb_184eb398",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-10-29T16:48:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91f6f87f_08f1b9c9",
+      "range": {
+        "startLine": 1058,
+        "startChar": 304,
+        "endLine": 1058,
+        "endChar": 320
+      },
+      "revId": "7db1d6286c38191c94b8aea1f486fa3508f3934d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
