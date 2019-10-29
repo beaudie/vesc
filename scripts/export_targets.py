@@ -193,6 +193,8 @@ IGNORED_INCLUDES = {
     b'libANGLE/renderer/vulkan/win32/DisplayVkWin32.h',
     b'libANGLE/renderer/vulkan/xcb/DisplayVkXcb.h',
     b'kernel/image.h',
+    b'spirv_cross_containers.hpp',
+    b'spirv_cross_error_handling.hpp',
 }
 
 IGNORED_INCLUDE_PREFIXES = {
@@ -212,6 +214,7 @@ IGNORED_INCLUDE_PREFIXES = {
 
 IGNORED_DIRECTORIES = {
     '//third_party/glslang',
+    '//third_party/spirv-cross',
     '//third_party/spirv-tools',
     '//third_party/SwiftShader',
     '//third_party/vulkan-headers',

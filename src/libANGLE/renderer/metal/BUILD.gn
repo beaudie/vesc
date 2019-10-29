@@ -9,6 +9,51 @@ import("../../../../gni/angle.gni")
 assert(is_mac)
 assert(angle_enable_metal)
 
+config("spirv_cross_public") {
+  include_dirs = [ "${angle_spirv_cross_dir}" ]
+
+  defines = [ "SPIRV_CROSS_EXCEPTIONS_TO_ASSERTIONS" ]
+}
+
+source_set("spirv_cross_sources") {
+  public_configs = [ ":spirv_cross_public" ]
+
+  sources = [
+    "${angle_spirv_cross_dir}/GLSL.std.450.h",
+    "${angle_spirv_cross_dir}/spirv.hpp",
+    "${angle_spirv_cross_dir}/spirv_cfg.cpp",
+    "${angle_spirv_cross_dir}/spirv_cfg.hpp",
+    "${angle_spirv_cross_dir}/spirv_common.hpp",
+    "${angle_spirv_cross_dir}/spirv_cross.cpp",
+    "${angle_spirv_cross_dir}/spirv_cross.hpp",
+    "${angle_spirv_cross_dir}/spirv_cross_parsed_ir.cpp",
+    "${angle_spirv_cross_dir}/spirv_cross_parsed_ir.hpp",
+    "${angle_spirv_cross_dir}/spirv_glsl.cpp",
+    "${angle_spirv_cross_dir}/spirv_glsl.hpp",
+    "${angle_spirv_cross_dir}/spirv_msl.cpp",
+    "${angle_spirv_cross_dir}/spirv_msl.hpp",
+    "${angle_spirv_cross_dir}/spirv_parser.cpp",
+    "${angle_spirv_cross_dir}/spirv_parser.hpp",
+    "${angle_spirv_cross_dir}/spirv_reflect.cpp",
+    "${angle_spirv_cross_dir}/spirv_reflect.hpp",
+  ]
+
+  cflags = [ "-fno-exceptions" ]
+
+  if (is_clang) {
+    cflags_cc = [
+      "-Wno-extra-semi",
+      "-Wno-ignored-qualifiers",
+      "-Wno-implicit-fallthrough",
+      "-Wno-inconsistent-missing-override",
+      "-Wno-missing-field-initializers",
+      "-Wno-newline-eof",
+      "-Wno-sign-compare",
+      "-Wno-unused-variable",
+    ]
+  }
+}
+
 _metal_backend_sources = [
   "BufferMtl.h",
   "BufferMtl.mm",
@@ -81,6 +126,10 @@ angle_source_set("angle_metal_backend") {
   public_deps = [
     "${angle_root}:angle_glslang_wrapper",
     "${angle_root}:libANGLE_headers",
+  ]
+
+  deps = [
+    ":spirv_cross_sources",
   ]
 
   objc_flags = [
