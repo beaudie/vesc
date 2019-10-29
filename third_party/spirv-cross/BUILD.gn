@@ -1,0 +1,48 @@
+# Copyright 2019 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+config("spirv_cross_public") {
+  include_dirs = [ "spirv-cross" ]
+
+  defines = [ "SPIRV_CROSS_EXCEPTIONS_TO_ASSERTIONS" ]
+}
+
+source_set("spirv_cross_sources") {
+  public_configs = [ ":spirv_cross_public" ]
+
+  sources = [
+    "spirv-cross/GLSL.std.450.h",
+    "spirv-cross/spirv.hpp",
+    "spirv-cross/spirv_cfg.cpp",
+    "spirv-cross/spirv_cfg.hpp",
+    "spirv-cross/spirv_common.hpp",
+    "spirv-cross/spirv_cross.cpp",
+    "spirv-cross/spirv_cross.hpp",
+    "spirv-cross/spirv_cross_parsed_ir.cpp",
+    "spirv-cross/spirv_cross_parsed_ir.hpp",
+    "spirv-cross/spirv_glsl.cpp",
+    "spirv-cross/spirv_glsl.hpp",
+    "spirv-cross/spirv_msl.cpp",
+    "spirv-cross/spirv_msl.hpp",
+    "spirv-cross/spirv_parser.cpp",
+    "spirv-cross/spirv_parser.hpp",
+    "spirv-cross/spirv_reflect.cpp",
+    "spirv-cross/spirv_reflect.hpp",
+  ]
+
+  cflags = [ "-fno-exceptions" ]
+
+  if (is_clang) {
+    cflags_cc = [
+      "-Wno-extra-semi",
+      "-Wno-ignored-qualifiers",
+      "-Wno-implicit-fallthrough",
+      "-Wno-inconsistent-missing-override",
+      "-Wno-missing-field-initializers",
+      "-Wno-newline-eof",
+      "-Wno-sign-compare",
+      "-Wno-unused-variable",
+    ]
+  }
+}

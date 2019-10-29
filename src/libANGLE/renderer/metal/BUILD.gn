@@ -70,6 +70,7 @@ angle_source_set("angle_metal_backend") {
   public_configs = [ ":angle_metal_backend_config" ]
 
   sources = _metal_backend_sources
+  spirv_cross_build_script_dir = "${angle_spirv_cross_dir}/.."
 
   cflags = []
   cflags_cc = []
@@ -81,6 +82,10 @@ angle_source_set("angle_metal_backend") {
   public_deps = [
     "${angle_root}:angle_glslang_wrapper",
     "${angle_root}:libANGLE_headers",
+  ]
+
+  deps = [
+    "${spirv_cross_build_script_dir}:spirv_cross_sources",
   ]
 
   objc_flags = [
