@@ -4,18 +4,20 @@
 // found in the LICENSE file.
 //
 // TranslatorMetal:
-//   Translator for Metal backend.
+//   A GLSL-based translator that outputs shaders that fit GL_KHR_vulkan_glsl.
+//   The shaders are then fed into glslang to spit out SPIR-V (libANGLE-side).
+//   See: https://www.khronos.org/registry/vulkan/specs/misc/GL_KHR_vulkan_glsl.txt
 //
 
 #ifndef LIBANGLE_RENDERER_METAL_TRANSLATORMETAL_H_
 #define LIBANGLE_RENDERER_METAL_TRANSLATORMETAL_H_
 
-#include "compiler/translator/Compiler.h"
+#include "compiler/translator/TranslatorVulkan.h"
 
 namespace sh
 {
 
-class TranslatorMetal : public TCompiler
+class TranslatorMetal : public TranslatorVulkan
 {
   public:
     TranslatorMetal(sh::GLenum type, ShShaderSpec spec);
@@ -24,8 +26,6 @@ class TranslatorMetal : public TCompiler
     ANGLE_NO_DISCARD bool translate(TIntermBlock *root,
                                     ShCompileOptions compileOptions,
                                     PerformanceDiagnostics *perfDiagnostics) override;
-
-    bool shouldFlattenPragmaStdglInvariantAll() override;
 };
 
 }  // namespace sh
