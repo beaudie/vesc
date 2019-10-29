@@ -46,6 +46,30 @@
       "revId": "9ec3d2863a185f3b1c842a3d69556aa387f915ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08539f5a_4e19273b",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-29T16:12:14Z",
+      "side": 1,
+      "message": "Maybe just drop the backs and get \"Add conditional support for XYZ when the Android loader adds conditional support for them\"",
+      "parentUuid": "3fd1dc39_3dd25289",
+      "range": {
+        "startLine": 54,
+        "startChar": 26,
+        "endLine": 54,
+        "endChar": 54
+      },
+      "revId": "9ec3d2863a185f3b1c842a3d69556aa387f915ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
