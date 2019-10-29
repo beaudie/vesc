@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "941b7a2c_0d73bf40",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-29T03:25:17Z",
+      "side": 1,
+      "message": "yes, we can add the memory barrier at the last step (just before releasing the old image)",
+      "parentUuid": "dbf18a74_abc0869c",
+      "range": {
+        "startLine": 1070,
+        "startChar": 38,
+        "endLine": 1070,
+        "endChar": 97
+      },
+      "revId": "a743252757a5762fbc4e871ceb0421216a252ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7757670_b52f1cb9",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 12
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-28T14:43:23Z",
       "side": 1,
       "message": "Rather than add a bool to bypass the gating logic, can you split out the logic into a wrapper function?  The wrapper function can be updateBaseMaxLevel, which can call into changeLevels.",
+      "range": {
+        "startLine": 1158,
+        "startChar": 49,
+        "endLine": 1158,
+        "endChar": 66
+      },
+      "revId": "a743252757a5762fbc4e871ceb0421216a252ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af186900_2ef36d66",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-10-29T03:25:17Z",
+      "side": 1,
+      "message": "no problem, but changeLevels calls updateBaseMaxLevel",
+      "parentUuid": "f7757670_b52f1cb9",
       "range": {
         "startLine": 1158,
         "startChar": 49,
