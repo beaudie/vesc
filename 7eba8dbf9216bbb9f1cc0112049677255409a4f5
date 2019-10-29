@@ -225,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "94a8f395_529ad3cb",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-29T18:34:45Z",
+      "side": 1,
+      "message": "Good point Shaobo. This has been a longstanding oversight in this WebGL extension proposal.\n\nI\u0027ve just revised the extension specification to allocate these enums out of the enum block that was allocated for WebGL some time ago:\nhttps://github.com/KhronosGroup/WebGL/pull/2956\n\nYou can use the GL_ prefix on these constants and put them in an #ifndef GL_WEBGL_video_texture block inside gl2ext_angle.h. Will that work for you?\n\nThanks for persisting with this change!",
+      "parentUuid": "b2e95b23_04d20a65",
+      "range": {
+        "startLine": 71,
+        "startChar": 18,
+        "endLine": 71,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0deb5fc7_a474b14d",
         "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
         "patchSetId": 12
