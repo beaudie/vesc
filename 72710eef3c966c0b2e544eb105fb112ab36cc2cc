@@ -521,6 +521,30 @@
     },
     {
       "key": {
+        "uuid": "462a75d5_303927e7",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-29T18:06:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8eaea17d_c327606d",
+      "range": {
+        "startLine": 1017,
+        "startChar": 0,
+        "endLine": 1031,
+        "endChar": 9
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b33a4c7_7d598ad8",
         "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
         "patchSetId": 10
@@ -984,6 +1008,30 @@
       "side": 1,
       "message": "Will do. I\u0027ll let you know of any answers.",
       "parentUuid": "fc68585b_cbb56e0e",
+      "range": {
+        "startLine": 246,
+        "startChar": 5,
+        "endLine": 246,
+        "endChar": 44
+      },
+      "revId": "72710eef3c966c0b2e544eb105fb112ab36cc2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f8ac2f1_2cfde358",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-29T18:06:59Z",
+      "side": 1,
+      "message": "From Apple dev: \"documentation bug. BGRA8Unorm is always supported\"",
+      "parentUuid": "c368835e_d14e5bfa",
       "range": {
         "startLine": 246,
         "startChar": 5,
