@@ -22,6 +22,30 @@
       "revId": "9ec3d2863a185f3b1c842a3d69556aa387f915ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fd1dc39_3dd25289",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-10-29T16:08:44Z",
+      "side": 1,
+      "message": "How about: \"Conditionally add support for GL_RGB10_A2 and GL_RGBA16F after the ...\"",
+      "parentUuid": "694d03b9_1c1e5003",
+      "range": {
+        "startLine": 54,
+        "startChar": 26,
+        "endLine": 54,
+        "endChar": 54
+      },
+      "revId": "9ec3d2863a185f3b1c842a3d69556aa387f915ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
