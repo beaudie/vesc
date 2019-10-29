@@ -201,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "b2e95b23_04d20a65",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-29T12:32:16Z",
+      "side": 1,
+      "message": "Hi, Ken,\nWhen I try to add GL_TEXTURE_VIDEO_IMAGE_WEBGL, I find I need to give it a enum value. Do you have any suggestions about this ?\n\nBR",
+      "parentUuid": "7de9bbd0_e18a3fd4",
+      "range": {
+        "startLine": 71,
+        "startChar": 18,
+        "endLine": 71,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0deb5fc7_a474b14d",
         "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
         "patchSetId": 12
