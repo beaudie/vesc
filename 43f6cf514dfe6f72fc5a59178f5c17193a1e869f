@@ -16,6 +16,24 @@
       "revId": "43f6cf514dfe6f72fc5a59178f5c17193a1e869f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae21941e_66b9355a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3012,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-29T12:46:34Z",
+      "side": 1,
+      "message": "Was a bug. Good catch. Fixed.",
+      "parentUuid": "bc6da1ca_f8ba6724",
+      "revId": "43f6cf514dfe6f72fc5a59178f5c17193a1e869f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
