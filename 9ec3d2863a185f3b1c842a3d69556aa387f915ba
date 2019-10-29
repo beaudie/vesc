@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "694d03b9_1c1e5003",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-29T16:04:59Z",
+      "side": 1,
+      "message": "To be clear, ANGLE\u0027s support wasn\u0027t conditional to begin with, so we wouldn\u0027t be adding it back, right?  Just don\u0027t want future developers to think simply uncommenting the formats below will give conditional support.  There will be additional work in ANGLE to determine if the underlying Vulkan implementation supports the formats.  Maybe the same work the Android Vulkan loader will need to do.",
+      "range": {
+        "startLine": 54,
+        "startChar": 26,
+        "endLine": 54,
+        "endChar": 54
+      },
+      "revId": "9ec3d2863a185f3b1c842a3d69556aa387f915ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
