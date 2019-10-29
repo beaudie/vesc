@@ -70,6 +70,52 @@
       "revId": "9ec3d2863a185f3b1c842a3d69556aa387f915ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75c917ef_aae881a1",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-29T16:21:33Z",
+      "side": 1,
+      "message": "drive-by: can you use http://anglebug.com/4062 for bug links? makes it easy to click through.",
+      "range": {
+        "startLine": 54,
+        "startChar": 6,
+        "endLine": 54,
+        "endChar": 24
+      },
+      "revId": "9ec3d2863a185f3b1c842a3d69556aa387f915ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85c66841_483c4e5b",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-29T16:21:33Z",
+      "side": 1,
+      "message": "also you can remove these instead of leaving in commented out code. should be easy enough to add back in when necessary.",
+      "range": {
+        "startLine": 56,
+        "startChar": 68,
+        "endLine": 56,
+        "endChar": 98
+      },
+      "revId": "9ec3d2863a185f3b1c842a3d69556aa387f915ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
