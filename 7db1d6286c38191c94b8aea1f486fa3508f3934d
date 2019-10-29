@@ -22,6 +22,30 @@
       "revId": "7db1d6286c38191c94b8aea1f486fa3508f3934d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91f6f87f_08f1b9c9",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-10-29T16:05:12Z",
+      "side": 1,
+      "message": "Yes ES3.0 is good for sized formats. This section of the table is unsized, which are not covered by ES3.0 spec. This table entry is saying that if we see a GL_DEPTH_STENCIL GL_UNSIGNED_NORMALIZED format request, we\u0027re represent it internally as GL_UNSIGNED_INT_24_8, but we need to treat the request as unsized, which requires the extensions.\nUp above in the table is the entry for GL_DEPTH24_STENCIL8, which is the sized entry that\u0027s supported by default in ES3.0.",
+      "parentUuid": "e71b5881_e397302e",
+      "range": {
+        "startLine": 1058,
+        "startChar": 304,
+        "endLine": 1058,
+        "endChar": 320
+      },
+      "revId": "7db1d6286c38191c94b8aea1f486fa3508f3934d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
