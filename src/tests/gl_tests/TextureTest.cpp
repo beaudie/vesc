@@ -948,10 +948,12 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
           mTexture2D(0),
           mTextureCube(0),
           mTexture2DShadow(0),
+          mTexture2DShadowStencil(0),
           mTextureCubeShadow(0),
           mTexture2DUniformLocation(-1),
           mTextureCubeUniformLocation(-1),
           mTexture2DShadowUniformLocation(-1),
+          mTexture2DShadowStencilUniformLocation(-1),
           mTextureCubeShadowUniformLocation(-1),
           mDepthRefUniformLocation(-1)
     {}
@@ -975,6 +977,7 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
                "uniform highp sampler2D tex2D;\n"
                "uniform highp samplerCube texCube;\n"
                "uniform highp sampler2DShadow tex2DShadow;\n"
+               "uniform highp sampler2DShadow tex2DShadowStencil;\n"
                "uniform highp samplerCubeShadow texCubeShadow;\n"
                "in vec2 texcoord;\n"
                "uniform float depthRef;\n"
@@ -984,6 +987,8 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
                "    fragColor = texture(tex2D, texcoord);\n"
                "    fragColor += texture(texCube, vec3(1.0, 0.0, 0.0));\n"
                "    fragColor += vec4(texture(tex2DShadow, vec3(texcoord, depthRef)) * 0.25);\n"
+               "    fragColor += vec4(texture(tex2DShadowStencil, vec3(texcoord, depthRef)) * "
+               "0.25);\n"
                "    fragColor += vec4(texture(texCubeShadow, vec4(1.0, 0.0, 0.0, depthRef)) * "
                "0.125);\n"
                "}\n";
@@ -1000,6 +1005,10 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
         glBindTexture(GL_TEXTURE_2D, mTexture2DShadow);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 
+        glGenTextures(1, &mTexture2DShadowStencil);
+        glBindTexture(GL_TEXTURE_2D, mTexture2DShadowStencil);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+
         glGenTextures(1, &mTextureCubeShadow);
         glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCubeShadow);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
@@ -1012,6 +1021,9 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
         ASSERT_NE(-1, mTextureCubeUniformLocation);
         mTexture2DShadowUniformLocation = glGetUniformLocation(mProgram, "tex2DShadow");
         ASSERT_NE(-1, mTexture2DShadowUniformLocation);
+        mTexture2DShadowStencilUniformLocation =
+            glGetUniformLocation(mProgram, "tex2DShadowStencil");
+        ASSERT_NE(-1, mTexture2DShadowStencilUniformLocation);
         mTextureCubeShadowUniformLocation = glGetUniformLocation(mProgram, "texCubeShadow");
         ASSERT_NE(-1, mTextureCubeShadowUniformLocation);
         mDepthRefUniformLocation = glGetUniformLocation(mProgram, "depthRef");
@@ -1025,6 +1037,7 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
         glDeleteTextures(1, &mTexture2D);
         glDeleteTextures(1, &mTextureCube);
         glDeleteTextures(1, &mTexture2DShadow);
+        glDeleteTextures(1, &mTexture2DShadowStencil);
         glDeleteTextures(1, &mTextureCubeShadow);
         TexCoordDrawTest::testTearDown();
     }
@@ -1032,10 +1045,12 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
     GLuint mTexture2D;
     GLuint mTextureCube;
     GLuint mTexture2DShadow;
+    GLuint mTexture2DShadowStencil;
     GLuint mTextureCubeShadow;
     GLint mTexture2DUniformLocation;
     GLint mTextureCubeUniformLocation;
     GLint mTexture2DShadowUniformLocation;
+    GLint mTexture2DShadowStencilUniformLocation;
     GLint mTextureCubeShadowUniformLocation;
     GLint mDepthRefUniformLocation;
 };
@@ -2704,6 +2719,14 @@ TEST_P(SamplerTypeMixTestES3, SamplerTypeMixDraw)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, 1, 1, 0, GL_DEPTH_COMPONENT, GL_FLOAT,
                  depthTexData);
 
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, mTexture2DShadowStencil);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+    GLfixed depthStencilTexData[1];
+    depthStencilTexData[0] = 0x00010002;
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, 1, 1, 0, GL_DEPTH_STENCIL,
+                 GL_UNSIGNED_INT_24_8, depthTexData);
+
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCubeShadow);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
@@ -2721,7 +2744,8 @@ TEST_P(SamplerTypeMixTestES3, SamplerTypeMixDraw)
     glUniform1i(mTexture2DUniformLocation, 0);
     glUniform1i(mTextureCubeUniformLocation, 1);
     glUniform1i(mTexture2DShadowUniformLocation, 2);
-    glUniform1i(mTextureCubeShadowUniformLocation, 3);
+    glUniform1i(mTexture2DShadowStencilUniformLocation, 3);
+    glUniform1i(mTextureCubeShadowUniformLocation, 4);
 
     drawQuad(mProgram, "position", 0.5f);
     EXPECT_GL_NO_ERROR();
@@ -2730,6 +2754,7 @@ TEST_P(SamplerTypeMixTestES3, SamplerTypeMixDraw)
     // <cube map color> +
     // 0.25 * <comparison result (1.0)> +
     // 0.125 * <comparison result (0.0)>
+    // TODO: Fix expectations based on DS texture addition
     EXPECT_PIXEL_NEAR(0, 0, 64, 154, 184, 255, 2);
 }
 
