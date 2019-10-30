@@ -1710,6 +1710,19 @@ void Framebuffer::setAttachmentMultisample(const Context *context,
                   FramebufferAttachment::kDefaultBaseViewIndex, false, samples);
 }
 
+void Framebuffer::setAttachmentMultisampleMultiview(const Context *context,
+                                                    GLenum type,
+                                                    GLenum binding,
+                                                    const ImageIndex &textureIndex,
+                                                    FramebufferAttachmentObject *resource,
+                                                    GLsizei samples,
+                                                    GLsizei numViews,
+                                                    GLint baseViewIndex)
+{
+    setAttachment(context, type, binding, textureIndex, resource, numViews, baseViewIndex, true,
+                  samples);
+}
+
 void Framebuffer::setAttachment(const Context *context,
                                 GLenum type,
                                 GLenum binding,
@@ -1973,23 +1986,25 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
         return;
     }
 
-    ASSERT(!mDirtyBitsGuard.valid() || mDirtyBitsGuard.value().test(index));
-    mDirtyBits.set(index);
-
-    invalidateCompletenessCache();
-
-    FramebufferAttachment *attachment = getAttachmentFromSubjectIndex(index);
-
-    // Mark the appropriate init flag.
-    mState.mResourceNeedsInit.set(index, attachment->initState() == InitState::MayNeedInit);
-
-    // Update mFloat32ColorAttachmentBits Cache
-    if (index < DIRTY_BIT_COLOR_ATTACHMENT_MAX)
+    if (!mDirtyBitsGuard.valid() || mDirtyBitsGuard.value().test(index))
     {
-        ASSERT(index != DIRTY_BIT_DEPTH_ATTACHMENT);
-        ASSERT(index != DIRTY_BIT_STENCIL_ATTACHMENT);
-        updateFloat32ColorAttachmentBits(index - DIRTY_BIT_COLOR_ATTACHMENT_0,
-                                         attachment->getFormat().info);
+        mDirtyBits.set(index);
+
+        invalidateCompletenessCache();
+
+        FramebufferAttachment *attachment = getAttachmentFromSubjectIndex(index);
+
+        // Mark the appropriate init flag.
+        mState.mResourceNeedsInit.set(index, attachment->initState() == InitState::MayNeedInit);
+
+        // Update mFloat32ColorAttachmentBits Cache
+        if (index < DIRTY_BIT_COLOR_ATTACHMENT_MAX)
+        {
+            ASSERT(index != DIRTY_BIT_DEPTH_ATTACHMENT);
+            ASSERT(index != DIRTY_BIT_STENCIL_ATTACHMENT);
+            updateFloat32ColorAttachmentBits(index - DIRTY_BIT_COLOR_ATTACHMENT_0,
+                                             attachment->getFormat().info);
+        }
     }
 }
 

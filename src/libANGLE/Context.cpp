@@ -4241,6 +4241,35 @@ void Context::framebufferTextureMultiview(GLenum target,
     mState.setObjectDirty(target);
 }
 
+void Context::framebufferTextureMultisampleMultiview(GLenum target,
+                                                     GLenum attachment,
+                                                     GLuint texture,
+                                                     GLint level,
+                                                     GLsizei samples,
+                                                     GLint baseViewIndex,
+                                                     GLsizei numViews)
+{
+    Framebuffer *framebuffer = mState.getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    TextureID texturePacked = FromGL<TextureID>(texture);
+    if (texturePacked.value != 0)
+    {
+        Texture *textureObj = getTexture(texturePacked);
+
+        ImageIndex index;
+        index = ImageIndex::Make2DArrayRange(level, baseViewIndex, numViews);
+        framebuffer->setAttachmentMultisampleMultiview(
+            this, GL_TEXTURE, attachment, index, textureObj, samples, numViews, baseViewIndex);
+    }
+    else
+    {
+        framebuffer->resetAttachment(this, attachment);
+    }
+
+    mState.setObjectDirty(target);
+}
+
 void Context::framebufferTexture(GLenum target, GLenum attachment, TextureID texture, GLint level)
 {
     Framebuffer *framebuffer = mState.getTargetFramebuffer(target);

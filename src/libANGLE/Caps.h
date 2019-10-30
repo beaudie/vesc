@@ -337,6 +337,9 @@ struct Extensions
     // OVR_multiview2
     bool multiview2 = false;
 
+    // OVR_multiview_multisampled_render_to_texture
+    bool multiviewMultisampledRenderToTexture = false;
+
     // GL_ANGLE_texture_usage
     bool textureUsage = false;
 

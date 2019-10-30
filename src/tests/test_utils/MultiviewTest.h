@@ -51,14 +51,16 @@ void AttachMultiviewTextures(GLenum target,
                              int baseViewIndex,
                              std::vector<GLuint> colorTextures,
                              GLuint depthTexture,
-                             GLuint depthStencilTexture);
+                             GLuint depthStencilTexture,
+                             bool implicitMS);
 void AttachMultiviewTextures(GLenum target,
                              int viewWidth,
                              int numViews,
                              int baseViewIndex,
                              GLuint colorTexture,
                              GLuint depthTexture,
-                             GLuint depthStencilTexture);
+                             GLuint depthStencilTexture,
+                             bool implicitMS);
 
 struct MultiviewImplementationParams : public PlatformParameters
 {
@@ -66,25 +68,31 @@ struct MultiviewImplementationParams : public PlatformParameters
                                   GLint minorVersion,
                                   bool forceUseGeometryShaderOnD3D,
                                   const EGLPlatformParameters &eglPlatformParameters,
-                                  ExtensionName multiviewExtension)
+                                  ExtensionName multiviewExtension,
+                                  bool implicitMS)
         : PlatformParameters(majorVersion, minorVersion, eglPlatformParameters),
           mForceUseGeometryShaderOnD3D(forceUseGeometryShaderOnD3D),
-          mMultiviewExtension(multiviewExtension)
+          mMultiviewExtension(multiviewExtension),
+          mImplicitMultisampling(implicitMS)
     {}
     bool mForceUseGeometryShaderOnD3D;
     ExtensionName mMultiviewExtension;
+    bool mImplicitMultisampling;
 };
 std::ostream &operator<<(std::ostream &os, const MultiviewImplementationParams &params);
 
 MultiviewImplementationParams VertexShaderOpenGL(GLint majorVersion,
                                                  GLint minorVersion,
-                                                 ExtensionName multiviewExtension);
+                                                 ExtensionName multiviewExtension,
+                                                 bool implicitMS);
 MultiviewImplementationParams VertexShaderD3D11(GLint majorVersion,
                                                 GLint minorVersion,
-                                                ExtensionName multiviewExtension);
+                                                ExtensionName multiviewExtension,
+                                                bool implicitMS);
 MultiviewImplementationParams GeomShaderD3D11(GLint majorVersion,
                                               GLint minorVersion,
-                                              ExtensionName multiviewExtension);
+                                              ExtensionName multiviewExtension,
+                                              bool implicitMS);
 
 class MultiviewTestBase : public ANGLETestBase
 {
@@ -115,13 +123,14 @@ class MultiviewTest : public MultiviewTestBase,
     virtual void testTearDown() {}
 
     // Requests the OVR_multiview(2) extension and returns true if the operation succeeds.
-    bool requestMultiviewExtension(bool requireMultiviewMultisample)
+    bool requestMultiviewExtension(bool requireMultiviewMultisample, bool implicitMultisampling)
     {
         if (!EnsureGLExtensionEnabled(extensionName()))
         {
             std::cout << "Test skipped due to missing " << extensionName() << "." << std::endl;
             return false;
         }
+        EXPECT_TRUE(!(requireMultiviewMultisample && implicitMultisampling));
 
         if (requireMultiviewMultisample)
         {
@@ -139,10 +148,22 @@ class MultiviewTest : public MultiviewTestBase,
                 return false;
             }
         }
+
+        if (implicitMultisampling)
+        {
+            if (!EnsureGLExtensionEnabled("GL_OVR_multiview_multisampled_render_to_texture"))
+            {
+                std::cout << "Test skipped due to missing "
+                             "GL_OVR_multiview_multisampled_render_to_texture."
+                          << std::endl;
+                return false;
+            }
+        }
         return true;
     }
 
-    bool requestMultiviewExtension() { return requestMultiviewExtension(false); }
+    bool requestMultiviewExtension() { return requestMultiviewExtension(false, isImplicitMS()); }
+    bool isImplicitMS() { return GetParam().mImplicitMultisampling; }
 
     std::string extensionName()
     {

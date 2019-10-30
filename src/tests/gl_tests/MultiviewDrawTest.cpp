@@ -61,7 +61,7 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase,
                                      public ::testing::TestWithParam<MultiviewRenderTestParams>
 {
   protected:
-    MultiviewFramebufferTestBase(const PlatformParameters &params, int samples)
+    MultiviewFramebufferTestBase(const PlatformParameters &params, int samples, bool implicitMS)
         : MultiviewTestBase(params),
           mViewWidth(0),
           mViewHeight(0),
@@ -70,6 +70,7 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase,
           mDepthTexture(0u),
           mDrawFramebuffer(0u),
           mSamples(samples),
+          mImplicitMultisampling(implicitMS),
           mResolveTexture(0u)
     {}
 
@@ -102,7 +103,7 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase,
         // Create draw framebuffer to be used for multiview rendering.
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDrawFramebuffer);
         AttachMultiviewTextures(GL_DRAW_FRAMEBUFFER, viewWidth, numViews, baseViewIndex,
-                                mColorTexture, mDepthTexture, 0u);
+                                mColorTexture, mDepthTexture, 0u, isImplicitMS());
 
         ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));
 
@@ -183,13 +184,14 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase,
     }
 
     // Requests the OVR_multiview(2) extension and returns true if the operation succeeds.
-    bool requestMultiviewExtension(bool requireMultiviewMultisample)
+    bool requestMultiviewExtension(bool requireMultiviewMultisample, bool implicitMultisampling)
     {
         if (!EnsureGLExtensionEnabled(extensionName()))
         {
             std::cout << "Test skipped due to missing " << extensionName() << "." << std::endl;
             return false;
         }
+        EXPECT_TRUE(!(requireMultiviewMultisample && implicitMultisampling));
 
         if (requireMultiviewMultisample)
         {
@@ -207,10 +209,21 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase,
                 return false;
             }
         }
+
+        if (implicitMultisampling)
+        {
+            if (!EnsureGLExtensionEnabled("GL_OVR_multiview_multisampled_render_to_texture"))
+            {
+                std::cout << "Test skipped due to missing "
+                             "GL_OVR_multiview_multisampled_render_to_texture."
+                          << std::endl;
+                return false;
+            }
+        }
         return true;
     }
 
-    bool requestMultiviewExtension() { return requestMultiviewExtension(false); }
+    bool requestMultiviewExtension() { return requestMultiviewExtension(false, isImplicitMS()); }
     std::string extensionName()
     {
         switch (GetParam().mMultiviewExtension)
@@ -226,6 +239,7 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase,
     }
 
     bool isMultisampled() { return mSamples > 0; }
+    bool isImplicitMS() { return mImplicitMultisampling; }
 
     int mViewWidth;
     int mViewHeight;
@@ -238,6 +252,7 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase,
     GLuint mDrawFramebuffer;
     std::vector<GLuint> mReadFramebuffer;
     int mSamples;
+    bool mImplicitMultisampling;
 
     // For reading back multisampled framebuffer.
     std::vector<GLuint> mResolveFramebuffer;
@@ -283,7 +298,11 @@ class MultiviewFramebufferTestBase : public MultiviewTestBase,
 class MultiviewRenderTest : public MultiviewFramebufferTestBase
 {
   protected:
-    MultiviewRenderTest() : MultiviewFramebufferTestBase(GetParam(), GetParam().mSamples) {}
+    MultiviewRenderTest()
+        : MultiviewFramebufferTestBase(GetParam(),
+                                       GetParam().mSamples,
+                                       GetParam().mImplicitMultisampling)
+    {}
 
     void overrideWorkaroundsD3D(FeaturesD3D *features) override
     {
@@ -370,7 +389,7 @@ class MultiviewRenderDualViewTest : public MultiviewRenderTest
 
     void testSetUp() override
     {
-        if (!requestMultiviewExtension(isMultisampled()))
+        if (!requestMultiviewExtension(isMultisampled(), isImplicitMS()))
         {
             return;
         }
@@ -501,7 +520,7 @@ class MultiviewRenderPrimitiveTest : public MultiviewRenderTest
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
     }
 
-    void checkGreenChannel(const GLubyte expectedGreenChannelData[])
+    void checkGreenChannel(const GLubyte expectedGreenChannelData[], bool implicitMS)
     {
         for (int view = 0; view < mNumViews; ++view)
         {
@@ -511,9 +530,31 @@ class MultiviewRenderPrimitiveTest : public MultiviewRenderTest
                 {
                     size_t flatIndex =
                         static_cast<size_t>(view * mViewWidth * mViewHeight + mViewWidth * h + w);
-                    EXPECT_EQ(GLColor(0, expectedGreenChannelData[flatIndex], 0,
-                                      expectedGreenChannelData[flatIndex]),
-                              GetViewColor(w, h, view));
+                    GLColor actualColor = GetViewColor(w, h, view);
+                    if (implicitMS)
+                    {
+                        // Red
+                        EXPECT_EQ(0, actualColor.R);
+                        // Green and Alpha
+                        if (expectedGreenChannelData[flatIndex] == 255)
+                        {
+                            EXPECT_GT(actualColor.G, 0);
+                            EXPECT_GT(actualColor.A, 0);
+                        }
+                        else
+                        {
+                            EXPECT_EQ(expectedGreenChannelData[flatIndex], actualColor.G);
+                            EXPECT_EQ(expectedGreenChannelData[flatIndex], actualColor.A);
+                        }
+                        // Blue
+                        EXPECT_EQ(0, actualColor.B);
+                    }
+                    else
+                    {
+                        EXPECT_EQ(GLColor(0, expectedGreenChannelData[flatIndex], 0,
+                                          expectedGreenChannelData[flatIndex]),
+                                  actualColor);
+                    }
                 }
             }
         }
@@ -524,7 +565,9 @@ class MultiviewRenderPrimitiveTest : public MultiviewRenderTest
 class MultiviewLayeredRenderTest : public MultiviewFramebufferTestBase
 {
   protected:
-    MultiviewLayeredRenderTest() : MultiviewFramebufferTestBase(GetParam(), 0) {}
+    MultiviewLayeredRenderTest()
+        : MultiviewFramebufferTestBase(GetParam(), 0, GetParam().mImplicitMultisampling)
+    {}
     void SetUp() final { MultiviewFramebufferTestBase::FramebufferTestSetUp(); }
     void TearDown() final { MultiviewFramebufferTestBase::FramebufferTestTearDown(); }
     void overrideWorkaroundsD3D(FeaturesD3D *features) final
@@ -579,7 +622,17 @@ TEST_P(MultiviewDrawValidationTest, IndirectDraw)
         GLTexture tex2DArray;
         initOnePixelColorTexture2DMultiLayered(tex2DArray);
 
-        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArray, 0, 0, 2);
+        if (isImplicitMS())
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                        tex2DArray, 0, 4, 0, 2);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArray, 0, 0,
+                                             2);
+        }
 
         glDrawArraysIndirect(GL_TRIANGLES, nullptr);
         EXPECT_GL_NO_ERROR();
@@ -604,7 +657,16 @@ TEST_P(MultiviewDrawValidationTest, IndirectDraw)
         GLTexture tex2D;
         initOnePixelColorTexture2DSingleLayered(tex2D);
 
-        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0, 0, 1);
+        if (isImplicitMS())
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D,
+                                                        0, 4, 0, 1);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0, 0, 1);
+        }
 
         glDrawArraysIndirect(GL_TRIANGLES, nullptr);
         EXPECT_GL_NO_ERROR();
@@ -657,7 +719,16 @@ TEST_P(MultiviewDrawValidationTest, NumViewsMismatch)
         initOnePixelColorTexture2DSingleLayered(tex2D);
 
         // The framebuffer has only 1 view.
-        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0, 0, 1);
+        if (isImplicitMS())
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D,
+                                                        0, 4, 0, 1);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0, 0, 1);
+        }
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
@@ -672,7 +743,17 @@ TEST_P(MultiviewDrawValidationTest, NumViewsMismatch)
         GLTexture tex2DArray;
         initOnePixelColorTexture2DMultiLayered(tex2DArray);
 
-        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArray, 0, 0, 2);
+        if (isImplicitMS())
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                        tex2DArray, 0, 4, 0, 2);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArray, 0, 0,
+                                             2);
+        }
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_GL_NO_ERROR();
@@ -714,7 +795,16 @@ TEST_P(MultiviewDrawValidationTest, NumViewsMismatchForNonMultiviewProgram)
     GLTexture tex2DArray;
     initOnePixelColorTexture2DMultiLayered(tex2DArray);
 
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArray, 0, 0, 2);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                    tex2DArray, 0, 4, 0, 2);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArray, 0, 0, 2);
+    }
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
@@ -785,7 +875,17 @@ void main()
     // Check that drawArrays generates an error when there is an active transform feedback object
     // and the number of views in the draw framebuffer is greater than 1.
     {
-        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArray, 0, 0, 2);
+        if (isImplicitMS())
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                        tex2DArray, 0, 4, 0, 2);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArray, 0, 0,
+                                             2);
+        }
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
     }
@@ -829,7 +929,16 @@ void main()
     // Check that drawArrays does not generate an error when the number of views in the draw
     // framebuffer is 1.
     {
-        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0, 0, 1);
+        if (isImplicitMS())
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D,
+                                                        0, 4, 0, 1);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0, 0, 1);
+        }
         glDrawArrays(GL_TRIANGLES, 0, 3);
         EXPECT_GL_NO_ERROR();
     }
@@ -882,7 +991,17 @@ TEST_P(MultiviewDrawValidationTest, ActiveTimeElapsedQuery)
     // Check first case.
     {
         glUseProgram(dualViewProgram);
-        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArr, 0, 0, 2);
+        if (isImplicitMS())
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                        tex2DArr, 0, 4, 0, 2);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArr, 0, 0,
+                                             2);
+        }
         glClear(GL_COLOR_BUFFER_BIT);
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -895,7 +1014,16 @@ TEST_P(MultiviewDrawValidationTest, ActiveTimeElapsedQuery)
     // Check second case.
     {
         glUseProgram(singleViewProgram);
-        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0, 0, 1);
+        if (isImplicitMS())
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D,
+                                                        0, 4, 0, 1);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2D, 0, 0, 1);
+        }
         glClear(GL_COLOR_BUFFER_BIT);
         EXPECT_GL_NO_ERROR();
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -908,7 +1036,17 @@ TEST_P(MultiviewDrawValidationTest, ActiveTimeElapsedQuery)
     // Check starting a query after a successful draw.
     {
         glUseProgram(dualViewProgram);
-        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArr, 0, 0, 2);
+        if (isImplicitMS())
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                        tex2DArr, 0, 4, 0, 2);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex2DArr, 0, 0,
+                                             2);
+        }
         glClear(GL_COLOR_BUFFER_BIT);
         EXPECT_GL_NO_ERROR();
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -931,7 +1069,7 @@ TEST_P(MultiviewDrawValidationTest, ActiveTimeElapsedQuery)
 // The test checks that glDrawArrays can be used to render into two views.
 TEST_P(MultiviewRenderDualViewTest, DrawArrays)
 {
-    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled()));
+    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled(), isImplicitMS()));
 
     drawQuad(mProgram, "vPosition", 0.0f, 1.0f, true);
     ASSERT_GL_NO_ERROR();
@@ -942,7 +1080,7 @@ TEST_P(MultiviewRenderDualViewTest, DrawArrays)
 // The test checks that glDrawElements can be used to render into two views.
 TEST_P(MultiviewRenderDualViewTest, DrawElements)
 {
-    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled()));
+    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled(), isImplicitMS()));
 
     drawIndexedQuad(mProgram, "vPosition", 0.0f, 1.0f, true);
     ASSERT_GL_NO_ERROR();
@@ -953,7 +1091,7 @@ TEST_P(MultiviewRenderDualViewTest, DrawElements)
 // The test checks that glDrawRangeElements can be used to render into two views.
 TEST_P(MultiviewRenderDualViewTest, DrawRangeElements)
 {
-    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled()));
+    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled(), isImplicitMS()));
 
     drawIndexedQuad(mProgram, "vPosition", 0.0f, 1.0f, true, true);
     ASSERT_GL_NO_ERROR();
@@ -964,7 +1102,7 @@ TEST_P(MultiviewRenderDualViewTest, DrawRangeElements)
 // The test checks that glDrawArrays can be used to render into four views.
 TEST_P(MultiviewRenderTest, DrawArraysFourViews)
 {
-    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled()));
+    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled(), isImplicitMS()));
 
     const std::string VS =
         "#version 300 es\n"
@@ -1026,7 +1164,7 @@ TEST_P(MultiviewRenderTest, DrawArraysFourViews)
 // The test checks that glDrawArraysInstanced can be used to render into two views.
 TEST_P(MultiviewRenderTest, DrawArraysInstanced)
 {
-    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled()));
+    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled(), isImplicitMS()));
 
     const std::string VS =
         "#version 300 es\n"
@@ -1096,7 +1234,7 @@ TEST_P(MultiviewRenderTest, DrawArraysInstanced)
 // not by 3.
 TEST_P(MultiviewRenderTest, AttribDivisor)
 {
-    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled()));
+    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled(), isImplicitMS()));
 
     // Looks like an incorrect D3D debug layer message is generated on Windows AMD and NVIDIA.
     // May be specific to Windows 7 / Windows Server 2008. http://anglebug.com/2778
@@ -1184,7 +1322,7 @@ TEST_P(MultiviewRenderTest, AttribDivisor)
 // multi-view context propagate the correct divisor to the driver.
 TEST_P(MultiviewRenderTest, DivisorOrderOfOperation)
 {
-    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled()));
+    ANGLE_SKIP_TEST_IF(!requestMultiviewExtension(isMultisampled(), isImplicitMS()));
 
     updateFBOs(1, 1, 2);
 
@@ -1631,7 +1769,7 @@ TEST_P(MultiviewRenderPrimitiveTest, Points)
 
     const GLubyte expectedGreenChannelData[kNumViews][kViewHeight][kViewWidth] = {
         {{255, 0, 0, 0}, {0, 0, 0, 255}}, {{255, 0, 0, 0}, {0, 0, 0, 255}}};
-    checkGreenChannel(expectedGreenChannelData[0][0]);
+    checkGreenChannel(expectedGreenChannelData[0][0], isImplicitMS());
 }
 
 // The test checks that GL_LINES is correctly rendered.
@@ -1666,7 +1804,7 @@ TEST_P(MultiviewRenderPrimitiveTest, Lines)
 
     const GLubyte expectedGreenChannelData[kNumViews][kViewHeight][kViewWidth] = {
         {{255, 255, 255, 255}, {0, 0, 0, 0}}, {{255, 255, 255, 255}, {0, 0, 0, 0}}};
-    checkGreenChannel(expectedGreenChannelData[0][0]);
+    checkGreenChannel(expectedGreenChannelData[0][0], isImplicitMS());
 
     glDeleteProgram(program);
 }
@@ -1703,7 +1841,7 @@ TEST_P(MultiviewRenderPrimitiveTest, LineStrip)
 
     const GLubyte expectedGreenChannelData[kNumViews][kViewHeight][kViewWidth] = {
         {{255, 255, 255, 255}, {0, 0, 0, 255}}, {{255, 255, 255, 255}, {0, 0, 0, 255}}};
-    checkGreenChannel(expectedGreenChannelData[0][0]);
+    checkGreenChannel(expectedGreenChannelData[0][0], isImplicitMS());
 
     glDeleteProgram(program);
 }
@@ -1745,7 +1883,7 @@ TEST_P(MultiviewRenderPrimitiveTest, LineLoop)
     const GLubyte expectedGreenChannelData[kNumViews][kViewHeight][kViewWidth] = {
         {{255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, {255, 255, 255, 255}},
         {{255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, {255, 255, 255, 255}}};
-    checkGreenChannel(expectedGreenChannelData[0][0]);
+    checkGreenChannel(expectedGreenChannelData[0][0], isImplicitMS());
 
     glDeleteProgram(program);
 }
@@ -1776,7 +1914,7 @@ TEST_P(MultiviewRenderPrimitiveTest, TriangleStrip)
 
     const GLubyte expectedGreenChannelData[kNumViews][kViewHeight][kViewWidth] = {
         {{0, 0}, {0, 255}}, {{0, 0}, {0, 255}}};
-    checkGreenChannel(expectedGreenChannelData[0][0]);
+    checkGreenChannel(expectedGreenChannelData[0][0], isImplicitMS());
 
     glDeleteProgram(program);
 }
@@ -1807,7 +1945,7 @@ TEST_P(MultiviewRenderPrimitiveTest, TriangleFan)
 
     const GLubyte expectedGreenChannelData[kNumViews][kViewHeight][kViewWidth] = {
         {{0, 0}, {0, 255}}, {{0, 0}, {0, 255}}};
-    checkGreenChannel(expectedGreenChannelData[0][0]);
+    checkGreenChannel(expectedGreenChannelData[0][0], isImplicitMS());
 
     glDeleteProgram(program);
 }
@@ -1817,7 +1955,7 @@ TEST_P(MultiviewRenderPrimitiveTest, TriangleFan)
 // to each other. The quads' position and color depend on the corresponding attribute divisors.
 TEST_P(MultiviewRenderTest, ProgramRelinkUpdatesAttribDivisor)
 {
-    if (!requestMultiviewExtension(isMultisampled()))
+    if (!requestMultiviewExtension(isMultisampled(), isImplicitMS()))
     {
         return;
     }
@@ -1963,7 +2101,7 @@ TEST_P(MultiviewRenderTest, ProgramRelinkUpdatesAttribDivisor)
 // divisor.
 TEST_P(MultiviewRenderTest, DivisorUpdatedOnProgramChange)
 {
-    if (!requestMultiviewExtension(isMultisampled()))
+    if (!requestMultiviewExtension(isMultisampled(), isImplicitMS()))
     {
         return;
     }
@@ -2027,7 +2165,7 @@ TEST_P(MultiviewRenderTest, DivisorUpdatedOnProgramChange)
 // The test checks that gl_ViewID_OVR is correctly propagated to the fragment shader.
 TEST_P(MultiviewRenderTest, SelectColorBasedOnViewIDOVR)
 {
-    if (!requestMultiviewExtension(isMultisampled()))
+    if (!requestMultiviewExtension(isMultisampled(), isImplicitMS()))
     {
         return;
     }
@@ -2130,7 +2268,7 @@ TEST_P(MultiviewLayeredRenderTest, RenderToSubrangeOfLayers)
 // green for view 1.
 TEST_P(MultiviewRenderTest, FlatInterpolation)
 {
-    if (!requestMultiviewExtension(isMultisampled()))
+    if (!requestMultiviewExtension(isMultisampled(), isImplicitMS()))
     {
         return;
     }
@@ -2184,7 +2322,7 @@ TEST_P(MultiviewRenderTest, FlatInterpolation)
 // varying in the fragment shader.
 TEST_P(MultiviewRenderTest, FlatInterpolation2)
 {
-    if (!requestMultiviewExtension(isMultisampled()))
+    if (!requestMultiviewExtension(isMultisampled(), isImplicitMS()))
     {
         return;
     }
@@ -2231,81 +2369,119 @@ TEST_P(MultiviewRenderTest, FlatInterpolation2)
     EXPECT_EQ(GLColor::green, GetViewColor(0, 0, 1));
 }
 
-MultiviewRenderTestParams VertexShaderOpenGL(ExtensionName multiviewExtension)
+MultiviewRenderTestParams VertexShaderOpenGL(ExtensionName multiviewExtension, bool implicitMS)
 {
-    return MultiviewRenderTestParams(0, VertexShaderOpenGL(3, 0, multiviewExtension));
+    return MultiviewRenderTestParams(0, VertexShaderOpenGL(3, 0, multiviewExtension, implicitMS));
 }
 
-MultiviewRenderTestParams GeomShaderD3D11(ExtensionName multiviewExtension)
+MultiviewRenderTestParams GeomShaderD3D11(ExtensionName multiviewExtension, bool implicitMS)
 {
-    return MultiviewRenderTestParams(0, GeomShaderD3D11(3, 0, multiviewExtension));
+    return MultiviewRenderTestParams(0, GeomShaderD3D11(3, 0, multiviewExtension, implicitMS));
 }
 
-MultiviewRenderTestParams VertexShaderD3D11(ExtensionName multiviewExtension)
+MultiviewRenderTestParams VertexShaderD3D11(ExtensionName multiviewExtension, bool implicitMS)
 {
-    return MultiviewRenderTestParams(0, VertexShaderD3D11(3, 0, multiviewExtension));
+    return MultiviewRenderTestParams(0, VertexShaderD3D11(3, 0, multiviewExtension, implicitMS));
 }
 
 MultiviewRenderTestParams MultisampledVertexShaderOpenGL(ExtensionName multiviewExtension)
 {
-    return MultiviewRenderTestParams(2, VertexShaderOpenGL(3, 1, multiviewExtension));
+    return MultiviewRenderTestParams(2, VertexShaderOpenGL(3, 1, multiviewExtension, false));
 }
 
 MultiviewRenderTestParams MultisampledVertexShaderD3D11(ExtensionName multiviewExtension)
 {
-    return MultiviewRenderTestParams(2, VertexShaderD3D11(3, 1, multiviewExtension));
+    return MultiviewRenderTestParams(2, VertexShaderD3D11(3, 1, multiviewExtension, false));
 }
 
 ANGLE_INSTANTIATE_TEST(MultiviewDrawValidationTest,
-                       VertexShaderOpenGL(3, 1, ExtensionName::multiview),
-                       VertexShaderD3D11(3, 1, ExtensionName::multiview),
-                       VertexShaderOpenGL(3, 1, ExtensionName::multiview2),
-                       VertexShaderD3D11(3, 1, ExtensionName::multiview2));
+                       VertexShaderOpenGL(3, 1, ExtensionName::multiview, false),
+                       VertexShaderD3D11(3, 1, ExtensionName::multiview, false),
+                       VertexShaderOpenGL(3, 1, ExtensionName::multiview2, false),
+                       VertexShaderD3D11(3, 1, ExtensionName::multiview2, false),
+                       VertexShaderOpenGL(3, 1, ExtensionName::multiview, true),
+                       VertexShaderD3D11(3, 1, ExtensionName::multiview, true),
+                       VertexShaderOpenGL(3, 1, ExtensionName::multiview2, true),
+                       VertexShaderD3D11(3, 1, ExtensionName::multiview2, true));
 ANGLE_INSTANTIATE_TEST(MultiviewRenderDualViewTest,
-                       VertexShaderOpenGL(ExtensionName::multiview),
+                       VertexShaderOpenGL(ExtensionName::multiview, false),
                        MultisampledVertexShaderOpenGL(ExtensionName::multiview),
-                       GeomShaderD3D11(ExtensionName::multiview),
-                       VertexShaderD3D11(ExtensionName::multiview),
+                       GeomShaderD3D11(ExtensionName::multiview, false),
+                       VertexShaderD3D11(ExtensionName::multiview, false),
                        MultisampledVertexShaderD3D11(ExtensionName::multiview),
-                       VertexShaderOpenGL(ExtensionName::multiview2),
+                       VertexShaderOpenGL(ExtensionName::multiview2, false),
                        MultisampledVertexShaderOpenGL(ExtensionName::multiview2),
-                       GeomShaderD3D11(ExtensionName::multiview2),
-                       VertexShaderD3D11(ExtensionName::multiview2),
-                       MultisampledVertexShaderD3D11(ExtensionName::multiview2));
+                       GeomShaderD3D11(ExtensionName::multiview2, false),
+                       VertexShaderD3D11(ExtensionName::multiview2, false),
+                       MultisampledVertexShaderD3D11(ExtensionName::multiview2),
+                       VertexShaderOpenGL(ExtensionName::multiview, true),
+                       GeomShaderD3D11(ExtensionName::multiview, true),
+                       VertexShaderD3D11(ExtensionName::multiview, true),
+                       VertexShaderOpenGL(ExtensionName::multiview2, true),
+                       GeomShaderD3D11(ExtensionName::multiview2, true),
+                       VertexShaderD3D11(ExtensionName::multiview2, true));
 ANGLE_INSTANTIATE_TEST(MultiviewRenderTest,
-                       VertexShaderOpenGL(ExtensionName::multiview),
+                       VertexShaderOpenGL(ExtensionName::multiview, false),
                        MultisampledVertexShaderOpenGL(ExtensionName::multiview),
-                       GeomShaderD3D11(ExtensionName::multiview),
-                       VertexShaderD3D11(ExtensionName::multiview),
+                       GeomShaderD3D11(ExtensionName::multiview, false),
+                       VertexShaderD3D11(ExtensionName::multiview, false),
                        MultisampledVertexShaderD3D11(ExtensionName::multiview),
-                       VertexShaderOpenGL(ExtensionName::multiview2),
+                       VertexShaderOpenGL(ExtensionName::multiview2, false),
                        MultisampledVertexShaderOpenGL(ExtensionName::multiview2),
-                       GeomShaderD3D11(ExtensionName::multiview2),
-                       VertexShaderD3D11(ExtensionName::multiview2),
-                       MultisampledVertexShaderD3D11(ExtensionName::multiview2));
+                       GeomShaderD3D11(ExtensionName::multiview2, false),
+                       VertexShaderD3D11(ExtensionName::multiview2, false),
+                       MultisampledVertexShaderD3D11(ExtensionName::multiview2),
+                       VertexShaderOpenGL(ExtensionName::multiview, true),
+                       GeomShaderD3D11(ExtensionName::multiview, true),
+                       VertexShaderD3D11(ExtensionName::multiview, true),
+                       VertexShaderOpenGL(ExtensionName::multiview2, true),
+                       GeomShaderD3D11(ExtensionName::multiview2, true),
+                       VertexShaderD3D11(ExtensionName::multiview2, true));
 ANGLE_INSTANTIATE_TEST(MultiviewOcclusionQueryTest,
-                       VertexShaderOpenGL(ExtensionName::multiview),
-                       GeomShaderD3D11(ExtensionName::multiview),
-                       VertexShaderD3D11(ExtensionName::multiview),
-                       VertexShaderOpenGL(ExtensionName::multiview2),
-                       GeomShaderD3D11(ExtensionName::multiview2),
-                       VertexShaderD3D11(ExtensionName::multiview2));
+                       VertexShaderOpenGL(ExtensionName::multiview, false),
+                       GeomShaderD3D11(ExtensionName::multiview, false),
+                       VertexShaderD3D11(ExtensionName::multiview, false),
+                       VertexShaderOpenGL(ExtensionName::multiview2, false),
+                       GeomShaderD3D11(ExtensionName::multiview2, false),
+                       VertexShaderD3D11(ExtensionName::multiview2, false),
+                       VertexShaderOpenGL(ExtensionName::multiview, true),
+                       GeomShaderD3D11(ExtensionName::multiview, true),
+                       VertexShaderD3D11(ExtensionName::multiview, true),
+                       VertexShaderOpenGL(ExtensionName::multiview2, true),
+                       GeomShaderD3D11(ExtensionName::multiview2, true),
+                       VertexShaderD3D11(ExtensionName::multiview2, true));
 ANGLE_INSTANTIATE_TEST(MultiviewProgramGenerationTest,
-                       VertexShaderOpenGL(3, 0, ExtensionName::multiview),
-                       GeomShaderD3D11(3, 0, ExtensionName::multiview),
-                       VertexShaderD3D11(3, 0, ExtensionName::multiview),
-                       VertexShaderOpenGL(3, 0, ExtensionName::multiview2),
-                       GeomShaderD3D11(3, 0, ExtensionName::multiview2),
-                       VertexShaderD3D11(3, 0, ExtensionName::multiview2));
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview, false),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview, false),
+                       VertexShaderD3D11(3, 0, ExtensionName::multiview, false),
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview2, false),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview2, false),
+                       VertexShaderD3D11(3, 0, ExtensionName::multiview2, false),
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview, true),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview, true),
+                       VertexShaderD3D11(3, 0, ExtensionName::multiview, true),
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview2, true),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview2, true),
+                       VertexShaderD3D11(3, 0, ExtensionName::multiview2, true));
 ANGLE_INSTANTIATE_TEST(MultiviewRenderPrimitiveTest,
-                       VertexShaderOpenGL(ExtensionName::multiview),
-                       GeomShaderD3D11(ExtensionName::multiview),
-                       VertexShaderD3D11(ExtensionName::multiview),
-                       VertexShaderOpenGL(ExtensionName::multiview2),
-                       GeomShaderD3D11(ExtensionName::multiview2),
-                       VertexShaderD3D11(ExtensionName::multiview2));
+                       VertexShaderOpenGL(ExtensionName::multiview, false),
+                       GeomShaderD3D11(ExtensionName::multiview, false),
+                       VertexShaderD3D11(ExtensionName::multiview, false),
+                       VertexShaderOpenGL(ExtensionName::multiview2, false),
+                       GeomShaderD3D11(ExtensionName::multiview2, false),
+                       VertexShaderD3D11(ExtensionName::multiview2, false),
+                       VertexShaderOpenGL(ExtensionName::multiview, true),
+                       GeomShaderD3D11(ExtensionName::multiview, true),
+                       VertexShaderD3D11(ExtensionName::multiview, true),
+                       VertexShaderOpenGL(ExtensionName::multiview2, true),
+                       GeomShaderD3D11(ExtensionName::multiview2, true),
+                       VertexShaderD3D11(ExtensionName::multiview2, true));
 ANGLE_INSTANTIATE_TEST(MultiviewLayeredRenderTest,
-                       VertexShaderOpenGL(ExtensionName::multiview),
-                       GeomShaderD3D11(ExtensionName::multiview),
-                       VertexShaderOpenGL(ExtensionName::multiview2),
-                       GeomShaderD3D11(ExtensionName::multiview2));
+                       VertexShaderOpenGL(ExtensionName::multiview, false),
+                       GeomShaderD3D11(ExtensionName::multiview, false),
+                       VertexShaderOpenGL(ExtensionName::multiview2, false),
+                       GeomShaderD3D11(ExtensionName::multiview2, false),
+                       VertexShaderOpenGL(ExtensionName::multiview, true),
+                       GeomShaderD3D11(ExtensionName::multiview, true),
+                       VertexShaderOpenGL(ExtensionName::multiview2, true),
+                       GeomShaderD3D11(ExtensionName::multiview2, true));

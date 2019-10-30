@@ -1418,7 +1418,7 @@ bool ValidateBlitFramebufferParameters(Context *context,
                         return false;
                     }
 
-                    if (readColorBuffer->getSamples() > 0 &&
+                    if (readColorBuffer->getResourceSamples() > 0 &&
                         (!Format::EquivalentForBlit(readFormat, drawFormat) || !sameBounds))
                     {
                         context->validationError(GL_INVALID_OPERATION,
@@ -6675,6 +6675,69 @@ bool ValidateInvalidateTextureANGLE(Context *context, TextureType target)
         return false;
     }
 
+    return true;
+}
+
+bool ValidateFramebufferTextureMultisampleBase(Context *context,
+                                               GLenum target,
+                                               GLenum attachment,
+                                               GLuint texture,
+                                               GLint level,
+                                               GLsizei samples,
+                                               TextureTarget textarget)
+{
+    if (samples < 0)
+    {
+        return false;
+    }
+
+    // EXT_multisampled_render_to_texture states that the value of samples
+    // must be less than or equal to MAX_SAMPLES_EXT (Context::getCaps().maxSamples)
+    // otherwise GL_INVALID_VALUE is generated.
+    if (samples > context->getCaps().maxSamples)
+    {
+        context->validationError(GL_INVALID_VALUE, kSamplesOutOfRange);
+        return false;
+    }
+
+    if (!ValidFramebufferTarget(context, target))
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidFramebufferTarget);
+        return false;
+    }
+
+    if (texture != 0)
+    {
+        TextureID texturePacked = FromGL<TextureID>(texture);
+        Texture *tex            = context->getTexture(texturePacked);
+
+        if (tex == nullptr)
+        {
+            context->validationError(GL_INVALID_OPERATION, kMissingTexture);
+            return false;
+        }
+
+        if (level < 0)
+        {
+            context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
+            return false;
+        }
+
+        // EXT_multisampled_render_to_texture returns INVALID_OPERATION when a sample number higher
+        // than the maximum sample number supported by this format is passed.
+        // The TextureCaps::getMaxSamples method is only guarenteed to be valid when the context is
+        // ES3.
+        if (context->getClientMajorVersion() >= 3)
+        {
+            GLenum internalformat         = tex->getFormat(textarget, level).info->internalFormat;
+            const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
+            if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
+            {
+                context->validationError(GL_INVALID_OPERATION, kSamplesOutOfRange);
+                return false;
+            }
+        }
+    }
     return true;
 }
 

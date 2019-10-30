@@ -34,16 +34,14 @@ class Renderer11;
 class SwapChain11;
 class Image11;
 struct Renderer11DeviceCaps;
-class TextureStorage11_2DMultisample;
+class TextureStorage11;
 
 template <typename T>
 using CubeFaceArray = std::array<T, gl::kCubeFaceCount>;
 
 struct MultisampledRenderToTextureInfo
 {
-    MultisampledRenderToTextureInfo(const GLsizei samples,
-                                    const gl::ImageIndex &indexSS,
-                                    const gl::ImageIndex &indexMS);
+    MultisampledRenderToTextureInfo(const GLsizei samples, const gl::ImageIndex &indexSS);
     ~MultisampledRenderToTextureInfo();
 
     // How many samples the multisampled texture contains
@@ -51,14 +49,10 @@ struct MultisampledRenderToTextureInfo
     // This is the image index for the single sampled texture
     // This will hold the relevant level information
     gl::ImageIndex indexSS;
-    // This is the image index for the multisampled texture
-    // For multisampled indexes, there is no level Index since they should
-    // account for the entire level.
-    gl::ImageIndex indexMS;
     // True when multisampled texture has been written to and needs to be
     // resolved to the single sampled texture
     bool msTextureNeedsResolve;
-    std::unique_ptr<TextureStorage11_2DMultisample> msTex;
+    std::unique_ptr<TextureStorage11> msTex;
 };
 
 class TextureStorage11 : public TextureStorage
@@ -197,12 +191,13 @@ class TextureStorage11 : public TextureStorage
     void clearSRVCache();
 
     // Helper for resolving MS shadowed texture
-    angle::Result resolveTextureHelper(const gl::Context *context, const TextureHelper11 &texture);
+    virtual angle::Result resolveTextureHelper(const gl::Context *context,
+                                               const TextureHelper11 &textureSS);
     angle::Result releaseMultisampledTexStorageForLevel(size_t level) override;
-    angle::Result getMultisampledRenderTarget(const gl::Context *context,
-                                              const gl::ImageIndex &index,
-                                              GLsizei samples,
-                                              RenderTargetD3D **outRT);
+    virtual angle::Result getMultisampledRenderTarget(const gl::Context *context,
+                                                      const gl::ImageIndex &index,
+                                                      GLsizei samples,
+                                                      RenderTargetD3D **outRT);
 
     Renderer11 *mRenderer;
     int mTopLevel;
@@ -727,6 +722,13 @@ class TextureStorage11_2DArray : public TextureStorage11
 
     angle::Result ensureDropStencilTexture(const gl::Context *context,
                                            DropStencil *dropStencilOut) override;
+    angle::Result getMultisampledRenderTarget(const gl::Context *context,
+                                              const gl::ImageIndex &index,
+                                              GLsizei samples,
+                                              RenderTargetD3D **outRT) override;
+    angle::Result resolveTexture(const gl::Context *context) override;
+    angle::Result resolveTextureHelper(const gl::Context *context,
+                                       const TextureHelper11 &textureSS) override;
 
   private:
     angle::Result createSRVForSampler(const gl::Context *context,
@@ -750,6 +752,8 @@ class TextureStorage11_2DArray : public TextureStorage11
                                         const gl::ImageIndex &index,
                                         DXGI_FORMAT resourceFormat,
                                         d3d11::SharedSRV *srv) const;
+    bool matchMSImageIndex(const gl::ImageIndex &index) const;
+    angle::Result clearRenderTargetsAfterResolve();
 
     std::map<LevelLayerRangeKey, std::unique_ptr<RenderTarget11>> mRenderTargets;
 
