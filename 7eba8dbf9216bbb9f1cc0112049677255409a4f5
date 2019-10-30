@@ -273,6 +273,30 @@
     },
     {
       "key": {
+        "uuid": "9a3a0895_ebc3ce77",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-30T20:08:38Z",
+      "side": 1,
+      "message": "I don\u0027t think that should be necessary; do you? glTexImage2D can already upload data to (for example) both GL_TEXTURE_2D and GL_TEXTURE_RECTANGLE_ARB type textures, so I think it can be reused for this purpose. The idea is that GL_TEXTURE_VIDEO_IMAGE_WEBGL aliases internally, in ANGLE, to one of the other binding points (GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_ARB, etc.).",
+      "parentUuid": "0460ae57_ba08864e",
+      "range": {
+        "startLine": 71,
+        "startChar": 18,
+        "endLine": 71,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0deb5fc7_a474b14d",
         "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
         "patchSetId": 12
