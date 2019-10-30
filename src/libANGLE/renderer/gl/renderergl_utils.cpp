@@ -1469,7 +1469,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
 
     ANGLE_FEATURE_CONDITION(features, addAndTrueToLoopCondition, isIntel);
 
-    ANGLE_FEATURE_CONDITION(features, emulateIsnanFloat, isIntel);
+    ANGLE_FEATURE_CONDITION(
+        features, emulateIsnanFloat,
+        isIntel && IsApple() && IsSkylake(device) && GetMacOSVersion() < OSVersion(10, 13, 2));
 
     ANGLE_FEATURE_CONDITION(features, doesSRGBClearsOnLinearFramebufferAttachments,
                             functions->standard == STANDARD_GL_DESKTOP && (isIntel || isAMD));
