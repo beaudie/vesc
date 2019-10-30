@@ -702,6 +702,13 @@ bool ValidateES3TexStorage3DParameters(Context *context,
                                        GLsizei width,
                                        GLsizei height,
                                        GLsizei depth);
+bool ValidateFramebufferTextureMultisampleBase(Context *context,
+                                               GLenum target,
+                                               GLenum attachment,
+                                               GLuint texture,
+                                               GLint level,
+                                               GLsizei samples,
+                                               TextureTarget textarget);
 
 bool ValidateGetMultisamplefvBase(Context *context, GLenum pname, GLuint index, GLfloat *val);
 bool ValidateSampleMaskiBase(Context *context, GLuint maskNumber, GLbitfield mask);
