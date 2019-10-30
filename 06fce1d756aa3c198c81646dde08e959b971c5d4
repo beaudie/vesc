@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f1c967dd_5a6ef36c",
+        "filename": "DEPS",
+        "patchSetId": 11
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-30T19:01:28Z",
+      "side": 1,
+      "message": "You can remove this. We rolled past this revision already. See https://autoroll.skia.org/r/swiftshader-angle-autoroll?tab\u003dstatus",
+      "parentUuid": "2343a627_4349c9f7",
+      "revId": "06fce1d756aa3c198c81646dde08e959b971c5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "728d2329_f48464b0",
         "filename": "include/platform/FeaturesVk.h",
         "patchSetId": 11
