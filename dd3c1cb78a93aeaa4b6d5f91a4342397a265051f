@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "744f1fda_3194df9b",
+        "filename": "src/libANGLE/renderer/metal/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-30T19:58:38Z",
+      "side": 1,
+      "message": "unfortunately this won\u0027t work until https://github.com/KhronosGroup/SPIRV-Cross/issues/1189 is resolved.\n\nwe\u0027ll need to temporarily use the ANGLE GN files you added since there is no canonical BUILD.gn yet. So you can point directly to $angle_root/third_party/spirv-cross:spirv_cross_sources. And in spirv-cross-sources you can use the angle_spirv_cross_dir to find the real sources.\n\nEither that or we just open a pull req to github and get your BUILD.gn landed. Do you want to try that?",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 0
+      },
+      "revId": "dd3c1cb78a93aeaa4b6d5f91a4342397a265051f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abd38f4a_b578e7d6",
+        "filename": "third_party/spirv-cross/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-30T19:58:38Z",
+      "side": 1,
+      "message": "See other comment/github issue.\n\nYou\u0027ll need to use the angle dir override in here to find the real location of the sources. You should be able to reproduce the Chromium failure locally if necessary.\n\nsee https://www.chromium.org/developers/how-tos/get-the-code",
+      "revId": "dd3c1cb78a93aeaa4b6d5f91a4342397a265051f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
