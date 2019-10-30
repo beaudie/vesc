@@ -90,6 +90,7 @@ gles_extensions = [
     "GL_OES_vertex_array_object",
     "GL_OVR_multiview",
     "GL_OVR_multiview2",
+    "GL_OVR_multiview_multisampled_render_to_texture",
 ]
 
 supported_extensions = sorted(angle_extensions + gles1_extensions + gles_extensions)

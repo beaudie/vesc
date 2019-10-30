@@ -20,6 +20,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/validationES.h"
+#include "libANGLE/validationESEXT_autogen.h"
 
 using namespace angle;
 
@@ -3321,6 +3322,44 @@ bool ValidateMultiDrawElementsInstancedBaseVertexBaseInstanceANGLE(Context *cont
         {
             return false;
         }
+    }
+    return true;
+}
+
+bool ValidateFramebufferTextureMultisampleMultiviewOVR(Context *context,
+                                                       GLenum target,
+                                                       GLenum attachment,
+                                                       GLuint texture,
+                                                       GLint level,
+                                                       GLsizei samples,
+                                                       GLint baseViewIndex,
+                                                       GLsizei numViews)
+{
+    if (!context->getExtensions().multiviewMultisampledRenderToTexture)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    TextureID texturePacked = FromGL<TextureID>(texture);
+    if (!ValidateFramebufferTextureMultiviewOVR(context, target, attachment, texturePacked, level,
+                                                baseViewIndex, numViews))
+    {
+        return false;
+    }
+
+    if (texture != 0)
+    {
+        Texture *tex = context->getTexture(texturePacked);
+
+        if (tex->getType() != TextureType::_2DArray)
+        {
+            context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
+            return false;
+        }
+        return ValidateFramebufferTextureMultisampleBase(
+            context, target, attachment, texture, level, samples,
+            NonCubeTextureTypeToTarget(tex->getType()));
     }
     return true;
 }

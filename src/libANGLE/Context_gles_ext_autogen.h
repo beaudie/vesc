@@ -415,6 +415,10 @@
     /* GL_OVR_multiview */                                                                         \
     void framebufferTextureMultiview(GLenum target, GLenum attachment, TextureID texturePacked,    \
                                      GLint level, GLint baseViewIndex, GLsizei numViews);          \
-    /* GL_OVR_multiview2 */
+    /* GL_OVR_multiview2 */                                                                        \
+    /* GL_OVR_multiview_multisampled_render_to_texture */                                          \
+    void framebufferTextureMultisampleMultiview(GLenum target, GLenum attachment, GLuint texture,  \
+                                                GLint level, GLsizei samples, GLint baseViewIndex, \
+                                                GLsizei numViews);
 
 #endif  // ANGLE_CONTEXT_API_EXT_AUTOGEN_H_

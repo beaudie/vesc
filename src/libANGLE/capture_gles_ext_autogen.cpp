@@ -6322,4 +6322,29 @@ CallCapture CaptureFramebufferTextureMultiviewOVR(const State &glState,
     return CallCapture(gl::EntryPoint::FramebufferTextureMultiviewOVR, std::move(paramBuffer));
 }
 
+CallCapture CaptureFramebufferTextureMultisampleMultiviewOVR(const State &glState,
+                                                             bool isCallValid,
+                                                             GLenum target,
+                                                             GLenum attachment,
+                                                             GLuint texture,
+                                                             GLint level,
+                                                             GLsizei samples,
+                                                             GLint baseViewIndex,
+                                                             GLsizei numViews)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addEnumParam("target", GLenumGroup::FramebufferTarget, ParamType::TGLenum, target);
+    paramBuffer.addEnumParam("attachment", GLenumGroup::FramebufferAttachment, ParamType::TGLenum,
+                             attachment);
+    paramBuffer.addValueParam("texture", ParamType::TGLuint, texture);
+    paramBuffer.addValueParam("level", ParamType::TGLint, level);
+    paramBuffer.addValueParam("samples", ParamType::TGLsizei, samples);
+    paramBuffer.addValueParam("baseViewIndex", ParamType::TGLint, baseViewIndex);
+    paramBuffer.addValueParam("numViews", ParamType::TGLsizei, numViews);
+
+    return CallCapture(gl::EntryPoint::FramebufferTextureMultisampleMultiviewOVR,
+                       std::move(paramBuffer));
+}
+
 }  // namespace gl
