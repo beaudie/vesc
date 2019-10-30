@@ -1656,6 +1656,10 @@ void GenerateCaps(ID3D11Device *device,
         extensions->multisampledRenderToTexture = true;
     }
 
+    extensions->multiviewMultisampledRenderToTexture =
+        ((extensions->multiview || extensions->multiview2) &&
+         extensions->multisampledRenderToTexture);
+
     // D3D11 cannot support reading depth texture as a luminance texture.
     // It treats it as a red-channel-only texture.
     extensions->depthTextureOES = false;
