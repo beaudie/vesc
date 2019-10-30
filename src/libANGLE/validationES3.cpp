@@ -20,6 +20,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/validationES.h"
+#include "libANGLE/validationESEXT_autogen.h"
 
 using namespace angle;
 
@@ -3320,6 +3321,104 @@ bool ValidateMultiDrawElementsInstancedBaseVertexBaseInstanceANGLE(Context *cont
                                                indices[drawID], instanceCounts[drawID]))
         {
             return false;
+        }
+    }
+    return true;
+}
+
+bool ValidateFramebufferTextureMultisampleMultiviewOVR(Context *context,
+                                                       GLenum target,
+                                                       GLenum attachment,
+                                                       GLuint texture,
+                                                       GLint level,
+                                                       GLsizei samples,
+                                                       GLint baseViewIndex,
+                                                       GLsizei numViews)
+{
+    if (!context->getExtensions().multiviewMultisampledRenderToTexture)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    TextureID texturePacked = FromGL<TextureID>(texture);
+    if (!ValidateFramebufferTextureMultiviewOVR(context, target, attachment, texturePacked, level,
+                                                baseViewIndex, numViews))
+    {
+        return false;
+    }
+
+    // Cannot directly call ValidateFramebufferTexture2DMultisampleEXT since TextureTarget::_2DArray
+    // will cause failure, but everything else is identical
+    if (!context->getExtensions().multisampledRenderToTexture)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    if (samples < 0)
+    {
+        return false;
+    }
+
+    // EXT_multisampled_render_to_texture states that the value of samples
+    // must be less than or equal to MAX_SAMPLES_EXT (Context::getCaps().maxSamples)
+    // otherwise GL_INVALID_VALUE is generated.
+    if (samples > context->getCaps().maxSamples)
+    {
+        context->validationError(GL_INVALID_VALUE, kSamplesOutOfRange);
+        return false;
+    }
+
+    if (!ValidFramebufferTarget(context, target))
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidFramebufferTarget);
+        return false;
+    }
+
+    if (attachment != GL_COLOR_ATTACHMENT0)
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidAttachment);
+        return false;
+    }
+
+    if (texture != 0)
+    {
+        Texture *tex = context->getTexture(texturePacked);
+
+        if (tex == nullptr)
+        {
+            context->validationError(GL_INVALID_OPERATION, kMissingTexture);
+            return false;
+        }
+
+        if (level < 0)
+        {
+            context->validationError(GL_INVALID_VALUE, kInvalidMipLevel);
+            return false;
+        }
+
+        if (tex->getType() != TextureType::_2DArray)
+        {
+            context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
+            return false;
+        }
+
+        // EXT_multisampled_render_to_texture returns INVALID_OPERATION when a sample number higher
+        // than the maximum sample number supported by this format is passed.
+        // The TextureCaps::getMaxSamples method is only guarenteed to be valid when the context is
+        // ES3.
+        if (context->getClientMajorVersion() >= 3)
+        {
+            GLenum internalformat =
+                tex->getFormat(NonCubeTextureTypeToTarget(tex->getType()), level)
+                    .info->internalFormat;
+            const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
+            if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
+            {
+                context->validationError(GL_INVALID_OPERATION, kSamplesOutOfRange);
+                return false;
+            }
         }
     }
     return true;

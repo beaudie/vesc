@@ -489,6 +489,10 @@ ProcEntry g_procTable[] = {
     {"glFramebufferTextureEXTContextANGLE", P(gl::FramebufferTextureEXTContextANGLE)},
     {"glFramebufferTextureLayer", P(gl::FramebufferTextureLayer)},
     {"glFramebufferTextureLayerContextANGLE", P(gl::FramebufferTextureLayerContextANGLE)},
+    {"glFramebufferTextureMultisampleMultiviewOVR",
+     P(gl::FramebufferTextureMultisampleMultiviewOVR)},
+    {"glFramebufferTextureMultisampleMultiviewOVRContextANGLE",
+     P(gl::FramebufferTextureMultisampleMultiviewOVRContextANGLE)},
     {"glFramebufferTextureMultiviewOVR", P(gl::FramebufferTextureMultiviewOVR)},
     {"glFramebufferTextureMultiviewOVRContextANGLE",
      P(gl::FramebufferTextureMultiviewOVRContextANGLE)},
@@ -1520,5 +1524,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1421;
+size_t g_numProcs = 1423;
 }  // namespace egl

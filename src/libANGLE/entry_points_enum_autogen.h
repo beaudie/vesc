@@ -345,6 +345,7 @@ enum class EntryPoint
     FramebufferTexture3DOES,
     FramebufferTextureEXT,
     FramebufferTextureLayer,
+    FramebufferTextureMultisampleMultiviewOVR,
     FramebufferTextureMultiviewOVR,
     FrontFace,
     Frustum,
