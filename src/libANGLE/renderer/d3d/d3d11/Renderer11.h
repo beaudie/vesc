@@ -445,6 +445,7 @@ class Renderer11 : public RendererD3D
                                        const d3d11::Format &formatSet,
                                        const gl::Extents &size,
                                        StagingAccess readAndWriteAccess,
+                                       GLsizei samples,
                                        TextureHelper11 *textureOut);
 
     template <typename DescT, typename ResourceT>
@@ -509,6 +510,11 @@ class Renderer11 : public RendererD3D
     angle::Result getIncompleteTexture(const gl::Context *context,
                                        gl::TextureType type,
                                        gl::Texture **textureOut) override;
+    angle::Result resolveMultisampledTexture(const gl::Context *context,
+                                             RenderTarget11 *renderTarget,
+                                             bool depth,
+                                             bool stencil,
+                                             TextureHelper11 *textureOut);
 
   private:
     void generateCaps(gl::Caps *outCaps,
@@ -530,12 +536,6 @@ class Renderer11 : public RendererD3D
                                   const void *indices,
                                   int baseVertex,
                                   int instances);
-
-    angle::Result resolveMultisampledTexture(const gl::Context *context,
-                                             RenderTarget11 *renderTarget,
-                                             bool depth,
-                                             bool stencil,
-                                             TextureHelper11 *textureOut);
 
     void populateRenderer11DeviceCaps();
 

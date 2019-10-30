@@ -835,6 +835,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_EXT_frag_depth"] = enableableExtension(&Extensions::fragDepth);
         map["GL_OVR_multiview"] = enableableExtension(&Extensions::multiview);
         map["GL_OVR_multiview2"] = enableableExtension(&Extensions::multiview2);
+        map["GL_OVR_multiview_multisampled_render_to_texture"] = enableableExtension(&Extensions::multiviewMultisampledRenderToTexture);
         map["GL_ANGLE_texture_usage"] = enableableExtension(&Extensions::textureUsage);
         map["GL_ANGLE_translated_shader_source"] = esOnlyExtension(&Extensions::translatedShaderSource);
         map["GL_OES_fbo_render_mipmap"] = enableableExtension(&Extensions::fboRenderMipmap);

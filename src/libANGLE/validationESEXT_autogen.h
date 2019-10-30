@@ -1416,6 +1416,16 @@ bool ValidateFramebufferTextureMultiviewOVR(Context *context,
                                             GLsizei numViews);
 
 // GL_OVR_multiview2
+
+// GL_OVR_multiview_multisampled_render_to_texture
+bool ValidateFramebufferTextureMultisampleMultiviewOVR(Context *context,
+                                                       GLenum target,
+                                                       GLenum attachment,
+                                                       GLuint texture,
+                                                       GLint level,
+                                                       GLsizei samples,
+                                                       GLint baseViewIndex,
+                                                       GLsizei numViews);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ESEXT_AUTOGEN_H_

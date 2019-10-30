@@ -844,6 +844,9 @@ EXPORTS
 
     ; GL_OVR_multiview2
 
+    ; GL_OVR_multiview_multisampled_render_to_texture
+    glFramebufferTextureMultisampleMultiviewOVR
+
     ; EGL_ANGLE_explicit_context
     glActiveShaderProgramContextANGLE
     glActiveTextureContextANGLE
@@ -1043,6 +1046,7 @@ EXPORTS
     glFramebufferTexture3DOESContextANGLE
     glFramebufferTextureEXTContextANGLE
     glFramebufferTextureLayerContextANGLE
+    glFramebufferTextureMultisampleMultiviewOVRContextANGLE
     glFramebufferTextureMultiviewOVRContextANGLE
     glFrontFaceContextANGLE
     glFrustumfContextANGLE

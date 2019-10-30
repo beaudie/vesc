@@ -1231,9 +1231,9 @@ angle::Result Blit11::copyAndConvertImpl(const gl::Context *context,
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
 
     TextureHelper11 sourceStaging;
-    ANGLE_TRY(mRenderer->createStagingTexture(context, ResourceType::Texture2D,
-                                              source.getFormatSet(), sourceSize,
-                                              StagingAccess::READ, &sourceStaging));
+    ANGLE_TRY(mRenderer->createStagingTexture(
+        context, ResourceType::Texture2D, source.getFormatSet(), sourceSize, StagingAccess::READ,
+        source.getSampleCount(), &sourceStaging));
 
     deviceContext->CopySubresourceRegion(sourceStaging.get(), 0, 0, 0, 0, source.get(),
                                          sourceSubresource, nullptr);
@@ -1300,7 +1300,8 @@ angle::Result Blit11::copyAndConvert(const gl::Context *context,
     //       using it's mapped data as a source
     TextureHelper11 destStaging;
     ANGLE_TRY(mRenderer->createStagingTexture(context, ResourceType::Texture2D, dest.getFormatSet(),
-                                              destSize, StagingAccess::READ_WRITE, &destStaging));
+                                              destSize, StagingAccess::READ_WRITE,
+                                              dest.getSampleCount(), &destStaging));
 
     deviceContext->CopySubresourceRegion(destStaging.get(), 0, 0, 0, 0, dest.get(), destSubresource,
                                          nullptr);
@@ -1920,9 +1921,9 @@ angle::Result Blit11::resolveStencil(const gl::Context *context,
 
     gl::Box copyBox(0, 0, 0, extents.width, extents.height, 1);
 
-    ANGLE_TRY(mRenderer->createStagingTexture(context, ResourceType::Texture2D,
-                                              depthStencil->getFormatSet(), extents,
-                                              StagingAccess::READ_WRITE, textureOut));
+    ANGLE_TRY(mRenderer->createStagingTexture(
+        context, ResourceType::Texture2D, depthStencil->getFormatSet(), extents,
+        StagingAccess::READ_WRITE, depthStencil->getTexture().getSampleCount(), textureOut));
 
     const auto &copyFunction = GetCopyDepthStencilFunction(depthStencil->getInternalFormat());
     const auto &dsFormatSet  = depthStencil->getFormatSet();
