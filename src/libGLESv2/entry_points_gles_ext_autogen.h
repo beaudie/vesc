@@ -1135,6 +1135,15 @@ ANGLE_EXPORT void GL_APIENTRY FramebufferTextureMultiviewOVR(GLenum target,
 
 // GL_OVR_multiview2
 
+// GL_OVR_multiview_multisampled_render_to_texture
+ANGLE_EXPORT void GL_APIENTRY FramebufferTextureMultisampleMultiviewOVR(GLenum target,
+                                                                        GLenum attachment,
+                                                                        GLuint texture,
+                                                                        GLint level,
+                                                                        GLsizei samples,
+                                                                        GLint baseViewIndex,
+                                                                        GLsizei numViews);
+
 // EGL_ANGLE_explicit_context
 ANGLE_EXPORT void GL_APIENTRY ActiveShaderProgramContextANGLE(GLeglContext ctx,
                                                               GLuint pipeline,
@@ -1780,6 +1789,15 @@ ANGLE_EXPORT void GL_APIENTRY FramebufferTextureLayerContextANGLE(GLeglContext c
                                                                   GLuint texture,
                                                                   GLint level,
                                                                   GLint layer);
+ANGLE_EXPORT void GL_APIENTRY
+FramebufferTextureMultisampleMultiviewOVRContextANGLE(GLeglContext ctx,
+                                                      GLenum target,
+                                                      GLenum attachment,
+                                                      GLuint texture,
+                                                      GLint level,
+                                                      GLsizei samples,
+                                                      GLint baseViewIndex,
+                                                      GLsizei numViews);
 ANGLE_EXPORT void GL_APIENTRY FramebufferTextureMultiviewOVRContextANGLE(GLeglContext ctx,
                                                                          GLenum target,
                                                                          GLenum attachment,

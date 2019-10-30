@@ -1710,6 +1710,19 @@ void Framebuffer::setAttachmentMultisample(const Context *context,
                   FramebufferAttachment::kDefaultBaseViewIndex, false, samples);
 }
 
+void Framebuffer::setAttachmentMultisampleMultiview(const Context *context,
+                                                    GLenum type,
+                                                    GLenum binding,
+                                                    const ImageIndex &textureIndex,
+                                                    FramebufferAttachmentObject *resource,
+                                                    GLsizei samples,
+                                                    GLsizei numViews,
+                                                    GLint baseViewIndex)
+{
+    setAttachment(context, type, binding, textureIndex, resource, numViews, baseViewIndex, true,
+                  samples);
+}
+
 void Framebuffer::setAttachment(const Context *context,
                                 GLenum type,
                                 GLenum binding,
