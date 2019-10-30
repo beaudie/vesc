@@ -249,6 +249,30 @@
     },
     {
       "key": {
+        "uuid": "0460ae57_ba08864e",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-10-30T11:16:53Z",
+      "side": 1,
+      "message": "Hi, Ken\nI\u0027ve handled the new texture type. But when I go back to this test case, I find we missed API like glTexImage2D for the new texture type. Do you think we should add an API named glTexImage2DVideoWEBGL to ANGLE for this? (Like https://cs.chromium.org/chromium/src/third_party/angle/src/libGLESv2/entry_points_gles_ext_autogen.h?l\u003d523)",
+      "parentUuid": "94a8f395_529ad3cb",
+      "range": {
+        "startLine": 71,
+        "startChar": 18,
+        "endLine": 71,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0deb5fc7_a474b14d",
         "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
         "patchSetId": 12
