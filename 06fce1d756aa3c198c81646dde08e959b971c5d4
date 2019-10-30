@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7385b76_53ccde52",
+        "filename": "DEPS",
+        "patchSetId": 11
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2019-10-30T18:49:40Z",
+      "side": 1,
+      "message": "Is this still necessary?",
+      "revId": "06fce1d756aa3c198c81646dde08e959b971c5d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
