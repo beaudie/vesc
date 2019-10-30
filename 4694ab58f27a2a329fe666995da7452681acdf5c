@@ -71,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "9468acf8_ac596407",
+        "filename": "src/libANGLE/renderer/vulkan/DynamicVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-30T06:58:15Z",
+      "side": 1,
+      "message": "Hi Mohan, I am looking at issue https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d4006. Is it ok to use \u0027gl_PrimitiveID\u0027 instead of \u0027gl_PrimitiveIDIn\u0027? In this case, the ProvokingVertexTest.FlatTriStrip/ES3_Vulkan can pass on Intel device.",
+      "range": {
+        "startLine": 360,
+        "startChar": 54,
+        "endLine": 360,
+        "endChar": 71
+      },
+      "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb6929e8_a574091e",
         "filename": "src/libANGLE/renderer/vulkan/DynamicVk.cpp",
         "patchSetId": 14
@@ -179,6 +202,29 @@
         "startChar": 9,
         "endLine": 39,
         "endChar": 39
+      },
+      "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05e8d51e_1103c96d",
+        "filename": "src/tests/gl_tests/ProvokingVertexTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-10-30T06:58:15Z",
+      "side": 1,
+      "message": "It seems that this case can pass on Intel device. The only issue one is FlatTriStrip. But if you use \u0027gl_PrimitiveID\u0027 instead of \u0027gl_PrimitiveIDIn\u0027, FlatTriStrip can pass too.",
+      "range": {
+        "startLine": 204,
+        "startChar": 4,
+        "endLine": 204,
+        "endChar": 50
       },
       "revId": "4694ab58f27a2a329fe666995da7452681acdf5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
