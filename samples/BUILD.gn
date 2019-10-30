@@ -57,8 +57,9 @@ template("angle_sample") {
   angle_executable(target_name) {
     forward_variables_from(invoker,
                            [
-                             "sources",
                              "cflags",
+                             "defines",
+                             "sources",
                            ])
     deps = [
       ":sample_util",
@@ -224,6 +225,9 @@ template("angle_capture_replay_sample") {
                 "capture_replay/angle_capture_context1.cpp",
                 "capture_replay/angle_capture_context1.h",
               ]
+
+    _data_path = rebase_path("capture_replay", root_out_dir)
+    defines = [ "ANGLE_CAPTURE_REPLAY_SAMPLE_DATA_DIR=\"${_data_path}\"" ]
     suppressed_configs = [ "$angle_root:constructor_and_destructor_warnings" ]
   }
 }
@@ -232,15 +236,16 @@ template("angle_capture_replay_sample") {
 # To use the capture replay sample fist move your capture sources into
 # the capture_replay folder. Uncomment and update this target:
 
-# angle_capture_replay_sample("capture_replay_sample") {
-#   sources = [
-#     "capture_replay/angle_capture_context1_frame000.cpp",
-#     "capture_replay/angle_capture_context1_frame001.cpp",
-#     "capture_replay/angle_capture_context1_frame002.cpp",
-#     "capture_replay/angle_capture_context1_frame003.cpp",
-#     "capture_replay/angle_capture_context1_frame004.cpp",
-#   ]
-# }
+angle_capture_replay_sample("capture_replay_sample") {
+  sources = [
+    "capture_replay/angle_capture_context1_frame000.cpp",
+    "capture_replay/angle_capture_context1_frame001.cpp",
+    "capture_replay/angle_capture_context1_frame002.cpp",
+    "capture_replay/angle_capture_context1_frame003.cpp",
+    "capture_replay/angle_capture_context1_frame004.cpp",
+    "capture_replay/angle_capture_context1_frame005.cpp",
+  ]
+}
 
 group("all") {
   testonly = true
