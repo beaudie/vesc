@@ -23,47 +23,43 @@ void InitBuiltInIsnanFunctionEmulatorForHLSLWorkarounds(BuiltInFunctionEmulator 
         return;
 
     emu->addEmulatedFunction(BuiltInId::isnan_Float1,
-                             "bool isnan_emu(float x)\n"
-                             "{\n"
-                             "    return (x > 0.0 || x < 0.0) ? false : x != 0.0;\n"
-                             "}\n"
-                             "\n");
+                             R"(bool isnan_emu(float x)
+                             {
+                                 return x != x;
+                             })");
 
-    emu->addEmulatedFunction(
-        BuiltInId::isnan_Float2,
-        "bool2 isnan_emu(float2 x)\n"
-        "{\n"
-        "    bool2 isnan;\n"
-        "    for (int i = 0; i < 2; i++)\n"
-        "    {\n"
-        "        isnan[i] = (x[i] > 0.0 || x[i] < 0.0) ? false : x[i] != 0.0;\n"
-        "    }\n"
-        "    return isnan;\n"
-        "}\n");
+    emu->addEmulatedFunction(BuiltInId::isnan_Float2,
+                             R"(bool2 isnan_emu(float2 x)
+                             {
+                                 bool2 isnan;
+                                 for (int i = 0; i < 2; i++)
+                                 {
+                                     isnan[i] = (x[i] != x[i]);
+                                 }
+                                 return isnan;
+                             })");
 
-    emu->addEmulatedFunction(
-        BuiltInId::isnan_Float3,
-        "bool3 isnan_emu(float3 x)\n"
-        "{\n"
-        "    bool3 isnan;\n"
-        "    for (int i = 0; i < 3; i++)\n"
-        "    {\n"
-        "        isnan[i] = (x[i] > 0.0 || x[i] < 0.0) ? false : x[i] != 0.0;\n"
-        "    }\n"
-        "    return isnan;\n"
-        "}\n");
+    emu->addEmulatedFunction(BuiltInId::isnan_Float3,
+                             R"(bool3 isnan_emu(float3 x)
+                             {
+                                 bool3 isnan;
+                                 for (int i = 0; i < 3; i++)
+                                 {
+                                     isnan[i] = (x[i] != x[i]);
+                                 }
+                                 return isnan;
+                             })");
 
-    emu->addEmulatedFunction(
-        BuiltInId::isnan_Float4,
-        "bool4 isnan_emu(float4 x)\n"
-        "{\n"
-        "    bool4 isnan;\n"
-        "    for (int i = 0; i < 4; i++)\n"
-        "    {\n"
-        "        isnan[i] = (x[i] > 0.0 || x[i] < 0.0) ? false : x[i] != 0.0;\n"
-        "    }\n"
-        "    return isnan;\n"
-        "}\n");
+    emu->addEmulatedFunction(BuiltInId::isnan_Float4,
+                             R"(bool4 isnan_emu(float4 x)
+                             {
+                                 bool4 isnan;
+                                 for (int i = 0; i < 4; i++)
+                                 {
+                                     isnan[i] = (x[i] != x[i]);
+                                 }
+                                 return isnan;
+                             }\n)");
 }
 
 void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
