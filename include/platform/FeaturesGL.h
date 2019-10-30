@@ -367,6 +367,23 @@ struct FeaturesGL : FeatureSetBase
         "remove_dynamic_indexing_of_swizzled_vector", FeatureCategory::OpenGLWorkarounds,
         "Dynamic indexing of swizzled l-values doesn't work correctly on various platforms.",
         &members, "http://crbug.com/709351"};
+
+    // Intel Mac drivers does not treat texelFetchOffset() correctly.
+    Feature preAddTexelFetchOffsets = {
+        "pre_add_texel_fetch_offsets", FeatureCategory::OpenGLWorkarounds,
+        "Intel Mac drivers mistakenly consider the parameter position of nagative vaule as invalid "
+        "even if the sum of position and offset is in range, so we need to add workarounds by "
+        "rewriting texelFetchOffset(sampler, position, lod, offset) into texelFetch(sampler, "
+        "position + offset, lod).",
+        &members, "http://crbug.com/642605"};
+
+    // All Mac drivers do not handle struct scopes correctly. This workaround overwrites a struct
+    // name with a unique prefix
+    Feature regenerateStructNames = {
+        "regenerate_struct_names", FeatureCategory::OpenGLWorkarounds,
+        "All Mac drivers do not handle struct scopes correctly. This workaround overwrites a struct"
+        "name with a unique prefix.",
+        &members, "http://crbug.com/403957"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
