@@ -68,9 +68,8 @@ bool TextureStorage11::ImageKey::operator<(const ImageKey &rhs) const
 }
 
 MultisampledRenderToTextureInfo::MultisampledRenderToTextureInfo(const GLsizei samples,
-                                                                 const gl::ImageIndex &indexSS,
-                                                                 const gl::ImageIndex &indexMS)
-    : samples(samples), indexSS(indexSS), indexMS(indexMS), msTextureNeedsResolve(false)
+                                                                 const gl::ImageIndex &indexSS)
+    : samples(samples), indexSS(indexSS), msTextureNeedsResolve(false)
 {}
 
 MultisampledRenderToTextureInfo::~MultisampledRenderToTextureInfo() {}
@@ -869,17 +868,18 @@ angle::Result TextureStorage11::initDropStencilTexture(const gl::Context *contex
 }
 
 angle::Result TextureStorage11::resolveTextureHelper(const gl::Context *context,
-                                                     const TextureHelper11 &texture)
+                                                     const TextureHelper11 &textureSS)
 {
     UINT subresourceIndexSS;
     ANGLE_TRY(getSubresourceIndex(context, mMSTexInfo->indexSS, &subresourceIndexSS));
-    UINT subresourceIndexMS;
-    ANGLE_TRY(getSubresourceIndex(context, mMSTexInfo->indexMS, &subresourceIndexMS));
+    // For MS texture level must = 0, layer is the entire level -> 0
+    // and miplevels must = 1. D3D11CalcSubresource(level, layer, miplevels);
+    UINT subresourceIndexMS            = D3D11CalcSubresource(0, 0, 1);
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
-    const TextureHelper11 *resource    = nullptr;
-    ANGLE_TRY(mMSTexInfo->msTex->getResource(context, &resource));
-    deviceContext->ResolveSubresource(texture.get(), subresourceIndexSS, resource->get(),
-                                      subresourceIndexMS, texture.getFormat());
+    const TextureHelper11 *textureMS   = nullptr;
+    ANGLE_TRY(mMSTexInfo->msTex->getResource(context, &textureMS));
+    deviceContext->ResolveSubresource(textureSS.get(), subresourceIndexSS, textureMS->get(),
+                                      subresourceIndexMS, textureSS.getFormat());
     mMSTexInfo->msTextureNeedsResolve = false;
     return angle::Result::Continue;
 }
@@ -935,14 +935,17 @@ angle::Result TextureStorage11::getMultisampledRenderTarget(const gl::Context *c
 
         // blit SS -> MS
         // mask: GL_COLOR_BUFFER_BIT, filter: GL_NEAREST
+        // can only be used with color texture, colorBit = true
+        // depthBit = false, stencilBit = false
         ANGLE_TRY(mRenderer->blitRenderbufferRect(context, area, area, readRenderTarget,
                                                   drawRenderTarget, GL_NEAREST, nullptr, true,
                                                   false, false));
-        mMSTexInfo = std::make_unique<MultisampledRenderToTextureInfo>(samples, index, indexMS);
+        mMSTexInfo        = std::make_unique<MultisampledRenderToTextureInfo>(samples, index);
         mMSTexInfo->msTex = std::move(texMS);
     }
     RenderTargetD3D *rt;
-    ANGLE_TRY(mMSTexInfo->msTex->getRenderTarget(context, mMSTexInfo->indexMS, samples, &rt));
+    gl::ImageIndex indexMS = gl::ImageIndex::Make2DMultisample();
+    ANGLE_TRY(mMSTexInfo->msTex->getRenderTarget(context, indexMS, samples, &rt));
     // By returning the multisampled render target to the caller, the render target
     // is expected to be changed so we need to resolve to a single sampled texture
     // next time resolveTexture is called.
@@ -3231,6 +3234,116 @@ angle::Result TextureStorage11_2DArray::createRenderTargetSRV(const gl::Context 
     return angle::Result::Continue;
 }
 
+angle::Result TextureStorage11_2DArray::resolveTextureHelper(const gl::Context *context,
+                                                             const TextureHelper11 &textureSS)
+{
+    const int layerCount = mMSTexInfo->indexSS.getLayerCount();
+    const int layerIndex = mMSTexInfo->indexSS.getLayerIndex();
+    const int level      = mMSTexInfo->indexSS.getLevelIndex();
+    for (int i = 0; i < layerCount; i++)
+    {
+        UINT subresourceIndexSS;
+        gl::ImageIndex indexSS = gl::ImageIndex::Make2DArray(level, layerIndex + i);
+        ANGLE_TRY(getSubresourceIndex(context, indexSS, &subresourceIndexSS));
+        // For MS texture level must = 0, layer is the layer we are iterating at
+        // and miplevels must = 1. D3D11CalcSubresource(level, layer, miplevels);
+        UINT subresourceIndexMS            = D3D11CalcSubresource(0, i, 1);
+        ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+        const TextureHelper11 *textureMS   = nullptr;
+        ANGLE_TRY(mMSTexInfo->msTex->getResource(context, &textureMS));
+        deviceContext->ResolveSubresource(textureSS.get(), subresourceIndexSS, textureMS->get(),
+                                          subresourceIndexMS, textureSS.getFormat());
+    }
+    // By returning the multisampled render target to the caller, the render target
+    // is expected to be changed so we need to resolve to a single sampled texture
+    // next time resolveTexture is called.
+    mMSTexInfo->msTextureNeedsResolve = false;
+    return angle::Result::Continue;
+}
+
+angle::Result TextureStorage11_2DArray::resolveTexture(const gl::Context *context)
+{
+    if (mMSTexInfo && mMSTexInfo->msTex && mMSTexInfo->msTextureNeedsResolve)
+    {
+        ANGLE_TRY(resolveTextureHelper(context, mTexture));
+        onStateChange(angle::SubjectMessage::ContentsChanged);
+    }
+    return angle::Result::Continue;
+}
+
+bool TextureStorage11_2DArray::matchMSImageIndex(const gl::ImageIndex &index) const
+{
+    const int level      = index.getLevelIndex();
+    const int layerIndex = index.getLayerIndex();
+    const int layerCount = index.getLayerCount();
+    return level == mMSTexInfo->indexSS.getLevelIndex() &&
+           layerIndex == mMSTexInfo->indexSS.getLayerIndex() &&
+           layerCount == mMSTexInfo->indexSS.getLayerCount();
+    return true;
+}
+angle::Result TextureStorage11_2DArray::getMultisampledRenderTarget(const gl::Context *context,
+                                                                    const gl::ImageIndex &index,
+                                                                    GLsizei samples,
+                                                                    RenderTargetD3D **outRT)
+{
+    const int level      = index.getLevelIndex();
+    const int layerIndex = index.getLayerIndex();
+    const int layerCount = index.getLayerCount();
+    if (!mMSTexInfo || !matchMSImageIndex(index) || samples != mMSTexInfo->samples ||
+        !mMSTexInfo->msTex)
+    {
+        // if mMSTexInfo already exists, then we want to resolve and release it
+        // since the mMSTexInfo must be for a different sample count or level
+        ANGLE_TRY(resolveTexture(context));
+
+        // Now we can create a new object for the correct sample and level
+        GLsizei width         = getLevelWidth(level);
+        GLsizei height        = getLevelHeight(level);
+        GLenum internalFormat = mFormatInfo.internalFormat;
+        std::unique_ptr<TextureStorage11_2DMultisampleArray> texMS(
+            GetAs<TextureStorage11_2DMultisampleArray>(
+                mRenderer->createTextureStorage2DMultisampleArray(
+                    internalFormat, width, height, layerCount, level, samples, true)));
+
+        // make sure multisample object has the blitted information.
+        gl::Rectangle area(0, 0, width, height);
+        for (int i = 0; i < layerCount; i++)
+        {
+            gl::ImageIndex indexSS            = gl::ImageIndex::Make2DArray(level, layerIndex + i);
+            RenderTargetD3D *readRenderTarget = nullptr;
+            ANGLE_TRY(getRenderTarget(context, indexSS, 0, &readRenderTarget));
+            // Multisampled image index always starts at layer 0 since we are only creating
+            // the exact amount of layers that is being multisampled
+            gl::ImageIndex indexMS            = gl::ImageIndex::Make2DMultisampleArray(i);
+            RenderTargetD3D *drawRenderTarget = nullptr;
+            ANGLE_TRY(texMS->getRenderTarget(context, indexMS, samples, &drawRenderTarget));
+
+            // blit SS -> MS
+            // mask: GL_COLOR_BUFFER_BIT, filter: GL_NEAREST
+            bool stencil = mFormatInfo.format().stencilBits > 0;
+            bool depth   = mFormatInfo.format().depthBits > 0;
+            bool color   = mFormatInfo.format().redBits > 0;
+            ANGLE_TRY(mRenderer->blitRenderbufferRect(context, area, area, readRenderTarget,
+                                                      drawRenderTarget, GL_NEAREST, nullptr, color,
+                                                      depth, stencil));
+        }
+
+        gl::ImageIndex indexSS = gl::ImageIndex::Make2DArrayRange(level, layerIndex, layerCount);
+        mMSTexInfo        = std::make_unique<MultisampledRenderToTextureInfo>(samples, indexSS);
+        mMSTexInfo->msTex = std::move(texMS);
+    }
+    RenderTargetD3D *rt;
+    gl::ImageIndex indexMS = gl::ImageIndex::Make2DMultisampleArrayRange(0, layerCount);
+    // gl::ImageIndex indexMS = gl::ImageIndex::Make2DMultisampleArrayRange(layerIndex, layerCount);
+    ANGLE_TRY(mMSTexInfo->msTex->getRenderTarget(context, indexMS, samples, &rt));
+    // By returning the multisampled render target to the caller, the render target
+    // is expected to be changed so we need to resolve to a single sampled texture
+    // next time resolveTexture is called.
+    mMSTexInfo->msTextureNeedsResolve = true;
+    *outRT                            = rt;
+    return angle::Result::Continue;
+}
+
 angle::Result TextureStorage11_2DArray::getRenderTarget(const gl::Context *context,
                                                         const gl::ImageIndex &index,
                                                         GLsizei samples,
@@ -3243,6 +3356,16 @@ angle::Result TextureStorage11_2DArray::getRenderTarget(const gl::Context *conte
     const int numLayers = index.getLayerCount();
 
     ASSERT(mipLevel >= 0 && mipLevel < getLevelCount());
+
+    bool needMS = samples > 0;
+    if (needMS)
+    {
+        return getMultisampledRenderTarget(context, index, samples, outRT);
+    }
+    else
+    {
+        ANGLE_TRY(resolveTexture(context));
+    }
 
     LevelLayerRangeKey key(mipLevel, layer, numLayers);
     if (mRenderTargets.find(key) == mRenderTargets.end())

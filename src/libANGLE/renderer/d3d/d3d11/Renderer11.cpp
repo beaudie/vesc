@@ -3296,7 +3296,7 @@ angle::Result Renderer11::readFromAttachment(const gl::Context *context,
     TextureHelper11 stagingHelper;
     ANGLE_TRY(createStagingTexture(context, textureHelper.getTextureType(),
                                    textureHelper.getFormatSet(), safeSize, StagingAccess::READ,
-                                   &stagingHelper));
+                                   textureHelper.getSampleCount(), &stagingHelper));
     stagingHelper.setDebugName("readFromAttachment::stagingHelper");
 
     TextureHelper11 resolvedTextureHelper;
@@ -3939,6 +3939,7 @@ angle::Result Renderer11::createStagingTexture(const gl::Context *context,
                                                const d3d11::Format &formatSet,
                                                const gl::Extents &size,
                                                StagingAccess readAndWriteAccess,
+                                               GLsizei samples,
                                                TextureHelper11 *textureOut)
 {
     Context11 *context11 = GetImplAs<Context11>(context);
@@ -3951,12 +3952,13 @@ angle::Result Renderer11::createStagingTexture(const gl::Context *context,
         stagingDesc.MipLevels          = 1;
         stagingDesc.ArraySize          = 1;
         stagingDesc.Format             = formatSet.texFormat;
-        stagingDesc.SampleDesc.Count   = 1;
-        stagingDesc.SampleDesc.Quality = 0;
+        stagingDesc.SampleDesc.Count   = (samples <= 1) ? 1 : samples;
+        stagingDesc.SampleDesc.Quality = (samples <= 1) ? 0 : D3D11_STANDARD_MULTISAMPLE_PATTERN;
         stagingDesc.Usage              = D3D11_USAGE_STAGING;
-        stagingDesc.BindFlags          = 0;
-        stagingDesc.CPUAccessFlags     = D3D11_CPU_ACCESS_READ;
-        stagingDesc.MiscFlags          = 0;
+        // stagingDesc.BindFlags          = (samples <= 1) ? 0 : D3D11_BIND_SHADER_RESOURCE;
+        stagingDesc.BindFlags      = 0;
+        stagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+        stagingDesc.MiscFlags      = 0;
 
         if (readAndWriteAccess == StagingAccess::READ_WRITE)
         {

@@ -181,24 +181,53 @@ void AttachMultiviewTextures(GLenum target,
                              int baseViewIndex,
                              std::vector<GLuint> colorTextures,
                              GLuint depthTexture,
-                             GLuint depthStencilTexture)
+                             GLuint depthStencilTexture,
+                             bool implicitMS)
 {
     ASSERT_TRUE(depthTexture == 0u || depthStencilTexture == 0u);
     for (size_t i = 0; i < colorTextures.size(); ++i)
     {
         GLenum attachment = static_cast<GLenum>(GL_COLOR_ATTACHMENT0 + i);
-        glFramebufferTextureMultiviewOVR(target, attachment, colorTextures[i], 0, baseViewIndex,
-                                         numViews);
+        if (implicitMS)
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(target, attachment, colorTextures[i], 0, 4,
+                                                        baseViewIndex, numViews);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(target, attachment, colorTextures[i], 0, baseViewIndex,
+                                             numViews);
+        }
     }
     if (depthTexture)
     {
-        glFramebufferTextureMultiviewOVR(target, GL_DEPTH_ATTACHMENT, depthTexture, 0,
-                                         baseViewIndex, numViews);
+        if (implicitMS)
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(target, GL_DEPTH_ATTACHMENT, depthTexture,
+                                                        0, 4, baseViewIndex, numViews);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(target, GL_DEPTH_ATTACHMENT, depthTexture, 0,
+                                             baseViewIndex, numViews);
+        }
     }
     if (depthStencilTexture)
     {
-        glFramebufferTextureMultiviewOVR(target, GL_DEPTH_STENCIL_ATTACHMENT, depthStencilTexture,
-                                         0, baseViewIndex, numViews);
+        if (implicitMS)
+        {
+            // samples = 4
+            glFramebufferTextureMultisampleMultiviewOVR(target, GL_DEPTH_STENCIL_ATTACHMENT,
+                                                        depthStencilTexture, 0, 4, baseViewIndex,
+                                                        numViews);
+        }
+        else
+        {
+            glFramebufferTextureMultiviewOVR(target, GL_DEPTH_STENCIL_ATTACHMENT,
+                                             depthStencilTexture, 0, baseViewIndex, numViews);
+        }
     }
 }
 
@@ -208,12 +237,13 @@ void AttachMultiviewTextures(GLenum target,
                              int baseViewIndex,
                              GLuint colorTexture,
                              GLuint depthTexture,
-                             GLuint depthStencilTexture)
+                             GLuint depthStencilTexture,
+                             bool implicitMS)
 {
     ASSERT_TRUE(colorTexture != 0u);
     std::vector<GLuint> colorTextures(1, colorTexture);
     AttachMultiviewTextures(target, viewWidth, numViews, baseViewIndex, colorTextures, depthTexture,
-                            depthStencilTexture);
+                            depthStencilTexture, implicitMS);
 }
 
 std::ostream &operator<<(std::ostream &os, const MultiviewImplementationParams &params)
@@ -228,7 +258,7 @@ std::ostream &operator<<(std::ostream &os, const MultiviewImplementationParams &
     {
         os << "_vertex_shader";
     }
-    if (params.mMultiviewExtension)
+    if (params.mMultiviewExtension == ExtensionName::multiview)
     {
         os << "_multiview";
     }
@@ -236,31 +266,38 @@ std::ostream &operator<<(std::ostream &os, const MultiviewImplementationParams &
     {
         os << "_multiview2";
     }
+    if (params.mImplicitMultisampling)
+    {
+        os << "_implicitMS";
+    }
     return os;
 }
 
 MultiviewImplementationParams VertexShaderOpenGL(GLint majorVersion,
                                                  GLint minorVersion,
-                                                 ExtensionName multiviewExtension)
+                                                 ExtensionName multiviewExtension,
+                                                 bool implicitMS)
 {
     return MultiviewImplementationParams(majorVersion, minorVersion, false, egl_platform::OPENGL(),
-                                         multiviewExtension);
+                                         multiviewExtension, implicitMS);
 }
 
 MultiviewImplementationParams VertexShaderD3D11(GLint majorVersion,
                                                 GLint minorVersion,
-                                                ExtensionName multiviewExtension)
+                                                ExtensionName multiviewExtension,
+                                                bool implicitMS)
 {
     return MultiviewImplementationParams(majorVersion, minorVersion, false, egl_platform::D3D11(),
-                                         multiviewExtension);
+                                         multiviewExtension, implicitMS);
 }
 
 MultiviewImplementationParams GeomShaderD3D11(GLint majorVersion,
                                               GLint minorVersion,
-                                              ExtensionName multiviewExtension)
+                                              ExtensionName multiviewExtension,
+                                              bool implicitMS)
 {
     return MultiviewImplementationParams(majorVersion, minorVersion, true, egl_platform::D3D11(),
-                                         multiviewExtension);
+                                         multiviewExtension, implicitMS);
 }
 
 void MultiviewTest::overrideWorkaroundsD3D(FeaturesD3D *features)

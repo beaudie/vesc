@@ -112,6 +112,10 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state)
     mResources.OVR_multiview2 = extensions.multiview2;
     mResources.MaxViewsOVR    = extensions.maxViews;
 
+    // OVR_multiview_multisampled_render_to_texture
+    mResources.OVR_multiview_multisampled_render_to_texture =
+        extensions.multiviewMultisampledRenderToTexture;
+
     // EXT_multisampled_render_to_texture
     mResources.EXT_multisampled_render_to_texture = extensions.multisampledRenderToTexture;
 

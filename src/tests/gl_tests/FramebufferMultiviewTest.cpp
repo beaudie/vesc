@@ -105,7 +105,7 @@ class FramebufferMultiviewLayeredClearTest : public FramebufferMultiviewTest
         // Generate multiview FBO and attach textures.
         glBindFramebuffer(GL_FRAMEBUFFER, mMultiviewFBO);
         AttachMultiviewTextures(GL_FRAMEBUFFER, width, numViews, baseViewIndex, mColorTex,
-                                mDepthTex, mDepthStencilTex);
+                                mDepthTex, mDepthStencilTex, isImplicitMS());
 
         const auto &drawBuffers = GetDrawBufferRange(numColorAttachments);
         glDrawBuffers(numColorAttachments, drawBuffers.data());
@@ -229,14 +229,32 @@ TEST_P(FramebufferMultiviewTest, InvalidMultiviewLayeredArguments)
     ASSERT_GL_NO_ERROR();
 
     // Negative base view index.
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, -1, 1);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 4,
+                                                    -1, 1);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, -1, 1);
+    }
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 
     // baseViewIndex + numViews is greater than MAX_TEXTURE_LAYERS.
     GLint maxTextureLayers = 0;
     glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &maxTextureLayers);
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, maxTextureLayers,
-                                     1);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 4,
+                                                    maxTextureLayers, 1);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0,
+                                         maxTextureLayers, 1);
+    }
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
@@ -252,7 +270,16 @@ TEST_P(FramebufferMultiviewTest, ExtensionNotAvailableCheck)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
     ASSERT_GL_NO_ERROR();
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 1, 1);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 4,
+                                                    1, 1);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 1, 1);
+    }
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
@@ -272,7 +299,16 @@ TEST_P(FramebufferMultiviewTest, CopyTex)
     glBindTexture(GL_TEXTURE_2D_ARRAY, tex);
     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, 1, 1, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 1);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 4,
+                                                    0, 1);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 1);
+    }
     ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
     ASSERT_GL_NO_ERROR();
 
@@ -339,7 +375,16 @@ TEST_P(FramebufferMultiviewTest, Blit)
     glBindTexture(GL_TEXTURE_2D_ARRAY, tex);
     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, 1, 1, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 1);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 4,
+                                                    0, 1);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 1);
+    }
     ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
     ASSERT_GL_NO_ERROR();
 
@@ -367,7 +412,16 @@ TEST_P(FramebufferMultiviewTest, ReadPixels)
     glBindTexture(GL_TEXTURE_2D_ARRAY, tex);
     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, 1, 1, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 1);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 4,
+                                                    0, 1);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 1);
+    }
     ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
     ASSERT_GL_NO_ERROR();
 
@@ -393,7 +447,16 @@ TEST_P(FramebufferMultiviewTest, ModifyLayeredState)
     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, 1, 1, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     ASSERT_GL_NO_ERROR();
 
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 1, 2);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 4,
+                                                    1, 2);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 1, 2);
+    }
     ASSERT_GL_NO_ERROR();
 
     GLint numViews = -1;
@@ -425,7 +488,16 @@ TEST_P(FramebufferMultiviewTest, IncompleteViewTargetsLayered)
 
     // Set the 0th attachment and keep it as it is till the end of the test. The 1st color
     // attachment will be modified to change the framebuffer's status.
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 2);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 4,
+                                                    0, 2);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex, 0, 0, 2);
+    }
     ASSERT_GL_NO_ERROR();
 
     GLTexture otherTexLayered;
@@ -433,8 +505,17 @@ TEST_P(FramebufferMultiviewTest, IncompleteViewTargetsLayered)
     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, 1, 1, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
     // Test framebuffer completeness when the base view index differs.
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, otherTexLayered, 0, 1,
-                                     2);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
+                                                    otherTexLayered, 0, 4, 1, 2);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, otherTexLayered, 0,
+                                         1, 2);
+    }
     ASSERT_GL_NO_ERROR();
     EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR,
                      glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -447,8 +528,17 @@ TEST_P(FramebufferMultiviewTest, IncompleteViewTargetsLayered)
 
     // Test that framebuffer is complete when the number of views, base view index and layouts are
     // the same.
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, otherTexLayered, 0, 0,
-                                     2);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
+                                                    otherTexLayered, 0, 4, 0, 2);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, otherTexLayered, 0,
+                                         0, 2);
+    }
     ASSERT_GL_NO_ERROR();
     EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 }
@@ -591,7 +681,16 @@ TEST_P(FramebufferMultiviewLayeredClearTest, UnmodifiedDetachedTexture)
 
     // Detach and clear again.
     glBindFramebuffer(GL_FRAMEBUFFER, mMultiviewFBO);
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, 0, 0, 1, 2);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, 0, 0, 4,
+                                                    1, 2);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, 0, 0, 1, 2);
+    }
     glClearColor(1, 1, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -713,11 +812,29 @@ TEST_P(FramebufferMultiviewTest, InvalidMultiviewArgumentsOnDetach)
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
     // Invalid base view index.
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, -1, 1);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, 4,
+                                                    -1, 1);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, -1, 1);
+    }
     EXPECT_GL_NO_ERROR();
 
     // Invalid number of views.
-    glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, 0, 0);
+    if (isImplicitMS())
+    {
+        // samples = 4
+        glFramebufferTextureMultisampleMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, 4,
+                                                    0, 0);
+    }
+    else
+    {
+        glFramebufferTextureMultiviewOVR(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, 0, 0);
+    }
     EXPECT_GL_NO_ERROR();
 }
 
@@ -760,12 +877,20 @@ TEST_P(FramebufferMultiviewTest, NegativeMultisampledFramebufferTest)
 }
 
 ANGLE_INSTANTIATE_TEST(FramebufferMultiviewTest,
-                       VertexShaderOpenGL(3, 0, ExtensionName::multiview),
-                       GeomShaderD3D11(3, 0, ExtensionName::multiview),
-                       VertexShaderOpenGL(3, 0, ExtensionName::multiview2),
-                       GeomShaderD3D11(3, 0, ExtensionName::multiview2));
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview, false),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview, false),
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview2, false),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview2, false),
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview, true),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview, true),
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview2, true),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview2, true));
 ANGLE_INSTANTIATE_TEST(FramebufferMultiviewLayeredClearTest,
-                       VertexShaderOpenGL(3, 0, ExtensionName::multiview),
-                       GeomShaderD3D11(3, 0, ExtensionName::multiview),
-                       VertexShaderOpenGL(3, 0, ExtensionName::multiview2),
-                       GeomShaderD3D11(3, 0, ExtensionName::multiview2));
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview, false),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview, false),
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview2, false),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview2, false),
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview, true),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview, true),
+                       VertexShaderOpenGL(3, 0, ExtensionName::multiview2, true),
+                       GeomShaderD3D11(3, 0, ExtensionName::multiview2, true));

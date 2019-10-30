@@ -445,6 +445,7 @@ class Renderer11 : public RendererD3D
                                        const d3d11::Format &formatSet,
                                        const gl::Extents &size,
                                        StagingAccess readAndWriteAccess,
+                                       GLsizei samples,
                                        TextureHelper11 *textureOut);
 
     template <typename DescT, typename ResourceT>

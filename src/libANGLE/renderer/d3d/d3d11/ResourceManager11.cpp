@@ -453,6 +453,11 @@ const D3D11_SUBRESOURCE_DATA *ResourceManager11::createInitDataIfNeeded<ID3D11Te
         // This will be done using ClearView methods.
         return nullptr;
     }
+    if (desc->SampleDesc.Count > 1)
+    {
+        // Multisampled textures cannot be created with initial data
+        return nullptr;
+    }
 
     size_t requiredSize = static_cast<size_t>(ComputeMemoryUsage(desc));
     if (mZeroMemory.size() < requiredSize)
