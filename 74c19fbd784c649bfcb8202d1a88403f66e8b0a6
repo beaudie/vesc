@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "832e2e17_48eb1047",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-30T15:39:15Z",
+      "side": 1,
+      "message": "This can become updateBaxMaxLevels",
+      "range": {
+        "startLine": 1143,
+        "startChar": 25,
+        "endLine": 1143,
+        "endChar": 37
+      },
+      "revId": "74c19fbd784c649bfcb8202d1a88403f66e8b0a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd964b0c_047b7ea0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-30T15:39:15Z",
+      "side": 1,
+      "message": "This is the inverse of what I was trying to describe.  changeLevels can be the guts of this flow, and updateBaseMaxLevels should be the wrapper.  Then if the storage is dirty, you can call changeLevels directly.  If base/max level is dirty, you then call updateBaseMaxLevels, which conditionally calls changeLevels.",
+      "range": {
+        "startLine": 1172,
+        "startChar": 11,
+        "endLine": 1172,
+        "endChar": 30
+      },
+      "revId": "74c19fbd784c649bfcb8202d1a88403f66e8b0a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39b7b1a7_ea2cbab6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-30T15:39:15Z",
+      "side": 1,
+      "message": "This can become changeLevels",
+      "range": {
+        "startLine": 1175,
+        "startChar": 25,
+        "endLine": 1175,
+        "endChar": 44
+      },
+      "revId": "74c19fbd784c649bfcb8202d1a88403f66e8b0a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efc9046e_e5e9caf8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-30T15:39:15Z",
+      "side": 1,
+      "message": "Rather than track a bool, you can call the new changeLevels here, which is the guts of the current changeLevels, with the base/max level checks moved out to updateBaseMaxLevels.  That is closer to what you had in the previous patch I reviewed.",
+      "range": {
+        "startLine": 1371,
+        "startChar": 8,
+        "endLine": 1371,
+        "endChar": 25
+      },
+      "revId": "74c19fbd784c649bfcb8202d1a88403f66e8b0a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af8817b6_92fe027a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-30T15:39:15Z",
+      "side": 1,
+      "message": "This can change to the wrapper version of updateBaseMaxLevels, which contains the base/max level conditional logic, before calling changeLevels if conditions warrant.",
+      "range": {
+        "startLine": 1381,
+        "startChar": 12,
+        "endLine": 1381,
+        "endChar": 24
+      },
+      "revId": "74c19fbd784c649bfcb8202d1a88403f66e8b0a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eab643e0_6f1afcae",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-30T15:39:15Z",
+      "side": 1,
+      "message": "I believe this section would go away if the above flow achieves the goal.",
+      "range": {
+        "startLine": 1385,
+        "startChar": 4,
+        "endLine": 1389,
+        "endChar": 5
+      },
+      "revId": "74c19fbd784c649bfcb8202d1a88403f66e8b0a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
