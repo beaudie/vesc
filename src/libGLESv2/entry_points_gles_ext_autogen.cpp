@@ -7483,6 +7483,40 @@ void GL_APIENTRY FramebufferTextureMultiviewOVR(GLenum target,
 
 // GL_OVR_multiview2
 
+// GL_OVR_multiview_multisampled_render_to_texture
+void GL_APIENTRY FramebufferTextureMultisampleMultiviewOVR(GLenum target,
+                                                           GLenum attachment,
+                                                           GLuint texture,
+                                                           GLint level,
+                                                           GLsizei samples,
+                                                           GLint baseViewIndex,
+                                                           GLsizei numViews)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT("glFramebufferTextureMultisampleMultiviewOVR",
+          "context = %d, GLenum target = %s, GLenum attachment = %s, GLuint texture = %u, GLint "
+          "level = %d, GLsizei samples = %d, GLint baseViewIndex = %d, GLsizei numViews = %d",
+          CID(context), GLenumToString(GLenumGroup::FramebufferTarget, target),
+          GLenumToString(GLenumGroup::FramebufferAttachment, attachment), texture, level, samples,
+          baseViewIndex, numViews);
+
+    if (context)
+    {
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateFramebufferTextureMultisampleMultiviewOVR(
+                 context, target, attachment, texture, level, samples, baseViewIndex, numViews));
+        if (isCallValid)
+        {
+            context->framebufferTextureMultisampleMultiview(target, attachment, texture, level,
+                                                            samples, baseViewIndex, numViews);
+        }
+        ANGLE_CAPTURE(FramebufferTextureMultisampleMultiviewOVR, isCallValid, context, target,
+                      attachment, texture, level, samples, baseViewIndex, numViews);
+    }
+}
+
 // EGL_ANGLE_explicit_context
 void GL_APIENTRY ActiveShaderProgramContextANGLE(GLeglContext ctx, GLuint pipeline, GLuint program)
 {
@@ -12075,6 +12109,41 @@ void GL_APIENTRY FramebufferTextureLayerContextANGLE(GLeglContext ctx,
         }
         ANGLE_CAPTURE(FramebufferTextureLayer, isCallValid, context, target, attachment,
                       texturePacked, level, layer);
+    }
+}
+
+void GL_APIENTRY FramebufferTextureMultisampleMultiviewOVRContextANGLE(GLeglContext ctx,
+                                                                       GLenum target,
+                                                                       GLenum attachment,
+                                                                       GLuint texture,
+                                                                       GLint level,
+                                                                       GLsizei samples,
+                                                                       GLint baseViewIndex,
+                                                                       GLsizei numViews)
+{
+    Context *context = static_cast<gl::Context *>(ctx);
+    EVENT("glFramebufferTextureMultisampleMultiviewOVR",
+          "context = %d, GLenum target = %s, GLenum attachment = %s, GLuint texture = %u, GLint "
+          "level = %d, GLsizei samples = %d, GLint baseViewIndex = %d, GLsizei numViews = %d",
+          CID(context), GLenumToString(GLenumGroup::FramebufferTarget, target),
+          GLenumToString(GLenumGroup::FramebufferAttachment, attachment), texture, level, samples,
+          baseViewIndex, numViews);
+
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateFramebufferTextureMultisampleMultiviewOVR(
+                 context, target, attachment, texture, level, samples, baseViewIndex, numViews));
+        if (isCallValid)
+        {
+            context->framebufferTextureMultisampleMultiview(target, attachment, texture, level,
+                                                            samples, baseViewIndex, numViews);
+        }
+        ANGLE_CAPTURE(FramebufferTextureMultisampleMultiviewOVR, isCallValid, context, target,
+                      attachment, texture, level, samples, baseViewIndex, numViews);
     }
 }
 

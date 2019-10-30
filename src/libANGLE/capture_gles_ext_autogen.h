@@ -1846,6 +1846,17 @@ angle::CallCapture CaptureFramebufferTextureMultiviewOVR(const State &glState,
 
 // GL_OVR_multiview2
 
+// GL_OVR_multiview_multisampled_render_to_texture
+angle::CallCapture CaptureFramebufferTextureMultisampleMultiviewOVR(const State &glState,
+                                                                    bool isCallValid,
+                                                                    GLenum target,
+                                                                    GLenum attachment,
+                                                                    GLuint texture,
+                                                                    GLint level,
+                                                                    GLsizei samples,
+                                                                    GLint baseViewIndex,
+                                                                    GLsizei numViews);
+
 // Parameter Captures
 
 void CaptureDrawElementsInstancedBaseVertexBaseInstanceANGLE_indices(
