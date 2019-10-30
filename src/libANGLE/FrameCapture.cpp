@@ -21,7 +21,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/capture_gles_2_0_autogen.h"
 #include "libANGLE/capture_gles_3_0_autogen.h"
-#include "libANGLE/gl_enum_utils_autogen.h"
+#include "libANGLE/gl_enum_utils.h"
 
 #if !ANGLE_CAPTURE_ENABLED
 #    error Frame capture must be enbled to include this file.
