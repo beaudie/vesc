@@ -30,6 +30,9 @@ class DisplayVkWin32 : public DisplayVk
     bool checkConfigSupport(egl::Config *config) override;
 
     const char *getWSIExtension() const override;
+
+  private:
+    HWND mHWND;
 };
 
 }  // namespace rx
