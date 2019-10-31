@@ -31,6 +31,7 @@ class CaptureReplaySample : public SampleApplication
 
     void draw() override
     {
+        SetupContext1Replay();
         ReplayContext1Frame(kReplayFrameStart + (mCurrentFrame % kReplayFrameEnd));
         mCurrentFrame++;
     }
