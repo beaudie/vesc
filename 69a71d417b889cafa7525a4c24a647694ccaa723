@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfc277e8_5dfded81",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T16:11:54Z",
+      "side": 1,
+      "message": "Why is this dependent on asserts being enabled?   Is there a more general debug flag we can/should use instead (maybe something \u0027is_debug\u0027 controls)?",
+      "revId": "69a71d417b889cafa7525a4c24a647694ccaa723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
