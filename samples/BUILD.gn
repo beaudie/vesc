@@ -236,15 +236,36 @@ template("angle_capture_replay_sample") {
 # To use the capture replay sample fist move your capture sources into
 # the capture_replay folder. Uncomment and update this target:
 
-# capture_replay("my_sample") {
-#   sources = [
-#     "capture_replay/angle_capture_context1_frame000.cpp",
-#     "capture_replay/angle_capture_context1_frame001.cpp",
-#     "capture_replay/angle_capture_context1_frame002.cpp",
-#     "capture_replay/angle_capture_context1_frame003.cpp",
-#     "capture_replay/angle_capture_context1_frame004.cpp",
-#   ]
-# }
+angle_capture_replay_sample("capture_replay_sample") {
+  sources = [
+    # "capture_replay/angle_capture_context1_frame010.cpp",
+    # "capture_replay/angle_capture_context1_frame011.cpp",
+    # "capture_replay/angle_capture_context1_frame012.cpp",
+    # "capture_replay/angle_capture_context1_frame013.cpp",
+    # "capture_replay/angle_capture_context1_frame014.cpp",
+    "capture_replay/angle_capture_context1_frame015.cpp",
+    "capture_replay/angle_capture_context1_frame016.cpp",
+    "capture_replay/angle_capture_context1_frame017.cpp",
+    "capture_replay/angle_capture_context1_frame018.cpp",
+    "capture_replay/angle_capture_context1_frame019.cpp",
+    "capture_replay/angle_capture_context1_frame020.cpp",
+    "capture_replay/angle_capture_context1_frame021.cpp",
+    "capture_replay/angle_capture_context1_frame022.cpp",
+    "capture_replay/angle_capture_context1_frame023.cpp",
+    "capture_replay/angle_capture_context1_frame024.cpp",
+    "capture_replay/angle_capture_context1_frame025.cpp",
+    "capture_replay/angle_capture_context1_frame026.cpp",
+    "capture_replay/angle_capture_context1_frame027.cpp",
+    "capture_replay/angle_capture_context1_frame028.cpp",
+    "capture_replay/angle_capture_context1_frame029.cpp",
+    "capture_replay/angle_capture_context1_frame030.cpp",
+    "capture_replay/angle_capture_context1_frame031.cpp",
+    "capture_replay/angle_capture_context1_frame032.cpp",
+    "capture_replay/angle_capture_context1_frame033.cpp",
+    "capture_replay/angle_capture_context1_frame034.cpp",
+    "capture_replay/angle_capture_context1_frame035.cpp",
+  ]
+}
 
 group("all") {
   testonly = true
