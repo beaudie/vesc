@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c3054e4f_44aadfc1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6f63976_7cf831ed",
+      "range": {
+        "startLine": 10,
+        "startChar": 61,
+        "endLine": 10,
+        "endChar": 65
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c135e0fb_58cea4cd",
         "filename": "/COMMIT_MSG",
         "patchSetId": 36
@@ -39,6 +63,24 @@
       "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3265521_da8328f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c135e0fb_58cea4cd",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "80e45765_fd77d744",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf7830be_4170946b",
+      "range": {
+        "startLine": 16,
+        "startChar": 30,
+        "endLine": 16,
+        "endChar": 35
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84997686_51c12ac5",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 36
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "9cefb959_d7e61e6c",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 36
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "We don\u0027t technically *need* to. Remember that capture is enabled by default in all ANGLE apps with this build setup. So disabling it here allows us to ensure we don\u0027t overwrite the replay we\u0027re currently running. Or otherwise generate garbage capture files.\n\nAdded a short comment.",
+      "parentUuid": "84997686_51c12ac5",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6bf0d80_e077c59a",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 36
@@ -93,6 +177,30 @@
       "writtenOn": "2019-10-31T02:10:22Z",
       "side": 1,
       "message": "\"xfbsPacked\"?",
+      "range": {
+        "startLine": 803,
+        "startChar": 38,
+        "endLine": 803,
+        "endChar": 47
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe7ef01d_f0f234b4",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "The canonical name in gl.xml is \"ids\". So I think idsPacked is the most consistent with our capture methods.",
+      "parentUuid": "d6bf0d80_e077c59a",
       "range": {
         "startLine": 803,
         "startChar": 38,
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "036d7ae3_b2736f85",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "Done, thanks for catching.",
+      "parentUuid": "0ce25854_a20bd784",
+      "range": {
+        "startLine": 942,
+        "startChar": 24,
+        "endLine": 942,
+        "endChar": 41
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab0e5732_faece851",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 36
@@ -139,6 +271,30 @@
       "writtenOn": "2019-10-31T02:10:22Z",
       "side": 1,
       "message": "Why a \"Level\" constant for these last 2 parameters, since the function is expecting minLayer/maxLayer?   Is (or should there) be a constant for \"all levels\"?",
+      "range": {
+        "startLine": 948,
+        "startChar": 16,
+        "endLine": 948,
+        "endChar": 40
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83bcc2cd_e82afe34",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "It\u0027s saying basically \"don\u0027t use a layer parameter\". The positive way of saying \"no layer\" is \"entire level\".",
+      "parentUuid": "ab0e5732_faece851",
       "range": {
         "startLine": 948,
         "startChar": 16,
@@ -174,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "17b70cb4_e47c7d6f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "Done. Thanks for catching.",
+      "parentUuid": "e6a72552_e47da362",
+      "range": {
+        "startLine": 973,
+        "startChar": 92,
+        "endLine": 973,
+        "endChar": 97
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b396c94a_ba9d99ea",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 36
@@ -185,6 +365,24 @@
       "writtenOn": "2019-10-31T02:10:22Z",
       "side": 1,
       "message": "Why are the current draw and read framebuffers the same here?",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ded757e2_1f6e2753",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "That\u0027s how BindFramebuffer(GL_FRAMEBUFFER) works. The separate DRAW and READ attachments came in a later spec revision so they made GL_FRAMEBUFFER automatically bind to DRAW and READ.\n\n¯\\_(ツ)_/¯ GL!",
+      "parentUuid": "b396c94a_ba9d99ea",
       "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -208,6 +406,24 @@
     },
     {
       "key": {
+        "uuid": "570bbb69_7f479242",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "That\u0027s one of the many assumptions, yes. :)",
+      "parentUuid": "095b5673_ce6af60c",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56534185_93140bf4",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 36
@@ -225,6 +441,24 @@
     },
     {
       "key": {
+        "uuid": "15e76b33_c7908790",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "Also XFB, Sync objects, VAOs, Queries, Samplers, MemoryObjects, Paths, etc. Added a comment.",
+      "parentUuid": "56534185_93140bf4",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "176c0e99_5bcce836",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 36
@@ -236,6 +470,24 @@
       "writtenOn": "2019-10-31T02:10:22Z",
       "side": 1,
       "message": "Should these be \u0027protected\u0027 and \u0027FrameCapture\u0027 made a friend class?",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a556f2dd_74a3fc01",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T15:48:58Z",
+      "side": 1,
+      "message": "I tried it. Would suggest we stick with this for now.\n\nThe FrameCapture class itself doesn\u0027t call these methods. Access happens via a static (private) method. It would be pretty tricky to make \u0027friend\u0027 work here.",
+      "parentUuid": "176c0e99_5bcce836",
       "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
