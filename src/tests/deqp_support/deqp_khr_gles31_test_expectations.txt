@@ -104,7 +104,7 @@
 3520 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.basic-atomic-case3-cs = FAIL
 
 // Draw indirect:
-3564 VULKAN : KHR-GLES31.core.draw_indirect.* = SKIP
+// 3564 VULKAN : KHR-GLES31.core.draw_indirect.* = SKIP
 
 // Explicit uniform locations:
 3520 VULKAN : KHR-GLES31.core.explicit_uniform_location.* = SKIP
