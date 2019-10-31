@@ -561,7 +561,7 @@
 2324 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.compute.program_not_active = FAIL
 2324 : dEQP-GLES31.functional.debug.negative_coverage.log.compute.program_not_active = FAIL
 2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.compute.program_not_active = FAIL
-2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements = FAIL
+// 2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements = FAIL
 2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements_incomplete_primitive = FAIL
 
 // These tests are failing because of compile errors with SSBOs in compute shaders.
