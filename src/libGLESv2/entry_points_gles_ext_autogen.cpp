@@ -5092,6 +5092,8 @@ void GL_APIENTRY ImportSemaphoreFdEXT(GLuint semaphore, GLenum handleType, GLint
     }
 }
 
+// GL_EXT_texture_filter_anisotropic
+
 // GL_EXT_texture_storage
 void GL_APIENTRY TexStorage1DEXT(GLenum target,
                                  GLsizei levels,
