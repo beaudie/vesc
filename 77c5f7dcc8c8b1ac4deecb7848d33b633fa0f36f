@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4f017de_a2b6b100",
+        "filename": "src/libANGLE/gl_enum_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T21:38:52Z",
+      "side": 1,
+      "message": "Would having some leading zeroes be good also?   It seems most enum values are 4 characters wide.\n\nhttps://stackoverflow.com/a/5760466\nout \u003c\u003c std::hex \u003c\u003c \"0x\" \u003c\u003c setfill(\u00270\u0027) \u003c\u003c setw(4) \u003c\u003c value \u003c\u003c std::dec;\n\nI\u0027m not sure how much of this is intended to be human-readable though.",
+      "revId": "77c5f7dcc8c8b1ac4deecb7848d33b633fa0f36f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
