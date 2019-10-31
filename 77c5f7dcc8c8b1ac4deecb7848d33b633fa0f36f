@@ -16,6 +16,24 @@
       "revId": "77c5f7dcc8c8b1ac4deecb7848d33b633fa0f36f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03973aaf_4e1695d4",
+        "filename": "src/libANGLE/gl_enum_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T21:56:28Z",
+      "side": 1,
+      "message": "Sure, done. Hopefully this code never gets hit. It\u0027s basically an error case.",
+      "parentUuid": "a4f017de_a2b6b100",
+      "revId": "77c5f7dcc8c8b1ac4deecb7848d33b633fa0f36f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
