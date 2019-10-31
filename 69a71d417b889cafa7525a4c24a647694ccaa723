@@ -16,6 +16,24 @@
       "revId": "69a71d417b889cafa7525a4c24a647694ccaa723",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "530932ba_3b1bdad7",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-10-31T16:41:56Z",
+      "side": 1,
+      "message": "ANGLE_ENABLE_ASSERTS is that flag. It\u0027s basically \"is debugging stuff enabled\". We rename it if people find it confusing. Probably out of scope for this CL though.",
+      "parentUuid": "bfc277e8_5dfded81",
+      "revId": "69a71d417b889cafa7525a4c24a647694ccaa723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
