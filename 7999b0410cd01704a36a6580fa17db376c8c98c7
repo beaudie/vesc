@@ -1,0 +1,244 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6f63976_7cf831ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 10,
+        "startChar": 61,
+        "endLine": 10,
+        "endChar": 65
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c135e0fb_58cea4cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "It looks like this sentence may be missing a word or two.",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf7830be_4170946b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "nit: \"start\", for consistency in this paragraph",
+      "range": {
+        "startLine": 16,
+        "startChar": 30,
+        "endLine": 16,
+        "endChar": 35
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84997686_51c12ac5",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 36
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "Why do we need to disable capturing when replaying?",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6bf0d80_e077c59a",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "\"xfbsPacked\"?",
+      "range": {
+        "startLine": 803,
+        "startChar": 38,
+        "endLine": 803,
+        "endChar": 47
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ce25854_a20bd784",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "*_T",
+      "range": {
+        "startLine": 942,
+        "startChar": 24,
+        "endLine": 942,
+        "endChar": 41
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab0e5732_faece851",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "Why a \"Level\" constant for these last 2 parameters, since the function is expecting minLayer/maxLayer?   Is (or should there) be a constant for \"all levels\"?",
+      "range": {
+        "startLine": 948,
+        "startChar": 16,
+        "endLine": 948,
+        "endChar": 40
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a72552_e47da362",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "height",
+      "range": {
+        "startLine": 973,
+        "startChar": 92,
+        "endLine": 973,
+        "endChar": 97
+      },
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b396c94a_ba9d99ea",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "Why are the current draw and read framebuffers the same here?",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "095b5673_ce6af60c",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "Is the assumption that since you have a program, the shaders must have compiled successfully?",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56534185_93140bf4",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "Separable programs could probably be listed here as a TODO too.",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "176c0e99_5bcce836",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-10-31T02:10:22Z",
+      "side": 1,
+      "message": "Should these be \u0027protected\u0027 and \u0027FrameCapture\u0027 made a friend class?",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
