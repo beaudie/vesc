@@ -6,12 +6,15 @@
 
 // SystemInfo_mac.cpp: implementation of the Mac-specific parts of SystemInfo.h
 
-#if __has_include(<Cocoa/Cocoa.h>)
+#include "common/platform.h"
+
+#ifdef ANGLE_PLATFORM_MACOS
 
 #    include "gpu_info_util/SystemInfo_internal.h"
 
-#    import <Cocoa/Cocoa.h>
-#    import <IOKit/IOKitLib.h>
+#    include <AppKit/NSApplication.h>
+#    include <Cocoa/Cocoa.h>
+#    include <IOKit/IOKitLib.h>
 
 namespace angle
 {
@@ -219,7 +222,7 @@ bool GetSystemInfo(SystemInfo *info)
 
     // Then override the activeGPUIndex field of info to reflect the current
     // GPU instead of the non-intel GPU
-    if (@available(macOS 10.13, *))
+    if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_13)
     {
         SetActiveGPUIndex(info);
     }
@@ -242,4 +245,4 @@ bool GetSystemInfo(SystemInfo *info)
 
 }  // namespace angle
 
-#endif  // __has_include(<Cocoa/Cocoa.h>)
+#endif  // ANGLE_PLATFORM_MACOS
