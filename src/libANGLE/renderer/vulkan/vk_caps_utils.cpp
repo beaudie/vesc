@@ -131,11 +131,15 @@ void RendererVk::ensureCapsInitialized() const
 
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
     mNativeCaps.maxElementIndex       = std::numeric_limits<GLuint>::max() - 1;
-    mNativeCaps.max3DTextureSize      = limitsVk.maxImageDimension3D;
-    mNativeCaps.max2DTextureSize      = limitsVk.maxImageDimension2D;
-    mNativeCaps.maxArrayTextureLayers = limitsVk.maxImageArrayLayers;
+    mNativeCaps.max3DTextureSize      = std::min(
+        limitsVk.maxImageDimension3D, static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.max2DTextureSize = std::min(
+        limitsVk.maxImageDimension2D, static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxArrayTextureLayers = std::min(
+        limitsVk.maxImageArrayLayers, static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
     mNativeCaps.maxLODBias            = limitsVk.maxSamplerLodBias;
-    mNativeCaps.maxCubeMapTextureSize = limitsVk.maxImageDimensionCube;
+    mNativeCaps.maxCubeMapTextureSize = std::min(
+        limitsVk.maxImageDimensionCube, static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
     mNativeCaps.maxRenderbufferSize =
         std::min({limitsVk.maxImageDimension2D, limitsVk.maxFramebufferWidth,
                   limitsVk.maxFramebufferHeight});
@@ -146,19 +150,31 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxAliasedLineWidth = 1.0f;
 
     mNativeCaps.maxDrawBuffers =
-        std::min<uint32_t>(limitsVk.maxColorAttachments, limitsVk.maxFragmentOutputAttachments);
-    mNativeCaps.maxFramebufferWidth    = limitsVk.maxFramebufferWidth;
-    mNativeCaps.maxFramebufferHeight   = limitsVk.maxFramebufferHeight;
-    mNativeCaps.maxColorAttachments    = limitsVk.maxColorAttachments;
-    mNativeCaps.maxViewportWidth       = limitsVk.maxViewportDimensions[0];
-    mNativeCaps.maxViewportHeight      = limitsVk.maxViewportDimensions[1];
-    mNativeCaps.maxSampleMaskWords     = limitsVk.maxSampleMaskWords;
+        std::min(limitsVk.maxColorAttachments, limitsVk.maxFragmentOutputAttachments);
+    mNativeCaps.maxFramebufferWidth = std::min(
+        limitsVk.maxFramebufferWidth, static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxFramebufferHeight = std::min(
+        limitsVk.maxFramebufferHeight, static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxColorAttachments = std::min(
+        limitsVk.maxColorAttachments, static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxViewportWidth =
+        std::min(limitsVk.maxViewportDimensions[0],
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxViewportHeight =
+        std::min(limitsVk.maxViewportDimensions[1],
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxSampleMaskWords = std::min(
+        limitsVk.maxSampleMaskWords, static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
     mNativeCaps.maxColorTextureSamples = limitsVk.sampledImageColorSampleCounts;
     mNativeCaps.maxDepthTextureSamples = limitsVk.sampledImageDepthSampleCounts;
     mNativeCaps.maxIntegerSamples      = limitsVk.sampledImageIntegerSampleCounts;
 
-    mNativeCaps.maxVertexAttributes     = limitsVk.maxVertexInputAttributes;
-    mNativeCaps.maxVertexAttribBindings = limitsVk.maxVertexInputBindings;
+    mNativeCaps.maxVertexAttributes =
+        std::min(limitsVk.maxVertexInputAttributes,
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxVertexAttribBindings =
+        std::min(limitsVk.maxVertexInputBindings,
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
     // Offset and stride are stored as uint16_t in PackedAttribDesc.
     mNativeCaps.maxVertexAttribRelativeOffset =
         std::min(static_cast<uint32_t>(std::numeric_limits<uint16_t>::max()),
@@ -167,8 +183,8 @@ void RendererVk::ensureCapsInitialized() const
         std::min(static_cast<uint32_t>(std::numeric_limits<uint16_t>::max()),
                  limitsVk.maxVertexInputBindingStride);
 
-    mNativeCaps.maxElementsIndices  = std::numeric_limits<GLint>::max();
-    mNativeCaps.maxElementsVertices = std::numeric_limits<GLint>::max();
+    mNativeCaps.maxElementsIndices  = std::numeric_limits<int32_t>::max();
+    mNativeCaps.maxElementsVertices = std::numeric_limits<int32_t>::max();
 
     // Looks like all floats are IEEE according to the docs here:
     // https://www.khronos.org/registry/vulkan/specs/1.0-wsi_extensions/html/vkspec.html#spirvenv-precision-operation
@@ -188,14 +204,30 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.fragmentLowpInt.setTwosComplementInt(32);
 
     // Compute shader limits.
-    mNativeCaps.maxComputeWorkGroupCount[0]    = limitsVk.maxComputeWorkGroupCount[0];
-    mNativeCaps.maxComputeWorkGroupCount[1]    = limitsVk.maxComputeWorkGroupCount[1];
-    mNativeCaps.maxComputeWorkGroupCount[2]    = limitsVk.maxComputeWorkGroupCount[2];
-    mNativeCaps.maxComputeWorkGroupSize[0]     = limitsVk.maxComputeWorkGroupSize[0];
-    mNativeCaps.maxComputeWorkGroupSize[1]     = limitsVk.maxComputeWorkGroupSize[1];
-    mNativeCaps.maxComputeWorkGroupSize[2]     = limitsVk.maxComputeWorkGroupSize[2];
-    mNativeCaps.maxComputeWorkGroupInvocations = limitsVk.maxComputeWorkGroupInvocations;
-    mNativeCaps.maxComputeSharedMemorySize     = limitsVk.maxComputeSharedMemorySize;
+    mNativeCaps.maxComputeWorkGroupCount[0] =
+        std::min(limitsVk.maxComputeWorkGroupCount[0],
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxComputeWorkGroupCount[1] =
+        std::min(limitsVk.maxComputeWorkGroupCount[1],
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxComputeWorkGroupCount[2] =
+        std::min(limitsVk.maxComputeWorkGroupCount[2],
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxComputeWorkGroupSize[0] =
+        std::min(limitsVk.maxComputeWorkGroupSize[0],
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxComputeWorkGroupSize[1] =
+        std::min(limitsVk.maxComputeWorkGroupSize[1],
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxComputeWorkGroupSize[2] =
+        std::min(limitsVk.maxComputeWorkGroupSize[2],
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxComputeWorkGroupInvocations =
+        std::min(limitsVk.maxComputeWorkGroupInvocations,
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    mNativeCaps.maxComputeSharedMemorySize =
+        std::min(limitsVk.maxComputeSharedMemorySize,
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
 
     // TODO(lucferron): This is something we'll need to implement custom in the back-end.
     // Vulkan doesn't do any waiting for you, our back-end code is going to manage sync objects,
@@ -243,7 +275,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxUniformBufferBindings = maxCombinedUniformBuffers;
     mNativeCaps.maxUniformBlockSize      = maxUniformBlockSize;
     mNativeCaps.uniformBufferOffsetAlignment =
-        static_cast<GLuint>(limitsVk.minUniformBufferOffsetAlignment);
+        static_cast<GLint>(limitsVk.minUniformBufferOffsetAlignment);
 
     // Note that Vulkan currently implements textures as combined image+samplers, so the limit is
     // the minimum of supported samplers and sampled images.
@@ -339,8 +371,8 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxAtomicCounterBufferBindings = maxCombinedAtomicCounterBuffers;
     // Emulated as storage buffers, atomic counter buffers have the same size limit.  However, the
     // limit is a signed integer and values above int max will end up as a negative size.
-    mNativeCaps.maxAtomicCounterBufferSize =
-        std::min<uint32_t>(std::numeric_limits<int32_t>::max(), limitsVk.maxStorageBufferRange);
+    mNativeCaps.maxAtomicCounterBufferSize = std::min(
+        static_cast<uint32_t>(std::numeric_limits<int32_t>::max()), limitsVk.maxStorageBufferRange);
 
     // There is no particular limit to how many atomic counters there can be, other than the size of
     // a storage buffer.  We nevertheless limit this to something sane (4096 arbitrarily).
@@ -353,8 +385,12 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxCombinedAtomicCounters = maxAtomicCounters;
 
     // GL Images correspond to Vulkan Storage Images.
-    const uint32_t maxPerStageImages = limitsVk.maxPerStageDescriptorStorageImages;
-    const uint32_t maxCombinedImages = limitsVk.maxDescriptorSetStorageImages;
+    const int32_t maxPerStageImages =
+        std::min(limitsVk.maxPerStageDescriptorStorageImages,
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+    const int32_t maxCombinedImages =
+        std::min(limitsVk.maxDescriptorSetStorageImages,
+                 static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mNativeCaps.maxShaderImageUniforms[shaderType] = maxPerStageImages;
@@ -441,18 +477,30 @@ void RendererVk::ensureCapsInitialized() const
     {
         // TODO : Remove below comment when http://anglebug.com/3571 will be completed
         // mNativeExtensions.geometryShader = true;
-        mNativeCaps.maxFramebufferLayers = limitsVk.maxFramebufferLayers;
+        mNativeCaps.maxFramebufferLayers =
+            std::min(limitsVk.maxFramebufferLayers,
+                     static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
         mNativeCaps.layerProvokingVertex = GL_LAST_VERTEX_CONVENTION_EXT;
 
-        mNativeCaps.maxGeometryInputComponents       = limitsVk.maxGeometryInputComponents;
-        mNativeCaps.maxGeometryOutputComponents      = limitsVk.maxGeometryOutputComponents;
-        mNativeCaps.maxGeometryOutputVertices        = limitsVk.maxGeometryOutputVertices;
-        mNativeCaps.maxGeometryTotalOutputComponents = limitsVk.maxGeometryTotalOutputComponents;
+        mNativeCaps.maxGeometryInputComponents =
+            std::min(limitsVk.maxGeometryInputComponents,
+                     static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+        mNativeCaps.maxGeometryOutputComponents =
+            std::min(limitsVk.maxGeometryOutputComponents,
+                     static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+        mNativeCaps.maxGeometryOutputVertices =
+            std::min(limitsVk.maxGeometryOutputVertices,
+                     static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+        mNativeCaps.maxGeometryTotalOutputComponents =
+            std::min(limitsVk.maxGeometryTotalOutputComponents,
+                     static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
         mNativeCaps.maxShaderStorageBlocks[gl::ShaderType::Geometry] =
             mNativeCaps.maxCombinedShaderOutputResources;
         mNativeCaps.maxShaderAtomicCounterBuffers[gl::ShaderType::Geometry] =
             maxCombinedAtomicCounterBuffers;
-        mNativeCaps.maxGeometryShaderInvocations = limitsVk.maxGeometryShaderInvocations;
+        mNativeCaps.maxGeometryShaderInvocations =
+            std::min(limitsVk.maxGeometryShaderInvocations,
+                     static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
     }
 }
 

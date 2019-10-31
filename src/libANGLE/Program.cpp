@@ -1507,7 +1507,7 @@ angle::Result Program::link(const Context *context)
         // fragment shader outputs exceeds the implementation-dependent value of
         // MAX_COMBINED_SHADER_OUTPUT_RESOURCES.
         if (combinedImageUniforms + combinedShaderStorageBlocks >
-            context->getCaps().maxCombinedShaderOutputResources)
+            static_cast<GLuint>(context->getCaps().maxCombinedShaderOutputResources))
         {
             mInfoLog
                 << "The sum of the number of active image uniforms, active shader storage blocks "
@@ -3805,7 +3805,7 @@ bool Program::linkInterfaceBlocks(const Caps &caps,
         }
     }
 
-    if (combinedUniformBlocksCount > caps.maxCombinedUniformBlocks)
+    if (combinedUniformBlocksCount > static_cast<GLuint>(caps.maxCombinedUniformBlocks))
     {
         infoLog << "The sum of the number of active uniform blocks exceeds "
                    "MAX_COMBINED_UNIFORM_BLOCKS ("
@@ -3847,7 +3847,8 @@ bool Program::linkInterfaceBlocks(const Caps &caps,
             }
         }
 
-        if (*combinedShaderStorageBlocksCount > caps.maxCombinedShaderStorageBlocks)
+        if (*combinedShaderStorageBlocksCount >
+            static_cast<GLuint>(caps.maxCombinedShaderStorageBlocks))
         {
             infoLog << "The sum of the number of active shader storage blocks exceeds "
                        "MAX_COMBINED_SHADER_STORAGE_BLOCKS ("
@@ -4135,7 +4136,7 @@ bool Program::linkValidateTransformFeedback(const Version &version,
         // TODO(jmadill): Investigate implementation limits on D3D11
         componentCount = VariableComponentCount(var->type) * elementCount;
         if (mState.mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS &&
-            componentCount > caps.maxTransformFeedbackSeparateComponents)
+            componentCount > static_cast<GLuint>(caps.maxTransformFeedbackSeparateComponents))
         {
             infoLog << "Transform feedback varying " << tfVaryingName << " components ("
                     << componentCount << ") exceed the maximum separate components ("
@@ -4145,7 +4146,7 @@ bool Program::linkValidateTransformFeedback(const Version &version,
 
         totalComponents += componentCount;
         if (mState.mTransformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS &&
-            totalComponents > caps.maxTransformFeedbackInterleavedComponents)
+            totalComponents > static_cast<GLuint>(caps.maxTransformFeedbackInterleavedComponents))
         {
             infoLog << "Transform feedback varying total components (" << totalComponents
                     << ") exceed the maximum interleaved components ("
@@ -4480,7 +4481,7 @@ bool Program::linkOutputVariables(const Caps &caps,
         // MAX_COMBINED_SHADER_OUTPUT_RESOURCES.
         if (combinedImageUniformsCount + combinedShaderStorageBlocksCount +
                 mState.mActiveOutputVariables.count() >
-            caps.maxCombinedShaderOutputResources)
+            static_cast<GLuint>(caps.maxCombinedShaderOutputResources))
         {
             mInfoLog
                 << "The sum of the number of active image uniforms, active shader storage blocks "
