@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0c77e88_0e7452a2",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-31T17:04:31Z",
+      "side": 1,
+      "message": "This logic could use a comment",
+      "range": {
+        "startLine": 911,
+        "startChar": 8,
+        "endLine": 911,
+        "endChar": 93
+      },
+      "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d2ddb49_44febfe0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-31T17:04:31Z",
+      "side": 1,
+      "message": "Can you add a comment explaining how compression plays into this?",
+      "range": {
+        "startLine": 998,
+        "startChar": 58,
+        "endLine": 998,
+        "endChar": 76
+      },
+      "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63cc5605_ea6d1b8b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-31T17:04:31Z",
+      "side": 1,
+      "message": "Quick comment to explain why you don\u0027t need default?",
+      "range": {
+        "startLine": 1111,
+        "startChar": 8,
+        "endLine": 1111,
+        "endChar": 36
+      },
+      "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b85234a_f6e40ddc",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-31T17:04:31Z",
+      "side": 1,
+      "message": "Could use a comment here, just to explain the breaks in flow.",
+      "range": {
+        "startLine": 1198,
+        "startChar": 8,
+        "endLine": 1198,
+        "endChar": 33
+      },
+      "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "873c08fc_8cf7efbe",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-31T17:04:31Z",
+      "side": 1,
+      "message": "I see there\u0027s a comment below explaining a few of the caveats in the code, but I think it is worth mentioning them in the code as well, to understand why the checks are here.",
+      "range": {
+        "startLine": 1232,
+        "startChar": 8,
+        "endLine": 1232,
+        "endChar": 33
+      },
+      "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

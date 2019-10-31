@@ -166,6 +166,24 @@
     },
     {
       "key": {
+        "uuid": "aef5641a_cf18215f",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 36
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-10-31T17:04:31Z",
+      "side": 1,
+      "message": "You don\u0027t have to, but this is a walk through, and it is confusing when you get capture output during replay.  Perhaps an additional comment is warranted i.e. \"Disable capture this time unless you want to recapture the capture\".",
+      "parentUuid": "84997686_51c12ac5",
+      "revId": "7999b0410cd01704a36a6580fa17db376c8c98c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6bf0d80_e077c59a",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 36
