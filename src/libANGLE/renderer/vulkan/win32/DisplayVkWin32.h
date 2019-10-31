@@ -18,6 +18,7 @@ class DisplayVkWin32 : public DisplayVk
 {
   public:
     DisplayVkWin32(const egl::DisplayState &state);
+    ~DisplayVkWin32() override;
 
     bool isValidNativeWindow(EGLNativeWindowType window) const override;
 
@@ -30,6 +31,10 @@ class DisplayVkWin32 : public DisplayVk
     bool checkConfigSupport(egl::Config *config) override;
 
     const char *getWSIExtension() const override;
+
+  private:
+    HWND mHWND;
+    std::vector<VkSurfaceFormatKHR> mSurfaceFormats;
 };
 
 }  // namespace rx
