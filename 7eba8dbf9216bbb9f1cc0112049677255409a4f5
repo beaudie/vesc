@@ -321,6 +321,30 @@
     },
     {
       "key": {
+        "uuid": "59d87565_db0ab443",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-10-31T18:59:11Z",
+      "side": 1,
+      "message": "Even right now, these tests are performing operations that we won\u0027t want to support in the long run. I think it\u0027s fine to just hide the \"real\" texture target behind GL_TEXTURE_VIDEO_IMAGE_WEBGL for now, make the glTexImage2D path work on Windows for GL_TEXTURE_VIDEO_IMAGE_WEBGL, and then expand the tests in the future as we get the extension working on more platforms. Your plan sounds good.",
+      "parentUuid": "498ec780_253f3dd9",
+      "range": {
+        "startLine": 71,
+        "startChar": 18,
+        "endLine": 71,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0deb5fc7_a474b14d",
         "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
         "patchSetId": 12
