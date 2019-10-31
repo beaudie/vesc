@@ -852,7 +852,7 @@ size_t GetMaximumPixelTextureUnits(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
-std::array<GLuint, 3> GetMaxComputeWorkGroupCount(D3D_FEATURE_LEVEL featureLevel)
+std::array<GLint, 3> GetMaxComputeWorkGroupCount(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
     {
@@ -867,7 +867,7 @@ std::array<GLuint, 3> GetMaxComputeWorkGroupCount(D3D_FEATURE_LEVEL featureLevel
     }
 }
 
-std::array<GLuint, 3> GetMaxComputeWorkGroupSize(D3D_FEATURE_LEVEL featureLevel)
+std::array<GLint, 3> GetMaxComputeWorkGroupSize(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
     {
@@ -893,7 +893,7 @@ size_t GetMaxComputeWorkGroupInvocations(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
-unsigned int GetMaxComputeSharedMemorySize(D3D_FEATURE_LEVEL featureLevel)
+int GetMaxComputeSharedMemorySize(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
     {
@@ -902,9 +902,9 @@ unsigned int GetMaxComputeSharedMemorySize(D3D_FEATURE_LEVEL featureLevel)
         // https://docs.microsoft.com/en-us/windows/desktop/direct3dhlsl/dx-graphics-hlsl-variable-syntax
         case D3D_FEATURE_LEVEL_11_1:
         case D3D_FEATURE_LEVEL_11_0:
-            return 32768u;
+            return 32768;
         default:
-            return 0u;
+            return 0;
     }
 }
 
@@ -1363,7 +1363,7 @@ bool IsMultiviewSupported(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
-unsigned int GetMaxSampleMaskWords(D3D_FEATURE_LEVEL featureLevel)
+int GetMaxSampleMaskWords(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
     {
@@ -1372,14 +1372,14 @@ unsigned int GetMaxSampleMaskWords(D3D_FEATURE_LEVEL featureLevel)
         case D3D_FEATURE_LEVEL_11_0:
         case D3D_FEATURE_LEVEL_10_1:
         case D3D_FEATURE_LEVEL_10_0:
-            return 1u;
+            return 1;
         case D3D_FEATURE_LEVEL_9_3:
         case D3D_FEATURE_LEVEL_9_2:
         case D3D_FEATURE_LEVEL_9_1:
-            return 0u;
+            return 0;
         default:
             UNREACHABLE();
-            return 0u;
+            return 0;
     }
 }
 
@@ -1410,10 +1410,10 @@ void GenerateCaps(ID3D11Device *device,
     // GL core feature limits
     // Reserve MAX_UINT for D3D11's primitive restart.
     caps->maxElementIndex  = static_cast<GLint64>(std::numeric_limits<unsigned int>::max() - 1);
-    caps->max3DTextureSize = static_cast<GLuint>(GetMaximum3DTextureSize(featureLevel));
-    caps->max2DTextureSize = static_cast<GLuint>(GetMaximum2DTextureSize(featureLevel));
-    caps->maxCubeMapTextureSize = static_cast<GLuint>(GetMaximumCubeMapTextureSize(featureLevel));
-    caps->maxArrayTextureLayers = static_cast<GLuint>(GetMaximum2DTextureArraySize(featureLevel));
+    caps->max3DTextureSize      = GetMaximum3DTextureSize(featureLevel);
+    caps->max2DTextureSize      = GetMaximum2DTextureSize(featureLevel);
+    caps->maxCubeMapTextureSize = GetMaximumCubeMapTextureSize(featureLevel);
+    caps->maxArrayTextureLayers = GetMaximum2DTextureArraySize(featureLevel);
 
     // Unimplemented, set to minimum required
     caps->maxLODBias = 2.0f;
@@ -1423,12 +1423,11 @@ void GenerateCaps(ID3D11Device *device,
 
     // Maximum draw buffers and color attachments are the same, max color attachments could
     // eventually be increased to 16
-    caps->maxDrawBuffers = static_cast<GLuint>(GetMaximumSimultaneousRenderTargets(featureLevel));
-    caps->maxColorAttachments =
-        static_cast<GLuint>(GetMaximumSimultaneousRenderTargets(featureLevel));
+    caps->maxDrawBuffers      = GetMaximumSimultaneousRenderTargets(featureLevel);
+    caps->maxColorAttachments = GetMaximumSimultaneousRenderTargets(featureLevel);
 
     // D3D11 has the same limit for viewport width and height
-    caps->maxViewportWidth  = static_cast<GLuint>(GetMaximumViewportSize(featureLevel));
+    caps->maxViewportWidth  = GetMaximumViewportSize(featureLevel);
     caps->maxViewportHeight = caps->maxViewportWidth;
 
     // Choose a reasonable maximum, enforced in the shader.
@@ -1440,8 +1439,8 @@ void GenerateCaps(ID3D11Device *device,
     caps->maxAliasedLineWidth = 1.0f;
 
     // Primitive count limits
-    caps->maxElementsIndices  = static_cast<GLuint>(GetMaximumDrawIndexedIndexCount(featureLevel));
-    caps->maxElementsVertices = static_cast<GLuint>(GetMaximumDrawVertexCount(featureLevel));
+    caps->maxElementsIndices  = GetMaximumDrawIndexedIndexCount(featureLevel);
+    caps->maxElementsVertices = GetMaximumDrawVertexCount(featureLevel);
 
     // Program and shader binary formats (no supported shader binary formats)
     caps->programBinaryFormats.push_back(GL_PROGRAM_BINARY_ANGLE);
@@ -1465,20 +1464,18 @@ void GenerateCaps(ID3D11Device *device,
     caps->maxServerWaitTimeout = 0;
 
     // Vertex shader limits
-    caps->maxVertexAttributes = static_cast<GLuint>(GetMaximumVertexInputSlots(featureLevel));
-    caps->maxVertexUniformVectors =
-        static_cast<GLuint>(GetMaximumVertexUniformVectors(featureLevel));
+    caps->maxVertexAttributes     = GetMaximumVertexInputSlots(featureLevel);
+    caps->maxVertexUniformVectors = GetMaximumVertexUniformVectors(featureLevel);
     if (features.skipVSConstantRegisterZero.enabled)
     {
         caps->maxVertexUniformVectors -= 1;
     }
     caps->maxShaderUniformComponents[gl::ShaderType::Vertex] = caps->maxVertexUniformVectors * 4;
     caps->maxShaderUniformBlocks[gl::ShaderType::Vertex] =
-        static_cast<GLuint>(GetMaximumVertexUniformBlocks(featureLevel));
-    caps->maxVertexOutputComponents =
-        static_cast<GLuint>(GetMaximumVertexOutputVectors(featureLevel)) * 4;
+        GetMaximumVertexUniformBlocks(featureLevel);
+    caps->maxVertexOutputComponents = GetMaximumVertexOutputVectors(featureLevel) * 4;
     caps->maxShaderTextureImageUnits[gl::ShaderType::Vertex] =
-        static_cast<GLuint>(GetMaximumVertexTextureUnits(featureLevel));
+        GetMaximumVertexTextureUnits(featureLevel);
 
     // Vertex Attribute Bindings are emulated on D3D11.
     caps->maxVertexAttribBindings = caps->maxVertexAttributes;
@@ -1489,31 +1486,28 @@ void GenerateCaps(ID3D11Device *device,
     caps->maxVertexAttribStride = 2048;
 
     // Fragment shader limits
-    caps->maxFragmentUniformVectors =
-        static_cast<GLuint>(GetMaximumPixelUniformVectors(featureLevel));
+    caps->maxFragmentUniformVectors = GetMaximumPixelUniformVectors(featureLevel);
     caps->maxShaderUniformComponents[gl::ShaderType::Fragment] =
         caps->maxFragmentUniformVectors * 4;
     caps->maxShaderUniformBlocks[gl::ShaderType::Fragment] =
-        static_cast<GLuint>(GetMaximumPixelUniformBlocks(featureLevel));
-    caps->maxFragmentInputComponents =
-        static_cast<GLuint>(GetMaximumPixelInputVectors(featureLevel)) * 4;
+        GetMaximumPixelUniformBlocks(featureLevel);
+    caps->maxFragmentInputComponents = GetMaximumPixelInputVectors(featureLevel) * 4;
     caps->maxShaderTextureImageUnits[gl::ShaderType::Fragment] =
-        static_cast<GLuint>(GetMaximumPixelTextureUnits(featureLevel));
+        GetMaximumPixelTextureUnits(featureLevel);
     caps->minProgramTexelOffset = GetMinimumTexelOffset(featureLevel);
     caps->maxProgramTexelOffset = GetMaximumTexelOffset(featureLevel);
 
     // Compute shader limits
     caps->maxComputeWorkGroupCount = GetMaxComputeWorkGroupCount(featureLevel);
     caps->maxComputeWorkGroupSize  = GetMaxComputeWorkGroupSize(featureLevel);
-    caps->maxComputeWorkGroupInvocations =
-        static_cast<GLuint>(GetMaxComputeWorkGroupInvocations(featureLevel));
+    caps->maxComputeWorkGroupInvocations = GetMaxComputeWorkGroupInvocations(featureLevel);
     caps->maxComputeSharedMemorySize = GetMaxComputeSharedMemorySize(featureLevel);
     caps->maxShaderUniformComponents[gl::ShaderType::Compute] =
-        static_cast<GLuint>(GetMaximumComputeUniformVectors(featureLevel)) * 4;
+        GetMaximumComputeUniformVectors(featureLevel) * 4;
     caps->maxShaderUniformBlocks[gl::ShaderType::Compute] =
-        static_cast<GLuint>(GetMaximumComputeUniformBlocks(featureLevel));
+        GetMaximumComputeUniformBlocks(featureLevel);
     caps->maxShaderTextureImageUnits[gl::ShaderType::Compute] =
-        static_cast<GLuint>(GetMaximumComputeTextureUnits(featureLevel));
+        GetMaximumComputeTextureUnits(featureLevel);
 
     SetUAVRelatedResourceLimits(featureLevel, caps);
 
@@ -1550,19 +1544,17 @@ void GenerateCaps(ID3D11Device *device,
             static_cast<GLint64>(caps->maxShaderUniformComponents[shaderType]);
     }
 
-    caps->maxVaryingComponents =
-        static_cast<GLuint>(GetMaximumVertexOutputVectors(featureLevel)) * 4;
-    caps->maxVaryingVectors = static_cast<GLuint>(GetMaximumVertexOutputVectors(featureLevel));
+    caps->maxVaryingComponents         = GetMaximumVertexOutputVectors(featureLevel) * 4;
+    caps->maxVaryingVectors            = GetMaximumVertexOutputVectors(featureLevel);
     caps->maxCombinedTextureImageUnits = caps->maxShaderTextureImageUnits[gl::ShaderType::Vertex] +
                                          caps->maxShaderTextureImageUnits[gl::ShaderType::Fragment];
 
     // Transform feedback limits
     caps->maxTransformFeedbackInterleavedComponents =
-        static_cast<GLuint>(GetMaximumStreamOutputInterleavedComponents(featureLevel));
-    caps->maxTransformFeedbackSeparateAttributes =
-        static_cast<GLuint>(GetMaximumStreamOutputBuffers(featureLevel));
+        GetMaximumStreamOutputInterleavedComponents(featureLevel);
+    caps->maxTransformFeedbackSeparateAttributes = GetMaximumStreamOutputBuffers(featureLevel);
     caps->maxTransformFeedbackSeparateComponents =
-        static_cast<GLuint>(GetMaximumStreamOutputSeparateComponents(featureLevel));
+        GetMaximumStreamOutputSeparateComponents(featureLevel);
 
     // Defer the computation of multisample limits to Context::updateCaps() where max*Samples values
     // are determined according to available sample counts for each individual format.
@@ -1576,8 +1568,7 @@ void GenerateCaps(ID3D11Device *device,
 
     // Framebuffer limits
     caps->maxFramebufferSamples = std::numeric_limits<GLint>::max();
-    caps->maxFramebufferWidth =
-        static_cast<GLuint>(GetMaximumRenderToBufferWindowSize(featureLevel));
+    caps->maxFramebufferWidth   = GetMaximumRenderToBufferWindowSize(featureLevel);
     caps->maxFramebufferHeight = caps->maxFramebufferWidth;
 
     // Texture gather offset limits
