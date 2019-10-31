@@ -357,7 +357,14 @@ void CaptureGetFloatv_data(const Context *context,
                            GLfloat *data,
                            ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    GLenum nativeType;
+    unsigned int numParams;
+    if (!context->getQueryParameterInfo(pname, &nativeType, &numParams))
+    {
+        numParams = 1;
+    }
+
+    paramCapture->readBufferSizeBytes = gl::VariableComponentSize(nativeType) * numParams;
 }
 
 void CaptureGetFramebufferAttachmentParameteriv_params(const Context *context,
