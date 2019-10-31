@@ -26,6 +26,12 @@ constexpr unsigned int kComponentsPerVector = 4;
 namespace rx
 {
 
+GLint LimitToInt(const uint32_t physicalDeviceValue)
+{
+    return std::min(physicalDeviceValue,
+                    static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+}
+
 void RendererVk::ensureCapsInitialized() const
 {
     if (mCapsInitialized)
@@ -130,13 +136,13 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.getImageANGLE = true;
 
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
-    mNativeCaps.maxElementIndex       = std::numeric_limits<GLuint>::max() - 1;
-    mNativeCaps.max3DTextureSize      = limitsVk.maxImageDimension3D;
+    mNativeCaps.maxElementIndex  = std::numeric_limits<GLuint>::max() - 1;
+    mNativeCaps.max3DTextureSize = LimitToInt(limitsVk.maxImageDimension3D);
     mNativeCaps.max2DTextureSize =
         std::min(limitsVk.maxFramebufferWidth, limitsVk.maxImageDimension2D);
-    mNativeCaps.maxArrayTextureLayers = limitsVk.maxImageArrayLayers;
+    mNativeCaps.maxArrayTextureLayers = LimitToInt(limitsVk.maxImageArrayLayers);
     mNativeCaps.maxLODBias            = limitsVk.maxSamplerLodBias;
-    mNativeCaps.maxCubeMapTextureSize = limitsVk.maxImageDimensionCube;
+    mNativeCaps.maxCubeMapTextureSize = LimitToInt(limitsVk.maxImageDimensionCube);
     mNativeCaps.maxRenderbufferSize =
         std::min({limitsVk.maxImageDimension2D, limitsVk.maxFramebufferWidth,
                   limitsVk.maxFramebufferHeight});
@@ -147,19 +153,19 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxAliasedLineWidth = 1.0f;
 
     mNativeCaps.maxDrawBuffers =
-        std::min<uint32_t>(limitsVk.maxColorAttachments, limitsVk.maxFragmentOutputAttachments);
-    mNativeCaps.maxFramebufferWidth    = limitsVk.maxFramebufferWidth;
-    mNativeCaps.maxFramebufferHeight   = limitsVk.maxFramebufferHeight;
-    mNativeCaps.maxColorAttachments    = limitsVk.maxColorAttachments;
-    mNativeCaps.maxViewportWidth       = limitsVk.maxViewportDimensions[0];
-    mNativeCaps.maxViewportHeight      = limitsVk.maxViewportDimensions[1];
-    mNativeCaps.maxSampleMaskWords     = limitsVk.maxSampleMaskWords;
+        std::min(limitsVk.maxColorAttachments, limitsVk.maxFragmentOutputAttachments);
+    mNativeCaps.maxFramebufferWidth    = LimitToInt(limitsVk.maxFramebufferWidth);
+    mNativeCaps.maxFramebufferHeight   = LimitToInt(limitsVk.maxFramebufferHeight);
+    mNativeCaps.maxColorAttachments    = LimitToInt(limitsVk.maxColorAttachments);
+    mNativeCaps.maxViewportWidth       = LimitToInt(limitsVk.maxViewportDimensions[0]);
+    mNativeCaps.maxViewportHeight      = LimitToInt(limitsVk.maxViewportDimensions[1]);
+    mNativeCaps.maxSampleMaskWords     = LimitToInt(limitsVk.maxSampleMaskWords);
     mNativeCaps.maxColorTextureSamples = limitsVk.sampledImageColorSampleCounts;
     mNativeCaps.maxDepthTextureSamples = limitsVk.sampledImageDepthSampleCounts;
     mNativeCaps.maxIntegerSamples      = limitsVk.sampledImageIntegerSampleCounts;
 
-    mNativeCaps.maxVertexAttributes     = limitsVk.maxVertexInputAttributes;
-    mNativeCaps.maxVertexAttribBindings = limitsVk.maxVertexInputBindings;
+    mNativeCaps.maxVertexAttributes     = LimitToInt(limitsVk.maxVertexInputAttributes);
+    mNativeCaps.maxVertexAttribBindings = LimitToInt(limitsVk.maxVertexInputBindings);
     // Offset and stride are stored as uint16_t in PackedAttribDesc.
     mNativeCaps.maxVertexAttribRelativeOffset =
         std::min(static_cast<uint32_t>(std::numeric_limits<uint16_t>::max()),
@@ -189,14 +195,20 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.fragmentLowpInt.setTwosComplementInt(32);
 
     // Compute shader limits.
-    mNativeCaps.maxComputeWorkGroupCount[0]    = limitsVk.maxComputeWorkGroupCount[0];
-    mNativeCaps.maxComputeWorkGroupCount[1]    = limitsVk.maxComputeWorkGroupCount[1];
-    mNativeCaps.maxComputeWorkGroupCount[2]    = limitsVk.maxComputeWorkGroupCount[2];
-    mNativeCaps.maxComputeWorkGroupSize[0]     = limitsVk.maxComputeWorkGroupSize[0];
-    mNativeCaps.maxComputeWorkGroupSize[1]     = limitsVk.maxComputeWorkGroupSize[1];
-    mNativeCaps.maxComputeWorkGroupSize[2]     = limitsVk.maxComputeWorkGroupSize[2];
-    mNativeCaps.maxComputeWorkGroupInvocations = limitsVk.maxComputeWorkGroupInvocations;
-    mNativeCaps.maxComputeSharedMemorySize     = limitsVk.maxComputeSharedMemorySize;
+    // Clamp the maxComputeWorkGroupCount[] to 1,000,000.
+    // It's a workaround for http://anglebug.com/4120 and http://anglebug.com/4066
+    mNativeCaps.maxComputeWorkGroupCount[0] =
+        std::min(LimitToInt(limitsVk.maxComputeWorkGroupCount[0]), 1000000);
+    mNativeCaps.maxComputeWorkGroupCount[1] =
+        std::min(LimitToInt(limitsVk.maxComputeWorkGroupCount[1]), 1000000);
+    mNativeCaps.maxComputeWorkGroupCount[2] =
+        std::min(LimitToInt(limitsVk.maxComputeWorkGroupCount[2]), 1000000);
+    mNativeCaps.maxComputeWorkGroupSize[0] = LimitToInt(limitsVk.maxComputeWorkGroupSize[0]);
+    mNativeCaps.maxComputeWorkGroupSize[1] = LimitToInt(limitsVk.maxComputeWorkGroupSize[1]);
+    mNativeCaps.maxComputeWorkGroupSize[2] = LimitToInt(limitsVk.maxComputeWorkGroupSize[2]);
+    mNativeCaps.maxComputeWorkGroupInvocations =
+        LimitToInt(limitsVk.maxComputeWorkGroupInvocations);
+    mNativeCaps.maxComputeSharedMemorySize = LimitToInt(limitsVk.maxComputeSharedMemorySize);
 
     // TODO(lucferron): This is something we'll need to implement custom in the back-end.
     // Vulkan doesn't do any waiting for you, our back-end code is going to manage sync objects,
@@ -231,10 +243,10 @@ void RendererVk::ensureCapsInitialized() const
     constexpr uint32_t kTotalReservedUniformBuffers =
         kReservedDriverUniformBindingCount + kReservedDefaultUniformBindingCount;
 
-    const uint32_t maxPerStageUniformBuffers =
-        limitsVk.maxPerStageDescriptorUniformBuffers - kTotalReservedPerStageUniformBuffers;
-    const uint32_t maxCombinedUniformBuffers =
-        limitsVk.maxDescriptorSetUniformBuffers - kTotalReservedUniformBuffers;
+    const int32_t maxPerStageUniformBuffers = LimitToInt(
+        limitsVk.maxPerStageDescriptorUniformBuffers - kTotalReservedPerStageUniformBuffers);
+    const int32_t maxCombinedUniformBuffers =
+        LimitToInt(limitsVk.maxDescriptorSetUniformBuffers - kTotalReservedUniformBuffers);
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mNativeCaps.maxShaderUniformBlocks[shaderType] = maxPerStageUniformBuffers;
@@ -244,7 +256,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxUniformBufferBindings = maxCombinedUniformBuffers;
     mNativeCaps.maxUniformBlockSize      = maxUniformBlockSize;
     mNativeCaps.uniformBufferOffsetAlignment =
-        static_cast<GLuint>(limitsVk.minUniformBufferOffsetAlignment);
+        static_cast<GLint>(limitsVk.minUniformBufferOffsetAlignment);
 
     // Note that Vulkan currently implements textures as combined image+samplers, so the limit is
     // the minimum of supported samplers and sampled images.
@@ -254,9 +266,9 @@ void RendererVk::ensureCapsInitialized() const
         std::min(limitsVk.maxDescriptorSetSamplers, limitsVk.maxDescriptorSetSampledImages);
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        mNativeCaps.maxShaderTextureImageUnits[shaderType] = maxPerStageTextures;
+        mNativeCaps.maxShaderTextureImageUnits[shaderType] = LimitToInt(maxPerStageTextures);
     }
-    mNativeCaps.maxCombinedTextureImageUnits = maxCombinedTextures;
+    mNativeCaps.maxCombinedTextureImageUnits = LimitToInt(maxCombinedTextures);
 
     uint32_t maxPerStageStorageBuffers    = limitsVk.maxPerStageDescriptorStorageBuffers;
     uint32_t maxVertexStageStorageBuffers = maxPerStageStorageBuffers;
@@ -326,7 +338,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxShaderStorageBufferBindings = maxCombinedStorageBuffers;
     mNativeCaps.maxShaderStorageBlockSize      = limitsVk.maxStorageBufferRange;
     mNativeCaps.shaderStorageBufferOffsetAlignment =
-        static_cast<GLuint>(limitsVk.minStorageBufferOffsetAlignment);
+        static_cast<GLint>(limitsVk.minStorageBufferOffsetAlignment);
 
     mNativeCaps.maxShaderAtomicCounterBuffers[gl::ShaderType::Vertex] =
         mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics ? maxVertexStageAtomicCounterBuffers
@@ -340,8 +352,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxAtomicCounterBufferBindings = maxCombinedAtomicCounterBuffers;
     // Emulated as storage buffers, atomic counter buffers have the same size limit.  However, the
     // limit is a signed integer and values above int max will end up as a negative size.
-    mNativeCaps.maxAtomicCounterBufferSize =
-        std::min<uint32_t>(std::numeric_limits<int32_t>::max(), limitsVk.maxStorageBufferRange);
+    mNativeCaps.maxAtomicCounterBufferSize = LimitToInt(limitsVk.maxStorageBufferRange);
 
     // There is no particular limit to how many atomic counters there can be, other than the size of
     // a storage buffer.  We nevertheless limit this to something sane (4096 arbitrarily).
@@ -354,8 +365,8 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxCombinedAtomicCounters = maxAtomicCounters;
 
     // GL Images correspond to Vulkan Storage Images.
-    const uint32_t maxPerStageImages = limitsVk.maxPerStageDescriptorStorageImages;
-    const uint32_t maxCombinedImages = limitsVk.maxDescriptorSetStorageImages;
+    const int32_t maxPerStageImages = LimitToInt(limitsVk.maxPerStageDescriptorStorageImages);
+    const int32_t maxCombinedImages = LimitToInt(limitsVk.maxDescriptorSetStorageImages);
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mNativeCaps.maxShaderImageUniforms[shaderType] = maxPerStageImages;
@@ -395,7 +406,7 @@ void RendererVk::ensureCapsInitialized() const
     // number of resources reported by Vulkan to 2 billion though to avoid seeing negative numbers
     // in applications that take the value as signed int (including dEQP).
     const uint32_t maxPerStageResources =
-        std::min<uint32_t>(std::numeric_limits<int32_t>::max(), limitsVk.maxPerStageResources);
+        static_cast<uint32_t>(LimitToInt(limitsVk.maxPerStageResources));
     mNativeCaps.maxCombinedShaderOutputResources =
         maxPerStageResources - kReservedPerStageBindingCount;
 
@@ -442,18 +453,20 @@ void RendererVk::ensureCapsInitialized() const
     {
         // TODO : Remove below comment when http://anglebug.com/3571 will be completed
         // mNativeExtensions.geometryShader = true;
-        mNativeCaps.maxFramebufferLayers = limitsVk.maxFramebufferLayers;
+        mNativeCaps.maxFramebufferLayers = LimitToInt(limitsVk.maxFramebufferLayers);
         mNativeCaps.layerProvokingVertex = GL_LAST_VERTEX_CONVENTION_EXT;
 
-        mNativeCaps.maxGeometryInputComponents       = limitsVk.maxGeometryInputComponents;
-        mNativeCaps.maxGeometryOutputComponents      = limitsVk.maxGeometryOutputComponents;
-        mNativeCaps.maxGeometryOutputVertices        = limitsVk.maxGeometryOutputVertices;
-        mNativeCaps.maxGeometryTotalOutputComponents = limitsVk.maxGeometryTotalOutputComponents;
+        mNativeCaps.maxGeometryInputComponents  = LimitToInt(limitsVk.maxGeometryInputComponents);
+        mNativeCaps.maxGeometryOutputComponents = LimitToInt(limitsVk.maxGeometryOutputComponents);
+        mNativeCaps.maxGeometryOutputVertices   = LimitToInt(limitsVk.maxGeometryOutputVertices);
+        mNativeCaps.maxGeometryTotalOutputComponents =
+            LimitToInt(limitsVk.maxGeometryTotalOutputComponents);
         mNativeCaps.maxShaderStorageBlocks[gl::ShaderType::Geometry] =
             mNativeCaps.maxCombinedShaderOutputResources;
         mNativeCaps.maxShaderAtomicCounterBuffers[gl::ShaderType::Geometry] =
             maxCombinedAtomicCounterBuffers;
-        mNativeCaps.maxGeometryShaderInvocations = limitsVk.maxGeometryShaderInvocations;
+        mNativeCaps.maxGeometryShaderInvocations =
+            LimitToInt(limitsVk.maxGeometryShaderInvocations);
     }
 }
 
