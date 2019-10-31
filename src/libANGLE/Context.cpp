@@ -3605,6 +3605,15 @@ void Context::initCaps()
 
     ANGLE_LIMIT_CAP(mState.mCaps.maxSampleMaskWords, MAX_SAMPLE_MASK_WORDS);
 
+    if (getClientVersion() >= ES_3_1)
+    {
+        for (size_t index = 0; index < 3u; index++)
+        {
+            ANGLE_LIMIT_CAP(mState.mCaps.maxComputeWorkGroupCount[index],
+                            static_cast<uint32_t>(std::numeric_limits<GLint>::max()));
+        }
+    }
+
 #undef ANGLE_LIMIT_CAP
 #undef ANGLE_LOG_CAP_LIMIT
 
