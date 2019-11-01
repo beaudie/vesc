@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d4158ded_cde03fcc",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-01T18:26:09Z",
+      "side": 1,
+      "message": "We should probably prioritize being consistent with the official Khronos names. Instead of trying to use a different scheme. See \n\nhttps://raw.githubusercontent.com/KhronosGroup/OpenGL-Registry/master/xml/gl.xml\n\nLook for \"MultiDraw\"",
+      "parentUuid": "4b1f8f11_c7fdefc6",
+      "range": {
+        "startLine": 135,
+        "startChar": 21,
+        "endLine": 135,
+        "endChar": 27
+      },
+      "revId": "f7e94b6605c9d174ed121c6ca4be4d42a1a1bc12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9c16f30a_7b2ec95d",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 4
