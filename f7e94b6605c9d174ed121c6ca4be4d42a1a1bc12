@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d0a14cb5_eb758ee3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-11-01T18:42:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6cf8e11_9222cb3f",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 9
+      },
+      "revId": "f7e94b6605c9d174ed121c6ca4be4d42a1a1bc12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51bc29cf_cc1e30e7",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 4
@@ -120,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "a89111c7_63382b8a",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-11-01T18:42:51Z",
+      "side": 1,
+      "message": "Thanks for the thorough review and input. As discussed I will land this as is and follow up the issue in later patches.",
+      "parentUuid": "e7684b75_f7d09ea4",
+      "range": {
+        "startLine": 135,
+        "startChar": 21,
+        "endLine": 135,
+        "endChar": 27
+      },
+      "revId": "f7e94b6605c9d174ed121c6ca4be4d42a1a1bc12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c16f30a_7b2ec95d",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 4
@@ -140,6 +188,30 @@
       "revId": "f7e94b6605c9d174ed121c6ca4be4d42a1a1bc12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16e2b4b1_83796ab8",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-11-01T18:42:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c16f30a_7b2ec95d",
+      "range": {
+        "startLine": 180,
+        "startChar": 9,
+        "endLine": 180,
+        "endChar": 61
+      },
+      "revId": "f7e94b6605c9d174ed121c6ca4be4d42a1a1bc12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
