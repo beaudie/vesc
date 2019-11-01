@@ -147,9 +147,6 @@ class TextureState final : private angle::NonCopyable
     void setGenerateMipmapHint(GLenum hint);
     GLenum getGenerateMipmapHint() const;
 
-    // Return the enabled mipmap level count.
-    GLuint getEnabledLevelCount() const;
-
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;

@@ -19,14 +19,6 @@
 namespace rx
 {
 
-enum class ImageMipLevels
-{
-    EnabledLevels = 0,
-    FullMipChain  = 1,
-
-    InvalidEnum = 2,
-};
-
 class TextureVk : public TextureImpl
 {
   public:
@@ -188,8 +180,7 @@ class TextureVk : public TextureImpl
         return mSampler.get();
     }
 
-    // Normally, initialize the image with enabled mipmap level counts.
-    angle::Result ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels);
+    angle::Result ensureImageInitialized(ContextVk *contextVk);
 
     Serial getSerial() const { return mSerial; }
 
@@ -243,6 +234,15 @@ class TextureVk : public TextureImpl
                                                   uint32_t layerCount,
                                                   const gl::Rectangle &sourceArea,
                                                   uint8_t **outDataPtr);
+
+    angle::Result copyImageDataToBuffer(ContextVk *contextVk,
+                                        size_t sourceLevel,
+                                        uint32_t layerCount,
+                                        uint32_t baseLayer,
+                                        const gl::Box &sourceArea,
+                                        vk::BufferHelper **bufferOut,
+                                        VkDeviceSize *bufferOffsetOut,
+                                        uint8_t **outDataPtr);
 
     angle::Result generateMipmapsWithCPU(const gl::Context *context);
 
@@ -303,14 +303,7 @@ class TextureVk : public TextureImpl
                             const uint32_t levelCount);
     void releaseImage(ContextVk *contextVk);
     void releaseStagingBuffer(ContextVk *contextVk);
-    uint32_t getMipLevelCount(ImageMipLevels mipLevels) const;
-    uint32_t getMaxLevelCount() const;
-    angle::Result copyImageDataToStagingBuffer(ContextVk *contextVk,
-                                               const gl::ImageDesc &desc,
-                                               bool ignoreLayerCount,
-                                               uint32_t currentLayer,
-                                               uint32_t sourceLevel,
-                                               uint32_t stagingDstMipLevel);
+    uint32_t getLevelCount() const;
     angle::Result initImageViews(ContextVk *contextVk,
                                  const vk::Format &format,
                                  const bool sized,
