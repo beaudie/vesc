@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95f30b5a_c42f6c17",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-01T16:54:20Z",
+      "side": 1,
+      "message": "kSmallSize, kSmallSize",
+      "range": {
+        "startLine": 199,
+        "startChar": 56,
+        "endLine": 199,
+        "endChar": 60
+      },
+      "revId": "e1f792b0b310080422d831f3b282f3d313a14199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
