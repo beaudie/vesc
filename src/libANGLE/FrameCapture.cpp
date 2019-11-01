@@ -1302,18 +1302,22 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
     // Capture GL Context states.
     // TODO(http://anglebug.com/3662): Complete state capture.
+    auto capCap = [cap, context](GLenum capEnum, bool capValue) {
+        if (capValue)
+        {
+            cap(CaptureEnable(context, true, capEnum));
+        }
+        else
+        {
+            cap(CaptureDisable(context, true, capEnum));
+        }
+    };
+
     const gl::RasterizerState defaultRasterState;
     const gl::RasterizerState &currentRasterState = glState.getRasterizerState();
     if (currentRasterState.cullFace != defaultRasterState.cullFace)
     {
-        if (currentRasterState.cullFace)
-        {
-            cap(CaptureEnable(context, true, GL_CULL_FACE));
-        }
-        else
-        {
-            cap(CaptureDisable(context, true, GL_CULL_FACE));
-        }
+        capCap(GL_CULL_FACE, currentRasterState.cullFace);
     }
 
     if (currentRasterState.cullMode != defaultRasterState.cullMode)
@@ -1324,6 +1328,73 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     if (currentRasterState.frontFace != defaultRasterState.frontFace)
     {
         cap(CaptureFrontFace(context, true, currentRasterState.frontFace));
+    }
+
+    const gl::DepthStencilState defaultDSState;
+    const gl::DepthStencilState &currentDSState = glState.getDepthStencilState();
+    if (defaultDSState.depthFunc != currentDSState.depthFunc)
+    {
+        cap(CaptureDepthFunc(context, true, currentDSState.depthFunc));
+    }
+
+    if (defaultDSState.depthMask != currentDSState.depthMask)
+    {
+        cap(CaptureDepthMask(context, true, currentDSState.depthMask ? GL_TRUE : GL_FALSE));
+    }
+
+    if (defaultDSState.depthTest != currentDSState.depthTest)
+    {
+        capCap(GL_DEPTH_TEST, currentDSState.depthTest);
+    }
+
+    if (defaultDSState.stencilTest != currentDSState.stencilTest)
+    {
+        capCap(GL_STENCIL_TEST, currentDSState.stencilTest);
+    }
+
+    if (defaultDSState.stencilFunc != currentDSState.stencilFunc ||
+        defaultDSState.stencilMask != currentDSState.stencilMask || glState.getStencilRef() != 0)
+    {
+        cap(CaptureStencilFuncSeparate(context, true, GL_FRONT, currentDSState.stencilFunc,
+                                       glState.getStencilRef(), currentDSState.stencilMask));
+    }
+
+    if (defaultDSState.stencilBackFunc != currentDSState.stencilBackFunc ||
+        defaultDSState.stencilBackMask != currentDSState.stencilBackMask ||
+        glState.getStencilBackRef() != 0)
+    {
+        cap(CaptureStencilFuncSeparate(context, true, GL_BACK, currentDSState.stencilBackFunc,
+                                       glState.getStencilBackRef(),
+                                       currentDSState.stencilBackMask));
+    }
+
+    if (defaultDSState.stencilFail != currentDSState.stencilFail ||
+        defaultDSState.stencilPassDepthFail != currentDSState.stencilPassDepthFail ||
+        defaultDSState.stencilPassDepthPass != currentDSState.stencilPassDepthPass)
+    {
+        cap(CaptureStencilOpSeparate(context, true, GL_FRONT, currentDSState.stencilFail,
+                                     currentDSState.stencilPassDepthFail,
+                                     currentDSState.stencilPassDepthPass));
+    }
+
+    if (defaultDSState.stencilBackFail != currentDSState.stencilBackFail ||
+        defaultDSState.stencilBackPassDepthFail != currentDSState.stencilBackPassDepthFail ||
+        defaultDSState.stencilBackPassDepthPass != currentDSState.stencilBackPassDepthPass)
+    {
+        cap(CaptureStencilOpSeparate(context, true, GL_BACK, currentDSState.stencilBackFail,
+                                     currentDSState.stencilBackPassDepthFail,
+                                     currentDSState.stencilBackPassDepthPass));
+    }
+
+    if (defaultDSState.stencilWritemask != currentDSState.stencilWritemask)
+    {
+        cap(CaptureStencilMaskSeparate(context, true, GL_FRONT, currentDSState.stencilWritemask));
+    }
+
+    if (defaultDSState.stencilBackWritemask != currentDSState.stencilBackWritemask)
+    {
+        cap(CaptureStencilMaskSeparate(context, true, GL_BACK,
+                                       currentDSState.stencilBackWritemask));
     }
 
     const gl::ColorF &currentClearColor = glState.getColorClearValue();
