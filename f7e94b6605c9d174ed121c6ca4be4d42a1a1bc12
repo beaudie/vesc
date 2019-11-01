@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "4b1f8f11_c7fdefc6",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-11-01T18:22:11Z",
+      "side": 1,
+      "message": "These represent multiple values conceptually though, and use the plural names in gl_angle_ext.xml. Shouldn\u0027t they remain plural?",
+      "parentUuid": "51bc29cf_cc1e30e7",
+      "range": {
+        "startLine": 135,
+        "startChar": 21,
+        "endLine": 135,
+        "endChar": 27
+      },
+      "revId": "f7e94b6605c9d174ed121c6ca4be4d42a1a1bc12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9c16f30a_7b2ec95d",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 4
