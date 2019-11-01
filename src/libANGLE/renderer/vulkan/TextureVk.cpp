@@ -341,7 +341,7 @@ angle::Result TextureVk::copyCompressedTexture(const gl::Context *context,
 
     ANGLE_TRY(redefineImage(context, destIndex, vkFormat, size));
 
-    ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
 
     return copySubImageImplWithTransfer(
         contextVk, destIndex, gl::Offset(0, 0, 0), vkFormat, sourceLevel, 0,
@@ -433,7 +433,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    ANGLE_TRY(source->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(source->ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
 
     const vk::Format &sourceVkFormat = source->getImage().getFormat();
     const vk::Format &destVkFormat   = renderer->getFormat(destFormat.sizedInternalFormat);
@@ -546,7 +546,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
     if (mImage->valid())
     {
         // Make sure any updates to the image are already flushed.
-        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
 
         vk::CommandBuffer *commandBuffer;
         ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
@@ -648,7 +648,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     if (mImage->valid())
     {
         // Make sure any updates to the image are already flushed.
-        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
 
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
@@ -953,7 +953,7 @@ angle::Result TextureVk::copyImageDataToBufferAndGetData(ContextVk *contextVk,
     ANGLE_TRACE_EVENT0("gpu.angle", "TextureVk::copyImageDataToBufferAndGetData");
 
     // Make sure the source is initialized and it's images are flushed.
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
 
     gl::Box area(0, 0, 0, sourceArea.width, sourceArea.height, 1);
 
@@ -1251,7 +1251,7 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     ASSERT(imageIndex.getLevelIndex() >= 0);
 
     ContextVk *contextVk = vk::GetImpl(context);
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
 
     GLuint layerIndex = 0, layerCount = 0;
     GetRenderTargetLayerCountAndIndex(mImage, imageIndex, &layerCount, &layerIndex);
@@ -1335,7 +1335,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     }
 
     // Initialize the image storage and flush the pixel buffer.
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
 
     if (dirtyBits.none() && mSampler.valid())
     {

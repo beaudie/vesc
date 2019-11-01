@@ -58,7 +58,7 @@ egl::Error ImageVk::initialize(const egl::Display *display)
         ASSERT(mContext != nullptr);
         ContextVk *contextVk = vk::GetImpl(mContext);
         ANGLE_TRY(ResultToEGL(
-            textureVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels)));
+            textureVk->ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain)));
 
         mImage = &textureVk->getImage();
 
