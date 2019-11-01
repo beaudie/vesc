@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7acb13fc_5f5e3658",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-01T16:11:17Z",
+      "side": 1,
+      "message": "Should this pattern be used by other getters, or specific to Floatv?",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 365,
+        "endChar": 5
+      },
+      "revId": "522b6129e0f12921a89b932e1cccd36f67ba94e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
