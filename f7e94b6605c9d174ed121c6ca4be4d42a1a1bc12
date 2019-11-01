@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "e7684b75_f7d09ea4",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-11-01T18:36:07Z",
+      "side": 1,
+      "message": "Let\u0027s discuss this more offline, ok? I think the naming convention for Khronos\u0027 multi-draw entry points is confusing, and prefer the plural names for both this extension as well as ANGLE_multi_draw. Suggesting to Shrek to proceed with this patch as is, and we can consider renaming everything in a follow up patch.",
+      "parentUuid": "d4158ded_cde03fcc",
+      "range": {
+        "startLine": 135,
+        "startChar": 21,
+        "endLine": 135,
+        "endChar": 27
+      },
+      "revId": "f7e94b6605c9d174ed121c6ca4be4d42a1a1bc12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c16f30a_7b2ec95d",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 4
