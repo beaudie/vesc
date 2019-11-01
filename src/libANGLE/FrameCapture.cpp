@@ -851,6 +851,21 @@ void MaybeCaptureUpdateResourceIDs(const gl::Context *context, std::vector<CallC
     }
 }
 
+GLboolean GLBool(bool value)
+{
+    return value ? GL_TRUE : GL_FALSE;
+}
+
+bool IsDefaultCurrentValue(const gl::VertexAttribCurrentValueData &currentValue)
+{
+    if (currentValue.Type != gl::VertexAttribType::Float)
+        return false;
+
+    return currentValue.Values.FloatValues[0] == 0.0f &&
+           currentValue.Values.FloatValues[1] == 0.0f &&
+           currentValue.Values.FloatValues[2] == 0.0f && currentValue.Values.FloatValues[3] == 1.0f;
+}
+
 void CaptureMidExecutionSetup(const gl::Context *context,
                               std::vector<CallCapture> *setupCalls,
                               const ShaderSourceMap &cachedShaderSources,
@@ -895,15 +910,69 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         MaybeCaptureUpdateResourceIDs(context, setupCalls);
 
         // Always use the array buffer binding point to upload data to keep things simple.
-        cap(CaptureBindBuffer(context, true, gl::BufferBinding::Array, id));
+        if (id != currentArrayBuffer)
+        {
+            cap(CaptureBindBuffer(context, true, gl::BufferBinding::Array, id));
+            currentArrayBuffer = id;
+        }
+
         cap(CaptureBufferData(context, true, gl::BufferBinding::Array,
                               static_cast<GLsizeiptr>(buffer->getSize()), buffer->getMapPointer(),
                               buffer->getUsage()));
 
-        currentArrayBuffer = id;
-
         GLboolean dontCare;
         (void)buffer->unmap(context, &dontCare);
+    }
+
+    // Vertex input states. Only handles GLES 2.0 states right now.
+    // Must happen after buffer data initialization.
+    // TODO(http://anglebug.com/3662): Complete state capture.
+    const std::vector<gl::VertexAttribCurrentValueData> &currentValues =
+        glState.getVertexAttribCurrentValues();
+    const std::vector<gl::VertexAttribute> &vertexAttribs =
+        glState.getVertexArray()->getVertexAttributes();
+    const std::vector<gl::VertexBinding> &vertexBindings =
+        glState.getVertexArray()->getVertexBindings();
+
+    for (GLuint attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
+    {
+        const gl::VertexAttribCurrentValueData &currentValue = currentValues[attribIndex];
+        if (!IsDefaultCurrentValue(currentValue))
+        {
+            cap(CaptureVertexAttrib4fv(context, true, attribIndex,
+                                       currentValue.Values.FloatValues));
+        }
+
+        const gl::VertexAttribute &attrib = vertexAttribs[attribIndex];
+        const gl::VertexBinding &binding  = vertexBindings[attrib.bindingIndex];
+
+        const gl::VertexAttribute defaultAttrib(attribIndex);
+        const gl::VertexBinding defaultBinding;
+
+        if (attrib.enabled != defaultAttrib.enabled)
+        {
+            cap(CaptureEnableVertexAttribArray(context, false, attribIndex));
+        }
+
+        if (attrib.format != defaultAttrib.format || attrib.pointer != defaultAttrib.pointer ||
+            binding.getStride() != defaultBinding.getStride() ||
+            binding.getBuffer().get() != nullptr)
+        {
+            if (binding.getBuffer().id() != currentArrayBuffer)
+            {
+                currentArrayBuffer = binding.getBuffer().id();
+                cap(CaptureBindBuffer(context, true, gl::BufferBinding::Array, currentArrayBuffer));
+            }
+
+            cap(CaptureVertexAttribPointer(context, true, attribIndex, attrib.format->channelCount,
+                                           attrib.format->vertexAttribType, attrib.format->isNorm(),
+                                           binding.getStride(), attrib.pointer));
+        }
+
+        if (binding.getDivisor() != defaultBinding.getDivisor())
+        {
+            cap(CaptureVertexAttribDivisor(context, true, attribIndex, binding.getDivisor()));
+        }
     }
 
     // Capture Buffer bindings.
@@ -919,6 +988,14 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         {
             cap(CaptureBindBuffer(context, true, binding, bufferID));
         }
+    }
+
+    // Set a pack alignment of 1.
+    gl::PixelPackState currentPackState;
+    if (currentPackState.alignment != 1)
+    {
+        cap(CapturePixelStorei(context, true, GL_UNPACK_ALIGNMENT, 1));
+        currentPackState.alignment = 1;
     }
 
     // Capture Texture setup and data.
@@ -1181,6 +1258,24 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             }
         }
 
+        const gl::FramebufferAttachment *depthAttachment = framebuffer->getDepthAttachment();
+        if (depthAttachment)
+        {
+            ASSERT(depthAttachment->type() == GL_RENDERBUFFER);
+            GLuint resourceID = depthAttachment->getResource()->getId();
+            cap(CaptureFramebufferRenderbuffer(context, true, GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                                               GL_RENDERBUFFER, {resourceID}));
+        }
+
+        const gl::FramebufferAttachment *stencilAttachment = framebuffer->getStencilAttachment();
+        if (stencilAttachment)
+        {
+            ASSERT(stencilAttachment->type() == GL_RENDERBUFFER);
+            GLuint resourceID = stencilAttachment->getResource()->getId();
+            cap(CaptureFramebufferRenderbuffer(context, true, GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                                               GL_RENDERBUFFER, {resourceID}));
+        }
+
         // TODO(jmadill): Draw buffer states. http://anglebug.com/3662
     }
 
@@ -1303,18 +1398,24 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
     // Capture GL Context states.
     // TODO(http://anglebug.com/3662): Complete state capture.
+    auto capCap = [cap, context](GLenum capEnum, bool capValue) {
+        if (capValue)
+        {
+            cap(CaptureEnable(context, true, capEnum));
+        }
+        else
+        {
+            cap(CaptureDisable(context, true, capEnum));
+        }
+    };
+
+    // Rasterizer state. Missing ES 3.x features.
+    // TODO(http://anglebug.com/3662): Complete state capture.
     const gl::RasterizerState defaultRasterState;
     const gl::RasterizerState &currentRasterState = glState.getRasterizerState();
     if (currentRasterState.cullFace != defaultRasterState.cullFace)
     {
-        if (currentRasterState.cullFace)
-        {
-            cap(CaptureEnable(context, true, GL_CULL_FACE));
-        }
-        else
-        {
-            cap(CaptureDisable(context, true, GL_CULL_FACE));
-        }
+        capCap(GL_CULL_FACE, currentRasterState.cullFace);
     }
 
     if (currentRasterState.cullMode != defaultRasterState.cullMode)
@@ -1327,11 +1428,163 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         cap(CaptureFrontFace(context, true, currentRasterState.frontFace));
     }
 
+    // Depth/stencil state.
+    const gl::DepthStencilState defaultDSState;
+    const gl::DepthStencilState &currentDSState = glState.getDepthStencilState();
+    if (defaultDSState.depthFunc != currentDSState.depthFunc)
+    {
+        cap(CaptureDepthFunc(context, true, currentDSState.depthFunc));
+    }
+
+    if (defaultDSState.depthMask != currentDSState.depthMask)
+    {
+        cap(CaptureDepthMask(context, true, GLBool(currentDSState.depthMask)));
+    }
+
+    if (defaultDSState.depthTest != currentDSState.depthTest)
+    {
+        capCap(GL_DEPTH_TEST, currentDSState.depthTest);
+    }
+
+    if (defaultDSState.stencilTest != currentDSState.stencilTest)
+    {
+        capCap(GL_STENCIL_TEST, currentDSState.stencilTest);
+    }
+
+    if (defaultDSState.stencilFunc != currentDSState.stencilFunc ||
+        defaultDSState.stencilMask != currentDSState.stencilMask || glState.getStencilRef() != 0)
+    {
+        cap(CaptureStencilFuncSeparate(context, true, GL_FRONT, currentDSState.stencilFunc,
+                                       glState.getStencilRef(), currentDSState.stencilMask));
+    }
+
+    if (defaultDSState.stencilBackFunc != currentDSState.stencilBackFunc ||
+        defaultDSState.stencilBackMask != currentDSState.stencilBackMask ||
+        glState.getStencilBackRef() != 0)
+    {
+        cap(CaptureStencilFuncSeparate(context, true, GL_BACK, currentDSState.stencilBackFunc,
+                                       glState.getStencilBackRef(),
+                                       currentDSState.stencilBackMask));
+    }
+
+    if (defaultDSState.stencilFail != currentDSState.stencilFail ||
+        defaultDSState.stencilPassDepthFail != currentDSState.stencilPassDepthFail ||
+        defaultDSState.stencilPassDepthPass != currentDSState.stencilPassDepthPass)
+    {
+        cap(CaptureStencilOpSeparate(context, true, GL_FRONT, currentDSState.stencilFail,
+                                     currentDSState.stencilPassDepthFail,
+                                     currentDSState.stencilPassDepthPass));
+    }
+
+    if (defaultDSState.stencilBackFail != currentDSState.stencilBackFail ||
+        defaultDSState.stencilBackPassDepthFail != currentDSState.stencilBackPassDepthFail ||
+        defaultDSState.stencilBackPassDepthPass != currentDSState.stencilBackPassDepthPass)
+    {
+        cap(CaptureStencilOpSeparate(context, true, GL_BACK, currentDSState.stencilBackFail,
+                                     currentDSState.stencilBackPassDepthFail,
+                                     currentDSState.stencilBackPassDepthPass));
+    }
+
+    if (defaultDSState.stencilWritemask != currentDSState.stencilWritemask)
+    {
+        cap(CaptureStencilMaskSeparate(context, true, GL_FRONT, currentDSState.stencilWritemask));
+    }
+
+    if (defaultDSState.stencilBackWritemask != currentDSState.stencilBackWritemask)
+    {
+        cap(CaptureStencilMaskSeparate(context, true, GL_BACK,
+                                       currentDSState.stencilBackWritemask));
+    }
+
+    // Blend state.
+    const gl::BlendState defaultBlendState;
+    const gl::BlendState &currentBlendState = glState.getBlendState();
+
+    if (currentBlendState.blend != defaultBlendState.blend)
+    {
+        capCap(GL_BLEND, currentBlendState.blend);
+    }
+
+    if (currentBlendState.sourceBlendRGB != defaultBlendState.sourceBlendRGB ||
+        currentBlendState.destBlendRGB != defaultBlendState.destBlendRGB ||
+        currentBlendState.sourceBlendAlpha != defaultBlendState.sourceBlendAlpha ||
+        currentBlendState.destBlendAlpha != defaultBlendState.destBlendAlpha)
+    {
+        cap(CaptureBlendFuncSeparate(
+            context, true, currentBlendState.sourceBlendRGB, currentBlendState.destBlendRGB,
+            currentBlendState.sourceBlendAlpha, currentBlendState.destBlendAlpha));
+    }
+
+    if (currentBlendState.blendEquationRGB != defaultBlendState.blendEquationRGB ||
+        currentBlendState.blendEquationAlpha != defaultBlendState.blendEquationAlpha)
+    {
+        cap(CaptureBlendEquationSeparate(context, true, currentBlendState.blendEquationRGB,
+                                         currentBlendState.blendEquationAlpha));
+    }
+
+    if (currentBlendState.colorMaskRed != defaultBlendState.colorMaskRed ||
+        currentBlendState.colorMaskGreen != defaultBlendState.colorMaskGreen ||
+        currentBlendState.colorMaskBlue != defaultBlendState.colorMaskBlue ||
+        currentBlendState.colorMaskAlpha != defaultBlendState.colorMaskAlpha)
+    {
+        cap(CaptureColorMask(context, true, GLBool(currentBlendState.colorMaskRed),
+                             GLBool(currentBlendState.colorMaskGreen),
+                             GLBool(currentBlendState.colorMaskBlue),
+                             GLBool(currentBlendState.colorMaskAlpha)));
+    }
+
+    const gl::ColorF &currentBlendColor = glState.getBlendColor();
+    if (currentBlendColor != gl::ColorF())
+    {
+        cap(CaptureBlendColor(context, true, currentBlendColor.red, currentBlendColor.green,
+                              currentBlendColor.blue, currentBlendColor.alpha));
+    }
+
+    // Pixel storage states.
+    // TODO(jmadill): ES 3.x+ implementation. http://anglebug.com/3662
+    if (currentPackState.alignment != glState.getPackAlignment())
+    {
+        cap(CapturePixelStorei(context, true, GL_UNPACK_ALIGNMENT, glState.getPackAlignment()));
+        currentPackState.alignment = glState.getPackAlignment();
+    }
+
+    // Clear state. Missing ES 3.x features.
+    // TODO(http://anglebug.com/3662): Complete state capture.
     const gl::ColorF &currentClearColor = glState.getColorClearValue();
     if (currentClearColor != gl::ColorF())
     {
         cap(CaptureClearColor(context, true, currentClearColor.red, currentClearColor.green,
                               currentClearColor.blue, currentClearColor.alpha));
+    }
+
+    if (glState.getDepthClearValue() != 1.0f)
+    {
+        cap(CaptureClearDepthf(context, true, glState.getDepthClearValue()));
+    }
+
+    // Viewport / scissor / clipping planes.
+    const gl::Rectangle &currentViewport = glState.getViewport();
+    if (currentViewport != gl::Rectangle())
+    {
+        cap(CaptureViewport(context, true, currentViewport.x, currentViewport.y,
+                            currentViewport.width, currentViewport.height));
+    }
+
+    if (glState.getNearPlane() != 0.0f || glState.getFarPlane() != 1.0f)
+    {
+        cap(CaptureDepthRangef(context, true, glState.getNearPlane(), glState.getFarPlane()));
+    }
+
+    if (glState.isScissorTestEnabled())
+    {
+        capCap(GL_SCISSOR_TEST, glState.isScissorTestEnabled());
+    }
+
+    const gl::Rectangle &currentScissor = glState.getScissor();
+    if (currentScissor != gl::Rectangle())
+    {
+        cap(CaptureScissor(context, true, currentScissor.x, currentScissor.y, currentScissor.width,
+                           currentScissor.height));
     }
 }
 }  // namespace
