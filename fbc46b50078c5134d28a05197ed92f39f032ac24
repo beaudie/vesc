@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae3540b2_dfd62fa5",
+        "filename": "scripts/gen_gl_enum_utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-01T16:08:28Z",
+      "side": 1,
+      "message": "Do we need gles3 as well, or does this include gles2+?\n\nOr will we need to update this for gles3 content?",
+      "range": {
+        "startLine": 183,
+        "startChar": 29,
+        "endLine": 183,
+        "endChar": 34
+      },
+      "revId": "fbc46b50078c5134d28a05197ed92f39f032ac24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
