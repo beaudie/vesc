@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6cf8e11_9222cb3f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-01T14:51:10Z",
+      "side": 1,
+      "message": "use angleproject, defaults to chromium still.",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 9
+      },
+      "revId": "f7e94b6605c9d174ed121c6ca4be4d42a1a1bc12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51bc29cf_cc1e30e7",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-01T14:51:10Z",
+      "side": 1,
+      "message": "these are just named \u0027first\u0027, \u0027count\u0027, \u0027instancecount\u0027, \u0027baseinstance\u0027 in gl.xml. might as well fix them now while we\u0027re at it. same of the other EPs.",
+      "range": {
+        "startLine": 135,
+        "startChar": 21,
+        "endLine": 135,
+        "endChar": 27
+      },
+      "revId": "f7e94b6605c9d174ed121c6ca4be4d42a1a1bc12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c16f30a_7b2ec95d",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-01T14:51:10Z",
+      "side": 1,
+      "message": "nit: typo (missing E)",
+      "range": {
+        "startLine": 180,
+        "startChar": 9,
+        "endLine": 180,
+        "endChar": 61
+      },
+      "revId": "f7e94b6605c9d174ed121c6ca4be4d42a1a1bc12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
