@@ -22,6 +22,30 @@
       "revId": "522b6129e0f12921a89b932e1cccd36f67ba94e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "497d94bc_cfa1167d",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-02T21:28:08Z",
+      "side": 1,
+      "message": "Done (made a helper)",
+      "parentUuid": "7acb13fc_5f5e3658",
+      "range": {
+        "startLine": 362,
+        "startChar": 4,
+        "endLine": 365,
+        "endChar": 5
+      },
+      "revId": "522b6129e0f12921a89b932e1cccd36f67ba94e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
