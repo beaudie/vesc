@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ecc5e21b_f8c97e2f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-03T01:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0c77e88_0e7452a2",
+      "range": {
+        "startLine": 911,
+        "startChar": 8,
+        "endLine": 911,
+        "endChar": 93
+      },
+      "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d2ddb49_44febfe0",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 41
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-31T17:04:31Z",
       "side": 1,
       "message": "Can you add a comment explaining how compression plays into this?",
+      "range": {
+        "startLine": 998,
+        "startChar": 58,
+        "endLine": 998,
+        "endChar": 76
+      },
+      "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0af2d4e_1c115adf",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-03T01:52:47Z",
+      "side": 1,
+      "message": "Going to have to redo the compressed logic a bit. It\u0027s a bit tricky. I\u0027m sketching out a design doc that discusses this (among other things). The basic difficulty is that on desktop compressed formats are emulated while on mobile they are native.",
+      "parentUuid": "8d2ddb49_44febfe0",
       "range": {
         "startLine": 998,
         "startChar": 58,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "80cef7b9_b5e4b74d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-03T01:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63cc5605_ea6d1b8b",
+      "range": {
+        "startLine": 1111,
+        "startChar": 8,
+        "endLine": 1111,
+        "endChar": 36
+      },
+      "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b85234a_f6e40ddc",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 41
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "6d4c1976_08768cf0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-03T01:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b85234a_f6e40ddc",
+      "range": {
+        "startLine": 1198,
+        "startChar": 8,
+        "endLine": 1198,
+        "endChar": 33
+      },
+      "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "873c08fc_8cf7efbe",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 41
@@ -114,6 +210,30 @@
       "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb36b86d_70b8861b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-03T01:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "873c08fc_8cf7efbe",
+      "range": {
+        "startLine": 1232,
+        "startChar": 8,
+        "endLine": 1232,
+        "endChar": 33
+      },
+      "revId": "32f38d708cbfb18f2ee90af2c588a7ebccb5b956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

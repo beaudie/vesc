@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "83aac6aa_50d1132d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-03T01:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba4ee10a_4c4dfe54",
+      "range": {
+        "startLine": 703,
+        "startChar": 18,
+        "endLine": 703,
+        "endChar": 29
+      },
+      "revId": "1545746b93fc436d1e25f86c633a9b26faead582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e289ff0c_5e0b92bf",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 40
@@ -36,6 +60,30 @@
       "writtenOn": "2019-10-31T17:04:31Z",
       "side": 1,
       "message": "Can these be unordered_map for performance, or do they need to be ordered?",
+      "range": {
+        "startLine": 172,
+        "startChar": 30,
+        "endLine": 172,
+        "endChar": 33
+      },
+      "revId": "1545746b93fc436d1e25f86c633a9b26faead582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04bb9603_f7aac45d",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-03T01:52:47Z",
+      "side": 1,
+      "message": "I originally didn\u0027t do unordered_map because it requires defining a hash function for each key type. Totally open to improving this in the future. For now if it\u0027s okay I\u0027d prefer to keep-it-simple. If it becomes a perf bottleneck.",
+      "parentUuid": "e289ff0c_5e0b92bf",
       "range": {
         "startLine": 172,
         "startChar": 30,
@@ -68,6 +116,30 @@
       "revId": "1545746b93fc436d1e25f86c633a9b26faead582",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9071a86_4330b4f9",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-03T01:52:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "17aa6111_c3c77b8c",
+      "range": {
+        "startLine": 173,
+        "startChar": 30,
+        "endLine": 173,
+        "endChar": 33
+      },
+      "revId": "1545746b93fc436d1e25f86c633a9b26faead582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
