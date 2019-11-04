@@ -2893,27 +2893,29 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
     ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::copyImageDataToBuffer");
 
     const angle::Format &imageFormat = mFormat->actualImageFormat();
-    size_t sourceCopyAllocationSize  = sourceArea.width * sourceArea.height * sourceArea.depth *
-                                      imageFormat.pixelBytes * layerCount;
+
+    const VkImageAspectFlags aspectFlags = getAspectFlags();
+    const VkImageAspectFlags dsAspectFlags =
+        VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+    // For combined DS account for extra byte per pixel in case we hit non-tightly packed case
+    const VkDeviceSize pixelBytes = ((aspectFlags & dsAspectFlags) == dsAspectFlags)
+                                        ? imageFormat.pixelBytes + 1
+                                        : imageFormat.pixelBytes;
+    size_t sourceCopyAllocationSize =
+        sourceArea.width * sourceArea.height * sourceArea.depth * pixelBytes * layerCount;
 
     CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
 
-    //  http://anglebug.com/3949: Need to handle DS combined aspect, will require copying D & S
-    //   separately. See ImageHelper::stageSubresourceUpdate for DS copy buff->image example.
-    ASSERT(getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT ||
-           getAspectFlags() == VK_IMAGE_ASPECT_DEPTH_BIT ||
-           getAspectFlags() == VK_IMAGE_ASPECT_STENCIL_BIT);
-
     // Transition the image to readable layout
-    changeLayout(getAspectFlags(), ImageLayout::TransferSrc, commandBuffer);
+    changeLayout(aspectFlags, ImageLayout::TransferSrc, commandBuffer);
 
     VkImageMemoryBarrier barrier            = {};
     barrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     barrier.image                           = mImage.getHandle();
     barrier.srcQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
     barrier.dstQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
-    barrier.subresourceRange.aspectMask     = getAspectFlags();
+    barrier.subresourceRange.aspectMask     = aspectFlags;
     barrier.subresourceRange.baseArrayLayer = baseLayer;
     barrier.subresourceRange.layerCount     = layerCount;
     barrier.subresourceRange.levelCount     = 1;
@@ -2930,23 +2932,60 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
     ANGLE_TRY(allocateStagingMemory(contextVk, sourceCopyAllocationSize, outDataPtr, bufferOut,
                                     bufferOffsetOut, nullptr));
 
-    VkBufferImageCopy region               = {};
-    region.bufferOffset                    = *bufferOffsetOut;
-    region.bufferRowLength                 = 0;
-    region.bufferImageHeight               = 0;
-    region.imageExtent.width               = sourceArea.width;
-    region.imageExtent.height              = sourceArea.height;
-    region.imageExtent.depth               = sourceArea.depth;
-    region.imageOffset.x                   = sourceArea.x;
-    region.imageOffset.y                   = sourceArea.y;
-    region.imageOffset.z                   = sourceArea.z;
-    region.imageSubresource.aspectMask     = getAspectFlags();
-    region.imageSubresource.baseArrayLayer = baseLayer;
-    region.imageSubresource.layerCount     = layerCount;
-    region.imageSubresource.mipLevel       = static_cast<uint32_t>(sourceLevel);
+    VkBufferImageCopy regions[2] = {};
+    // Default to non-combined DS case
+    uint32_t numRegions                        = 1;
+    regions[0].bufferOffset                    = *bufferOffsetOut;
+    regions[0].bufferRowLength                 = 0;
+    regions[0].bufferImageHeight               = 0;
+    regions[0].imageExtent.width               = sourceArea.width;
+    regions[0].imageExtent.height              = sourceArea.height;
+    regions[0].imageExtent.depth               = sourceArea.depth;
+    regions[0].imageOffset.x                   = sourceArea.x;
+    regions[0].imageOffset.y                   = sourceArea.y;
+    regions[0].imageOffset.z                   = sourceArea.z;
+    regions[0].imageSubresource.aspectMask     = aspectFlags;
+    regions[0].imageSubresource.baseArrayLayer = baseLayer;
+    regions[0].imageSubresource.layerCount     = layerCount;
+    regions[0].imageSubresource.mipLevel       = static_cast<uint32_t>(sourceLevel);
+
+    if ((aspectFlags & dsAspectFlags) == dsAspectFlags)
+    {
+        // For combined DS image we'll copy depth & stencil aspects separately
+        numRegions = 2;
+        // Depth aspect
+        regions[0].imageSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        // Stencil aspect
+        // Depth is tightly packed in almost all cases
+        uint32_t depthBytesPerPixel = imageFormat.depthBits >> 3;
+        // Only these 2 cases use an extra byte for depth
+        if (mFormat->vkImageFormat == VK_FORMAT_X8_D24_UNORM_PACK32 ||
+            mFormat->vkImageFormat == VK_FORMAT_D24_UNORM_S8_UINT)
+        {
+            depthBytesPerPixel = 4;
+        }
+        VkDeviceSize depthSize = depthBytesPerPixel * sourceArea.width * sourceArea.height *
+                                 sourceArea.depth * layerCount;
+        // Make sure we allocated enough buffer space for D & S (always 1 byte per stencil)
+        ASSERT(sourceCopyAllocationSize >= (depthSize + (sourceArea.width * sourceArea.height *
+                                                         sourceArea.depth * layerCount)));
+        regions[1].bufferOffset                    = *bufferOffsetOut + depthSize;
+        regions[1].bufferRowLength                 = 0;
+        regions[1].bufferImageHeight               = 0;
+        regions[1].imageExtent.width               = sourceArea.width;
+        regions[1].imageExtent.height              = sourceArea.height;
+        regions[1].imageExtent.depth               = sourceArea.depth;
+        regions[1].imageOffset.x                   = sourceArea.x;
+        regions[1].imageOffset.y                   = sourceArea.y;
+        regions[1].imageOffset.z                   = sourceArea.z;
+        regions[1].imageSubresource.aspectMask     = VK_IMAGE_ASPECT_STENCIL_BIT;
+        regions[1].imageSubresource.baseArrayLayer = baseLayer;
+        regions[1].imageSubresource.layerCount     = layerCount;
+        regions[1].imageSubresource.mipLevel       = static_cast<uint32_t>(sourceLevel);
+    }
 
     commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(),
-                                     (*bufferOut)->getBuffer().getHandle(), 1, &region);
+                                     (*bufferOut)->getBuffer().getHandle(), numRegions, regions);
 
     barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
     barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
