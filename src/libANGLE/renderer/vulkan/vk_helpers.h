@@ -731,6 +731,8 @@ class ImageHelper final : public CommandGraphResource
     bool valid() const { return mImage.valid(); }
 
     VkImageAspectFlags getAspectFlags() const;
+    // True if image contains both depth & stencil aspects
+    bool isDepthStencil() const;
     void destroy(VkDevice device);
 
     void init2DWeakReference(VkImage handle,
@@ -806,7 +808,7 @@ class ImageHelper final : public CommandGraphResource
                                                    const VkExtent3D &extent,
                                                    const VkOffset3D &offset,
                                                    BufferHelper *stagingBuffer,
-                                                   VkDeviceSize stagingOffset);
+                                                   std::vector<VkDeviceSize> stagingOffsets);
 
     angle::Result stageSubresourceUpdateFromFramebuffer(const gl::Context *context,
                                                         const gl::ImageIndex &index,
@@ -888,7 +890,8 @@ class ImageHelper final : public CommandGraphResource
                                         uint32_t baseLayer,
                                         const gl::Box &sourceArea,
                                         BufferHelper **bufferOut,
-                                        VkDeviceSize *bufferOffsetOut,
+                                        size_t *bufferSize,
+                                        std::vector<VkDeviceSize> *bufferOffsetOut,
                                         uint8_t **outDataPtr);
 
     static angle::Result GetReadPixelsParams(ContextVk *contextVk,
