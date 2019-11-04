@@ -1874,6 +1874,12 @@ VkImageAspectFlags ImageHelper::getAspectFlags() const
     return GetFormatAspectFlags(mFormat->actualImageFormat());
 }
 
+bool ImageHelper::isCombinedDepthStencilFormat() const
+{
+    return ((VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT) & getAspectFlags()) ==
+           (VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT);
+}
+
 VkImageLayout ImageHelper::getCurrentLayout() const
 {
     return kImageMemoryBarrierData[mCurrentLayout].layout;
@@ -2455,35 +2461,50 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
     return angle::Result::Continue;
 }
 
-angle::Result ImageHelper::stageSubresourceUpdateFromBuffer(ContextVk *contextVk,
-                                                            size_t allocationSize,
-                                                            uint32_t mipLevel,
-                                                            uint32_t baseArrayLayer,
-                                                            uint32_t layerCount,
-                                                            const VkExtent3D &extent,
-                                                            const VkOffset3D &offset,
-                                                            BufferHelper *bufferHelper,
-                                                            VkDeviceSize stagingOffset)
+angle::Result ImageHelper::stageSubresourceUpdateFromBuffer(
+    ContextVk *contextVk,
+    size_t allocationSize,
+    uint32_t mipLevel,
+    uint32_t baseArrayLayer,
+    uint32_t layerCount,
+    const VkExtent3D &extent,
+    const VkOffset3D &offset,
+    BufferHelper *bufferHelper,
+    std::vector<VkDeviceSize> stagingOffsets)
 {
     // This function stages an update from explicitly provided handle and offset
     // It is used when the texture base level has changed, and we need to propagate data
 
-    VkBufferImageCopy copy               = {};
-    copy.bufferOffset                    = stagingOffset;
-    copy.bufferRowLength                 = extent.width;
-    copy.bufferImageHeight               = extent.height;
-    copy.imageSubresource.aspectMask     = getAspectFlags();
-    copy.imageSubresource.mipLevel       = mipLevel;
-    copy.imageSubresource.baseArrayLayer = baseArrayLayer;
-    copy.imageSubresource.layerCount     = layerCount;
-    copy.imageOffset                     = offset;
-    copy.imageExtent                     = extent;
+    VkBufferImageCopy copy[2]               = {};
+    copy[0].bufferOffset                    = stagingOffsets[0];
+    copy[0].bufferRowLength                 = extent.width;
+    copy[0].bufferImageHeight               = extent.height;
+    copy[0].imageSubresource.aspectMask     = getAspectFlags();
+    copy[0].imageSubresource.mipLevel       = mipLevel;
+    copy[0].imageSubresource.baseArrayLayer = baseArrayLayer;
+    copy[0].imageSubresource.layerCount     = layerCount;
+    copy[0].imageOffset                     = offset;
+    copy[0].imageExtent                     = extent;
 
-    ASSERT(getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT ||
-           getAspectFlags() == VK_IMAGE_ASPECT_DEPTH_BIT ||
-           getAspectFlags() == VK_IMAGE_ASPECT_STENCIL_BIT);
+    if (isCombinedDepthStencilFormat())
+    {
+        // Force aspect to depth for first copy
+        copy[0].imageSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        // Copy stencil aspect separately
+        ASSERT(stagingOffsets.size() >= 2);
+        copy[1].bufferOffset                    = stagingOffsets[1];
+        copy[1].bufferRowLength                 = extent.width;
+        copy[1].bufferImageHeight               = extent.height;
+        copy[1].imageSubresource.aspectMask     = VK_IMAGE_ASPECT_STENCIL_BIT;
+        copy[1].imageSubresource.mipLevel       = mipLevel;
+        copy[1].imageSubresource.baseArrayLayer = baseArrayLayer;
+        copy[1].imageSubresource.layerCount     = layerCount;
+        copy[1].imageOffset                     = offset;
+        copy[1].imageExtent                     = extent;
+        mSubresourceUpdates.emplace_back(bufferHelper, copy[1]);
+    }
 
-    mSubresourceUpdates.emplace_back(bufferHelper, copy);
+    mSubresourceUpdates.emplace_back(bufferHelper, copy[0]);
 
     return angle::Result::Continue;
 }
@@ -2887,33 +2908,43 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
                                                  uint32_t baseLayer,
                                                  const gl::Box &sourceArea,
                                                  BufferHelper **bufferOut,
-                                                 VkDeviceSize *bufferOffsetOut,
+                                                 size_t *bufferSize,
+                                                 std::vector<VkDeviceSize> *bufferOffsetsOut,
                                                  uint8_t **outDataPtr)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::copyImageDataToBuffer");
 
     const angle::Format &imageFormat = mFormat->actualImageFormat();
-    size_t sourceCopyAllocationSize  = sourceArea.width * sourceArea.height * sourceArea.depth *
-                                      imageFormat.pixelBytes * layerCount;
+
+    // Two VK formats (one depth-only, one combined depth/stencil) use an extra byte for depth.
+    // From https://www.khronos.org/registry/vulkan/specs/1.1/html/vkspec.html#VkBufferImageCopy:
+    //  data copied to or from the depth aspect of a VK_FORMAT_X8_D24_UNORM_PACK32 or
+    //  VK_FORMAT_D24_UNORM_S8_UINT format is packed with one 32-bit word per texel...
+    // So make sure if we hit the depth/stencil format that we have enough bytes per pixel.
+    //  NOTE that depth-only VK_FORMAT_X8_D24_UNORM_PACK32 already has 4 bytes per pixel which
+    //  is sufficient to contain its depth aspect (no stencil aspect)
+    uint32_t pixelBytes = imageFormat.pixelBytes;
+    if (mFormat->vkImageFormat == VK_FORMAT_D24_UNORM_S8_UINT)
+    {
+        // Need to make sure we have at least 5 bytes per pixel (4 for depth aspect, 1 for stencil)
+        pixelBytes = std::max(pixelBytes, 5u);
+    }
+
+    *bufferSize = sourceArea.width * sourceArea.height * sourceArea.depth * pixelBytes * layerCount;
 
     CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
 
-    //  http://anglebug.com/3949: Need to handle DS combined aspect, will require copying D & S
-    //   separately. See ImageHelper::stageSubresourceUpdate for DS copy buff->image example.
-    ASSERT(getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT ||
-           getAspectFlags() == VK_IMAGE_ASPECT_DEPTH_BIT ||
-           getAspectFlags() == VK_IMAGE_ASPECT_STENCIL_BIT);
-
     // Transition the image to readable layout
-    changeLayout(getAspectFlags(), ImageLayout::TransferSrc, commandBuffer);
+    const VkImageAspectFlags aspectFlags = getAspectFlags();
+    changeLayout(aspectFlags, ImageLayout::TransferSrc, commandBuffer);
 
     VkImageMemoryBarrier barrier            = {};
     barrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     barrier.image                           = mImage.getHandle();
     barrier.srcQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
     barrier.dstQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
-    barrier.subresourceRange.aspectMask     = getAspectFlags();
+    barrier.subresourceRange.aspectMask     = aspectFlags;
     barrier.subresourceRange.baseArrayLayer = baseLayer;
     barrier.subresourceRange.layerCount     = layerCount;
     barrier.subresourceRange.levelCount     = 1;
@@ -2926,27 +2957,73 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
     commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
                                 &barrier);
 
+    // Local alias to make code more readable
+#define bufferOffsetsVector (*bufferOffsetsOut)
     // Allocate staging buffer data
-    ANGLE_TRY(allocateStagingMemory(contextVk, sourceCopyAllocationSize, outDataPtr, bufferOut,
-                                    bufferOffsetOut, nullptr));
+    ANGLE_TRY(allocateStagingMemory(contextVk, *bufferSize, outDataPtr, bufferOut,
+                                    &(bufferOffsetsVector[0]), nullptr));
 
-    VkBufferImageCopy region               = {};
-    region.bufferOffset                    = *bufferOffsetOut;
-    region.bufferRowLength                 = 0;
-    region.bufferImageHeight               = 0;
-    region.imageExtent.width               = sourceArea.width;
-    region.imageExtent.height              = sourceArea.height;
-    region.imageExtent.depth               = sourceArea.depth;
-    region.imageOffset.x                   = sourceArea.x;
-    region.imageOffset.y                   = sourceArea.y;
-    region.imageOffset.z                   = sourceArea.z;
-    region.imageSubresource.aspectMask     = getAspectFlags();
-    region.imageSubresource.baseArrayLayer = baseLayer;
-    region.imageSubresource.layerCount     = layerCount;
-    region.imageSubresource.mipLevel       = static_cast<uint32_t>(sourceLevel);
+    VkBufferImageCopy regions[2] = {};
+    // Default to non-combined DS case
+    regions[0].bufferOffset                    = bufferOffsetsVector[0];
+    regions[0].bufferRowLength                 = 0;
+    regions[0].bufferImageHeight               = 0;
+    regions[0].imageExtent.width               = sourceArea.width;
+    regions[0].imageExtent.height              = sourceArea.height;
+    regions[0].imageExtent.depth               = sourceArea.depth;
+    regions[0].imageOffset.x                   = sourceArea.x;
+    regions[0].imageOffset.y                   = sourceArea.y;
+    regions[0].imageOffset.z                   = sourceArea.z;
+    regions[0].imageSubresource.aspectMask     = aspectFlags;
+    regions[0].imageSubresource.baseArrayLayer = baseLayer;
+    regions[0].imageSubresource.layerCount     = layerCount;
+    regions[0].imageSubresource.mipLevel       = static_cast<uint32_t>(sourceLevel);
+
+    if (isCombinedDepthStencilFormat())
+    {
+        // For combined DS image we'll copy depth and stencil aspects separately
+        // Depth aspect comes first in buffer and can use most settings from above
+        regions[0].imageSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+
+        // Stencil aspect immediately follows depth data in buffer
+        // Depth is tightly packed in almost all cases, for the one non-tightly
+        //  packed DS case make sure that depth portion of buffer is correctly sized
+        uint32_t depthBytesPerPixel = imageFormat.depthBits >> 3;
+        if (mFormat->vkImageFormat == VK_FORMAT_D24_UNORM_S8_UINT)
+        {
+            depthBytesPerPixel = 4;
+        }
+        const VkDeviceSize depthSize = depthBytesPerPixel * sourceArea.width * sourceArea.height *
+                                       sourceArea.depth * layerCount;
+
+        // Double-check that we allocated enough buffer space (always 1 byte per stencil)
+        ASSERT(*bufferSize >= (depthSize + (sourceArea.width * sourceArea.height *
+                                            sourceArea.depth * layerCount)));
+
+        // Copy stencil data into buffer immediately following the depth data
+        const VkDeviceSize stencilOffset = bufferOffsetsVector[0] + depthSize;
+        ASSERT(bufferOffsetsVector.size() >= 2);
+        bufferOffsetsVector[1]                     = stencilOffset;
+        regions[1].bufferOffset                    = stencilOffset;
+        regions[1].bufferRowLength                 = 0;
+        regions[1].bufferImageHeight               = 0;
+        regions[1].imageExtent.width               = sourceArea.width;
+        regions[1].imageExtent.height              = sourceArea.height;
+        regions[1].imageExtent.depth               = sourceArea.depth;
+        regions[1].imageOffset.x                   = sourceArea.x;
+        regions[1].imageOffset.y                   = sourceArea.y;
+        regions[1].imageOffset.z                   = sourceArea.z;
+        regions[1].imageSubresource.aspectMask     = VK_IMAGE_ASPECT_STENCIL_BIT;
+        regions[1].imageSubresource.baseArrayLayer = baseLayer;
+        regions[1].imageSubresource.layerCount     = layerCount;
+        regions[1].imageSubresource.mipLevel       = static_cast<uint32_t>(sourceLevel);
+        commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(),
+                                         (*bufferOut)->getBuffer().getHandle(), 1, &regions[1]);
+    }
+#undef bufferOffsetsVector
 
     commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(),
-                                     (*bufferOut)->getBuffer().getHandle(), 1, &region);
+                                     (*bufferOut)->getBuffer().getHandle(), 1, regions);
 
     barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
     barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
