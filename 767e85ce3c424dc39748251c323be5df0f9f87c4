@@ -34,6 +34,24 @@
       "revId": "767e85ce3c424dc39748251c323be5df0f9f87c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb55b224_9ab6f709",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-04T15:49:17Z",
+      "side": 1,
+      "message": "Can you just record memory barrier commands directly in a command buffer?",
+      "parentUuid": "9966f009_7dc66afa",
+      "revId": "767e85ce3c424dc39748251c323be5df0f9f87c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
