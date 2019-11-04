@@ -187,6 +187,30 @@
       "revId": "5ddacfd18e9e3b55322160792e0c703d09d59e13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4a5b4ad_5c564692",
+        "filename": "extensions/EGL_ANGLE_swap_with_frame_token.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-04T21:50:57Z",
+      "side": 1,
+      "message": "Agreed, I don\u0027t see any capitalization on parameters.\n\nLooking at include/EGL/eglext.h, I see a lot of snake_case:\n\n  EGLAttrib *attrib_list\n  EGLNativeFileDescriptorKHR file_descriptor\n  EGLint n_rects\n  EGLint external_ref_id\n  EGLint *context_attributes\n  EGLint num_entries\n\nHow about frame_token?",
+      "parentUuid": "c37fbe61_65c19a2f",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "5ddacfd18e9e3b55322160792e0c703d09d59e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
