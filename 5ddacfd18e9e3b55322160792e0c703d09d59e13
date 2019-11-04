@@ -259,6 +259,30 @@
       "revId": "5ddacfd18e9e3b55322160792e0c703d09d59e13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "909ef098_2be090ca",
+        "filename": "extensions/EGL_ANGLE_swap_with_frame_token.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-04T23:59:32Z",
+      "side": 1,
+      "message": "Thanks. eglext is all over the place. Even gl3.h had inconsistencies. FWIW I think the most \"GL\" thing is all lowercase, no spaces.",
+      "parentUuid": "63b01f3a_d7d49197",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "5ddacfd18e9e3b55322160792e0c703d09d59e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
