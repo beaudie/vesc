@@ -16,6 +16,24 @@
       "revId": "aead1326e308a60646c57335d168d911a0b6a766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e2940f4_36c80b9f",
+        "filename": "src/libGLESv2/libGLESv2_with_capture_autogen.def",
+        "patchSetId": 4
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-04T17:40:23Z",
+      "side": 1,
+      "message": "They are encapsulated in the auto-gen script. I\u0027m not sure if they can share code on disk. Would need to understand the limitations of .def files. AFAIK it\u0027s not possible.",
+      "parentUuid": "94584db7_f248e5c6",
+      "revId": "aead1326e308a60646c57335d168d911a0b6a766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
