@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "05ebd826_a721cf82",
+        "filename": "extensions/EGL_ANGLE_ggp_stream_descriptor.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-04T21:19:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64b04456_53bf11eb",
+      "range": {
+        "startLine": 36,
+        "startChar": 26,
+        "endLine": 36,
+        "endChar": 36
+      },
+      "revId": "5ddacfd18e9e3b55322160792e0c703d09d59e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "500c64ab_c0b1564d",
         "filename": "extensions/EGL_ANGLE_swap_with_frame_token.txt",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "5ddacfd18e9e3b55322160792e0c703d09d59e13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15723487_2e09a40c",
+        "filename": "extensions/EGL_ANGLE_swap_with_frame_token.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-04T21:19:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "500c64ab_c0b1564d",
+      "range": {
+        "startLine": 44,
+        "startChar": 51,
+        "endLine": 44,
+        "endChar": 53
+      },
+      "revId": "5ddacfd18e9e3b55322160792e0c703d09d59e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b3a7a0b8_b3babadf",
+        "filename": "extensions/EGL_ANGLE_swap_with_frame_token.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-04T21:19:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cc31f91_ac672bfa",
+      "range": {
+        "startLine": 46,
+        "startChar": 29,
+        "endLine": 46,
+        "endChar": 47
+      },
+      "revId": "5ddacfd18e9e3b55322160792e0c703d09d59e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd54dfdd_0cf54e8b",
         "filename": "extensions/EGL_ANGLE_swap_with_frame_token.txt",
         "patchSetId": 6
@@ -82,6 +154,30 @@
       "writtenOn": "2019-11-04T21:00:33Z",
       "side": 1,
       "message": "Same here:\nframetoken -\u003e frameToken",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "5ddacfd18e9e3b55322160792e0c703d09d59e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c37fbe61_65c19a2f",
+        "filename": "extensions/EGL_ANGLE_swap_with_frame_token.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-04T21:19:46Z",
+      "side": 1,
+      "message": "Is it alright if I leave this off? I did a bit of digging in GL headers. It seems they\u0027re inconsistent but by and large they prefer using lowercase instead of camelCase for parameter names.",
+      "parentUuid": "dd54dfdd_0cf54e8b",
       "range": {
         "startLine": 53,
         "startChar": 27,
