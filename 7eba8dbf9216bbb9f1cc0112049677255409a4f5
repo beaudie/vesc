@@ -345,6 +345,30 @@
     },
     {
       "key": {
+        "uuid": "3e696a0d_e33a8db6",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-04T02:02:15Z",
+      "side": 1,
+      "message": "Under debugging to make state sync works with new type texture. Need more time for uploading new patch set. Sry about that.",
+      "parentUuid": "59d87565_db0ab443",
+      "range": {
+        "startLine": 71,
+        "startChar": 18,
+        "endLine": 71,
+        "endChar": 31
+      },
+      "revId": "7eba8dbf9216bbb9f1cc0112049677255409a4f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0deb5fc7_a474b14d",
         "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
         "patchSetId": 12
