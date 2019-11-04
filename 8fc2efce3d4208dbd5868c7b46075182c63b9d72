@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "586d139c_07c3d4be",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-04T18:23:10Z",
+      "side": 1,
+      "message": "I\u0027d say we just converge to a 120 second timeout. Debug SwiftShader is very slow. 2 minutes should suffice.\n\nThere\u0027s no reason a real program couldn\u0027t be that slow either. Imagine something processing 1 billion vertices. Most OS\u0027es have a timeout mechanism: e.g. TDR on Windows. So waiting for 100 seconds or more seems okay for testing.\n\nIn that case we could update kMaxFenceWaitTimeNs to 120\u0027000\u0027000\u0027000llu.",
+      "range": {
+        "startLine": 1768,
+        "startChar": 4,
+        "endLine": 1768,
+        "endChar": 95
+      },
+      "revId": "8fc2efce3d4208dbd5868c7b46075182c63b9d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
