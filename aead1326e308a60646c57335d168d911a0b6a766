@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94584db7_f248e5c6",
+        "filename": "src/libGLESv2/libGLESv2_with_capture_autogen.def",
+        "patchSetId": 4
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-04T17:27:49Z",
+      "side": 1,
+      "message": "Unrelated to this CL, but I didn\u0027t realize there were 3 versions of these autogen defs, with only one line different. Could that be encapsulated somehow, like in the autogeneration script itself?",
+      "revId": "aead1326e308a60646c57335d168d911a0b6a766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
