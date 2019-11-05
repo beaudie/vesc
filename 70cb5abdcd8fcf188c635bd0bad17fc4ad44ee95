@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "979c9d92_80e355e9",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-05T04:36:20Z",
+      "side": 1,
+      "message": "I saw that chorimum uses spirv-cross/spirv-cross even though I used spirv-cross/src ititially. So to avoid hassle, I switched to use the same folder as chromium.\nBtw, is dawn using the same folder for its spirv-cross? If not, will there be duplicated symbols in the final linked product?",
+      "parentUuid": "f0030e76_6484a85c",
+      "range": {
+        "startLine": 166,
+        "startChar": 26,
+        "endLine": 166,
+        "endChar": 38
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abb0e6f_12743cfd",
         "filename": "scripts/export_targets.py",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2019-11-05T03:41:57Z",
       "side": 1,
       "message": "can you just add these to the sources list?",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 38
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f7ec41a_bd53f187",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-05T04:36:20Z",
+      "side": 1,
+      "message": "There were some gn errors when I added these to sources list. It said these headers are included but not used by dawn (i.e. dawn\u0027s spirv-cross\u0027s BUILD.gn doesn\u0027t list these headers in its sources list).\nI maded a CL here in dawn repo: https://dawn-review.googlesource.com/c/dawn/+/13020\nAlso dawn dev explained to me why the errors happened in his last comment.",
+      "parentUuid": "1abb0e6f_12743cfd",
       "range": {
         "startLine": 196,
         "startChar": 0,
