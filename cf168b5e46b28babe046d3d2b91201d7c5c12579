@@ -22,6 +22,30 @@
       "revId": "cf168b5e46b28babe046d3d2b91201d7c5c12579",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf59e2fa_bd65d500",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-05T15:37:03Z",
+      "side": 1,
+      "message": "Done. Actually BindResources is OK. That\u0027s my mistake. I thought template overloading with same name is not possible.",
+      "parentUuid": "f42857cd_07ecbf24",
+      "range": {
+        "startLine": 55,
+        "startChar": 14,
+        "endLine": 55,
+        "endChar": 33
+      },
+      "revId": "cf168b5e46b28babe046d3d2b91201d7c5c12579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
