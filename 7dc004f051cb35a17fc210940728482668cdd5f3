@@ -22,6 +22,30 @@
       "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fedef573_4498290f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-11-05T01:27:16Z",
+      "side": 1,
+      "message": "I know your concern, using context-\u003ememoryBarrier is not performance friendly.\nAll the commands are recorded in CommandGraphNode, assume we have node1 (includes copying old image to staging buffer) and node2 (include copying staging buffer to new image), and node1 should be executed before node2, according to the logic in CommandGraph::submitCommands: \n1. Add context-\u003ememoryBarrier will insert a new node, so the submit order will be node1 -\u003e node2\n2. \"Add Vulkan memory barrier commands\" that will add a new vk API into node1 or node2, so the submit order will still be node2 -\u003e node1, and I don\u0027t know how to keep the execution order in this case.\n3. Add onRead/onWrite is similar to context-\u003ememoryBarrier in this case, onRead/onWrite will also make CommandGraph::submitCommands to submit node1 before node2, but onRead/onWrite has other potential dependency loop issues as I described before",
+      "parentUuid": "4f1d2377_d4bd57f0",
+      "range": {
+        "startLine": 1071,
+        "startChar": 0,
+        "endLine": 1074,
+        "endChar": 44
+      },
+      "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
