@@ -22,6 +22,30 @@
       "revId": "83cffda1e1ae1a7f514517ad010f74278e6136e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "266dec2a_d25de52d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-05T18:39:39Z",
+      "side": 1,
+      "message": "The header is specified in the spec:\n\nhttps://www.khronos.org/registry/vulkan/specs/1.1/html/vkspec.html#pipelines-cache\nTable 7. Layout for pipeline cache header version VK_PIPELINE_CACHE_HEADER_VERSION_ONE\n\nHowever, I haven\u0027t been able to find it in the vulkan header files, presumably since it\u0027s not something a user would ever use directly\n\nI\u0027ll add a comment with the table name.",
+      "parentUuid": "5510ea03_3474c231",
+      "range": {
+        "startLine": 1559,
+        "startChar": 44,
+        "endLine": 1559,
+        "endChar": 46
+      },
+      "revId": "83cffda1e1ae1a7f514517ad010f74278e6136e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
