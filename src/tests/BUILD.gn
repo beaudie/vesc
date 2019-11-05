@@ -790,6 +790,9 @@ if (build_angle_deqp_tests && !is_fuchsia) {
       ":angle_deqp_glshared",
       "${angle_root}:angle_common",
       "${angle_root}:angle_util",
+    ]
+
+    data_deps = [
       "${angle_root}:libEGL",
       "${angle_root}:libGLESv2",
     ]
