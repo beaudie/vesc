@@ -46,6 +46,30 @@
       "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "086eb6d2_ccbb759f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T01:44:59Z",
+      "side": 1,
+      "message": "\u003e 2. glGenerateMipmap: copy staging buffer to new image (onRead)\n\nShouldn\u0027t this be another onWrite? You\u0027re writing to the image.",
+      "parentUuid": "fedef573_4498290f",
+      "range": {
+        "startLine": 1071,
+        "startChar": 0,
+        "endLine": 1074,
+        "endChar": 44
+      },
+      "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
