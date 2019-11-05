@@ -1115,6 +1115,9 @@ void GenerateCaps(const FunctionsGL *functions,
                                  functions->hasGLExtension("GL_ARB_map_buffer_range") ||
                                  functions->isAtLeastGLES(gl::Version(3, 0)) ||
                                  functions->hasGLESExtension("GL_EXT_map_buffer_range");
+    extensions->textureFormat2101010REV =
+        functions->isAtLeastGL(gl::Version(3, 3)) || functions->isAtLeastGLES(gl::Version(3, 0)) ||
+        functions->hasGLESExtension("GL_EXT_texture_type_2_10_10_10_REV");
     extensions->textureNPOT = functions->standard == STANDARD_GL_DESKTOP ||
                               functions->isAtLeastGLES(gl::Version(3, 0)) ||
                               functions->hasGLESExtension("GL_OES_texture_npot");
