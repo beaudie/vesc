@@ -166,6 +166,30 @@
       "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de9fde11_b6e45f41",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T04:07:56Z",
+      "side": 1,
+      "message": "If that works, let\u0027s go with that. It\u0027s more consistent with the current graph design. Thanks!",
+      "parentUuid": "1bb52219_e05dfa8b",
+      "range": {
+        "startLine": 1071,
+        "startChar": 0,
+        "endLine": 1074,
+        "endChar": 44
+      },
+      "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
