@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0030e76_6484a85c",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T03:41:57Z",
+      "side": 1,
+      "message": "just to confirm - we need to check it out to this folder, and we can\u0027t check it out to spirv-cross/src?",
+      "range": {
+        "startLine": 166,
+        "startChar": 26,
+        "endLine": 166,
+        "endChar": 38
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1abb0e6f_12743cfd",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T03:41:57Z",
+      "side": 1,
+      "message": "can you just add these to the sources list?",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 38
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a229c27_0caf597b",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T03:41:57Z",
+      "side": 1,
+      "message": "wondering if we can clear this up. do you know what it complains about? usually this is pretty easy to fix with a few tweaks to the GN.",
+      "range": {
+        "startLine": 217,
+        "startChar": 4,
+        "endLine": 217,
+        "endChar": 32
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "981fd384_ac344b9f",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T03:41:57Z",
+      "side": 1,
+      "message": "nit: can we call this translateImpl?",
+      "range": {
+        "startLine": 659,
+        "startChar": 23,
+        "endLine": 659,
+        "endChar": 33
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e794ae0_9c9f088c",
+        "filename": "src/compiler/translator/TranslatorVulkan.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T03:41:57Z",
+      "side": 1,
+      "message": "nit: can you mention this is also called by the Metal translator?",
+      "range": {
+        "startLine": 34,
+        "startChar": 26,
+        "endLine": 34,
+        "endChar": 36
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ad7daa8_b7b09b5a",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T03:41:57Z",
+      "side": 1,
+      "message": "nit: Usually we call things \"DoThingImpl\" instead of \"DoThing2\". Can you use that naming scheme? Or another naming scheme that is more descriptive?",
+      "range": {
+        "startLine": 52,
+        "startChar": 14,
+        "endLine": 52,
+        "endChar": 28
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38639dc3_4dced844",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T03:41:57Z",
+      "side": 1,
+      "message": "nit: Can you either use the explicit type, or just wrap this whole thing in ANGLE_MTL_TRY for consistency.",
+      "range": {
+        "startLine": 458,
+        "startChar": 4,
+        "endLine": 458,
+        "endChar": 9
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
