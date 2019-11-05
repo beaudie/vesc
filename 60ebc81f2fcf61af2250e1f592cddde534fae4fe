@@ -46,6 +46,30 @@
       "revId": "60ebc81f2fcf61af2250e1f592cddde534fae4fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d091c38_d6c6aa89",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2921,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-05T23:02:14Z",
+      "side": 1,
+      "message": "The other format I had to special case was VK_FORMAT_D32_SFLOAT_S8_UINT, I believe that\u0027s has a pixelBytes of 8. That shouldn\u0027t hurt here, just means we allocate a larger buffer than strictly necessary.",
+      "parentUuid": "366806ef_3705d29d",
+      "range": {
+        "startLine": 2921,
+        "startChar": 35,
+        "endLine": 2921,
+        "endChar": 64
+      },
+      "revId": "60ebc81f2fcf61af2250e1f592cddde534fae4fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
