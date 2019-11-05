@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d66471a_ff55995a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2472,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "plural: stagingOffsets",
+      "range": {
+        "startLine": 2472,
+        "startChar": 86,
+        "endLine": 2472,
+        "endChar": 99
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1010ade5_96155f32",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "Can you add a comment that says you are overwriting the aspect on purpose here?  I could tell after looking at the code for a moment, but might as well save the effort next time.  Just something like \"Force the aspect to depth only for first copy\"",
+      "range": {
+        "startLine": 2490,
+        "startChar": 33,
+        "endLine": 2490,
+        "endChar": 43
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84871f14_d4b5f12e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2492,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "Assert stagingOffsets.size() \u003d\u003d 2?",
+      "range": {
+        "startLine": 2492,
+        "startChar": 50,
+        "endLine": 2492,
+        "endChar": 63
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2274017e_c962fc5e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2909,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "bufferOffsetsOut",
+      "range": {
+        "startLine": 2909,
+        "startChar": 76,
+        "endLine": 2909,
+        "endChar": 91
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21d1b0cd_a825636b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "Can you spell these out, one depth only, one combined depth stencil?",
+      "range": {
+        "startLine": 2916,
+        "startChar": 27,
+        "endLine": 2916,
+        "endChar": 41
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa33d186_de167722",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "Can you link to the spec?",
+      "range": {
+        "startLine": 2916,
+        "startChar": 77,
+        "endLine": 2916,
+        "endChar": 81
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11f38c9b_b37050fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2923,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "Can you explain this 5u a bit more?  I follow a bit from Courtney\u0027s comments, but it isn\u0027t clear to me why that\u0027s correct.  Is it room for 4 bytes of depth + 1 byte of stencil?\n\nWhy is VK_FORMAT_X8_D24_UNORM_PACK32 mentioned in the comment, but not used in the format check?",
+      "range": {
+        "startLine": 2923,
+        "startChar": 42,
+        "endLine": 2923,
+        "endChar": 44
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1299eb6_47f9f2e4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2955,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "Boy this is hard to read and gets used multiple times in here.  Is there a helper (even a local one) that could be created to improve readability?",
+      "range": {
+        "startLine": 2955,
+        "startChar": 38,
+        "endLine": 2955,
+        "endChar": 59
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0310444f_1fecddb2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2975,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "can you spell these out \"and\", otherwise looks like code.  Also, sprinkle in some newlines after code when switching back to comments?",
+      "range": {
+        "startLine": 2975,
+        "startChar": 50,
+        "endLine": 2975,
+        "endChar": 51
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "329ee84c_cb0a5d7c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2982,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "Again, just this format called out.  Should we have a helper like isCombinedDepthStencilFormat() that checks for both formats?  Or will we never see VK_FORMAT_X8_D24_UNORM_PACK32?",
+      "range": {
+        "startLine": 2982,
+        "startChar": 38,
+        "endLine": 2982,
+        "endChar": 65
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf6333b9_d7604688",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2991,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "ASSERT(bufferOffsetsOut.size() \u003d\u003d 2)",
+      "range": {
+        "startLine": 2991,
+        "startChar": 10,
+        "endLine": 2991,
+        "endChar": 25
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "234f76b7_d84c735e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2991,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "Can you add a comment here saying something like \"Start the stencil buffer entry right after depth\"?  Wasn\u0027t clear to me immediately why you were adding to a dereferenced vector index.",
+      "range": {
+        "startLine": 2991,
+        "startChar": 77,
+        "endLine": 2991,
+        "endChar": 86
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd29a2cc_c35296b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2992,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "Hopefully the compiler is smart enough to realize it doesn\u0027t have to compute this twice.  But since we\u0027re derefencing a pointer and indexing into it, might not be a guarantee.  Probably worth creating a variable to store the results, then write it to two places.",
+      "range": {
+        "startLine": 2992,
+        "startChar": 53,
+        "endLine": 2992,
+        "endChar": 74
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b1a1086_a171123f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-05T23:11:53Z",
+      "side": 1,
+      "message": "plural? bufferOffsetsOut",
+      "range": {
+        "startLine": 894,
+        "startChar": 67,
+        "endLine": 894,
+        "endChar": 82
+      },
+      "revId": "abeb0ec9e44483812e55c9e18fca08103dc974aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
