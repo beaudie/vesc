@@ -69,6 +69,30 @@
       "revId": "83cffda1e1ae1a7f514517ad010f74278e6136e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d5d941b_7fab2cae",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1584,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-05T18:58:41Z",
+      "side": 1,
+      "message": "Why?\nIt\u0027s not an error, just letting caller know that size changed since last time they asked.\nWhat you got is still valid.\nIt makes me worry that a developer might see this warning and wonder what they need to do to resolve it.",
+      "parentUuid": "a2bc7020_3478242f",
+      "range": {
+        "startLine": 1584,
+        "startChar": 23,
+        "endLine": 1584,
+        "endChar": 36
+      },
+      "revId": "83cffda1e1ae1a7f514517ad010f74278e6136e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
