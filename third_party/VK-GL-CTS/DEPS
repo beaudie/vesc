@@ -1,0 +1,12 @@
+use_relative_paths = True
+
+vars = {
+  # Current revision of VK-GL-CTS (a.k.a dEQP).
+  'vk_gl_cts_revision': '54ec6f2b1390bf33ea10424dca610f8bcbfefa06',
+}
+
+deps = {
+  'src': {
+    'url': '{chromium_git}/external/github.com/KhronosGroup/VK-GL-CTS@{vk_gl_cts_revision}',
+  },
+}

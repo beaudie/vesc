@@ -83,10 +83,6 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
-  'third_party/VK-GL-CTS/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/VK-GL-CTS@{vk_gl_cts_revision}',
-  },
-
   'third_party/fuchsia-sdk': {
     'url': '{chromium_git}/chromium/src/third_party/fuchsia-sdk.git@1785f0ac8e1fe81cb25e260acbe7de8f62fa3e44',
     'condition': 'checkout_fuchsia and not build_with_chromium',
@@ -359,4 +355,5 @@ recursedeps = [
   'third_party/googletest',
   'third_party/jsoncpp',
   'third_party/yasm',
+  'third_party/VK-GL-CTS',
 ]
