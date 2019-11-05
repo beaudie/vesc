@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c126249d_8892ec6a",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1166470
+      },
+      "writtenOn": "2019-11-05T01:56:08Z",
+      "side": 1,
+      "message": "nit: should we check for GL_EXT_pixel_buffer_object here too?",
+      "range": {
+        "startLine": 1114,
+        "startChar": 65,
+        "endLine": 1114,
+        "endChar": 90
+      },
+      "revId": "d058dcbca94ec9de6c82d41e8c229444ff6e4663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
