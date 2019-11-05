@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7d140a4b_5c075f93",
+        "filename": "src/compiler/translator/TranslatorMetal.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-05T18:42:35Z",
+      "side": 1,
+      "message": "nit: TranslatorVulkan::translateImpl is more explicit when reading only this class",
+      "range": {
+        "startLine": 75,
+        "startChar": 9,
+        "endLine": 75,
+        "endChar": 22
+      },
+      "revId": "edced2e5c613671d51a075aab5c02247c316b06c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6ee613a2_ca03c806",
         "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
         "patchSetId": 9
