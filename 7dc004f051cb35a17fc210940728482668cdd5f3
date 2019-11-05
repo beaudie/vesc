@@ -118,6 +118,30 @@
       "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d64f4339_332a36a9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T03:30:58Z",
+      "side": 1,
+      "message": "What about onSelfReadWrite? If you must make a cycle with the buffer, that should be able to start a new command buffer.",
+      "parentUuid": "bc2e8de0_6838362c",
+      "range": {
+        "startLine": 1071,
+        "startChar": 0,
+        "endLine": 1074,
+        "endChar": 44
+      },
+      "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
