@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f42857cd_07ecbf24",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T15:18:31Z",
+      "side": 1,
+      "message": "Can you rename this to BindResourceToSlots or something like that? I don\u0027t see a reason to use a version number in the function name.",
+      "range": {
+        "startLine": 55,
+        "startChar": 14,
+        "endLine": 55,
+        "endChar": 33
+      },
+      "revId": "cf168b5e46b28babe046d3d2b91201d7c5c12579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
