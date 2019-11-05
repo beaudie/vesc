@@ -92,7 +92,7 @@ CallCapture CaptureClipPlanef(const Context *context,
 
     ParamCapture eqnParam("eqn", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, eqn, &eqnParam.value);
-    CaptureClipPlanef_eqn(context, isCallValid, p, eqn, &eqnParam);
+    CaptureClipPlanef_eqn(context->getState(), isCallValid, p, eqn, &eqnParam);
     paramBuffer.addParam(std::move(eqnParam));
 
     return CallCapture(gl::EntryPoint::ClipPlanef, std::move(paramBuffer));
@@ -109,7 +109,7 @@ CallCapture CaptureClipPlanex(const Context *context,
 
     ParamCapture equationParam("equation", ParamType::TGLfixedConstPointer);
     InitParamValue(ParamType::TGLfixedConstPointer, equation, &equationParam.value);
-    CaptureClipPlanex_equation(context, isCallValid, plane, equation, &equationParam);
+    CaptureClipPlanex_equation(context->getState(), isCallValid, plane, equation, &equationParam);
     paramBuffer.addParam(std::move(equationParam));
 
     return CallCapture(gl::EntryPoint::ClipPlanex, std::move(paramBuffer));
@@ -181,7 +181,7 @@ CallCapture CaptureColorPointer(const Context *context,
 
     ParamCapture pointerParam("pointer", ParamType::TvoidConstPointer);
     InitParamValue(ParamType::TvoidConstPointer, pointer, &pointerParam.value);
-    CaptureColorPointer_pointer(context, isCallValid, size, typePacked, stride, pointer,
+    CaptureColorPointer_pointer(context->getState(), isCallValid, size, typePacked, stride, pointer,
                                 &pointerParam);
     paramBuffer.addParam(std::move(pointerParam));
 
@@ -241,7 +241,7 @@ CallCapture CaptureFogfv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, params, &paramsParam.value);
-    CaptureFogfv_params(context, isCallValid, pname, params, &paramsParam);
+    CaptureFogfv_params(context->getState(), isCallValid, pname, params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::Fogfv, std::move(paramBuffer));
@@ -268,7 +268,7 @@ CallCapture CaptureFogxv(const Context *context,
 
     ParamCapture paramParam("param", ParamType::TGLfixedConstPointer);
     InitParamValue(ParamType::TGLfixedConstPointer, param, &paramParam.value);
-    CaptureFogxv_param(context, isCallValid, pname, param, &paramParam);
+    CaptureFogxv_param(context->getState(), isCallValid, pname, param, &paramParam);
     paramBuffer.addParam(std::move(paramParam));
 
     return CallCapture(gl::EntryPoint::Fogxv, std::move(paramBuffer));
@@ -327,7 +327,8 @@ CallCapture CaptureGetClipPlanef(const Context *context,
 
     ParamCapture equationParam("equation", ParamType::TGLfloatPointer);
     InitParamValue(ParamType::TGLfloatPointer, equation, &equationParam.value);
-    CaptureGetClipPlanef_equation(context, isCallValid, plane, equation, &equationParam);
+    CaptureGetClipPlanef_equation(context->getState(), isCallValid, plane, equation,
+                                  &equationParam);
     paramBuffer.addParam(std::move(equationParam));
 
     return CallCapture(gl::EntryPoint::GetClipPlanef, std::move(paramBuffer));
@@ -344,7 +345,8 @@ CallCapture CaptureGetClipPlanex(const Context *context,
 
     ParamCapture equationParam("equation", ParamType::TGLfixedPointer);
     InitParamValue(ParamType::TGLfixedPointer, equation, &equationParam.value);
-    CaptureGetClipPlanex_equation(context, isCallValid, plane, equation, &equationParam);
+    CaptureGetClipPlanex_equation(context->getState(), isCallValid, plane, equation,
+                                  &equationParam);
     paramBuffer.addParam(std::move(equationParam));
 
     return CallCapture(gl::EntryPoint::GetClipPlanex, std::move(paramBuffer));
@@ -361,7 +363,7 @@ CallCapture CaptureGetFixedv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfixedPointer);
     InitParamValue(ParamType::TGLfixedPointer, params, &paramsParam.value);
-    CaptureGetFixedv_params(context, isCallValid, pname, params, &paramsParam);
+    CaptureGetFixedv_params(context->getState(), isCallValid, pname, params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetFixedv, std::move(paramBuffer));
@@ -380,7 +382,8 @@ CallCapture CaptureGetLightfv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfloatPointer);
     InitParamValue(ParamType::TGLfloatPointer, params, &paramsParam.value);
-    CaptureGetLightfv_params(context, isCallValid, light, pnamePacked, params, &paramsParam);
+    CaptureGetLightfv_params(context->getState(), isCallValid, light, pnamePacked, params,
+                             &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetLightfv, std::move(paramBuffer));
@@ -399,7 +402,8 @@ CallCapture CaptureGetLightxv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfixedPointer);
     InitParamValue(ParamType::TGLfixedPointer, params, &paramsParam.value);
-    CaptureGetLightxv_params(context, isCallValid, light, pnamePacked, params, &paramsParam);
+    CaptureGetLightxv_params(context->getState(), isCallValid, light, pnamePacked, params,
+                             &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetLightxv, std::move(paramBuffer));
@@ -418,7 +422,8 @@ CallCapture CaptureGetMaterialfv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfloatPointer);
     InitParamValue(ParamType::TGLfloatPointer, params, &paramsParam.value);
-    CaptureGetMaterialfv_params(context, isCallValid, face, pnamePacked, params, &paramsParam);
+    CaptureGetMaterialfv_params(context->getState(), isCallValid, face, pnamePacked, params,
+                                &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetMaterialfv, std::move(paramBuffer));
@@ -437,7 +442,8 @@ CallCapture CaptureGetMaterialxv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfixedPointer);
     InitParamValue(ParamType::TGLfixedPointer, params, &paramsParam.value);
-    CaptureGetMaterialxv_params(context, isCallValid, face, pnamePacked, params, &paramsParam);
+    CaptureGetMaterialxv_params(context->getState(), isCallValid, face, pnamePacked, params,
+                                &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetMaterialxv, std::move(paramBuffer));
@@ -456,7 +462,7 @@ CallCapture CaptureGetTexEnvfv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfloatPointer);
     InitParamValue(ParamType::TGLfloatPointer, params, &paramsParam.value);
-    CaptureGetTexEnvfv_params(context, isCallValid, targetPacked, pnamePacked, params,
+    CaptureGetTexEnvfv_params(context->getState(), isCallValid, targetPacked, pnamePacked, params,
                               &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
@@ -476,7 +482,7 @@ CallCapture CaptureGetTexEnviv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLintPointer);
     InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
-    CaptureGetTexEnviv_params(context, isCallValid, targetPacked, pnamePacked, params,
+    CaptureGetTexEnviv_params(context->getState(), isCallValid, targetPacked, pnamePacked, params,
                               &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
@@ -496,7 +502,7 @@ CallCapture CaptureGetTexEnvxv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfixedPointer);
     InitParamValue(ParamType::TGLfixedPointer, params, &paramsParam.value);
-    CaptureGetTexEnvxv_params(context, isCallValid, targetPacked, pnamePacked, params,
+    CaptureGetTexEnvxv_params(context->getState(), isCallValid, targetPacked, pnamePacked, params,
                               &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
@@ -516,7 +522,7 @@ CallCapture CaptureGetTexParameterxv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfixedPointer);
     InitParamValue(ParamType::TGLfixedPointer, params, &paramsParam.value);
-    CaptureGetTexParameterxv_params(context, isCallValid, targetPacked, pname, params,
+    CaptureGetTexParameterxv_params(context->getState(), isCallValid, targetPacked, pname, params,
                                     &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
@@ -547,7 +553,7 @@ CallCapture CaptureLightModelfv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, params, &paramsParam.value);
-    CaptureLightModelfv_params(context, isCallValid, pname, params, &paramsParam);
+    CaptureLightModelfv_params(context->getState(), isCallValid, pname, params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::LightModelfv, std::move(paramBuffer));
@@ -577,7 +583,7 @@ CallCapture CaptureLightModelxv(const Context *context,
 
     ParamCapture paramParam("param", ParamType::TGLfixedConstPointer);
     InitParamValue(ParamType::TGLfixedConstPointer, param, &paramParam.value);
-    CaptureLightModelxv_param(context, isCallValid, pname, param, &paramParam);
+    CaptureLightModelxv_param(context->getState(), isCallValid, pname, param, &paramParam);
     paramBuffer.addParam(std::move(paramParam));
 
     return CallCapture(gl::EntryPoint::LightModelxv, std::move(paramBuffer));
@@ -611,7 +617,8 @@ CallCapture CaptureLightfv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, params, &paramsParam.value);
-    CaptureLightfv_params(context, isCallValid, light, pnamePacked, params, &paramsParam);
+    CaptureLightfv_params(context->getState(), isCallValid, light, pnamePacked, params,
+                          &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::Lightfv, std::move(paramBuffer));
@@ -645,7 +652,8 @@ CallCapture CaptureLightxv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfixedConstPointer);
     InitParamValue(ParamType::TGLfixedConstPointer, params, &paramsParam.value);
-    CaptureLightxv_params(context, isCallValid, light, pnamePacked, params, &paramsParam);
+    CaptureLightxv_params(context->getState(), isCallValid, light, pnamePacked, params,
+                          &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::Lightxv, std::move(paramBuffer));
@@ -673,7 +681,7 @@ CallCapture CaptureLoadMatrixf(const Context *context, bool isCallValid, const G
 
     ParamCapture mParam("m", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, m, &mParam.value);
-    CaptureLoadMatrixf_m(context, isCallValid, m, &mParam);
+    CaptureLoadMatrixf_m(context->getState(), isCallValid, m, &mParam);
     paramBuffer.addParam(std::move(mParam));
 
     return CallCapture(gl::EntryPoint::LoadMatrixf, std::move(paramBuffer));
@@ -685,7 +693,7 @@ CallCapture CaptureLoadMatrixx(const Context *context, bool isCallValid, const G
 
     ParamCapture mParam("m", ParamType::TGLfixedConstPointer);
     InitParamValue(ParamType::TGLfixedConstPointer, m, &mParam.value);
-    CaptureLoadMatrixx_m(context, isCallValid, m, &mParam);
+    CaptureLoadMatrixx_m(context->getState(), isCallValid, m, &mParam);
     paramBuffer.addParam(std::move(mParam));
 
     return CallCapture(gl::EntryPoint::LoadMatrixx, std::move(paramBuffer));
@@ -728,7 +736,8 @@ CallCapture CaptureMaterialfv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, params, &paramsParam.value);
-    CaptureMaterialfv_params(context, isCallValid, face, pnamePacked, params, &paramsParam);
+    CaptureMaterialfv_params(context->getState(), isCallValid, face, pnamePacked, params,
+                             &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::Materialfv, std::move(paramBuffer));
@@ -762,7 +771,8 @@ CallCapture CaptureMaterialxv(const Context *context,
 
     ParamCapture paramParam("param", ParamType::TGLfixedConstPointer);
     InitParamValue(ParamType::TGLfixedConstPointer, param, &paramParam.value);
-    CaptureMaterialxv_param(context, isCallValid, face, pnamePacked, param, &paramParam);
+    CaptureMaterialxv_param(context->getState(), isCallValid, face, pnamePacked, param,
+                            &paramParam);
     paramBuffer.addParam(std::move(paramParam));
 
     return CallCapture(gl::EntryPoint::Materialxv, std::move(paramBuffer));
@@ -783,7 +793,7 @@ CallCapture CaptureMultMatrixf(const Context *context, bool isCallValid, const G
 
     ParamCapture mParam("m", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, m, &mParam.value);
-    CaptureMultMatrixf_m(context, isCallValid, m, &mParam);
+    CaptureMultMatrixf_m(context->getState(), isCallValid, m, &mParam);
     paramBuffer.addParam(std::move(mParam));
 
     return CallCapture(gl::EntryPoint::MultMatrixf, std::move(paramBuffer));
@@ -795,7 +805,7 @@ CallCapture CaptureMultMatrixx(const Context *context, bool isCallValid, const G
 
     ParamCapture mParam("m", ParamType::TGLfixedConstPointer);
     InitParamValue(ParamType::TGLfixedConstPointer, m, &mParam.value);
-    CaptureMultMatrixx_m(context, isCallValid, m, &mParam);
+    CaptureMultMatrixx_m(context->getState(), isCallValid, m, &mParam);
     paramBuffer.addParam(std::move(mParam));
 
     return CallCapture(gl::EntryPoint::MultMatrixx, std::move(paramBuffer));
@@ -882,7 +892,8 @@ CallCapture CaptureNormalPointer(const Context *context,
 
     ParamCapture pointerParam("pointer", ParamType::TvoidConstPointer);
     InitParamValue(ParamType::TvoidConstPointer, pointer, &pointerParam.value);
-    CaptureNormalPointer_pointer(context, isCallValid, typePacked, stride, pointer, &pointerParam);
+    CaptureNormalPointer_pointer(context->getState(), isCallValid, typePacked, stride, pointer,
+                                 &pointerParam);
     paramBuffer.addParam(std::move(pointerParam));
 
     return CallCapture(gl::EntryPoint::NormalPointer, std::move(paramBuffer));
@@ -954,7 +965,8 @@ CallCapture CapturePointParameterfv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, params, &paramsParam.value);
-    CapturePointParameterfv_params(context, isCallValid, pnamePacked, params, &paramsParam);
+    CapturePointParameterfv_params(context->getState(), isCallValid, pnamePacked, params,
+                                   &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::PointParameterfv, std::move(paramBuffer));
@@ -984,7 +996,8 @@ CallCapture CapturePointParameterxv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfixedConstPointer);
     InitParamValue(ParamType::TGLfixedConstPointer, params, &paramsParam.value);
-    CapturePointParameterxv_params(context, isCallValid, pnamePacked, params, &paramsParam);
+    CapturePointParameterxv_params(context->getState(), isCallValid, pnamePacked, params,
+                                   &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::PointParameterxv, std::move(paramBuffer));
@@ -1128,8 +1141,8 @@ CallCapture CaptureTexCoordPointer(const Context *context,
 
     ParamCapture pointerParam("pointer", ParamType::TvoidConstPointer);
     InitParamValue(ParamType::TvoidConstPointer, pointer, &pointerParam.value);
-    CaptureTexCoordPointer_pointer(context, isCallValid, size, typePacked, stride, pointer,
-                                   &pointerParam);
+    CaptureTexCoordPointer_pointer(context->getState(), isCallValid, size, typePacked, stride,
+                                   pointer, &pointerParam);
     paramBuffer.addParam(std::move(pointerParam));
 
     return CallCapture(gl::EntryPoint::TexCoordPointer, std::move(paramBuffer));
@@ -1163,7 +1176,8 @@ CallCapture CaptureTexEnvfv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, params, &paramsParam.value);
-    CaptureTexEnvfv_params(context, isCallValid, targetPacked, pnamePacked, params, &paramsParam);
+    CaptureTexEnvfv_params(context->getState(), isCallValid, targetPacked, pnamePacked, params,
+                           &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::TexEnvfv, std::move(paramBuffer));
@@ -1197,7 +1211,8 @@ CallCapture CaptureTexEnviv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLintConstPointer);
     InitParamValue(ParamType::TGLintConstPointer, params, &paramsParam.value);
-    CaptureTexEnviv_params(context, isCallValid, targetPacked, pnamePacked, params, &paramsParam);
+    CaptureTexEnviv_params(context->getState(), isCallValid, targetPacked, pnamePacked, params,
+                           &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::TexEnviv, std::move(paramBuffer));
@@ -1231,7 +1246,8 @@ CallCapture CaptureTexEnvxv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfixedConstPointer);
     InitParamValue(ParamType::TGLfixedConstPointer, params, &paramsParam.value);
-    CaptureTexEnvxv_params(context, isCallValid, targetPacked, pnamePacked, params, &paramsParam);
+    CaptureTexEnvxv_params(context->getState(), isCallValid, targetPacked, pnamePacked, params,
+                           &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::TexEnvxv, std::move(paramBuffer));
@@ -1265,7 +1281,8 @@ CallCapture CaptureTexParameterxv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfixedConstPointer);
     InitParamValue(ParamType::TGLfixedConstPointer, params, &paramsParam.value);
-    CaptureTexParameterxv_params(context, isCallValid, targetPacked, pname, params, &paramsParam);
+    CaptureTexParameterxv_params(context->getState(), isCallValid, targetPacked, pname, params,
+                                 &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::TexParameterxv, std::move(paramBuffer));
@@ -1316,8 +1333,8 @@ CallCapture CaptureVertexPointer(const Context *context,
 
     ParamCapture pointerParam("pointer", ParamType::TvoidConstPointer);
     InitParamValue(ParamType::TvoidConstPointer, pointer, &pointerParam.value);
-    CaptureVertexPointer_pointer(context, isCallValid, size, typePacked, stride, pointer,
-                                 &pointerParam);
+    CaptureVertexPointer_pointer(context->getState(), isCallValid, size, typePacked, stride,
+                                 pointer, &pointerParam);
     paramBuffer.addParam(std::move(pointerParam));
 
     return CallCapture(gl::EntryPoint::VertexPointer, std::move(paramBuffer));

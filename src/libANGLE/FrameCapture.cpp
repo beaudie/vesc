@@ -22,6 +22,7 @@
 #include "libANGLE/capture_gles_2_0_autogen.h"
 #include "libANGLE/capture_gles_3_0_autogen.h"
 #include "libANGLE/gl_enum_utils.h"
+#include "libANGLE/queryutils.h"
 
 #if !ANGLE_CAPTURE_ENABLED
 #    error Frame capture must be enbled to include this file.
@@ -1795,14 +1796,21 @@ void CaptureString(const GLchar *str, ParamCapture *paramCapture)
     CaptureMemory(str, strlen(str) + 1, paramCapture);
 }
 
-void CaptureGetParameter(const gl::Context *context,
+gl::Program *GetLinkedProgramForCapture(const gl::State &glState, gl::ShaderProgramID handle)
+{
+    gl::Program *program = glState.getShaderProgramManagerForCapture().getProgram(handle);
+    ASSERT(program->isLinked());
+    return program;
+}
+
+void CaptureGetParameter(const gl::State &glState,
                          GLenum pname,
                          size_t typeSize,
                          ParamCapture *paramCapture)
 {
     GLenum nativeType;
     unsigned int numParams;
-    if (!context->getQueryParameterInfo(pname, &nativeType, &numParams))
+    if (!gl::GetQueryParameterInfo(glState, pname, &nativeType, &numParams))
     {
         numParams = 1;
     }

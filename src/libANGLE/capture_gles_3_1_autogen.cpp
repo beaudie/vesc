@@ -98,8 +98,8 @@ CallCapture CaptureCreateShaderProgramv(const Context *context,
 
     ParamCapture stringsParam("strings", ParamType::TGLcharConstPointerPointer);
     InitParamValue(ParamType::TGLcharConstPointerPointer, strings, &stringsParam.value);
-    CaptureCreateShaderProgramv_strings(context, isCallValid, typePacked, count, strings,
-                                        &stringsParam);
+    CaptureCreateShaderProgramv_strings(context->getState(), isCallValid, typePacked, count,
+                                        strings, &stringsParam);
     paramBuffer.addParam(std::move(stringsParam));
 
     ParamCapture returnValueCapture("returnValue", ParamType::TGLuint);
@@ -121,8 +121,8 @@ CallCapture CaptureDeleteProgramPipelines(const Context *context,
     ParamCapture pipelinesPackedParam("pipelinesPacked", ParamType::TProgramPipelineIDConstPointer);
     InitParamValue(ParamType::TProgramPipelineIDConstPointer, pipelinesPacked,
                    &pipelinesPackedParam.value);
-    CaptureDeleteProgramPipelines_pipelinesPacked(context, isCallValid, n, pipelinesPacked,
-                                                  &pipelinesPackedParam);
+    CaptureDeleteProgramPipelines_pipelinesPacked(context->getState(), isCallValid, n,
+                                                  pipelinesPacked, &pipelinesPackedParam);
     paramBuffer.addParam(std::move(pipelinesPackedParam));
 
     return CallCapture(gl::EntryPoint::DeleteProgramPipelines, std::move(paramBuffer));
@@ -165,7 +165,8 @@ CallCapture CaptureDrawArraysIndirect(const Context *context,
 
     ParamCapture indirectParam("indirect", ParamType::TvoidConstPointer);
     InitParamValue(ParamType::TvoidConstPointer, indirect, &indirectParam.value);
-    CaptureDrawArraysIndirect_indirect(context, isCallValid, modePacked, indirect, &indirectParam);
+    CaptureDrawArraysIndirect_indirect(context->getState(), isCallValid, modePacked, indirect,
+                                       &indirectParam);
     paramBuffer.addParam(std::move(indirectParam));
 
     return CallCapture(gl::EntryPoint::DrawArraysIndirect, std::move(paramBuffer));
@@ -184,8 +185,8 @@ CallCapture CaptureDrawElementsIndirect(const Context *context,
 
     ParamCapture indirectParam("indirect", ParamType::TvoidConstPointer);
     InitParamValue(ParamType::TvoidConstPointer, indirect, &indirectParam.value);
-    CaptureDrawElementsIndirect_indirect(context, isCallValid, modePacked, typePacked, indirect,
-                                         &indirectParam);
+    CaptureDrawElementsIndirect_indirect(context->getState(), isCallValid, modePacked, typePacked,
+                                         indirect, &indirectParam);
     paramBuffer.addParam(std::move(indirectParam));
 
     return CallCapture(gl::EntryPoint::DrawElementsIndirect, std::move(paramBuffer));
@@ -219,7 +220,7 @@ CallCapture CaptureGenProgramPipelines(const Context *context,
     ParamCapture pipelinesPackedParam("pipelinesPacked", ParamType::TProgramPipelineIDPointer);
     InitParamValue(ParamType::TProgramPipelineIDPointer, pipelinesPacked,
                    &pipelinesPackedParam.value);
-    CaptureGenProgramPipelines_pipelinesPacked(context, isCallValid, n, pipelinesPacked,
+    CaptureGenProgramPipelines_pipelinesPacked(context->getState(), isCallValid, n, pipelinesPacked,
                                                &pipelinesPackedParam);
     paramBuffer.addParam(std::move(pipelinesPackedParam));
 
@@ -239,7 +240,7 @@ CallCapture CaptureGetBooleani_v(const Context *context,
 
     ParamCapture dataParam("data", ParamType::TGLbooleanPointer);
     InitParamValue(ParamType::TGLbooleanPointer, data, &dataParam.value);
-    CaptureGetBooleani_v_data(context, isCallValid, target, index, data, &dataParam);
+    CaptureGetBooleani_v_data(context->getState(), isCallValid, target, index, data, &dataParam);
     paramBuffer.addParam(std::move(dataParam));
 
     return CallCapture(gl::EntryPoint::GetBooleani_v, std::move(paramBuffer));
@@ -259,7 +260,7 @@ CallCapture CaptureGetFramebufferParameteriv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLintPointer);
     InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
-    CaptureGetFramebufferParameteriv_params(context, isCallValid, target, pname, params,
+    CaptureGetFramebufferParameteriv_params(context->getState(), isCallValid, target, pname, params,
                                             &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
@@ -279,7 +280,7 @@ CallCapture CaptureGetMultisamplefv(const Context *context,
 
     ParamCapture valParam("val", ParamType::TGLfloatPointer);
     InitParamValue(ParamType::TGLfloatPointer, val, &valParam.value);
-    CaptureGetMultisamplefv_val(context, isCallValid, pname, index, val, &valParam);
+    CaptureGetMultisamplefv_val(context->getState(), isCallValid, pname, index, val, &valParam);
     paramBuffer.addParam(std::move(valParam));
 
     return CallCapture(gl::EntryPoint::GetMultisamplefv, std::move(paramBuffer));
@@ -302,8 +303,8 @@ CallCapture CaptureGetProgramInterfaceiv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLintPointer);
     InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
-    CaptureGetProgramInterfaceiv_params(context, isCallValid, programPacked, programInterface,
-                                        pname, params, &paramsParam);
+    CaptureGetProgramInterfaceiv_params(context->getState(), isCallValid, programPacked,
+                                        programInterface, pname, params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetProgramInterfaceiv, std::move(paramBuffer));
@@ -323,14 +324,14 @@ CallCapture CaptureGetProgramPipelineInfoLog(const Context *context,
 
     ParamCapture lengthParam("length", ParamType::TGLsizeiPointer);
     InitParamValue(ParamType::TGLsizeiPointer, length, &lengthParam.value);
-    CaptureGetProgramPipelineInfoLog_length(context, isCallValid, pipelinePacked, bufSize, length,
-                                            infoLog, &lengthParam);
+    CaptureGetProgramPipelineInfoLog_length(context->getState(), isCallValid, pipelinePacked,
+                                            bufSize, length, infoLog, &lengthParam);
     paramBuffer.addParam(std::move(lengthParam));
 
     ParamCapture infoLogParam("infoLog", ParamType::TGLcharPointer);
     InitParamValue(ParamType::TGLcharPointer, infoLog, &infoLogParam.value);
-    CaptureGetProgramPipelineInfoLog_infoLog(context, isCallValid, pipelinePacked, bufSize, length,
-                                             infoLog, &infoLogParam);
+    CaptureGetProgramPipelineInfoLog_infoLog(context->getState(), isCallValid, pipelinePacked,
+                                             bufSize, length, infoLog, &infoLogParam);
     paramBuffer.addParam(std::move(infoLogParam));
 
     return CallCapture(gl::EntryPoint::GetProgramPipelineInfoLog, std::move(paramBuffer));
@@ -350,8 +351,8 @@ CallCapture CaptureGetProgramPipelineiv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLintPointer);
     InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
-    CaptureGetProgramPipelineiv_params(context, isCallValid, pipelinePacked, pname, params,
-                                       &paramsParam);
+    CaptureGetProgramPipelineiv_params(context->getState(), isCallValid, pipelinePacked, pname,
+                                       params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetProgramPipelineiv, std::move(paramBuffer));
@@ -372,8 +373,8 @@ CallCapture CaptureGetProgramResourceIndex(const Context *context,
 
     ParamCapture nameParam("name", ParamType::TGLcharConstPointer);
     InitParamValue(ParamType::TGLcharConstPointer, name, &nameParam.value);
-    CaptureGetProgramResourceIndex_name(context, isCallValid, programPacked, programInterface, name,
-                                        &nameParam);
+    CaptureGetProgramResourceIndex_name(context->getState(), isCallValid, programPacked,
+                                        programInterface, name, &nameParam);
     paramBuffer.addParam(std::move(nameParam));
 
     ParamCapture returnValueCapture("returnValue", ParamType::TGLuint);
@@ -398,8 +399,8 @@ CallCapture CaptureGetProgramResourceLocation(const Context *context,
 
     ParamCapture nameParam("name", ParamType::TGLcharConstPointer);
     InitParamValue(ParamType::TGLcharConstPointer, name, &nameParam.value);
-    CaptureGetProgramResourceLocation_name(context, isCallValid, programPacked, programInterface,
-                                           name, &nameParam);
+    CaptureGetProgramResourceLocation_name(context->getState(), isCallValid, programPacked,
+                                           programInterface, name, &nameParam);
     paramBuffer.addParam(std::move(nameParam));
 
     ParamCapture returnValueCapture("returnValue", ParamType::TGLint);
@@ -428,14 +429,15 @@ CallCapture CaptureGetProgramResourceName(const Context *context,
 
     ParamCapture lengthParam("length", ParamType::TGLsizeiPointer);
     InitParamValue(ParamType::TGLsizeiPointer, length, &lengthParam.value);
-    CaptureGetProgramResourceName_length(context, isCallValid, programPacked, programInterface,
-                                         index, bufSize, length, name, &lengthParam);
+    CaptureGetProgramResourceName_length(context->getState(), isCallValid, programPacked,
+                                         programInterface, index, bufSize, length, name,
+                                         &lengthParam);
     paramBuffer.addParam(std::move(lengthParam));
 
     ParamCapture nameParam("name", ParamType::TGLcharPointer);
     InitParamValue(ParamType::TGLcharPointer, name, &nameParam.value);
-    CaptureGetProgramResourceName_name(context, isCallValid, programPacked, programInterface, index,
-                                       bufSize, length, name, &nameParam);
+    CaptureGetProgramResourceName_name(context->getState(), isCallValid, programPacked,
+                                       programInterface, index, bufSize, length, name, &nameParam);
     paramBuffer.addParam(std::move(nameParam));
 
     return CallCapture(gl::EntryPoint::GetProgramResourceName, std::move(paramBuffer));
@@ -462,22 +464,25 @@ CallCapture CaptureGetProgramResourceiv(const Context *context,
 
     ParamCapture propsParam("props", ParamType::TGLenumConstPointer);
     InitParamValue(ParamType::TGLenumConstPointer, props, &propsParam.value);
-    CaptureGetProgramResourceiv_props(context, isCallValid, programPacked, programInterface, index,
-                                      propCount, props, bufSize, length, params, &propsParam);
+    CaptureGetProgramResourceiv_props(context->getState(), isCallValid, programPacked,
+                                      programInterface, index, propCount, props, bufSize, length,
+                                      params, &propsParam);
     paramBuffer.addParam(std::move(propsParam));
 
     paramBuffer.addValueParam("bufSize", ParamType::TGLsizei, bufSize);
 
     ParamCapture lengthParam("length", ParamType::TGLsizeiPointer);
     InitParamValue(ParamType::TGLsizeiPointer, length, &lengthParam.value);
-    CaptureGetProgramResourceiv_length(context, isCallValid, programPacked, programInterface, index,
-                                       propCount, props, bufSize, length, params, &lengthParam);
+    CaptureGetProgramResourceiv_length(context->getState(), isCallValid, programPacked,
+                                       programInterface, index, propCount, props, bufSize, length,
+                                       params, &lengthParam);
     paramBuffer.addParam(std::move(lengthParam));
 
     ParamCapture paramsParam("params", ParamType::TGLintPointer);
     InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
-    CaptureGetProgramResourceiv_params(context, isCallValid, programPacked, programInterface, index,
-                                       propCount, props, bufSize, length, params, &paramsParam);
+    CaptureGetProgramResourceiv_params(context->getState(), isCallValid, programPacked,
+                                       programInterface, index, propCount, props, bufSize, length,
+                                       params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetProgramResourceiv, std::move(paramBuffer));
@@ -498,8 +503,8 @@ CallCapture CaptureGetTexLevelParameterfv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLfloatPointer);
     InitParamValue(ParamType::TGLfloatPointer, params, &paramsParam.value);
-    CaptureGetTexLevelParameterfv_params(context, isCallValid, targetPacked, level, pname, params,
-                                         &paramsParam);
+    CaptureGetTexLevelParameterfv_params(context->getState(), isCallValid, targetPacked, level,
+                                         pname, params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetTexLevelParameterfv, std::move(paramBuffer));
@@ -520,8 +525,8 @@ CallCapture CaptureGetTexLevelParameteriv(const Context *context,
 
     ParamCapture paramsParam("params", ParamType::TGLintPointer);
     InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
-    CaptureGetTexLevelParameteriv_params(context, isCallValid, targetPacked, level, pname, params,
-                                         &paramsParam);
+    CaptureGetTexLevelParameteriv_params(context->getState(), isCallValid, targetPacked, level,
+                                         pname, params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetTexLevelParameteriv, std::move(paramBuffer));
@@ -595,8 +600,8 @@ CallCapture CaptureProgramUniform1fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniform1fv_value(context, isCallValid, programPacked, location, count, value,
-                                   &valueParam);
+    CaptureProgramUniform1fv_value(context->getState(), isCallValid, programPacked, location, count,
+                                   value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform1fv, std::move(paramBuffer));
@@ -632,8 +637,8 @@ CallCapture CaptureProgramUniform1iv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLintConstPointer);
     InitParamValue(ParamType::TGLintConstPointer, value, &valueParam.value);
-    CaptureProgramUniform1iv_value(context, isCallValid, programPacked, location, count, value,
-                                   &valueParam);
+    CaptureProgramUniform1iv_value(context->getState(), isCallValid, programPacked, location, count,
+                                   value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform1iv, std::move(paramBuffer));
@@ -669,8 +674,8 @@ CallCapture CaptureProgramUniform1uiv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLuintConstPointer);
     InitParamValue(ParamType::TGLuintConstPointer, value, &valueParam.value);
-    CaptureProgramUniform1uiv_value(context, isCallValid, programPacked, location, count, value,
-                                    &valueParam);
+    CaptureProgramUniform1uiv_value(context->getState(), isCallValid, programPacked, location,
+                                    count, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform1uiv, std::move(paramBuffer));
@@ -708,8 +713,8 @@ CallCapture CaptureProgramUniform2fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniform2fv_value(context, isCallValid, programPacked, location, count, value,
-                                   &valueParam);
+    CaptureProgramUniform2fv_value(context->getState(), isCallValid, programPacked, location, count,
+                                   value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform2fv, std::move(paramBuffer));
@@ -747,8 +752,8 @@ CallCapture CaptureProgramUniform2iv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLintConstPointer);
     InitParamValue(ParamType::TGLintConstPointer, value, &valueParam.value);
-    CaptureProgramUniform2iv_value(context, isCallValid, programPacked, location, count, value,
-                                   &valueParam);
+    CaptureProgramUniform2iv_value(context->getState(), isCallValid, programPacked, location, count,
+                                   value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform2iv, std::move(paramBuffer));
@@ -786,8 +791,8 @@ CallCapture CaptureProgramUniform2uiv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLuintConstPointer);
     InitParamValue(ParamType::TGLuintConstPointer, value, &valueParam.value);
-    CaptureProgramUniform2uiv_value(context, isCallValid, programPacked, location, count, value,
-                                    &valueParam);
+    CaptureProgramUniform2uiv_value(context->getState(), isCallValid, programPacked, location,
+                                    count, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform2uiv, std::move(paramBuffer));
@@ -827,8 +832,8 @@ CallCapture CaptureProgramUniform3fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniform3fv_value(context, isCallValid, programPacked, location, count, value,
-                                   &valueParam);
+    CaptureProgramUniform3fv_value(context->getState(), isCallValid, programPacked, location, count,
+                                   value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform3fv, std::move(paramBuffer));
@@ -868,8 +873,8 @@ CallCapture CaptureProgramUniform3iv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLintConstPointer);
     InitParamValue(ParamType::TGLintConstPointer, value, &valueParam.value);
-    CaptureProgramUniform3iv_value(context, isCallValid, programPacked, location, count, value,
-                                   &valueParam);
+    CaptureProgramUniform3iv_value(context->getState(), isCallValid, programPacked, location, count,
+                                   value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform3iv, std::move(paramBuffer));
@@ -909,8 +914,8 @@ CallCapture CaptureProgramUniform3uiv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLuintConstPointer);
     InitParamValue(ParamType::TGLuintConstPointer, value, &valueParam.value);
-    CaptureProgramUniform3uiv_value(context, isCallValid, programPacked, location, count, value,
-                                    &valueParam);
+    CaptureProgramUniform3uiv_value(context->getState(), isCallValid, programPacked, location,
+                                    count, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform3uiv, std::move(paramBuffer));
@@ -952,8 +957,8 @@ CallCapture CaptureProgramUniform4fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniform4fv_value(context, isCallValid, programPacked, location, count, value,
-                                   &valueParam);
+    CaptureProgramUniform4fv_value(context->getState(), isCallValid, programPacked, location, count,
+                                   value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform4fv, std::move(paramBuffer));
@@ -995,8 +1000,8 @@ CallCapture CaptureProgramUniform4iv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLintConstPointer);
     InitParamValue(ParamType::TGLintConstPointer, value, &valueParam.value);
-    CaptureProgramUniform4iv_value(context, isCallValid, programPacked, location, count, value,
-                                   &valueParam);
+    CaptureProgramUniform4iv_value(context->getState(), isCallValid, programPacked, location, count,
+                                   value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform4iv, std::move(paramBuffer));
@@ -1038,8 +1043,8 @@ CallCapture CaptureProgramUniform4uiv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLuintConstPointer);
     InitParamValue(ParamType::TGLuintConstPointer, value, &valueParam.value);
-    CaptureProgramUniform4uiv_value(context, isCallValid, programPacked, location, count, value,
-                                    &valueParam);
+    CaptureProgramUniform4uiv_value(context->getState(), isCallValid, programPacked, location,
+                                    count, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniform4uiv, std::move(paramBuffer));
@@ -1062,8 +1067,8 @@ CallCapture CaptureProgramUniformMatrix2fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniformMatrix2fv_value(context, isCallValid, programPacked, location, count,
-                                         transpose, value, &valueParam);
+    CaptureProgramUniformMatrix2fv_value(context->getState(), isCallValid, programPacked, location,
+                                         count, transpose, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniformMatrix2fv, std::move(paramBuffer));
@@ -1086,8 +1091,8 @@ CallCapture CaptureProgramUniformMatrix2x3fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniformMatrix2x3fv_value(context, isCallValid, programPacked, location, count,
-                                           transpose, value, &valueParam);
+    CaptureProgramUniformMatrix2x3fv_value(context->getState(), isCallValid, programPacked,
+                                           location, count, transpose, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniformMatrix2x3fv, std::move(paramBuffer));
@@ -1110,8 +1115,8 @@ CallCapture CaptureProgramUniformMatrix2x4fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniformMatrix2x4fv_value(context, isCallValid, programPacked, location, count,
-                                           transpose, value, &valueParam);
+    CaptureProgramUniformMatrix2x4fv_value(context->getState(), isCallValid, programPacked,
+                                           location, count, transpose, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniformMatrix2x4fv, std::move(paramBuffer));
@@ -1134,8 +1139,8 @@ CallCapture CaptureProgramUniformMatrix3fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniformMatrix3fv_value(context, isCallValid, programPacked, location, count,
-                                         transpose, value, &valueParam);
+    CaptureProgramUniformMatrix3fv_value(context->getState(), isCallValid, programPacked, location,
+                                         count, transpose, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniformMatrix3fv, std::move(paramBuffer));
@@ -1158,8 +1163,8 @@ CallCapture CaptureProgramUniformMatrix3x2fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniformMatrix3x2fv_value(context, isCallValid, programPacked, location, count,
-                                           transpose, value, &valueParam);
+    CaptureProgramUniformMatrix3x2fv_value(context->getState(), isCallValid, programPacked,
+                                           location, count, transpose, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniformMatrix3x2fv, std::move(paramBuffer));
@@ -1182,8 +1187,8 @@ CallCapture CaptureProgramUniformMatrix3x4fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniformMatrix3x4fv_value(context, isCallValid, programPacked, location, count,
-                                           transpose, value, &valueParam);
+    CaptureProgramUniformMatrix3x4fv_value(context->getState(), isCallValid, programPacked,
+                                           location, count, transpose, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniformMatrix3x4fv, std::move(paramBuffer));
@@ -1206,8 +1211,8 @@ CallCapture CaptureProgramUniformMatrix4fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniformMatrix4fv_value(context, isCallValid, programPacked, location, count,
-                                         transpose, value, &valueParam);
+    CaptureProgramUniformMatrix4fv_value(context->getState(), isCallValid, programPacked, location,
+                                         count, transpose, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniformMatrix4fv, std::move(paramBuffer));
@@ -1230,8 +1235,8 @@ CallCapture CaptureProgramUniformMatrix4x2fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniformMatrix4x2fv_value(context, isCallValid, programPacked, location, count,
-                                           transpose, value, &valueParam);
+    CaptureProgramUniformMatrix4x2fv_value(context->getState(), isCallValid, programPacked,
+                                           location, count, transpose, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniformMatrix4x2fv, std::move(paramBuffer));
@@ -1254,8 +1259,8 @@ CallCapture CaptureProgramUniformMatrix4x3fv(const Context *context,
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
-    CaptureProgramUniformMatrix4x3fv_value(context, isCallValid, programPacked, location, count,
-                                           transpose, value, &valueParam);
+    CaptureProgramUniformMatrix4x3fv_value(context->getState(), isCallValid, programPacked,
+                                           location, count, transpose, value, &valueParam);
     paramBuffer.addParam(std::move(valueParam));
 
     return CallCapture(gl::EntryPoint::ProgramUniformMatrix4x3fv, std::move(paramBuffer));

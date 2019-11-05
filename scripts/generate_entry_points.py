@@ -897,10 +897,16 @@ def format_capture_method(command, cmd_name, proto, params, all_param_types, cap
 
     packed_gl_enums = get_packed_enums(cmd_packed_gl_enums, cmd_name)
 
-    params_with_type = get_internal_params(
+    params_with_type_context = get_internal_params(
         cmd_name, ["const Context *context", "bool isCallValid"] + params, cmd_packed_gl_enums)
-    params_just_name = ", ".join(
+    params_just_name_context = ", ".join(
         ["context", "isCallValid"] +
+        [just_the_name_packed(param, packed_gl_enums) for param in params])
+
+    params_with_type_state = get_internal_params(
+        cmd_name, ["const State &glState", "bool isCallValid"] + params, cmd_packed_gl_enums)
+    params_just_name_state = ", ".join(
+        ["context->getState()", "isCallValid"] +
         [just_the_name_packed(param, packed_gl_enums) for param in params])
 
     parameter_captures = []
@@ -913,13 +919,14 @@ def format_capture_method(command, cmd_name, proto, params, all_param_types, cap
         param_type = get_capture_param_type_name(param_type)
 
         if pointer_count > 0:
-            params = params_just_name
+            params = params_just_name_state
             capture_name = "Capture%s_%s" % (cmd_name[2:], param_name)
             capture = template_parameter_capture_pointer.format(
                 name=param_name, type=param_type, capture_name=capture_name, params=params)
 
             capture_pointer_func = template_parameter_capture_pointer_func.format(
-                name=capture_name, params=params_with_type + ", angle::ParamCapture *paramCapture")
+                name=capture_name,
+                params=params_with_type_state + ", angle::ParamCapture *paramCapture")
             capture_pointer_funcs += [capture_pointer_func]
         elif param_type in ('GLenum', 'GLbitfield'):
             gl_enum_group = find_gl_enum_group_in_command(command, param_name)
@@ -937,8 +944,8 @@ def format_capture_method(command, cmd_name, proto, params, all_param_types, cap
     format_args = {
         "full_name": cmd_name,
         "short_name": cmd_name[2:],
-        "params_with_type": params_with_type,
-        "params_just_name": params_just_name,
+        "params_with_type": params_with_type_context,
+        "params_just_name": params_just_name_context,
         "parameter_captures": "\n    ".join(parameter_captures),
         "return_value_type_original": return_type,
         "return_value_type_custom": get_capture_param_type_name(return_type)
