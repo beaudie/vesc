@@ -46,6 +46,30 @@
       "revId": "cf168b5e46b28babe046d3d2b91201d7c5c12579",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cfdc50a2_cff6ea27",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T15:48:04Z",
+      "side": 1,
+      "message": "A unique name is still clearer to me. Anyway, don\u0027t want to go back and forth on this forever so will land it.",
+      "parentUuid": "bf59e2fa_bd65d500",
+      "range": {
+        "startLine": 55,
+        "startChar": 14,
+        "endLine": 55,
+        "endChar": 33
+      },
+      "revId": "cf168b5e46b28babe046d3d2b91201d7c5c12579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
