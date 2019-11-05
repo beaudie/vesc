@@ -22,6 +22,30 @@
       "revId": "60ebc81f2fcf61af2250e1f592cddde534fae4fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "366806ef_3705d29d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2921,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-05T22:20:34Z",
+      "side": 1,
+      "message": "Looks like we store 4 bytes for VK_FORMAT_X8_D24_UNORM_PACK32 which we don\u0027t need to expand since it\u0027s just a depth format (no stencil aspect). I\u0027ve taken it out of this if case.\nThanks!",
+      "parentUuid": "b18a1943_4f797ca6",
+      "range": {
+        "startLine": 2921,
+        "startChar": 35,
+        "endLine": 2921,
+        "endChar": 64
+      },
+      "revId": "60ebc81f2fcf61af2250e1f592cddde534fae4fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
