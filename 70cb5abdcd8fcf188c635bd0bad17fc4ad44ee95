@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "c4aa732e_69685c1c",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-05T14:49:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e2250f4_748c7428",
+      "range": {
+        "startLine": 166,
+        "startChar": 26,
+        "endLine": 166,
+        "endChar": 38
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abb0e6f_12743cfd",
         "filename": "scripts/export_targets.py",
         "patchSetId": 6
@@ -144,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "1679d196_9c3ab807",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-05T14:49:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db7d4fa9_f5e43930",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 38
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a229c27_0caf597b",
         "filename": "scripts/export_targets.py",
         "patchSetId": 6
@@ -164,6 +212,30 @@
       "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edb608cd_ebf12be4",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-05T14:49:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a229c27_0caf597b",
+      "range": {
+        "startLine": 217,
+        "startChar": 4,
+        "endLine": 217,
+        "endChar": 32
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +262,30 @@
     },
     {
       "key": {
+        "uuid": "17321bc5_52db49ba",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-05T14:49:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "981fd384_ac344b9f",
+      "range": {
+        "startLine": 659,
+        "startChar": 23,
+        "endLine": 659,
+        "endChar": 33
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e794ae0_9c9f088c",
         "filename": "src/compiler/translator/TranslatorVulkan.h",
         "patchSetId": 6
@@ -210,6 +306,30 @@
       "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcfa056f_91bcafce",
+        "filename": "src/compiler/translator/TranslatorVulkan.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-05T14:49:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e794ae0_9c9f088c",
+      "range": {
+        "startLine": 34,
+        "startChar": 26,
+        "endLine": 34,
+        "endChar": 36
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -236,6 +356,30 @@
     },
     {
       "key": {
+        "uuid": "5319f84d_4fe9f167",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-05T14:49:20Z",
+      "side": 1,
+      "message": "Actually I think I will add a comment instead. BindResourcesImpl doesn\u0027t make sense to me.",
+      "parentUuid": "7ad7daa8_b7b09b5a",
+      "range": {
+        "startLine": 52,
+        "startChar": 14,
+        "endLine": 52,
+        "endChar": 28
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38639dc3_4dced844",
         "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
         "patchSetId": 6
@@ -256,6 +400,30 @@
       "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bff05b6b_dedb4988",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-05T14:49:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38639dc3_4dced844",
+      "range": {
+        "startLine": 458,
+        "startChar": 4,
+        "endLine": 458,
+        "endChar": 9
+      },
+      "revId": "70cb5abdcd8fcf188c635bd0bad17fc4ad44ee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
