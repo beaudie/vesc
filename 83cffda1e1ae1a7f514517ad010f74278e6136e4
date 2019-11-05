@@ -93,6 +93,30 @@
       "revId": "83cffda1e1ae1a7f514517ad010f74278e6136e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c51eb6a_f80bbec5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1584,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-05T19:01:02Z",
+      "side": 1,
+      "message": "Seems like a driver bug. See the internal email thread. It should be resolved and acted on despite not being a fatal error.",
+      "parentUuid": "6d5d941b_7fab2cae",
+      "range": {
+        "startLine": 1584,
+        "startChar": 23,
+        "endLine": 1584,
+        "endChar": 36
+      },
+      "revId": "83cffda1e1ae1a7f514517ad010f74278e6136e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
