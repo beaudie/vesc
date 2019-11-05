@@ -94,6 +94,30 @@
       "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc2e8de0_6838362c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-11-05T03:18:42Z",
+      "side": 1,
+      "message": "\u003e2. glGenerateMipmap: copy staging buffer to new image (onRead)\n\n\u003eShouldn\u0027t this be another onWrite? You\u0027re writing to the image.\n\nBut the dependency is in the buffer side, copy old image to buffer, and then from buffer to new image.\nadd onWrite with the new image doesn\u0027t help, because the new image has no relationship with the old image or staging buffer (we have no dep setup)\n\n\u003e Maybe call image-\u003eaddWriteDependency instead of Buffer-\u003eonRead?\n\nboth of image-\u003eaddWriteDepdency or image-\u003eaddReadDependency don\u0027t useful, the new image content will be incorrect because of node2 is submitted first",
+      "parentUuid": "51a722f3_c3441b66",
+      "range": {
+        "startLine": 1071,
+        "startChar": 0,
+        "endLine": 1074,
+        "endChar": 44
+      },
+      "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
