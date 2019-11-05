@@ -265,7 +265,7 @@ inline void DefaultCacheProgram(PlatformMethods *platform,
 
 #define ANGLE_PLATFORM_METHOD_DEF(Name, CapsName) CapsName##Func Name = Default##CapsName;
 
-struct ANGLE_PLATFORM_EXPORT PlatformMethods
+struct PlatformMethods
 {
     inline PlatformMethods();
 
