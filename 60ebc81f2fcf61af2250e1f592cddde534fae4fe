@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b18a1943_4f797ca6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2921,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-05T21:50:08Z",
+      "side": 1,
+      "message": "What\u0027s the pixelBytes for VK_FORMAT_X8_D24_UNORM_PACK32?\nI think it should be 4 which I think would be right for this format.\nIf it\u0027s 3, then we want 4 because the read won\u0027t pack the 24bit depth.\n5 only works if you have stencil as well.",
+      "range": {
+        "startLine": 2921,
+        "startChar": 35,
+        "endLine": 2921,
+        "endChar": 64
+      },
+      "revId": "60ebc81f2fcf61af2250e1f592cddde534fae4fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
