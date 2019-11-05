@@ -142,6 +142,30 @@
       "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bb52219_e05dfa8b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-11-05T03:49:54Z",
+      "side": 1,
+      "message": "that should be OK, but looks like this:\ncopyImagetoBuffer\nstagingBuffer-\u003eonWrite\n\ncopyBufferToImage\nstagingbuffer-\u003eonRead(mImage)\nstagingbuffer-\u003eonSelfReadWrite",
+      "parentUuid": "d64f4339_332a36a9",
+      "range": {
+        "startLine": 1071,
+        "startChar": 0,
+        "endLine": 1074,
+        "endChar": 44
+      },
+      "revId": "7dc004f051cb35a17fc210940728482668cdd5f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
