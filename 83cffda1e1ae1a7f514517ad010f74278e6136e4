@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5510ea03_3474c231",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-05T18:34:04Z",
+      "side": 1,
+      "message": "Is this defined somewhere as a minimum size?\nCurious if it\u0027s something that spec\u0027d or just chosen as a \"reasonable\" minimum.",
+      "range": {
+        "startLine": 1559,
+        "startChar": 44,
+        "endLine": 1559,
+        "endChar": 46
+      },
+      "revId": "83cffda1e1ae1a7f514517ad010f74278e6136e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
