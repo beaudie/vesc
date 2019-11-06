@@ -210,6 +210,30 @@
       "revId": "5710f64794d7e6172e948f57d24270c64757a631",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12377257_ffbe3472",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-06T20:57:01Z",
+      "side": 1,
+      "message": "There is a known issue on Pixel 4 with writing Depth/Stencil, wouldn\u0027t surprise me that they have an issue with reading as well.\nhttps://issuetracker.google.com/137276715",
+      "parentUuid": "16868f99_cc4cb217",
+      "range": {
+        "startLine": 640,
+        "startChar": 5,
+        "endLine": 640,
+        "endChar": 13
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
