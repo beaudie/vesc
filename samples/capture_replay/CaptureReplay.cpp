@@ -8,6 +8,7 @@
 #include "SampleApplication.h"
 
 #include "angle_capture_context1.h"
+#include "util/test_utils.h"
 
 class CaptureReplaySample : public SampleApplication
 {
@@ -24,6 +25,8 @@ class CaptureReplaySample : public SampleApplication
             return false;
         SetBinaryDataDir(ANGLE_CAPTURE_REPLAY_SAMPLE_DATA_DIR);
         SetupContext1Replay();
+
+        eglSwapInterval(getDisplay(), 1);
         return true;
     }
 
@@ -31,7 +34,9 @@ class CaptureReplaySample : public SampleApplication
 
     void draw() override
     {
-        ReplayContext1Frame(kReplayFrameStart + (mCurrentFrame % kReplayFrameEnd));
+        uint32_t frame =
+            kReplayFrameStart + (mCurrentFrame % (kReplayFrameEnd - kReplayFrameStart));
+        ReplayContext1Frame(frame);
         mCurrentFrame++;
     }
 
