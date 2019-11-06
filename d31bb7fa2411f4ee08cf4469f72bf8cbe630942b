@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3eb20bc7_ea650bbc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-06T17:59:04Z",
+      "side": 1,
+      "message": "tiny wording nit: DEPS \n\nDEPS implements submodules-like functionality. submodules is a git concept while DEPS is a gclient/depot_tools concept.",
+      "range": {
+        "startLine": 7,
+        "startChar": 22,
+        "endLine": 7,
+        "endChar": 32
+      },
+      "revId": "d31bb7fa2411f4ee08cf4469f72bf8cbe630942b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
