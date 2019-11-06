@@ -157,6 +157,9 @@ config("extra_warnings") {
       "-Wunreachable-code",
       "-Wshorten-64-to-32",
     ]
+    if (is_win) {
+      cflags += [ "-Wno-incompatible-pointer-types" ]
+    }
   }
 
   if (angle_is_winuwp) {
@@ -570,6 +573,7 @@ config("libANGLE_config") {
 
   if (is_win) {
     cflags += [ "/wd4530" ]  # C++ exception handler used, but unwind semantics are not enabled.
+    libs += [ "dxgi.lib" ]
   }
 
   if (is_android && (angle_enable_gl || angle_enable_vulkan)) {
