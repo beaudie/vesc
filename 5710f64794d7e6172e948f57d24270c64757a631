@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "6c6472b1_38dc2442",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2930,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-06T20:52:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14f92e50_96d30ccb",
+      "range": {
+        "startLine": 2930,
+        "startChar": 21,
+        "endLine": 2930,
+        "endChar": 46
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7234ffa9_a8550b67",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 11
@@ -59,6 +83,30 @@
       "writtenOn": "2019-11-06T17:39:20Z",
       "side": 1,
       "message": "this looks like WIP code that should be replaced with the other suggestion I had.",
+      "range": {
+        "startLine": 2961,
+        "startChar": 0,
+        "endLine": 2961,
+        "endChar": 47
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6bfd78d_d770fa99",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2961,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-06T20:52:21Z",
+      "side": 1,
+      "message": "This is to avoid code like \"\u0026((*bufferOffsetsOut)[0])\" below. Even with the new and improved StagingBufferOffsetArray we still have to dereference the array ptr. I\u0027ve refactored the allocateStagingMemory function to take the StagingBufferOffsetArray ptr since this is its only calling site.\n\nI\u0027ve pulled this #define out and updated code below accordingly. Not sure if there\u0027s a nicer way to update the Array accesses below to avoid \"(*bufferOffsetsOut)\" syntax.",
+      "parentUuid": "7234ffa9_a8550b67",
       "range": {
         "startLine": 2961,
         "startChar": 0,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "27525f12_6b935f98",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-06T20:52:21Z",
+      "side": 1,
+      "message": "I hoisted this and made both pixel \u0026 depth bytes set under shared \"if\" case.",
+      "parentUuid": "1473a930_96fd3bbc",
+      "range": {
+        "startLine": 2992,
+        "startChar": 0,
+        "endLine": 2995,
+        "endChar": 9
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0745f306_5f18a87d",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 11
@@ -105,6 +177,30 @@
       "writtenOn": "2019-11-06T17:39:20Z",
       "side": 1,
       "message": "this makes me worry that there\u0027s a bug with some format emulation that only get exposed on Android. You can test by forcing emulation on with FeaturesVk::forceFallbackFormat\n\nI\u0027d also say trying on SwiftShader. Not sure if that is possible.",
+      "range": {
+        "startLine": 640,
+        "startChar": 5,
+        "endLine": 640,
+        "endChar": 13
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16868f99_cc4cb217",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-06T20:52:21Z",
+      "side": 1,
+      "message": "I\u0027m able to pass this test on swiftshader with and without forceFallbackFormat forced on. On Pixel4 I see the test fail both with and without forceFallbackFormat forced on.",
+      "parentUuid": "0745f306_5f18a87d",
       "range": {
         "startLine": 640,
         "startChar": 5,
