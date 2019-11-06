@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c659fefe_d4139fc4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-06T17:39:20Z",
+      "side": 1,
+      "message": "vector is a \"heavyweight\" container that internally calls malloc. We could likely improve on this. My thought is defining a custom type. Either a std::array of an angle::FixedVector. \n\nusing StagingBufferOffsetArray \u003d std::array\u003cVkDeviceSize, 2\u003e;\nusing StagingBufferOffsetVector \u003d angle::FixedVector\u003cVkDeviceSize, 2\u003e;\n\nFixedVector lets you use a variable length (up to the max size).",
+      "range": {
+        "startLine": 973,
+        "startChar": 4,
+        "endLine": 973,
+        "endChar": 29
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14f92e50_96d30ccb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2930,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-06T17:39:20Z",
+      "side": 1,
+      "message": "nit: std::max seems not necessary. Maybe just set it to 5? mFormat-\u003epixelBytes shouldn\u0027t vary.",
+      "range": {
+        "startLine": 2930,
+        "startChar": 21,
+        "endLine": 2930,
+        "endChar": 46
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7234ffa9_a8550b67",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2961,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-06T17:39:20Z",
+      "side": 1,
+      "message": "this looks like WIP code that should be replaced with the other suggestion I had.",
+      "range": {
+        "startLine": 2961,
+        "startChar": 0,
+        "endLine": 2961,
+        "endChar": 47
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1473a930_96fd3bbc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-06T17:39:20Z",
+      "side": 1,
+      "message": "you\u0027re doing a similar size computation here. Maybe make this a helper and share code with the above?",
+      "range": {
+        "startLine": 2992,
+        "startChar": 0,
+        "endLine": 2995,
+        "endChar": 9
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0745f306_5f18a87d",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-06T17:39:20Z",
+      "side": 1,
+      "message": "this makes me worry that there\u0027s a bug with some format emulation that only get exposed on Android. You can test by forcing emulation on with FeaturesVk::forceFallbackFormat\n\nI\u0027d also say trying on SwiftShader. Not sure if that is possible.",
+      "range": {
+        "startLine": 640,
+        "startChar": 5,
+        "endLine": 640,
+        "endChar": 13
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
