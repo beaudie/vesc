@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "04c9861a_6b98afbd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2961,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-06T21:15:20Z",
+      "side": 1,
+      "message": "I see. The (*thing)[index] pattern is regrettable. I think it\u0027s preferable to defines. Don\u0027t have a better solution atm.",
+      "parentUuid": "e6bfd78d_d770fa99",
+      "range": {
+        "startLine": 2961,
+        "startChar": 0,
+        "endLine": 2961,
+        "endChar": 47
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1473a930_96fd3bbc",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 11
@@ -234,6 +258,30 @@
       "revId": "5710f64794d7e6172e948f57d24270c64757a631",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec6b2c84_b904f7d4",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-06T21:15:20Z",
+      "side": 1,
+      "message": "Gotcha, thanks for alleviating the worry.",
+      "parentUuid": "12377257_ffbe3472",
+      "range": {
+        "startLine": 640,
+        "startChar": 5,
+        "endLine": 640,
+        "endChar": 13
+      },
+      "revId": "5710f64794d7e6172e948f57d24270c64757a631",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
