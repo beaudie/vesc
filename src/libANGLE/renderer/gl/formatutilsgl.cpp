@@ -50,6 +50,20 @@ static inline SupportRequirement VersionOrExts(GLuint major,
     return requirement;
 }
 
+// supported = version && vertexExt
+// Introduced to fix Nexus 5 with OpenGL ES 3.0 advertise EXT_texture_norm16
+static inline SupportRequirement VersionAndExts(GLuint major,
+                                                GLuint minor,
+                                                const std::string &versionExt)
+{
+    SupportRequirement requirement;
+    requirement.version.major = major;
+    requirement.version.minor = minor;
+    requirement.requiredExtensions.resize(1);
+    angle::SplitStringAlongWhitespace(versionExt, &requirement.requiredExtensions[0]);
+    return requirement;
+}
+
 // supported = version
 static inline SupportRequirement VersionOnly(GLuint major, GLuint minor)
 {
@@ -208,6 +222,17 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     InsertFormatMapping(&map, GL_RGBA16UI,          VersionOrExts(3, 0, "GL_EXT_texture_integer"),    NeverSupported(),  VersionOrExts(3, 0, "GL_EXT_texture_integer"), VersionOnly(3, 0),                          NeverSupported(),  VersionOnly(3, 0),                        VersionOnly(3, 0)                         );
     InsertFormatMapping(&map, GL_RGBA32I,           VersionOrExts(3, 0, "GL_EXT_texture_integer"),    NeverSupported(),  VersionOrExts(3, 0, "GL_EXT_texture_integer"), VersionOnly(3, 0),                          NeverSupported(),  VersionOnly(3, 0),                        VersionOnly(3, 0)                         );
     InsertFormatMapping(&map, GL_RGBA32UI,          VersionOrExts(3, 0, "GL_EXT_texture_integer"),    NeverSupported(),  VersionOrExts(3, 0, "GL_EXT_texture_integer"), VersionOnly(3, 0),                          NeverSupported(),  VersionOnly(3, 0),                        VersionOnly(3, 0)                         );
+
+    InsertFormatMapping(&map, GL_R16,               VersionOrExts(3, 0, "GL_ARB_texture_rg"),         AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_rg"),      ExtsOnly("GL_EXT_texture_norm16"),          AlwaysSupported(), VersionAndExts(3, 1, "GL_EXT_texture_norm16"),        VersionAndExts(3, 1, "GL_EXT_texture_norm16"));
+    InsertFormatMapping(&map, GL_RG16,              VersionOrExts(3, 0, "GL_ARB_texture_rg"),         AlwaysSupported(), VersionOrExts(3, 0, "GL_ARB_texture_rg"),      ExtsOnly("GL_EXT_texture_norm16"),          AlwaysSupported(), VersionAndExts(3, 1, "GL_EXT_texture_norm16"),        VersionAndExts(3, 1, "GL_EXT_texture_norm16"));
+    InsertFormatMapping(&map, GL_RGBA16,            AlwaysSupported(),                                AlwaysSupported(), AlwaysSupported(),                             ExtsOnly("GL_EXT_texture_norm16"),          AlwaysSupported(), VersionAndExts(3, 1, "GL_EXT_texture_norm16"),        VersionAndExts(3, 1, "GL_EXT_texture_norm16"));
+
+    InsertFormatMapping(&map, GL_RGB16,             AlwaysSupported(),                                AlwaysSupported(), NeverSupported(),                              ExtsOnly("GL_EXT_texture_norm16"),          AlwaysSupported(), NeverSupported(),                         NeverSupported()                          );
+
+    InsertFormatMapping(&map, GL_R16_SNORM,         VersionOnly(3, 1),                                AlwaysSupported(), NeverSupported(),                              ExtsOnly("GL_EXT_texture_norm16"),          AlwaysSupported(), NeverSupported(),                         NeverSupported()                          );
+    InsertFormatMapping(&map, GL_RG16_SNORM,        VersionOnly(3, 1),                                AlwaysSupported(), NeverSupported(),                              ExtsOnly("GL_EXT_texture_norm16"),          AlwaysSupported(), NeverSupported(),                         NeverSupported()                          );
+    InsertFormatMapping(&map, GL_RGB16_SNORM,       VersionOnly(3, 1),                                AlwaysSupported(), NeverSupported(),                              ExtsOnly("GL_EXT_texture_norm16"),          AlwaysSupported(), NeverSupported(),                         NeverSupported()                          );
+    InsertFormatMapping(&map, GL_RGBA16_SNORM,      VersionOnly(3, 1),                                AlwaysSupported(), NeverSupported(),                              ExtsOnly("GL_EXT_texture_norm16"),          AlwaysSupported(), NeverSupported(),                         NeverSupported()                          );
 
     // Unsized formats
     InsertFormatMapping(&map, GL_ALPHA,             NeverSupported(),                                 NeverSupported(),  NeverSupported(),                              AlwaysSupported(),                          AlwaysSupported(), NeverSupported(),                         NeverSupported()                          );
