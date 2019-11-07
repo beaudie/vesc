@@ -685,6 +685,11 @@ PlatformParameters ES3_VULKAN_NULL()
     return PlatformParameters(3, 0, egl_platform::VULKAN_NULL());
 }
 
+PlatformParameters ES3_VULKAN_SWIFTSHADER()
+{
+    return PlatformParameters(3, 0, egl_platform::VULKAN_SWIFTSHADER());
+}
+
 PlatformParameters ES31_VULKAN()
 {
     return PlatformParameters(3, 1, egl_platform::VULKAN());
@@ -693,6 +698,11 @@ PlatformParameters ES31_VULKAN()
 PlatformParameters ES31_VULKAN_NULL()
 {
     return PlatformParameters(3, 1, egl_platform::VULKAN_NULL());
+}
+
+PlatformParameters ES31_VULKAN_SWIFTSHADER()
+{
+    return PlatformParameters(3, 1, egl_platform::VULKAN_SWIFTSHADER());
 }
 
 PlatformParameters ES2_WGL()

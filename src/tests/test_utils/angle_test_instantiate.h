@@ -99,6 +99,37 @@ struct CombinedPrintToStringParamName
     INSTANTIATE_TEST_SUITE_P(, testName, ANGLE_INSTANTIATE_TEST_PLATFORMS(testName), \
                              testing::PrintToStringParamName())
 
+#define ANGLE_INSTANTIATE_ALL_PLATFORMS_ES1                                          \
+    ES1_D3D9(), ES1_D3D11(), ES1_OPENGL(), ES1_OPENGLES(), ES1_NULL(), ES1_VULKAN(), \
+        ES1_VULKAN_NULL()
+
+#define ANGLE_INSTANTIATE_ALL_PLATFORMS_ES2                                          \
+    ES2_D3D9(), ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES(), ES2_NULL(), ES2_VULKAN(), \
+        ES2_VULKAN_NULL(), ES2_VULKAN_SWIFTSHADER(), ES2_WGL()
+
+#define ANGLE_INSTANTIATE_ALL_PLATFORMS_ES3x                                                \
+    ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_NULL(), ES3_VULKAN(), ES3_VULKAN_NULL(), \
+        ES3_VULKAN_SWIFTSHADER(), ES3_WGL(), ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES(),  \
+        ES31_NULL(), ES31_VULKAN(), ES31_VULKAN_NULL(), ES31_VULKAN_SWIFTSHADER()
+
+// Instantiate the test once for each GLES1 platform
+#define ANGLE_INSTANTIATE_TEST_ES1(testName)                                               \
+    const decltype(ES1_D3D9()) testName##params[] = {ANGLE_INSTANTIATE_ALL_PLATFORMS_ES1}; \
+    INSTANTIATE_TEST_SUITE_P(, testName, ANGLE_INSTANTIATE_TEST_PLATFORMS(testName),       \
+                             testing::PrintToStringParamName())
+
+// Instantiate the test once for each GLES2 platform
+#define ANGLE_INSTANTIATE_TEST_ES2(testName)                                               \
+    const decltype(ES2_D3D9()) testName##params[] = {ANGLE_INSTANTIATE_ALL_PLATFORMS_ES2}; \
+    INSTANTIATE_TEST_SUITE_P(, testName, ANGLE_INSTANTIATE_TEST_PLATFORMS(testName),       \
+                             testing::PrintToStringParamName())
+
+// Instantiate the test once for each GLES3 platform
+#define ANGLE_INSTANTIATE_TEST_ES3x(testName)                                                \
+    const decltype(ES3_D3D11()) testName##params[] = {ANGLE_INSTANTIATE_ALL_PLATFORMS_ES3x}; \
+    INSTANTIATE_TEST_SUITE_P(, testName, ANGLE_INSTANTIATE_TEST_PLATFORMS(testName),         \
+                             testing::PrintToStringParamName())
+
 // Instantiate the test for a combination of N parameters and the enumeration of platforms in the
 // extra args, similar to ANGLE_INSTANTIATE_TEST.  The macros are defined only for the Ns currently
 // in use, and can be expanded as necessary.
