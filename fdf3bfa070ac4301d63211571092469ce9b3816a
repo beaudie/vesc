@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad3d7816_1f688283",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3951,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-11-07T17:15:46Z",
+      "side": 1,
+      "message": "Is there any specific reason to pick 0x6A35 for GL_UNSIGNED_SHORT? (0x7FFF is MAX for signed short which makes sense)",
+      "revId": "fdf3bfa070ac4301d63211571092469ce9b3816a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
