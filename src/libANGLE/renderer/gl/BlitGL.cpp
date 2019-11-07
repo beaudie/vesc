@@ -391,6 +391,18 @@ angle::Result BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *con
                                   destOffset.y, 0, 0, sourceArea.width, sourceArea.height));
     }
 
+    // Reset the scratch texture back to default swizzle values
+    mStateManager->bindTexture(gl::TextureType::_2D, mScratchTextures[0]);
+
+    swizzle[0] = GL_RED;
+    swizzle[1] = GL_GREEN;
+    swizzle[2] = GL_BLUE;
+    swizzle[3] = GL_ALPHA;
+    ANGLE_GL_TRY(context,
+                 mFunctions->texParameteriv(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_RGBA, swizzle));
+
+    mStateManager->bindTexture(textureType, texture);
+
     // Finally orphan the scratch textures so they can be GCed by the driver.
     ANGLE_TRY(orphanScratchTextures(context));
 
