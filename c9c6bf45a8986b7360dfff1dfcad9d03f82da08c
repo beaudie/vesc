@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "071c39ba_ff69a66d",
+        "filename": "samples/capture_replay/CaptureReplay.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-07T22:46:38Z",
+      "side": 1,
+      "message": "This got complicated enough to warrant a comment, like \"looping on frame range\" or something.",
+      "range": {
+        "startLine": 36,
+        "startChar": 17,
+        "endLine": 36,
+        "endChar": 22
+      },
+      "revId": "c9c6bf45a8986b7360dfff1dfcad9d03f82da08c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6548f15e_c4a1843d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-07T22:46:38Z",
+      "side": 1,
+      "message": "Easier to read if clang-format will let you do one more newline:\n\n  currentValue.Values.FloatValues[0] \u003d\u003d 0.0f \u0026\u0026\n  currentValue.Values.FloatValues[1] \u003d\u003d 0.0f \u0026\u0026\n  currentValue.Values.FloatValues[2] \u003d\u003d 0.0f \u0026\u0026\n  currentValue.Values.FloatValues[3] \u003d\u003d 1.0f;",
+      "range": {
+        "startLine": 875,
+        "startChar": 11,
+        "endLine": 877,
+        "endChar": 100
+      },
+      "revId": "c9c6bf45a8986b7360dfff1dfcad9d03f82da08c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d8eb32e_8839aaf8",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-07T22:46:38Z",
+      "side": 1,
+      "message": "I see some other members in VertexAttribute::operator\u003d that might need to be here,  like relativeOffset.  How\u0027d you come up with the list checked here?  Is it just comparing parameters that will go into the call?  The question probably applies to the whole capture design and I should go read it.",
+      "range": {
+        "startLine": 968,
+        "startChar": 8,
+        "endLine": 968,
+        "endChar": 11
+      },
+      "revId": "c9c6bf45a8986b7360dfff1dfcad9d03f82da08c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f26cebf5_23467607",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-07T22:46:38Z",
+      "side": 1,
+      "message": "newline here for readability",
+      "range": {
+        "startLine": 1473,
+        "startChar": 67,
+        "endLine": 1473,
+        "endChar": 68
+      },
+      "revId": "c9c6bf45a8986b7360dfff1dfcad9d03f82da08c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d17eea6_af736780",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-07T22:46:38Z",
+      "side": 1,
+      "message": "A newline here would help make the code easier to analyze, if clang-format will allow it.",
+      "range": {
+        "startLine": 1549,
+        "startChar": 47,
+        "endLine": 1549,
+        "endChar": 48
+      },
+      "revId": "c9c6bf45a8986b7360dfff1dfcad9d03f82da08c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
