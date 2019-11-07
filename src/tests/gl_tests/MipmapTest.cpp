@@ -666,10 +666,6 @@ TEST_P(MipmapTest, RenderOntoLevelZeroAfterGenerateMipmap)
 // already uploaded before. The test expects that mip to be usable.
 TEST_P(MipmapTest, DefineValidExtraLevelAndUseItLater)
 {
-    // Disable this test until metal backend implements mipmap chain with respect to
-    // OpenGL spec.
-    ANGLE_SKIP_TEST_IF(IsMetal());
-
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
 
     GLubyte *levels[] = {mLevelZeroBlueInitData.data(), mLevelOneGreenInitData.data(),
