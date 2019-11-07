@@ -22,6 +22,30 @@
       "revId": "d8b5ae37d2eeb6aa26bf2a65adaddc563bd50f2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86b945ac_c26ace9b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-07T00:07:32Z",
+      "side": 1,
+      "message": "It\u0027s essentially a duplicate version of State::getLinkedProgram. It doesn\u0027t take a gl::Context as a parameter. Needed that in the parameter pointer captures.",
+      "parentUuid": "0f3b5ba8_4e17059e",
+      "range": {
+        "startLine": 1798,
+        "startChar": 13,
+        "endLine": 1798,
+        "endChar": 39
+      },
+      "revId": "d8b5ae37d2eeb6aa26bf2a65adaddc563bd50f2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
