@@ -3914,7 +3914,9 @@ TEST_P(TextureLimitsTest, TextureTypeConflict)
 class Texture2DNorm16TestES3 : public Texture2DTestES3
 {
   protected:
-    Texture2DNorm16TestES3() : Texture2DTestES3(), mTextures{0, 0, 0}, mFBO(0), mRenderbuffer(0) {}
+    Texture2DNorm16TestES3()
+        : Texture2DTestES3(), mTextures{0, 0, 0}, mFBO(0), mFBORenderbuffer(0), mRenderbuffer(0)
+    {}
 
     void testSetUp() override
     {
@@ -3923,6 +3925,7 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
         glActiveTexture(GL_TEXTURE0);
         glGenTextures(3, mTextures);
         glGenFramebuffers(1, &mFBO);
+        glGenFramebuffers(1, &mFBORenderbuffer);
         glGenRenderbuffers(1, &mRenderbuffer);
 
         for (size_t textureIndex = 0; textureIndex < 3; textureIndex++)
@@ -3941,6 +3944,7 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
     {
         glDeleteTextures(3, mTextures);
         glDeleteFramebuffers(1, &mFBO);
+        glDeleteFramebuffers(1, &mFBORenderbuffer);
         glDeleteRenderbuffers(1, &mRenderbuffer);
 
         Texture2DTestES3::testTearDown();
@@ -4004,6 +4008,7 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
                               SliceFormatColor(format, GLColor(expectedValue, expectedValue,
                                                                expectedValue, expectedValue)));
 
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBORenderbuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, mRenderbuffer);
         glRenderbufferStorage(GL_RENDERBUFFER, internalformat, 1, 1);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
@@ -4014,8 +4019,12 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        EXPECT_PIXEL_COLOR_EQ(0, 0, SliceFormatColor(format, GLColor::white));
+
+        glBindTexture(GL_TEXTURE_2D, mTextures[1]);
         glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
 
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
         EXPECT_PIXEL_COLOR_EQ(0, 0, SliceFormatColor(format, GLColor::white));
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -4025,6 +4034,8 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
 
     GLuint mTextures[3];
     GLuint mFBO;
+    // Create an extra fbo to workaround win intel OpenGL / android Nexus5 driver issue
+    GLuint mFBORenderbuffer;
     GLuint mRenderbuffer;
 };
 
