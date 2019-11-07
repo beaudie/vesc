@@ -502,12 +502,6 @@ TEST_P(TimerQueriesTestES3, TimestampGetInteger64)
     EXPECT_LT(result1, result2);
 }
 
-ANGLE_INSTANTIATE_TEST(TimerQueriesTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES3_D3D11(),
-                       ES2_OPENGL(),
-                       ES3_OPENGL(),
-                       ES2_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(TimerQueriesTest);
 
-ANGLE_INSTANTIATE_TEST(TimerQueriesTestES3, ES3_D3D11(), ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST_ES3(TimerQueriesTestES3);

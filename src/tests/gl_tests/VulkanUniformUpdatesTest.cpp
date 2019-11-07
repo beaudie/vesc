@@ -475,6 +475,6 @@ TEST_P(VulkanUniformUpdatesTest, TextureStagingBufferRecycling)
     }
 }
 
-ANGLE_INSTANTIATE_TEST(VulkanUniformUpdatesTest, ES2_VULKAN(), ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2(VulkanUniformUpdatesTest);
 
 }  // anonymous namespace
