@@ -123,6 +123,9 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterReadCompute)
     // http://anglebug.com/2925
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
 
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
+
     constexpr char kComputeShaderSource[] = R"(#version 310 es
 layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
 
@@ -191,6 +194,9 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterIncrementAndDecrement)
     // Skipping due to a bug on the Qualcomm Vulkan Android driver.
     // http://anglebug.com/3726
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     constexpr char kCS[] =
         "#version 310 es\n"
@@ -438,12 +444,7 @@ void main()
 // test is run afterwards.  AtomicCounter* tests are alphabetically first, and having them not run
 // on Vulkan makes every shard our bots currently make do have at least some OpenGL test run before
 // any Vulkan test.
-ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest,
-                       ES3_OPENGL(),
-                       ES3_OPENGLES(),
-                       ES31_OPENGL(),
-                       ES31_OPENGLES(),
-                       ES31_D3D11());
-ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest31, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
+ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(AtomicCounterBufferTest);
+ANGLE_INSTANTIATE_TEST_ES31(AtomicCounterBufferTest31);
 
 }  // namespace

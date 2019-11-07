@@ -112,6 +112,6 @@ TEST_P(VulkanFormatTablesTest, TestFormatSupport)
     }
 }
 
-ANGLE_INSTANTIATE_TEST(VulkanFormatTablesTest, ES2_VULKAN());
+ANGLE_INSTANTIATE_TEST(VulkanFormatTablesTest, ES2_VULKAN(), ES2_VULKAN_SWIFTSHADER());
 
 }  // anonymous namespace

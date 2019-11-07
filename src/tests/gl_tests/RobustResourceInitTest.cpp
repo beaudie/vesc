@@ -1947,18 +1947,10 @@ TEST_P(RobustResourceInitTestES3, InitializeMultisampledDepthRenderbufferAfterCo
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
-ANGLE_INSTANTIATE_TEST(RobustResourceInitTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES3_D3D11(),
-                       ES2_OPENGL(),
-                       ES3_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES3_OPENGLES(),
-                       ES2_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(RobustResourceInitTest);
 
-ANGLE_INSTANTIATE_TEST(RobustResourceInitTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST_ES3(RobustResourceInitTestES3);
 
-ANGLE_INSTANTIATE_TEST(RobustResourceInitTestES31, ES31_OPENGL(), ES31_D3D11());
+ANGLE_INSTANTIATE_TEST_ES31(RobustResourceInitTestES31);
 
 }  // namespace angle

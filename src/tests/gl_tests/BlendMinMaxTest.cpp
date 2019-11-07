@@ -168,6 +168,9 @@ TEST_P(BlendMinMaxTest, RGBA8)
 
 TEST_P(BlendMinMaxTest, RGBA32F)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
+
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 || !IsGLExtensionEnabled("GL_EXT_float_blend") ||
                        !IsGLExtensionEnabled("GL_EXT_color_buffer_float"));
 
@@ -187,12 +190,4 @@ TEST_P(BlendMinMaxTest, RGBA16F)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST(BlendMinMaxTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES3_D3D11(),
-                       ES2_OPENGL(),
-                       ES3_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES3_OPENGLES(),
-                       ES2_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(BlendMinMaxTest);

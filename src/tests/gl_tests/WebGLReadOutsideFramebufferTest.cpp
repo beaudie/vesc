@@ -381,19 +381,8 @@ TEST_P(WebGL2ReadOutsideFramebufferTest, CopyTexSubImage3D)
     Main3D(&WebGLReadOutsideFramebufferTest::TestCopyTexSubImage3D, false);
 }
 
-ANGLE_INSTANTIATE_TEST(WebGLReadOutsideFramebufferTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES3_D3D11(),
-                       ES2_OPENGL(),
-                       ES3_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(WebGLReadOutsideFramebufferTest);
 
-ANGLE_INSTANTIATE_TEST(WebGL2ReadOutsideFramebufferTest,
-                       ES3_D3D11(),
-                       ES3_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(WebGL2ReadOutsideFramebufferTest);
 
 }  // namespace angle

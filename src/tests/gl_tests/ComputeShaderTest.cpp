@@ -3619,11 +3619,7 @@ void main(void) {
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2 - 1, getWindowHeight() / 2 - 1, GLColor::green);
 }
 
-ANGLE_INSTANTIATE_TEST(ComputeShaderTest,
-                       ES31_OPENGL(),
-                       ES31_OPENGLES(),
-                       ES31_D3D11(),
-                       ES31_VULKAN());
-ANGLE_INSTANTIATE_TEST(ComputeShaderTestES3, ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());
-ANGLE_INSTANTIATE_TEST(WebGL2ComputeTest, ES31_D3D11(), ES31_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES31(ComputeShaderTest);
+ANGLE_INSTANTIATE_TEST_ES3(ComputeShaderTestES3);
+ANGLE_INSTANTIATE_TEST_ES31(WebGL2ComputeTest);
 }  // namespace
