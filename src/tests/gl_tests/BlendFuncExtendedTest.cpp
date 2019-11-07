@@ -306,6 +306,9 @@ TEST_P(EXTBlendFuncExtendedDrawTestES3, FragmentOutputLocationsInShader)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_blend_func_extended"));
 
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
+
     const char *kFragColorShader = R"(#version 300 es
 #extension GL_EXT_blend_func_extended : require
 precision mediump float;
@@ -361,6 +364,9 @@ void main() {
 TEST_P(EXTBlendFuncExtendedDrawTestES3, FragmentOutputLocationsAPIAndAutomatic)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_blend_func_extended"));
+
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     constexpr char kFS[] = R"(#version 300 es
 #extension GL_EXT_blend_func_extended : require
@@ -707,29 +713,8 @@ void main() {
     glDeleteProgram(program);
 }
 
-ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedTest,
-                       ES2_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES3_OPENGL(),
-                       ES3_OPENGLES(),
-                       ES2_VULKAN());
-ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedTestES3,
-                       ES3_OPENGL(),
-                       ES3_OPENGLES(),
-                       ES31_OPENGL(),
-                       ES31_OPENGLES(),
-                       ES3_VULKAN(),
-                       ES31_VULKAN());
-ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedDrawTest,
-                       ES2_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES3_OPENGL(),
-                       ES3_OPENGLES(),
-                       ES2_VULKAN());
-ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedDrawTestES3,
-                       ES3_OPENGL(),
-                       ES3_OPENGLES(),
-                       ES31_OPENGL(),
-                       ES31_OPENGLES(),
-                       ES3_VULKAN(),
-                       ES31_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2(EXTBlendFuncExtendedTest);
+ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(EXTBlendFuncExtendedTestES3);
+
+ANGLE_INSTANTIATE_TEST_ES2(EXTBlendFuncExtendedDrawTest);
+ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(EXTBlendFuncExtendedDrawTestES3);

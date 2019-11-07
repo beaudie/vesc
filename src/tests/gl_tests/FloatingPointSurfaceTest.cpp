@@ -66,7 +66,4 @@ TEST_P(FloatingPointSurfaceTest, Drawing)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST(FloatingPointSurfaceTest,
-                       ES2_D3D11(),
-                       ES3_D3D11(),
-                       ES2_D3D11_PRESENT_PATH_FAST());
+ANGLE_INSTANTIATE_TEST_ES2(FloatingPointSurfaceTest);

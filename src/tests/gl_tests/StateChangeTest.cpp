@@ -4373,21 +4373,14 @@ TEST_P(SimpleStateChangeTestES3, RasterizerDiscardState)
 }
 }  // anonymous namespace
 
-ANGLE_INSTANTIATE_TEST(StateChangeTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL(), ES2_VULKAN());
-ANGLE_INSTANTIATE_TEST(LineLoopStateChangeTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES2_OPENGL(),
-                       ES2_VULKAN());
-ANGLE_INSTANTIATE_TEST(StateChangeRenderTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL(), ES2_VULKAN());
-ANGLE_INSTANTIATE_TEST(StateChangeTestES3, ES3_D3D11(), ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(SimpleStateChangeTest, ES2_D3D11(), ES2_VULKAN(), ES2_OPENGL());
-ANGLE_INSTANTIATE_TEST(SimpleStateChangeTestES3, ES3_OPENGL(), ES3_D3D11(), ES3_VULKAN());
-ANGLE_INSTANTIATE_TEST(SimpleStateChangeTestES31, ES31_OPENGL(), ES31_D3D11(), ES31_VULKAN());
-ANGLE_INSTANTIATE_TEST(ValidationStateChangeTest, ES3_D3D11(), ES3_OPENGL(), ES3_VULKAN());
-ANGLE_INSTANTIATE_TEST(WebGL2ValidationStateChangeTest, ES3_D3D11(), ES3_OPENGL(), ES3_VULKAN());
-ANGLE_INSTANTIATE_TEST(ValidationStateChangeTestES31, ES31_OPENGL(), ES31_D3D11(), ES31_VULKAN());
-ANGLE_INSTANTIATE_TEST(WebGLComputeValidationStateChangeTest,
-                       ES31_D3D11(),
-                       ES31_OPENGL(),
-                       ES31_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2(StateChangeTest);
+ANGLE_INSTANTIATE_TEST_ES2(LineLoopStateChangeTest);
+ANGLE_INSTANTIATE_TEST_ES2(StateChangeRenderTest);
+ANGLE_INSTANTIATE_TEST_ES3(StateChangeTestES3);
+ANGLE_INSTANTIATE_TEST_ES2(SimpleStateChangeTest);
+ANGLE_INSTANTIATE_TEST_ES3(SimpleStateChangeTestES3);
+ANGLE_INSTANTIATE_TEST_ES31(SimpleStateChangeTestES31);
+ANGLE_INSTANTIATE_TEST_ES3(ValidationStateChangeTest);
+ANGLE_INSTANTIATE_TEST_ES3(WebGL2ValidationStateChangeTest);
+ANGLE_INSTANTIATE_TEST_ES31(ValidationStateChangeTestES31);
+ANGLE_INSTANTIATE_TEST_ES31(WebGLComputeValidationStateChangeTest);

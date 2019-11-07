@@ -389,6 +389,9 @@ class BlitFramebufferANGLETest : public ANGLETest
 // Draw to user-created framebuffer, blit whole-buffer color to original framebuffer.
 TEST_P(BlitFramebufferANGLETest, BlitColorToDefault)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
+
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_blit"));
 
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
@@ -1991,13 +1994,6 @@ TEST_P(BlitFramebufferTest, BlitFramebufferSizeOverflow2)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES2_D3D11_PRESENT_PATH_FAST(),
-                       ES2_OPENGL(),
-                       ES3_OPENGL(),
-                       ES2_VULKAN(),
-                       ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(BlitFramebufferANGLETest);
 
-ANGLE_INSTANTIATE_TEST(BlitFramebufferTest, ES3_D3D11(), ES3_OPENGL(), ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES3(BlitFramebufferTest);
