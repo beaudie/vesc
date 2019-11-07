@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "aeb620a3_cd593696",
+        "filename": "src/compiler/translator/TranslatorMetal.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-07T03:48:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d140a4b_5c075f93",
+      "range": {
+        "startLine": 75,
+        "startChar": 9,
+        "endLine": 75,
+        "endChar": 22
+      },
+      "revId": "edced2e5c613671d51a075aab5c02247c316b06c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ee613a2_ca03c806",
         "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
         "patchSetId": 9
@@ -69,6 +93,30 @@
       "revId": "edced2e5c613671d51a075aab5c02247c316b06c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96580c86_5a639a9d",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-07T03:48:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bd738dd0_84c4ef72",
+      "range": {
+        "startLine": 453,
+        "startChar": 14,
+        "endLine": 453,
+        "endChar": 15
+      },
+      "revId": "edced2e5c613671d51a075aab5c02247c316b06c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
