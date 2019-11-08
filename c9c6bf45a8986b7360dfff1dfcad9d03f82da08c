@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "eab0082e_385b40f7",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-08T01:06:16Z",
+      "side": 1,
+      "message": "[[[... third_party/angle/src/libANGLE/queryconversions.h ...]]]\ntemplate \u003ctypename ParamType\u003e\nGLboolean ConvertToGLBoolean(ParamType param)\n{\n    return param ? GL_TRUE : GL_FALSE;\n}\n\n\nCan ConvertToGLBoolean() be used instead, or can these functions be merged to somewhere common?",
+      "revId": "c9c6bf45a8986b7360dfff1dfcad9d03f82da08c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6548f15e_c4a1843d",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 8
@@ -111,6 +128,23 @@
         "endLine": 1549,
         "endChar": 48
       },
+      "revId": "c9c6bf45a8986b7360dfff1dfcad9d03f82da08c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "102858a4_55956bbc",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-08T01:06:16Z",
+      "side": 1,
+      "message": "This was forced to \u00271\u0027 above, why is it being reset to apiState.getPackAlignment() here?",
       "revId": "c9c6bf45a8986b7360dfff1dfcad9d03f82da08c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
