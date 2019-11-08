@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ad0d9f2_7d190707",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T14:54:06Z",
+      "side": 1,
+      "message": "Hopefully we can keep the metal backend compile online.",
+      "parentUuid": "f0b8f5b6_09d5f7b0",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 560,
+        "endChar": 5
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd81a83f_fc198970",
         "filename": "gni/angle.gni",
         "patchSetId": 5
@@ -41,6 +65,76 @@
         "startChar": 28,
         "endLine": 101,
         "endChar": 55
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "becfcf24_aca0299f",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T14:54:06Z",
+      "side": 1,
+      "message": "that sounds fine. just a note that you\u0027ll need to move it into the next declare_args block.",
+      "parentUuid": "dd81a83f_fc198970",
+      "range": {
+        "startLine": 101,
+        "startChar": 28,
+        "endLine": 101,
+        "endChar": 55
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da9549c5_62d0d533",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T14:54:06Z",
+      "side": 1,
+      "message": "maybe not necessary to have it both here and in angle_backend_config",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 268,
+        "endChar": 3
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db3a13ab_3d71cffa",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T14:54:06Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be in vulkan_headers?",
+      "range": {
+        "startLine": 276,
+        "startChar": 0,
+        "endLine": 278,
+        "endChar": 3
       },
       "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
