@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69460878_c332af2a",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-11-08T01:16:42Z",
+      "side": 1,
+      "message": "Seems suspicious - are we sure that all of the GL state setting calls above are being done against the correct texture objects?\n\nIf the user level code has bound a sampler object, are we sure we\u0027ve unbound it above? Otherwise I think these calls can affect the sampler object instead of the texture object, leading to a state leak.",
+      "range": {
+        "startLine": 402,
+        "startChar": 17,
+        "endLine": 402,
+        "endChar": 27
+      },
+      "revId": "3abb0586c655aeb1b4858af598e729399717d9fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
