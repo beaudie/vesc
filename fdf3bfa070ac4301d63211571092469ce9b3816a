@@ -16,6 +16,24 @@
       "revId": "fdf3bfa070ac4301d63211571092469ce9b3816a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5601ee7_161e3730",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3951,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-08T13:44:19Z",
+      "side": 1,
+      "message": "I\u0027m not sure, if it\u0027s an off-by-small-ammount error, we can change the EXPECT_PIXEL_COLOR_EQ to EXPECT_PIXEL_COLOR_NEAR.",
+      "parentUuid": "ad3d7816_1f688283",
+      "revId": "fdf3bfa070ac4301d63211571092469ce9b3816a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
