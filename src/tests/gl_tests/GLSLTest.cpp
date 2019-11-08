@@ -6153,6 +6153,7 @@ void main()
                 static_cast<GLfloat>(getWindowHeight()));
 
     // Draw to backbuffer.
+    glClear(GL_COLOR_BUFFER_BIT);
     glDrawArrays(GL_POINTS, 0, 1);
     ASSERT_GL_NO_ERROR();
 
@@ -6172,6 +6173,7 @@ void main()
     ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
 
     // Draw to user FBO.
+    glClear(GL_COLOR_BUFFER_BIT);
     glDrawArrays(GL_POINTS, 0, 1);
     ASSERT_GL_NO_ERROR();
 
@@ -7442,6 +7444,7 @@ void main()
 ANGLE_INSTANTIATE_TEST(GLSLTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
+                       ES2_METAL(),
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
@@ -7451,6 +7454,7 @@ ANGLE_INSTANTIATE_TEST(GLSLTest,
 ANGLE_INSTANTIATE_TEST(GLSLTestNoValidation,
                        ES2_D3D9(),
                        ES2_D3D11(),
+                       ES2_METAL(),
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
@@ -7461,6 +7465,11 @@ ANGLE_INSTANTIATE_TEST(GLSLTestNoValidation,
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest_ES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());
 
-ANGLE_INSTANTIATE_TEST(WebGLGLSLTest, ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES(), ES2_VULKAN());
+ANGLE_INSTANTIATE_TEST(WebGLGLSLTest,
+                       ES2_D3D11(),
+                       ES2_METAL(),
+                       ES2_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES2_VULKAN());
 
 ANGLE_INSTANTIATE_TEST(GLSLTest_ES31, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES(), ES31_VULKAN());
