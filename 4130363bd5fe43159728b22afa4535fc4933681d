@@ -1,0 +1,239 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "204fe2eb_3d873e81",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "D3D11: Translate uniform blocks to StructuredBuffer when necessary\n(or some better names because in this CL the uniform buffers are not always tranlated into structuredbuffers)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d307b99_4f534a02",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "The version should be increased.",
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0de8f31b_d7dc05ed",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "It seems to be called as kMaxInputResourceSlotCount.",
+      "range": {
+        "startLine": 28,
+        "startChar": 19,
+        "endLine": 28,
+        "endChar": 44
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f796823_b6341482",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "Could you explain why the threshold is 50 here?",
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2be9817_931f5a76",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "Could you explain in the comments why in this situation we need force packing?",
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f2590ed_bffee8a5",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "The condition is quite complex. What about putting it into a function?",
+      "range": {
+        "startLine": 655,
+        "startChar": 11,
+        "endLine": 659,
+        "endChar": 71
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d34372a_8b6ee8f1",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "This should be \"\u003e\u003d\" as the name of the threshold is \"min array size use structured buffer\".",
+      "range": {
+        "startLine": 659,
+        "startChar": 72,
+        "endLine": 659,
+        "endChar": 73
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "189ea459_9cc27da7",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "Now it is not suitable to call it \"texture register\" because buffers will also occupy such kind of register. What about calling it \"mSRVRegister\"?",
+      "range": {
+        "startLine": 667,
+        "startChar": 12,
+        "endLine": 667,
+        "endChar": 28
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "699cb7fa_15f6b896",
+        "filename": "src/libANGLE/renderer/d3d/ShaderD3D.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "It is never used and should be removed.",
+      "range": {
+        "startLine": 106,
+        "startChar": 32,
+        "endLine": 106,
+        "endChar": 50
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9662045b_0c75995b",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "You can use R(\"\") here.",
+      "range": {
+        "startLine": 1635,
+        "startChar": 8,
+        "endLine": 1647,
+        "endChar": 14
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73d88a5e_1138b52c",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-11-08T08:45:54Z",
+      "side": 1,
+      "message": "You can use R(\"\") here.",
+      "range": {
+        "startLine": 1730,
+        "startChar": 2,
+        "endLine": 1742,
+        "endChar": 14
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
