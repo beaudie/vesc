@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5597c12c_8fd18b99",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T11:39:53Z",
+      "side": 1,
+      "message": "can you also handle ES 3.1 while you\u0027re at it?",
+      "revId": "7f779191ab0c1bfba7c4c1c868cc52de2acbd3a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cf295df_a5f3cb0d",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T11:39:53Z",
+      "side": 1,
+      "message": "should include ES1_VULKAN_SWIFTSHADER here too.",
+      "range": {
+        "startLine": 102,
+        "startChar": 8,
+        "endLine": 102,
+        "endChar": 37
+      },
+      "revId": "7f779191ab0c1bfba7c4c1c868cc52de2acbd3a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee72cfa9_f04f63e6",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T11:39:53Z",
+      "side": 1,
+      "message": "you can omit this. ES1 requires effectively ES3.0 functionality.",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 12
+      },
+      "revId": "7f779191ab0c1bfba7c4c1c868cc52de2acbd3a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7d63c33_66cff59f",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T11:39:53Z",
+      "side": 1,
+      "message": "should remove this guy still. likely unstable.",
+      "range": {
+        "startLine": 109,
+        "startChar": 87,
+        "endLine": 109,
+        "endChar": 94
+      },
+      "revId": "7f779191ab0c1bfba7c4c1c868cc52de2acbd3a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
