@@ -721,6 +721,8 @@ libangle_gl_sources = [
   "src/libANGLE/renderer/gl/ImageGL.h",
   "src/libANGLE/renderer/gl/MemoryObjectGL.cpp",
   "src/libANGLE/renderer/gl/MemoryObjectGL.h",
+  "src/libANGLE/renderer/gl/OpenGLTextureSurfaceGL.cpp",
+  "src/libANGLE/renderer/gl/OpenGLTextureSurfaceGL.h",
   "src/libANGLE/renderer/gl/PathGL.h",
   "src/libANGLE/renderer/gl/PathGL.cpp",
   "src/libANGLE/renderer/gl/ProgramGL.cpp",

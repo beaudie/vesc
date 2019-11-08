@@ -262,6 +262,11 @@ class TextureGL : public TextureImpl
     const LevelInfoGL &getLevelInfo(gl::TextureTarget target, size_t level) const;
     const LevelInfoGL &getBaseLevelInfo() const;
 
+    // For EGL_ANGLE_opengl_texture_client_buffer
+    friend class OpenGLTextureSurfaceGL;
+    void saveTextureIDForOpenGLTextureClientBuffer(GLuint newTextureID);
+    void restoreTextureIDForOpenGLTextureClientBuffer();
+
     std::vector<LevelInfoGL> mLevelInfo;
     gl::Texture::DirtyBits mLocalDirtyBits;
 
@@ -271,6 +276,7 @@ class TextureGL : public TextureImpl
     GLuint mAppliedMaxLevel;
 
     GLuint mTextureID;
+    GLuint mSavedTextureIDForOpenGLTextureClientBuffer;
 };
 }  // namespace rx
 

@@ -1,0 +1,157 @@
+Name
+
+    ANGLE_opengl_texture_client_buffer
+
+Name Strings
+
+    EGL_ANGLE_opengl_texture_client_buffer
+
+Contributors
+
+    Geoff Lang
+    Olli Etuaho
+    Sunny Sachanandani
+    Ken Russell
+
+Contacts
+
+    Ken Russell, Google Inc. (kbr 'at' google.com)
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, October 11, 2019
+
+Number
+
+    EGL Extension #??
+
+Dependencies
+
+    This extension is written against the wording of the EGL 1.2
+    Specification.
+
+    References the EGL_KHR_image_base and EGL_ANGLE_device_cgl extensions.
+
+Overview
+
+    This extension allows creating EGL surfaces and EGL images from OpenGL texture
+    objects.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    Accepted by the <target> parameter of eglCreateImageKHR and <buftype>
+    parameter of eglCreatePbufferFromClientBuffer:
+
+        EGL_OPENGL_TEXTURE_ANGLE            0x348A
+
+Additions to Chapter 2 of the EGL 1.2 Specification (EGL Operation)
+
+    Add to section 2.5.1 "EGLImage Specification" (as defined by the
+    EGL_KHR_image_base specification), in the description of
+    eglCreateImageKHR:
+
+   "Values accepted for <target> are listed in Table aaa, below.
+
+      +----------------------------+-----------------------------------------+
+      |  <target>                  |  Notes                                  |
+      +----------------------------+-----------------------------------------+
+      |  EGL_OPENGL_TEXTURE_ANGLE  |  Used for OpenGL texture objects        |
+      +----------------------------+-----------------------------------------+
+       Table aaa.  Legal values for eglCreateImageKHR <target> parameter
+
+    ...
+
+    If <target> is EGL_OPENGL_TEXTURE_ANGLE, <dpy> must be a valid display,
+    <ctx> must be EGL_NO_CONTEXT, <buffer> must be a pointer to a valid OpenGL
+    texture object (cast into the type EGLClientBuffer), and attributes other
+    than EGL_TEXTURE_INTERNAL_FORMAT_ANGLE are ignored. The width and height of
+    the pbuffer are determined by the width and height of <buffer>."
+
+    If EGL_TEXTURE_INTERNAL_FORMAT_ANGLE is specified, it is used to interpret
+    <buffer> according to the provided internal format. See table
+    egl.restrictions for acceptable texture object types and formats.
+
+    The provided OpenGL texture object must have been created by an OpenGL or
+    OpenGL ES context that shares resources with ANGLE's internal context, for
+    example via the EGL_ANGLE_device_cgl extension. However, no validation is
+    performed of the texture object."
+
+Additions to Chapter 3 of the EGL 1.2 Specification (EGL Functions and Errors)
+
+    Replace the last sentence of paragraph 1 of Section 3.5.3 with the
+    following text.
+    "Currently, the only client API resources which may be bound in this
+    fashion are OpenVG VGImage objects and OpenGL texture objects."
+
+    Replace the last sentence of paragraph 2 ("To bind a client API...") of
+    Section 3.5.3 with the following text.
+    "When <buftype> is EGL_OPENVG_IMAGE or EGL_OPENGL_TEXTURE_ANGLE, the width
+    and height of the pbuffer are determined by the width and height of
+    <buffer>."
+
+    Replace the third paragraph of Section 3.5.3 with the following text.
+    "<buftype> specifies the type of buffer to be bound. The only allowed values
+    of <buftype> are EGL_OPENVG_IMAGE and EGL_OPENGL_TEXTURE_ANGLE".
+
+    Append the following text to the fourth paragraph of Section 3.5.3.
+    "When <buftype> is EGL_OPENGL_TEXTURE_ANGLE, <buffer> must be a valid OpenGL
+    texture object, cast into the type EGLClientBuffer. See table
+    egl.restrictions for acceptable texture object types and formats."
+
+    ---------------------------------------------------------------------------
+    Resource Type      Resource Restrictions
+    ---------------------------------------------------------------------------
+    OpenGL Texture     Texture target must be GL_TEXTURE_2D or
+                       GL_TEXTURE_RECTANGLE_ARB.
+
+                       Level 0 of the texture must be specified.
+
+                       Format must be GL_RGB or GL_RGBA.
+                       Type must be GL_UNSIGNED_BYTE.
+                       Internal format must be GL_RGB8 or GL_RGBA8.
+
+    --------------------------------------------------------------------------
+    Table egl.restrictions - Restrictions on OpenGL textures that can be used
+    as a <buffer>.
+    --------------------------------------------------------------------------
+
+    Append to the end of Section 3.5.3.
+    "When a pbuffer is created with type EGL_OPENGL_TEXTURE_ANGLE, the contents
+    of the associcated OpenGL texture object are undefined while the pbuffer is
+    the current read surface, draw surface or bound to a client texture."
+
+Issues
+
+    1. What formats and types must be supported for import of OpenGL textures?
+
+    UNRESOLVED as of yet.
+
+    2. What happens to the non-zero mipmap levels when importing the
+    texture as a pbuffer?
+
+    UNRESOLVED: this extension doesn't use any primitives above and
+    beyond those in the OpenGL API, so all of the mip levels are preserved.
+
+    3. What happens to the filtering modes of the texture?
+
+    UNRESOLVED: the filtering modes should be preserved, read from the
+    native OpenGL texture at the time eglBindTexImage is called, and
+    reflected in the state of the ANGLE texture. In the current
+    implementation this isn't done yet.
+
+Revision History
+
+    Version 1, 2019/10/11 - first draft.
+    Version 2, 2019/11/08 - second draft. Added more issues.

@@ -1621,6 +1621,18 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display,
             }
             break;
 
+        case EGL_OPENGL_TEXTURE_ANGLE:
+            if (!displayExtensions.openglTextureClientBuffer)
+            {
+                return EglBadParameter() << "<buftype> EGL_OPENGL_TEXTURE_ANGLE requires the "
+                                            "EGL_ANGLE_opengl_texture_client_buffer extension.";
+            }
+            if (buffer == nullptr)
+            {
+                return EglBadParameter() << "<buffer> must be non null";
+            }
+            break;
+
         default:
             return EglBadParameter();
     }
@@ -1636,10 +1648,11 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display,
             case EGL_WIDTH:
             case EGL_HEIGHT:
                 if (buftype != EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE &&
-                    buftype != EGL_D3D_TEXTURE_ANGLE && buftype != EGL_IOSURFACE_ANGLE)
+                    buftype != EGL_D3D_TEXTURE_ANGLE && buftype != EGL_IOSURFACE_ANGLE &&
+                    buftype != EGL_OPENGL_TEXTURE_ANGLE)
                 {
                     return EglBadParameter()
-                           << "Width and Height are not supported for thie <buftype>";
+                           << "Width and Height are not supported for this <buftype>";
                 }
                 if (value < 0)
                 {
@@ -1666,7 +1679,7 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display,
                     case EGL_TEXTURE_2D:
                         break;
                     case EGL_TEXTURE_RECTANGLE_ANGLE:
-                        if (buftype != EGL_IOSURFACE_ANGLE)
+                        if (buftype != EGL_IOSURFACE_ANGLE && buftype != EGL_OPENGL_TEXTURE_ANGLE)
                         {
                             return EglBadParameter()
                                    << "<buftype> doesn't support rectangle texture targets";
@@ -1698,14 +1711,15 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display,
                 break;
 
             case EGL_TEXTURE_TYPE_ANGLE:
-                if (buftype != EGL_IOSURFACE_ANGLE)
+                if (buftype != EGL_IOSURFACE_ANGLE && buftype != EGL_OPENGL_TEXTURE_ANGLE)
                 {
                     return EglBadAttribute() << "<buftype> doesn't support texture type";
                 }
                 break;
 
             case EGL_TEXTURE_INTERNAL_FORMAT_ANGLE:
-                if (buftype != EGL_IOSURFACE_ANGLE && buftype != EGL_D3D_TEXTURE_ANGLE)
+                if (buftype != EGL_IOSURFACE_ANGLE && buftype != EGL_D3D_TEXTURE_ANGLE &&
+                    buftype != EGL_OPENGL_TEXTURE_ANGLE)
                 {
                     return EglBadAttribute() << "<buftype> doesn't support texture internal format";
                 }
@@ -1749,7 +1763,7 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display,
         // Instead of adding the flag we special case the check here to be ignored for IOSurfaces.
         // The TODO is to find a proper solution for this, maybe by implementing eglBindTexImage on
         // OSX?
-        if (buftype != EGL_IOSURFACE_ANGLE)
+        if (buftype != EGL_IOSURFACE_ANGLE && buftype != EGL_OPENGL_TEXTURE_ANGLE)
         {
             return EglBadAttribute();
         }
@@ -1792,6 +1806,26 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display,
             !attributes.contains(EGL_IOSURFACE_PLANE_ANGLE))
         {
             return EglBadParameter() << "Missing required attribute for EGL_IOSURFACE";
+        }
+    }
+
+    if (buftype == EGL_OPENGL_TEXTURE_ANGLE)
+    {
+        if (textureTarget != EGL_TEXTURE_2D && textureTarget != EGL_TEXTURE_RECTANGLE_ANGLE)
+        {
+            return EglBadAttribute() << "EGL_OPENGL_TEXTURE requires the EGL_TEXTURE_2D or EGL_TEXTURE_RECTANGLE_ANGLE target";
+        }
+
+        if (textureFormat != EGL_TEXTURE_RGB && textureFormat != EGL_TEXTURE_RGBA)
+        {
+            return EglBadAttribute() << "EGL_OPENGL_TEXTURE requires the EGL_TEXTURE_RGB or EGL_TEXTURE_RGBA format";
+        }
+
+        if (!attributes.contains(EGL_WIDTH) || !attributes.contains(EGL_HEIGHT) ||
+            !attributes.contains(EGL_TEXTURE_INTERNAL_FORMAT_ANGLE) ||
+            !attributes.contains(EGL_TEXTURE_TYPE_ANGLE))
+        {
+            return EglBadParameter() << "Missing required attribute for EGL_OPENGL_TEXTURE";
         }
     }
 

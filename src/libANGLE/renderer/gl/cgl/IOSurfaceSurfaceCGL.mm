@@ -4,8 +4,8 @@
 // found in the LICENSE file.
 //
 
-// PBufferSurfaceCGL.cpp: an implementation of PBuffers created from IOSurfaces using
-//                        EGL_ANGLE_iosurface_client_buffer
+// IOSurfaceSurfaceCGL.mm: an implementation of PBuffers created from IOSurfaces using
+//                         EGL_ANGLE_iosurface_client_buffer
 
 #if __has_include(<Cocoa/Cocoa.h>)
 

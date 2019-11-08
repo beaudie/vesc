@@ -945,6 +945,9 @@ struct DisplayExtensions
     // EGL_KHR_no_config_context
     bool noConfigContext = false;
 
+    // EGL_ANGLE_opengl_texture_client_buffer
+    bool openglTextureClientBuffer = false;
+
     // EGL_ANGLE_ggp_stream_descriptor
     bool ggpStreamDescriptor = false;
 

@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 
-// PBufferSurfaceCGL.cpp: an implementation of egl::Surface for PBuffers for the CLG backend,
+// PBufferSurfaceCGL.cpp: an implementation of egl::Surface for PBuffers for the CGL backend,
 //                      currently implemented using renderbuffers
 
 #include "libANGLE/renderer/gl/cgl/PbufferSurfaceCGL.h"

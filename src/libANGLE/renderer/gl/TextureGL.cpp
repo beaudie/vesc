@@ -139,7 +139,8 @@ TextureGL::TextureGL(const gl::TextureState &state, GLuint id)
       mAppliedSampler(state.getSamplerState()),
       mAppliedBaseLevel(state.getEffectiveBaseLevel()),
       mAppliedMaxLevel(state.getEffectiveMaxLevel()),
-      mTextureID(id)
+      mTextureID(id),
+      mSavedTextureIDForOpenGLTextureClientBuffer(0)
 {
     mLevelInfo.resize(GetMaxLevelInfoCountForTextureType(getType()));
 }
@@ -1897,6 +1898,20 @@ angle::Result TextureGL::initializeContents(const gl::Context *context,
     stateManager->bindBuffer(gl::BufferBinding::PixelUnpack, prevUnpackBuffer);
 
     return angle::Result::Continue;
+}
+
+void TextureGL::saveTextureIDForOpenGLTextureClientBuffer(GLuint newTextureID)
+{
+    ASSERT(!mSavedTextureIDForOpenGLTextureClientBuffer);
+    mSavedTextureIDForOpenGLTextureClientBuffer = mTextureID;
+    mTextureID = newTextureID;
+}
+
+void TextureGL::restoreTextureIDForOpenGLTextureClientBuffer()
+{
+    ASSERT(mSavedTextureIDForOpenGLTextureClientBuffer);
+    mTextureID = mSavedTextureIDForOpenGLTextureClientBuffer;
+    mSavedTextureIDForOpenGLTextureClientBuffer = 0;
 }
 
 }  // namespace rx

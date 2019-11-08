@@ -1,20 +1,17 @@
 //
-// Copyright 2017 The ANGLE Project Authors. All rights reserved.
+// Copyright 2019 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
 
-// IOSurfaceSurfaceCGL.h: an implementation of PBuffers created from IOSurfaces using
-//                        EGL_ANGLE_iosurface_client_buffer
+// OpenGLTextureSurfaceGL.h: an implementation of PBuffers created from OpenGL textures using
+//                           EGL_ANGLE_opengl_texture_client_buffer
 
-#ifndef LIBANGLE_RENDERER_GL_CGL_IOSURFACESURFACECGL_H_
-#define LIBANGLE_RENDERER_GL_CGL_IOSURFACESURFACECGL_H_
+#ifndef LIBANGLE_RENDERER_GL_OPENGLTEXTURESURFACEGL_H_
+#define LIBANGLE_RENDERER_GL_OPENGLTEXTURESURFACEGL_H_
 
 #include "libANGLE/renderer/gl/SurfaceGL.h"
 #include "libANGLE/renderer/gl/cgl/DisplayCGL.h"
-
-struct __IOSurface;
-typedef __IOSurface *IOSurfaceRef;
 
 namespace egl
 {
@@ -27,15 +24,17 @@ namespace rx
 class DisplayCGL;
 class FunctionsGL;
 class StateManagerGL;
+class TextureGL;
 
-class IOSurfaceSurfaceCGL : public SurfaceGL
+class OpenGLTextureSurfaceGL : public SurfaceGL
 {
   public:
-    IOSurfaceSurfaceCGL(const egl::SurfaceState &state,
-                        CGLContextObj cglContext,
-                        EGLClientBuffer buffer,
-                        const egl::AttributeMap &attribs);
-    ~IOSurfaceSurfaceCGL() override;
+    OpenGLTextureSurfaceGL(const egl::SurfaceState &state,
+                           // TODO(kbr): what should the context be, if anything?
+                           // CGLContextObj cglContext,
+                           EGLClientBuffer buffer,
+                           const egl::AttributeMap &attribs);
+    ~OpenGLTextureSurfaceGL() override;
 
     egl::Error initialize(const egl::Display *display) override;
     egl::Error makeCurrent(const gl::Context *context) override;
@@ -64,21 +63,18 @@ class IOSurfaceSurfaceCGL : public SurfaceGL
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
 
-    bool hasEmulatedAlphaChannel() const override;
-
   private:
-    angle::Result initializeAlphaChannel(const gl::Context *context, GLuint texture);
-
-    CGLContextObj mCGLContext;
-    IOSurfaceRef mIOSurface;
+    GLuint mTexture;
     int mWidth;
     int mHeight;
-    int mPlane;
-    int mFormatIndex;
+    GLenum mTextureTarget;
+    GLenum mInternalFormat;
+    GLenum mFormat;
+    GLenum mType;
 
-    bool mAlphaInitialized;
+    rx::TextureGL *mBoundTexture;
 };
 
 }  // namespace rx
 
-#endif  // LIBANGLE_RENDERER_GL_CGL_IOSURFACESURFACECGL_H_
+#endif  // LIBANGLE_RENDERER_GL_OPENGLTEXTURESURFACEGL_H_

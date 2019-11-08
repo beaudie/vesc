@@ -17,6 +17,7 @@
 #    include "common/debug.h"
 #    include "gpu_info_util/SystemInfo.h"
 #    include "libANGLE/Display.h"
+#    include "libANGLE/renderer/gl/OpenGLTextureSurfaceGL.h"
 #    include "libANGLE/renderer/gl/cgl/ContextCGL.h"
 #    include "libANGLE/renderer/gl/cgl/DeviceCGL.h"
 #    include "libANGLE/renderer/gl/cgl/IOSurfaceSurfaceCGL.h"
@@ -164,9 +165,14 @@ SurfaceImpl *DisplayCGL::createPbufferFromClientBuffer(const egl::SurfaceState &
                                                        EGLClientBuffer clientBuffer,
                                                        const egl::AttributeMap &attribs)
 {
-    ASSERT(buftype == EGL_IOSURFACE_ANGLE);
+    ASSERT(buftype == EGL_IOSURFACE_ANGLE || buftype == EGL_OPENGL_TEXTURE_ANGLE);
 
-    return new IOSurfaceSurfaceCGL(state, mContext, clientBuffer, attribs);
+    if (buftype == EGL_IOSURFACE_ANGLE)
+    {
+        return new IOSurfaceSurfaceCGL(state, mContext, clientBuffer, attribs);
+    }
+
+    return new OpenGLTextureSurfaceGL(state, clientBuffer, attribs);
 }
 
 SurfaceImpl *DisplayCGL::createPixmapSurface(const egl::SurfaceState &state,
@@ -302,11 +308,20 @@ egl::Error DisplayCGL::validateClientBuffer(const egl::Config *configuration,
                                             EGLClientBuffer clientBuffer,
                                             const egl::AttributeMap &attribs) const
 {
-    ASSERT(buftype == EGL_IOSURFACE_ANGLE);
+    ASSERT(buftype == EGL_IOSURFACE_ANGLE || buftype == EGL_OPENGL_TEXTURE_ANGLE);
 
-    if (!IOSurfaceSurfaceCGL::validateAttributes(clientBuffer, attribs))
+    if (buftype == EGL_IOSURFACE_ANGLE)
     {
-        return egl::EglBadAttribute();
+        if (!IOSurfaceSurfaceCGL::validateAttributes(clientBuffer, attribs))
+        {
+            return egl::EglBadAttribute();
+        }
+    }
+
+    if (buftype == EGL_OPENGL_TEXTURE_ANGLE)
+    {
+        // TODO(kbr): implement any additional required validation not
+        // already handled by validationEGL.cpp.
     }
 
     return egl::NoError();
@@ -330,9 +345,10 @@ CGLPixelFormatObj DisplayCGL::getCGLPixelFormat() const
 
 void DisplayCGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
-    outExtensions->iosurfaceClientBuffer = true;
-    outExtensions->surfacelessContext    = true;
-    outExtensions->deviceQuery           = true;
+    outExtensions->iosurfaceClientBuffer     = true;
+    outExtensions->openglTextureClientBuffer = true;
+    outExtensions->surfacelessContext        = true;
+    outExtensions->deviceQuery               = true;
 
     // Contexts are virtualized so textures can be shared globally
     outExtensions->displayTextureShareGroup = true;

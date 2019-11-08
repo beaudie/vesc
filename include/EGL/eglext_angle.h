@@ -259,6 +259,11 @@ EGLAPI EGLBoolean EGLAPIENTRY eglQueryDisplayAttribANGLE(EGLDisplay dpy, EGLint 
 #define EGL_CGL_PIXEL_FORMAT_ANGLE 0x3486
 #endif
 
+#ifndef EGL_ANGLE_opengl_texture_client_buffer
+#define EGL_ANGLE_opengl_texture_client_buffer 1
+#define EGL_OPENGL_TEXTURE_ANGLE 0x348A
+#endif
+
 #ifndef EGL_ANGLE_ggp_stream_descriptor
 #define EGL_ANGLE_ggp_stream_descriptor 1
 #define EGL_GGP_STREAM_DESCRIPTOR_ANGLE 0x348B
