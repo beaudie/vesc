@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0b8f5b6_09d5f7b0",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-08T13:51:28Z",
+      "side": 1,
+      "message": "Intentional?",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 560,
+        "endChar": 5
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd81a83f_fc198970",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-08T13:51:28Z",
+      "side": 1,
+      "message": "What about \"\u003d angle_enable_vulkan \u0026\u0026 !is_android \u0026\u0026 !is_fuchsia\"\n\nThis way we can make sure that if vulkan is ever explicitly disabled, swiftshader is too.",
+      "range": {
+        "startLine": 101,
+        "startChar": 28,
+        "endLine": 101,
+        "endChar": 55
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb59067c_e9fc2237",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-08T13:51:28Z",
+      "side": 1,
+      "message": "So much simpler than what we were messing around with!",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 36
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acae9802_b2f2c3dd",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-08T13:51:28Z",
+      "side": 1,
+      "message": "nit: nullptr",
+      "range": {
+        "startLine": 47,
+        "startChar": 45,
+        "endLine": 47,
+        "endChar": 49
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afbaf481_03f6f4ca",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-08T13:51:28Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 59,
+        "startChar": 44,
+        "endLine": 59,
+        "endChar": 48
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
