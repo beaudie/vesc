@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "847c2af8_2f7074e9",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T15:50:29Z",
+      "side": 1,
+      "message": "can you cache this in the display?",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 24
+      },
+      "revId": "a65b6cd25a0ef02f1a02c34eae1ef3d3d378fa3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dbdc494_9e70d1a3",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T15:50:29Z",
+      "side": 1,
+      "message": "nit: \u0027mRenderer\u0027: don\u0027t need \u0027this-\u003e\u0027",
+      "range": {
+        "startLine": 86,
+        "startChar": 34,
+        "endLine": 86,
+        "endChar": 53
+      },
+      "revId": "a65b6cd25a0ef02f1a02c34eae1ef3d3d378fa3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1fb287e_e61ff9c9",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T15:50:29Z",
+      "side": 1,
+      "message": "what\u0027s your plan if this fails? we should likely report an error.",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 84
+      },
+      "revId": "a65b6cd25a0ef02f1a02c34eae1ef3d3d378fa3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4154355_df765409",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T15:50:29Z",
+      "side": 1,
+      "message": "suggestion: null this out on destroy. and make sure to destroy this in the destructor as well if it is not null. then you can early-exit on error and not leak resources.",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 25
+      },
+      "revId": "a65b6cd25a0ef02f1a02c34eae1ef3d3d378fa3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c797c93_8a436d5b",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T15:50:29Z",
+      "side": 1,
+      "message": "what\u0027s this about? doesn\u0027t seem fine if you\u0027re returning false?",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 115,
+        "endChar": 88
+      },
+      "revId": "a65b6cd25a0ef02f1a02c34eae1ef3d3d378fa3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b152290d_8216bc0f",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-08T15:50:29Z",
+      "side": 1,
+      "message": "return true?",
+      "range": {
+        "startLine": 125,
+        "startChar": 16,
+        "endLine": 126,
+        "endChar": 22
+      },
+      "revId": "a65b6cd25a0ef02f1a02c34eae1ef3d3d378fa3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
