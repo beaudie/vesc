@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "f8c1de80_00d61de0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-09T19:10:05Z",
+      "side": 1,
+      "message": "There\u0027s a significant design flaw here. The VkFramebuffer is cached once for each FramebufferVk and is only recreated when the front-end state chanes. It is not recreated when the blend states change. You should be easily able to reproduce test errors via a few state changes. That might be why the bots are failing.\n\nI\u0027ll think about this a bit myself. Not sure if the best way to handle this is via recreating the VkFramebuffer on blend state changes.",
+      "range": {
+        "startLine": 1336,
+        "startChar": 0,
+        "endLine": 1349,
+        "endChar": 0
+      },
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70659eed_7752a11c",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -30,6 +53,24 @@
       "writtenOn": "2019-11-09T18:38:46Z",
       "side": 1,
       "message": "i wanted to call your attention to a particular piece of code we are blocked on, this\nif-condition is where we check that there are no valid framebuffer attachments and hence\ndoesn\u0027t make sense to create a renderpass. but we had issues -\n1) if we did an early return here with a \"continue\" without creating the renderpass we\n   crash in the caller due to an assert\n2) we changed it to create an empty renderpass just so we wouldn\u0027t assert and it caused\n   validation errors and other issues\n\nis there a way to \"early-return\" from this function in a valid way? or are we doing this logic at the wrong abstraction level?",
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd8e40d4_8140e431",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-09T19:10:05Z",
+      "side": 1,
+      "message": "What are the validation errors? Early return is probably not the best solution. We can bind dummy attachments if necessary.",
+      "parentUuid": "7f1f3f32_dfe6a936",
       "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
