@@ -512,6 +512,9 @@ TEST_P(MipmapTest, DISABLED_ThreeLevelsInitData)
 // the 'normal' texture are copied during conversion.
 TEST_P(MipmapTest, GenerateMipmapFromInitDataThenRender)
 {
+    // TODO(hqle): Find what wrong with intel GPU.
+    ANGLE_SKIP_TEST_IF(IsIntelRenderer() && IsMetal());
+
     // Pass in initial data so the texture is blue.
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getWindowWidth(), getWindowHeight(), 0, GL_RGB,
@@ -599,6 +602,9 @@ TEST_P(MipmapTest, RenderOntoLevelZeroAfterGenerateMipmap)
 {
     // TODO(geofflang): Figure out why this is broken on AMD OpenGL
     ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
+
+    // TODO(hqle): Find what wrong with intel GPU.
+    ANGLE_SKIP_TEST_IF(IsIntelRenderer() && IsMetal());
 
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
 
@@ -774,6 +780,9 @@ TEST_P(MipmapTest, TextureCubeGeneralLevelZero)
 
     // http://anglebug.com/2822
     ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsVulkan());
+
+    // TODO(hqle): Find what wrong with intel GPU.
+    ANGLE_SKIP_TEST_IF(IsIntelRenderer() && IsMetal());
 
     glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
 
@@ -1250,6 +1259,7 @@ ANGLE_INSTANTIATE_TEST(MipmapTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
                        ES2_D3D11_PRESENT_PATH_FAST(),
+                       ES2_METAL(),
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
