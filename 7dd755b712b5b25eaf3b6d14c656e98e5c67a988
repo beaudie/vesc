@@ -22,6 +22,30 @@
       "revId": "7dd755b712b5b25eaf3b6d14c656e98e5c67a988",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "325b6b0e_a19c5c13",
+        "filename": "src/common/platform.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-11-09T00:11:09Z",
+      "side": 1,
+      "message": "Yes, TVOS and WatchOS would be examples of different targets (confusingly, they don\u0027t define TARGET_OS_IOS despite being iOS variants). However I\u0027m worried that an #error here might break the WebKit build because the way the build system works it probably compiles parts of ANGLE when building for those platforms even if it isn\u0027t used.",
+      "parentUuid": "453c92d6_1c37a7af",
+      "range": {
+        "startLine": 120,
+        "startChar": 5,
+        "endLine": 120,
+        "endChar": 10
+      },
+      "revId": "7dd755b712b5b25eaf3b6d14c656e98e5c67a988",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
