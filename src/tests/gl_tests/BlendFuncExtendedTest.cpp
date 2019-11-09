@@ -708,6 +708,7 @@ void main() {
 }
 
 ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedTest,
+                       ES2_METAL(),
                        ES2_OPENGL(),
                        ES2_OPENGLES(),
                        ES3_OPENGL(),
@@ -721,6 +722,7 @@ ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedTestES3,
                        ES3_VULKAN(),
                        ES31_VULKAN());
 ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedDrawTest,
+                       ES2_METAL(),
                        ES2_OPENGL(),
                        ES2_OPENGLES(),
                        ES3_OPENGL(),
