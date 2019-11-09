@@ -102,7 +102,20 @@ class BlendMinMaxTest : public ANGLETest
                 {
                     EXPECT_NEAR(
                         getExpected(blendMin, color.values[componentIdx], prevColor[componentIdx]),
-                        pixel[componentIdx], errorRange);
+                        pixel[componentIdx], errorRange)
+                        << " blendMin=" << blendMin << " componentIdx=" << componentIdx << std::endl
+
+                        << " color.values[0]=" << color.values[0]
+                        << " prevColor[0]=" << prevColor[0] << std::endl
+
+                        << " color.values[1]=" << color.values[1]
+                        << " prevColor[1]=" << prevColor[1] << std::endl
+
+                        << " color.values[2]=" << color.values[2]
+                        << " prevColor[2]=" << prevColor[2] << std::endl
+
+                        << " color.values[3]=" << color.values[3]
+                        << " prevColor[3]=" << prevColor[3];
                 }
             }
 
@@ -191,6 +204,7 @@ ANGLE_INSTANTIATE_TEST(BlendMinMaxTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
                        ES3_D3D11(),
+                       ES2_METAL(),
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
