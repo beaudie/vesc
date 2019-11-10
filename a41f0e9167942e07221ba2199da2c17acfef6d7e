@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6cbfbde7_16f0922a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-10T00:22:19Z",
+      "side": 1,
+      "message": "im not sure i understand the flaw, we are performing a read on the current attachment as-is\nthe blend state is a reflection of the latest updated blend state right? shouldn\u0027t it be\nsufficient as long as that state has the info we need?",
+      "parentUuid": "f8c1de80_00d61de0",
+      "range": {
+        "startLine": 1336,
+        "startChar": 0,
+        "endLine": 1349,
+        "endChar": 0
+      },
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70659eed_7752a11c",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
