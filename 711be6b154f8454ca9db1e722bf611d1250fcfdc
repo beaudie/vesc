@@ -1,0 +1,274 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c387623b_82503685",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "I didn\u0027t notice this method before. Can you switch this to rx::IncompleteTextureSet? Also Usually these are owned by each ContextMtl.",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 356,
+        "endChar": 98
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "745a4ac5_03667a64",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "nit: \u0027Actual\u0027 is not very descriptive. How about \u0027mNativeTexture\u0027? Or \u0027mDriverTexture\u0027?",
+      "range": {
+        "startLine": 230,
+        "startChar": 20,
+        "endLine": 230,
+        "endChar": 34
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8f48598_28bda269",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "nit: map is quite slow. It\u0027s far faster to store the empty values and use array or vector.",
+      "range": {
+        "startLine": 238,
+        "startChar": 9,
+        "endLine": 238,
+        "endChar": 12
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd62a1b7_0294ddeb",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "First off, thanks for writing this documentation! We need more of that. I have some grammar suggestions for this document. I hope you don\u0027t mind.\n\nalso, a nit: can you wrap the lines in this file to 100 characters? It will make reviews easier in the future.",
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a493f087_4e528e18",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "nit: \"Texture images\" are an ES 3.1 feature so this title is a bit confusing with that in mind.\n\nHow about we call this something like TextureInitialization.md, and \"Texture initialization in the Metal back-end\"?",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 42
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4930952_d757e887",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "nit: \u0027The OpenGL spec\u0027",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 7
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a245d0ed_2eb117f9",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "nit: can clarify the wording as\n\n\"The texture doesn\u0027t need to be complete when created.\"",
+      "range": {
+        "startLine": 4,
+        "startChar": 34,
+        "endLine": 4,
+        "endChar": 87
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bb6d54b_02068d67",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "nit: can slightly improve the readability by removing the commas and passive voice here:\n\nThe back-end checks the texture\u0027s images during draw calls. It considers the texture complete if the images are consistent in size and format. Then it uses the texture for rendering.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 75
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83adcacb_a3b1f62c",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "nit: Metal texture (i.e. MTLTexture) on the other hand require consistent defined images at all times. MTLTextures are always created complete.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 109
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f43d66bd_ca09c680",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "tiny nit: uppercase \u0027GL\u0027",
+      "range": {
+        "startLine": 12,
+        "startChar": 72,
+        "endLine": 12,
+        "endChar": 75
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "723d5fce_e0f0bd43",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "nit: image",
+      "range": {
+        "startLine": 12,
+        "startChar": 53,
+        "endLine": 12,
+        "endChar": 60
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6adaa7dc_5049ef24",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:32:11Z",
+      "side": 1,
+      "message": "nit: \u0027the\u0027 Metal back-end",
+      "range": {
+        "startLine": 12,
+        "startChar": 28,
+        "endLine": 12,
+        "endChar": 34
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
