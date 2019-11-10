@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "dcb9204a_311db202",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:12:38Z",
+      "side": 1,
+      "message": "Ah, I misread this a bit. You\u0027re not recreating the VkFramebuffer. You\u0027re restarting the render pass.\n\nWith this approach we need to force a new RenderPass when the presence of these cycles is introduced or removed. Otherwise the GL application could draw twice: once with a correct state, then a second time after binding a Texture and updating the mask state to introduce a (valid) cycle. We need to make sure we call startNewRenderPass in this case and not append. Similarly when the cycle is removed.\n\nConservatively you could force a new RP on every Texture state change. That might be too costly.",
+      "parentUuid": "6cbfbde7_16f0922a",
+      "range": {
+        "startLine": 1336,
+        "startChar": 0,
+        "endLine": 1349,
+        "endChar": 0
+      },
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70659eed_7752a11c",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -113,6 +137,24 @@
       "side": 1,
       "message": "this is one of the validation errors we get now -\n\n[ RUN      ] dEQP.KHR_GLES2/core_internalformat_renderbuffer_depth24_stencil8\nKHR-GLES2.core.internalformat.renderbuffer.depth24_stencil8\n../../third_party/angle/src/tests/deqp_support/angle_deqp_gtest.cpp:45: Failure\nFailed\nDebugUtilsMessenger(309): [ UNASSIGNED-CoreValidation-DrawState-InvalidRenderpass ] You cannot start a render pass using attachment 1 where the render pass initial layout is VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL and the previous known layout of the attachment is VK_IMAGE_LAYOUT_UNDEFINED. The layouts must match, or the render pass initial layout for the attachment must be VK_IMAGE_LAYOUT_UNDEFINED\n                            Object: VK_NULL_HANDLE (type \u003d Unknown(0))\n\ni suspect this arises out of the fact that we are early returning with no renderpass/commandbuffer being created",
       "parentUuid": "dd8e40d4_8140e431",
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "598cfcf5_56be5f8b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-10T16:12:38Z",
+      "side": 1,
+      "message": "Early return is a bit tricky. Even for a no-op draw call there can be side effects in the shader for later ES versions.\n\nThe warning seems to indicate *something* is bound to attachment 1. Is this really a draw call with no attachments? What\u0027s the test case you\u0027re running here?\n\nMight be wise to move this discussion to a small ddoc.",
+      "parentUuid": "0bcf4f96_4da35017",
       "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
