@@ -74,6 +74,24 @@
       "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bcf4f96_4da35017",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-10T00:10:29Z",
+      "side": 1,
+      "message": "this is one of the validation errors we get now -\n\n[ RUN      ] dEQP.KHR_GLES2/core_internalformat_renderbuffer_depth24_stencil8\nKHR-GLES2.core.internalformat.renderbuffer.depth24_stencil8\n../../third_party/angle/src/tests/deqp_support/angle_deqp_gtest.cpp:45: Failure\nFailed\nDebugUtilsMessenger(309): [ UNASSIGNED-CoreValidation-DrawState-InvalidRenderpass ] You cannot start a render pass using attachment 1 where the render pass initial layout is VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL and the previous known layout of the attachment is VK_IMAGE_LAYOUT_UNDEFINED. The layouts must match, or the render pass initial layout for the attachment must be VK_IMAGE_LAYOUT_UNDEFINED\n                            Object: VK_NULL_HANDLE (type \u003d Unknown(0))\n\ni suspect this arises out of the fact that we are early returning with no renderpass/commandbuffer being created",
+      "parentUuid": "dd8e40d4_8140e431",
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
