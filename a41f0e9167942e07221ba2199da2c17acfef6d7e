@@ -158,6 +158,24 @@
       "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8cdd7ce_b0553211",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-10T23:22:45Z",
+      "side": 1,
+      "message": "this is the test case - \"dEQP.KHR_GLES2/core_internalformat_renderbuffer_depth24_stencil8\" but im not sure of what the attachments are in this drawcall.\n\n\u003e Might be wise to move this discussion to a small ddoc.\n\nok, will create one",
+      "parentUuid": "598cfcf5_56be5f8b",
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
