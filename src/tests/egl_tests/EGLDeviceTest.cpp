@@ -445,6 +445,8 @@ class EGLDeviceQueryTest : public ANGLETest
 // If the test is confitured to use D3D9, then it should succeed to obtain a D3D9 device.
 TEST_P(EGLDeviceQueryTest, QueryDevice)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsWindows() && IsOpenGL());
     EGLAttrib device      = 0;
     EGLAttrib angleDevice = 0;
     if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
@@ -479,6 +481,8 @@ TEST_P(EGLDeviceQueryTest, QueryDevice)
 // If the test is confitured to use D3D9, then it should fail to obtain a D3D9 device.
 TEST_P(EGLDeviceQueryTest, QueryDeviceBadAttribute)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsWindows() && IsOpenGL());
     EGLAttrib device      = 0;
     EGLAttrib angleDevice = 0;
     if (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
@@ -505,6 +509,8 @@ TEST_P(EGLDeviceQueryTest, QueryDeviceBadAttribute)
 // results in the same EGLDisplay being returned from getPlatformDisplayEXT both times
 TEST_P(EGLDeviceQueryTest, GetPlatformDisplayDeviceReuse)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsVulkan() || (IsWindows() && IsOpenGL()));
     EGLAttrib eglDevice = 0;
     EXPECT_EGL_TRUE(
         eglQueryDisplayAttribEXT(getEGLWindow()->getDisplay(), EGL_DEVICE_EXT, &eglDevice));
@@ -517,4 +523,4 @@ TEST_P(EGLDeviceQueryTest, GetPlatformDisplayDeviceReuse)
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(EGLDeviceCreationTest, WithNoFixture(ES2_D3D11()));
-ANGLE_INSTANTIATE_TEST(EGLDeviceQueryTest, ES2_D3D9(), ES2_D3D11());
+ANGLE_INSTANTIATE_TEST_ES2(EGLDeviceQueryTest);
