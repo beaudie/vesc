@@ -338,6 +338,6 @@ TEST_P(ProvokingVertexTest, ANGLEProvokingVertex)
     }
 }
 
-ANGLE_INSTANTIATE_TEST(ProvokingVertexTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST_ES3(ProvokingVertexTest);
 
 }  // anonymous namespace

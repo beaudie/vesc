@@ -1026,16 +1026,7 @@ TEST_P(TextureMultisampleArrayWebGLTest, IntegerTexelFetch)
     }
 }
 
-ANGLE_INSTANTIATE_TEST(TextureMultisampleTest,
-                       ES3_D3D11(),
-                       ES31_D3D11(),
-                       ES3_OPENGL(),
-                       ES3_OPENGLES(),
-                       ES31_OPENGL(),
-                       ES31_OPENGLES());
-ANGLE_INSTANTIATE_TEST(NegativeTextureMultisampleTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
-ANGLE_INSTANTIATE_TEST(TextureMultisampleArrayWebGLTest,
-                       ES31_D3D11(),
-                       ES31_OPENGL(),
-                       ES31_OPENGLES());
+ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(TextureMultisampleTest);
+ANGLE_INSTANTIATE_TEST_ES3(NegativeTextureMultisampleTest);
+ANGLE_INSTANTIATE_TEST_ES31(TextureMultisampleArrayWebGLTest);
 }  // anonymous namespace

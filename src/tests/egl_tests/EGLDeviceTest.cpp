@@ -517,4 +517,4 @@ TEST_P(EGLDeviceQueryTest, GetPlatformDisplayDeviceReuse)
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(EGLDeviceCreationTest, WithNoFixture(ES2_D3D11()));
-ANGLE_INSTANTIATE_TEST(EGLDeviceQueryTest, ES2_D3D9(), ES2_D3D11());
+ANGLE_INSTANTIATE_TEST_ES2(EGLDeviceQueryTest);
