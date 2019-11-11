@@ -438,12 +438,7 @@ void main()
 // test is run afterwards.  AtomicCounter* tests are alphabetically first, and having them not run
 // on Vulkan makes every shard our bots currently make do have at least some OpenGL test run before
 // any Vulkan test.
-ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest,
-                       ES3_OPENGL(),
-                       ES3_OPENGLES(),
-                       ES31_OPENGL(),
-                       ES31_OPENGLES(),
-                       ES31_D3D11());
-ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest31, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
+ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(AtomicCounterBufferTest);
+ANGLE_INSTANTIATE_TEST_ES31(AtomicCounterBufferTest31);
 
 }  // namespace

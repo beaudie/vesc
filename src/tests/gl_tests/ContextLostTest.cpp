@@ -19,6 +19,8 @@ class ContextLostTest : public ANGLETest
 // GL_CHROMIUM_lose_context is implemented in the frontend
 TEST_P(ContextLostTest, ExtensionStringExposed)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
     EXPECT_TRUE(EnsureGLExtensionEnabled("GL_CHROMIUM_lose_context"));
 }
 
@@ -27,6 +29,8 @@ TEST_P(ContextLostTest, BasicUsage)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_CHROMIUM_lose_context"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_robustness"));
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
 
     glLoseContextCHROMIUM(GL_GUILTY_CONTEXT_RESET, GL_INNOCENT_CONTEXT_RESET);
     EXPECT_GL_NO_ERROR();
@@ -42,6 +46,8 @@ TEST_P(ContextLostTest, PollingQuery)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_CHROMIUM_lose_context"));
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
 
     GLsync sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
     EXPECT_GL_NO_ERROR();
@@ -67,6 +73,8 @@ TEST_P(ContextLostTest, ParallelCompileReadyQuery)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_CHROMIUM_lose_context"));
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_KHR_parallel_shader_compile"));
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
 
     GLuint vs = CompileShader(GL_VERTEX_SHADER, essl1_shaders::vs::Simple());
     GLuint fs = CompileShader(GL_FRAGMENT_SHADER, essl1_shaders::fs::UniformColor());
@@ -105,12 +113,6 @@ TEST_P(ContextLostTest, ParallelCompileReadyQuery)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST(ContextLostTest,
-                       ES2_NULL(),
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES3_D3D11(),
-                       ES2_VULKAN(),
-                       ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ContextLostTest);
 
 }  // namespace angle
