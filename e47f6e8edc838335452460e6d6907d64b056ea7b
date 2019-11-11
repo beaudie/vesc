@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e2e0991a_78868ac5",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-11T16:41:55Z",
+      "side": 1,
+      "message": "Does this need to be done everywhere or just on systems that have less than 8 bits of subpixel accuracy?   Is this doing extra work on those systems without any benefit?",
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "65ffb09c_b65db862",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
@@ -70,6 +87,98 @@
       "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "162789fd_4f62c091",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-11T16:41:55Z",
+      "side": 1,
+      "message": "nit: viewport.zw",
+      "range": {
+        "startLine": 582,
+        "startChar": 61,
+        "endLine": 582,
+        "endChar": 70
+      },
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f1d721d_83844873",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-11T16:41:55Z",
+      "side": 1,
+      "message": "Can you call this \"kEpsilon\" to match how it\u0027s referred to in the comments?",
+      "range": {
+        "startLine": 635,
+        "startChar": 27,
+        "endLine": 635,
+        "endChar": 38
+      },
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a77d012b_8617aaf7",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-11T16:41:55Z",
+      "side": 1,
+      "message": "nit: This doesn\u0027t match the values in the comments (or the doc).   It\u0027s probably better to just put something like \"0.5 + epsilon\" into the comments so that value can change without needing to update it everywhere.",
+      "range": {
+        "startLine": 635,
+        "startChar": 40,
+        "endLine": 635,
+        "endChar": 47
+      },
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a84d46a_70450a0c",
+        "filename": "src/libANGLE/renderer/vulkan/doc/OpenGLLineSegmentRasterization.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-11T16:41:55Z",
+      "side": 1,
+      "message": "nit: OpenGL ES?",
+      "range": {
+        "startLine": 58,
+        "startChar": 43,
+        "endLine": 58,
+        "endChar": 49
+      },
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
