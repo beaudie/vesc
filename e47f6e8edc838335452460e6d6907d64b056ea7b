@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c52a1ddf_a0047689",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T17:09:10Z",
+      "side": 1,
+      "message": "It should theoretically still give more accurate results on 8+ bits. The CTS tests allow a certain number of non-Bresenham pixels. I suppose we could check if that number got reduced by using this clamping. Not very important though as we don\u0027t intend to use this functionality.",
+      "parentUuid": "e2e0991a_78868ac5",
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "65ffb09c_b65db862",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
@@ -113,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "23bef97b_a7eefe58",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T17:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "162789fd_4f62c091",
+      "range": {
+        "startLine": 582,
+        "startChar": 61,
+        "endLine": 582,
+        "endChar": 70
+      },
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f1d721d_83844873",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
@@ -159,6 +201,54 @@
     },
     {
       "key": {
+        "uuid": "1e53d619_bffbfcb4",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T17:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a77d012b_8617aaf7",
+      "range": {
+        "startLine": 635,
+        "startChar": 40,
+        "endLine": 635,
+        "endChar": 47
+      },
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84d7a9c1_ce276cdc",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T17:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f1d721d_83844873",
+      "range": {
+        "startLine": 635,
+        "startChar": 27,
+        "endLine": 635,
+        "endChar": 38
+      },
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a84d46a_70450a0c",
         "filename": "src/libANGLE/renderer/vulkan/doc/OpenGLLineSegmentRasterization.md",
         "patchSetId": 13
@@ -179,6 +269,30 @@
       "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17692173_70296b3a",
+        "filename": "src/libANGLE/renderer/vulkan/doc/OpenGLLineSegmentRasterization.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T17:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a84d46a_70450a0c",
+      "range": {
+        "startLine": 58,
+        "startChar": 43,
+        "endLine": 58,
+        "endChar": 49
+      },
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
