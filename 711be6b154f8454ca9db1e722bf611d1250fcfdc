@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "d9e8952a_9c789689",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-11T06:43:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "745a4ac5_03667a64",
+      "range": {
+        "startLine": 230,
+        "startChar": 20,
+        "endLine": 230,
+        "endChar": 34
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8f48598_28bda269",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
         "patchSetId": 6
@@ -88,6 +112,24 @@
     },
     {
       "key": {
+        "uuid": "4ab32aa7_260a1d27",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-11T06:43:08Z",
+      "side": 1,
+      "message": "Ack. I will modify this doc accordingly.",
+      "parentUuid": "cd62a1b7_0294ddeb",
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a493f087_4e528e18",
         "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
         "patchSetId": 6
@@ -108,6 +150,30 @@
       "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c2ec883_5ee3bac8",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-11T06:43:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a493f087_4e528e18",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 42
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +200,30 @@
     },
     {
       "key": {
+        "uuid": "7a6f3458_f62a8e9e",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-11T06:43:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d4930952_d757e887",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 7
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a245d0ed_2eb117f9",
         "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
         "patchSetId": 6
@@ -154,6 +244,30 @@
       "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f35c3f21_75c2a9ea",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-11T06:43:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a245d0ed_2eb117f9",
+      "range": {
+        "startLine": 4,
+        "startChar": 34,
+        "endLine": 4,
+        "endChar": 87
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -180,6 +294,30 @@
     },
     {
       "key": {
+        "uuid": "0194d436_53db0109",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-11T06:43:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5bb6d54b_02068d67",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 75
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83adcacb_a3b1f62c",
         "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
         "patchSetId": 6
@@ -200,6 +338,30 @@
       "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ec6add2_6b96ae9e",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-11T06:43:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "83adcacb_a3b1f62c",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 109
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -269,6 +431,78 @@
       "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b550c5ec_0d47bcb7",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-11T06:43:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f43d66bd_ca09c680",
+      "range": {
+        "startLine": 12,
+        "startChar": 72,
+        "endLine": 12,
+        "endChar": 75
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a1930f19_a2b90ead",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-11T06:43:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "723d5fce_e0f0bd43",
+      "range": {
+        "startLine": 12,
+        "startChar": 53,
+        "endLine": 12,
+        "endChar": 60
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50f912b3_97cb477b",
+        "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-11T06:43:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6adaa7dc_5049ef24",
+      "range": {
+        "startLine": 12,
+        "startChar": 28,
+        "endLine": 12,
+        "endChar": 34
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
