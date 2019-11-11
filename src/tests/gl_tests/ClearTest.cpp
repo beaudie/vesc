@@ -1461,17 +1461,8 @@ TEST_P(ClearTestES3, ClearBuffer1OnDefaultFramebufferNoAssert)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST(ClearTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES3_D3D11(),
-                       ES2_OPENGL(),
-                       ES3_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES3_OPENGLES(),
-                       ES2_VULKAN(),
-                       ES3_VULKAN());
-ANGLE_INSTANTIATE_TEST(ClearTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ClearTest);
+ANGLE_INSTANTIATE_TEST_ES3(ClearTestES3);
 ANGLE_INSTANTIATE_TEST_COMBINE_4(MaskedScissoredClearTest,
                                  MaskedScissoredClearVariationsTestPrint,
                                  testing::Range(0, 3),
@@ -1497,6 +1488,6 @@ ANGLE_INSTANTIATE_TEST_COMBINE_4(VulkanClearTest,
                                  ES3_VULKAN());
 
 // Not all ANGLE backends support RGB backbuffers
-ANGLE_INSTANTIATE_TEST(ClearTestRGB, ES2_D3D11(), ES3_D3D11(), ES2_VULKAN(), ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ClearTestRGB);
 
 }  // anonymous namespace

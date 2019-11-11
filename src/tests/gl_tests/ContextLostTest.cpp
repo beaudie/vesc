@@ -105,12 +105,6 @@ TEST_P(ContextLostTest, ParallelCompileReadyQuery)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST(ContextLostTest,
-                       ES2_NULL(),
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES3_D3D11(),
-                       ES2_VULKAN(),
-                       ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ContextLostTest);
 
 }  // namespace angle
