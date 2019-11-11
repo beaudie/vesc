@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2da6c677_dd092607",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T17:12:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a4b2532_e4a85c11",
+      "range": {
+        "startLine": 9,
+        "startChar": 35,
+        "endLine": 9,
+        "endChar": 41
+      },
+      "revId": "6901a93f7b4a5ec0d1aa4e5215062a5f0a00c0fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06466c03_a3f4dd91",
         "filename": "util/windows/test_utils_win.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "6901a93f7b4a5ec0d1aa4e5215062a5f0a00c0fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c287c33_2bb21f18",
+        "filename": "util/windows/test_utils_win.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T17:12:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06466c03_a3f4dd91",
+      "range": {
+        "startLine": 294,
+        "startChar": 52,
+        "endLine": 294,
+        "endChar": 55
+      },
+      "revId": "6901a93f7b4a5ec0d1aa4e5215062a5f0a00c0fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
