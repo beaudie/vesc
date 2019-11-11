@@ -22,6 +22,30 @@
       "revId": "ee9858e728821ba8c2d29d5634d22a85602d23a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "224a93b9_130c67be",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-11T23:15:38Z",
+      "side": 1,
+      "message": "VkSurfaceFormatKHR is not a VkFormat, so find doesn\u0027t work. I would need find to check surfaceFormat.format to nativeFormat. I didn\u0027t see that find had a custom compare operator.",
+      "parentUuid": "cb940e01_12232af0",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 5
+      },
+      "revId": "ee9858e728821ba8c2d29d5634d22a85602d23a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
