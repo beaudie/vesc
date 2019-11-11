@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0024c39_4bdf3bb5",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T22:10:57Z",
+      "side": 1,
+      "message": "ES 3.1 SwS initialization wasn\u0027t supported yet last time I checked. Did they fix that?",
+      "range": {
+        "startLine": 116,
+        "startChar": 65,
+        "endLine": 116,
+        "endChar": 88
+      },
+      "revId": "ed85555646d25ba7e3f4beb32fb69c0a657bc807",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "56ec4a47_4cc55957",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T22:10:57Z",
+      "side": 1,
+      "message": "K. I would recommend splitting it if you feel like it. Makes it easier to land smaller less affecting CLs.",
+      "parentUuid": "cea41057_62310280",
+      "range": {
+        "startLine": 113,
+        "startChar": 65,
+        "endLine": 113,
+        "endChar": 88
+      },
+      "revId": "50aae6c7c8e824a04016818d156eb0faebeb15f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1b12744_331b97eb",
         "filename": "src/tests/test_utils/angle_test_instantiate.h",
         "patchSetId": 6
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "Noted. I went with this pretty aggressively to get more coverage. Is that ok to do? It doesn\u0027t seem like there are tons of fails so if this is ok I\u0027m thinking I\u0027ll stick with it and try to selectively skip/disable certain tests.",
       "parentUuid": "c1b12744_331b97eb",
+      "range": {
+        "startLine": 140,
+        "startChar": 8,
+        "endLine": 140,
+        "endChar": 51
+      },
+      "revId": "50aae6c7c8e824a04016818d156eb0faebeb15f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e875f724_61483756",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T22:10:57Z",
+      "side": 1,
+      "message": "I\u0027m more in the camp of keeping the tests as much as possible like they were before. Seems wasteful to run redundant tests against all possible ES versions. It\u0027s ultimately doesn\u0027t increase coverage.\n\ni.e. running a test against ES 2.0 and 3.0 is in most cases the same as ES 2.0/3.0/3.1.",
+      "parentUuid": "9daeb668_81131878",
       "range": {
         "startLine": 140,
         "startChar": 8,
