@@ -205,6 +205,30 @@
     },
     {
       "key": {
+        "uuid": "3916ef53_8a8852fd",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-11T23:31:58Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY wants to return an error of some sort, not compatible with a egl::ConfigSet.\nIf I change return type, I\u0027d have to change other platforms as well. Do we want to do that?",
+      "parentUuid": "2c8f5e66_a21572ed",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 5
+      },
+      "revId": "ff8a92d1bc884c56d042a6a8429cea2b2a3c3448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f5a0d2f0_c92803fb",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 5
@@ -216,6 +240,30 @@
       "writtenOn": "2019-11-11T13:58:57Z",
       "side": 1,
       "message": "If we destroy mHWND here, why keep it as a member and destroy it in the destructor?",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 20
+      },
+      "revId": "ff8a92d1bc884c56d042a6a8429cea2b2a3c3448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a0849d0_7294d7f0",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-11T23:31:58Z",
+      "side": 1,
+      "message": "Yeah, scope of the window is limited to this function, no need to keep it as a class member.",
+      "parentUuid": "f5a0d2f0_c92803fb",
       "range": {
         "startLine": 114,
         "startChar": 0,
