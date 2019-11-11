@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "275f79d8_b36223b7",
+        "filename": "src/tests/gl_tests/VulkanFormatTablesTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T19:26:54Z",
+      "side": 1,
+      "message": "I would make this one ES2_VULKAN + ES2_VULKAN_SWIFTSHADER. If you look at the test it only makes sense for Vulkan.",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 26
+      },
+      "revId": "50aae6c7c8e824a04016818d156eb0faebeb15f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddff14ab_39fcf9f4",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T19:26:54Z",
+      "side": 1,
+      "message": "I think a bunch of tests are failing b/c of this.\n\nHow about we split this CL in two:\n\n1. does this refactor without adding SwS configs\n2. adds the SwS configs",
+      "range": {
+        "startLine": 113,
+        "startChar": 65,
+        "endLine": 113,
+        "endChar": 88
+      },
+      "revId": "50aae6c7c8e824a04016818d156eb0faebeb15f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1b12744_331b97eb",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-11T19:26:54Z",
+      "side": 1,
+      "message": "one note is you might want to make a ES2_AND_ES3 config. In a bunch of places you cold use that instead of this one.",
+      "range": {
+        "startLine": 140,
+        "startChar": 8,
+        "endLine": 140,
+        "endChar": 51
+      },
+      "revId": "50aae6c7c8e824a04016818d156eb0faebeb15f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
