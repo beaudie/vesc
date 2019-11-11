@@ -234,5 +234,5 @@ TEST_P(PackUnpackTest, PackUnpackSnormOverflow)
     compareBeforeAfter(mSNormProgram, 67000.0f, -67000.0f, 1.0f, -1.0f);
 }
 
-ANGLE_INSTANTIATE_TEST(PackUnpackTest, ES3_OPENGL(), ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST_ES3(PackUnpackTest);
 }  // namespace

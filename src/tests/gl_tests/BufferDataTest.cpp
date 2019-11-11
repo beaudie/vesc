@@ -538,18 +538,9 @@ TEST_P(BufferDataTestES3, NoBufferInitDataCopyBug)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST(BufferDataTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES2_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES2_VULKAN());
-ANGLE_INSTANTIATE_TEST(BufferDataTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());
-ANGLE_INSTANTIATE_TEST(IndexedBufferCopyTest,
-                       ES3_D3D11(),
-                       ES3_OPENGL(),
-                       ES3_OPENGLES(),
-                       ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST_ES2(BufferDataTest);
+ANGLE_INSTANTIATE_TEST_ES3(BufferDataTestES3);
+ANGLE_INSTANTIATE_TEST_ES3(IndexedBufferCopyTest);
 
 #ifdef _WIN64
 
@@ -666,6 +657,6 @@ TEST_P(BufferDataOverflowTest, CopySubDataValidation)
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
-ANGLE_INSTANTIATE_TEST(BufferDataOverflowTest, ES3_D3D11());
+ANGLE_INSTANTIATE_TEST_ES3(BufferDataOverflowTest);
 
 #endif  // _WIN64
