@@ -917,7 +917,8 @@ angle::Result TextureStorage11::getMultisampledRenderTarget(const gl::Context *c
     {
         RenderTargetD3D *rt;
         ANGLE_TRY(mMSTexInfo->msTex->getRenderTarget(context, index, samples, &rt));
-        *outRT = rt;
+        mMSTexInfo->dirty = true;
+        *outRT            = rt;
         return angle::Result::Continue;
     }
     else
@@ -953,7 +954,8 @@ angle::Result TextureStorage11::getMultisampledRenderTarget(const gl::Context *c
         mMSTexInfo->msTex = std::move(texMS);
         RenderTargetD3D *rt;
         ANGLE_TRY(mMSTexInfo->msTex->getRenderTarget(context, index, samples, &rt));
-        *outRT = rt;
+        mMSTexInfo->dirty = true;
+        *outRT            = rt;
         return angle::Result::Continue;
     }
 }
@@ -1554,9 +1556,10 @@ angle::Result TextureStorage11_2D::ensureDropStencilTexture(const gl::Context *c
 
 angle::Result TextureStorage11_2D::resolveTexture(const gl::Context *context)
 {
-    if (mMSTexInfo && mMSTexInfo->msTex)
+    if (mMSTexInfo && mMSTexInfo->msTex && mMSTexInfo->dirty)
     {
         ANGLE_TRY(resolveTextureHelper(context, mTexture));
+        mMSTexInfo->dirty = false;
         onStateChange(angle::SubjectMessage::ContentsChanged);
     }
     return angle::Result::Continue;
@@ -2661,9 +2664,10 @@ angle::Result TextureStorage11_Cube::ensureDropStencilTexture(const gl::Context 
 
 angle::Result TextureStorage11_Cube::resolveTexture(const gl::Context *context)
 {
-    if (mMSTexInfo && mMSTexInfo->msTex)
+    if (mMSTexInfo && mMSTexInfo->msTex && mMSTexInfo->dirty)
     {
         ANGLE_TRY(resolveTextureHelper(context, mTexture));
+        mMSTexInfo->dirty = false;
         onStateChange(angle::SubjectMessage::ContentsChanged);
     }
     return angle::Result::Continue;
