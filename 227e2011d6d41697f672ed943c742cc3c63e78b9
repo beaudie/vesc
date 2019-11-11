@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5583ea83_fa2b7561",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-11T18:15:38Z",
+      "side": 1,
+      "message": "Isn\u0027t this redundant since the tests are already disabled on Intel/Metal?\nAlso, why not the existing IsIntel()?",
+      "revId": "227e2011d6d41697f672ed943c742cc3c63e78b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71dd5ea6_5b119abc",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-11T18:15:38Z",
+      "side": 1,
+      "message": "Same",
+      "revId": "227e2011d6d41697f672ed943c742cc3c63e78b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc3d4d0c_39291652",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-11T18:15:38Z",
+      "side": 1,
+      "message": "Same",
+      "revId": "227e2011d6d41697f672ed943c742cc3c63e78b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
