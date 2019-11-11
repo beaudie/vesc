@@ -46,6 +46,30 @@
       "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe4788d4_b38f928e",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-11T16:24:11Z",
+      "side": 1,
+      "message": "Okay, thanks!",
+      "parentUuid": "2bb15720_1022afd9",
+      "range": {
+        "startLine": 498,
+        "startChar": 49,
+        "endLine": 498,
+        "endChar": 74
+      },
+      "revId": "e47f6e8edc838335452460e6d6907d64b056ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
