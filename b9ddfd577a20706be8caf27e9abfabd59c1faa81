@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b11cbf24_5b40575c",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-11-11T06:35:11Z",
+      "side": 0,
+      "message": "Why it is not needed?",
+      "range": {
+        "startLine": 2250,
+        "startChar": 12,
+        "endLine": 2250,
+        "endChar": 55
+      },
+      "revId": "b9ddfd577a20706be8caf27e9abfabd59c1faa81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

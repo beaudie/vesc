@@ -168,6 +168,52 @@
     },
     {
       "key": {
+        "uuid": "fa56e2b8_0fbde235",
+        "filename": "src/libANGLE/ProgramLinkedResources.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-11-11T06:35:11Z",
+      "side": 1,
+      "message": "Should use \u0027getOutermostArraySize()\u0027?",
+      "range": {
+        "startLine": 1133,
+        "startChar": 64,
+        "endLine": 1133,
+        "endChar": 85
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afc557ce_6632d22e",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-11-11T06:35:11Z",
+      "side": 1,
+      "message": "Is it used anywhere? How about merging D3DUBOCacheUseSB and D3DUBOCache into one structure?\nstruct D3DUBOCache\n{\n    unsigned int registerIndex;\n    int binding;\n    bool isStructructedBuffer;\n    unsigned int structureByteStride;\n}",
+      "range": {
+        "startLine": 117,
+        "startChar": 17,
+        "endLine": 117,
+        "endChar": 26
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "699cb7fa_15f6b896",
         "filename": "src/libANGLE/renderer/d3d/ShaderD3D.h",
         "patchSetId": 9
@@ -184,6 +230,29 @@
         "startChar": 32,
         "endLine": 106,
         "endChar": 50
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2610bc26_4c31af02",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3637,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-11-11T06:35:11Z",
+      "side": 1,
+      "message": "Duplicated with L3624 uniformBuffer?",
+      "range": {
+        "startLine": 3633,
+        "startChar": 0,
+        "endLine": 3637,
+        "endChar": 9
       },
       "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
