@@ -409,11 +409,8 @@ bool CommandQueue::hasInFlightCommands() const
 
 angle::Result CommandQueue::finishToSerialOrTimeout(vk::Context *context,
                                                     Serial serial,
-                                                    uint64_t timeout,
-                                                    bool *outTimedOut)
+                                                    uint64_t timeout)
 {
-    *outTimedOut = false;
-
     if (mInFlightCommands.empty())
     {
         return angle::Result::Continue;
@@ -434,15 +431,7 @@ angle::Result CommandQueue::finishToSerialOrTimeout(vk::Context *context,
 
     // Wait for it finish
     VkDevice device = context->getDevice();
-    VkResult status =
-        batch.fence.get().wait(device, context->getRenderer()->getMaxFenceWaitTimeNs());
-
-    // If timed out, report it as such.
-    if (status == VK_TIMEOUT)
-    {
-        *outTimedOut = true;
-        return angle::Result::Continue;
-    }
+    VkResult status = batch.fence.get().wait(device, timeout);
 
     ANGLE_VK_TRY(context, status);
 
@@ -3125,21 +3114,7 @@ angle::Result ContextVk::checkCompletedCommands()
 
 angle::Result ContextVk::finishToSerial(Serial serial)
 {
-    bool timedOut = false;
-    angle::Result result =
-        finishToSerialOrTimeout(serial, mRenderer->getMaxFenceWaitTimeNs(), &timedOut);
-
-    // Don't tolerate timeout.  If such a large wait time results in timeout, something's wrong.
-    if (timedOut)
-    {
-        result = angle::Result::Stop;
-    }
-    return result;
-}
-
-angle::Result ContextVk::finishToSerialOrTimeout(Serial serial, uint64_t timeout, bool *outTimedOut)
-{
-    return mCommandQueue.finishToSerialOrTimeout(this, serial, timeout, outTimedOut);
+    return mCommandQueue.finishToSerialOrTimeout(this, serial, mRenderer->getMaxFenceWaitTimeNs());
 }
 
 angle::Result ContextVk::getCompatibleRenderPass(const vk::RenderPassDesc &desc,
