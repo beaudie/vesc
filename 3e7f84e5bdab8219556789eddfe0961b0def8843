@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "e53e066a_afa5b9d2",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T16:38:04Z",
+      "side": 1,
+      "message": "\u003e That wouldn\u0027t fit with the use of Display initialization with other backends.\n\nMaybe you could elaborate in your ddoc. I don\u0027t see why it wouldn\u0027t fit at the moment.",
+      "parentUuid": "f3b3acb5_e445a7ec",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b5d9aeaa_59802908",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 8
