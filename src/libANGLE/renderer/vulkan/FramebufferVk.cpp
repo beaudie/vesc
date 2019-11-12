@@ -1329,8 +1329,16 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
                                                size_t index,
                                                GLfloat *xy) const
 {
+#ifdef OLD_CODE
+    // Original "unreachable" implementation:
     ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
     return angle::Result::Stop;
+#else  // OLD_CODE
+    // FIXME: DO A PROPER IMPLEMENTATION.
+    xy[0] = 0.0;
+    xy[0] = 1.0;
+    return angle::Result::Continue;
+#endif // OLD_CODE
 }
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,

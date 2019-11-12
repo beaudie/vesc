@@ -93,6 +93,11 @@ void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
             *layerCount = image->getLayerCount();
             return;
 
+        case gl::TextureType::_2DMultisample:
+            *layerIndex = 0;
+            *layerCount = 1;
+            return;
+
         default:
             UNREACHABLE();
     }
@@ -357,6 +362,8 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
                                           gl::Framebuffer *source)
 {
     gl::Extents fbSize = source->getReadColorAttachment()->getSize();
+
+
     gl::Rectangle clippedSourceArea;
     if (!ClipRectangle(sourceArea, gl::Rectangle(0, 0, fbSize.width, fbSize.height),
                        &clippedSourceArea))
@@ -1491,8 +1498,29 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
                                                const gl::Extents &size,
                                                bool fixedSampleLocations)
 {
+#ifdef OLD_CODE
+    // Original "unreachable" implementation:
     ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
     return angle::Result::Stop;
+#else  // OLD_CODE
+    // FIXME: DO A PROPER IMPLEMENTATION.  MEAN TIME, BORROW THE setStorage() CODE
+    ContextVk *contextVk = GetAs<ContextVk>(context->getImplementation());
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (!mOwnsImage)
+    {
+        releaseAndDeleteImage(contextVk);
+    }
+
+    const vk::Format &format = renderer->getFormat(internalformat);
+    ANGLE_TRY(ensureImageAllocated(contextVk, format));
+
+    if (mImage->valid())
+    {
+        releaseImage(contextVk);
+    }
+    return angle::Result::Continue;
+#endif // OLD_CODE
 }
 
 angle::Result TextureVk::initializeContents(const gl::Context *context,
