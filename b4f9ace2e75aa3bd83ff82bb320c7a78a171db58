@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "38929030_3c1ed114",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T16:28:49Z",
+      "side": 1,
+      "message": "Jamie suggested that I make them class members to simplify cleaning things under error conditions.",
+      "parentUuid": "ace7a41d_284b2cb6",
+      "range": {
+        "startLine": 31,
+        "startChar": 3,
+        "endLine": 45,
+        "endChar": 0
+      },
+      "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04f0b895_eb8a48c5",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f618c06a_6768136d",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T16:28:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04f0b895_eb8a48c5",
+      "range": {
+        "startLine": 67,
+        "startChar": 21,
+        "endLine": 67,
+        "endChar": 32
+      },
+      "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a76b062a_aa4e5106",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T16:28:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7088a420_1296b514",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 13
+      },
+      "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f62520d4_00db270b",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 9
@@ -91,6 +163,30 @@
       "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3982a043_841629c3",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T16:28:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f62520d4_00db270b",
+      "range": {
+        "startLine": 151,
+        "startChar": 4,
+        "endLine": 154,
+        "endChar": 5
+      },
+      "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
