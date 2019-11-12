@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f323ca8a_92908822",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea4518f1_507a7a57",
+      "range": {
+        "startLine": 120,
+        "startChar": 5,
+        "endLine": 120,
+        "endChar": 21
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b27ae8c3_a84ca16d",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 13
@@ -36,6 +60,30 @@
       "writtenOn": "2019-11-08T16:15:21Z",
       "side": 1,
       "message": "can we get rid of this somehow? seems odd.\n\nI\u0027d be fine with including all data in every target if that fixes this.",
+      "range": {
+        "startLine": 909,
+        "startChar": 0,
+        "endLine": 912,
+        "endChar": 9
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d13af31_3353b9d6",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "The EGL tests don\u0027t require any data files, so nothing gets copied to the device and the data directory is never created.   However, deqp_support/angle_deqp_libtester_main.cpp requires that it finds at least 1 data directory from its list on the device and signals an error otherwise.   Including at least 1 file here works around this by creating the data directory at the expected location.\n\nWe can explicitly create an empty/dummy file, but we\u0027d still need to copy that, so reusing an existing one felt the same to me.\n\nDue to the increases in test time (1 min. -\u003e 3 min.), I\u0027m not going to add all of the data files for each target to handle this issue.",
+      "parentUuid": "b27ae8c3_a84ca16d",
       "range": {
         "startLine": 909,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d6d764cc_e4949310",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Yup, now that we have a good way to tackle the issue, I can bring in these guys too.",
+      "parentUuid": "b2f3a437_e9488e17",
+      "range": {
+        "startLine": 975,
+        "startChar": 0,
+        "endLine": 986,
+        "endChar": 5
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e68ad41_9753c7e4",
         "filename": "src/tests/deqp_data.gni",
         "patchSetId": 13
@@ -85,6 +157,24 @@
       "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf153daa_3b33b9fe",
+        "filename": "src/tests/deqp_data.gni",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e68ad41_9753c7e4",
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "4c74f57e_1431b358",
+        "filename": "src/tests/deqp_data.gni",
+        "patchSetId": 13
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b38250ec_69c6e013",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 28
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14ce0d22_35632985",
         "filename": "src/tests/deqp_data.gni",
         "patchSetId": 13
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "299739fa_10546c94",
+        "filename": "src/tests/deqp_data.gni",
+        "patchSetId": 13
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14ce0d22_35632985",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 23
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdfd7eb5_87b54731",
         "filename": "src/tests/deqp_support/BUILD.gn",
         "patchSetId": 13
@@ -148,6 +286,24 @@
       "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b122c7bc_6f64cbb4",
+        "filename": "src/tests/deqp_support/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdfd7eb5_87b54731",
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "1777818a_c6071e3d",
+        "filename": "src/tests/deqp_support/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6330430c_5c87b79b",
+      "range": {
+        "startLine": 1,
+        "startChar": 12,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5433476_d85d7d87",
         "filename": "src/tests/deqp_support/BUILD.gn",
         "patchSetId": 13
@@ -194,6 +374,30 @@
       "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5d336a9_532ffc81",
+        "filename": "src/tests/deqp_support/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5433476_d85d7d87",
+      "range": {
+        "startLine": 7,
+        "startChar": 6,
+        "endLine": 7,
+        "endChar": 21
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -220,6 +424,30 @@
     },
     {
       "key": {
+        "uuid": "2bb57797_3d0b8ad9",
+        "filename": "src/tests/deqp_support/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d60cab7_2e8c726e",
+      "range": {
+        "startLine": 12,
+        "startChar": 4,
+        "endLine": 12,
+        "endChar": 19
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a0f256ea_f7fd0cc7",
         "filename": "src/tests/gen_deqp_gni.py",
         "patchSetId": 13
@@ -234,6 +462,24 @@
       "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5296c0de_ed4e6aab",
+        "filename": "src/tests/gen_deqp_gni.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0f256ea_f7fd0cc7",
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -260,6 +506,30 @@
     },
     {
       "key": {
+        "uuid": "51d9893e_75f8cda6",
+        "filename": "src/tests/gen_deqp_gni.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "I don\u0027t remember and grepping around it looks like it\u0027s essentially everywhere (Android, Chromium, Khronos, SwiftShader, etc.).",
+      "parentUuid": "7a848130_d2e854a0",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 25
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27ada831_9360986d",
         "filename": "src/tests/gen_deqp_gni.py",
         "patchSetId": 13
@@ -280,6 +550,30 @@
       "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d428fbb9_9a2fdbba",
+        "filename": "src/tests/gen_deqp_gni.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27ada831_9360986d",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 29
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -306,6 +600,30 @@
     },
     {
       "key": {
+        "uuid": "f9cd39a9_3f06c380",
+        "filename": "src/tests/gen_deqp_gni.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Ah, good idea.",
+      "parentUuid": "7593fbeb_a66a771b",
+      "range": {
+        "startLine": 102,
+        "startChar": 8,
+        "endLine": 102,
+        "endChar": 19
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c7002ad_2705afb5",
         "filename": "src/tests/gen_deqp_gni.py",
         "patchSetId": 13
@@ -329,6 +647,30 @@
     },
     {
       "key": {
+        "uuid": "ca9f36be_ca1a37f6",
+        "filename": "src/tests/gen_deqp_gni.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c7002ad_2705afb5",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 32
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2cbca818_ba1367b5",
         "filename": "src/tests/gen_deqp_gni.py",
         "patchSetId": 13
@@ -349,6 +691,30 @@
       "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2700e8a_b7b8d8a6",
+        "filename": "src/tests/gen_deqp_gni.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T00:58:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cbca818_ba1367b5",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 30
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
