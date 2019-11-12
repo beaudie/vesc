@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a951f064_5aec77aa",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-11-12T19:28:24Z",
+      "side": 1,
+      "message": "Ack\nwill fix in clean up CL",
+      "parentUuid": "3b0ba138_5d8f94c9",
+      "range": {
+        "startLine": 873,
+        "startChar": 4,
+        "endLine": 873,
+        "endChar": 19
+      },
+      "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff1d37c6_08310153",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8220f7fd_dfd6b1e9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-11-12T19:28:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff1d37c6_08310153",
+      "range": {
+        "startLine": 920,
+        "startChar": 8,
+        "endLine": 920,
+        "endChar": 49
+      },
+      "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e832ab46_8eb2f0fa",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-11-12T19:28:24Z",
+      "side": 1,
+      "message": "Ack\nWill create a new CL for edits/clean up changes",
+      "parentUuid": "a2d353a3_fca73c3c",
+      "range": {
+        "startLine": 918,
+        "startChar": 0,
+        "endLine": 922,
+        "endChar": 39
+      },
+      "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42b2d4d7_8117f6ee",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 4
@@ -91,6 +163,30 @@
       "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b14db0cc_b01ffab3",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-11-12T19:28:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42b2d4d7_8117f6ee",
+      "range": {
+        "startLine": 1562,
+        "startChar": 8,
+        "endLine": 1562,
+        "endChar": 50
+      },
+      "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
