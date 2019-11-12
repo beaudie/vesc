@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "64150651_8a5b822f",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T03:52:47Z",
+      "side": 1,
+      "message": "That\u0027s concerning that the data file inclusions take so long. Did you verify that things operate smoothly with Android and this CL? Why does a test take 3 minutes just to copy data? On which platform?",
+      "parentUuid": "5d13af31_3353b9d6",
+      "range": {
+        "startLine": 909,
+        "startChar": 0,
+        "endLine": 912,
+        "endChar": 9
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2f3a437_e9488e17",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 13
