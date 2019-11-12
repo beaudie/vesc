@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f86f1078_66ea4240",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T15:57:16Z",
+      "side": 1,
+      "message": "mWindowClass is an ATOM and compiler won\u0027t let me assign nullptr.\nAdded init.",
+      "parentUuid": "f33ec24c_a92d1c13",
+      "range": {
+        "startLine": 36,
+        "startChar": 23,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f691db7_c23fe07a",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2019-11-12T04:01:00Z",
       "side": 1,
       "message": "I think the concern I had with this approach is that we\u0027re not guaranteed to have any queues we can use with this surface. See selectPresentQueueForSurface.\n\nAnyway if you want to take this tack would be nice to unify the various platforms and just have the per-OS init return a VkSurfaceKHR to query the configs from.",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3b3acb5_e445a7ec",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T15:57:16Z",
+      "side": 1,
+      "message": "\u003e I think the concern I had with this approach is that we\u0027re not guaranteed to have any queues we can use with this surface. See selectPresentQueueForSurface.\n\nWith Windows we don\u0027t have a lot of choice on the surface. There is only one to get. Well, maybe if we asked for a fullscreen window that might yield a different surface, but otherwise, as far as I can tell, you are going to get the same VkSurfaceKHR regardless of the parameters to the CreateWindowEx call. selectPresentQueueForSurface then finds the appropriate queue index to get a queue we can present to.\n\n\u003e Anyway if you want to take this tack would be nice to unify the various platforms and just have the per-OS init return a VkSurfaceKHR to query the configs from.\n\nThat wouldn\u0027t fit with the use of Display initialization with other backends.",
+      "parentUuid": "2f691db7_c23fe07a",
       "range": {
         "startLine": 53,
         "startChar": 27,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ebe1655e_8d7a9793",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T15:57:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5d9aeaa_59802908",
+      "range": {
+        "startLine": 103,
+        "startChar": 73,
+        "endLine": 103,
+        "endChar": 83
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f84ec271_bd52269d",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 8
@@ -91,6 +163,30 @@
       "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "527dbf5a_f2544ef2",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T15:57:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f84ec271_bd52269d",
+      "range": {
+        "startLine": 107,
+        "startChar": 8,
+        "endLine": 107,
+        "endChar": 44
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "5df9d30b_e5d358ae",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T15:57:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbe0db48_d2d9f58f",
+      "range": {
+        "startLine": 109,
+        "startChar": 8,
+        "endLine": 109,
+        "endChar": 44
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d56b0c5_0c29dd6b",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 8
@@ -137,6 +257,30 @@
       "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e972223_3cb858a3",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T15:57:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d56b0c5_0c29dd6b",
+      "range": {
+        "startLine": 118,
+        "startChar": 18,
+        "endLine": 118,
+        "endChar": 29
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
