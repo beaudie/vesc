@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac4683d9_b93a0f1e",
+        "filename": "src/tests/gl_tests/FloatingPointSurfaceTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T15:24:56Z",
+      "side": 1,
+      "message": "This one is a bit tricky. It\u0027s failing because we don\u0027t know until after we start the test that the config isn\u0027t supported. I had a WIP change a while back to move surface parameters into the test config. Never got around to implementing it. You might want to leave this one just for D3D11 for now.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 34
+      },
+      "revId": "919d812fab5e81fd268735be841d0bf01390d333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
