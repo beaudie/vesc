@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d8d99048_4442d382",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-12T09:38:06Z",
+      "side": 1,
+      "message": "My bad, actually this code is not supposed to be in this CL. My computer has 2 GPUs, AMD and intel, I can switch Metal backend to use Intel GPU during tests by tweaking the code a little bit. However, IsIntel() doesn\u0027t detect it correctly, it always detects AMD as active GPU. In this case, parsing the GL_RENDERER is more accurate.\nThe thing is the tests ran fine on my Intel GPU (2 tests failed and I had to skip them using IsIntelRenderer()), whereas here, it hang for some unknown reasons on trybots machine (no logs given).",
+      "parentUuid": "5583ea83_fa2b7561",
+      "revId": "227e2011d6d41697f672ed943c742cc3c63e78b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71dd5ea6_5b119abc",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 17
