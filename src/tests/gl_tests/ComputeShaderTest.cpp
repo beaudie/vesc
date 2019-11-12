@@ -2692,7 +2692,7 @@ TEST_P(WebGL2ComputeTest, sharedVariablesShouldBeZero)
     // Fails on Android, AMD/windows and Intel/windows.  Probably works by chance on other
     // platforms, so suppressing on all platforms to avoid possible flakiness.
     // http://anglebug.com/3869
-    ANGLE_SKIP_TEST_IF(IsVulkan());
+    //ANGLE_SKIP_TEST_IF(IsVulkan());
 
     const char kCSShader[] = R"(#version 310 es
 layout (local_size_x = 4, local_size_y = 4, local_size_z = 1) in;
