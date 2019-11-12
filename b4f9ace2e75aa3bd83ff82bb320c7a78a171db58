@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ace7a41d_284b2cb6",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-12T16:09:09Z",
+      "side": 1,
+      "message": "I think we can remove the mDummyWindow and mWindowClass members and simply delete them at the end of DisplayVkWin32::initialize.  They\u0027re not needed by any code except DisplayVkWin32::initialize.",
+      "range": {
+        "startLine": 31,
+        "startChar": 3,
+        "endLine": 45,
+        "endChar": 0
+      },
+      "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04f0b895_eb8a48c5",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-12T16:09:09Z",
+      "side": 1,
+      "message": "nit: DisplayVkWin32",
+      "range": {
+        "startLine": 67,
+        "startChar": 21,
+        "endLine": 67,
+        "endChar": 32
+      },
+      "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7088a420_1296b514",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-12T16:09:09Z",
+      "side": 1,
+      "message": "We don\u0027t need to cache this, it\u0027s only called once, this code can remain as it was with the addition of the new formats.",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 13
+      },
+      "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f62520d4_00db270b",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-12T16:09:09Z",
+      "side": 1,
+      "message": "Could you add a comment about why we have this special case?",
+      "range": {
+        "startLine": 151,
+        "startChar": 4,
+        "endLine": 154,
+        "endChar": 5
+      },
+      "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
