@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "213facad_f3fc14ec",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T23:09:05Z",
+      "side": 1,
+      "message": "Yes, these all seem to work fine on Android (locally and CQ) and Linux, I haven\u0027t tried Windows but CQ passes there also.\n\nThe long data copy times are only related to Android, since we need to upload all of the data to the device vs just accessing the file system on desktop.   I don\u0027t know how the GN dEQP stuff works well enough to know why it\u0027s so slow, but that\u0027s what I\u0027m seeing when uploading everything vs trimming it down to just what\u0027s required.",
+      "parentUuid": "64150651_8a5b822f",
+      "range": {
+        "startLine": 909,
+        "startChar": 0,
+        "endLine": 912,
+        "endChar": 9
+      },
+      "revId": "1bfd948ac462127dc4a156eecdc47a5c6a8f0e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2f3a437_e9488e17",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 13

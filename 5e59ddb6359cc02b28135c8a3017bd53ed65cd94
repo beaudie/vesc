@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ee6a1c96_725bb336",
+        "filename": "scripts/gen_vk_gl_cts_build.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T23:09:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17b1c7da_88c48699",
+      "revId": "5e59ddb6359cc02b28135c8a3017bd53ed65cd94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5c9ab16_12f7b039",
         "filename": "scripts/gen_vk_gl_cts_build.py",
         "patchSetId": 15
@@ -39,6 +57,30 @@
       "revId": "5e59ddb6359cc02b28135c8a3017bd53ed65cd94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34884517_a273171a",
+        "filename": "scripts/gen_vk_gl_cts_build.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T23:09:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5c9ab16_12f7b039",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 75
+      },
+      "revId": "5e59ddb6359cc02b28135c8a3017bd53ed65cd94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "e062cdd1_df3a1dd1",
+        "filename": "scripts/gen_vk_gl_cts_build.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T23:09:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c82a1ee9_56e20844",
+      "range": {
+        "startLine": 337,
+        "startChar": 80,
+        "endLine": 337,
+        "endChar": 97
+      },
+      "revId": "5e59ddb6359cc02b28135c8a3017bd53ed65cd94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed3e35ed_a6ef9213",
         "filename": "src/tests/deqp_data_autogen.gni",
         "patchSetId": 15
@@ -79,6 +145,24 @@
       "revId": "5e59ddb6359cc02b28135c8a3017bd53ed65cd94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e8d2dbf_367a3e4e",
+        "filename": "src/tests/deqp_data_autogen.gni",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T23:09:05Z",
+      "side": 1,
+      "message": "Done.\n\nI\u0027ve moved deqp.gni there also, since they should live next to each other (and I intend to auto-generate that as well now that gen_vk_gl_cts_build.py is watching the CMakeLists.txt).",
+      "parentUuid": "ed3e35ed_a6ef9213",
+      "revId": "5e59ddb6359cc02b28135c8a3017bd53ed65cd94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "b90778f0_cd62fec0",
+        "filename": "src/tests/deqp_data_autogen.gni",
+        "patchSetId": 15
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T23:09:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af8f01fe_c277c3fd",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 38
+      },
+      "revId": "5e59ddb6359cc02b28135c8a3017bd53ed65cd94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6b9758f_2c274758",
         "filename": "src/tests/deqp_support/BUILD.gn",
         "patchSetId": 15
@@ -125,6 +233,30 @@
       "revId": "5e59ddb6359cc02b28135c8a3017bd53ed65cd94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60d33756_5ad147b8",
+        "filename": "src/tests/deqp_support/BUILD.gn",
+        "patchSetId": 15
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-12T23:09:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6b9758f_2c274758",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 38
+      },
+      "revId": "5e59ddb6359cc02b28135c8a3017bd53ed65cd94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
