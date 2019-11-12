@@ -106,7 +106,8 @@ DisplayWGL::DisplayWGL(const egl::DisplayState &state)
       mD3d11Module(nullptr),
       mD3D11DeviceHandle(nullptr),
       mD3D11Device(nullptr),
-      mUseARBShare(true)
+      mUseARBShare(true),
+      swapChainCreated(false)
 {}
 
 DisplayWGL::~DisplayWGL() {}
@@ -416,6 +417,8 @@ SurfaceImpl *DisplayWGL::createWindowSurface(const egl::SurfaceState &state,
             return nullptr;
         }
 
+        swapChainCreated = true;
+
         return new DXGISwapChainWindowSurfaceWGL(
             state, mRenderer->getStateManager(), window, mD3D11Device, mD3D11DeviceHandle,
             mDeviceContext, mRenderer->getFunctions(), mFunctionsWGL, orientation);
@@ -706,7 +709,7 @@ egl::Error DisplayWGL::makeCurrent(egl::Surface *drawSurface,
         ContextWGL *contextWGL = GetImplAs<ContextWGL>(context);
         newContext             = contextWGL->getContext();
     }
-    else
+    else if (!swapChainCreated)
     {
         newContext = 0;
     }
