@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61e1ed6b_7752b460",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T14:01:52Z",
+      "side": 1,
+      "message": "Can you make this a helper It\u0027s being repeated in a couple places.",
+      "range": {
+        "startLine": 239,
+        "startChar": 1,
+        "endLine": 248,
+        "endChar": 98
+      },
+      "revId": "15f5c97a3452631ba558bef01c4d6dd567c3443a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87bee6ef_b16fd912",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T14:01:52Z",
+      "side": 1,
+      "message": "zero seems wrong. depth should be at least one. can you ensure this is covered by a regression test?",
+      "range": {
+        "startLine": 1066,
+        "startChar": 79,
+        "endLine": 1066,
+        "endChar": 80
+      },
+      "revId": "15f5c97a3452631ba558bef01c4d6dd567c3443a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3449668b_0309dc22",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T14:01:52Z",
+      "side": 1,
+      "message": "nit: instead of checking for 2D array twice, use temporary variables above the struct init and check once. slightly more optimized.",
+      "range": {
+        "startLine": 1066,
+        "startChar": 33,
+        "endLine": 1066,
+        "endChar": 95
+      },
+      "revId": "15f5c97a3452631ba558bef01c4d6dd567c3443a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ac74586_54ad901b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T14:01:52Z",
+      "side": 1,
+      "message": "nit: mod/div are slow. You can use a more optimized expression here. Something like (offset \u0026 0x3) \u003d\u003d 0.",
+      "range": {
+        "startLine": 161,
+        "startChar": 12,
+        "endLine": 161,
+        "endChar": 49
+      },
+      "revId": "15f5c97a3452631ba558bef01c4d6dd567c3443a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41c87e2f_e95fb182",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T14:01:52Z",
+      "side": 1,
+      "message": "nit: can you remove this? it is inconsistent with how we usually do our code.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 51
+      },
+      "revId": "15f5c97a3452631ba558bef01c4d6dd567c3443a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caf991e2_036ca84c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T14:01:52Z",
+      "side": 1,
+      "message": "nit: constexpr uint8_t kCompressedImageETC2. \n\nhttps://google.github.io/styleguide/cppguide.html#Constant_Names",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 33
+      },
+      "revId": "15f5c97a3452631ba558bef01c4d6dd567c3443a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "864619cf_e0630312",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1853,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T14:01:52Z",
+      "side": 1,
+      "message": "please when you can use the raii types in gl_raii.h. For here it would be GLTexture. For Programs we use ANGLE_GL_PROGRAM()",
+      "range": {
+        "startLine": 1852,
+        "startChar": 0,
+        "endLine": 1853,
+        "endChar": 36
+      },
+      "revId": "15f5c97a3452631ba558bef01c4d6dd567c3443a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
