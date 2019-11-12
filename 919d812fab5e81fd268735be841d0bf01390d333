@@ -22,6 +22,30 @@
       "revId": "919d812fab5e81fd268735be841d0bf01390d333",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4baf8ba6_885184c6",
+        "filename": "src/tests/gl_tests/FloatingPointSurfaceTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-12T16:02:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ac4683d9_b93a0f1e",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 34
+      },
+      "revId": "919d812fab5e81fd268735be841d0bf01390d333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
