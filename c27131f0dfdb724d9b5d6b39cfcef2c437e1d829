@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "3b0ba138_5d8f94c9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-12T19:05:44Z",
+      "side": 1,
+      "message": "Nit: If callers already check mMSTexInfo, consider removing this check.\n\n(Doesn\u0027t need to be part of this change)",
+      "range": {
+        "startLine": 873,
+        "startChar": 4,
+        "endLine": 873,
+        "endChar": 19
+      },
+      "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff1d37c6_08310153",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-12T19:05:44Z",
+      "side": 1,
+      "message": "Nit: Please add a comment before the two added lines of code that states why we\u0027re setting the boolean to true. I was confused at first as to why a \"getter\" needs to set the boolean. \nSomething like: \"Since getMultisampleRenderTarget assumes the caller will change the render target we need to resolve to the single sample texture the next time resolveTexture gets called\".",
+      "range": {
+        "startLine": 920,
+        "startChar": 8,
+        "endLine": 920,
+        "endChar": 49
+      },
+      "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2d353a3_fca73c3c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-12T19:05:44Z",
+      "side": 1,
+      "message": "Nit: In the future we should consider restructuring this method such that these lines of code are not repeated for both the if and else blocks. \n\nSomething like:\n\n if (!mMSTexInfo || level !\u003d mMSTexInfo-\u003eindex.getLevelIndex() ||\n         samples !\u003d mMSTexInfo-\u003esamples || mMSTexInfo-\u003emsTex) \n {\n    // Resolve and make a new mMSTexInfo\n }\n\n RenderTargetD3D *rt;\n ANGLE_TRY(mMSTexInfo-\u003emsTex-\u003egetRenderTarget(context, index, samples, \u0026rt));\n mMSTexInfo-\u003emsTextureNeedsResolve \u003d true;\n *outRT                            \u003d rt;\n return angle::Result::Continue;\n\n(Doesn\u0027t have to be done as part of this change)",
+      "range": {
+        "startLine": 918,
+        "startChar": 0,
+        "endLine": 922,
+        "endChar": 39
+      },
+      "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42b2d4d7_8117f6ee",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-12T19:05:44Z",
+      "side": 1,
+      "message": "We should move setting the boolean to be inside of resolveTextureHelper so that it is close to where the resolve actually happens.\n\nThen, we can remove setting the boolean from TextureStorage11_Cube::resolveTexture as well.",
+      "range": {
+        "startLine": 1562,
+        "startChar": 8,
+        "endLine": 1562,
+        "endChar": 50
+      },
+      "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4ec34773_b5ab278d",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
         "patchSetId": 4
