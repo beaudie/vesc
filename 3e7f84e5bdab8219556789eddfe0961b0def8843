@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f33ec24c_a92d1c13",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T04:01:00Z",
+      "side": 1,
+      "message": "nit: nullptr, and don\u0027t forget to init in constructor.",
+      "range": {
+        "startLine": 36,
+        "startChar": 23,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f691db7_c23fe07a",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T04:01:00Z",
+      "side": 1,
+      "message": "I think the concern I had with this approach is that we\u0027re not guaranteed to have any queues we can use with this surface. See selectPresentQueueForSurface.\n\nAnyway if you want to take this tack would be nice to unify the various platforms and just have the per-OS init return a VkSurfaceKHR to query the configs from.",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5d9aeaa_59802908",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T04:01:00Z",
+      "side": 1,
+      "message": "nit: return error on a failure and you won\u0027t need to have an \"else\"",
+      "range": {
+        "startLine": 103,
+        "startChar": 73,
+        "endLine": 103,
+        "endChar": 83
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f84ec271_bd52269d",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T04:01:00Z",
+      "side": 1,
+      "message": "don\u0027t forget to handle VkResult here",
+      "range": {
+        "startLine": 107,
+        "startChar": 8,
+        "endLine": 107,
+        "endChar": 44
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbe0db48_d2d9f58f",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T04:01:00Z",
+      "side": 1,
+      "message": "don\u0027t forget to handle VkResult here",
+      "range": {
+        "startLine": 109,
+        "startChar": 8,
+        "endLine": 109,
+        "endChar": 44
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d56b0c5_0c29dd6b",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T04:01:00Z",
+      "side": 1,
+      "message": "I recommend making this a member variable so you don\u0027t need to manually free it before error conditions.",
+      "range": {
+        "startLine": 118,
+        "startChar": 18,
+        "endLine": 118,
+        "endChar": 29
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

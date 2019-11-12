@@ -367,6 +367,30 @@
     },
     {
       "key": {
+        "uuid": "cbf528ab_eedddedb",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-12T04:01:00Z",
+      "side": 1,
+      "message": "What I usually do to make ANGLE_VK_TRY work is make an \"Impl\" function that returns VkResult and convert the VkResult to an egl::Error. See SurfaceVk::initializeImpl. Could do the same here.",
+      "parentUuid": "1563f919_327f6a59",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 5
+      },
+      "revId": "ff8a92d1bc884c56d042a6a8429cea2b2a3c3448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5a0d2f0_c92803fb",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 5
