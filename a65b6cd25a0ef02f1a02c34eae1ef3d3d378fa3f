@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f3532db9_8ea05d09",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T00:13:40Z",
+      "side": 1,
+      "message": "Seems Geoff would prefer not.",
+      "parentUuid": "8dcaee45_8e03be6d",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 24
+      },
+      "revId": "a65b6cd25a0ef02f1a02c34eae1ef3d3d378fa3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9dbdc494_9e70d1a3",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 4

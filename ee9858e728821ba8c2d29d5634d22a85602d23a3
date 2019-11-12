@@ -46,6 +46,30 @@
       "revId": "ee9858e728821ba8c2d29d5634d22a85602d23a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5ef08a6_b81b8f32",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-12T00:13:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "224a93b9_130c67be",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 5
+      },
+      "revId": "ee9858e728821ba8c2d29d5634d22a85602d23a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
