@@ -706,10 +706,6 @@ egl::Error DisplayWGL::makeCurrent(egl::Surface *drawSurface,
         ContextWGL *contextWGL = GetImplAs<ContextWGL>(context);
         newContext             = contextWGL->getContext();
     }
-    else
-    {
-        newContext = 0;
-    }
 
     if (newDC != currentContext.dc || newContext != currentContext.glrc)
     {
