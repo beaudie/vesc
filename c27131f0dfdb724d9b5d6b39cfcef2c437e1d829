@@ -22,6 +22,30 @@
       "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6eb22813_142ff551",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-11-12T18:57:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ec34773_b5ab278d",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 31
+      },
+      "revId": "c27131f0dfdb724d9b5d6b39cfcef2c437e1d829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
