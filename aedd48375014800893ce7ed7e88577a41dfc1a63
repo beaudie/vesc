@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64519286_84cc27f5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-13T19:12:05Z",
+      "side": 1,
+      "message": "I suggest using insertLayoutSpecifier and modifying the specifier argument. These functions have a one-to-one mapping to the @@ MACRO @@ they are replacing.",
+      "revId": "aedd48375014800893ce7ed7e88577a41dfc1a63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f020971_91a1ed8c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-13T19:12:05Z",
+      "side": 1,
+      "message": "unused?",
+      "range": {
+        "startLine": 347,
+        "startChar": 1,
+        "endLine": 350,
+        "endChar": 0
+      },
+      "revId": "aedd48375014800893ce7ed7e88577a41dfc1a63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "171c1532_34fee7d5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-13T19:12:05Z",
+      "side": 1,
+      "message": "You can make this conditional to whether the transform feedback extension is used.",
+      "range": {
+        "startLine": 110,
+        "startChar": 12,
+        "endLine": 110,
+        "endChar": 61
+      },
+      "revId": "aedd48375014800893ce7ed7e88577a41dfc1a63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
