@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0ab8c558_ea1dc0e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-13T20:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "280beb45_95ac9897",
+      "range": {
+        "startLine": 15,
+        "startChar": 17,
+        "endLine": 15,
+        "endChar": 21
+      },
+      "revId": "ec9dc66b8324a41a0ceed86705dbbd92988a779c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71471b1a_addce67d",
         "filename": "DEPS",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5763a6d1_3cacd7a9",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-13T20:45:08Z",
+      "side": 1,
+      "message": "Unfortunately we need it because Chrome\u0027s build gn files reference it on Android: https://cs.chromium.org/chromium/src/build/android/BUILD.gn?l\u003d122",
+      "parentUuid": "71471b1a_addce67d",
+      "range": {
+        "startLine": 232,
+        "startChar": 3,
+        "endLine": 232,
+        "endChar": 23
+      },
+      "revId": "ec9dc66b8324a41a0ceed86705dbbd92988a779c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fdf18c5f_a94d7e31",
         "filename": "gni/angle.gni",
         "patchSetId": 6
@@ -59,6 +107,30 @@
       "writtenOn": "2019-11-13T19:16:57Z",
       "side": 1,
       "message": "I\u0027m surprised angle_unittests pass with this, could you also try manual Android trybots?\nI thought that some code needs to run to handle application startup for a native activity, which I don\u0027t think is invoked in angle_unittests since they should not create EGL Display.",
+      "range": {
+        "startLine": 184,
+        "startChar": 6,
+        "endLine": 184,
+        "endChar": 25
+      },
+      "revId": "ec9dc66b8324a41a0ceed86705dbbd92988a779c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df532980_412c0bf0",
+        "filename": "gni/angle.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-13T20:45:08Z",
+      "side": 1,
+      "message": "angle_unittests shouldn\u0027t need any kind of window/graphics so they would work.  end2end and other tests could possibly work off-screen only.\n\nAll this said, they don\u0027t run on a device without a ton of hacking to put things like libc++_shared.so, etc in the correct places, modifying LD_LIBRARY_PATH and then running the tests from an Android shell.\n\nThe goal of this wasn\u0027t to be able to run the tests, just be able to gn gen/compile them so we can use gn desc and other tools for Android in a standalone ANGLE checkout.\n\nYou can also build libGLESv2.so and copy it to a device to use.\n\nEventually we can use some simpler-than-chromium APK generation in our gn files to build the tests/java into APKs that could run easily.",
+      "parentUuid": "fdf18c5f_a94d7e31",
       "range": {
         "startLine": 184,
         "startChar": 6,
