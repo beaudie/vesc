@@ -98,6 +98,17 @@ bool HasSystemVendorID(VendorID vendorID)
     }
     return systemInfo->gpus[systemInfo->activeGPUIndex].vendorId == vendorID;
 }
+
+bool HasSystemDeviceID(DeviceID deviceID)
+{
+    SystemInfo *systemInfo = GetTestSystemInfo();
+    // Unfortunately sometimes GPU info collection can fail.
+    if (systemInfo->activeGPUIndex < 0 || systemInfo->gpus.empty())
+    {
+        return false;
+    }
+    return systemInfo->gpus[systemInfo->activeGPUIndex].deviceId == deviceID;
+}
 }  // namespace
 
 std::string gSelectedConfig;
@@ -252,6 +263,11 @@ bool IsNVIDIA()
     }
 #endif
     return HasSystemVendorID(kVendorID_NVIDIA);
+}
+
+bool IsSwiftshader()
+{
+    return HasSystemVendorID(kVendorID_GOOGLE) && HasSystemDeviceID(kDeviceID_Swiftshader);
 }
 
 bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters &param)
