@@ -254,6 +254,11 @@ bool IsNVIDIA()
     return HasSystemVendorID(kVendorID_NVIDIA);
 }
 
+bool IsSwiftshader(const PlatformParameters *param)
+{
+    return (param->eglParameters.deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE);
+}
+
 bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters &param)
 {
     VendorID vendorID = systemInfo.gpus[systemInfo.activeGPUIndex].vendorId;

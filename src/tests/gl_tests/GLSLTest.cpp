@@ -703,6 +703,8 @@ void main()
 // Draw an array of points with the first vertex offset at 0 using gl_VertexID
 TEST_P(GLSLTest_ES3, GLVertexIDOffsetZeroDrawArray)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     constexpr int kStartIndex  = 0;
     constexpr int kArrayLength = 5;
     constexpr char kVS[]       = R"(#version 300 es
@@ -820,6 +822,8 @@ void main() {
 // Draw an array of points with the first vertex offset at 5 using gl_VertexID
 TEST_P(GLSLTest_ES3, GLVertexIDOffsetFiveDrawArray)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     // Bug in Nexus drivers, offset does not work. (anglebug.com/3264)
     ANGLE_SKIP_TEST_IF((IsNexus5X() || IsNexus6P()) && IsOpenGLES());
 
@@ -6130,6 +6134,8 @@ TEST_P(GLSLTest, PointCoordConsistency)
 
     // AMD's OpenGL drivers may have the same issue. http://anglebug.com/1643
     ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsOpenGL());
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
 
     constexpr char kPointCoordVS[] = R"(attribute vec2 position;
 uniform vec2 viewportSize;
