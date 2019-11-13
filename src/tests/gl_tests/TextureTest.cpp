@@ -4016,16 +4016,19 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
 
         EXPECT_PIXEL_COLOR_EQ(0, 0, SliceFormatColor(format, GLColor::white));
 
-        glBindTexture(GL_TEXTURE_2D, mTextures[1]);
-        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
+        if (format == GL_RGBA)
+        {
+            glBindTexture(GL_TEXTURE_2D, mTextures[1]);
+            glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
 
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[1],
-                               0);
-        EXPECT_PIXEL_COLOR_EQ(0, 0, SliceFormatColor(format, GLColor::white));
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                   mTextures[1], 0);
+            EXPECT_PIXEL_COLOR_EQ(0, 0, SliceFormatColor(format, GLColor::white));
+
+            ASSERT_GL_NO_ERROR();
+        }
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        ASSERT_GL_NO_ERROR();
     }
 
     GLuint mTextures[3];
@@ -4036,8 +4039,6 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
 // Test texture formats enabled by the GL_EXT_texture_norm16 extension.
 TEST_P(Texture2DNorm16TestES3, TextureNorm16Test)
 {
-    // TODO(crbug.com/angleproject/4089) Fails on Nexus5X Adreno
-    ANGLE_SKIP_TEST_IF(IsNexus5X());
     // TODO(crbug.com/angleproject/4089) Fails on Win Intel OpenGL driver
     ANGLE_SKIP_TEST_IF(IsIntel() && IsOpenGL());
 
