@@ -22,6 +22,30 @@
       "revId": "84068d9ced366fa04e64c9bc52fde2fea6b9016c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d1b42d5_f62b159a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-13T17:04:34Z",
+      "side": 1,
+      "message": "I would love it if we could, but unfortunately can\u0027t think of a straightforward way. In fact, I\u0027m not 100% sure if the dirty bits are perfectly covering some other cases, like GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT etc (but have observed it working fine in the single test that uses it!). Until we discover cases we haven\u0027t provisioned, I\u0027d say any missing barriers in the other cases is a sign that we are missing a usage-notification elsewhere.\n\nRegarding the two you mentioned:\n\n- For the image-based barriers (e.g. GL_FRAMEBUFFER_BARRIER_BIT) where the image has to transition layout, it\u0027s necessarily handled elsewhere as we do have to issue individual layout transition barriers. GL_SHADER_IMAGE_ACCESS_BARRIER_BIT is the only one I believe that\u0027s necessary to be implemented here as the image stays in the same layout.\n- For the buffer-based barriers, there are two sides of the barrier to consider. The src access of all glMemoryBarrier* functions is SHADER_WRITE, and I believe the front-end sends a dirty bit notification when the buffer is expected to have changed (like when it was used as SSBO in a draw call, or transform feedback buffer etc). The dst access is set through BufferHelper::onRead*/onWrite* which should be issued every time the buffer is deemed dirty. I\u0027m not sure if the SSBO dirty notification is sent on every draw, or only when the buffer is bound as SSBO. In the former case, even GL_SHADER_STORAGE_BARRIER_BIT could be a no-op, but I stayed on the safe side.",
+      "parentUuid": "4ae22a61_48c1b8ea",
+      "range": {
+        "startLine": 2651,
+        "startChar": 0,
+        "endLine": 2662,
+        "endChar": 65
+      },
+      "revId": "84068d9ced366fa04e64c9bc52fde2fea6b9016c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
