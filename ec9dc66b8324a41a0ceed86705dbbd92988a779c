@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "280beb45_95ac9897",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-13T19:20:04Z",
+      "side": 1,
+      "message": "I think 2344 is a better context for this.",
+      "range": {
+        "startLine": 15,
+        "startChar": 17,
+        "endLine": 15,
+        "endChar": 21
+      },
+      "revId": "ec9dc66b8324a41a0ceed86705dbbd92988a779c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71471b1a_addce67d",
         "filename": "DEPS",
         "patchSetId": 6
