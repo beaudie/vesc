@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "24dca94c_518c1ce1",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-13T16:28:24Z",
+      "side": 1,
+      "message": "Sorry, you\u0027re right, that function is custom to the Vulkan back-end. I thought that came from the DisplayImpl class.\nI spent some time looking at what Android would require in order to unify this interface and it\u0027s not really possible for us to create a window on Android. We need to use the window given to us by the platform. So changing this to return a VkSurfaceKHR object and having a general purpose function that uses that surface to extract the surface formats won\u0027t work on Android.\nSo I\u0027m going to leave things as is for now.",
+      "parentUuid": "e53e066a_afa5b9d2",
+      "range": {
+        "startLine": 53,
+        "startChar": 27,
+        "endLine": 53,
+        "endChar": 37
+      },
+      "revId": "3e7f84e5bdab8219556789eddfe0961b0def8843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5d9aeaa_59802908",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 8
