@@ -16,6 +16,24 @@
       "revId": "5911a88ccd5bb0dbcb7e647237e7ee28f27acd8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c6aac1a_7d303a4e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2672,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-13T18:57:52Z",
+      "side": 1,
+      "message": "dst access _is_ determined by the given bitfield. The dozen possible flags each correspond to some vulkan access mask. By coincidence, the two that we care about translate to the same Vulkan flags.\n\nClarified this in the comment.",
+      "parentUuid": "1788e7e3_7bb05925",
+      "revId": "5911a88ccd5bb0dbcb7e647237e7ee28f27acd8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
