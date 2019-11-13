@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01ed9811_6317ba3c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-11-13T18:35:15Z",
+      "side": 1,
+      "message": "Are these texture values in danger of being greater than std::numeric_limits\u003cint32_t\u003e::max()?  I see where this use of std::min() is necessary for some values, but I\u0027m not sure it\u0027s needed for all of these values.",
+      "revId": "bc2106b6ea5154c32fed7e2ddf4e76ffec34e04a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
