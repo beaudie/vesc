@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e722f9d2_bae33757",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-13T04:36:59Z",
+      "side": 1,
+      "message": "Unfortunately, the way setupDraw is done, updateActiveTextures is called after we determine the node we will record to. So closing the framebuffer\u0027s graph node here is too late.\n\nAlso, (I need to refresh my memory, but) wasn\u0027t the issue that T-Rex was setting a texture that was actually unused? IIRC, the spec says the behavior is undefined if the texture is both being read from and drawn into, so wouldn\u0027t a better solution be to bind a dummy texture instead if we detect that it\u0027s the same image as the framebuffer\u0027s?",
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8c1de80_00d61de0",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -84,6 +101,29 @@
       "writtenOn": "2019-11-09T18:38:46Z",
       "side": 1,
       "message": "jamie, i know there are bot failures but wanted to get your take on this before going any further. This is the more \"optimal\" backend logic that we thought of. it was trivial enough\nthat we did not create a design note but we can if needed.",
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48c2e2f5_eb6d8151",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-13T04:36:59Z",
+      "side": 1,
+      "message": "Isn\u0027t this always true? If the format is not color writable, the framebuffer should not be \"complete\", isn\u0027t that so?",
+      "range": {
+        "startLine": 1370,
+        "startChar": 8,
+        "endLine": 1371,
+        "endChar": 73
+      },
       "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
