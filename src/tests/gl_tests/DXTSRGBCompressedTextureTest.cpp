@@ -33,6 +33,9 @@ class DXTSRGBCompressedTextureTest : public ANGLETest
 
     void testSetUp() override
     {
+        // http://anglebug.com/4092
+        ANGLE_SKIP_TEST_IF(isSwiftshader());
+
         constexpr char kVS[] =
             "precision highp float;\n"
             "attribute vec4 position;\n"
@@ -124,24 +127,32 @@ class DXTSRGBCompressedTextureTest : public ANGLETest
 // Test correct decompression of 8x8 textures (four 4x4 blocks) of SRGB_S3TC_DXT1
 TEST_P(DXTSRGBCompressedTextureTest, Decompression8x8RGBDXT1)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     runTest(GL_COMPRESSED_SRGB_S3TC_DXT1_EXT);
 }
 
 // Test correct decompression of 8x8 textures (four 4x4 blocks) of SRGB_ALPHA_S3TC_DXT1
 TEST_P(DXTSRGBCompressedTextureTest, Decompression8x8RGBADXT1)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     runTest(GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT);
 }
 
 // Test correct decompression of 8x8 textures (four 4x4 blocks) of SRGB_ALPHA_S3TC_DXT3
 TEST_P(DXTSRGBCompressedTextureTest, Decompression8x8RGBADXT3)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     runTest(GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT);
 }
 
 // Test correct decompression of 8x8 textures (four 4x4 blocks) of SRGB_ALPHA_S3TC_DXT5
 TEST_P(DXTSRGBCompressedTextureTest, Decompression8x8RGBADXT5)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     runTest(GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT);
 }
 
