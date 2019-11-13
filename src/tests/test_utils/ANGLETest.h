@@ -311,6 +311,24 @@ class ANGLETestBase
 
     static void ReleaseFixtures();
 
+    bool isSwiftshader() const
+    {
+        bool isSwS = mCurrentParams->eglParameters.deviceType ==
+                     EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE;
+        printf("Checking if isSwiftshader():\n");
+        if (isSwS)
+        {
+            printf("  detected swiftshader, deviceType: 0x%X\n",
+                   mCurrentParams->eglParameters.deviceType);
+        }
+        else
+        {
+            printf("  detected NOT swiftshader, deviceType: 0x%X\n",
+                   mCurrentParams->eglParameters.deviceType);
+        }
+        return isSwS;
+    }
+
   protected:
     void ANGLETestSetUp();
     void ANGLETestTearDown();

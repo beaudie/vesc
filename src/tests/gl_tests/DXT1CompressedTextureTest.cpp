@@ -26,6 +26,8 @@ class DXT1CompressedTextureTest : public ANGLETest
 
     void testSetUp() override
     {
+        // http://anglebug.com/4092
+        ANGLE_SKIP_TEST_IF(isSwiftshader());
         constexpr char kVS[] = R"(precision highp float;
 attribute vec4 position;
 varying vec2 texcoord;
@@ -65,6 +67,8 @@ void main()
 
 TEST_P(DXT1CompressedTextureTest, CompressedTexImage)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
     GLuint texture;
@@ -112,6 +116,8 @@ TEST_P(DXT1CompressedTextureTest, CompressedTexImage)
 
 TEST_P(DXT1CompressedTextureTest, CompressedTexStorage)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 &&
@@ -176,6 +182,8 @@ TEST_P(DXT1CompressedTextureTest, CompressedTexStorage)
 // Test validation of glCompressedTexSubImage2D with DXT formats
 TEST_P(DXT1CompressedTextureTest, CompressedTexSubImageValidation)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
     GLTexture texture;
@@ -204,6 +212,8 @@ TEST_P(DXT1CompressedTextureTest, CompressedTexSubImageValidation)
 // Test that it's not possible to call CopyTexSubImage2D on a compressed texture
 TEST_P(DXT1CompressedTextureTest, CopyTexSubImage2DDisallowed)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
     GLTexture texture;
@@ -219,6 +229,8 @@ TEST_P(DXT1CompressedTextureTest, CopyTexSubImage2DDisallowed)
 
 TEST_P(DXT1CompressedTextureTest, PBOCompressedTexStorage)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 &&
@@ -304,6 +316,8 @@ class DXT1CompressedTextureTestES3 : public DXT1CompressedTextureTest
 
 TEST_P(DXT1CompressedTextureTestES3, PBOCompressedTexImage)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
     GLuint texture;
@@ -369,6 +383,8 @@ TEST_P(DXT1CompressedTextureTestES3, PBOCompressedTexImage)
 // Test validation of glCompressedTexSubImage3D with DXT formats
 TEST_P(DXT1CompressedTextureTestES3, CompressedTexSubImageValidation)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
     GLTexture texture;
@@ -396,6 +412,8 @@ TEST_P(DXT1CompressedTextureTestES3, CompressedTexSubImageValidation)
 // Test validation of glCompressedTexSubImage3D with DXT formats
 TEST_P(DXT1CompressedTextureTestES3, CopyTexSubImage3DDisallowed)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
     GLTexture texture;

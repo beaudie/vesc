@@ -60,6 +60,8 @@ TEST_P(FenceNVTest, IsFence)
 // Test error cases for all FenceNV functions
 TEST_P(FenceNVTest, Errors)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_NV_fence"));
 
     EXPECT_GL_TRUE(glTestFenceNV(10)) << "glTestFenceNV should still return TRUE for an invalid "
