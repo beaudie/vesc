@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "517f9bd2_b65c0400",
+        "filename": "DEPS",
+        "patchSetId": 7
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-13T21:14:17Z",
+      "side": 1,
+      "message": "Drivers are supposed to use VNDK, a somewhat more restricted subset of libraries. I think for now we are okay because we are optionally enabled, but when ANGLE needs primary OpenGL ES driver we\u0027ll want to switch to VNDK.",
+      "range": {
+        "startLine": 237,
+        "startChar": 3,
+        "endLine": 237,
+        "endChar": 26
+      },
+      "revId": "1721d575d47596c52e4e850a4413695f4d9b87a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
