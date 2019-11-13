@@ -22,6 +22,30 @@
       "revId": "b9ddfd577a20706be8caf27e9abfabd59c1faa81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8056694_03ac7900",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 0,
+      "message": "Not necessary. Here in order to ensure index value is equal with register value, So must resize vector size to register+1.",
+      "parentUuid": "b11cbf24_5b40575c",
+      "range": {
+        "startLine": 2250,
+        "startChar": 12,
+        "endLine": 2250,
+        "endChar": 55
+      },
+      "revId": "b9ddfd577a20706be8caf27e9abfabd59c1faa81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

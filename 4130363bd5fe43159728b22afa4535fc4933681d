@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "90b723ef_33f65936",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "204fe2eb_3d873e81",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d307b99_4f534a02",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 9
@@ -39,6 +63,24 @@
       "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c041b042_87d35e9a",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d307b99_4f534a02",
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "eb989688_3b83a23a",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0de8f31b_d7dc05ed",
+      "range": {
+        "startLine": 28,
+        "startChar": 19,
+        "endLine": 28,
+        "endChar": 44
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f796823_b6341482",
         "filename": "src/compiler/translator/ResourcesHLSL.cpp",
         "patchSetId": 9
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "228418f9_c7843945",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f796823_b6341482",
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2be9817_931f5a76",
         "filename": "src/compiler/translator/ResourcesHLSL.cpp",
         "patchSetId": 9
@@ -96,6 +180,24 @@
       "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4557165d_50843bf8",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2be9817_931f5a76",
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -145,6 +247,54 @@
     },
     {
       "key": {
+        "uuid": "0b28a449_43b901c4",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f2590ed_bffee8a5",
+      "range": {
+        "startLine": 655,
+        "startChar": 11,
+        "endLine": 659,
+        "endChar": 71
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "613b2317_eae08398",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d34372a_8b6ee8f1",
+      "range": {
+        "startLine": 659,
+        "startChar": 72,
+        "endLine": 659,
+        "endChar": 73
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "189ea459_9cc27da7",
         "filename": "src/compiler/translator/ResourcesHLSL.cpp",
         "patchSetId": 9
@@ -168,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "4ac6afa4_195dd95f",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "189ea459_9cc27da7",
+      "range": {
+        "startLine": 667,
+        "startChar": 12,
+        "endLine": 667,
+        "endChar": 28
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa56e2b8_0fbde235",
         "filename": "src/libANGLE/ProgramLinkedResources.cpp",
         "patchSetId": 9
@@ -179,6 +353,30 @@
       "writtenOn": "2019-11-11T06:35:11Z",
       "side": 1,
       "message": "Should use \u0027getOutermostArraySize()\u0027?",
+      "range": {
+        "startLine": 1133,
+        "startChar": 64,
+        "endLine": 1133,
+        "endChar": 85
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4ade6b7_4870f560",
+        "filename": "src/libANGLE/ProgramLinkedResources.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "In ResourcesHLSL.cpp file, we had restricted the number of array size is 1, so getArraySizeProduct is equal with getOutermostArraySize here. And I think getArraySizeProduct matchs \"firstFieldArraySize\" variable better. Do you think so?",
+      "parentUuid": "fa56e2b8_0fbde235",
       "range": {
         "startLine": 1133,
         "startChar": 64,
@@ -214,6 +412,30 @@
     },
     {
       "key": {
+        "uuid": "2bec97d3_95a5c0bd",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Remove byteWidth, but not merge here. It is more convenient to iterate uniform block to been bound in StateManager11.cpp.",
+      "parentUuid": "afc557ce_6632d22e",
+      "range": {
+        "startLine": 117,
+        "startChar": 17,
+        "endLine": 117,
+        "endChar": 26
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "699cb7fa_15f6b896",
         "filename": "src/libANGLE/renderer/d3d/ShaderD3D.h",
         "patchSetId": 9
@@ -234,6 +456,30 @@
       "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aea50f8_a104fd6a",
+        "filename": "src/libANGLE/renderer/d3d/ShaderD3D.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "699cb7fa_15f6b896",
+      "range": {
+        "startLine": 106,
+        "startChar": 32,
+        "endLine": 106,
+        "endChar": 50
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -260,6 +506,30 @@
     },
     {
       "key": {
+        "uuid": "9d195866_c3467d0b",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3637,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2610bc26_4c31af02",
+      "range": {
+        "startLine": 3633,
+        "startChar": 0,
+        "endLine": 3637,
+        "endChar": 9
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9662045b_0c75995b",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 9
@@ -283,6 +553,30 @@
     },
     {
       "key": {
+        "uuid": "e352ab1e_ff155234",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9662045b_0c75995b",
+      "range": {
+        "startLine": 1635,
+        "startChar": 8,
+        "endLine": 1647,
+        "endChar": 14
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "73d88a5e_1138b52c",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 9
@@ -303,6 +597,30 @@
       "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a236dd6_f9d1bc22",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-11-13T05:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73d88a5e_1138b52c",
+      "range": {
+        "startLine": 1730,
+        "startChar": 2,
+        "endLine": 1742,
+        "endChar": 14
+      },
+      "revId": "4130363bd5fe43159728b22afa4535fc4933681d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
