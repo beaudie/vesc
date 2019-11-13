@@ -142,6 +142,8 @@ TEST_P(DXTSRGBCompressedTextureTest, Decompression8x8RGBADXT3)
 // Test correct decompression of 8x8 textures (four 4x4 blocks) of SRGB_ALPHA_S3TC_DXT5
 TEST_P(DXTSRGBCompressedTextureTest, Decompression8x8RGBADXT5)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     runTest(GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT);
 }
 
