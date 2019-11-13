@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "d7d5918d_122c94b9",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-13T20:52:07Z",
+      "side": 1,
+      "message": ":-(\nDoesn\u0027t look like it will be easy to split that file into what we need and what we don\u0027t need, so checking out catapult it is.",
+      "parentUuid": "5763a6d1_3cacd7a9",
+      "range": {
+        "startLine": 232,
+        "startChar": 3,
+        "endLine": 232,
+        "endChar": 23
+      },
+      "revId": "ec9dc66b8324a41a0ceed86705dbbd92988a779c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fdf18c5f_a94d7e31",
         "filename": "gni/angle.gni",
         "patchSetId": 6
