@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a70c6e5f_e737a9ae",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-13T21:26:24Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this (and ones below) be SWIFTSHADER? It passes with regular Vulkan back-end on Windows.",
+      "range": {
+        "startLine": 655,
+        "startChar": 5,
+        "endLine": 655,
+        "endChar": 12
+      },
+      "revId": "20c3985a416f62c8b39dc46c436f319c81470a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30ea7f4a_2fd151c5",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-13T21:26:24Z",
+      "side": 1,
+      "message": "SWIFTSHADER since it\u0027s limited to that.",
+      "range": {
+        "startLine": 147,
+        "startChar": 5,
+        "endLine": 147,
+        "endChar": 12
+      },
+      "revId": "20c3985a416f62c8b39dc46c436f319c81470a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
