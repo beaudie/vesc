@@ -176,6 +176,8 @@ TEST_P(DXT1CompressedTextureTest, CompressedTexStorage)
 // Test validation of glCompressedTexSubImage2D with DXT formats
 TEST_P(DXT1CompressedTextureTest, CompressedTexSubImageValidation)
 {
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
     GLTexture texture;

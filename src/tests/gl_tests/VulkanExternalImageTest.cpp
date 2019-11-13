@@ -123,6 +123,8 @@ TEST_P(VulkanExternalImageTest, ShouldImportSemaphoreOpaqueFd)
 TEST_P(VulkanExternalImageTest, ShouldClearOpaqueFdRGBA8)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
 
     VulkanExternalHelper helper;
     helper.initialize();
