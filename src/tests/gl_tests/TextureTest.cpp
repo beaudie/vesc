@@ -45,6 +45,30 @@ GLColor SliceFormatColor(GLenum format, GLColor full)
     }
 }
 
+GLColor16UI SliceFormatColor16UI(GLenum format, GLColor16UI full)
+{
+    switch (format)
+    {
+        case GL_RED:
+            return GLColor16UI(full.R, 0, 0, 0xFFFF);
+        case GL_RG:
+            return GLColor16UI(full.R, full.G, 0, 0xFFFF);
+        case GL_RGB:
+            return GLColor16UI(full.R, full.G, full.B, 0xFFFF);
+        case GL_RGBA:
+            return full;
+        case GL_LUMINANCE:
+            return GLColor16UI(full.R, full.R, full.R, 0xFFFF);
+        case GL_ALPHA:
+            return GLColor16UI(0, 0, 0, full.R);
+        case GL_LUMINANCE_ALPHA:
+            return GLColor16UI(full.R, full.R, full.R, full.G);
+        default:
+            EXPECT_TRUE(false);
+            return GLColor16UI(0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF);
+    }
+}
+
 // As above, for 32F colors
 GLColor32F SliceFormatColor32F(GLenum format, GLColor32F full)
 {
@@ -3967,11 +3991,12 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
 
         drawQuad(mProgram, "position", 0.5f);
 
-        GLubyte expectedValue = (type == GL_SHORT) ? 0xFF : static_cast<GLubyte>(pixelValue >> 8);
+        GLushort expectedValue = (type == GL_SHORT) ? 0xFFFF : pixelValue;
 
-        EXPECT_PIXEL_COLOR_EQ(0, 0,
-                              SliceFormatColor(format, GLColor(expectedValue, expectedValue,
-                                                               expectedValue, expectedValue)));
+        EXPECT_PIXEL_16UI_COLOR(
+            0, 0,
+            SliceFormatColor16UI(
+                format, GLColor16UI(expectedValue, expectedValue, expectedValue, expectedValue)));
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -3999,10 +4024,9 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
 
         drawQuad(mProgram, "position", 0.5f);
 
-        GLubyte expectedValue = static_cast<GLubyte>(pixelValue >> 8);
-        EXPECT_PIXEL_COLOR_EQ(0, 0,
-                              SliceFormatColor(format, GLColor(expectedValue, expectedValue,
-                                                               expectedValue, expectedValue)));
+        EXPECT_PIXEL_16UI_COLOR(0, 0,
+                                SliceFormatColor16UI(format, GLColor16UI(pixelValue, pixelValue,
+                                                                         pixelValue, pixelValue)));
 
         glBindRenderbuffer(GL_RENDERBUFFER, mRenderbuffer);
         glRenderbufferStorage(GL_RENDERBUFFER, internalformat, 1, 1);
@@ -4014,18 +4038,20 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        EXPECT_PIXEL_COLOR_EQ(0, 0, SliceFormatColor(format, GLColor::white));
+        EXPECT_PIXEL_16UI_COLOR(
+            0, 0, SliceFormatColor16UI(format, GLColor16UI(0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF)));
 
         glBindTexture(GL_TEXTURE_2D, mTextures[1]);
         glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[1],
                                0);
-        EXPECT_PIXEL_COLOR_EQ(0, 0, SliceFormatColor(format, GLColor::white));
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        EXPECT_PIXEL_16UI_COLOR(
+            0, 0, SliceFormatColor16UI(format, GLColor16UI(0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF)));
 
         ASSERT_GL_NO_ERROR();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     GLuint mTextures[3];
@@ -4036,10 +4062,10 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
 // Test texture formats enabled by the GL_EXT_texture_norm16 extension.
 TEST_P(Texture2DNorm16TestES3, TextureNorm16Test)
 {
-    // TODO(crbug.com/angleproject/4089) Fails on Nexus5X Adreno
-    ANGLE_SKIP_TEST_IF(IsNexus5X());
-    // TODO(crbug.com/angleproject/4089) Fails on Win Intel OpenGL driver
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsOpenGL());
+    // // TODO(crbug.com/angleproject/4089) Fails on Nexus5X Nexus6P Adreno
+    // ANGLE_SKIP_TEST_IF(IsNexus5X() || IsNexus6P());
+    // // TODO(crbug.com/angleproject/4089) Fails on Win Intel OpenGL driver
+    // ANGLE_SKIP_TEST_IF(IsIntel() && IsOpenGL());
 
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_norm16"));
 
