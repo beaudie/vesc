@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ae22a61_48c1b8ea",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-13T16:42:24Z",
+      "side": 1,
+      "message": "Does it make sense to have an ASSERT (or more) to verify these details? Can we assert that barriers \u0026 w/ GL_COMMAND_BARRIER_BIT or GL_FRAMEBUFFER_BARRIER_BIT are zero?",
+      "range": {
+        "startLine": 2651,
+        "startChar": 0,
+        "endLine": 2662,
+        "endChar": 65
+      },
+      "revId": "84068d9ced366fa04e64c9bc52fde2fea6b9016c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
