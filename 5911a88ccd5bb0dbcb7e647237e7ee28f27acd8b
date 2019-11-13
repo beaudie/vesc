@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1788e7e3_7bb05925",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2672,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-13T17:41:04Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to match the description above:\n\n\u003e the dst access is determined by the given bitfield.\n\ndstAccess is always set to the same value for the necessary barriers, regardless of the bitfield value.",
+      "revId": "5911a88ccd5bb0dbcb7e647237e7ee28f27acd8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
