@@ -140,6 +140,30 @@
       "revId": "ec9dc66b8324a41a0ceed86705dbbd92988a779c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29107841_a08f68f2",
+        "filename": "gni/angle.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-13T20:50:26Z",
+      "side": 1,
+      "message": "I didn\u0027t set \"use_native_activity \u003d true\" for angle_unittests initially, since I believed activity creation would be stuck and tests won\u0027t be able to run.\nBut they passed on android_angle_rel_ng, so either I was wrong, or the activity creation being stuck doesn\u0027t prevent tests from running.",
+      "parentUuid": "df532980_412c0bf0",
+      "range": {
+        "startLine": 184,
+        "startChar": 6,
+        "endLine": 184,
+        "endChar": 25
+      },
+      "revId": "ec9dc66b8324a41a0ceed86705dbbd92988a779c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
