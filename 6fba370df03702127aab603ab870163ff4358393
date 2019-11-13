@@ -22,6 +22,30 @@
       "revId": "6fba370df03702127aab603ab870163ff4358393",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb76feeb_84cd2bb8",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-13T22:42:50Z",
+      "side": 1,
+      "message": "Oops, thought I got them all.",
+      "parentUuid": "12f072db_20e20d43",
+      "range": {
+        "startLine": 106,
+        "startChar": 5,
+        "endLine": 106,
+        "endChar": 12
+      },
+      "revId": "6fba370df03702127aab603ab870163ff4358393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
