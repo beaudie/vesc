@@ -91,6 +91,7 @@
 3443 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength-cs-*-matR* = SKIP
 3443 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength-vs-*-matR* = SKIP
 3443 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength-fs-*-matR* = SKIP
+3443 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.advanced-switchBuffers-vs = SKIP
 
 // Bug with GL_SHADER_STORAGE_BUFFER_START
 3520 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.basic-binding = FAIL
@@ -101,6 +102,8 @@
 // Fails to compile shader
 3520 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.basic-atomic-case3-vsfs = FAIL
 3520 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.basic-atomic-case3-cs = FAIL
+
+4107 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.advanced-switchBuffers-vs = FAIL
 
 // Draw indirect:
 3564 VULKAN : KHR-GLES31.core.draw_indirect.* = SKIP
@@ -140,3 +143,7 @@
 
 // Crashes on Android
 3520 VULKAN ANDROID : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength* = SKIP
+
+4106 VULKAN : KHR-GLES31.core.layout_binding.sampler*_layout_binding_texture_* = FAIL
+
+4108 VULKAN : KHR-GLES31.core.shader_image_size.*-nonMS-* = SKIP
