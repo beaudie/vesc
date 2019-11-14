@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac4ce127_0dcbb1bf",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3054,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-14T21:54:19Z",
+      "side": 1,
+      "message": "Is this true? It\u0027s not mentioned in the extension spec, maybe it\u0027s only some soft requirement for the D3D backend?",
+      "revId": "3f51f57688648c376af5d26e822e5e55ab6cf5ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
