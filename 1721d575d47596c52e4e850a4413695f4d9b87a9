@@ -22,6 +22,30 @@
       "revId": "1721d575d47596c52e4e850a4413695f4d9b87a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb62a8d4_3ef464ce",
+        "filename": "DEPS",
+        "patchSetId": 7
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-14T14:51:15Z",
+      "side": 1,
+      "message": "Huh, interesting, I saw that as a Chrome dep.",
+      "parentUuid": "517f9bd2_b65c0400",
+      "range": {
+        "startLine": 237,
+        "startChar": 3,
+        "endLine": 237,
+        "endChar": 26
+      },
+      "revId": "1721d575d47596c52e4e850a4413695f4d9b87a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
