@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e8d4aa1e_9f83dccb",
+        "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-14T15:30:38Z",
+      "side": 1,
+      "message": "I think we can use RAII to cleanly wrap all of this, but this is fine for now.\n\nI may do a followup to add wrappers.",
+      "parentUuid": "38929030_3c1ed114",
+      "range": {
+        "startLine": 31,
+        "startChar": 3,
+        "endLine": 45,
+        "endChar": 0
+      },
+      "revId": "b4f9ace2e75aa3bd83ff82bb320c7a78a171db58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04f0b895_eb8a48c5",
         "filename": "src/libANGLE/renderer/vulkan/win32/DisplayVkWin32.cpp",
         "patchSetId": 9
