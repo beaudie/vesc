@@ -207,6 +207,24 @@
     },
     {
       "key": {
+        "uuid": "941e91c4_5ac052fd",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 5
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-14T08:36:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f7fc688_cf387b56",
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f9b4663_1821683f",
         "filename": "src/compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.cpp",
         "patchSetId": 5
@@ -604,6 +622,30 @@
       "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6a568e1_cbe40582",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-14T08:36:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8fa95f8_e7414a7c",
+      "range": {
+        "startLine": 1153,
+        "startChar": 36,
+        "endLine": 1153,
+        "endChar": 49
+      },
+      "revId": "d47431d3a5a34e45397253750e255d09fcbcd7b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
