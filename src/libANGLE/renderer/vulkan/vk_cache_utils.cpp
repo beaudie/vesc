@@ -894,6 +894,16 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     createInfo.basePipelineHandle  = VK_NULL_HANDLE;
     createInfo.basePipelineIndex   = 0;
 
+    for (uint32_t i = 0; i < createInfo.pVertexInputState->vertexAttributeDescriptionCount; i++)
+    {
+        printf("%s binding = %d format = %d location = %d offset = %d stride = %d\n", __func__,
+               createInfo.pVertexInputState->pVertexAttributeDescriptions[i].binding,
+               createInfo.pVertexInputState->pVertexAttributeDescriptions[i].format,
+               createInfo.pVertexInputState->pVertexAttributeDescriptions[i].location,
+               createInfo.pVertexInputState->pVertexAttributeDescriptions[i].offset,
+               createInfo.pVertexInputState->pVertexBindingDescriptions[i].stride);
+    }
+
     ANGLE_VK_TRY(contextVk,
                  pipelineOut->initGraphics(contextVk->getDevice(), createInfo, pipelineCacheVk));
     return angle::Result::Continue;
