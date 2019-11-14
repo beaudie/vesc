@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "79873960_21cb530e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-14T22:51:10Z",
+      "side": 1,
+      "message": "My suggestion was to _not_ go through the CPU path anymore in that case. So yes, I think it would be worth it (to avoid a GPU stall)",
+      "parentUuid": "019bf83e_25062178",
+      "range": {
+        "startLine": 245,
+        "startChar": 12,
+        "endLine": 245,
+        "endChar": 32
+      },
+      "revId": "3fb9ac681c2a6bc0f0ed39f8c4341b16db05dc5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dbb3e215_fa99a4e4",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
