@@ -132,7 +132,8 @@ void RendererVk::ensureCapsInitialized() const
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
     mNativeCaps.maxElementIndex       = std::numeric_limits<GLuint>::max() - 1;
     mNativeCaps.max3DTextureSize      = limitsVk.maxImageDimension3D;
-    mNativeCaps.max2DTextureSize      = limitsVk.maxImageDimension2D;
+    mNativeCaps.max2DTextureSize =
+        std::min(limitsVk.maxFramebufferWidth, limitsVk.maxImageDimension2D);
     mNativeCaps.maxArrayTextureLayers = limitsVk.maxImageArrayLayers;
     mNativeCaps.maxLODBias            = limitsVk.maxSamplerLodBias;
     mNativeCaps.maxCubeMapTextureSize = limitsVk.maxImageDimensionCube;
@@ -147,8 +148,10 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeCaps.maxDrawBuffers =
         std::min<uint32_t>(limitsVk.maxColorAttachments, limitsVk.maxFragmentOutputAttachments);
-    mNativeCaps.maxFramebufferWidth    = limitsVk.maxFramebufferWidth;
-    mNativeCaps.maxFramebufferHeight   = limitsVk.maxFramebufferHeight;
+    mNativeCaps.maxFramebufferWidth =
+        std::min(limitsVk.maxFramebufferWidth, limitsVk.maxImageDimension2D);
+    mNativeCaps.maxFramebufferHeight =
+        std::min(limitsVk.maxFramebufferHeight, limitsVk.maxImageDimension2D);
     mNativeCaps.maxColorAttachments    = limitsVk.maxColorAttachments;
     mNativeCaps.maxViewportWidth       = limitsVk.maxViewportDimensions[0];
     mNativeCaps.maxViewportHeight      = limitsVk.maxViewportDimensions[1];
