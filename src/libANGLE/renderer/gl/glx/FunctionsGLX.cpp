@@ -100,6 +100,9 @@ struct FunctionsGLX::GLXFunctionTable
 
     // GLX_SGI_swap_control
     PFNGLXSWAPINTERVALSGIPROC swapIntervalSGIPtr;
+
+    // GLX_OML_sync_control
+    PFNGLXGETSYNCVALUESOMLPROC getSyncValuesOMLPtr;
 };
 
 FunctionsGLX::FunctionsGLX()
@@ -239,6 +242,10 @@ bool FunctionsGLX::initialize(Display *xDisplay, int screen, std::string *errorS
     if (hasExtension("GLX_SGI_swap_control"))
     {
         GET_PROC_OR_ERROR(&mFnPtrs->swapIntervalSGIPtr, glXSwapIntervalSGI);
+    }
+    if (hasExtension("GLX_OML_sync_control"))
+    {
+        GET_PROC_OR_ERROR(&mFnPtrs->getSyncValuesOMLPtr, glXGetSyncValuesOML);
     }
 
 #undef GET_FNPTR_OR_ERROR
@@ -398,6 +405,14 @@ int FunctionsGLX::swapIntervalMESA(int intervals) const
 int FunctionsGLX::swapIntervalSGI(int intervals) const
 {
     return mFnPtrs->swapIntervalSGIPtr(intervals);
+}
+
+bool FunctionsGLX::getSyncValuesOML(glx::Drawable drawable,
+                                    int64_t *ust,
+                                    int64_t *msc,
+                                    int64_t *sbc) const
+{
+    return mFnPtrs->getSyncValuesOMLPtr(mXDisplay, drawable, ust, msc, sbc);
 }
 
 }  // namespace rx

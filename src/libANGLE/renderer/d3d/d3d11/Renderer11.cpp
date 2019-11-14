@@ -1246,7 +1246,7 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
     outExtensions->displayTextureShareGroup = true;
 
     // getSyncValues requires direct composition.
-    outExtensions->getSyncValues = outExtensions->directComposition;
+    outExtensions->syncControlCHROMIUM = outExtensions->directComposition;
 
     // D3D11 can be used without a swap chain
     outExtensions->surfacelessContext = true;

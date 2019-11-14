@@ -3033,9 +3033,9 @@ Error ValidateGetSyncValuesCHROMIUM(const Display *display,
     ANGLE_TRY(ValidateDisplay(display));
 
     const DisplayExtensions &displayExtensions = display->getExtensions();
-    if (!displayExtensions.getSyncValues)
+    if (!displayExtensions.syncControlCHROMIUM)
     {
-        return EglBadAccess() << "getSyncValues extension not active";
+        return EglBadAccess() << "syncControlCHROMIUM extension not active";
     }
 
     if (display->isDeviceLost())
@@ -3045,12 +3045,13 @@ Error ValidateGetSyncValuesCHROMIUM(const Display *display,
 
     if (surface == EGL_NO_SURFACE)
     {
-        return EglBadSurface() << "getSyncValues surface cannot be EGL_NO_SURFACE";
+        return EglBadSurface() << "syncControlCHROMIUM surface cannot be EGL_NO_SURFACE";
     }
 
     if (!surface->directComposition())
     {
-        return EglBadSurface() << "getSyncValues surface requires Direct Composition to be enabled";
+        return EglBadSurface()
+               << "syncControlCHROMIUM surface requires Direct Composition to be enabled";
     }
 
     if (ust == nullptr)
