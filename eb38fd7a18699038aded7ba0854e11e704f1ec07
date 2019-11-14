@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c64c9990_3139546a",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-14T17:43:39Z",
+      "side": 1,
+      "message": "Nit: technically, it\u0027s better to say IsVulkan() \u0026\u0026 IsSwiftShader(). That is to treat swiftshader as the vendor rather than the API, like you would e.g. IsIntel(). We had (still have?) cases of tests being skipped e.g. on Linux because they assumed that means GL.\n\nNot blocking the change though.",
+      "revId": "eb38fd7a18699038aded7ba0854e11e704f1ec07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81773944_cc06eed4",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-14T17:43:39Z",
+      "side": 1,
+      "message": "Side question: Is it not possible to choose the Vulkan implementation for the (binary) application externally? Like with VK_ICD_FILENAMES?\n\nIn that case, running on swiftshader (or the mock ICD for that matter) would be a command line switch and we wouldn\u0027t need to send EGL parameters for them. Then ES2_VULKAN() for example would mean whatever Vulkan implementation is being used, be it swiftshader or not.",
+      "revId": "eb38fd7a18699038aded7ba0854e11e704f1ec07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
