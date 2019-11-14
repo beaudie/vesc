@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3616d209_915fecab",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-14T02:34:25Z",
+      "side": 1,
+      "message": "Noted. I will change it in upcoming patch. Actually I just realized that I also made the other handle* functions do bits reset() within which is redundant since it is already done by the switch loop.",
+      "parentUuid": "600f182d_297685e0",
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c387623b_82503685",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 6
