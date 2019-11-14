@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "8fd9c10e_143e90f8",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-14T15:18:06Z",
+      "side": 1,
+      "message": "Okay, whichever way you prefer is fine for calling reset",
+      "parentUuid": "3616d209_915fecab",
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c387623b_82503685",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 6
