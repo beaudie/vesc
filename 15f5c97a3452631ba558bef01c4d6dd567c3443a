@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "7b76f3a8_9c018c66",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-14T20:51:08Z",
+      "side": 1,
+      "message": "(Fairly certain the compiler is automatically doing that for unsigned types)",
+      "parentUuid": "b4416476_e1e94866",
+      "range": {
+        "startLine": 161,
+        "startChar": 12,
+        "endLine": 161,
+        "endChar": 49
+      },
+      "revId": "15f5c97a3452631ba558bef01c4d6dd567c3443a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41c87e2f_e95fb182",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 3
