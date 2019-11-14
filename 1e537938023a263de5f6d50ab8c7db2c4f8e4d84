@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5dd4328f_4a09b92c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-14T20:23:12Z",
+      "side": 1,
+      "message": "You can keep this private to glslang_wrapper_utils.cpp",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a891685f_60b0f753",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-14T20:23:12Z",
+      "side": 1,
+      "message": "Nit: `(transformFeedbackID, bufferIndex)` to indicate a tuple.",
+      "range": {
+        "startLine": 410,
+        "startChar": 7,
+        "endLine": 410,
+        "endChar": 40
+      },
+      "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a200ca5_e8bd0254",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-14T20:23:12Z",
+      "side": 1,
+      "message": "You could fold this logic in ContextVk::onTransformFeedbackPauseResume, as it is used 4 times here, so these functions call `onTransformFeedbackPauseResume`, and that decides what to invalidate based on the feature.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 5
+      },
+      "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a4b1724_770b1d5f",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-14T20:23:12Z",
+      "side": 1,
+      "message": "Was this a bug in the emulation path?",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 63
+      },
+      "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6cbd08d_5e4f3f3a",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-14T20:23:12Z",
+      "side": 1,
+      "message": "nit: You can move this out of the class too, for consistency.",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 6
+      },
+      "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
