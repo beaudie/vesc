@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a6cd930_bae2ea5c",
+        "filename": "scripts/gen_vk_gl_cts_build.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-14T17:08:58Z",
+      "side": 1,
+      "message": "os.sep ?",
+      "range": {
+        "startLine": 71,
+        "startChar": 24,
+        "endLine": 71,
+        "endChar": 27
+      },
+      "revId": "3c0648abb26083bf13cea746549dfbcbccb500b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ebd4165_9322bc53",
+        "filename": "scripts/gen_vk_gl_cts_build.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-14T17:08:58Z",
+      "side": 1,
+      "message": "deqpSupportDirectory ?",
+      "range": {
+        "startLine": 100,
+        "startChar": 47,
+        "endLine": 100,
+        "endChar": 61
+      },
+      "revId": "3c0648abb26083bf13cea746549dfbcbccb500b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d757d73_4dab44f6",
+        "filename": "scripts/gen_vk_gl_cts_build.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-14T17:08:58Z",
+      "side": 1,
+      "message": "deqpSupportDirectory ?",
+      "range": {
+        "startLine": 102,
+        "startChar": 51,
+        "endLine": 102,
+        "endChar": 65
+      },
+      "revId": "3c0648abb26083bf13cea746549dfbcbccb500b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8790cb22_7bfeea4a",
+        "filename": "scripts/gen_vk_gl_cts_build.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-14T17:08:58Z",
+      "side": 1,
+      "message": "I\u0027m curious, we are a python script, why have a hard coded list when we could run the shell command above to create it dynamically when we run the script?",
+      "revId": "3c0648abb26083bf13cea746549dfbcbccb500b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a98877b3_77de529d",
+        "filename": "scripts/gen_vk_gl_cts_build.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-14T17:08:58Z",
+      "side": 1,
+      "message": "convertPathToVarName(dataDirectory)?",
+      "range": {
+        "startLine": 296,
+        "startChar": 38,
+        "endLine": 296,
+        "endChar": 72
+      },
+      "revId": "3c0648abb26083bf13cea746549dfbcbccb500b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
