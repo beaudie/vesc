@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a179f5e0_491d5e09",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-15T17:38:38Z",
+      "side": 1,
+      "message": "Ideally there would be comments per block.  I know these are new failures and we don\u0027t have a lot of detail yet, but this can be cleaner.\n\nFor readability, can you break it up into groups and add a general comment, like:\n\n  // Initial KHR failures for dEQP-GLES31.functional.state_query.integer.*\n\nShould only take a minute or two, and will hopefully prevent us from losing track of any.",
+      "revId": "570797fa09f8c965ed7b6e8bc9b5aa0203eb36b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
