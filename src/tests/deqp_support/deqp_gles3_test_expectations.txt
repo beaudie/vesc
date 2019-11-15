@@ -558,6 +558,11 @@
 3748 VULKAN WIN NVIDIA : dEQP-GLES3.functional.fbo.color.repeated_clear.sample.tex2d.* = FAIL
 
 // Android Vulkan failures
+4110 ANDROID VULKAN : dEQP-GLES31.functional.shaders.helper_invocation.derivate.lines_8_samples_fwidth = FAIL
+4110 ANDROID VULKAN : dEQP-GLES31.functional.shaders.helper_invocation.derivate.triangles_max_samples_dfdx = FAIL
+4110 ANDROID VULKAN : dEQP-GLES31.functional.shaders.helper_invocation.derivate.wide_lines_max_samples_dfdy = FAIL
+4110 ANDROID VULKAN : dEQP-GLES31.functional.shaders.helper_invocation.value.lines_8_samples = FAIL
+4110 ANDROID VULKAN : dEQP-GLES31.functional.shaders.helper_invocation.value.triangles_max_samples = FAIL
 3306 ANDROID VULKAN : dEQP-GLES3.functional.polygon_offset.* = FAIL
 2830 ANDROID VULKAN : dEQP-GLES3.functional.rasterization.fbo.rbo_singlesample.primitives.lines = FAIL
 2830 ANDROID VULKAN : dEQP-GLES3.functional.rasterization.fbo.texture_2d.primitives.lines = FAIL
