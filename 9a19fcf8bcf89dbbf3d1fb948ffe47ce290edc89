@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aaf04f5_0c74e793",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-11-15T23:25:10Z",
+      "side": 1,
+      "message": "Instead of duplicating this whole call, do the same thing you did above: call ToGLenum first and override it if the target is VideoTexture.",
+      "range": {
+        "startLine": 346,
+        "startChar": 45,
+        "endLine": 346,
+        "endChar": 58
+      },
+      "revId": "9a19fcf8bcf89dbbf3d1fb948ffe47ce290edc89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
