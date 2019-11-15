@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "be66e56c_966dc9f7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-15T20:25:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcb6530a_9a63fd53",
+      "range": {
+        "startLine": 1248,
+        "startChar": 7,
+        "endLine": 1248,
+        "endChar": 20
+      },
+      "revId": "3f51f57688648c376af5d26e822e5e55ab6cf5ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00407441_e5cf9285",
         "filename": "src/libANGLE/renderer/gl/glx/FunctionsGLX.cpp",
         "patchSetId": 1
