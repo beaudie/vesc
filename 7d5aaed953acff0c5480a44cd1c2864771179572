@@ -22,6 +22,30 @@
       "revId": "7d5aaed953acff0c5480a44cd1c2864771179572",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66c8c4be_8aea4fa2",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4029,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-11-15T21:21:45Z",
+      "side": 1,
+      "message": "Thanks for investigating. Would like to make sure I understand the whole logic correctly.\n\nI think I get the first part. Currently we only read back RGBA \u0026 UNSIGNED_BYTE. We will replace GL_UNSIGNED_NORMALIZED with EXPECT_PIXEL_16UI\n\nFor the second part, in addition to framebufferComponentType, we need internalFormat to decide if readpixels FormatType is valid (still a bit confused on sizedInternalFormat, is it a superset of internalFormat?)\n\nFor example, under case GL_UNSIGNED_NORMALIZED:, we will use internalFormat to help decide whether it\u0027s valid. Say internalFormat \u003d\u003d GL_RGBA16, it will be invalid when type \u003d\u003d GL_UNSIGNED_BYTE (should be GL_UNSIGNED_SHORT). And if internalFormat \u003d\u003d GL_R16, format \u003d\u003d GL_RGBA would be invalid.\n(Does readpixels format have to be exactly the same as the read source (framebuffer in our case) internalformat?)",
+      "parentUuid": "41e65c98_f3097594",
+      "range": {
+        "startLine": 4019,
+        "startChar": 0,
+        "endLine": 4029,
+        "endChar": 9
+      },
+      "revId": "7d5aaed953acff0c5480a44cd1c2864771179572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
