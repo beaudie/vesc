@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b16e3c6a_bfc19159",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-15T23:15:53Z",
+      "side": 1,
+      "message": "Re-using the \"attribute\" terminology for compute shaders feels odd since CS inputs aren\u0027t attributes (they aren\u0027t really anything, just inputs), but seems like the best choice given the current options:\n\n    std::vector\u003cShaderVariable\u003e *mAttribs;\n    std::vector\u003cShaderVariable\u003e *mOutputVariables;\n    std::vector\u003cShaderVariable\u003e *mUniforms;\n    std::vector\u003cShaderVariable\u003e *mInputVaryings;\n    std::vector\u003cShaderVariable\u003e *mOutputVaryings;\n    std::vector\u003cInterfaceBlock\u003e *mUniformBlocks;\n    std::vector\u003cInterfaceBlock\u003e *mShaderStorageBlocks;\n    std::vector\u003cInterfaceBlock\u003e *mInBlocks;\n\nAnd the corresponding Shader lists:\n\n    std::vector\u003csh::ShaderVariable\u003e mInputVaryings;\n    std::vector\u003csh::ShaderVariable\u003e mOutputVaryings;\n    std::vector\u003csh::ShaderVariable\u003e mUniforms;\n    std::vector\u003csh::InterfaceBlock\u003e mUniformBlocks;\n    std::vector\u003csh::InterfaceBlock\u003e mShaderStorageBlocks;\n    std::vector\u003csh::ShaderVariable\u003e mAllAttributes;\n    std::vector\u003csh::ShaderVariable\u003e mActiveAttributes;\n    std::vector\u003csh::ShaderVariable\u003e mActiveOutputVariables;\n\nIt seems like a refactor to remove the attribute/varying designations to just become \"inputs\" may be a better idea, which would allow CS, VS, and FS to reuse a lot of the same code that\u0027s currently duplicated purely for naming:\n\nvoid CollectVariablesTraverser::recordBuiltInAttributeUsed(const TVariable \u0026variable,\n                                                           bool *addedFlag)\n{\n    if (!(*addedFlag))\n    {\n        ShaderVariable info;\n        setBuiltInInfoFromSymbol(variable, \u0026info);\n        info.staticUse \u003d true;\n        info.active    \u003d true;\n        info.location  \u003d -1;\n        mAttribs-\u003epush_back(info);\n        (*addedFlag) \u003d true;\n    }\n}\n\nvoid CollectVariablesTraverser::recordBuiltInVaryingUsed(const TVariable \u0026variable,\n                                                         bool *addedFlag,\n                                                         std::vector\u003cShaderVariable\u003e *varyings)\n{\n    ASSERT(varyings);\n    if (!(*addedFlag))\n    {\n        ShaderVariable info;\n        setBuiltInInfoFromSymbol(variable, \u0026info);\n        info.staticUse   \u003d true;\n        info.active      \u003d true;\n        info.isInvariant \u003d mSymbolTable-\u003eisVaryingInvariant(variable);\n        varyings-\u003epush_back(info);\n        (*addedFlag) \u003d true;\n    }\n}\n\nAlmost all of that code is the same, except which list the variables get added to and a unique field being set (info.location, info.isInvariant).\n\nRemoving the attribute/varying designation could turn into a sizable refactor though; larger than what I\u0027d want to clutter this CL up with anyway.\n\nThoughts on the best way to handle this?",
+      "revId": "8ebd4e89b86ecbbdfbf7edd252fec2b6cd75bc88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
