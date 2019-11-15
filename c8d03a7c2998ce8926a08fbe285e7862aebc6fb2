@@ -22,6 +22,30 @@
       "revId": "c8d03a7c2998ce8926a08fbe285e7862aebc6fb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80804644_c590c196",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1380695
+      },
+      "writtenOn": "2019-11-15T20:33:36Z",
+      "side": 1,
+      "message": "Seems so. angle_end2end_tests.exe was crashing when I ran it locally, but only when testing this patch. DXGISwapChainWindowSurfaceWGL doesn\u0027t seem to work when resetting the context after it\u0027s created, so only allowing the context to be reset before that seems to fix the issue with tests. I\u0027m not sure why this method gets called with a null `context` when a resize occurs though.",
+      "parentUuid": "e2649b3c_cc25c337",
+      "range": {
+        "startLine": 712,
+        "startChar": 0,
+        "endLine": 715,
+        "endChar": 5
+      },
+      "revId": "c8d03a7c2998ce8926a08fbe285e7862aebc6fb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
