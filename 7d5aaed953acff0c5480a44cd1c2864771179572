@@ -46,6 +46,30 @@
       "revId": "7d5aaed953acff0c5480a44cd1c2864771179572",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a6590ce_3b206c32",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4029,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-11-15T21:23:53Z",
+      "side": 1,
+      "message": "I guess my last example would be valid instead (framebuffer internalFormat \u003d\u003d GL_R16, readpixels format \u003d\u003d GL_RGBA)",
+      "parentUuid": "66c8c4be_8aea4fa2",
+      "range": {
+        "startLine": 4019,
+        "startChar": 0,
+        "endLine": 4029,
+        "endChar": 9
+      },
+      "revId": "7d5aaed953acff0c5480a44cd1c2864771179572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
