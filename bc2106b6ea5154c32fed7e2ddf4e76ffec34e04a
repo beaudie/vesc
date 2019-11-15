@@ -16,6 +16,24 @@
       "revId": "bc2106b6ea5154c32fed7e2ddf4e76ffec34e04a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2060eee4_1162d41d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2019-11-15T06:10:13Z",
+      "side": 1,
+      "message": "Yes. For example, ES uses getIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE) to get maxCubeMapTextureSize value and this value is initialized by limitsVk.maxImageDimensionCube, which is from physical device. According to Vulkan and ES spec, it is uint32_t and at least 16 but it hasn\u0027t the limitation for the maximum in the spec. Of course, most of values returned from drivers are in a reasonable range, but it\u0027s hard to ensure all. It will spend lots of time checking each one, so I\u0027ll be appreciate if you could provide such a list of these values.",
+      "parentUuid": "01ed9811_6317ba3c",
+      "revId": "bc2106b6ea5154c32fed7e2ddf4e76ffec34e04a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
