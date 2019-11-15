@@ -613,7 +613,6 @@
 3520 VULKAN : dEQP-GLES31.functional.state_query.integer.max_uniform_locations* = FAIL
 
 // Front-end query bugs:
-3596 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.resource_list.compute.empty = FAIL
 3596 VULKAN : dEQP-GLES31.functional.program_interface_query.shader_storage_block.buffer_data_size.* = FAIL
 
 // Shader support:
