@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6b043f3d_b99b132a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-15T20:45:14Z",
+      "side": 1,
+      "message": "\u003e the spec says the behavior is undefined if the texture is both being read from and drawn into\n\nthat is not the case here, the texture is bound as color attachment but write mask is off,\nwhich means it will not be written to, making it well defined behavior",
+      "parentUuid": "e722f9d2_bae33757",
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8c1de80_00d61de0",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -118,6 +136,30 @@
       "writtenOn": "2019-11-13T04:36:59Z",
       "side": 1,
       "message": "Isn\u0027t this always true? If the format is not color writable, the framebuffer should not be \"complete\", isn\u0027t that so?",
+      "range": {
+        "startLine": 1370,
+        "startChar": 8,
+        "endLine": 1371,
+        "endChar": 73
+      },
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f84b96f_7c0d6b4f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-15T20:45:14Z",
+      "side": 1,
+      "message": "it can still be \"depth\" writable",
+      "parentUuid": "48c2e2f5_eb6d8151",
       "range": {
         "startLine": 1370,
         "startChar": 8,
