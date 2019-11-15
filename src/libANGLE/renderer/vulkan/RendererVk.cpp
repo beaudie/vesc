@@ -19,6 +19,7 @@
 #include "common/system_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/Surface.h"
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
@@ -1226,7 +1227,7 @@ std::string RendererVk::getRendererDescription() const
     return strstr.str();
 }
 
-gl::Version RendererVk::getMaxSupportedESVersion() const
+gl::Version RendererVk::getMaxSupportedESVersion()
 {
     // Current highest supported version
     gl::Version maxVersion = gl::Version(3, 1);
@@ -1300,10 +1301,20 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
         maxVersion = std::max(maxVersion, gl::Version(2, 0));
     }
 
+    // If the surface's depth/stencil format does not support texture sampling, we can't support
+    // GLES 3.0.
+    const vk::Format &surfaceDSFormat =
+        getFormat(mDisplay->getWGLSurface()->getConfig()->depthStencilFormat);
+    if (!hasImageFormatFeatureBits(surfaceDSFormat.vkImageFormat,
+                                   VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT))
+    {
+        maxVersion = std::max(maxVersion, gl::Version(2, 0));
+    }
+
     return maxVersion;
 }
 
-gl::Version RendererVk::getMaxConformantESVersion() const
+gl::Version RendererVk::getMaxConformantESVersion()
 {
     return std::min(getMaxSupportedESVersion(), gl::Version(3, 0));
 }

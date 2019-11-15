@@ -95,6 +95,21 @@ constexpr VkImageUsageFlags kSurfaceVKColorImageUsageFlags =
 constexpr VkImageUsageFlags kSurfaceVKDepthStencilImageUsageFlags =
     kSurfaceVKImageUsageFlags | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
 
+VkImageUsageFlags GetSurfaceDepthStencilUsageFlags(RendererVk *renderer, const vk::Format &format)
+{
+    VkImageUsageFlags usage = kSurfaceVKDepthStencilImageUsageFlags;
+
+    // If the depth/stencil format does not support sampling, remove this usage.  We ensure in
+    // |RendererVk::getMaxSupportedESVersion()| that the context is limited to ES2 in this case.
+    if (!renderer->hasImageFormatFeatureBits(format.vkImageFormat,
+                                             VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT))
+    {
+        usage &= ~VK_IMAGE_USAGE_SAMPLED_BIT;
+    }
+
+    return usage;
+}
+
 }  // namespace
 
 SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfaceState) {}
@@ -138,8 +153,9 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initialize(DisplayVk *display
 
     const angle::Format &textureFormat = vkFormat.actualImageFormat();
     bool isDepthOrStencilFormat   = textureFormat.depthBits > 0 || textureFormat.stencilBits > 0;
-    const VkImageUsageFlags usage = isDepthOrStencilFormat ? kSurfaceVKDepthStencilImageUsageFlags
-                                                           : kSurfaceVKColorImageUsageFlags;
+    const VkImageUsageFlags usage = isDepthOrStencilFormat
+                                        ? GetSurfaceDepthStencilUsageFlags(renderer, vkFormat)
+                                        : kSurfaceVKColorImageUsageFlags;
 
     VkExtent3D extents = {std::max(static_cast<uint32_t>(width), 1u),
                           std::max(static_cast<uint32_t>(height), 1u), 1u};
@@ -799,7 +815,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     {
         const vk::Format &dsFormat = renderer->getFormat(mState.config->depthStencilFormat);
 
-        const VkImageUsageFlags dsUsage = kSurfaceVKDepthStencilImageUsageFlags;
+        const VkImageUsageFlags dsUsage = GetSurfaceDepthStencilUsageFlags(renderer, dsFormat);
 
         ANGLE_TRY(mDepthStencilImage.init(context, gl::TextureType::_2D, vkExtents, dsFormat,
                                           samples, dsUsage, 0, 0, 1, 1));
