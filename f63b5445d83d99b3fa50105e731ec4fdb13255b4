@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "2b14296d_bab9164f",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-15T22:21:03Z",
+      "side": 1,
+      "message": "Apologies for the newb question (definitely diving in to the deep end of this code), but wouldn\u0027t it be better to fix whatever thought this needed a transform?",
+      "range": {
+        "startLine": 900,
+        "startChar": 12,
+        "endLine": 900,
+        "endChar": 34
+      },
+      "revId": "f63b5445d83d99b3fa50105e731ec4fdb13255b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "771c532e_40114122",
         "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
         "patchSetId": 4
