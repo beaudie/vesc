@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41e65c98_f3097594",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4029,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-15T16:29:22Z",
+      "side": 1,
+      "message": "Ok, did some digging.\n\nGenerally to read back this texture format we should be passing GL_UNSIGNED_SHORT+RGBA to ReadPixels. Even for RGB textures this should work. That would mean we should have a new EXPECT_PIXEL_16UI similar to some of the other helpers we have here: https://cs.chromium.org/chromium/src/third_party/angle/src/tests/test_utils/ANGLETest.h?l\u003d248\n\nThis will currently work for the UNSIGNED_SHORT+RGBA format because that is the IMPLEMENTATION_READ_FORMAT/TYPE for the RGBA 16-bit formats but not in general yet.  We need to update ValidateReadPixelsFormatType to accept it (here: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/validationES.cpp?l\u003d159), to do this, we need to pass the full framebuffer format to ValidReadPixelsFormatType to know how many bits it is (and accept UNSIGNED_SHORT or UNSIGNED_BYTE based on that).\n\nShrek, can you try to do this?",
+      "range": {
+        "startLine": 4019,
+        "startChar": 0,
+        "endLine": 4029,
+        "endChar": 9
+      },
+      "revId": "7d5aaed953acff0c5480a44cd1c2864771179572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
