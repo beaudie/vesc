@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d3c1a00_e354dc03",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-15T18:26:55Z",
+      "side": 1,
+      "message": "Would like to use vendor and device ID to detect swiftshader but currently SystemInfo does not detect swiftshader device (at least on Windows w/ GetDevicesFromDXGI()) so checking EGL params in test base class instead.",
+      "revId": "f60906519010d425aa5c7ea429cd624c0e6532cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1e29f1a_73648320",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-15T18:26:55Z",
+      "side": 1,
+      "message": "Currently detecting Swiftshader with this method using params in ANGLETestBase class. This is because SystemInfo doesn\u0027t currently detect swiftshader device.",
+      "revId": "f60906519010d425aa5c7ea429cd624c0e6532cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
