@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2d3c0a5c_9c4238bc",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-15T06:10:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5dd4328f_4a09b92c",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a891685f_60b0f753",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 12
@@ -45,6 +69,30 @@
       "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2824711_6c4bd003",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-15T06:10:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a891685f_60b0f753",
+      "range": {
+        "startLine": 410,
+        "startChar": 7,
+        "endLine": 410,
+        "endChar": 40
+      },
+      "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "6b5e6208_d6cc22e6",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-15T06:10:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a200ca5_e8bd0254",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 5
+      },
+      "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a4b1724_770b1d5f",
         "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
         "patchSetId": 12
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "cad2601e_bb645be7",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-15T06:10:24Z",
+      "side": 1,
+      "message": "I don\u0027t think it was a bug. Because OpenGL ES 3.0 spec guarantees valid xfb buffer bindings in glBeginTransformFeedback call, there is no problem to call it there. But I think it is more intuitive to invalidate buffer here.",
+      "parentUuid": "7a4b1724_770b1d5f",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 63
+      },
+      "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6cbd08d_5e4f3f3a",
         "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.h",
         "patchSetId": 12
@@ -114,6 +210,30 @@
       "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e36b91f7_b272f1e9",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-15T06:10:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6cbd08d_5e4f3f3a",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 6
+      },
+      "revId": "1e537938023a263de5f6d50ab8c7db2c4f8e4d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
