@@ -41,11 +41,14 @@ using CubeFaceArray = std::array<T, gl::kCubeFaceCount>;
 
 struct MultisampledRenderToTextureInfo
 {
-    MultisampledRenderToTextureInfo(const GLsizei samples, const gl::ImageIndex index);
+    MultisampledRenderToTextureInfo(const GLsizei samples,
+                                    const gl::ImageIndex indexSS,
+                                    const gl::ImageIndex indexMS);
     ~MultisampledRenderToTextureInfo();
 
     GLsizei samples;
-    gl::ImageIndex index;
+    gl::ImageIndex indexSS;
+    gl::ImageIndex indexMS;
     bool msTextureNeedsResolve;
     std::unique_ptr<TextureStorage11_2DMultisample> msTex;
 };
