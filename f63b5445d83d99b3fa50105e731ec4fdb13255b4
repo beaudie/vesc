@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "771c532e_40114122",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-15T21:52:22Z",
+      "side": 1,
+      "message": "It sounds like the idea is that an array of matrices doesn\u0027t need to have every matrix rewritten to col-major just to get the length of the array(?).   Instead, just call .length() on the array without any transformation.\n\nI don\u0027t quite understand what\u0027s being replaced at this point in the code, or what it\u0027s being replaced with, though.   How is the type of the array changing?",
+      "range": {
+        "startLine": 902,
+        "startChar": 0,
+        "endLine": 906,
+        "endChar": 46
+      },
+      "revId": "f63b5445d83d99b3fa50105e731ec4fdb13255b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
