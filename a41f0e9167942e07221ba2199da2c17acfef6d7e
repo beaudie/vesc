@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "e1586702_24c1e3f0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-15T21:01:49Z",
+      "side": 1,
+      "message": "Is that really the case? From previous discussions here: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d3453#c16 (see also comment #17), ARM pointed out that the texture is bound as sampler, even though the relevant shader code could be eliminated (and the sampler removed).\n\nI was under the impression that rendering is legitimately happening to this texture, but it\u0027s being bound as sampler unnecessarily. Resolving that would get rid of the issue.\n\n---\n\nIt\u0027s true that that would not solve the handling of the legitimate case of sampling from masked-off render target.",
+      "parentUuid": "6b043f3d_b99b132a",
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8c1de80_00d61de0",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -160,6 +178,30 @@
       "side": 1,
       "message": "it can still be \"depth\" writable",
       "parentUuid": "48c2e2f5_eb6d8151",
+      "range": {
+        "startLine": 1370,
+        "startChar": 8,
+        "endLine": 1371,
+        "endChar": 73
+      },
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8e09eb8_09ae03a9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-15T21:01:49Z",
+      "side": 1,
+      "message": "We are iterating only over the color render targets here, not the depth/stencil attachment.",
+      "parentUuid": "5f84b96f_7c0d6b4f",
       "range": {
         "startLine": 1370,
         "startChar": 8,
