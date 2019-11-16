@@ -1329,8 +1329,32 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
                                                size_t index,
                                                GLfloat *xy) const
 {
+#ifdef OLD_CODE
+    // Original "unreachable" implementation:
     ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
     return angle::Result::Stop;
+#else  // OLD_CODE
+    // FIXME: DO A PROPER IMPLEMENTATION.
+    ContextVk *contextVk = vk::GetImpl(context);
+#    if 0
+    VkPhysicalDeviceProperties physicalDeviceProperties =
+        contextVk->getRenderer()->getPhysicalDeviceProperties();
+    if (physicalDeviceProperties.limits.standardSampleLocations)
+#    else
+    if (contextVk->getRenderer()->getPhysicalDeviceProperties().limits.standardSampleLocations)
+#    endif
+    {
+        // For VK_SAMPLE_COUNT_1_BIT:
+        xy[0] = 0.5;
+        xy[1] = 0.5;
+    }
+    else
+    {
+        xy[0] = 0.5;
+        xy[1] = 0.5;
+    }
+    return angle::Result::Continue;
+#endif  // OLD_CODE
 }
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
