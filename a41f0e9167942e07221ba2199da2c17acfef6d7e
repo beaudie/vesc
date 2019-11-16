@@ -256,6 +256,30 @@
     },
     {
       "key": {
+        "uuid": "0367b610_42b06719",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-16T03:20:07Z",
+      "side": 1,
+      "message": "Understood. Yes, the function name suggests you are testing if the VkFormat supports color attachment!\n\n---\n\nFYI, you would need to make sure to restart the render pass if the blend state changes in such a way that a render target needs to be re-added or removed. Anyway, let\u0027s get back to it after I read the doc, otherwise the logic here makes sense.",
+      "parentUuid": "12c44b71_51124295",
+      "range": {
+        "startLine": 1370,
+        "startChar": 8,
+        "endLine": 1371,
+        "endChar": 73
+      },
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7f1f3f32_dfe6a936",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
