@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23cb9d4c_4cba9fc8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-16T11:40:30Z",
+      "side": 1,
+      "message": "it\u0027s probably worth passing these by const \u0026. one pointer is probably faster than four integers.",
+      "range": {
+        "startLine": 71,
+        "startChar": 65,
+        "endLine": 72,
+        "endChar": 92
+      },
+      "revId": "0e8126070901b5ddee84e6b91b586fc5536af6db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd6f209a_12672bbe",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-16T11:40:30Z",
+      "side": 1,
+      "message": "nit: can you add a couple comments describing the fields?",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 58
+      },
+      "revId": "0e8126070901b5ddee84e6b91b586fc5536af6db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
