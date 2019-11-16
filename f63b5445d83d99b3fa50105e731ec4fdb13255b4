@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ce077ed9_30c25aa8",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-16T02:20:45Z",
+      "side": 1,
+      "message": "It\u0027s the loop right above this that\u0027s determining this. Basically when we see a symbol whose layout needs to change (because it\u0027s row major and we convert it column major), we move up in the expression until we find the entire relevant expression that needs conversion. Sometimes that leads to cases where we don\u0027t actually need extra \"transformations\" other than replacing the variables with the new ones (for example, if the expression is s.x where s is a row-major struct and is being replaced, but x is a vec4, so that layout didn\u0027t really affect it).\n\nThe loop itself could check for this, but I think this is clear. The loop only looks at EOpIndex* operations (i.e. s.x.y[n].z[w][x]...) and .length() can only be applied at the end, so might as well be checked for at the end, after the loop.",
+      "parentUuid": "2b14296d_bab9164f",
+      "range": {
+        "startLine": 900,
+        "startChar": 12,
+        "endLine": 900,
+        "endChar": 34
+      },
+      "revId": "f63b5445d83d99b3fa50105e731ec4fdb13255b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "771c532e_40114122",
         "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-11-15T21:52:22Z",
       "side": 1,
       "message": "It sounds like the idea is that an array of matrices doesn\u0027t need to have every matrix rewritten to col-major just to get the length of the array(?).   Instead, just call .length() on the array without any transformation.\n\nI don\u0027t quite understand what\u0027s being replaced at this point in the code, or what it\u0027s being replaced with, though.   How is the type of the array changing?",
+      "range": {
+        "startLine": 902,
+        "startChar": 0,
+        "endLine": 906,
+        "endChar": 46
+      },
+      "revId": "f63b5445d83d99b3fa50105e731ec4fdb13255b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "986aaa3d_a36e9776",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-16T02:20:45Z",
+      "side": 1,
+      "message": "I know this is a complex and (3-months) old code, so it\u0027s hard to figure out the details. I recommend at least reading the comment at the beginning of this function.\n\nThat said, let\u0027s say the array of row-major matrices that needs conversion is in an SSBO, and the expression that leads to that array is `ssbo.array`. Previously, the following possibilities were handled:\n\n1. ssbo.array \u003d expression\n\n  which would translate to:\n\n        type temp[N] \u003d expression;\n        ssbo.array[0] \u003d transpose(temp[0]);\n        ssbo.array[1] \u003d transpose(temp[2]);\n        ...\n\n2. f(ssbo.array) // that is, ssbo.array is read from in some expression\n\n  which would translate to:\n\n        f(type[N](transpose(ssbo.array[0]), transpose(ssbo.array[1]), ...))\n\nNeither of these cases make sense for an unsized array. In that case, the only meaningful (non-index) operation on `ssbo.array` is `ssbo.array.length()`. Now ssbo is a variable that needs replacing (because its type is being changed from row-major to column-major). Likewise `array`\u0027s dimensions have swapped. However, it\u0027s enough to replace `ssbo.array.length()` with `ssbo.array.length()` (Note, the variable names are the same, but these are using the new (column-major) symbols corresponding to the old ones), and that\u0027s what\u0027s happening here (and the `if` below).",
+      "parentUuid": "771c532e_40114122",
       "range": {
         "startLine": 902,
         "startChar": 0,
