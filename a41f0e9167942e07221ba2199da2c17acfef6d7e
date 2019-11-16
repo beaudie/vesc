@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "9c6e8f5b_d878ed41",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-16T00:04:12Z",
+      "side": 1,
+      "message": "\u003e even though the relevant shader code could be eliminated\n\nwe did not want to do any sort of legitimate shader dead code elimination in angle, the\ncompiler is the right place for that\n\nMay be ARM was talking about a different frame in trex but we are unable to repro any sort\nof assert in trex, only manhattan continues to assert (we tried gfxbench4.0 and gfxbench5.0\ni believe)",
+      "parentUuid": "e1586702_24c1e3f0",
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8c1de80_00d61de0",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -202,6 +220,30 @@
       "side": 1,
       "message": "We are iterating only over the color render targets here, not the depth/stencil attachment.",
       "parentUuid": "5f84b96f_7c0d6b4f",
+      "range": {
+        "startLine": 1370,
+        "startChar": 8,
+        "endLine": 1371,
+        "endChar": 73
+      },
+      "revId": "a41f0e9167942e07221ba2199da2c17acfef6d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12c44b71_51124295",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-16T00:04:12Z",
+      "side": 1,
+      "message": "func name could be more clear, this was the reasoning -\n\nsay we have a full RGBA attachment and the write mask of only BA channel are off. The texture\nwould still be writable to the RG channel",
+      "parentUuid": "d8e09eb8_09ae03a9",
       "range": {
         "startLine": 1370,
         "startChar": 8,
