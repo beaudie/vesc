@@ -1870,6 +1870,9 @@ TEST_P(RobustResourceInitTest, DynamicVertexArrayOffsetOutOfBounds)
     // Not implemented on Vulkan.  http://anglebug.com/3350
     ANGLE_SKIP_TEST_IF(IsVulkan());
 
+    // TODO(hqle): implement this handling in Metal.
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
     glUseProgram(program);
 
