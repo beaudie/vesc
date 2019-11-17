@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7fc6d765_05a809fe",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-17T18:29:04Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "d8d99048_4442d382",
+      "revId": "227e2011d6d41697f672ed943c742cc3c63e78b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71dd5ea6_5b119abc",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 17
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "daa828e2_197489bb",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-17T18:29:04Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "71dd5ea6_5b119abc",
+      "revId": "227e2011d6d41697f672ed943c742cc3c63e78b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc3d4d0c_39291652",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 17
@@ -68,6 +104,24 @@
       "revId": "227e2011d6d41697f672ed943c742cc3c63e78b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d377ebde_cb1f470f",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-17T18:29:04Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "cc3d4d0c_39291652",
+      "revId": "227e2011d6d41697f672ed943c742cc3c63e78b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
