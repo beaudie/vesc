@@ -286,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "f7966abf_56984499",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-18T17:42:07Z",
+      "side": 1,
+      "message": "I could use gl::TexLevelArray in place of ImagesMipChain map (2nd level index) for now. The slice map (1st level index) will still use std::map for now. At least mipmap levels are using gl::TexLevelArray which is consistent which other modules in ANGLE.",
+      "parentUuid": "98ed04ce_a6701318",
+      "range": {
+        "startLine": 238,
+        "startChar": 9,
+        "endLine": 238,
+        "endChar": 12
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd62a1b7_0294ddeb",
         "filename": "src/libANGLE/renderer/metal/doc/TextureImagesStorage.md",
         "patchSetId": 6
