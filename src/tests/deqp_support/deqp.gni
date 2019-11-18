@@ -936,8 +936,10 @@ deqp_khr_common_sources = [
   "$deqp_path/external/openglcts/modules/common/glcShaderStructTests.hpp",
   "$deqp_path/external/openglcts/modules/common/glcShaderSwitchTests.cpp",
   "$deqp_path/external/openglcts/modules/common/glcShaderSwitchTests.hpp",
-  "$deqp_path/external/openglcts/modules/common/glcSpirvUtils.cpp",
-  "$deqp_path/external/openglcts/modules/common/glcSpirvUtils.hpp",
+
+  # Removed to avoid linking against glslang.  http://anglebug.com/4123
+  # "$deqp_path/external/openglcts/modules/common/glcSpirvUtils.cpp",
+  # "$deqp_path/external/openglcts/modules/common/glcSpirvUtils.hpp",
   "$deqp_path/external/openglcts/modules/common/glcTestCase.cpp",
   "$deqp_path/external/openglcts/modules/common/glcTestCase.hpp",
   "$deqp_path/external/openglcts/modules/common/glcTestCaseWrapper.cpp",
@@ -1044,8 +1046,10 @@ deqp_khr_gl_sources = [
   "$deqp_path/external/openglcts/modules/gl/gl4cES31CompatibilityTests.hpp",
   "$deqp_path/external/openglcts/modules/gl/gl4cGetTextureSubImageTests.cpp",
   "$deqp_path/external/openglcts/modules/gl/gl4cGetTextureSubImageTests.hpp",
-  "$deqp_path/external/openglcts/modules/gl/gl4cGlSpirvTests.cpp",
-  "$deqp_path/external/openglcts/modules/gl/gl4cGlSpirvTests.hpp",
+
+  # Removed to avoid linking against glslang.  http://anglebug.com/4123
+  # "$deqp_path/external/openglcts/modules/gl/gl4cGlSpirvTests.cpp",
+  # "$deqp_path/external/openglcts/modules/gl/gl4cGlSpirvTests.hpp",
   "$deqp_path/external/openglcts/modules/gl/gl4cGPUShaderFP64Tests.cpp",
   "$deqp_path/external/openglcts/modules/gl/gl4cGPUShaderFP64Tests.hpp",
   "$deqp_path/external/openglcts/modules/gl/gl4cIncompleteTextureAccessTests.cpp",
@@ -1099,8 +1103,10 @@ deqp_khr_gl_sources = [
   "$deqp_path/external/openglcts/modules/gl/gl4cStencilTexturingTests.hpp",
   "$deqp_path/external/openglcts/modules/gl/gl4cSyncTests.cpp",
   "$deqp_path/external/openglcts/modules/gl/gl4cSyncTests.hpp",
-  "$deqp_path/external/openglcts/modules/gl/gl4cTestPackages.cpp",
-  "$deqp_path/external/openglcts/modules/gl/gl4cTestPackages.hpp",
+
+  # Removed to avoid linking against glslang.  http://anglebug.com/4123
+  # "$deqp_path/external/openglcts/modules/gl/gl4cTestPackages.cpp",
+  # "$deqp_path/external/openglcts/modules/gl/gl4cTestPackages.hpp",
   "$deqp_path/external/openglcts/modules/gl/gl4cTextureBarrierTests.cpp",
   "$deqp_path/external/openglcts/modules/gl/gl4cTextureBarrierTests.hpp",
   "$deqp_path/external/openglcts/modules/gl/gl4cTextureFilterMinmaxTests.cpp",
