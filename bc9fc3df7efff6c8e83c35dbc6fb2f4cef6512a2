@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b41d7fc_22742e2e",
+        "filename": "src/image_util/imageformats.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-18T07:20:31Z",
+      "side": 1,
+      "message": "I think the previous layout is incorrect. According to https://www.khronos.org/registry/OpenGL/extensions/OES/OES_packed_depth_stencil.txt\nstencil component occupied first 8 bits not last 8 bits.",
+      "range": {
+        "startLine": 730,
+        "startChar": 4,
+        "endLine": 730,
+        "endChar": 13
+      },
+      "revId": "bc9fc3df7efff6c8e83c35dbc6fb2f4cef6512a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ad87c8c_318472f8",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-18T07:20:31Z",
+      "side": 1,
+      "message": "when depth texture is modified via glTexSubImage, previously, the Framebuffer\u0027s dirty bit would be DIRTY_BIT_COLOR_BUFFER_CONTENTS_MAX instead of DIRTY_BIT_DEPTH_BUFFER_CONTENTS. That was not correct. \nAlso, DIRTY_BIT_DEPTH_ATTACHMENT \u003d DIRTY_BIT_COLOR_ATTACHMENT_MAX above, so DIRTY_BIT_DEPTH_BUFFER_CONTENTS should be assigned similarly.",
+      "range": {
+        "startLine": 350,
+        "startChar": 8,
+        "endLine": 350,
+        "endChar": 40
+      },
+      "revId": "bc9fc3df7efff6c8e83c35dbc6fb2f4cef6512a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
