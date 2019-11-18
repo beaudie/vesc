@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e7a1548_63dc316f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-18T22:49:29Z",
+      "side": 1,
+      "message": "Can you move these four lines into a single compound ASSERT?  They can be broken up later for debugging if need be.",
+      "range": {
+        "startLine": 256,
+        "startChar": 12,
+        "endLine": 259,
+        "endChar": 37
+      },
+      "revId": "f8122827170de2487d3b68b8c0702367f9bdbf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee3a78e8_9fca4e45",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-18T22:49:29Z",
+      "side": 1,
+      "message": "Can you restore the new lines in this block to maintain readability?",
+      "range": {
+        "startLine": 269,
+        "startChar": 12,
+        "endLine": 269,
+        "endChar": 21
+      },
+      "revId": "f8122827170de2487d3b68b8c0702367f9bdbf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f4f401f_d40b4534",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-18T22:49:29Z",
+      "side": 1,
+      "message": "Rather than inlining these checks, can you overwrite them at the end?  i.e.\n\nif (index.getType() \u003d\u003d gl::TextureType::_2DArray)\n{\n    region.imageExtent.depth \u003d 1;\n    region.imageSubresource.layerCount \u003d sourceArea.depth;\n}\n\nMakes for much more readable code at the end of the day, especially as new specializations are added later.",
+      "range": {
+        "startLine": 1062,
+        "startChar": 45,
+        "endLine": 1062,
+        "endChar": 54
+      },
+      "revId": "f8122827170de2487d3b68b8c0702367f9bdbf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9ec12b7_0f8f5fe3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-18T22:49:29Z",
+      "side": 1,
+      "message": "It would be safer to invert this logic and return true for the known good scenario spelled out above, false otherwise.",
+      "range": {
+        "startLine": 161,
+        "startChar": 8,
+        "endLine": 162,
+        "endChar": 58
+      },
+      "revId": "f8122827170de2487d3b68b8c0702367f9bdbf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
