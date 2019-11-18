@@ -93,6 +93,11 @@ void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
             *layerCount = image->getLayerCount();
             return;
 
+        case gl::TextureType::_2DMultisample:
+            *layerIndex = 0;
+            *layerCount = 1;
+            return;
+
         default:
             UNREACHABLE();
     }
@@ -357,6 +362,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
                                           gl::Framebuffer *source)
 {
     gl::Extents fbSize = source->getReadColorAttachment()->getSize();
+
     gl::Rectangle clippedSourceArea;
     if (!ClipRectangle(sourceArea, gl::Rectangle(0, 0, fbSize.width, fbSize.height),
                        &clippedSourceArea))
@@ -1491,8 +1497,62 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
                                                const gl::Extents &size,
                                                bool fixedSampleLocations)
 {
+#ifdef OLD_CODE
+    // Original "unreachable" implementation:
     ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
     return angle::Result::Stop;
+#else  // OLD_CODE
+    // FIXME: DO A PROPER IMPLEMENTATION.  MEAN TIME, BORROW THE setStorage() CODE
+    // TODO:
+    //
+    //   1) Use the "samples", "size", and "fixedSampleLocations" parameters
+    ContextVk *contextVk = GetAs<ContextVk>(context->getImplementation());
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // TBD: IS THIS THE CORRECT SENSE OF THE TEST (THE "!" IN FRONT)???
+    if (!mOwnsImage)
+    {
+        releaseAndDeleteImage(contextVk);
+    }
+
+    const vk::Format &format = renderer->getFormat(internalformat);
+#    if 0
+    VkExtent3D vkExtents;
+    gl_vk::GetExtent(size, &vkExtents);
+    // Copied from TextureVk::ensureImageAllocated...
+    mImageUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+        VK_IMAGE_USAGE_SAMPLED_BIT;
+    // If the image has depth/stencil support, add those as possible usage.
+    if (contextVk->getRenderer()->hasImageFormatFeatureBits(
+            format.vkImageFormat, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT))
+    {
+        mImageUsageFlags |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+    }
+    else if (contextVk->getRenderer()->hasImageFormatFeatureBits(
+                 format.vkImageFormat, VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT))
+    {
+        mImageUsageFlags |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    }
+    // Create the ImageHelper with "samples":
+    mImage = new vk::ImageHelper();
+    ANGLE_TRY(mImage->init(contextVk, type, vkExtents, format, samples, mImageUsageFlags,
+                           0, 0, 1, 1));
+#    endif
+    // TODO:
+    //
+    //   1) potentially plumb multisample'd-ness down to initStagingBuffer
+    //
+    //   2) potentially Format::getImageCopyBufferAlignment() needs to know
+    ANGLE_TRY(ensureImageAllocated(contextVk, format));
+
+#    if 0
+    if (mImage->valid())
+    {
+        releaseImage(contextVk);
+    }
+#    endif
+    return angle::Result::Continue;
+#endif  // OLD_CODE
 }
 
 angle::Result TextureVk::initializeContents(const gl::Context *context,
