@@ -91,6 +91,92 @@
       "revId": "f8122827170de2487d3b68b8c0702367f9bdbf3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64bb8c6e_20fd3e5e",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-18T23:06:53Z",
+      "side": 1,
+      "message": "Can you also check for ES3 for this test?  I know it is only instantiated for ES2 at the moment, but we\u0027d like that to change eventually.  Might as well take care of it now.",
+      "range": {
+        "startLine": 1768,
+        "startChar": 4,
+        "endLine": 1768,
+        "endChar": 8
+      },
+      "revId": "f8122827170de2487d3b68b8c0702367f9bdbf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de05436a_66fd2823",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-18T23:06:53Z",
+      "side": 1,
+      "message": "Same here, let\u0027s let this test run for ES3 eventually.",
+      "range": {
+        "startLine": 1832,
+        "startChar": 4,
+        "endLine": 1833,
+        "endChar": 72
+      },
+      "revId": "f8122827170de2487d3b68b8c0702367f9bdbf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bffcb8d8_73d8a144",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-18T23:06:53Z",
+      "side": 1,
+      "message": "Is there significance to drawing multiple times, and is 5 an important number?\n\nI would guess ANGLE could eliminate all but the last one anyway.",
+      "range": {
+        "startLine": 1883,
+        "startChar": 10,
+        "endLine": 1883,
+        "endChar": 17
+      },
+      "revId": "f8122827170de2487d3b68b8c0702367f9bdbf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b34f8226_9d774795",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-18T23:06:53Z",
+      "side": 1,
+      "message": "To be complete, might be worth verifying you got red here.",
+      "revId": "f8122827170de2487d3b68b8c0702367f9bdbf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
