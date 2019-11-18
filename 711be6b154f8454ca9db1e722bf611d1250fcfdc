@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "cb8cf38f_257c2230",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-18T10:59:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "247546e9_2476545e",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 356,
+        "endChar": 98
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "745a4ac5_03667a64",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
         "patchSetId": 6
@@ -226,6 +250,30 @@
       "side": 1,
       "message": "Noted in future. Anw, this map is only used during glTexImage/glTexSubImage, IMO its speed is not critical as these functions are actually not that fast to begin with.",
       "parentUuid": "b8f48598_28bda269",
+      "range": {
+        "startLine": 238,
+        "startChar": 9,
+        "endLine": 238,
+        "endChar": 12
+      },
+      "revId": "711be6b154f8454ca9db1e722bf611d1250fcfdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98ed04ce_a6701318",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-18T10:59:10Z",
+      "side": 1,
+      "message": "If you don\u0027t mind addressing this before we land it would be nice. It would make the Metal back-end more consistent with the rest of ANGLE.",
+      "parentUuid": "a0808352_a9e936c9",
       "range": {
         "startLine": 238,
         "startChar": 9,
