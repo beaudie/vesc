@@ -163,6 +163,30 @@
     },
     {
       "key": {
+        "uuid": "a93388a0_f7a326a3",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2019-11-18T23:30:36Z",
+      "side": 1,
+      "message": "5 is not a special number. Just ensuring that the buffer serial is working correctly as we do a pbo to texture copy, mark the pbo for deletion multiple draws(using a different texture) before we actually use the updated texture.",
+      "parentUuid": "bffcb8d8_73d8a144",
+      "range": {
+        "startLine": 1883,
+        "startChar": 10,
+        "endLine": 1883,
+        "endChar": 17
+      },
+      "revId": "f8122827170de2487d3b68b8c0702367f9bdbf3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b34f8226_9d774795",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 5
