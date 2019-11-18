@@ -414,6 +414,35 @@ bool ValidateGetBooleani_vRobustANGLE(Context *context,
     return true;
 }
 
+bool ValidateBoundVertexAttributes(Context *context)
+{
+    const gl::AttributesMask activeAttribs =
+        context->getStateCache().getActiveClientAttribsMask() |
+        context->getStateCache().getActiveBufferedAttribsMask();
+
+    // Early return if no attributes active
+    if (!activeAttribs.any())
+    {
+        context->validationError(GL_INVALID_OPERATION, kVertexArrayNoBuffer);
+        return false;
+    }
+
+    const auto &attribs  = context->getState().getVertexArray()->getVertexAttributes();
+    const auto &bindings = context->getState().getVertexArray()->getVertexBindings();
+    for (size_t attribIndex : activeAttribs)
+    {
+        const gl::VertexAttribute &attrib = attribs[attribIndex];
+        ASSERT(attrib.enabled);
+        const gl::VertexBinding &binding = bindings[attrib.bindingIndex];
+        if (binding.getBuffer() == nullptr)
+        {
+            context->validationError(GL_INVALID_OPERATION, kVertexArrayNoBufferPointer);
+            return false;
+        }
+    }
+    return true;
+}
+
 bool ValidateDrawIndirectBase(Context *context, PrimitiveMode mode, const void *indirect)
 {
     if (context->getClientVersion() < ES_3_1)
@@ -454,6 +483,10 @@ bool ValidateDrawIndirectBase(Context *context, PrimitiveMode mode, const void *
         return false;
     }
 
+    if (!ValidateBoundVertexAttributes(context))
+    {
+        return false;
+    }
     return true;
 }
 
