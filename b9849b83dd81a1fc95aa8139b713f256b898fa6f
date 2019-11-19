@@ -34,6 +34,24 @@
       "revId": "b9849b83dd81a1fc95aa8139b713f256b898fa6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12065788_fa47183e",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-19T15:31:53Z",
+      "side": 1,
+      "message": "This CL is restoring the platforms it was tested on prior to my test macro refactor:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1904635\n\nI\u0027d prefer to just revert like this for now and all Vulkan configs can be added in when 3738 is resolved.",
+      "parentUuid": "0b8d50c6_a5021ea0",
+      "revId": "b9849b83dd81a1fc95aa8139b713f256b898fa6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
