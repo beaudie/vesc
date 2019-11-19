@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90441bc8_97e5427b",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "This structure is redescribed multiple times in the CL.  In other parts of the code, we\u0027ve used the following idiom to make it more readable:\n\n  using XfbBufferMap \u003d std::map\u003cstd::string, xfbBufferInfo\u003e;\n\nAnd the signatures become:\n\n  XfbBufferMap* xfbBufferMap;",
+      "range": {
+        "startLine": 530,
+        "startChar": 47,
+        "endLine": 530,
+        "endChar": 83
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7ce791c_748b41e6",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "It feels odd that you are looking for gl_Position in a block that was hit when the index was NOT gl_Position.  I can see that you are prepending this list of built-ins one time, but it does have an odd flow.  Not sure if there is a refactor that would make this code cleaner, or if there is a non-terribly-expensive way to do this outside of the loop.",
+      "range": {
+        "startLine": 603,
+        "startChar": 28,
+        "endLine": 603,
+        "endChar": 71
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd46314f_b30e9809",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "You initialized this string but none of the others in the function.  Is there a reason?",
+      "range": {
+        "startLine": 656,
+        "startChar": 23,
+        "endLine": 656,
+        "endChar": 27
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8674a62e_ec620b76",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "Can you move this to the next line and merge it with the last parameter for consistency?",
+      "range": {
+        "startLine": 779,
+        "startChar": 92,
+        "endLine": 779,
+        "endChar": 98
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a79b25a_8e837cd1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "This expression is also repeated a lot, could be described with \"using\" as well.",
+      "range": {
+        "startLine": 2147,
+        "startChar": 8,
+        "endLine": 2147,
+        "endChar": 89
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04912e48_e5d247d3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "Can you describe why you need to release this after you just created it?",
+      "range": {
+        "startLine": 2154,
+        "startChar": 28,
+        "endLine": 2155,
+        "endChar": 38
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f1e3692_d8bce095",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "Can you bring this function call back up a line and have the parameters that don\u0027t fit on the line below?",
+      "range": {
+        "startLine": 611,
+        "startChar": 0,
+        "endLine": 611,
+        "endChar": 40
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09b31eec_374d2a4e",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "Can you explain why you are setting this to offsetsSize?  It isn\u0027t clear to me (reading the extension) why that would be useful.",
+      "range": {
+        "startLine": 787,
+        "startChar": 4,
+        "endLine": 787,
+        "endChar": 36
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1d6fc96_4451a608",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "What do Bresenham lines have to do with stream out?",
+      "range": {
+        "startLine": 817,
+        "startChar": 21,
+        "endLine": 817,
+        "endChar": 49
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91b1e006_6d7300a6",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "Why are you skipping these on Vulkan?  Need to file a tracking bug for these.",
+      "range": {
+        "startLine": 1212,
+        "startChar": 23,
+        "endLine": 1212,
+        "endChar": 31
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5667bdb_f4fcc604",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:25:44Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 1276,
+        "startChar": 23,
+        "endLine": 1276,
+        "endChar": 31
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
