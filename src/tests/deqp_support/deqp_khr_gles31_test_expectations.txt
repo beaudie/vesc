@@ -53,9 +53,6 @@
 3570 VULKAN : KHR-GLES31.core.shader_atomic_counters.advanced-usage-many-draw-calls2 = FAIL
 3570 VULKAN : KHR-GLES31.core.shader_atomic_counters.advanced-usage-many-dispatches = FAIL
 
-// RGBA32F:
-3520 VULKAN : KHR-GLES31.core.texture_gather.*-gather-float-2d-rgb = SKIP
-
 // Separate shader objects:
 3570 VULKAN : KHR-GLES31.core.sepshaderobjs* = FAIL
 
@@ -76,9 +73,6 @@
 3571 VULKAN : KHR-GLES31.core.constant_expressions.*tess_control = SKIP
 3571 VULKAN : KHR-GLES31.core.constant_expressions.*tess_eval = SKIP
 
-3520 VULKAN : KHR-GLES31.core.vertex_attrib_binding* = SKIP
-3520 VULKAN : KHR-GLES31.core.internalformat.texture2d.* = FAIL
-
 // Crashes in libnvidia-glvkspirv.so, fixed in newer drivers
 4128 VULKAN NVIDIA : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength-cs-*-matC* = SKIP
 4128 VULKAN NVIDIA : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength-vs-*-matC* = SKIP
@@ -90,29 +84,13 @@
 4128 VULKAN NVIDIA : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength-vs-*-matR* = SKIP
 4128 VULKAN NVIDIA : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength-fs-*-matR* = SKIP
 
-// Bug with GL_SHADER_STORAGE_BUFFER_START
-3520 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.basic-binding = FAIL
-
-// Unimplemented ValidateCreateShaderProgramv
-3520 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.basic-syntaxSSO = FAIL
-
-// Fails to compile shader
-3520 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.basic-atomic-case3-vsfs = FAIL
-3520 VULKAN : KHR-GLES31.core.shader_storage_buffer_object.basic-atomic-case3-cs = FAIL
-
 // Draw indirect:
 3564 VULKAN : KHR-GLES31.core.draw_indirect.* = SKIP
-
-// Explicit uniform locations:
-3520 VULKAN : KHR-GLES31.core.explicit_uniform_location.* = SKIP
-
-3520 VULKAN : KHR-GLES31.core.program_interface_query.* = SKIP
 
 // Framebuffer without attachments:
 3579 VULKAN : KHR-GLES31.core.framebuffer_no_attachments.api = FAIL
 
 // Expected to fail to compile, but doesn't.
-3520 VULKAN : KHR-GLES31.core.arrays_of_arrays.ExpressionsDynamicIndexing2 = FAIL
 3520 VULKAN : KHR-GLES31.core.arrays_of_arrays.InteractionInterfaceArrays2 = FAIL
 
 // Blend equations:
@@ -126,11 +104,6 @@
 4124 VULKAN : KHR-GLES31.core.layout_binding.image2D_layout_binding_imageLoad_ComputeShader = SKIP
 4124 VULKAN : KHR-GLES31.core.layout_binding.image2D_layout_binding_imageLoad_FragmentShader = SKIP
 4124 VULKAN : KHR-GLES31.core.layout_binding.image2D_layout_binding_imageLoad_VertexShader = SKIP
-
-3520 VULKAN : KHR-GLES31.core.internalformat.copy_tex_image* = FAIL
-3520 VULKAN : KHR-GLES31.core.internalformat.renderbuffer* = FAIL
-
-3520 VULKAN : KHR-GLES31.shaders.aggressive_optimizations* = FAIL
 
 // Passing on recent drivers:
 3726 VULKAN ANDROID : KHR-GLES31.core.shader_atomic_counters.* = FAIL
