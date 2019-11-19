@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "24a33303_379782b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-19T19:02:14Z",
+      "side": 1,
+      "message": "Might be worth providing a bullet point summary of the things you are cleaning up.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "0e8126070901b5ddee84e6b91b586fc5536af6db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23cb9d4c_4cba9fc8",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 2
@@ -18,6 +41,29 @@
         "startChar": 65,
         "endLine": 72,
         "endChar": 92
+      },
+      "revId": "0e8126070901b5ddee84e6b91b586fc5536af6db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ccec170_4f8effc6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-19T19:02:14Z",
+      "side": 1,
+      "message": "The new code replaces a single index field for two fields. Does this fix a bug or is this preparation for an upcoming change?  If the latter, would good to call this out in the description of the change and incorporate it into the title.",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 27
       },
       "revId": "0e8126070901b5ddee84e6b91b586fc5536af6db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
