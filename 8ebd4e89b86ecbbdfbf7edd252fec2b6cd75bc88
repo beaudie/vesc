@@ -16,6 +16,47 @@
       "revId": "8ebd4e89b86ecbbdfbf7edd252fec2b6cd75bc88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0e94eac_d1a9ba96",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-19T21:01:38Z",
+      "side": 1,
+      "message": "I think this approach is fine for now.  They just end up as defines in the shader code to communicate things.  If we add a new vector, we could call it inputs or builtins.\n\nActually, to get us half way there, how about adding a new recordInputUsed method that just calls recordBuiltInAttributeUsed internally?  That way we can change the internals of it later without the call sites.",
+      "parentUuid": "b16e3c6a_bfc19159",
+      "revId": "8ebd4e89b86ecbbdfbf7edd252fec2b6cd75bc88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89968733_1acdc957",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1805,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-19T21:01:38Z",
+      "side": 1,
+      "message": "Should we add an else with an assert that shader-\u003egetInputVaryings is empty?",
+      "range": {
+        "startLine": 1805,
+        "startChar": 4,
+        "endLine": 1805,
+        "endChar": 5
+      },
+      "revId": "8ebd4e89b86ecbbdfbf7edd252fec2b6cd75bc88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
