@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07f03b9b_d4aec08b",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-19T00:26:00Z",
+      "side": 1,
+      "message": "Previously it looks like this test was only disabled for Windows \u0026 Vulkan, but now it\u0027s not tested with Vulkan on any OS. Is that what we want?",
+      "revId": "b9849b83dd81a1fc95aa8139b713f256b898fa6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
