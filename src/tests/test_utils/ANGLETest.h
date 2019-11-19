@@ -449,6 +449,8 @@ class ANGLETestBase
         return mCurrentParams->getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE;
     }
 
+    bool platformSupportsMultithreading() const;
+
   private:
     void checkD3D11SDKLayersMessages();
 
