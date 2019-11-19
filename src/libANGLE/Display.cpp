@@ -565,6 +565,8 @@ void Display::setAttributes(rx::DisplayImpl *impl, const AttributeMap &attribMap
         reinterpret_cast<const char **>(mAttributeMap.get(EGL_FEATURE_OVERRIDES_DISABLED_ANGLE, 0));
     mState.featureOverridesEnabled  = EGLStringArrayToStringVector(featuresForceEnabled);
     mState.featureOverridesDisabled = EGLStringArrayToStringVector(featuresForceDisabled);
+    mState.featuresAllDisabled =
+        static_cast<bool>(mAttributeMap.get(EGL_FEATURE_ALL_DISABLED_ANGLE, 0));
 }
 
 Error Display::initialize()
@@ -610,7 +612,10 @@ Error Display::initialize()
         config.second.renderableType |= EGL_OPENGL_ES_BIT;
     }
 
-    initializeFrontendFeatures();
+    if (!mState.featuresAllDisabled)
+    {
+        initializeFrontendFeatures();
+    }
 
     mFeatures.clear();
     mFrontendFeatures.populateFeatureList(&mFeatures);
