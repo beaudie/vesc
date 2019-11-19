@@ -1329,8 +1329,80 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
                                                size_t index,
                                                GLfloat *xy) const
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+    // NOTES:
+    //
+    // - This FramebufferVk is the GLES "draw framebuffer".
+    //
+    // - From the GLES 3.2 spec:
+    //
+    //   - If a framebuffer object or default framebuffer is not framebuffer complete,
+    //     as deﬁned in section 9.4.2, then the effective values of SAMPLE_BUFFERS and
+    //     SAMPLES are undeﬁned.
+    //
+    //   - Otherwise, the effective value of SAMPLES is equal to the value of
+    //     RENDERBUFFER_SAMPLES or TEXTURE_SAMPLES (depending on the type of the
+    //     attached images), which must all have the same value. The effective value of
+    //     SAMPLE_BUFFERS is one if SAMPLES is non-zero, and zero otherwise.
+    //
+    // - Questions:
+    //
+    //   - Do I need to check wither this Framebuffer is "framebuffer complete"?
+    //
+    //   - Seems like I need to get the effective value of GL_SAMPLES from the renderbuffer of
+    //     texture that is attached.  The statement "which must all have the same value" suggests
+    //     that I only need to look at the first attachment here.  Correct?
+    //
+    // -
+    // FIXME: For now, assume standard sample locations:
+    switch (getSamples())
+    {
+        case 0:
+        case 1:
+            xy[0] = 0.5;
+            xy[1] = 0.5;
+            break;
+        case 2:
+            if (index == 0)
+            {
+                xy[0] = 0.75;
+                xy[1] = 0.75;
+            }
+            else
+            {
+                xy[0] = 0.25;
+                xy[1] = 0.25;
+            }
+            break;
+        case 4:
+            switch (index)
+            {
+                case 0:
+                    xy[0] = 0.375;
+                    xy[1] = 0.125;
+                    break;
+                case 1:
+                    xy[0] = 0.875;
+                    xy[1] = 0.375;
+                    break;
+                case 2:
+                    xy[0] = 0.125;
+                    xy[1] = 0.625;
+                    break;
+                case 3:
+                    xy[0] = 0.625;
+                    xy[1] = 0.875;
+                    break;
+            }
+            break;
+        case 8:
+        case 16:
+        case 32:
+        default:
+            xy[0] = 0.5;
+            xy[1] = 0.5;
+            break;
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
