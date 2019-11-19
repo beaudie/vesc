@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e22a4911_7f54ab06",
+        "filename": "src/tests/gl_tests/PointSpritesTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-19T12:32:11Z",
+      "side": 1,
+      "message": "when you leave TODOs, please always tag them with an http://anglebug.com/#### link so they remain tracked.",
+      "range": {
+        "startLine": 483,
+        "startChar": 6,
+        "endLine": 483,
+        "endChar": 17
+      },
+      "revId": "2270fa0d802d5c532ac3d08d6490f8f62efdead9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7471a3e6_a4d357d0",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-19T12:32:11Z",
+      "side": 1,
+      "message": "does Metal support a mock device?",
+      "range": {
+        "startLine": 418,
+        "startChar": 22,
+        "endLine": 418,
+        "endChar": 32
+      },
+      "revId": "2270fa0d802d5c532ac3d08d6490f8f62efdead9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28c58ac5_d4118ae6",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-19T12:32:11Z",
+      "side": 1,
+      "message": "you can remove these. I think it\u0027s unlikely we\u0027ll develop ES 3.1 support on Metal any time soon.",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 0
+      },
+      "revId": "2270fa0d802d5c532ac3d08d6490f8f62efdead9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
