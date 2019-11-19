@@ -22,28 +22,41 @@ namespace rx
 
 DisplayVkWin32::DisplayVkWin32(const egl::DisplayState &state)
     : DisplayVk(state), mWindowClass(NULL), mDummyWindow(nullptr)
-{}
+{
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
+}
 
-DisplayVkWin32::~DisplayVkWin32() {}
+DisplayVkWin32::~DisplayVkWin32()
+{
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
+}
 
 void DisplayVkWin32::terminate()
 {
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     if (mDummyWindow)
     {
+        INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
         DestroyWindow(mDummyWindow);
         mDummyWindow = nullptr;
+        INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     }
     if (mWindowClass)
     {
+        INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
         if (!UnregisterClassA(reinterpret_cast<const char *>(mWindowClass),
                               GetModuleHandle(nullptr)))
         {
             WARN() << "Failed to unregister ANGLE window class: " << gl::FmtHex(mWindowClass);
         }
+        INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
         mWindowClass = NULL;
+        INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     }
 
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     DisplayVk::terminate();
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
 }
 
 bool DisplayVkWin32::isValidNativeWindow(EGLNativeWindowType window) const
@@ -69,8 +82,10 @@ egl::Error DisplayVkWin32::initialize(egl::Display *display)
     const LPSTR idcArrow  = MAKEINTRESOURCEA(32512);
     std::string className = stream.str();
     WNDCLASSA wndClass;
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     if (!GetClassInfoA(hinstance, className.c_str(), &wndClass))
     {
+        INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
         WNDCLASSA intermediateClassDesc     = {};
         intermediateClassDesc.style         = CS_OWNDC;
         intermediateClassDesc.lpfnWndProc   = DefWindowProcA;
@@ -85,21 +100,26 @@ egl::Error DisplayVkWin32::initialize(egl::Display *display)
         mWindowClass                        = RegisterClassA(&intermediateClassDesc);
         if (!mWindowClass)
         {
+            INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
             return egl::EglNotInitialized()
                    << "Failed to register intermediate OpenGL window class \"" << className.c_str()
                    << "\":" << gl::FmtErr(HRESULT_CODE(GetLastError()));
         }
     }
 
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     mDummyWindow =
         CreateWindowExA(0, reinterpret_cast<const char *>(mWindowClass), "ANGLE Dummy Window",
                         WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                         CW_USEDEFAULT, nullptr, nullptr, nullptr, nullptr);
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     if (!mDummyWindow)
     {
+        INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
         return egl::EglNotInitialized() << "Failed to create dummy OpenGL window.";
     }
 
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     VkSurfaceKHR surfaceVk;
     VkWin32SurfaceCreateInfoKHR info = {VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR, nullptr, 0,
                                         GetModuleHandle(nullptr), mDummyWindow};
@@ -113,6 +133,7 @@ egl::Error DisplayVkWin32::initialize(egl::Display *display)
     }
     uint32_t surfaceFormatCount;
 
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     if (vkGetPhysicalDeviceSurfaceFormatsKHR(physDevice, surfaceVk, &surfaceFormatCount, nullptr) !=
         VK_SUCCESS)
     {
@@ -124,16 +145,20 @@ egl::Error DisplayVkWin32::initialize(egl::Display *display)
     {
         return egl::EglNotInitialized() << "vkGetPhysicalDeviceSurfaceFormatsKHR (2nd) failed";
     }
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     vkDestroySurfaceKHR(instance, surfaceVk, nullptr);
 
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     DestroyWindow(mDummyWindow);
     mDummyWindow = nullptr;
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
 
     return egl::NoError();
 }
 
 egl::ConfigSet DisplayVkWin32::generateConfigs()
 {
+    INFO() << __FUNCTION__ << "(" << __FILE__ << ": " << __LINE__ << ")";
     constexpr GLenum kColorFormats[] = {GL_RGB565, GL_BGRA8_EXT, GL_BGRX8_ANGLEX};
     return egl_vk::GenerateConfigs(kColorFormats, egl_vk::kConfigDepthStencilFormats, this);
 }
