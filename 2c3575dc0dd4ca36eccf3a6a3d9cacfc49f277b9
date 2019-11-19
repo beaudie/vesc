@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "46dabd71_8d23cddc",
+        "filename": "extensions/EGL_ANGLE_feature_control.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-19T22:22:02Z",
+      "side": 1,
+      "message": "I would suggest mentioning the name of the API the enum is meant to be used with. I don\u0027t see that here so wasn\u0027t sure which it belonged to.",
+      "parentUuid": "14bf10a0_47f50d91",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 65
+      },
+      "revId": "2c3575dc0dd4ca36eccf3a6a3d9cacfc49f277b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "897e198f_5f73c9a4",
         "filename": "src/libANGLE/Display.h",
         "patchSetId": 1
