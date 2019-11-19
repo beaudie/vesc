@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2873523f_29c48985",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-19T22:42:20Z",
+      "side": 1,
+      "message": "I would actually leave it as is, because the code later in this review is all tied to attributes.  You can change the interfaces later if the refactor ever happens.",
+      "parentUuid": "c0e94eac_d1a9ba96",
+      "revId": "8ebd4e89b86ecbbdfbf7edd252fec2b6cd75bc88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "89968733_1acdc957",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 1
