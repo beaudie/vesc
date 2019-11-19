@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "6a478452_e7e76326",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-19T21:54:15Z",
+      "side": 1,
+      "message": "I think you can just use mUseDXGISwapChains instead of adding a new member.",
+      "range": {
+        "startLine": 712,
+        "startChar": 14,
+        "endLine": 712,
+        "endChar": 30
+      },
+      "revId": "c8d03a7c2998ce8926a08fbe285e7862aebc6fb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2649b3c_cc25c337",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
         "patchSetId": 2
@@ -46,6 +69,30 @@
       "revId": "c8d03a7c2998ce8926a08fbe285e7862aebc6fb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53de44a1_eb37daa2",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-19T21:54:15Z",
+      "side": 1,
+      "message": "I believe chrome handles resize by calling eglMakeCurrent(null...) when a window resizes before destroying the old surface to create a new one.\n\nI\u0027m a bit concerned that we\u0027re covering up the problem here.  \u0027swapChainCreated\u0027 becomes equivalent to \u0027underneath chrome\u0027.\n\nThat said, we\u0027re not officially supporting this path so we can land this and see what happens.",
+      "parentUuid": "80804644_c590c196",
+      "range": {
+        "startLine": 712,
+        "startChar": 0,
+        "endLine": 715,
+        "endChar": 5
+      },
+      "revId": "c8d03a7c2998ce8926a08fbe285e7862aebc6fb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
