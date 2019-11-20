@@ -261,7 +261,6 @@ State::State(ContextID contextIn,
       mSyncManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mSyncManager)),
       mPathManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mPathManager)),
       mFramebufferManager(new FramebufferManager()),
-      mProgramPipelineManager(new ProgramPipelineManager()),
       mMemoryObjectManager(
           AllocateOrGetSharedResourceManager(shareContextState, &State::mMemoryObjectManager)),
       mSemaphoreManager(
@@ -288,6 +287,7 @@ State::State(ContextID contextIn,
       mReadFramebuffer(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
+      mProgramPipeline(nullptr),
       mProvokingVertex(gl::ProvokingVertexConvention::LastVertexConvention),
       mVertexArray(nullptr),
       mActiveSampler(0),
@@ -480,7 +480,7 @@ void State::reset(const Context *context)
     }
     mProgram = nullptr;
 
-    mProgramPipeline.set(context, nullptr);
+    mProgramPipeline = nullptr;
 
     if (mTransformFeedback.get())
         mTransformFeedback->onBindingChanged(context, false);
@@ -1499,14 +1499,38 @@ bool State::removeTransformFeedbackBinding(const Context *context,
     return false;
 }
 
-void State::setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline)
+void State::useProgramStages(ProgramPipeline *programPipeline,
+                             GLbitfield stages,
+                             Program *shaderProgram)
 {
-    mProgramPipeline.set(context, pipeline);
+    programPipeline->useProgramStages(stages, shaderProgram);
+    mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
 }
 
-void State::detachProgramPipeline(const Context *context, ProgramPipelineID pipeline)
+void State::setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline)
 {
-    mProgramPipeline.set(context, nullptr);
+    if (mProgramPipeline == pipeline)
+        return;
+    mProgramPipeline = pipeline;
+    mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
+
+    if (mProgramPipeline && mProgramPipeline->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+    }
+}
+
+bool State::detachProgramPipeline(const Context *context, ProgramPipelineID pipeline)
+{
+    if (mProgramPipeline && mProgramPipeline->id().value == pipeline.value)
+    {
+        mProgramPipeline = nullptr;
+        mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+        return true;
+    }
+
+    return false;
 }
 
 bool State::isQueryActive(QueryType type) const
@@ -2740,7 +2764,22 @@ angle::Result State::syncVertexArray(const Context *context)
 
 angle::Result State::syncProgram(const Context *context)
 {
-    return mProgram->syncState(context);
+    // There may not be a program if the calling application only uses program pipelines.
+    if (mProgram)
+    {
+        return mProgram->syncState(context);
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result State::syncProgramPipeline(const Context *context)
+{
+    // There may not be a program pipeline if the calling application only uses programs.
+    if (mProgramPipeline)
+    {
+        return mProgramPipeline->syncState(context);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result State::syncDirtyObject(const Context *context, GLenum target)
@@ -2771,6 +2810,9 @@ angle::Result State::syncDirtyObject(const Context *context, GLenum target)
         case GL_PROGRAM:
             localSet.set(DIRTY_OBJECT_PROGRAM);
             break;
+        case GL_PROGRAM_PIPELINE:
+            localSet.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+            break;
     }
 
     return syncDirtyObjects(context, localSet);
@@ -2795,6 +2837,9 @@ void State::setObjectDirty(GLenum target)
             break;
         case GL_PROGRAM:
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+            break;
+        case GL_PROGRAM_PIPELINE:
+            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
             break;
         default:
             break;
