@@ -236,7 +236,7 @@ deps = {
 
   'third_party/android_ndk': {
     'url': '{chromium_git}/android_ndk.git@89e8db0cdf323af8bc24de875d7d2a43a66bf10e',
-    'condition': 'not build_with_chromium',
+    'condition': 'not build_with_chromium and not checkout_mac',
   },
 
   'tools/clang/dsymutil': {
