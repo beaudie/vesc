@@ -238,6 +238,17 @@ deps = {
     'url': '{chromium_git}/android_ndk.git@89e8db0cdf323af8bc24de875d7d2a43a66bf10e',
     'condition': 'not build_with_chromium',
   },
+
+  'tools/clang/dsymutil': {
+    'packages': [
+      {
+        'package': 'chromium/llvm-build-tools/dsymutil',
+        'version': 'M56jPzDv1620Rnm__jTMYS62Zi8rxHVq7yw0qeBFEgkC',
+      }
+    ],
+    'condition': 'checkout_mac and not build_with_chromium',
+    'dep_type': 'cipd',
+  },
 }
 
 hooks = [
