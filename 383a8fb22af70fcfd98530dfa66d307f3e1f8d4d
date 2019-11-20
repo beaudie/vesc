@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e74a8892_c45e8d2f",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T16:25:22Z",
+      "side": 1,
+      "message": "Sounds good to me. Could be helpful to add a comment for the why.",
+      "parentUuid": "3e14d00a_a22a6ce1",
+      "range": {
+        "startLine": 113,
+        "startChar": 48,
+        "endLine": 113,
+        "endChar": 49
+      },
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5da5f90_28c702da",
         "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
         "patchSetId": 4
@@ -78,6 +102,24 @@
       "side": 1,
       "message": "the query is tightly controlled, the test must not query for something that is not in spec and a driver must not fail if it is a valid query, hence the silent drop",
       "parentUuid": "f5da5f90_28c702da",
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98ef260b_5e5eea3c",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T16:25:22Z",
+      "side": 1,
+      "message": "If it cannot fail, I would replace the if with an ASSERT_GL_NO_ERROR(), so it would fail loudly if we break the test.",
+      "parentUuid": "8cf7f926_cbaace0e",
       "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -128,6 +170,30 @@
       "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b76f706c_3a583295",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T16:25:22Z",
+      "side": 1,
+      "message": "It\u0027s ok, since you are targeting CVS, choose whatever fits best for machine processing (probably what\u0027s already there is good).",
+      "parentUuid": "0f420d25_8d90035d",
+      "range": {
+        "startLine": 126,
+        "startChar": 48,
+        "endLine": 126,
+        "endChar": 70
+      },
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
