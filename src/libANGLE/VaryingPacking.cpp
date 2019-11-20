@@ -433,10 +433,12 @@ void VaryingPacking::packUserVaryingFieldTF(const ProgramVaryingRef &ref,
 
 bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
                                                 const ProgramMergedVaryings &mergedVaryings,
-                                                const std::vector<std::string> &tfVaryings)
+                                                const std::vector<std::string> &tfVaryings,
+                                                const bool isSeparableProgram)
 {
     VaryingUniqueFullNames uniqueFullNames;
     mPackedVaryings.clear();
+    clearRegisterMap();
 
     for (const ProgramVaryingRef &ref : mergedVaryings)
     {
@@ -450,7 +452,8 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
         // optimizations" may be used to make vertex shader outputs fit.
         if ((input && output && output->staticUse) ||
             (input && input->isBuiltIn() && input->active) ||
-            (output && output->isBuiltIn() && output->active))
+            (output && output->isBuiltIn() && output->active) ||
+            (isSeparableProgram && ((input && input->active) || (output && output->active))))
         {
             const sh::ShaderVariable *varying = output ? output : input;
 
@@ -484,8 +487,9 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
             }
         }
 
-        // If the varying is not used in the input, we know it is inactive.
-        if (!input)
+        // If the varying is not used in the input, we know it is inactive, unless it's a separable
+        // program, in which case the input shader may not exist in this program.
+        if (!input && !isSeparableProgram)
         {
             mInactiveVaryingMappedNames[ref.backShaderStage].push_back(output->mappedName);
             continue;
@@ -563,7 +567,33 @@ bool VaryingPacking::packUserVaryings(gl::InfoLog &infoLog,
     // subrectangle. No splitting of variables is permitted."
     for (const PackedVarying &packedVarying : packedVaryings)
     {
+#if 0  // TIMTIM
+        bool foundSameVarying = false;
+
+        // Determine if we've seen this varying already
+        if (!packedVarying.varying->isBuiltIn())
+        {
+            size_t registerListSize = getRegisterList().size();
+            for (size_t i = 0; i < registerListSize; ++i)
+            {
+                const gl::PackedVaryingRegister &varyingReg = getRegisterList()[i];
+                const sh::ShaderVariable *varying           = varyingReg.packedVarying->varying;
+                if (packedVarying.varying->isSameVaryingAtLinkTime(*varying, 310))
+                {
+                    // Copy the PackedVaryingRegister since it's the same for this varying
+                    PackedVaryingRegister registerInfo = varyingReg;
+                    registerInfo.packedVarying         = &packedVarying;
+                    mRegisterList.push_back(registerInfo);
+                    foundSameVarying = true;
+                    break;
+                }
+            }
+        }
+
+        if (!foundSameVarying && !packVarying(packedVarying))
+#else
         if (!packVarying(packedVarying))
+#endif
         {
             ShaderType eitherStage = packedVarying.frontVarying.varying
                                          ? packedVarying.frontVarying.stage
