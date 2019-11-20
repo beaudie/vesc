@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "a4cd0730_11cebe5f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-20T16:51:13Z",
+      "side": 1,
+      "message": "You will need to modify the syntax to get a different result from git cl format. It is stable.",
+      "parentUuid": "3e4ce856_b91efd2f",
+      "range": {
+        "startLine": 779,
+        "startChar": 92,
+        "endLine": 779,
+        "endChar": 98
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a79b25a_8e837cd1",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
