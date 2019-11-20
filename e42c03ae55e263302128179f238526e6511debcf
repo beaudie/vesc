@@ -22,6 +22,30 @@
       "revId": "e42c03ae55e263302128179f238526e6511debcf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a1d285d_005d785c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2019-11-20T01:13:44Z",
+      "side": 1,
+      "message": "It calls mTexture2D \u003d create2DTexture(); on line 194. Where that function creates a RGBA texture which our test needs to use a compressed ETC2 texture.",
+      "parentUuid": "1183e841_3ec94660",
+      "range": {
+        "startLine": 1408,
+        "startChar": 8,
+        "endLine": 1408,
+        "endChar": 24
+      },
+      "revId": "e42c03ae55e263302128179f238526e6511debcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
