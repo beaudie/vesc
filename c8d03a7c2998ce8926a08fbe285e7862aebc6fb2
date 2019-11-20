@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1eebeb28_366b92f2",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1380695
+      },
+      "writtenOn": "2019-11-20T12:10:58Z",
+      "side": 1,
+      "message": "Fixed, thanks.",
+      "parentUuid": "6a478452_e7e76326",
+      "range": {
+        "startLine": 712,
+        "startChar": 14,
+        "endLine": 712,
+        "endChar": 30
+      },
+      "revId": "c8d03a7c2998ce8926a08fbe285e7862aebc6fb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2649b3c_cc25c337",
         "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
         "patchSetId": 2
