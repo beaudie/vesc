@@ -221,6 +221,20 @@ class VaryingPacking final : angle::NonCopyable
         return mInactiveVaryingMappedNames;
     }
 
+    PackMode getPackMode() { return mPackMode; }
+
+    void reset()
+    {
+        clearRegisterMap();
+        mRegisterList.clear();
+        mPackedVaryings.clear();
+
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            mInactiveVaryingMappedNames[shaderType].clear();
+        }
+    }
+
   private:
     bool packVarying(const PackedVarying &packedVarying);
     bool isFree(unsigned int registerRow,
@@ -240,6 +254,12 @@ class VaryingPacking final : angle::NonCopyable
     void packUserVaryingFieldTF(const ProgramVaryingRef &ref,
                                 const sh::ShaderVariable &field,
                                 GLuint fieldIndex);
+
+    void clearRegisterMap()
+    {
+        size_t maxVaryingVectors = mRegisterMap.size();
+        mRegisterMap             = std::vector<Register>(maxVaryingVectors);
+    }
 
     std::vector<Register> mRegisterMap;
     std::vector<PackedVaryingRegister> mRegisterList;

@@ -283,7 +283,6 @@ State::State(ContextID contextIn,
       mSyncManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mSyncManager)),
       mPathManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mPathManager)),
       mFramebufferManager(new FramebufferManager()),
-      mProgramPipelineManager(new ProgramPipelineManager()),
       mMemoryObjectManager(
           AllocateOrGetSharedResourceManager(shareContextState, &State::mMemoryObjectManager)),
       mSemaphoreManager(
@@ -310,6 +309,7 @@ State::State(ContextID contextIn,
       mReadFramebuffer(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
+      mProgramPipeline(nullptr),
       mProvokingVertex(gl::ProvokingVertexConvention::LastVertexConvention),
       mVertexArray(nullptr),
       mActiveSampler(0),
@@ -503,7 +503,7 @@ void State::reset(const Context *context)
     }
     mProgram = nullptr;
 
-    mProgramPipeline.set(context, nullptr);
+    mProgramPipeline = nullptr;
 
     if (mTransformFeedback.get())
         mTransformFeedback->onBindingChanged(context, false);
@@ -541,7 +541,7 @@ void State::reset(const Context *context)
 ANGLE_INLINE void State::unsetActiveTextures(ActiveTextureMask textureMask)
 {
     // Unset any relevant bound textures.
-    for (size_t textureIndex : mProgram->getActiveSamplersMask())
+    for (size_t textureIndex : mProgramPipeline->getActiveSamplersMask())
     {
         mActiveTexturesCache[textureIndex] = nullptr;
         mCompleteTextureBindings[textureIndex].reset();
@@ -1526,14 +1526,58 @@ bool State::removeTransformFeedbackBinding(const Context *context,
     return false;
 }
 
-void State::setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline)
+angle::Result State::useProgramStages(const Context *context,
+                                      ProgramPipeline *programPipeline,
+                                      GLbitfield stages,
+                                      Program *shaderProgram)
 {
-    mProgramPipeline.set(context, pipeline);
+    programPipeline->useProgramStages(stages, shaderProgram);
+    ANGLE_TRY(onProgramPipelineExecutableChange(context, programPipeline));
+
+    return angle::Result::Continue;
 }
 
-void State::detachProgramPipeline(const Context *context, ProgramPipelineID pipeline)
+angle::Result State::setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline)
 {
-    mProgramPipeline.set(context, nullptr);
+    if (mProgramPipeline == pipeline)
+    {
+        return angle::Result::Continue;
+    }
+
+    if (mProgramPipeline)
+    {
+        unsetActiveTextures(mProgramPipeline->getActiveSamplersMask());
+    }
+
+    mProgramPipeline = pipeline;
+
+    if (mProgramPipeline)
+    {
+        mProgramPipeline->addRef();
+        ANGLE_TRY(onProgramPipelineExecutableChange(context, mProgramPipeline));
+    }
+
+    mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
+
+    if (mProgramPipeline && mProgramPipeline->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+    }
+
+    return angle::Result::Continue;
+}
+
+bool State::detachProgramPipeline(const Context *context, ProgramPipelineID pipeline)
+{
+    if (mProgramPipeline && mProgramPipeline->id().value == pipeline.value)
+    {
+        mProgramPipeline = nullptr;
+        mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+        return true;
+    }
+
+    return false;
 }
 
 bool State::isQueryActive(QueryType type) const
@@ -2792,7 +2836,22 @@ angle::Result State::syncVertexArray(const Context *context)
 
 angle::Result State::syncProgram(const Context *context)
 {
-    return mProgram->syncState(context);
+    // There may not be a program if the calling application only uses program pipelines.
+    if (mProgram)
+    {
+        return mProgram->syncState(context);
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result State::syncProgramPipeline(const Context *context)
+{
+    // There may not be a program pipeline if the calling application only uses programs.
+    if (mProgramPipeline)
+    {
+        return mProgramPipeline->syncState(context);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result State::syncDirtyObject(const Context *context, GLenum target)
@@ -2823,6 +2882,9 @@ angle::Result State::syncDirtyObject(const Context *context, GLenum target)
         case GL_PROGRAM:
             localSet.set(DIRTY_OBJECT_PROGRAM);
             break;
+        case GL_PROGRAM_PIPELINE:
+            localSet.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+            break;
     }
 
     return syncDirtyObjects(context, localSet);
@@ -2847,6 +2909,9 @@ void State::setObjectDirty(GLenum target)
             break;
         case GL_PROGRAM:
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+            break;
+        case GL_PROGRAM_PIPELINE:
+            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
             break;
         default:
             break;
@@ -2883,6 +2948,50 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
     }
 
     for (size_t imageUnitIndex : program->getActiveImagesMask())
+    {
+        Texture *image = mImageUnits[imageUnitIndex].texture.get();
+        if (!image)
+            continue;
+
+        if (image->hasAnyDirtyBit())
+        {
+            ANGLE_TRY(image->syncState(context));
+        }
+
+        if (mRobustResourceInit && image->initState() == InitState::MayNeedInit)
+        {
+            mDirtyObjects.set(DIRTY_OBJECT_IMAGES_INIT);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result State::onProgramPipelineExecutableChange(const Context *context,
+                                                       ProgramPipeline *programPipeline)
+{
+    mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
+
+    if (programPipeline->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+    }
+
+    // Set any bound textures.
+    const ActiveTextureTypeArray &textureTypes = programPipeline->getActiveSamplerTypes();
+    for (size_t textureIndex : programPipeline->getActiveSamplersMask())
+    {
+        TextureType type = textureTypes[textureIndex];
+
+        // This can happen if there is a conflicting texture type.
+        if (type == TextureType::InvalidEnum)
+            continue;
+
+        Texture *texture = getTextureForActiveSampler(type, textureIndex);
+        updateActiveTexture(context, textureIndex, texture);
+    }
+
+    for (size_t imageUnitIndex : programPipeline->getActiveImagesMask())
     {
         Texture *image = mImageUnits[imageUnitIndex].texture.get();
         if (!image)
@@ -2941,9 +3050,9 @@ void State::setImageUnit(const Context *context,
 // Handle a dirty texture event.
 void State::onActiveTextureChange(const Context *context, size_t textureUnit)
 {
-    if (mProgram)
+    if (mProgramPipeline)
     {
-        TextureType type = mProgram->getActiveSamplerTypes()[textureUnit];
+        TextureType type = mProgramPipeline->getActiveSamplerTypes()[textureUnit];
         if (type != TextureType::InvalidEnum)
         {
             Texture *activeTexture = getTextureForActiveSampler(type, textureUnit);
@@ -2954,9 +3063,9 @@ void State::onActiveTextureChange(const Context *context, size_t textureUnit)
 
 void State::onActiveTextureStateChange(const Context *context, size_t textureUnit)
 {
-    if (mProgram)
+    if (mProgramPipeline)
     {
-        TextureType type = mProgram->getActiveSamplerTypes()[textureUnit];
+        TextureType type = mProgramPipeline->getActiveSamplerTypes()[textureUnit];
         if (type != TextureType::InvalidEnum)
         {
             Texture *activeTexture = getTextureForActiveSampler(type, textureUnit);
@@ -2968,7 +3077,7 @@ void State::onActiveTextureStateChange(const Context *context, size_t textureUni
 
 void State::onImageStateChange(const Context *context, size_t unit)
 {
-    if (mProgram)
+    if (mProgramPipeline)
     {
         const ImageUnit &image = mImageUnits[unit];
 
