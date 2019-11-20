@@ -565,6 +565,7 @@ void BlockEncoderVisitor::visitNamedVariable(const ShaderVariable &variable,
     {
         innermostArraySize.push_back(variable.getNestedArraySize(0));
     }
+    // for unsized arrays, innermostArraySize = 0 (?)
     BlockMemberInfo variableInfo =
         mEncoder->encodeType(variable.type, innermostArraySize, isRowMajor);
     if (!mIsTopLevelArrayStrideReady)
