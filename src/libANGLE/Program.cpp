@@ -1270,6 +1270,7 @@ void Program::onDestroy(const Context *context)
 
     delete this;
 }
+
 ShaderProgramID Program::id() const
 {
     ASSERT(mLinkResolved);
