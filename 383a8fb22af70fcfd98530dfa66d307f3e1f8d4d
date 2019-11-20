@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3e14d00a_a22a6ce1",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-20T15:59:24Z",
+      "side": 1,
+      "message": "shabi, the reason we have that is so we can save the output as a CSV file and easily diff basic differences between 2 vendor ICDs",
+      "parentUuid": "7b19265e_f29d021a",
+      "range": {
+        "startLine": 113,
+        "startChar": 48,
+        "endLine": 113,
+        "endChar": 49
+      },
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f5da5f90_28c702da",
         "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
         "patchSetId": 4
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "8cf7f926_cbaace0e",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-20T15:59:24Z",
+      "side": 1,
+      "message": "the query is tightly controlled, the test must not query for something that is not in spec and a driver must not fail if it is a valid query, hence the silent drop",
+      "parentUuid": "f5da5f90_28c702da",
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5e861b10_d2e77690",
         "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
         "patchSetId": 4
@@ -53,6 +95,30 @@
       "writtenOn": "2019-11-20T03:48:52Z",
       "side": 1,
       "message": "suggest \u003d { x, y, z }",
+      "range": {
+        "startLine": 126,
+        "startChar": 48,
+        "endLine": 126,
+        "endChar": 70
+      },
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f420d25_8d90035d",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-20T15:59:24Z",
+      "side": 1,
+      "message": "as long as the final format is - \"GL_CAPABILITY_X, {1, 2, 3}\" i\u0027m fine with this",
+      "parentUuid": "5e861b10_d2e77690",
       "range": {
         "startLine": 126,
         "startChar": 48,
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "a8a244a1_71f85b5c",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-20T15:59:24Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "cefc9cad_54644731",
+      "range": {
+        "startLine": 160,
+        "startChar": 18,
+        "endLine": 160,
+        "endChar": 19
+      },
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42eb54bf_f88dbc26",
         "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
         "patchSetId": 4
@@ -99,6 +189,24 @@
       "writtenOn": "2019-11-20T03:48:52Z",
       "side": 1,
       "message": "Note that EGLPrintEGLinfoTest is only being run on ES2_VULKAN() and ES3_VULKAN().",
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bb1500e_58d1974c",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-20T15:59:24Z",
+      "side": 1,
+      "message": "intended behavior, we are targeting all our changes for vulkan backend for now",
+      "parentUuid": "42eb54bf_f88dbc26",
       "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
