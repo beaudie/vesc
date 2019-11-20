@@ -387,9 +387,9 @@ void StateManagerGL::bindBufferBase(gl::BufferBinding target, size_t index, GLui
     if (binding.buffer != buffer || binding.offset != static_cast<size_t>(-1) ||
         binding.size != static_cast<size_t>(-1))
     {
-        binding.buffer = buffer;
-        binding.offset = static_cast<size_t>(-1);
-        binding.size   = static_cast<size_t>(-1);
+        binding.buffer   = buffer;
+        binding.offset   = static_cast<size_t>(-1);
+        binding.size     = static_cast<size_t>(-1);
         mBuffers[target] = buffer;
         mFunctions->bindBufferBase(gl::ToGLenum(target), static_cast<GLuint>(index), buffer);
     }
@@ -407,9 +407,9 @@ void StateManagerGL::bindBufferRange(gl::BufferBinding target,
     auto &binding = mIndexedBuffers[target][index];
     if (binding.buffer != buffer || binding.offset != offset || binding.size != size)
     {
-        binding.buffer = buffer;
-        binding.offset = offset;
-        binding.size   = size;
+        binding.buffer   = buffer;
+        binding.offset   = offset;
+        binding.size     = size;
         mBuffers[target] = buffer;
         mFunctions->bindBufferRange(gl::ToGLenum(target), static_cast<GLuint>(index), buffer,
                                     offset, size);
@@ -1843,12 +1843,12 @@ void StateManagerGL::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 setMultisamplingStateEnabled(state.isMultisamplingEnabled());
                 break;
-            case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_ONE:
-                setSampleAlphaToOneStateEnabled(state.isSampleAlphaToOneEnabled());
-                break;
-            case gl::State::DIRTY_BIT_COVERAGE_MODULATION:
-                setCoverageModulation(state.getCoverageModulation());
-                break;
+                //            case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_ONE:
+                //                setSampleAlphaToOneStateEnabled(state.isSampleAlphaToOneEnabled());
+                //                break;
+                //            case gl::State::DIRTY_BIT_COVERAGE_MODULATION:
+                //                setCoverageModulation(state.getCoverageModulation());
+                //                break;
             case gl::State::DIRTY_BIT_PATH_RENDERING:
                 setPathRenderingModelViewMatrix(
                     state.getPathRenderingMatrix(GL_PATH_MODELVIEW_MATRIX_CHROMIUM));
@@ -2000,7 +2000,7 @@ void StateManagerGL::setSampleAlphaToOneStateEnabled(bool enabled)
         {
             mFunctions->disable(GL_SAMPLE_ALPHA_TO_ONE);
         }
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_ONE);
+        //        mLocalDirtyBits.set(gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_ONE);
     }
 }
 
@@ -2011,7 +2011,7 @@ void StateManagerGL::setCoverageModulation(GLenum components)
         mCoverageModulation = components;
         mFunctions->coverageModulationNV(components);
 
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_COVERAGE_MODULATION);
+        //        mLocalDirtyBits.set(gl::State::DIRTY_BIT_COVERAGE_MODULATION);
     }
 }
 

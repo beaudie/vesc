@@ -311,6 +311,8 @@ class ANGLETestBase
 
     static void ReleaseFixtures();
 
+    static std::array<angle::Vector3, 6> GetQuadVertices();
+
   protected:
     void ANGLETestSetUp();
     void ANGLETestTearDown();
@@ -338,7 +340,6 @@ class ANGLETestBase
                            bool useVertexBuffer,
                            GLuint numInstances);
 
-    static std::array<angle::Vector3, 6> GetQuadVertices();
     static std::array<GLushort, 6> GetQuadIndices();
     static std::array<angle::Vector3, 4> GetIndexedQuadVertices();
 
