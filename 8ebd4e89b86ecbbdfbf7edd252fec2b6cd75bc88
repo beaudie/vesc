@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "a2f291e4_7d05ba49",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-20T16:56:27Z",
+      "side": 1,
+      "message": "I\u0027m going to take Cody\u0027s approach and leave this CL a bit more focused on just the changes to get the compute shader queries to work.\n\nI\u0027ve opened anglebug.com/4152 to tackle the refactor and mentioned these functions in the description.",
+      "parentUuid": "2873523f_29c48985",
+      "revId": "8ebd4e89b86ecbbdfbf7edd252fec2b6cd75bc88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "89968733_1acdc957",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 1
@@ -66,6 +84,30 @@
       "writtenOn": "2019-11-19T21:01:38Z",
       "side": 1,
       "message": "Should we add an else with an assert that shader-\u003egetInputVaryings is empty?",
+      "range": {
+        "startLine": 1805,
+        "startChar": 4,
+        "endLine": 1805,
+        "endChar": 5
+      },
+      "revId": "8ebd4e89b86ecbbdfbf7edd252fec2b6cd75bc88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "143d86ba_c497a39a",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1805,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-20T16:56:27Z",
+      "side": 1,
+      "message": "Hm, I\u0027m not sure there\u0027s much benefit with doing that from a readability perspective.   The tricky part is that each shader type is being handled differently in here:\n\nvertex: return immediately, since attributes are already in mProgramInputs (done in Program::linkAttributes)\ncompute: add attributes to mProgramInputs\nfragment: add varyings to mProgramInputs\n\nThat should just leave geometry shaders that are currently unprocessed, which we may need to handle eventually (as part of 3.2?) if the refactoring work done for anglebug.com/4152 isn\u0027t able to get rid of this function entirely.\n\nI\u0027d also need to add return statements into each block (or convert this to a switch statement), since the Shader\u0027s mInputVaryings isn\u0027t being emptied, we\u0027re just grabbing some pointers.\n\nMy vote is to avoid the ASSERT() for now, but I can update it if you think it would help catch some tricky bugs.",
+      "parentUuid": "89968733_1acdc957",
       "range": {
         "startLine": 1805,
         "startChar": 4,
