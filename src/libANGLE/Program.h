@@ -28,6 +28,7 @@
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/angletypes.h"
@@ -403,6 +404,16 @@ class ProgramState final : angle::NonCopyable
     ShaderType getFirstAttachedShaderStageType() const;
     ShaderType getLastAttachedShaderStageType() const;
 
+    const std::string &getTranslatedSource(ShaderType shaderType) const
+    {
+        return mTranslatedSources[shaderType];
+    }
+
+    void setTranslatedSource(ShaderType shaderType, const std::string &translatedSource)
+    {
+        mTranslatedSources[shaderType] = translatedSource;
+    }
+
   private:
     friend class MemoryProgramCache;
     friend class Program;
@@ -514,6 +525,8 @@ class ProgramState final : angle::NonCopyable
 
     // Cached mask of active images.
     ActiveTextureMask mActiveImagesMask;
+
+    gl::ShaderMap<std::string> mTranslatedSources;
 };
 
 struct ProgramBinding
@@ -648,7 +661,9 @@ class Program final : angle::NonCopyable, public LabeledObject
     bool isSeparable() const;
 
     int getInfoLogLength() const;
+    InfoLog &getInfoLog() { return mInfoLog; }
     void getInfoLog(GLsizei bufSize, GLsizei *length, char *infoLog) const;
+    std::string getInfoLogString() const;
     void getAttachedShaders(GLsizei maxCount, GLsizei *count, ShaderProgramID *shaders) const;
 
     GLuint getAttributeLocation(const std::string &name) const;
@@ -968,8 +983,26 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     ANGLE_INLINE bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
+    gl::ProgramLinkedResources &getResources()
+    {
+        ASSERT(mResources);
+        return *mResources;
+    }
+
     // Writes a program's binary to the output memory buffer.
     void serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
+
+    const char *validateDrawStates(const State &state, const gl::Extensions &extensions) const;
+
+    static bool linkValidateShaderInterfaceMatching(Shader *generatingShader,
+                                                    Shader *consumingShader,
+                                                    InfoLog &infoLog);
+    static bool linkValidateBuiltInVaryings(Shader *vertexShader,
+                                            Shader *fragmentShader,
+                                            InfoLog &infoLog);
+    // Check for aliased path rendering input bindings (if any).
+    // If more than one binding refer statically to the same location the link must fail.
+    bool linkValidateFragmentInputBindings(InfoLog &infoLog) const;
 
   private:
     struct LinkingState;
@@ -1008,15 +1041,6 @@ class Program final : angle::NonCopyable, public LabeledObject
                                                   bool validateGeometryShaderInputVarying,
                                                   std::string *mismatchedStructFieldName);
 
-    bool linkValidateShaderInterfaceMatching(Shader *generatingShader,
-                                             Shader *consumingShader,
-                                             InfoLog &infoLog) const;
-
-    // Check for aliased path rendering input bindings (if any).
-    // If more than one binding refer statically to the same location the link must fail.
-    bool linkValidateFragmentInputBindings(InfoLog &infoLog) const;
-
-    bool linkValidateBuiltInVaryings(InfoLog &infoLog) const;
     bool linkValidateTransformFeedback(const Version &version,
                                        InfoLog &infoLog,
                                        const ProgramMergedVaryings &linkedVaryings,
@@ -1112,6 +1136,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     Optional<bool> mCachedValidateSamplersResult;
 
     DirtyBits mDirtyBits;
+
+    std::unique_ptr<gl::ProgramLinkedResources> mResources;
 };
 }  // namespace gl
 
