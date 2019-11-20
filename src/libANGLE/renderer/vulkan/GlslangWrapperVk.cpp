@@ -21,31 +21,15 @@ angle::Result ErrorHandler(vk::Context *context, GlslangError)
     ANGLE_VK_CHECK(context, false, VK_ERROR_INVALID_SHADER_NV);
     return angle::Result::Stop;
 }
-
-GlslangSourceOptions CreateSourceOptions(const angle::FeaturesVk &features)
-{
-    GlslangSourceOptions options;
-    options.uniformsAndXfbDescriptorSetIndex = kUniformsAndXfbDescriptorSetIndex;
-    options.textureDescriptorSetIndex        = kTextureDescriptorSetIndex;
-    options.shaderResourceDescriptorSetIndex = kShaderResourceDescriptorSetIndex;
-    options.driverUniformsDescriptorSetIndex = kDriverUniformsDescriptorSetIndex;
-    options.xfbBindingIndexStart             = kXfbBindingIndexStart;
-    options.useOldRewriteStructSamplers      = features.forceOldRewriteStructSamplers.enabled;
-    options.supportsTransformFeedbackExtension =
-        features.supportsTransformFeedbackExtension.enabled;
-    options.emulateTransformFeedback = features.emulateTransformFeedback.enabled;
-    return options;
-}
 }  // namespace
 
 // static
-void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
-                                       const gl::ProgramState &programState,
+void GlslangWrapperVk::GetShaderSource(const gl::ProgramState &programState,
                                        const gl::ProgramLinkedResources &resources,
+                                       GlslangSourceOptions &glslangSourceOptions,
                                        gl::ShaderMap<std::string> *shaderSourcesOut)
 {
-    GlslangGetShaderSource(CreateSourceOptions(features), programState, resources,
-                           shaderSourcesOut);
+    GlslangGetShaderSource(glslangSourceOptions, programState, resources, shaderSourcesOut);
 }
 
 // static
