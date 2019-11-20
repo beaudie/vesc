@@ -969,6 +969,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     // Writes a program's binary to the output memory buffer.
     void serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
 
+    const char *validateDrawStates(const State &state, const gl::Extensions &extensions) const;
+
   private:
     struct LinkingState;
 
