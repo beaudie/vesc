@@ -27,6 +27,13 @@ class ProgramPipelineTest : public ANGLETest
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
     }
+
+    void drawQuad(const std::string &positionAttribName,
+                  const GLfloat positionAttribZ,
+                  const GLfloat positionAttribXYScale);
+
+    GLuint vertProg;
+    GLuint fragProg;
 };
 
 // Verify that program pipeline is not supported in version lower than ES31.
@@ -103,6 +110,113 @@ TEST_P(ProgramPipelineTest31, IsProgramPipelineTest)
     glDeleteProgramPipelines(1, &pipeline);
     EXPECT_GL_FALSE(glIsProgramPipeline(pipeline));
     EXPECT_GL_NO_ERROR();
+}
+
+#if 0  // TIMTIM
+std::string QueryErrorMessage(GLuint program)
+{
+    GLint infoLogLength;
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+    EXPECT_GL_NO_ERROR();
+
+    if (infoLogLength >= 1)
+    {
+        std::vector<GLchar> infoLog(infoLogLength);
+        glGetProgramInfoLog(program, static_cast<GLsizei>(infoLog.size()), nullptr, infoLog.data());
+        EXPECT_GL_NO_ERROR();
+        return infoLog.data();
+    }
+
+    return "";
+}
+#endif
+
+// Simulates a call to glCreateShaderProgramv()
+GLuint createShaderProgram(GLenum type, const GLchar *shaderString)
+{
+    GLShader shader(type);
+    if (!shader.get())
+    {
+        return 0;
+    }
+
+    glShaderSource(shader, 1, &shaderString, nullptr);
+    glCompileShader(shader);
+
+    GLuint program = glCreateProgram();
+
+    if (program)
+    {
+        GLint compiled;
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+        glProgramParameteri(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
+        if (compiled)
+        {
+            glAttachShader(program, shader);
+            glLinkProgram(program);
+            glDetachShader(program, shader);
+        }
+    }
+
+    EXPECT_GL_NO_ERROR();
+
+    return program;
+}
+
+void ProgramPipelineTest::drawQuad(const std::string &positionAttribName,
+                                   const GLfloat positionAttribZ,
+                                   const GLfloat positionAttribXYScale)
+{
+    glUseProgram(0);
+
+    std::array<Vector3, 6> quadVertices = ANGLETestBase::GetQuadVertices();
+
+    for (Vector3 &vertex : quadVertices)
+    {
+        vertex.x() *= positionAttribXYScale;
+        vertex.y() *= positionAttribXYScale;
+        vertex.z() = positionAttribZ;
+    }
+
+    GLint positionLocation = glGetAttribLocation(vertProg, positionAttribName.c_str());
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, quadVertices.data());
+    glEnableVertexAttribArray(positionLocation);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glDisableVertexAttribArray(positionLocation);
+    glVertexAttribPointer(positionLocation, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+}
+
+// Test glUseProgramStages
+TEST_P(ProgramPipelineTest31, UseProgramStages)
+{
+    // Create two separable program objects from a
+    // single source string respectively (vertSrc and fragSrc)
+    const GLchar *vertString = essl31_shaders::vs::Simple();
+    const GLchar *fragString = essl31_shaders::fs::Red();
+
+    vertProg = createShaderProgram(GL_VERTEX_SHADER, vertString);
+    ASSERT_NE(vertProg, 0u);
+    fragProg = createShaderProgram(GL_FRAGMENT_SHADER, fragString);
+    ASSERT_NE(fragProg, 0u);
+
+    // Generate a program pipeline and attach the programs to their respective stages
+    GLuint pipeline;
+    glGenProgramPipelines(1, &pipeline);
+    EXPECT_GL_NO_ERROR();
+    glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, vertProg);
+    EXPECT_GL_NO_ERROR();
+    glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, fragProg);
+    EXPECT_GL_NO_ERROR();
+    glBindProgramPipeline(pipeline);
+    EXPECT_GL_NO_ERROR();
+
+    ProgramPipelineTest::drawQuad("a_position", 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 }
 
 ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(ProgramPipelineTest);
