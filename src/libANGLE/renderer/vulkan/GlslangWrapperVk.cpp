@@ -21,26 +21,16 @@ angle::Result ErrorHandler(vk::Context *context, GlslangError)
     ANGLE_VK_CHECK(context, false, VK_ERROR_INVALID_SHADER_NV);
     return angle::Result::Stop;
 }
-
-GlslangSourceOptions CreateSourceOptions()
-{
-    GlslangSourceOptions options;
-    options.uniformsAndXfbDescriptorSetIndex = kUniformsAndXfbDescriptorSetIndex;
-    options.textureDescriptorSetIndex        = kTextureDescriptorSetIndex;
-    options.shaderResourceDescriptorSetIndex = kShaderResourceDescriptorSetIndex;
-    options.driverUniformsDescriptorSetIndex = kDriverUniformsDescriptorSetIndex;
-    options.xfbBindingIndexStart             = kXfbBindingIndexStart;
-    return options;
-}
 }  // namespace
 
 // static
 void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
                                        const gl::ProgramState &programState,
                                        const gl::ProgramLinkedResources &resources,
+                                       GlslangSourceOptions &glslangSourceOptions,
                                        gl::ShaderMap<std::string> *shaderSourcesOut)
 {
-    GlslangGetShaderSource(CreateSourceOptions(), features.forceOldRewriteStructSamplers.enabled,
+    GlslangGetShaderSource(glslangSourceOptions, features.forceOldRewriteStructSamplers.enabled,
                            features.supportsTransformFeedbackExtension.enabled,
                            features.emulateTransformFeedback.enabled, programState, resources,
                            shaderSourcesOut);
