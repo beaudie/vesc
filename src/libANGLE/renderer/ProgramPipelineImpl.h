@@ -21,7 +21,9 @@ class ProgramPipelineImpl : public angle::NonCopyable
   public:
     ProgramPipelineImpl(const gl::ProgramPipelineState &state) : mState(state) {}
     virtual ~ProgramPipelineImpl() {}
-    virtual void destroy(const ContextImpl *contextImpl) {}
+    virtual void destroy(const gl::Context *context) {}
+
+    const gl::ProgramPipelineState &getState() const { return mState; }
 
   protected:
     const gl::ProgramPipelineState &mState;
