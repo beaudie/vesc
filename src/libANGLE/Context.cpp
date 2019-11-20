@@ -479,6 +479,7 @@ void Context::initialize()
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
+    mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
 
@@ -532,6 +533,7 @@ void Context::initialize()
     mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
+    mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
 
@@ -602,6 +604,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.reset(this);
 
     mState.mBufferManager->release(this);
+    mState.mProgramPipelineManager->release(this);
     mState.mShaderProgramManager->release(this);
     mState.mTextureManager->release(this);
     mState.mRenderbufferManager->release(this);
@@ -609,7 +612,6 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mSyncManager->release(this);
     mState.mPathManager->release(this);
     mState.mFramebufferManager->release(this);
-    mState.mProgramPipelineManager->release(this);
     mState.mMemoryObjectManager->release(this);
     mState.mSemaphoreManager->release(this);
 
@@ -744,12 +746,75 @@ void Context::genFencesNV(GLsizei n, FenceNVID *fences)
 
 ProgramPipelineID Context::createProgramPipeline()
 {
-    return mState.mProgramPipelineManager->createProgramPipeline();
+    return mState.mProgramPipelineManager->createProgramPipeline(mImplementation.get());
 }
 
 GLuint Context::createShaderProgramv(ShaderType type, GLsizei count, const GLchar *const *strings)
 {
-    UNIMPLEMENTED();
+    // CreateShaderProgramv is equivalent to (assuming no errors are generated):
+    // const uint shader = CreateShader(type);
+    // if (shader) {
+    //   ShaderSource(shader, count, strings, NULL);
+    //   CompileShader(shader);
+    //   const uint program = CreateProgram();
+    //   if (program) {
+    //     int compiled = FALSE;
+    //     GetShaderiv(shader, COMPILE_STATUS, &compiled);
+    //     ProgramParameteri(program, PROGRAM_SEPARABLE, TRUE);
+    //     if (compiled) {
+    //       AttachShader(program, shader);
+    //       LinkProgram(program);
+    //       DetachShader(program, shader);
+    //     }
+    //     append-shader-info-log-to-program-info-log
+    //   }
+    //   DeleteShader(shader);
+    //   return program;
+    // } else {
+    //   return 0;
+    // }
+
+    const ShaderProgramID shaderID = FromGL<ShaderProgramID>(createShader(type));
+    if (shaderID.value)
+    {
+        Shader *shaderObject = getShader(shaderID);
+        ASSERT(shaderObject);
+        shaderObject->setSource(count, strings, nullptr);
+        shaderObject->compile(this);
+        const ShaderProgramID programID = FromGL<ShaderProgramID>(createProgram());
+        if (programID.value)
+        {
+            gl::Program *programObject = getProgramNoResolveLink(programID);
+            ASSERT(programObject);
+            programObject->setSeparable(true);
+
+            if (shaderObject->isCompiled())
+            {
+                programObject->attachShader(shaderObject);
+
+                if (programObject->link(this) != angle::Result::Continue)
+                {
+                    return 0u;
+                }
+                if (onProgramLink(programObject) != angle::Result::Continue)
+                {
+                    return 0u;
+                }
+
+                // Need to manually resolveLink(), since onProgramLink() doesn't think the program
+                // is in use.   For the normal glDetachShader() API call path, this is done during
+                // ValidateDetachShader() via gl::GetValidProgram().
+                programObject->resolveLink(this);
+                programObject->detachShader(this, shaderObject);
+            }
+            // append-shader-info-log-to-program-info-log()
+        }
+
+        deleteShader(shaderID);
+
+        return programID.value;
+    }
+
     return 0u;
 }
 
@@ -781,7 +846,10 @@ void Context::deleteShader(ShaderProgramID shader)
 
 void Context::deleteProgram(ShaderProgramID program)
 {
-    mState.mShaderProgramManager->deleteProgram(this, program);
+    if (!isProgramInProgramPipeline(program))
+    {
+        mState.mShaderProgramManager->deleteProgram(this, program);
+    }
 }
 
 void Context::deleteTexture(TextureID texture)
@@ -1177,7 +1245,9 @@ void Context::useProgramStages(ProgramPipelineID pipeline,
                                GLbitfield stages,
                                ShaderProgramID program)
 {
-    UNIMPLEMENTED();
+    Program *shaderProgram           = getProgramNoResolveLink(program);
+    ProgramPipeline *programPipeline = mState.mProgramPipelineManager->getProgramPipeline(pipeline);
+    mState.useProgramStages(programPipeline, stages, shaderProgram);
 }
 
 void Context::bindTransformFeedback(GLenum target, TransformFeedbackID transformFeedbackHandle)
@@ -4852,7 +4922,9 @@ angle::Result Context::syncStateForPathOperation()
 
 void Context::activeShaderProgram(ProgramPipelineID pipeline, ShaderProgramID program)
 {
-    UNIMPLEMENTED();
+    Program *shaderProgram           = getProgramNoResolveLink(program);
+    ProgramPipeline *programPipeline = mState.mProgramPipelineManager->getProgramPipeline(pipeline);
+    programPipeline->activeShaderProgram(shaderProgram);
 }
 
 void Context::activeTexture(GLenum texture)
@@ -6416,7 +6488,13 @@ void Context::getProgramivRobust(ShaderProgramID program,
 
 void Context::getProgramPipelineiv(ProgramPipelineID pipeline, GLenum pname, GLint *params)
 {
-    UNIMPLEMENTED();
+    ProgramPipeline *programPipeline = nullptr;
+    if (!mContextLost)
+    {
+        programPipeline = getProgramPipeline(pipeline);
+        ASSERT(programPipeline);
+    }
+    QueryProgramPipelineiv(this, programPipeline, pname, params);
 }
 
 MemoryObject *Context::getMemoryObject(MemoryObjectID handle) const
@@ -6900,7 +6978,9 @@ void Context::validateProgram(ShaderProgramID program)
 
 void Context::validateProgramPipeline(ProgramPipelineID pipeline)
 {
-    UNIMPLEMENTED();
+    ProgramPipeline *programPipeline = getProgramPipeline(pipeline);
+    ASSERT(programPipeline);
+    programPipeline->validate(mState.mCaps);
 }
 
 void Context::getProgramBinary(ShaderProgramID program,
@@ -8470,6 +8550,24 @@ void Context::onPostSwap() const
     mFrameCapture->onEndFrame(this);
 }
 
+bool Context::isProgramInProgramPipeline(ShaderProgramID program) const
+{
+    if (mState.mProgramPipelineManager)
+    {
+        for (const auto &it : *mState.mProgramPipelineManager)
+        {
+            // ResourceMap<ProgramPipelineID, ProgramPipeline*>
+            ProgramPipeline *programPipeline = reinterpret_cast<ProgramPipeline *>(it.second);
+            if (programPipeline->usesShaderProgram(program))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void Context::getTexImage(TextureTarget target,
                           GLint level,
                           GLenum format,
@@ -8581,7 +8679,7 @@ void StateCache::updateActiveAttribsMask(Context *context)
     bool isGLES1         = context->isGLES1();
     const State &glState = context->getState();
 
-    if (!isGLES1 && !glState.getProgram())
+    if (!isGLES1 && !glState.getProgram() && !glState.getProgramPipeline())
     {
         mCachedActiveBufferedAttribsMask = AttributesMask();
         mCachedActiveClientAttribsMask   = AttributesMask();
@@ -8589,8 +8687,23 @@ void StateCache::updateActiveAttribsMask(Context *context)
         return;
     }
 
-    AttributesMask activeAttribs = isGLES1 ? glState.gles1().getActiveAttributesMask()
-                                           : glState.getProgram()->getActiveAttribLocationsMask();
+    AttributesMask activeAttribs;
+    if (isGLES1)
+    {
+        activeAttribs = glState.gles1().getActiveAttributesMask();
+    }
+    else
+    {
+        ASSERT(glState.getProgram() || glState.getProgramPipeline());
+        if (glState.getProgram())
+        {
+            activeAttribs = glState.getProgram()->getActiveAttribLocationsMask();
+        }
+        else
+        {
+            activeAttribs = glState.getProgramPipeline()->getActiveAttribLocationsMask();
+        }
+    }
 
     const VertexArray *vao = glState.getVertexArray();
     ASSERT(vao);

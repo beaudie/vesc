@@ -359,36 +359,6 @@ class Std140BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFacto
 };
 }  // anonymous namespace
 
-// ProgramVk::ShaderInfo implementation.
-ProgramVk::ShaderInfo::ShaderInfo() {}
-
-ProgramVk::ShaderInfo::~ShaderInfo() = default;
-
-angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
-                                                 const gl::ShaderMap<std::string> &shaderSources,
-                                                 bool enableLineRasterEmulation)
-{
-    ASSERT(!valid());
-
-    gl::ShaderMap<std::vector<uint32_t>> shaderCodes;
-    ANGLE_TRY(GlslangWrapperVk::GetShaderCode(
-        contextVk, contextVk->getCaps(), enableLineRasterEmulation, shaderSources, &shaderCodes));
-
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        if (!shaderSources[shaderType].empty())
-        {
-            ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
-                                              shaderCodes[shaderType].data(),
-                                              shaderCodes[shaderType].size() * sizeof(uint32_t)));
-
-            mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
-        }
-    }
-
-    return angle::Result::Continue;
-}
-
 angle::Result ProgramVk::loadShaderSource(ContextVk *contextVk, gl::BinaryInputStream *stream)
 {
     // Read in shader sources for all shader types
@@ -406,16 +376,6 @@ void ProgramVk::saveShaderSource(gl::BinaryOutputStream *stream)
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         stream->writeString(mShaderSources[shaderType]);
-    }
-}
-
-void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
-{
-    mProgramHelper.release(contextVk);
-
-    for (vk::RefCounted<vk::ShaderAndSerial> &shader : mShaders)
-    {
-        shader.get().destroy(contextVk->getDevice());
     }
 }
 
@@ -455,10 +415,14 @@ void ProgramVk::reset(ContextVk *contextVk)
         uniformBlock.storage.release(renderer);
     }
 
-    mDefaultShaderInfo.release(contextVk);
-    mLineRasterShaderInfo.release(contextVk);
-
     mEmptyBuffer.release(renderer);
+
+    mProgramHelper.release(contextVk);
+
+    for (vk::RefCounted<vk::ShaderAndSerial> &shader : mShaders)
+    {
+        shader.get().destroy(contextVk->getDevice());
+    }
 
     mDescriptorSets.clear();
     mEmptyDescriptorSets.fill(VK_NULL_HANDLE);
@@ -475,6 +439,52 @@ void ProgramVk::reset(ContextVk *contextVk)
 
     mTextureDescriptorsCache.clear();
     mDescriptorBuffersCache.clear();
+}
+
+angle::Result ProgramVk::getGraphicsPipeline(ContextVk *contextVk,
+                                             gl::PrimitiveMode mode,
+                                             const vk::GraphicsPipelineDesc &desc,
+                                             const gl::AttributesMask &activeAttribLocations,
+                                             const vk::GraphicsPipelineDesc **descPtrOut,
+                                             vk::PipelineHelper **pipelineOut)
+{
+    bool enableLineRasterEmulation = contextVk->useLineRaster(mode);
+
+    ANGLE_TRY(initGraphicsShaders(contextVk, mode, enableLineRasterEmulation, &mProgramHelper));
+    ASSERT(mProgramHelper.isGraphicsProgram());
+    RendererVk *renderer             = contextVk->getRenderer();
+    vk::PipelineCache *pipelineCache = nullptr;
+    ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
+    return mProgramHelper.getGraphicsPipeline(
+        contextVk, &contextVk->getRenderPassCache(), *pipelineCache,
+        contextVk->getCurrentQueueSerial(), mPipelineLayout.get(), desc, activeAttribLocations,
+        mState.getAttributesTypeMask(), descPtrOut, pipelineOut);
+}
+
+angle::Result ProgramVk::initShaders(ContextVk *contextVk,
+                                     const gl::ShaderMap<std::string> &shaderSources,
+                                     bool enableLineRasterEmulation,
+                                     vk::ShaderProgramHelper *shaderProgramOut)
+{
+    ASSERT(!valid());
+
+    gl::ShaderMap<std::vector<uint32_t>> shaderCodes;
+    ANGLE_TRY(rx::GlslangWrapperVk::GetShaderCode(
+        contextVk, contextVk->getCaps(), enableLineRasterEmulation, shaderSources, &shaderCodes));
+
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        if (!shaderSources[shaderType].empty())
+        {
+            ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
+                                              shaderCodes[shaderType].data(),
+                                              shaderCodes[shaderType].size() * sizeof(uint32_t)));
+
+            shaderProgramOut->setShader(shaderType, &mShaders[shaderType]);
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
@@ -557,6 +567,14 @@ void ProgramVk::setSeparable(bool separable)
     // Nohting to do here yet.
 }
 
+void ProgramVk::clearShaderSources()
+{
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        mShaderSources[shaderType] = std::string();
+    }
+}
+
 std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                            const gl::ProgramLinkedResources &resources,
                                            gl::InfoLog &infoLog)
@@ -566,6 +584,7 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     // assignment done in that function.
     linkResources(resources);
 
+    clearShaderSources();
     GlslangWrapperVk::GetShaderSource(contextVk->useOldRewriteStructSamplers(), mState, resources,
                                       &mShaderSources);
 
@@ -1573,6 +1592,11 @@ void ProgramVk::updateTransformFeedbackDescriptorSetImpl(ContextVk *contextVk)
 
 angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk)
 {
+    if (!hasTextures())
+    {
+        return angle::Result::Continue;
+    }
+
     const vk::TextureDescriptorDesc &texturesDesc = contextVk->getActiveTexturesDesc();
 
     auto iter = mTextureDescriptorsCache.find(texturesDesc);
