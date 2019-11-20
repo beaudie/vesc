@@ -591,7 +591,7 @@ TEST_P(SimpleOperationTest, DrawQuadWithVertexUniform)
     constexpr char kVS[] =
         "attribute vec3 position;\n"
         "uniform vec4 color;\n"
-        "varying vec4 vcolor;\n"
+        "varying mediump vec4 vcolor;\n"
         "void main()\n"
         "{\n"
         "    gl_Position = vec4(position, 1);\n"
@@ -623,7 +623,7 @@ TEST_P(SimpleOperationTest, DrawQuadWithTwoUniforms)
     constexpr char kVS[] =
         "attribute vec3 position;\n"
         "uniform vec4 color1;\n"
-        "varying vec4 vcolor1;\n"
+        "varying mediump vec4 vcolor1;\n"
         "void main()\n"
         "{\n"
         "    gl_Position = vec4(position, 1);\n"
@@ -652,6 +652,15 @@ TEST_P(SimpleOperationTest, DrawQuadWithTwoUniforms)
 
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Draw a second time to verify the necessary resources are reused correctly
+    drawQuad(program.get(), "position", 0.5f, 1.0f, true);
+
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
 }
 
 // Tests a shader program with more than one vertex attribute, with vertex buffers.
@@ -660,7 +669,7 @@ TEST_P(SimpleOperationTest, ThreeVertexAttributes)
     constexpr char kVS[] = R"(attribute vec2 position;
 attribute vec4 color1;
 attribute vec4 color2;
-varying vec4 color;
+varying mediump vec4 color;
 void main()
 {
     gl_Position = vec4(position, 0, 1);
@@ -915,7 +924,8 @@ TEST_P(SimpleOperationTest, DrawWithCubeTexture)
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    constexpr char kVertexShader[] = R"(attribute vec2 pos;
+    constexpr char kVertexShader[] = R"(precision mediump float;
+attribute vec2 pos;
 attribute vec3 coord;
 varying vec3 texCoord;
 void main()
