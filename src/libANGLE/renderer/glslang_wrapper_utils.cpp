@@ -24,8 +24,11 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 
 #include <array>
 #include <numeric>
+#include <string>
+#include <unordered_map>
 
 #include "common/FixedVector.h"
+#include "common/PackedEnums.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
@@ -766,14 +769,14 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
             IntermediateShaderSource *shaderSource = &(*shaderSources)[stage];
             if (shaderSource->empty())
             {
-                ASSERT(!varying.shaderStages[stage]);
+                ASSERT(!varying.shaderStages[stage] || programState.isSeparable());
                 continue;
             }
 
-            if (!varying.shaderStages[stage])
+            if (!varying.shaderStages[stage] && !programState.isSeparable())
             {
-                // If not active in this stage, remove the varying declaration.  Imagine the
-                // following scenario:
+                // If not active in this stage and the program is not marked separable, remove the
+                // varying declaration.  Imagine the following scenario:
                 //
                 //  - VS: declare out varying used for transform feedback
                 //  - FS: declare corresponding in varying which is not active
@@ -816,13 +819,14 @@ void AssignUniformBindings(const GlslangSourceOptions &options,
         "set = " + Str(options.uniformsAndXfbDescriptorSetIndex);
 
     constexpr char kDefaultUniformsBlockName[] = "defaultUniforms";
-    uint32_t bindingIndex                      = 0;
-    for (IntermediateShaderSource &shaderSource : *shaderSources)
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
+        IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
         if (!shaderSource.empty())
         {
             std::string defaultUniformsBinding =
-                uniformsDescriptorSet + ", binding = " + Str(bindingIndex++);
+                uniformsDescriptorSet +
+                ", binding = " + Str(options.uniformsAndXfbDescriptorSetIndexShaderMap[shaderType]);
 
             shaderSource.insertLayoutSpecifier(kDefaultUniformsBlockName, defaultUniformsBinding);
         }
@@ -842,41 +846,46 @@ void AssignUniformBindings(const GlslangSourceOptions &options,
 // Helper to go through shader stages and substitute layout macro.  The translator must have already
 // output the qualifiers.
 void AssignResourceBinding(gl::ShaderBitSet activeShaders,
+                           const gl::ShaderType shaderType,
                            const std::string &name,
                            const std::string &bindingString,
-                           gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+                           IntermediateShaderSource *shaderSource)
 {
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    if (!shaderSource->empty())
     {
-        IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
-        if (activeShaders[shaderType] && !shaderSource.empty())
+        if (activeShaders[shaderType])
         {
-            shaderSource.insertLayoutSpecifier(name, bindingString);
+            shaderSource->insertLayoutSpecifier(name, bindingString);
         }
     }
 }
 
-uint32_t AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
-                                      const std::vector<gl::InterfaceBlock> &blocks,
-                                      uint32_t bindingStart,
-                                      gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+void AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
+                                  const std::vector<gl::InterfaceBlock> &blocks,
+                                  gl::ShaderMap<IntermediateShaderSource> *shaderSources)
 {
     const std::string resourcesDescriptorSet =
         "set = " + Str(options.shaderResourceDescriptorSetIndex);
 
-    uint32_t bindingIndex = bindingStart;
     for (const gl::InterfaceBlock &block : blocks)
     {
         if (!block.isArray || block.arrayElement == 0)
         {
-            const std::string bindingString =
-                resourcesDescriptorSet + ", binding = " + Str(bindingIndex++);
+            for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+            {
+                IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
+                if (!shaderSource.empty())
+                {
+                    const std::string bindingString =
+                        resourcesDescriptorSet + ", binding = " +
+                        Str(options.interfaceBlockBindingsShaderMap[shaderType].at(block.name));
 
-            AssignResourceBinding(block.activeShaders(), block.name, bindingString, shaderSources);
+                    AssignResourceBinding(block.activeShaders(), shaderType, block.name,
+                                          bindingString, &shaderSource);
+                }
+            }
         }
     }
-
-    return bindingIndex;
 }
 
 uint32_t AssignAtomicCounterBufferBindings(const GlslangSourceOptions &options,
@@ -906,21 +915,18 @@ uint32_t AssignAtomicCounterBufferBindings(const GlslangSourceOptions &options,
     return bindingStart + 1;
 }
 
-uint32_t AssignImageBindings(const GlslangSourceOptions &options,
-                             const std::vector<gl::LinkedUniform> &uniforms,
-                             const gl::RangeUI &imageUniformRange,
-                             uint32_t bindingStart,
-                             gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+void AssignImageBindings(const GlslangSourceOptions &options,
+                         const std::vector<gl::LinkedUniform> &uniforms,
+                         const gl::RangeUI &imageUniformRange,
+                         uint32_t bindingStart,
+                         gl::ShaderMap<IntermediateShaderSource> *shaderSources)
 {
     const std::string resourcesDescriptorSet =
         "set = " + Str(options.shaderResourceDescriptorSetIndex);
 
-    uint32_t bindingIndex = bindingStart;
     for (unsigned int uniformIndex : imageUniformRange)
     {
         const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
-        const std::string bindingString =
-            resourcesDescriptorSet + ", binding = " + Str(bindingIndex++);
 
         std::string name = imageUniform.name;
         if (name.back() == ']')
@@ -928,25 +934,35 @@ uint32_t AssignImageBindings(const GlslangSourceOptions &options,
             name = name.substr(0, name.find('['));
         }
 
-        AssignResourceBinding(imageUniform.activeShaders(), name, bindingString, shaderSources);
-    }
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
+            if (!shaderSource.empty())
+            {
+                const std::string bindingString =
+                    resourcesDescriptorSet + ", binding = " +
+                    Str(options.shaderResourceDescriptorSetIndexShaderMap[shaderType]);
 
-    return bindingIndex;
+                AssignResourceBinding(imageUniform.activeShaders(), shaderType, name, bindingString,
+                                      &shaderSource);
+            }
+        }
+    }
 }
 
 void AssignNonTextureBindings(const GlslangSourceOptions &options,
                               const gl::ProgramState &programState,
                               gl::ShaderMap<IntermediateShaderSource> *shaderSources)
 {
+    // TIMTIM - need to get these binding values when creating the pipeline layout, rather
+    // than calculating them again here.
     uint32_t bindingStart = 0;
 
     const std::vector<gl::InterfaceBlock> &uniformBlocks = programState.getUniformBlocks();
-    bindingStart =
-        AssignInterfaceBlockBindings(options, uniformBlocks, bindingStart, shaderSources);
+    AssignInterfaceBlockBindings(options, uniformBlocks, shaderSources);
 
     const std::vector<gl::InterfaceBlock> &storageBlocks = programState.getShaderStorageBlocks();
-    bindingStart =
-        AssignInterfaceBlockBindings(options, storageBlocks, bindingStart, shaderSources);
+    AssignInterfaceBlockBindings(options, storageBlocks, shaderSources);
 
     const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers =
         programState.getAtomicCounterBuffers();
@@ -955,8 +971,7 @@ void AssignNonTextureBindings(const GlslangSourceOptions &options,
 
     const std::vector<gl::LinkedUniform> &uniforms = programState.getUniforms();
     const gl::RangeUI &imageUniformRange           = programState.getImageUniformRange();
-    bindingStart =
-        AssignImageBindings(options, uniforms, imageUniformRange, bindingStart, shaderSources);
+    AssignImageBindings(options, uniforms, imageUniformRange, bindingStart, shaderSources);
 }
 
 void AssignTextureBindings(const GlslangSourceOptions &options,
@@ -966,7 +981,6 @@ void AssignTextureBindings(const GlslangSourceOptions &options,
     const std::string texturesDescriptorSet = "set = " + Str(options.textureDescriptorSetIndex);
 
     // Assign textures to a descriptor set and binding.
-    uint32_t bindingIndex                          = 0;
     const std::vector<gl::LinkedUniform> &uniforms = programState.getUniforms();
 
     for (unsigned int uniformIndex : programState.getSamplerUniformRange())
@@ -979,16 +993,33 @@ void AssignTextureBindings(const GlslangSourceOptions &options,
             continue;
         }
 
-        const std::string bindingString =
-            texturesDescriptorSet + ", binding = " + Str(bindingIndex++);
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
+            if (!shaderSource.empty())
+            {
+                // Samplers in structs are extracted and renamed.
+                const std::string samplerName =
+                    options.useOldRewriteStructSamplers
+                        ? GetMappedSamplerNameOld(samplerUniform.name)
+                        : GlslangGetMappedSamplerName(samplerUniform.name);
+                int bindingValue = -1;
+                // We may not have created the Vulkan pipeline yet, so we may not know the bindings
+                // of the sampler uniforms yet either.
+                auto it = options.textureBindingsShaderMap[shaderType].find(
+                    GlslangGetMappedSamplerName(samplerUniform.name));
+                if (it != options.textureBindingsShaderMap[shaderType].end())
+                {
+                    bindingValue = options.textureBindingsShaderMap[shaderType].at(
+                        GlslangGetMappedSamplerName(samplerUniform.name));
+                }
+                const std::string bindingString =
+                    texturesDescriptorSet + ", binding = " + Str(bindingValue);
 
-        // Samplers in structs are extracted and renamed.
-        const std::string samplerName = options.useOldRewriteStructSamplers
-                                            ? GetMappedSamplerNameOld(samplerUniform.name)
-                                            : GlslangGetMappedSamplerName(samplerUniform.name);
-
-        AssignResourceBinding(samplerUniform.activeShaders(), samplerName, bindingString,
-                              shaderSources);
+                AssignResourceBinding(samplerUniform.activeShaders(), shaderType, samplerName,
+                                      bindingString, &shaderSource);
+            }
+        }
     }
 }
 
@@ -1199,7 +1230,13 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        // To support program pipeline objects, only return shader source for shaders that were
+        // passed in by this gl::ProgramState to avoid overwriting previously link()'ed shaders.
+        gl::Shader *glShader = programState.getAttachedShader(shaderType);
+        if (glShader || programState.hasLinkedShaderStage(shaderType))
+        {
+            (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        }
     }
 }
 
