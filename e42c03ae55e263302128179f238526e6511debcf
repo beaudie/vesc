@@ -70,6 +70,30 @@
       "revId": "e42c03ae55e263302128179f238526e6511debcf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65a75b5a_7ab611ee",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2019-11-20T17:56:33Z",
+      "side": 1,
+      "message": "To clarify:\nTest is calling create2dTexture() which creates a RGBA Texture2D. It should not do this. It needs to use a compressed Texture2D.",
+      "parentUuid": "b70be317_06b2c809",
+      "range": {
+        "startLine": 1408,
+        "startChar": 8,
+        "endLine": 1408,
+        "endChar": 24
+      },
+      "revId": "e42c03ae55e263302128179f238526e6511debcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
