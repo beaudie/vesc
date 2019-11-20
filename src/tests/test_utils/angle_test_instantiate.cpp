@@ -17,6 +17,7 @@
 #include "common/system_utils.h"
 #include "gpu_info_util/SystemInfo.h"
 #include "test_utils/angle_test_configs.h"
+#include "test_utils/angle_test_instantiate_apple.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
 #include "util/test_utils.h"
@@ -300,6 +301,7 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
         }
     }
 
+#if defined(ANGLE_PLATFORM_APPLE)
     if (IsOSX())
     {
         // We do not support non-ANGLE bindings on OSX.
@@ -314,9 +316,19 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
             return false;
         }
 
-        // Currently we only support the OpenGL back-end on OSX.
-        return (param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE);
+        if (param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_METAL_ANGLE &&
+            (!IsMetalRendererAvailable() || IsIntel(vendorID)))
+        {
+            // TODO(hqle): Intel metal tests seem to have problems. Disable for now.
+            // http://anglebug.com/4133
+            return false;
+        }
+
+        // Currently we only support the OpenGL & Metal back-end on OSX.
+        return (param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE ||
+                param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_METAL_ANGLE);
     }
+#endif  // #if defined(ANGLE_PLATFORM_APPLE)
 
     if (IsFuchsia())
     {
@@ -453,6 +465,13 @@ bool IsPlatformAvailable(const PlatformParameters &param)
 
         case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
 #if !defined(ANGLE_ENABLE_VULKAN)
+            return false;
+#else
+            break;
+#endif
+
+        case EGL_PLATFORM_ANGLE_TYPE_METAL_ANGLE:
+#if !defined(ANGLE_ENABLE_METAL)
             return false;
 #else
             break;
