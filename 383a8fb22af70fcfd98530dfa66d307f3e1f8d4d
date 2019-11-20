@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b19265e_f29d021a",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T03:48:52Z",
+      "side": 1,
+      "message": "suggest \u003d instead of , in these macros",
+      "range": {
+        "startLine": 113,
+        "startChar": 48,
+        "endLine": 113,
+        "endChar": 49
+      },
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5da5f90_28c702da",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T03:48:52Z",
+      "side": 1,
+      "message": "Would it be useful to also print error if one is encountered, instead of silently dropping the query?",
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e861b10_d2e77690",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T03:48:52Z",
+      "side": 1,
+      "message": "suggest \u003d { x, y, z }",
+      "range": {
+        "startLine": 126,
+        "startChar": 48,
+        "endLine": 126,
+        "endChar": 70
+      },
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cefc9cad_54644731",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T03:48:52Z",
+      "side": 1,
+      "message": "kMax... per style guide",
+      "range": {
+        "startLine": 160,
+        "startChar": 18,
+        "endLine": 160,
+        "endChar": 19
+      },
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42eb54bf_f88dbc26",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T03:48:52Z",
+      "side": 1,
+      "message": "Note that EGLPrintEGLinfoTest is only being run on ES2_VULKAN() and ES3_VULKAN().",
+      "revId": "383a8fb22af70fcfd98530dfa66d307f3e1f8d4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
