@@ -140,6 +140,30 @@
     },
     {
       "key": {
+        "uuid": "6c6eb52b_47b08e12",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T03:18:13Z",
+      "side": 1,
+      "message": "Also the (void) cast needs to be removed and proper error handling added (ANGLE_TRY)",
+      "parentUuid": "04912e48_e5d247d3",
+      "range": {
+        "startLine": 2154,
+        "startChar": 28,
+        "endLine": 2155,
+        "endChar": 38
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0f1e3692_d8bce095",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 15
@@ -163,6 +187,30 @@
     },
     {
       "key": {
+        "uuid": "75425505_6399bd43",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T03:18:13Z",
+      "side": 1,
+      "message": "Presumably this is `git cl format`\u0027s doing?",
+      "parentUuid": "0f1e3692_d8bce095",
+      "range": {
+        "startLine": 611,
+        "startChar": 0,
+        "endLine": 611,
+        "endChar": 40
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09b31eec_374d2a4e",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
         "patchSetId": 15
@@ -174,6 +222,30 @@
       "writtenOn": "2019-11-19T22:25:44Z",
       "side": 1,
       "message": "Can you explain why you are setting this to offsetsSize?  It isn\u0027t clear to me (reading the extension) why that would be useful.",
+      "range": {
+        "startLine": 787,
+        "startChar": 4,
+        "endLine": 787,
+        "endChar": 36
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38315068_c21b05f1",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-20T03:18:13Z",
+      "side": 1,
+      "message": "Probably that there are the same number of sizes and offsets?",
+      "parentUuid": "09b31eec_374d2a4e",
       "range": {
         "startLine": 787,
         "startChar": 4,
