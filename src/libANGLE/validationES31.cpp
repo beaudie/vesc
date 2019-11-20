@@ -1705,18 +1705,97 @@ bool ValidateIsProgramPipeline(Context *context, ProgramPipelineID pipeline)
 bool ValidateUseProgramStages(Context *context,
                               ProgramPipelineID pipeline,
                               GLbitfield stages,
-                              ShaderProgramID program)
+                              ShaderProgramID programId)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES31Required);
+        return false;
+    }
+
+    // GL_INVALID_VALUE is generated if shaders contains set bits that are not recognized, and is
+    // not the reserved value GL_ALL_SHADER_BITS.
+    const GLbitfield knownShaderBits =
+        GL_VERTEX_SHADER_BIT | GL_FRAGMENT_SHADER_BIT | GL_COMPUTE_SHADER_BIT;
+    if ((stages & ~knownShaderBits) && (stages != GL_ALL_SHADER_BITS))
+    {
+        context->validationError(GL_INVALID_VALUE, kUnrecognizedShaderStageBit);
+        return false;
+    }
+
+    Program *program = context->getProgramNoResolveLink(programId);
+    if (!program)
+    {
+        context->validationError(GL_INVALID_VALUE, kProgramDoesNotExist);
+        return false;
+    }
+
+    // GL_INVALID_OPERATION is generated if program refers to a program object that was not linked
+    // with its GL_PROGRAM_SEPARABLE status set.
+    if (!program->isSeparable())
+    {
+        context->validationError(GL_INVALID_OPERATION, kProgramNotSeparable);
+        return false;
+    }
+
+    // GL_INVALID_OPERATION is generated if program refers to a program object that has not been
+    // successfully linked.
+    if (!program->isLinked())
+    {
+        context->validationError(GL_INVALID_OPERATION, kProgramNotLinked);
+        return false;
+    }
+
+    // GL_INVALID_OPERATION is generated if pipeline is not a name previously returned from a call
+    // to glGenProgramPipelines or if such a name has been deleted by a call to
+    // glDeleteProgramPipelines.
+    if (!context->isProgramPipelineGenerated({pipeline}))
+    {
+        context->validationError(GL_INVALID_OPERATION, kObjectNotGenerated);
+        return false;
+    }
+
+    return true;
 }
 
 bool ValidateActiveShaderProgram(Context *context,
                                  ProgramPipelineID pipeline,
-                                 ShaderProgramID program)
+                                 ShaderProgramID programId)
 {
-    UNIMPLEMENTED();
-    return false;
+    // An INVALID_OPERATION error is generated if pipeline is not a name returned from a previous
+    // call to GenProgramPipelines or if such a name has since been deleted by
+    // DeleteProgramPipelines.
+    if (!context->isProgramPipelineGenerated({pipeline}))
+    {
+        context->validationError(GL_INVALID_OPERATION, kObjectNotGenerated);
+        return false;
+    }
+
+    // An INVALID_VALUE error is generated if program is not zero and is not the name of either a
+    // program or shader object.
+    if ((programId.value != 0) && !context->isProgram(programId) && !context->isShader(programId))
+    {
+        context->validationError(GL_INVALID_VALUE, kProgramDoesNotExist);
+        return false;
+    }
+
+    // An INVALID_OPERATION error is generated if program is the name of a shader object.
+    if (context->isShader(programId))
+    {
+        context->validationError(GL_INVALID_OPERATION, kExpectedProgramName);
+        return false;
+    }
+
+    // An INVALID_OPERATION error is generated if program is not zero and has not been linked, or
+    // was last linked unsuccessfully. The active program is not modified.
+    Program *program = context->getProgramNoResolveLink(programId);
+    if ((programId.value != 0) && !program->isLinked())
+    {
+        context->validationError(GL_INVALID_OPERATION, kProgramNotLinked);
+        return false;
+    }
+
+    return true;
 }
 
 bool ValidateCreateShaderProgramv(Context *context,
@@ -1724,8 +1803,28 @@ bool ValidateCreateShaderProgramv(Context *context,
                                   GLsizei count,
                                   const GLchar *const *strings)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->validationError(GL_INVALID_OPERATION, kES31Required);
+        return false;
+    }
+
+    // GL_INVALID_ENUM is generated if type is not an accepted shader type.
+    if ((type != ShaderType::Vertex) && (type != ShaderType::Fragment) &&
+        (type != ShaderType::Compute))
+    {
+        context->validationError(GL_INVALID_ENUM, kInvalidShaderType);
+        return false;
+    }
+
+    // GL_INVALID_VALUE is generated if count is negative.
+    if (count < 0)
+    {
+        context->validationError(GL_INVALID_VALUE, kNegativeCount);
+        return false;
+    }
+
+    return true;
 }
 
 bool ValidateGetProgramPipelineiv(Context *context,
