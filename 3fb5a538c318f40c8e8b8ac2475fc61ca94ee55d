@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4ee92203_a81e21ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-20T20:06:06Z",
+      "side": 1,
+      "message": "This CL took about 20 minutes to write. The cost is pretty low. And now we can ensure the tests pass and stay passing.",
+      "parentUuid": "d7c3f342_9c55d628",
+      "revId": "3fb5a538c318f40c8e8b8ac2475fc61ca94ee55d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a01597f0_cb28b12a",
         "filename": "src/tests/deqp_support/deqp.gni",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-11-20T18:40:12Z",
       "side": 1,
       "message": "Can you open an angle bug to revert this, so we have something tracking it locally too?",
+      "revId": "3fb5a538c318f40c8e8b8ac2475fc61ca94ee55d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d496942c_13908627",
+        "filename": "src/tests/deqp_support/deqp.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-20T20:06:06Z",
+      "side": 1,
+      "message": "Yeah, I\u0027ll leave the bug I opened open.",
+      "parentUuid": "a01597f0_cb28b12a",
       "revId": "3fb5a538c318f40c8e8b8ac2475fc61ca94ee55d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
