@@ -26,6 +26,7 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 #include <numeric>
 
 #include "common/FixedVector.h"
+#include "common/PackedEnums.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
@@ -1112,7 +1113,13 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        // To support program pipeline objects, only return shader source for shaders that were
+        // passed in by this gl::ProgramState to avoid overwriting previously link()'ed shaders.
+        gl::Shader *glShader = programState.getAttachedShader(shaderType);
+        if (glShader)
+        {
+            (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        }
     }
 }
 
