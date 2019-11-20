@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7c3f342_9c55d628",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-20T18:40:12Z",
+      "side": 1,
+      "message": "What\u0027s the benefit of doing this rather than waiting for the dEQP fix to land and get picked up naturally, since this will need to be reverted again (hopefully relatively soon).",
+      "revId": "3fb5a538c318f40c8e8b8ac2475fc61ca94ee55d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a01597f0_cb28b12a",
+        "filename": "src/tests/deqp_support/deqp.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-11-20T18:40:12Z",
+      "side": 1,
+      "message": "Can you open an angle bug to revert this, so we have something tracking it locally too?",
+      "revId": "3fb5a538c318f40c8e8b8ac2475fc61ca94ee55d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
