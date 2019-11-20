@@ -24,10 +24,14 @@ struct GlslangSourceOptions
 {
     // Uniforms set index:
     uint32_t uniformsAndXfbDescriptorSetIndex = 0;
+    // Uniforms binding index shader map:
+    gl::ShaderMap<int> uniformsAndXfbDescriptorSetIndexMap;
+
     // Textures set index:
     uint32_t textureDescriptorSetIndex = 1;
     // Other shader resources set index:
     uint32_t shaderResourceDescriptorSetIndex = 2;
+
     // ANGLE driver uniforms set index:
     uint32_t driverUniformsDescriptorSetIndex = 3;
 
