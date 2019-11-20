@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "591ce826_60444a82",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-20T20:35:29Z",
+      "side": 1,
+      "message": "What\u0027s the spec language for this check? I\u0027d like to figure out where to best cache it. We have existing machinery for caching this kind of information in ANGLE and potentially we can reuse it.",
+      "range": {
+        "startLine": 417,
+        "startChar": 5,
+        "endLine": 417,
+        "endChar": 34
+      },
+      "revId": "29c4829044f9d217ad92b1fda4587d0a9cb5f7e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
