@@ -1267,9 +1267,8 @@ void ProgramLinkedResourcesLinker::linkResources(const ProgramState &programStat
 {
     // Gather uniform interface block info.
     InterfaceBlockInfo uniformBlockInfo(mCustomEncoderFactory);
-    for (const ShaderType shaderType : AllShaderTypes())
+    for (Shader *shader : programState.getAttachedShaders())
     {
-        Shader *shader = programState.getAttachedShader(shaderType);
         if (shader)
         {
             uniformBlockInfo.getShaderBlockInfo(shader->getUniformBlocks());
@@ -1290,11 +1289,10 @@ void ProgramLinkedResourcesLinker::linkResources(const ProgramState &programStat
     // Link uniform interface blocks.
     resources.uniformBlockLinker.linkBlocks(getUniformBlockSize, getUniformBlockMemberInfo);
 
-    // Gather storage bufer interface block info.
+    // Gather storage buffer interface block info.
     InterfaceBlockInfo shaderStorageBlockInfo(mCustomEncoderFactory);
-    for (const ShaderType shaderType : AllShaderTypes())
+    for (Shader *shader : programState.getAttachedShaders())
     {
-        Shader *shader = programState.getAttachedShader(shaderType);
         if (shader)
         {
             shaderStorageBlockInfo.getShaderBlockInfo(shader->getShaderStorageBlocks());
