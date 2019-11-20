@@ -3593,6 +3593,89 @@ bool GetQueryParameterInfo(const State &glState,
 
     return false;
 }
+
+void QueryProgramPipelineiv(const Context *context,
+                            ProgramPipeline *programPipeline,
+                            GLenum pname,
+                            GLint *params)
+{
+    if (!params)
+    {
+        // Can't write the result anywhere, so just return immediately.
+        return;
+    }
+
+    switch (pname)
+    {
+        case GL_ACTIVE_PROGRAM:
+        {
+            // the name of the active program object of the program pipeline object is returned in
+            // params
+            const Program *program = programPipeline->getActiveShaderProgram();
+            if (program)
+            {
+                *params = program->id().value;
+            }
+            break;
+        }
+
+        case GL_VERTEX_SHADER:
+        {
+            // the name of the current program object for the vertex shader type of the program
+            // pipeline object is returned in params
+            const Program *program = programPipeline->getShaderProgram(ShaderType::Vertex);
+            if (program)
+            {
+                *params = program->id().value;
+            }
+            break;
+        }
+
+        case GL_FRAGMENT_SHADER:
+        {
+            // the name of the current program object for the fragment shader type of the program
+            // pipeline object is returned in params
+            const Program *program = programPipeline->getShaderProgram(ShaderType::Fragment);
+            if (program)
+            {
+                *params = program->id().value;
+            }
+            break;
+        }
+
+        case GL_COMPUTE_SHADER:
+        {
+            // the name of the current program object for the compute shader type of the program
+            // pipeline object is returned in params
+            const Program *program = programPipeline->getShaderProgram(ShaderType::Compute);
+            if (program)
+            {
+                *params = program->id().value;
+            }
+            break;
+        }
+
+        case GL_INFO_LOG_LENGTH:
+        {
+            // the length of the info log, including the null terminator, is returned in params. If
+            // there is no info log, zero is returned.
+            *params = programPipeline->getInfoLogLength();
+            break;
+        }
+
+        case GL_VALIDATE_STATUS:
+        {
+            // the validation status of pipeline, as determined by glValidateProgramPipeline, is
+            // returned in params
+            *params = programPipeline->isValid();
+            break;
+        }
+
+        default:
+            break;
+    }
+}
+
 }  // namespace gl
 
 namespace egl
