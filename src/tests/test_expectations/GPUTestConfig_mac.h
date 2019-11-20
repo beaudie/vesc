@@ -15,6 +15,7 @@
 namespace angle
 {
 
+bool IsMetalRendererAvailable();
 void GetOperatingSystemVersionNumbers(int32_t *majorVersion, int32_t *minorVersion);
 
 }  // namespace angle
