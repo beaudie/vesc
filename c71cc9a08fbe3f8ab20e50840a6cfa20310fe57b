@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "748e19b1_81419599",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90441bc8_97e5427b",
+      "range": {
+        "startLine": 530,
+        "startChar": 47,
+        "endLine": 530,
+        "endChar": 83
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7ce791c_748b41e6",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 15
@@ -45,6 +69,30 @@
       "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acbf960e_e30c512f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "The rule of creating transform feedback layout qualifier is quite complicated. In case of built-in varyings, if one of the built-in varyings is declared as transform feedback varying, we have to add all built-in varyings which are used in the shader to gl_PerVertex Struct. And there is one exception. If \u0027gl_position\u0027 is registered as a transform feedback varying, we have to use user defined varying to write to transform feedback buffer. Checking \u0027gl_position\u0027 on 576 line is to create user defined varying. And second checking on 603 line is another case. It is the cae that non \u0027gl_position\u0027 built-in varying is registered as transform feedback varying and \u0027gl_position\u0027 is used in shader and not in the transform feedback varying. we should add \u0027gl_position\u0027 to gl_PerVertex.",
+      "parentUuid": "a7ce791c_748b41e6",
+      "range": {
+        "startLine": 603,
+        "startChar": 28,
+        "endLine": 603,
+        "endChar": 71
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "8e4eda3d_6c0386b5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "I removed it.",
+      "parentUuid": "cd46314f_b30e9809",
+      "range": {
+        "startLine": 656,
+        "startChar": 23,
+        "endLine": 656,
+        "endChar": 27
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8674a62e_ec620b76",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 15
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "d8ec3a56_40667b02",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "This is the result of \u0027git cl format\u0027.",
+      "parentUuid": "8674a62e_ec620b76",
+      "range": {
+        "startLine": 779,
+        "startChar": 92,
+        "endLine": 779,
+        "endChar": 98
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a79b25a_8e837cd1",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
@@ -114,6 +210,30 @@
       "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c003cf2_8117ea45",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a79b25a_8e837cd1",
+      "range": {
+        "startLine": 2147,
+        "startChar": 8,
+        "endLine": 2147,
+        "endChar": 89
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -164,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "b63e050a_46ad7c25",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "Cody : you\u0027re right. I removed release here.\nShahbaz : Done.",
+      "parentUuid": "6c6eb52b_47b08e12",
+      "range": {
+        "startLine": 2154,
+        "startChar": 28,
+        "endLine": 2155,
+        "endChar": 38
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f1e3692_d8bce095",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 15
@@ -208,6 +352,30 @@
       "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d41a07b6_64b3363d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "Correct. It is a result of \u0027git cl format\u0027",
+      "parentUuid": "75425505_6399bd43",
+      "range": {
+        "startLine": 611,
+        "startChar": 0,
+        "endLine": 611,
+        "endChar": 40
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -258,6 +426,30 @@
     },
     {
       "key": {
+        "uuid": "96e9cfb5_26af018f",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "Right. same number of sizes and offsets.",
+      "parentUuid": "38315068_c21b05f1",
+      "range": {
+        "startLine": 787,
+        "startChar": 4,
+        "endLine": 787,
+        "endChar": 36
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1d6fc96_4451a608",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 15
@@ -278,6 +470,30 @@
       "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01e8ae0a_2743078f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "Wrong comment. I removed it.",
+      "parentUuid": "f1d6fc96_4451a608",
+      "range": {
+        "startLine": 817,
+        "startChar": 21,
+        "endLine": 817,
+        "endChar": 49
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -304,6 +520,30 @@
     },
     {
       "key": {
+        "uuid": "611be7f2_25f1a493",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "You can find history for this in previous comments thread. Also, I filed a new anglebug for it.",
+      "parentUuid": "91b1e006_6d7300a6",
+      "range": {
+        "startLine": 1212,
+        "startChar": 23,
+        "endLine": 1212,
+        "endChar": 31
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5667bdb_f4fcc604",
         "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
         "patchSetId": 15
@@ -324,6 +564,30 @@
       "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b61a1b95_141cc267",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-20T10:10:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5667bdb_f4fcc604",
+      "range": {
+        "startLine": 1276,
+        "startChar": 23,
+        "endLine": 1276,
+        "endChar": 31
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
