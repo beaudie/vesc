@@ -2822,6 +2822,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             BufferHelper *currentBuffer = bufferUpdate.bufferHelper;
             ASSERT(currentBuffer && currentBuffer->valid());
             currentBuffer->onGraphAccess(contextVk->getCommandGraph());
+            currentBuffer->onRead(contextVk, this, VK_ACCESS_TRANSFER_READ_BIT);
 
             commandBuffer->copyBufferToImage(currentBuffer->getBuffer().getHandle(), mImage,
                                              getCurrentLayout(), 1, &update.buffer.copyRegion);

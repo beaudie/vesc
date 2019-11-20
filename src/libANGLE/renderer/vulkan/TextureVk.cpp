@@ -1076,14 +1076,6 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
         releaseImage(contextVk);
 
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
-        // Set up read dependency, we are now reading from this buffer to the new image.
-        if (stagingBuffer)
-        {
-            stagingBuffer->onRead(contextVk, mImage, VK_ACCESS_TRANSFER_READ_BIT);
-            // Different parts of the buffer might be read from or write to.
-            stagingBuffer->onSelfReadWrite(contextVk, VK_ACCESS_TRANSFER_READ_BIT,
-                                           VK_ACCESS_TRANSFER_WRITE_BIT);
-        }
     }
     // Check if the image supports blit. If it does, we can do the mipmap generation on the gpu
     // only.
@@ -1390,14 +1382,6 @@ angle::Result TextureVk::syncState(const gl::Context *context,
 
     // Initialize the image storage and flush the pixel buffer.
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
-
-    if (stagingBuffer)
-    {
-        stagingBuffer->onRead(contextVk, mImage, VK_ACCESS_TRANSFER_READ_BIT);
-        // Different parts of the buffer might be read from or write to.
-        stagingBuffer->onSelfReadWrite(contextVk, VK_ACCESS_TRANSFER_READ_BIT,
-                                       VK_ACCESS_TRANSFER_WRITE_BIT);
-    }
 
     if (dirtyBits.none() && mSampler.valid())
     {
