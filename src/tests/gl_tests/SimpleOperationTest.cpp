@@ -652,6 +652,15 @@ TEST_P(SimpleOperationTest, DrawQuadWithTwoUniforms)
 
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Draw a second time to verify the necessary resources are reused correctly
+    drawQuad(program.get(), "position", 0.5f, 1.0f, true);
+
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
 }
 
 // Tests a shader program with more than one vertex attribute, with vertex buffers.
