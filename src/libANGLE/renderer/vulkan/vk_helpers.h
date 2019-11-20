@@ -1200,9 +1200,10 @@ class ShaderProgramHelper : angle::NonCopyable
 
     bool isGraphicsProgram() const
     {
-        ASSERT(mShaders[gl::ShaderType::Vertex].valid() !=
+        ASSERT((mShaders[gl::ShaderType::Vertex].valid() ||
+                mShaders[gl::ShaderType::Fragment].valid()) !=
                mShaders[gl::ShaderType::Compute].valid());
-        return mShaders[gl::ShaderType::Vertex].valid();
+        return !mShaders[gl::ShaderType::Compute].valid();
     }
 
     ShaderAndSerial &getShader(gl::ShaderType shaderType) { return mShaders[shaderType].get(); }

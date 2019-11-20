@@ -10,6 +10,8 @@
 #define LIBANGLE_RENDERER_GLSLANG_WRAPPER_UTILS_H_
 
 #include <functional>
+#include <string>
+#include <unordered_map>
 
 #include "libANGLE/renderer/ProgramImpl.h"
 
@@ -23,16 +25,31 @@ enum class GlslangError
 struct GlslangSourceOptions
 {
     // Uniforms set index:
-    uint32_t uniformsAndXfbDescriptorSetIndex = 0;
+    uint32_t uniformsAndXfbDescriptorSetIndex = -1;
+    // Uniforms binding index shader map:
+    gl::ShaderMap<int> uniformsAndXfbDescriptorSetIndexShaderMap;
+
     // Textures set index:
-    uint32_t textureDescriptorSetIndex = 1;
+    uint32_t textureDescriptorSetIndex = -1;
+    // Textures set index shader map:
+    gl::ShaderMap<int> textureDescriptorSetIndexShaderMap;
+    // Map of interface blocks to descriptor set bindings, per shader
+    gl::ShaderMap<std::unordered_map<std::string, int>> textureBindingsShaderMap;
+
     // Other shader resources set index:
-    uint32_t shaderResourceDescriptorSetIndex = 2;
+    uint32_t shaderResourceDescriptorSetIndex = -1;
+    // Other shader resources set index shader map:
+    gl::ShaderMap<int> shaderResourceDescriptorSetIndexShaderMap;
+    // Map of interface blocks to descriptor set bindings, per shader
+    gl::ShaderMap<std::unordered_map<std::string, int>> interfaceBlockBindingsShaderMap;
+
     // ANGLE driver uniforms set index:
-    uint32_t driverUniformsDescriptorSetIndex = 3;
+    uint32_t driverUniformsDescriptorSetIndex = -1;
+    // ANGLE driver uniforms shader map:
+    gl::ShaderMap<int> driverUniformsDescriptorSetIndexShaderMap;
 
     // Binding index start for transform feedback buffers:
-    uint32_t xfbBindingIndexStart = 16;
+    uint32_t xfbBindingIndexStart = -1;
 
     bool useOldRewriteStructSamplers        = false;
     bool supportsTransformFeedbackExtension = false;
