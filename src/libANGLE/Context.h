@@ -577,6 +577,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     void onPostSwap() const;
 
+    bool isProgramInProgramPipeline(ShaderProgramID program) const;
+
   private:
     void initialize();
 

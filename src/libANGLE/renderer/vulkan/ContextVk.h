@@ -421,6 +421,13 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     const gl::OverlayType *getOverlay() const { return mState.getOverlay(); }
 
+    ANGLE_INLINE bool useLineRaster(const gl::PrimitiveMode mode)
+    {
+        return getFeatures().basicGLLineRasterization.enabled && gl::IsLineMode(mode);
+    }
+
+    void invalidateCurrentShaderResources(ProgramVk *programVk);
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -660,6 +667,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     void clearAllGarbage();
     angle::Result ensureSubmitFenceInitialized();
 
+    void dirtyProgramExecutableHelper(const gl::Context *context);
+
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
@@ -693,6 +702,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     VertexArrayVk *mVertexArray;
     FramebufferVk *mDrawFramebuffer;
     ProgramVk *mProgram;
+    ProgramPipelineVk *mProgramPipeline;
 
     // Graph resource used to record dispatch commands and hold resource dependencies.
     vk::DispatchHelper mDispatcher;
