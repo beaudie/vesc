@@ -10,6 +10,8 @@
 #define LIBANGLE_RENDERER_GLSLANG_WRAPPER_UTILS_H_
 
 #include <functional>
+#include <string>
+#include <unordered_map>
 
 #include "libANGLE/renderer/ProgramImpl.h"
 
@@ -24,16 +26,27 @@ enum class GlslangError
 struct GlslangSourceOptions
 {
     // Uniforms set index:
-    uint32_t uniformsAndXfbDescriptorSetIndex = 0;
+    uint32_t uniformsAndXfbDescriptorSetIndex = -1;
+    // Uniforms binding index shader map:
+    gl::ShaderMap<int> uniformsAndXfbDescriptorSetIndexShaderMap;
+
     // Textures set index:
-    uint32_t textureDescriptorSetIndex = 1;
+    uint32_t textureDescriptorSetIndex = -1;
+    // Map of interface blocks to descriptor set bindings, per shader
+    gl::ShaderMap<std::unordered_map<std::string, int>> textureBindingsShaderMap;
+
     // Other shader resources set index:
-    uint32_t shaderResourceDescriptorSetIndex = 2;
+    uint32_t shaderResourceDescriptorSetIndex = -1;
+    // Other shader resources set index shader map:
+    gl::ShaderMap<int> shaderResourceDescriptorSetIndexShaderMap;
+    // Map of interface blocks to descriptor set bindings, per shader
+    gl::ShaderMap<std::unordered_map<std::string, int>> interfaceBlockBindingsShaderMap;
+
     // ANGLE driver uniforms set index:
-    uint32_t driverUniformsDescriptorSetIndex = 3;
+    uint32_t driverUniformsDescriptorSetIndex = -1;
 
     // Binding index start for transform feedback buffers:
-    uint32_t xfbBindingIndexStart = 16;
+    uint32_t xfbBindingIndexStart = -1;
 
     bool useOldRewriteStructSamplers        = false;
     bool supportsTransformFeedbackExtension = false;
@@ -61,8 +74,8 @@ struct ShaderInterfaceVariableInfo
     // variables that share the same name, such as a vertex attribute and a fragment output.  They
     // will share this object since they have the same name, but will find possibly different
     // locations in their respective slots.
-    gl::ShaderMap<uint32_t> location;
-    gl::ShaderMap<uint32_t> component;
+    uint32_t location  = kInvalid;
+    uint32_t component = kInvalid;
     // The stages this shader interface variable is active.
     gl::ShaderBitSet activeStages;
     // Used for transform feedback extension to decorate vertex shader output.
@@ -87,13 +100,14 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
-                            ShaderInterfaceVariableInfoMap *variableInfoMapOut);
+                            gl::ShaderMap<ShaderInterfaceVariableInfoMap> *variableInfoMapOut);
 
-angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
-                                        const gl::Caps &glCaps,
-                                        const gl::ShaderMap<std::string> &shaderSources,
-                                        const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                        gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
+angle::Result GlslangGetShaderSpirvCode(
+    GlslangErrorCallback callback,
+    const gl::Caps &glCaps,
+    const gl::ShaderMap<std::string> &shaderSources,
+    const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap,
+    gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
 
 }  // namespace rx
 
