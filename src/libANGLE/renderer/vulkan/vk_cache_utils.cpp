@@ -27,6 +27,11 @@ namespace rx
 namespace vk
 {
 
+uint32_t getDescriptorSetLayoutIndex(const gl::ShaderType shaderType, uint32_t descriptorSetIndex)
+{
+    return (gl::kShaderCount * descriptorSetIndex) + static_cast<uint32_t>(shaderType);
+}
+
 namespace
 {
 
@@ -1526,10 +1531,10 @@ bool PipelineLayoutDesc::operator==(const PipelineLayoutDesc &other) const
 }
 
 void PipelineLayoutDesc::updateDescriptorSetLayout(uint32_t setIndex,
-                                                   const DescriptorSetLayoutDesc &desc)
+                                                   const DescriptorSetLayoutDescArray &descArray)
 {
     ASSERT(setIndex < mDescriptorSetLayouts.size());
-    mDescriptorSetLayouts[setIndex] = desc;
+    mDescriptorSetLayouts[setIndex] = descArray;
 }
 
 void PipelineLayoutDesc::updatePushConstantRange(gl::ShaderType shaderType,
@@ -1872,7 +1877,7 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     }
 
     // Note this does not handle gaps in descriptor set layouts gracefully.
-    angle::FixedVector<VkDescriptorSetLayout, vk::kMaxDescriptorSetLayouts> setLayoutHandles;
+    angle::FixedVector<VkDescriptorSetLayout, kMaxDescriptorSetLayouts> setLayoutHandles;
     for (const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr : descriptorSetLayouts)
     {
         if (layoutPtr.valid())
@@ -1918,6 +1923,143 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
 
     auto insertedItem = mPayload.emplace(desc, vk::RefCountedPipelineLayout(std::move(newLayout)));
     vk::RefCountedPipelineLayout &insertedLayout = insertedItem.first->second;
+    pipelineLayoutOut->set(&insertedLayout);
+
+    return angle::Result::Continue;
+}
+
+angle::Result PipelineLayoutCache::getPipelineLayout(
+    vk::Context *context,
+    const vk::PipelineLayoutDesc &desc,
+    const vk::DescriptorSetLayoutArrayofArrays<vk::DescriptorSetLayoutPointerArray>
+        &descriptorSetLayouts,
+    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        vk::RefCountedPipelineLayout &layout = iter->second;
+        pipelineLayoutOut->set(&layout);
+        return angle::Result::Continue;
+    }
+
+    // Note this does not handle gaps in descriptor set layouts gracefully.
+    angle::FixedVector<VkDescriptorSetLayout, gl::kShaderCount * kMaxDescriptorSetLayouts>
+        setLayoutHandles;
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        for (const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr :
+             descriptorSetLayouts[(int)shaderType])
+        {
+            if (layoutPtr.valid())
+            {
+                VkDescriptorSetLayout setLayout = layoutPtr.get().getHandle();
+                if (setLayout != VK_NULL_HANDLE)
+                {
+                    setLayoutHandles.push_back(setLayout);
+                }
+            }
+        }
+    }
+
+    const vk::PushConstantRangeArray<vk::PackedPushConstantRange> &descPushConstantRanges =
+        desc.getPushConstantRanges();
+
+    gl::ShaderVector<VkPushConstantRange> pushConstantRanges;
+
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        const vk::PackedPushConstantRange &pushConstantDesc = descPushConstantRanges[shaderType];
+        if (pushConstantDesc.size > 0)
+        {
+            VkPushConstantRange range;
+            range.stageFlags = gl_vk::kShaderStageMap[shaderType];
+            range.offset     = pushConstantDesc.offset;
+            range.size       = pushConstantDesc.size;
+
+            pushConstantRanges.push_back(range);
+        }
+    }
+
+    // No pipeline layout found. We must create a new one.
+    VkPipelineLayoutCreateInfo createInfo = {};
+    createInfo.sType                      = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    createInfo.flags                      = 0;
+    createInfo.setLayoutCount             = static_cast<uint32_t>(setLayoutHandles.size());
+    createInfo.pSetLayouts                = setLayoutHandles.data();
+    createInfo.pushConstantRangeCount     = static_cast<uint32_t>(pushConstantRanges.size());
+    createInfo.pPushConstantRanges        = pushConstantRanges.data();
+
+    vk::PipelineLayout newLayout;
+    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+
+    auto insertedItem = mPayload.emplace(desc, vk::RefCountedPipelineLayout(std::move(newLayout)));
+    vk::RefCountedPipelineLayout &insertedLayout = insertedItem.first->second;
+    pipelineLayoutOut->set(&insertedLayout);
+
+    return angle::Result::Continue;
+}
+
+angle::Result PipelineLayoutCache::getPipelinePipelineLayout(
+    vk::Context *context,
+    std::vector<const vk::PipelineLayoutDesc *> &pipelinePipelineLayoutDesc,
+    std::vector<const vk::DescriptorSetLayoutPointerArray *> &pipelineDescriptorSetLayout,
+    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
+{
+    // Note this does not handle gaps in descriptor set layouts gracefully.
+    vk::DescriptorSetLayoutDesc uniformsAndXfbSetDesc;
+
+    std::vector<VkDescriptorSetLayout> setLayoutHandles;
+    for (const vk::DescriptorSetLayoutPointerArray *pipelineLayoutDesc :
+         pipelineDescriptorSetLayout)
+    {
+        for (const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr : *pipelineLayoutDesc)
+        {
+            if (layoutPtr.valid())
+            {
+                VkDescriptorSetLayout setLayout = layoutPtr.get().getHandle();
+                if (setLayout != VK_NULL_HANDLE)
+                {
+                    setLayoutHandles.push_back(setLayout);
+                }
+            }
+        }
+    }
+
+    gl::ShaderVector<VkPushConstantRange> pushConstantRanges;
+#if 0  // TIMTIM
+    const vk::PushConstantRangeArray<vk::PackedPushConstantRange> &descPushConstantRanges =
+        desc.getPushConstantRanges();
+
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        const vk::PackedPushConstantRange &pushConstantDesc = descPushConstantRanges[shaderType];
+        if (pushConstantDesc.size > 0)
+        {
+            VkPushConstantRange range;
+            range.stageFlags = gl_vk::kShaderStageMap[shaderType];
+            range.offset     = pushConstantDesc.offset;
+            range.size       = pushConstantDesc.size;
+
+            pushConstantRanges.push_back(range);
+        }
+    }
+#endif
+
+    // No pipeline layout found. We must create a new one.
+    VkPipelineLayoutCreateInfo createInfo = {};
+    createInfo.sType                      = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    createInfo.flags                      = 0;
+    createInfo.setLayoutCount             = static_cast<uint32_t>(setLayoutHandles.size());
+    createInfo.pSetLayouts                = setLayoutHandles.data();
+    createInfo.pushConstantRangeCount     = static_cast<uint32_t>(pushConstantRanges.size());
+    createInfo.pPushConstantRanges        = pushConstantRanges.data();
+
+    vk::PipelineLayout newLayout;
+    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+
+    mPipelinePayload.emplace_back(vk::RefCountedPipelineLayout(std::move(newLayout)));
+    vk::RefCountedPipelineLayout &insertedLayout = mPipelinePayload.back();
     pipelineLayoutOut->set(&insertedLayout);
 
     return angle::Result::Continue;

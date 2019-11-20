@@ -438,7 +438,8 @@ angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *contextVk,
     // Corresponding pipeline layouts:
     vk::PipelineLayoutDesc pipelineLayoutDesc;
 
-    pipelineLayoutDesc.updateDescriptorSetLayout(kSetIndex, descriptorSetDesc);
+    vk::DescriptorSetLayoutDescArray descriptorSetDescArray = {descriptorSetDesc};
+    pipelineLayoutDesc.updateDescriptorSetLayout(kSetIndex, descriptorSetDescArray);
     if (pushConstantsSize)
     {
         pipelineLayoutDesc.updatePushConstantRange(pushConstantsShaderStage, 0,

@@ -1495,9 +1495,18 @@ bool State::removeTransformFeedbackBinding(const Context *context,
     return false;
 }
 
+void State::useProgramStages(ProgramPipeline *programPipeline,
+                             GLbitfield stages,
+                             Program *shaderProgram)
+{
+    programPipeline->useProgramStages(stages, shaderProgram);
+    mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
+}
+
 void State::setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline)
 {
     mProgramPipeline.set(context, pipeline);
+    mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
 }
 
 void State::detachProgramPipeline(const Context *context, ProgramPipelineID pipeline)
@@ -2736,7 +2745,22 @@ angle::Result State::syncVertexArray(const Context *context)
 
 angle::Result State::syncProgram(const Context *context)
 {
-    return mProgram->syncState(context);
+    // There may not be a program if the calling application only uses program pipelines.
+    if (mProgram)
+    {
+        return mProgram->syncState(context);
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result State::syncProgramPipeline(const Context *context)
+{
+    // There may not be a program pipeline if the calling application only uses programs.
+    if (mProgramPipeline.get())
+    {
+        return mProgramPipeline.get()->syncState(context);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result State::syncDirtyObject(const Context *context, GLenum target)
@@ -2767,6 +2791,9 @@ angle::Result State::syncDirtyObject(const Context *context, GLenum target)
         case GL_PROGRAM:
             localSet.set(DIRTY_OBJECT_PROGRAM);
             break;
+        case GL_PROGRAM_PIPELINE:
+            localSet.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+            break;
     }
 
     return syncDirtyObjects(context, localSet);
@@ -2791,6 +2818,9 @@ void State::setObjectDirty(GLenum target)
             break;
         case GL_PROGRAM:
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+            break;
+        case GL_PROGRAM_PIPELINE:
+            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
             break;
         default:
             break;

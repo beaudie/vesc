@@ -1553,6 +1553,29 @@ angle::Result RendererVk::getPipelineLayout(
                                                   pipelineLayoutOut);
 }
 
+angle::Result RendererVk::getPipelineLayout(
+    vk::Context *context,
+    const vk::PipelineLayoutDesc &desc,
+    const vk::DescriptorSetLayoutArrayofArrays<vk::DescriptorSetLayoutPointerArray>
+        &descriptorSetLayouts,
+    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
+{
+    std::lock_guard<decltype(mPipelineLayoutCacheMutex)> lock(mPipelineLayoutCacheMutex);
+    return mPipelineLayoutCache.getPipelineLayout(context, desc, descriptorSetLayouts,
+                                                  pipelineLayoutOut);
+}
+
+angle::Result RendererVk::getPipelinePipelineLayout(
+    vk::Context *context,
+    std::vector<const vk::PipelineLayoutDesc *> &pipelinePipelineLayoutDesc,
+    std::vector<const vk::DescriptorSetLayoutPointerArray *> &pipelineDescriptorSetLayout,
+    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
+{
+    std::lock_guard<decltype(mPipelineLayoutCacheMutex)> lock(mPipelineLayoutCacheMutex);
+    return mPipelineLayoutCache.getPipelinePipelineLayout(
+        context, pipelinePipelineLayoutDesc, pipelineDescriptorSetLayout, pipelineLayoutOut);
+}
+
 angle::Result RendererVk::getPipelineCacheSize(DisplayVk *displayVk, size_t *pipelineCacheSizeOut)
 {
     VkResult result = mPipelineCache.getCacheData(mDevice, pipelineCacheSizeOut, nullptr);
