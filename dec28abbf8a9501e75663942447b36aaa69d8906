@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "308b4e6b_7b620a4d",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-20T01:19:48Z",
+      "side": 1,
+      "message": "PrintGLESCapabilities sounds good to me.",
+      "range": {
+        "startLine": 310,
+        "startChar": 28,
+        "endLine": 310,
+        "endChar": 53
+      },
+      "revId": "dec28abbf8a9501e75663942447b36aaa69d8906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23a58700_83228950",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-20T01:19:48Z",
+      "side": 1,
+      "message": "Capability",
+      "range": {
+        "startLine": 312,
+        "startChar": 31,
+        "endLine": 312,
+        "endChar": 41
+      },
+      "revId": "dec28abbf8a9501e75663942447b36aaa69d8906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
