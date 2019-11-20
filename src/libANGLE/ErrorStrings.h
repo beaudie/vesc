@@ -496,6 +496,9 @@ MSG kWebgl2NameLengthLimitExceeded = "Location lengths must not be greater than 
 MSG kWebglBindAttribLocationReservedPrefix = "Attributes that begin with 'webgl_', or '_webgl_' are not allowed.";
 MSG kWebglNameLengthLimitExceeded = "Location name lengths must not be greater than 256 characters.";
 MSG kZeroBoundToTarget = "Zero is bound to target.";
+MSG kUnrecognizedShaderStageBit = "Unrecognized shader stage bit.";
+MSG kProgramNotSeparable = "Program object was not linked with its GL_PROGRAM_SEPARABLE status set.";
+MSG kProgramPipelineDoesNotExist = "Program pipeline does not exist.";
 // clang-format on
 
 #undef MSG
