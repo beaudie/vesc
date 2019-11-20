@@ -22,6 +22,30 @@
       "revId": "29c4829044f9d217ad92b1fda4587d0a9cb5f7e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e292448a_1316acac",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-20T21:06:00Z",
+      "side": 1,
+      "message": "This is what I found:\nDrawArraysIndirect requires that all data sourced for the command, including the DrawArraysIndirectCommand structure, be in buffer objects, and\nmay not be called when the default vertex array object is bound.\nAll elements of DrawArraysIndirectCommand are tightly-packed 32-bit values.\n\nErrors\nAn INVALID_OPERATION error is generated if zero is bound to\nVERTEX_ARRAY_BINDING, DRAW_INDIRECT_BUFFER or to any enabled vertex array.\nAn INVALID_OPERATION error is generated if the command would\nsource data beyond the end of the buffer object.\nAn INVALID_VALUE error is generated if indirect is not a multiple of the\nsize, in basic machine units, of uint.\nAn INVALID_OPERATION error is generated if transform feedback is active and not paused.\nResults are undefined if reservedMustBeZero is non-zero, but may not result in program termination.\n\nI think the most relevant is: An INVALID_OPERATION error is generated if zero is bound to\nVERTEX_ARRAY_BINDING\nThe code does glEnableVertexAttribArray(0), but doesn\u0027t bind anything to index 0.",
+      "parentUuid": "591ce826_60444a82",
+      "range": {
+        "startLine": 417,
+        "startChar": 5,
+        "endLine": 417,
+        "endChar": 34
+      },
+      "revId": "29c4829044f9d217ad92b1fda4587d0a9cb5f7e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
