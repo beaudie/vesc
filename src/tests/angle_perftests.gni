@@ -68,3 +68,8 @@ angle_white_box_perf_tests_vulkan_sources = [
   "test_utils/third_party/vulkan_command_buffer_utils.cpp",
   "test_utils/third_party/vulkan_command_buffer_utils.h",
 ]
+
+angle_white_box_perf_tests_mac_sources = [
+  "test_utils/angle_test_instantiate_apple.mm",
+  "test_utils/angle_test_instantiate_apple.h",
+]
