@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d814466_eaa95b60",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-20T14:51:55Z",
+      "side": 1,
+      "message": "nit: can you sort this alphabetically? You can fix the android_ndk and catapult if you feel like it, or just ignore them.",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 4
+      },
+      "revId": "c875516209b44e65ef56ea3826c0a15648bd7f48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
