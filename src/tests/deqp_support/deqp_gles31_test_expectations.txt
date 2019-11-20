@@ -546,6 +546,10 @@
 // OpenGL/D3D11 Failing Tests
 1442 OPENGL : dEQP-GLES31.functional.shaders.opaque_type_indexing.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.shaders.opaque_type_indexing.* = FAIL
+1442 OPENGL : dEQP-GLES31.functional.separate_shader.* = FAIL
+1442 D3D11 : dEQP-GLES31.functional.separate_shader.* = FAIL
+//TIMTIM
+//3570 VULKAN : dEQP-GLES31.functional.separate_shader.* = FAIL
 
 // OpenGL/D3D11/Vulkan Failing Tests
 1442 : dEQP-GLES31.functional.synchronization.inter_call.without_memory_barrier.atomic_counter_dispatch_100_calls_1k_invocations = FAIL
@@ -555,7 +559,6 @@
 3570 : dEQP-GLES31.functional.state_query.program.program_separable_get_programiv = FAIL
 3570 : dEQP-GLES31.functional.state_query.program_pipeline.* = FAIL
 3570 : dEQP-GLES31.functional.debug.object_labels.program_pipeline = FAIL
-3570 : dEQP-GLES31.functional.separate_shader.* = FAIL
 
 // The following passes with Vulkan (with warning), but fails otherwise.  We'll keep the file simple by expecting it to fail.
 2324 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.compute.program_not_active = FAIL
