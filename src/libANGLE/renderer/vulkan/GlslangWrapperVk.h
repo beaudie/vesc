@@ -25,9 +25,9 @@ namespace rx
 class GlslangWrapperVk
 {
   public:
-    static void GetShaderSource(const angle::FeaturesVk &features,
-                                const gl::ProgramState &programState,
+    static void GetShaderSource(const gl::ProgramState &programState,
                                 const gl::ProgramLinkedResources &resources,
+                                GlslangSourceOptions &glslangSourceOptions,
                                 gl::ShaderMap<std::string> *shaderSourcesOut,
                                 ShaderInterfaceVariableInfoMap *variableInfoMapOut);
 
