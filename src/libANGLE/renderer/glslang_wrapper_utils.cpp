@@ -26,6 +26,7 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 #include <numeric>
 
 #include "common/FixedVector.h"
+#include "common/PackedEnums.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
@@ -822,13 +823,14 @@ void AssignUniformBindings(const GlslangSourceOptions &options,
         "set = " + Str(options.uniformsAndXfbDescriptorSetIndex);
 
     constexpr char kDefaultUniformsBlockName[] = "defaultUniforms";
-    uint32_t bindingIndex                      = 0;
-    for (IntermediateShaderSource &shaderSource : *shaderSources)
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
+        IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
         if (!shaderSource.empty())
         {
             std::string defaultUniformsBinding =
-                uniformsDescriptorSet + ", binding = " + Str(bindingIndex++);
+                uniformsDescriptorSet +
+                ", binding = " + Str(options.uniformsAndXfbDescriptorSetIndexMap[shaderType]);
 
             shaderSource.insertLayoutSpecifier(kDefaultUniformsBlockName, defaultUniformsBinding);
         }
@@ -1203,6 +1205,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
+        // TIMTIM - the shader isn't attached anymore, so no more source to translate
         gl::Shader *glShader = programState.getAttachedShader(shaderType);
         if (glShader)
         {
@@ -1265,7 +1268,13 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        // To support program pipeline objects, only return shader source for shaders that were
+        // passed in by this gl::ProgramState to avoid overwriting previously link()'ed shaders.
+        gl::Shader *glShader = programState.getAttachedShader(shaderType);
+        if (glShader)
+        {
+            (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        }
     }
 }
 

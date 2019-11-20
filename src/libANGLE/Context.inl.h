@@ -97,6 +97,7 @@ ANGLE_INLINE angle::Result Context::prepareForDraw(PrimitiveMode mode)
     ANGLE_TRY(syncDirtyObjects(mDrawDirtyObjects));
     ASSERT(!isRobustResourceInitEnabled() ||
            !mState.getDrawFramebuffer()->hasResourceThatNeedsInit());
+    ANGLE_TRY(mState.getProgramPipeline()->prepareForDraw(this));
     return syncDirtyBits();
 }
 

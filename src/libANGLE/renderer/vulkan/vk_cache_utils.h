@@ -909,14 +909,14 @@ class PipelineLayoutCache final : angle::NonCopyable
 //   only under rare circumstances, such as viewport or depth range change.  However, there is only
 //   one binding in this set.
 
-// Uniforms set index:
-constexpr uint32_t kUniformsAndXfbDescriptorSetIndex = 0;
-// Textures set index:
-constexpr uint32_t kTextureDescriptorSetIndex = 1;
-// Other shader resources set index:
-constexpr uint32_t kShaderResourceDescriptorSetIndex = 2;
 // ANGLE driver uniforms set index (binding is always 3):
-constexpr uint32_t kDriverUniformsDescriptorSetIndex = 3;
+constexpr uint32_t kDriverUniformsDescriptorSetIndex = 0;
+// Uniforms set index:
+constexpr uint32_t kUniformsAndXfbDescriptorSetIndex = 1;
+// Textures set index:
+constexpr uint32_t kTextureDescriptorSetIndex = 2;
+// Other shader resources set index:
+constexpr uint32_t kShaderResourceDescriptorSetIndex = 3;
 
 // Only 1 driver uniform binding is used.
 constexpr uint32_t kReservedDriverUniformBindingCount = 1;
