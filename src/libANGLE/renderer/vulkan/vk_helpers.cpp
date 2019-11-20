@@ -3049,11 +3049,6 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
     commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(),
                                      (*bufferOut)->getBuffer().getHandle(), 1, regions);
 
-    barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-    barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-    commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                &barrier);
-
     return angle::Result::Continue;
 }
 
