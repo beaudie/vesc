@@ -22,6 +22,30 @@
       "revId": "467650e95d54e32788b72706711465c44c51f762",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5efb3709_b99efe38",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-20T15:08:33Z",
+      "side": 1,
+      "message": "I just checked https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/refs/heads/master/gclient.py#70\n\nAdding \"target_os \u003d [ \"android\" ]\" to the end of the .gclient file at the root ANGLE directory will trigger checkout_android condition.",
+      "parentUuid": "f0baaafe_d7d9a6c3",
+      "range": {
+        "startLine": 239,
+        "startChar": 18,
+        "endLine": 239,
+        "endChar": 35
+      },
+      "revId": "467650e95d54e32788b72706711465c44c51f762",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
