@@ -30,8 +30,11 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 
 #include <array>
 #include <numeric>
+#include <string>
+#include <unordered_map>
 
 #include "common/FixedVector.h"
+#include "common/PackedEnums.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
@@ -730,15 +733,14 @@ void AssignUniformBindings(const GlslangSourceOptions &options,
                            ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     // Assign binding to the default uniforms block of each shader stage.
-    uint32_t bindingIndex = 0;
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         const std::string &shaderSource = (*shaderSources)[shaderType];
         if (!shaderSource.empty())
         {
             AddResourceInfo(variableInfoMapOut, kDefaultUniformNames[shaderType],
-                            options.uniformsAndXfbDescriptorSetIndex, bindingIndex);
-            ++bindingIndex;
+                            options.uniformsAndXfbDescriptorSetIndex,
+                            options.uniformsAndXfbDescriptorSetIndexShaderMap[shaderType]);
         }
     }
 
@@ -747,23 +749,28 @@ void AssignUniformBindings(const GlslangSourceOptions &options,
                     options.driverUniformsDescriptorSetIndex, 0);
 }
 
-uint32_t AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
-                                      const std::vector<gl::InterfaceBlock> &blocks,
-                                      uint32_t bindingStart,
-                                      ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+void AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
+                                  const gl::ProgramState &programState,
+                                  const std::vector<gl::InterfaceBlock> &blocks,
+                                  uint32_t bindingStart,
+                                  ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    uint32_t bindingIndex = bindingStart;
     for (const gl::InterfaceBlock &block : blocks)
     {
         if (!block.isArray || block.arrayElement == 0)
         {
-            AddResourceInfo(variableInfoMapOut, block.mappedName,
-                            options.shaderResourceDescriptorSetIndex, bindingIndex);
-            ++bindingIndex;
+            for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+            {
+                if (programState.hasLinkedShaderStage(shaderType))
+                {
+                    AddResourceInfo(
+                        variableInfoMapOut, block.mappedName,
+                        options.shaderResourceDescriptorSetIndex,
+                        options.interfaceBlockBindingsShaderMap[shaderType].at(block.name));
+                }
+            }
         }
     }
-
-    return bindingIndex;
 }
 
 uint32_t AssignAtomicCounterBufferBindings(const GlslangSourceOptions &options,
@@ -783,6 +790,7 @@ uint32_t AssignAtomicCounterBufferBindings(const GlslangSourceOptions &options,
 }
 
 uint32_t AssignImageBindings(const GlslangSourceOptions &options,
+                             const gl::ProgramState &programState,
                              const std::vector<gl::LinkedUniform> &uniforms,
                              const gl::RangeUI &imageUniformRange,
                              uint32_t bindingStart,
@@ -796,8 +804,15 @@ uint32_t AssignImageBindings(const GlslangSourceOptions &options,
         std::string name = imageUniform.mappedName;
         if (GetImageNameWithoutIndices(&name))
         {
-            AddResourceInfo(variableInfoMapOut, name, options.shaderResourceDescriptorSetIndex,
-                            bindingIndex);
+            for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+            {
+                if (programState.hasLinkedShaderStage(shaderType))
+                {
+                    AddResourceInfo(variableInfoMapOut, name,
+                                    options.shaderResourceDescriptorSetIndex,
+                                    options.shaderResourceDescriptorSetIndexShaderMap[shaderType]);
+                }
+            }
         }
         ++bindingIndex;
     }
@@ -809,15 +824,17 @@ void AssignNonTextureBindings(const GlslangSourceOptions &options,
                               const gl::ProgramState &programState,
                               ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
+    // TIMTIM - need to get these binding values when creating the pipeline layout, rather
+    // than calculating them again here.
     uint32_t bindingStart = 0;
 
     const std::vector<gl::InterfaceBlock> &uniformBlocks = programState.getUniformBlocks();
-    bindingStart =
-        AssignInterfaceBlockBindings(options, uniformBlocks, bindingStart, variableInfoMapOut);
+    AssignInterfaceBlockBindings(options, programState, uniformBlocks, bindingStart,
+                                 variableInfoMapOut);
 
     const std::vector<gl::InterfaceBlock> &storageBlocks = programState.getShaderStorageBlocks();
-    bindingStart =
-        AssignInterfaceBlockBindings(options, storageBlocks, bindingStart, variableInfoMapOut);
+    AssignInterfaceBlockBindings(options, programState, storageBlocks, bindingStart,
+                                 variableInfoMapOut);
 
     const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers =
         programState.getAtomicCounterBuffers();
@@ -826,8 +843,8 @@ void AssignNonTextureBindings(const GlslangSourceOptions &options,
 
     const std::vector<gl::LinkedUniform> &uniforms = programState.getUniforms();
     const gl::RangeUI &imageUniformRange           = programState.getImageUniformRange();
-    bindingStart =
-        AssignImageBindings(options, uniforms, imageUniformRange, bindingStart, variableInfoMapOut);
+    bindingStart = AssignImageBindings(options, programState, uniforms, imageUniformRange,
+                                       bindingStart, variableInfoMapOut);
 }
 
 void AssignTextureBindings(const GlslangSourceOptions &options,
@@ -835,7 +852,6 @@ void AssignTextureBindings(const GlslangSourceOptions &options,
                            ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     // Assign textures to a descriptor set and binding.
-    uint32_t bindingIndex                          = 0;
     const std::vector<gl::LinkedUniform> &uniforms = programState.getUniforms();
 
     for (unsigned int uniformIndex : programState.getSamplerUniformRange())
@@ -855,11 +871,26 @@ void AssignTextureBindings(const GlslangSourceOptions &options,
                                                 ? GetMappedSamplerNameOld(samplerUniform.name)
                                                 : GlslangGetMappedSamplerName(samplerUniform.name);
 
-            AddResourceInfo(variableInfoMapOut, samplerName, options.textureDescriptorSetIndex,
-                            bindingIndex);
-        }
+            for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+            {
+                if (programState.hasLinkedShaderStage(shaderType))
+                {
+                    int bindingValue = -1;
+                    // We may not have created the Vulkan pipeline yet, so we may not know the
+                    // bindings of the sampler uniforms yet either.
+                    auto it = options.textureBindingsShaderMap[shaderType].find(
+                        GlslangGetMappedSamplerName(samplerUniform.name));
+                    if (it != options.textureBindingsShaderMap[shaderType].end())
+                    {
+                        bindingValue = options.textureBindingsShaderMap[shaderType].at(
+                            GlslangGetMappedSamplerName(samplerUniform.name));
+                    }
 
-        ++bindingIndex;
+                    AddResourceInfo(variableInfoMapOut, samplerName,
+                                    options.textureDescriptorSetIndex, bindingValue);
+                }
+            }
+        }
     }
 }
 

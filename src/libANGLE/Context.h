@@ -259,6 +259,7 @@ class StateCache final : angle::NonCopyable
     // State change notifications.
     void onVertexArrayBindingChange(Context *context);
     void onProgramExecutableChange(Context *context);
+    void onProgramPipelineChange(Context *context);
     void onVertexArrayFormatChange(Context *context);
     void onVertexArrayBufferContentsChange(Context *context);
     void onVertexArrayStateChange(Context *context);
@@ -356,7 +357,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     BufferID createBuffer();
     TextureID createTexture();
     RenderbufferID createRenderbuffer();
-    ProgramPipelineID createProgramPipeline();
     MemoryObjectID createMemoryObject();
     SemaphoreID createSemaphore();
 
@@ -586,6 +586,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     void onPostSwap() const;
 
+    bool isProgramInDefaultProgramPipeline(ShaderProgramID program) const;
+    bool isProgramInAnyUserProgramPipeline(ShaderProgramID program) const;
+
   private:
     void initialize();
 
@@ -606,6 +609,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     VertexArray *checkVertexArrayAllocation(VertexArrayID vertexArrayHandle);
     TransformFeedback *checkTransformFeedbackAllocation(TransformFeedbackID transformFeedback);
+    ProgramPipeline *checkProgramPipelineAllocation(ProgramPipelineID programPipelineHandle);
 
     angle::Result onProgramLink(Program *programObject);
 
@@ -674,6 +678,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     ResourceMap<TransformFeedback, TransformFeedbackID> mTransformFeedbackMap;
     HandleAllocator mTransformFeedbackHandleAllocator;
+
+    ResourceMap<ProgramPipeline, ProgramPipelineID> mProgramPipelineMap;
+    HandleAllocator mProgramPipelineHandleAllocator;
 
     const char *mVersionString;
     const char *mShadingLanguageString;
