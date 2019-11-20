@@ -26,6 +26,7 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 #include <numeric>
 
 #include "common/FixedVector.h"
+#include "common/PackedEnums.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
@@ -775,14 +776,14 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
             IntermediateShaderSource *shaderSource = &(*shaderSources)[stage];
             if (shaderSource->empty())
             {
-                ASSERT(!varying.shaderStages[stage]);
+                ASSERT(!varying.shaderStages[stage] || programState.isSeparable());
                 continue;
             }
 
-            if (!varying.shaderStages[stage])
+            if (!varying.shaderStages[stage] && !programState.isSeparable())
             {
-                // If not active in this stage, remove the varying declaration.  Imagine the
-                // following scenario:
+                // If not active in this stage and the program is not marked separable, remove the
+                // varying declaration.  Imagine the following scenario:
                 //
                 //  - VS: declare out varying used for transform feedback
                 //  - FS: declare corresponding in varying which is not active
@@ -825,13 +826,14 @@ void AssignUniformBindings(const GlslangSourceOptions &options,
         "set = " + Str(options.uniformsAndXfbDescriptorSetIndex);
 
     constexpr char kDefaultUniformsBlockName[] = "defaultUniforms";
-    uint32_t bindingIndex                      = 0;
-    for (IntermediateShaderSource &shaderSource : *shaderSources)
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
+        IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
         if (!shaderSource.empty())
         {
             std::string defaultUniformsBinding =
-                uniformsDescriptorSet + ", binding = " + Str(bindingIndex++);
+                uniformsDescriptorSet +
+                ", binding = " + Str(options.uniformsAndXfbDescriptorSetIndexMap[shaderType]);
 
             shaderSource.insertLayoutSpecifier(kDefaultUniformsBlockName, defaultUniformsBinding);
         }
@@ -1025,19 +1027,23 @@ void CleanupUnusedEntities(bool useOldRewriteStructSamplers,
     if (!vertexSource.empty())
     {
         gl::Shader *glVertexShader = programState.getAttachedShader(gl::ShaderType::Vertex);
-        ASSERT(glVertexShader != nullptr);
-
-        // The attributes in the programState could have been filled with active attributes only
-        // depending on the shader version. If there is inactive attributes left, we have to remove
-        // their @@ QUALIFIER and @@ LAYOUT markers.
-        for (const sh::ShaderVariable &attribute : glVertexShader->getAllAttributes())
+        // It's possible to get into here without a vertex shader attached with re-linking
+        // shaders for a program pipeline object with programs that no longer have any shaders
+        // attached like when calling glCreateShaderProgramv().
+        if (glVertexShader)
         {
-            if (attribute.active)
+            // The attributes in the programState could have been filled with active attributes only
+            // depending on the shader version. If there is inactive attributes left, we have to
+            // remove their @@ QUALIFIER and @@ LAYOUT markers.
+            for (const sh::ShaderVariable &attribute : glVertexShader->getAllAttributes())
             {
-                continue;
-            }
+                if (attribute.active)
+                {
+                    continue;
+                }
 
-            vertexSource.eraseLayoutAndQualifierSpecifiers(attribute.name, "");
+                vertexSource.eraseLayoutAndQualifierSpecifiers(attribute.name, "");
+            }
         }
     }
 
@@ -1202,6 +1208,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
+        // TIMTIM - the shader isn't attached anymore, so no more source to translate
         gl::Shader *glShader = programState.getAttachedShader(shaderType);
         if (glShader)
         {
@@ -1264,7 +1271,13 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        // To support program pipeline objects, only return shader source for shaders that were
+        // passed in by this gl::ProgramState to avoid overwriting previously link()'ed shaders.
+        gl::Shader *glShader = programState.getAttachedShader(shaderType);
+        if (glShader || programState.hasLinkedShaderStage(shaderType))
+        {
+            (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        }
     }
 }
 
