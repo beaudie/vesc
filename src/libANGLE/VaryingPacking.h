@@ -161,7 +161,8 @@ class VaryingPacking final : angle::NonCopyable
 
     bool collectAndPackUserVaryings(gl::InfoLog &infoLog,
                                     const ProgramMergedVaryings &mergedVaryings,
-                                    const std::vector<std::string> &tfVaryings);
+                                    const std::vector<std::string> &tfVaryings,
+                                    const bool isSeparableProgram);
 
     struct Register
     {
@@ -189,6 +190,17 @@ class VaryingPacking final : angle::NonCopyable
 
     const std::vector<sh::ShaderVariable> &getInputVaryings() const { return mInputVaryings; }
 
+    PackMode getPackMode() { return mPackMode; }
+
+    void reset()
+    {
+        clearRegisterMap();
+        mRegisterList.clear();
+        mInputVaryings.clear();
+        mPackedVaryings.clear();
+        mInactiveVaryingMappedNames.clear();
+    }
+
   private:
     bool packVarying(const PackedVarying &packedVarying);
     bool isFree(unsigned int registerRow,
@@ -198,6 +210,12 @@ class VaryingPacking final : angle::NonCopyable
     void insert(unsigned int registerRow,
                 unsigned int registerColumn,
                 const PackedVarying &packedVarying);
+
+    void clearRegisterMap()
+    {
+        size_t maxVaryingVectors = mRegisterMap.size();
+        mRegisterMap             = std::vector<Register>(maxVaryingVectors);
+    }
 
     std::vector<Register> mRegisterMap;
     std::vector<PackedVaryingRegister> mRegisterList;
