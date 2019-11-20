@@ -422,11 +422,20 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     const gl::OverlayType *getOverlay() const { return mState.getOverlay(); }
 
+    ANGLE_INLINE bool useLineRaster(const gl::PrimitiveMode mode)
+    {
+        return getFeatures().basicGLLineRasterization.enabled && gl::IsLineMode(mode);
+    }
+
+    void invalidateCurrentShaderResources(ProgramVk *programVk);
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
     {
         DIRTY_BIT_DEFAULT_ATTRIBS,
+        // DIRTY_BIT_PIPELINE must be handled first so we have a pipeline to use when handling the
+        // remaining dirty bits
         DIRTY_BIT_PIPELINE,
         DIRTY_BIT_TEXTURES,
         DIRTY_BIT_VERTEX_BUFFERS,
@@ -437,6 +446,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
         DIRTY_BIT_TRANSFORM_FEEDBACK_STATE,
         DIRTY_BIT_DESCRIPTOR_SETS,
+        // DIRTY_BIT_PIPELINE must be handled after DIRTY_BIT_DESCRIPTOR_SETS so we relink shaders
+        // with the correct descriptor set/binding values in the GLSL.
+        //        DIRTY_BIT_PIPELINE,
         DIRTY_BIT_MAX,
     };
 
@@ -672,6 +684,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     void clearAllGarbage();
     angle::Result ensureSubmitFenceInitialized();
 
+    void dirtyProgramExecutableHelper(const gl::Context *context);
+
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
@@ -705,6 +719,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     VertexArrayVk *mVertexArray;
     FramebufferVk *mDrawFramebuffer;
     ProgramVk *mProgram;
+    ProgramPipelineVk *mProgramPipeline;
 
     // Graph resource used to record dispatch commands and hold resource dependencies.
     vk::DispatchHelper mDispatcher;
