@@ -479,6 +479,7 @@ void Context::initialize()
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
+    mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
 
@@ -532,6 +533,7 @@ void Context::initialize()
     mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
+    mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
 
@@ -602,6 +604,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.reset(this);
 
     mState.mBufferManager->release(this);
+    mState.mProgramPipelineManager->release(this);
     mState.mShaderProgramManager->release(this);
     mState.mTextureManager->release(this);
     mState.mRenderbufferManager->release(this);
@@ -609,7 +612,6 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mSyncManager->release(this);
     mState.mPathManager->release(this);
     mState.mFramebufferManager->release(this);
-    mState.mProgramPipelineManager->release(this);
     mState.mMemoryObjectManager->release(this);
     mState.mSemaphoreManager->release(this);
 
@@ -744,12 +746,75 @@ void Context::genFencesNV(GLsizei n, FenceNVID *fences)
 
 ProgramPipelineID Context::createProgramPipeline()
 {
-    return mState.mProgramPipelineManager->createProgramPipeline();
+    return mState.mProgramPipelineManager->createProgramPipeline(mImplementation.get());
 }
 
 GLuint Context::createShaderProgramv(ShaderType type, GLsizei count, const GLchar *const *strings)
 {
-    UNIMPLEMENTED();
+    // CreateShaderProgramv is equivalent to (assuming no errors are generated):
+    // const uint shader = CreateShader(type);
+    // if (shader) {
+    //   ShaderSource(shader, count, strings, NULL);
+    //   CompileShader(shader);
+    //   const uint program = CreateProgram();
+    //   if (program) {
+    //     int compiled = FALSE;
+    //     GetShaderiv(shader, COMPILE_STATUS, &compiled);
+    //     ProgramParameteri(program, PROGRAM_SEPARABLE, TRUE);
+    //     if (compiled) {
+    //       AttachShader(program, shader);
+    //       LinkProgram(program);
+    //       DetachShader(program, shader);
+    //     }
+    //     append-shader-info-log-to-program-info-log
+    //   }
+    //   DeleteShader(shader);
+    //   return program;
+    // } else {
+    //   return 0;
+    // }
+
+    const ShaderProgramID shaderID = FromGL<ShaderProgramID>(createShader(type));
+    if (shaderID.value)
+    {
+        Shader *shaderObject = getShader(shaderID);
+        ASSERT(shaderObject);
+        shaderObject->setSource(count, strings, nullptr);
+        shaderObject->compile(this);
+        const ShaderProgramID programID = FromGL<ShaderProgramID>(createProgram());
+        if (programID.value)
+        {
+            gl::Program *programObject = getProgramNoResolveLink(programID);
+            ASSERT(programObject);
+            programObject->setSeparable(true);
+
+            if (shaderObject->isCompiled())
+            {
+                programObject->attachShader(shaderObject);
+
+                if (programObject->link(this) != angle::Result::Continue)
+                {
+                    return 0u;
+                }
+                if (onProgramLink(programObject) != angle::Result::Continue)
+                {
+                    return 0u;
+                }
+
+                // Need to manually resolveLink(), since onProgramLink() doesn't think the program
+                // is in use.   For the normal glDetachShader() API call path, this is done during
+                // ValidateDetachShader() via gl::GetValidProgram().
+                programObject->resolveLink(this);
+                programObject->detachShader(this, shaderObject);
+            }
+            // append-shader-info-log-to-program-info-log()
+        }
+
+        deleteShader(shaderID);
+
+        return programID.value;
+    }
+
     return 0u;
 }
 
@@ -781,7 +846,10 @@ void Context::deleteShader(ShaderProgramID shader)
 
 void Context::deleteProgram(ShaderProgramID program)
 {
-    mState.mShaderProgramManager->deleteProgram(this, program);
+    if (!isProgramInProgramPipeline(program))
+    {
+        mState.mShaderProgramManager->deleteProgram(this, program);
+    }
 }
 
 void Context::deleteTexture(TextureID texture)
@@ -1177,7 +1245,9 @@ void Context::useProgramStages(ProgramPipelineID pipeline,
                                GLbitfield stages,
                                ShaderProgramID program)
 {
-    UNIMPLEMENTED();
+    Program *shaderProgram           = getProgramNoResolveLink(program);
+    ProgramPipeline *programPipeline = mState.mProgramPipelineManager->getProgramPipeline(pipeline);
+    mState.useProgramStages(programPipeline, stages, shaderProgram);
 }
 
 void Context::bindTransformFeedback(GLenum target, TransformFeedbackID transformFeedbackHandle)
@@ -3324,7 +3394,7 @@ void Context::beginTransformFeedback(PrimitiveMode primitiveMode)
     ASSERT(transformFeedback != nullptr);
     ASSERT(!transformFeedback->isPaused());
 
-    ANGLE_CONTEXT_TRY(transformFeedback->begin(this, primitiveMode, mState.getProgram()));
+    ANGLE_CONTEXT_TRY(transformFeedback->begin(this, primitiveMode, mState.getActiveProgram()));
     mStateCache.onActiveTransformFeedbackChange(this);
 }
 
@@ -4852,7 +4922,9 @@ angle::Result Context::syncStateForPathOperation()
 
 void Context::activeShaderProgram(ProgramPipelineID pipeline, ShaderProgramID program)
 {
-    UNIMPLEMENTED();
+    Program *shaderProgram           = getProgramNoResolveLink(program);
+    ProgramPipeline *programPipeline = mState.mProgramPipelineManager->getProgramPipeline(pipeline);
+    programPipeline->activeShaderProgram(shaderProgram);
 }
 
 void Context::activeTexture(GLenum texture)
@@ -6416,7 +6488,13 @@ void Context::getProgramivRobust(ShaderProgramID program,
 
 void Context::getProgramPipelineiv(ProgramPipelineID pipeline, GLenum pname, GLint *params)
 {
-    UNIMPLEMENTED();
+    ProgramPipeline *programPipeline = nullptr;
+    if (!mContextLost)
+    {
+        programPipeline = getProgramPipeline(pipeline);
+        ASSERT(programPipeline);
+    }
+    QueryProgramPipelineiv(this, programPipeline, pname, params);
 }
 
 MemoryObject *Context::getMemoryObject(MemoryObjectID handle) const
@@ -6755,13 +6833,13 @@ void Context::patchParameteri(GLenum pname, GLint value)
 
 void Context::uniform1f(GLint location, GLfloat x)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform1fv(location, 1, &x);
 }
 
 void Context::uniform1fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform1fv(location, count, v);
 }
 
@@ -6778,89 +6856,89 @@ void Context::onSamplerUniformChange(size_t textureUnitIndex)
 
 void Context::uniform1i(GLint location, GLint x)
 {
-    setUniform1iImpl(mState.getProgram(), location, 1, &x);
+    setUniform1iImpl(mState.getActiveProgram(), location, 1, &x);
 }
 
 void Context::uniform1iv(GLint location, GLsizei count, const GLint *v)
 {
-    setUniform1iImpl(mState.getProgram(), location, count, v);
+    setUniform1iImpl(mState.getActiveProgram(), location, count, v);
 }
 
 void Context::uniform2f(GLint location, GLfloat x, GLfloat y)
 {
     GLfloat xy[2]    = {x, y};
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform2fv(location, 1, xy);
 }
 
 void Context::uniform2fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform2fv(location, count, v);
 }
 
 void Context::uniform2i(GLint location, GLint x, GLint y)
 {
     GLint xy[2]      = {x, y};
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform2iv(location, 1, xy);
 }
 
 void Context::uniform2iv(GLint location, GLsizei count, const GLint *v)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform2iv(location, count, v);
 }
 
 void Context::uniform3f(GLint location, GLfloat x, GLfloat y, GLfloat z)
 {
     GLfloat xyz[3]   = {x, y, z};
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform3fv(location, 1, xyz);
 }
 
 void Context::uniform3fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform3fv(location, count, v);
 }
 
 void Context::uniform3i(GLint location, GLint x, GLint y, GLint z)
 {
     GLint xyz[3]     = {x, y, z};
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform3iv(location, 1, xyz);
 }
 
 void Context::uniform3iv(GLint location, GLsizei count, const GLint *v)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform3iv(location, count, v);
 }
 
 void Context::uniform4f(GLint location, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
     GLfloat xyzw[4]  = {x, y, z, w};
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform4fv(location, 1, xyzw);
 }
 
 void Context::uniform4fv(GLint location, GLsizei count, const GLfloat *v)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform4fv(location, count, v);
 }
 
 void Context::uniform4i(GLint location, GLint x, GLint y, GLint z, GLint w)
 {
     GLint xyzw[4]    = {x, y, z, w};
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform4iv(location, 1, xyzw);
 }
 
 void Context::uniform4iv(GLint location, GLsizei count, const GLint *v)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform4iv(location, count, v);
 }
 
@@ -6869,7 +6947,7 @@ void Context::uniformMatrix2fv(GLint location,
                                GLboolean transpose,
                                const GLfloat *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniformMatrix2fv(location, count, transpose, value);
 }
 
@@ -6878,7 +6956,7 @@ void Context::uniformMatrix3fv(GLint location,
                                GLboolean transpose,
                                const GLfloat *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniformMatrix3fv(location, count, transpose, value);
 }
 
@@ -6887,7 +6965,7 @@ void Context::uniformMatrix4fv(GLint location,
                                GLboolean transpose,
                                const GLfloat *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniformMatrix4fv(location, count, transpose, value);
 }
 
@@ -6900,7 +6978,9 @@ void Context::validateProgram(ShaderProgramID program)
 
 void Context::validateProgramPipeline(ProgramPipelineID pipeline)
 {
-    UNIMPLEMENTED();
+    ProgramPipeline *programPipeline = getProgramPipeline(pipeline);
+    ASSERT(programPipeline);
+    programPipeline->validate(mState.mCaps);
 }
 
 void Context::getProgramBinary(ShaderProgramID program,
@@ -6929,51 +7009,51 @@ void Context::programBinary(ShaderProgramID program,
 
 void Context::uniform1ui(GLint location, GLuint v0)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform1uiv(location, 1, &v0);
 }
 
 void Context::uniform2ui(GLint location, GLuint v0, GLuint v1)
 {
-    Program *program  = mState.getProgram();
+    Program *program  = mState.getActiveProgram();
     const GLuint xy[] = {v0, v1};
     program->setUniform2uiv(location, 1, xy);
 }
 
 void Context::uniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2)
 {
-    Program *program   = mState.getProgram();
+    Program *program   = mState.getActiveProgram();
     const GLuint xyz[] = {v0, v1, v2};
     program->setUniform3uiv(location, 1, xyz);
 }
 
 void Context::uniform4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
 {
-    Program *program    = mState.getProgram();
+    Program *program    = mState.getActiveProgram();
     const GLuint xyzw[] = {v0, v1, v2, v3};
     program->setUniform4uiv(location, 1, xyzw);
 }
 
 void Context::uniform1uiv(GLint location, GLsizei count, const GLuint *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform1uiv(location, count, value);
 }
 void Context::uniform2uiv(GLint location, GLsizei count, const GLuint *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform2uiv(location, count, value);
 }
 
 void Context::uniform3uiv(GLint location, GLsizei count, const GLuint *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform3uiv(location, count, value);
 }
 
 void Context::uniform4uiv(GLint location, GLsizei count, const GLuint *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniform4uiv(location, count, value);
 }
 
@@ -7015,7 +7095,7 @@ void Context::uniformMatrix2x3fv(GLint location,
                                  GLboolean transpose,
                                  const GLfloat *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniformMatrix2x3fv(location, count, transpose, value);
 }
 
@@ -7024,7 +7104,7 @@ void Context::uniformMatrix3x2fv(GLint location,
                                  GLboolean transpose,
                                  const GLfloat *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniformMatrix3x2fv(location, count, transpose, value);
 }
 
@@ -7033,7 +7113,7 @@ void Context::uniformMatrix2x4fv(GLint location,
                                  GLboolean transpose,
                                  const GLfloat *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniformMatrix2x4fv(location, count, transpose, value);
 }
 
@@ -7042,7 +7122,7 @@ void Context::uniformMatrix4x2fv(GLint location,
                                  GLboolean transpose,
                                  const GLfloat *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniformMatrix4x2fv(location, count, transpose, value);
 }
 
@@ -7051,7 +7131,7 @@ void Context::uniformMatrix3x4fv(GLint location,
                                  GLboolean transpose,
                                  const GLfloat *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniformMatrix3x4fv(location, count, transpose, value);
 }
 
@@ -7060,7 +7140,7 @@ void Context::uniformMatrix4x3fv(GLint location,
                                  GLboolean transpose,
                                  const GLfloat *value)
 {
-    Program *program = mState.getProgram();
+    Program *program = mState.getActiveProgram();
     program->setUniformMatrix4x3fv(location, count, transpose, value);
 }
 
@@ -8470,6 +8550,24 @@ void Context::onPostSwap() const
     mFrameCapture->onEndFrame(this);
 }
 
+bool Context::isProgramInProgramPipeline(ShaderProgramID program) const
+{
+    if (mState.mProgramPipelineManager)
+    {
+        for (const auto &it : *mState.mProgramPipelineManager)
+        {
+            // ResourceMap<ProgramPipelineID, ProgramPipeline*>
+            ProgramPipeline *programPipeline = reinterpret_cast<ProgramPipeline *>(it.second);
+            if (programPipeline->usesShaderProgram(program))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void Context::getTexImage(TextureTarget target,
                           GLint level,
                           GLenum format,
@@ -8581,7 +8679,7 @@ void StateCache::updateActiveAttribsMask(Context *context)
     bool isGLES1         = context->isGLES1();
     const State &glState = context->getState();
 
-    if (!isGLES1 && !glState.getProgram())
+    if (!isGLES1 && !glState.getProgram() && !glState.getProgramPipeline())
     {
         mCachedActiveBufferedAttribsMask = AttributesMask();
         mCachedActiveClientAttribsMask   = AttributesMask();
@@ -8589,8 +8687,23 @@ void StateCache::updateActiveAttribsMask(Context *context)
         return;
     }
 
-    AttributesMask activeAttribs = isGLES1 ? glState.gles1().getActiveAttributesMask()
-                                           : glState.getProgram()->getActiveAttribLocationsMask();
+    AttributesMask activeAttribs;
+    if (isGLES1)
+    {
+        activeAttribs = glState.gles1().getActiveAttributesMask();
+    }
+    else
+    {
+        ASSERT(glState.getProgram() || glState.getProgramPipeline());
+        if (glState.getProgram())
+        {
+            activeAttribs = glState.getProgram()->getActiveAttribLocationsMask();
+        }
+        else
+        {
+            activeAttribs = glState.getProgramPipeline()->getActiveAttribLocationsMask();
+        }
+    }
 
     const VertexArray *vao = glState.getVertexArray();
     ASSERT(vao);

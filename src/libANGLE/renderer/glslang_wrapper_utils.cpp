@@ -26,6 +26,7 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 #include <numeric>
 
 #include "common/FixedVector.h"
+#include "common/PackedEnums.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
@@ -814,36 +815,37 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
     }
 }
 
+// TODO: Duplicate of getDescriptorSetLayoutIndex()
+uint32_t getSetValue(const gl::ShaderType shaderType, uint32_t descriptorSetIndex)
+{
+    return (gl::kShaderCount * descriptorSetIndex) + static_cast<uint32_t>(shaderType);
+}
+
 void AssignUniformBindings(const GlslangSourceOptions &options,
                            gl::ShaderMap<IntermediateShaderSource> *shaderSources)
 {
     // Bind the default uniforms for vertex and fragment shaders.
     // See corresponding code in OutputVulkanGLSL.cpp.
-    const std::string uniformsDescriptorSet =
-        "set = " + Str(options.uniformsAndXfbDescriptorSetIndex);
-
     constexpr char kDefaultUniformsBlockName[] = "defaultUniforms";
-    uint32_t bindingIndex                      = 0;
-    for (IntermediateShaderSource &shaderSource : *shaderSources)
+
+    for (const gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)
     {
+        IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
         if (!shaderSource.empty())
         {
-            std::string defaultUniformsBinding =
-                uniformsDescriptorSet + ", binding = " + Str(bindingIndex++);
+            int set = getSetValue(shaderType, options.uniformsAndXfbDescriptorSetIndex);
+            const std::string uniformsDescriptorSet = "set = " + (Str(set));
+            std::string defaultUniformsBinding      = uniformsDescriptorSet + ", binding = 0";
 
             shaderSource.insertLayoutSpecifier(kDefaultUniformsBlockName, defaultUniformsBinding);
+
+            // Substitute layout and qualifier strings for the driver uniforms block.
+            set = getSetValue(shaderType, options.driverUniformsDescriptorSetIndex);
+            const std::string driverBlockLayoutString = "set = " + Str(set) + ", binding = 0";
+            constexpr char kDriverBlockName[]         = "ANGLEUniformBlock";
+            shaderSource.insertLayoutSpecifier(kDriverBlockName, driverBlockLayoutString);
+            shaderSource.insertQualifierSpecifier(kDriverBlockName, kUniformQualifier);
         }
-    }
-
-    // Substitute layout and qualifier strings for the driver uniforms block.
-    const std::string driverBlockLayoutString =
-        "set = " + Str(options.driverUniformsDescriptorSetIndex) + ", binding = 0";
-    constexpr char kDriverBlockName[] = "ANGLEUniformBlock";
-
-    for (IntermediateShaderSource &shaderSource : *shaderSources)
-    {
-        shaderSource.insertLayoutSpecifier(kDriverBlockName, driverBlockLayoutString);
-        shaderSource.insertQualifierSpecifier(kDriverBlockName, kUniformQualifier);
     }
 }
 
@@ -1271,7 +1273,13 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        // To support program pipeline objects, only return shader source for shaders that were
+        // passed in by this gl::ProgramState to avoid overwriting previously link()'ed shaders.
+        gl::Shader *glShader = programState.getAttachedShader(shaderType);
+        if (glShader)
+        {
+            (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        }
     }
 }
 

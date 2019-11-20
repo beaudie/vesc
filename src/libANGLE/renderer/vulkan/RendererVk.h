@@ -127,6 +127,11 @@ class RendererVk : angle::NonCopyable
                                     const vk::PipelineLayoutDesc &desc,
                                     const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
                                     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
+    angle::Result getPipelinePipelineLayout(
+        vk::Context *context,
+        std::vector<const vk::PipelineLayoutDesc *> &pipelinePipelineLayoutDesc,
+        std::vector<const vk::DescriptorSetLayoutPointerArray *> &pipelineDescriptorSetLayout,
+        vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
     angle::Result getPipelineCacheSize(DisplayVk *displayVk, size_t *pipelineCacheSizeOut);
     angle::Result syncPipelineCacheVk(DisplayVk *displayVk);
