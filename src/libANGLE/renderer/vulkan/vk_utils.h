@@ -101,14 +101,22 @@ namespace vk
 {
 struct Format;
 
-struct CommonStructHeader
+// Prepend ptr to the pNext chain at chainStart
+template <typename VulkanStruct1, typename VulkanStruct2>
+void AddToPNextChain(VulkanStruct1 *chainStart, VulkanStruct2 *ptr)
 {
-    VkStructureType sType;
-    void *pNext;
-};
-
-// Append ptr to end of pNext chain beginning at chainStart->pNext
-void AppendToPNextChain(CommonStructHeader *chainStart, void *ptr);
+    // Note: some Vulkan structures are used both to be populated by Vulkan (attached to a |void *|
+    // pNext chain) and to be supplied to Vulkan (attached to a |const void *| chain), for example
+    // VkPhysicalDeviceLineRasterizationFeaturesEXT where the features are first queried through
+    // vkGetPhysicalDeviceFeatures2KHR and later enabled by vkCreateDevice.
+    //
+    // The const_cast here allows these structures (who have |void *pNext|) to be chained with
+    // structures that have const pNext pointers.  Note that Vulkan's facilities to walk the pNext
+    // chain include reinterpret_cast to VkBaseInStructure and VkBaseOutStructure to work around the
+    // same issue.
+    ptr->pNext        = const_cast<void *>(chainStart->pNext);
+    chainStart->pNext = ptr;
+}
 
 extern const char *gLoaderLayersPathEnv;
 extern const char *gLoaderICDFilenamesEnv;
