@@ -624,10 +624,6 @@
 
 // General Vulkan failures
 
-// Front-end query bugs:
-3596 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.resource_list.compute.empty = FAIL
-3596 VULKAN : dEQP-GLES31.functional.program_interface_query.shader_storage_block.buffer_data_size.* = FAIL
-
 // Shader support:
 3565 VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_* = SKIP
 
@@ -642,9 +638,6 @@
 
 // Framebuffer without attachments:
 3579 ANDROID VULKAN : dEQP-GLES31.functional.fbo.no_attachments.* = SKIP
-
-// Debug:
-3590 VULKAN : dEQP-GLES31.functional.debug.negative_coverage.*exceed_shared_memory_size_limit = FAIL
 
 // Stencil textures (some missing support for base level):
 3683 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.stencil_texturing.format.* = FAIL
