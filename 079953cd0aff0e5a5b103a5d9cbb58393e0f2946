@@ -22,6 +22,30 @@
       "revId": "079953cd0aff0e5a5b103a5d9cbb58393e0f2946",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abd509d7_380863ca",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-21T15:24:23Z",
+      "side": 1,
+      "message": "I agree, looks like it\u0027s been this way since 2017 but I can\u0027t find an actual reason behind using -1",
+      "parentUuid": "fb05f987_e7e89ace",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 71
+      },
+      "revId": "079953cd0aff0e5a5b103a5d9cbb58393e0f2946",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
