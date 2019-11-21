@@ -144,8 +144,7 @@ TEST(TestUtils, RunApp)
     executablePath += "/";
     executablePath += kRunAppHelperExecutable;
 
-    std::vector<const char *> args = {executablePath.c_str(), kRunAppTestArg1, kRunAppTestArg2,
-                                      nullptr};
+    std::vector<const char *> args = {executablePath.c_str(), kRunAppTestArg1, kRunAppTestArg2};
 
     // Test that the application can be executed.
     {
@@ -154,12 +153,13 @@ TEST(TestUtils, RunApp)
         EXPECT_TRUE(process->finish());
         EXPECT_TRUE(process->finished());
 
+        EXPECT_GT(process->getElapsedTimeSeconds(), 0.0);
         EXPECT_EQ(kRunAppTestStdout, NormalizeNewLines(process->getStdout()));
         EXPECT_EQ(kRunAppTestStderr, NormalizeNewLines(process->getStderr()));
         EXPECT_EQ(EXIT_SUCCESS, process->getExitCode());
     }
 
-    // Test that environment variables reach the cild.
+    // Test that environment variables reach the child.
     {
         bool setEnvDone = SetEnvironmentVar(kRunAppTestEnvVarName, kRunAppTestEnvVarValue);
         EXPECT_TRUE(setEnvDone);
@@ -168,8 +168,54 @@ TEST(TestUtils, RunApp)
         EXPECT_TRUE(process->started());
         EXPECT_TRUE(process->finish());
 
+        EXPECT_GT(process->getElapsedTimeSeconds(), 0.0);
         EXPECT_EQ("", process->getStdout());
         EXPECT_EQ(kRunAppTestEnvVarValue, NormalizeNewLines(process->getStderr()));
+        EXPECT_EQ(EXIT_SUCCESS, process->getExitCode());
+
+        // Unset environment var.
+        SetEnvironmentVar(kRunAppTestEnvVarName, "");
+    }
+}
+
+// Test running an external application and receiving its output asynchronously.
+TEST(TestUtils, RunAppAsync)
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    // TODO: android support. http://anglebug.com/3125
+    return;
+#endif
+
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+    // TODO: fuchsia support. http://anglebug.com/3161
+    return;
+#endif
+
+    std::string executablePath = GetExecutableDirectory();
+    EXPECT_NE(executablePath, "");
+    executablePath += "/";
+    executablePath += kRunAppHelperExecutable;
+
+    std::vector<const char *> args = {executablePath.c_str(), kRunAppTestArg1, kRunAppTestArg2};
+
+    // Test that the application can be executed.
+    {
+        ProcessHandle process(args, true, true);
+        EXPECT_TRUE(process->started());
+
+        constexpr double kTimeout = 3.0;
+
+        Timer timer;
+        timer.start();
+        while (!process->finished() && timer.getElapsedTime() < kTimeout)
+        {
+            Sleep(1);
+        }
+
+        EXPECT_TRUE(process->finished());
+        EXPECT_GT(process->getElapsedTimeSeconds(), 0.0);
+        EXPECT_EQ(kRunAppTestStdout, NormalizeNewLines(process->getStdout()));
+        EXPECT_EQ(kRunAppTestStderr, NormalizeNewLines(process->getStderr()));
         EXPECT_EQ(EXIT_SUCCESS, process->getExitCode());
     }
 }
