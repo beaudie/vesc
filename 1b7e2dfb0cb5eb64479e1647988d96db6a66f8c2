@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fa53b999_3f350a78",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-21T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad0d9f2_7d190707",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 560,
+        "endChar": 5
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd81a83f_fc198970",
         "filename": "gni/angle.gni",
         "patchSetId": 5
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "56fdd670_7bb9db12",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-21T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "becfcf24_aca0299f",
+      "range": {
+        "startLine": 101,
+        "startChar": 28,
+        "endLine": 101,
+        "endChar": 55
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9549c5_62d0d533",
         "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
         "patchSetId": 5
@@ -116,6 +164,30 @@
       "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "261fcd7e_b47b7b89",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-21T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9549c5_62d0d533",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 268,
+        "endChar": 3
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -142,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "447729e4_1a97f064",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-21T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db3a13ab_3d71cffa",
+      "range": {
+        "startLine": 276,
+        "startChar": 0,
+        "endLine": 278,
+        "endChar": 3
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb59067c_e9fc2237",
         "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
         "patchSetId": 5
@@ -162,6 +258,30 @@
       "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d0017ec_233493b4",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-21T16:29:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cb59067c_e9fc2237",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 36
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -188,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "a53471fc_0db9c895",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-21T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acae9802_b2f2c3dd",
+      "range": {
+        "startLine": 47,
+        "startChar": 45,
+        "endLine": 47,
+        "endChar": 49
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afbaf481_03f6f4ca",
         "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
         "patchSetId": 5
@@ -208,6 +352,30 @@
       "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "768173b5_a71af322",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-21T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afbaf481_03f6f4ca",
+      "range": {
+        "startLine": 59,
+        "startChar": 44,
+        "endLine": 59,
+        "endChar": 48
+      },
+      "revId": "1b7e2dfb0cb5eb64479e1647988d96db6a66f8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
