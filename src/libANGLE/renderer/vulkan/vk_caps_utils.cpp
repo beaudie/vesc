@@ -66,6 +66,9 @@ void RendererVk::ensureCapsInitialized() const
     // Enable ANGLE_base_vertex_base_instance
     mNativeExtensions.baseVertexBaseInstance = true;
 
+    // Enable OES_draw_elements_base_vertex
+    mNativeExtensions.drawElementsBaseVertex = true;
+
     // Enable EXT_blend_minmax
     mNativeExtensions.blendMinMax = true;
 
@@ -130,8 +133,8 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.getImageANGLE = true;
 
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
-    mNativeCaps.maxElementIndex       = std::numeric_limits<GLuint>::max() - 1;
-    mNativeCaps.max3DTextureSize      = limitsVk.maxImageDimension3D;
+    mNativeCaps.maxElementIndex  = std::numeric_limits<GLuint>::max() - 1;
+    mNativeCaps.max3DTextureSize = limitsVk.maxImageDimension3D;
     mNativeCaps.max2DTextureSize =
         std::min(limitsVk.maxFramebufferWidth, limitsVk.maxImageDimension2D);
     mNativeCaps.maxArrayTextureLayers = limitsVk.maxImageArrayLayers;
