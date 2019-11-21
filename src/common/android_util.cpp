@@ -194,6 +194,8 @@ T1 *offsetPointer(T2 *ptr, int bytes)
     return reinterpret_cast<T1 *>(reinterpret_cast<intptr_t>(ptr) + bytes);
 }
 
+constexpr int kStreamSize = 64;
+
 }  // anonymous namespace
 
 namespace angle
@@ -276,6 +278,31 @@ EGLClientBuffer AHardwareBufferToClientBuffer(const AHardwareBuffer *hardwareBuf
 {
     return offsetPointer<EGLClientBuffer>(hardwareBuffer,
                                           kAHardwareBufferToANativeWindowBufferOffset);
+}
+
+std::string AndroidExecCommand(const char *cmd)
+{
+    // Run the command and open a I/O stream to read results
+    char stream[kStreamSize] = {};
+    FILE *pipe               = popen(cmd, "r");
+    if (pipe != nullptr)
+    {
+        fgets(stream, kStreamSize, pipe);
+        pclose(pipe);
+    }
+
+    // Right strip white space
+    std::string result(stream);
+    result.erase(result.find_last_not_of(" \n\r\t") + 1);
+    return result;
+}
+
+// Call out to 'getprop' on a shell and return a string if the value was set
+std::string AndroidGetEnvFromProp(const char *key)
+{
+    std::string command("getprop ");
+    command += key;
+    return AndroidExecCommand(command.c_str());
 }
 
 }  // namespace android
