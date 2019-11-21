@@ -10,6 +10,7 @@
 #define COMMON_ANDROIDUTIL_H_
 
 #include <EGL/egl.h>
+#include <string>
 #include "angle_gl.h"
 
 struct ANativeWindowBuffer;
@@ -32,6 +33,9 @@ void GetANativeWindowBufferProperties(const ANativeWindowBuffer *buffer,
 GLenum NativePixelFormatToGLInternalFormat(int pixelFormat);
 
 AHardwareBuffer *ANativeWindowBufferToAHardwareBuffer(ANativeWindowBuffer *windowBuffer);
+
+std::string AndroidExecCommand(const char *cmd);
+std::string AndroidGetEnvFromProp(const char *key);
 
 }  // namespace android
 }  // namespace angle
