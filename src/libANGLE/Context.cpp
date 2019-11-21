@@ -4092,9 +4092,11 @@ void Context::framebufferTexture2D(GLenum target,
 
     if (texture.value != 0)
     {
-        Texture *textureObj = getTexture(texture);
-        ImageIndex index    = ImageIndex::MakeFromTarget(textarget, level, 1);
-        framebuffer->setAttachment(this, GL_TEXTURE, attachment, index, textureObj);
+        Texture *textureObj    = getTexture(texture);
+        ImageIndex index       = ImageIndex::MakeFromTarget(textarget, level, 1);
+        GLsizei textureSamples = textureObj->getSamples(textarget, level);
+        framebuffer->setAttachmentMultisample(this, GL_TEXTURE, attachment, index, textureObj,
+                                              textureSamples);
     }
     else
     {
