@@ -8,23 +8,24 @@
 
 #include "util/test_utils.h"
 
+#include <dlfcn.h>
 #include <errno.h>
 #include <sched.h>
 #include <signal.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 #include <cstdarg>
 #include <cstring>
+#include <iostream>
 
 #include "common/debug.h"
 #include "common/platform.h"
 
 #if !defined(ANGLE_PLATFORM_FUCHSIA)
-#    include <dlfcn.h>
 #    include <sys/resource.h>
-#    include <sys/stat.h>
-#    include <sys/types.h>
-#    include <sys/wait.h>
 #endif
 
 namespace angle
@@ -88,12 +89,7 @@ class PosixProcess : public Process
                  bool captureStdOut,
                  bool captureStdErr)
     {
-#if defined(ANGLE_PLATFORM_FUCHSIA)
-        ANGLE_UNUSED_VARIABLE(ReadEntireFile);
-        ANGLE_UNUSED_VARIABLE(mExitCode);
-        ANGLE_UNUSED_VARIABLE(mPID);
-#else
-        if (commandLineArgs.empty() || commandLineArgs.back() != nullptr)
+        if (commandLineArgs.empty())
         {
             return;
         }
@@ -115,6 +111,7 @@ class PosixProcess : public Process
         }
 
         mStarted = true;
+        mTimer.start();
 
         if (mPID == 0)
         {
@@ -149,11 +146,18 @@ class PosixProcess : public Process
             // functions do not modify either the array of pointers or the characters to which the
             // function points, but this would disallow existing correct code. Instead, only the
             // array of pointers is noted as constant.
-            execv(commandLineArgs[0], const_cast<char *const *>(commandLineArgs.data()));
+            std::vector<char *> args;
+            for (const char *arg : commandLineArgs)
+            {
+                args.push_back(const_cast<char *>(arg));
+            }
+            args.push_back(nullptr);
+
+            execv(commandLineArgs[0], args.data());
+            std::cerr << "Error calling evecv: " << errno;
             _exit(errno);
         }
         // Parent continues execution.
-#endif  // defined(ANGLE_PLATFORM_FUCHSIA)
     }
 
     ~PosixProcess() override {}
@@ -167,41 +171,29 @@ class PosixProcess : public Process
             return false;
         }
 
-#if defined(ANGLE_PLATFORM_FUCHSIA)
-        return false;
-#else
-        // Close the write end of the pipes, so EOF can be generated when child exits.
-        // Then read back the output of the child.
-        if (mStdoutPipe.valid())
-        {
-            mStdoutPipe.closeEndPoint(1);
-            ReadEntireFile(mStdoutPipe.fds[0], &mStdout);
-        }
-        if (mStderrPipe.valid())
-        {
-            mStderrPipe.closeEndPoint(1);
-            ReadEntireFile(mStderrPipe.fds[0], &mStderr);
-        }
+        readPipes();
 
         // Cleanup the child.
         int status = 0;
         do
         {
-            pid_t changedPid = waitpid(mPID, &status, 0);
+            pid_t changedPid = ::waitpid(mPID, &status, 0);
             if (changedPid < 0 && errno == EINTR)
             {
                 continue;
             }
             if (changedPid < 0)
             {
+                mTimer.stop();
                 return false;
             }
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
 
+        mTimer.stop();
+
         // Retrieve the error code.
         mExitCode = WEXITSTATUS(status);
         return true;
-#endif  // defined(ANGLE_PLATFORM_FUCHSIA)
     }
 
     bool finished() override
@@ -211,7 +203,30 @@ class PosixProcess : public Process
             return false;
         }
 
-        return (::kill(mPID, 0) != 0);
+        if (::kill(mPID, 0) != 0)
+        {
+            mTimer.stop();
+            return true;
+        }
+
+        int status        = 0;
+        pid_t returnedPID = ::waitpid(mPID, &status, WNOHANG);
+
+        if (returnedPID == -1 && errno != ECHILD)
+        {
+            std::cerr << "Error calling waitpid: " << ::strerror(errno) << "\n";
+            return true;
+        }
+
+        if (returnedPID == mPID)
+        {
+            mTimer.stop();
+            readPipes();
+            mExitCode = status;
+            return true;
+        }
+
+        return false;
     }
 
     int getExitCode() override { return 0; }
@@ -232,6 +247,22 @@ class PosixProcess : public Process
     }
 
   private:
+    void readPipes()
+    {
+        // Close the write end of the pipes, so EOF can be generated when child exits.
+        // Then read back the output of the child.
+        if (mStdoutPipe.valid())
+        {
+            mStdoutPipe.closeEndPoint(1);
+            ReadEntireFile(mStdoutPipe.fds[0], &mStdout);
+        }
+        if (mStderrPipe.valid())
+        {
+            mStderrPipe.closeEndPoint(1);
+            ReadEntireFile(mStderrPipe.fds[0], &mStderr);
+        }
+    }
+
     bool mStarted = false;
     ScopedPipe mStdoutPipe;
     ScopedPipe mStderrPipe;
