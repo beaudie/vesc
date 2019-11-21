@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e368e568_5203b7be",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-21T15:52:32Z",
+      "side": 1,
+      "message": "Can you add these (including line 1418) to a helper function shouldInvertDepthRange(float near, float far)?\nSeems trivial but will help when later searching for all places where this takes effect",
+      "revId": "8b81bc68f2c35e8afd6188f8316880743b7cd99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
