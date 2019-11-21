@@ -32,6 +32,9 @@ class VertexArrayVk : public VertexArrayImpl
                             gl::VertexArray::DirtyAttribBitsArray *attribBits,
                             gl::VertexArray::DirtyBindingBitsArray *bindingBits) override;
 
+    void updateDirtyAttribs(const gl::Context *context,
+                            gl::VertexArray::DirtyBits &dirtyBits) override;
+
     void updateDefaultAttrib(ContextVk *contextVk,
                              size_t attribIndex,
                              VkBuffer bufferHandle,

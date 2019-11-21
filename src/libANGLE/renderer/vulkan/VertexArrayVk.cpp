@@ -845,4 +845,15 @@ void VertexArrayVk::updateDefaultAttrib(ContextVk *contextVk,
         setDefaultPackedInput(contextVk, attribIndex);
     }
 }
+
+void VertexArrayVk::updateDirtyAttribs(const gl::Context *context,
+                                       gl::VertexArray::DirtyBits &dirtyBits)
+{
+    // Dirty the attribute bits as well
+    const gl::State &glState = context->getState();
+    for (auto attribIndex : glState.getProgram()->getActiveAttribLocationsMask())
+    {
+        dirtyBits.set(gl::VertexArray::DIRTY_BIT_ATTRIB_0 + attribIndex);
+    }
+}
 }  // namespace rx

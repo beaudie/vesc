@@ -1387,11 +1387,7 @@ void State::setVertexArrayBinding(const Context *context, VertexArray *vertexArr
     if (vertexArray)
         vertexArray->onBindingChanged(context, 1);
     mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
-
-    if (mVertexArray && mVertexArray->hasAnyDirtyBit())
-    {
-        mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
-    }
+    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 bool State::removeVertexArrayBinding(const Context *context, VertexArrayID vertexArray)

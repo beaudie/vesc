@@ -534,6 +534,8 @@ void VertexArray::setVertexAttribIPointer(const Context *context,
 
 angle::Result VertexArray::syncState(const Context *context)
 {
+    mVertexArray->updateDirtyAttribs(context, mDirtyBits);
+
     if (mDirtyBits.any())
     {
         mDirtyBitsGuard = mDirtyBits;
