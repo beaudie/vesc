@@ -117,6 +117,30 @@
       "revId": "8ebd4e89b86ecbbdfbf7edd252fec2b6cd75bc88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44542076_7c7801d3",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1805,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-21T21:15:01Z",
+      "side": 1,
+      "message": "Ah, I see, I had missed the early return above.  It can be left as is.",
+      "parentUuid": "143d86ba_c497a39a",
+      "range": {
+        "startLine": 1805,
+        "startChar": 4,
+        "endLine": 1805,
+        "endChar": 5
+      },
+      "revId": "8ebd4e89b86ecbbdfbf7edd252fec2b6cd75bc88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
