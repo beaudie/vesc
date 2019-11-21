@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd1cf44e_d233d930",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "maybe in your examples use `export PACKAGE_NAME \u003cpackage\u003e` and then the user can copy/paste the rest exactly using $PACKAGE_NAME",
+      "range": {
+        "startLine": 82,
+        "startChar": 46,
+        "endLine": 82,
+        "endChar": 55
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fe64b28_69a74cba",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "tiny nit: \":\" instead of \",\"",
+      "range": {
+        "startLine": 91,
+        "startChar": 8,
+        "endLine": 91,
+        "endChar": 9
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da5f73d4_3790ae1d",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "nit: can more explicitly state that the \"capture.frame_start must be zero\"",
+      "range": {
+        "startLine": 91,
+        "startChar": 67,
+        "endLine": 91,
+        "endChar": 85
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4101f952_edaeaf7d",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "maybe include an adb example for this as well, it\u0027ll make it easier to copy paste",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 35
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca8b504b_1609c6a0",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "probably should call this \"angle_capture_replay_sample_context_id\" for consistency (most closely matches existing nomenclature, e.g. angle_build_capture_replay_sample)",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 32
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88844571_81e6ed57",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "worth noting: we should still be able to make perf tests and correctness tests without samples.",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 83
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db0bc637_ec5c4c7b",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "(see other comments)",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 30
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f32b660_7bb6ad99",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "if you want you can mirror this ling variable name as\n\n _contextid \u003d angle_capture_replay_sample_context_id",
+      "range": {
+        "startLine": 236,
+        "startChar": 61,
+        "endLine": 236,
+        "endChar": 88
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a1bbd4a_147bfb04",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "nit: can rename these as well",
+      "range": {
+        "startLine": 248,
+        "startChar": 7,
+        "endLine": 248,
+        "endChar": 35
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d4fb55_c512b263",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "Can you try to eliminate these using #defines in the sample?",
+      "range": {
+        "startLine": 249,
+        "startChar": 6,
+        "endLine": 251,
+        "endChar": 101
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97de66ad_64a790ef",
+        "filename": "samples/capture_replay/CaptureReplay.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "nit: ANGLE_MACRO_CONCAT/ANGLE_MACRO_CONCAT2 (something all caps with ANGLE_ at the start)",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 12
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a276fb8_ae7e5de8",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T13:00:38Z",
+      "side": 1,
+      "message": "nit: can be in an anonymous block",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 31
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
