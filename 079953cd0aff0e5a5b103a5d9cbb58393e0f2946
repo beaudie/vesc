@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb05f987_e7e89ace",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-21T15:02:28Z",
+      "side": 1,
+      "message": "I think the real fix is to make sure that activeGPUIndex is always valid.  I think we could set it\u0027s default value to 0 here: https://cs.chromium.org/chromium/src/third_party/angle/src/gpu_info_util/SystemInfo.h?dr\u003dC\u0026g\u003d0\u0026l\u003d63\n\nThere is already a bunch of code scattered around Chrome that checks if it\u0027s -1 and uses 0 instead.",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 71
+      },
+      "revId": "079953cd0aff0e5a5b103a5d9cbb58393e0f2946",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
