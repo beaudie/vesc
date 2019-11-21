@@ -180,11 +180,26 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                     vkCmdDrawIndexed(cmdBuffer, params->indexCount, 1, 0, 0, 0);
                     break;
                 }
+                case CommandID::DrawIndexedBaseVertex:
+                {
+                    const DrawIndexedBaseVertexParams *params =
+                        getParamPtr<DrawIndexedBaseVertexParams>(currentCommand);
+                    vkCmdDrawIndexed(cmdBuffer, params->indexCount, 1, 0, params->vertexOffset, 0);
+                    break;
+                }
                 case CommandID::DrawIndexedInstanced:
                 {
                     const DrawIndexedInstancedParams *params =
                         getParamPtr<DrawIndexedInstancedParams>(currentCommand);
                     vkCmdDrawIndexed(cmdBuffer, params->indexCount, params->instanceCount, 0, 0, 0);
+                    break;
+                }
+                case CommandID::DrawIndexedInstancedBaseVertex:
+                {
+                    const DrawIndexedInstancedBaseVertexParams *params =
+                        getParamPtr<DrawIndexedInstancedBaseVertexParams>(currentCommand);
+                    vkCmdDrawIndexed(cmdBuffer, params->indexCount, params->instanceCount, 0,
+                                     params->vertexOffset, 0);
                     break;
                 }
                 case CommandID::DrawIndexedInstancedBaseVertexBaseInstance:
