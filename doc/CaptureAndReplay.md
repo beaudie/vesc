@@ -68,3 +68,57 @@ $ ANGLE_CAPTURE_ENABLED=0 out/Debug/capture_replay_sample
 ```
 
 Note that we specify `ANGLE_CAPTURE_ENABLED=0` to prevent re-capturing when running the replay.
+
+## Capturing an Android application
+
+In order to capture on Android, the following additional steps must be taken.  These steps
+presume you've built and installed the ANGLE APK with capture enabled, and selected ANGLE
+as the GLES driver for your application.
+
+1. Create the output directory
+
+    Determine your package name, then create an output directory that it can write to:
+    ```
+    $ adb shell mkdir -p /sdcard/Android/data/<package>/angle_capture
+    ```
+
+2. Set properties to use for environment variable
+
+    On Android, it is difficult to set an environment variable before starting native code.
+    To work around this, ANGLE will read debug system properties before starting the capture
+    and use them to prime environment variables used by the capture code.
+
+    Note, mid-execution capture doesn't work for Android just yet, so start from zero.
+    ```
+    $ adb shell setprop debug.angle.capture.frame_start 0
+    $ adb shell setprop debug.angle.capture.frame_end 200
+    ```
+
+    There are other properties that can be set that match 1:1 with the env vars:
+    * `debug.angle.capture.enabled`
+    * `debug.angle.capture.out_dir`
+    * `debug.angle.capture.frame_start`
+    * `debug.angle.capture.frame_end`
+
+3.  Run the application, then pull the files to the capture_replay directory
+    ```
+    $ cd samples/capture_replay
+    $ adb pull /sdcard/Android/data/<package>/angle_capture replay_files
+    $ mv replay_files/* .
+    ```
+
+4. Update your GN args to specifiy which context will be replayed.
+
+    By default Context1 will be replayed.  On Android, Context2 is more typical, some apps
+    we've run go as high as 6.  Note, this solution is temporary until EGL capture is in place.
+    ```
+    angle_frame_capture_context = 2
+    ```
+
+5. Replay the capture on desktop
+
+    Until we have samples building for Android, the replay must be done on desktop.
+    ```
+    $ autoninja -C out/Release capture_replay_sample
+    $ out/Release/capture_replay_sample
+    ```
