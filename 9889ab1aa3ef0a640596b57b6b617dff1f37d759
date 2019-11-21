@@ -16,6 +16,24 @@
       "revId": "9889ab1aa3ef0a640596b57b6b617dff1f37d759",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f27261c_6e67f35f",
+        "filename": "src/tests/test_utils/angle_test_instantiate_apple.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-21T11:42:17Z",
+      "side": 1,
+      "message": "the @available directive is objective-c syntax. I have to put inside .mm. However if there is any option from gn that can force angle_test_instantiate.cpp to be compiled as objective-c++ file when is_mac\u003dtrue, then it would certainly a big help.",
+      "parentUuid": "b071a1ac_e974b6de",
+      "revId": "9889ab1aa3ef0a640596b57b6b617dff1f37d759",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
