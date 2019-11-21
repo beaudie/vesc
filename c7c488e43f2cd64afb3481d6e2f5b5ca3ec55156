@@ -22,6 +22,30 @@
       "revId": "c7c488e43f2cd64afb3481d6e2f5b5ca3ec55156",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "037974c7_951ad59b",
+        "filename": "scripts/code_generation_hashes/Vulkan_mandatory_format_support_table.json",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-21T18:32:40Z",
+      "side": 1,
+      "message": "upload checks said I needed to run the code generator to update things.\nThis was the result.\nI\u0027ll double check that code is in sync.",
+      "parentUuid": "0a0c9fc7_ad05491e",
+      "range": {
+        "startLine": 11,
+        "startChar": 5,
+        "endLine": 11,
+        "endChar": 37
+      },
+      "revId": "c7c488e43f2cd64afb3481d6e2f5b5ca3ec55156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
