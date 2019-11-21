@@ -46,6 +46,30 @@
       "revId": "c7c488e43f2cd64afb3481d6e2f5b5ca3ec55156",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf1b6a79_91833ece",
+        "filename": "scripts/code_generation_hashes/Vulkan_mandatory_format_support_table.json",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-21T21:12:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "037974c7_951ad59b",
+      "range": {
+        "startLine": 11,
+        "startChar": 5,
+        "endLine": 11,
+        "endChar": 37
+      },
+      "revId": "c7c488e43f2cd64afb3481d6e2f5b5ca3ec55156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
