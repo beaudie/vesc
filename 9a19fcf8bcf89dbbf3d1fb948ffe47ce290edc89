@@ -46,6 +46,30 @@
       "revId": "9a19fcf8bcf89dbbf3d1fb948ffe47ce290edc89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "925bfc23_e6ff950d",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-11-21T00:18:42Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand. I\u0027m not suggesting that you change ToGLenum. I\u0027m suggesting that you do the same thing here as you did on line 252 of this file:\n\nGLenum gl_type \u003d target \u003d\u003d gl::TextureTarget::VideoTexture ? GL_TEXTURE_2D : ToGLenum(target);\n\nThen pass gl_type to texSubImage2D.",
+      "parentUuid": "65f8d729_15a09f54",
+      "range": {
+        "startLine": 346,
+        "startChar": 45,
+        "endLine": 346,
+        "endChar": 58
+      },
+      "revId": "9a19fcf8bcf89dbbf3d1fb948ffe47ce290edc89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
