@@ -34,6 +34,24 @@
       "revId": "9889ab1aa3ef0a640596b57b6b617dff1f37d759",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cc03be2_748bae94",
+        "filename": "src/tests/test_utils/angle_test_instantiate_apple.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T11:49:31Z",
+      "side": 1,
+      "message": "I don\u0027t think there is to compile cpp as objective c++. I found a solution here:\n\nhttps://stackoverflow.com/questions/5969485/getting-the-os-version-in-mac-os-x-using-standard-c\n\nIt\u0027s pretty convoluted. I think yours is better. So LGTM.",
+      "parentUuid": "8f27261c_6e67f35f",
+      "revId": "9889ab1aa3ef0a640596b57b6b617dff1f37d759",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
