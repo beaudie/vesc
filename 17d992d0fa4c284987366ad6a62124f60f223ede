@@ -1,0 +1,343 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76bec6d4_f3273140",
+        "filename": "include/GLSLANG/ShaderVars.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "nit: can you update the version number in ShaderLang.h when modifying this file?",
+      "range": {
+        "startLine": 123,
+        "startChar": 16,
+        "endLine": 123,
+        "endChar": 36
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "528b735b_2a3d682e",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "Would be nice to have this as separate features. That way we could control them individually and also disable both of them for testing.",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 36
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9864ec18_adbfeb56",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "can you update this code to move it into utilities.h/utilities.cpp? It shouldn\u0027t need to be part of the public translator API. Would be nicer a static function that takes a GLenum argument. i.e. GetGLSLTypeString",
+      "range": {
+        "startLine": 343,
+        "startChar": 0,
+        "endLine": 390,
+        "endChar": 0
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f73c2555_0e05bf18",
+        "filename": "src/libANGLE/TransformFeedback.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "would like if we can omit this. Ids are not a safe caching mechanism.",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 28
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceb42ca4_40add44c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "nit: XFBBufferInfo or TransformFeedbackBufferInfo... should respect our naming conventions.\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#variable-names",
+      "range": {
+        "startLine": 113,
+        "startChar": 7,
+        "endLine": 113,
+        "endChar": 20
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd03b60a_725f043b",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "I haven\u0027t been following the design as closely. It\u0027s a bit surprising that this much glue is needed for the extension. Can you add a short comment here as to what this code is doing?",
+      "range": {
+        "startLine": 530,
+        "startChar": 5,
+        "endLine": 530,
+        "endChar": 46
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb21fe68_af47ea57",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "tiny nit: \u0027tfVaryings\u0027 to distinguish from non-tf varyings.",
+      "range": {
+        "startLine": 535,
+        "startChar": 53,
+        "endLine": 535,
+        "endChar": 62
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eca8e9c6_560fc3c8",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "nit: a cleaner way to structure this code would be\n\nif (varyingIndex \u003e 0)\n{\n   const \u003ctype\u003e \u0026prev \u003d varyings[varyingIndex - 1];\n   currentOffset +\u003d prev.size() * ....;\n}",
+      "range": {
+        "startLine": 558,
+        "startChar": 29,
+        "endLine": 561,
+        "endChar": 37
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cd3c004_57ee139a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "could use some clarification and documentation here. Why do you need special treatment for non-XFB varyings?",
+      "range": {
+        "startLine": 631,
+        "startChar": 8,
+        "endLine": 631,
+        "endChar": 81
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7774447e_74be8ab6",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "nit: I think you could use a std::find_if here. or use a std::set for a slightly nicer lookup.",
+      "range": {
+        "startLine": 636,
+        "startChar": 0,
+        "endLine": 644,
+        "endChar": 17
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f5bf112_2fd37899",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "nit: these objects are designed to be stored by-value. I\u0027d recommend using that approach.\n\nwe also already have gl::TransformFeedbackBuffersArray in angletypes.h. You can make this type simply TransformFeedbackBuffersArray\u003cvk::BufferHelper\u003e.",
+      "range": {
+        "startLine": 433,
+        "startChar": 19,
+        "endLine": 433,
+        "endChar": 37
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d5428fd_fa68f164",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "Couple comments here:\n\n * The counter buffers concept is a difference between Vulkan and GL that would be nice to document. You could consider writing a short .md doc on the implementation of your XFB extension feature.\n * Having a map here looks wrong to me. I looked in the cpp and it\u0027s indexed by XFB ID. Can you flatten this so the TransformFeedbackVk owns the XfbBufferHelpers?",
+      "range": {
+        "startLine": 797,
+        "startChar": 4,
+        "endLine": 797,
+        "endChar": 80
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd3ddbbb_0af43b40",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapperVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "tiny nit: closing namespace comment",
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5165035e_eea3776f",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapperVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "nit: you can omit this if you\u0027re now passing FeaturesVk",
+      "range": {
+        "startLine": 27,
+        "startChar": 37,
+        "endLine": 27,
+        "endChar": 64
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ba7b6f0_bb183ad2",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-21T17:36:18Z",
+      "side": 1,
+      "message": "nit: you can improve this code by early-exit.\n\nif (extension)\n  return;\n\nor if !emulation with the two features method. same for the other functions.",
+      "range": {
+        "startLine": 270,
+        "startChar": 4,
+        "endLine": 271,
+        "endChar": 5
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
