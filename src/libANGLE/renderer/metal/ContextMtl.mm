@@ -302,6 +302,17 @@ angle::Result ContextMtl::drawElements(const gl::Context *context,
 
     return angle::Result::Continue;
 }
+angle::Result ContextMtl::drawElementsBaseVertex(const gl::Context *context,
+                                                 gl::PrimitiveMode mode,
+                                                 GLsizei count,
+                                                 gl::DrawElementsType type,
+                                                 const void *indices,
+                                                 GLint baseVertex)
+{
+    // NOTE(hqle): ES 3.2
+    UNIMPLEMENTED();
+    return angle::Result::Stop;
+}
 angle::Result ContextMtl::drawElementsInstanced(const gl::Context *context,
                                                 gl::PrimitiveMode mode,
                                                 GLsizei count,
@@ -310,6 +321,18 @@ angle::Result ContextMtl::drawElementsInstanced(const gl::Context *context,
                                                 GLsizei instanceCount)
 {
     // NOTE(hqle): ES 3.0
+    UNIMPLEMENTED();
+    return angle::Result::Stop;
+}
+angle::Result ContextMtl::drawElementsInstancedBaseVertex(const gl::Context *context,
+                                                          gl::PrimitiveMode mode,
+                                                          GLsizei count,
+                                                          gl::DrawElementsType type,
+                                                          const void *indices,
+                                                          GLsizei instanceCount,
+                                                          GLint baseVertex)
+{
+    // NOTE(hqle): ES 3.2
     UNIMPLEMENTED();
     return angle::Result::Stop;
 }
@@ -334,6 +357,19 @@ angle::Result ContextMtl::drawRangeElements(const gl::Context *context,
                                             const void *indices)
 {
     // NOTE(hqle): ES 3.0
+    UNIMPLEMENTED();
+    return angle::Result::Stop;
+}
+angle::Result ContextMtl::drawRangeElementsBaseVertex(const gl::Context *context,
+                                                      gl::PrimitiveMode mode,
+                                                      GLuint start,
+                                                      GLuint end,
+                                                      GLsizei count,
+                                                      gl::DrawElementsType type,
+                                                      const void *indices,
+                                                      GLint baseVertex)
+{
+    // NOTE(hqle): ES 3.2
     UNIMPLEMENTED();
     return angle::Result::Stop;
 }
