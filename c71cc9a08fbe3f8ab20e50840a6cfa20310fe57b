@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "9915ec0f_50084459",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-21T04:20:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4cd0730_11cebe5f",
+      "range": {
+        "startLine": 779,
+        "startChar": 92,
+        "endLine": 779,
+        "endChar": 98
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a79b25a_8e837cd1",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
@@ -380,6 +404,30 @@
     },
     {
       "key": {
+        "uuid": "93a287bf_1a3a313d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-21T04:20:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f19fef37_28a377e4",
+      "range": {
+        "startLine": 2154,
+        "startChar": 28,
+        "endLine": 2155,
+        "endChar": 38
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f1e3692_d8bce095",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 15
@@ -463,6 +511,30 @@
       "side": 1,
       "message": "Might be worth trying to make the change by hand rather than let \u0027git cl format\u0027 choose where to break the line.  It\u0027s not the hill I plan to die on, just like to keep the code readable.",
       "parentUuid": "d41a07b6_64b3363d",
+      "range": {
+        "startLine": 611,
+        "startChar": 0,
+        "endLine": 611,
+        "endChar": 40
+      },
+      "revId": "c71cc9a08fbe3f8ab20e50840a6cfa20310fe57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de20b7c3_af1feb91",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-21T04:20:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a150b02_d2c3039e",
       "range": {
         "startLine": 611,
         "startChar": 0,

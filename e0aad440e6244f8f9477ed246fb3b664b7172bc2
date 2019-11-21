@@ -16,6 +16,24 @@
       "revId": "e0aad440e6244f8f9477ed246fb3b664b7172bc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c03cd24a_616c3e23",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-21T04:20:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbd0a5fa_5523bbe5",
+      "revId": "e0aad440e6244f8f9477ed246fb3b664b7172bc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
