@@ -628,9 +628,6 @@
 3596 VULKAN : dEQP-GLES31.functional.program_interface_query.program_input.resource_list.compute.empty = FAIL
 3596 VULKAN : dEQP-GLES31.functional.program_interface_query.shader_storage_block.buffer_data_size.* = FAIL
 
-// Shader support:
-3565 VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_* = SKIP
-
 // SSBO synchronization:
 4097 VULKAN PIXEL2ORXL : dEQP-GLES31.functional.synchronization.in_invocation.ssbo_alias_overwrite = FAIL
 
@@ -653,9 +650,24 @@
 // Need to support non-color when staging image updates
 4080 ANDROID VULKAN : dEQP-GLES31.functional.stencil_texturing.misc.base_level = SKIP
 
-// Multisampled textures:
-3565 VULKAN : dEQP-GLES31.functional.texture.multisample.* = SKIP
-3565 VULKAN : dEQP-GLES31.functional.state_query.texture*multisample.* = SKIP
+//// Multisampled textures:
+// The tests associated with the following line actually pass, but fail because of Vulkan
+// validation-layer errors (perhaps a bug in the validation layers):
+3565 VULKAN : dEQP-GLES31.functional.texture.multisample.samples_1.* = FAIL
+// TODO: Investigate why these are failing:
+3565 VULKAN : dEQP-GLES31.functional.texture.multisample.samples_10.use_texture_depth_2d = FAIL
+3565 VULKAN : dEQP-GLES31.functional.texture.multisample.samples_12.use_texture_depth_2d = FAIL
+3565 VULKAN : dEQP-GLES31.functional.texture.multisample.samples_13.use_texture_depth_2d = FAIL
+3565 VULKAN : dEQP-GLES31.functional.texture.multisample.samples_16.use_texture_depth_2d = FAIL
+// TODO: Investigate why these are failing:
+3565 SWIFTSHADER : dEQP-GLES31.functional.texture.multisample.samples_4.sample_position = FAIL
+3565 SWIFTSHADER : dEQP-GLES31.functional.texture.multisample.samples_4.sample_mask_only = FAIL
+
+// Multisampled shader support:
+3565 VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_2d = FAIL
+3565 VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_int_2d = FAIL
+3565 VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_uint_2d = FAIL
+3565 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_4_texture_2d = FAIL
 
 // Vulkan creates the image view with the same format as the texture.
 3885 VULKAN : dEQP-GLES31.functional.image_load_store.*.format_reinterpret.* = FAIL

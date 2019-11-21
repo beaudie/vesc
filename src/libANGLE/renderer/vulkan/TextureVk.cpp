@@ -93,6 +93,11 @@ void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
             *layerCount = image->getLayerCount();
             return;
 
+        case gl::TextureType::_2DMultisample:
+            *layerIndex = 0;
+            *layerCount = 1;
+            return;
+
         default:
             UNREACHABLE();
     }
@@ -398,6 +403,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
                                           gl::Framebuffer *source)
 {
     gl::Extents fbSize = source->getReadColorAttachment()->getSize();
+
     gl::Rectangle clippedSourceArea;
     if (!ClipRectangle(sourceArea, gl::Rectangle(0, 0, fbSize.width, fbSize.height),
                        &clippedSourceArea))
@@ -763,7 +769,7 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
     }
 
     const vk::Format &format = renderer->getFormat(internalFormat);
-    ANGLE_TRY(ensureImageAllocated(contextVk, format));
+    ANGLE_TRY(ensureImageAllocated(contextVk, format, 1));
 
     if (mImage->valid())
     {
@@ -894,11 +900,14 @@ void TextureVk::releaseAndDeleteImage(ContextVk *contextVk)
     }
 }
 
-angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk, const vk::Format &format)
+angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk,
+                                              const vk::Format &format,
+                                              GLint samples)
 {
     if (mImage == nullptr)
     {
-        setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0, 0, true);
+        setImageHelper(contextVk, new vk::ImageHelper(samples), mState.getType(), format, 0, 0, 0,
+                       true);
     }
     else
     {
@@ -991,7 +1000,7 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
 
     if (!size.empty())
     {
-        ANGLE_TRY(ensureImageAllocated(contextVk, format));
+        ANGLE_TRY(ensureImageAllocated(contextVk, format, 1));
     }
 
     return angle::Result::Continue;
@@ -1588,8 +1597,25 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
                                                const gl::Extents &size,
                                                bool fixedSampleLocations)
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+    // TODO:
+    //
+    //   1) Use the "samples", "size", and "fixedSampleLocations" parameters
+    ContextVk *contextVk = GetAs<ContextVk>(context->getImplementation());
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (!mOwnsImage)
+    {
+        releaseAndDeleteImage(contextVk);
+    }
+
+    const vk::Format &format = renderer->getFormat(internalformat);
+    ANGLE_TRY(ensureImageAllocated(contextVk, format, samples));
+
+    if (mImage->valid())
+    {
+        releaseImage(contextVk);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::initializeContents(const gl::Context *context,
@@ -1683,9 +1709,9 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     uint32_t layerCount;
     gl_vk::GetExtentsAndLayerCount(mState.getType(), extents, &vkExtent, &layerCount);
 
-    ANGLE_TRY(mImage->init(contextVk, mState.getType(), vkExtent, format, 1, mImageUsageFlags,
-                           mState.getEffectiveBaseLevel(), mState.getEffectiveMaxLevel(),
-                           levelCount, layerCount));
+    ANGLE_TRY(mImage->init(contextVk, mState.getType(), vkExtent, format, mImage->getSamples(),
+                           mImageUsageFlags, mState.getEffectiveBaseLevel(),
+                           mState.getEffectiveMaxLevel(), levelCount, layerCount));
 
     const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 

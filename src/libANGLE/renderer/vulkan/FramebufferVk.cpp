@@ -1329,8 +1329,188 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
                                                size_t index,
                                                GLfloat *xy) const
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+    // NOTES:
+    //
+    // - This FramebufferVk is the GLES "draw framebuffer".
+    //
+    // - From the GLES 3.2 spec:
+    //
+    //   - If a framebuffer object or default framebuffer is not framebuffer complete,
+    //     as deﬁned in section 9.4.2, then the effective values of SAMPLE_BUFFERS and
+    //     SAMPLES are undeﬁned.
+    //
+    //   - Otherwise, the effective value of SAMPLES is equal to the value of
+    //     RENDERBUFFER_SAMPLES or TEXTURE_SAMPLES (depending on the type of the
+    //     attached images), which must all have the same value. The effective value of
+    //     SAMPLE_BUFFERS is one if SAMPLES is non-zero, and zero otherwise.
+    //
+    // - Questions:
+    //
+    //   - Do I need to check wither this Framebuffer is "framebuffer complete"?
+    //
+    //   - Seems like I need to get the effective value of GL_SAMPLES from the renderbuffer of
+    //     texture that is attached.  The statement "which must all have the same value" suggests
+    //     that I only need to look at the first attachment here.  Correct?
+    //
+    // -
+    // FIXME: For now, assume standard sample locations:
+    switch (getSamples())
+    {
+        case 0:
+        case 1:
+            xy[0] = 0.5;
+            xy[1] = 0.5;
+            break;
+        case 2:
+            switch (index)
+            {
+                // NOTE: The following is in correct order, per the Vulkan spec and per the
+                // dEQP-GLES31.functional.texture.multisample.samples_2.sample_position test.
+                // However, the reverse order is needed for passing the test on Intel.
+                case 0:
+                    xy[0] = 0.75;
+                    xy[1] = 0.75;
+                    break;
+                case 1:
+                    xy[0] = 0.25;
+                    xy[1] = 0.25;
+                    break;
+            }
+            break;
+        case 4:
+            switch (index)
+            {
+                case 0:
+                    xy[0] = 0.375;
+                    xy[1] = 0.125;
+                    break;
+                case 1:
+                    xy[0] = 0.875;
+                    xy[1] = 0.375;
+                    break;
+                case 2:
+                    xy[0] = 0.125;
+                    xy[1] = 0.625;
+                    break;
+                case 3:
+                    xy[0] = 0.625;
+                    xy[1] = 0.875;
+                    break;
+            }
+            break;
+        case 8:
+            switch (index)
+            {
+                case 0:
+                    xy[0] = 0.5625;
+                    xy[1] = 0.3125;
+                    break;
+                case 1:
+                    xy[0] = 0.4375;
+                    xy[1] = 0.6875;
+                    break;
+                case 2:
+                    xy[0] = 0.8125;
+                    xy[1] = 0.5625;
+                    break;
+                case 3:
+                    xy[0] = 0.3125;
+                    xy[1] = 0.1875;
+                    break;
+                case 4:
+                    xy[0] = 0.1875;
+                    xy[1] = 0.8125;
+                    break;
+                case 5:
+                    xy[0] = 0.0625;
+                    xy[1] = 0.4375;
+                    break;
+                case 6:
+                    xy[0] = 0.6875;
+                    xy[1] = 0.9375;
+                    break;
+                case 7:
+                    xy[0] = 0.9375;
+                    xy[1] = 0.0625;
+                    break;
+            }
+            break;
+        case 16:
+            switch (index)
+            {
+                case 0:
+                    xy[0] = 0.5625;
+                    xy[1] = 0.5625;
+                    break;
+                case 1:
+                    xy[0] = 0.4375;
+                    xy[1] = 0.3125;
+                    break;
+                case 2:
+                    xy[0] = 0.3125;
+                    xy[1] = 0.625;
+                    break;
+                case 3:
+                    xy[0] = 0.75;
+                    xy[1] = 0.4375;
+                    break;
+                case 4:
+                    xy[0] = 0.1875;
+                    xy[1] = 0.375;
+                    break;
+                case 5:
+                    xy[0] = 0.625;
+                    xy[1] = 0.8125;
+                    break;
+                case 6:
+                    xy[0] = 0.8125;
+                    xy[1] = 0.6875;
+                    break;
+                case 7:
+                    xy[0] = 0.6875;
+                    xy[1] = 0.1875;
+                    break;
+                case 8:
+                    xy[0] = 0.375;
+                    xy[1] = 0.875;
+                    break;
+                case 9:
+                    xy[0] = 0.5;
+                    xy[1] = 0.0625;
+                    break;
+                case 10:
+                    xy[0] = 0.25;
+                    xy[1] = 0.125;
+                    break;
+                case 11:
+                    xy[0] = 0.125;
+                    xy[1] = 0.75;
+                    break;
+                case 12:
+                    xy[0] = 0;
+                    xy[1] = 0.5;
+                    break;
+                case 13:
+                    xy[0] = 0.9375;
+                    xy[1] = 0.25;
+                    break;
+                case 14:
+                    xy[0] = 0.875;
+                    xy[1] = 0.9375;
+                    break;
+                case 15:
+                    xy[0] = 0.0625;
+                    xy[1] = 0;
+                    break;
+            }
+            break;
+        case 32:
+        default:
+            xy[0] = 0.5;
+            xy[1] = 0.5;
+            break;
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
