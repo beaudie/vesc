@@ -259,6 +259,7 @@ class VertexArray final : public angle::ObserverInterface,
     AttributesMask getAttributesMask() const { return mState.mEnabledAttributesMask; }
 
     void onBindingChanged(const Context *context, int incr);
+    void dirtyEnabledAttributes();
     bool hasTransformFeedbackBindingConflict(const gl::Context *context) const;
 
     ANGLE_INLINE angle::Result getIndexRange(const Context *context,

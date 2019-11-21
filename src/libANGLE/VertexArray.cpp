@@ -559,6 +559,14 @@ void VertexArray::onBindingChanged(const Context *context, int incr)
     }
 }
 
+void VertexArray::dirtyEnabledAttributes()
+{
+    for (auto attribIndex : mState.getEnabledAttributesMask())
+    {
+        setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_BINDING);
+    }
+}
+
 VertexArray::DirtyBitType VertexArray::getDirtyBitFromIndex(bool contentsChanged,
                                                             angle::SubjectIndex index) const
 {
