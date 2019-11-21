@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "7b9ec86e_e8dad6db",
+        "filename": "src/libANGLE/TransformFeedback.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-21T23:05:41Z",
+      "side": 1,
+      "message": "Id is used for key value in counter buffer map. I don\u0027t have better idea on it. Could you suggest one?",
+      "parentUuid": "f73c2555_0e05bf18",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 28
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ceb42ca4_40add44c",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 19
