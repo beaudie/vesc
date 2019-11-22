@@ -22,6 +22,30 @@
       "revId": "4d87798d23879dffabc82e3181e01a63ec14fdba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d3fee5f_7bd1bd56",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-22T18:09:08Z",
+      "side": 1,
+      "message": "I\u0027m not entirely certain why processes were being cleaned up. I found that sometimes the process was finished and no longer around as a zombie. Probably it\u0027s a bug on my part.",
+      "parentUuid": "2c762780_bf406b7f",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 9
+      },
+      "revId": "4d87798d23879dffabc82e3181e01a63ec14fdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
