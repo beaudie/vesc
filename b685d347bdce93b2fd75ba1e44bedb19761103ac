@@ -34,6 +34,24 @@
       "revId": "b685d347bdce93b2fd75ba1e44bedb19761103ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a303f215_f8a9e948",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T22:40:08Z",
+      "side": 1,
+      "message": "The approach can work (we use it in RenderDoc, vktrace, and Vulkan screenshot layer), but I\u0027d prefer to try this new approach that allows getenv/setenv to work naturally, and only reaches out to debug properties on startup.",
+      "parentUuid": "ffb8257e_753fd3d5",
+      "revId": "b685d347bdce93b2fd75ba1e44bedb19761103ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
