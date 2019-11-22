@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db3e9945_7eb32fdf",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-22T02:37:22Z",
+      "side": 1,
+      "message": "This pointer needs to be release in this class\u0027s destructor or onDestroy(). I don\u0027t see any code doing that, maybe I\u0027m missing something?\n\nAlternatively, we can enable -fobjc-arc compiling option for this file.",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "e0d390d8c4f3316e2f2b97441eeb8b5127a8dd56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7db36aa1_1e4f55c3",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-22T02:37:22Z",
+      "side": 1,
+      "message": "I think autorelease does nothing here actually, since you didn\u0027t wrap it inside @autoreleasepool block. It will work if the application layer has its @autoreleasepool block itself, however, I don\u0027t think it is guaranteed.\n\nI think you should do the manual release of mMetalLayer in destructor instead of calling autorelease here.\n\nI did autorelease in metal backend since I want to move the pointer to be managed by wrapper class mtl::AutoObjCPtr (poor man\u0027s std::shared_ptr for objective-c).\n\nanw, we can just enable -fobjc-arc for this file and forget all of above.",
+      "range": {
+        "startLine": 35,
+        "startChar": 64,
+        "endLine": 35,
+        "endChar": 75
+      },
+      "revId": "e0d390d8c4f3316e2f2b97441eeb8b5127a8dd56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02e070e9_87939126",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-22T02:37:22Z",
+      "side": 1,
+      "message": "This is not correct metal layer\u0027s backbuffer size. It is only correct if layer.contentsScale \u003d 1.\nThe real backbuffer size is mMetalLayer.drawableSize. This is a little bit tricky, I only discovered it during metal backend development:\n- If you try to query mMetalLayer.drawableSize at this point, it will return zero.\n- Only after the first backbuffer is created ([mMetalLayer nextDrawable]), then mMetalLayer.drawableSize will return mMetalLayer.drawableSize * mMetalLayer.contentsScale by default.\n- You can force drawableSize by assign the value yourself. Example, after creating CAMetalLayer, assign it backbuffer\u0027s size manually:  mMetalLayer.drawableSize \u003d  mMetalLayer.bounds *  mMetalLayer.contentsScale. Then in getCurrentWindowSize(), we can query mMetalLayer.drawableSize without issues.\n- drawableSize is not automatically resized when the parent layer is resized. So if we resize the application\u0027s window for example, mMetalLayer.bounds will be resized, however, mMetalLayer.drawableSize (backbuffer\u0027s size) will still be the same after the 1st creation. This will lead to glViewport inconsistency issue. In the metal backend, I have to check for mMetalLayer.bounds and recalculate and reassign mMetalLayer.drawableSize every frame to make sure the backbuffer\u0027s size is consistent with contentsScale and layer bounds. That\u0027s the way I chose to handle this.\n- However, I think there is another way, just assign drawableSize to the width x height values in the Surface\u0027s attributes provided by front-end, and then the backbuffer size will be remain static and conform to the attributes sent by front-end. I think this is better approach and plan to change to it in metal backend. However I took a look at swiftshader code, that code still assumes the backbuffer size \u003d layer\u0027s bounds * layer\u0027s contentsScale, that won\u0027t be correct anymore after the layer is resized.",
+      "range": {
+        "startLine": 61,
+        "startChar": 35,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "e0d390d8c4f3316e2f2b97441eeb8b5127a8dd56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
