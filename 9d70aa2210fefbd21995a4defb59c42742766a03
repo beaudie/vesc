@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8d65941e_26a51a1c",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd1cf44e_d233d930",
+      "range": {
+        "startLine": 82,
+        "startChar": 46,
+        "endLine": 82,
+        "endChar": 55
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0fe64b28_69a74cba",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 1
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "fa1077a1_45e620c7",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5f73d4_3790ae1d",
+      "range": {
+        "startLine": 91,
+        "startChar": 67,
+        "endLine": 91,
+        "endChar": 85
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "542a7d68_fb5f6da3",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fe64b28_69a74cba",
+      "range": {
+        "startLine": 91,
+        "startChar": 8,
+        "endLine": 91,
+        "endChar": 9
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4101f952_edaeaf7d",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d17e928b_be698315",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4101f952_edaeaf7d",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 35
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "664177ed_b923d824",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "Good call, done.",
+      "parentUuid": "ca8b504b_1609c6a0",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 32
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "88844571_81e6ed57",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 1
@@ -137,6 +257,30 @@
       "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac6ca9df_b01a3b4f",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88844571_81e6ed57",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 83
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "8423e1eb_c98d93e0",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db0bc637_ec5c4c7b",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 30
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f32b660_7bb6ad99",
         "filename": "samples/BUILD.gn",
         "patchSetId": 1
@@ -183,6 +351,30 @@
       "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12cd6baf_c6dd098f",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "Ah, good idea. I tried several ways to prevent that line from getting completely blown up, didn\u0027t think of that. That made it better, although still broken up more than I would like.",
+      "parentUuid": "1f32b660_7bb6ad99",
+      "range": {
+        "startLine": 236,
+        "startChar": 61,
+        "endLine": 236,
+        "endChar": 88
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "4846ccf0_c58d3b38",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a1bbd4a_147bfb04",
+      "range": {
+        "startLine": 248,
+        "startChar": 7,
+        "endLine": 248,
+        "endChar": 35
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6d4fb55_c512b263",
         "filename": "samples/BUILD.gn",
         "patchSetId": 1
@@ -220,6 +436,30 @@
       "writtenOn": "2019-11-21T13:00:38Z",
       "side": 1,
       "message": "Can you try to eliminate these using #defines in the sample?",
+      "range": {
+        "startLine": 249,
+        "startChar": 6,
+        "endLine": 251,
+        "endChar": 101
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2a0dc4d_612582cd",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "I was able to eliminate the function definitions, but not the header.  Clang doesn\u0027t like pasting together values that contain \u0027.\u0027.",
+      "parentUuid": "e6d4fb55_c512b263",
       "range": {
         "startLine": 249,
         "startChar": 6,
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "0d2744de_2cadfbe0",
+        "filename": "samples/capture_replay/CaptureReplay.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "I added some more macros, named specifically for this project.  Let me know what you think.",
+      "parentUuid": "97de66ad_64a790ef",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 12
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a276fb8_ae7e5de8",
         "filename": "src/common/android_util.cpp",
         "patchSetId": 1
@@ -275,6 +539,30 @@
       "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fc9339d_ca1e0db8",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-11-22T03:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a276fb8_ae7e5de8",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 31
+      },
+      "revId": "9d70aa2210fefbd21995a4defb59c42742766a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
