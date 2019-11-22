@@ -46,6 +46,30 @@
       "revId": "079953cd0aff0e5a5b103a5d9cbb58393e0f2946",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "885237de_a3677420",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1001604
+      },
+      "writtenOn": "2019-11-22T00:42:16Z",
+      "side": 1,
+      "message": "Would it make sense to do that as a follow-up or would you prefer to go straight there? The reason it might make sense to do it separately is that affects more code in the stack. Shortly after this CL lands, _LIBCPP_DEBUG\u003d0 will be enforced, which means if there was something we\u0027d missed, it will be difficult to revert.\n\nIt also looks like systemInfo.gpus might be empty, in which case an unguarded index like this function still doesn\u0027t work. No GPUs would mean activeGPUIndex may still be invalid. -1 gives a signal for invalidity that initializing to zero wouldn\u0027t.\nhttps://cs.chromium.org/chromium/src/gpu/config/gpu_info_collector.cc?rcl\u003db9ba992955b39ead9251fa625eb5ceb0ac4351b9\u0026l\u003d360\n\n(I\u0027m just asking this to double-check. I know nothing about this code, so I have no opinions apart from memory errors and what little I can infer from surrounding code. Whatever you all think is correct works for me.)",
+      "parentUuid": "abd509d7_380863ca",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 71
+      },
+      "revId": "079953cd0aff0e5a5b103a5d9cbb58393e0f2946",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
