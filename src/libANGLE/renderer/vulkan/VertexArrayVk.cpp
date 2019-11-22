@@ -539,6 +539,24 @@ ANGLE_INLINE void VertexArrayVk::setDefaultPackedInput(ContextVk *contextVk, siz
     contextVk->onVertexAttributeChange(attribIndex, 0, 0, format, 0);
 }
 
+void VertexArrayVk::updateActiveAttribInfo(ContextVk *contextVk,
+                                           gl::AttributesMask defaultAttribMask)
+{
+    const std::vector<gl::VertexAttribute> &attribs = mState.getVertexAttributes();
+    const std::vector<gl::VertexBinding> &bindings  = mState.getVertexBindings();
+
+    // Update pipeline cache with current active attribute info
+    for (auto attribIndex : mState.getEnabledAttributesMask())
+    {
+        const gl::VertexAttribute &attrib = attribs[attribIndex];
+        const gl::VertexBinding &binding  = bindings[attribs[attribIndex].bindingIndex];
+
+        contextVk->onVertexAttributeChange(attribIndex, mCachedAttributeStrides[attribIndex],
+                                           binding.getDivisor(), attrib.format->id,
+                                           attrib.relativeOffset);
+    }
+}
+
 angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                                              const gl::VertexAttribute &attrib,
                                              const gl::VertexBinding &binding,
@@ -645,6 +663,9 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         {
             ANGLE_TRY(contextVk->flushImpl(nullptr));
         }
+
+        // Cache the stride of the attribute
+        mCachedAttributeStrides[attribIndex] = stride;
     }
     else
     {
@@ -765,6 +786,8 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
 
         mCurrentArrayBufferHandles[attribIndex] =
             mCurrentArrayBuffers[attribIndex]->getBuffer().getHandle();
+        // Cache the stride of the attribute
+        mCachedAttributeStrides[attribIndex] = stride;
     }
 
     return angle::Result::Continue;

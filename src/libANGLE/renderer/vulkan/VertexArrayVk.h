@@ -32,6 +32,8 @@ class VertexArrayVk : public VertexArrayImpl
                             gl::VertexArray::DirtyAttribBitsArray *attribBits,
                             gl::VertexArray::DirtyBindingBitsArray *bindingBits) override;
 
+    void updateActiveAttribInfo(ContextVk *contextVk, gl::AttributesMask defaultAttribMask);
+
     void updateDefaultAttrib(ContextVk *contextVk,
                              size_t attribIndex,
                              VkBuffer bufferHandle,
@@ -157,6 +159,9 @@ class VertexArrayVk : public VertexArrayImpl
 
     // Track client and/or emulated attribs that we have to stream their buffer contents
     gl::AttributesMask mStreamingVertexAttribsMask;
+
+    // Cache strides of attributes for a fast pipeline cache update when VAOa are changed
+    gl::AttribArray<GLuint> mCachedAttributeStrides;
 };
 }  // namespace rx
 
