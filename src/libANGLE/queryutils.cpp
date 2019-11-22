@@ -3744,6 +3744,9 @@ void QueryContextAttrib(const gl::Context *context, EGLint attribute, EGLint *va
         case EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
             *value = context->isRobustResourceInitEnabled();
             break;
+        case EGL_CONTEXT_PRIORITY_LEVEL_IMG:
+            *value = context->getContextPriority();
+            break;
         default:
             UNREACHABLE();
             break;

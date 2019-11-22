@@ -189,6 +189,17 @@ GLenum GetResetStrategy(const egl::AttributeMap &attribs)
     }
 }
 
+EGLenum GetContextPriority(const egl::AttributeMap &attribs)
+{
+    EGLint value = static_cast<EGLint>(
+        attribs.get(EGL_CONTEXT_PRIORITY_LEVEL_IMG, EGL_CONTEXT_PRIORITY_MEDIUM_IMG));
+    if (value == EGL_DONT_CARE)
+    {
+        value = EGL_CONTEXT_PRIORITY_MEDIUM_IMG;
+    }
+    return static_cast<EGLenum>(value);
+}
+
 bool GetRobustAccess(const egl::AttributeMap &attribs)
 {
     return (attribs.get(EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT, EGL_FALSE) == EGL_TRUE) ||
@@ -337,6 +348,7 @@ Context::Context(egl::Display *display,
       mBufferAccessValidationEnabled(false),
       mExtensionsEnabled(GetExtensionsEnabled(attribs, mWebGLContext)),
       mMemoryProgramCache(memoryProgramCache),
+      mContextPriority(GetContextPriority(attribs)),
       mVertexArrayObserverBinding(this, kVertexArraySubjectIndex),
       mDrawFramebufferObserverBinding(this, kDrawFramebufferSubjectIndex),
       mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
