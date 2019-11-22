@@ -346,6 +346,103 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     ASSERT_EQ(64, height);
 }
 
+TEST_P(EGLSurfaceTest, ResizeWindowWithDraw)
+{
+    mOSWindow->setVisible(true);
+
+    initializeDisplay();
+    initializeSurfaceWithDefaultConfig();
+    initializeContext();
+
+    int size      = 64;
+    EGLint height = 0;
+    EGLint width  = 0;
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    glClearColor(0.25f, 0.5f, 0.5f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_WIDTH, &width);
+    ASSERT_EGL_SUCCESS();
+    ASSERT_EQ(size, height);
+    ASSERT_EQ(size, width);
+
+    EXPECT_PIXEL_EQ(size / 4, size / 4, 64, 127, 127, 255);
+    EXPECT_PIXEL_EQ(3 * size / 4, size / 4, 64, 127, 127, 255);
+    EXPECT_PIXEL_EQ(3 * size / 4, 3 * size / 4, 64, 127, 127, 255);
+    EXPECT_PIXEL_EQ(size / 4, 3 * size / 4, 64, 127, 127, 255);
+    EXPECT_PIXEL_EQ(0, 0, 64, 127, 127, 255);
+    EXPECT_PIXEL_EQ(size - 1, 0, 64, 127, 127, 255);
+    EXPECT_PIXEL_EQ(size - 1, size - 1, 64, 127, 127, 255);
+    EXPECT_PIXEL_EQ(0, size - 1, 64, 127, 127, 255);
+    EXPECT_PIXEL_EQ(-1, -1, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, 0, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(0, size, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, size, 0, 0, 0, 0);
+
+    // set window's height to 0 (if possible) or 1
+    size = 1;
+    mOSWindow->resize(size, size);
+
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    glClearColor(0.5f, 0.25f, 0.5f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_WIDTH, &width);
+    ASSERT_EGL_SUCCESS();
+    ASSERT_EQ(size, height);
+    ASSERT_EQ(size, width);
+
+    EXPECT_PIXEL_EQ(size / 4, size / 4, 127, 64, 127, 255);
+    EXPECT_PIXEL_EQ(3 * size / 4, size / 4, 127, 64, 127, 255);
+    EXPECT_PIXEL_EQ(3 * size / 4, 3 * size / 4, 127, 64, 127, 255);
+    EXPECT_PIXEL_EQ(size / 4, 3 * size / 4, 127, 64, 127, 255);
+    EXPECT_PIXEL_EQ(0, 0, 127, 64, 127, 255);
+    EXPECT_PIXEL_EQ(size - 1, 0, 127, 64, 127, 255);
+    EXPECT_PIXEL_EQ(size - 1, size - 1, 127, 64, 127, 255);
+    EXPECT_PIXEL_EQ(0, size - 1, 127, 64, 127, 255);
+    EXPECT_PIXEL_EQ(-1, -1, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, 0, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(0, size, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, size, 0, 0, 0, 0);
+
+    // restore window's height
+    size = 128;
+    mOSWindow->resize(size, size);
+
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    glClearColor(0.5f, 0.5f, 0.25f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_WIDTH, &width);
+    ASSERT_EGL_SUCCESS();
+    ASSERT_EQ(size, height);
+    ASSERT_EQ(size, width);
+
+    EXPECT_PIXEL_EQ(size / 4, size / 4, 127, 127, 64, 255);
+    EXPECT_PIXEL_EQ(3 * size / 4, size / 4, 127, 127, 64, 255);
+    EXPECT_PIXEL_EQ(3 * size / 4, 3 * size / 4, 127, 127, 64, 255);
+    EXPECT_PIXEL_EQ(size / 4, 3 * size / 4, 127, 127, 64, 255);
+    EXPECT_PIXEL_EQ(0, 0, 127, 127, 64, 255);
+    EXPECT_PIXEL_EQ(size - 1, 0, 127, 127, 64, 255);
+    EXPECT_PIXEL_EQ(size - 1, size - 1, 127, 127, 64, 255);
+    EXPECT_PIXEL_EQ(0, size - 1, 127, 127, 64, 255);
+    EXPECT_PIXEL_EQ(-1, -1, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, 0, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(0, size, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, size, 0, 0, 0, 0);
+}
+
 // Test that swap interval works.
 TEST_P(EGLSurfaceTest, SwapInterval)
 {
