@@ -400,7 +400,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mPreTransform(VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR),
       mCompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR),
       mCurrentSwapHistoryIndex(0),
-      mCurrentSwapchainImageIndex(0)
+      mCurrentSwapchainImageIndex(0),
+      mQueue(nullptr)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -421,8 +422,11 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkDevice device      = renderer->getDevice();
     VkInstance instance  = renderer->getInstance();
 
-    // We might not need to flush the pipe here.
-    (void)renderer->queueWaitIdle(displayVk);
+    // flush the pipe.
+    if (mQueue)
+    {
+        (void)renderer->queueWaitIdle(displayVk, mQueue);
+    }
 
     destroySwapChainImages(displayVk);
 
@@ -649,7 +653,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk,
         static constexpr size_t kMaxOldSwapchains = 5;
         if (mOldSwapchains.size() > kMaxOldSwapchains)
         {
-            ANGLE_TRY(contextVk->getRenderer()->queueWaitIdle(contextVk));
+            ANGLE_TRY(contextVk->getRenderer()->queueWaitIdle(contextVk, contextVk->getQueue()));
             for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
             {
                 oldSwapchain.destroy(contextVk->getDevice(), &mPresentSemaphoreRecycler);
@@ -988,6 +992,19 @@ FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Context *co
     return FramebufferVk::CreateDefaultFBO(renderer, state, this);
 }
 
+egl::Error WindowSurfaceVk::makeCurrent(const gl::Context *context)
+{
+    // The context is not persistent for life of surface, but queue is.
+    // Need for flush when destroying.
+    mQueue = vk::GetImpl(context)->getQueue();
+    return egl::NoError();
+}
+
+egl::Error WindowSurfaceVk::unMakeCurrent(const gl::Context *context)
+{
+    return egl::NoError();
+}
+
 egl::Error WindowSurfaceVk::swapWithDamage(const gl::Context *context,
                                            EGLint *rects,
                                            EGLint n_rects)
@@ -1133,7 +1150,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     mCurrentSwapHistoryIndex =
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
-    VkResult result = contextVk->getRenderer()->queuePresent(presentInfo);
+    VkResult result = contextVk->getRenderer()->queuePresent(contextVk->getQueue(), presentInfo);
 
     // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
     // continuing.
