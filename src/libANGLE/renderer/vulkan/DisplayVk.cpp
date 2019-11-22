@@ -135,13 +135,33 @@ ImageImpl *DisplayVk::createImage(const egl::ImageState &state,
     return new ImageVk(state, context);
 }
 
+// Convert the EGL priority token into an index to the mQueues.
+RendererVk::QueuePriority MapEGLPriorityToRenderVkPriority(EGLAttrib eglPriority)
+{
+    switch (eglPriority)
+    {
+        case EGL_CONTEXT_PRIORITY_LOW_IMG:
+            return RendererVk::QueuePriority::Low;
+            break;
+        case EGL_CONTEXT_PRIORITY_HIGH_IMG:
+            return RendererVk::QueuePriority::High;
+            break;
+        case EGL_CONTEXT_PRIORITY_MEDIUM_IMG:
+        default:
+            return RendererVk::QueuePriority::Medium;
+            break;
+    }
+}
+
 rx::ContextImpl *DisplayVk::createContext(const gl::State &state,
                                           gl::ErrorSet *errorSet,
                                           const egl::Config *configuration,
                                           const gl::Context *shareContext,
                                           const egl::AttributeMap &attribs)
 {
-    return new ContextVk(state, errorSet, mRenderer);
+    return new ContextVk(state, errorSet, mRenderer,
+                         MapEGLPriorityToRenderVkPriority(attribs.get(
+                             EGL_CONTEXT_PRIORITY_LEVEL_IMG, EGL_CONTEXT_PRIORITY_MEDIUM_IMG)));
 }
 
 StreamProducerImpl *DisplayVk::createStreamProducerD3DTexture(
@@ -193,7 +213,7 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
         getRenderer()->getFeatures().supportsAndroidHardwareBuffer.enabled;
     outExtensions->surfacelessContext = true;
     outExtensions->glColorspace = getRenderer()->getFeatures().supportsSwapchainColorspace.enabled;
-
+    outExtensions->contextPriority = true;
     outExtensions->noConfigContext = true;
 
 #if defined(ANGLE_PLATFORM_GGP)
