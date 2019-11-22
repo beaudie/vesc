@@ -1594,6 +1594,18 @@ ImageHelper::ImageHelper()
       mLevelCount(0)
 {}
 
+ImageHelper::ImageHelper(GLint samples)
+    : CommandGraphResource(CommandGraphResourceType::Image),
+      mFormat(nullptr),
+      mSamples(samples),
+      mCurrentLayout(ImageLayout::Undefined),
+      mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
+      mBaseLevel(0),
+      mMaxLevel(0),
+      mLayerCount(0),
+      mLevelCount(0)
+{}
+
 ImageHelper::ImageHelper(ImageHelper &&other)
     : CommandGraphResource(CommandGraphResourceType::Image),
       mImage(std::move(other.mImage)),
