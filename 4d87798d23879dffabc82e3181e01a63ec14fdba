@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c762780_bf406b7f",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-22T05:40:42Z",
+      "side": 1,
+      "message": "Is this call needed? If `mStarted`, fork() has succeeded so there is necessarily a process to be queried.\n\nIf there is some magic way to externally cleanup a zombie child process of another process (without the latter knowing), I think generally we would have bigger problems.",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 9
+      },
+      "revId": "4d87798d23879dffabc82e3181e01a63ec14fdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
