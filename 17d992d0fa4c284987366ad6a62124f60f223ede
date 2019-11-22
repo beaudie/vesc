@@ -326,6 +326,30 @@
     },
     {
       "key": {
+        "uuid": "2fd795d2_0b9a7adf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-22T02:04:12Z",
+      "side": 1,
+      "message": "What do you think would happen if the TransformFeeedbackVk owns a BufferHelper and we delete it? What about when a BufferVk is deleted when vk::BufferHelper mBuffer is in the graph?",
+      "parentUuid": "51b05a46_b0f7dec6",
+      "range": {
+        "startLine": 797,
+        "startChar": 4,
+        "endLine": 797,
+        "endChar": 80
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bd3ddbbb_0af43b40",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapperVk.h",
         "patchSetId": 19
