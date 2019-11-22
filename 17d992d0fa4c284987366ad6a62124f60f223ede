@@ -302,6 +302,30 @@
     },
     {
       "key": {
+        "uuid": "51b05a46_b0f7dec6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1357791
+      },
+      "writtenOn": "2019-11-22T01:38:46Z",
+      "side": 1,
+      "message": "If we move this to TransformFeedbackVk, the lifetime of counter buffer will be dependent on the transform feedback object. We have to consider the case which deletes xfb object before command submission.",
+      "parentUuid": "7d5428fd_fa68f164",
+      "range": {
+        "startLine": 797,
+        "startChar": 4,
+        "endLine": 797,
+        "endChar": 80
+      },
+      "revId": "17d992d0fa4c284987366ad6a62124f60f223ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bd3ddbbb_0af43b40",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapperVk.h",
         "patchSetId": 19
