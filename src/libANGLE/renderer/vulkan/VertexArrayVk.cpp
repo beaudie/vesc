@@ -438,6 +438,26 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+gl::VertexArray::DirtyBits VertexArrayVk::updateDirtyBitsForActiveAttribs(
+    const gl::Context *context,
+    const gl::VertexArray::DirtyBits &dirtyBitsIn)
+{
+    gl::VertexArray::DirtyBits dirtyBits = dirtyBitsIn;
+
+    // Instead of calling syncDirtyAttrib, which affects all backends,
+    // updating dirty attrib binding bits in just the Vulkan backend
+    if (dirtyBits.test(gl::VertexArray::DIRTY_BIT_VERTEX_ARRAY_BINDING))
+    {
+        // Dirty the attribute bits as well
+        for (auto attribIndex : context->getState().getProgram()->getActiveAttribLocationsMask())
+        {
+            dirtyBits.set(gl::VertexArray::DIRTY_BIT_ATTRIB_0 + attribIndex);
+        }
+    }
+
+    return dirtyBits;
+}
+
 angle::Result VertexArrayVk::syncState(const gl::Context *context,
                                        const gl::VertexArray::DirtyBits &dirtyBits,
                                        gl::VertexArray::DirtyAttribBitsArray *attribBits,
@@ -450,7 +470,7 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
     const std::vector<gl::VertexAttribute> &attribs = mState.getVertexAttributes();
     const std::vector<gl::VertexBinding> &bindings  = mState.getVertexBindings();
 
-    for (size_t dirtyBit : dirtyBits)
+    for (size_t dirtyBit : updateDirtyBitsForActiveAttribs(context, dirtyBits))
     {
         switch (dirtyBit)
         {
@@ -514,6 +534,10 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
         break;
 
                 ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_BUFFER_DATA_FUNC)
+
+            // Nothing to do here
+            case gl::VertexArray::DIRTY_BIT_VERTEX_ARRAY_BINDING:
+                break;
 
             default:
                 UNREACHABLE();

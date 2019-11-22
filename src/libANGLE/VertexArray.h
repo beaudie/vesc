@@ -114,6 +114,7 @@ class VertexArray final : public angle::ObserverInterface,
     {
         DIRTY_BIT_ELEMENT_ARRAY_BUFFER,
         DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA,
+        DIRTY_BIT_VERTEX_ARRAY_BINDING,
 
         // Dirty bits for attributes.
         DIRTY_BIT_ATTRIB_0,

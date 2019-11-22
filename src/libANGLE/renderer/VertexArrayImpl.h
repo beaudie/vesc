@@ -40,6 +40,8 @@ class VertexArrayImpl : angle::NonCopyable
                                     gl::VertexArray::DirtyAttribBitsArray *attribBits,
                                     gl::VertexArray::DirtyBindingBitsArray *bindingBits);
 
+    virtual void setVertexArrayBindingDirty(gl::VertexArray::DirtyBits &dirtyBits) {}
+
     virtual void destroy(const gl::Context *context) {}
     virtual ~VertexArrayImpl() {}
 

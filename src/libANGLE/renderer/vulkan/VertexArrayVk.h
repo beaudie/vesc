@@ -32,6 +32,11 @@ class VertexArrayVk : public VertexArrayImpl
                             gl::VertexArray::DirtyAttribBitsArray *attribBits,
                             gl::VertexArray::DirtyBindingBitsArray *bindingBits) override;
 
+    void setVertexArrayBindingDirty(gl::VertexArray::DirtyBits &dirtyBits) override
+    {
+        dirtyBits.set(gl::VertexArray::DIRTY_BIT_VERTEX_ARRAY_BINDING);
+    }
+
     void updateDefaultAttrib(ContextVk *contextVk,
                              size_t attribIndex,
                              VkBuffer bufferHandle,
@@ -135,6 +140,10 @@ class VertexArrayVk : public VertexArrayImpl
                                   const gl::VertexBinding &binding,
                                   size_t attribIndex,
                                   bool bufferOnly);
+
+    gl::VertexArray::DirtyBits updateDirtyBitsForActiveAttribs(
+        const gl::Context *context,
+        const gl::VertexArray::DirtyBits &dirtyBitsIn);
 
     gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
     gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;

@@ -27,6 +27,7 @@
 #include "libANGLE/queryutils.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/TextureImpl.h"
+#include "libANGLE/renderer/VertexArrayImpl.h"
 
 namespace gl
 {
@@ -1388,9 +1389,14 @@ void State::setVertexArrayBinding(const Context *context, VertexArray *vertexArr
         vertexArray->onBindingChanged(context, 1);
     mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
 
-    if (mVertexArray && mVertexArray->hasAnyDirtyBit())
+    if (mVertexArray)
     {
-        mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+        mVertexArray->getImplementation()->setVertexArrayBindingDirty(mVertexArray->mDirtyBits);
+
+        if (mVertexArray->hasAnyDirtyBit())
+        {
+            mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+        }
     }
 }
 
