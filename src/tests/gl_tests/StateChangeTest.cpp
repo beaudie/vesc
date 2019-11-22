@@ -3226,6 +3226,104 @@ TEST_P(SimpleStateChangeTestES31, DispatchImageTextureAThenTextureBThenTextureA)
     ASSERT_GL_NO_ERROR();
 }
 
+// Tests that rendering works as expected with multiple VAOs.
+TEST_P(SimpleStateChangeTestES31, MultipleVertexArrayObjectRendering)
+{
+    if (mFramebuffer != 0)
+    {
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+    }
+
+    constexpr char kVertexShader[] =
+        "attribute vec4 a_position;\n"
+        "attribute vec4 a_color;\n"
+        "varying vec4 v_color;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = a_position;\n"
+        "   v_color = a_color;\n"
+        "}";
+
+    constexpr char kFragmentShader[] =
+        "precision mediump float;\n"
+        "varying vec4 v_color;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = v_color;\n"
+        "}";
+
+    ANGLE_GL_PROGRAM(mProgram, kVertexShader, kFragmentShader);
+    GLint positionLoc = glGetAttribLocation(mProgram, "a_position");
+    ASSERT_NE(-1, positionLoc);
+    GLint colorLoc = glGetAttribLocation(mProgram, "a_color");
+    ASSERT_NE(-1, colorLoc);
+
+    GLuint VAOS[2];
+    GLBuffer positionBuffer;
+    GLBuffer colorBuffers[2];
+    const auto quadVertices = GetQuadVertices();
+
+    glGenVertexArrays(1, &VAOS[0]);
+    glBindVertexArray(VAOS[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVertices.size() * sizeof(Vector3), quadVertices.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(positionLoc);
+    glVertexAttribPointer(positionLoc, 3, GL_BYTE, GL_FALSE, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffers[1]);
+    std::vector<GLColor32F> vertices2(6, kFloatBlue);
+    glBufferData(GL_ARRAY_BUFFER, vertices2.size() * sizeof(GLColor32F), vertices2.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(colorLoc);
+    glVertexAttribPointer(colorLoc, 4, GL_BYTE, GL_FALSE, 0, 0);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glGenVertexArrays(1, &VAOS[1]);
+    glBindVertexArray(VAOS[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVertices.size() * sizeof(Vector3), quadVertices.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(positionLoc);
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffers[1]);
+    std::vector<GLColor32F> vertices(6, kFloatGreen);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLColor32F), vertices.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(colorLoc);
+    glVertexAttribPointer(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glUseProgram(mProgram);
+    ASSERT_GL_NO_ERROR();
+
+    glBindVertexArray(VAOS[1]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    // This drawing should not affect the next drawing.
+    glBindVertexArray(VAOS[0]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glBindVertexArray(VAOS[1]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, 0, GLColor::green);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 static constexpr char kColorVS[] = R"(attribute vec2 position;
 attribute vec4 color;
 varying vec4 vColor;
