@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9aa2963_6c77bd74",
+        "filename": "src/common/packed_gl_enums.json",
+        "patchSetId": 21
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-22T17:07:49Z",
+      "side": 1,
+      "message": "This name should be \u0027VideoImage\u0027 or just \u0027Video\u0027, \u0027Texture\u0027 is already part of the enum name.",
+      "range": {
+        "startLine": 191,
+        "startChar": 9,
+        "endLine": 191,
+        "endChar": 21
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38ccd27c_81606eb2",
+        "filename": "src/common/packed_gl_enums.json",
+        "patchSetId": 21
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-22T17:07:49Z",
+      "side": 1,
+      "message": "Same for this.",
+      "range": {
+        "startLine": 208,
+        "startChar": 9,
+        "endLine": 208,
+        "endChar": 21
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15b86d6f_42a4d8e0",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-22T17:07:49Z",
+      "side": 1,
+      "message": "nit: No need for the comment, prefer to keep the list packed.",
+      "range": {
+        "startLine": 906,
+        "startChar": 0,
+        "endLine": 907,
+        "endChar": 40
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9afcdc39_72063142",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-22T17:07:49Z",
+      "side": 1,
+      "message": "This makes it so the video textures cannot be unbound when deleted.  You need to at least set the binding to null.",
+      "range": {
+        "startLine": 1186,
+        "startChar": 12,
+        "endLine": 1186,
+        "endChar": 55
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdacd4b5_888795bf",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-22T17:07:49Z",
+      "side": 1,
+      "message": "Can you add refactor this into a nativegl::GetTextureBindingTarget around here: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/gl/renderergl_utils.h?q\u003drenderergl_utils.h\u0026dr\u003dC\u0026l\u003d107 ?",
+      "range": {
+        "startLine": 433,
+        "startChar": 8,
+        "endLine": 442,
+        "endChar": 9
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d25698cb_19726aaa",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-22T17:07:49Z",
+      "side": 1,
+      "message": "Same with this, use the helper once it\u0027s written.",
+      "range": {
+        "startLine": 252,
+        "startChar": 8,
+        "endLine": 253,
+        "endChar": 89
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8497252e_7555a6dd",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-22T17:07:49Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 344,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 93
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae93f4ec_3f972db5",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-22T17:07:49Z",
+      "side": 1,
+      "message": "here too.",
+      "range": {
+        "startLine": 1324,
+        "startChar": 0,
+        "endLine": 1325,
+        "endChar": 89
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7c0cddd_223b8099",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-22T17:07:49Z",
+      "side": 1,
+      "message": "I don\u0027t understand this, how can the user unbind a video texture?  Also, if this generates an error, you need to call RecordBindTextureTypeError",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 9
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
