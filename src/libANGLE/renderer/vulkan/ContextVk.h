@@ -68,6 +68,7 @@ class CommandQueue final : angle::NonCopyable
     angle::Result finishToSerial(vk::Context *context, Serial serial, uint64_t timeout);
 
     angle::Result submitFrame(vk::Context *context,
+                              VkQueue queue,
                               const VkSubmitInfo &submitInfo,
                               const vk::Shared<vk::Fence> &sharedFence,
                               vk::GarbageList *currentGarbage,
@@ -97,7 +98,10 @@ class CommandQueue final : angle::NonCopyable
 class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassOwner
 {
   public:
-    ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer);
+    ContextVk(const gl::State &state,
+              gl::ErrorSet *errorSet,
+              RendererVk *renderer,
+              RendererVk::QueuePriority priority);
     ~ContextVk() override;
 
     angle::Result initialize() override;
@@ -275,6 +279,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     angle::Result memoryBarrierByRegion(const gl::Context *context, GLbitfield barriers) override;
 
     VkDevice getDevice() const;
+    inline VkQueue getQueue() const { return mQueue; }
 
     ANGLE_INLINE const angle::FeaturesVk &getFeatures() const { return mRenderer->getFeatures(); }
 
@@ -803,6 +808,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     SerialFactory mTextureSerialFactory;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
+
+    VkQueue mQueue;
 };
 }  // namespace rx
 

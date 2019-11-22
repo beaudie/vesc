@@ -15,6 +15,7 @@
 #include "vk_ext_provoking_vertex.h"
 #include "volk.h"
 
+#include "common/PackedEnums.h"
 #include "common/PoolAlloc.h"
 #include "common/angleutils.h"
 #include "libANGLE/BlobCache.h"
@@ -154,12 +155,26 @@ class RendererVk : angle::NonCopyable
     bool hasImageFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
     bool hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
 
+    // Index to mQueues
+    enum class QueuePriority : uint32_t
+    {
+        Low    = 0,
+        Medium = 1,
+        High   = 2,
+        Max,
+        InvalidEnum = Max,
+        EnumCount   = Max,
+    };
+
+    inline VkQueue getQueue(RendererVk::QueuePriority priority) const { return mQueues[priority]; };
+
     angle::Result queueSubmit(vk::Context *context,
+                              VkQueue queue,
                               const VkSubmitInfo &submitInfo,
                               const vk::Fence &fence,
                               Serial *serialOut);
-    angle::Result queueWaitIdle(vk::Context *context);
-    VkResult queuePresent(const VkPresentInfoKHR &presentInfo);
+    angle::Result queueWaitIdle(vk::Context *context, VkQueue queue);
+    VkResult queuePresent(VkQueue queue, const VkPresentInfoKHR &presentInfo);
 
     angle::Result newSharedFence(vk::Context *context, vk::Shared<vk::Fence> *sharedFenceOut);
     inline void resetSharedFence(vk::Shared<vk::Fence> *sharedFenceIn)
@@ -253,7 +268,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceProvokingVertexFeaturesEXT mProvokingVertexFeatures;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
     std::mutex mQueueMutex;
-    VkQueue mQueue;
+    angle::PackedEnumMap<QueuePriority, VkQueue> mQueues;
     uint32_t mCurrentQueueFamilyIndex;
     uint32_t mMaxVertexAttribDivisor;
     VkDevice mDevice;

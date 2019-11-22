@@ -189,6 +189,16 @@ GLenum GetResetStrategy(const egl::AttributeMap &attribs)
     }
 }
 
+EGLenum GetContextPriority(const egl::AttributeMap &attribs)
+{
+    EGLAttrib value = attribs.get(EGL_CONTEXT_PRIORITY_LEVEL_IMG, EGL_CONTEXT_PRIORITY_MEDIUM_IMG);
+    if (value == EGL_DONT_CARE)
+    {
+        value = EGL_CONTEXT_PRIORITY_MEDIUM_IMG;
+    }
+    return value;
+}
+
 bool GetRobustAccess(const egl::AttributeMap &attribs)
 {
     return (attribs.get(EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT, EGL_FALSE) == EGL_TRUE) ||
@@ -344,7 +354,8 @@ Context::Context(egl::Display *display,
       mZeroFilledBuffer(1000u),
       mThreadPool(nullptr),
       mFrameCapture(new angle::FrameCapture),
-      mOverlay(mImplementation.get())
+      mOverlay(mImplementation.get()),
+      mContextPriority(GetContextPriority(attribs))
 {
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)

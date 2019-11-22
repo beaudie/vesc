@@ -447,6 +447,7 @@ angle::Result CommandQueue::finishToSerial(vk::Context *context, Serial serial, 
 }
 
 angle::Result CommandQueue::submitFrame(vk::Context *context,
+                                        VkQueue queue,
                                         const VkSubmitInfo &submitInfo,
                                         const vk::Shared<vk::Fence> &sharedFence,
                                         vk::GarbageList *currentGarbage,
@@ -465,7 +466,7 @@ angle::Result CommandQueue::submitFrame(vk::Context *context,
     CommandBatch &batch = scopedBatch.get();
     batch.fence.copy(device, sharedFence);
 
-    ANGLE_TRY(renderer->queueSubmit(context, submitInfo, batch.fence.get(), &batch.serial));
+    ANGLE_TRY(renderer->queueSubmit(context, queue, submitInfo, batch.fence.get(), &batch.serial));
 
     if (!currentGarbage->empty())
     {
@@ -501,7 +502,10 @@ vk::Shared<vk::Fence> CommandQueue::getLastSubmittedFence(const vk::Context *con
 }
 
 // ContextVk implementation.
-ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer)
+ContextVk::ContextVk(const gl::State &state,
+                     gl::ErrorSet *errorSet,
+                     RendererVk *renderer,
+                     RendererVk::QueuePriority priority)
     : ContextImpl(state, errorSet),
       vk::Context(renderer),
       mCurrentGraphicsPipeline(nullptr),
@@ -523,7 +527,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mCommandGraph(kEnableCommandGraphDiagnostics, &mPoolAllocator),
       mGpuEventsEnabled(false),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
-      mGpuEventTimestampOrigin(0)
+      mGpuEventTimestampOrigin(0),
+      mQueue(renderer->getQueue(priority))
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -1294,8 +1299,8 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
                                      vk::PrimaryCommandBuffer &&commandBuffer)
 {
     ANGLE_TRY(ensureSubmitFenceInitialized());
-    ANGLE_TRY(mCommandQueue.submitFrame(this, submitInfo, mSubmitFence, &mCurrentGarbage,
-                                        &mCommandPool, std::move(commandBuffer)));
+    ANGLE_TRY(mCommandQueue.submitFrame(this, getQueue(), submitInfo, mSubmitFence,
+                                        &mCurrentGarbage, &mCommandPool, std::move(commandBuffer)));
 
     // we need to explicitly notify every other Context using this VkQueue that their current
     // command buffer is no longer valid.
@@ -3390,7 +3395,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     submitInfo.pSignalSemaphores    = nullptr;
 
     Serial throwAwaySerial;
-    ANGLE_TRY(mRenderer->queueSubmit(this, submitInfo, fence.get(), &throwAwaySerial));
+    ANGLE_TRY(mRenderer->queueSubmit(this, getQueue(), submitInfo, fence.get(), &throwAwaySerial));
 
     // Wait for the submission to finish.  Given no semaphores, there is hope that it would execute
     // in parallel with what's already running on the GPU.
