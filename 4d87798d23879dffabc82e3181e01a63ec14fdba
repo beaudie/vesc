@@ -70,6 +70,30 @@
       "revId": "4d87798d23879dffabc82e3181e01a63ec14fdba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52c55a0b_d7967f85",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-22T22:24:19Z",
+      "side": 1,
+      "message": "Done. Redid this a bit to keep a flag instead and only call waitpid in one place.",
+      "parentUuid": "c870aa3a_569ed8ca",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 9
+      },
+      "revId": "4d87798d23879dffabc82e3181e01a63ec14fdba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
