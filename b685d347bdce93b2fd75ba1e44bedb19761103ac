@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f58702fb_1f8f0439",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-11-22T21:45:53Z",
+      "side": 1,
+      "message": "I\u0027m somewhat surprised we don\u0027t have a more platform agnostic mechanism than using setenv/getenv to handle initialization.\nMaybe a platform specific init function that capture can call and it fills in a structure of capture related info. The platform code can then use the appropriate getenv or getprop or whatever and everything can be localized.\nOr define angle::GetEnvironmentVar to have an Android version that does getprop under the covers.",
+      "revId": "b685d347bdce93b2fd75ba1e44bedb19761103ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
