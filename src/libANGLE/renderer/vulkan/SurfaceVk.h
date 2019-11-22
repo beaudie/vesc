@@ -183,6 +183,8 @@ class WindowSurfaceVk : public SurfaceVk
     egl::Error initialize(const egl::Display *display) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
+    egl::Error makeCurrent(const gl::Context *context) override;
+    egl::Error unMakeCurrent(const gl::Context *context) override;
     egl::Error swap(const gl::Context *context) override;
     egl::Error swapWithDamage(const gl::Context *context, EGLint *rects, EGLint n_rects) override;
     egl::Error postSubBuffer(const gl::Context *context,
@@ -292,6 +294,9 @@ class WindowSurfaceVk : public SurfaceVk
     vk::ImageHelper mColorImageMS;
     vk::ImageViewHelper mColorImageMSViews;
     vk::Framebuffer mFramebufferMS;
+
+    // For access to render queue to waitIdle.
+    egl::ContextPriority mContextPriority;
 };
 
 }  // namespace rx
