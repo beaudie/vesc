@@ -3226,6 +3226,98 @@ TEST_P(SimpleStateChangeTestES31, DispatchImageTextureAThenTextureBThenTextureA)
     ASSERT_GL_NO_ERROR();
 }
 
+// Tests that rendering works as expected with multiple VAOs.
+TEST_P(SimpleStateChangeTestES31, MultipleVertexArrayObjectRendering)
+{
+    constexpr char kVertexShader[] = R"(attribute vec4 a_position;
+        attribute vec4 a_color;
+        varying vec4 v_color;
+        void main()
+        {
+            gl_Position = a_position;
+            v_color = a_color;
+        })";
+
+    constexpr char kFragmentShader[] = R"(precision mediump float;
+        varying vec4 v_color;
+        void main()
+        {
+            gl_FragColor = v_color;
+        })";
+
+    ANGLE_GL_PROGRAM(mProgram, kVertexShader, kFragmentShader);
+    GLint positionLoc = glGetAttribLocation(mProgram, "a_position");
+    ASSERT_NE(-1, positionLoc);
+    GLint colorLoc = glGetAttribLocation(mProgram, "a_color");
+    ASSERT_NE(-1, colorLoc);
+
+    GLVertexArray VAOS[2];
+    GLBuffer positionBuffer;
+    GLBuffer colorBuffer;
+    const auto quadVertices = GetQuadVertices();
+
+    glBindVertexArray(VAOS[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVertices.size() * sizeof(Vector3), quadVertices.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(positionLoc);
+    glVertexAttribPointer(positionLoc, 3, GL_BYTE, GL_FALSE, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+    std::vector<GLColor32F> blueColor(6, kFloatBlue);
+    glBufferData(GL_ARRAY_BUFFER, blueColor.size() * sizeof(GLColor32F), blueColor.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(colorLoc);
+    glVertexAttribPointer(colorLoc, 4, GL_BYTE, GL_FALSE, 0, 0);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindVertexArray(VAOS[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVertices.size() * sizeof(Vector3), quadVertices.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(positionLoc);
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+    std::vector<GLColor32F> greenColor(6, kFloatGreen);
+    glBufferData(GL_ARRAY_BUFFER, greenColor.size() * sizeof(GLColor32F), greenColor.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(colorLoc);
+    glVertexAttribPointer(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glUseProgram(mProgram);
+    ASSERT_GL_NO_ERROR();
+
+    glBindVertexArray(VAOS[1]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    // This drawing should not affect the next drawing.
+    glBindVertexArray(VAOS[0]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glBindVertexArray(VAOS[1]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    // We rendered to the default framebuffer, ensure we read from the same
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, 0, GLColor::green);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 static constexpr char kColorVS[] = R"(attribute vec2 position;
 attribute vec4 color;
 varying vec4 vColor;
