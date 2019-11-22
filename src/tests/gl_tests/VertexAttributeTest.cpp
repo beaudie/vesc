@@ -2408,6 +2408,193 @@ void main()
     checkPixels();
 }
 
+// Tests that rendering works as expected with VAOs.
+
+TEST_P(VertexAttributeTestES31, MultipleVertexArrayObjectRendering)
+
+{
+    GLuint VAOS[2];
+
+    constexpr char kVertexShaderRender[] =
+        R"(#version 310 es
+        precision mediump float;
+        layout(location = 0) in vec4 position;
+        layout(location = 2) in vec2 aOffset;
+        layout(location = 3) in vec4 aColor;
+        out vec4 vColor;
+        void main() {
+        vColor = aColor;
+        gl_Position = position + vec4(aOffset, 0.0, 0.0);
+        })";
+
+    constexpr char kFragmentShaderRender[] =
+        R"(#version 310 es
+        precision mediump float;
+        in vec4 vColor;
+        out vec4  color;
+        void main() {
+        color = vColor;
+        })";
+
+    ANGLE_GL_PROGRAM(renderProgram, kVertexShaderRender, kFragmentShaderRender);
+    GLint aPositionLoc = glGetAttribLocation(renderProgram, "position");
+    ASSERT_NE(-1, aPositionLoc);
+    GLint aOffsetLoc = glGetAttribLocation(renderProgram, "aOffset");
+    ASSERT_NE(-1, aOffsetLoc);
+    GLint aColorLoc = glGetAttribLocation(renderProgram, "aColor");
+    ASSERT_NE(-1, aColorLoc);
+    std::array<GLfloat, 8> offsets = {
+        -1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0,
+    };
+
+    GLBuffer offsetBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, offsetBuffer);
+    glBufferData(GL_ARRAY_BUFFER, offsets.size() * sizeof(GLfloat), offsets.data(), GL_STATIC_DRAW);
+
+    std::array<GLfloat, 16> colors0 = {
+        1.0, 0.0, 0.0, 1.0,  // Red
+        0.0, 1.0, 0.0, 1.0,  // Green
+        0.0, 0.0, 1.0, 1.0,  // Blue
+        1.0, 1.0, 0.0, 1.0,  // Yellow
+    };
+
+    std::array<GLfloat, 16> colors1 = {
+        1.0, 1.0, 0.0, 1.0,  // Yellow
+        0.0, 0.0, 1.0, 1.0,  // Blue
+        0.0, 1.0, 0.0, 1.0,  // Green
+        1.0, 0.0, 0.0, 1.0,  // Red
+    };
+
+    GLBuffer colorBuffers[2];
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, colors0.size() * sizeof(GLfloat), colors0.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, colors1.size() * sizeof(GLfloat), colors1.data(), GL_STATIC_DRAW);
+
+    std::array<GLfloat, 16> positions = {1.0, 1.0, -1.0, 1.0,  -1.0, -1.0,
+                                         1.0, 1.0, -1.0, -1.0, 1.0,  -1.0};
+    GLBuffer positionBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+    glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(GLfloat), positions.data(),
+                 GL_STATIC_DRAW);
+
+    const int kInstanceCount = 4;
+    glGenVertexArrays(1, &VAOS[0]);
+    glBindVertexArray(VAOS[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, offsetBuffer);
+    glEnableVertexAttribArray(aOffsetLoc);
+    glVertexAttribPointer(aOffsetLoc, 2, GL_FLOAT, false, 0, 0);
+    glVertexAttribDivisor(aOffsetLoc, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffers[0]);
+    glEnableVertexAttribArray(aColorLoc);
+    glVertexAttribPointer(aColorLoc, 4, GL_FLOAT, false, 0, 0);
+    glVertexAttribDivisor(aColorLoc, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+    glEnableVertexAttribArray(aPositionLoc);
+    glVertexAttribPointer(aPositionLoc, 2, GL_FLOAT, false, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    constexpr char kVertexShader[] =
+        "attribute vec4 a_position;\n"
+        "attribute vec4 a_color;\n"
+        "varying vec4 v_color;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = a_position;\n"
+        "   v_color = a_color;\n"
+        "}";
+
+    constexpr char kFragmentShader[] =
+        "precision mediump float;\n"
+        "varying vec4 v_color;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = v_color;\n"
+        "}";
+
+    ANGLE_GL_PROGRAM(program, kVertexShader, kFragmentShader);
+    GLint positionLoc = glGetAttribLocation(program, "a_position");
+    ASSERT_NE(-1, positionLoc);
+    GLint colorLoc = glGetAttribLocation(program, "a_color");
+    ASSERT_NE(-1, colorLoc);
+
+    GLBuffer positionBuffer2;
+    GLBuffer colorBuffers2[2];
+    const auto quadVertices = GetQuadVertices();
+
+    glGenVertexArrays(1, &VAOS[1]);
+    glBindVertexArray(VAOS[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer2);
+    glBufferData(GL_ARRAY_BUFFER, quadVertices.size() * sizeof(Vector3), quadVertices.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(positionLoc);
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffers2[1]);
+    std::vector<GLColor32F> vertices2(6, kFloatGreen);
+    glBufferData(GL_ARRAY_BUFFER, vertices2.size() * sizeof(GLColor32F), vertices2.data(),
+                 GL_STATIC_DRAW);
+    glEnableVertexAttribArray(colorLoc);
+    glVertexAttribPointer(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glUseProgram(program);
+    ASSERT_GL_NO_ERROR();
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, 0, GLColor::green);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glFinish();
+
+    glBindVertexArray(VAOS[1]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, 0, GLColor::green);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glFinish();
+
+    glUseProgram(renderProgram);
+    glBindVertexArray(VAOS[0]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 6, kInstanceCount);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() / 2, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, 0, GLColor::yellow);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glFinish();
+
+    glUseProgram(program);
+    glBindVertexArray(VAOS[1]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, 0, GLColor::green);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glFinish();
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 // D3D11 Feature Level 9_3 uses different D3D formats for vertex attribs compared to Feature Levels
