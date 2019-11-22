@@ -546,7 +546,6 @@ RendererVk::RendererVk()
       mDebugReportCallback(VK_NULL_HANDLE),
       mPhysicalDevice(VK_NULL_HANDLE),
       mPhysicalDeviceSubgroupProperties{},
-      mQueue(VK_NULL_HANDLE),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mMaxVertexAttribDivisor(1),
       mMaxVertexAttribStride(0),
@@ -959,13 +958,29 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     ExtensionNameList enabledDeviceExtensions;
     enabledDeviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 
-    float zeroPriority                      = 0.0f;
+    // Queues: map low, med, high priority to whatever is supported up to 3 queues
+    uint32_t queueCount = std::min(mQueueFamilyProperties[queueFamilyIndex].queueCount,
+                                   static_cast<uint32_t>(egl::ContextPriority::EnumCount));
+
+    constexpr float kVulkanQueuePriorityLow    = 0.0;
+    constexpr float kVulkanQueuePriorityMedium = 0.5;
+    constexpr float kVulkanQueuePriorityHigh   = 1.0;
+
+    // Index order: Low, High, Medium - so no need to rearange:
+    // If we have 1 queue - low, if 2 - low and high, if 3 low, high and medium.
+    constexpr uint32_t kQueueIndexLow    = 0;
+    constexpr uint32_t kQueueIndexMedium = 2;
+    constexpr uint32_t kQueueIndexHigh   = 1;
+
+    constexpr float queuePriorities[static_cast<uint32_t>(egl::ContextPriority::EnumCount)] = {
+        kVulkanQueuePriorityLow, kVulkanQueuePriorityHigh, kVulkanQueuePriorityMedium};
+
     VkDeviceQueueCreateInfo queueCreateInfo = {};
     queueCreateInfo.sType                   = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     queueCreateInfo.flags                   = 0;
     queueCreateInfo.queueFamilyIndex        = queueFamilyIndex;
-    queueCreateInfo.queueCount              = 1;
-    queueCreateInfo.pQueuePriorities        = &zeroPriority;
+    queueCreateInfo.queueCount              = queueCount;
+    queueCreateInfo.pQueuePriorities        = queuePriorities;
 
     // Setup device initialization struct
     VkDeviceCreateInfo createInfo = {};
@@ -1149,13 +1164,59 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     mCurrentQueueFamilyIndex = queueFamilyIndex;
 
-    vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, 0, &mQueue);
+    if (queueCount == 1)
+    {  // When only 1 Queues, use low for all
+        VkQueue lowQueue;
+        vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexLow, &lowQueue);
+        mQueues[egl::ContextPriority::Low]    = lowQueue;
+        mQueues[egl::ContextPriority::Medium] = lowQueue;
+        mQueues[egl::ContextPriority::High]   = lowQueue;
+    }
+    else if (queueCount == 2)
+    {  // When only 2 Queues, use low for medium
+        VkQueue lowQueue;
+        vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexLow, &lowQueue);
+        mQueues[egl::ContextPriority::Low]    = lowQueue;
+        mQueues[egl::ContextPriority::Medium] = lowQueue;
+        vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexHigh,
+                         &mQueues[egl::ContextPriority::High]);
+    }
+    else
+    {
+        vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexLow,
+                         &mQueues[egl::ContextPriority::Low]);
+        vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexMedium,
+                         &mQueues[egl::ContextPriority::Medium]);
+        vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexHigh,
+                         &mQueues[egl::ContextPriority::High]);
+    }
 
     // Initialize the vulkan pipeline cache.
     bool success = false;
     ANGLE_TRY(initPipelineCache(displayVk, &mPipelineCache, &success));
 
     return angle::Result::Continue;
+}
+
+bool RendererVk::getQueuePriority(VkQueue queue, egl::ContextPriority *priority)
+{
+    // Order is important here because medium and low are often the same.
+    if (queue == mQueues[egl::ContextPriority::Medium])
+    {
+        *priority = egl::ContextPriority::Medium;
+        return true;
+    }
+    if (queue == mQueues[egl::ContextPriority::High])
+    {
+        *priority = egl::ContextPriority::High;
+        return true;
+    }
+    if (queue == mQueues[egl::ContextPriority::Low])
+    {
+        *priority = egl::ContextPriority::Low;
+        return true;
+    }
+    return false;
 }
 
 angle::Result RendererVk::selectPresentQueueForSurface(DisplayVk *displayVk,
@@ -1702,13 +1763,14 @@ bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatu
 }
 
 angle::Result RendererVk::queueSubmit(vk::Context *context,
+                                      VkQueue queue,
                                       const VkSubmitInfo &submitInfo,
                                       const vk::Fence &fence,
                                       Serial *serialOut)
 {
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
-        ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
+        ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fence.getHandle()));
     }
 
     ANGLE_TRY(cleanupGarbage(context, false));
@@ -1720,11 +1782,11 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::queueWaitIdle(vk::Context *context)
+angle::Result RendererVk::queueWaitIdle(vk::Context *context, VkQueue queue)
 {
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
-        ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
+        ANGLE_VK_TRY(context, vkQueueWaitIdle(queue));
     }
 
     ANGLE_TRY(cleanupGarbage(context, false));
@@ -1732,7 +1794,7 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context)
     return angle::Result::Continue;
 }
 
-VkResult RendererVk::queuePresent(const VkPresentInfoKHR &presentInfo)
+VkResult RendererVk::queuePresent(VkQueue queue, const VkPresentInfoKHR &presentInfo)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queuePresent");
 
@@ -1740,7 +1802,7 @@ VkResult RendererVk::queuePresent(const VkPresentInfoKHR &presentInfo)
 
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "vkQueuePresentKHR");
-        return vkQueuePresentKHR(mQueue, &presentInfo);
+        return vkQueuePresentKHR(queue, &presentInfo);
     }
 }
 

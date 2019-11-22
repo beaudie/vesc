@@ -135,4 +135,9 @@ void ContextImpl::handleError(GLenum errorCode,
     mErrors->handleError(errorCode, errorStream.str().c_str(), file, function, line);
 }
 
+bool ContextImpl::getActualPriority(EGLAttrib *value) const
+{
+    return static_cast<EGLAttrib>(false);
+}
+
 }  // namespace rx

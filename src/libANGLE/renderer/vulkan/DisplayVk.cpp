@@ -141,7 +141,9 @@ rx::ContextImpl *DisplayVk::createContext(const gl::State &state,
                                           const gl::Context *shareContext,
                                           const egl::AttributeMap &attribs)
 {
-    return new ContextVk(state, errorSet, mRenderer);
+    return new ContextVk(state, errorSet, mRenderer,
+                         egl::FromEGLenum<egl::ContextPriority>(static_cast<EGLenum>(attribs.get(
+                             EGL_CONTEXT_PRIORITY_LEVEL_IMG, EGL_CONTEXT_PRIORITY_MEDIUM_IMG))));
 }
 
 StreamProducerImpl *DisplayVk::createStreamProducerD3DTexture(
@@ -197,6 +199,8 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 #if defined(ANGLE_PLATFORM_ANDROID)
     outExtensions->framebufferTargetANDROID = true;
 #endif  // defined(ANGLE_PLATFORM_ANDROID)
+
+    outExtensions->contextPriority = true;
     outExtensions->noConfigContext = true;
 
 #if defined(ANGLE_PLATFORM_GGP)

@@ -337,6 +337,8 @@ Context::Context(egl::Display *display,
       mBufferAccessValidationEnabled(false),
       mExtensionsEnabled(GetExtensionsEnabled(attribs, mWebGLContext)),
       mMemoryProgramCache(memoryProgramCache),
+      mContextPriority(
+          attribs.get(EGL_CONTEXT_PRIORITY_LEVEL_IMG, EGL_CONTEXT_PRIORITY_MEDIUM_IMG)),
       mVertexArrayObserverBinding(this, kVertexArraySubjectIndex),
       mDrawFramebufferObserverBinding(this, kDrawFramebufferSubjectIndex),
       mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
@@ -988,6 +990,16 @@ Buffer *Context::getBuffer(BufferID handle) const
 Renderbuffer *Context::getRenderbuffer(RenderbufferID handle) const
 {
     return mState.mRenderbufferManager->getRenderbuffer(handle);
+}
+
+EGLAttrib Context::getContextPriority() const
+{
+    EGLAttrib value = EGL_CONTEXT_PRIORITY_MEDIUM_IMG;
+    if (mImplementation->getActualPriority(&value))
+    {
+        return value;
+    }
+    return mContextPriority;
 }
 
 Sync *Context::getSync(GLsync handle) const

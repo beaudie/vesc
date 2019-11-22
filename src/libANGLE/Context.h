@@ -460,6 +460,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const egl::Config *getConfig() const;
     EGLenum getClientType() const;
     EGLenum getRenderBuffer() const;
+    EGLAttrib getContextPriority() const;
 
     const GLubyte *getString(GLenum name) const;
     const GLubyte *getStringi(GLenum name, GLuint index) const;
@@ -693,6 +694,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool mBufferAccessValidationEnabled;
     const bool mExtensionsEnabled;
     MemoryProgramCache *mMemoryProgramCache;
+    EGLAttrib mContextPriority;
 
     State::DirtyObjects mDrawDirtyObjects;
     State::DirtyObjects mPathOperationDirtyObjects;

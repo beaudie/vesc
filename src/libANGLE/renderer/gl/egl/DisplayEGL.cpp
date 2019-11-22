@@ -169,6 +169,8 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->framebufferTargetANDROID = mEGL->hasExtension("EGL_ANDROID_framebuffer_target");
 
+    outExtensions->contextPriority = mEGL->hasExtension("EGL_IMG_context_priority");
+
     DisplayGL::generateExtensions(outExtensions);
 }
 
