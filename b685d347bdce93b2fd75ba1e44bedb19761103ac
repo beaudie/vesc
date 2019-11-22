@@ -16,6 +16,24 @@
       "revId": "b685d347bdce93b2fd75ba1e44bedb19761103ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffb8257e_753fd3d5",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-22T21:48:12Z",
+      "side": 1,
+      "message": "Overriding GetEnvironmentVar to mean properties on Android sounds reasonable. There\u0027s definitely an open question on how best to control the cap from the host.",
+      "parentUuid": "f58702fb_1f8f0439",
+      "revId": "b685d347bdce93b2fd75ba1e44bedb19761103ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
