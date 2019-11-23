@@ -61,6 +61,8 @@ angle_test("angle_unittests") {
   sources = angle_unittests_sources
   main = "angle_unittest_main"
 
+  standalone_harness = true
+
   if (angle_enable_hlsl) {
     sources += angle_unittests_hlsl_sources
     defines = [ "ANGLE_ENABLE_HLSL" ]
