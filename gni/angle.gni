@@ -196,6 +196,7 @@ set_defaults("angle_test") {
   sources = []
   data = []
   defines = []
+  data_deps = []
   main = ""
   suppressed_configs = angle_remove_configs
 
@@ -344,6 +345,10 @@ template("angle_test") {
       if (invoker.main != "") {
         sources += [ "${invoker.main}.cpp" ]
       }
+      data += [
+        "src/tests/test_utils/runner/run_gtest_angle_test.py",
+        "//testing/xvfb.py",
+      ]
     } else {
       if (invoker.main != "") {
         sources += [ "//gpu/${invoker.main}.cc" ]
