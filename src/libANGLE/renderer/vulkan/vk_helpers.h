@@ -642,18 +642,20 @@ enum class ImageLayout
 {
     Undefined                  = 0,
     ExternalPreInitialized     = 1,
-    TransferSrc                = 2,
-    TransferDst                = 3,
-    ComputeShaderReadOnly      = 4,
-    ComputeShaderWrite         = 5,
-    AllGraphicsShadersReadOnly = 6,
-    AllGraphicsShadersWrite    = 7,
-    ColorAttachment            = 8,
-    DepthStencilAttachment     = 9,
-    Present                    = 10,
+    ExternalShadersReadOnly    = 2,
+    ExternalShadersWrite       = 3,
+    TransferSrc                = 4,
+    TransferDst                = 5,
+    ComputeShaderReadOnly      = 6,
+    ComputeShaderWrite         = 7,
+    AllGraphicsShadersReadOnly = 8,
+    AllGraphicsShadersWrite    = 9,
+    ColorAttachment            = 10,
+    DepthStencilAttachment     = 11,
+    Present                    = 12,
 
-    InvalidEnum = 11,
-    EnumCount   = 11,
+    InvalidEnum = 13,
+    EnumCount   = 13,
 };
 
 class ImageHelper final : public CommandGraphResource
@@ -895,6 +897,10 @@ class ImageHelper final : public CommandGraphResource
                               ImageLayout newLayout,
                               uint32_t newQueueFamilyIndex,
                               CommandBuffer *commandBuffer);
+
+    // If the image is used externally to GL, its layout could be different from ANGLE's internal
+    // state.  This function is used to inform ImageHelper of an external layout change.
+    void onExternalLayoutChange(ImageLayout newLayout);
 
     uint32_t getBaseLevel();
     void setBaseAndMaxLevels(uint32_t baseLevel, uint32_t maxLevel);
