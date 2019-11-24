@@ -11,9 +11,46 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/TextureVk.h"
 
 namespace rx
 {
+
+namespace
+{
+vk::ImageLayout GetVulkanImageLayout(GLenum layout)
+{
+    switch (layout)
+    {
+        case GL_NONE:
+            return vk::ImageLayout::Undefined;
+        case GL_LAYOUT_GENERAL_EXT:
+            return vk::ImageLayout::ExternalShadersWrite;
+        case GL_LAYOUT_COLOR_ATTACHMENT_EXT:
+            return vk::ImageLayout::ColorAttachment;
+        case GL_LAYOUT_DEPTH_STENCIL_ATTACHMENT_EXT:
+        case GL_LAYOUT_DEPTH_STENCIL_READ_ONLY_EXT:
+        case GL_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_EXT:
+        case GL_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_EXT:
+            // Note: once VK_KHR_separate_depth_stencil_layouts becomes core or ubiquitous, we
+            // should optimize depth/stencil image layout transitions to only be performed on the
+            // aspect that needs transition.  In that case, these four layouts can be distinguished
+            // and optimized.  Note that the exact equivalent of these layouts are specified in
+            // VK_KHR_maintenance2, which are also usable, granted we transition the pair of
+            // depth/stencil layouts accordingly elsewhere in ANGLE.
+            return vk::ImageLayout::DepthStencilAttachment;
+        case GL_LAYOUT_SHADER_READ_ONLY_EXT:
+            return vk::ImageLayout::ExternalShadersReadOnly;
+        case GL_LAYOUT_TRANSFER_SRC_EXT:
+            return vk::ImageLayout::TransferSrc;
+        case GL_LAYOUT_TRANSFER_DST_EXT:
+            return vk::ImageLayout::TransferDst;
+        default:
+            UNREACHABLE();
+            return vk::ImageLayout::Undefined;
+    }
+}
+}  // anonymous namespace
 
 SemaphoreVk::SemaphoreVk() = default;
 
@@ -46,14 +83,19 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
 
     if (!bufferBarriers.empty())
     {
-        // Buffers in external memory are not implemented yet.
-        UNIMPLEMENTED();
+        // Create one global memory barrier to cover all buffer barriers.
+        contextVk->getCommandGraph()->syncExternalMemoryPreFrame();
     }
 
     if (!textureBarriers.empty())
     {
-        // Texture barriers are not implemented yet.
-        UNIMPLEMENTED();
+        for (const gl::TextureAndLayout &textureAndLayout : textureBarriers)
+        {
+            TextureVk *textureVk   = vk::GetImpl(textureAndLayout.texture);
+            vk::ImageLayout layout = GetVulkanImageLayout(textureAndLayout.layout);
+
+            textureVk->getImage().onExternalLayoutChange(layout);
+        }
     }
 
     contextVk->insertWaitSemaphore(&mSemaphore);
@@ -66,16 +108,33 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    if (!bufferBarriers.empty())
-    {
-        // Buffers in external memory are not implemented yet.
-        UNIMPLEMENTED();
-    }
-
     if (!textureBarriers.empty())
     {
-        // Texture barriers are not implemented yet.
-        UNIMPLEMENTED();
+        for (const gl::TextureAndLayout &textureAndLayout : textureBarriers)
+        {
+            TextureVk *textureVk   = vk::GetImpl(textureAndLayout.texture);
+            vk::ImageLayout layout = GetVulkanImageLayout(textureAndLayout.layout);
+
+            // Don't transition to Undefined layout.  If external wants to transition the image away
+            // from Undefined after this operation, it's perfectly fine to keep the layout as is in
+            // ANGLE.  Note that vk::ImageHelper doesn't expect transitions to Undefined.
+            if (layout != vk::ImageLayout::Undefined)
+            {
+                vk::ImageHelper &image = textureVk->getImage();
+
+                vk::CommandBuffer *layoutChange;
+                ANGLE_TRY(image.recordCommands(contextVk, &layoutChange));
+
+                image.changeLayout(image.getAspectFlags(), layout, layoutChange);
+            }
+        }
+    }
+
+    // Note: bufferBarriers are handled after textureBarriers, to avoid creating small
+    // single-image-layout-transition nodes after the graph barrier inserted here.  Do not reorder.
+    if (!bufferBarriers.empty())
+    {
+        contextVk->getCommandGraph()->syncExternalMemoryPostFrame();
     }
 
     return contextVk->flushImpl(&mSemaphore);

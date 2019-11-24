@@ -524,6 +524,9 @@ class CommandGraph final : angle::NonCopyable
     void popDebugMarker();
     // Host-visible buffer write availability operation:
     void makeHostVisibleBufferWriteAvailable();
+    // External memory synchronization:
+    void syncExternalMemoryPreFrame();
+    void syncExternalMemoryPostFrame();
 
     void onResourceUse(const SharedResourceUse &resourceUse);
     void releaseResourceUses();
@@ -542,6 +545,7 @@ class CommandGraph final : angle::NonCopyable
 
     std::vector<CommandGraphNode *> mNodes;
     bool mEnableGraphDiagnostics;
+    bool mSyncExternalMemoryPreFrame;
     angle::PoolAllocator *mPoolAllocator;
 
     // A set of nodes (eventually) exist that act as barriers to guarantee submission order.  For

@@ -864,6 +864,7 @@ bool SharedGarbage::destroyIfComplete(VkDevice device, Serial completedSerial)
 // CommandGraph implementation.
 CommandGraph::CommandGraph(bool enableGraphDiagnostics, angle::PoolAllocator *poolAllocator)
     : mEnableGraphDiagnostics(enableGraphDiagnostics),
+      mSyncExternalMemoryPreFrame(false),
       mPoolAllocator(poolAllocator),
       mLastBarrierIndex(kInvalidNodeIndex)
 {
@@ -955,6 +956,21 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
 
     ANGLE_TRY(context->traceGpuEvent(primaryCommandBuffer, TRACE_EVENT_PHASE_BEGIN,
                                      "Primary Command Buffer"));
+
+    if (mSyncExternalMemoryPreFrame)
+    {
+        // Add an all-inclusive memory barrier before executing the graph to synchronize with
+        // external access to GL objects.
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
+
+        primaryCommandBuffer->memoryBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                                            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, &memoryBarrier);
+
+        mSyncExternalMemoryPreFrame = false;
+    }
 
     for (CommandGraphNode *topLevelNode : mNodes)
     {
@@ -1102,6 +1118,23 @@ void CommandGraph::makeHostVisibleBufferWriteAvailable()
 {
     allocateBarrierNode(CommandGraphNodeFunction::HostAvailabilityOperation,
                         CommandGraphResourceType::HostAvailabilityOperation, 0);
+}
+
+void CommandGraph::syncExternalMemoryPreFrame()
+{
+    // Remember to add an all-inclusive memory barrier prior to executing the graph.  This is not
+    // recorded in a node as it would otherwise need to be prepended to the list of nodes, requiring
+    // move-ability of CommandGraphNode and special variations of allocateNode and setNewBarrier
+    // solely for this purpose.
+    mSyncExternalMemoryPreFrame = true;
+}
+
+void CommandGraph::syncExternalMemoryPostFrame()
+{
+    // Add an all-inclusive memory barrier at the end of the graph.
+    memoryBarrier(VK_ACCESS_MEMORY_WRITE_BIT,
+                  VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT,
+                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
 }
 
 // Dumps the command graph into a dot file that works with graphviz.

@@ -100,6 +100,32 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         },
     },
     {
+        ImageLayout::ExternalShadersReadOnly,
+        {
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            false,
+        },
+    },
+    {
+        ImageLayout::ExternalShadersWrite,
+        {
+            VK_IMAGE_LAYOUT_GENERAL,
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            // Transition to: all reads and writes must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            // Transition from: all writes must finish before barrier.
+            VK_ACCESS_SHADER_WRITE_BIT,
+            true,
+        },
+    },
+    {
         ImageLayout::TransferSrc,
         {
             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
@@ -1926,6 +1952,11 @@ void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
 {
     ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
     forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
+}
+
+void ImageHelper::onExternalLayoutChange(ImageLayout newLayout)
+{
+    mCurrentLayout = newLayout;
 }
 
 uint32_t ImageHelper::getBaseLevel()
