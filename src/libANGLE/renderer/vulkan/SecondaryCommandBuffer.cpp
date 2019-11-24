@@ -95,6 +95,14 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                                    params->filter);
                     break;
                 }
+                case CommandID::BufferBarrier:
+                {
+                    const BufferBarrierParams *params =
+                        getParamPtr<BufferBarrierParams>(currentCommand);
+                    vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask, 0,
+                                         0, nullptr, 1, &params->bufferMemoryBarrier, 0, nullptr);
+                    break;
+                }
                 case CommandID::ClearAttachments:
                 {
                     const ClearAttachmentsParams *params =
@@ -425,6 +433,9 @@ std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
                     break;
                 case CommandID::BlitImage:
                     result += "BlitImage";
+                    break;
+                case CommandID::BufferBarrier:
+                    result += "BufferBarrier";
                     break;
                 case CommandID::ClearAttachments:
                     result += "ClearAttachments";
