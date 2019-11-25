@@ -160,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "fa695c9f_c92b8d81",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-25T18:10:13Z",
+      "side": 1,
+      "message": "I think ANGLE should have a zero texture for this type so it can be handled like the others.  I know WebGL says that there is no zero textures but that is handled above ANGLE in Chrome\u0027s WebGL layers so that should be able to apply here too.",
+      "parentUuid": "243aa08a_79160899",
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9afcdc39_72063142",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 21
