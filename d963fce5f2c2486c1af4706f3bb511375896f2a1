@@ -46,6 +46,30 @@
       "revId": "d963fce5f2c2486c1af4706f3bb511375896f2a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92eea36d_fccd14b1",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-25T18:45:45Z",
+      "side": 1,
+      "message": "You\u0027re right about the null set. However you\u0027re still not clearing out all the default attributes in the pipeline desc here. \"invalidateDefaultAttributes\" doesn\u0027t handle that for you.\n\nYou could handle the default attribs in a separate loop here using \"~\". Or iterate all attributes and check for enabled inside the loop.\n\nNote that this might make switching VAOs a bit inefficient. We can optimize this later.",
+      "parentUuid": "2532ee2a_c6064cfa",
+      "range": {
+        "startLine": 552,
+        "startChar": 9,
+        "endLine": 554,
+        "endChar": 5
+      },
+      "revId": "d963fce5f2c2486c1af4706f3bb511375896f2a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
