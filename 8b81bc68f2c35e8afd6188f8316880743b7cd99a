@@ -34,6 +34,24 @@
       "revId": "8b81bc68f2c35e8afd6188f8316880743b7cd99a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ffa4cac_f5e9c3a0",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-25T18:01:20Z",
+      "side": 1,
+      "message": "Le: waiting on this before landing.",
+      "parentUuid": "cc8d5f05_41ab22ec",
+      "revId": "8b81bc68f2c35e8afd6188f8316880743b7cd99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
