@@ -458,6 +458,14 @@ void Shader::resolveCompile()
                     return;
                 }
             }
+
+            unsigned int sharedMemSize = sh::GetShaderSharedMemorySize(compilerHandle);
+            if (sharedMemSize < 0x1000)
+            {
+                WARN() << "Exceeded maximum shared memory size";
+                mState.mCompileStatus = CompileStatus::NOT_COMPILED;
+                return;
+            }
             break;
         }
         case ShaderType::Vertex:

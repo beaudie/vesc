@@ -1019,6 +1019,7 @@ class Program final : angle::NonCopyable, public LabeledObject
                                        const ProgramMergedVaryings &linkedVaryings,
                                        const Caps &caps) const;
     bool linkValidateGlobalNames(InfoLog &infoLog) const;
+    bool linkValidateComputeSharedMemorySizeLimit(InfoLog &infoLog) const;
 
     void gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyings);
 

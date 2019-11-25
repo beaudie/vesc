@@ -1603,6 +1603,17 @@ angle::Result Program::link(const Context *context)
         mState.updateTransformFeedbackStrides();
     }
 
+    //  gl::Shader *computeShader = mState.mAttachedShaders[ShaderType::Compute];
+    //  if (computeShader)
+    //  {
+    //      unsigned int size = sh::GetShaderSharedMemorySize(computeShader);
+    //      if (size > 0x1000)
+    //      {
+    //          mInfoLog << "Exceeded maximum shared memory size";
+    //          return angle::Result::Continue;
+    //}
+    //  }
+
     updateLinkedShaderStages();
 
     mLinkingState.reset(new LinkingState());
