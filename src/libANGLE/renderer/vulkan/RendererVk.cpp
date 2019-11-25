@@ -1077,6 +1077,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
     }
+    enabledFeatures.features.shaderStorageImageMultisample =
+        mPhysicalDeviceFeatures.shaderStorageImageMultisample;
 
     VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT divisorFeatures = {};
     divisorFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT;
@@ -1243,6 +1245,13 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     // ES3.1 requires at least a maximum offset of at least 2047.
     // If the Vulkan implementation can't support that, we cannot support 3.1.
     if (mPhysicalDeviceProperties.limits.maxVertexInputAttributeOffset < 2047)
+    {
+        maxVersion = std::min(maxVersion, gl::Version(3, 0));
+    }
+
+    // ES3.1 requires support for multisampled textures.  If the physical device doesn't support
+    // multisampled storage images, we can't support ES3.1.
+    if (!mPhysicalDeviceFeatures.shaderStorageImageMultisample)
     {
         maxVersion = std::min(maxVersion, gl::Version(3, 0));
     }
