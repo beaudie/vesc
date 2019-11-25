@@ -22,6 +22,30 @@
       "revId": "d963fce5f2c2486c1af4706f3bb511375896f2a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2532ee2a_c6064cfa",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-25T18:40:32Z",
+      "side": 1,
+      "message": "will rectify the emulated attributes but not sure i get the comment about default attributes. Wont the intersection of active attribute set and default attribute set be a null set? and we just got done with \"invalidateDefaultAttributes\" before entering this method",
+      "parentUuid": "21d5fb7e_1f4d91b5",
+      "range": {
+        "startLine": 552,
+        "startChar": 9,
+        "endLine": 554,
+        "endChar": 5
+      },
+      "revId": "d963fce5f2c2486c1af4706f3bb511375896f2a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
