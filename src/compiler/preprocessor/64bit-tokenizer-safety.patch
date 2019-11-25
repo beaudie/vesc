@@ -1,7 +1,7 @@
-diff --git a/src/compiler/preprocessor/Tokenizer.cpp b/src/compiler/preprocessor/Tokenizer.cpp
+diff --git a/src/compiler/preprocessor/preprocessor_lex.cpp b/src/compiler/preprocessor/preprocessor_lex.cpp
 index 0d7ad58..5ef0e5e 100644
---- a/src/compiler/preprocessor/Tokenizer.cpp
-+++ b/src/compiler/preprocessor/Tokenizer.cpp
+--- a/src/compiler/preprocessor/preprocessor_lex.cpp
++++ b/src/compiler/preprocessor/preprocessor_lex.cpp
 @@ -1746,8 +1746,10 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
  			num_to_read = YY_READ_BUF_SIZE;
  

@@ -1,0 +1,16 @@
+{
+  "src/compiler/preprocessor/generate_parser.py":
+    "cc871de99688a35bfe32ef501f965d5a",
+  "src/compiler/preprocessor/preprocessor.l":
+    "1ffd62b5d0e7efce0c570b168af88032",
+  "src/compiler/preprocessor/preprocessor.y":
+    "f5c394ec3c1405916dffed7c0c441cbe",
+  "src/compiler/preprocessor/preprocessor_lex.cpp":
+    "586cdb8dd1889ab6712ba64bfcc503ae",
+  "src/compiler/preprocessor/preprocessor_tab.cpp":
+    "65476b872cccc0851fb4c58e17a8bd1d",
+  "tools/flex-bison/linux/bison.sha1":
+    "4faaec2565bbb83650f19199129651fb",
+  "tools/flex-bison/linux/flex.sha1":
+    "f740a9de228a34814913947d751c1af9"
+}
