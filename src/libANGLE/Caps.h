@@ -972,6 +972,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_swap_with_frame_token
     bool swapWithFrameToken = false;
+
+    // EGL_ANDROID_framebuffer_target
+    bool framebufferTargetANDROID = false;
 };
 
 struct DeviceExtensions
