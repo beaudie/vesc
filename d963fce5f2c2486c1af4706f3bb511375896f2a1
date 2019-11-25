@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21d5fb7e_1f4d91b5",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-25T12:09:07Z",
+      "side": 1,
+      "message": "this isn\u0027t correct for default attributes (see VertexArrayVk::setDefaultPackedInput) and for emulated attributes (stride will be incorrect, see VertexArrayVk::syncDirtyAttrib). Likely you could solve the problems by checking for default attribs and caching the stride.",
+      "range": {
+        "startLine": 552,
+        "startChar": 9,
+        "endLine": 554,
+        "endChar": 5
+      },
+      "revId": "d963fce5f2c2486c1af4706f3bb511375896f2a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
