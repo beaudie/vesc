@@ -94,6 +94,30 @@
       "revId": "d963fce5f2c2486c1af4706f3bb511375896f2a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83311efa_3998db70",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-25T19:17:55Z",
+      "side": 1,
+      "message": "No, you\u0027re right. My bad. I was only correct about the emulated attributes.",
+      "parentUuid": "95cc91e6_f3bbd70d",
+      "range": {
+        "startLine": 552,
+        "startChar": 9,
+        "endLine": 554,
+        "endChar": 5
+      },
+      "revId": "d963fce5f2c2486c1af4706f3bb511375896f2a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
