@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "779fca5e_1f75cb11",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3254,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-25T22:58:17Z",
+      "side": 1,
+      "message": "Instead of calling these parameters \u0027texture\u0027 and \u0027resource\u0027 consider renaming to textureSS and textureMS. Makes the developer intent easier to reason about.",
+      "range": {
+        "startLine": 3252,
+        "startChar": 0,
+        "endLine": 3254,
+        "endChar": 0
+      },
+      "revId": "1780c0fe10bef6415533441791534dc46d43f537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd20d514_4386be2c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3273,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-25T22:58:17Z",
+      "side": 1,
+      "message": "Consider renaming matchImageIndex to matchMSImageIndex to make it clear what is being matched.",
+      "range": {
+        "startLine": 3273,
+        "startChar": 31,
+        "endLine": 3273,
+        "endChar": 46
+      },
+      "revId": "1780c0fe10bef6415533441791534dc46d43f537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d551cb9_e46ac508",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3273,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-25T22:58:17Z",
+      "side": 1,
+      "message": "Can this method be const?",
+      "range": {
+        "startLine": 3273,
+        "startChar": 0,
+        "endLine": 3273,
+        "endChar": 75
+      },
+      "revId": "1780c0fe10bef6415533441791534dc46d43f537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5365ab38_f01bf264",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3275,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-25T22:58:17Z",
+      "side": 1,
+      "message": "Since the caller is already checking mMSTexInfo, we shouldn\u0027t need to check it here.",
+      "range": {
+        "startLine": 3275,
+        "startChar": 1,
+        "endLine": 3275,
+        "endChar": 19
+      },
+      "revId": "1780c0fe10bef6415533441791534dc46d43f537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab29ea34_fdf32ad1",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3352,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-25T22:58:17Z",
+      "side": 1,
+      "message": "Instead of copying and pasting all of this code, can we instead put it into a common function and add a parameter for 2D_ARRAY vs. 2D?",
+      "range": {
+        "startLine": 3351,
+        "startChar": 0,
+        "endLine": 3352,
+        "endChar": 59
+      },
+      "revId": "1780c0fe10bef6415533441791534dc46d43f537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ee9d0bf_d70a9ceb",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3358,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-25T22:58:17Z",
+      "side": 1,
+      "message": "I do not see a clear mandate in the spec that you must enable the multisampleRenderToTexture extension in order to use multiviewMultisampledRenderToTexture. Since we\u0027re not going to be exposing the non-multiview extension directly to WebGL, there\u0027s no way for web developers to use the multi-view version as it\u0027s currently written.",
+      "range": {
+        "startLine": 3353,
+        "startChar": 0,
+        "endLine": 3358,
+        "endChar": 0
+      },
+      "revId": "1780c0fe10bef6415533441791534dc46d43f537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
