@@ -70,6 +70,30 @@
       "revId": "079953cd0aff0e5a5b103a5d9cbb58393e0f2946",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ec4bfc0_f4ec527b",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-25T15:37:27Z",
+      "side": 1,
+      "message": "Yea, I think it makes sense to do the the suggested fix now.  It\u0027s a bug that some of our platforms don\u0027t change it to 0 and then a bunch of clients work around this by changing it to 0. \n\nIf systemInfo.gpus is zero sized, other code should catch this.",
+      "parentUuid": "885237de_a3677420",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 71
+      },
+      "revId": "079953cd0aff0e5a5b103a5d9cbb58393e0f2946",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
