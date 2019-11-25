@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7d2fc8f_417aaba3",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-25T17:55:25Z",
+      "side": 1,
+      "message": "thanks for fixing!",
+      "range": {
+        "startLine": 350,
+        "startChar": 42,
+        "endLine": 350,
+        "endChar": 77
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64ba5a9c_f8d5eaf3",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-25T17:55:25Z",
+      "side": 1,
+      "message": "nit: no need for the switch, can just check dirtyBits.none() or any() like you had before.",
+      "range": {
+        "startLine": 819,
+        "startChar": 0,
+        "endLine": 847,
+        "endChar": 5
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bba6e28_50e05d7b",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-25T17:55:25Z",
+      "side": 1,
+      "message": "nit: missing comment before the test.",
+      "range": {
+        "startLine": 811,
+        "startChar": 0,
+        "endLine": 811,
+        "endChar": 6
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
