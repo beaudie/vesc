@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48a2b9c5_5faeaadb",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-25T13:38:33Z",
+      "side": 1,
+      "message": "We should open a new bug for this. Likely a driver bug that we can track separately.",
+      "range": {
+        "startLine": 653,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 134
+      },
+      "revId": "b6ea0f5f30c2fb17319e0f21da63da26b67c0788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
