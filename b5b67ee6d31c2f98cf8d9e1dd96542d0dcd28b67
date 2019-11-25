@@ -25,6 +25,98 @@
     },
     {
       "key": {
+        "uuid": "1408c4f7_915f7226",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-25T18:01:34Z",
+      "side": 1,
+      "message": "nit: \u0027Copy\u0027 would be more fitting.",
+      "range": {
+        "startLine": 118,
+        "startChar": 14,
+        "endLine": 118,
+        "endChar": 20
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c266ab4_5ad05d4e",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-25T18:01:34Z",
+      "side": 1,
+      "message": "I would prefer to use local variables to determine the src and dest pointers instead of mutating pdst.  It protects us against future bugs, especially since pdst is used int he other branch too.",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 32
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3ae6136_33f18096",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-25T18:01:34Z",
+      "side": 1,
+      "message": "This can be factored into a ANGLE_MTL_UNREACHABLE, we do this in our VK backend: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/vk_utils.h?l\u003d731\u0026rcl\u003d04e074d1aae0aa1c3d9990ca147b17d5b6f96529",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 45
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01d6cc78_6af999a4",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-25T18:01:34Z",
+      "side": 1,
+      "message": "Can you turn this into an item in FeatureMtl instead of macros here?",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 44
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64ba5a9c_f8d5eaf3",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 5
@@ -41,6 +133,29 @@
         "startChar": 0,
         "endLine": 847,
         "endChar": 5
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "792da3b0_5f2d0d68",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-25T18:01:34Z",
+      "side": 1,
+      "message": "You can also support depthTextureANGLE, it has strictly fewer requirements than depthTextureOES.",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 128,
+        "endChar": 48
       },
       "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
