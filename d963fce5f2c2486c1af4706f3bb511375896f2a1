@@ -70,6 +70,30 @@
       "revId": "d963fce5f2c2486c1af4706f3bb511375896f2a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95cc91e6_f3bbd70d",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-25T19:13:18Z",
+      "side": 1,
+      "message": "but setupdraw does call into \"updateDefaultAttribute\" through \"handleDirtyGraphicsDefaultAttribs\" which goes on to call \"onVertexAttributeChange\" which updates the pipeline desc. seems like im missing something",
+      "parentUuid": "92eea36d_fccd14b1",
+      "range": {
+        "startLine": 552,
+        "startChar": 9,
+        "endLine": 554,
+        "endChar": 5
+      },
+      "revId": "d963fce5f2c2486c1af4706f3bb511375896f2a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
