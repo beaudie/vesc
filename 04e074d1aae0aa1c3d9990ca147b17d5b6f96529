@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16dc711f_605e2d03",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-11-25T15:37:31Z",
+      "side": 0,
+      "message": "I think this script is now unused and can be removed.",
+      "revId": "04e074d1aae0aa1c3d9990ca147b17d5b6f96529",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
