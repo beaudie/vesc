@@ -92,6 +92,7 @@ class EGLSurfaceTest : public ANGLETest
     void initializeDisplay()
     {
         GLenum platformType = GetParam().getRenderer();
+        GLenum deviceType   = GetParam().getDeviceType();
 
         std::vector<EGLint> displayAttributes;
         displayAttributes.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
@@ -101,7 +102,7 @@ class EGLSurfaceTest : public ANGLETest
         displayAttributes.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE);
         displayAttributes.push_back(EGL_DONT_CARE);
         displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
-        displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
+        displayAttributes.push_back(deviceType);
         displayAttributes.push_back(EGL_NONE);
 
         mDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE,
@@ -344,6 +345,91 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
     ASSERT_EGL_SUCCESS();
     ASSERT_EQ(64, height);
+}
+
+TEST_P(EGLSurfaceTest, ResizeWindowWithDraw)
+{
+    mOSWindow->setVisible(true);
+
+    initializeDisplay();
+    initializeSurfaceWithDefaultConfig();
+    initializeContext();
+
+    int size      = 64;
+    EGLint height = 0;
+    EGLint width  = 0;
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_WIDTH, &width);
+    ASSERT_EGL_SUCCESS();
+    ASSERT_EQ(size, height);
+    ASSERT_EQ(size, width);
+
+    EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
+    EXPECT_PIXEL_EQ(size - 1, 0, 255, 0, 0, 255);
+    EXPECT_PIXEL_EQ(size - 1, size - 1, 255, 0, 0, 255);
+    EXPECT_PIXEL_EQ(0, size - 1, 255, 0, 0, 255);
+    EXPECT_PIXEL_EQ(-1, -1, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, 0, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(0, size, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, size, 0, 0, 0, 0);
+
+    // set window's height to 0 (if possible) or 1
+    size = 1;
+    mOSWindow->resize(size, size);
+
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_WIDTH, &width);
+    ASSERT_EGL_SUCCESS();
+    ASSERT_EQ(size, height);
+    ASSERT_EQ(size, width);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+    EXPECT_PIXEL_EQ(size - 1, 0, 0, 255, 0, 255);
+    EXPECT_PIXEL_EQ(size - 1, size - 1, 0, 255, 0, 255);
+    EXPECT_PIXEL_EQ(0, size - 1, 0, 255, 0, 255);
+    EXPECT_PIXEL_EQ(-1, -1, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, 0, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(0, size, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, size, 0, 0, 0, 0);
+
+    // restore window's height
+    size = 128;
+    mOSWindow->resize(size, size);
+
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
+    eglQuerySurface(mDisplay, mWindowSurface, EGL_WIDTH, &width);
+    ASSERT_EGL_SUCCESS();
+    ASSERT_EQ(size, height);
+    ASSERT_EQ(size, width);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 255, 255);
+    EXPECT_PIXEL_EQ(size - 1, 0, 0, 0, 255, 255);
+    EXPECT_PIXEL_EQ(size - 1, size - 1, 0, 0, 255, 255);
+    EXPECT_PIXEL_EQ(0, size - 1, 0, 0, 255, 255);
+    EXPECT_PIXEL_EQ(-1, -1, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, 0, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(0, size, 0, 0, 0, 0);
+    EXPECT_PIXEL_EQ(size, size, 0, 0, 0, 0);
 }
 
 // Test that swap interval works.
@@ -811,7 +897,9 @@ ANGLE_INSTANTIATE_TEST(EGLSurfaceTest,
                        WithNoFixture(ES2_OPENGLES()),
                        WithNoFixture(ES3_OPENGLES()),
                        WithNoFixture(ES2_VULKAN()),
-                       WithNoFixture(ES3_VULKAN()));
+                       WithNoFixture(ES3_VULKAN()),
+                       WithNoFixture(ES2_VULKAN_SWIFTSHADER()),
+                       WithNoFixture(ES3_VULKAN_SWIFTSHADER()));
 ANGLE_INSTANTIATE_TEST(EGLSurfaceTest3, WithNoFixture(ES3_VULKAN()));
 
 #if defined(ANGLE_ENABLE_D3D11)
