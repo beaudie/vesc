@@ -189,9 +189,9 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->glRenderbufferImage   = true;
     outExtensions->imageNativeBuffer =
         getRenderer()->getFeatures().supportsAndroidHardwareBuffer.enabled;
-    outExtensions->surfacelessContext = true;
-
-    outExtensions->noConfigContext = true;
+    outExtensions->surfacelessContext       = true;
+    outExtensions->framebufferTargetANDROID = true;
+    outExtensions->noConfigContext          = true;
 
 #if defined(ANGLE_PLATFORM_GGP)
     outExtensions->ggpStreamDescriptor = true;
