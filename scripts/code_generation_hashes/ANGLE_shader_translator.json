@@ -1,0 +1,18 @@
+{
+  "src/compiler/translator/generate_parser.py":
+    "566178ecdfae3a29803b3687fc518ebb",
+  "src/compiler/translator/glslang.l":
+    "bf65bb626072a4ee9f54177b95190b9b",
+  "src/compiler/translator/glslang.y":
+    "a57c20e7cd38cc7790bba59e67412eb1",
+  "src/compiler/translator/glslang_lex.cpp":
+    "321c3f8fb1c385d2e8c843c094d87058",
+  "src/compiler/translator/glslang_tab.cpp":
+    "3b9681eea6c276411f45333f7b337b77",
+  "src/compiler/translator/glslang_tab.h":
+    "6c69f953a2aefcea0a402c9ce43e3685",
+  "tools/flex-bison/linux/bison.sha1":
+    "4faaec2565bbb83650f19199129651fb",
+  "tools/flex-bison/linux/flex.sha1":
+    "f740a9de228a34814913947d751c1af9"
+}
