@@ -2256,6 +2256,55 @@ void main()
     EXPECT_GL_NO_ERROR();
 }
 
+// Verify the size of structs with unsized arrays are calculated correctly
+TEST_P(ShaderStorageBufferTest31, BigStructUnsizedArraySize)
+{
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+layout (local_size_x=1) in;
+
+struct S
+{
+    mat4 m;     // 4 vec4 = 16 floats
+    vec4 a[10]; // 10 vec4 = 40 floats
+};
+
+layout(binding=0) buffer B
+{
+    vec4 precedingMember;               // 4 floats
+    S precedingMemberUnsizedArray[];    // 56 floats
+} b;
+
+void main()
+{
+    if (false)
+    {
+        b.precedingMember = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+}
+)";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+    EXPECT_GL_NO_ERROR();
+
+    glUseProgram(program);
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    GLuint resourceIndex = glGetProgramResourceIndex(program, GL_SHADER_STORAGE_BLOCK, "B");
+    EXPECT_GL_NO_ERROR();
+    EXPECT_NE(resourceIndex, 0xFFFFFFFF);
+
+    GLenum property = GL_BUFFER_DATA_SIZE;
+    GLint queryData = -1;
+    glGetProgramResourceiv(program, GL_SHADER_STORAGE_BLOCK, resourceIndex, 1, &property, 1,
+                           nullptr, &queryData);
+    EXPECT_GL_NO_ERROR();
+
+    // 60 * sizeof(float) = 240
+    EXPECT_EQ(queryData, 240);
+}
+
 ANGLE_INSTANTIATE_TEST_ES31(ShaderStorageBufferTest31);
 
 }  // namespace
