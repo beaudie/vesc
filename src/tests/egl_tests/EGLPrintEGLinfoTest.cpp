@@ -29,7 +29,7 @@ class EGLPrintEGLinfoTest : public ANGLETest
 };
 
 // Parse space separated extension string into a vector of strings
-std::vector<std::string> ParseExtensions(const char *extensions)
+static std::vector<std::string> ParseExtensions(const char *extensions)
 {
     std::string extensionsStr(extensions);
     std::vector<std::string> extensionsVec;
@@ -38,7 +38,7 @@ std::vector<std::string> ParseExtensions(const char *extensions)
 }
 
 // Query a EGL attribute
-EGLint GetAttrib(EGLDisplay display, EGLConfig config, EGLint attrib)
+static EGLint GetAttrib(EGLDisplay display, EGLConfig config, EGLint attrib)
 {
     EGLint value = 0;
     EXPECT_EGL_TRUE(eglGetConfigAttrib(display, config, attrib, &value));
@@ -46,7 +46,7 @@ EGLint GetAttrib(EGLDisplay display, EGLConfig config, EGLint attrib)
 }
 
 // Query a egl string
-const char *GetEGLString(EGLDisplay display, EGLint name)
+static const char *GetEGLString(EGLDisplay display, EGLint name)
 {
     const char *value = "";
     value             = eglQueryString(display, name);
@@ -55,7 +55,7 @@ const char *GetEGLString(EGLDisplay display, EGLint name)
 }
 
 // Query a GL string
-const char *GetGLString(EGLint name)
+static const char *GetGLString(EGLint name)
 {
     const char *value = "";
     value             = reinterpret_cast<const char *>(glGetString(name));
@@ -465,6 +465,8 @@ TEST_P(EGLPrintEGLinfoTest, PrintConfigInfo)
         // Extensions
         std::cout << "\tAndroid Recordable: " << GetAttrib(mDisplay, config, EGL_RECORDABLE_ANDROID)
                   << std::endl;
+        std::cout << "\tAndroid framebuffer target: "
+                  << GetAttrib(mDisplay, config, EGL_FRAMEBUFFER_TARGET_ANDROID) << std::endl;
 
         // Separator between configs
         std::cout << std::endl;
