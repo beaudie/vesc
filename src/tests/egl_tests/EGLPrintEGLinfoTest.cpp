@@ -25,43 +25,43 @@ class EGLPrintEGLinfoTest : public ANGLETest
         ASSERT_TRUE(mDisplay != EGL_NO_DISPLAY);
     }
 
+    // Parse space separated extension string into a vector of strings
+    static std::vector<std::string> ParseExtensions(const char *extensions)
+    {
+        std::string extensionsStr(extensions);
+        std::vector<std::string> extensionsVec;
+        SplitStringAlongWhitespace(extensionsStr, &extensionsVec);
+        return extensionsVec;
+    }
+
+    // Query a EGL attribute
+    static EGLint GetAttrib(EGLDisplay display, EGLConfig config, EGLint attrib)
+    {
+        EGLint value = 0;
+        EXPECT_EGL_TRUE(eglGetConfigAttrib(display, config, attrib, &value));
+        return value;
+    }
+
+    // Query a egl string
+    static const char *GetEGLString(EGLDisplay display, EGLint name)
+    {
+        const char *value = "";
+        value             = eglQueryString(display, name);
+        EXPECT_TRUE(value != nullptr);
+        return value;
+    }
+
+    // Query a GL string
+    static const char *GetGLString(EGLint name)
+    {
+        const char *value = "";
+        value             = reinterpret_cast<const char *>(glGetString(name));
+        EXPECT_TRUE(value != nullptr);
+        return value;
+    }
+
     EGLDisplay mDisplay = EGL_NO_DISPLAY;
 };
-
-// Parse space separated extension string into a vector of strings
-std::vector<std::string> ParseExtensions(const char *extensions)
-{
-    std::string extensionsStr(extensions);
-    std::vector<std::string> extensionsVec;
-    SplitStringAlongWhitespace(extensionsStr, &extensionsVec);
-    return extensionsVec;
-}
-
-// Query a EGL attribute
-EGLint GetAttrib(EGLDisplay display, EGLConfig config, EGLint attrib)
-{
-    EGLint value = 0;
-    EXPECT_EGL_TRUE(eglGetConfigAttrib(display, config, attrib, &value));
-    return value;
-}
-
-// Query a egl string
-const char *GetEGLString(EGLDisplay display, EGLint name)
-{
-    const char *value = "";
-    value             = eglQueryString(display, name);
-    EXPECT_TRUE(value != nullptr);
-    return value;
-}
-
-// Query a GL string
-const char *GetGLString(EGLint name)
-{
-    const char *value = "";
-    value             = reinterpret_cast<const char *>(glGetString(name));
-    EXPECT_TRUE(value != nullptr);
-    return value;
-}
 
 // Print the EGL strings and extensions
 TEST_P(EGLPrintEGLinfoTest, PrintEGLInfo)
@@ -463,8 +463,16 @@ TEST_P(EGLPrintEGLinfoTest, PrintConfigInfo)
         std::cout << std::endl;
 
         // Extensions
-        std::cout << "\tAndroid Recordable: " << GetAttrib(mDisplay, config, EGL_RECORDABLE_ANDROID)
-                  << std::endl;
+        if (IsEGLDisplayExtensionEnabled(mDisplay, "EGL_ANDROID_recordable"))
+        {
+            std::cout << "\tAndroid Recordable: "
+                      << GetAttrib(mDisplay, config, EGL_RECORDABLE_ANDROID) << std::endl;
+        }
+        if (IsEGLDisplayExtensionEnabled(mDisplay, "EGL_ANDROID_framebuffer_target"))
+        {
+            std::cout << "\tAndroid framebuffer target: "
+                      << GetAttrib(mDisplay, config, EGL_FRAMEBUFFER_TARGET_ANDROID) << std::endl;
+        }
 
         // Separator between configs
         std::cout << std::endl;
