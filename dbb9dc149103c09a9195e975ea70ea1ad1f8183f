@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cec1d5f1_3aca7ae5",
+        "filename": "src/common/packed_gl_enums.json",
+        "patchSetId": 21
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-25T07:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9aa2963_6c77bd74",
+      "range": {
+        "startLine": 191,
+        "startChar": 9,
+        "endLine": 191,
+        "endChar": 21
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38ccd27c_81606eb2",
         "filename": "src/common/packed_gl_enums.json",
         "patchSetId": 21
@@ -45,6 +69,30 @@
       "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "610da4eb_847d3aa6",
+        "filename": "src/common/packed_gl_enums.json",
+        "patchSetId": 21
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-25T07:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38ccd27c_81606eb2",
+      "range": {
+        "startLine": 208,
+        "startChar": 9,
+        "endLine": 208,
+        "endChar": 21
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,47 @@
     },
     {
       "key": {
+        "uuid": "d6bf39c0_816bbd9e",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-25T07:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15b86d6f_42a4d8e0",
+      "range": {
+        "startLine": 906,
+        "startChar": 0,
+        "endLine": 907,
+        "endChar": 40
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "243aa08a_79160899",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-25T07:12:38Z",
+      "side": 1,
+      "message": "Geoff@:\nI\u0027m not quite sure how to handle video texture zero texture.\nMy thoughts are that video texture may map to same native texture type as other texture type. If video texture has a zeroTexture, binding it will destroy previous corresponds other texture type\u0027s binding. So I don\u0027t think we should have zero texture for video texture.\nHowever, in ANGLE, I see lots of ASSERT to ensure no nullptr transfer to state* table.\nCould you offer some idea about this?",
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9afcdc39_72063142",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 21
@@ -82,6 +171,30 @@
       "writtenOn": "2019-11-22T17:07:49Z",
       "side": 1,
       "message": "This makes it so the video textures cannot be unbound when deleted.  You need to at least set the binding to null.",
+      "range": {
+        "startLine": 1186,
+        "startChar": 12,
+        "endLine": 1186,
+        "endChar": 55
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b70fa414_9bfc2f44",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-25T07:12:38Z",
+      "side": 1,
+      "message": "Oops. Thanks for pointing out this.",
+      "parentUuid": "9afcdc39_72063142",
       "range": {
         "startLine": 1186,
         "startChar": 12,
@@ -117,6 +230,30 @@
     },
     {
       "key": {
+        "uuid": "0215adc1_ebb3ecb9",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-25T07:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdacd4b5_888795bf",
+      "range": {
+        "startLine": 433,
+        "startChar": 8,
+        "endLine": 442,
+        "endChar": 9
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d25698cb_19726aaa",
         "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
         "patchSetId": 21
@@ -137,6 +274,30 @@
       "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33596bb3_917cf7a1",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-25T07:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d25698cb_19726aaa",
+      "range": {
+        "startLine": 252,
+        "startChar": 8,
+        "endLine": 253,
+        "endChar": 89
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +324,30 @@
     },
     {
       "key": {
+        "uuid": "3d8a86cf_c2f1464f",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-25T07:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8497252e_7555a6dd",
+      "range": {
+        "startLine": 344,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 93
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae93f4ec_3f972db5",
         "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
         "patchSetId": 21
@@ -183,6 +368,30 @@
       "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bd2a7a6_63762e27",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-25T07:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae93f4ec_3f972db5",
+      "range": {
+        "startLine": 1324,
+        "startChar": 0,
+        "endLine": 1325,
+        "endChar": 89
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
