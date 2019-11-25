@@ -624,9 +624,6 @@
 
 // General Vulkan failures
 
-// Front-end query bugs:
-3596 VULKAN : dEQP-GLES31.functional.program_interface_query.shader_storage_block.buffer_data_size.* = FAIL
-
 // Shader support:
 3565 VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_* = SKIP
 
