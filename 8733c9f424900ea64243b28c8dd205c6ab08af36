@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "8219fe0d_70815465",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T21:14:25Z",
+      "side": 1,
+      "message": "Oh, I didn\u0027t notice that. We should take out all the setup logic from the test setup and move it into a helper function. Do you mind doing that in a follow-up? SimpleStateChangeTest is supposed to be totally simple and not have any fixture logic.",
+      "parentUuid": "bd9da08d_01ce3621",
+      "range": {
+        "startLine": 3232,
+        "startChar": 0,
+        "endLine": 3235,
+        "endChar": 5
+      },
+      "revId": "8733c9f424900ea64243b28c8dd205c6ab08af36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aeac187c_2759effc",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 9

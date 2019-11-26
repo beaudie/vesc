@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac6acfb2_6e7efbce",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3246,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T21:14:25Z",
+      "side": 1,
+      "message": "nit: can you unindent this? the blank spaces are not correct for a block string.",
+      "range": {
+        "startLine": 3233,
+        "startChar": 0,
+        "endLine": 3246,
+        "endChar": 12
+      },
+      "revId": "3e7a804c4e50e73f8ba3e3ced4fbb1d693e5da6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
