@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fad9828_cc17858f",
+        "filename": "scripts/gen_gl_enum_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-26T15:07:48Z",
+      "side": 1,
+      "message": "does `key\u003dreversed` work?",
+      "range": {
+        "startLine": 205,
+        "startChar": 28,
+        "endLine": 205,
+        "endChar": 54
+      },
+      "revId": "346295f26f41186f61afdcc3e520be0918a1d78e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "239d4f7f_f3d1e81a",
+        "filename": "src/tests/gl_tests/gl_enum_to_string_flattened_autogen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-26T15:07:48Z",
+      "side": 1,
+      "message": "Not a big deal, but could these instead be like:\n\n    case GL_2X_BIT_ATI:\n        return \"GL_2X_BIT_ATI\";\n\nWouldn\u0027t that be clearer?",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 34
+      },
+      "revId": "346295f26f41186f61afdcc3e520be0918a1d78e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
