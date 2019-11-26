@@ -52,6 +52,24 @@
       "revId": "8b81bc68f2c35e8afd6188f8316880743b7cd99a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94af1960_7c503ab1",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-11-26T09:54:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ffa4cac_f5e9c3a0",
+      "revId": "8b81bc68f2c35e8afd6188f8316880743b7cd99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
