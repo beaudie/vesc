@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "428409f6_68f61392",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T18:33:42Z",
+      "side": 1,
+      "message": "nit: comment before test",
+      "range": {
+        "startLine": 350,
+        "startChar": 0,
+        "endLine": 350,
+        "endChar": 6
+      },
+      "revId": "fdf15b2f96c4edb08818ff410d9c4e67acee2c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94ef232f_350a9584",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T18:33:42Z",
+      "side": 1,
+      "message": "might comment to note why this is required, if required.",
+      "range": {
+        "startLine": 352,
+        "startChar": 4,
+        "endLine": 352,
+        "endChar": 32
+      },
+      "revId": "fdf15b2f96c4edb08818ff410d9c4e67acee2c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
