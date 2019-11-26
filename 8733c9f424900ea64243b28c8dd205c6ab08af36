@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "985f54a1_75fb4f03",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-26T21:31:50Z",
+      "side": 1,
+      "message": "made some minor refactor to better reflect purpose of class",
+      "parentUuid": "8219fe0d_70815465",
+      "range": {
+        "startLine": 3232,
+        "startChar": 0,
+        "endLine": 3235,
+        "endChar": 5
+      },
+      "revId": "8733c9f424900ea64243b28c8dd205c6ab08af36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aeac187c_2759effc",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 9

@@ -22,6 +22,30 @@
       "revId": "3e7a804c4e50e73f8ba3e3ced4fbb1d693e5da6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbd097d3_07c8e259",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3246,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-26T21:31:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac6acfb2_6e7efbce",
+      "range": {
+        "startLine": 3233,
+        "startChar": 0,
+        "endLine": 3246,
+        "endChar": 12
+      },
+      "revId": "3e7a804c4e50e73f8ba3e3ced4fbb1d693e5da6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
