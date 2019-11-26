@@ -140,6 +140,30 @@
       "revId": "e0d390d8c4f3316e2f2b97441eeb8b5127a8dd56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b5552924_ee850c3f",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-26T19:57:14Z",
+      "side": 1,
+      "message": "We do want to resize the backbuffer automatically, so I used the 4th point you listed (not the 5th)",
+      "parentUuid": "8970d2bc_c6884213",
+      "range": {
+        "startLine": 61,
+        "startChar": 35,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "e0d390d8c4f3316e2f2b97441eeb8b5127a8dd56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
