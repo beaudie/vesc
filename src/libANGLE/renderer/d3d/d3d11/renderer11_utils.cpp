@@ -1410,8 +1410,8 @@ void GenerateCaps(ID3D11Device *device,
     // GL core feature limits
     // Reserve MAX_UINT for D3D11's primitive restart.
     caps->maxElementIndex  = static_cast<GLint64>(std::numeric_limits<unsigned int>::max() - 1);
-    caps->max3DTextureSize = GetMaximum3DTextureSize(featureLevel);
-    caps->max2DTextureSize = GetMaximum2DTextureSize(featureLevel);
+    caps->max3DTextureSize      = GetMaximum3DTextureSize(featureLevel);
+    caps->max2DTextureSize      = GetMaximum2DTextureSize(featureLevel);
     caps->maxCubeMapTextureSize = GetMaximumCubeMapTextureSize(featureLevel);
     caps->maxArrayTextureLayers = GetMaximum2DTextureArraySize(featureLevel);
 
