@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0267a268_2a9b766a",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-26T19:56:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db3e9945_7eb32fdf",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "e0d390d8c4f3316e2f2b97441eeb8b5127a8dd56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7db36aa1_1e4f55c3",
         "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
         "patchSetId": 9
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "f9c2a612_00c49174",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-26T19:56:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7db36aa1_1e4f55c3",
+      "range": {
+        "startLine": 35,
+        "startChar": 64,
+        "endLine": 35,
+        "endChar": 75
+      },
+      "revId": "e0d390d8c4f3316e2f2b97441eeb8b5127a8dd56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02e070e9_87939126",
         "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
         "patchSetId": 9
@@ -68,6 +116,30 @@
       "revId": "e0d390d8c4f3316e2f2b97441eeb8b5127a8dd56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8970d2bc_c6884213",
+        "filename": "src/libANGLE/renderer/vulkan/mac/WindowSurfaceVkMac.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-26T19:56:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02e070e9_87939126",
+      "range": {
+        "startLine": 61,
+        "startChar": 35,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "e0d390d8c4f3316e2f2b97441eeb8b5127a8dd56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
