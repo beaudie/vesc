@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3963685_88d78ab8",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-26T02:24:27Z",
+      "side": 1,
+      "message": "need to remove this, hold over from debug session",
+      "range": {
+        "startLine": 543,
+        "startChar": 43,
+        "endLine": 543,
+        "endChar": 79
+      },
+      "revId": "06d219e0e7a7dddb1a653666d57c5f4b81ce7628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
