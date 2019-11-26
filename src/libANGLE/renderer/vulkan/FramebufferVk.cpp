@@ -1329,8 +1329,50 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
                                                size_t index,
                                                GLfloat *xy) const
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+    // Assume Vulkan standard sample positions (Note: there are no standard positions for 32
+    // samples, so use the position for 1 sample)
+    static GLfloat sample2Positions[][2] = {{0.75, 0.75}, {0.25, 0.25}};
+    static GLfloat sample4Positions[][2] = {
+        {0.375, 0.125}, {0.875, 0.375}, {0.125, 0.625}, {0.625, 0.875}};
+    static GLfloat sample8Positions[][2]  = {{0.5625, 0.3125}, {0.4375, 0.6875}, {0.8125, 0.5625},
+                                            {0.3125, 0.1875}, {0.1875, 0.8125}, {0.0625, 0.4375},
+                                            {0.6875, 0.9375}, {0.9375, 0.0625}};
+    static GLfloat sample16Positions[][2] = {
+        {0.5625, 0.5625}, {0.4375, 0.3125}, {0.3125, 0.625},  {0.75, 0.4375},
+        {0.1875, 0.375},  {0.625, 0.8125},  {0.8125, 0.6875}, {0.6875, 0.1875},
+        {0.375, 0.875},   {0.5, 0.0625},    {0.25, 0.125},    {0.125, 0.75},
+        {0, 0.5},         {0.9375, 0.25},   {0.875, 0.9375},  {0.0625, 0}};
+    switch (getSamples())
+    {
+        case 0:
+        case 1:
+        case 32:
+        case 64:
+            // Note: There are no Vulkan standard positions for 32 or 64 samples
+            xy[0] = 0.5;
+            xy[1] = 0.5;
+            break;
+        case 2:
+            xy[0] = sample2Positions[index][0];
+            xy[1] = sample2Positions[index][1];
+            break;
+        case 4:
+            xy[0] = sample4Positions[index][0];
+            xy[1] = sample4Positions[index][1];
+            break;
+        case 8:
+            xy[0] = sample8Positions[index][0];
+            xy[1] = sample8Positions[index][1];
+            break;
+        case 16:
+            xy[0] = sample16Positions[index][0];
+            xy[1] = sample16Positions[index][1];
+            break;
+        default:
+            ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
+            return angle::Result::Stop;
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
