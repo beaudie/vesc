@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59b3943e_66588a9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T18:32:20Z",
+      "side": 1,
+      "message": "nit: use\n\n\"Bug: angleproject:4127\"\n\nWe should probably update our presubmit to be more strict.",
+      "range": {
+        "startLine": 16,
+        "startChar": 5,
+        "endLine": 16,
+        "endChar": 29
+      },
+      "revId": "8733c9f424900ea64243b28c8dd205c6ab08af36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab37697e_5382107e",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T18:32:20Z",
+      "side": 1,
+      "message": "nit: you can omit this. the test state should be clear when we enter a test body.",
+      "range": {
+        "startLine": 3232,
+        "startChar": 0,
+        "endLine": 3235,
+        "endChar": 5
+      },
+      "revId": "8733c9f424900ea64243b28c8dd205c6ab08af36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeac187c_2759effc",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3253,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T18:32:20Z",
+      "side": 1,
+      "message": "nit: can you use the R\"()\" syntax for the shaders? See other examples in this file.",
+      "range": {
+        "startLine": 3236,
+        "startChar": 0,
+        "endLine": 3253,
+        "endChar": 12
+      },
+      "revId": "8733c9f424900ea64243b28c8dd205c6ab08af36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb3f2ef6_d9f82b7a",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3261,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T18:32:20Z",
+      "side": 1,
+      "message": "nit: GLVertexArray vaos[2];\n\nYou won\u0027t need the Gen calls any more.",
+      "range": {
+        "startLine": 3261,
+        "startChar": 3,
+        "endLine": 3261,
+        "endChar": 19
+      },
+      "revId": "8733c9f424900ea64243b28c8dd205c6ab08af36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
