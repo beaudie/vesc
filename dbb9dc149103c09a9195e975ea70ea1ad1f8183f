@@ -178,6 +178,24 @@
     },
     {
       "key": {
+        "uuid": "7e61840c_5fe1cddd",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-26T01:12:49Z",
+      "side": 1,
+      "message": "Geoff@,Thanks for your reply. If we have zero texture, to resolve unbound other type texture issue, I have two rough ideas. One is that we can directly mapping the zero texture of Video Texture to its native type correspond zero textures. This means in mZeroTextures, there will be two same textureImpl object. I\u0027m afraid this way will have potential issues since I\u0027m a novice in ANGLE. \nThe other is that in this function(https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/gl/ContextGL.cpp?l\u003d80) we can gen a new texture but not bind it to avoid destroy other zeroTextures. This method seems less risk for me. WDYT?\n\nBR,\nYan, Shaobo",
+      "parentUuid": "fa695c9f_c92b8d81",
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9afcdc39_72063142",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 21
