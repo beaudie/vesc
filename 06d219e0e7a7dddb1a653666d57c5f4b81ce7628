@@ -22,6 +22,144 @@
       "revId": "06d219e0e7a7dddb1a653666d57c5f4b81ce7628",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b3ea7a4_9005c9ea",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T03:01:39Z",
+      "side": 1,
+      "message": "nit: can use the explicit type here for readability.",
+      "range": {
+        "startLine": 549,
+        "startChar": 9,
+        "endLine": 549,
+        "endChar": 13
+      },
+      "revId": "06d219e0e7a7dddb1a653666d57c5f4b81ce7628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49b405bd_03a9c341",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T03:01:39Z",
+      "side": 1,
+      "message": "nit: you can place this right next to onVertexAttributeChange.",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 668,
+        "endChar": 54
+      },
+      "revId": "06d219e0e7a7dddb1a653666d57c5f4b81ce7628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b68d4b7_0a584ec8",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T03:01:39Z",
+      "side": 1,
+      "message": "nit: should reset the stride here for consistency.",
+      "range": {
+        "startLine": 679,
+        "startChar": 8,
+        "endLine": 679,
+        "endChar": 29
+      },
+      "revId": "06d219e0e7a7dddb1a653666d57c5f4b81ce7628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f870edba_79ba4a6d",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T03:01:39Z",
+      "side": 1,
+      "message": "nit: you can remove this. the stride will remain consistent.",
+      "range": {
+        "startLine": 789,
+        "startChar": 0,
+        "endLine": 790,
+        "endChar": 54
+      },
+      "revId": "06d219e0e7a7dddb1a653666d57c5f4b81ce7628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a1ef622_79050d6c",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T03:01:39Z",
+      "side": 1,
+      "message": "nit: can call this mCurrentArrayBufferStrides and place it up with the rest of the \"mCurrent*ArrayBuffer*\"s.",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 52
+      },
+      "revId": "06d219e0e7a7dddb1a653666d57c5f4b81ce7628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90db4453_baa0e39d",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2413,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-26T03:01:39Z",
+      "side": 1,
+      "message": "I\u0027ve mentioned a couple times, will mention again. We should simplify this test to be a minimal repro and make it part of StateChangeTest. For consistency and simplicity.",
+      "range": {
+        "startLine": 2413,
+        "startChar": 7,
+        "endLine": 2413,
+        "endChar": 30
+      },
+      "revId": "06d219e0e7a7dddb1a653666d57c5f4b81ce7628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
