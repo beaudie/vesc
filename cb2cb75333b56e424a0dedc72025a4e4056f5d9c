@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0a1545f_9cf86508",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-27T11:37:48Z",
+      "side": 1,
+      "message": "This function is extremely expensive and will likely impact benchmark scores if used. I\u0027m worried about landing something like this CL without any optimization or perf testing.",
+      "range": {
+        "startLine": 2011,
+        "startChar": 18,
+        "endLine": 2011,
+        "endChar": 48
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43a6a7fc_beabd69a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-27T11:37:48Z",
+      "side": 1,
+      "message": "It\u0027s quite overkill to always split the renderpass when re-binding textures. Is there no other solution?",
+      "range": {
+        "startLine": 753,
+        "startChar": 0,
+        "endLine": 757,
+        "endChar": 5
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9927ec4_cde7a939",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-27T11:37:48Z",
+      "side": 1,
+      "message": "nit: naming\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#variable-names",
+      "range": {
+        "startLine": 2126,
+        "startChar": 16,
+        "endLine": 2126,
+        "endChar": 42
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0c4cb83_1778f77a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-27T11:37:48Z",
+      "side": 1,
+      "message": "This filtering is supposed to be done in the front end. So either we could add it to the front-end or just remove it from here. You can remove the new helper functions as well.",
+      "range": {
+        "startLine": 2129,
+        "startChar": 4,
+        "endLine": 2129,
+        "endChar": 41
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "783113bd_4203532e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2143,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-27T11:37:48Z",
+      "side": 1,
+      "message": "same comment.",
+      "range": {
+        "startLine": 2143,
+        "startChar": 8,
+        "endLine": 2143,
+        "endChar": 35
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "561e7798_ed48a781",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-27T11:37:48Z",
+      "side": 1,
+      "message": "this doesn\u0027t seem like it needs to be a dirty bit. Seems like you could just as easily either store a member bool or just store a local bool in ContextVk::syncState and process the check after the loop.",
+      "range": {
+        "startLine": 438,
+        "startChar": 8,
+        "endLine": 438,
+        "endChar": 34
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
