@@ -166,9 +166,9 @@ bool TIntermDeclaration::visit(Visit visit, TIntermTraverser *it)
     return it->visitDeclaration(visit, this);
 }
 
-bool TIntermInvariantDeclaration::visit(Visit visit, TIntermTraverser *it)
+bool TIntermInvariantPreciseDeclaration::visit(Visit visit, TIntermTraverser *it)
 {
-    return it->visitInvariantDeclaration(visit, this);
+    return it->visitInvariantPreciseDeclaration(visit, this);
 }
 
 bool TIntermBlock::visit(Visit visit, TIntermTraverser *it)
