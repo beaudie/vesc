@@ -1796,6 +1796,19 @@ void TParseContext::checkInvariantVariableQualifier(bool invariant,
     }
 }
 
+void TParseContext::checkPreciseVariableQualifier(bool precise,
+                                                  const TQualifier qualifier,
+                                                  const TSourceLoc &preciseLocation)
+{
+    if (!precise)
+        return;
+
+    if (!sh::CanBePrecise(qualifier))
+    {
+        error(preciseLocation, "Cannot be qualified as precise.", "precise");
+    }
+}
+
 bool TParseContext::isExtensionEnabled(TExtension extension) const
 {
     return IsExtensionEnabled(extensionBehavior(), extension);
@@ -2198,6 +2211,7 @@ TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &ty
     TPublicType returnType     = typeSpecifier;
     returnType.qualifier       = typeQualifier.qualifier;
     returnType.invariant       = typeQualifier.invariant;
+    returnType.precise         = typeQualifier.precise;
     returnType.layoutQualifier = typeQualifier.layoutQualifier;
     returnType.memoryQualifier = typeQualifier.memoryQualifier;
     returnType.precision       = typeSpecifier.precision;
@@ -2212,6 +2226,8 @@ TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &ty
 
     checkInvariantVariableQualifier(returnType.invariant, returnType.qualifier,
                                     typeSpecifier.getLine());
+    checkPreciseVariableQualifier(returnType.precise, returnType.qualifier,
+                                  typeSpecifier.getLine());
 
     checkWorkGroupSizeIsNotSpecified(typeSpecifier.getLine(), returnType.layoutQualifier);
 
@@ -2645,7 +2661,7 @@ TIntermDeclaration *TParseContext::parseSingleArrayInitDeclaration(
     return declaration;
 }
 
-TIntermInvariantDeclaration *TParseContext::parseInvariantDeclaration(
+TIntermInvariantPreciseDeclaration *TParseContext::parseInvariantPreciseDeclaration(
     const TTypeQualifierBuilder &typeQualifierBuilder,
     const TSourceLoc &identifierLoc,
     const ImmutableString &identifier,
@@ -2653,33 +2669,33 @@ TIntermInvariantDeclaration *TParseContext::parseInvariantDeclaration(
 {
     TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(mDiagnostics);
 
-    if (!typeQualifier.invariant)
+    if (!typeQualifier.invariant && !typeQualifier.precise)
     {
-        error(identifierLoc, "Expected invariant", identifier);
+        error(identifierLoc, "Expected invariant or precise", identifier);
         return nullptr;
     }
-    if (!checkIsAtGlobalLevel(identifierLoc, "invariant varying"))
+    if (typeQualifier.invariant && !checkIsAtGlobalLevel(identifierLoc, "invariant varying"))
     {
         return nullptr;
     }
     if (!symbol)
     {
-        error(identifierLoc, "undeclared identifier declared as invariant", identifier);
+        error(identifierLoc, "undeclared identifier declared as invariant or precise", identifier);
         return nullptr;
     }
     if (!IsQualifierUnspecified(typeQualifier.qualifier))
     {
-        error(identifierLoc, "invariant declaration specifies qualifier",
+        error(identifierLoc, "invariant or precise declaration specifies qualifier",
               getQualifierString(typeQualifier.qualifier));
     }
     if (typeQualifier.precision != EbpUndefined)
     {
-        error(identifierLoc, "invariant declaration specifies precision",
+        error(identifierLoc, "invariant or precise declaration specifies precision",
               getPrecisionString(typeQualifier.precision));
     }
     if (!typeQualifier.layoutQualifier.isEmpty())
     {
-        error(identifierLoc, "invariant declaration specifies layout", "'layout'");
+        error(identifierLoc, "invariant or precise declaration specifies layout", "'layout'");
     }
 
     const TVariable *variable = getNamedVariable(identifierLoc, identifier, symbol);
@@ -2691,6 +2707,7 @@ TIntermInvariantDeclaration *TParseContext::parseInvariantDeclaration(
 
     checkInvariantVariableQualifier(typeQualifier.invariant, type.getQualifier(),
                                     typeQualifier.line);
+    checkPreciseVariableQualifier(typeQualifier.precise, type.getQualifier(), typeQualifier.line);
     checkMemoryQualifierIsNotSpecified(typeQualifier.memoryQualifier, typeQualifier.line);
 
     symbolTable.addInvariantVarying(*variable);
@@ -2698,7 +2715,8 @@ TIntermInvariantDeclaration *TParseContext::parseInvariantDeclaration(
     TIntermSymbol *intermSymbol = new TIntermSymbol(variable);
     intermSymbol->setLine(identifierLoc);
 
-    return new TIntermInvariantDeclaration(intermSymbol, identifierLoc);
+    return new TIntermInvariantPreciseDeclaration(intermSymbol, typeQualifier.precise,
+                                                  identifierLoc);
 }
 
 void TParseContext::parseDeclarator(TPublicType &publicType,
@@ -3037,6 +3055,8 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
 
     checkInvariantVariableQualifier(typeQualifier.invariant, typeQualifier.qualifier,
                                     typeQualifier.line);
+    checkPreciseVariableQualifier(typeQualifier.precise, typeQualifier.qualifier,
+                                  typeQualifier.line);
 
     // It should never be the case, but some strange parser errors can send us here.
     if (layoutQualifier.isEmpty())
@@ -4824,6 +4844,7 @@ TFieldList *TParseContext::addStructDeclaratorListWithQualifiers(
     typeSpecifier->layoutQualifier = typeQualifier.layoutQualifier;
     typeSpecifier->memoryQualifier = typeQualifier.memoryQualifier;
     typeSpecifier->invariant       = typeQualifier.invariant;
+    typeSpecifier->precise         = typeQualifier.precise;
     if (typeQualifier.precision != EbpUndefined)
     {
         typeSpecifier->precision = typeQualifier.precision;

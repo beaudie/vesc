@@ -87,12 +87,17 @@ void TOutputVulkanGLSLForMetal::writeVariableType(const TType &type, const TSymb
     TOutputVulkanGLSL::writeVariableType(overrideType, symbol);
 }
 
-bool TOutputVulkanGLSLForMetal::visitInvariantDeclaration(Visit visit,
-                                                          TIntermInvariantDeclaration *node)
+bool TOutputVulkanGLSLForMetal::visitInvariantPreciseDeclaration(
+    Visit visit,
+    TIntermInvariantPreciseDeclaration *node)
 {
     TInfoSinkBase &out = objSink();
     ASSERT(visit == PreVisit);
     const TIntermSymbol *symbol = node->getSymbol();
+
+    // TODO: Add support for |precise|.  http://anglebug.com/2634
+    ASSERT(node->isInvariant());
+
     if (!ShoudRemoveInvariant(symbol->getType()))
     {
         out << "invariant ";

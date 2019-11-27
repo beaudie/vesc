@@ -117,7 +117,8 @@ class CollectVariablesTraverser : public TIntermTraverser
                               GLenum shaderType,
                               const TExtensionBehavior &extensionBehavior);
 
-    bool visitInvariantDeclaration(Visit visit, TIntermInvariantDeclaration *node) override;
+    bool visitInvariantPreciseDeclaration(Visit visit,
+                                          TIntermInvariantPreciseDeclaration *node) override;
     void visitSymbol(TIntermSymbol *symbol) override;
     bool visitDeclaration(Visit, TIntermDeclaration *node) override;
     bool visitBinary(Visit visit, TIntermBinary *binaryNode) override;
@@ -354,11 +355,12 @@ InterfaceBlock *CollectVariablesTraverser::recordGLInUsed(const TType &glInType)
     }
 }
 
-bool CollectVariablesTraverser::visitInvariantDeclaration(Visit visit,
-                                                          TIntermInvariantDeclaration *node)
+bool CollectVariablesTraverser::visitInvariantPreciseDeclaration(
+    Visit visit,
+    TIntermInvariantPreciseDeclaration *node)
 {
-    // We should not mark variables as active just based on an invariant declaration, so we don't
-    // traverse the symbols declared invariant.
+    // We should not mark variables as active just based on an invariant/precise declaration, so we
+    // don't traverse the symbols declared invariant.
     return false;
 }
 
