@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d07771f_bae0a649",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3282,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-27T21:27:28Z",
+      "side": 1,
+      "message": "Nit: \u0027return true\u0027 is not necessary since it is already covered by the return statement in the line above.",
+      "range": {
+        "startLine": 3282,
+        "startChar": 4,
+        "endLine": 3282,
+        "endChar": 16
+      },
+      "revId": "a04312841bcd0c6124f11ee62c35c6283e12badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89a48314_1bc39d70",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-11-27T21:27:28Z",
+      "side": 1,
+      "message": "Since this is a helper method that is an implementation detail of the other methods in this class, we should make it be private.",
+      "range": {
+        "startLine": 729,
+        "startChar": 0,
+        "endLine": 729,
+        "endChar": 62
+      },
+      "revId": "a04312841bcd0c6124f11ee62c35c6283e12badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
