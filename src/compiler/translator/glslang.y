@@ -158,7 +158,7 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 } while (0)
 %}
 
-%token <lex> INVARIANT HIGH_PRECISION MEDIUM_PRECISION LOW_PRECISION PRECISION
+%token <lex> INVARIANT PRECISE HIGH_PRECISION MEDIUM_PRECISION LOW_PRECISION PRECISION
 %token <lex> ATTRIBUTE CONST_QUAL BOOL_TYPE FLOAT_TYPE INT_TYPE UINT_TYPE
 %token <lex> BREAK CONTINUE DO ELSE FOR IF DISCARD RETURN SWITCH CASE DEFAULT
 %token <lex> BVEC2 BVEC3 BVEC4 IVEC2 IVEC3 IVEC4 VEC2 VEC3 VEC4 UVEC2 UVEC3 UVEC4
@@ -227,7 +227,7 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 %type <interm.precision> precision_qualifier
 %type <interm.layoutQualifier> layout_qualifier
 %type <interm.qualifier> interpolation_qualifier
-%type <interm.qualifierWrapper> storage_qualifier single_type_qualifier invariant_qualifier
+%type <interm.qualifierWrapper> storage_qualifier single_type_qualifier invariant_qualifier precise_qualifier
 %type <interm.typeQualifierBuilder> type_qualifier
 
 %type <interm.typeSpecifierNonArray> type_specifier_nonarray struct_specifier
@@ -620,9 +620,9 @@ declaration
         context->parseGlobalLayoutQualifier(*$1);
         $$ = nullptr;
     }
-    | type_qualifier IDENTIFIER SEMICOLON // e.g. to qualify an existing variable as invariant
+    | type_qualifier IDENTIFIER SEMICOLON // e.g. to qualify an existing variable as invariant or precise
     {
-        $$ = context->parseInvariantDeclaration(*$1, @2, ImmutableString($2.string), $2.symbol);
+        $$ = context->parseInvariantPreciseDeclaration(*$1, @2, ImmutableString($2.string), $2.symbol);
     }
     ;
 
@@ -796,6 +796,12 @@ invariant_qualifier
     }
     ;
 
+precise_qualifier
+    : PRECISE {
+        // empty
+    }
+    ;
+
 single_type_qualifier
     : storage_qualifier {
         context->checkLocalVariableConstStorageQualifier(*$1);
@@ -814,6 +820,9 @@ single_type_qualifier
     | invariant_qualifier {
         context->checkIsAtGlobalLevel(@1, "invariant");
         $$ = new TInvariantQualifierWrapper(@1);
+    }
+    | precise_qualifier {
+        $$ = new TPreciseQualifierWrapper(@1);
     }
     ;
 

@@ -676,6 +676,13 @@ bool CanBeInvariantESSL3OrGreater(TQualifier qualifier)
            IsBuiltinOutputVariable(qualifier);
 }
 
+// GLSL ES 2.20 Revision 6, 4.9 The Precise Qualifier
+bool CanBePrecise(TQualifier qualifier)
+{
+    // No restructions are specified.
+    return true;
+}
+
 bool IsBuiltinOutputVariable(TQualifier qualifier)
 {
     switch (qualifier)

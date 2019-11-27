@@ -139,6 +139,10 @@ void RendererVk::ensureCapsInitialized() const
     // We support getting image data for Textures and Renderbuffers.
     mNativeExtensions.getImageANGLE = true;
 
+    // Vulkan natively supports GL_EXT_gpu_shader5 features.  TODO(syoussefi): verify.  Also, this
+    // is not yet completely implemented.
+    mNativeExtensions.gpuShader5EXT = true;
+
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
     mNativeCaps.maxElementIndex  = std::numeric_limits<GLuint>::max() - 1;
     mNativeCaps.max3DTextureSize = LimitToInt(limitsVk.maxImageDimension3D);
