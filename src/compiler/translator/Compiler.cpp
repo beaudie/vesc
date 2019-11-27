@@ -487,6 +487,45 @@ void TCompiler::setASTMetadata(const TParseContext &parseContext)
     }
 }
 
+unsigned int TCompiler::getStructSize(const ShaderVariable &var) const
+{
+    unsigned int memorySize = 0;
+
+    if (var.type == GL_NONE)
+    {
+        // Have a structure, need to compute the structure size.
+        for (const auto &field : var.fields)
+        {
+            memorySize += field.getArraySizeProduct() * getStructSize(field);
+        }
+    }
+    else
+    {
+        memorySize += gl::VariableComponentSize(var.type);
+    }
+
+    return memorySize;
+}
+
+unsigned int TCompiler::getSharedMemorySize() const
+{
+    unsigned int sharedMemSize = 0;
+    for (const sh::ShaderVariable &var : mSharedVariables)
+    {
+        if (var.type == GL_NONE)
+        {
+            // Have a structure, need to compute the structure size.
+            sharedMemSize += var.getArraySizeProduct() * getStructSize(var);
+        }
+        else
+        {
+            sharedMemSize += var.getArraySizeProduct() * gl::VariableComponentSize(var.type);
+        }
+    }
+
+    return sharedMemSize;
+}
+
 bool TCompiler::validateAST(TIntermNode *root)
 {
     if ((mCompileOptions & SH_VALIDATE_AST) != 0)
@@ -767,8 +806,9 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     {
         ASSERT(!mVariablesCollected);
         CollectVariables(root, &mAttributes, &mOutputVariables, &mUniforms, &mInputVaryings,
-                         &mOutputVaryings, &mUniformBlocks, &mShaderStorageBlocks, &mInBlocks,
-                         mResources.HashFunction, &mSymbolTable, mShaderType, mExtensionBehavior);
+                         &mOutputVaryings, &mSharedVariables, &mUniformBlocks,
+                         &mShaderStorageBlocks, &mInBlocks, mResources.HashFunction, &mSymbolTable,
+                         mShaderType, mExtensionBehavior);
         collectInterfaceBlocks();
         mVariablesCollected = true;
         if (compileOptions & SH_USE_UNUSED_STANDARD_SHARED_BLOCKS)
@@ -1113,6 +1153,7 @@ void TCompiler::clearResults()
     mUniforms.clear();
     mInputVaryings.clear();
     mOutputVaryings.clear();
+    mSharedVariables.clear();
     mInterfaceBlocks.clear();
     mUniformBlocks.clear();
     mShaderStorageBlocks.clear();
