@@ -999,6 +999,9 @@ enum TQualifier
     EvqPrimitiveID,    // gl_PrimitiveID
     EvqLayer,          // gl_Layer
 
+    // GLSL ES 3.1 extension EXT_gpu_shader5 qualifiers
+    EvqPrecise,
+
     // end of list
     EvqLast
 };

@@ -45,6 +45,7 @@ class TOutputGLSLBase : public TIntermTraverser
     virtual void writeLayoutQualifier(TIntermTyped *variable);
     virtual void writeFieldLayoutQualifier(const TField *field);
     void writeInvariantQualifier(const TType &type);
+    void writePreciseQualifier(const TType &type);
     virtual void writeVariableType(const TType &type, const TSymbol *symbol);
     virtual bool writeVariablePrecision(TPrecision precision) = 0;
     void writeFunctionParameters(const TFunction *func);
@@ -65,7 +66,8 @@ class TOutputGLSLBase : public TIntermTraverser
     bool visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node) override;
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
     bool visitBlock(Visit visit, TIntermBlock *node) override;
-    bool visitInvariantDeclaration(Visit visit, TIntermInvariantDeclaration *node) override;
+    bool visitInvariantPreciseDeclaration(Visit visit,
+                                          TIntermInvariantPreciseDeclaration *node) override;
     bool visitDeclaration(Visit visit, TIntermDeclaration *node) override;
     bool visitLoop(Visit visit, TIntermLoop *node) override;
     bool visitBranch(Visit visit, TIntermBranch *node) override;
