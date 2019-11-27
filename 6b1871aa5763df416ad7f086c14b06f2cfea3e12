@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "e7cc7133_3f493d5f",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-27T16:38:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8433c135_d134390b",
+      "revId": "6b1871aa5763df416ad7f086c14b06f2cfea3e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69255550_8ae7325e",
         "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
         "patchSetId": 6
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "afaik \u0027group\u0027 can\u0027t contain \u0027lib\u0027 and I had to put it in a config. see \u0027gn help group\u0027 vs \u0027gn help config\u0027",
       "parentUuid": "69255550_8ae7325e",
+      "revId": "6b1871aa5763df416ad7f086c14b06f2cfea3e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d003b6ec_3f3cd4b5",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-27T16:38:39Z",
+      "side": 1,
+      "message": "Thanks, yes I see it in documentation now. Figured it was some gn quirk.",
+      "parentUuid": "7ca933a0_5fa7a216",
       "revId": "6b1871aa5763df416ad7f086c14b06f2cfea3e12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
