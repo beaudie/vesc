@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e07ae0ce_08595674",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-27T15:57:53Z",
+      "side": 1,
+      "message": "nice",
+      "revId": "6b1871aa5763df416ad7f086c14b06f2cfea3e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72588d5c_bf5a7adf",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-27T15:57:53Z",
+      "side": 1,
+      "message": "Why the addition of all these \"if\" checks? Is there any way they could/would ever be false?",
+      "revId": "6b1871aa5763df416ad7f086c14b06f2cfea3e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69255550_8ae7325e",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-11-27T15:57:53Z",
+      "side": 1,
+      "message": "This seems strangely redundant to add a *_android config that then only updates libs if we\u0027re android. Do we need the config or can we just have the block from the config in here?",
+      "revId": "6b1871aa5763df416ad7f086c14b06f2cfea3e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
