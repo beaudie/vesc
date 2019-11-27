@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91880b96_0a1233fd",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-27T05:05:07Z",
+      "side": 1,
+      "message": "Hi, Geoff@,\nFor zeroTextures, the most simple (but tricky) way is to create zero video texture before texture 2D and Cube Map to prevent the destroy. Since video texture doesn\u0027t have initial texture concept, it is Ok for zero video texture be unbound by texture 2D (Pls correct me if I\u0027m wrong)\nWDYT?",
+      "revId": "e53e0f2f3449786e488a1cf30e15404a7a3b5275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
