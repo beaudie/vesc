@@ -671,4 +671,17 @@ int GetGeometryShaderMaxVertices(const ShHandle handle)
     return maxVertices;
 }
 
+unsigned int GetShaderSharedMemorySize(const ShHandle handle)
+{
+    ASSERT(handle);
+
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    unsigned int sharedMemorySize = compiler->getSharedMemorySize();
+    ASSERT(sharedMemorySize >= 0);
+    return sharedMemorySize;
+}
+
 }  // namespace sh
