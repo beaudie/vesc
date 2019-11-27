@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "8433c135_d134390b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-27T16:01:52Z",
+      "side": 1,
+      "message": "1. for consistency with the Metal design so we can use it going forward, and use the same pattern for all back-ends.\n2. seems like it could be useful at some point. we can fail early if vkWhatever APIs aren\u0027t available.",
+      "parentUuid": "13719945_fc9a872e",
+      "revId": "6b1871aa5763df416ad7f086c14b06f2cfea3e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "69255550_8ae7325e",
         "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
         "patchSetId": 6
@@ -65,6 +83,24 @@
       "writtenOn": "2019-11-27T15:57:53Z",
       "side": 1,
       "message": "This seems strangely redundant to add a *_android config that then only updates libs if we\u0027re android. Do we need the config or can we just have the block from the config in here?",
+      "revId": "6b1871aa5763df416ad7f086c14b06f2cfea3e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ca933a0_5fa7a216",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-27T16:01:52Z",
+      "side": 1,
+      "message": "afaik \u0027group\u0027 can\u0027t contain \u0027lib\u0027 and I had to put it in a config. see \u0027gn help group\u0027 vs \u0027gn help config\u0027",
+      "parentUuid": "69255550_8ae7325e",
       "revId": "6b1871aa5763df416ad7f086c14b06f2cfea3e12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
