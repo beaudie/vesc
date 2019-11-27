@@ -8,6 +8,7 @@
 
 #include "common/utilities.h"
 #include <GLSLANG/ShaderVars.h>
+#include "GLES3/gl3.h"
 #include "common/mathutil.h"
 #include "common/platform.h"
 
@@ -188,6 +189,42 @@ size_t VariableComponentSize(GLenum type)
             return sizeof(GLint);
         case GL_UNSIGNED_INT:
             return sizeof(GLuint);
+        case GL_FLOAT_VEC2:
+            return sizeof(GLfloat) * 2;
+        case GL_FLOAT_VEC3:
+            return sizeof(GLfloat) * 3;
+        case GL_FLOAT_VEC4:
+            return sizeof(GLfloat) * 4;
+        case GL_BOOL_VEC2:
+        case GL_INT_VEC2:
+            return sizeof(GLint) * 2;
+        case GL_BOOL_VEC3:
+        case GL_INT_VEC3:
+            return sizeof(GLint) * 3;
+        case GL_BOOL_VEC4:
+        case GL_INT_VEC4:
+            return sizeof(GLint) * 4;
+        case GL_FLOAT_MAT2:
+            return sizeof(GLfloat) * 4;
+        case GL_FLOAT_MAT3:
+            return sizeof(GLfloat) * 9;
+        case GL_FLOAT_MAT4:
+            return sizeof(GLfloat) * 16;
+        case GL_FLOAT_MAT2x3:
+        case GL_FLOAT_MAT3x2:
+            return sizeof(GLfloat) * 2 * 3;
+        case GL_FLOAT_MAT2x4:
+        case GL_FLOAT_MAT4x2:
+            return sizeof(GLfloat) * 2 * 4;
+        case GL_FLOAT_MAT3x4:
+        case GL_FLOAT_MAT4x3:
+            return sizeof(GLfloat) * 3 * 4;
+        case GL_UNSIGNED_INT_VEC2:
+            return sizeof(GLuint) * 2;
+        case GL_UNSIGNED_INT_VEC3:
+            return sizeof(GLuint) * 3;
+        case GL_UNSIGNED_INT_VEC4:
+            return sizeof(GLuint) * 4;
         default:
             UNREACHABLE();
     }
