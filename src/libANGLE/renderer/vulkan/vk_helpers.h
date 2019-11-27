@@ -660,6 +660,7 @@ class ImageHelper final : public CommandGraphResource
 {
   public:
     ImageHelper();
+    ImageHelper(GLint samples);
     ImageHelper(ImageHelper &&other);
     ~ImageHelper() override;
 

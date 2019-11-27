@@ -74,6 +74,7 @@ void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
     switch (index.getType())
     {
         case gl::TextureType::_2D:
+        case gl::TextureType::_2DMultisample:
             *layerIndex = 0;
             *layerCount = 1;
             return;
@@ -89,6 +90,7 @@ void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
             return;
 
         case gl::TextureType::_2DArray:
+        case gl::TextureType::_2DMultisampleArray:
             *layerIndex = index.hasLayer() ? index.getLayerIndex() : 0;
             *layerCount = image->getLayerCount();
             return;
@@ -754,6 +756,16 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
                                     GLenum internalFormat,
                                     const gl::Extents &size)
 {
+    return setStorageMultisample(context, type, 1, internalFormat, size, true);
+}
+
+angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
+                                               gl::TextureType type,
+                                               GLsizei samples,
+                                               GLint internalformat,
+                                               const gl::Extents &size,
+                                               bool fixedSampleLocations)
+{
     ContextVk *contextVk = GetAs<ContextVk>(context->getImplementation());
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -762,8 +774,8 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
         releaseAndDeleteImage(contextVk);
     }
 
-    const vk::Format &format = renderer->getFormat(internalFormat);
-    ANGLE_TRY(ensureImageAllocated(contextVk, format));
+    const vk::Format &format = renderer->getFormat(internalformat);
+    ANGLE_TRY(ensureImageAllocated(contextVk, format, samples));
 
     if (mImage->valid())
     {
@@ -894,11 +906,14 @@ void TextureVk::releaseAndDeleteImage(ContextVk *contextVk)
     }
 }
 
-angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk, const vk::Format &format)
+angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk,
+                                              const vk::Format &format,
+                                              GLint samples)
 {
     if (mImage == nullptr)
     {
-        setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0, 0, true);
+        setImageHelper(contextVk, new vk::ImageHelper(samples), mState.getType(), format, 0, 0, 0,
+                       true);
     }
     else
     {
@@ -991,7 +1006,7 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
 
     if (!size.empty())
     {
-        ANGLE_TRY(ensureImageAllocated(contextVk, format));
+        ANGLE_TRY(ensureImageAllocated(contextVk, format, 1));
     }
 
     return angle::Result::Continue;
@@ -1571,17 +1586,6 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
-                                               gl::TextureType type,
-                                               GLsizei samples,
-                                               GLint internalformat,
-                                               const gl::Extents &size,
-                                               bool fixedSampleLocations)
-{
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
-}
-
 angle::Result TextureVk::initializeContents(const gl::Context *context,
                                             const gl::ImageIndex &imageIndex)
 {
@@ -1673,9 +1677,9 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     uint32_t layerCount;
     gl_vk::GetExtentsAndLayerCount(mState.getType(), extents, &vkExtent, &layerCount);
 
-    ANGLE_TRY(mImage->init(contextVk, mState.getType(), vkExtent, format, 1, mImageUsageFlags,
-                           mState.getEffectiveBaseLevel(), mState.getEffectiveMaxLevel(),
-                           levelCount, layerCount));
+    ANGLE_TRY(mImage->init(contextVk, mState.getType(), vkExtent, format, mImage->getSamples(),
+                           mImageUsageFlags, mState.getEffectiveBaseLevel(),
+                           mState.getEffectiveMaxLevel(), levelCount, layerCount));
 
     const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
