@@ -1247,6 +1247,15 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
         maxVersion = std::min(maxVersion, gl::Version(3, 0));
     }
 
+    // ES3.1 requires support for multisampled textures.  If the physical device doesn't support
+    // multisampled storage images, we can't support ES3.1.
+    if ((mPhysicalDeviceProperties.limits.framebufferColorSampleCounts <= 1) &&
+        (mPhysicalDeviceProperties.limits.framebufferDepthSampleCounts <= 1) &&
+        (mPhysicalDeviceProperties.limits.framebufferStencilSampleCounts <= 1))
+    {
+        maxVersion = std::min(maxVersion, gl::Version(3, 0));
+    }
+
     // Limit to ES2.0 if there are any blockers for 3.0.
     // TODO: http://anglebug.com/3972 Limit to GLES 2.0 if flat shading can't be emulated
 
