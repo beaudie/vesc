@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a484792_ef7bc632",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-27T16:34:50Z",
+      "side": 1,
+      "message": "nit: comment needs updating.",
+      "range": {
+        "startLine": 385,
+        "startChar": 7,
+        "endLine": 385,
+        "endChar": 50
+      },
+      "revId": "11dfbcd0c81a471fb7bb5c38978ccafb2c0f6f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
