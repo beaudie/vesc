@@ -34,6 +34,24 @@
       "revId": "e53e0f2f3449786e488a1cf30e15404a7a3b5275",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f540f2cf_ce55d271",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-11-28T00:39:57Z",
+      "side": 1,
+      "message": "Sry.Let me provide more background about this special texture type.\n\nGL_TEXTURE_VIDEO_IMAGE_WEBGL is not a texture target that exists in OpenGLES/OpenGL. It will be mapped to GL_TEXTURE_2D, GL_TEXTURE_EXTERNAL_OES or GL_TEXTURE_RECTANGLE on different OS. \n\nWhen we create a zeroTexature for VideoImage(VIDEO_IMAGE_WEBGL), it will invoke createTexture, which will invoke glBindTexture function and been bound as its native type. \n\nPer my understanding, all zero texatures are bound to 0 texture unit with different texture type previously. But when we add VideoImage and create its zeroTexture after 2D zeroTexature creation, a native glBindTexture call with its real native texture type(e.g. TEXTURE_2D, TEXTURE_EXTERNAL_OES or TEXTURE_RECTANGLE) will unbound previous texture object. For example it looks like the following operation on gl renderer:\n//Create GL_TEXTURE_2D zeroTexture\nglActiveTexture(GL_TEXTURE0);\nglGenTexture(1, \u0026zero2DTexture);\nglBindTexture(TEXTURE_2D, zero2DTexture);\n\n//Create GL_TEXTURE_VIDEO_IMAGE_WEBGL zeroTexture but mapping to GL_TEXTURE_2D in native.\nglActiveTexture(GL_TEXTURE0);\nglGenTexture(1, \u0026zeroVideoTexture);\nglBindTexture(TEXTURE_2D, zeroVideoTexture).\n\nAs you can see, it will unbound previous zero2DTexture.\n\nIn most cases, it won\u0027t trigger issue. But in OpenGLES 1.x, it GL_TEXTURE_2D, quote from OpenGLES spec:\n    // [OpenGL ES 2.0.24] section 3.7 page 83:\n    // In the initial state, TEXTURE_2D and TEXTURE_CUBE_MAP have two-dimensional\n    // and cube map texture state vectors respectively associated with them.\n    // In order that access to these initial textures not be lost, they are treated as texture\n    // objects all of whose names are 0.\nthis will trigger a issue because the \"initial texture\" has been unbound. And this issue has been caught by angle GLES1 conformance tests(e.g. PointSprite, TexCombine).\nSo, I think we should create zeroTexture for VideoImage before we create zeroTexture for 2D.\n\nWDYT?",
+      "parentUuid": "f7c2b6f2_36d915f8",
+      "revId": "e53e0f2f3449786e488a1cf30e15404a7a3b5275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
