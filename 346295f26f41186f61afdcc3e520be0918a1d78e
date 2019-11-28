@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "8339169e_4f945030",
+        "filename": "scripts/gen_gl_enum_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-28T17:05:38Z",
+      "side": 1,
+      "message": "Mohan, if you just need format and type enums, can\u0027t you specify the groups for them?\n\nYou can pretty easily pull the existing file into white box tests. Just takes a bit of reordering of the build files.",
+      "parentUuid": "791b736f_9183bf35",
+      "revId": "346295f26f41186f61afdcc3e520be0918a1d78e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2fad9828_cc17858f",
         "filename": "scripts/gen_gl_enum_utils.py",
         "patchSetId": 2
