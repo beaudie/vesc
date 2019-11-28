@@ -1338,9 +1338,7 @@ void ProgramVk::updateBuffersDescriptorSet(ContextVk *contextVk,
 
         if (isStorageBuffer)
         {
-            // We set the SHADER_READ_BIT to be conservative.
-            bufferHelper.onWrite(contextVk, recorder,
-                                 VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT);
+            bufferHelper.onWrite(contextVk, recorder, VK_ACCESS_SHADER_WRITE_BIT);
         }
         else
         {
@@ -1402,10 +1400,7 @@ void ProgramVk::updateAtomicCounterBuffersDescriptorSet(ContextVk *contextVk,
         BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
-        // We set SHADER_READ_BIT to be conservative.
-        bufferHelper.onWrite(contextVk, recorder,
-                             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT);
-
+        bufferHelper.onWrite(contextVk, recorder, VK_ACCESS_SHADER_WRITE_BIT);
         writtenBindings.set(binding);
     }
 
