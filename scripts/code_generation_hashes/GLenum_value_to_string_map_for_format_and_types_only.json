@@ -1,0 +1,8 @@
+{
+  "scripts/gen_format_and_type_enum.py":
+    "7b42ed24f0b2807b56461afab10c25ad",
+  "src/tests/gl_tests/format_and_type_enums.json":
+    "c708b6991097781829c00d60098320bc",
+  "src/tests/gl_tests/gl_enum_to_string_formats_and_types_autogen.cpp":
+    "640b9b9b84d3c9ce2646a8373a4c8cd4"
+}

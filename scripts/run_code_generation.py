@@ -89,6 +89,8 @@ generators = {
         'scripts/generate_entry_points.py',
     'GLenum value to string map':
         'scripts/gen_gl_enum_utils.py',
+    'GLenum value to string map for format and types only':
+        'scripts/gen_format_and_type_enum.py',
     'GL format map':
         'src/libANGLE/gen_format_map.py',
     'uniform type':
