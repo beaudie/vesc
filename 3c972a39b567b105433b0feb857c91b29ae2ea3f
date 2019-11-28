@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6f564a_88732ada",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-28T17:06:46Z",
+      "side": 1,
+      "message": "Seems to me more like UpdateCurrentTestResult",
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e36cc185_7a472b25",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-28T17:06:46Z",
+      "side": 1,
+      "message": "Is this for initialization? It\u0027s missing elapsedTimeSeconds\nCould you do it in the TestResult constructor?",
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d64bda4a_aea8444c",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-28T17:06:46Z",
+      "side": 1,
+      "message": "Could forward to GetCurrentTestResult to update the elapsed time too",
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0f0d7c7_7352f85a",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-28T17:06:46Z",
+      "side": 1,
+      "message": "could forward to GetCurrentTestResult",
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "599e5dcf_a019cacd",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-28T17:06:46Z",
+      "side": 1,
+      "message": "Why is this necessary? Just double checking because (for example) on Android this adds 60 seconds to the total end2end test suite. (and much worse if this ends up being used for dEQP)",
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b863d210_3fb562a7",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-28T17:06:46Z",
+      "side": 1,
+      "message": "From my understanding, this doesn\u0027t yet parse any expectations, right? Would be more clear with the name printFailuresAndReturnCount()\n\nOr if expectations are parsed, it seems to be missing a comparison result.type !\u003d expectation.type below",
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "162cc894_be33ae1b",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-28T17:06:46Z",
+      "side": 1,
+      "message": "nit: Is this meant to be commented or removed?",
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4b3b930_0fe90cc6",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-11-28T17:06:46Z",
+      "side": 1,
+      "message": "nit: unnecessary",
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
