@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "791b736f_9183bf35",
+        "filename": "scripts/gen_gl_enum_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-28T16:36:08Z",
+      "side": 1,
+      "message": "Geoff, we were aware of it when we started work on this but the issue is 2 fold -\n\n1) we do not know the group any enum belongs to, there was no O(1) way to retrieve the enum group for a given enum and we ended up trying out all the enum groups for every enum we encountered\n2) that file is compiled only on trace enabled builds, i think that decision was made due to the sheer binary size increase that file brings in\n\nWe are about to upload another patchset where we created our own data.json file that contains JUST the format and type enums and we auto gen the swicth statement from that file. IMO, it is a more leaner and cleaner solution.",
+      "parentUuid": "e7d6695b_90bd4dbe",
+      "revId": "346295f26f41186f61afdcc3e520be0918a1d78e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2fad9828_cc17858f",
         "filename": "scripts/gen_gl_enum_utils.py",
         "patchSetId": 2
@@ -53,6 +71,30 @@
       "writtenOn": "2019-11-26T15:07:48Z",
       "side": 1,
       "message": "Not a big deal, but could these instead be like:\n\n    case GL_2X_BIT_ATI:\n        return \"GL_2X_BIT_ATI\";\n\nWouldn\u0027t that be clearer?",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 34
+      },
+      "revId": "346295f26f41186f61afdcc3e520be0918a1d78e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30dd28ee_f2e535fc",
+        "filename": "src/tests/gl_tests/gl_enum_to_string_flattened_autogen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-28T16:36:08Z",
+      "side": 1,
+      "message": "shabi, we started taking a closer look at this and found out that the existing script that\nwe modified was not \"complete\". There were many times we had enums with value, say 0x01,\nthat map to about 10 different strings and the script would just pick the first one in\nlexicographical order\n\nwill upload a new patch where we created a new json file that contains just the format and\ntype enums and autogen a switch from there.",
+      "parentUuid": "239d4f7f_f3d1e81a",
       "range": {
         "startLine": 25,
         "startChar": 0,
