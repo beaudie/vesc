@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "043c61ad_602da91e",
+        "filename": "src/tests/gl_tests/FormatPrintTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-28T23:03:00Z",
+      "side": 1,
+      "message": "at this point say we get -\n    \"internalFormat.first\" as \"0x1907\"\n    \"typeFormatPair.first\" as \"0x8368\"",
+      "revId": "798d8bf162eece8f8c177e5373a99be1da38e946",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
