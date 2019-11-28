@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "947fb4f8_9e5670a4",
+        "filename": "scripts/gen_gl_enum_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-28T17:48:48Z",
+      "side": 1,
+      "message": "I think the current solution makes the code more difficult to maintain.\n\nMy thinking is you are likely running into bugs in gl.xml. Can you upload a version that uses the current function and we can go through the missing entries?\n\nAbout DefaultGroup: call OutputGLenumString. This falls back from your selected category to DefaultGroup automatically.\n\nIf there\u0027s a ton of gl.xml errors, too many to fix, we can always expand DefaultGroup instead of adding a totally new query.",
+      "parentUuid": "3292c954_0455fbb0",
+      "revId": "346295f26f41186f61afdcc3e520be0918a1d78e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2fad9828_cc17858f",
         "filename": "scripts/gen_gl_enum_utils.py",
         "patchSetId": 2
@@ -125,6 +143,52 @@
         "startChar": 28,
         "endLine": 205,
         "endChar": 54
+      },
+      "revId": "346295f26f41186f61afdcc3e520be0918a1d78e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "358fc315_2511eea3",
+        "filename": "src/tests/gl_tests/FormatPrintTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-28T17:48:48Z",
+      "side": 1,
+      "message": "this should be the InternalFormat category",
+      "range": {
+        "startLine": 67,
+        "startChar": 90,
+        "endLine": 67,
+        "endChar": 95
+      },
+      "revId": "346295f26f41186f61afdcc3e520be0918a1d78e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1289b14e_a93f15f8",
+        "filename": "src/tests/gl_tests/FormatPrintTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-28T17:48:48Z",
+      "side": 1,
+      "message": "this should be PixelType",
+      "range": {
+        "startLine": 68,
+        "startChar": 65,
+        "endLine": 68,
+        "endChar": 79
       },
       "revId": "346295f26f41186f61afdcc3e520be0918a1d78e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
