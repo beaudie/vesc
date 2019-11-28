@@ -22,6 +22,30 @@
       "revId": "7fd3ad466b4def80115c28f473f7cd9a1b024f98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b69f3c85_01927f9f",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-28T15:05:25Z",
+      "side": 0,
+      "message": "Yeah, if you want to try it, go ahead.\n\nThis currently might be blocked on issues with Chrome using the new loader build.",
+      "parentUuid": "94e3649c_bf7f5cc0",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 60
+      },
+      "revId": "7fd3ad466b4def80115c28f473f7cd9a1b024f98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
