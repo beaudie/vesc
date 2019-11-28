@@ -52,6 +52,24 @@
       "revId": "e53e0f2f3449786e488a1cf30e15404a7a3b5275",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "135ac3cc_7965603e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-11-28T15:43:18Z",
+      "side": 1,
+      "message": "Ok, I understand but this is not an issue.  A texture will only be deleted when another is bound IF the texture has already been deleted with glDeleteTextures.  We don\u0027t call glDeleteTextures until Texture::~Texture is called which will not happen until the context is destroyed.  You are safe here.\n\nYou can think of textures as ref-counted objects.  glGenTextures adds a ref and glDeleteTextures removes one.  While a texture is bound, a ref is also added. It is not possible to remove the last reference until glDeleteTextures is called.  You also cannot delete the zero texture.",
+      "parentUuid": "f540f2cf_ce55d271",
+      "revId": "e53e0f2f3449786e488a1cf30e15404a7a3b5275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
