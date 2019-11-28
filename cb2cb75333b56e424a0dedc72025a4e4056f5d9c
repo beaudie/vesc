@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5e064e3b_683f6880",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2019-11-28T03:02:23Z",
+      "side": 1,
+      "message": "I\u0027ve optimized this function to O(m*log n) time, down from O(m*n) time (m \u003d attachments, n \u003d samplers)\nThis uses a std::set of currently bound textures, which has O(log n) insert/remove/find time.\n\nO(n+m) is also possible, but not as optimal for small m.\n\nWe pay an O(log n) price for every sampler we update, which amortizes the cost over multiple calls rather than paying one m*n price when we want to check.",
+      "parentUuid": "d0a1545f_9cf86508",
+      "range": {
+        "startLine": 2011,
+        "startChar": 18,
+        "endLine": 2011,
+        "endChar": 48
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43a6a7fc_beabd69a",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0ac37db_1864a070",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2019-11-28T03:02:23Z",
+      "side": 1,
+      "message": "If DIRTY_BIT_RENDERPASS_SPLIT is set, then we will still only split the render pass if we detect a rendering feedback loop.\nThis should be clarified with the refactoring suggested in your other comment.",
+      "parentUuid": "43a6a7fc_beabd69a",
+      "range": {
+        "startLine": 753,
+        "startChar": 0,
+        "endLine": 757,
+        "endChar": 5
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ec309dec_828059d6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2019-11-28T03:02:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9927ec4_cde7a939",
+      "range": {
+        "startLine": 2126,
+        "startChar": 16,
+        "endLine": 2126,
+        "endChar": 42
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0c4cb83_1778f77a",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c23ddf0d_3b05850a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2019-11-28T03:02:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0c4cb83_1778f77a",
+      "range": {
+        "startLine": 2129,
+        "startChar": 4,
+        "endLine": 2129,
+        "endChar": 41
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "6462e7e5_7dc6fc6f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2143,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2019-11-28T03:02:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "783113bd_4203532e",
+      "range": {
+        "startLine": 2143,
+        "startChar": 8,
+        "endLine": 2143,
+        "endChar": 35
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "561e7798_ed48a781",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
@@ -137,6 +257,30 @@
       "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55b5bba4_8cc0e47f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2019-11-28T03:02:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "561e7798_ed48a781",
+      "range": {
+        "startLine": 438,
+        "startChar": 8,
+        "endLine": 438,
+        "endChar": 34
+      },
+      "revId": "cb2cb75333b56e424a0dedc72025a4e4056f5d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
