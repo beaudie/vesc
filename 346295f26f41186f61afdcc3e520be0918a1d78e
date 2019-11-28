@@ -127,6 +127,24 @@
     },
     {
       "key": {
+        "uuid": "91c01340_15b9a966",
+        "filename": "scripts/gen_gl_enum_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-28T21:54:02Z",
+      "side": 1,
+      "message": "im not sure i understand your recommendation. Calling \"OutputGLenumString\" requires us\nto pass in an enum group. We wont know which group an enum belongs to in the first place.\nIt is possible that the enum we are looking up belongs to the pixel format group and if\nwe fallback to a search in the default category, we will fail.\n\nCan you elaborate a little bit on what you mean or walk us through a couple usecases\non how you want to see the lookup implemented?",
+      "parentUuid": "947fb4f8_9e5670a4",
+      "revId": "346295f26f41186f61afdcc3e520be0918a1d78e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2fad9828_cc17858f",
         "filename": "scripts/gen_gl_enum_utils.py",
         "patchSetId": 2
