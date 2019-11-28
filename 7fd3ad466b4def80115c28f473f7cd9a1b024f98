@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94e3649c_bf7f5cc0",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-28T15:03:03Z",
+      "side": 0,
+      "message": "Is it tested that this would continue to work? Do you want me to try it?",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 60
+      },
+      "revId": "7fd3ad466b4def80115c28f473f7cd9a1b024f98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
