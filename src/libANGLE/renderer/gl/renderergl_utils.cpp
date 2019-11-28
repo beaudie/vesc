@@ -1602,6 +1602,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
 
     ANGLE_FEATURE_CONDITION(features, rgbDXT1TexturesSampleZeroAlpha, IsApple());
 
+    ANGLE_FEATURE_CONDITION(
+        features, emulatePrimitiveRestartFixedIndex,
+        functions->isAtLeastGL(gl::Version(3, 1)) && functions->isAtMostGL(gl::Version(4, 2)));
+
     ANGLE_FEATURE_CONDITION(features, unfoldShortCircuits, IsApple());
 
     ANGLE_FEATURE_CONDITION(features, removeDynamicIndexingOfSwizzledVector,

@@ -185,6 +185,13 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
 
     angle::Matrix<GLfloat>::setToIdentity(mPathMatrixProj);
     angle::Matrix<GLfloat>::setToIdentity(mPathMatrixMV);
+
+    if (mFeatures.emulatePrimitiveRestartFixedIndex.enabled)
+    {
+        // Initialize the primitive restart value.  Some drivers have issues with non-indexed draw
+        // calls when primitive restart has been enabled but the index has the default value of 0.
+        setPrimitiveRestartIndex(0xFFFFFFFF);
+    }
 }
 
 StateManagerGL::~StateManagerGL() {}
