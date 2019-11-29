@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b65f3470_1ce16ae2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-29T12:50:02Z",
+      "side": 1,
+      "message": "nit: can you indicate that you\u0027re adding a regression test here? I was a bit confused by the message.",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 62
+      },
+      "revId": "354e7f26eeec08601beb7eff695c3ab33fbe8e9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d633299_f90b7462",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-29T12:50:02Z",
+      "side": 1,
+      "message": "nit: it\u0027s nice if we can use the GLTexture RAII type instead of GenTextures. Can you move this into the test?\n\nalso can you do the same for the program and use ANGLE_GL_PROGRAM?",
+      "range": {
+        "startLine": 443,
+        "startChar": 0,
+        "endLine": 457,
+        "endChar": 5
+      },
+      "revId": "354e7f26eeec08601beb7eff695c3ab33fbe8e9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
