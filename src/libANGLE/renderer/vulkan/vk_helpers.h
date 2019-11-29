@@ -557,6 +557,17 @@ class BufferHelper final : public CommandGraphResource
 
     void changeQueue(uint32_t newQueueFamilyIndex, CommandBuffer *commandBuffer);
 
+    bool canCoalesceReadBarrier(ContextVk *contextVk, VkAccessFlags readAccessType);
+    bool canCoalesceWriteBarrier(ContextVk *contextVk, VkAccessFlags writeAccessType);
+
+    void updateReadBarrier(VkAccessFlags readAccessType,
+                           VkAccessFlags *barrierSrcOut,
+                           VkAccessFlags *barrierDstOut);
+
+    void updateWriteBarrier(VkAccessFlags writeAccessType,
+                            VkAccessFlags *barrierSrcOut,
+                            VkAccessFlags *barrierDstOut);
+
   private:
     angle::Result mapImpl(ContextVk *contextVk);
     bool needsOnReadBarrier(VkAccessFlags readAccessType,

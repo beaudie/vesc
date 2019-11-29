@@ -157,32 +157,43 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     auto *sourceBuffer   = GetAs<BufferVk>(source);
 
-    vk::CommandBuffer *commandBuffer = nullptr;
+    const VkBufferCopy copyRegion = {static_cast<VkDeviceSize>(sourceOffset),
+                                     static_cast<VkDeviceSize>(destOffset),
+                                     static_cast<VkDeviceSize>(size)};
 
-    // Handle self-dependency especially.
-    if (sourceBuffer->mBuffer.getBuffer().getHandle() == mBuffer.getBuffer().getHandle())
+    if (contextVk->getFeatures().commandGraph.enabled)
     {
-        // We set the TRANSFER_READ_BIT to be conservative.
-        mBuffer.onSelfReadWrite(contextVk,
-                                VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT);
+        vk::CommandBuffer *commandBuffer = nullptr;
 
-        ANGLE_TRY(mBuffer.recordCommands(contextVk, &commandBuffer));
+        // Handle self-dependency especially.
+        if (sourceBuffer->mBuffer.getBuffer().getHandle() == mBuffer.getBuffer().getHandle())
+        {
+            // We set the TRANSFER_READ_BIT to be conservative.
+            mBuffer.onSelfReadWrite(contextVk,
+                                    VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT);
+
+            ANGLE_TRY(mBuffer.recordCommands(contextVk, &commandBuffer));
+        }
+        else
+        {
+            ANGLE_TRY(mBuffer.recordCommands(contextVk, &commandBuffer));
+
+            sourceBuffer->mBuffer.onReadByBuffer(contextVk, &mBuffer, VK_ACCESS_TRANSFER_READ_BIT,
+                                                 VK_ACCESS_TRANSFER_WRITE_BIT);
+        }
+
+        // Enqueue a copy command on the GPU.
+        commandBuffer->copyBuffer(sourceBuffer->getBuffer().getBuffer(), mBuffer.getBuffer(), 1,
+                                  &copyRegion);
     }
     else
     {
-        ANGLE_TRY(mBuffer.recordCommands(contextVk, &commandBuffer));
-
-        sourceBuffer->mBuffer.onReadByBuffer(contextVk, &mBuffer, VK_ACCESS_TRANSFER_READ_BIT,
-                                             VK_ACCESS_TRANSFER_WRITE_BIT);
+        contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, &sourceBuffer->getBuffer());
+        contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, &mBuffer);
+        vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
+        commandBuffer.copyBuffer(sourceBuffer->getBuffer().getBuffer(), mBuffer.getBuffer(), 1,
+                                 &copyRegion);
     }
-
-    // Enqueue a copy command on the GPU.
-    VkBufferCopy copyRegion = {static_cast<VkDeviceSize>(sourceOffset),
-                               static_cast<VkDeviceSize>(destOffset),
-                               static_cast<VkDeviceSize>(size)};
-
-    commandBuffer->copyBuffer(sourceBuffer->getBuffer().getBuffer(), mBuffer.getBuffer(), 1,
-                              &copyRegion);
 
     // The new destination buffer data may require a conversion for the next draw, so mark it dirty.
     onDataChanged();
@@ -351,13 +362,22 @@ angle::Result BufferVk::copyToBuffer(ContextVk *contextVk,
                                      uint32_t copyCount,
                                      const VkBufferCopy *copies)
 {
-    vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(destBuffer->recordCommands(contextVk, &commandBuffer));
-    commandBuffer->copyBuffer(mBuffer.getBuffer(), destBuffer->getBuffer(), copyCount, copies);
+    if (contextVk->getFeatures().commandGraph.enabled)
+    {
+        vk::CommandBuffer *commandBuffer;
+        ANGLE_TRY(destBuffer->recordCommands(contextVk, &commandBuffer));
+        commandBuffer->copyBuffer(mBuffer.getBuffer(), destBuffer->getBuffer(), copyCount, copies);
 
-    mBuffer.onReadByBuffer(contextVk, destBuffer, VK_ACCESS_TRANSFER_READ_BIT,
-                           VK_ACCESS_TRANSFER_WRITE_BIT);
-
+        mBuffer.onReadByBuffer(contextVk, destBuffer, VK_ACCESS_TRANSFER_READ_BIT,
+                               VK_ACCESS_TRANSFER_WRITE_BIT);
+    }
+    else
+    {
+        contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, destBuffer);
+        contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, &mBuffer);
+        vk::CommandBuffer &commandBuffer = contextVk->getOutsideRenderPassCommandBuffer();
+        commandBuffer.copyBuffer(mBuffer.getBuffer(), destBuffer->getBuffer(), copyCount, copies);
+    }
     return angle::Result::Continue;
 }
 
