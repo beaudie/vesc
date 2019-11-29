@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ac1171c_db1e15af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-11-29T14:41:21Z",
+      "side": 1,
+      "message": "A better wording? We _are_ storing read accesses, but in mCurrentWriteAccess instead of mCurrentReadAccess.\n\nMaybe something like: \"Fold read access into write flags on buffer writes\" or something along these lines",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "0af6e1a5186a7610fc748534049cfe78e66fcea2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
