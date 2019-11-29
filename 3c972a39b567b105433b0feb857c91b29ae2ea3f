@@ -378,6 +378,30 @@
     },
     {
       "key": {
+        "uuid": "945b7d49_473feeb1",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 1,
+      "message": "Interesting.\nhttps://chromium.googlesource.com/chromium/src/+/master/docs/testing/json_test_results_format.md has both \"time\" and \"times\".",
+      "parentUuid": "594cfbfd_2353e9ba",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 54
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "227687e8_24afb4bc",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -413,6 +437,30 @@
       "side": 1,
       "message": "I\u0027d like to keep this one as it doesn\u0027t need a (slow) std::stringstream. The code duplication is a bit irksome though.",
       "parentUuid": "227687e8_24afb4bc",
+      "range": {
+        "startLine": 206,
+        "startChar": 8,
+        "endLine": 206,
+        "endChar": 81
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d95331a_d1e7efdf",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 1,
+      "message": "Maybe a helper function in TestIdentifier, then?",
+      "parentUuid": "6632ec99_6dc74645",
       "range": {
         "startLine": 206,
         "startChar": 8,
@@ -695,6 +743,29 @@
     },
     {
       "key": {
+        "uuid": "aae3abab_88a89baa",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 1,
+      "message": "I think you missed this when merging the two functions.",
+      "range": {
+        "startLine": 353,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 0
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3975d13c_4de45c25",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -883,6 +954,30 @@
     },
     {
       "key": {
+        "uuid": "d01dfb4d_30fbbba1",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 1,
+      "message": "Well, you could have TestIdentifier constructor from a single string, but it wouldn\u0027t be obvious what it does.\nSo, I was thinking about \"static TestIdentifier TestIdentifier::parse(string)\".",
+      "parentUuid": "2f684a88_9375be51",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 474,
+        "endChar": 92
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0c5e1187_7db68910",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -918,6 +1013,30 @@
       "side": 1,
       "message": "Not sure. What\u0027s the concern?",
       "parentUuid": "0c5e1187_7db68910",
+      "range": {
+        "startLine": 543,
+        "startChar": 0,
+        "endLine": 543,
+        "endChar": 60
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e149d274_a2c6887e",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 1,
+      "message": "That output-\u003eresults[id] can construct a new TestResult, and you have outputResult.type !\u003d TestResultType::Skip below. Incidentally, 0 \u003d\u003d Crash, so the check below works well. But I\u0027d prefer it to be explicit.",
+      "parentUuid": "3366ab8a_ebed84ef",
       "range": {
         "startLine": 543,
         "startChar": 0,
@@ -1423,6 +1542,30 @@
     },
     {
       "key": {
+        "uuid": "1b699700_83d5cce4",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 1,
+      "message": "The actual command line might have more arguments than you print here.\n\"args\" has them all.",
+      "parentUuid": "94c5f975_9f2cb2d3",
+      "range": {
+        "startLine": 886,
+        "startChar": 22,
+        "endLine": 886,
+        "endChar": 89
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bf082536_14b4d82d",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -1470,6 +1613,30 @@
     },
     {
       "key": {
+        "uuid": "7f5595c4_bc6b33e7",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 1,
+      "message": "My concern it that I don\u0027t understand what \"Skip\" result means.\nReading the code, looks like if some test crashes, subsequent rests would have \"Skip\" result.\nThis was not obvious to me from the name, my interpretation was that tests that have \"Skip\" expectation would have this result.\nThus, I wanted to separate \"Skip\" and \"Did not run\" concepts.",
+      "parentUuid": "78c26373_9b1d1d30",
+      "range": {
+        "startLine": 916,
+        "startChar": 0,
+        "endLine": 919,
+        "endChar": 9
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "09505af2_d9516f85",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -1505,6 +1672,30 @@
       "side": 1,
       "message": "Failures are rare. Pretty sure this is what the Chromium test harness does. We don\u0027t need to worry about optimizing the error case.",
       "parentUuid": "09505af2_d9516f85",
+      "range": {
+        "startLine": 934,
+        "startChar": 45,
+        "endLine": 934,
+        "endChar": 90
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe0a9c01_b3109c3a",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 1,
+      "message": "Yes, Chromium harness is bad.\nI don\u0027t see why we can\u0027t do better.\nI think failed CQ runs are much more common than successful.\nLike, all first patchsets of a CL will have failures, until all these are fixed.\nSo, successful runs to failed runs ratio is something like 1 : \"average number of patchsets for a CL\". (I know this is not accurate, since most of the test suites will pass with maybe one failing, but still, the proportion of failures is significant).",
+      "parentUuid": "ef529cb3_8d7e0ec5",
       "range": {
         "startLine": 934,
         "startChar": 45,
@@ -1611,6 +1802,30 @@
     },
     {
       "key": {
+        "uuid": "50ae8704_801b47ff",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 1,
+      "message": "Windows has FILE_FLAG_DELETE_ON_CLOSE in CreateFile.\nLinux has O_TMPFILE in open().",
+      "parentUuid": "616fe262_d792ff8f",
+      "range": {
+        "startLine": 957,
+        "startChar": 20,
+        "endLine": 957,
+        "endChar": 30
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c14d9fc_a4a6c3fe",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -1646,6 +1861,30 @@
       "side": 1,
       "message": "They are not returned to mTestQueue. If a test or bartch times out we don\u0027t want to re-run it. Could be something bad happening.",
       "parentUuid": "7c14d9fc_a4a6c3fe",
+      "range": {
+        "startLine": 1024,
+        "startChar": 72,
+        "endLine": 1024,
+        "endChar": 84
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ecb52b6_411b80c7",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 1,
+      "message": "Ah, yes, you did comment that we can\u0027t determine which sub-test caused a timeout.\nI think Chromium harness starts running tests one-by-one in this case.\nMaybe we can do something smarter, like binary search, i.e. dividing a timing out batch into two.",
+      "parentUuid": "1aad50ec_541632d0",
       "range": {
         "startLine": 1024,
         "startChar": 72,

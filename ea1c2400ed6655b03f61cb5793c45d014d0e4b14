@@ -46,6 +46,30 @@
       "revId": "ea1c2400ed6655b03f61cb5793c45d014d0e4b14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54ce6819_b788a7c6",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-11-29T18:35:16Z",
+      "side": 0,
+      "message": "I guess I\u0027ve meant that we should keep backtraces for errors, not for crashes as I\u0027ve said originally.",
+      "parentUuid": "a7afd6bd_24e6a0b1",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 23
+      },
+      "revId": "ea1c2400ed6655b03f61cb5793c45d014d0e4b14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
