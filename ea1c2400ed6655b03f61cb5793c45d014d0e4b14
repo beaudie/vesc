@@ -22,6 +22,30 @@
       "revId": "ea1c2400ed6655b03f61cb5793c45d014d0e4b14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7afd6bd_24e6a0b1",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-11-29T15:23:12Z",
+      "side": 0,
+      "message": "We\u0027ll still get them.\n\nIn Chromium you\u0027ll still get the Chromium crash handler. In ANGLE standalone the crash handler is initialized in TestSuite.cpp now.",
+      "parentUuid": "2cb46850_39b0b227",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 23
+      },
+      "revId": "ea1c2400ed6655b03f61cb5793c45d014d0e4b14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
