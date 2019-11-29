@@ -1624,6 +1624,51 @@ void BufferHelper::changeQueue(uint32_t newQueueFamilyIndex, CommandBuffer *comm
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
 
+bool BufferHelper::canCoalesceReadBarrier(ContextVk *contextVk, VkAccessFlags readAccessType)
+{
+    // We only need to start a new command buffer when we need a new barrier.
+    // For simplicity's sake for now we always start a new command buffer.
+    // TODO(jmadill): Re-use the command buffer. http://anglebug.com/####
+    return false;
+}
+
+bool BufferHelper::canCoalesceWriteBarrier(ContextVk *contextVk, VkAccessFlags writeAccessType)
+{
+    // We only need to start a new command buffer when we need a new barrier.
+    // For simplicity's sake for now we always start a new command buffer.
+    // TODO(jmadill): Re-use the command buffer. http://anglebug.com/####
+    return false;
+}
+
+void BufferHelper::updateReadBarrier(VkAccessFlags readAccessType,
+                                     VkAccessFlags *barrierSrcOut,
+                                     VkAccessFlags *barrierDstOut)
+{
+    if (mCurrentWriteAccess != 0 && (mCurrentReadAccess & readAccessType) != readAccessType)
+    {
+        *barrierSrcOut |= mCurrentWriteAccess;
+        *barrierDstOut |= readAccessType;
+    }
+
+    // Accumulate new read usage.
+    mCurrentReadAccess |= readAccessType;
+}
+
+void BufferHelper::updateWriteBarrier(VkAccessFlags writeAccessType,
+                                      VkAccessFlags *barrierSrcOut,
+                                      VkAccessFlags *barrierDstOut)
+{
+    if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
+    {
+        *barrierSrcOut |= mCurrentWriteAccess;
+        *barrierDstOut |= writeAccessType;
+    }
+
+    // Reset usages on the new write.
+    mCurrentWriteAccess = writeAccessType;
+    mCurrentReadAccess  = 0;
+}
+
 // ImageHelper implementation.
 ImageHelper::ImageHelper()
     : CommandGraphResource(CommandGraphResourceType::Image),

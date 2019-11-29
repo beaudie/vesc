@@ -205,6 +205,13 @@ struct FeaturesVk : FeatureSetBase
         "Some shader compilers don't support sampler arrays as parameters, so revert to old "
         "RewriteStructSamplers behavior, which produces fewer.",
         &members, "http://anglebug.com/2703"};
+
+    Feature commandGraph = {
+        "command_graph",
+        FeatureCategory::VulkanFeatures,
+        "Use deferred command graph.",
+        &members,
+    };
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
