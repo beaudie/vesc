@@ -34,6 +34,24 @@
       "revId": "798d8bf162eece8f8c177e5373a99be1da38e946",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12bbd72e_8cf08cd9",
+        "filename": "src/tests/gl_tests/FormatPrintTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-11-29T18:05:36Z",
+      "side": 1,
+      "message": "\u003e GL_UNSIGNED_INT_2_10_10_10_REV is missing from PixelType because of a bug in gl.xml\n\nyup, i missed that part. if that is the premise then code reuse should be easy with a fix to gl.xml",
+      "parentUuid": "58a4e987_f0a5d895",
+      "revId": "798d8bf162eece8f8c177e5373a99be1da38e946",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
