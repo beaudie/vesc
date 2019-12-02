@@ -1337,6 +1337,30 @@
     },
     {
       "key": {
+        "uuid": "7e423285_17ee3d87",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T20:51:19Z",
+      "side": 1,
+      "message": "Ah. I do want Skip \u003d\u003d \"not run\" by default. And sorry, I forget exactly my reasoning on why I used operator[]. From what I can see this code can create the expectation if it is not present. Skip should be the correct default. Thanks for pointing out the incorrect initialization in a prior patch set.",
+      "parentUuid": "d28747d5_ac46d24f",
+      "range": {
+        "startLine": 543,
+        "startChar": 0,
+        "endLine": 543,
+        "endChar": 60
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86461be3_27a165c2",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -2021,6 +2045,30 @@
     },
     {
       "key": {
+        "uuid": "03d03f76_75cde67a",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T20:51:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "18b4e104_07f85dfe",
+      "range": {
+        "startLine": 916,
+        "startChar": 0,
+        "endLine": 919,
+        "endChar": 9
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09505af2_d9516f85",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -2137,6 +2185,30 @@
       "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4812b3e5_35e0fc86",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T20:51:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0e408e07_8613b0e2",
+      "range": {
+        "startLine": 934,
+        "startChar": 45,
+        "endLine": 934,
+        "endChar": 90
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -2318,6 +2390,30 @@
       "side": 1,
       "message": "Sure. Here is another thought - you could delete these in signal handler, but not delete if you pass a debugging flag to keep them for crash debugging.",
       "parentUuid": "127add43_7e52b3c1",
+      "range": {
+        "startLine": 957,
+        "startChar": 20,
+        "endLine": 957,
+        "endChar": 30
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0b59299_8d72fd04",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T20:51:19Z",
+      "side": 1,
+      "message": "The master process doesn\u0027t currently do a cleanup when the harness itself crashes. It does do cleanup when there are crashes and timeouts in the children. I\u0027m a bit hesitant here because it\u0027s hard to test this behaviour and it\u0027s not clear if it really affects behaviour on the bots.\n\nHow about we revisit this if we can prove it leads to bad behaviour on the bots? I left a note.",
+      "parentUuid": "b2de6c3c_5e558108",
       "range": {
         "startLine": 957,
         "startChar": 20,
