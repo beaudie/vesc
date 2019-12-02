@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cab4974c_977e3f22",
+        "filename": "src/compiler/translator/IntermNode.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T15:40:21Z",
+      "side": 1,
+      "message": "naming suggestion: TIntermQualifierDeclaration. Rather than accumulating all the possible uses in the name of this type we can call it what it is.\n\nSecond suggestion: make the renaming a split refactor patch and CQ+2 / TBR it to me.",
+      "range": {
+        "startLine": 807,
+        "startChar": 6,
+        "endLine": 807,
+        "endChar": 40
+      },
+      "revId": "fedae4e9db3d3958ec65dd156e04b085b727e743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48b2fecb_8f9f2392",
+        "filename": "src/compiler/translator/OutputVulkanGLSLForMetal.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T15:40:21Z",
+      "side": 1,
+      "message": "you can omit this - we won\u0027t be implementing ES 3.2 on Metal.",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 65
+      },
+      "revId": "fedae4e9db3d3958ec65dd156e04b085b727e743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70a6ec26_9d010552",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 5
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T15:40:21Z",
+      "side": 1,
+      "message": "nit: you could also split off the \u0027cleanup\u0027 part of this CL and land it TBR to me and CQ+2.",
+      "range": {
+        "startLine": 142,
+        "startChar": 24,
+        "endLine": 142,
+        "endChar": 37
+      },
+      "revId": "fedae4e9db3d3958ec65dd156e04b085b727e743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "560b21ae_34895347",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 5
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T15:40:21Z",
+      "side": 1,
+      "message": "What is a \"promoted extension\"? I\u0027m not sure that\u0027s the clearest term. I suggest \"is_keyword_in_spec_or_extension\"",
+      "range": {
+        "startLine": 590,
+        "startChar": 8,
+        "endLine": 590,
+        "endChar": 37
+      },
+      "revId": "fedae4e9db3d3958ec65dd156e04b085b727e743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32120f15_25edeac8",
+        "filename": "src/compiler/translator/util.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T15:40:21Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 682,
+        "startChar": 10,
+        "endLine": 682,
+        "endChar": 23
+      },
+      "revId": "fedae4e9db3d3958ec65dd156e04b085b727e743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08dea507_5b9513ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T15:40:21Z",
+      "side": 1,
+      "message": "I did see these:\n\n  VkBool32    shaderUniformBufferArrayDynamicIndexing;\n  VkBool32    shaderSampledImageArrayDynamicIndexing;\n  VkBool32    shaderStorageBufferArrayDynamicIndexing;\n  VkBool32    shaderStorageImageArrayDynamicIndexing;\n\nI\u0027m not sure if the validation layers check for these features when shaders use dynamic indexing. Filed https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/1407\n\nNot sure about the rest of the features. Could you tag the todo with the tracking bug btw?",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 41
+      },
+      "revId": "fedae4e9db3d3958ec65dd156e04b085b727e743",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
