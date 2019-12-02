@@ -33,6 +33,24 @@
       "revId": "43367d697eb8a6ed319bcde8c42971add3795ede",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b166a288_a8d5198b",
+        "filename": "src/compiler/translator/ShaderLang.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-02T22:39:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8668ee17_6b291b7a",
+      "revId": "43367d697eb8a6ed319bcde8c42971add3795ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
