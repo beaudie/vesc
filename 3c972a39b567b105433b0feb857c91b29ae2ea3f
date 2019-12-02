@@ -1313,6 +1313,30 @@
     },
     {
       "key": {
+        "uuid": "d28747d5_ac46d24f",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-12-02T18:44:42Z",
+      "side": 1,
+      "message": "Below you check \"outputResult.type !\u003d TestResultType::Skip\".\nIf outputResult didn\u0027t exist in \"output\" map, it would be constructed in\n\"TestResult \u0026outputResult \u003d output-\u003eresults[id]\".\nThe value of outputResult.type would be 0 or \"Crash\" in the old patchset or \"Skip\" with the new constructor you\u0027ve added in later patchset.\nI don\u0027t think that\u0027s what you want to check in \"outputResult.type !\u003d TestResultType::Skip\".\nThus, I think we should have something like outputResult.type \u003d TestResultType::Uninitialized in TestResult constructor.\nOr maybe use output-\u003eresults.at(id) instead of operator[], though it will fix only the usage here but constructor would solve all future usages.",
+      "parentUuid": "1b8b6b53_14ba8fda",
+      "range": {
+        "startLine": 543,
+        "startChar": 0,
+        "endLine": 543,
+        "endChar": 60
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86461be3_27a165c2",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -2092,6 +2116,30 @@
     },
     {
       "key": {
+        "uuid": "0e408e07_8613b0e2",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-12-02T18:44:42Z",
+      "side": 1,
+      "message": "Note that our output is huge sometimes. Actually, here is an 18MB example\nhttps://chromium-swarm.appspot.com/task?id\u003d488f87129bed1710\nMaybe it\u0027s a few milliseconds, but I still feel bad about it.\n\nI thought originally that we could simply advance a pointer in batchStdout in GetTestOutputSnippet(), but this won\u0027t work since we can\u0027t guarantee gtest executes tests in the same order they appear in batchResults.results. Maybe we can process batchStdout once and build a map from test name to output snippet. Still would take some time to look for the snippet in the map, so I don\u0027t mind to leave this as is.",
+      "parentUuid": "d21f8d8e_e2792f36",
+      "range": {
+        "startLine": 934,
+        "startChar": 45,
+        "endLine": 934,
+        "endChar": 90
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "82db5a55_5e1fc7b7",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -2246,6 +2294,30 @@
       "side": 1,
       "message": "I\u0027m a bit hesitant for this one because the Chromium harness doesn\u0027t do it and because I like to have the files available if my test suite I\u0027m debugging crashes. The master process itself shouldn\u0027t crash very often so it\u0027s unlikely to cause a real mess on the bots.\n\nWould be happy to defer action on this one.",
       "parentUuid": "50ae8704_801b47ff",
+      "range": {
+        "startLine": 957,
+        "startChar": 20,
+        "endLine": 957,
+        "endChar": 30
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2de6c3c_5e558108",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-12-02T18:44:42Z",
+      "side": 1,
+      "message": "Sure. Here is another thought - you could delete these in signal handler, but not delete if you pass a debugging flag to keep them for crash debugging.",
+      "parentUuid": "127add43_7e52b3c1",
       "range": {
         "startLine": 957,
         "startChar": 20,
