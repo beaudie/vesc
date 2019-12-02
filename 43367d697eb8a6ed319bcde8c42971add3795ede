@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad97a12_04b1addf",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-02T18:56:19Z",
+      "side": 1,
+      "message": "I used recordBuiltInAttributeUsed() above for the built-in compute shader variables.   For example:\n\n            case EvqNumWorkGroups:\n                recordBuiltInAttributeUsed(symbol-\u003evariable(), \u0026mNumWorkGroupsAdded);\n                return;\n            case EvqWorkGroupID:\n                recordBuiltInAttributeUsed(symbol-\u003evariable(), \u0026mWorkGroupIDAdded);\n                return;\n\nAny particular reason you decided on recordBuiltInVaryingUsed()?   I\u0027m not sure using recordBuiltInAttributeUsed() would work anyway, since that\u0027s what\u0027s used when determining the compute shader inputs, so adding other variables to the list is probably a bad idea.\n\nIn the end, neither is really \"correct\", but it may affect what\u0027s done if/when this stuff is refactored for anglebug.com/4152: Refactor program input attribute/varying naming.",
+      "revId": "43367d697eb8a6ed319bcde8c42971add3795ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8668ee17_6b291b7a",
+        "filename": "src/compiler/translator/ShaderLang.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-02T18:56:19Z",
+      "side": 1,
+      "message": "This assert can be removed, since \u0027sharedMemorySize\u0027 is unsigned and can\u0027t be negative.",
+      "revId": "43367d697eb8a6ed319bcde8c42971add3795ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
