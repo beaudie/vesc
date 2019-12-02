@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "371ae1db_be36cf21",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T13:25:14Z",
+      "side": 1,
+      "message": "Also DevSetup.md has some blurbs about Cygwin and the compiler. Can you update that too?",
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff7e5cd4_fa6c34c1",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T13:25:14Z",
+      "side": 1,
+      "message": "nit: just anglebug.com works.",
+      "range": {
+        "startLine": 17,
+        "startChar": 15,
+        "endLine": 17,
+        "endChar": 68
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "913f589f_e8ebf339",
+        "filename": "src/compiler/generate_parser_tools.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T13:25:14Z",
+      "side": 1,
+      "message": "can you suffix these in _autogen now?",
+      "range": {
+        "startLine": 57,
+        "startChar": 32,
+        "endLine": 57,
+        "endChar": 36
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "290c0292_fa5822dd",
+        "filename": "src/compiler/generate_parser_tools.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T13:25:14Z",
+      "side": 1,
+      "message": "can you print some error info on the error cases?",
+      "range": {
+        "startLine": 68,
+        "startChar": 8,
+        "endLine": 68,
+        "endChar": 15
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ed04f68_c5d58306",
+        "filename": "src/compiler/generate_parser_tools.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T13:25:14Z",
+      "side": 1,
+      "message": "Just confirming that tabs are intentional here?",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 1
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01dc8210_a7c0e56f",
+        "filename": "src/compiler/generate_parser_tools.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T13:25:14Z",
+      "side": 1,
+      "message": "can you suffix these in _autogen now?",
+      "range": {
+        "startLine": 103,
+        "startChar": 32,
+        "endLine": 103,
+        "endChar": 36
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3c97161_347d0594",
+        "filename": "src/compiler/preprocessor/preprocessor_lex.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T13:25:14Z",
+      "side": 1,
+      "message": "nit: can you make the autogen message look more like the other autogen messages? see Format_table_autogen for an example.",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 0
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f3ae7bf_4e485c2c",
+        "filename": "tools/flex-bison/common/m4sugar/foreach.m4",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T13:25:14Z",
+      "side": 1,
+      "message": "for this stuff you\u0027re redistributing, can we put it in a third_party folder, include a LICENSE file and add README.chromium?",
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
