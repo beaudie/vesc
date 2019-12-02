@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "006955b8_8bbbef7f",
+        "filename": "src/tests/test_utils/runner/README.md",
+        "patchSetId": 51
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f57d579f_f8967ebd",
+      "range": {
+        "startLine": 22,
+        "startChar": 44,
+        "endLine": 22,
+        "endChar": 56
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "403b3365_2a6369e2",
         "filename": "src/tests/test_utils/runner/README.md",
         "patchSetId": 51
@@ -331,6 +355,30 @@
     },
     {
       "key": {
+        "uuid": "c8d480a8_cd86c47f",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c79ecc55_25620163",
+      "range": {
+        "startLine": 196,
+        "startChar": 39,
+        "endLine": 196,
+        "endChar": 45
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "280138d0_6f23d225",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -390,6 +438,30 @@
       "side": 1,
       "message": "Interesting.\nhttps://chromium.googlesource.com/chromium/src/+/master/docs/testing/json_test_results_format.md has both \"time\" and \"times\".",
       "parentUuid": "594cfbfd_2353e9ba",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 54
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4301cf7d_d42f4bb7",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Fair enough. \"times\" is future proofed for multiple flaky retries. Left as is for now.",
+      "parentUuid": "945b7d49_473feeb1",
       "range": {
         "startLine": 199,
         "startChar": 0,
@@ -473,6 +545,30 @@
     },
     {
       "key": {
+        "uuid": "f359d64a_9ce1684f",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d95331a_d1e7efdf",
+      "range": {
+        "startLine": 206,
+        "startChar": 8,
+        "endLine": 206,
+        "endChar": 81
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6f564a_88732ada",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -552,6 +648,30 @@
       "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "150b4d97_893ec7bf",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3bb981d_6ef5e91d",
+      "range": {
+        "startLine": 260,
+        "startChar": 41,
+        "endLine": 260,
+        "endChar": 45
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -649,6 +769,30 @@
     },
     {
       "key": {
+        "uuid": "991b50ce_95024e49",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b4fe8bf_a2d8d78f",
+      "range": {
+        "startLine": 280,
+        "startChar": 22,
+        "endLine": 280,
+        "endChar": 46
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4ca8c9f_45f73e43",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -693,6 +837,30 @@
       "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0403259d_b3895fbd",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9184a9b8_4d9ef1fc",
+      "range": {
+        "startLine": 324,
+        "startChar": 0,
+        "endLine": 326,
+        "endChar": 53
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -763,6 +931,30 @@
       "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f9b08e6_938845a6",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "I had changed the way the filtering works. GetFilteredTests calls FilterMatchesTest instead of relying on testInfo.should_run().",
+      "parentUuid": "aae3abab_88a89baa",
+      "range": {
+        "startLine": 353,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 0
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -857,6 +1049,30 @@
       "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1273a44e_705edeb0",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7cb70aa_001f1f06",
+      "range": {
+        "startLine": 427,
+        "startChar": 42,
+        "endLine": 427,
+        "endChar": 56
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -978,6 +1194,30 @@
     },
     {
       "key": {
+        "uuid": "0758cae4_e118190f",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d01dfb4d_30fbbba1",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 474,
+        "endChar": 92
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c5e1187_7db68910",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -1037,6 +1277,30 @@
       "side": 1,
       "message": "That output-\u003eresults[id] can construct a new TestResult, and you have outputResult.type !\u003d TestResultType::Skip below. Incidentally, 0 \u003d\u003d Crash, so the check below works well. But I\u0027d prefer it to be explicit.",
       "parentUuid": "3366ab8a_ebed84ef",
+      "range": {
+        "startLine": 543,
+        "startChar": 0,
+        "endLine": 543,
+        "endChar": 60
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b8b6b53_14ba8fda",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "I don\u0027t follow the concern still. What specifically are you worried about?",
+      "parentUuid": "e149d274_a2c6887e",
       "range": {
         "startLine": 543,
         "startChar": 0,
@@ -1187,6 +1451,30 @@
       "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4f89d90_fd15e4fe",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a50f409b_b82e654d",
+      "range": {
+        "startLine": 695,
+        "startChar": 20,
+        "endLine": 695,
+        "endChar": 82
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1378,6 +1666,30 @@
     },
     {
       "key": {
+        "uuid": "f5049994_734df890",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "31ee0bdd_e6b19fda",
+      "range": {
+        "startLine": 759,
+        "startChar": 24,
+        "endLine": 759,
+        "endChar": 35
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e36cc185_7a472b25",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -1566,6 +1878,30 @@
     },
     {
       "key": {
+        "uuid": "d6ef716c_84c394f6",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b699700_83d5cce4",
+      "range": {
+        "startLine": 886,
+        "startChar": 22,
+        "endLine": 886,
+        "endChar": 89
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf082536_14b4d82d",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -1625,6 +1961,30 @@
       "side": 1,
       "message": "My concern it that I don\u0027t understand what \"Skip\" result means.\nReading the code, looks like if some test crashes, subsequent rests would have \"Skip\" result.\nThis was not obvious to me from the name, my interpretation was that tests that have \"Skip\" expectation would have this result.\nThus, I wanted to separate \"Skip\" and \"Did not run\" concepts.",
       "parentUuid": "78c26373_9b1d1d30",
+      "range": {
+        "startLine": 916,
+        "startChar": 0,
+        "endLine": 919,
+        "endChar": 9
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18b4e104_07f85dfe",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "https://chromium.googlesource.com/chromium/src/+/master/docs/testing/json_test_results_format.md#test-result-types\n\n\u003e SKIP\tThe test was not run.",
+      "parentUuid": "7f5595c4_bc6b33e7",
       "range": {
         "startLine": 916,
         "startChar": 0,
@@ -1708,6 +2068,30 @@
     },
     {
       "key": {
+        "uuid": "d21f8d8e_e2792f36",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "I see your thinking. We\u0027re totally fine saving developer time by not optimizing this edge case. If you even think about the napkin math on how much developer and bot costs would be saved by optimizing this error case I think it would be tiny. i.e. this slowdown is likely in the order of a few milliseconds. So you\u0027d need to add a lot of milliseconds of bot time together to make this optimization worthwhile.\n\nSorry for the long-winded explanation.",
+      "parentUuid": "fe0a9c01_b3109c3a",
+      "range": {
+        "startLine": 934,
+        "startChar": 45,
+        "endLine": 934,
+        "endChar": 90
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "82db5a55_5e1fc7b7",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -1752,6 +2136,30 @@
       "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87a40c25_27629a3d",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7cd1dd22_eaaa4744",
+      "range": {
+        "startLine": 942,
+        "startChar": 13,
+        "endLine": 942,
+        "endChar": 58
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1814,6 +2222,30 @@
       "side": 1,
       "message": "Windows has FILE_FLAG_DELETE_ON_CLOSE in CreateFile.\nLinux has O_TMPFILE in open().",
       "parentUuid": "616fe262_d792ff8f",
+      "range": {
+        "startLine": 957,
+        "startChar": 20,
+        "endLine": 957,
+        "endChar": 30
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "127add43_7e52b3c1",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "I\u0027m a bit hesitant for this one because the Chromium harness doesn\u0027t do it and because I like to have the files available if my test suite I\u0027m debugging crashes. The master process itself shouldn\u0027t crash very often so it\u0027s unlikely to cause a real mess on the bots.\n\nWould be happy to defer action on this one.",
+      "parentUuid": "50ae8704_801b47ff",
       "range": {
         "startLine": 957,
         "startChar": 20,
@@ -1897,6 +2329,30 @@
     },
     {
       "key": {
+        "uuid": "80c5543e_7bdf67f7",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Because the child process itself has a watchdog this \"whole shard timeout\" shouldn\u0027t happen very often. It\u0027s mainly for safety. The unit test actually verifies that when one test in the shard times out, it gets marked as a timeout and the rest of the tests get their proper result.",
+      "parentUuid": "8ecb52b6_411b80c7",
+      "range": {
+        "startLine": 1024,
+        "startChar": 72,
+        "endLine": 1024,
+        "endChar": 84
+      },
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d0f0d7c7_7352f85a",
         "filename": "src/tests/test_utils/runner/TestSuite.cpp",
         "patchSetId": 51
@@ -1929,6 +2385,24 @@
       "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c02a59d_d92eea85",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T16:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46966831_10a297a8",
+      "revId": "3c972a39b567b105433b0feb857c91b29ae2ea3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
