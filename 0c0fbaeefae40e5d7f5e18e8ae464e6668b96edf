@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e06e087_a442ecb4",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-02T14:42:50Z",
+      "side": 1,
+      "message": "nit: can you add a comment here explaining what this flag does?",
+      "range": {
+        "startLine": 811,
+        "startChar": 6,
+        "endLine": 811,
+        "endChar": 20
+      },
+      "revId": "0c0fbaeefae40e5d7f5e18e8ae464e6668b96edf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
