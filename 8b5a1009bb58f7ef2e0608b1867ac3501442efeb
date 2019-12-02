@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a60f35ff_1c86aa42",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-02T16:50:21Z",
+      "side": 1,
+      "message": "Are you sure we need to do this?  mState.getSize() will be the previous size that you can use for the invalidation check above.  I don\u0027t see mSize used anywhere else.",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 118,
+        "endChar": 17
+      },
+      "revId": "8b5a1009bb58f7ef2e0608b1867ac3501442efeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9833cb5_a80ad207",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-02T16:50:21Z",
+      "side": 1,
+      "message": "I don\u0027t think there is a point to returning this as an output parameter when it\u0027s a property of the packedFormat already.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 88
+      },
+      "revId": "8b5a1009bb58f7ef2e0608b1867ac3501442efeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
