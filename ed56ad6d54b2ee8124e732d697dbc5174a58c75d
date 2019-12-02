@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1da352b3_c5864e85",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-02T16:02:52Z",
+      "side": 1,
+      "message": "This should be:\n\n    gl::TextureType nativeType \u003d nativegl::GetNativeTextureType(type);\n    if (mTextures[nativeType][mTextureUnitIndex] !\u003d texture)\n    {\n        mTextures[nativeType][mTextureUnitIndex] \u003d texture;\n        mFunctions-\u003ebindTexture(ToGLEnum(nativeType), texture);\n        mLocalDirtyBits.set(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);\n    }",
+      "range": {
+        "startLine": 430,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 5
+      },
+      "revId": "ed56ad6d54b2ee8124e732d697dbc5174a58c75d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
