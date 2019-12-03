@@ -29,18 +29,21 @@ util_sources = [
   "util/Timer.cpp",
 ]
 
-util_win_sources = [
-  "util/windows/test_utils_win.cpp",
-  "util/windows/win32/test_utils_win32.cpp",
-  "util/windows/win32/Win32Pixmap.cpp",
-  "util/windows/win32/Win32Pixmap.h",
-  "util/windows/win32/Win32Window.cpp",
-  "util/windows/win32/Win32Window.h",
-  "util/windows/WGLWindow.h",
-]
+if (is_win) {
+  util_sources += [
+    "util/windows/test_utils_win.cpp",
+    "util/windows/win32/Win32Pixmap.cpp",
+    "util/windows/win32/Win32Pixmap.h",
+    "util/windows/win32/Win32Window.cpp",
+    "util/windows/win32/Win32Window.h",
+    "util/windows/WGLWindow.h",
+  ]
 
-if (current_os != "winuwp") {
-  util_win_shared_sources = [ "util/windows/WGLWindow.cpp" ]
+  if (current_os == "winuwp") {
+    util_sources += [ "util/windows/test_utils_winuwp.cpp" ]
+  } else {
+    util_sources += [ "util/windows/win32/test_utils_win32.cpp" ]
+  }
 }
 
 util_posix_sources = [

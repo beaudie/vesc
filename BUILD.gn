@@ -1101,7 +1101,6 @@ foreach(is_shared_library,
     libs = []
 
     if (is_win && !angle_is_winuwp) {
-      sources += util_win_sources
       deps += [ ":angle_stack_walker" ]
     }
 
@@ -1160,7 +1159,7 @@ foreach(is_shared_library,
       defines = [ "LIBANGLE_UTIL_IMPLEMENTATION" ]
 
       if (is_win && !angle_is_winuwp) {
-        sources += util_win_shared_sources
+        sources += [ "util/windows/WGLWindow.cpp" ]
       }
 
       public_deps += [ ":angle_util_loader" ]
