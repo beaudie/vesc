@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e9264d4_6b7f7009",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-03T21:09:33Z",
+      "side": 1,
+      "message": "nit: expectations",
+      "range": {
+        "startLine": 7,
+        "startChar": 30,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "83239db0a6b5ce21ea9441ca546bd44e12d7255b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
