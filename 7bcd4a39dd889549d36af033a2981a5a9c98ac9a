@@ -22,6 +22,30 @@
       "revId": "7bcd4a39dd889549d36af033a2981a5a9c98ac9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5745a614_d627c417",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-03T21:39:11Z",
+      "side": 1,
+      "message": "Yeah.. not sure why it wasn\u0027t in there before honestly.",
+      "parentUuid": "0838fe69_8a2fb658",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 41,
+        "endChar": 13
+      },
+      "revId": "7bcd4a39dd889549d36af033a2981a5a9c98ac9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
