@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfb28230_d54e8b00",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-03T16:48:17Z",
+      "side": 1,
+      "message": "I think you can use VariableExternalSize below instead of adding these new cases.",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 227,
+        "endChar": 38
+      },
+      "revId": "9bcf23f920e74b1b437eaba5c4b93f7fa679e16b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a32ed8c_3ad7d972",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-03T16:48:17Z",
+      "side": 1,
+      "message": "Can you add this as a method to ShaderVariable?  Possibly ShaderVariable::getExternalSize",
+      "range": {
+        "startLine": 490,
+        "startChar": 0,
+        "endLine": 508,
+        "endChar": 1
+      },
+      "revId": "9bcf23f920e74b1b437eaba5c4b93f7fa679e16b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cc7853e_cb8abd37",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-03T16:48:17Z",
+      "side": 1,
+      "message": "No need to handle these cases differently, your other function handles structs and non-structs.",
+      "range": {
+        "startLine": 515,
+        "startChar": 8,
+        "endLine": 523,
+        "endChar": 9
+      },
+      "revId": "9bcf23f920e74b1b437eaba5c4b93f7fa679e16b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
