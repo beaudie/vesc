@@ -149,6 +149,16 @@ if (is_win || is_linux || is_mac || is_android) {
     sources = angle_white_box_tests_sources
     main = "angle_end2end_tests_main"
 
+    # gl_enum_utils.cpp file is already included in libGLESv2 source list if it is a
+    # debug build or if tracing has been enabled. We need to include it in the
+    # white box test source list for all build types
+    if (!(angle_enable_trace || is_debug)) {
+      sources += [
+        "${angle_root}/src/libANGLE/gl_enum_utils.cpp",
+        "${angle_root}/src/libANGLE/gl_enum_utils_autogen.cpp",
+      ]
+    }
+
     if (is_win) {
       sources += angle_white_box_tests_win_sources
     }
