@@ -496,7 +496,7 @@ void main()
 {
     gl_FragColor = texture(sampler, vec2(0, 0));
 })";
-    if (getClientMajorVersion() > 3)
+    if (getClientMajorVersion() >= 3)
     {
         EXPECT_EQ(0u, CompileShader(GL_FRAGMENT_SHADER, kFSES3));
     }
@@ -522,7 +522,7 @@ void main()
         glGetIntegerv(GL_TEXTURE_BINDING_EXTERNAL_OES, &result);
         EXPECT_GL_NO_ERROR();
 
-        if (getClientMajorVersion() > 3 &&
+        if (getClientMajorVersion() >= 3 &&
             IsGLExtensionRequestable("GL_OES_EGL_image_external_essl3"))
         {
             glRequestExtensionANGLE("GL_OES_EGL_image_external_essl3");
