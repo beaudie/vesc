@@ -51,7 +51,7 @@ TEST_P(MemorySizeTest, BasicUsageTexture)
     EXPECT_GL_NO_ERROR();
     EXPECT_GT(result, 0);
 
-    if (getClientMajorVersion() > 3)
+    if (getClientMajorVersion() >= 3)
     {
         glGetTexLevelParameteriv(GL_TEXTURE_2D, 1, GL_MEMORY_SIZE_ANGLE, &result);
         EXPECT_GL_NO_ERROR();
