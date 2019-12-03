@@ -2266,7 +2266,8 @@ bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
     return false;
 }
 
-bool OutputHLSL::visitInvariantDeclaration(Visit visit, TIntermInvariantDeclaration *node)
+bool OutputHLSL::visitGlobalQualifierDeclaration(Visit visit,
+                                                 TIntermGlobalQualifierDeclaration *node)
 {
     // Do not do any translation
     return false;
