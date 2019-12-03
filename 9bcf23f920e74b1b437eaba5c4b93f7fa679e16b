@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "21961008_10b92031",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-03T16:49:20Z",
+      "side": 1,
+      "message": "There is var.isStruct() for this.",
+      "range": {
+        "startLine": 494,
+        "startChar": 8,
+        "endLine": 494,
+        "endChar": 27
+      },
+      "revId": "9bcf23f920e74b1b437eaba5c4b93f7fa679e16b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0a32ed8c_3ad7d972",
         "filename": "src/compiler/translator/Compiler.cpp",
         "patchSetId": 6
