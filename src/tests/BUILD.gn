@@ -11,6 +11,7 @@ declare_args() {
   # Don't build dEQP by default.
   build_angle_deqp_tests = false
   build_angle_gles1_conform_tests = false
+  build_angle_capture_replay_tests = false
 }
 
 angle_executable("test_utils_unittest_helper") {
@@ -251,6 +252,45 @@ if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
     }
     if (is_linux) {
       data_deps += [ "${angle_root}/third_party/glmark2:glmark2_glx" ]
+    }
+
+    if (build_angle_capture_replay_tests) {
+      _capture_test_dir = "${angle_root}/src/tests/internal_capture_tests"
+      sources += [ "${_capture_test_dir}/CaptureReplayPerf.cpp" ]
+      defines = []
+
+      # Internal captures
+      _frame_ranges = [
+        "500_510",
+        "1000_1010",
+        "1500_1510",
+        "2000_2010",
+      ]
+      foreach(_frame_range, _frame_ranges) {
+        _trex_dir = "${_capture_test_dir}/trex_${_frame_range}"
+        _trex_ctx = "${_trex_dir}/trex_${_frame_range}_capture_context1"
+
+        # Similar to capture replay sample, use the file index for sources
+        sources +=
+            rebase_path(read_file("${_trex_ctx}_files.txt", "list lines"),
+                        ".",
+                        "${_trex_dir}") +
+            [
+              "${_trex_ctx}.cpp",
+              "${_trex_ctx}.h",
+            ]
+
+        if (is_android) {
+          # TODO (cnorthrop): Figure out how to do this with data or data_deps
+          _trex_data_path = "/data/local/tmp/trex_${_frame_range}"
+        } else {
+          _trex_data_path = rebase_path("${_trex_dir}")
+        }
+
+        defines += [
+          "ANGLE_TREX_REPLAY_DATA_DIR_${_frame_range}=\"${_trex_data_path}\"",
+        ]
+      }
     }
   }
 }
