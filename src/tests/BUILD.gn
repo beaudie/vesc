@@ -11,6 +11,7 @@ declare_args() {
   # Don't build dEQP by default.
   build_angle_deqp_tests = false
   build_angle_gles1_conform_tests = false
+  build_angle_capture_replay_tests = false
 }
 
 if (!build_with_chromium) {
@@ -271,6 +272,33 @@ if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
     }
     if (is_linux) {
       data_deps += [ "${angle_root}/third_party/glmark2:glmark2_glx" ]
+    }
+
+    if (build_angle_capture_replay_tests) {
+      _capture_test_dir = "${angle_root}/src/tests/internal_capture_tests"
+      sources += [ "${_capture_test_dir}/CaptureReplayPerf.cpp" ]
+
+      # TRex capture
+      _trex_dir = "${_capture_test_dir}/trex"
+      sources +=
+          rebase_path(
+              read_file("${_trex_dir}/angle_capture_context1_trex_files.txt",
+                        "list lines"),
+              ".",
+              "${_trex_dir}") +
+          [
+            "${_trex_dir}/angle_capture_context1_trex.cpp",
+            "${_trex_dir}/angle_capture_context1_trex.h",
+          ]
+
+      if (is_android) {
+        # TODO before submission (cnorthrop): Move this to a data_dep
+        _trex_data_path = "/data/local/tmp/trex"
+      } else {
+        _trex_data_path = rebase_path("${_trex_dir}")
+      }
+
+      defines = [ "ANGLE_TREX_REPLAY_DATA_DIR=\"${_trex_data_path}\"" ]
     }
   }
 }
