@@ -40,8 +40,8 @@ namespace
 {
 // Standard D3D sample positions from
 // https://msdn.microsoft.com/en-us/library/windows/desktop/ff476218.aspx
-using SamplePositionsArray                                            = std::array<float, 32>;
-static constexpr std::array<SamplePositionsArray, 5> kSamplePositions = {
+using SamplePositionsArray                                     = std::array<float, 32>;
+constexpr std::array<SamplePositionsArray, 5> kSamplePositions = {
     {{{0.5f, 0.5f}},
      {{0.75f, 0.75f, 0.25f, 0.25f}},
      {{0.375f, 0.125f, 0.875f, 0.375f, 0.125f, 0.625f, 0.625f, 0.875f}},
