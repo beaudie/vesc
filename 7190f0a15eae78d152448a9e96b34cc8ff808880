@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7e8765a2_b9cc3cce",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-03T22:20:15Z",
+      "side": 1,
+      "message": "Interesting idea. There are a number of users that call setBuiltInInfoFromSymbol, I didn\u0027t want them all to be doing extra work that wasn\u0027t necessary and/or potentially confuse other code not expecting those values to be set.",
+      "parentUuid": "b10fb846_9008adcc",
+      "revId": "7190f0a15eae78d152448a9e96b34cc8ff808880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c83c89a_f20bd23f",
         "filename": "src/compiler/translator/CollectVariables.cpp",
         "patchSetId": 7
@@ -39,6 +57,30 @@
       "revId": "7190f0a15eae78d152448a9e96b34cc8ff808880",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cae08ec_bf2f5b0d",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-03T22:20:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6c83c89a_f20bd23f",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 40
+      },
+      "revId": "7190f0a15eae78d152448a9e96b34cc8ff808880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "895fcf41_46de107f",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-03T22:20:15Z",
+      "side": 1,
+      "message": "Ha, yeah, shouldn\u0027t need to do that. Guess I was being a little too mechanical in implementing Geoff\u0027s suggestion.",
+      "parentUuid": "effb1b0c_84948baa",
+      "range": {
+        "startLine": 495,
+        "startChar": 53,
+        "endLine": 495,
+        "endChar": 77
+      },
+      "revId": "7190f0a15eae78d152448a9e96b34cc8ff808880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e78bf00_6f1d3749",
         "filename": "src/compiler/translator/ShaderVars.cpp",
         "patchSetId": 7
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "8b9e75d3_96bf9de3",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-03T22:20:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e78bf00_6f1d3749",
+      "revId": "7190f0a15eae78d152448a9e96b34cc8ff808880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61a96c5e_0b008a22",
         "filename": "src/libANGLE/Shader.cpp",
         "patchSetId": 7
@@ -96,6 +180,24 @@
       "revId": "7190f0a15eae78d152448a9e96b34cc8ff808880",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e71fc447_1509dd59",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-03T22:20:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61a96c5e_0b008a22",
+      "revId": "7190f0a15eae78d152448a9e96b34cc8ff808880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
