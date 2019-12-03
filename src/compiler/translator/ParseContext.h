@@ -181,6 +181,9 @@ class TParseContext : angle::NonCopyable
     void checkInvariantVariableQualifier(bool invariant,
                                          const TQualifier qualifier,
                                          const TSourceLoc &invariantLocation);
+    void checkPreciseVariableQualifier(bool precise,
+                                       const TQualifier qualifier,
+                                       const TSourceLoc &preciseLocation);
     void checkInputOutputTypeIsValidES3(const TQualifier qualifier,
                                         const TPublicType &type,
                                         const TSourceLoc &qualifierLocation);

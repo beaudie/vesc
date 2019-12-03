@@ -94,6 +94,10 @@ bool TOutputVulkanGLSLForMetal::visitGlobalQualifierDeclaration(
     TInfoSinkBase &out = objSink();
     ASSERT(visit == PreVisit);
     const TIntermSymbol *symbol = node->getSymbol();
+
+    // TODO: Add support for |precise|.  http://anglebug.com/2634
+    ASSERT(node->isInvariant());
+
     if (!ShoudRemoveInvariant(symbol->getType()))
     {
         out << "invariant ";
