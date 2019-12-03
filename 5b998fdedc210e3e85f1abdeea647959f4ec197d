@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2a94fe12_6310bd9d",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-03T15:36:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "371ae1db_be36cf21",
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff7e5cd4_fa6c34c1",
         "filename": "doc/ContributingCode.md",
         "patchSetId": 8
@@ -39,6 +57,30 @@
       "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e7c2b65_1f0fdd28",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-03T15:36:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff7e5cd4_fa6c34c1",
+      "range": {
+        "startLine": 17,
+        "startChar": 15,
+        "endLine": 17,
+        "endChar": 68
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "56e4aa51_1dc54a86",
+        "filename": "src/compiler/generate_parser_tools.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-03T15:36:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "913f589f_e8ebf339",
+      "range": {
+        "startLine": 57,
+        "startChar": 32,
+        "endLine": 57,
+        "endChar": 36
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "290c0292_fa5822dd",
         "filename": "src/compiler/generate_parser_tools.py",
         "patchSetId": 8
@@ -85,6 +151,30 @@
       "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03cd027b_6140fc26",
+        "filename": "src/compiler/generate_parser_tools.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-03T15:36:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "290c0292_fa5822dd",
+      "range": {
+        "startLine": 68,
+        "startChar": 8,
+        "endLine": 68,
+        "endChar": 15
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "994135b0_ce721bfe",
+        "filename": "src/compiler/generate_parser_tools.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-03T15:36:19Z",
+      "side": 1,
+      "message": "Yes. flex\u0027s output uses tabs.",
+      "parentUuid": "2ed04f68_c5d58306",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 1
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01dc8210_a7c0e56f",
         "filename": "src/compiler/generate_parser_tools.py",
         "patchSetId": 8
@@ -131,6 +245,30 @@
       "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86ced128_5437d190",
+        "filename": "src/compiler/generate_parser_tools.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-03T15:36:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01dc8210_a7c0e56f",
+      "range": {
+        "startLine": 103,
+        "startChar": 32,
+        "endLine": 103,
+        "endChar": 36
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "43c68c51_9489c75d",
+        "filename": "src/compiler/preprocessor/preprocessor_lex.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-03T15:36:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3c97161_347d0594",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 0
+      },
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f3ae7bf_4e485c2c",
         "filename": "tools/flex-bison/common/m4sugar/foreach.m4",
         "patchSetId": 8
@@ -171,6 +333,24 @@
       "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbac8352_94a3f284",
+        "filename": "tools/flex-bison/common/m4sugar/foreach.m4",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-03T15:36:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f3ae7bf_4e485c2c",
+      "revId": "5b998fdedc210e3e85f1abdeea647959f4ec197d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
