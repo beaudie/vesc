@@ -40,6 +40,15 @@ bool IsIntel();
 bool IsAMD();
 bool IsNVIDIA();
 
+inline bool IsASan()
+{
+#if defined(ANGLE_WITH_ASAN)
+    return true;
+#else
+    return false;
+#endif  // defined(ANGLE_WITH_ASAN)
+}
+
 bool IsPlatformAvailable(const PlatformParameters &param);
 
 // This functions is used to filter which tests should be registered,
@@ -207,5 +216,15 @@ extern std::string gSelectedConfig;
 // multiple APIs/windows/etc in the same process.
 extern bool gSeparateProcessPerConfig;
 }  // namespace angle
+
+#define ANGLE_SKIP_TEST_IF(COND)                                  \
+    do                                                            \
+    {                                                             \
+        if (COND)                                                 \
+        {                                                         \
+            std::cout << "Test skipped: " #COND "." << std::endl; \
+            return;                                               \
+        }                                                         \
+    } while (0)
 
 #endif  // ANGLE_TEST_INSTANTIATE_H_

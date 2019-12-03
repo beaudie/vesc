@@ -15,9 +15,11 @@ declare_args() {
 
 angle_test("test_utils_unittest_helper") {
   standalone_harness = true
+
   sources = [
     "../../util/test_utils_unittest_helper.cpp",
     "../../util/test_utils_unittest_helper.h",
+    "test_utils/angle_test_instantiate.h",
     "test_utils/runner/TestSuite_unittest.cpp",
   ]
 
