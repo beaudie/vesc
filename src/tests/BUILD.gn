@@ -980,34 +980,32 @@ if (build_angle_deqp_tests && !is_fuchsia) {
   }
 }
 
-if (!build_with_chromium) {
-  group("all") {
-    testonly = true
-    deps = [
-      ":angle_end2end_tests",
-      ":angle_perftests",
-      ":angle_unittests",
+group("angle_tests") {
+  testonly = true
+  deps = [
+    ":angle_end2end_tests",
+    ":angle_perftests",
+    ":angle_unittests",
+  ]
+  if (!is_fuchsia) {
+    deps += [
+      ":angle_white_box_perftests",
+      ":angle_white_box_tests",
     ]
-    if (!is_fuchsia) {
-      deps += [
-        ":angle_white_box_perftests",
-        ":angle_white_box_tests",
-      ]
-    }
-    if (build_angle_deqp_tests && !is_fuchsia) {
-      deps += [
-        ":angle_deqp_egl_no_gtest",
-        ":angle_deqp_egl_tests",
-        ":angle_deqp_gles2_no_gtest",
-        ":angle_deqp_gles2_tests",
-        ":angle_deqp_gles31_no_gtest",
-        ":angle_deqp_gles31_tests",
-        ":angle_deqp_gles3_no_gtest",
-        ":angle_deqp_gles3_tests",
-      ]
-    }
-    if (build_angle_gles1_conform_tests) {
-      deps += [ ":angle_gles1_conformance_tests" ]
-    }
+  }
+  if (build_angle_deqp_tests && !is_fuchsia) {
+    deps += [
+      ":angle_deqp_egl_no_gtest",
+      ":angle_deqp_egl_tests",
+      ":angle_deqp_gles2_no_gtest",
+      ":angle_deqp_gles2_tests",
+      ":angle_deqp_gles31_no_gtest",
+      ":angle_deqp_gles31_tests",
+      ":angle_deqp_gles3_no_gtest",
+      ":angle_deqp_gles3_tests",
+    ]
+  }
+  if (build_angle_gles1_conform_tests) {
+    deps += [ ":angle_gles1_conformance_tests" ]
   }
 }
