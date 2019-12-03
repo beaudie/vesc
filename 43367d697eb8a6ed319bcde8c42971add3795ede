@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ece9850c_b8cb208f",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-03T14:58:22Z",
+      "side": 1,
+      "message": "Yeah, I didn\u0027t want to add this info into any existing lists, recordBuiltInVaryingUsed() allowed me to specify what list to add stuff too. And I also need to keep track of more stuff for structures making it more specialized. Does make me wonder if I should create a new function, though it would mostly be a duplicate of recordBuiltInVaryingUsed().",
+      "parentUuid": "9ad97a12_04b1addf",
+      "revId": "43367d697eb8a6ed319bcde8c42971add3795ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8668ee17_6b291b7a",
         "filename": "src/compiler/translator/ShaderLang.cpp",
         "patchSetId": 3
