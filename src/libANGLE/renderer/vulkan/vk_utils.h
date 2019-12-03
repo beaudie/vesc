@@ -604,6 +604,10 @@ class Recycler final : angle::NonCopyable
     std::vector<T> mObjectFreeList;
 };
 
+// Functions that determine support for a feature or extension, used both to advertise support for
+// an extension, and to determine if a context version can be supported.
+bool CanSupportGPUShader5EXT(const VkPhysicalDeviceFeatures &features);
+
 }  // namespace vk
 
 // List of function pointers for used extensions.
