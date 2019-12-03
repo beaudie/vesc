@@ -8,6 +8,7 @@
 
 #include <gtest/gtest.h>
 
+#include "../angle_test_instantiate.h"
 #include "TestSuite.h"
 #include "common/debug.h"
 #include "common/system_utils.h"
@@ -42,6 +43,9 @@ class TestSuiteTest : public testing::Test
 // Verifies that Pass, Fail, Crash and Timeout are all handled correctly.
 TEST_F(TestSuiteTest, RunMockTests)
 {
+    // Fails in ASan when trying to communicate with child processes. http://crbug.com/1030192
+    ANGLE_SKIP_TEST_IF(IsASan());
+
     std::string executablePath = GetExecutableDirectory();
     EXPECT_NE(executablePath, "");
     executablePath += std::string("/") + kTestHelperExecutable + GetExecutableExtension();
