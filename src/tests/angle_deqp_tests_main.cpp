@@ -19,8 +19,8 @@ void InitTestHarness(int *argc, char **argv);
 
 int main(int argc, char **argv)
 {
-    angle::TestSuite testSuite(&argc, argv);
     angle::InitTestHarness(&argc, argv);
+    angle::TestSuite testSuite(&argc, argv);
     int rt = RUN_ALL_TESTS();
     return rt;
 }
