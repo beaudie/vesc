@@ -22,6 +22,30 @@
       "revId": "ed56ad6d54b2ee8124e732d697dbc5174a58c75d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47711eaa_5ad574f3",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-12-03T04:11:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1da352b3_c5864e85",
+      "range": {
+        "startLine": 430,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 5
+      },
+      "revId": "ed56ad6d54b2ee8124e732d697dbc5174a58c75d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
