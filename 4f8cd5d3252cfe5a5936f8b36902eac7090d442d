@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f45ca4b0_cec97795",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-12-03T14:49:20Z",
+      "side": 1,
+      "message": "This link is broken",
+      "range": {
+        "startLine": 94,
+        "startChar": 22,
+        "endLine": 94,
+        "endChar": 74
+      },
+      "revId": "4f8cd5d3252cfe5a5936f8b36902eac7090d442d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
