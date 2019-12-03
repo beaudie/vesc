@@ -561,7 +561,7 @@
 2324 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.compute.program_not_active = FAIL
 2324 : dEQP-GLES31.functional.debug.negative_coverage.log.compute.program_not_active = FAIL
 2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.compute.program_not_active = FAIL
-2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements = FAIL
+// 2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements = FAIL
 2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements_incomplete_primitive = FAIL
 
 // These tests are failing because of compile errors with SSBOs in compute shaders.
@@ -666,8 +666,8 @@
 3714 VULKAN : dEQP-GLES31.functional.ssbo.layout.random.* = FAIL
 
 // OpenGL ES 3.1 conformance failures
-4098 SWIFTSHADER : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_multiple_groups = FAIL
-4098 SWIFTSHADER : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_single_invocation = FAIL
+// 4098 SWIFTSHADER : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_multiple_groups = FAIL
+// 4098 SWIFTSHADER : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_single_invocation = FAIL
 
 4099 SWIFTSHADER : dEQP-GLES31.functional.draw_indirect.draw_elements_indirect.base_vertex.index_neg_* = FAIL
 
