@@ -104,6 +104,12 @@ deps = {
     'condition': 'checkout_angle_internal',
   },
 
+  # Closed-source ANGLE capture files and tests
+  'src/tests/internal_capture_tests': {
+    'url': '{chrome_internal_git}/angle/angle-captures.git@e2fa6fa80de07f784da7214e933c8565ebfc34da',
+    'condition': 'checkout_angle_internal',
+  },
+
   # glmark2 is a GPL3-licensed OpenGL ES 2.0 benchmark. We use it for testing.
   'third_party/glmark2/src': {
     'url': '{chromium_git}/external/github.com/glmark2/glmark2@9e01aef1a786b28aca73135a5b00f85c357e8f5e',
