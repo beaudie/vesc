@@ -237,7 +237,9 @@ class TextureVk : public TextureImpl
     uint32_t getNativeImageLayer(uint32_t frontendLayer) const;
 
     void releaseAndDeleteImage(ContextVk *contextVk);
-    angle::Result ensureImageAllocated(ContextVk *contextVk, const vk::Format &format);
+    angle::Result ensureImageAllocated(ContextVk *contextVk,
+                                       const vk::Format &format,
+                                       GLint samples);
     void setImageHelper(ContextVk *contextVk,
                         vk::ImageHelper *imageHelper,
                         gl::TextureType imageType,
