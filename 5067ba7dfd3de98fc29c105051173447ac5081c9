@@ -52,6 +52,24 @@
       "revId": "5067ba7dfd3de98fc29c105051173447ac5081c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4ecd624_caebd1f1",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-04T20:03:28Z",
+      "side": 1,
+      "message": "@Tim, I removed the loop and made it only look at the vertex shader. We can always put it back in a loop if necessary. As you mentioned in the chat earlier, varyings are individually replaced below.\n\n@Jamie, the ASSERT on whether all @@ macros are replaced would catch anything missing here (as long as there\u0027s a test for it)",
+      "parentUuid": "87c5f9ed_ae6f5876",
+      "revId": "5067ba7dfd3de98fc29c105051173447ac5081c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
