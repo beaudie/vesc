@@ -70,6 +70,24 @@
       "revId": "5067ba7dfd3de98fc29c105051173447ac5081c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47d4bbca_6c49d634",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-04T20:06:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e4ecd624_caebd1f1",
+      "revId": "5067ba7dfd3de98fc29c105051173447ac5081c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
