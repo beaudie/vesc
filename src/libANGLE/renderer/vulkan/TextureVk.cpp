@@ -1357,7 +1357,7 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
 
     releaseAndDeleteImage(contextVk);
 
-    GLenum internalFormat    = surface->getConfig()->renderTargetFormat;
+    GLenum internalFormat    = surface->getFinalizedRenderTargetFormat();
     const vk::Format &format = renderer->getFormat(internalFormat);
 
     // eglBindTexImage can only be called with pbuffer (offscreen) surfaces

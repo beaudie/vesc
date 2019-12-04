@@ -194,10 +194,11 @@ angle::Result OffscreenSurfaceVk::initializeImpl(DisplayVk *displayVk)
     GLint samples = GetSampleCount(mState.config);
     ANGLE_VK_CHECK(displayVk, samples > 0, VK_ERROR_INITIALIZATION_FAILED);
 
-    if (config->renderTargetFormat != GL_NONE)
+    if (mState.finalizedRenderTargetFormat != GL_NONE)
     {
         ANGLE_TRY(mColorAttachment.initialize(
-            displayVk, mWidth, mHeight, renderer->getFormat(config->renderTargetFormat), samples));
+            displayVk, mWidth, mHeight, renderer->getFormat(mState.finalizedRenderTargetFormat),
+            samples));
         mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, 0, 0);
     }
 
@@ -526,7 +527,7 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
                  vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, mSurface, &surfaceFormatCount,
                                                       surfaceFormats.data()));
 
-    const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
+    const vk::Format &format = renderer->getFormat(mState.finalizedRenderTargetFormat);
     VkFormat nativeFormat    = format.vkImageFormat;
 
     if (surfaceFormatCount == 1u && surfaceFormats[0].format == VK_FORMAT_UNDEFINED)
@@ -705,7 +706,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
-    const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
+    const vk::Format &format = renderer->getFormat(mState.finalizedRenderTargetFormat);
     VkFormat nativeFormat    = format.vkImageFormat;
 
     // We need transfer src for reading back from the backbuffer.
