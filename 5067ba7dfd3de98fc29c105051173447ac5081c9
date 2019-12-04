@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "846ba3d0_899d1bad",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-04T16:37:36Z",
+      "side": 1,
+      "message": "Follow up with Tim (and for the sake of Jamie):\n\nThe question is, does this only make sense for vertex shaders? Will Tim\u0027s future work change it to include things that other stages use?\n\nThe enclosing loop can be removed if this is only going to ever be applicable to VS.",
+      "revId": "5067ba7dfd3de98fc29c105051173447ac5081c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
