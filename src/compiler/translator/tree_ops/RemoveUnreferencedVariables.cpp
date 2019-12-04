@@ -236,9 +236,14 @@ bool RemoveUnreferencedVariablesTraverser::visitDeclaration(Visit visit, TInterm
         TIntermTyped *declarator = node->getSequence()->back()->getAsTyped();
         ASSERT(declarator);
 
-        // We can only remove variables that are not a part of the shader interface.
+        // We can only remove variables that are not a part of the shader interface, with the
+        // exception of images and atomic counters.
         TQualifier qualifier = declarator->getQualifier();
-        if (qualifier != EvqTemporary && qualifier != EvqGlobal && qualifier != EvqConst)
+        TBasicType basicType = declarator->getBasicType();
+        bool isUniformReplaceable =
+            qualifier == EvqUniform && (IsImage(basicType) || IsAtomicCounter(basicType));
+        if (qualifier != EvqTemporary && qualifier != EvqGlobal && qualifier != EvqConst &&
+            !isUniformReplaceable)
         {
             return true;
         }
