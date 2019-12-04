@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c22d9cf4_a2285854",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-04T16:46:15Z",
+      "side": 1,
+      "message": "I would move this multiplication into ShaderVariable::getExternalSize",
+      "range": {
+        "startLine": 495,
+        "startChar": 25,
+        "endLine": 495,
+        "endChar": 53
+      },
+      "revId": "014c9fd2c97d706d2a6c13dc25ba6a4d902b85ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

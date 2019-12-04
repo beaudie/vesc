@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7ba7b686_2e4ec458",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-04T16:46:15Z",
+      "side": 1,
+      "message": "I think setFieldOrVariableProperties is the right call, it does exactly what this function does with only added cost for structures which weren\u0027t getting into this function before anyways.\n\nThe call to setFieldOrVariableProperties in recordBuiltInVaryingUsed below can disappear then.",
+      "parentUuid": "7e8765a2_b9cc3cce",
+      "revId": "7190f0a15eae78d152448a9e96b34cc8ff808880",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c83c89a_f20bd23f",
         "filename": "src/compiler/translator/CollectVariables.cpp",
         "patchSetId": 7
