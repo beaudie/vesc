@@ -16,6 +16,24 @@
       "revId": "5067ba7dfd3de98fc29c105051173447ac5081c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1d2298f_664bdb04",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-04T17:22:27Z",
+      "side": 1,
+      "message": "I think if we\u0027ve made it this far without any shader compiler errors (due to the @@ QUALIFIER and @@ LAYOUT markers), then it\u0027s probably safe to say that this only applies to vertex shader attributes.   Otherwise, I\u0027d expect the separable shader program tests that have been compiling separable fragment shaders would be failing to compile, causing the tests to fail.   However, it\u0027s certainly possible that those all use their inputs (varyings), so we haven\u0027t seen this case for fragment shaders yet.\n\nI\u0027m fine with pulling this out of the loop for now.   We would need to handle that issue separately (also outside of the loop) anyway, since fragment shaders would need to loop through a different list of variables.",
+      "parentUuid": "846ba3d0_899d1bad",
+      "revId": "5067ba7dfd3de98fc29c105051173447ac5081c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
