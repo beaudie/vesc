@@ -84,6 +84,7 @@ TEST_P(AtomicCounterBufferTest31, OffsetNotAllSpecified)
         "layout(binding = 0) uniform atomic_uint foo;\n"
         "void main()\n"
         "{\n"
+        "    atomicCounter(foo);\n"
         "}\n";
 
     GLuint program = CompileProgram(kVS, kFS);
@@ -106,6 +107,7 @@ TEST_P(AtomicCounterBufferTest31, OffsetNotAllSpecifiedWithSameValue)
         "layout(binding = 0, offset = 8) uniform atomic_uint foo;\n"
         "void main()\n"
         "{\n"
+        "    atomicCounter(foo);\n"
         "}\n";
 
     GLuint program = CompileProgram(kVS, kFS);

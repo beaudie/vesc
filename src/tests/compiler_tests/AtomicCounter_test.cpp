@@ -43,6 +43,11 @@ TEST_F(AtomicCounterTest, BasicAtomicCounterDeclaration)
         "layout(binding = 1, offset = 4) uniform atomic_uint e;\n"
         "void main()\n"
         "{\n"
+        "  atomicCounterIncrement(a);\n"
+        "  atomicCounterIncrement(b);\n"
+        "  atomicCounterIncrement(c);\n"
+        "  atomicCounterIncrement(d);\n"
+        "  atomicCounterIncrement(e);\n"
         "}\n";
     if (!compile(source))
     {
