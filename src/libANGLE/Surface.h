@@ -52,6 +52,10 @@ struct SurfaceState final : private angle::NonCopyable
     const egl::Config *config;
     AttributeMap attributes;
 
+    // Based on the requested colorspace, the render target format
+    // in config gets overridden with the non-linear version of the
+    // format. Cache this finalized render target format for subsequent use
+    GLenum finalizedRenderTargetFormat;
     bool timestampsEnabled;
     SupportedCompositorTiming supportedCompositorTimings;
     SupportedTimestamps supportedTimestamps;
@@ -142,7 +146,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
         return mFlexibleSurfaceCompatibilityRequested;
     }
     EGLint getOrientation() const { return mOrientation; }
-
+    GLenum getFinalizedRenderTargetFormat() { return mState.finalizedRenderTargetFormat; }
     bool directComposition() const { return mState.directComposition; }
 
     gl::InitState initState(const gl::ImageIndex &imageIndex) const override;
