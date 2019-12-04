@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d6f1a29_69061370",
+        "filename": "src/tests/gl_tests/RenderbufferMultisampleTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-04T21:14:05Z",
+      "side": 1,
+      "message": "nit: comment before each test.",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 6
+      },
+      "revId": "80137598e6a63cb13c7fba59c4a3d182c02070fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
