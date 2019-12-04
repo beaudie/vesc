@@ -19,6 +19,7 @@
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/tree_ops/NameEmbeddedUniformStructs.h"
 #include "compiler/translator/tree_ops/NameNamelessUniformBuffers.h"
+#include "compiler/translator/tree_ops/RemoveInactiveVariables.h"
 #include "compiler/translator/tree_ops/RewriteAtomicCounters.h"
 #include "compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.h"
 #include "compiler/translator/tree_ops/RewriteDfdy.h"
@@ -702,20 +703,34 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
     int atomicCounterCount            = 0;
     for (const auto &uniform : getUniforms())
     {
-        if (!uniform.isBuiltIn() && uniform.staticUse && !gl::IsOpaqueType(uniform.type))
-        {
-            ++defaultUniformCount;
-        }
-
         if (uniform.isStruct() || uniform.isArrayOfArrays())
         {
             ++aggregateTypesUsedForUniforms;
+        }
+
+        // Inactive uniforms will be removed after samplers are moved out of structs.
+        if (!uniform.active)
+        {
+            continue;
+        }
+
+        if (!uniform.isBuiltIn() && !gl::IsOpaqueType(uniform.type))
+        {
+            ++defaultUniformCount;
         }
 
         if (gl::IsAtomicCounterType(uniform.type))
         {
             ++atomicCounterCount;
         }
+    }
+
+    // Remove declarations of inactive shader interface variables so glslang wrapper doesn't need to
+    // replace them.  Note: this is done before extracting samplers from structs, as removing such
+    // inactive samplers is not yet supported.
+    if (!RemoveInactiveVariables(this, root, getUniforms(), getInterfaceBlocks()))
+    {
+        return false;
     }
 
     // TODO(lucferron): Refactor this function to do fewer tree traversals.
