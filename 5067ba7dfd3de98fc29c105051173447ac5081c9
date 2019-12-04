@@ -34,6 +34,24 @@
       "revId": "5067ba7dfd3de98fc29c105051173447ac5081c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87c5f9ed_ae6f5876",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-04T18:44:54Z",
+      "side": 1,
+      "message": "I forget how this happens. AFAIK if you put ASSERTs in the right place we should catch internal errors when our assumptions get violated.",
+      "parentUuid": "f1d2298f_664bdb04",
+      "revId": "5067ba7dfd3de98fc29c105051173447ac5081c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
