@@ -93,6 +93,30 @@
       "revId": "7472b85b4fc26aa26ab7a97f474163a472be0656",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c9f62dc_4c3eb74f",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-04T18:03:16Z",
+      "side": 1,
+      "message": "Sure. Can you ensure there\u0027s a test for querying TEXTURE_SAMPLES for a samples of 3 -\u003e a result 4+?\n\nAlso I think we\u0027ll need a similar test for Renderbuffers, as the spec language is the same:\n\n However, the resulting value for RENDERBUFFER_SAMPLES is guaranteed to be greater than or equal to samples and no more than the next larger sample count supported by the implementation",
+      "parentUuid": "af8e8e85_0e29db30",
+      "range": {
+        "startLine": 815,
+        "startChar": 50,
+        "endLine": 815,
+        "endChar": 54
+      },
+      "revId": "7472b85b4fc26aa26ab7a97f474163a472be0656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
