@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2cc4f8d9_132391fb",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-12-04T05:34:09Z",
+      "side": 1,
+      "message": "mSize is used to copy data from shadow buffer to real metal buffer at the end of this function. Currently I don\u0027t resize the shadow buffer if the new size is \u003c\u003d shadow buffer\u0027size. Thus, when copying the data to real metal buffer, it is better to only copy mSize bytes instead of copying the whole shadow buffer.\nAt this point, only way to know the real size of buffer is through mSize, mState doesn\u0027t have this info yet, and shadow buffer\u0027s size might be bigger than the actual size.\nanw, the code could be modified to pass the actual size to the commitShadowCopy() function instead of using mSize. I think I will change it.",
+      "parentUuid": "a60f35ff_1c86aa42",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 118,
+        "endChar": 17
+      },
+      "revId": "8b5a1009bb58f7ef2e0608b1867ac3501442efeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f9833cb5_a80ad207",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-02T16:50:21Z",
       "side": 1,
       "message": "I don\u0027t think there is a point to returning this as an output parameter when it\u0027s a property of the packedFormat already.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 88
+      },
+      "revId": "8b5a1009bb58f7ef2e0608b1867ac3501442efeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f0dd94a_18a94a89",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-12-04T05:34:09Z",
+      "side": 1,
+      "message": "I just think GetVertexConversionFormat() could be changed in future to not used packed format. Besides, having a variable to hold this info in caller code so I don\u0027t have to write \"packedFormat.actualAngleFormat().pixelBytes\" in many places.\nFurthermore, if in future, the places using GetVertexConversionFormat() are refactored, people might change only GetVertexConversionFormat() calls and forget to change the stride value (packedFormat.actualAngleFormat().pixelBytes).\nThis is my 2c.",
+      "parentUuid": "f9833cb5_a80ad207",
       "range": {
         "startLine": 55,
         "startChar": 0,
