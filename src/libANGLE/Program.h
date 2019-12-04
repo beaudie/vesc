@@ -439,10 +439,10 @@ class ProgramState final : angle::NonCopyable
 
     // Uniforms are sorted in order:
     //  1. Non-opaque uniforms
-    //  2. Sampler uniforms
-    //  3. Image uniforms
-    //  4. Atomic counter uniforms
-    //  5. Uniform block uniforms
+    //  2. Uniform block uniforms
+    //  3. Sampler uniforms
+    //  4. Image uniforms
+    //  5. Atomic counter uniforms
     // This makes opaque uniform validation easier, since we don't need a separate list.
     // For generating the entries and naming them we follow the spec: GLES 3.1 November 2016 section
     // 7.3.1.1 Naming Active Resources. There's a separate entry for each struct member and each
