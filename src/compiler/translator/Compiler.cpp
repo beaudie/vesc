@@ -38,6 +38,7 @@
 #include "compiler/translator/tree_ops/RemoveDynamicIndexing.h"
 #include "compiler/translator/tree_ops/RemoveInvariantDeclaration.h"
 #include "compiler/translator/tree_ops/RemovePow.h"
+#include "compiler/translator/tree_ops/RemoveStaticallyUnusedVariables.h"
 #include "compiler/translator/tree_ops/RemoveUnreferencedVariables.h"
 #include "compiler/translator/tree_ops/RewriteDoWhile.h"
 #include "compiler/translator/tree_ops/RewriteRepeatedAssignToSwizzled.h"
@@ -818,6 +819,12 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         {
             return false;
         }
+    }
+
+    // Remove declarations of statically unused shader interface variables after CollectVariables.
+    if (!RemoveStaticallyUnusedVariables(this, root, &mSymbolTable))
+    {
+        return false;
     }
 
     // gl_Position is always written in compatibility output mode.
