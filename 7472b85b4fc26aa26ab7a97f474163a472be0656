@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2e53780e_61020643",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-12-04T17:57:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e325d6c_2d4978e6",
+      "range": {
+        "startLine": 14,
+        "startChar": 45,
+        "endLine": 14,
+        "endChar": 58
+      },
+      "revId": "7472b85b4fc26aa26ab7a97f474163a472be0656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19eb7507_7c4b18f1",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-04T16:48:48Z",
       "side": 1,
       "message": "rather than making the front-end change, I propose:\n\n    inline int ceilLog2(int x)\n    {\n        if (x \u003c\u003d 1) return 0;  // double-check this?\n        return gl::log2(x-1) + 1;\n    }",
+      "range": {
+        "startLine": 815,
+        "startChar": 50,
+        "endLine": 815,
+        "endChar": 54
+      },
+      "revId": "7472b85b4fc26aa26ab7a97f474163a472be0656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af8e8e85_0e29db30",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-12-04T17:57:38Z",
+      "side": 1,
+      "message": "\u003e rather than making the front-end change\n\nSorry, but the front-end change is needed anyway.  Per the design doc, the front-end needs to be changed in order for the front-end to store the correct number of samples (in gl::TextureState::mImageDescs) for use later; for example:\n\n1) GL_TEXTURE_SAMPLES must be the number of samples actually used in the texture (which is \u003e\u003d the number of samples requested).\n\n2) When ImageHelper::init() is called, you requested that the front-end be queried.",
+      "parentUuid": "19eb7507_7c4b18f1",
       "range": {
         "startLine": 815,
         "startChar": 50,
