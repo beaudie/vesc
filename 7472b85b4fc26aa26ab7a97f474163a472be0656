@@ -141,6 +141,30 @@
       "revId": "7472b85b4fc26aa26ab7a97f474163a472be0656",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7077b05e_cb4b18af",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-12-04T21:07:53Z",
+      "side": 1,
+      "message": "Per private chat with Jamie, I am proceeding with my proposal.  I filed http://anglebug.com/4196, added the multisample-renderbuffer test, but disabled the last check until I fix the multisample-renderbuffer code.",
+      "parentUuid": "9ca695d9_fd41bb1b",
+      "range": {
+        "startLine": 815,
+        "startChar": 50,
+        "endLine": 815,
+        "endChar": 54
+      },
+      "revId": "7472b85b4fc26aa26ab7a97f474163a472be0656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
