@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8a6ac7f_01cfb449",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3255,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-12-04T23:57:26Z",
+      "side": 1,
+      "message": "ResolveSubResource will not work for depth, stencil or depth-stencil textures. You will need to use the blitter to \u0027resolve\u0027 depth. Stencil, we\u0027ll need to get spec clarification for.",
+      "range": {
+        "startLine": 3254,
+        "startChar": 0,
+        "endLine": 3255,
+        "endChar": 85
+      },
+      "revId": "d73a0071138a81c054a0fac3885606463534b0a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
