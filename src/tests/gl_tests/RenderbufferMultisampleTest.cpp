@@ -74,5 +74,51 @@ TEST_P(RenderbufferMultisampleTest, IntegerInternalformat)
     }
 }
 
+TEST_P(RenderbufferMultisampleTest, OddSampleCount)
+{
+    glBindRenderbuffer(GL_RENDERBUFFER, mRenderbuffer);
+    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    {
+        ASSERT_GL_ERROR(GL_INVALID_OPERATION);
+    }
+    else
+    {
+        ASSERT_GL_NO_ERROR();
+
+        // Lookup the supported number of sample counts
+        GLint numSampleCounts = 0;
+        std::vector<GLint> sampleCounts;
+        GLsizei queryBufferSize = 1;
+        glGetInternalformativ(GL_RENDERBUFFER, GL_RGBA8, GL_NUM_SAMPLE_COUNTS, queryBufferSize,
+                              &numSampleCounts);
+        ANGLE_SKIP_TEST_IF((numSampleCounts < 2));
+        sampleCounts.resize(numSampleCounts);
+        queryBufferSize = numSampleCounts;
+        glGetInternalformativ(GL_RENDERBUFFER, GL_RGBA8, GL_SAMPLES, queryBufferSize,
+                              sampleCounts.data());
+
+        // Look for two sample counts that are not 1 apart (e.g. 2 and 4).  Request a sample count
+        // that's between those two samples counts (e.g. 3) and ensure that GL_RENDERBUFFER_SAMPLES
+        // is the higher number.
+        for (int i = 1; i < numSampleCounts; i++)
+        {
+            if (sampleCounts[i - 1] > (sampleCounts[i] + 1))
+            {
+                glRenderbufferStorageMultisample(GL_RENDERBUFFER, sampleCounts[i] + 1, GL_RGBA8, 64,
+                                                 64);
+                ASSERT_GL_NO_ERROR();
+                GLint renderbufferSamples = 0;
+                glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_SAMPLES,
+                                             &renderbufferSamples);
+                ASSERT_GL_NO_ERROR();
+                // TODO (ianelliott) Uncomment the following line once the implementation is fixed.
+                // http://anglebug.com/4196
+                // EXPECT_EQ(renderbufferSamples, sampleCounts[i-1]);
+                break;
+            }
+        }
+    }
+}
+
 ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(RenderbufferMultisampleTest);
 }  // namespace
