@@ -38,6 +38,7 @@
 #include "compiler/translator/tree_ops/RemoveDynamicIndexing.h"
 #include "compiler/translator/tree_ops/RemoveInvariantDeclaration.h"
 #include "compiler/translator/tree_ops/RemovePow.h"
+#include "compiler/translator/tree_ops/RemoveStaticallyUnusedVariables.h"
 #include "compiler/translator/tree_ops/RemoveUnreferencedVariables.h"
 #include "compiler/translator/tree_ops/RewriteDoWhile.h"
 #include "compiler/translator/tree_ops/RewriteRepeatedAssignToSwizzled.h"
@@ -815,6 +816,16 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     if (RemoveInvariant(mShaderType, mShaderVersion, mOutputType, compileOptions))
     {
         if (!RemoveInvariantDeclaration(this, root))
+        {
+            return false;
+        }
+    }
+
+    // Remove declarations of statically unused shader interface variables so glslang wrapper
+    // doesn't need to replace them.  This must be done after CollectVariables.
+    if ((compileOptions & SH_REMOVE_STATICALLY_UNUSED_VARIABLES) != 0)
+    {
+        if (!RemoveStaticallyUnusedVariables(this, root, &mSymbolTable))
         {
             return false;
         }

@@ -299,6 +299,10 @@ const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING = UINT64_C(1) << 44;
 // If requested, validates the AST after every transformation.  Useful for debugging.
 const ShCompileOptions SH_VALIDATE_AST = UINT64_C(1) << 46;
 
+// Remove statically unused shader interface variables.  This allows glslang wrapper to avoid
+// having to comment them out.
+const ShCompileOptions SH_REMOVE_STATICALLY_UNUSED_VARIABLES = UINT64_C(1) << 45;
+
 // Use old version of RewriteStructSamplers, which doesn't produce as many
 // sampler arrays in parameters. This causes a few tests to pass on Android.
 const ShCompileOptions SH_USE_OLD_REWRITE_STRUCT_SAMPLERS = UINT64_C(1) << 47;
