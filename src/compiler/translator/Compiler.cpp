@@ -740,22 +740,6 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
-    if (!RemoveUnreferencedVariables(this, root, &mSymbolTable))
-    {
-        return false;
-    }
-
-    // In case the last case inside a switch statement is a certain type of no-op, GLSL compilers in
-    // drivers may not accept it. In this case we clean up the dead code from the end of switch
-    // statements. This is also required because PruneNoOps or RemoveUnreferencedVariables may have
-    // left switch statements that only contained an empty declaration inside the final case in an
-    // invalid state. Relies on that PruneNoOps and RemoveUnreferencedVariables have already been
-    // run.
-    if (!PruneEmptyCases(this, root))
-    {
-        return false;
-    }
-
     // Built-in function emulation needs to happen after validateLimitations pass.
     // TODO(jmadill): Remove global pool allocator.
     GetGlobalPoolAllocator()->lock();
@@ -808,6 +792,22 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
                 return false;
             }
         }
+    }
+
+    if (!RemoveUnreferencedVariables(this, root, &mSymbolTable))
+    {
+        return false;
+    }
+
+    // In case the last case inside a switch statement is a certain type of no-op, GLSL compilers in
+    // drivers may not accept it. In this case we clean up the dead code from the end of switch
+    // statements. This is also required because PruneNoOps or RemoveUnreferencedVariables may have
+    // left switch statements that only contained an empty declaration inside the final case in an
+    // invalid state. Relies on that PruneNoOps and RemoveUnreferencedVariables have already been
+    // run.
+    if (!PruneEmptyCases(this, root))
+    {
+        return false;
     }
 
     // Removing invariant declarations must be done after collecting variables.

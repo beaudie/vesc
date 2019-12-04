@@ -712,7 +712,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             ++aggregateTypesUsedForUniforms;
         }
 
-        if (gl::IsAtomicCounterType(uniform.type))
+        if (gl::IsAtomicCounterType(uniform.type) && uniform.active)
         {
             ++atomicCounterCount;
         }
