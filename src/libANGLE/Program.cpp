@@ -3540,7 +3540,7 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
 
     high = low;
 
-    for (auto imageIter = mState.mUniforms.rbegin();
+    for (auto imageIter = mState.mUniforms.rbegin() + mState.mAtomicCounterUniformRange.length();
          imageIter != mState.mUniforms.rend() && imageIter->isImage(); ++imageIter)
     {
         --low;
