@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18f0b2bd_9dac1859",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-05T20:01:53Z",
+      "side": 1,
+      "message": "typo: driver\n\nAlso, would be nice to indicate which driver (I presume mesa?), as AMD has both an open source and closed source driver on Linux. I wouldn\u0027t bother so much as to tie the workaround to one of them though.",
+      "range": {
+        "startLine": 9,
+        "startChar": 42,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "60390cf6cb161e9dad1f2badba57369da15ebacc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
