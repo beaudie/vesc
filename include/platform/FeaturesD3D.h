@@ -43,6 +43,13 @@ struct FeaturesD3D : FeatureSetBase
                                             FeatureCategory::D3DWorkarounds,
                                             "Set data faster than image upload", &members};
 
+    // Intel Haswell/IvyBridge/Broadwell drivers occasionally corrupt 128bpp texture data uploads.
+    // On these drivers, use image uploads instead of setData for these formats.
+    // http://anglebug.com/4366
+    Feature setDataCorruptionWith128bpp = {
+        "set_data_corruption_with_128bpp", FeatureCategory::D3DWorkarounds,
+        "`setData` can corrupt data with 128bpp formats", &members};
+
     // Some renderers can't disable mipmaps on a mipmapped texture (i.e. solely sample from level
     // zero, and ignore the other levels). D3D11 Feature Level 10+ does this by setting MaxLOD to
     // 0.0f in the Sampler state. D3D9 sets D3DSAMP_MIPFILTER to D3DTEXF_NONE. There is no
