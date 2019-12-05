@@ -8,7 +8,6 @@
 
 #include "common/utilities.h"
 #include <GLSLANG/ShaderVars.h>
-#include "GLES3/gl3.h"
 #include "common/mathutil.h"
 #include "common/platform.h"
 
