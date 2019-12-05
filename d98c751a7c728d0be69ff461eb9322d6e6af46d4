@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c37c63b_4baeb9e2",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-05T19:59:31Z",
+      "side": 1,
+      "message": "It\u0027s me being super crazy, but could we move this check to last? If a vendor comes up with a product name like \"RTX Super Intelligent\" we could get tripped up if GL_RENDERER is added in.\n\nBetter yet, and preferably, to avoid issues with a vendor naming their card \"Beat this NVIDIA! 5000\", we can add a check for AMD/ATI in GL_RENDERER only before resorting to VENDOR_ID_UNKNOWN.\n\nThe latter better matches what the code actually intends to do.",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 5
+      },
+      "revId": "d98c751a7c728d0be69ff461eb9322d6e6af46d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
