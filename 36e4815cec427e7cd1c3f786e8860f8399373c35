@@ -70,6 +70,30 @@
       "revId": "36e4815cec427e7cd1c3f786e8860f8399373c35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1530906c_cabc5d55",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-05T15:36:29Z",
+      "side": 1,
+      "message": "In fact they are! GL allows the application to query uniform block uniforms (from UBOs as you said) via glGetActiveUniform. They don\u0027t have locations and you can\u0027t set values on them. You *can* query the properties such as the block offset. This is necessary for shared/packed layouts.",
+      "parentUuid": "eff91ca8_dab2ea63",
+      "range": {
+        "startLine": 441,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 33
+      },
+      "revId": "36e4815cec427e7cd1c3f786e8860f8399373c35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
