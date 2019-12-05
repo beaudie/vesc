@@ -2422,9 +2422,12 @@ void InitializeFeatures(const Renderer11DeviceCaps &deviceCaps,
     ANGLE_FEATURE_CONDITION(features, addDummyTextureNoRenderTarget,
                             isIntel && capsVersion < IntelDriverVersion(4815));
 
+    // RobustResourceInitTestES3.CopyTexSubImage3D fails on D3D11 for
+    // setDataFasterThanImageUpload:false.
+    ANGLE_FEATURE_CONDITION(features, setDataFasterThanImageUpload, true);
     // Haswell/Ivybridge drivers occasionally corrupt (small?) (vertex?) texture data uploads.
-    ANGLE_FEATURE_CONDITION(features, setDataFasterThanImageUpload,
-                            !(isIvyBridge || isBroadwell || isHaswell));
+    ANGLE_FEATURE_CONDITION(features, setDataCorruptionWith128bpp,
+                            isIvyBridge || isBroadwell || isHaswell);
 
     ANGLE_FEATURE_CONDITION(features, disableB5G6R5Support,
                             (isIntel && capsVersion < IntelDriverVersion(4539)) || isAMD);

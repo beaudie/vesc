@@ -218,6 +218,14 @@ bool TextureD3D::shouldUseSetData(const ImageD3D *image) const
         return false;
     }
 
+    if (mRenderer->getFeatures().setDataCorruptionWith128bpp.enabled)
+    {
+        if (internalFormat.pixelBytes >= 16)
+        {
+            return false;
+        }
+    }
+
     // TODO(jmadill): Handle compressed internal formats
     return (mTexStorage && !internalFormat.compressed);
 }
@@ -472,27 +480,8 @@ angle::Result TextureD3D::generateMipmapUsingImages(const gl::Context *context,
     // We know that all layers have the same dimension, for the texture to be complete
     GLint layerCount = static_cast<GLint>(getLayerCount(mBaseLevel));
 
-    // When making mipmaps with the setData workaround enabled, the texture storage has
-    // the image data already. For non-render-target storage, we have to pull it out into
-    // an image layer.
-    if (mRenderer->getFeatures().setDataFasterThanImageUpload.enabled && mTexStorage)
-    {
-        if (!mTexStorage->isRenderTarget())
-        {
-            // Copy from the storage mip 0 to Image mip 0
-            for (GLint layer = 0; layer < layerCount; ++layer)
-            {
-                gl::ImageIndex srcIndex = getImageIndex(mBaseLevel, layer);
-
-                ImageD3D *image = getImage(srcIndex);
-                ANGLE_TRY(image->copyFromTexStorage(context, srcIndex, mTexStorage));
-            }
-        }
-        else
-        {
-            ANGLE_TRY(updateStorage(context));
-        }
-    }
+    // Whether we can setData is tricky, and GenerateMipmap should be cold code, so don't try to use
+    // setData.
 
     // TODO: Decouple this from zeroMaxLodWorkaround. This is a 9_3 restriction, unrelated to
     // zeroMaxLodWorkaround. The restriction is because Feature Level 9_3 can't create SRVs on
