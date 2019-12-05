@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b325e67d_a7955535",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-05T18:46:13Z",
+      "side": 1,
+      "message": "Yea, not depending on mSize in commitShadowCopy would be good!",
+      "parentUuid": "2cc4f8d9_132391fb",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 118,
+        "endChar": 17
+      },
+      "revId": "8b5a1009bb58f7ef2e0608b1867ac3501442efeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f9833cb5_a80ad207",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 2
@@ -93,6 +117,30 @@
       "revId": "8b5a1009bb58f7ef2e0608b1867ac3501442efeb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c413e2b_39b9b478",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-05T18:46:13Z",
+      "side": 1,
+      "message": "This is fair if you expect it to be calculated in a different way in the future.",
+      "parentUuid": "1f0dd94a_18a94a89",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 88
+      },
+      "revId": "8b5a1009bb58f7ef2e0608b1867ac3501442efeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
