@@ -38,6 +38,8 @@ namespace rx
 VendorID GetVendorID(const FunctionsGL *functions)
 {
     std::string nativeVendorString(reinterpret_cast<const char *>(functions->getString(GL_VENDOR)));
+    nativeVendorString +=
+        " " + std::string(reinterpret_cast<const char *>(functions->getString(GL_RENDERER)));
     if (nativeVendorString.find("Intel") != std::string::npos)
     {
         return VENDOR_ID_INTEL;
@@ -1113,7 +1115,7 @@ void GenerateCaps(const FunctionsGL *functions,
                                     functions->hasGLExtension("GL_ARB_pixel_buffer_object") ||
                                     functions->hasGLExtension("GL_EXT_pixel_buffer_object") ||
                                     functions->hasGLESExtension("GL_NV_pixel_buffer_object");
-    extensions->glSync = nativegl::SupportsFenceSync(functions);
+    extensions->glSync    = nativegl::SupportsFenceSync(functions);
     extensions->mapBuffer = functions->isAtLeastGL(gl::Version(1, 5)) ||
                             functions->isAtLeastGLES(gl::Version(3, 0)) ||
                             functions->hasGLESExtension("GL_OES_mapbuffer");
