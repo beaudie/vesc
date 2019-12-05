@@ -34,6 +34,24 @@
       "revId": "c45da668562d155c45d08cd99bda121c7788d7dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "565c10d9_1e8a2cfb",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-05T17:01:48Z",
+      "side": 1,
+      "message": "Very strange.   Looking through some of those results, the test is running:\n\nLinux:\n[ RUN      ] dEQP.KHR_GLES31/core_compute_shader_sharedmax\nKHR-GLES31.core.compute_shader.shared-max\n[       OK ] dEQP.KHR_GLES31/core_compute_shader_sharedmax (15 ms)\n\nWindows:\n[ RUN      ] dEQP.KHR_GLES31/core_compute_shader_sharedmax\nKHR-GLES31.core.compute_shader.shared-max\n[       OK ] dEQP.KHR_GLES31/core_compute_shader_sharedmax (59 ms)\n\nUnfortunately, pass/fail looks the same if the expectations file has marked the test as \"FAIL\", so we can\u0027t tell what it was seeing at the time or what it was expected to be.   Seems like it should be expected to pass though, and that it did.\n\nHopefully there aren\u0027t too many other tests that are mysteriously passing like this one was.",
+      "parentUuid": "cfa8561f_97182c74",
+      "revId": "c45da668562d155c45d08cd99bda121c7788d7dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
