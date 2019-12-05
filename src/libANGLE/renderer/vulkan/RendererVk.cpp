@@ -1246,6 +1246,15 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
         maxVersion = std::min(maxVersion, gl::Version(3, 0));
     }
 
+    // Atomic counter emulation passes the (constant) index into the storage buffer array used for
+    // emulation to functions that originally received the atomic counter.  As such, the array
+    // index is no longer a constant expression when used in those functions, so we need this
+    // feature to be able to support atomic counters.
+    if (!mPhysicalDeviceFeatures.shaderStorageBufferArrayDynamicIndexing)
+    {
+        maxVersion = std::min(maxVersion, gl::Version(3, 0));
+    }
+
     // ES3.1 requires at least a maximum offset of at least 2047.
     // If the Vulkan implementation can't support that, we cannot support 3.1.
     if (mPhysicalDeviceProperties.limits.maxVertexInputAttributeOffset < 2047)
