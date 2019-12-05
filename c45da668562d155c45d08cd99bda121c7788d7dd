@@ -52,6 +52,24 @@
       "revId": "c45da668562d155c45d08cd99bda121c7788d7dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9bcaca0_f3ea791e",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-05T17:07:39Z",
+      "side": 1,
+      "message": "Yes, that\u0027s how I verified that that CL didn\u0027t fail. My thought was perhaps the bots are thinking that the test is not necessary (they sometimes do that if they think nothing important has changed in the CL), but that wasn\u0027t the case.\n\nWeirdest thing is that, the test could be passing on a platform that has a very large limit for the compute shared memory size, but fail or pass, it can\u0027t be flaky, yet it somehow is!",
+      "parentUuid": "565c10d9_1e8a2cfb",
+      "revId": "c45da668562d155c45d08cd99bda121c7788d7dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
