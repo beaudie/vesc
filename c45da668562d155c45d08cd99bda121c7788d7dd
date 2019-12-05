@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc5ae4ab_007aedbf",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-05T16:43:06Z",
+      "side": 1,
+      "message": "Good catch.   Looks like this is the second place the *\u003d getArraySizeProduct() is being done.\n\nAny ideas on how this got through CQ?   I\u0027m able to recreate the failure locally with native and swiftshader.",
+      "revId": "c45da668562d155c45d08cd99bda121c7788d7dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
