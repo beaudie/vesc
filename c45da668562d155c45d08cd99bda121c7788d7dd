@@ -16,6 +16,24 @@
       "revId": "c45da668562d155c45d08cd99bda121c7788d7dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfa8561f_97182c74",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-05T16:51:09Z",
+      "side": 1,
+      "message": "I really don\u0027t! I saw it in another CL where Android and Windows failed but not Linux, but I see the failure locally on Linux.\n\nThe change that added this function had the test disabled, and the change that enabled the test didn\u0027t fail: https://chromium-review.googlesource.com/c/angle/angle/+/1948524",
+      "parentUuid": "cc5ae4ab_007aedbf",
+      "revId": "c45da668562d155c45d08cd99bda121c7788d7dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
