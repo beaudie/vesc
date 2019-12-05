@@ -483,7 +483,8 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
     // Clip read area to framebuffer.
-    const gl::Extents fbSize = getState().getReadAttachment()->getSize();
+    const auto *readAttachment = mState.getReadAttachment();
+    const gl::Extents fbSize   = readAttachment->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
     gl::Rectangle clippedArea;
     if (!ClipRectangle(area, fbRect, &clippedArea))
@@ -496,8 +497,10 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
     const gl::Buffer *packBuffer =
         context->getState().getTargetBuffer(gl::BufferBinding::PixelPack);
 
-    nativegl::ReadPixelsFormat readPixelsFormat =
-        nativegl::GetReadPixelsFormat(functions, features, format, type);
+    nativegl::ReadPixelsFormat readPixelsFormat = nativegl::GetReadPixelsFormat(
+        functions, features,
+        readAttachment->getFormat().info->getReadPixelsFormat(context->getExtensions()), format,
+        type);
     GLenum readFormat = readPixelsFormat.format;
     GLenum readType   = readPixelsFormat.type;
 
@@ -535,7 +538,8 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
 
     if (cannotSetDesiredRowLength || useOverlappingRowsWorkaround)
     {
-        return readPixelsRowByRow(context, clippedArea, readFormat, readType, packState, outPtr);
+        return readPixelsRowByRow(context, clippedArea, format, readFormat, readType, packState,
+                                  outPtr);
     }
 
     bool useLastRowPaddingWorkaround = false;
@@ -546,8 +550,8 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
             readFormat, readType, false, outPtr, &useLastRowPaddingWorkaround));
     }
 
-    return readPixelsAllAtOnce(context, clippedArea, readFormat, readType, packState, outPtr,
-                               useLastRowPaddingWorkaround);
+    return readPixelsAllAtOnce(context, clippedArea, format, readFormat, readType, packState,
+                               outPtr, useLastRowPaddingWorkaround);
 }
 
 angle::Result FramebufferGL::blit(const gl::Context *context,
@@ -1273,16 +1277,85 @@ bool FramebufferGL::modifyInvalidateAttachmentsForEmulatedDefaultFBO(
     return true;
 }
 
+// Workaround to rearrange pixels read by RED/RG to RGBA for RGBA/UNSIGNED_SHORT pixel type
+// combination
+static angle::Result rearrangePixels(const gl::Context *context,
+                                     const gl::Rectangle &area,
+                                     GLenum originalFormat,
+                                     GLenum format,
+                                     GLenum type,
+                                     GLuint skipBytes,
+                                     GLuint rowBytes,
+                                     GLuint pixelBytes,
+                                     const gl::PixelPackState &pack,
+                                     GLubyte *pixels)
+{
+    ASSERT(originalFormat == GL_RGBA);
+    ASSERT(format == GL_RED_EXT || format == GL_RG_EXT);
+    ASSERT(type == GL_UNSIGNED_SHORT);
+
+    ContextGL *contextGL          = GetImplAs<ContextGL>(context);
+    GLubyte *originalFormatPixels = pixels;
+
+    const gl::InternalFormat &glFormatOriginal = gl::GetInternalFormatInfo(originalFormat, type);
+
+    GLuint originalFormatRowBytes = 0;
+    ANGLE_CHECK_GL_MATH(contextGL,
+                        glFormatOriginal.computeRowPitch(type, area.width, pack.alignment,
+                                                         pack.rowLength, &originalFormatRowBytes));
+    GLuint originalFormatSkipBytes = 0;
+    ANGLE_CHECK_GL_MATH(
+        contextGL, glFormatOriginal.computeSkipBytes(type, originalFormatRowBytes, 0, pack, false,
+                                                     &originalFormatSkipBytes));
+
+    GLuint originalFormatPixelByte = glFormatOriginal.computePixelBytes(type);
+
+    pixels += skipBytes;
+    originalFormatPixels += originalFormatSkipBytes;
+
+    GLubyte *pRowStart  = pixels + area.height * rowBytes;
+    GLubyte *opRowStart = originalFormatPixels + area.height * originalFormatRowBytes;
+
+    GLuint alphaChannelBytes = glFormatOriginal.alphaBits / 8;
+
+    for (GLint y = area.y + area.height - 1; y >= area.y; --y)
+    {
+        pRowStart -= rowBytes;
+        opRowStart -= originalFormatRowBytes;
+
+        // Assume pixels align compactly for each row
+        GLubyte *p  = pRowStart + area.width * pixelBytes;
+        GLubyte *op = opRowStart + area.width * originalFormatPixelByte;
+
+        for (GLint x = area.x + area.width - 1; x >= area.x; --x)
+        {
+            p -= pixelBytes;
+            op -= originalFormatPixelByte;
+
+            memset(op + pixelBytes, 0, originalFormatPixelByte - pixelBytes);
+
+            // Assume alpha channel is byte algined
+            memset(op + originalFormatPixelByte - alphaChannelBytes, 0xff, sizeof(GLushort));
+            memcpy(op, p, pixelBytes);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result FramebufferGL::readPixelsRowByRow(const gl::Context *context,
                                                 const gl::Rectangle &area,
+                                                GLenum originalFormat,
                                                 GLenum format,
                                                 GLenum type,
                                                 const gl::PixelPackState &pack,
                                                 GLubyte *pixels) const
 {
-    ContextGL *contextGL         = GetImplAs<ContextGL>(context);
-    const FunctionsGL *functions = GetFunctionsGL(context);
-    StateManagerGL *stateManager = GetStateManagerGL(context);
+    ContextGL *contextGL              = GetImplAs<ContextGL>(context);
+    const FunctionsGL *functions      = GetFunctionsGL(context);
+    StateManagerGL *stateManager      = GetStateManagerGL(context);
+    const angle::FeaturesGL &features = GetFeaturesGL(context);
+    GLubyte *originalFormatPixels     = pixels;
 
     const gl::InternalFormat &glFormat = gl::GetInternalFormatInfo(format, type);
 
@@ -1304,20 +1377,29 @@ angle::Result FramebufferGL::readPixelsRowByRow(const gl::Context *context,
         pixels += rowBytes;
     }
 
+    if (features.readPixelsUsingImplementationColorReadFormat.enabled && originalFormat != format)
+    {
+        return rearrangePixels(context, area, originalFormat, format, type, skipBytes, rowBytes,
+                               glFormat.computePixelBytes(type), pack, originalFormatPixels);
+    }
+
     return angle::Result::Continue;
 }
 
 angle::Result FramebufferGL::readPixelsAllAtOnce(const gl::Context *context,
                                                  const gl::Rectangle &area,
+                                                 GLenum originalFormat,
                                                  GLenum format,
                                                  GLenum type,
                                                  const gl::PixelPackState &pack,
                                                  GLubyte *pixels,
                                                  bool readLastRowSeparately) const
 {
-    ContextGL *contextGL         = GetImplAs<ContextGL>(context);
-    const FunctionsGL *functions = GetFunctionsGL(context);
-    StateManagerGL *stateManager = GetStateManagerGL(context);
+    ContextGL *contextGL              = GetImplAs<ContextGL>(context);
+    const FunctionsGL *functions      = GetFunctionsGL(context);
+    StateManagerGL *stateManager      = GetStateManagerGL(context);
+    const angle::FeaturesGL &features = GetFeaturesGL(context);
+    GLubyte *originalFormatPixels     = pixels;
 
     GLint height = area.height - readLastRowSeparately;
     if (height > 0)
@@ -1326,17 +1408,17 @@ angle::Result FramebufferGL::readPixelsAllAtOnce(const gl::Context *context,
         functions->readPixels(area.x, area.y, area.width, height, format, type, pixels);
     }
 
+    const gl::InternalFormat &glFormat = gl::GetInternalFormatInfo(format, type);
+
+    GLuint rowBytes = 0;
+    ANGLE_CHECK_GL_MATH(contextGL, glFormat.computeRowPitch(type, area.width, pack.alignment,
+                                                            pack.rowLength, &rowBytes));
+    GLuint skipBytes = 0;
+    ANGLE_CHECK_GL_MATH(contextGL,
+                        glFormat.computeSkipBytes(type, rowBytes, 0, pack, false, &skipBytes));
+
     if (readLastRowSeparately)
     {
-        const gl::InternalFormat &glFormat = gl::GetInternalFormatInfo(format, type);
-
-        GLuint rowBytes = 0;
-        ANGLE_CHECK_GL_MATH(contextGL, glFormat.computeRowPitch(type, area.width, pack.alignment,
-                                                                pack.rowLength, &rowBytes));
-        GLuint skipBytes = 0;
-        ANGLE_CHECK_GL_MATH(contextGL,
-                            glFormat.computeSkipBytes(type, rowBytes, 0, pack, false, &skipBytes));
-
         gl::PixelPackState directPack;
         directPack.alignment = 1;
         stateManager->setPixelPackState(directPack);
@@ -1344,6 +1426,12 @@ angle::Result FramebufferGL::readPixelsAllAtOnce(const gl::Context *context,
         pixels += skipBytes + (area.height - 1) * rowBytes;
         functions->readPixels(area.x, area.y + area.height - 1, area.width, 1, format, type,
                               pixels);
+    }
+
+    if (features.readPixelsUsingImplementationColorReadFormat.enabled && originalFormat != format)
+    {
+        return rearrangePixels(context, area, originalFormat, format, type, skipBytes, rowBytes,
+                               glFormat.computePixelBytes(type), pack, originalFormatPixels);
     }
 
     return angle::Result::Continue;
