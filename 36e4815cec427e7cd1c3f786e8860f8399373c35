@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b4a1ceb_c7eebd51",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-05T04:53:46Z",
+      "side": 1,
+      "message": "Not sure what non-opaque uniform refers to exactly. It\u0027s possible that these two items both refer to the same thing. In the test I added, there are 4 items in this vector in the following order: default uniform, sampler, image, atomic counter.\n\n@Jamie who 4 years ago wrote this here:\n\n        //  1. Non-sampler uniforms\n        //  2. Sampler uniforms\n        //  3. Uniform block uniforms",
+      "range": {
+        "startLine": 441,
+        "startChar": 0,
+        "endLine": 442,
+        "endChar": 33
+      },
+      "revId": "36e4815cec427e7cd1c3f786e8860f8399373c35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
