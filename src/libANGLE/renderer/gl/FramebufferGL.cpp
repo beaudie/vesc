@@ -483,7 +483,8 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
     // Clip read area to framebuffer.
-    const gl::Extents fbSize = getState().getReadAttachment()->getSize();
+    const auto *readAttachment = mState.getReadAttachment();
+    const gl::Extents fbSize   = readAttachment->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
     gl::Rectangle clippedArea;
     if (!ClipRectangle(area, fbRect, &clippedArea))
@@ -496,8 +497,11 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
     const gl::Buffer *packBuffer =
         context->getState().getTargetBuffer(gl::BufferBinding::PixelPack);
 
-    nativegl::ReadPixelsFormat readPixelsFormat =
-        nativegl::GetReadPixelsFormat(functions, features, format, type);
+    nativegl::ReadPixelsFormat readPixelsFormat = nativegl::GetReadPixelsFormat(
+        functions, features,
+        readAttachment->getFormat().info->getReadPixelsFormat(context->getExtensions()), format,
+        type);
+    // TODO: complete remaining channels for pixels if using workaround for RGAB/UNSIGNED_SHORT
     GLenum readFormat = readPixelsFormat.format;
     GLenum readType   = readPixelsFormat.type;
 
@@ -512,6 +516,8 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
     int topClip     = clippedArea.y - area.y;
     if (leftClip || topClip)
     {
+        // DCHECK(false);
+
         // Adjust destination to match portion clipped off left and/or top.
         const gl::InternalFormat &glFormat = gl::GetInternalFormatInfo(readFormat, readType);
 

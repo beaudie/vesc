@@ -4230,6 +4230,8 @@ TEST_P(Texture2DNorm16TestES3, TextureNorm16Test)
     testNorm16Texture(GL_RGB16_SNORM_EXT, GL_RGB, GL_SHORT);
     testNorm16Texture(GL_RGBA16_SNORM_EXT, GL_RGBA, GL_SHORT);
 
+    testNorm16Render(GL_R16_EXT, GL_RED, GL_UNSIGNED_SHORT);
+    testNorm16Render(GL_RG16_EXT, GL_RG, GL_UNSIGNED_SHORT);
     testNorm16Render(GL_RGBA16_EXT, GL_RGBA, GL_UNSIGNED_SHORT);
 }
 
