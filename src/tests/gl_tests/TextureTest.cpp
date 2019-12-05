@@ -4154,15 +4154,43 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
         ASSERT_GL_NO_ERROR();
     }
 
+    void testReadPixelsRGBAWithRange(GLuint x,
+                                     GLuint y,
+                                     GLuint width,
+                                     GLuint height,
+                                     GLenum type,
+                                     GLColor16UI color)
+    {
+        // Populate the pixels array with random dirty value
+        std::vector<GLushort> pixels(4 * width * height, 0x1234);
+        glReadPixels(0, 0, width, height, GL_RGBA, type, pixels.data());
+
+        EXPECT_GL_NO_ERROR();
+
+        for (GLuint i = 0; i < width * height; ++i)
+        {
+            GLuint o = i * 4;
+
+            EXPECT_EQ(color.R, pixels[o + 0]);
+            EXPECT_EQ(color.G, pixels[o + 1]);
+            EXPECT_EQ(color.B, pixels[o + 2]);
+            EXPECT_EQ(color.A, pixels[o + 3]);
+        }
+    }
+
     void testNorm16Render(GLint internalformat, GLenum format, GLenum type)
     {
         GLushort pixelValue  = 0x6A35;
         GLushort imageData[] = {pixelValue, pixelValue, pixelValue, pixelValue};
+        GLColor16UI color    = SliceFormatColor16UI(
+            format, GLColor16UI(pixelValue, pixelValue, pixelValue, pixelValue));
+        // Size of drawing viewport
+        GLuint width = 4, height = 4;
 
         setUpProgram();
 
         glBindTexture(GL_TEXTURE_2D, mTextures[1]);
-        glTexImage2D(GL_TEXTURE_2D, 0, internalformat, 1, 1, 0, format, type, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalformat, width, height, 0, format, type, nullptr);
 
         glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[1],
@@ -4175,9 +4203,14 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
 
         drawQuad(mProgram, "position", 0.5f);
 
-        EXPECT_PIXEL_16UI_COLOR(0, 0,
-                                SliceFormatColor16UI(format, GLColor16UI(pixelValue, pixelValue,
-                                                                         pixelValue, pixelValue)));
+        // ReadPixels against different width, height combination to test workaround of pixels
+        // rearrangement
+        std::pair<GLuint, GLuint> areas[] = {{1, 1}, {2, 2}, {3, 2}, {3, 3}, {4, 3}, {4, 4}};
+
+        for (auto a : areas)
+        {
+            testReadPixelsRGBAWithRange(0, 0, a.first, a.second, type, color);
+        }
 
         glBindRenderbuffer(GL_RENDERBUFFER, mRenderbuffer);
         glRenderbufferStorage(GL_RENDERBUFFER, internalformat, 1, 1);
@@ -4213,23 +4246,28 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
 // Test texture formats enabled by the GL_EXT_texture_norm16 extension.
 TEST_P(Texture2DNorm16TestES3, TextureNorm16Test)
 {
-    // TODO(crbug.com/angleproject/4089) Fails on Nexus5X Adreno
-    // TODO(crbug.com/1024387) Fails on Nexus6P
-    ANGLE_SKIP_TEST_IF(IsNexus5X() || IsNexus6P());
     // TODO(crbug.com/angleproject/4089) Fails on Win Intel OpenGL driver
     ANGLE_SKIP_TEST_IF(IsIntel() && IsOpenGL());
+
+    // (crbug.com/angleproject/4215) Driver bug on some Qualcomm Adreno gpu
+    bool skipRGBTextureSampleTest = (IsNexus5X() || IsNexus6P()) && IsOpenGLES();
 
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_norm16"));
 
     testNorm16Texture(GL_R16_EXT, GL_RED, GL_UNSIGNED_SHORT);
     testNorm16Texture(GL_RG16_EXT, GL_RG, GL_UNSIGNED_SHORT);
-    testNorm16Texture(GL_RGB16_EXT, GL_RGB, GL_UNSIGNED_SHORT);
     testNorm16Texture(GL_RGBA16_EXT, GL_RGBA, GL_UNSIGNED_SHORT);
     testNorm16Texture(GL_R16_SNORM_EXT, GL_RED, GL_SHORT);
     testNorm16Texture(GL_RG16_SNORM_EXT, GL_RG, GL_SHORT);
-    testNorm16Texture(GL_RGB16_SNORM_EXT, GL_RGB, GL_SHORT);
     testNorm16Texture(GL_RGBA16_SNORM_EXT, GL_RGBA, GL_SHORT);
+    if (!skipRGBTextureSampleTest)
+    {
+        testNorm16Texture(GL_RGB16_EXT, GL_RGB, GL_UNSIGNED_SHORT);
+        testNorm16Texture(GL_RGB16_SNORM_EXT, GL_RGB, GL_SHORT);
+    }
 
+    testNorm16Render(GL_R16_EXT, GL_RED, GL_UNSIGNED_SHORT);
+    testNorm16Render(GL_RG16_EXT, GL_RG, GL_UNSIGNED_SHORT);
     testNorm16Render(GL_RGBA16_EXT, GL_RGBA, GL_UNSIGNED_SHORT);
 }
 
