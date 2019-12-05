@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad0ab0d7_e79b0bb8",
+        "filename": "src/compiler/translator/ValidateVaryingLocations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-05T05:16:29Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this also be multiplied by `static_cast\u003cint\u003e(varyingType.getArraySizeProduct())`? Can you please add a few end2end tests to exercise this?\n\n- One with a non-square-matrix varying\n- One with a non-square-matrix array varying\n- One with a non-square-matrix array-of-array varying (ES3.1)\n\nI suspect the second 2 would fail without multiplying the array sizes. The last one could expose a bug in our array-of-array implementation if we are not flattening it.",
+      "range": {
+        "startLine": 58,
+        "startChar": 15,
+        "endLine": 58,
+        "endChar": 43
+      },
+      "revId": "921c9194257943ed86e40a8008f6678e2bb6f344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdd66f17_a5584378",
+        "filename": "src/compiler/translator/ValidateVaryingLocations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-05T05:16:29Z",
+      "side": 1,
+      "message": "Looks like secondary size is 1 everywhere except for matrices, so in the least, this can be removed from the multiplication if `isMatrix()` is special-cased.",
+      "range": {
+        "startLine": 62,
+        "startChar": 27,
+        "endLine": 62,
+        "endChar": 43
+      },
+      "revId": "921c9194257943ed86e40a8008f6678e2bb6f344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
