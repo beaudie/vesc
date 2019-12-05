@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "36033878_904d7cc5",
+        "filename": "src/compiler/translator/ValidateVaryingLocations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-05T21:43:42Z",
+      "side": 1,
+      "message": "Please take a look at the MatrixTest31 tests I added.\n\nHere is the output when running the vulkan portion locally:\n\nNote: Google Test filter \u003d MatrixTest31.*/ES3_1_Vulkan\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 6 tests from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 6 tests from MatrixTest31\n[ RUN      ] MatrixTest31.Mat3Varying/ES3_1_Vulkan\n[       OK ] MatrixTest31.Mat3Varying/ES3_1_Vulkan (1301 ms)\n[ RUN      ] MatrixTest31.Mat3VaryingBadLocation/ES3_1_Vulkan\nWarning: resolveCompile(392): \nERROR: 0:7: \u0027vector\u0027 : \u0027vector\u0027 conflicting location with previously defined \u0027matrix\u0027\n\nWARN: resolveCompile(392): \nERROR: 0:7: \u0027vector\u0027 : \u0027vector\u0027 conflicting location with previously defined \u0027matrix\u0027\n\n[       OK ] MatrixTest31.Mat3VaryingBadLocation/ES3_1_Vulkan (283 ms)\n[ RUN      ] MatrixTest31.Mat3x4Varying/ES3_1_Vulkan\n[       OK ] MatrixTest31.Mat3x4Varying/ES3_1_Vulkan (752 ms)\n[ RUN      ] MatrixTest31.Mat3x4VaryingBadLocation/ES3_1_Vulkan\nWarning: resolveCompile(392): \nERROR: 0:7: \u0027vector\u0027 : \u0027vector\u0027 conflicting location with previously defined \u0027matrix\u0027\n\nWARN: resolveCompile(392): \nERROR: 0:7: \u0027vector\u0027 : \u0027vector\u0027 conflicting location with previously defined \u0027matrix\u0027\n\n[       OK ] MatrixTest31.Mat3x4VaryingBadLocation/ES3_1_Vulkan (250 ms)\n[ RUN      ] MatrixTest31.Mat3x4ArrayVarying/ES3_1_Vulkan\n[       OK ] MatrixTest31.Mat3x4ArrayVarying/ES3_1_Vulkan (750 ms)\n[ RUN      ] MatrixTest31.Mat3x4ArrayVaryingBadLocation/ES3_1_Vulkan\nWarning: resolveCompile(392): \nERROR: 0:7: \u0027vector\u0027 : \u0027vector\u0027 conflicting location with previously defined \u0027matrix\u0027\n\nWARN: resolveCompile(392): \nERROR: 0:7: \u0027vector\u0027 : \u0027vector\u0027 conflicting location with previously defined \u0027matrix\u0027\n\n[       OK ] MatrixTest31.Mat3x4ArrayVaryingBadLocation/ES3_1_Vulkan (284 ms)\n[----------] 6 tests from MatrixTest31 (3620 ms total)\n\n[----------] Global test environment tear-down\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 6 tests from 1 test suite ran. (3623 ms total)\n[  PASSED  ] 6 tests.\n\n\nThe one piece that\u0027s missing from your list is:\n- One with a non-square-matrix array-of-array varying (ES3.1)\n\nArray of arrays as inputs/outputs is not supported with GLSL ES 3.1:\n\nhttps://www.khronos.org/registry/OpenGL/specs/es/3.1/GLSL_ES_Specification_3.10.pdf\n\nSection 4.3.4 Input Variables\n\nIt is a compile-time error to declare a fragment shader input with, or that contains, any of the following types:\n• A boolean type\n• An opaque type\n• An array of arrays  \u003c\u003c---- no good\n• An array of structures\n• A structure containing an array\n• A structure containing a structure\n\nSimilarly:\n\nSection 4.3.6 Output Variables\n\nIt is a compile-time error to declare a vertex shader output with, or that contains, any of the following types:\n• A boolean type\n• An opaque type\n• An array of arrays   \u003c\u003c---- no good\n• An array of structures\n• A structure containing an array\n• A structure containing a structure \n\nThis is also how ANGLE behaves if I attempt to create an array of arrays of matrices; an error is generated and the shader fails to compile, so no location validation is performed.   Using Uniforms won\u0027t work either:\n\n4.3.5 Uniform Variables\n\nUnlike locations for inputs and outputs, uniform locations are logical values, not register locations, and there is no concept of overlap. For example:\nlayout (location \u003d 2) uniform mat4 x;\nlayout (location \u003d 3) uniform mat4 y; // No overlap with x\nlayout(location \u003d 2) in mat4 x;\nlayout(location \u003d 3) in mat4 y; // Error, locations conflict with x\n\n\nIs there another way for me to check array of arrays of matrices location validation is being handled by ANGLE correctly?",
+      "parentUuid": "ad0ab0d7_e79b0bb8",
+      "range": {
+        "startLine": 58,
+        "startChar": 15,
+        "endLine": 58,
+        "endChar": 43
+      },
+      "revId": "921c9194257943ed86e40a8008f6678e2bb6f344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fdd66f17_a5584378",
         "filename": "src/compiler/translator/ValidateVaryingLocations.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "921c9194257943ed86e40a8008f6678e2bb6f344",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8438df90_145b6e51",
+        "filename": "src/compiler/translator/ValidateVaryingLocations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-05T21:43:42Z",
+      "side": 1,
+      "message": "Done.   While I agree with your code inspection, I haven\u0027t verified this is entirely safe yet, so we\u0027ll let CQ make sure this is good.",
+      "parentUuid": "fdd66f17_a5584378",
+      "range": {
+        "startLine": 62,
+        "startChar": 27,
+        "endLine": 62,
+        "endChar": 43
+      },
+      "revId": "921c9194257943ed86e40a8008f6678e2bb6f344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
