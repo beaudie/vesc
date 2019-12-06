@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b0036d07_0535a4ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-12-06T23:10:23Z",
+      "side": 1,
+      "message": "Unfortunately we don\u0027t have the authority to change how WebKit does source control. We still want to make it easier for them to use ANGLE, to make it more likely that they will choose to finally ship WebGL 2.",
+      "parentUuid": "8d6f0402_215d3711",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 5
+      },
+      "revId": "ef8eb3fd5ad629e01034d7c9091c0f0c04c5744a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b2e510f_f384a001",
         "filename": "src/compiler/generate_parser_tools.py",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d7cba315_c1f12839",
+        "filename": "src/compiler/generate_parser_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-12-06T23:10:23Z",
+      "side": 1,
+      "message": "Ah, I didn\u0027t realize that clang-format was disabled for these files. Unfortunately, though, this is not sufficient. clang-format does not remove tab characters from comments and Subversion does not make exceptions to its no-tab policy.",
+      "parentUuid": "0b2e510f_f384a001",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 42
+      },
+      "revId": "ef8eb3fd5ad629e01034d7c9091c0f0c04c5744a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cea0df36_ad84617c",
         "filename": "src/compiler/preprocessor/preprocessor_lex_autogen.cpp",
         "patchSetId": 1
@@ -62,6 +110,24 @@
       "revId": "ef8eb3fd5ad629e01034d7c9091c0f0c04c5744a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43dc984c_39e106d5",
+        "filename": "src/compiler/preprocessor/preprocessor_lex_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-12-06T23:10:23Z",
+      "side": 1,
+      "message": "Unfortunately this is not sufficient. clang-format does not remove tab characters from comments and Subversion does not make exceptions to its no-tab policy.",
+      "parentUuid": "cea0df36_ad84617c",
+      "revId": "ef8eb3fd5ad629e01034d7c9091c0f0c04c5744a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
