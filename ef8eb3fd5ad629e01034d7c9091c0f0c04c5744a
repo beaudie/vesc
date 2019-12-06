@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8d6f0402_215d3711",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-06T15:16:30Z",
+      "side": 1,
+      "message": "Ugh. Imagine ANGLE vendored in another repo that requires tabs...\n\nSo, why is ANGLE being checked in WebKit\u0027s repo? Shouldn\u0027t they check out ANGLE on demand (from our repo, like we do during `gclient sync`)? It\u0027s not like ANGLE is super mature and rarely-changing.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 5
+      },
+      "revId": "ef8eb3fd5ad629e01034d7c9091c0f0c04c5744a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0b2e510f_f384a001",
         "filename": "src/compiler/generate_parser_tools.py",
         "patchSetId": 1
@@ -19,6 +42,23 @@
         "endLine": 94,
         "endChar": 42
       },
+      "revId": "ef8eb3fd5ad629e01034d7c9091c0f0c04c5744a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cea0df36_ad84617c",
+        "filename": "src/compiler/preprocessor/preprocessor_lex_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-06T15:16:30Z",
+      "side": 1,
+      "message": "Definitely remove this from the .l and .y source files instead.",
       "revId": "ef8eb3fd5ad629e01034d7c9091c0f0c04c5744a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
