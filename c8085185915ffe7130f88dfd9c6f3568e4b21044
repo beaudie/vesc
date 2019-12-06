@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d81ec29a_70ca3199",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25e98b5f_e715a015",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 10,
+        "endChar": 21
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7831b35_f7c6ab63",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 13
@@ -45,6 +69,30 @@
       "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1470d791_152510dd",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "I changed \"Is\" to \"Should\", including everywhere related to this function.",
+      "parentUuid": "f7831b35_f7c6ab63",
+      "range": {
+        "startLine": 672,
+        "startChar": 5,
+        "endLine": 672,
+        "endChar": 38
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "6f204a24_11324d54",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28b74ac4_11c421c9",
+      "range": {
+        "startLine": 856,
+        "startChar": 44,
+        "endLine": 856,
+        "endChar": 50
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d3d9b7e5_ae6e0a43",
         "filename": "src/compiler/translator/ResourcesHLSL.cpp",
         "patchSetId": 13
@@ -105,6 +177,30 @@
       "writtenOn": "2019-12-04T22:56:38Z",
       "side": 1,
       "message": "Is this test of mSRVRegister what enforces that StructuredBuffer isn\u0027t used if the array is too large?",
+      "range": {
+        "startLine": 857,
+        "startChar": 26,
+        "endLine": 857,
+        "endChar": 52
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "426dfe52_60fff003",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Sorry, I did not deeply understand your comment here?\nNo matter how large the array of uniform block is, this uniform block only occupies one \"t\" type register here.",
+      "parentUuid": "d3d9b7e5_ae6e0a43",
       "range": {
         "startLine": 857,
         "startChar": 26,
@@ -134,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "fa066647_30dcfde6",
+        "filename": "src/compiler/translator/StructureHLSL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d855f3ef_ff7d3077",
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b946af69_e3ac8af3",
         "filename": "src/compiler/translator/StructureHLSL.h",
         "patchSetId": 13
@@ -154,6 +268,30 @@
       "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a4a9c0f_ef5945e6",
+        "filename": "src/compiler/translator/StructureHLSL.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b946af69_e3ac8af3",
+      "range": {
+        "startLine": 39,
+        "startChar": 35,
+        "endLine": 39,
+        "endChar": 47
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -180,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "fd788bee_1ac6400e",
+        "filename": "src/compiler/translator/TranslatorHLSL.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fc7d3d9_ddaac6ce",
+      "range": {
+        "startLine": 26,
+        "startChar": 9,
+        "endLine": 26,
+        "endChar": 42
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5437747d_14c3230e",
         "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
         "patchSetId": 13
@@ -200,6 +362,30 @@
       "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18a06a5b_2275216c",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5437747d_14c3230e",
+      "range": {
+        "startLine": 2179,
+        "startChar": 61,
+        "endLine": 2179,
+        "endChar": 80
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -226,6 +412,30 @@
     },
     {
       "key": {
+        "uuid": "6de2a015_8a0b12a0",
+        "filename": "src/libANGLE/renderer/d3d/ShaderD3D.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bedca90_6f2d7fc8",
+      "range": {
+        "startLine": 57,
+        "startChar": 9,
+        "endLine": 57,
+        "endChar": 42
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2711ce1f_bfcd9d7d",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
         "patchSetId": 13
@@ -249,6 +459,30 @@
     },
     {
       "key": {
+        "uuid": "aa1fea15_00b04edc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2711ce1f_bfcd9d7d",
+      "range": {
+        "startLine": 960,
+        "startChar": 56,
+        "endLine": 960,
+        "endChar": 64
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "922e10e7_5be963fe",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
         "patchSetId": 13
@@ -266,6 +500,24 @@
     },
     {
       "key": {
+        "uuid": "3b40cd9f_9e05741d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Here still need a GPU-GPU copy in follow statement (updateBufferStorage function).\nI will try to optimize it in next patch.",
+      "parentUuid": "922e10e7_5be963fe",
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "293f044e_f0bda256",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
         "patchSetId": 13
@@ -277,6 +529,30 @@
       "writtenOn": "2019-12-04T22:56:38Z",
       "side": 1,
       "message": "Is \"true\" ever passed for preserveData? It looks like it isn\u0027t. Is that code path tested?",
+      "range": {
+        "startLine": 1453,
+        "startChar": 9,
+        "endLine": 1453,
+        "endChar": 21
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96f1e282_6ad107c1",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "I had passed \"false\" to this function. It seems I could discard former buffer data here. I removed this parameter here.",
+      "parentUuid": "293f044e_f0bda256",
       "range": {
         "startLine": 1453,
         "startChar": 9,
@@ -312,6 +588,30 @@
     },
     {
       "key": {
+        "uuid": "e8536a51_fdd1868e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9908b591_7d18de99",
+      "range": {
+        "startLine": 1524,
+        "startChar": 25,
+        "endLine": 1524,
+        "endChar": 36
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9faf7aaf_be2e5166",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.h",
         "patchSetId": 13
@@ -326,6 +626,24 @@
       "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "784ece52_310e4ad5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-06T08:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9faf7aaf_be2e5166",
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
