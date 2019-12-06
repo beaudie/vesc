@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9dcfc11_a1103b2d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-06T20:15:50Z",
+      "side": 1,
+      "message": "I think this comment can be removed now.",
+      "range": {
+        "startLine": 389,
+        "startChar": 0,
+        "endLine": 393,
+        "endChar": 39
+      },
+      "revId": "c1505d41040a2de0402b2bcd917e20edefe3b6ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "835e53b0_523ef8d5",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-06T20:15:50Z",
+      "side": 1,
+      "message": "Can be\n\n   ToGLenum(GetNativeTextureType(textureType))",
+      "range": {
+        "startLine": 1751,
+        "startChar": 11,
+        "endLine": 1751,
+        "endChar": 94
+      },
+      "revId": "c1505d41040a2de0402b2bcd917e20edefe3b6ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8cad480_fa6335de",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 1757,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-12-06T20:15:50Z",
+      "side": 1,
+      "message": "Can be:\n\n   GetTextureBindingTarget(TextureTargetToType(textureTarget))",
+      "range": {
+        "startLine": 1757,
+        "startChar": 11,
+        "endLine": 1757,
+        "endChar": 99
+      },
+      "revId": "c1505d41040a2de0402b2bcd917e20edefe3b6ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
