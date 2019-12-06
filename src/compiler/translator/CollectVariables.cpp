@@ -952,11 +952,12 @@ bool CollectVariablesTraverser::visitBinary(Visit, TIntermBinary *binaryNode)
             {
                 namedBlock = recordGLInUsed(interfaceType);
                 ASSERT(namedBlock);
-
-                // We need to continue traversing to collect useful variables in the index
-                // expression of gl_in.
-                traverseIndexExpression = true;
             }
+
+            // We need to continue traversing to collect useful variables in the index expression
+            // of the interface block array or gl_in in the case of the if above.
+            // TODO: add support for array of array of interface blocks.  http://anglebug.com/3881
+            traverseIndexExpression = true;
         }
 
         const TInterfaceBlock *interfaceBlock = blockNode->getType().getInterfaceBlock();
