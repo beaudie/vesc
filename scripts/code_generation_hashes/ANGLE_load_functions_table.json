@@ -1,4 +1,6 @@
 {
+  "src/libANGLE/renderer/angle_format.py":
+    "32ba71942c0fd00e6807104f1bb80a3c",
   "src/libANGLE/renderer/gen_load_functions_table.py":
     "e65c50e84fc38ad34d0eb0bebb84aab6",
   "src/libANGLE/renderer/load_functions_data.json":
