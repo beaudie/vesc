@@ -29,6 +29,7 @@ const DisplayTypeInfo kDisplayTypes[] = {
     {"null", EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE},
     {"vulkan", EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE},
     {"swiftshader", EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE},
+    {"metal", EGL_PLATFORM_ANGLE_TYPE_METAL_ANGLE},
 };
 
 EGLint GetDisplayTypeFromArg(const char *displayTypeArg)
