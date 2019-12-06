@@ -90,6 +90,9 @@ def run_flex(basename):
 
         patched = output.replace(patch_in, patch_out)
 
+    # Convert tabs to spaces.
+    patched = output.replace('\t', '    ')
+
     with open(output_source, 'w') as flex_output_patched:
         flex_output_patched.write(patched)
 
