@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4b77ffeb_8fb980d8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3282,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-12-06T19:11:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d07771f_bae0a649",
+      "range": {
+        "startLine": 3282,
+        "startChar": 4,
+        "endLine": 3282,
+        "endChar": 16
+      },
+      "revId": "a04312841bcd0c6124f11ee62c35c6283e12badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89a48314_1bc39d70",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "a04312841bcd0c6124f11ee62c35c6283e12badc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f53c1cba_17146d4f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-12-06T19:11:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89a48314_1bc39d70",
+      "range": {
+        "startLine": 729,
+        "startChar": 0,
+        "endLine": 729,
+        "endChar": 62
+      },
+      "revId": "a04312841bcd0c6124f11ee62c35c6283e12badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
