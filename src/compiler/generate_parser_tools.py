@@ -90,6 +90,10 @@ def run_flex(basename):
 
         patched = output.replace(patch_in, patch_out)
 
+    # Remove all tab characters from output. WebKit does not allow any tab characters in source
+    # files.
+    patched = patched.replace('\t', '    ')
+
     with open(output_source, 'w') as flex_output_patched:
         flex_output_patched.write(patched)
 

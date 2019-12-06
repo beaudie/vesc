@@ -69,60 +69,62 @@ def auto_script(script):
 
 
 generators = {
-    'ANGLE format':
+    'ANGLE format': [
         'src/libANGLE/renderer/gen_angle_format_table.py',
-    'ANGLE load functions table':
+        'src/libANGLE/renderer/angle_format.py',
+    ],
+    'ANGLE load functions table': [
         'src/libANGLE/renderer/gen_load_functions_table.py',
-    'ANGLE shader preprocessor':
+        'src/libANGLE/renderer/angle_format.py',
+    ],
+    'ANGLE shader preprocessor': [
         'src/compiler/preprocessor/generate_parser.py',
-    'ANGLE shader translator':
+        'src/compiler/generate_parser_tools.py',
+    ],
+    'ANGLE shader translator': [
         'src/compiler/translator/generate_parser.py',
-    'D3D11 blit shader selection':
-        'src/libANGLE/renderer/d3d/d3d11/gen_blit11helper.py',
-    'D3D11 format':
+        'src/compiler/generate_parser_tools.py',
+    ],
+    'D3D11 blit shader selection': ['src/libANGLE/renderer/d3d/d3d11/gen_blit11helper.py'],
+    'D3D11 format': [
         'src/libANGLE/renderer/d3d/d3d11/gen_texture_format_table.py',
-    'DXGI format':
+        'src/libANGLE/renderer/angle_format.py',
+    ],
+    'DXGI format': [
         'src/libANGLE/renderer/d3d/d3d11/gen_dxgi_format_table.py',
-    'DXGI format support':
-        'src/libANGLE/renderer/d3d/d3d11/gen_dxgi_support_tables.py',
-    'GL copy conversion table':
+        'src/libANGLE/renderer/angle_format.py',
+    ],
+    'DXGI format support': ['src/libANGLE/renderer/d3d/d3d11/gen_dxgi_support_tables.py'],
+    'GL copy conversion table': [
         'src/libANGLE/gen_copy_conversion_table.py',
-    'GL/EGL/WGL loader':
-        'scripts/generate_loader.py',
-    'GL/EGL entry points':
-        'scripts/generate_entry_points.py',
-    'GLenum value to string map':
-        'scripts/gen_gl_enum_utils.py',
-    'GL format map':
-        'src/libANGLE/gen_format_map.py',
-    'uniform type':
-        'src/common/gen_uniform_type_table.py',
-    'OpenGL dispatch table':
-        'src/libANGLE/renderer/gl/generate_gl_dispatch_table.py',
-    'packed enum':
-        'src/common/gen_packed_gl_enums.py',
-    'proc table':
-        'scripts/gen_proc_table.py',
-    'Vulkan format':
+        'src/libANGLE/renderer/angle_format.py',
+    ],
+    'GL/EGL/WGL loader': ['scripts/generate_loader.py'],
+    'GL/EGL entry points': ['scripts/generate_entry_points.py'],
+    'GLenum value to string map': ['scripts/gen_gl_enum_utils.py'],
+    'GL format map': ['src/libANGLE/gen_format_map.py', 'src/libANGLE/renderer/angle_format.py'],
+    'uniform type': ['src/common/gen_uniform_type_table.py'],
+    'OpenGL dispatch table': ['src/libANGLE/renderer/gl/generate_gl_dispatch_table.py'],
+    'packed enum': ['src/common/gen_packed_gl_enums.py'],
+    'proc table': ['scripts/gen_proc_table.py'],
+    'Vulkan format': [
         'src/libANGLE/renderer/vulkan/gen_vk_format_table.py',
-    'Vulkan mandatory format support table':
-        'src/libANGLE/renderer/vulkan/gen_vk_mandatory_format_support_table.py',
-    'Vulkan internal shader programs':
-        'src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py',
-    'overlay fonts':
-        'src/libANGLE/gen_overlay_fonts.py',
-    'overlay widgets':
-        'src/libANGLE/gen_overlay_widgets.py',
-    'Emulated HLSL functions':
-        'src/compiler/translator/gen_emulated_builtin_function_tables.py',
-    'Static builtins':
-        'src/compiler/translator/gen_builtin_symbols.py',
-    'Metal format table':
+        'src/libANGLE/renderer/angle_format.py',
+    ],
+    'Vulkan mandatory format support table': [
+        'src/libANGLE/renderer/vulkan/gen_vk_mandatory_format_support_table.py'
+    ],
+    'Vulkan internal shader programs': ['src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py'],
+    'overlay fonts': ['src/libANGLE/gen_overlay_fonts.py'],
+    'overlay widgets': ['src/libANGLE/gen_overlay_widgets.py'],
+    'Emulated HLSL functions': ['src/compiler/translator/gen_emulated_builtin_function_tables.py'],
+    'Static builtins': ['src/compiler/translator/gen_builtin_symbols.py'],
+    'Metal format table': [
         'src/libANGLE/renderer/metal/gen_mtl_format_table.py',
-    'Metal default shaders':
-        'src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py',
-    'GL CTS (dEQP) build files':
-        'scripts/gen_vk_gl_cts_build.py',
+        'src/libANGLE/renderer/angle_format.py',
+    ],
+    'Metal default shaders': ['src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py'],
+    'GL CTS (dEQP) build files': ['scripts/gen_vk_gl_cts_build.py'],
 }
 
 
@@ -195,10 +197,11 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == '--verify-no-dirty':
         verify_only = True
 
-    for name, script in sorted(generators.iteritems()):
+    for name, scripts in sorted(generators.iteritems()):
+        script = scripts[0]
         info = auto_script(script)
         fname = get_hash_file_name(name)
-        filenames = info['inputs'] + info['outputs'] + [script]
+        filenames = info['inputs'] + info['outputs'] + scripts
         new_hashes = {}
         if fname not in all_old_hashes:
             all_old_hashes[fname] = {}
@@ -235,7 +238,8 @@ def main():
         subprocess.call(args)
 
         # Update the output hashes again since they can be formatted.
-        for name, script in sorted(generators.iteritems()):
+        for name, scripts in sorted(generators.iteritems()):
+            script = scripts[0]
             info = auto_script(script)
             fname = get_hash_file_name(name)
             update_output_hashes(name, info['outputs'], all_new_hashes[fname])
