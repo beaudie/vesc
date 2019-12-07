@@ -886,6 +886,7 @@ void CleanupUnusedEntities(bool useOldRewriteStructSamplers,
         }
     }
 
+#if 0
     // Remove all the markers for unused interface blocks, and replace them with |struct|.
     for (const std::string &unusedInterfaceBlock : resources.unusedInterfaceBlocks)
     {
@@ -900,6 +901,28 @@ void CleanupUnusedEntities(bool useOldRewriteStructSamplers,
     // uniforms to a single line.
     for (const gl::UnusedUniform &unusedUniform : resources.unusedUniforms)
     {
+        std::string uniformName = unusedUniform.isSampler
+                                      ? useOldRewriteStructSamplers
+                                            ? GetMappedSamplerNameOld(unusedUniform.name)
+                                            : GlslangGetMappedSamplerName(unusedUniform.name)
+                                      : unusedUniform.name;
+
+        for (IntermediateShaderSource &shaderSource : *shaderSources)
+        {
+            shaderSource.eraseLayoutAndQualifierSpecifiers(uniformName, kUnusedUniformSubstitution);
+        }
+    }
+#endif
+
+    // Comment out unused default uniforms.  This relies on the fact that the shader compiler
+    // outputs uniforms to a single line.
+    for (const gl::UnusedUniform &unusedUniform : resources.unusedUniforms)
+    {
+        if (unusedUniform.isImage || unusedUniform.isAtomicCounter)
+        {
+            continue;
+        }
+
         std::string uniformName = unusedUniform.isSampler
                                       ? useOldRewriteStructSamplers
                                             ? GetMappedSamplerNameOld(unusedUniform.name)
