@@ -112,7 +112,6 @@ class IntermediateShaderSource final : angle::NonCopyable
     void init(const std::string &source);
     bool empty() const { return mTokens.empty(); }
 
-    bool findTokenName(const std::string &name);
     // Find @@ LAYOUT-name(extra, args) @@ and replace it with:
     //
     //     layout(specifier, extra, args)
@@ -289,18 +288,6 @@ void IntermediateShaderSource::init(const std::string &source)
         // Continue from after the closing of this macro.
         cur += ConstStrLen(kMarkerEnd);
     }
-}
-
-bool IntermediateShaderSource::findTokenName(const std::string &name)
-{
-    for (Token &block : mTokens)
-    {
-        if (block.text == name)
-        {
-            return true;
-        }
-    }
-    return false;
 }
 
 void IntermediateShaderSource::insertLayoutSpecifier(const std::string &name,
@@ -572,9 +559,14 @@ void AssignOutputLocations(const gl::ProgramState &programState,
 
 void AssignVaryingLocations(const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
-                            IntermediateShaderSource *outStageSource,
-                            IntermediateShaderSource *inStageSource)
+                            gl::ShaderType outStage,
+                            gl::ShaderType inStage,
+                            gl::ShaderMap<IntermediateShaderSource> *shaderSources)
 {
+
+    IntermediateShaderSource *outStageSource = &(*shaderSources)[outStage];
+    IntermediateShaderSource *inStageSource  = &(*shaderSources)[inStage];
+
     // Assign varying locations.
     for (const gl::PackedVaryingRegister &varyingReg : resources.varyingPacking.getRegisterList())
     {
@@ -613,11 +605,11 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
 
         // Varings are from 3 stage of shader sources
         // To match pair of (out - in) qualifier, varying should be in the pair of shader source
-        if (!outStageSource->findTokenName(name) || !inStageSource->findTokenName(name))
+        if (!varying.shaderStages.test(outStage) || !varying.shaderStages.test(inStage))
         {
             // Pair can be unmatching at transform feedback case,
             // But it requires qualifier.
-            if (!varying.vertexOnly)
+            if (!varying.vertexOnly())
                 continue;
         }
 
@@ -1062,29 +1054,43 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     IntermediateShaderSource *vertexSource   = &intermediateSources[gl::ShaderType::Vertex];
     IntermediateShaderSource *fragmentSource = &intermediateSources[gl::ShaderType::Fragment];
     IntermediateShaderSource *geometrySource = &intermediateSources[gl::ShaderType::Geometry];
+    IntermediateShaderSource *computeSource  = &intermediateSources[gl::ShaderType::Compute];
 
-    if (!geometrySource->empty())
+    if (computeSource->empty())
     {
+        // Assign outputs to the fragment shader, if any.
         AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, geometrySource, fragmentSource);
+
+        // Assign attributes to the vertex shader, if any.
         if (!vertexSource->empty())
         {
             AssignAttributeLocations(programState, vertexSource);
-            AssignVaryingLocations(programState, resources, vertexSource, geometrySource);
+        }
+
+        // Create a list of present stages for varying location assignment.
+        angle::FixedVector<gl::ShaderType, 3> presentStages;
+        if (!geometrySource->empty())
+        {
+            if (!vertexSource->empty())
+            {
+                presentStages.push_back(gl::ShaderType::Vertex);
+            }
+            presentStages.push_back(gl::ShaderType::Geometry);
+        }
+        else
+        {
+            presentStages.push_back(gl::ShaderType::Vertex);
+        }
+        presentStages.push_back(gl::ShaderType::Fragment);
+
+        // Assign varying locations to pairs of stages.
+        for (size_t i = 1; i < presentStages.size(); ++i)
+        {
+            AssignVaryingLocations(programState, resources, presentStages[i - 1], presentStages[i],
+                                   &intermediateSources);
         }
     }
-    else if (!vertexSource->empty())
-    {
-        AssignAttributeLocations(programState, vertexSource);
-        AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, vertexSource, fragmentSource);
-    }
-    else if (!fragmentSource->empty())
-    {
-        AssignAttributeLocations(programState, fragmentSource);
-        AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, vertexSource, fragmentSource);
-    }
+
     AssignUniformBindings(options, &intermediateSources);
     AssignTextureBindings(options, useOldRewriteStructSamplers, programState, &intermediateSources);
     AssignNonTextureBindings(options, programState, &intermediateSources);
