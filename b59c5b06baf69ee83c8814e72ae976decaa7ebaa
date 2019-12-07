@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fadabaf9_5bc71925",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-07T00:55:39Z",
+      "side": 1,
+      "message": "can you instead update the generators themselves to use the correct input dependencies? seems like that would make more logical sense so we don\u0027t have to maintain lists of inputs in two places.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 11
+      },
+      "revId": "b59c5b06baf69ee83c8814e72ae976decaa7ebaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
