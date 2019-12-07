@@ -513,7 +513,7 @@ const angle::PlatformParameters es2_platforms[] = {
 };
 
 INSTANTIATE_TEST_SUITE_P(
-    ,
+    t,
     MultiDrawTest,
     testing::Combine(testing::ValuesIn(::angle::FilterTestParams(platforms, ArraySize(platforms))),
                      testing::Values(DrawIDOption::NoDrawID, DrawIDOption::UseDrawID),
@@ -522,7 +522,7 @@ INSTANTIATE_TEST_SUITE_P(
     PrintToStringParamName());
 
 INSTANTIATE_TEST_SUITE_P(
-    ,
+    t,
     MultiDrawNoInstancingSupportTest,
     testing::Combine(testing::ValuesIn(::angle::FilterTestParams(es2_platforms,
                                                                  ArraySize(es2_platforms))),

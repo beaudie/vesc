@@ -637,7 +637,7 @@ TEST_P(VulkanCommandBufferPerfTest, Run)
     run();
 }
 
-INSTANTIATE_TEST_SUITE_P(,
+INSTANTIATE_TEST_SUITE_P(t,
                          VulkanCommandBufferPerfTest,
                          ::testing::Values(PrimaryCBHundredIndividualParams(),
                                            PrimaryCBOneWithOneHundredParams(),
