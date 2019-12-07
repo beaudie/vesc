@@ -886,6 +886,7 @@ void CleanupUnusedEntities(bool useOldRewriteStructSamplers,
         }
     }
 
+#if 0
     // Remove all the markers for unused interface blocks, and replace them with |struct|.
     for (const std::string &unusedInterfaceBlock : resources.unusedInterfaceBlocks)
     {
@@ -911,6 +912,7 @@ void CleanupUnusedEntities(bool useOldRewriteStructSamplers,
             shaderSource.eraseLayoutAndQualifierSpecifiers(uniformName, kUnusedUniformSubstitution);
         }
     }
+#endif
 }
 
 constexpr gl::ShaderMap<EShLanguage> kShLanguageMap = {
