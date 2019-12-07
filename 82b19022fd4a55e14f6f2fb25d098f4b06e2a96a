@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e734fc27_0576f932",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-07T01:06:35Z",
+      "side": 1,
+      "message": "how about we explicitly say \"vulkan\", \"vulkan-null\" or \"swiftshader\". The current code would allow \"vulkan-is-bad\" or \"vulkanblahblah\"",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 5
+      },
+      "revId": "82b19022fd4a55e14f6f2fb25d098f4b06e2a96a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6422552b_551b562b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-07T01:06:35Z",
+      "side": 1,
+      "message": "nit: can probably just omit the outDisplayType return variable and let the caller query it.",
+      "range": {
+        "startLine": 600,
+        "startChar": 14,
+        "endLine": 600,
+        "endChar": 42
+      },
+      "revId": "82b19022fd4a55e14f6f2fb25d098f4b06e2a96a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
