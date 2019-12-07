@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "719ab3db_e78f822b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-07T01:30:31Z",
+      "side": 1,
+      "message": "I don\u0027t understand this part.   \u0027src/tests/internal_capture_tests\u0027 is inside the source code and part of git source control, so I\u0027d expect the files to already exist.   If they need to be created by the user, then I\u0027d expect them to live outside of src/ (somewhere in out/?) so they don\u0027t accidentally get checked in.   Or, can/should that directory be .gitignore\u0027d?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 33
+      },
+      "revId": "8f9755ad511c19be6297d97f4fbb73f15bf53eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35b5a851_4af20ce0",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-07T01:30:31Z",
+      "side": 1,
+      "message": "Are there other defines that this is throwing away?",
+      "revId": "8f9755ad511c19be6297d97f4fbb73f15bf53eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83ac3d0d_a8f21edc",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-07T01:30:31Z",
+      "side": 1,
+      "message": "Here\u0027s a CL that did a lot of that stuff recently for dEQP:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1881759",
+      "revId": "8f9755ad511c19be6297d97f4fbb73f15bf53eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
