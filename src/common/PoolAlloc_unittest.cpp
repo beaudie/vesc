@@ -70,7 +70,7 @@ TEST_P(PoolAllocatorAlignmentTest, Alignment)
     }
 }
 
-INSTANTIATE_TEST_SUITE_P(,
+INSTANTIATE_TEST_SUITE_P(All,
                          PoolAllocatorAlignmentTest,
                          testing::Values(2, 4, 8, 16, 32, 64, 128),
                          testing::PrintToStringParamName());
