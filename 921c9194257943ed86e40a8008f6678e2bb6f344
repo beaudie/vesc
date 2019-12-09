@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1b0a4be4_ac26f1f7",
+        "filename": "src/compiler/translator/ValidateVaryingLocations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-09T19:14:54Z",
+      "side": 1,
+      "message": "Thanks for the tests. Ignore the array of array test request then, since it\u0027s not valid GLSL.",
+      "parentUuid": "36033878_904d7cc5",
+      "range": {
+        "startLine": 58,
+        "startChar": 15,
+        "endLine": 58,
+        "endChar": 43
+      },
+      "revId": "921c9194257943ed86e40a8008f6678e2bb6f344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fdd66f17_a5584378",
         "filename": "src/compiler/translator/ValidateVaryingLocations.cpp",
         "patchSetId": 1

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be956da2_248cae53",
+        "filename": "src/tests/gl_tests/MatrixTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-09T19:14:54Z",
+      "side": 1,
+      "message": "nit: You could bundle these in GLSLTests.cpp, but works either way.",
+      "revId": "6c7b73937685770cb0aa5d2e3ad3d656bcf36834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
