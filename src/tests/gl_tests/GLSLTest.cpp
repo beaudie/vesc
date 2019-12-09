@@ -2982,6 +2982,32 @@ void main() {
     glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 }
 
+// Test that inactive samplers in structs don't cause any errors.
+TEST_P(GLSLTest_ES31, InactiveSamplersInStructCS)
+{
+    // While the sampler is being extracted and declared outside of the struct, it's not removed
+    // from the struct definition.  http://anglebug.com/4211
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    constexpr char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+struct S
+{
+    vec4 v;
+    sampler2D t[10];
+};
+uniform S s;
+void main()
+{
+})";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+
+    glUseProgram(program.get());
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that array indices for arrays of arrays of basic types work as expected.
 TEST_P(GLSLTest_ES31, ArraysOfArraysBasicType)
 {
@@ -6586,6 +6612,34 @@ TEST_P(GLSLTest, MemoryExhaustedTest)
     GLuint program =
         CompileProgram(essl1_shaders::vs::Simple(), BuillBigInitialStackShader(36).c_str());
     EXPECT_NE(0u, program);
+}
+
+// Test that inactive samplers in structs don't cause any errors.
+TEST_P(GLSLTest, InactiveSamplersInStruct)
+{
+    // While the sampler is being extracted and declared outside of the struct, it's not removed
+    // from the struct definition.  http://anglebug.com/4211
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    constexpr char kVS[] = R"(attribute vec4 a_position;
+void main() {
+  gl_Position = a_position;
+})";
+
+    constexpr char kFS[] = R"(precision highp float;
+struct S
+{
+    vec4 v;
+    sampler2D t[10];
+};
+uniform S s;
+void main() {
+  gl_FragColor = vec4(0, 0, 0, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    drawQuad(program, "a_position", 0.5f);
 }
 
 // Helper functions for MixedRowAndColumnMajorMatrices* tests
