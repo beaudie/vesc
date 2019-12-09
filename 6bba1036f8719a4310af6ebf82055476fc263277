@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27b5ad86_a600d09d",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4056,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-09T06:18:09Z",
+      "side": 1,
+      "message": "Not related to your patch. But it seems that the original code doesn\u0027t check that array index for images must be constant integral expressions. Could you please add that checking and a corresponding test in a separate patch?",
+      "revId": "6bba1036f8719a4310af6ebf82055476fc263277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
