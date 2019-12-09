@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "634923d9_9f5e4bb6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-12-09T06:49:44Z",
+      "side": 1,
+      "message": "Add this comment as Notice",
+      "revId": "e7ae3c8b1a0edc32c994caae7b1ee6a88034509c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a22f943_094fe62f",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-12-09T06:49:44Z",
+      "side": 1,
+      "message": "Add this comment as Notice",
+      "revId": "e7ae3c8b1a0edc32c994caae7b1ee6a88034509c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

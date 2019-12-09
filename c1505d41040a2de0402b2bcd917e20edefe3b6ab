@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5afd34f1_a7962fb1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-12-09T06:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9dcfc11_a1103b2d",
+      "range": {
+        "startLine": 389,
+        "startChar": 0,
+        "endLine": 393,
+        "endChar": 39
+      },
+      "revId": "c1505d41040a2de0402b2bcd917e20edefe3b6ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "835e53b0_523ef8d5",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 30
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6030e1fa_4550b210",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-12-09T06:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "835e53b0_523ef8d5",
+      "range": {
+        "startLine": 1751,
+        "startChar": 11,
+        "endLine": 1751,
+        "endChar": 94
+      },
+      "revId": "c1505d41040a2de0402b2bcd917e20edefe3b6ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8cad480_fa6335de",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 30
@@ -68,6 +116,30 @@
       "revId": "c1505d41040a2de0402b2bcd917e20edefe3b6ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f7ddd10_1df0eb97",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 1757,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-12-09T06:49:44Z",
+      "side": 1,
+      "message": "Cannot directly change to above type because in cube map situation, they return different value.\nAdd a helper function. Done.",
+      "parentUuid": "b8cad480_fa6335de",
+      "range": {
+        "startLine": 1757,
+        "startChar": 11,
+        "endLine": 1757,
+        "endChar": 99
+      },
+      "revId": "c1505d41040a2de0402b2bcd917e20edefe3b6ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
