@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a096f01_f15949df",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-09T16:34:28Z",
+      "side": 1,
+      "message": "nit: you can use default init and then go *this \u003d std::move(other);",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 2
+      },
+      "revId": "5f34db748a0973ddd62f8111f0a7d22d3be668c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e207429b_864530f7",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-09T16:34:28Z",
+      "side": 1,
+      "message": "nit: I like to use std::swap for move ops to ensure that the rhs becomes reset completely.",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 40
+      },
+      "revId": "5f34db748a0973ddd62f8111f0a7d22d3be668c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
