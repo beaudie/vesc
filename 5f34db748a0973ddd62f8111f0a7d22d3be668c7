@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c09ac5ec_994c019d",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-09T19:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a096f01_f15949df",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 2
+      },
+      "revId": "5f34db748a0973ddd62f8111f0a7d22d3be668c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e207429b_864530f7",
         "filename": "src/libANGLE/VaryingPacking.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "5f34db748a0973ddd62f8111f0a7d22d3be668c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cf40a52_8611a516",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-09T19:00:55Z",
+      "side": 1,
+      "message": "They are generally integers, so the swap is 2 times unnecessary instructions.\n\nBut done anyway, it\u0027s not like there are that many varyings!",
+      "parentUuid": "e207429b_864530f7",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 40
+      },
+      "revId": "5f34db748a0973ddd62f8111f0a7d22d3be668c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
