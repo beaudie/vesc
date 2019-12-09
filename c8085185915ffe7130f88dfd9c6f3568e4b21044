@@ -213,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "85bf87d7_a6211fd3",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-09T23:42:46Z",
+      "side": 1,
+      "message": "I thought there was a restriction on how large the StructuredBuffer could be, and that this was where that was enforced. Maybe I\u0027m wrong.",
+      "parentUuid": "426dfe52_60fff003",
+      "range": {
+        "startLine": 857,
+        "startChar": 26,
+        "endLine": 857,
+        "endChar": 52
+      },
+      "revId": "c8085185915ffe7130f88dfd9c6f3568e4b21044",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d855f3ef_ff7d3077",
         "filename": "src/compiler/translator/StructureHLSL.cpp",
         "patchSetId": 13
