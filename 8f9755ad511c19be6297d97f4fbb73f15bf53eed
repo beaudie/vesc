@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "44547ca8_00367e70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-09T16:18:55Z",
+      "side": 1,
+      "message": "If you enable this flag, it expects the files to be present, or \"gn gen\" will fail.  They will only be present if you\u0027ve enabled \"checkout_src_internal\" in your custom GN vars and performed a gclient sync.  I can document this better in the CL, and generally I\u0027ll add a markdown document to this internal repo.\n\nI\u0027m flexible on the location.  This one is weird since we generate and control the source, but don\u0027t want to post them publicly.",
+      "parentUuid": "719ab3db_e78f822b",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 33
+      },
+      "revId": "8f9755ad511c19be6297d97f4fbb73f15bf53eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35b5a851_4af20ce0",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 4
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "645b0cb6_84e82315",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-09T16:18:55Z",
+      "side": 1,
+      "message": "GN is pretty good at forcing you to define something that hasn\u0027t already been defined.  In this scenario, there aren\u0027t any existing defines.",
+      "parentUuid": "35b5a851_4af20ce0",
+      "revId": "8f9755ad511c19be6297d97f4fbb73f15bf53eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83ac3d0d_a8f21edc",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 4
@@ -53,6 +95,24 @@
       "writtenOn": "2019-12-07T01:30:31Z",
       "side": 1,
       "message": "Here\u0027s a CL that did a lot of that stuff recently for dEQP:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1881759",
+      "revId": "8f9755ad511c19be6297d97f4fbb73f15bf53eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6eb8863e_7ef3abc2",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-09T16:18:55Z",
+      "side": 1,
+      "message": "Ah, excellent, thanks!  I\u0027ll update this CL once I\u0027ve got data_deps figured out.",
+      "parentUuid": "83ac3d0d_a8f21edc",
       "revId": "8f9755ad511c19be6297d97f4fbb73f15bf53eed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
