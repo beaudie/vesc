@@ -6608,13 +6608,14 @@ uint32_t FillBuffer(const std::pair<uint32_t, uint32_t> matrixDims[],
     size_t offset = 0;
     for (size_t m = 0; m < matrixCount; ++m)
     {
-        uint32_t cols   = matrixDims[m].first;
-        uint32_t rows   = matrixDims[m].second;
+        uint32_t rows   = matrixDims[m].first;
+        uint32_t cols   = matrixDims[m].second;
         bool isColMajor = matrixIsColMajor[m] != isTransposed;
 
-        uint32_t arraySize              = isColMajor ? cols : rows;
-        uint32_t arrayElementComponents = isColMajor ? rows : cols;
-        uint32_t stride                 = isStd430 ? RoundUpPow2(arrayElementComponents, 2) : 4;
+        uint32_t arraySize              = isColMajor ? rows : cols;
+        uint32_t arrayElementComponents = isColMajor ? cols : rows;
+        uint32_t stride                 = isStd430 ? RoundUpPow2(arrayElementComponents, 2)
+                                   : RoundUpPow2(arrayElementComponents, 2);
 
         offset = RoundUpPow2(offset, stride);
 
@@ -6915,13 +6916,13 @@ void main()
     float dataZeros[kMatrixCount * 4 * 4]          = {};
 
     const uint32_t sizeStd140ColMajor =
-        FillBuffer(kMatrixDims, kMatrixIsColMajor, kMatrixCount, dataStd140ColMajor, false, false);
+        FillBuffer(kMatrixDims, kMatrixIsColMajor, kMatrixCount, dataStd140ColMajor, false, true);
     const uint32_t sizeStd140RowMajor =
-        FillBuffer(kMatrixDims, kMatrixIsColMajor, kMatrixCount, dataStd140RowMajor, false, true);
+        FillBuffer(kMatrixDims, kMatrixIsColMajor, kMatrixCount, dataStd140RowMajor, false, false);
     const uint32_t sizeStd430ColMajor =
-        FillBuffer(kMatrixDims, kMatrixIsColMajor, kMatrixCount, dataStd430ColMajor, true, false);
+        FillBuffer(kMatrixDims, kMatrixIsColMajor, kMatrixCount, dataStd430ColMajor, true, true);
     const uint32_t sizeStd430RowMajor =
-        FillBuffer(kMatrixDims, kMatrixIsColMajor, kMatrixCount, dataStd430RowMajor, true, true);
+        FillBuffer(kMatrixDims, kMatrixIsColMajor, kMatrixCount, dataStd430RowMajor, true, false);
 
     GLBuffer uboStd140ColMajor, uboStd140RowMajor;
     GLBuffer ssboStd140ColMajor, ssboStd140RowMajor;
@@ -6952,6 +6953,8 @@ void main()
     EXPECT_GL_NO_ERROR();
 
     drawQuad(program, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_GL_NO_ERROR();
+
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 
     EXPECT_TRUE(VerifyBuffer(ssboStd140ColMajorOut, dataStd140ColMajor, sizeStd140ColMajor));
