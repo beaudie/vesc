@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "877bdcb4_9fff3980",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-10T17:52:24Z",
+      "side": 1,
+      "message": "nit: Prefer newlines between test failure blocks, and one block per bug, but maybe catch it in your next update.",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 670,
+        "endChar": 3
+      },
+      "revId": "ce9f0a0d54ec06dc69a6146ac2fe0974c52b7b26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
