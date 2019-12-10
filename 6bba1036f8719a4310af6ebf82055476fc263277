@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b3d7a86f_0c99ac74",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4000,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-10T16:25:23Z",
+      "side": 1,
+      "message": "I don\u0027t know how likely it is, but if there were eventually a version 330, this check would fail.  Might as well make it \"\u003e\u003d\".",
+      "range": {
+        "startLine": 4000,
+        "startChar": 23,
+        "endLine": 4000,
+        "endChar": 29
+      },
+      "revId": "6bba1036f8719a4310af6ebf82055476fc263277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "27b5ad86_a600d09d",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 3
@@ -13,6 +36,24 @@
       "writtenOn": "2019-12-09T06:18:09Z",
       "side": 1,
       "message": "Not related to your patch. But it seems that the original code doesn\u0027t check that array index for images must be constant integral expressions. Could you please add that checking and a corresponding test in a separate patch?",
+      "revId": "6bba1036f8719a4310af6ebf82055476fc263277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9799f9fb_2ba9d50e",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4056,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-10T16:25:23Z",
+      "side": 1,
+      "message": "Not related to the patch, but definitely related to EXT_gpu_shader5:\n\n  * support for indexing into arrays of images and shader storage blocks\n    using only constant integral expressions;\n\nMaybe coming in a later patch series?",
+      "parentUuid": "27b5ad86_a600d09d",
       "revId": "6bba1036f8719a4310af6ebf82055476fc263277",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
