@@ -536,7 +536,7 @@ void dEQPTest<TestModuleIndex>::TearDownTestCase()
     {};                                                                       \
     TEST_P(dEQP, API) { runTest(); }                                          \
                                                                               \
-    INSTANTIATE_TEST_SUITE_P(All, dEQP, dEQP::GetTestingRange(),              \
+    INSTANTIATE_TEST_SUITE_P(t, dEQP, dEQP::GetTestingRange(),                \
                              [](const testing::TestParamInfo<size_t> &info) { \
                                  return dEQP::GetCaseGTestName(info.param);   \
                              })

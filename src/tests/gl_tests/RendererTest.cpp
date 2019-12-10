@@ -172,5 +172,6 @@ TEST_P(RendererTest, SimpleOperation)
 // Select configurations (e.g. which renderer, which GLES major version) these tests should be run
 // against.
 
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31_AND_NULL(RendererTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(RendererTest);
+ANGLE_INSTANTIATE_TEST(RendererTest, ANGLE_ALL_TEST_PLATFORMS_NULL);
 }  // anonymous namespace

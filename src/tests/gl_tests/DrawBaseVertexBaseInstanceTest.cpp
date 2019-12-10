@@ -675,7 +675,7 @@ const angle::PlatformParameters platforms[] = {
 };
 
 INSTANTIATE_TEST_SUITE_P(
-    All,
+    t,
     DrawBaseVertexBaseInstanceTest,
     testing::Combine(
         testing::ValuesIn(::angle::FilterTestParams(platforms, ArraySize(platforms))),
