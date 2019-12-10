@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d28e7c13_fb80c9f2",
+        "filename": "src/compiler/preprocessor/preprocessor.l",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-10T15:41:33Z",
+      "side": 0,
+      "message": "Can you remove these from the .y files too? That would be preprocessor.y and glslang.y",
+      "revId": "11e6944ec5a84a780c495bbf6d3edf04404e0539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
