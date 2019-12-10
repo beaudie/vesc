@@ -68,6 +68,8 @@ class RendererVk : angle::NonCopyable
                              egl::Display *display,
                              const char *wsiExtension,
                              const char *wsiLayer);
+    // Soft initialize resets volk vk* function ptrs for an already initialized RendererVk
+    angle::Result softInitialize();
     void onDestroy(vk::Context *context);
 
     void notifyDeviceLost();

@@ -614,6 +614,15 @@ bool RendererVk::isDeviceLost() const
     return mDeviceLost;
 }
 
+angle::Result RendererVk::softInitialize()
+{
+    ASSERT(mDevice != nullptr && mInstance != nullptr);
+    // Set all vk* function ptrs
+    volkInitialize();
+    volkLoadInstance(mInstance);
+    return angle::Result::Continue;
+}
+
 angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      egl::Display *display,
                                      const char *wsiExtension,
