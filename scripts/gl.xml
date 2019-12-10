@@ -1608,6 +1608,61 @@ typedef unsigned int GLhandleARB;
         </group>
 
         <group name="InternalFormat" comment="Was PixelInternalFormat">
+            <!-- unsized or extension formats -->
+            <enum name="GL_ALPHA"/>
+            <enum name="GL_STENCIL"/>
+            <enum name="GL_STENCIL_EXT"/>
+            <enum name="GL_LUMINANCE"/>
+            <enum name="GL_LUMINANCE_ALPHA"/>
+            <enum name="GL_BGRA"/>
+            <enum name="GL_BGRA_EXT"/>
+            <enum name="GL_BGRA_IMG"/>
+            <enum name="GL_DEPTH_COMPONENT32"/>
+            <enum name="GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE"/>
+            <enum name="GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE"/>
+            <enum name="GL_COMPRESSED_SRGB_PVRTC_2BPPV1_EXT"/>
+            <enum name="GL_COMPRESSED_SRGB_PVRTC_4BPPV1_EXT"/>
+            <enum name="GL_COMPRESSED_SRGB_ALPHA_PVRTC_2BPPV1_EXT"/>
+            <enum name="GL_COMPRESSED_SRGB_ALPHA_PVRTC_4BPPV1_EXT"/>
+            <enum name="GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG"/>
+            <enum name="GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG"/>
+            <enum name="GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG"/>
+            <enum name="GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG"/>
+            <enum name="GL_COMPRESSED_SRGB_S3TC_DXT1_NV"/>
+            <enum name="GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_NV"/>
+            <enum name="GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_NV"/>
+            <enum name="GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_NV"/>
+            <enum name="GL_ETC1_RGB8_OES"/>
+            <enum name="GL_COMPRESSED_RGBA_BPTC_UNORM_ARB"/>
+            <enum name="GL_COMPRESSED_RGBA_BPTC_UNORM_EXT"/>
+            <enum name="GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB"/>
+            <enum name="GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT"/>
+            <enum name="GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB"/>
+            <enum name="GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT"/>
+            <enum name="GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB"/>
+            <enum name="GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT"/>
+            <enum name="GL_RGBA16_SNORM"/>
+            <enum name="GL_RGBA16_SNORM_EXT"/>
+            <enum name="GL_COMPRESSED_RGBA_ASTC_3x3x3_OES"/>
+            <enum name="GL_COMPRESSED_RGBA_ASTC_4x3x3_OES"/>
+            <enum name="GL_COMPRESSED_RGBA_ASTC_4x4x3_OES"/>
+            <enum name="GL_COMPRESSED_RGBA_ASTC_4x4x4_OES"/>
+            <enum name="GL_COMPRESSED_RGBA_ASTC_5x4x4_OES"/>
+            <enum name="GL_COMPRESSED_RGBA_ASTC_5x5x4_OES"/>
+            <enum name="GL_COMPRESSED_RGBA_ASTC_5x5x5_OES"/>
+            <enum name="GL_COMPRESSED_RGBA_ASTC_6x5x5_OES"/>
+            <enum name="GL_COMPRESSED_RGBA_ASTC_6x6x5_OES"/>
+            <enum name="GL_COMPRESSED_RGBA_ASTC_6x6x6_OES"/>
+            <enum name="GL_COMPRESSED_SRGB8_ALPHA8_ASTC_3x3x3_OES"/>
+            <enum name="GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x3x3_OES"/>
+            <enum name="GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4x3_OES"/>
+            <enum name="GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4x4_OES"/>
+            <enum name="GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4x4_OES"/>
+            <enum name="GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5x4_OES"/>
+            <enum name="GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5x5_OES"/>
+            <enum name="GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5x5_OES"/>
+            <enum name="GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6x5_OES"/>
+            <enum name="GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6x6_OES"/>
             <!-- Compatibility -->
             <enum name="GL_ALPHA12"/>
             <enum name="GL_ALPHA16"/>
@@ -1974,6 +2029,21 @@ typedef unsigned int GLhandleARB;
         </group>
 
         <group name="PixelType">
+            <enum name="GL_HALF_FLOAT"/>
+            <enum name="GL_HALF_FLOAT_ARB"/>
+            <enum name="GL_HALF_FLOAT_NV"/>
+            <enum name="GL_HALF_APPLE"/>
+            <enum name="GL_UNSIGNED_SHORT_4_4_4_4_REV"/>
+            <enum name="GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT"/>
+            <enum name="GL_UNSIGNED_SHORT_4_4_4_4_REV_IMG"/>
+            <enum name="GL_UNSIGNED_SHORT_1_5_5_5_REV"/>
+            <enum name="GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT"/>
+            <enum name="GL_UNSIGNED_INT_2_10_10_10_REV"/>
+            <enum name="GL_UNSIGNED_INT_2_10_10_10_REV_EXT"/>
+            <enum name="GL_UNSIGNED_INT_10F_11F_11F_REV"/>
+            <enum name="GL_UNSIGNED_INT_10F_11F_11F_REV_APPLE"/>
+            <enum name="GL_UNSIGNED_INT_10F_11F_11F_REV_EXT"/>
+            <enum name="GL_HALF_FLOAT_OES"/>
             <enum name="GL_BITMAP"/>
             <enum name="GL_BYTE"/>
             <enum name="GL_FLOAT"/>
