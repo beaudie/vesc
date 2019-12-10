@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4f573d2_1b1b9b2f",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-10T17:53:06Z",
+      "side": 1,
+      "message": "Is this statement still true if there is a GS present?",
+      "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a29f9168_b3526689",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-10T17:53:06Z",
+      "side": 1,
+      "message": "I\u0027m not sure what your opinion is, but this looks easier to read to me:\n\n    IntermediateShaderSource *outStageSource \u003d shaderSources + outStage;",
+      "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e43f6acd_0527f834",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-10T17:53:06Z",
+      "side": 1,
+      "message": "nit: Varyings",
+      "range": {
+        "startLine": 606,
+        "startChar": 11,
+        "endLine": 606,
+        "endChar": 18
+      },
+      "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67f9f874_fcdbc067",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-10T17:53:06Z",
+      "side": 1,
+      "message": "By removing the `if (!fragmentSource-\u003eempty())`, you\u0027ll be doing work for a fragment shader that may not exist.   It should probably be added back or moved into AssignOutputLocations().",
+      "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e946e744_7e9d301c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-10T17:53:06Z",
+      "side": 1,
+      "message": "kGraphicsShaderCount",
+      "range": {
+        "startLine": 1071,
+        "startChar": 43,
+        "endLine": 1071,
+        "endChar": 44
+      },
+      "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
