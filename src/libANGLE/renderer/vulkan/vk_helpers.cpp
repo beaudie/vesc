@@ -734,10 +734,12 @@ angle::Result DynamicDescriptorPool::init(ContextVk *contextVk,
     ASSERT(mDescriptorPools.empty() || (mDescriptorPools.size() == 1 &&
                                         mDescriptorPools[0]->get().hasCapacity(mMaxSetsPerPool)));
 
+    printf("%s: this=%p\n", __PRETTY_FUNCTION__, this);
     mPoolSizes.assign(setSizes, setSizes + setSizeCount);
     for (uint32_t i = 0; i < setSizeCount; ++i)
     {
         mPoolSizes[i].descriptorCount *= mMaxSetsPerPool;
+        printf("  mPoolSizes[%d].descriptorCount = %d\n", i, mPoolSizes[i].descriptorCount);
     }
 
     mDescriptorPools.push_back(new RefCountedDescriptorPoolHelper());
@@ -798,6 +800,8 @@ angle::Result DynamicDescriptorPool::allocateSetsAndGetInfo(
         bindingOut->set(mDescriptorPools[mCurrentPoolIndex]);
     }
 
+    printf("%s: this=%p, descriptorSetLayout=%p, descriptorSetCount=%d\n", __PRETTY_FUNCTION__,
+           this, descriptorSetLayout, descriptorSetCount);
     return bindingOut->get().allocateSets(contextVk, descriptorSetLayout, descriptorSetCount,
                                           descriptorSetsOut);
 }

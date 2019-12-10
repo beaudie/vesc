@@ -702,6 +702,8 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
         contextVk, uniformAndXfbSetSize.data(), uniformAndXfbSetSize.size()));
     if (resourceSetSize.size() > 0)
     {
+        printf("%s: init kShaderResourceDescriptorSetIndex, resourceSetSize=%llu\n",
+               __PRETTY_FUNCTION__, resourceSetSize.size());
         ANGLE_TRY(mDynamicDescriptorPools[kShaderResourceDescriptorSetIndex].init(
             contextVk, resourceSetSize.data(), static_cast<uint32_t>(resourceSetSize.size())));
     }
