@@ -4022,6 +4022,8 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
                     }
                     break;
                 case EvqBuffer:
+                    // Note that EXT_gpu_shader5 (and consequently ES3.2) doesn't allow dynamically
+                    // uniform indices on images.
                     error(location,
                           "array indexes for shader storage block arrays must be constant integral "
                           "expressions",
@@ -4044,27 +4046,19 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
         }
         else if (baseExpression->isArray())
         {
-            TType elementType;
-            switch (mShaderVersion)
+            TBasicType elementType = baseExpression->getType().getBasicType();
+
+            if (IsSampler(elementType) && !allowUniformIndices)
             {
-                case 100:
-                    break;
-                case 300:
-                case 310:
-                    elementType = baseExpression->getType();
-                    elementType.toArrayElementType();
-                    if (elementType.isSampler() && !allowUniformIndices)
-                    {
-                        error(location,
-                              "array index for samplers must be constant integral expressions",
-                              "[");
-                    }
-                    break;
-                case 320:
-                    break;
-                default:
-                    UNREACHABLE();
-                    break;
+                error(location, "array index for samplers must be constant integral expressions",
+                      "[");
+            }
+            else if (IsImage(elementType))
+            {
+                // Note that EXT_gpu_shader5 (and consequently ES3.2) doesn't allow dynamically
+                // uniform indices on images.
+                error(location,
+                      "array indexes for image arrays must be constant integral expressions", "[");
             }
         }
     }
