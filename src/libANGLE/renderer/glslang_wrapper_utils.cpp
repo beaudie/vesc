@@ -716,14 +716,9 @@ void AssignOutputLocations(const gl::ProgramState &programState,
 
 void AssignVaryingLocations(const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
-                            gl::ShaderType outStage,
-                            gl::ShaderType inStage,
                             gl::ShaderMap<IntermediateShaderSource> *shaderSources,
                             XfbBufferMap *xfbBufferMap)
 {
-
-    IntermediateShaderSource *outStageSource = &(*shaderSources)[outStage];
-    IntermediateShaderSource *inStageSource  = &(*shaderSources)[inStage];
 
     // Assign varying locations.
     for (const gl::PackedVaryingRegister &varyingReg : resources.varyingPacking.getRegisterList())
@@ -761,34 +756,23 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
         const std::string &name =
             varying.isStructField() ? varying.parentStructName : varying.varying->name;
 
-        // Varyings are from multiple shader stages
-        // To match pair of (out - in) qualifier, varying should be in the pair of shader source
-        if (!varying.shaderStages.test(outStage) || !varying.shaderStages.test(inStage))
+        for (gl::ShaderType stage : varying.shaderStages)
         {
-            // Pair can be unmatching at transform feedback case,
-            // But it requires qualifier.
-            if (!varying.vertexOnly())
-                continue;
-        }
+            IntermediateShaderSource *shaderSource = &(*shaderSources)[stage];
+            ASSERT(!shaderSource->empty());
 
-        XfbBufferMap::iterator iter;
-        iter = xfbBufferMap->find(name);
-        if (iter != xfbBufferMap->end())
-        {
-            XFBBufferInfo item = iter->second;
-            const std::string xfbSpecifier =
-                "xfb_buffer = " + Str(item.index) + ", xfb_offset = " + Str(item.offset) +
-                ", xfb_stride = " + Str(item.stride) + ", " + locationString;
-            outStageSource->insertLayoutSpecifier(name, xfbSpecifier);
+            XfbBufferMap::iterator iter;
+            iter = xfbBufferMap->find(name);
+            if (iter != xfbBufferMap->end())
+            {
+                XFBBufferInfo item = iter->second;
+                locationString     = "xfb_buffer = " + Str(item.index) +
+                                 ", xfb_offset = " + Str(item.offset) +
+                                 ", xfb_stride = " + Str(item.stride) + ", " + locationString;
+            }
+            shaderSource->insertLayoutSpecifier(name, locationString);
+            shaderSource->insertQualifierSpecifier(name, "");
         }
-        else
-        {
-            outStageSource->insertLayoutSpecifier(name, locationString);
-        }
-        inStageSource->insertLayoutSpecifier(name, locationString);
-
-        outStageSource->insertQualifierSpecifier(name, "");
-        inStageSource->insertQualifierSpecifier(name, "");
     }
 
     // Substitute layout and qualifier strings for the position varying. Use the first free
@@ -799,11 +783,11 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
                  << (resources.varyingPacking.getMaxSemanticIndex() + kANGLEPositionLocationOffset);
     const std::string layout = layoutStream.str();
 
-    outStageSource->insertLayoutSpecifier(kVaryingName, layout);
-    inStageSource->insertLayoutSpecifier(kVaryingName, layout);
-
-    outStageSource->insertQualifierSpecifier(kVaryingName, "");
-    inStageSource->insertQualifierSpecifier(kVaryingName, "");
+    for (IntermediateShaderSource &shaderSource : *shaderSources)
+    {
+        shaderSource.insertLayoutSpecifier(kVaryingName, layout);
+        shaderSource.insertQualifierSpecifier(kVaryingName, "");
+    }
 }
 
 void AssignUniformBindings(const GlslangSourceOptions &options,
@@ -1210,7 +1194,8 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     IntermediateShaderSource *vertexSource   = &intermediateSources[gl::ShaderType::Vertex];
     IntermediateShaderSource *fragmentSource = &intermediateSources[gl::ShaderType::Fragment];
-    IntermediateShaderSource *geometrySource = &intermediateSources[gl::ShaderType::Geometry];
+    IntermediateShaderSource *computeSource  = &intermediateSources[gl::ShaderType::Compute];
+
     XfbBufferMap xfbBufferMap;
 
     // Write transform feedback output code.
@@ -1235,32 +1220,24 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         }
     }
 
-    if (!geometrySource->empty())
+    // Assign outputs to the fragment shader, if any.
+    if (!fragmentSource->empty())
     {
         AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, gl::ShaderType::Geometry,
-                               gl::ShaderType::Fragment, &intermediateSources, &xfbBufferMap);
-        if (!vertexSource->empty())
-        {
-            AssignAttributeLocations(programState, vertexSource);
-            AssignVaryingLocations(programState, resources, gl::ShaderType::Vertex,
-                                   gl::ShaderType::Geometry, &intermediateSources, &xfbBufferMap);
-        }
     }
-    else if (!vertexSource->empty())
+
+    // Assign attributes to the vertex shader, if any.
+    if (!vertexSource->empty())
     {
         AssignAttributeLocations(programState, vertexSource);
-        AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, gl::ShaderType::Vertex,
-                               gl::ShaderType::Fragment, &intermediateSources, &xfbBufferMap);
     }
-    else if (!fragmentSource->empty())
+
+    if (computeSource->empty())
     {
-        AssignAttributeLocations(programState, fragmentSource);
-        AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, gl::ShaderType::Vertex,
-                               gl::ShaderType::Fragment, &intermediateSources, &xfbBufferMap);
+        // Assign varying locations.
+        AssignVaryingLocations(programState, resources, &intermediateSources, &xfbBufferMap);
     }
+
     AssignUniformBindings(options, &intermediateSources);
     AssignTextureBindings(options, useOldRewriteStructSamplers, programState, &intermediateSources);
     AssignNonTextureBindings(options, programState, &intermediateSources);
