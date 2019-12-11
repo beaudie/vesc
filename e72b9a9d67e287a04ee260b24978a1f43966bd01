@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "900e2bbd_960691ae",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1631,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-11T21:39:08Z",
+      "side": 1,
+      "message": "Instead of \"which also has a mat4 member\" it would be clearer to write \"where the struct itself contains a mat4 member\" or \"where the struct contains a mat4 member\".",
+      "revId": "e72b9a9d67e287a04ee260b24978a1f43966bd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "668e45cc_7b29b23b",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1658,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-11T21:39:08Z",
+      "side": 1,
+      "message": "You could just allocate v as std::vector\u003cGLfloat\u003e (removing the kBytesPerElement) and still pass down v.data() to glBufferData and glBufferSubData below. Then you can index directly into v and eliminate the vAsFloat variable. Would you make this change?",
+      "range": {
+        "startLine": 1658,
+        "startChar": 11,
+        "endLine": 1658,
+        "endChar": 19
+      },
+      "revId": "e72b9a9d67e287a04ee260b24978a1f43966bd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82626106_11857e6f",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-11T21:39:08Z",
+      "side": 1,
+      "message": "Here and below: these tests don\u0027t query GL_UNIFORM_BLOCK_DATA_SIZE. What happens if the underlying driver actually requires a larger minimum size? Could you improve the test\u0027s robustness by checking that value and allocating a larger uniform buffer if necessary?",
+      "range": {
+        "startLine": 1666,
+        "startChar": 17,
+        "endLine": 1666,
+        "endChar": 34
+      },
+      "revId": "e72b9a9d67e287a04ee260b24978a1f43966bd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ce6df1c_b286b123",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-11T21:39:08Z",
+      "side": 1,
+      "message": "I wish there were a way to simplify this block of expectations. This block of lines is essentially repeated about 10 times in these new tests. Please think about ways you might simplify it - maybe shrinking the area being tested? Thanks.",
+      "range": {
+        "startLine": 1680,
+        "startChar": 45,
+        "endLine": 1680,
+        "endChar": 49
+      },
+      "revId": "e72b9a9d67e287a04ee260b24978a1f43966bd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93e88fb7_e4d6801d",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-11T21:39:08Z",
+      "side": 1,
+      "message": "Please add some comment or change variable names to make it clearer that this is taking into account the std140 alignment of the additional \"float factor\" member of the struct, and the struct\u0027s aligned size.",
+      "range": {
+        "startLine": 1750,
+        "startChar": 11,
+        "endLine": 1750,
+        "endChar": 19
+      },
+      "revId": "e72b9a9d67e287a04ee260b24978a1f43966bd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dfd2fbb_c8a43c66",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1753,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-11T21:39:08Z",
+      "side": 1,
+      "message": "Again, since everything in this uniform block is ultimately a float, you could allocate this as std::vector\u003cfloat\u003e and simplify the math.",
+      "range": {
+        "startLine": 1753,
+        "startChar": 16,
+        "endLine": 1753,
+        "endChar": 23
+      },
+      "revId": "e72b9a9d67e287a04ee260b24978a1f43966bd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d03a9917_56ae3c2f",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1832,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-11T21:39:08Z",
+      "side": 1,
+      "message": "shares -\u003e share",
+      "revId": "e72b9a9d67e287a04ee260b24978a1f43966bd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ee30e3f_c9a89c5a",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-11T21:39:08Z",
+      "side": 1,
+      "message": "Please consider simplifying this to std::vector\u003cGLfloat\u003e here too.",
+      "range": {
+        "startLine": 1865,
+        "startChar": 22,
+        "endLine": 1865,
+        "endChar": 38
+      },
+      "revId": "e72b9a9d67e287a04ee260b24978a1f43966bd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
