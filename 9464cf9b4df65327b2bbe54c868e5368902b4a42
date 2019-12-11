@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "704f2f9e_8558c205",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-11T16:23:45Z",
+      "side": 1,
+      "message": "Is this nesting needed?  Or can we just assert that if computeSource is not empty, all the other stages must be empty?",
+      "range": {
+        "startLine": 1269,
+        "startChar": 8,
+        "endLine": 1269,
+        "endChar": 30
+      },
+      "revId": "9464cf9b4df65327b2bbe54c868e5368902b4a42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "83ecc235_ed5b6362",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 1
@@ -13,6 +36,30 @@
       "writtenOn": "2019-12-11T15:39:26Z",
       "side": 1,
       "message": "@Tim, I replicated the behavior already in the code, but this looks dodgy at best. You would think I could just take the actual active stages and assign varying locations between them, but that would definitely do less work if the program has only one stage (currently, this code always produces at least 2 stages; FS and either VS or GS (or both)).\n\nI don\u0027t know if this would end up being a problem for program pipeline objects. In case you see mysterious issues with varying assignments in your work, this could be a place to look at!\n\nI\u0027m hoping to revisit this when tessellation is added.",
+      "range": {
+        "startLine": 1285,
+        "startChar": 0,
+        "endLine": 1293,
+        "endChar": 57
+      },
+      "revId": "9464cf9b4df65327b2bbe54c868e5368902b4a42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ac48b474_e8429f63",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-11T16:23:45Z",
+      "side": 1,
+      "message": "Hard to parse the original code.  There are definitely behavior changes here (for instance, fragment source outputs were written no matter what).  Is your intent to keep the exact original behavior, or are you trying to facilitate a new model?\n\nIt would be nice to find an elegant solution (assign varyings between active stages) and handle the single stage scenario separately.\n\nAlso, I think you lost AssignAttributeLocations for the FS only case.",
+      "parentUuid": "83ecc235_ed5b6362",
       "range": {
         "startLine": 1285,
         "startChar": 0,
