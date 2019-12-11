@@ -728,10 +728,15 @@ void AssignOutputLocations(const gl::ProgramState &programState,
 
 void AssignVaryingLocations(const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
-                            IntermediateShaderSource *outStageSource,
-                            IntermediateShaderSource *inStageSource,
+                            gl::ShaderType outStage,
+                            gl::ShaderType inStage,
+                            gl::ShaderMap<IntermediateShaderSource> *shaderSources,
                             XfbBufferMap *xfbBufferMap)
 {
+
+    IntermediateShaderSource *outStageSource = &(*shaderSources)[outStage];
+    IntermediateShaderSource *inStageSource  = &(*shaderSources)[inStage];
+
     // Assign varying locations.
     for (const gl::PackedVaryingRegister &varyingReg : resources.varyingPacking.getRegisterList())
     {
@@ -1235,6 +1240,8 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     IntermediateShaderSource *vertexSource   = &intermediateSources[gl::ShaderType::Vertex];
     IntermediateShaderSource *fragmentSource = &intermediateSources[gl::ShaderType::Fragment];
     IntermediateShaderSource *geometrySource = &intermediateSources[gl::ShaderType::Geometry];
+    IntermediateShaderSource *computeSource  = &intermediateSources[gl::ShaderType::Compute];
+
     XfbBufferMap xfbBufferMap;
 
     // Write transform feedback output code.
@@ -1259,32 +1266,40 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         }
     }
 
-    if (!geometrySource->empty())
+    if (computeSource->empty())
     {
-        AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, geometrySource, fragmentSource,
-                               &xfbBufferMap);
+        // Assign outputs to the fragment shader, if any.
+        if (!fragmentSource->empty())
+        {
+            AssignOutputLocations(programState, fragmentSource);
+        }
+
+        // Assign attributes to the vertex shader, if any.
         if (!vertexSource->empty())
         {
             AssignAttributeLocations(programState, vertexSource);
-            AssignVaryingLocations(programState, resources, vertexSource, geometrySource,
-                                   &xfbBufferMap);
+        }
+
+        // Create a list of present stages for varying location assignment.
+        angle::FixedVector<gl::ShaderType, gl::kGraphicsShaderCount> activeStages;
+        if (!vertexSource->empty() || geometrySource->empty())
+        {
+            activeStages.push_back(gl::ShaderType::Vertex);
+        }
+        if (!geometrySource->empty())
+        {
+            activeStages.push_back(gl::ShaderType::Geometry);
+        }
+        activeStages.push_back(gl::ShaderType::Fragment);
+
+        // Assign varying locations to pairs of stages.
+        for (size_t i = 1; i < activeStages.size(); ++i)
+        {
+            AssignVaryingLocations(programState, resources, activeStages[i - 1], activeStages[i],
+                                   &intermediateSources, &xfbBufferMap);
         }
     }
-    else if (!vertexSource->empty())
-    {
-        AssignAttributeLocations(programState, vertexSource);
-        AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, vertexSource, fragmentSource,
-                               &xfbBufferMap);
-    }
-    else if (!fragmentSource->empty())
-    {
-        AssignAttributeLocations(programState, fragmentSource);
-        AssignOutputLocations(programState, fragmentSource);
-        AssignVaryingLocations(programState, resources, vertexSource, fragmentSource,
-                               &xfbBufferMap);
-    }
+
     AssignUniformBindings(options, &intermediateSources);
     AssignTextureBindings(options, useOldRewriteStructSamplers, programState, &intermediateSources);
     AssignNonTextureBindings(options, programState, &intermediateSources);
