@@ -119,19 +119,25 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
         {
             TextureVk *textureVk   = vk::GetImpl(textureAndLayout.texture);
             vk::ImageHelper &image = textureVk->getImage();
-            vk::ImageLayout layout = GetVulkanImageLayout(textureAndLayout.layout);
+            // vk::ImageLayout layout = GetVulkanImageLayout(textureAndLayout.layout);
 
             // If there were GL commands using this image prior to this call, that's a
             // synchronization error on behalf of the program.
             ASSERT(!image.isCurrentlyInGraph());
 
             // Inform the image that the layout has been externally changed.
-            image.onExternalLayoutChange(layout);
+            // image.onExternalLayoutChange(layout);
 
             vk::CommandBuffer *queueChange;
             ANGLE_TRY(image.recordCommands(contextVk, &queueChange));
 
             // Queue ownership transfer.
+            vk::ImageLayout layout = image.getCurrentImageLayout();
+            if (layout == vk::ImageLayout::Undefined ||
+                layout == vk::ImageLayout::ExternalPreInitialized)
+            {
+                layout = vk::ImageLayout::ColorAttachment;
+            }
             image.changeLayoutAndQueue(image.getAspectFlags(), layout, rendererQueueFamilyIndex,
                                        queueChange);
         }

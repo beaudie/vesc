@@ -1781,7 +1781,6 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
                                               const VkMemoryRequirements &memoryRequirements,
                                               const void *extraAllocationInfo,
                                               uint32_t currentQueueFamilyIndex,
-
                                               VkMemoryPropertyFlags flags)
 {
     // TODO(jmadill): Memory sub-allocation. http://anglebug.com/2162
@@ -1967,7 +1966,15 @@ void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                        CommandBuffer *commandBuffer)
 {
     ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
-    forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
+    if (newQueueFamilyIndex == VK_QUEUE_FAMILY_EXTERNAL)
+    {
+        changeLayout(aspectMask, newLayout, commandBuffer);
+        forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
+    }
+    else
+    {
+        forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
+    }
 }
 
 void ImageHelper::onExternalLayoutChange(ImageLayout newLayout)
