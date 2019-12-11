@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3cf51145_17a41543",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4025,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T15:00:19Z",
+      "side": 1,
+      "message": "Actually removed the comment as it was redundant. I put the note to clarify why `allowUniformIndices` doesn\u0027t apply to this case, but the comment on that variable already says that it doesn\u0027t apply to SSBOs and images.",
+      "parentUuid": "d28c2047_a75a0d02",
+      "range": {
+        "startLine": 4025,
+        "startChar": 33,
+        "endLine": 4025,
+        "endChar": 73
+      },
+      "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95993491_40b9a1d1",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efbaebb3_d6f19f2d",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4026,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T15:00:19Z",
+      "side": 1,
+      "message": "Done (comment was redundant and removed)",
+      "parentUuid": "95993491_40b9a1d1",
+      "range": {
+        "startLine": 4026,
+        "startChar": 42,
+        "endLine": 4026,
+        "endChar": 48
+      },
+      "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3fc0264a_7984c319",
+        "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T15:00:19Z",
+      "side": 1,
+      "message": "Fixed, copy paste error.",
+      "parentUuid": "b787283c_8d4bf36b",
+      "range": {
+        "startLine": 1309,
+        "startChar": 56,
+        "endLine": 1309,
+        "endChar": 65
+      },
+      "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0fa27a16_96db5ca7",
         "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e93fb36e_548e4c4d",
+        "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T15:00:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fa27a16_96db5ca7",
+      "range": {
+        "startLine": 1313,
+        "startChar": 20,
+        "endLine": 1313,
+        "endChar": 23
+      },
+      "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1718a823_83a81758",
         "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
         "patchSetId": 1
@@ -114,6 +210,30 @@
       "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e1606af_cd8c7ee0",
+        "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T15:00:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1718a823_83a81758",
+      "range": {
+        "startLine": 1357,
+        "startChar": 20,
+        "endLine": 1357,
+        "endChar": 23
+      },
+      "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
