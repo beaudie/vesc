@@ -104,7 +104,9 @@
 
 
 // Explicit uniform locations: triggers ASSERT.
-4132 : KHR-GLES31.core.explicit_uniform_location.* = SKIP
+4217 : KHR-GLES31.core.explicit_uniform_location.uniform-loc-negative-link-max-num-of-locations = FAIL
+4219 VULKAN PIXEL2ORXL : KHR-GLES31.core.explicit_uniform_location.uniform-loc-mix-with-implicit-max = FAIL
+4219 VULKAN PIXEL2ORXL : KHR-GLES31.core.explicit_uniform_location.uniform-loc-mix-with-implicit-max-array = FAIL
 
 // Program interface query.
 3596 VULKAN : KHR-GLES31.core.program_interface_query.* = FAIL
