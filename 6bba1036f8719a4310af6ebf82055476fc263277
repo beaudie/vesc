@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a878a7f8_ddbfdfb7",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4000,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T03:37:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3d7a86f_0c99ac74",
+      "range": {
+        "startLine": 4000,
+        "startChar": 23,
+        "endLine": 4000,
+        "endChar": 29
+      },
+      "revId": "6bba1036f8719a4310af6ebf82055476fc263277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27b5ad86_a600d09d",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 3
@@ -57,6 +81,24 @@
       "revId": "6bba1036f8719a4310af6ebf82055476fc263277",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de67bfcd_de106b03",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4056,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T03:37:11Z",
+      "side": 1,
+      "message": "Will do. Incidentally, in a previous version I had added a check for atomic counters, but turned out the base spec allows dynamically uniform indexing to atomic counters!\n\n---\n\nI think that sentence in EXT_gpu_shader5 is just an emphasis that they didn\u0027t allow dynamically uniform indices for images and storage blocks, as constant indices are already supported in base GLSL ES 3.10 spec.",
+      "parentUuid": "27b5ad86_a600d09d",
+      "revId": "6bba1036f8719a4310af6ebf82055476fc263277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
