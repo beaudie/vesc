@@ -1058,8 +1058,6 @@ void InterfaceBlockLinker::addShaderBlocks(ShaderType shaderType,
 void InterfaceBlockLinker::linkBlocks(const GetBlockSizeFunc &getBlockSize,
                                       const GetBlockMemberInfoFunc &getMemberInfo) const
 {
-    ASSERT(mBlocksOut->empty());
-
     std::set<std::string> visitedList;
 
     for (const ShaderType shaderType : AllShaderTypes())
