@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "59afa34b_33e026f8",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T15:33:18Z",
+      "side": 1,
+      "message": "Yes I think, but the comment was not updated with GS was added to the front-end. Between any pair of stages, if the varying is not in the input, it\u0027s inactive.\n\nUpdated.",
+      "parentUuid": "c4f573d2_1b1b9b2f",
+      "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a29f9168_b3526689",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9085ac5_534bd087",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T15:33:18Z",
+      "side": 1,
+      "message": "Me too, but ANGLE\u0027s style is to do \u0026array[index] instead of array+index.\n\nNote here that the expression here would be `*shaderSources + outStage`, which still isn\u0027t correct as `shaderSources` is not an array, but a container with operator[] overloaded on it.",
+      "parentUuid": "a29f9168_b3526689",
+      "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "06e7140b_a6adf939",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T15:33:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e43f6acd_0527f834",
+      "range": {
+        "startLine": 606,
+        "startChar": 11,
+        "endLine": 606,
+        "endChar": 18
+      },
+      "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67f9f874_fcdbc067",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 5
@@ -73,6 +133,24 @@
       "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6297a5b_8d9d7865",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T15:33:18Z",
+      "side": 1,
+      "message": "If you look at the code before this change, this was being called in every case. I think the function becomes a no-op automatically as the loop inside it (over outputs) doesn\u0027t do anything since there are no outputs.\n\nAdded the if anyway though, as it anyway doesn\u0027t make sense to do this work if there\u0027s no FS.",
+      "parentUuid": "67f9f874_fcdbc067",
+      "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -96,6 +174,30 @@
       "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9b55baa_62aedcbe",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-11T15:33:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e946e744_7e9d301c",
+      "range": {
+        "startLine": 1071,
+        "startChar": 43,
+        "endLine": 1071,
+        "endChar": 44
+      },
+      "revId": "836daaa9dff3819d1d5aa9d1c874be9654eb9638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
