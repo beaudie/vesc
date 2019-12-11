@@ -1501,6 +1501,11 @@ angle::Result Program::link(const Context *context)
             return angle::Result::Continue;
         }
 
+        if (!linkValidateUniforms(mInfoLog, context->getCaps()))
+        {
+            return angle::Result::Continue;
+        }
+
         // [OpenGL ES 3.1] Chapter 8.22 Page 203:
         // A link error will be generated if the sum of the number of active image uniforms used in
         // all shaders, the number of active shader storage blocks, and the number of active
@@ -1561,6 +1566,11 @@ angle::Result Program::link(const Context *context)
         if (!linkInterfaceBlocks(context->getCaps(), context->getClientVersion(),
                                  context->getExtensions().webglCompatibility, mInfoLog,
                                  &combinedShaderStorageBlocks))
+        {
+            return angle::Result::Continue;
+        }
+
+        if (!linkValidateUniforms(mInfoLog, context->getCaps()))
         {
             return angle::Result::Continue;
         }
@@ -4290,6 +4300,19 @@ bool Program::linkValidateGlobalNames(InfoLog &infoLog) const
             infoLog << "Name conflicts between a uniform and a uniform block field: " << fieldName;
             return false;
         }
+    }
+
+    return true;
+}
+
+bool Program::linkValidateUniforms(InfoLog &infoLog, const Caps &caps) const
+{
+    GLint locationSize = static_cast<GLint>(mState.getUniformLocations().size());
+
+    if (locationSize > caps.maxUniformLocations)
+    {
+        infoLog << "Exceeded maximum uniform location size";
+        return false;
     }
 
     return true;
