@@ -7185,10 +7185,6 @@ void main()
 // Test that side effects respect the order of logical expression operands.
 TEST_P(GLSLTest_ES3, MixedRowAndColumnMajorMatrices_ReadSideEffectOrder)
 {
-    // IntermTraverser::insertStatementsInParentBlock that's used to move side effects does not
-    // respect the order of evaluation of logical expressions.  http://anglebug.com/3829.
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     // http://anglebug.com/3837
     ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
 
@@ -7250,10 +7246,6 @@ void main()
 // Test that side effects respect short-circuit.
 TEST_P(GLSLTest_ES3, MixedRowAndColumnMajorMatrices_ReadSideEffectShortCircuit)
 {
-    // IntermTraverser::insertStatementsInParentBlock that's used to move side effects does not
-    // respect short-circuiting in evaluation of logical expressions.  http://anglebug.com/3829.
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     // Fails on Android: http://anglebug.com/3839
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGL());
 
