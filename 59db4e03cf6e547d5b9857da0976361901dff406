@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d28c2047_a75a0d02",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4025,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-11T05:36:33Z",
+      "side": 1,
+      "message": "ES3.1 also doesn\u0027t allow dynamically uniform indices on SSBO. Same with below.",
+      "range": {
+        "startLine": 4025,
+        "startChar": 33,
+        "endLine": 4025,
+        "endChar": 73
+      },
+      "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95993491_40b9a1d1",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4026,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-11T05:36:33Z",
+      "side": 1,
+      "message": "Should be shader storage block?",
+      "range": {
+        "startLine": 4026,
+        "startChar": 42,
+        "endLine": 4026,
+        "endChar": 48
+      },
+      "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b787283c_8d4bf36b",
+        "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-11T05:36:33Z",
+      "side": 1,
+      "message": "I think SSBO is supported since ESSL 310.",
+      "range": {
+        "startLine": 1309,
+        "startChar": 56,
+        "endLine": 1309,
+        "endChar": 65
+      },
+      "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fa27a16_96db5ca7",
+        "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-11T05:36:33Z",
+      "side": 1,
+      "message": "310",
+      "range": {
+        "startLine": 1313,
+        "startChar": 20,
+        "endLine": 1313,
+        "endChar": 23
+      },
+      "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1718a823_83a81758",
+        "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-11T05:36:33Z",
+      "side": 1,
+      "message": "310",
+      "range": {
+        "startLine": 1357,
+        "startChar": 20,
+        "endLine": 1357,
+        "endChar": 23
+      },
+      "revId": "59db4e03cf6e547d5b9857da0976361901dff406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
