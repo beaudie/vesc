@@ -138,7 +138,8 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
     }
 
     contextVk->insertWaitSemaphore(&mSemaphore);
-    return angle::Result::Continue;
+    return contextVk->flushImpl(nullptr);
+    // return angle::Result::Continue;
 }
 
 angle::Result SemaphoreVk::signal(gl::Context *context,

@@ -717,15 +717,25 @@ GLuint GetSampleCount(VkSampleCountFlags supportedCounts, GLuint requestedCount)
 
 }  // namespace rx
 
-#define ANGLE_VK_TRY(context, command)                                                 \
-    do                                                                                 \
-    {                                                                                  \
-        auto ANGLE_LOCAL_VAR = command;                                                \
-        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS))                             \
-        {                                                                              \
-            context->handleError(ANGLE_LOCAL_VAR, __FILE__, ANGLE_FUNCTION, __LINE__); \
-            return angle::Result::Stop;                                                \
-        }                                                                              \
+#define ANGLE_VK_TRY(context, command)                                                      \
+    do                                                                                      \
+    {                                                                                       \
+        auto ANGLE_LOCAL_VAR = command;                                                     \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS))                                  \
+        {                                                                                   \
+            context->handleError(ANGLE_LOCAL_VAR, __FILE__, ANGLE_FUNCTION, __LINE__);      \
+            return angle::Result::Stop;                                                     \
+        }                                                                                   \
+        if (context->getDevice() != VK_NULL_HANDLE)                                         \
+        {                                                                                   \
+            ANGLE_LOCAL_VAR = vkDeviceWaitIdle(context->getDevice());                       \
+            if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS))                              \
+            {                                                                               \
+                fprintf(stderr, "EEE %s @ %s %d result=%d\n", __func__, __FILE__, __LINE__, \
+                        ANGLE_LOCAL_VAR);                                                   \
+                abort();                                                                    \
+            }                                                                               \
+        }                                                                                   \
     } while (0)
 
 #define ANGLE_VK_CHECK(context, test, error) ANGLE_VK_TRY(context, test ? VK_SUCCESS : error)
