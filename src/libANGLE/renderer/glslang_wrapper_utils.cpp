@@ -317,7 +317,8 @@ void IntermediateShaderSource::insertLayoutSpecifier(const std::string &name,
     {
         if (block.type == TokenType::Layout && block.text == name)
         {
-            const char *separator = specifier.empty() || block.args.empty() ? "" : ", ";
+            ASSERT(!specifier.empty());
+            const char *separator = block.args.empty() ? "" : ", ";
 
             block.type = TokenType::Text;
             block.text = "layout(" + block.args + separator + specifier + ")";
@@ -335,7 +336,7 @@ void IntermediateShaderSource::insertQualifierSpecifier(const std::string &name,
         {
             block.type = TokenType::Text;
             block.text = specifier;
-            if (!specifier.empty() && !block.args.empty())
+            if (!block.args.empty())
             {
                 block.text += " " + block.args;
             }
@@ -672,7 +673,7 @@ void AssignAttributeLocations(const gl::ProgramState &programState,
 
         std::string locationString = "location = " + Str(attribute.location);
         shaderSource->insertLayoutSpecifier(attribute.name, locationString);
-        shaderSource->insertQualifierSpecifier(attribute.name, "in");
+        shaderSource->insertQualifierSpecifier(attribute.name, "");
     }
 }
 
@@ -786,25 +787,8 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
         }
         inStageSource->insertLayoutSpecifier(name, locationString);
 
-        const char *outQualifier = "out";
-        const char *inQualifier  = "in";
-        switch (varying.interpolation)
-        {
-            case sh::INTERPOLATION_SMOOTH:
-                break;
-            case sh::INTERPOLATION_CENTROID:
-                outQualifier = "centroid out";
-                inQualifier  = "centroid in";
-                break;
-            case sh::INTERPOLATION_FLAT:
-                outQualifier = "flat out";
-                inQualifier  = "flat in";
-                break;
-            default:
-                UNREACHABLE();
-        }
-        outStageSource->insertQualifierSpecifier(name, outQualifier);
-        inStageSource->insertQualifierSpecifier(name, inQualifier);
+        outStageSource->insertQualifierSpecifier(name, "");
+        inStageSource->insertQualifierSpecifier(name, "");
     }
 
     // Substitute layout and qualifier strings for the position varying. Use the first free
@@ -818,8 +802,8 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
     outStageSource->insertLayoutSpecifier(kVaryingName, layout);
     inStageSource->insertLayoutSpecifier(kVaryingName, layout);
 
-    outStageSource->insertQualifierSpecifier(kVaryingName, "out");
-    inStageSource->insertQualifierSpecifier(kVaryingName, "in");
+    outStageSource->insertQualifierSpecifier(kVaryingName, "");
+    inStageSource->insertQualifierSpecifier(kVaryingName, "");
 }
 
 void AssignUniformBindings(const GlslangSourceOptions &options,
