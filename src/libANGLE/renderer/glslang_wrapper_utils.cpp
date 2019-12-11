@@ -132,7 +132,6 @@ class IntermediateShaderSource final : angle::NonCopyable
     void init(const std::string &source);
     bool empty() const { return mTokens.empty(); }
 
-    bool findTokenName(const std::string &name);
     // Find @@ LAYOUT-name(extra, args) @@ and replace it with:
     //
     //     layout(specifier, extra, args)
@@ -309,18 +308,6 @@ void IntermediateShaderSource::init(const std::string &source)
         // Continue from after the closing of this macro.
         cur += ConstStrLen(kMarkerEnd);
     }
-}
-
-bool IntermediateShaderSource::findTokenName(const std::string &name)
-{
-    for (Token &block : mTokens)
-    {
-        if (block.text == name)
-        {
-            return true;
-        }
-    }
-    return false;
 }
 
 void IntermediateShaderSource::insertLayoutSpecifier(const std::string &name,
@@ -775,11 +762,11 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
 
         // Varings are from 3 stage of shader sources
         // To match pair of (out - in) qualifier, varying should be in the pair of shader source
-        if (!outStageSource->findTokenName(name) || !inStageSource->findTokenName(name))
+        if (!varying.shaderStages.test(outStage) || !varying.shaderStages.test(inStage))
         {
             // Pair can be unmatching at transform feedback case,
             // But it requires qualifier.
-            if (!varying.vertexOnly)
+            if (!varying.vertexOnly())
                 continue;
         }
 
