@@ -22,6 +22,30 @@
       "revId": "c2d8990c602faf3a567bc10cfdb08a40c76ff1d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae88d13e_13f1ef44",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-12T18:18:56Z",
+      "side": 1,
+      "message": "Done, thanks for the thorough review.",
+      "parentUuid": "1270f158_d8374b63",
+      "range": {
+        "startLine": 44,
+        "startChar": 25,
+        "endLine": 44,
+        "endChar": 26
+      },
+      "revId": "c2d8990c602faf3a567bc10cfdb08a40c76ff1d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
