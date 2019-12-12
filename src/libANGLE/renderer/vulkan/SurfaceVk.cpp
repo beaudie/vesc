@@ -155,6 +155,46 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initialize(DisplayVk *display
     return angle::Result::Continue;
 }
 
+angle::Result OffscreenSurfaceVk::AttachmentImage::initializeWithExternalMemory(
+    DisplayVk *displayVk,
+    EGLint width,
+    EGLint height,
+    const vk::Format &vkFormat,
+    GLint samples,
+    void *buffer)
+{
+    RendererVk *renderer = displayVk->getRenderer();
+
+    const angle::Format &textureFormat = vkFormat.actualImageFormat();
+    bool isDepthOrStencilFormat   = textureFormat.depthBits > 0 || textureFormat.stencilBits > 0;
+    const VkImageUsageFlags usage = isDepthOrStencilFormat ? kSurfaceVKDepthStencilImageUsageFlags
+                                                           : kSurfaceVKColorImageUsageFlags;
+
+    VkExtent3D extents = {std::max(static_cast<uint32_t>(width), 1u),
+                          std::max(static_cast<uint32_t>(height), 1u), 1u};
+    ANGLE_TRY(
+        image.init(displayVk, gl::TextureType::_2D, extents, vkFormat, samples, usage, 0, 0, 1, 1));
+
+    VkIOSurfaceMemoryInfo ioSurfaceMemoryInfo = {};
+    ioSurfaceMemoryInfo.sType                 = VK_STRUCTURE_TYPE_IOSURFACE_MEMORY_INFO;
+    ioSurfaceMemoryInfo.pIOSurfaceRef         = buffer;
+    ioSurfaceMemoryInfo.size                  = width * height;
+    ioSurfaceMemoryInfo.plane                 = 0;
+
+    VkMemoryRequirements externalMemoryRequirements;
+    image.getImage().getMemoryRequirements(renderer->getDevice(), &externalMemoryRequirements);
+
+    VkMemoryPropertyFlags flags = 0;
+    ANGLE_TRY(image.initExternalMemory(displayVk, renderer->getMemoryProperties(),
+                                       externalMemoryRequirements, &ioSurfaceMemoryInfo,
+                                       VK_QUEUE_FAMILY_EXTERNAL, flags));
+
+    // Clear the image if it has emulated channels.
+    image.stageClearIfEmulatedFormat(gl::ImageIndex::Make2D(0), vkFormat);
+
+    return angle::Result::Continue;
+}
+
 void OffscreenSurfaceVk::AttachmentImage::destroy(const egl::Display *display)
 {
     DisplayVk *displayVk = vk::GetImpl(display);
