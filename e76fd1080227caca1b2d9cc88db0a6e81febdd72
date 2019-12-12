@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a054acab_80769219",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-12-12T21:28:52Z",
+      "side": 1,
+      "message": "Is it possible to have angle_util_static here instead of exposing all angle_util symbols in the other CL?\nMaybe this will fix ASAN, too.",
+      "range": {
+        "startLine": 28,
+        "startChar": 17,
+        "endLine": 28,
+        "endChar": 27
+      },
+      "revId": "e76fd1080227caca1b2d9cc88db0a6e81febdd72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
