@@ -1706,6 +1706,8 @@ angle::Result ImageHelper::initExternal(Context *context,
 {
     ASSERT(!valid());
 
+    printf("layerCount = %d\n", layerCount);
+
     mExtents    = extents;
     mFormat     = &format;
     mSamples    = samples;
