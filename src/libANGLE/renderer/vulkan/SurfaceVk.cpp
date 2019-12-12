@@ -194,10 +194,11 @@ angle::Result OffscreenSurfaceVk::initializeImpl(DisplayVk *displayVk)
     GLint samples = GetSampleCount(mState.config);
     ANGLE_VK_CHECK(displayVk, samples > 0, VK_ERROR_INITIALIZATION_FAILED);
 
-    if (config->renderTargetFormat != GL_NONE)
+    if (mState.finalizedRenderTargetFormat != GL_NONE)
     {
         ANGLE_TRY(mColorAttachment.initialize(
-            displayVk, mWidth, mHeight, renderer->getFormat(config->renderTargetFormat), samples));
+            displayVk, mWidth, mHeight, renderer->getFormat(mState.finalizedRenderTargetFormat),
+            samples));
         mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, 0, 0);
     }
 
@@ -455,7 +456,9 @@ egl::Error WindowSurfaceVk::initialize(const egl::Display *display)
 {
     DisplayVk *displayVk = vk::GetImpl(display);
     angle::Result result = initializeImpl(displayVk);
-    return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
+    return ((result == angle::Result::Incomplete)
+                ? angle::ToEGL(result, displayVk, EGL_BAD_MATCH)
+                : angle::ToEGL(result, displayVk, EGL_BAD_SURFACE));
 }
 
 angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
@@ -526,7 +529,7 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
                  vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, mSurface, &surfaceFormatCount,
                                                       surfaceFormats.data()));
 
-    const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
+    const vk::Format &format = renderer->getFormat(mState.finalizedRenderTargetFormat);
     VkFormat nativeFormat    = format.vkImageFormat;
 
     if (surfaceFormatCount == 1u && surfaceFormats[0].format == VK_FORMAT_UNDEFINED)
@@ -545,7 +548,13 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
             }
         }
 
-        ANGLE_VK_CHECK(displayVk, foundFormat, VK_ERROR_INITIALIZATION_FAILED);
+        // If a non-linear colorspace was requested but the non-linear format is
+        // not supported as a vulkan surface format, treat it as a non-fatal error
+        if (!foundFormat)
+        {
+            ANGLE_VK_LOG_AND_RETURN(displayVk, VK_ERROR_FORMAT_NOT_SUPPORTED,
+                                    angle::Result::Incomplete);
+        }
     }
 
     mCompositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
@@ -705,7 +714,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
-    const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
+    const vk::Format &format = renderer->getFormat(mState.finalizedRenderTargetFormat);
     VkFormat nativeFormat    = format.vkImageFormat;
 
     // We need transfer src for reading back from the backbuffer.

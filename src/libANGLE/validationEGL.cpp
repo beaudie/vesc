@@ -296,6 +296,18 @@ Error ValidateConfigAttributeValue(const Display *display, EGLAttrib attribute, 
             }
             break;
 
+        case EGL_COLOR_COMPONENT_TYPE_EXT:
+            switch (value)
+            {
+                case EGL_COLOR_COMPONENT_TYPE_FIXED_EXT:
+                case EGL_COLOR_COMPONENT_TYPE_FLOAT_EXT:
+                case EGL_DONT_CARE:
+                    break;
+                default:
+                    return EglBadAttribute()
+                           << "EGL_COLOR_COMPONENT_TYPE_EXT invalid attribute: " << value;
+            }
+            break;
         default:
             break;
     }
@@ -314,6 +326,43 @@ Error ValidateConfigAttributes(const Display *display, const AttributeMap &attri
     return NoError();
 }
 
+Error ValidateColorspaceAttribute(const DisplayExtensions &displayExtensions, EGLAttrib colorSpace)
+{
+    switch (colorSpace)
+    {
+        case EGL_GL_COLORSPACE_SRGB:
+            break;
+        case EGL_GL_COLORSPACE_LINEAR:
+            break;
+        case EGL_GL_COLORSPACE_DISPLAY_P3_LINEAR_EXT:
+            if (!displayExtensions.glColorspaceDisplayP3Linear)
+            {
+                return EglBadAttribute() << "EXT_gl_colorspace_display_p3_linear is not enabled.";
+            }
+            break;
+        case EGL_GL_COLORSPACE_DISPLAY_P3_EXT:
+            if (!displayExtensions.glColorspaceDisplayP3)
+            {
+                return EglBadAttribute() << "EXT_gl_colorspace_display_p3 is not enabled.";
+            }
+            break;
+        case EGL_GL_COLORSPACE_SCRGB_EXT:
+            if (!displayExtensions.glColorspaceScrgb)
+            {
+                return EglBadAttribute() << "EXT_gl_colorspace_scrgb is not enabled.";
+            }
+            break;
+        case EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT:
+            if (!displayExtensions.glColorspaceScrgbLinear)
+            {
+                return EglBadAttribute() << "EXT_gl_colorspace_scrgb_linear is not enabled.";
+            }
+            break;
+        default:
+            return EglBadAttribute();
+    }
+    return NoError();
+}
 Error ValidatePlatformType(const ClientExtensions &clientExtensions, EGLAttrib platformType)
 {
     switch (platformType)
@@ -1412,6 +1461,9 @@ Error ValidateCreateWindowSurface(Display *display,
             case EGL_VG_COLORSPACE:
                 return EglBadMatch();
 
+            case EGL_GL_COLORSPACE:
+                ANGLE_TRY(ValidateColorspaceAttribute(displayExtensions, value));
+                break;
             case EGL_VG_ALPHA_FORMAT:
                 return EglBadMatch();
 
@@ -1509,6 +1561,10 @@ Error ValidateCreatePbufferSurface(Display *display, Config *config, const Attri
                 break;
 
             case EGL_VG_COLORSPACE:
+                break;
+
+            case EGL_GL_COLORSPACE:
+                ANGLE_TRY(ValidateColorspaceAttribute(displayExtensions, value));
                 break;
 
             case EGL_VG_ALPHA_FORMAT:
