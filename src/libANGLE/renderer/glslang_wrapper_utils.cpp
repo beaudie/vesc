@@ -390,6 +390,10 @@ std::string IntermediateShaderSource::getShaderSource()
     for (Token &block : mTokens)
     {
         // All blocks should have been replaced.
+        if (block.type != TokenType::Text)
+        {
+            fprintf(stderr, "Failed for %s\n", block.text.c_str());
+        }
         ASSERT(block.type == TokenType::Text);
         shaderSource += block.text;
     }
@@ -755,9 +759,11 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
         // such a case, use |parentStructName|.
         const std::string &name =
             varying.isStructField() ? varying.parentStructName : varying.varying->name;
+        fprintf(stderr, "Assigning varying %s\n", name.c_str());
 
         for (gl::ShaderType stage : varying.shaderStages)
         {
+            fprintf(stderr, " - to %hhu\n", stage);
             IntermediateShaderSource *shaderSource = &(*shaderSources)[stage];
             ASSERT(!shaderSource->empty());
 
@@ -1019,6 +1025,8 @@ void CleanupUnusedEntities(bool useOldRewriteStructSamplers,
     // Remove all the markers for unused varyings.
     for (const std::string &varyingName : resources.varyingPacking.getInactiveVaryingNames())
     {
+        fprintf(stderr, "%s\n", varyingName.c_str());
+        // ASSERT(varyingName == "gl_Position");
         for (IntermediateShaderSource &shaderSource : *shaderSources)
         {
             shaderSource.eraseLayoutAndQualifierSpecifiers(varyingName, "");
@@ -1189,6 +1197,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         if (glShader)
         {
             intermediateSources[shaderType].init(glShader->getTranslatedSource());
+            fprintf(stderr, "%s\n", glShader->getTranslatedSource().c_str());
         }
     }
 
@@ -1247,6 +1256,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
+        fprintf(stderr, "%hhu\n", shaderType);
         (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
     }
 }
