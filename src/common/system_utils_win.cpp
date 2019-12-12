@@ -100,4 +100,9 @@ char GetPathSeparator()
 {
     return '\\';
 }
+
+std::string GetApplicationDir()
+{
+    return "";
+}
 }  // namespace angle

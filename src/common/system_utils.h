@@ -27,6 +27,7 @@ std::string GetEnvironmentVar(const char *variableName);
 const char *GetPathSeparatorForEnvironmentVar();
 bool PrependPathToEnvironmentVar(const char *variableName, const char *path);
 bool IsDirectory(const char *filename);
+std::string GetApplicationDir();
 
 // Get absolute time in seconds.  Use this function to get an absolute time with an unknown origin.
 double GetCurrentTime();
