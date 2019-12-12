@@ -1819,4 +1819,17 @@ void RendererVk::onCompletedSerial(Serial serial)
         mLastCompletedQueueSerial = serial;
     }
 }
+
+void RendererVk::validateVolk() const
+{
+    if (volkGetLoadedInstance() != mInstance)
+    {
+        volkLoadInstance(mInstance);
+    }
+
+    if (volkGetLoadedDevice() != mDevice)
+    {
+        volkLoadDevice(mDevice);
+    }
+}
 }  // namespace rx

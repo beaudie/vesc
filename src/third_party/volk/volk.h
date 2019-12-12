@@ -94,6 +94,9 @@ void volkLoadDevice(VkDevice device);
  */
 void volkLoadDeviceTable(struct VolkDeviceTable* table, VkDevice device);
 
+VkInstance volkGetLoadedInstance();
+VkDevice volkGetLoadedDevice();
+
 /**
  * Device-specific function pointer table
  */

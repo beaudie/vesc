@@ -211,6 +211,8 @@ class RendererVk : angle::NonCopyable
         return (mSharedGarbage.size() > mGarbageCollectionFlushThreshold);
     }
 
+    void validateVolk() const;
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
