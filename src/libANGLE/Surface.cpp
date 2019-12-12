@@ -148,6 +148,21 @@ void Surface::postSwap(const gl::Context *context)
 
 Error Surface::initialize(const Display *display)
 {
+    // To account for color space differences, cache the non-linear format of the config
+    // in `finalizedRenderTargetFormat`. Return EGL_BAD_MATCH error if no suitable
+    // non-linear format is available
+    if (!gl::ColorspaceFormatOverride(mGLColorspace, mState.config->renderTargetFormat,
+                                      mState.finalizedRenderTargetFormat))
+        return egl::EglBadMatch();
+
+    // new mColorFormat object with the render target format
+    // updated based on the requested colorspace
+    if (mState.finalizedRenderTargetFormat != mState.config->renderTargetFormat)
+    {
+        mColorFormat.~Format();
+        new (&mColorFormat) gl::Format(mState.finalizedRenderTargetFormat);
+    }
+
     ANGLE_TRY(mImplementation->initialize(display));
 
     // Initialized here since impl is nullptr in the constructor.

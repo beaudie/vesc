@@ -717,15 +717,18 @@ GLuint GetSampleCount(VkSampleCountFlags supportedCounts, GLuint requestedCount)
 
 }  // namespace rx
 
-#define ANGLE_VK_TRY(context, command)                                                 \
-    do                                                                                 \
-    {                                                                                  \
-        auto ANGLE_LOCAL_VAR = command;                                                \
-        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS))                             \
-        {                                                                              \
-            context->handleError(ANGLE_LOCAL_VAR, __FILE__, ANGLE_FUNCTION, __LINE__); \
-            return angle::Result::Stop;                                                \
-        }                                                                              \
+#define ANGLE_VK_LOG_AND_RETURN(context, error, result)              \
+    context->handleError(error, __FILE__, ANGLE_FUNCTION, __LINE__); \
+    return result;
+
+#define ANGLE_VK_TRY(context, command)                                     \
+    do                                                                     \
+    {                                                                      \
+        auto ANGLE_LOCAL_VAR = command;                                    \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS))                 \
+        {                                                                  \
+            ANGLE_VK_LOG_AND_RETURN(context, command, angle::Result::Stop) \
+        }                                                                  \
     } while (0)
 
 #define ANGLE_VK_CHECK(context, test, error) ANGLE_VK_TRY(context, test ? VK_SUCCESS : error)
