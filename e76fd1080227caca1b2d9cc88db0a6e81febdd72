@@ -22,6 +22,30 @@
       "revId": "e76fd1080227caca1b2d9cc88db0a6e81febdd72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88f421ee_fa747617",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-12T21:30:03Z",
+      "side": 1,
+      "message": "See other comment. I don\u0027t think that\u0027s the culprit. You\u0027re right that in standalone angle_unittests might be linking both.",
+      "parentUuid": "a054acab_80769219",
+      "range": {
+        "startLine": 28,
+        "startChar": 17,
+        "endLine": 28,
+        "endChar": 27
+      },
+      "revId": "e76fd1080227caca1b2d9cc88db0a6e81febdd72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
