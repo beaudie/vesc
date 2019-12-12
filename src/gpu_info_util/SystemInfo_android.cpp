@@ -244,6 +244,11 @@ bool GetSystemInfo(SystemInfo *info)
                 gpu.driverVersion               = FormatString("0x%x", properties.driverVersion);
                 gpu.detailedDriverVersion.major = properties.driverVersion;
                 break;
+            case kVendorID_Broadcom:
+                gpu.driverVendor                = "Broadcom";
+                gpu.driverVersion               = FormatString("0x%x", properties.driverVersion);
+                gpu.detailedDriverVersion.major = properties.driverVersion;
+                break;
             default:
                 return false;
         }

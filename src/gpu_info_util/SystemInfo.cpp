@@ -45,6 +45,8 @@ std::string VendorName(VendorID vendor)
             return "VMWare";
         case kVendorID_Kazan:
             return "Kazan";
+        case kVendorID_Broadcom:
+            return "Broadcom";
         default:
             return "Unknown (" + std::to_string(vendor) + ")";
     }
@@ -106,6 +108,11 @@ bool IsAMD(VendorID vendorId)
 bool IsARM(VendorID vendorId)
 {
     return vendorId == kVendorID_ARM;
+}
+
+bool IsBroadcom(VendorID vendorId)
+{
+    return vendorId == kVendorID_Broadcom;
 }
 
 bool IsImgTec(VendorID vendorId)
