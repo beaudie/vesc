@@ -2878,8 +2878,8 @@ void State::setImageUnit(const Context *context,
     if (texture)
     {
         texture->onBindImageTexture();
+        onImageStateChange(context, unit);
     }
-    onImageStateChange(context, unit);
 }
 
 // Handle a dirty texture event.
