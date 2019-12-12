@@ -231,6 +231,16 @@ const char *GetVkObjectTypeName(VkObjectType type)
     }
 }
 
+const std::string WrapICDEnvironment(const char *icdEnvironment)
+{
+#if defined(ANGLE_PLATFORM_APPLE)
+    // On MacOS the libraries are bundled into the application directory
+    std::string ret = angle::GetHelperExecutableDir() + icdEnvironment;
+    return ret;
+#endif  // defined(ANGLE_PLATFORM_APPLE)
+    return icdEnvironment;
+}
+
 VKAPI_ATTR VkBool32 VKAPI_CALL
 DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                     VkDebugUtilsMessageTypeFlagsEXT messageTypes,
@@ -378,7 +388,7 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
 #    if defined(ANGLE_VK_SWIFTSHADER_ICD_JSON)
         else if (icd == vk::ICD::SwiftShader)
         {
-            if (!setICDEnvironment(ANGLE_VK_SWIFTSHADER_ICD_JSON))
+            if (!setICDEnvironment(WrapICDEnvironment(ANGLE_VK_SWIFTSHADER_ICD_JSON).c_str()))
             {
                 ERR() << "Error setting environment for SwiftShader.";
             }
@@ -553,6 +563,7 @@ RendererVk::RendererVk()
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mMaxVertexAttribDivisor(1),
       mMaxVertexAttribStride(0),
+      mMinImportedHostPointerAlignment(1),
       mDevice(VK_NULL_HANDLE),
       mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
       mCurrentQueueSerial(mQueueSerialFactory.generate()),
@@ -923,6 +934,10 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
     mPhysicalDeviceSubgroupProperties       = {};
     mPhysicalDeviceSubgroupProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES;
 
+    mPhysicalDeviceExternalMemoryHostProperties = {};
+    mPhysicalDeviceExternalMemoryHostProperties.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_MEMORY_HOST_PROPERTIES_EXT;
+
     if (!vkGetPhysicalDeviceProperties2KHR || !vkGetPhysicalDeviceFeatures2KHR)
     {
         return;
@@ -960,6 +975,12 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
         vk::AddToPNextChain(&deviceFeatures, &mTransformFeedbackFeatures);
     }
 
+    // Query external memory host properties
+    if (ExtensionFound(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceProperties, &mPhysicalDeviceExternalMemoryHostProperties);
+    }
+
     // Query subgroup properties
     vk::AddToPNextChain(&deviceProperties, &mPhysicalDeviceSubgroupProperties);
 
@@ -967,12 +988,13 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
 
     // Clean up pNext chains
-    mLineRasterizationFeatures.pNext        = nullptr;
-    mProvokingVertexFeatures.pNext          = nullptr;
-    mVertexAttributeDivisorFeatures.pNext   = nullptr;
-    mVertexAttributeDivisorProperties.pNext = nullptr;
-    mTransformFeedbackFeatures.pNext        = nullptr;
-    mPhysicalDeviceSubgroupProperties.pNext = nullptr;
+    mLineRasterizationFeatures.pNext                  = nullptr;
+    mProvokingVertexFeatures.pNext                    = nullptr;
+    mVertexAttributeDivisorFeatures.pNext             = nullptr;
+    mVertexAttributeDivisorProperties.pNext           = nullptr;
+    mTransformFeedbackFeatures.pNext                  = nullptr;
+    mPhysicalDeviceSubgroupProperties.pNext           = nullptr;
+    mPhysicalDeviceExternalMemoryHostProperties.pNext = nullptr;
 }
 
 angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex)
@@ -1181,6 +1203,13 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         enabledDeviceExtensions.push_back(VK_EXT_TRANSFORM_FEEDBACK_EXTENSION_NAME);
         vk::AddToPNextChain(&createInfo, &mTransformFeedbackFeatures);
+    }
+
+    if (getFeatures().supportsExternalMemoryHost.enabled)
+    {
+        enabledDeviceExtensions.push_back(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME);
+        mMinImportedHostPointerAlignment =
+            mPhysicalDeviceExternalMemoryHostProperties.minImportedHostPointerAlignment;
     }
 
     createInfo.sType                 = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -1554,6 +1583,10 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
             IsPixel1XL(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID));
 
     ANGLE_FEATURE_CONDITION((&mFeatures), commandGraph, true);
+
+    ANGLE_FEATURE_CONDITION(
+        (&mFeatures), supportsExternalMemoryHost,
+        ExtensionFound(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME, deviceExtensionNames));
 
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
