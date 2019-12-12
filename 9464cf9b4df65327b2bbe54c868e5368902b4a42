@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5ca04cb4_61aa5626",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-12T04:50:01Z",
+      "side": 1,
+      "message": "Just needed to avoid doing the varying assignment work. Moved to around that code.",
+      "parentUuid": "704f2f9e_8558c205",
+      "range": {
+        "startLine": 1269,
+        "startChar": 8,
+        "endLine": 1269,
+        "endChar": 30
+      },
+      "revId": "9464cf9b4df65327b2bbe54c868e5368902b4a42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83ecc235_ed5b6362",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "I think this block can use ProgramState::getLinkedShaderStages() instead:\n\n    for (gl::ShaderType shaderType : program-\u003egetState().getLinkedShaderStages())\n    {\n        activeStages.push_back(shaderType);\n    }\n\nIf there is no VS or GS, then the next loop will be skipped entirely.   Of course, the next problem is that the shader that does exist doesn\u0027t have the necessary work done in the call to AssignVaryingLocations().   I think that function can be broken up anyway though, since the only thing that it does that requires two shaders to be passed in is:\n\n        // Varings are from 3 stage of shader sources\n        // To match pair of (out - in) qualifier, varying should be in the pair of shader source\n        if (!outStageSource-\u003efindTokenName(name) || !inStageSource-\u003efindTokenName(name))\n        {\n            // Pair can be unmatching at transform feedback case,\n            // But it requires qualifier.\n            if (!varying.vertexOnly)\n                continue;\n        }\n\nBeyond that, when there isn\u0027t actually a pair (we have an empty VS or FS), we are doing work for a shader that doesn\u0027t exist (building strings, insertQualifierSpecifier(), insertLayoutSpecifier(), etc.).\n\nThe one thing the current version of that function does get us is looping through the varyings once for each pair, but we can probably do something like:\n\n    getVaryingsRequiringLocations()\n      - Does the initial loop and builds a list of only the varyings that need location qualifiers.\n    addLocationQualifiers(varyingsList, shader, isInputOrOutput)\n      - Do this for each of the shaders\n\nFor a full monolithic program, since we aren\u0027t doing the full loop through all of the varyings for each pair (VS-GS, GS-FS), just the varyings that require location qualifiers, it may actually end up better than before (or at least be a decent compromise for all of the program/pipeline cases).\n\nThoughts?",
       "parentUuid": "ac48b474_e8429f63",
+      "range": {
+        "startLine": 1285,
+        "startChar": 0,
+        "endLine": 1293,
+        "endChar": 57
+      },
+      "revId": "9464cf9b4df65327b2bbe54c868e5368902b4a42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e974fa9_f4532257",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-12T04:50:01Z",
+      "side": 1,
+      "message": "@Cody, chatted with Tim, and indeed found a more elegant solution. Regarding your comments:\n\n\u003e There are definitely behavior changes here (for instance, fragment source outputs were written no matter what).\n\nAssignOutputLocations(programState, fragmentSource) was always called, yes, but it was a no-op if fragmentSource is empty.\n\n\u003e Also, I think you lost AssignAttributeLocations for the FS only case.\n\nThat didn\u0027t make sense as attributes are a vertex thing. Again, it was a no-op.\n\n@Tim, I made a CL placed prior to this that makes the translator output the `in`/`out` qualifiers instead of letting the code here determine that. This allows AssignVaryingLocations to not have to work in pairs just to figure out what is `in` and what is `out`. That made the code there much better!",
+      "parentUuid": "fa53d8f7_9fa0e32e",
       "range": {
         "startLine": 1285,
         "startChar": 0,
