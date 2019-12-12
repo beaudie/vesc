@@ -1379,16 +1379,41 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
 
     ASSERT(mImage->getLayerCount() == 1);
     gl::Format glFormat(internalFormat);
-    return initImageViews(contextVk, format, glFormat.info->sized, 1, 1);
+    ANGLE_TRY(initImageViews(contextVk, format, glFormat.info->sized, 1, 1));
+
+    // Transfer the image to this queue if needed
+    uint32_t rendererQueueFamilyIndex = renderer->getQueueFamilyIndex();
+    if (mImage->isQueueChangeNeccesary(rendererQueueFamilyIndex))
+    {
+        vk::CommandBuffer *commandBuffer = nullptr;
+        ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+        mImage->changeLayoutAndQueue(VK_IMAGE_ASPECT_COLOR_BIT,
+                                     vk::ImageLayout::AllGraphicsShadersReadOnly,
+                                     rendererQueueFamilyIndex, commandBuffer);
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::releaseTexImage(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
+    // Transfer the image to this queue if needed
+    if (mImage->isQueueChangeNeccesary(VK_QUEUE_FAMILY_EXTERNAL))
+    {
+        vk::CommandBuffer *commandBuffer = nullptr;
+        ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+        mImage->changeLayoutAndQueue(mImage->getCurrentLayout(),
+                                     vk::ImageLayout::AllGraphicsShadersReadOnly,
+                                     VK_QUEUE_FAMILY_EXTERNAL, commandBuffer);
+    }
+
+    angle::Result result = contextVk->finishImpl();
+
     releaseImage(contextVk);
 
-    return angle::Result::Continue;
+    return result;
 }
 
 angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,

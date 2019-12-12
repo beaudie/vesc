@@ -1775,9 +1775,10 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display,
 
     if (buftype == EGL_IOSURFACE_ANGLE)
     {
-        if (textureTarget != EGL_TEXTURE_RECTANGLE_ANGLE)
+        if (textureTarget != config->textureTarget)
         {
-            return EglBadAttribute() << "EGL_IOSURFACE requires the EGL_TEXTURE_RECTANGLE target";
+            return EglBadAttribute()
+                   << "EGL_IOSURFACE requires the texture target to match the config";
         }
 
         if (textureFormat != EGL_TEXTURE_RGBA)
