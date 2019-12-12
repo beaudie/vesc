@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1270f158_d8374b63",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-12T17:57:20Z",
+      "side": 1,
+      "message": "nit: \"n\" is more generally used for numeric arguments. maybe \u003clabel\u003e or \u003cfoo\u003e to be consistent with ANGLE_CAPTURE_OUT_DIR ?",
+      "range": {
+        "startLine": 44,
+        "startChar": 25,
+        "endLine": 44,
+        "endChar": 26
+      },
+      "revId": "c2d8990c602faf3a567bc10cfdb08a40c76ff1d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
