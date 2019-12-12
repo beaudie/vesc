@@ -23,6 +23,9 @@ __declspec(dllimport) HMODULE __stdcall LoadLibraryA(LPCSTR);
 __declspec(dllimport) FARPROC __stdcall GetProcAddress(HMODULE, LPCSTR);
 #endif
 
+static VkInstance loadedInstance = VK_NULL_HANDLE;
+static VkDevice loadedDevice = VK_NULL_HANDLE;
+
 static void volkGenLoadLoader(void* context, PFN_vkVoidFunction (*load)(void*, const char*));
 static void volkGenLoadInstance(void* context, PFN_vkVoidFunction (*load)(void*, const char*));
 static void volkGenLoadDevice(void* context, PFN_vkVoidFunction (*load)(void*, const char*));
@@ -95,13 +98,25 @@ uint32_t volkGetInstanceVersion(void)
 
 void volkLoadInstance(VkInstance instance)
 {
+    loadedInstance = instance;
 	volkGenLoadInstance(instance, vkGetInstanceProcAddrStub);
 	volkGenLoadDevice(instance, vkGetInstanceProcAddrStub);
 }
 
+VkInstance volkGetLoadedInstance()
+{
+    return loadedInstance;
+}
+
 void volkLoadDevice(VkDevice device)
 {
+    loadedDevice = device;
 	volkGenLoadDevice(device, vkGetDeviceProcAddrStub);
+}
+
+VkDevice volkGetLoadedDevice()
+{
+    return loadedDevice;
 }
 
 void volkLoadDeviceTable(struct VolkDeviceTable* table, VkDevice device)
