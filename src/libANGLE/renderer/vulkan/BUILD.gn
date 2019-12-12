@@ -146,6 +146,8 @@ if (is_mac) {
   _vulkan_backend_sources += [
     "mac/DisplayVkMac.mm",
     "mac/DisplayVkMac.h",
+    "mac/IOSurfaceSurfaceVkMac.mm",
+    "mac/IOSurfaceSurfaceVkMac.h",
     "mac/WindowSurfaceVkMac.mm",
     "mac/WindowSurfaceVkMac.h",
   ]
