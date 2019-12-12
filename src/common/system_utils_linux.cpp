@@ -52,4 +52,8 @@ double GetCurrentTime()
     return currentTime.tv_sec + currentTime.tv_nsec * 1e-9;
 }
 
+std::string GetLibraryPath()
+{
+    return "";
+}
 }  // namespace angle

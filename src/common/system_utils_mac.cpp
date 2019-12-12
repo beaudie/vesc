@@ -21,6 +21,7 @@
 
 namespace angle
 {
+
 std::string GetExecutablePath()
 {
     std::string result;
@@ -61,4 +62,5 @@ double GetCurrentTime()
     double secondCoeff = timebaseInfo.numer * 1e-9 / timebaseInfo.denom;
     return secondCoeff * mach_absolute_time();
 }
+
 }  // namespace angle

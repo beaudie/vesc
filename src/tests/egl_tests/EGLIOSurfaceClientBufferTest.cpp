@@ -93,6 +93,31 @@ ScopedIOSurfaceRef CreateSinglePlaneIOSurface(int width,
 class IOSurfaceClientBufferTest : public ANGLETest
 {
   protected:
+    EGLint GetTextureTarget() const
+    {
+        EGLint target = 0;
+        eglGetConfigAttrib(mDisplay, mConfig, EGL_TEXTURE_TARGET, &target);
+        return target;
+    }
+
+    GLint GetGLTextureTarget() const
+    {
+        EGLint target_egl = GetTextureTarget();
+        GLenum target_gl  = 0;
+        switch (target_egl)
+        {
+            case EGL_TEXTURE_2D:
+                target_gl = GL_TEXTURE_2D;
+                break;
+            case EGL_TEXTURE_RECTANGLE_ANGLE:
+                target_gl = GL_TEXTURE_RECTANGLE_ANGLE;
+                break;
+            default:
+                break;
+        }
+        return target_gl;
+    }
+
     IOSurfaceClientBufferTest() : mConfig(0), mDisplay(nullptr) {}
 
     void testSetUp() override
@@ -114,7 +139,7 @@ class IOSurfaceClientBufferTest : public ANGLETest
             EGL_WIDTH,                         width,
             EGL_HEIGHT,                        height,
             EGL_IOSURFACE_PLANE_ANGLE,         plane,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, internalFormat,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            type,
@@ -139,7 +164,7 @@ class IOSurfaceClientBufferTest : public ANGLETest
         createIOSurfacePbuffer(ioSurface, width, height, plane, internalFormat, type, pbuffer);
 
         // Bind the pbuffer
-        glBindTexture(GL_TEXTURE_RECTANGLE_ANGLE, *texture);
+        glBindTexture(GetGLTextureTarget(), *texture);
         EGLBoolean result = eglBindTexImage(mDisplay, *pbuffer, EGL_BACK_BUFFER);
         EXPECT_EGL_TRUE(result);
         EXPECT_EGL_SUCCESS();
@@ -159,8 +184,8 @@ class IOSurfaceClientBufferTest : public ANGLETest
         GLFramebuffer fbo;
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         EXPECT_GL_NO_ERROR();
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE_ANGLE,
-                               texture, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GetGLTextureTarget(), texture,
+                               0);
         EXPECT_GL_NO_ERROR();
         EXPECT_GLENUM_EQ(glCheckFramebufferStatus(GL_FRAMEBUFFER), GL_FRAMEBUFFER_COMPLETE);
         EXPECT_GL_NO_ERROR();
@@ -214,8 +239,7 @@ class IOSurfaceClientBufferTest : public ANGLETest
             "{\n"
             "    gl_Position = vec4(position.xy, 0.0, 1.0);\n"
             "}\n";
-
-        constexpr char kFS[] =
+        constexpr char kFS_rect[] =
             "#extension GL_ARB_texture_rectangle : require\n"
             "precision mediump float;\n"
             "uniform sampler2DRect tex;\n"
@@ -223,8 +247,16 @@ class IOSurfaceClientBufferTest : public ANGLETest
             "{\n"
             "    gl_FragColor = texture2DRect(tex, vec2(0, 0));\n"
             "}\n";
+        constexpr char kFS_2D[] =
+            "precision mediump float;\n"
+            "uniform sampler2D tex;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = texture2D(tex, vec2(0, 0));\n"
+            "}\n";
 
-        ANGLE_GL_PROGRAM(program, kVS, kFS);
+        ANGLE_GL_PROGRAM(program, kVS,
+                         (GetTextureTarget() == EGL_TEXTURE_RECTANGLE_ANGLE ? kFS_rect : kFS_2D));
         glUseProgram(program);
 
         GLint location = glGetUniformLocation(program, "tex");
@@ -244,7 +276,7 @@ class IOSurfaceClientBufferTest : public ANGLETest
     void doBlitTest(bool ioSurfaceIsSource, int width, int height)
     {
         // Create IOSurface and bind it to a texture.
-        ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(width, height, 'BGRA', 4);
+        ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(width * 2, height * 2, 'BGRA', 4);
         EGLSurface pbuffer;
         GLTexture texture;
         bindIOSurfaceToTexture(ioSurface, width, height, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, &pbuffer,
@@ -253,8 +285,8 @@ class IOSurfaceClientBufferTest : public ANGLETest
         GLFramebuffer iosurfaceFbo;
         glBindFramebuffer(GL_FRAMEBUFFER, iosurfaceFbo);
         EXPECT_GL_NO_ERROR();
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE_ANGLE,
-                               texture, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GetGLTextureTarget(), texture,
+                               0);
         EXPECT_GL_NO_ERROR();
         EXPECT_GLENUM_EQ(glCheckFramebufferStatus(GL_FRAMEBUFFER), GL_FRAMEBUFFER_COMPLETE);
         EXPECT_GL_NO_ERROR();
@@ -316,6 +348,7 @@ class IOSurfaceClientBufferTest : public ANGLETest
 // Test using BGRA8888 IOSurfaces for rendering
 TEST_P(IOSurfaceClientBufferTest, RenderToBGRA8888IOSurface)
 {
+
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'BGRA', 4);
 
     GLColor color(3, 2, 1, 4);
@@ -325,6 +358,9 @@ TEST_P(IOSurfaceClientBufferTest, RenderToBGRA8888IOSurface)
 // Test reading from BGRA8888 IOSurfaces
 TEST_P(IOSurfaceClientBufferTest, ReadFromBGRA8888IOSurface)
 {
+    // TODO(http://anglebug.com/4369)
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
+
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'BGRA', 4);
 
     GLColor color(3, 2, 1, 4);
@@ -334,6 +370,9 @@ TEST_P(IOSurfaceClientBufferTest, ReadFromBGRA8888IOSurface)
 // Test using BGRX8888 IOSurfaces for rendering
 TEST_P(IOSurfaceClientBufferTest, RenderToBGRX8888IOSurface)
 {
+    // TODO(http://anglebug.com/4369)
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
+
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'BGRA', 4);
 
     GLColor color(3, 2, 1, 255);
@@ -343,6 +382,7 @@ TEST_P(IOSurfaceClientBufferTest, RenderToBGRX8888IOSurface)
 // Test reading from BGRX8888 IOSurfaces
 TEST_P(IOSurfaceClientBufferTest, ReadFromBGRX8888IOSurface)
 {
+
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'BGRA', 4);
 
     GLColor color(3, 2, 1, 4);
@@ -352,6 +392,7 @@ TEST_P(IOSurfaceClientBufferTest, ReadFromBGRX8888IOSurface)
 // Test using RG88 IOSurfaces for rendering
 TEST_P(IOSurfaceClientBufferTest, RenderToRG88IOSurface)
 {
+
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, '2C08', 2);
 
     uint8_t color[2] = {1, 2};
@@ -361,6 +402,7 @@ TEST_P(IOSurfaceClientBufferTest, RenderToRG88IOSurface)
 // Test reading from RG88 IOSurfaces
 TEST_P(IOSurfaceClientBufferTest, ReadFromRG88IOSurface)
 {
+
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, '2C08', 2);
 
     uint8_t color[2] = {1, 2};
@@ -370,6 +412,7 @@ TEST_P(IOSurfaceClientBufferTest, ReadFromRG88IOSurface)
 // Test using R8 IOSurfaces for rendering
 TEST_P(IOSurfaceClientBufferTest, RenderToR8IOSurface)
 {
+
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'L008', 1);
 
     uint8_t color = 1;
@@ -379,6 +422,7 @@ TEST_P(IOSurfaceClientBufferTest, RenderToR8IOSurface)
 // Test reading from R8 IOSurfaces
 TEST_P(IOSurfaceClientBufferTest, ReadFromR8IOSurface)
 {
+
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'L008', 1);
 
     uint8_t color = 1;
@@ -390,6 +434,8 @@ TEST_P(IOSurfaceClientBufferTest, RenderToR16IOSurface)
 {
     // This test only works on ES3.
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+    // TODO(http://anglebug.com/4369)
+    ANGLE_SKIP_TEST_IF(isSwiftshader());
 
     // HACK(cwallez@chromium.org) 'L016' doesn't seem to be an official pixel format but it works
     // sooooooo let's test using it
@@ -406,13 +452,13 @@ TEST_P(IOSurfaceClientBufferTest, RenderToR16IOSurface)
 // Test blitting from IOSurface
 TEST_P(IOSurfaceClientBufferTest, BlitFromIOSurface)
 {
-    doBlitTest(true, 2, 2);
+    doBlitTest(true, 100, 100);
 }
 
 // Test blitting to IOSurface
 TEST_P(IOSurfaceClientBufferTest, BlitToIOSurface)
 {
-    doBlitTest(false, 2, 2);
+    doBlitTest(false, 100, 100);
 }
 
 // Test the validation errors for missing attributes for eglCreatePbufferFromClientBuffer with
@@ -428,7 +474,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationMissingAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -450,7 +496,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationMissingAttributes)
         const EGLint attribs[] = {
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -470,7 +516,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationMissingAttributes)
         const EGLint attribs[] = {
             EGL_WIDTH,                         10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -490,7 +536,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationMissingAttributes)
         const EGLint attribs[] = {
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -532,7 +578,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationMissingAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
             EGL_NONE,                          EGL_NONE,
@@ -553,7 +599,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationMissingAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
             EGL_NONE,                          EGL_NONE,
@@ -573,7 +619,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationMissingAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_NONE,                          EGL_NONE,
@@ -599,7 +645,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationBadAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -622,7 +668,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationBadAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGB,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -643,7 +689,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationBadAttributes)
             EGL_WIDTH,                         0,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -664,7 +710,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationBadAttributes)
             EGL_WIDTH,                         11,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -685,7 +731,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationBadAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        0,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -706,7 +752,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationBadAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        11,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -720,14 +766,27 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationBadAttributes)
         EXPECT_EGL_ERROR(EGL_BAD_ATTRIBUTE);
     }
 
-    // EGL_TEXTURE_FORMAT must be at EGL_TEXTURE_RECTANGLE_ANGLE
+    // EGL_TEXTURE_FORMAT must be equal to the config's texture target
     {
+        EGLint target      = GetTextureTarget();
+        EGLint wrongTarget = 0;
+        switch (target)
+        {
+            case EGL_TEXTURE_RECTANGLE_ANGLE:
+                wrongTarget = EGL_TEXTURE_2D;
+                break;
+            case EGL_TEXTURE_2D:
+                wrongTarget = EGL_TEXTURE_RECTANGLE_ANGLE;
+                break;
+            default:
+                break;
+        }
         // clang-format off
         const EGLint attribs[] = {
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_2D,
+            EGL_TEXTURE_TARGET,                wrongTarget,
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -748,7 +807,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationBadAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         -1,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -769,7 +828,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationBadAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         1,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_BGRA_EXT,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -790,7 +849,7 @@ TEST_P(IOSurfaceClientBufferTest, NegativeValidationBadAttributes)
             EGL_WIDTH,                         10,
             EGL_HEIGHT,                        10,
             EGL_IOSURFACE_PLANE_ANGLE,         0,
-            EGL_TEXTURE_TARGET,                EGL_TEXTURE_RECTANGLE_ANGLE,
+            EGL_TEXTURE_TARGET,                GetTextureTarget(),
             EGL_TEXTURE_INTERNAL_FORMAT_ANGLE, GL_RGBA,
             EGL_TEXTURE_FORMAT,                EGL_TEXTURE_RGBA,
             EGL_TEXTURE_TYPE_ANGLE,            GL_UNSIGNED_BYTE,
@@ -827,4 +886,8 @@ TEST_P(IOSurfaceClientBufferTest, MakeCurrent)
 // TODO(cwallez@chromium.org): Test setting width and height to less than the IOSurface's work as
 // expected.
 
-ANGLE_INSTANTIATE_TEST(IOSurfaceClientBufferTest, ES2_OPENGL(), ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(IOSurfaceClientBufferTest,
+                       ES2_OPENGL(),
+                       ES3_OPENGL(),
+                       ES2_VULKAN_SWIFTSHADER(),
+                       ES3_VULKAN_SWIFTSHADER());

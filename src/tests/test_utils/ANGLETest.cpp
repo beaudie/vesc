@@ -372,6 +372,11 @@ ANGLETestBase::ANGLETestBase(const PlatformParameters &params)
     PlatformParameters withMethods            = params;
     withMethods.eglParameters.platformMethods = &gDefaultPlatformMethods;
 
+    if (IsOSX() && withMethods.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
+    {
+        withMethods.eglParameters.debugLayersEnabled = false;
+    }
+
     auto iter = gFixtures.find(withMethods);
     if (iter != gFixtures.end())
     {
