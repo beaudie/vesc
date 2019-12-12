@@ -231,6 +231,16 @@ const char *GetVkObjectTypeName(VkObjectType type)
     }
 }
 
+const std::string WrapICDEnvironment(const char *icdEnvironment)
+{
+#if defined(ANGLE_PLATFORM_APPLE)
+    // On MacOS the libraries are bundled into the application directory
+    std::string ret = angle::GetApplicationDir().c_str() + std::string(icdEnvironment);
+    return ret;
+#endif  // defined(ANGLE_PLATFORM_APPLE)
+    return icdEnvironment;
+}
+
 VKAPI_ATTR VkBool32 VKAPI_CALL
 DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                     VkDebugUtilsMessageTypeFlagsEXT messageTypes,
@@ -378,7 +388,7 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
 #    if defined(ANGLE_VK_SWIFTSHADER_ICD_JSON)
         else if (icd == vk::ICD::SwiftShader)
         {
-            if (!setICDEnvironment(ANGLE_VK_SWIFTSHADER_ICD_JSON))
+            if (!setICDEnvironment(WrapICDEnvironment(ANGLE_VK_SWIFTSHADER_ICD_JSON).c_str()))
             {
                 ERR() << "Error setting environment for SwiftShader.";
             }
