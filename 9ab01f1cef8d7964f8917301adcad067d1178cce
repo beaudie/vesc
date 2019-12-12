@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68df9eec_cb1e3fa9",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-12T17:21:46Z",
+      "side": 1,
+      "message": "From a readability perspective, I think this would be better as:\n\n    strlen(inOutQualifier) \u003d\u003d 0",
+      "range": {
+        "startLine": 176,
+        "startChar": 35,
+        "endLine": 176,
+        "endChar": 60
+      },
+      "revId": "9ab01f1cef8d7964f8917301adcad067d1178cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a784cb07_bfdcfa14",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-12T17:21:46Z",
+      "side": 1,
+      "message": "Unrelated, but since you\u0027re in here, can this be cleaned up or removed?\n\nWe support ES 3.0 shaders, but this assert still isn\u0027t being hit even though we are (or should be?) getting all active and inactive attributes.   Is the assert here worth keeping anymore and the comment just needs to be cleaned up, or should it just be removed?",
+      "revId": "9ab01f1cef8d7964f8917301adcad067d1178cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
