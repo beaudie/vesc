@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2aabdc90_cde1a0b3",
+        "filename": "src/tests/gl_tests/D3DTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1442,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-13T20:06:30Z",
+      "side": 1,
+      "message": "I think I can restore the original macro here and other places now. Will do that.",
+      "parentUuid": "a8de5216_2cb43da7",
+      "revId": "bb26ead76a40650dd9f2982703dbc25c2220fea3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e682ad8f_14174b5e",
         "filename": "src/third_party/volk/volk.c",
         "patchSetId": 3
@@ -39,6 +57,30 @@
       "revId": "bb26ead76a40650dd9f2982703dbc25c2220fea3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c64a2511_28a598b3",
+        "filename": "src/third_party/volk/volk.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-13T20:06:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e682ad8f_14174b5e",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 1
+      },
+      "revId": "bb26ead76a40650dd9f2982703dbc25c2220fea3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
