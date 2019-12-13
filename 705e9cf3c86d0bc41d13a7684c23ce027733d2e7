@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "772ef18a_abe156cb",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T16:33:13Z",
+      "side": 1,
+      "message": "What \"element\" is this?",
+      "range": {
+        "startLine": 64,
+        "startChar": 42,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b432548b_6e8fff3c",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T16:33:13Z",
+      "side": 1,
+      "message": "anglebug.com/3682 for brevity",
+      "range": {
+        "startLine": 657,
+        "startChar": 19,
+        "endLine": 657,
+        "endChar": 81
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39bbfbc1_c42142e4",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T16:33:13Z",
+      "side": 1,
+      "message": "You can just use `\u0026\u0026` instead.",
+      "range": {
+        "startLine": 270,
+        "startChar": 73,
+        "endLine": 270,
+        "endChar": 74
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0b7137e_c1408cd7",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1629,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T16:33:13Z",
+      "side": 1,
+      "message": "Could you add a draw call using the shader with basic testing for functionality? Not only to test correctness, but also for the sake of the Vulkan backend that currently really builds shaders at draw time.",
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c58ad47_6b0985ff",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T16:33:13Z",
+      "side": 1,
+      "message": "Naming: LargeStructArray or LargeArrayOfStructs\n\nYou can also drop Member.",
+      "range": {
+        "startLine": 1634,
+        "startChar": 45,
+        "endLine": 1634,
+        "endChar": 61
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ae0eadf_a84bab4e",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1635,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T16:33:13Z",
+      "side": 1,
+      "message": "There\u0027s a failure on OpenGL/AMD/Windows here. Can you make sure you are not busting some limit here? The UBO has a size of 32KB, but MAX_UNIFORM_BLOCK_SIZE is 16KB.",
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63215f26_157c8754",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T16:33:13Z",
+      "side": 1,
+      "message": "Same naming comment",
+      "range": {
+        "startLine": 1726,
+        "startChar": 48,
+        "endLine": 1726,
+        "endChar": 64
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaea4dd1_3e855286",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T16:33:13Z",
+      "side": 1,
+      "message": "\"share a uniform buffer\"? Do you mean \"use the same struct\"?",
+      "range": {
+        "startLine": 1829,
+        "startChar": 53,
+        "endLine": 1829,
+        "endChar": 75
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a68be1fc_3bd87395",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1928,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T16:33:13Z",
+      "side": 1,
+      "message": "Also here. I don\u0027t quite understand what you mean by sharing a uniform buffer.",
+      "range": {
+        "startLine": 1928,
+        "startChar": 59,
+        "endLine": 1928,
+        "endChar": 81
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
