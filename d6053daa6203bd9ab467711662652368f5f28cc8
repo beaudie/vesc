@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "918c272a_e439bffe",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 0,
+      "message": "Why is this removed? We have similar cases where the zero texture is initialized based on support for some extension. I\u0027m trying to understand what\u0027s different here.",
+      "revId": "d6053daa6203bd9ab467711662652368f5f28cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

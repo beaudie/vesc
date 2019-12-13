@@ -1,0 +1,331 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00d9473f_0c12d16b",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "Please increment this number",
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c321a00_c48b8703",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "Also, no big deal, but 45 is unused",
+      "range": {
+        "startLine": 315,
+        "startChar": 78,
+        "endLine": 315,
+        "endChar": 80
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9277ec04_8c08b449",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 34
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "Can you move it up a bit next to other float samplers?",
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "756412d1_6d1d49d0",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "what native 2D image?",
+      "range": {
+        "startLine": 444,
+        "startChar": 7,
+        "endLine": 444,
+        "endChar": 40
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afd0a5ef_8d5a9cc0",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "is aware of",
+      "range": {
+        "startLine": 444,
+        "startChar": 62,
+        "endLine": 444,
+        "endChar": 69
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "488243fb_14b8f62e",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1806,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "nit: Irrelevant piece of information",
+      "range": {
+        "startLine": 1806,
+        "startChar": 54,
+        "endLine": 1806,
+        "endChar": 60
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f62ba1de_24a504f6",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "typo: VideoImage",
+      "range": {
+        "startLine": 1810,
+        "startChar": 48,
+        "endLine": 1810,
+        "endChar": 58
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8142ee8_3fab3b81",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "typo: unbind",
+      "range": {
+        "startLine": 1811,
+        "startChar": 7,
+        "endLine": 1811,
+        "endChar": 14
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f90e840_a73f7b38",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "typo: unbind",
+      "range": {
+        "startLine": 1812,
+        "startChar": 38,
+        "endLine": 1812,
+        "endChar": 45
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46dcd376_094a4ef8",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "typo: is",
+      "range": {
+        "startLine": 1812,
+        "startChar": 14,
+        "endLine": 1812,
+        "endChar": 15
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da5334eb_6b70c967",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "So if binding a VideoImage texture unbinds the 2D image binding, what happens if you have a shader with both a VideoImage and a 2D image?",
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "093ad6fc_5c5d2efc",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1832,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "Same comments",
+      "range": {
+        "startLine": 1825,
+        "startChar": 0,
+        "endLine": 1832,
+        "endChar": 56
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f73da196_33920ff6",
+        "filename": "src/tests/compiler_tests/SamplerVideoWEBGL_test.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "We don\u0027t add (c) anymore. Please remove.",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c617e1f5_3fc0ee04",
+        "filename": "src/tests/compiler_tests/SamplerVideoWEBGL_test.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "samplerVideoWEBGL",
+      "range": {
+        "startLine": 7,
+        "startChar": 36,
+        "endLine": 7,
+        "endChar": 48
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be37c234_d4a08320",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T18:33:44Z",
+      "side": 1,
+      "message": "Please use the new `ANGLE_INSTANTIATE_TEST_ES2_AND_ES3` and `ANGLE_INSTANTIATE_TEST_ES3` macros.",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 78
+      },
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
