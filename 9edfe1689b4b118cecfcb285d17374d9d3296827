@@ -34,6 +34,24 @@
       "revId": "9edfe1689b4b118cecfcb285d17374d9d3296827",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b24b2f08_14e3448e",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2881,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-13T23:14:51Z",
+      "side": 1,
+      "message": "I\u0027d prefer an early out in onImageStateChange if there is no texture vs. checking the condition outside the function.  I haven\u0027t looked at other patterns though.",
+      "parentUuid": "de6fc31f_d415471a",
+      "revId": "9edfe1689b4b118cecfcb285d17374d9d3296827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
