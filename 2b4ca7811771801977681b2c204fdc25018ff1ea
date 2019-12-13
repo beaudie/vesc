@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "45d304f8_e07a0c49",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-13T02:12:14Z",
+      "side": 1,
+      "message": "yes, it will double include symbols and compiler will complain",
+      "parentUuid": "0221ef14_cfd6344c",
+      "range": {
+        "startLine": 168,
+        "startChar": 4,
+        "endLine": 170,
+        "endChar": 53
+      },
+      "revId": "2b4ca7811771801977681b2c204fdc25018ff1ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a997743d_b29c5cb2",
         "filename": "src/tests/gl_tests/FormatPrintTest.cpp",
         "patchSetId": 5
@@ -105,6 +129,30 @@
       "writtenOn": "2019-12-13T01:27:31Z",
       "side": 1,
       "message": "can we clean up the output a bit? something like\n\n GL_RGBA8: filterable, textureable, textureAttachment, renderbuffer\n GL_BGRA: filterable, textureable",
+      "range": {
+        "startLine": 70,
+        "startChar": 12,
+        "endLine": 70,
+        "endChar": 38
+      },
+      "revId": "2b4ca7811771801977681b2c204fdc25018ff1ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dc66ff6_aa8cad95",
+        "filename": "src/tests/gl_tests/FormatPrintTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-13T02:12:14Z",
+      "side": 1,
+      "message": "we maintain this format so we can store the output in a csv file and it becomes easy to diff between 2 results",
+      "parentUuid": "f8d2d726_bb01f915",
       "range": {
         "startLine": 70,
         "startChar": 12,
