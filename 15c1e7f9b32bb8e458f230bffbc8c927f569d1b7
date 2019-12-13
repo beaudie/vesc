@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "d8814bfd_ce45e2c1",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5731,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-13T15:49:23Z",
+      "side": 1,
+      "message": "This could use a comment explaining why we\u0027re done.  How do we ever get to the isTextureGatherOffset check?  Or is this intended as an early out while you finish the code below?  If so, makes sense to split up the CL.",
+      "range": {
+        "startLine": 5731,
+        "startChar": 8,
+        "endLine": 5731,
+        "endChar": 14
+      },
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbc55a3d_da507787",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5739,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-13T15:49:23Z",
+      "side": 1,
+      "message": "Copy paste error?  I don\u0027t think this comment applies.",
+      "range": {
+        "startLine": 5738,
+        "startChar": 4,
+        "endLine": 5739,
+        "endChar": 96
+      },
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "474ea7ab_8cbe5e6c",
         "filename": "src/compiler/translator/builtin_function_declarations.txt",
         "patchSetId": 2
