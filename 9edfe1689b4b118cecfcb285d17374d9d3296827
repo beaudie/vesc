@@ -16,6 +16,24 @@
       "revId": "9edfe1689b4b118cecfcb285d17374d9d3296827",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de6fc31f_d415471a",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2881,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-13T23:11:21Z",
+      "side": 1,
+      "message": "I started with that but when I look at how assert is used elsewhere, it means that condition must not happen, you shouldn\u0027t be calling here if that\u0027s true. So, if the caller should know that and, in this case, it\u0027s already testing for that condition, change the caller to call this function correctly.\nI\u0027m not sure I have a preference.",
+      "parentUuid": "9a2dc64a_47fe589c",
+      "revId": "9edfe1689b4b118cecfcb285d17374d9d3296827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
