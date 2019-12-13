@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc6b819c_a24e4b26",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-13T01:18:10Z",
+      "side": 1,
+      "message": "can you sort these into appropriate sections when possible? e.g. compressed formats under the compressed section. some of them we might have to just throw in where they fit or at the end.",
+      "range": {
+        "startLine": 1612,
+        "startChar": 0,
+        "endLine": 1664,
+        "endChar": 68
+      },
+      "revId": "ecfe85845b5120c3d3b15218e99971e32d73a6ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bd64d29_2376a344",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-13T01:18:10Z",
+      "side": 1,
+      "message": "nit: these should likely be sorted",
+      "range": {
+        "startLine": 2032,
+        "startChar": 0,
+        "endLine": 2064,
+        "endChar": 56
+      },
+      "revId": "ecfe85845b5120c3d3b15218e99971e32d73a6ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
