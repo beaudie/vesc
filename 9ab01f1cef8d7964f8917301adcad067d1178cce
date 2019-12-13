@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "2bc62912_9e625ae5",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-13T18:03:36Z",
+      "side": 1,
+      "message": "I\u0027m not sure strcmp() is any faster in practice.\n\nReally, all you\u0027re trying to do is see if there needs to be an extra space or not, when having too many spaces doesn\u0027t hurt anything (functionality or readability).   This seems easiest:\n\n    const char *inOutQualifier \u003d \"\";\n    if (IsShaderIn(qualifier) || IsShaderOut(qualifier))\n    {\n        inOutQualifier \u003d mapQualifierToString(qualifier);\n    }\n    std::string memoryQualifiers \u003d getMemoryQualifiers(type);\n\n    TInfoSinkBase \u0026out \u003d objSink();\n    out \u003c\u003c \"@@ QUALIFIER-\" \u003c\u003c name.data() \u003c\u003c \"(\" \u003c\u003c inOutQualifier \u003c\u003c \" \" \u003c\u003c memoryQualifiers\n        \u003c\u003c \") @@ \";\n\nThis improves performance without sacrificing any readability with the chance there will occasionally be an extra space in the (already not very pretty) translated shader code.",
+      "parentUuid": "bb49ee56_cd9ba36c",
+      "range": {
+        "startLine": 176,
+        "startChar": 35,
+        "endLine": 176,
+        "endChar": 60
+      },
+      "revId": "9ab01f1cef8d7964f8917301adcad067d1178cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a784cb07_bfdcfa14",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 4
@@ -81,6 +105,24 @@
       "revId": "9ab01f1cef8d7964f8917301adcad067d1178cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f3ce923_914ae905",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-13T18:03:36Z",
+      "side": 1,
+      "message": "Cool, thanks for looking into that.\n\nThe obvious next question is: can the second loop be removed, since presumably getActiveAttributes() already only contains active attributes?   Or, should the distinction between getAllAttributes() and getActiveAttributes() be removed and we only need getAllAttributes(), since we will clean up mProgramInputs for shaderVersion \u003e\u003d 300 later anyway.\n\nThat\u0027s probably a question for another time though.",
+      "parentUuid": "47d495d1_c443603e",
+      "revId": "9ab01f1cef8d7964f8917301adcad067d1178cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
