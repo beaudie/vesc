@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a2dc64a_47fe589c",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2881,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T19:00:35Z",
+      "side": 1,
+      "message": "Small preference: I\u0027d keep this as is, and an if in onImageStateChange(). It\u0027s more clear to me that onImageStateChange is unconditionally called here (since the state definitely changed), and whether that\u0027s a no-op if !texture is a detail onImageStateChange itself needs to worry about.\n\nFor example, it could make sense to move `mDirtyBits.set(DIRTY_BIT_IMAGE_BINDINGS);` to onImageStateChange at some point, which would need to be called regardless.",
+      "revId": "9edfe1689b4b118cecfcb285d17374d9d3296827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
