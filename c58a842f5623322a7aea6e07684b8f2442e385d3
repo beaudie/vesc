@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13064613_5cbeb512",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-13T23:17:37Z",
+      "side": 1,
+      "message": "can\u0027t you do this check in linkUniforms?",
+      "range": {
+        "startLine": 1559,
+        "startChar": 13,
+        "endLine": 1559,
+        "endChar": 25
+      },
+      "revId": "c58a842f5623322a7aea6e07684b8f2442e385d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
