@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "117b2690_d92598f6",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5731,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T19:40:17Z",
+      "side": 1,
+      "message": "Added a comment. Before, the rest of the function was inside a giant if. I just unnested the code.\n\nThe function is called always, and we return early if it\u0027s not a textureGatherOffset* or textureOffset intrinsic.",
+      "parentUuid": "d8814bfd_ce45e2c1",
+      "range": {
+        "startLine": 5731,
+        "startChar": 8,
+        "endLine": 5731,
+        "endChar": 14
+      },
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbc55a3d_da507787",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a723766e_a417d06c",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5739,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T19:40:17Z",
+      "side": 1,
+      "message": "(Oops) Done",
+      "parentUuid": "fbc55a3d_da507787",
+      "range": {
+        "startLine": 5738,
+        "startChar": 4,
+        "endLine": 5739,
+        "endChar": 96
+      },
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "474ea7ab_8cbe5e6c",
         "filename": "src/compiler/translator/builtin_function_declarations.txt",
         "patchSetId": 2
@@ -62,6 +110,24 @@
       "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e531d08_400ae6f0",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T19:40:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "474ea7ab_8cbe5e6c",
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
