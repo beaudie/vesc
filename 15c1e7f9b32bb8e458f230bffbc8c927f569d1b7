@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "474ea7ab_8cbe5e6c",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-13T09:44:17Z",
+      "side": 1,
+      "message": "How about putting your refactor that splitting Offset into Offset/Offsets (NoComp and Comp) into a separate PR? Then this patch will be very straightforward.",
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
