@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bb49ee56_cd9ba36c",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T17:19:28Z",
+      "side": 1,
+      "message": "... which would also unnecessarily iterate over the whole string.\n\nI changed it to `strcmp(inOutQualifier, \"\") \u003d\u003d 0`.",
+      "parentUuid": "68df9eec_cb1e3fa9",
+      "range": {
+        "startLine": 176,
+        "startChar": 35,
+        "endLine": 176,
+        "endChar": 60
+      },
+      "revId": "9ab01f1cef8d7964f8917301adcad067d1178cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a784cb07_bfdcfa14",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 4
@@ -36,6 +60,24 @@
       "writtenOn": "2019-12-12T17:21:46Z",
       "side": 1,
       "message": "Unrelated, but since you\u0027re in here, can this be cleaned up or removed?\n\nWe support ES 3.0 shaders, but this assert still isn\u0027t being hit even though we are (or should be?) getting all active and inactive attributes.   Is the assert here worth keeping anymore and the comment just needs to be cleaned up, or should it just be removed?",
+      "revId": "9ab01f1cef8d7964f8917301adcad067d1178cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47d495d1_c443603e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-13T17:19:28Z",
+      "side": 1,
+      "message": "Removed the comment as it seems outdated. Found this in Program.cpp:\n\n    if (shaderVersion \u003e\u003d 300)\n    {\n        // In GLSL ES 3.00.6, aliasing checks should be done with all declared attributes -\n        // see GLSL ES 3.00.6 section 12.46. Inactive attributes will be pruned after\n        // aliasing checks.\n        mState.mProgramInputs \u003d vertexShader-\u003egetAllAttributes();\n    }\n    else\n    {\n        // In GLSL ES 1.00.17 we only do aliasing checks for active attributes.\n        mState.mProgramInputs \u003d vertexShader-\u003egetActiveAttributes();\n    }\n\nwhich must be the reason for this comment. But later, the same function does this:\n\n    // Prune inactive attributes. This step is only needed on shaderVersion \u003e\u003d 300 since on earlier\n    // shader versions we\u0027re only processing active attributes to begin with.\n    if (shaderVersion \u003e\u003d 300)\n    {\n        for (auto attributeIter \u003d mState.mProgramInputs.begin();\n             attributeIter !\u003d mState.mProgramInputs.end();)\n        {\n            if (attributeIter-\u003eactive)\n            {\n                ++attributeIter;\n            }\n            else\n            {\n                attributeIter \u003d mState.mProgramInputs.erase(attributeIter);\n            }\n        }\n    }\n\nSo we should never get inactive attributes in mProgramInputs. The code in Program.cpp comes form Mar 2018 and the comment from April 2018. I don\u0027t know why the comment was added; either the author\u0027s local repo was a few weeks old or they simply missed the second loop.",
+      "parentUuid": "a784cb07_bfdcfa14",
       "revId": "9ab01f1cef8d7964f8917301adcad067d1178cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
