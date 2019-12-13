@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37f8a451_2e6b6cbf",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/WindowSurfaceVkFuchsia.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-13T22:26:44Z",
+      "side": 0,
+      "message": "This seems unrelated.",
+      "revId": "e181f2f7cf172afd95b9646283bd910caaa1b721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42c937c9_4dae4c50",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-13T22:26:44Z",
+      "side": 0,
+      "message": "unrelated change?",
+      "revId": "e181f2f7cf172afd95b9646283bd910caaa1b721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

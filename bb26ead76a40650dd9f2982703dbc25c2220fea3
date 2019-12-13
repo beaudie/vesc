@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "d09d033b_54609e30",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-13T22:26:44Z",
+      "side": 1,
+      "message": "Is this because of missing extension support on Android?",
+      "revId": "bb26ead76a40650dd9f2982703dbc25c2220fea3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "799ca2b3_78932ca5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-13T22:26:44Z",
+      "side": 1,
+      "message": "If you have both device and instance, call RendererVk::validateVolk() instead?",
+      "revId": "bb26ead76a40650dd9f2982703dbc25c2220fea3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c44e96f_cb1bb564",
+        "filename": "src/tests/gl_tests/D3DTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-13T22:26:44Z",
+      "side": 1,
+      "message": "How is this related to volk?",
+      "revId": "bb26ead76a40650dd9f2982703dbc25c2220fea3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8de5216_2cb43da7",
         "filename": "src/tests/gl_tests/D3DTextureTest.cpp",
         "patchSetId": 3
