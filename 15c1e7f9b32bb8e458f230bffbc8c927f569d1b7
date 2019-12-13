@@ -49,6 +49,53 @@
     },
     {
       "key": {
+        "uuid": "73b5c416_310d6d43",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5731,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-13T20:40:11Z",
+      "side": 1,
+      "message": "Okay, I think I missed that the built-in can be in multiple groups at the same time, which is what allows this to work.",
+      "parentUuid": "117b2690_d92598f6",
+      "range": {
+        "startLine": 5731,
+        "startChar": 8,
+        "endLine": 5731,
+        "endChar": 14
+      },
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "24861486_0221bb32",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5736,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-13T20:40:11Z",
+      "side": 1,
+      "message": "nit: This code would read better if you moved these two bools down into the \"else if\" block where they are used.  The series of bools below is hard to follow, so eliminating some variables could help.",
+      "range": {
+        "startLine": 5735,
+        "startChar": 0,
+        "endLine": 5736,
+        "endChar": 93
+      },
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fbc55a3d_da507787",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 2
@@ -93,6 +140,29 @@
       "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73aeb059_022f4e56",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5755,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-13T20:40:11Z",
+      "side": 1,
+      "message": "nit: Took me a bit to realize that you\u0027re describing why this block is an \"else if\", if you could add that to the comment.",
+      "range": {
+        "startLine": 5755,
+        "startChar": 0,
+        "endLine": 5755,
+        "endChar": 78
+      },
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
