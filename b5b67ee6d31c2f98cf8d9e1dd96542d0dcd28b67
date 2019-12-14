@@ -284,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "e213f07f_e6dfd059",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-14T17:27:37Z",
+      "side": 1,
+      "message": "I don\u0027t think there will be a need for a fine grained implementation.",
+      "parentUuid": "9ccb2ff1_176176e6",
+      "range": {
+        "startLine": 819,
+        "startChar": 0,
+        "endLine": 847,
+        "endChar": 5
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "792da3b0_5f2d0d68",
         "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
         "patchSetId": 5
