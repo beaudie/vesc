@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "74261ab5_e9a41f73",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-12-14T11:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7d2fc8f_417aaba3",
+      "range": {
+        "startLine": 350,
+        "startChar": 42,
+        "endLine": 350,
+        "endChar": 77
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1408c4f7_915f7226",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "057a4602_878e4536",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-12-14T11:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1408c4f7_915f7226",
+      "range": {
+        "startLine": 118,
+        "startChar": 14,
+        "endLine": 118,
+        "endChar": 20
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "365ce19d_7ff98179",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-12-14T11:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c266ab4_5ad05d4e",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 32
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3ae6136_33f18096",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fa3cbb2_f9b38cdf",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-12-14T11:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3ae6136_33f18096",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 45
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "c0858485_5f5015f7",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-12-14T11:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01d6cc78_6af999a4",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 44
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64ba5a9c_f8d5eaf3",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 5
@@ -137,6 +257,30 @@
       "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ccb2ff1_176176e6",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-12-14T11:35:26Z",
+      "side": 1,
+      "message": "I just want to leave them here to handle them in more fine grained manner in future GL version implementation.",
+      "parentUuid": "64ba5a9c_f8d5eaf3",
+      "range": {
+        "startLine": 819,
+        "startChar": 0,
+        "endLine": 847,
+        "endChar": 5
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "3caeb861_2f1a0343",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_utils.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-12-14T11:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "792da3b0_5f2d0d68",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 128,
+        "endChar": 48
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5bba6e28_50e05d7b",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 5
@@ -183,6 +351,30 @@
       "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "469fdee6_bfd648ea",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2019-12-14T11:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bba6e28_50e05d7b",
+      "range": {
+        "startLine": 811,
+        "startChar": 0,
+        "endLine": 811,
+        "endChar": 6
+      },
+      "revId": "b5b67ee6d31c2f98cf8d9e1dd96542d0dcd28b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
