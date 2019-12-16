@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "826cae88_6e064226",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-16T19:04:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7fa199d3_9974ed3e",
+      "range": {
+        "startLine": 740,
+        "startChar": 0,
+        "endLine": 740,
+        "endChar": 36
+      },
+      "revId": "b94654fc99ab4f0d5b1fd19c6ffbd10be7023897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "235974d4_8b345c6c",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "11035d30_88b3a3e7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-16T19:04:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "235974d4_8b345c6c",
+      "range": {
+        "startLine": 214,
+        "startChar": 9,
+        "endLine": 214,
+        "endChar": 21
+      },
+      "revId": "b94654fc99ab4f0d5b1fd19c6ffbd10be7023897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e15458ee_71c20c6c",
         "filename": "src/tests/gl_tests/PackUnpackTest.cpp",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2019-12-13T23:15:44Z",
       "side": 1,
       "message": "is this still necessary?",
+      "range": {
+        "startLine": 238,
+        "startChar": 10,
+        "endLine": 238,
+        "endChar": 18
+      },
+      "revId": "b94654fc99ab4f0d5b1fd19c6ffbd10be7023897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93ad0e54_7078817e",
+        "filename": "src/tests/gl_tests/PackUnpackTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-16T19:04:24Z",
+      "side": 1,
+      "message": "Could potentially restore all of the exceptions. I prefer for now to just keep this as-is, tracked w/ 4092 for further clean-up, as this keeps original targets (from before SwS rework) and avoids having exceptions in every test.",
+      "parentUuid": "e15458ee_71c20c6c",
       "range": {
         "startLine": 238,
         "startChar": 10,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "fe513b4e_33995c2b",
+        "filename": "src/third_party/volk/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-16T19:04:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bee6155_16d3ae7d",
+      "range": {
+        "startLine": 1,
+        "startChar": 12,
+        "endLine": 1,
+        "endChar": 15
+      },
+      "revId": "b94654fc99ab4f0d5b1fd19c6ffbd10be7023897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8efc0788_1dfb6b2c",
         "filename": "src/third_party/volk/BUILD.gn",
         "patchSetId": 4
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "3fe260e5_6802a7df",
+        "filename": "src/third_party/volk/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-16T19:04:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8efc0788_1dfb6b2c",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 63
+      },
+      "revId": "b94654fc99ab4f0d5b1fd19c6ffbd10be7023897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab475657_dbeea9c3",
         "filename": "src/third_party/volk/volk.c",
         "patchSetId": 4
@@ -137,6 +257,30 @@
       "revId": "b94654fc99ab4f0d5b1fd19c6ffbd10be7023897",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8fb148e_a53a413b",
+        "filename": "src/third_party/volk/volk.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-16T19:04:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ab475657_dbeea9c3",
+      "range": {
+        "startLine": 109,
+        "startChar": 11,
+        "endLine": 109,
+        "endChar": 32
+      },
+      "revId": "b94654fc99ab4f0d5b1fd19c6ffbd10be7023897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7bdb827d_a605e5bf",
+        "filename": "src/libANGLE/renderer/vulkan/fuchsia/WindowSurfaceVkFuchsia.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-16T19:04:24Z",
+      "side": 0,
+      "message": "All function ptr init now handled via volk.",
+      "parentUuid": "37f8a451_2e6b6cbf",
+      "revId": "e181f2f7cf172afd95b9646283bd910caaa1b721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42c937c9_4dae4c50",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "aa86af0b_553c4339",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-16T19:04:24Z",
+      "side": 0,
+      "message": "Kind of. At one point these were failing in CI and I removed them. They should pass now but I was afraid to re-enable them. I\u0027ll turn them back on, though.",
+      "parentUuid": "42c937c9_4dae4c50",
+      "revId": "e181f2f7cf172afd95b9646283bd910caaa1b721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2c4f2742_9523d551",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 4
@@ -47,6 +83,30 @@
       "writtenOn": "2019-12-13T23:15:44Z",
       "side": 0,
       "message": "is this still necessary?",
+      "range": {
+        "startLine": 903,
+        "startChar": 37,
+        "endLine": 903,
+        "endChar": 59
+      },
+      "revId": "e181f2f7cf172afd95b9646283bd910caaa1b721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "768a9b63_ae70ee7a",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-16T19:04:24Z",
+      "side": 0,
+      "message": "I don\u0027t think so. Attempting to bring back.",
+      "parentUuid": "2c4f2742_9523d551",
       "range": {
         "startLine": 903,
         "startChar": 37,
