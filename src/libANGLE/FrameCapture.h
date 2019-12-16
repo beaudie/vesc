@@ -15,11 +15,12 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/frame_capture_utils_autogen.h"
+#include "libANGLE/renderer/serial_utils.h"
 
 namespace gl
 {
 enum class GLenumGroup;
-}
+}  // namespace gl
 
 namespace angle
 {
@@ -91,6 +92,7 @@ struct CallCapture
     gl::EntryPoint entryPoint;
     std::string customFunctionName;
     ParamBuffer params;
+    bool isActive;
 };
 
 class ReplayContext
@@ -164,6 +166,7 @@ class DataCounters final : angle::NonCopyable
 
 // Used by the CPP replay to filter out unnecessary code.
 using HasResourceTypeMap = angle::PackedEnumBitSet<ResourceIDType>;
+using SerialToIndexesMap = std::map<rx::Serial, std::vector<size_t>>;
 
 // A dictionary of sources indexed by shader type.
 using ProgramSources = gl::ShaderMap<std::string>;
@@ -188,7 +191,6 @@ class FrameCapture final : angle::NonCopyable
                                     size_t vertexCount,
                                     size_t instanceCount);
 
-    void reset();
     void maybeCaptureClientData(const gl::Context *context, const CallCapture &call);
 
     static void ReplayCall(gl::Context *context,
@@ -197,7 +199,7 @@ class FrameCapture final : angle::NonCopyable
 
     std::vector<CallCapture> mSetupCalls;
     std::vector<CallCapture> mFrameCalls;
-    std::vector<CallCapture> mTearDownCalls;
+    std::vector<std::vector<CallCapture>> mCallCaptureHistory;
 
     bool mEnabled;
     std::string mOutDirectory;
@@ -209,6 +211,7 @@ class FrameCapture final : angle::NonCopyable
     gl::AttribArray<size_t> mClientArraySizes;
     size_t mReadBufferSize;
     HasResourceTypeMap mHasResourceType;
+    SerialToIndexesMap mSerialToIndexesMap;
 
     // Cache most recently compiled and linked sources.
     ShaderSourceMap mCachedShaderSources;
