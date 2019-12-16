@@ -16,7 +16,7 @@ config("sample_util_config") {
   include_dirs = [ "sample_util" ]
 }
 
-angle_static_library("sample_util") {
+angle_source_set("sample_util") {
   testonly = true
   sources = [
     "sample_util/SampleApplication.cpp",
@@ -63,6 +63,7 @@ template("angle_sample") {
                            ])
     deps = [
       ":sample_util",
+      "../util:angle_test_utils",
     ]
     if (defined(invoker.data)) {
       deps += [ ":${target_name}_data" ]
