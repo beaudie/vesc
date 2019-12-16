@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ec86fa16_a9945f70",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-16T19:52:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b8ea582_0279c40d",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 13
+      },
+      "revId": "4fffc5e5f4a08148e482b481ec030a14107b2f15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5eaa2f7_bb803653",
         "filename": "PRESUBMIT.py",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "4fffc5e5f4a08148e482b481ec030a14107b2f15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "421ed33b_04987b32",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-16T19:52:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5eaa2f7_bb803653",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 25
+      },
+      "revId": "4fffc5e5f4a08148e482b481ec030a14107b2f15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
