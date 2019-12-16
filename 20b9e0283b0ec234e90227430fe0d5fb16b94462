@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4a72c810_64a9c0a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-12-16T21:27:10Z",
+      "side": 1,
+      "message": "Actually, since tests depend both on angle_test_utils and angle_util now, there will be 2 instances of angle_test_utils classes in tests. I guess the linker will remove the duplication if angle_utils is linked statically into the tests, but I\u0027m not sure what will happen for dynamically linked angle_util.",
+      "range": {
+        "startLine": 11,
+        "startChar": 56,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "20b9e0283b0ec234e90227430fe0d5fb16b94462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34cef215_728b0809",
         "filename": "util/BUILD.gn",
         "patchSetId": 3
