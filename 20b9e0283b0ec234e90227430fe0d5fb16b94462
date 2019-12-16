@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8320b585_7750c372",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-16T21:30:16Z",
+      "side": 1,
+      "message": "Either case is fine. There are no duplicate symbols. It\u0027s a small static library now. Similar to angle_common. There will be one copy in every test executable or shared object.\n\nUpdated the comment.",
+      "parentUuid": "4a72c810_64a9c0a4",
+      "range": {
+        "startLine": 11,
+        "startChar": 56,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "20b9e0283b0ec234e90227430fe0d5fb16b94462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34cef215_728b0809",
         "filename": "util/BUILD.gn",
         "patchSetId": 3
@@ -69,6 +93,30 @@
       "revId": "20b9e0283b0ec234e90227430fe0d5fb16b94462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c777024_dc38e1f5",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-16T21:30:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1be23b20_b93483ad",
+      "range": {
+        "startLine": 41,
+        "startChar": 5,
+        "endLine": 41,
+        "endChar": 16
+      },
+      "revId": "20b9e0283b0ec234e90227430fe0d5fb16b94462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
