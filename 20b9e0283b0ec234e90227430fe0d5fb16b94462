@@ -22,6 +22,30 @@
       "revId": "20b9e0283b0ec234e90227430fe0d5fb16b94462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1be23b20_b93483ad",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-12-16T21:23:02Z",
+      "side": 1,
+      "message": "I don\u0027t think you need LIBANGLE_UTIL_IMPLEMENTATION above either.",
+      "parentUuid": "34cef215_728b0809",
+      "range": {
+        "startLine": 41,
+        "startChar": 5,
+        "endLine": 41,
+        "endChar": 16
+      },
+      "revId": "20b9e0283b0ec234e90227430fe0d5fb16b94462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
