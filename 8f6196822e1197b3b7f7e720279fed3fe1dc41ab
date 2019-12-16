@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e8b5b9a_56b5e8a9",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-16T18:50:11Z",
+      "side": 0,
+      "message": "The commit hook is reformatting the Bug: tag to contain a single whitespace. At the same time, BugsFromDescription is stripping the whitespace, so this if was not doing anything.",
+      "revId": "8f6196822e1197b3b7f7e720279fed3fe1dc41ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
