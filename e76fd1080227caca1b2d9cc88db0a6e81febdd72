@@ -70,6 +70,30 @@
       "revId": "e76fd1080227caca1b2d9cc88db0a6e81febdd72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42f57bc8_89d97dfb",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-16T21:10:27Z",
+      "side": 1,
+      "message": "Removed this.",
+      "parentUuid": "d7906f44_84dce474",
+      "range": {
+        "startLine": 28,
+        "startChar": 17,
+        "endLine": 28,
+        "endChar": 27
+      },
+      "revId": "e76fd1080227caca1b2d9cc88db0a6e81febdd72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
