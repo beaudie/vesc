@@ -101,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "bd57f632_c70630a7",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 34
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-12-16T05:02:52Z",
+      "side": 1,
+      "message": "Sry, this order needs to be the same as it in BaseTypes.h (or it will affect the hash number and compiler cannot find the correct function definition) https://cs.chromium.org/chromium/src/third_party/angle/src/compiler/translator/BaseTypes.h?l\u003d53. To not affect previous enum values, I\u0027d like to keep it here.",
+      "parentUuid": "9277ec04_8c08b449",
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "756412d1_6d1d49d0",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 34
