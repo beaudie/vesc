@@ -1066,7 +1066,8 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
 
         mGraphicsPipelineTransition.reset();
     }
-    commandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
+    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+    framebuffer->cacheCurrrentGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
     mCurrentGraphicsPipeline->updateSerial(getCurrentQueueSerial());
@@ -1225,14 +1226,13 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
         bufferHandles[bufferIndex]     = bufferHelper.getBuffer().getHandle();
     }
 
+    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
     const TransformFeedbackBufferRange &xfbBufferRangeExtension =
         transformFeedbackVk->getTransformFeedbackBufferRange();
+    framebuffer->bindActiveTransformFeedbackBuffers(bufferCount, bufferHandles.data(),
+                                                    xfbBufferRangeExtension.offsets.data(),
+                                                    xfbBufferRangeExtension.sizes.data());
 
-    commandBuffer->bindTransformFeedbackBuffers(bufferCount, bufferHandles.data(),
-                                                xfbBufferRangeExtension.offsets.data(),
-                                                xfbBufferRangeExtension.sizes.data());
-
-    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
     transformFeedbackVk->addFramebufferDependency(this, mProgram->getState(), framebuffer);
 
     return angle::Result::Continue;
@@ -1252,11 +1252,11 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Con
         transformFeedbackVk->getCounterBufferHandles();
 
     vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
-    bool rebindBuffer = transformFeedbackVk->getTransformFeedbackBufferRebindState();
+    bool restartBuffer                 = transformFeedbackVk->getCounterBufferRestartState();
     framebuffer->setActiveTransformFeedbackInfo(bufferCount, counterBufferHandles.data(),
-                                                rebindBuffer);
+                                                restartBuffer);
 
-    transformFeedbackVk->unsetTransformFeedbackBufferRebindState();
+    transformFeedbackVk->unsetCounterBufferRestartState();
 
     return angle::Result::Continue;
 }
@@ -2734,7 +2734,11 @@ void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
 
 void ContextVk::invalidateCurrentTransformFeedbackBuffers()
 {
-    mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
+    if (getFeatures().supportsTransformFeedbackExtension.enabled ||
+        getFeatures().emulateTransformFeedback.enabled)
+    {
+        mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
+    }
     if (getFeatures().emulateTransformFeedback.enabled)
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);

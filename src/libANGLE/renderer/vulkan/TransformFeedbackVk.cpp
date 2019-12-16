@@ -23,7 +23,7 @@ namespace rx
 {
 
 TransformFeedbackVk::TransformFeedbackVk(const gl::TransformFeedbackState &state)
-    : TransformFeedbackImpl(state), mRebindTransformFeedbackBuffer(false)
+    : TransformFeedbackImpl(state), mRestartCounterBuffer(false)
 {
     mCounterBufferHandles.fill(0);
 }
@@ -49,7 +49,7 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
 
     if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-        mRebindTransformFeedbackBuffer = true;
+        mRestartCounterBuffer = true;
     }
 
     onTransformFeedbackStateChanged(context);
@@ -121,7 +121,7 @@ angle::Result TransformFeedbackVk::bindIndexedBuffer(
         mTransformFeedbackBufferRange.offsets[index] = binding.getOffset();
         mTransformFeedbackBufferRange.sizes[index] =
             (binding.getSize()) ? binding.getSize() : VK_WHOLE_SIZE;
-        mRebindTransformFeedbackBuffer = true;
+        mRestartCounterBuffer = true;
 
         if (mCounterBufferHandles[index] == 0)
         {

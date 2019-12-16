@@ -207,15 +207,35 @@ class CommandGraphNode final : angle::NonCopyable
 
     ANGLE_INLINE void setActiveTransformFeedbackInfo(size_t validBufferCount,
                                                      const VkBuffer *counterBuffers,
-                                                     bool rebindBuffer)
+                                                     bool restartCounterBuffer)
     {
-        mValidTransformFeedbackBufferCount = static_cast<uint32_t>(validBufferCount);
-        mRebindTransformFeedbackBuffers    = rebindBuffer;
+        mValidXfbCounterBufferCount = static_cast<uint32_t>(validBufferCount);
+        mRestartXfbCounterBuffers   = restartCounterBuffer;
 
         for (size_t index = 0; index < validBufferCount; index++)
         {
-            mTransformFeedbackCounterBuffers[index] = counterBuffers[index];
+            mXfbCounterBuffers[index] = counterBuffers[index];
         }
+    }
+
+    ANGLE_INLINE void bindActiveTransformFeedbackBuffers(size_t bindingCount,
+                                                         const VkBuffer *buffers,
+                                                         const VkDeviceSize *offsets,
+                                                         const VkDeviceSize *sizes)
+    {
+        mValidXfbBufferCount = static_cast<uint32_t>(bindingCount);
+
+        for (size_t index = 0; index < bindingCount; index++)
+        {
+            mXfbBuffers[index]       = buffers[index];
+            mXfbBufferOffsets[index] = offsets[index];
+            mXfbBufferSizes[index]   = sizes[index];
+        }
+    }
+
+    ANGLE_INLINE void cacheCurrrentGraphicsPipeline(const Pipeline &pipeline)
+    {
+        mGraphicsPipeline = pipeline.getHandle();
     }
 
     // This can only be set for RenderPass nodes. Each RenderPass node can have at most one owner.
@@ -283,10 +303,27 @@ class CommandGraphNode final : angle::NonCopyable
     // Render pass command buffer notifications.
     RenderPassOwner *mRenderPassOwner;
 
-    // Active transform feedback state
-    gl::TransformFeedbackBuffersArray<VkBuffer> mTransformFeedbackCounterBuffers;
-    uint32_t mValidTransformFeedbackBufferCount;
-    bool mRebindTransformFeedbackBuffers;
+    // The number of valid counter buffers in mXfbCounterBuffers array.
+    uint32_t mValidXfbCounterBufferCount;
+    // Array of transform feedback counter buffers which contain a 4 byte4 integer value
+    // representing the byte offset from the start of the corresponding transform feedback buffer
+    // from where to start capturing vertex data.
+    gl::TransformFeedbackBuffersArray<VkBuffer> mXfbCounterBuffers;
+    // If this is ture, counter buffer in vkCmdBeginTransformFeedbackExt will be ignored. It makes
+    // GPU capture vertex data from the beginning of the XFB buffer.
+    bool mRestartXfbCounterBuffers;
+    // The number of valid counter buffers in mXfbBuffers array.
+    uint32_t mValidXfbBufferCount;
+    // Array of Transform feedback buffer handles
+    gl::TransformFeedbackBuffersArray<VkBuffer> mXfbBuffers;
+    // Array of Transform feedback buffer offsets
+    gl::TransformFeedbackBuffersArray<VkDeviceSize> mXfbBufferOffsets;
+    // Array of Transform feedback buffer sizes
+    gl::TransformFeedbackBuffersArray<VkDeviceSize> mXfbBufferSizes;
+
+    // Cache graphics pipeline here to ensure we do not record vkCmdBindPipeline when transform
+    // feedback is active.
+    VkPipeline mGraphicsPipeline;
 };
 
 // Tracks how a resource is used in a command graph and in a VkQueue. The reference count indicates
@@ -475,7 +512,16 @@ class CommandGraphResource : angle::NonCopyable
     // Sets active transform feedback information to current writing node.
     void setActiveTransformFeedbackInfo(size_t validBufferCount,
                                         const VkBuffer *counterBuffers,
-                                        bool rebindBuffer);
+                                        bool restartCounterBuffer);
+
+    // Bind active transform feedback buffers to current writing node.
+    void bindActiveTransformFeedbackBuffers(size_t bindingCount,
+                                            const VkBuffer *buffers,
+                                            const VkDeviceSize *offsets,
+                                            const VkDeviceSize *sizes);
+
+    // Bind graphics pipeline to current writing node.
+    void cacheCurrrentGraphicsPipeline(const Pipeline &pipeline);
 
   protected:
     explicit CommandGraphResource(CommandGraphResourceType resourceType);
@@ -747,11 +793,27 @@ ANGLE_INLINE void CommandGraphResource::addGlobalMemoryBarrier(VkFlags srcAccess
 ANGLE_INLINE void CommandGraphResource::setActiveTransformFeedbackInfo(
     size_t validBufferCount,
     const VkBuffer *counterBuffers,
-    bool rebindBuffer)
+    bool restartCounterBuffer)
 {
     ASSERT(mCurrentWritingNode);
     mCurrentWritingNode->setActiveTransformFeedbackInfo(validBufferCount, counterBuffers,
-                                                        rebindBuffer);
+                                                        restartCounterBuffer);
+}
+
+ANGLE_INLINE void CommandGraphResource::bindActiveTransformFeedbackBuffers(
+    size_t bindingCount,
+    const VkBuffer *buffers,
+    const VkDeviceSize *offsets,
+    const VkDeviceSize *sizes)
+{
+    ASSERT(mCurrentWritingNode);
+    mCurrentWritingNode->bindActiveTransformFeedbackBuffers(bindingCount, buffers, offsets, sizes);
+}
+
+ANGLE_INLINE void CommandGraphResource::cacheCurrrentGraphicsPipeline(const Pipeline &pipeline)
+{
+    ASSERT(mCurrentWritingNode);
+    mCurrentWritingNode->cacheCurrrentGraphicsPipeline(pipeline);
 }
 
 ANGLE_INLINE bool CommandGraphResource::hasChildlessWritingNode() const

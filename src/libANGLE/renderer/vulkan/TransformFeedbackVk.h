@@ -72,9 +72,9 @@ class TransformFeedbackVk : public TransformFeedbackImpl
                           int32_t *offsetsOut,
                           size_t offsetsSize) const;
 
-    void unsetTransformFeedbackBufferRebindState() { mRebindTransformFeedbackBuffer = false; }
+    void unsetCounterBufferRestartState() { mRestartCounterBuffer = false; }
 
-    bool getTransformFeedbackBufferRebindState() const { return mRebindTransformFeedbackBuffer; }
+    bool getCounterBufferRestartState() const { return mRestartCounterBuffer; }
 
     const TransformFeedbackBufferRange &getTransformFeedbackBufferRange() const
     {
@@ -97,7 +97,7 @@ class TransformFeedbackVk : public TransformFeedbackImpl
     // is called and unset in dirty bit handler for transform feedback state change. If this
     // value is true, vertex shader will record transform feedback varyings from the beginning
     // of the buffer.
-    bool mRebindTransformFeedbackBuffer;
+    bool mRestartCounterBuffer;
     TransformFeedbackBufferRange mTransformFeedbackBufferRange;
     // Counter buffer used for pause and resume.
     gl::TransformFeedbackBuffersArray<vk::BufferHelper> mCounterBuffer;

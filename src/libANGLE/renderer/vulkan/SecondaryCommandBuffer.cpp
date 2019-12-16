@@ -9,7 +9,6 @@
 
 #include "libANGLE/renderer/vulkan/SecondaryCommandBuffer.h"
 #include "common/debug.h"
-#include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
 {
@@ -74,20 +73,6 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                         getParamPtr<BindIndexBufferParams>(currentCommand);
                     vkCmdBindIndexBuffer(cmdBuffer, params->buffer, params->offset,
                                          params->indexType);
-                    break;
-                }
-                case CommandID::BindTransformFeedbackBuffers:
-                {
-                    const BindTransformFeedbackBuffersParams *params =
-                        getParamPtr<BindTransformFeedbackBuffersParams>(currentCommand);
-                    const VkBuffer *buffers =
-                        Offset<VkBuffer>(params, sizeof(BindTransformFeedbackBuffersParams));
-                    const VkDeviceSize *offsets =
-                        Offset<VkDeviceSize>(buffers, sizeof(VkBuffer) * params->bindingCount);
-                    const VkDeviceSize *sizes =
-                        Offset<VkDeviceSize>(offsets, sizeof(VkDeviceSize) * params->bindingCount);
-                    vkCmdBindTransformFeedbackBuffersEXT(cmdBuffer, 0, params->bindingCount,
-                                                         buffers, offsets, sizes);
                     break;
                 }
                 case CommandID::BindVertexBuffers:
@@ -445,9 +430,6 @@ std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
                     break;
                 case CommandID::BindVertexBuffers:
                     result += "BindVertexBuffers";
-                    break;
-                case CommandID::BindTransformFeedbackBuffers:
-                    result += "BindTransformFeedbackBuffers";
                     break;
                 case CommandID::BlitImage:
                     result += "BlitImage";
