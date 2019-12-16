@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "927360a0_bb0cd18f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-16T21:35:04Z",
+      "side": 1,
+      "message": "minor request - can you trim the first line of the commit message to something under 70 characters? fits in more nicely with our tools. something like \"Vulkan: Add test that logs supported texture formats\"",
+      "revId": "1076a636f08bf29d97a8913d11ed7e95ce6f74af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
