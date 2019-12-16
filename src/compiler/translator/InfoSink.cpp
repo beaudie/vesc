@@ -50,8 +50,8 @@ TInfoSinkBase &TInfoSinkBase::operator<<(const TType &type)
     }
     if (type.isArray())
     {
-        for (auto arraySizeIter = type.getArraySizes()->rbegin();
-             arraySizeIter != type.getArraySizes()->rend(); ++arraySizeIter)
+        for (auto arraySizeIter = type.getArraySizes().rbegin();
+             arraySizeIter != type.getArraySizes().rend(); ++arraySizeIter)
         {
             *this << "array[" << (*arraySizeIter) << "] of ";
         }
