@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34cef215_728b0809",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-16T21:15:30Z",
+      "side": 1,
+      "message": "I don\u0027t need this actually.",
+      "range": {
+        "startLine": 41,
+        "startChar": 5,
+        "endLine": 41,
+        "endChar": 16
+      },
+      "revId": "20b9e0283b0ec234e90227430fe0d5fb16b94462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
