@@ -45,6 +45,30 @@
       "revId": "8e202ed022b207ba3d4558ce6e9442e8fbb5187d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dae402e_075423f3",
+        "filename": "DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-12-16T22:20:38Z",
+      "side": 1,
+      "message": "I don\u0027t expect any problem, but if I\u0027m wrong, I think CQ will catch it.",
+      "parentUuid": "5c2914a7_f91e2cbb",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 4
+      },
+      "revId": "8e202ed022b207ba3d4558ce6e9442e8fbb5187d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
