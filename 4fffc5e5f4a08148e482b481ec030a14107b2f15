@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b8ea582_0279c40d",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-16T19:20:42Z",
+      "side": 1,
+      "message": "nit: can sort this",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 13
+      },
+      "revId": "4fffc5e5f4a08148e482b481ec030a14107b2f15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5eaa2f7_bb803653",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-16T19:20:42Z",
+      "side": 1,
+      "message": "nit: can you verify the bug is either \"None\" or instances of the regex? This would allow \"Bug: None, angleproject:1, None\". Probably can check the size of the bugs list if we find \"None\"",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 25
+      },
+      "revId": "4fffc5e5f4a08148e482b481ec030a14107b2f15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
