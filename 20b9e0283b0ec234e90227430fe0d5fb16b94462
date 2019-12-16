@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "61b0131e_bd3719b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-16T21:54:01Z",
+      "side": 1,
+      "message": "Don\u0027t use global variables.",
+      "parentUuid": "41863430_1b506b4f",
+      "range": {
+        "startLine": 11,
+        "startChar": 56,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "20b9e0283b0ec234e90227430fe0d5fb16b94462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34cef215_728b0809",
         "filename": "util/BUILD.gn",
         "patchSetId": 3
