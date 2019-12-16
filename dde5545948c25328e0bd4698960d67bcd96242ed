@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29ef1555_6cec9cf9",
+        "filename": "src/tests/gl_tests/WEBGLVideoTextureTest.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-16T19:39:12Z",
+      "side": 1,
+      "message": "What happens if you draw program2D again (after a clear to blue for example)? If you still expect a red, can you please add that too? That way we check programVideoImage being called both before and after program2D.",
+      "revId": "dde5545948c25328e0bd4698960d67bcd96242ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

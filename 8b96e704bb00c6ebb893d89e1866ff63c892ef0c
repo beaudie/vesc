@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "d1b629fc_52d602d7",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 34
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-16T19:39:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bd57f632_c70630a7",
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "756412d1_6d1d49d0",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 34
@@ -480,6 +498,24 @@
       "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b6ecaf2_f8ad4f75",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1820,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-16T19:39:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2f58f6af_7d880b46",
+      "revId": "8b96e704bb00c6ebb893d89e1866ff63c892ef0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
