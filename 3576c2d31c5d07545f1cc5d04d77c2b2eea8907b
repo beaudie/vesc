@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d864bd7a_6bf71118",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3527,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-16T14:36:41Z",
+      "side": 1,
+      "message": "Should this also check for GL_ARB_explicit_uniform_location?",
+      "range": {
+        "startLine": 3527,
+        "startChar": 0,
+        "endLine": 3527,
+        "endChar": 33
+      },
+      "revId": "3576c2d31c5d07545f1cc5d04d77c2b2eea8907b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "217e28c4_763a8249",
         "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
         "patchSetId": 5
