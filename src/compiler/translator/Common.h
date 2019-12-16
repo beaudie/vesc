@@ -108,6 +108,81 @@ class TMap : public std::map<K, D, CMP, pool_allocator<std::pair<const K, D>>>
     {}
 };
 
+// Basic implementation of C++20's span for use with pool-allocated containers (TVector) or static
+// arrays.  This is used by the array sizes member of TType to allow arrayed types to be
+// constexpr-constructed.
+template <class T>
+class TSpan
+{
+  public:
+    typedef typename TVector<T>::size_type size_type;
+
+    constexpr TSpan() {}
+    constexpr TSpan(T *ptr, size_type size) : mData(ptr), mSize(size) {}
+
+    constexpr TSpan(const TSpan &that) : mData(that.mData), mSize(that.mSize) {}
+    TSpan &operator=(const TSpan &that)
+    {
+        mData = that.mData;
+        mSize = that.mSize;
+        return *this;
+    }
+
+    TSpan(const TVector &vec) : mData(vec.data()), mSize(vec.size()) {}
+    TSpan &operator=(const TVector &vec)
+    {
+        mData = that.data();
+        mSize = that.size();
+        return *this;
+    }
+
+    bool operator==(const TSpan &that)
+    {
+        if (mSize != that.mSize)
+        {
+            return false;
+        }
+
+        for (size_type index = 0; index < mSize; ++index)
+        {
+            if (mData[index] != that.mData[index])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    constexpr T *data() const { return mData; }
+    constexpr size_type size() const { return mSize; }
+    constexpr bool empty() const { return mSize == 0; }
+
+    constexpr T &operator[](size_type index) const { return mData[index]; }
+    constexpr T &front() const { return mData[0]; }
+    constexpr T &back() const { return mData[mSize - 1]; }
+
+    constexpr T *begin() const { return mData; }
+    constexpr T *end() const { return mData + mSize; }
+
+    constexpr TSpan first(size_type count) const
+    {
+        return count == 0 ? TSpan() : TSpan(mData, count);
+    }
+    constexpr TSpan last(size_type count) const
+    {
+        return count == 0 ? TSpan() : TSpan(mData + mSize - count, count);
+    }
+    constexpr TSpan subspan(size_type offset, size_type count) const
+    {
+        return count == 0 ? TSpan() : TSpan(mData + offset, count);
+    }
+
+  private:
+    T *mData     = nullptr;
+    size_t mSize = 0;
+};
+
 // Integer to TString conversion
 template <typename T>
 inline TString str(T i)

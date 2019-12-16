@@ -122,7 +122,6 @@ class TType
           layoutQualifier(TLayoutQualifier::Create()),
           primarySize(ps),
           secondarySize(ss),
-          mArraySizes(nullptr),
           mInterfaceBlock(nullptr),
           mStructure(nullptr),
           mIsStructSpecifier(false),
@@ -190,21 +189,21 @@ class TType
 
     bool isMatrix() const { return primarySize > 1 && secondarySize > 1; }
     bool isNonSquareMatrix() const { return isMatrix() && primarySize != secondarySize; }
-    bool isArray() const { return mArraySizes != nullptr && !mArraySizes->empty(); }
-    bool isArrayOfArrays() const { return isArray() && mArraySizes->size() > 1u; }
-    size_t getNumArraySizes() const { return isArray() ? mArraySizes->size() : 0; }
-    const TVector<unsigned int> *getArraySizes() const { return mArraySizes; }
+    bool isArray() const { return !mArraySizes.empty(); }
+    bool isArrayOfArrays() const { return mArraySizes.size() > 1u; }
+    size_t getNumArraySizes() const { return mArraySizes.size(); }
+    const TSpan<unsigned int> &getArraySizes() const { return mArraySizes; }
     unsigned int getArraySizeProduct() const;
     bool isUnsizedArray() const;
     unsigned int getOutermostArraySize() const
     {
         ASSERT(isArray());
-        return mArraySizes->back();
+        return mArraySizes.back();
     }
     void makeArray(unsigned int s);
 
     // sizes contain new outermost array sizes.
-    void makeArrays(const TVector<unsigned int> &sizes);
+    void makeArrays(const TSpan<unsigned int> &sizes);
     // Here, the array dimension value 0 corresponds to the innermost array.
     void setArraySize(size_t arrayDimension, unsigned int s);
 
@@ -258,7 +257,7 @@ class TType
         size_t numArraySizesL = getNumArraySizes();
         size_t numArraySizesR = right.getNumArraySizes();
         bool arraySizesEqual  = numArraySizesL == numArraySizesR &&
-                               (numArraySizesL == 0 || *mArraySizes == *right.mArraySizes);
+                               (numArraySizesL == 0 || mArraySizes == right.mArraySizes);
         return type == right.type && primarySize == right.primarySize &&
                secondarySize == right.secondarySize && arraySizesEqual &&
                mStructure == right.mStructure;
@@ -279,8 +278,8 @@ class TType
             return numArraySizesL < numArraySizesR;
         for (size_t i = 0; i < numArraySizesL; ++i)
         {
-            if ((*mArraySizes)[i] != (*right.mArraySizes)[i])
-                return (*mArraySizes)[i] < (*right.mArraySizes)[i];
+            if (mArraySizes[i] != right.mArraySizes[i])
+                return mArraySizes[i] < right.mArraySizes[i];
         }
         if (mStructure != right.mStructure)
             return mStructure < right.mStructure;
@@ -347,6 +346,7 @@ class TType
     TQualifier qualifier;
     bool invariant;
     bool precise;
+
     TMemoryQualifier memoryQualifier;
     TLayoutQualifier layoutQualifier;
     unsigned char primarySize;    // size of vector or cols matrix
@@ -354,7 +354,7 @@ class TType
 
     // Used to make an array type. Outermost array size is stored at the end of the vector. Having 0
     // in this vector means an unsized array.
-    TVector<unsigned int> *mArraySizes;
+    TSpan<unsigned int> mArraySizes;
 
     // This is set only in the following two cases:
     // 1) Represents an interface block.
