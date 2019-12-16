@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "33340002_b85a36c3",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5731,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-16T20:04:40Z",
+      "side": 1,
+      "message": "While that is true, this is not really about that. This function is called for every built-in that\u0027s matched (that\u0027s also not mapped to some EOp* enum), so this if just checks if the built-in is one of the interesting ones (any of textureGatherOffset* or textureOffset).",
+      "parentUuid": "73b5c416_310d6d43",
+      "range": {
+        "startLine": 5731,
+        "startChar": 8,
+        "endLine": 5731,
+        "endChar": 14
+      },
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24861486_0221bb32",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 2
@@ -93,6 +117,30 @@
       "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c848001_a3f80087",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5736,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-16T20:04:40Z",
+      "side": 1,
+      "message": "Done. I was not very happy with the bool names myself, so reworked them now. Hopefully that\u0027s more clear.",
+      "parentUuid": "24861486_0221bb32",
+      "range": {
+        "startLine": 5735,
+        "startChar": 0,
+        "endLine": 5736,
+        "endChar": 93
+      },
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +211,30 @@
       "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5122fb91_a4883ad9",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5755,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-16T20:04:40Z",
+      "side": 1,
+      "message": "Done. Denested the if and added an early return, which should make it pretty obvious what the comment refers to.",
+      "parentUuid": "73aeb059_022f4e56",
+      "range": {
+        "startLine": 5755,
+        "startChar": 0,
+        "endLine": 5755,
+        "endChar": 78
+      },
+      "revId": "15c1e7f9b32bb8e458f230bffbc8c927f569d1b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
