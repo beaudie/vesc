@@ -1235,6 +1235,11 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
             {
                 GenerateTransformFeedbackEmulationOutputs(options, programState, vertexSource);
             }
+            else
+            {
+                vertexSource->insertTransformFeedbackDeclaration("");
+                vertexSource->insertTransformFeedbackOutput("");
+            }
         }
     }
 

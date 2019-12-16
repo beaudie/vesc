@@ -207,22 +207,30 @@ void ExecuteCommands(PrimaryCommandBuffer *primCmdBuffer, priv::CommandBuffer *s
 }
 
 ANGLE_MAYBE_UNUSED
+std::string DumpCommands(const priv::SecondaryCommandBuffer &commandBuffer, const char *separator)
+{
+    return commandBuffer.dumpCommands(separator);
+}
+
+ANGLE_MAYBE_UNUSED
+std::string DumpCommands(const priv::CommandBuffer &commandBuffer, const char *separator)
+{
+    return "--blob--";
+}
+
 void InsertBeginTransformFeedback(PrimaryCommandBuffer *primCmdBuffer,
-                                  priv::SecondaryCommandBuffer &commandBuffer,
                                   uint32_t validBufferCount,
                                   const VkBuffer *counterBuffers,
-                                  bool rebindBuffer)
+                                  bool restartCounterBuffer)
 {
     gl::TransformFeedbackBuffersArray<VkDeviceSize> offsets = {0, 0, 0, 0};
-    uint32_t counterBufferSize                              = (rebindBuffer) ? 0 : validBufferCount;
+    uint32_t counterBufferSize = (restartCounterBuffer) ? 0 : validBufferCount;
 
     vkCmdBeginTransformFeedbackEXT(primCmdBuffer->getHandle(), 0, counterBufferSize, counterBuffers,
                                    offsets.data());
 }
 
-ANGLE_MAYBE_UNUSED
 void InsertEndTransformFeedback(PrimaryCommandBuffer *primCmdBuffer,
-                                priv::SecondaryCommandBuffer &commandBuffer,
                                 uint32_t validBufferCount,
                                 const VkBuffer *counterBuffers)
 {
@@ -232,9 +240,7 @@ void InsertEndTransformFeedback(PrimaryCommandBuffer *primCmdBuffer,
                                  offsets.data());
 }
 
-ANGLE_MAYBE_UNUSED
 void InsertCounterBufferPipelineBarrier(PrimaryCommandBuffer *primCmdBuffer,
-                                        priv::SecondaryCommandBuffer &commandBuffer,
                                         const VkBuffer *counterBuffers)
 {
     VkBufferMemoryBarrier bufferBarrier = {};
@@ -253,16 +259,19 @@ void InsertCounterBufferPipelineBarrier(PrimaryCommandBuffer *primCmdBuffer,
                          0u, nullptr);
 }
 
-ANGLE_MAYBE_UNUSED
-std::string DumpCommands(const priv::SecondaryCommandBuffer &commandBuffer, const char *separator)
+void InsertBindTransformFeedbackBuffers(PrimaryCommandBuffer *primCmdBuffer,
+                                        uint32_t validBufferCount,
+                                        const VkBuffer *xfbBuffers,
+                                        const VkDeviceSize *bufferOffsets,
+                                        const VkDeviceSize *bufferSizes)
 {
-    return commandBuffer.dumpCommands(separator);
+    vkCmdBindTransformFeedbackBuffersEXT(primCmdBuffer->getHandle(), 0, validBufferCount,
+                                         xfbBuffers, bufferOffsets, bufferSizes);
 }
 
-ANGLE_MAYBE_UNUSED
-std::string DumpCommands(const priv::CommandBuffer &commandBuffer, const char *separator)
+void InsertBindGraphicPipeline(PrimaryCommandBuffer *primCmdBuffer, const VkPipeline &pipeline)
 {
-    return "--blob--";
+    vkCmdBindPipeline(primCmdBuffer->getHandle(), VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 }
 
 float CalculateSecondaryCommandBufferPoolWaste(const std::vector<CommandGraphNode *> nodes)
@@ -429,7 +438,10 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
       mGlobalMemoryBarrierDstAccess(0),
       mGlobalMemoryBarrierStages(0),
       mRenderPassOwner(nullptr),
-      mValidTransformFeedbackBufferCount(0)
+      mValidXfbCounterBufferCount(0),
+      mValidXfbBufferCount(0),
+      mGraphicsPipeline(VK_NULL_HANDLE),
+      mHasGraphicsPipelineInCommandBuffer(false)
 {}
 
 CommandGraphNode::~CommandGraphNode()
@@ -652,25 +664,38 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                 beginInfo.pClearValues = mRenderPassClearValues.data();
 
                 primaryCommandBuffer->beginRenderPass(beginInfo, kRenderPassContents);
-                if (mValidTransformFeedbackBufferCount == 0)
+                if (mGraphicsPipeline)
+                {
+                    // vkCmdBindPipeline should not be recorded when trasnform feedback is
+                    // active. so we insert it here.
+                    InsertBindGraphicPipeline(primaryCommandBuffer, mGraphicsPipeline);
+                }
+
+                if (mValidXfbBufferCount)
+                {
+                    // vkCmdBindTransformFeedbackBuffersEXT should not be recorded when trasnform
+                    // feedback is active. so we insert it here.
+                    InsertBindTransformFeedbackBuffers(primaryCommandBuffer, mValidXfbBufferCount,
+                                                       mXfbBuffers.data(), mXfbBufferOffsets.data(),
+                                                       mXfbBufferSizes.data());
+                }
+
+                if (mValidXfbCounterBufferCount == 0)
                 {
                     ExecuteCommands(primaryCommandBuffer, &mInsideRenderPassCommands);
                     primaryCommandBuffer->endRenderPass();
                 }
                 else
                 {
-                    InsertBeginTransformFeedback(primaryCommandBuffer, mInsideRenderPassCommands,
-                                                 mValidTransformFeedbackBufferCount,
-                                                 mTransformFeedbackCounterBuffers.data(),
-                                                 mRebindTransformFeedbackBuffers);
+                    InsertBeginTransformFeedback(primaryCommandBuffer, mValidXfbCounterBufferCount,
+                                                 mXfbCounterBuffers.data(),
+                                                 mRestartXfbCounterBuffers);
                     ExecuteCommands(primaryCommandBuffer, &mInsideRenderPassCommands);
-                    InsertEndTransformFeedback(primaryCommandBuffer, mInsideRenderPassCommands,
-                                               mValidTransformFeedbackBufferCount,
-                                               mTransformFeedbackCounterBuffers.data());
+                    InsertEndTransformFeedback(primaryCommandBuffer, mValidXfbCounterBufferCount,
+                                               mXfbCounterBuffers.data());
                     primaryCommandBuffer->endRenderPass();
                     InsertCounterBufferPipelineBarrier(primaryCommandBuffer,
-                                                       mInsideRenderPassCommands,
-                                                       mTransformFeedbackCounterBuffers.data());
+                                                       mXfbCounterBuffers.data());
                 }
             }
             break;

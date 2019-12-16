@@ -796,26 +796,56 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         }
     }
 
-    // We keep a local copy of the command buffer. It's possible that some state changes could
-    // trigger a command buffer invalidation. The local copy ensures we retain the reference.
-    // Command buffers are pool allocated and only deleted after submit. Thus we know the
-    // command buffer will still be valid for the duration of this API call.
-    *commandBufferOut = mRenderPassCommandBuffer;
-    ASSERT(*commandBufferOut);
-
     if (mProgram->dirtyUniforms())
     {
         ANGLE_TRY(mProgram->updateUniforms(this));
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
 
-    // Update transform feedback offsets on every draw call.
     if (mState.isTransformFeedbackActiveUnpaused())
     {
-        ASSERT(firstVertexOrInvalid != -1);
-        mXfbBaseVertex = firstVertexOrInvalid;
-        invalidateGraphicsDriverUniforms();
+        if (getFeatures().emulateTransformFeedback.enabled)
+        {
+            // Update transform feedback offsets on every draw call.
+            ASSERT(firstVertexOrInvalid != -1);
+            mXfbBaseVertex = firstVertexOrInvalid;
+            invalidateGraphicsDriverUniforms();
+        }
+        else if (getFeatures().supportsTransformFeedbackExtension.enabled)
+        {
+            // We have to start new render pass if current write node has valid graphics pipeline
+            // before we set new graphics pipeline.
+            if (mGraphicsDirtyBits.test(DIRTY_BIT_PIPELINE))
+            {
+                vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+                if (framebuffer->hasCachedGraphicsPipeline())
+                {
+                    TransformFeedbackVk *transformFeedbackVk =
+                        vk::GetImpl(mState.getCurrentTransformFeedback());
+                    mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
+
+                    gl::Rectangle scissoredRenderArea =
+                        mDrawFramebuffer->getScissoredRenderArea(this);
+                    ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, scissoredRenderArea,
+                                                                   &mRenderPassCommandBuffer));
+
+                    size_t bufferCount = mProgram->getState().getTransformFeedbackBufferCount();
+                    const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBufferHandles =
+                        transformFeedbackVk->getCounterBufferHandles();
+
+                    framebuffer->setActiveTransformFeedbackInfo(bufferCount,
+                                                                counterBufferHandles.data(), false);
+                }
+            }
+        }
     }
+
+    // We keep a local copy of the command buffer. It's possible that some state changes could
+    // trigger a command buffer invalidation. The local copy ensures we retain the reference.
+    // Command buffers are pool allocated and only deleted after submit. Thus we know the
+    // command buffer will still be valid for the duration of this API call.
+    *commandBufferOut = mRenderPassCommandBuffer;
+    ASSERT(*commandBufferOut);
 
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
 
@@ -1066,7 +1096,17 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
 
         mGraphicsPipelineTransition.reset();
     }
-    commandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
+    if (!getFeatures().supportsTransformFeedbackExtension.enabled ||
+        !mState.isTransformFeedbackActiveUnpaused())
+    {
+        commandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
+    }
+    else
+    {
+        vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+        framebuffer->cacheCurrrentGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
+    }
+
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
     mCurrentGraphicsPipeline->updateSerial(getCurrentQueueSerial());
@@ -1225,14 +1265,13 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
         bufferHandles[bufferIndex]     = bufferHelper.getBuffer().getHandle();
     }
 
+    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
     const TransformFeedbackBufferRange &xfbBufferRangeExtension =
         transformFeedbackVk->getTransformFeedbackBufferRange();
+    framebuffer->bindActiveTransformFeedbackBuffers(bufferCount, bufferHandles.data(),
+                                                    xfbBufferRangeExtension.offsets.data(),
+                                                    xfbBufferRangeExtension.sizes.data());
 
-    commandBuffer->bindTransformFeedbackBuffers(bufferCount, bufferHandles.data(),
-                                                xfbBufferRangeExtension.offsets.data(),
-                                                xfbBufferRangeExtension.sizes.data());
-
-    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
     transformFeedbackVk->addFramebufferDependency(this, mProgram->getState(), framebuffer);
 
     return angle::Result::Continue;
@@ -1252,11 +1291,11 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Con
         transformFeedbackVk->getCounterBufferHandles();
 
     vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
-    bool rebindBuffer = transformFeedbackVk->getTransformFeedbackBufferRebindState();
+    bool restartBuffer                 = transformFeedbackVk->getCounterBufferRestartState();
     framebuffer->setActiveTransformFeedbackInfo(bufferCount, counterBufferHandles.data(),
-                                                rebindBuffer);
+                                                restartBuffer);
 
-    transformFeedbackVk->unsetTransformFeedbackBufferRebindState();
+    transformFeedbackVk->unsetCounterBufferRestartState();
 
     return angle::Result::Continue;
 }
@@ -2734,7 +2773,11 @@ void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
 
 void ContextVk::invalidateCurrentTransformFeedbackBuffers()
 {
-    mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
+    if (getFeatures().supportsTransformFeedbackExtension.enabled ||
+        getFeatures().emulateTransformFeedback.enabled)
+    {
+        mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
+    }
     if (getFeatures().emulateTransformFeedback.enabled)
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);

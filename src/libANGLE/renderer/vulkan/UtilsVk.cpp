@@ -1269,6 +1269,11 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
                            imageClearProgram, &pipelineDesc, VK_NULL_HANDLE, &shaderParams,
                            sizeof(shaderParams), commandBuffer));
     commandBuffer->draw(6, 0);
+
+    // Call this to avoid vkCmdBindPipeline recording when Transform feedback is active.
+    vk::FramebufferHelper *framebufferHelper = framebuffer->getFramebuffer();
+    framebufferHelper->notifyBindGraphicsPipelineInCommand();
+
     return angle::Result::Continue;
 }
 
@@ -1507,6 +1512,10 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
                            &shaderParams, sizeof(shaderParams), commandBuffer));
     commandBuffer->draw(6, 0);
     descriptorPoolBinding.reset();
+
+    vk::FramebufferHelper *framebufferHelper = framebuffer->getFramebuffer();
+    // Call this to avoid vkCmdBindPipeline recording when Transform feedback is active.
+    framebufferHelper->notifyBindGraphicsPipelineInCommand();
 
     return angle::Result::Continue;
 }
