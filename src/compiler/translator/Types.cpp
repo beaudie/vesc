@@ -123,36 +123,10 @@ const char *getBasicString(TBasicType t)
 }
 
 // TType implementation.
-TType::TType()
-    : type(EbtVoid),
-      precision(EbpUndefined),
-      qualifier(EvqGlobal),
-      invariant(false),
-      precise(false),
-      memoryQualifier(TMemoryQualifier::Create()),
-      layoutQualifier(TLayoutQualifier::Create()),
-      primarySize(0),
-      secondarySize(0),
-      mInterfaceBlock(nullptr),
-      mStructure(nullptr),
-      mIsStructSpecifier(false),
-      mMangledName(nullptr)
-{}
+TType::TType() : TType(EbtVoid, 0, 0) {}
 
 TType::TType(TBasicType t, unsigned char ps, unsigned char ss)
-    : type(t),
-      precision(EbpUndefined),
-      qualifier(EvqGlobal),
-      invariant(false),
-      precise(false),
-      memoryQualifier(TMemoryQualifier::Create()),
-      layoutQualifier(TLayoutQualifier::Create()),
-      primarySize(ps),
-      secondarySize(ss),
-      mInterfaceBlock(nullptr),
-      mStructure(nullptr),
-      mIsStructSpecifier(false),
-      mMangledName(nullptr)
+    : TType(t, EbpUndefined, EvqGlobal, ps, ss)
 {}
 
 TType::TType(TBasicType t, TPrecision p, TQualifier q, unsigned char ps, unsigned char ss)
@@ -200,38 +174,20 @@ TType::TType(const TPublicType &p)
 }
 
 TType::TType(const TStructure *userDef, bool isStructSpecifier)
-    : type(EbtStruct),
-      precision(EbpUndefined),
-      qualifier(EvqTemporary),
-      invariant(false),
-      precise(false),
-      memoryQualifier(TMemoryQualifier::Create()),
-      layoutQualifier(TLayoutQualifier::Create()),
-      primarySize(1),
-      secondarySize(1),
-      mInterfaceBlock(nullptr),
-      mStructure(userDef),
-      mIsStructSpecifier(isStructSpecifier),
-      mMangledName(nullptr)
-{}
+    : TType(EbtStruct, EbpUndefined, EvqTemporary, 1, 1)
+{
+    mStructure         = userDef;
+    mIsStructSpecifier = isStructSpecifier;
+}
 
 TType::TType(const TInterfaceBlock *interfaceBlockIn,
              TQualifier qualifierIn,
              TLayoutQualifier layoutQualifierIn)
-    : type(EbtInterfaceBlock),
-      precision(EbpUndefined),
-      qualifier(qualifierIn),
-      invariant(false),
-      precise(false),
-      memoryQualifier(TMemoryQualifier::Create()),
-      layoutQualifier(layoutQualifierIn),
-      primarySize(1),
-      secondarySize(1),
-      mInterfaceBlock(interfaceBlockIn),
-      mStructure(0),
-      mIsStructSpecifier(false),
-      mMangledName(nullptr)
-{}
+    : TType(EbtInterfaceBlock, EbpUndefined, qualifierIn, 1, 1)
+{
+    layoutQualifier = layoutQualifierIn;
+    mInterfaceBlock = interfaceBlockIn;
+}
 
 TType::TType(const TType &t)
     : type(t.type),
