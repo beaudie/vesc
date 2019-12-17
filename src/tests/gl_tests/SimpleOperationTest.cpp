@@ -190,6 +190,48 @@ TEST_P(SimpleOperationTest, ClearAndSwap)
     ASSERT_FALSE(getGLWindow()->hasError());
 }
 
+TEST_P(SimpleOperationTest, VertexIdTest)
+{
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec3 StageData_color;\n"
+        "void main() {\n"
+        "  const vec2 positions[4] = vec2[4](\n"
+        "    vec2(-0.4, -0.4),\n"
+        "    vec2(0.4, -0.4),\n"
+        "    vec2(-0.4, 0.4),\n"
+        "    vec2(0.4, 0.4)\n"
+        "  );\n"
+        "  gl_Position = vec4(positions[gl_VertexID], 0, 1.);\n"
+        "  StageData_color = vec3(0, 1., 0);\n"
+        "}\n";
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in vec3 StageData_color;\n"
+        "layout(location = 0) out vec4 g_fs_out;\n"
+        "void main() {\n"
+        "  g_fs_out = vec4(StageData_color, 1.);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    ASSERT_GL_NO_ERROR();
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLuint vertexArray;
+    glGenVertexArrays(1, &vertexArray);
+
+    glUseProgram(program);
+    glBindVertexArray(vertexArray);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    // Test inside, green of the fragment shader.
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::green);
+}
+
 // Simple case of setting a scissor, enabled or disabled.
 TEST_P(SimpleOperationTest, ScissorTest)
 {

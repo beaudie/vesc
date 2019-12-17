@@ -87,8 +87,8 @@
 4128 VULKAN NVIDIA : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength-fs-*-matR* = SKIP
 
 // Error with detecting some atomic counter buffer uses:
-4150 : KHR-GLES31.core.shader_storage_buffer_object.basic-atomic-case3-cs = FAIL
-4150 : KHR-GLES31.core.shader_storage_buffer_object.basic-atomic-case3-vsfs = FAIL
+// 4150 : KHR-GLES31.core.shader_storage_buffer_object.basic-atomic-case3-cs = FAIL
+// 4150 : KHR-GLES31.core.shader_storage_buffer_object.basic-atomic-case3-vsfs = FAIL
 
 // Unimplemented glValidateCreateShaderProgramv:
 4146 : KHR-GLES31.core.shader_storage_buffer_object.basic-syntaxSSO = FAIL
@@ -120,7 +120,7 @@
 3726 VULKAN ANDROID : KHR-GLES31.core.shader_atomic_counters.advanced-usage-* = SKIP
 
 // Crashes on Android
-3520 VULKAN ANDROID : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength* = SKIP
+// 3520 VULKAN ANDROID : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength* = SKIP
 
 // OpenGL ES 3.1 conformance failures
 // 4107 SWIFTSHADER : KHR-GLES31.core.shader_storage_buffer_object.advanced-switchBuffers-vs = FAIL
