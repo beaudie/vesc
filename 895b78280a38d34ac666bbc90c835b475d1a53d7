@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d9cee52a_a0e750b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6aa4dd19_924b2b57",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 0
+      },
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47c1d7cd_71cbd212",
         "filename": "src/libANGLE/Surface.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-13T17:39:04Z",
       "side": 1,
       "message": "This variable is used in many places throughout ANGLE. Should finalizedRenderTargetFormat always replace renderTargetFormat when querying the format?\n\nIf so, I would suggest making the change safer by introducing `requestedRenderTargetFormat` (or whatever makes sense) to denote the \"input\" render target format, and then calculate `renderTargetFormat` based on that (instead of introducing `finalizedRenderTargetFormat`).\n\nThat way, whatever code is using `renderTargetFormat` can remain as is, and any code that sets the initial value can also be made more obvious by indicating that it\u0027s requesting this format, not dictating it.\n\nIf you could make it such that code that\u0027s supposed to set the requested format cannot set renderTargetFormat by accident (resulting in compile error) and code that\u0027s supposed to read the finalized format cannot read the requested one by accident (again, compile error), that would be cherry on top!",
+      "range": {
+        "startLine": 160,
+        "startChar": 61,
+        "endLine": 160,
+        "endChar": 79
+      },
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53cf1b39_ec492321",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "modified the code a little bit that does get rid of touching \"mState.config-\u003erenderTargetFormat\"\nall over the place. take a look and let me know",
+      "parentUuid": "47c1d7cd_71cbd212",
       "range": {
         "startLine": 160,
         "startChar": 61,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f5d76b1d_e99d5582",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c6ab693_2af48907",
+      "range": {
+        "startLine": 58,
+        "startChar": 20,
+        "endLine": 58,
+        "endChar": 21
+      },
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22aa0a6a_6177eb27",
         "filename": "src/libANGLE/formatutils.h",
         "patchSetId": 4
@@ -94,6 +166,54 @@
     },
     {
       "key": {
+        "uuid": "7b8e5ccc_5aab4ade",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22aa0a6a_6177eb27",
+      "range": {
+        "startLine": 95,
+        "startChar": 46,
+        "endLine": 95,
+        "endChar": 61
+      },
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5461bcf2_c9551cad",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22aa0a6a_6177eb27",
+      "range": {
+        "startLine": 95,
+        "startChar": 46,
+        "endLine": 95,
+        "endChar": 61
+      },
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "203a225d_dae515df",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -105,6 +225,30 @@
       "writtenOn": "2019-12-13T17:39:04Z",
       "side": 1,
       "message": "It looks like this extension is only supported on AMD/Windows. We do have one bot config that runs tests on this configuration, but I\u0027m guessing the dEQP tests you unsuppressed are not testing this, so this change isn\u0027t being tested at all. (I\u0027m not sure if our AMD card on the bot supports this extension either)\n\nDo you mind adding a few end2end tests to make sure this works as intended and we don\u0027t introduce regressions in the future?",
+      "range": {
+        "startLine": 716,
+        "startChar": 23,
+        "endLine": 716,
+        "endChar": 66
+      },
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a824ee2_d88fea6c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "the deqp test actually does render in srgb space and checks for it, if the support is incorrect the test will error out saying mismatch in pixel values",
+      "parentUuid": "203a225d_dae515df",
       "range": {
         "startLine": 716,
         "startChar": 23,
@@ -140,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "dcc79cce_a1d1fa3c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37d49606_7d26c51d",
+      "range": {
+        "startLine": 459,
+        "startChar": 11,
+        "endLine": 459,
+        "endChar": 13
+      },
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa82a352_c70ed7e0",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -154,6 +322,42 @@
       "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69460840_c45704d1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa82a352_c70ed7e0",
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d043220b_b4ce3e1e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa82a352_c70ed7e0",
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +378,24 @@
     },
     {
       "key": {
+        "uuid": "a66aada0_426f8c10",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aab8b0b6_08b04f15",
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42411c1f_a8d9b145",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
@@ -188,6 +410,24 @@
       "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c14c4fda_92e2a934",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-12-17T18:16:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42411c1f_a8d9b145",
+      "revId": "895b78280a38d34ac666bbc90c835b475d1a53d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
