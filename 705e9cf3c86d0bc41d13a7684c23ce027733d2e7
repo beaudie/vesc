@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "65d7eaa4_203f1d41",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-17T09:19:54Z",
+      "side": 1,
+      "message": "Changed it to \"pack structure in the end\".",
+      "parentUuid": "772ef18a_abe156cb",
+      "range": {
+        "startLine": 64,
+        "startChar": 42,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b432548b_6e8fff3c",
         "filename": "src/compiler/translator/ResourcesHLSL.cpp",
         "patchSetId": 18
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "8e4b28ca_504ca567",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-17T09:19:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b432548b_6e8fff3c",
+      "range": {
+        "startLine": 657,
+        "startChar": 19,
+        "endLine": 657,
+        "endChar": 81
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39bbfbc1_c42142e4",
         "filename": "src/compiler/translator/TranslatorHLSL.cpp",
         "patchSetId": 18
@@ -68,6 +116,30 @@
       "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad38d3fb_e309499b",
+        "filename": "src/compiler/translator/TranslatorHLSL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-17T09:19:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39bbfbc1_c42142e4",
+      "range": {
+        "startLine": 270,
+        "startChar": 73,
+        "endLine": 270,
+        "endChar": 74
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +183,30 @@
     },
     {
       "key": {
+        "uuid": "a8353f88_f88feca9",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-17T09:19:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c58ad47_6b0985ff",
+      "range": {
+        "startLine": 1634,
+        "startChar": 45,
+        "endLine": 1634,
+        "endChar": 61
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ae0eadf_a84bab4e",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 18
@@ -151,6 +247,53 @@
     },
     {
       "key": {
+        "uuid": "9a79825e_4898c67b",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-17T09:19:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63215f26_157c8754",
+      "range": {
+        "startLine": 1726,
+        "startChar": 48,
+        "endLine": 1726,
+        "endChar": 64
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "972ced69_eb8843f7",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1777,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-17T09:19:54Z",
+      "side": 1,
+      "message": "Here bot of AMD driver reports a OpenGL error.\nUse \"glGetActiveUniformBlockiv(program, uniformBufferIndex, GL_UNIFORM_BLOCK_DATA_SIZE, \u0026blockSize);\" to query the uniform block size.\nOn Intel and NV drivers, the uniform block size is 512 * 80 \u003d 40960, 512 is array size, 80 is structure size with padding. But on AMD, its size is 511 * 80 + 68 \u003d 40948, the last element of array does not be padded. \"kFloatCount * sizeof(GLfloat)\" is larger than uniform buffer, so will report a error.",
+      "range": {
+        "startLine": 1777,
+        "startChar": 42,
+        "endLine": 1777,
+        "endChar": 71
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eaea4dd1_3e855286",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 18
@@ -174,6 +317,30 @@
     },
     {
       "key": {
+        "uuid": "5f0c965f_f90f130c",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-17T09:19:54Z",
+      "side": 1,
+      "message": "Use the same UNIFORM buffer on API side, here means to use \"mUniformBuffer\".",
+      "parentUuid": "eaea4dd1_3e855286",
+      "range": {
+        "startLine": 1829,
+        "startChar": 53,
+        "endLine": 1829,
+        "endChar": 75
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a68be1fc_3bd87395",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 18
@@ -185,6 +352,30 @@
       "writtenOn": "2019-12-13T16:33:13Z",
       "side": 1,
       "message": "Also here. I don\u0027t quite understand what you mean by sharing a uniform buffer.",
+      "range": {
+        "startLine": 1928,
+        "startChar": 59,
+        "endLine": 1928,
+        "endChar": 81
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbc2cf27_ee6ca807",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1928,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-12-17T09:19:54Z",
+      "side": 1,
+      "message": "Use the same UNIFORM buffer on API side, here means to use \"mUniformBuffer\".",
+      "parentUuid": "a68be1fc_3bd87395",
       "range": {
         "startLine": 1928,
         "startChar": 59,
