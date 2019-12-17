@@ -3791,16 +3791,19 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
         ASSERT(attribute.location != -1);
         unsigned int regs = static_cast<unsigned int>(VariableRegisterCount(attribute.type));
 
+        unsigned int index = 0;
         for (unsigned int r = 0; r < regs; r++)
         {
-            unsigned int location = static_cast<unsigned int>(attribute.location) + r;
-            mState.mActiveAttribLocationsMask.set(location);
-            mState.mMaxActiveAttribLocation =
-                std::max(mState.mMaxActiveAttribLocation, location + 1);
+            unsigned int location = static_cast<unsigned int>(attribute.location) + index;
 
             // gl_VertexID and gl_InstanceID are active attributes but don't have a bound attribute.
             if (!attribute.isBuiltIn())
             {
+                mState.mActiveAttribLocationsMask.set(location);
+                mState.mMaxActiveAttribLocation =
+                    std::max(mState.mMaxActiveAttribLocation, location + 1);
+                index++;
+
                 ComponentType componentType =
                     GLenumToComponentType(VariableComponentType(attribute.type));
 
