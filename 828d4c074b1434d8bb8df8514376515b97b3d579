@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3181827e_748dfef2",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1816,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-17T23:50:11Z",
+      "side": 1,
+      "message": "GL_STENCIL?",
+      "range": {
+        "startLine": 1816,
+        "startChar": 39,
+        "endLine": 1816,
+        "endChar": 56
+      },
+      "revId": "828d4c074b1434d8bb8df8514376515b97b3d579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
