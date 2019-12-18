@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9eeda6dc_1997eb6a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-18T19:25:24Z",
+      "side": 1,
+      "message": "If you don\u0027t assign a location, how would it work for the applications that *do* define some vertex array attributes?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3b84ad24_3775510b",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -70,6 +93,24 @@
       "writtenOn": "2019-12-18T19:14:22Z",
       "side": 1,
       "message": "This can be moved into the conditional block also.",
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fd1071b_e67ed91f",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3797,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-18T19:25:24Z",
+      "side": 1,
+      "message": "Alternatively, outside the loop do `unsigned int location \u003d static_cast\u003cunsigned int\u003e(attribute.location);` and remove index altogether. You can then do `++location` inside the `if`.",
+      "parentUuid": "305ea316_c8a9c357",
       "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
