@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "29abd585_84a77a20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-18T21:21:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9eeda6dc_1997eb6a",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b84ad24_3775510b",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "06b590f2_d60a9def",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-18T21:21:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b84ad24_3775510b",
+      "range": {
+        "startLine": 12,
+        "startChar": 13,
+        "endLine": 12,
+        "endChar": 15
+      },
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3287d1f5_1b7be9fb",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 2
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "e6574647_ebf7af57",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3658,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-18T21:21:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3287d1f5_1b7be9fb",
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80136b9e_cf7289fb",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 2
@@ -79,6 +145,24 @@
       "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a20dafec_6018b23d",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3703,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-18T21:21:23Z",
+      "side": 1,
+      "message": "I\u0027ve reworded the CL description to better describe what\u0027s going on. I\u0027m not stopping locations from being assigned to these attributes, what I\u0027m stopping is setting a dirty bit that indicates we have a vertex attribute at that location that needs to be bound. That\u0027s sufficient to address the validation error and likely has fewer side effects than removing built-in\u0027s from location processing which is more complicated.",
+      "parentUuid": "80136b9e_cf7289fb",
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +201,24 @@
     },
     {
       "key": {
+        "uuid": "ccfdcabb_9993bd4c",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3797,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-18T21:21:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fd1071b_e67ed91f",
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e031697_f084328c",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 2
@@ -131,6 +233,24 @@
       "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ffbaaee_73a8b3fd",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3799,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-18T21:21:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e031697_f084328c",
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
