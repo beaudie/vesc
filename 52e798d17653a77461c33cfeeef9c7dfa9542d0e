@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "0e3e45ec_9f46060c",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-18T17:32:47Z",
+      "side": 1,
+      "message": "nit: sort? looks like Kazan is also out of order.",
+      "range": {
+        "startLine": 48,
+        "startChar": 13,
+        "endLine": 48,
+        "endChar": 31
+      },
+      "revId": "52e798d17653a77461c33cfeeef9c7dfa9542d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e821831_e292791c",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-18T17:32:47Z",
+      "side": 1,
+      "message": "nit: sort?",
+      "range": {
+        "startLine": 90,
+        "startChar": 19,
+        "endLine": 90,
+        "endChar": 38
+      },
+      "revId": "52e798d17653a77461c33cfeeef9c7dfa9542d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5ed0208_6fd3cd19",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-18T17:32:47Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 247,
+        "startChar": 17,
+        "endLine": 247,
+        "endChar": 35
+      },
+      "revId": "52e798d17653a77461c33cfeeef9c7dfa9542d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dae7316_dbff5cd7",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-18T17:32:47Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 147,
+        "startChar": 13,
+        "endLine": 147,
+        "endChar": 31
+      },
+      "revId": "52e798d17653a77461c33cfeeef9c7dfa9542d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8ac0df56_f2214743",
         "filename": "src/libANGLE/renderer/driver_utils.h",
         "patchSetId": 1
