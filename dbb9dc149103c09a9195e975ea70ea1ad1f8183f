@@ -196,6 +196,24 @@
     },
     {
       "key": {
+        "uuid": "94574ca6_6052e312",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-12-18T01:37:08Z",
+      "side": 1,
+      "message": "Done. Support zeroTexture for VideoImage now.",
+      "parentUuid": "7e61840c_5fe1cddd",
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9afcdc39_72063142",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 21
@@ -240,6 +258,30 @@
       "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63b688f1_d48d0eb2",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-12-18T01:37:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b70fa414_9bfc2f44",
+      "range": {
+        "startLine": 1186,
+        "startChar": 12,
+        "endLine": 1186,
+        "endChar": 55
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -451,6 +493,30 @@
       "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d526052d_bbb70bf2",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2019-12-18T01:37:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7c0cddd_223b8099",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 9
+      },
+      "revId": "dbb9dc149103c09a9195e975ea70ea1ad1f8183f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
