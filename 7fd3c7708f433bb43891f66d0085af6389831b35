@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b84ad24_3775510b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-18T19:14:22Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 12,
+        "startChar": 13,
+        "endLine": 12,
+        "endChar": 15
+      },
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3287d1f5_1b7be9fb",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3658,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-18T19:14:22Z",
+      "side": 1,
+      "message": "This may need to be updated also:\n\n    // Assigns locations to all attributes (except built-ins) from the bindings and program locations.",
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80136b9e_cf7289fb",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3703,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-18T19:14:22Z",
+      "side": 1,
+      "message": "I believe this is where the attribute is getting the location assigned, since callers won\u0027t (can\u0027t) bind a location to built-in attributes, and built-ins are initialized with a `-1` location:\n\n    void CollectVariablesTraverser::recordBuiltInAttributeUsed(const TVariable \u0026variable,\n                                                               bool *addedFlag)\n    {\n        if (!(*addedFlag))\n        {\n            ShaderVariable info;\n            setBuiltInInfoFromSymbol(variable, \u0026info);\n            info.active   \u003d true;\n            info.location \u003d -1;\n            mAttribs-\u003epush_back(info);\n            (*addedFlag) \u003d true;\n        }\n    }\n\nThe loop you\u0027re modifying requires that this is done though, otherwise the ASSERT(attribute.location !\u003d -1) will be hit, so we currently require that even built-ins have a location assigned.\n\nWe are also doing all of the work in the next block just below here on line 3706, which is consuming locations for built-ins, and preventing user-defined attributes from using those locations.   I don\u0027t know if there are any other interactions between the front and backends that could be getting out of sync by giving built-ins locations, but not tracking that in mState.mMaxActiveAttribLocation.\n\nLots of words to get to: should we check for !attribute.isBuiltIn() here also and remove forcing built-ins to have a location from the ASSERT below?",
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "305ea316_c8a9c357",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3797,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-18T19:14:22Z",
+      "side": 1,
+      "message": "This can be moved into the conditional block also.",
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e031697_f084328c",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3799,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-12-18T19:14:22Z",
+      "side": 1,
+      "message": "Looking here:\nhttps://www.khronos.org/opengl/wiki/Built-in_Variable_(GLSL)\n\nThere are actually several built-in vertex shader inputs (attributes) that this change will (eventually) effect:\n\n    in int gl_VertexID;\n    in int gl_InstanceID;\n    in int gl_DrawID; // Requires GLSL 4.60 or ARB_shader_draw_parameters\n    in int gl_BaseVertex; // Requires GLSL 4.60 or ARB_shader_draw_parameters\n    in int gl_BaseInstance; // Requires GLSL 4.60 or ARB_shader_draw_parameters\n\nThis comment should probably be generalized to something like:\n\n    // Built-in active program inputs don\u0027t have a bound attribute.",
+      "revId": "7fd3c7708f433bb43891f66d0085af6389831b35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
