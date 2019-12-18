@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4d9c6b7_0c0e7d25",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-18T17:20:02Z",
+      "side": 1,
+      "message": "You can defer making a copy to inside the `if`, so if override is not necessary, we don\u0027t pay this cost.",
+      "revId": "046fc9cd8fdd9fe718a7b7fabe68c6877c1da111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30f25d33_aeea43df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-18T17:20:02Z",
+      "side": 1,
+      "message": "G",
+      "range": {
+        "startLine": 55,
+        "startChar": 28,
+        "endLine": 55,
+        "endChar": 29
+      },
+      "revId": "046fc9cd8fdd9fe718a7b7fabe68c6877c1da111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
