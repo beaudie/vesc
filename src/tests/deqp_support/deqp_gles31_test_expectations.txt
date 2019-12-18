@@ -554,13 +554,6 @@
 3570 : dEQP-GLES31.functional.debug.object_labels.program_pipeline = FAIL
 3570 : dEQP-GLES31.functional.separate_shader.* = FAIL
 
-// The following passes with Vulkan (with warning), but fails otherwise.  We'll keep the file simple by expecting it to fail.
-2324 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.compute.program_not_active = FAIL
-2324 : dEQP-GLES31.functional.debug.negative_coverage.log.compute.program_not_active = FAIL
-2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.compute.program_not_active = FAIL
-2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements = FAIL
-2324 : dEQP-GLES31.functional.debug.negative_coverage.get_error.vertex_array.draw_range_elements_incomplete_primitive = FAIL
-
 // These tests are failing because of compile errors with SSBOs in compute shaders.
 
 1442 D3D11 : dEQP-GLES31.functional.stencil_texturing.* = SKIP
