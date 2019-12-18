@@ -16,6 +16,24 @@
       "revId": "17b90b310cb51f3165a4fe483653ebdcba7473f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7646361_9dc8cc36",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-18T16:07:41Z",
+      "side": 1,
+      "message": "I second that. Also, now you are losing coverage for the \"edges\" of the image (though that might not really matter in this case).\n\nI suggest using the positions you had before, but instead with a for loop and a pre-defined array like:\n\n    unsigned int positionToTest[10][2] \u003d {{0,0}, {75,0}, {98,13}, ..., {127, 127}};\n\nThat makes it easy to see which pixels will be tested, and easy to add certain pixels if some were found to be problematic.",
+      "parentUuid": "e168ab41_bc8679ae",
+      "revId": "17b90b310cb51f3165a4fe483653ebdcba7473f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

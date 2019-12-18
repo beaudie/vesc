@@ -318,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "272e45fb_ef0e6a28",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1777,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-18T16:07:41Z",
+      "side": 1,
+      "message": "Re base::StringPrintf, no we don\u0027t use that. The test can always use std::ostringstream.",
+      "parentUuid": "ab20a6c5_8f38138b",
+      "range": {
+        "startLine": 1777,
+        "startChar": 42,
+        "endLine": 1777,
+        "endChar": 71
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eaea4dd1_3e855286",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 18
