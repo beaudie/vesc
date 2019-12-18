@@ -869,6 +869,18 @@ void AddSampleCounts(VkSampleCountFlags sampleCounts, gl::SupportedSampleSet *se
     // writing, b is in [0, 6], however, we test all 32 bits in case the enum is extended.
     for (size_t bit : angle::BitSet32<32>(sampleCounts))
     {
+        if (bit == 0)
+        {
+            // The Vulkan back-end will not support 1-sample multisampling, because of a Vulkan
+            // specification restriction:
+            //
+            //   If the image was created with VkImageCreateInfo::samples equal to
+            //   VK_SAMPLE_COUNT_1_BIT, the instruction must: have MS = 0.
+            //
+            // This restriction was tracked in http://anglebug.com/4196 and Khronos-private Vulkan
+            // specification issue https://gitlab.khronos.org/vulkan/vulkan/issues/1925.
+            continue;
+        }
         setOut->insert(static_cast<GLuint>(1 << bit));
     }
 }
@@ -878,6 +890,12 @@ GLuint GetMaxSampleCount(VkSampleCountFlags sampleCounts)
     GLuint maxCount = 0;
     for (size_t bit : angle::BitSet32<32>(sampleCounts))
     {
+        if (bit == 0)
+        {
+            // The Vulkan back-end will not support 1-sample multisampling, because of a Vulkan
+            // specification restriction (see explanation in AddSampleCounts).
+            continue;
+        }
         maxCount = static_cast<GLuint>(1 << bit);
     }
     return maxCount;
@@ -887,6 +905,12 @@ GLuint GetSampleCount(VkSampleCountFlags supportedCounts, GLuint requestedCount)
 {
     for (size_t bit : angle::BitSet32<32>(supportedCounts))
     {
+        if (bit == 0)
+        {
+            // The Vulkan back-end will not support 1-sample multisampling, because of a Vulkan
+            // specification restriction (see explanation in AddSampleCounts).
+            continue;
+        }
         GLuint sampleCount = static_cast<GLuint>(1 << bit);
         if (sampleCount >= requestedCount)
         {

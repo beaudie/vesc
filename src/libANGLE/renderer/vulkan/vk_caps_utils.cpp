@@ -166,9 +166,9 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxViewportWidth       = LimitToInt(limitsVk.maxViewportDimensions[0]);
     mNativeCaps.maxViewportHeight      = LimitToInt(limitsVk.maxViewportDimensions[1]);
     mNativeCaps.maxSampleMaskWords     = LimitToInt(limitsVk.maxSampleMaskWords);
-    mNativeCaps.maxColorTextureSamples = limitsVk.sampledImageColorSampleCounts;
-    mNativeCaps.maxDepthTextureSamples = limitsVk.sampledImageDepthSampleCounts;
-    mNativeCaps.maxIntegerSamples      = limitsVk.sampledImageIntegerSampleCounts;
+    mNativeCaps.maxColorTextureSamples = limitsVk.sampledImageColorSampleCounts & 0x7FFFFFFE;
+    mNativeCaps.maxDepthTextureSamples = limitsVk.sampledImageDepthSampleCounts & 0x7FFFFFFE;
+    mNativeCaps.maxIntegerSamples      = limitsVk.sampledImageIntegerSampleCounts & 0x7FFFFFFE;
 
     mNativeCaps.maxVertexAttributes     = LimitToInt(limitsVk.maxVertexInputAttributes);
     mNativeCaps.maxVertexAttribBindings = LimitToInt(limitsVk.maxVertexInputBindings);
@@ -442,7 +442,7 @@ void RendererVk::ensureCapsInitialized() const
 
     const uint32_t sampleCounts = limitsVk.framebufferColorSampleCounts &
                                   limitsVk.framebufferDepthSampleCounts &
-                                  limitsVk.framebufferStencilSampleCounts;
+                                  limitsVk.framebufferStencilSampleCounts & 0x7FFFFFFE;
 
     mNativeCaps.maxSamples            = LimitToInt(vk_gl::GetMaxSampleCount(sampleCounts));
     mNativeCaps.maxFramebufferSamples = mNativeCaps.maxSamples;
@@ -604,9 +604,9 @@ egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
     const VkPhysicalDeviceLimits &limits =
         display->getRenderer()->getPhysicalDeviceProperties().limits;
     const uint32_t depthStencilSampleCountsLimit =
-        limits.framebufferDepthSampleCounts & limits.framebufferStencilSampleCounts;
+        limits.framebufferDepthSampleCounts & limits.framebufferStencilSampleCounts & 0x7FFFFFFE;
 
-    vk_gl::AddSampleCounts(limits.framebufferColorSampleCounts, &colorSampleCounts);
+    vk_gl::AddSampleCounts(limits.framebufferColorSampleCounts & 0x7FFFFFFE, &colorSampleCounts);
     vk_gl::AddSampleCounts(depthStencilSampleCountsLimit, &depthStencilSampleCounts);
 
     // Always support 0 samples
