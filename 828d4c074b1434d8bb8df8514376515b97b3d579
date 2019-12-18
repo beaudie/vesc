@@ -22,6 +22,30 @@
       "revId": "828d4c074b1434d8bb8df8514376515b97b3d579",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e33b9fc_f245b685",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1816,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2019-12-18T00:09:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3181827e_748dfef2",
+      "range": {
+        "startLine": 1816,
+        "startChar": 39,
+        "endLine": 1816,
+        "endChar": 56
+      },
+      "revId": "828d4c074b1434d8bb8df8514376515b97b3d579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
