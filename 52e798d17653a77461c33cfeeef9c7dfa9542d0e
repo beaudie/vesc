@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ac0df56_f2214743",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-18T16:00:00Z",
+      "side": 1,
+      "message": "micro nit: I\u0027d use \"their\" instead of \"our\". This is public code, and to the reader Broadcom is likely somebody else.",
+      "range": {
+        "startLine": 29,
+        "startChar": 51,
+        "endLine": 29,
+        "endChar": 54
+      },
+      "revId": "52e798d17653a77461c33cfeeef9c7dfa9542d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
