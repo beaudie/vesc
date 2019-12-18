@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e168ab41_bc8679ae",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-18T01:18:28Z",
+      "side": 1,
+      "message": "Here and in several places below: this constructor initializes the random number generator with the current time as the seed:\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/util/random_utils.cpp;l\u003d20?q\u003dRNG\n\nThis will cause non-determinism in the tests, and make it much harder to debug failures. Could you please pass in constants to the constructors of these RNG instances? While this will decrease test coverage, it will also make the runs deterministic.",
+      "revId": "17b90b310cb51f3165a4fe483653ebdcba7473f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

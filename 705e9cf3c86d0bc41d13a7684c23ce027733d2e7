@@ -294,6 +294,30 @@
     },
     {
       "key": {
+        "uuid": "ab20a6c5_8f38138b",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1777,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-18T01:18:28Z",
+      "side": 1,
+      "message": "As Shahbaz mentioned in his code review, could you please verify that this test case isn\u0027t exceeding limits imposed by the graphics driver? The failure to allocate the ShaderResourceView indicates to me that some buffers are too large for the driver to handle.\n\nThis test should really query GL_MAX_UNIFORM_BLOCK_SIZE first, then compute how many array elements should go into the uniform block, and then use something like base::StringPrintf (is that accessible from ANGLE?) to generate the shader source code. For safety, it should probably allocate a few elements fewer than the absolute maximum number that might be supported. Could you please try making changes along these lines?",
+      "parentUuid": "972ced69_eb8843f7",
+      "range": {
+        "startLine": 1777,
+        "startChar": 42,
+        "endLine": 1777,
+        "endChar": 71
+      },
+      "revId": "705e9cf3c86d0bc41d13a7684c23ce027733d2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eaea4dd1_3e855286",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 18
