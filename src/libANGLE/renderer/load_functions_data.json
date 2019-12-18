@@ -309,6 +309,12 @@
   "GL_DEPTH_COMPONENT32F": {
     "D32_FLOAT": {
       "GL_FLOAT": "LoadD32FToD32F"
+    },
+    "D32_FLOAT_S8X24_UINT": {
+      "GL_FLOAT_32_UNSIGNED_INT_24_8_REV": "LoadD32FToD32FS8X24"
+    },
+    "D24_UNORM_S8_UINT": {
+      "GL_FLOAT_32_UNSIGNED_INT_24_8_REV": "LoadD32FToD24S8"
     }
   },
   "GL_RG32I": {
