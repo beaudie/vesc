@@ -1342,6 +1342,64 @@ void LoadD32FToD32F(size_t width,
     }
 }
 
+void LoadD32FToD32FS8X24(size_t width,
+                         size_t height,
+                         size_t depth,
+                         const uint8_t *input,
+                         size_t inputRowPitch,
+                         size_t inputDepthPitch,
+                         uint8_t *output,
+                         size_t outputRowPitch,
+                         size_t outputDepthPitch)
+{
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const float *source =
+                priv::OffsetDataPointer<float>(input, y, z, inputRowPitch, inputDepthPitch);
+            float *destDepth =
+                priv::OffsetDataPointer<float>(output, y, z, outputRowPitch, outputDepthPitch);
+            uint32_t *destStencil =
+                priv::OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch, outputDepthPitch) +
+                1;
+            for (size_t x = 0; x < width; x++)
+            {
+                destDepth[x * 2]   = gl::clamp01(source[x]);
+                destStencil[x * 2] = 0xFFFFFFFFu;
+            }
+        }
+    }
+}
+
+void LoadD32FToD24S8(size_t width,
+                     size_t height,
+                     size_t depth,
+                     const uint8_t *input,
+                     size_t inputRowPitch,
+                     size_t inputDepthPitch,
+                     uint8_t *output,
+                     size_t outputRowPitch,
+                     size_t outputDepthPitch)
+{
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const float *source =
+                priv::OffsetDataPointer<float>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint32_t *dest =
+                priv::OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch, outputDepthPitch);
+            for (size_t x = 0; x < width; x++)
+            {
+                uint32_t d = static_cast<uint32_t>(gl::clamp01(source[x * 2]) * 0xFFFFFF);
+                uint32_t s = 0xFF000000u;
+                dest[x]    = d | s;
+            }
+        }
+    }
+}
+
 void LoadD32FS8X24ToD24S8(size_t width,
                           size_t height,
                           size_t depth,
