@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3fba56d1_4d14f30e",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-12-19T22:41:51Z",
+      "side": 1,
+      "message": "Courtney left this comment in the issue:\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d4208#c3\nSo I\u0027m on hold for Google to have a plan.",
+      "parentUuid": "a538fdbb_7d8e1467",
+      "range": {
+        "startLine": 64,
+        "startChar": 36,
+        "endLine": 64,
+        "endChar": 69
+      },
+      "revId": "e1f43f9d5ae3ab395db35cd98cb43ae006e76acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c45a4c42_f255d8e2",
         "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-19T21:20:02Z",
       "side": 1,
       "message": "nit: we don\u0027t use yoda conditions. can you rephrase with the EGL_TRUE as the RHS?",
+      "range": {
+        "startLine": 57,
+        "startChar": 12,
+        "endLine": 57,
+        "endChar": 83
+      },
+      "revId": "e1f43f9d5ae3ab395db35cd98cb43ae006e76acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c11e23c5_e5f817c0",
+        "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-12-19T22:41:51Z",
+      "side": 1,
+      "message": "Lol, I hadn\u0027t heard it referred to as a \"yoda condition\". Some code styles insist to root out \"\u003d\" vs \"\u003d\u003d\".\nWill reverse.",
+      "parentUuid": "c45a4c42_f255d8e2",
       "range": {
         "startLine": 57,
         "startChar": 12,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5b5e4537_7ef4658b",
+        "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-12-19T22:41:51Z",
+      "side": 1,
+      "message": "I\u0027ll simplify down to the \u003d\u003d below as pass or fail.",
+      "parentUuid": "23d106bf_3eaae6a9",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 27
+      },
+      "revId": "e1f43f9d5ae3ab395db35cd98cb43ae006e76acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be7e85ff_d45ad31b",
         "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2019-12-19T21:20:02Z",
       "side": 1,
       "message": "small nit, but this static use isn\u0027t usually how we do angle tests. if you want to ensure these function name symbols are kept private you can wrap pretty much the whole test in an anonymous namespace.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 7
+      },
+      "revId": "e1f43f9d5ae3ab395db35cd98cb43ae006e76acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a04245b_9eb2f03d",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-12-19T22:41:51Z",
+      "side": 1,
+      "message": "I\u0027ll move to static members of the test class that should isolate them. I don\u0027t think they are all that generic or useful to go in a utility file anyways.",
+      "parentUuid": "be7e85ff_d45ad31b",
       "range": {
         "startLine": 32,
         "startChar": 0,
