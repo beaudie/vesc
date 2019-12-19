@@ -22,6 +22,30 @@
       "revId": "9ea7e3907fa63ae38c50cc3fb860f4b77b6d6638",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc1842ef_3ae548f1",
+        "filename": "src/compiler/translator/InfoSink.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-19T22:08:33Z",
+      "side": 1,
+      "message": "Probably because both `restrict` and `volatile` are C (and C++) keywords!",
+      "parentUuid": "0b3e52ff_5802a396",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 42
+      },
+      "revId": "9ea7e3907fa63ae38c50cc3fb860f4b77b6d6638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
