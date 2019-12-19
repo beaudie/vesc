@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2ba6ea0b_b8d129f0",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-19T17:52:35Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "8c6c8c74_a20e5e3b",
+      "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d344256_8e463a3f",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-12-19T15:56:45Z",
       "side": 1,
       "message": "Look for `getFeatures()` in this file and see how the workaround/feature system works. We need to add a workaround in `include/platform/FeaturesVk.h`, initialize it in `RendererVk::initFeatures` and use that here.\n\nI looked at the history, and this is an AMD/windows issue, so the workaround flag should also be limited to that particular configuration.",
+      "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de75ce17_9a83629f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-19T17:52:35Z",
+      "side": 1,
+      "message": "+1... we should also test this on a newer AMD card and see if the newer drivers still have the bug. If so we can report it to AMD.",
+      "parentUuid": "5d344256_8e463a3f",
       "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
