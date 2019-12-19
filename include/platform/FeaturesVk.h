@@ -212,6 +212,14 @@ struct FeaturesVk : FeatureSetBase
         "Some shader compilers don't support sampler arrays as parameters, so revert to old "
         "RewriteStructSamplers behavior, which produces fewer.",
         &members, "http://anglebug.com/2703"};
+
+    // AMD on Windows has a weird behavior when we edge toward using the maximum number of varyings
+    // and can often crash.
+    Feature avoidMaxVaryingsUse = {
+        "avoid_max_varyings_use", FeatureCategory::VulkanWorkarounds,
+        "AMD on Windows can crash when we edge toward using the maximum number of varyings, so "
+        "prevent using the maximum amount.",
+        &members, "http://anglebug.com/2483"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
