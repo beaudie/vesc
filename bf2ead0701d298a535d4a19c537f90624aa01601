@@ -49,6 +49,53 @@
     },
     {
       "key": {
+        "uuid": "bf70594b_d09471d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-12-19T17:53:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13ef419f_7f296390",
+      "range": {
+        "startLine": 169,
+        "startChar": 82,
+        "endLine": 169,
+        "endChar": 92
+      },
+      "revId": "bf2ead0701d298a535d4a19c537f90624aa01601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "374ef8db_a553d749",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-12-19T17:53:55Z",
+      "side": 1,
+      "message": "Turns out, doing this causes the following end2end tests to fail with SwiftShader:\n\n- TextureMultisampleTest.MaxIntegerSamples/ES3_1_Vulkan_SwiftShader\n- RenderbufferMultisampleTest.IntegerInternalformat/ES3_1_Vulkan_SwiftShader\n\nThis is because SwiftShader only supports a sample count for 1 for integer formats (all that\u0027s required for Vulkan 1.1).",
+      "range": {
+        "startLine": 171,
+        "startChar": 81,
+        "endLine": 171,
+        "endChar": 94
+      },
+      "revId": "bf2ead0701d298a535d4a19c537f90624aa01601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "553c9e8f_2ada5aa0",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 1
@@ -93,6 +140,30 @@
       "revId": "bf2ead0701d298a535d4a19c537f90624aa01601",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf580715_0aeb7c04",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-12-19T17:53:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71fae1c9_c00ad028",
+      "range": {
+        "startLine": 870,
+        "startChar": 42,
+        "endLine": 870,
+        "endChar": 54
+      },
+      "revId": "bf2ead0701d298a535d4a19c537f90624aa01601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
