@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "bbe36ebb_3bed91dc",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-19T05:19:34Z",
+      "side": 1,
+      "message": "Definitely a minor issue, so no big deal, but my point was to simply hoist this into the `if (format !\u003d override_format)` and everything can remain the same. Something like:\n\n    GLenum overrideRenderTargetFormat \u003d mState.config-\u003erenderTargetFormat;\n\n    if (!gl::ColorspaceFormatOverride(mGLColorspace, overrideRenderTargetFormat))\n        return egl::EglBadMatch();\n\n    // If an override is required update mState.config as well\n    if (mState.config-\u003erenderTargetFormat !\u003d overrideRenderTargetFormat)\n    {\n        egl::Config overrideConfig \u003d *(mState.config);\n        overrideConfig.renderTargetFormat \u003d overrideRenderTargetFormat;\n\n        delete mState.config;\n        mState.config \u003d new egl::Config(overrideConfig);\n\n        mColorFormat \u003d gl::Format(mState.config-\u003erenderTargetFormat);\n        mDSFormat    \u003d gl::Format(mState.config-\u003edepthStencilFormat);\n    }",
+      "parentUuid": "81391984_1fdaf702",
+      "revId": "046fc9cd8fdd9fe718a7b7fabe68c6877c1da111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30f25d33_aeea43df",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.h",
         "patchSetId": 5
