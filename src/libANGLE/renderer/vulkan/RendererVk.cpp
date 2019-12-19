@@ -1431,8 +1431,9 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
     ANGLE_FEATURE_CONDITION((&mFeatures), perFrameWindowSizeQuery,
                             isIntel || (IsWindows() && isAMD));
 
-    // Disabled on AMD/windows due to buggy behavior.
+    // Workaround buggy behavior on AMD/windows.
     ANGLE_FEATURE_CONDITION((&mFeatures), disallowSeamfulCubeMapEmulation, IsWindows() && isAMD);
+    ANGLE_FEATURE_CONDITION((&mFeatures), avoidMaxVaryingsUse, IsWindows() && isAMD);
 
     ANGLE_FEATURE_CONDITION((&mFeatures), forceD16TexFilter, IsAndroid() && isQualcomm);
 

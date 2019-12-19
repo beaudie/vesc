@@ -14,6 +14,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/formatutils.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "vk_format_utils.h"
@@ -421,14 +422,16 @@ void RendererVk::ensureCapsInitialized() const
     // The gles2.0 section 2.10 states that "gl_Position is not a varying variable and does
     // not count against this limit.", but the Vulkan spec has no such mention in its Built-in
     // vars section. It is implicit that we need to actually reserve it for Vulkan in that case.
-    //
-    // Note: AMD has a weird behavior when we edge toward the maximum number of varyings and can
-    // often crash. Reserving an additional varying just for them bringing the total to 2.
-    constexpr GLint kReservedVaryingCount = 2;
-    mNativeCaps.maxVaryingVectors =
-        LimitToInt((limitsVk.maxVertexOutputComponents / 4) - kReservedVaryingCount);
-    mNativeCaps.maxVertexOutputComponents =
-        LimitToInt(static_cast<uint32_t>(mNativeCaps.maxVaryingVectors * 4));
+    GLint reservedVaryingVectorCount = 1;
+    if (getFeatures().avoidMaxVaryingsUse.enabled)
+    {
+        // Reserving an additional varying to avoid using the maximum amount.
+        reservedVaryingVectorCount = 2;
+    }
+
+    mNativeCaps.maxVaryingVectors = LimitToInt(
+        (limitsVk.maxVertexOutputComponents / kComponentsPerVector) - reservedVaryingVectorCount);
+    mNativeCaps.maxVertexOutputComponents = LimitToInt(limitsVk.maxVertexOutputComponents);
 
     mNativeCaps.maxTransformFeedbackInterleavedComponents =
         gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS;
