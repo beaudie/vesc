@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9297a6e6_8b978520",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-19T05:21:30Z",
+      "side": 1,
+      "message": "Sorry I missed this before, but per our style guide, please use pointers (instead of references) to output through function arguments.",
+      "range": {
+        "startLine": 76,
+        "startChar": 76,
+        "endLine": 76,
+        "endChar": 77
+      },
+      "revId": "0d1951ddf010764eb24c9aab7f5b29c725b66ba9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

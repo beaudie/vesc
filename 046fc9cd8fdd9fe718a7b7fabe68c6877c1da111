@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "348dcb8d_3adc94fd",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-19T05:21:30Z",
+      "side": 1,
+      "message": "Ah, looks like Jeff already did that exactly",
+      "parentUuid": "bbe36ebb_3bed91dc",
+      "revId": "046fc9cd8fdd9fe718a7b7fabe68c6877c1da111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30f25d33_aeea43df",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.h",
         "patchSetId": 5
