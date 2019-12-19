@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a538fdbb_7d8e1467",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-19T21:20:02Z",
+      "side": 1,
+      "message": "what\u0027s the plan to fulfill this TODO? maybe this TODO should move to the Vulkan back-end. seems like the default init should remain EGL_FALSE.",
+      "range": {
+        "startLine": 64,
+        "startChar": 36,
+        "endLine": 64,
+        "endChar": 69
+      },
+      "revId": "e1f43f9d5ae3ab395db35cd98cb43ae006e76acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c45a4c42_f255d8e2",
+        "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-19T21:20:02Z",
+      "side": 1,
+      "message": "nit: we don\u0027t use yoda conditions. can you rephrase with the EGL_TRUE as the RHS?",
+      "range": {
+        "startLine": 57,
+        "startChar": 12,
+        "endLine": 57,
+        "endChar": 83
+      },
+      "revId": "e1f43f9d5ae3ab395db35cd98cb43ae006e76acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23d106bf_3eaae6a9",
+        "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-19T21:20:02Z",
+      "side": 1,
+      "message": "nit: our tests should pretty much be silent and have no output on success. I know we added some white box tests that dump info. the standard should be zero output. can you update this test to have no output on success?",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 27
+      },
+      "revId": "e1f43f9d5ae3ab395db35cd98cb43ae006e76acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be7e85ff_d45ad31b",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-19T21:20:02Z",
+      "side": 1,
+      "message": "small nit, but this static use isn\u0027t usually how we do angle tests. if you want to ensure these function name symbols are kept private you can wrap pretty much the whole test in an anonymous namespace.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 7
+      },
+      "revId": "e1f43f9d5ae3ab395db35cd98cb43ae006e76acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
