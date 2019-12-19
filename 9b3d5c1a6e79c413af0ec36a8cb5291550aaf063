@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c6c8c74_a20e5e3b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-19T15:56:45Z",
+      "side": 1,
+      "message": "Can you please make this a split change?",
+      "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d344256_8e463a3f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-19T15:56:45Z",
+      "side": 1,
+      "message": "Look for `getFeatures()` in this file and see how the workaround/feature system works. We need to add a workaround in `include/platform/FeaturesVk.h`, initialize it in `RendererVk::initFeatures` and use that here.\n\nI looked at the history, and this is an AMD/windows issue, so the workaround flag should also be limited to that particular configuration.",
+      "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
