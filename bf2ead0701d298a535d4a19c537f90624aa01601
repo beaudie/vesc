@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8592faea_bd9c0675",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-19T04:55:23Z",
+      "side": 1,
+      "message": "// Relevant comment\n    constexpr unsigned int kAllButSingleSample \u003d ~VK_SAMPLE_COUNT_1_BIT;\n\nAnd use that. (Could use a better name)",
+      "range": {
+        "startLine": 169,
+        "startChar": 82,
+        "endLine": 169,
+        "endChar": 92
+      },
+      "revId": "bf2ead0701d298a535d4a19c537f90624aa01601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "553c9e8f_2ada5aa0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-19T04:55:23Z",
+      "side": 1,
+      "message": "Suggest `\u0026 ~VK_SAMPLE_COUNT_1_BIT` to avoid the `if`. Same for other three.",
+      "range": {
+        "startLine": 870,
+        "startChar": 42,
+        "endLine": 870,
+        "endChar": 54
+      },
+      "revId": "bf2ead0701d298a535d4a19c537f90624aa01601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
