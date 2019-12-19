@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b65c611d_80df6323",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2019-12-19T13:44:56Z",
+      "side": 1,
+      "message": "IOSurfaceLock/IOSurfaceUnlock is required around any call to IOSurfaceGetBaseAddress. Just look at the ClientBuffer class in SwiftShader for a simple example of how to do this:\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/swiftshader/src/OpenGL/common/Image.cpp;l\u003d1166",
+      "range": {
+        "startLine": 117,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 31
+      },
+      "revId": "78e8553eae756a8116db32ceb2a9edb2b8bfa581",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
