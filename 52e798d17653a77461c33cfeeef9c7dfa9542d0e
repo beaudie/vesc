@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4028106e_01f00b60",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1386099
+      },
+      "writtenOn": "2019-12-19T08:31:36Z",
+      "side": 1,
+      "message": "Intel, ImgTec, Vivante, VeriSilicon and Kazan were already out of order, which is why I assumed they weren\u0027t actually sorted. I\u0027ve hopefully sorted them all correctly now.",
+      "parentUuid": "0e3e45ec_9f46060c",
+      "range": {
+        "startLine": 48,
+        "startChar": 13,
+        "endLine": 48,
+        "endChar": 31
+      },
+      "revId": "52e798d17653a77461c33cfeeef9c7dfa9542d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3e821831_e292791c",
         "filename": "src/gpu_info_util/SystemInfo.h",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "50093f6b_f5c27cec",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1386099
+      },
+      "writtenOn": "2019-12-19T08:31:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e821831_e292791c",
+      "range": {
+        "startLine": 90,
+        "startChar": 19,
+        "endLine": 90,
+        "endChar": 38
+      },
+      "revId": "52e798d17653a77461c33cfeeef9c7dfa9542d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5ed0208_6fd3cd19",
         "filename": "src/gpu_info_util/SystemInfo_android.cpp",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2019-12-18T17:32:47Z",
       "side": 1,
       "message": "same nit",
+      "range": {
+        "startLine": 247,
+        "startChar": 17,
+        "endLine": 247,
+        "endChar": 35
+      },
+      "revId": "52e798d17653a77461c33cfeeef9c7dfa9542d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bdc7f81_19afc77f",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1386099
+      },
+      "writtenOn": "2019-12-19T08:31:36Z",
+      "side": 1,
+      "message": "I\u0027ve ordered them all now.",
+      "parentUuid": "f5ed0208_6fd3cd19",
       "range": {
         "startLine": 247,
         "startChar": 17,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "82dd7a6b_5e9de0bc",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1386099
+      },
+      "writtenOn": "2019-12-19T08:31:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dae7316_dbff5cd7",
+      "range": {
+        "startLine": 147,
+        "startChar": 13,
+        "endLine": 147,
+        "endChar": 31
+      },
+      "revId": "52e798d17653a77461c33cfeeef9c7dfa9542d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ac0df56_f2214743",
         "filename": "src/libANGLE/renderer/driver_utils.h",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2019-12-18T16:00:00Z",
       "side": 1,
       "message": "micro nit: I\u0027d use \"their\" instead of \"our\". This is public code, and to the reader Broadcom is likely somebody else.",
+      "range": {
+        "startLine": 29,
+        "startChar": 51,
+        "endLine": 29,
+        "endChar": 54
+      },
+      "revId": "52e798d17653a77461c33cfeeef9c7dfa9542d0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ab3a8d4_0b326836",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1386099
+      },
+      "writtenOn": "2019-12-19T08:31:36Z",
+      "side": 1,
+      "message": "Done. Also sorted the vendor names.",
+      "parentUuid": "8ac0df56_f2214743",
       "range": {
         "startLine": 29,
         "startChar": 51,
