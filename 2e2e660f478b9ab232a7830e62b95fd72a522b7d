@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a624c54_5032ad14",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-20T15:58:34Z",
+      "side": 1,
+      "message": "Can you point to where this is documented in the comment?  It would also be good to see tests for this to ensure it\u0027s all done correctly, and to show some usage examples.  Although since it clearly being used extensively in the rest of the CL, maybe tests are overkill.",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 11
+      },
+      "revId": "2e2e660f478b9ab232a7830e62b95fd72a522b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c1a3f1d_fc6d22c2",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-20T15:58:34Z",
+      "side": 1,
+      "message": "Shouldn\u0027t first and last be returning elements of the span, not a new span?",
+      "range": {
+        "startLine": 183,
+        "startChar": 20,
+        "endLine": 183,
+        "endChar": 25
+      },
+      "revId": "2e2e660f478b9ab232a7830e62b95fd72a522b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
