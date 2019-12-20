@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9d21fdd_13dd0db1",
+        "filename": "src/libANGLE/Config.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T20:10:21Z",
+      "side": 1,
+      "message": "Super nit: we wrap at 100 columns, not 80.",
+      "range": {
+        "startLine": 73,
+        "startChar": 35,
+        "endLine": 76,
+        "endChar": 63
+      },
+      "revId": "281e2c118123151e3171e2a9066b41939831e084",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74a9d46d_7e101988",
+        "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T20:10:21Z",
+      "side": 1,
+      "message": "Is this normal? Should we ASSERT_EQ(configs.size(), count) instead?",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 26
+      },
+      "revId": "281e2c118123151e3171e2a9066b41939831e084",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13137426_a65096a6",
+        "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T20:10:21Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 53,
+        "startChar": 28,
+        "endLine": 53,
+        "endChar": 30
+      },
+      "revId": "281e2c118123151e3171e2a9066b41939831e084",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bc02637_26b2aac6",
+        "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T20:10:21Z",
+      "side": 1,
+      "message": "Here it still is!",
+      "range": {
+        "startLine": 57,
+        "startChar": 12,
+        "endLine": 57,
+        "endChar": 23
+      },
+      "revId": "281e2c118123151e3171e2a9066b41939831e084",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8521a922_58fb3360",
+        "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T20:10:21Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 62,
+        "startChar": 28,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "281e2c118123151e3171e2a9066b41939831e084",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eda684e4_c14a4b9e",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T20:10:21Z",
+      "side": 1,
+      "message": "I second Jamie\u0027s comment to keep them where they were, and wrap them in an anonymous namespace:\n\n    namespace {\n    // Functions where they were before.\n    }  // anonymous namespace\n\nThat way, you wouldn\u0027t need to lower-case their first letter ;)",
+      "range": {
+        "startLine": 29,
+        "startChar": 36,
+        "endLine": 29,
+        "endChar": 37
+      },
+      "revId": "281e2c118123151e3171e2a9066b41939831e084",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

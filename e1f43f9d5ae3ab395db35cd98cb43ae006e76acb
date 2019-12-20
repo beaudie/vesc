@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "9540f086_65c28d8c",
+        "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T20:10:21Z",
+      "side": 1,
+      "message": "Compilers now warn about `if (x \u003d y)` so there\u0027s really no benefit to putting the constant on the lhs.",
+      "parentUuid": "c11e23c5_e5f817c0",
+      "range": {
+        "startLine": 57,
+        "startChar": 12,
+        "endLine": 57,
+        "endChar": 83
+      },
+      "revId": "e1f43f9d5ae3ab395db35cd98cb43ae006e76acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23d106bf_3eaae6a9",
         "filename": "src/tests/egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
         "patchSetId": 4
