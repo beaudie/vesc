@@ -2330,6 +2330,22 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                     UNREACHABLE();
             }
         }
+        if (storageFormat.id == angle::FormatID::D32_FLOAT)
+        {
+            outputRowPitch = sizeof(float) * glExtents.width;
+
+            switch (type)
+            {
+                case GL_UNSIGNED_INT:
+                    loadFunctionInfo.loadFunction = angle::LoadD32ToD32F;
+                    break;
+                case GL_UNSIGNED_INT_24_8_OES:
+                    loadFunctionInfo.loadFunction = angle::LoadD24S8ToD32F;
+                    break;
+                default:
+                    UNREACHABLE();
+            }
+        }
         else
         {
             outputRowPitch = storageFormat.pixelBytes * glExtents.width;
