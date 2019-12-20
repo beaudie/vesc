@@ -46,6 +46,30 @@
       "revId": "fb0889d9d9f06bef4ebd1b70ce3842225758b0aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f106b913_9b615754",
+        "filename": "src/tests/deqp_support/deqp_data_autogen.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-20T23:10:34Z",
+      "side": 1,
+      "message": "Do you know what script was giving you trouble? It should pretty much be contained to python, gn, etc, and not be reliant on the shell environment.",
+      "parentUuid": "b7988e82_202f0e62",
+      "range": {
+        "startLine": 295,
+        "startChar": 36,
+        "endLine": 295,
+        "endChar": 37
+      },
+      "revId": "fb0889d9d9f06bef4ebd1b70ce3842225758b0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
