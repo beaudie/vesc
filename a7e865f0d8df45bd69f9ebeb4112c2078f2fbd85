@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "0efe63af_f9e36c89",
+        "filename": "src/compiler/translator/StaticType.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T21:20:01Z",
+      "side": 1,
+      "message": "They are asserted below in comment marked with Reference.\n\nI can\u0027t ASSERT here, as that makes the function not constexpr. The caller static_asserts.",
+      "parentUuid": "4cfdf22d_5b3d0a01",
+      "range": {
+        "startLine": 59,
+        "startChar": 39,
+        "endLine": 59,
+        "endChar": 48
+      },
+      "revId": "a7e865f0d8df45bd69f9ebeb4112c2078f2fbd85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "43d79629_3a1b1356",
+        "filename": "src/compiler/translator/StaticType.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T21:20:01Z",
+      "side": 1,
+      "message": "Reference*",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 100
+      },
+      "revId": "a7e865f0d8df45bd69f9ebeb4112c2078f2fbd85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a66ece2c_a70ec7cc",
         "filename": "src/compiler/translator/SymbolTable_autogen.cpp",
         "patchSetId": 4
@@ -36,6 +83,30 @@
       "writtenOn": "2019-12-20T18:25:00Z",
       "side": 1,
       "message": "This doesn\u0027t look right.  What does the \"2\" represent here?  Is there any precedent in here for putting the size before the type?  Could this instead be IntArray4 or something similar that keeps the type first?",
+      "range": {
+        "startLine": 1330,
+        "startChar": 82,
+        "endLine": 1330,
+        "endChar": 88
+      },
+      "revId": "a7e865f0d8df45bd69f9ebeb4112c2078f2fbd85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73af46c6_f000f849",
+        "filename": "src/compiler/translator/SymbolTable_autogen.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T21:20:01Z",
+      "side": 1,
+      "message": "The function takes vec2[4]. Int2 means the elements are ivec2. I added 4x before as a way to say there are 4x ivec2s (i.e. an array of size 4). (Can\u0027t put after FYI, as it gets mistaken with matrix types).\n\nIt could be Int2Array4 if that helps. I figured this would be clear, like when you say \"we need 4x screws and 2x nuts\", we need 4x Int2s here :D\n\nDo you still want the name changed?",
+      "parentUuid": "a66ece2c_a70ec7cc",
       "range": {
         "startLine": 1330,
         "startChar": 82,
