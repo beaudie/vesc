@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a72b4688_6bad340a",
+        "filename": "src/tests/gl_tests/RenderbufferMultisampleTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T20:14:31Z",
+      "side": 1,
+      "message": "Can you revert this and SKIP if swiftshader inside the test itself? There are only two of them (and looks like only one is integer).",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 38
+      },
+      "revId": "e13e5e9bf716fa6063238dee5c0ca32b462519a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
