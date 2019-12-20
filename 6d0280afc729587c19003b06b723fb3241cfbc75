@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40808665_5749dec4",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-20T22:17:11Z",
+      "side": 1,
+      "message": "This should have curly braces even for single line entries.",
+      "range": {
+        "startLine": 160,
+        "startChar": 8,
+        "endLine": 160,
+        "endChar": 34
+      },
+      "revId": "6d0280afc729587c19003b06b723fb3241cfbc75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fd3e97f_61d77bb2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-20T22:17:11Z",
+      "side": 1,
+      "message": "Go ahead and break up the ternary operator:\n\nif (result \u003d\u003d angle::Result::Incomplete)\n{ \n    return angle::ToEGL(result, displayVk, EGL_BAD_MATCH);\n}\nelse\n{\n    return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);\n}",
+      "range": {
+        "startLine": 460,
+        "startChar": 11,
+        "endLine": 460,
+        "endChar": 48
+      },
+      "revId": "6d0280afc729587c19003b06b723fb3241cfbc75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
