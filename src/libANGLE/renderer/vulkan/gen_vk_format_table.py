@@ -151,11 +151,11 @@ def gen_format_case(angle, internal_format, vk_json_data):
 
     def get_formats(format, type):
         format = vk_overrides.get(format, {}).get(type, format)
-        if format not in vk_map:
-            return []
         fallbacks = vk_fallbacks.get(format, {}).get(type, [])
         if not isinstance(fallbacks, list):
             fallbacks = [fallbacks]
+        if format not in vk_map:
+            return fallbacks
         return [format] + fallbacks
 
     def image_args(format):
