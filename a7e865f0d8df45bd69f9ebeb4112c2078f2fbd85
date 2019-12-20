@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cfdf22d_5b3d0a01",
+        "filename": "src/compiler/translator/StaticType.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-20T18:25:00Z",
+      "side": 1,
+      "message": "Could enforce with an assert that arraySizes[0] \u003c 10 and numArraySizes \u003d\u003d 1",
+      "range": {
+        "startLine": 59,
+        "startChar": 39,
+        "endLine": 59,
+        "endChar": 48
+      },
+      "revId": "a7e865f0d8df45bd69f9ebeb4112c2078f2fbd85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a66ece2c_a70ec7cc",
+        "filename": "src/compiler/translator/SymbolTable_autogen.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-20T18:25:00Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right.  What does the \"2\" represent here?  Is there any precedent in here for putting the size before the type?  Could this instead be IntArray4 or something similar that keeps the type first?",
+      "range": {
+        "startLine": 1330,
+        "startChar": 82,
+        "endLine": 1330,
+        "endChar": 88
+      },
+      "revId": "a7e865f0d8df45bd69f9ebeb4112c2078f2fbd85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc2875db_3f3c1229",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-20T18:25:00Z",
+      "side": 1,
+      "message": "Excellent.",
+      "revId": "a7e865f0d8df45bd69f9ebeb4112c2078f2fbd85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
