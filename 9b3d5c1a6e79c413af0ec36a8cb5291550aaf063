@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "75c966db_83029cd3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T15:40:40Z",
+      "side": 1,
+      "message": "It _could_ be part of the change, though I feel it\u0027s quite an independent fix (that is, this is a generic bug in the ANGLE frontend, the other change is a separate bug in the Vulkan backend).\n\nBeing in a separate commit makes it easier to bisect if either change causes a regression, and makes it easier to only revert the specific change if it turned out to be troublesome.\n\nMy personal rule of thumb is, if the change says \"It does X. It also does Y\", probably the \"also\" part should be a separate change, unless the two changes don\u0027t make sense (or work) without the other.",
+      "parentUuid": "11ce66a9_19ca2dff",
+      "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d344256_8e463a3f",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1

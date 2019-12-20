@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e19cabe1_828519a3",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T15:40:40Z",
+      "side": 1,
+      "message": "These strings can show up in chrome://gpu. We made an effort a while back to not mention the specific condition that triggers the workaround, to avoid bitrot if the workaround starts getting used in other configurations. You can change this to just say \"Some drivers\". The comment above can still say AMD on Windows though, so readers of the code have some idea of where they could expect trouble.",
+      "range": {
+        "startLine": 220,
+        "startChar": 9,
+        "endLine": 220,
+        "endChar": 23
+      },
+      "revId": "e35cf72cd94dc3d7f503d99ee835cb8c0b215b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
