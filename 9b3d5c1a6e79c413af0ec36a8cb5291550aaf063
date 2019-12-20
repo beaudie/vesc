@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "178b0980_dc3a3369",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1386099
+      },
+      "writtenOn": "2019-12-20T08:42:03Z",
+      "side": 1,
+      "message": "Can you please explain why this shouldn\u0027t be a part of this change?\n\nThe change is fixing up errant varying limits, of which this is part. I\u0027m not seeing the obvious value in it being a separate change. I\u0027m happy to do so, I\u0027m just trying to understand the reasoning so I don\u0027t fall into the same trap again.",
+      "parentUuid": "2ba6ea0b_b8d129f0",
+      "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d344256_8e463a3f",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "+1... we should also test this on a newer AMD card and see if the newer drivers still have the bug. If so we can report it to AMD.",
       "parentUuid": "5d344256_8e463a3f",
+      "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c25779cd_759420ca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1386099
+      },
+      "writtenOn": "2019-12-20T08:42:03Z",
+      "side": 1,
+      "message": "I copied this idiom from RendererVk::getRendererDescription().\nI\u0027ll take a look at the alternative you are suggesting.",
+      "parentUuid": "de75ce17_9a83629f",
       "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
