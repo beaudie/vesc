@@ -1032,7 +1032,20 @@ TEST_P(TextureMultisampleArrayWebGLTest, IntegerTexelFetch)
     }
 }
 
-ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(TextureMultisampleTest);
+// TODO(ianelliott): re-enable 3.1 test on top of SwiftShader once http://anglebug.com/4197 is
+// resolved (i.e. once SwiftShader supports more than a sample count of 1 for integer formats).
+//
+//ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(TextureMultisampleTest);
+ANGLE_INSTANTIATE_TEST(TextureMultisampleTest,
+                       ES3_OPENGL(),
+                       ES3_OPENGLES(),
+                       ES3_D3D11(),
+                       ES3_VULKAN(),
+                       ES3_VULKAN_SWIFTSHADER(),
+                       ES31_OPENGL(),
+                       ES31_OPENGLES(),
+                       ES31_D3D11(),
+                       ES31_VULKAN());
 ANGLE_INSTANTIATE_TEST_ES3(NegativeTextureMultisampleTest);
 ANGLE_INSTANTIATE_TEST_ES31(TextureMultisampleArrayWebGLTest);
 }  // anonymous namespace

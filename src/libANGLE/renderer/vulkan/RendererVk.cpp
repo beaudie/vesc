@@ -1267,6 +1267,16 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
         maxVersion = std::min(maxVersion, gl::Version(3, 0));
     }
 
+    // ES3.1 requires multisample support for integer internal-formats, with a minimum sample count
+    // of at least 1.  That requires the Vulkan driver to support a value greater than 1 for
+    // sampledImageIntegerSampleCounts, since the Vulkan back-end filters out sample counts of 1
+    // (due to a Vulkan specifcation limitation).  If the Vulkan implementation only supports the
+    // minimum-required value of 1, we cannot support 3.1.
+    if (mPhysicalDeviceProperties.limits.sampledImageIntegerSampleCounts < 2)
+    {
+        maxVersion = std::min(maxVersion, gl::Version(3, 0));
+    }
+
     // Limit to ES2.0 if there are any blockers for 3.0.
     // TODO: http://anglebug.com/3972 Limit to GLES 2.0 if flat shading can't be emulated
 
