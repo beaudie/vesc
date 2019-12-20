@@ -105,6 +105,24 @@
       "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39daacc5_4c1604f3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1386099
+      },
+      "writtenOn": "2019-12-20T08:47:35Z",
+      "side": 1,
+      "message": "\u003e I looked at the history, and this is an AMD/windows issue\n\nDo you have an issue number that I can reference in the code?",
+      "parentUuid": "c25779cd_759420ca",
+      "revId": "9b3d5c1a6e79c413af0ec36a8cb5291550aaf063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
