@@ -94,6 +94,30 @@
       "revId": "fb0889d9d9f06bef4ebd1b70ce3842225758b0aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74819105_3c9dab1b",
+        "filename": "src/tests/deqp_support/deqp_data_autogen.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-20T23:12:58Z",
+      "side": 1,
+      "message": "What happens?",
+      "parentUuid": "99aa3d7e_095a6223",
+      "range": {
+        "startLine": 295,
+        "startChar": 36,
+        "endLine": 295,
+        "endChar": 37
+      },
+      "revId": "fb0889d9d9f06bef4ebd1b70ce3842225758b0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
