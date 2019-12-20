@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "4a7c1486_568e3f4c",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-20T22:55:54Z",
+      "side": 1,
+      "message": "Thanks for remembering to update this!",
+      "revId": "49a84edb3fbc0cbf69b5a2f1cd58f49ea86360de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6526455c_670ca63b",
         "filename": "include/platform/FeaturesD3D.h",
         "patchSetId": 32
@@ -25,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "29d1e1d7_6a2190eb",
+        "filename": "include/platform/FeaturesD3D.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-20T22:55:54Z",
+      "side": 1,
+      "message": "It\u0027s a good point that most of the time positive boolean expressions are easier to read, but in this case the default behavior of the shader translator for the D3D11 backend should be to try to translate large uniform blocks as StructuredBuffer. Most of the other shader translator flags are only enabled in limited situations, rather than globally except for a small number of users. Let\u0027s leave this as is for now, and consider reversing the sense of the feature and shader translator flag later.",
+      "parentUuid": "6526455c_670ca63b",
+      "range": {
+        "startLine": 213,
+        "startChar": 12,
+        "endLine": 213,
+        "endChar": 55
+      },
+      "revId": "49a84edb3fbc0cbf69b5a2f1cd58f49ea86360de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23cafa22_52eeed9c",
         "filename": "include/platform/FeaturesD3D.h",
         "patchSetId": 32
@@ -41,6 +82,76 @@
         "startChar": 70,
         "endLine": 216,
         "endChar": 15
+      },
+      "revId": "49a84edb3fbc0cbf69b5a2f1cd58f49ea86360de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12b97809_fcdfdea5",
+        "filename": "include/platform/FeaturesD3D.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-20T22:55:54Z",
+      "side": 1,
+      "message": "Agree.",
+      "parentUuid": "23cafa22_52eeed9c",
+      "range": {
+        "startLine": 215,
+        "startChar": 70,
+        "endLine": 216,
+        "endChar": 15
+      },
+      "revId": "49a84edb3fbc0cbf69b5a2f1cd58f49ea86360de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c3742b3_9db309cd",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-20T22:55:54Z",
+      "side": 1,
+      "message": "Could you please add a comment after this TODO? What is the action to take to address it?",
+      "range": {
+        "startLine": 659,
+        "startChar": 25,
+        "endLine": 659,
+        "endChar": 28
+      },
+      "revId": "49a84edb3fbc0cbf69b5a2f1cd58f49ea86360de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9daaf2e8_2439de96",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-20T22:55:54Z",
+      "side": 1,
+      "message": "Could you please add a comment after this TODO? What is the action to take to address it?",
+      "range": {
+        "startLine": 857,
+        "startChar": 12,
+        "endLine": 857,
+        "endChar": 29
       },
       "revId": "49a84edb3fbc0cbf69b5a2f1cd58f49ea86360de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
