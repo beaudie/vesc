@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "04a8de56_ff38f960",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-20T22:35:08Z",
+      "side": 1,
+      "message": "Yes, that\u0027s the site that pops up for me too, but better to reference it directly so we\u0027re all on the same page. :)",
+      "parentUuid": "29323f3e_50940f19",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 11
+      },
+      "revId": "2e2e660f478b9ab232a7830e62b95fd72a522b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c1a3f1d_fc6d22c2",
         "filename": "src/compiler/translator/Common.h",
         "patchSetId": 6
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "https://en.cppreference.com/w/cpp/container/span/first\nhttps://en.cppreference.com/w/cpp/container/span/last\n\nWhat you are thinking of are `front()` and `back()`.",
       "parentUuid": "7c1a3f1d_fc6d22c2",
+      "range": {
+        "startLine": 183,
+        "startChar": 20,
+        "endLine": 183,
+        "endChar": 25
+      },
+      "revId": "2e2e660f478b9ab232a7830e62b95fd72a522b7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "547d13fa_726569ca",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-12-20T22:35:08Z",
+      "side": 1,
+      "message": "You\u0027re right, I misread the function names.",
+      "parentUuid": "5e0dfa91_a344d28a",
       "range": {
         "startLine": 183,
         "startChar": 20,
