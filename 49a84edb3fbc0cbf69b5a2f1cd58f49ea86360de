@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6526455c_670ca63b",
+        "filename": "include/platform/FeaturesD3D.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T19:46:03Z",
+      "side": 1,
+      "message": "No big deal, but usually \"positive\" names make boolean expressions easier to follow. In this particular case, I would say that translating UBO to SB itself is the workaround, as it\u0027s working around an issue with FXC.\n\nMy suggestion is to make this \"translateLargeUniformBlocksToStructuredBuffer\" (or something along those lines), then enable it everywhere except AMD/windows. In the future, if we get a choice not to use FXC, it could also be conditioned to FXC.",
+      "range": {
+        "startLine": 213,
+        "startChar": 12,
+        "endLine": 213,
+        "endChar": 55
+      },
+      "revId": "49a84edb3fbc0cbf69b5a2f1cd58f49ea86360de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23cafa22_52eeed9c",
+        "filename": "include/platform/FeaturesD3D.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T19:46:03Z",
+      "side": 1,
+      "message": "You can just say \"some drivers\" in this public-facing string. That would avoid confusion if this workaround starts getting used elsewhere and the description is not updated.",
+      "range": {
+        "startLine": 215,
+        "startChar": 70,
+        "endLine": 216,
+        "endChar": 15
+      },
+      "revId": "49a84edb3fbc0cbf69b5a2f1cd58f49ea86360de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
