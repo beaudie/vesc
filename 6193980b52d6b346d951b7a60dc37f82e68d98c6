@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6eaa4ff9_2ddaff6d",
+        "filename": "src/compiler/translator/tree_ops/SimplifyLoopConditions.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T21:49:58Z",
+      "side": 1,
+      "message": "Can you add a comment on how we can reach here?",
+      "revId": "6193980b52d6b346d951b7a60dc37f82e68d98c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21934876_64c2b99a",
+        "filename": "src/compiler/translator/tree_ops/SimplifyLoopConditions.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T21:49:58Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we always ignore break (as was done before too?). The expression shouldn\u0027t be re-evaluated on break (it may have side-effects, so it\u0027s not harmless).\n\nAlso, have you thought about breaks that come from switch statements?",
+      "revId": "6193980b52d6b346d951b7a60dc37f82e68d98c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50654f32_a87afea7",
+        "filename": "src/compiler/translator/tree_ops/SimplifyLoopConditions.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T21:49:58Z",
+      "side": 1,
+      "message": "At the end of traverseLoop, there\u0027s this call:\n\n    // We traverse the body of the loop even if the loop is transformed.\n    if (node-\u003egetBody())\n        node-\u003egetBody()-\u003etraverse(this);\n\nShouldn\u0027t that already be enough? You might just want to keep a stack of `BranchFixupState`s, and in `visitBranch`, just use the top() of the stack. `mCurrentLoopDepth` could be eliminated in favor of the stack::size() and visitBranch can early out of the stack is empty.",
+      "revId": "6193980b52d6b346d951b7a60dc37f82e68d98c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a22d0806_ec810955",
+        "filename": "src/tests/compiler_tests/SimplifyLoopConditions_test.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T21:49:58Z",
+      "side": 1,
+      "message": "Stray whitespace",
+      "range": {
+        "startLine": 34,
+        "startChar": 22,
+        "endLine": 34,
+        "endChar": 23
+      },
+      "revId": "6193980b52d6b346d951b7a60dc37f82e68d98c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04e15aed_abfb8ea3",
+        "filename": "src/tests/compiler_tests/SimplifyLoopConditions_test.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-20T21:49:58Z",
+      "side": 1,
+      "message": "Could you add a test with nested ifs and a bit more complicated structure too?\n\nAnd another one with nested loops, each having a continue?\n\nAnd another with break?",
+      "revId": "6193980b52d6b346d951b7a60dc37f82e68d98c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
