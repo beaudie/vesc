@@ -114,6 +114,7 @@ VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &s
     : VertexArrayImpl(state),
       mCurrentArrayBufferHandles{},
       mCurrentArrayBufferOffsets{},
+      mCurrentArrayBufferAttribOffsets{},
       mCurrentArrayBuffers{},
       mCurrentElementArrayBufferOffset(0),
       mCurrentElementArrayBuffer(nullptr),
@@ -130,6 +131,7 @@ VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &s
 
     mCurrentArrayBufferHandles.fill(mTheNullBuffer.getBuffer().getHandle());
     mCurrentArrayBufferOffsets.fill(0);
+    mCurrentArrayBufferAttribOffsets.fill(0);
     mCurrentArrayBuffers.fill(&mTheNullBuffer);
 
     mDynamicVertexData.init(renderer, vk::kVertexBufferUsageFlags, vk::kVertexBufferAlignment,
@@ -552,7 +554,7 @@ void VertexArrayVk::updateActiveAttribInfo(ContextVk *contextVk)
 
         contextVk->onVertexAttributeChange(attribIndex, mCurrentArrayBufferStrides[attribIndex],
                                            binding.getDivisor(), attrib.format->id,
-                                           attrib.relativeOffset);
+                                           mCurrentArrayBufferAttribOffsets[attribIndex]);
     }
 }
 
@@ -562,12 +564,20 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                                              size_t attribIndex,
                                              bool bufferOnly)
 {
+    // Init backend VK vtx array buffer to null case
+    mCurrentArrayBuffers[attribIndex]             = &mTheNullBuffer;
+    mCurrentArrayBufferHandles[attribIndex]       = mTheNullBuffer.getBuffer().getHandle();
+    mCurrentArrayBufferOffsets[attribIndex]       = 0;
+    mCurrentArrayBufferAttribOffsets[attribIndex] = 0;
     if (attrib.enabled)
     {
         RendererVk *renderer           = contextVk->getRenderer();
         const vk::Format &vertexFormat = renderer->getFormat(attrib.format->id);
 
         GLuint stride;
+        // Init attribute offset to the front-end value
+        mCurrentArrayBufferAttribOffsets[attribIndex] = attrib.relativeOffset;
+
         bool anyVertexBufferConvertedOnGpu = false;
         gl::Buffer *bufferGL               = binding.getBuffer().get();
         // Emulated and/or client-side attribs will be streamed
@@ -614,35 +624,23 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                 mCurrentArrayBuffers[attribIndex]       = bufferHelper;
                 mCurrentArrayBufferHandles[attribIndex] = bufferHelper->getBuffer().getHandle();
                 mCurrentArrayBufferOffsets[attribIndex] = conversion->lastAllocationOffset;
+                // Converted attribs are packed in their own VK buffer so offset is zero
+                mCurrentArrayBufferAttribOffsets[attribIndex] = 0;
 
                 // Converted buffer is tightly packed
                 stride = vertexFormat.actualBufferFormat().pixelBytes;
             }
-            else
+            else if (bufferVk->getSize() != 0)
             {
-                if (bufferVk->getSize() == 0)
-                {
-                    mCurrentArrayBuffers[attribIndex] = &mTheNullBuffer;
-                    mCurrentArrayBufferHandles[attribIndex] =
-                        mTheNullBuffer.getBuffer().getHandle();
-                    mCurrentArrayBufferOffsets[attribIndex] = 0;
-                    stride                                  = 0;
-                }
-                else
-                {
-                    vk::BufferHelper &bufferHelper          = bufferVk->getBuffer();
-                    mCurrentArrayBuffers[attribIndex]       = &bufferHelper;
-                    mCurrentArrayBufferHandles[attribIndex] = bufferHelper.getBuffer().getHandle();
-                    mCurrentArrayBufferOffsets[attribIndex] = binding.getOffset();
-                    stride                                  = binding.getStride();
-                }
+                vk::BufferHelper &bufferHelper          = bufferVk->getBuffer();
+                mCurrentArrayBuffers[attribIndex]       = &bufferHelper;
+                mCurrentArrayBufferHandles[attribIndex] = bufferHelper.getBuffer().getHandle();
+                mCurrentArrayBufferOffsets[attribIndex] = binding.getOffset();
+                stride                                  = binding.getStride();
             }
         }
         else
         {
-            mCurrentArrayBuffers[attribIndex]       = &mTheNullBuffer;
-            mCurrentArrayBufferHandles[attribIndex] = mTheNullBuffer.getBuffer().getHandle();
-            mCurrentArrayBufferOffsets[attribIndex] = 0;
             // Client side buffer will be transfered to a tightly packed buffer later
             stride = vertexFormat.actualBufferFormat().pixelBytes;
         }
@@ -654,7 +652,8 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         else
         {
             contextVk->onVertexAttributeChange(attribIndex, stride, binding.getDivisor(),
-                                               attrib.format->id, attrib.relativeOffset);
+                                               attrib.format->id,
+                                               mCurrentArrayBufferAttribOffsets[attribIndex]);
             // Cache the stride of the attribute
             mCurrentArrayBufferStrides[attribIndex] = stride;
         }
@@ -668,13 +667,6 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
     else
     {
         contextVk->invalidateDefaultAttribute(attribIndex);
-
-        // These will be filled out by the ContextVk.
-        mCurrentArrayBuffers[attribIndex]       = &mTheNullBuffer;
-        mCurrentArrayBufferHandles[attribIndex] = mTheNullBuffer.getBuffer().getHandle();
-        mCurrentArrayBufferOffsets[attribIndex] = 0;
-        mCurrentArrayBufferStrides[attribIndex] = 0;
-
         setDefaultPackedInput(contextVk, attribIndex);
     }
 
