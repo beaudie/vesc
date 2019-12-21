@@ -443,6 +443,9 @@ std::string GenerateTransformFeedbackVaryingOutput(const gl::TransformFeedbackVa
         {
             for (int row = 0; row < info.rowCount; ++row)
             {
+                // http://anglebug.com/4236: Need to account for instanced draws here
+                //   Can do this by adding "gl_InstanceIndex * <num_vertices_per_draw> * stride"
+                //   to the offset below. Need to figure out how to get num vertices per draw here
                 result << "xfbOut" << bufferIndex << "[ANGLEUniforms.xfbBufferOffsets["
                        << bufferIndex << "] + gl_VertexIndex * " << stride << " + " << offset
                        << "] = " << info.glslAsFloat << "(" << varying.mappedName;
