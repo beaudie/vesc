@@ -714,6 +714,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     // not yet ubiquitous, which would have otherwise removed the need for this value to be passed
     // as a uniform.
     GLint mXfbBaseVertex;
+    // For each draw, update the number of vertices being draw. This is used in transform/feedback
+    //  to correctly offset output when performing an instanced draw
+    GLuint mXfbVerticesInMostRecentDraw;
 
     // Cached clear value/mask for color and depth/stencil.
     VkClearValue mClearColorValue;
