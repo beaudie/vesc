@@ -16,6 +16,24 @@
       "revId": "ce7be09b5b46c590652521e9db61c80f85d36ba9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61e63f5a_d4161d6e",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-21T05:12:09Z",
+      "side": 1,
+      "message": "The sequence that binds the xfb output buffer is:\nglBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_xfbo);\nglBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, sizeof(expected_data), \u0026zero[0], GL_DYNAMIC_DRAW);\n\nOn the first call gl::OffsetBindingPointer is set w/ mTransformFeedbackBufferRange.sizes[bufferIndex] getting a value of 0.\n\nThat value is not updated when glBufferData() is then called, setting the buffer size.\n\nI\u0027ve added an update to the patch where we set the bufferInfo.range based on the size pulled directly from the bufferHelper, which is correct.\n\nIf we want to use the mTransformFeedbackBufferRange.sizes[bufferIndex] instead, then we need some state update path from glBufferData() that will update that data.",
+      "parentUuid": "5ec2d236_d8bccf7f",
+      "revId": "ce7be09b5b46c590652521e9db61c80f85d36ba9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
