@@ -252,7 +252,7 @@ void TransformFeedbackVk::updateDescriptorSet(ContextVk *contextVk,
     std::array<VkDescriptorBufferInfo, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS>
         descriptorBufferInfo;
 
-    // Write default uniforms for each shader type.
+    // Update buffer descriptor binding info for output buffers
     for (size_t bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
     {
         VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[bufferIndex];
@@ -265,9 +265,10 @@ void TransformFeedbackVk::updateDescriptorSet(ContextVk *contextVk,
 
         bufferInfo.buffer = bufferHelper.getBuffer().getHandle();
         bufferInfo.offset = mTransformFeedbackBufferRange.alignedOffsets[bufferIndex];
-        bufferInfo.range  = mTransformFeedbackBufferRange.sizes[bufferIndex] +
-                           (mTransformFeedbackBufferRange.offsets[bufferIndex] -
-                            mTransformFeedbackBufferRange.alignedOffsets[bufferIndex]);
+        bufferInfo.range =
+            bufferHelper.getSize() + (mTransformFeedbackBufferRange.offsets[bufferIndex] -
+                                      mTransformFeedbackBufferRange.alignedOffsets[bufferIndex]);
+        ASSERT(bufferInfo.range != 0);
     }
 
     writeDescriptorSet(contextVk, xfbBufferCount, descriptorBufferInfo.data(), descSet);

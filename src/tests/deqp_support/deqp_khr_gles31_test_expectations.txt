@@ -56,6 +56,7 @@
 3565 VULKAN : KHR-GLES31.core.texture_storage_multisample.* = SKIP
 
 // Program Pipeline Objects:
+3570 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-usage = FAIL
 3570 VULKAN : KHR-GLES31.core.shader_atomic_counters.advanced-usage-many-draw-calls2 = FAIL
 3570 VULKAN : KHR-GLES31.core.shader_atomic_counters.advanced-usage-many-dispatches = FAIL
 
@@ -72,8 +73,10 @@
 3569 : KHR-GLES31.core.shader_bitfield_operation.umulExtended.* = SKIP
 3569 : KHR-GLES31.core.shader_bitfield_operation.imulExtended.* = SKIP
 
-// Trigger Vulkan validation errors:
-4145 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-* = FAIL
+// Attribute configs passed through xform/feedback with instanced drawing:
+4236 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-input-case9 = FAIL
+4236 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-input-case11 = FAIL
+4236 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-inputI-case2 = FAIL
 
 // Crashes in libnvidia-glvkspirv.so, fixed in newer drivers
 4128 VULKAN NVIDIA : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength-cs-*-matC* = SKIP
@@ -92,8 +95,6 @@
 
 // Unimplemented glValidateCreateShaderProgramv:
 4146 : KHR-GLES31.core.shader_storage_buffer_object.basic-syntaxSSO = FAIL
-4146 : KHR-GLES31.core.vertex_attrib_binding.advanced-bindingUpdate = FAIL
-4146 : KHR-GLES31.core.vertex_attrib_binding.advanced-largeStrideAndOffsetsNewAndLegacyAPI = FAIL
 
 // Explicit uniform locations:
 4219 VULKAN PIXEL2ORXL : KHR-GLES31.core.explicit_uniform_location.uniform-loc-mix-with-implicit-max = FAIL
