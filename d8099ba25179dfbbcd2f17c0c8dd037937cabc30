@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faac1f39_62189f5d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-22T10:52:56Z",
+      "side": 1,
+      "message": "Through a driver uniform, like ANGLEUniforms.xfbBufferOffsets.",
+      "range": {
+        "startLine": 448,
+        "startChar": 42,
+        "endLine": 448,
+        "endChar": 98
+      },
+      "revId": "d8099ba25179dfbbcd2f17c0c8dd037937cabc30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d118735d_b8aa4cad",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-22T10:52:56Z",
+      "side": 1,
+      "message": "If glBindBufferRange is used, this could be larger than the user-provided size. If the front-end could update the binding size on buffer-redefinition, I think that would be best as this bug should affect every backend.\n\nOtherwise, using bufferHelper.getSize() should be only done if sizes[bufferIndex] is 0.\n\n---\n\nAlso, maybe make the xfb-related changes a separate CL?",
+      "range": {
+        "startLine": 269,
+        "startChar": 12,
+        "endLine": 269,
+        "endChar": 34
+      },
+      "revId": "d8099ba25179dfbbcd2f17c0c8dd037937cabc30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
