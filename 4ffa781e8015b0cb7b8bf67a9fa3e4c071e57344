@@ -122,6 +122,29 @@
     },
     {
       "key": {
+        "uuid": "bc922cee_06317652",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-23T17:55:20Z",
+      "side": 1,
+      "message": "not totally happy with this as it\u0027s redundant in many cases. will slow down the microbenchmark that I had optimized pretty heavily at one point. Can you make this function do the minimal work even it costs some code duplication?",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 570,
+        "endChar": 54
+      },
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2fa32e5d_4f5bf6cd",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 6
@@ -133,6 +156,29 @@
       "writtenOn": "2019-12-23T17:24:28Z",
       "side": 1,
       "message": "This is the fix for the converted attrib buffer offsets to make sure the offset is 0 when we convert attribs into new backend buffer.",
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60856b17_1e2354be",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-23T17:55:20Z",
+      "side": 1,
+      "message": "I was confused by the naming. Let\u0027s call this out clearly as mCurrentArrayBufferRelativeOffsets to match GL nomenclature.",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 61
+      },
       "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
