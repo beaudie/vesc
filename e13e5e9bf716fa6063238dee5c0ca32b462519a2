@@ -22,6 +22,30 @@
       "revId": "e13e5e9bf716fa6063238dee5c0ca32b462519a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0343e1f2_2e09e26a",
+        "filename": "src/tests/gl_tests/RenderbufferMultisampleTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-12-23T17:34:06Z",
+      "side": 1,
+      "message": "I did it this way because the test doesn\u0027t even get to the first line of RenderbufferMultisampleTest.IntegerInternalformat/ES3_1_Vulkan_SwiftShader or TextureMultisampleTest.MaxIntegerSamples/ES3_1_Vulkan_SwiftShader.  It fails as follows:\n\nINFO: insertMessage(462): EGL ERROR: eglCreateContext: Requested GLES version is not supported.\nError on eglCreateContext.\n../../src/tests/test_utils/ANGLETest.cpp(562): error: Failed\nGL Context init failed.\n\nIs there a different approach to skipping just the failing test for SwiftShader?",
+      "parentUuid": "a72b4688_6bad340a",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 38
+      },
+      "revId": "e13e5e9bf716fa6063238dee5c0ca32b462519a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
