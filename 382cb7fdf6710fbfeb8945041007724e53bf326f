@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e29c3c5_754c615f",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-23T16:51:23Z",
+      "side": 1,
+      "message": "I don\u0027t think you need this override logic.",
+      "revId": "382cb7fdf6710fbfeb8945041007724e53bf326f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64be1a61_b7d25ff7",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-23T16:51:23Z",
+      "side": 1,
+      "message": "I don\u0027t think you should need this.\nThe colorspace extensions are written such that the application is responsible for using the appropriate rendertarget format to enable sRGB or not.",
+      "range": {
+        "startLine": 76,
+        "startChar": 18,
+        "endLine": 76,
+        "endChar": 42
+      },
+      "revId": "382cb7fdf6710fbfeb8945041007724e53bf326f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e37a01a_2f4d3e97",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-23T16:51:23Z",
+      "side": 1,
+      "message": "nit: \u0027not available\u0027 vs \u0027not enabled\u0027 Extensions are either available or not, enabling varies and is dependent on the extension. In this case, if the extension is available, app can include color space attribs in the appropriate EGL calls.",
+      "range": {
+        "startLine": 328,
+        "startChar": 84,
+        "endLine": 328,
+        "endChar": 95
+      },
+      "revId": "382cb7fdf6710fbfeb8945041007724e53bf326f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c414ef2_44b18af2",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-12-23T16:51:23Z",
+      "side": 1,
+      "message": "nit: blank line after this?",
+      "revId": "382cb7fdf6710fbfeb8945041007724e53bf326f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
