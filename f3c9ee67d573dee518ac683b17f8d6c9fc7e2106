@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "289f1241_2c6c6c2d",
+        "filename": "src/compiler/translator/Types.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T15:41:46Z",
+      "side": 1,
+      "message": "Yes, I\u0027m aware. The point is to avoid repeating default values as much as we can. For example, the fact that unspecified qualifiers default to EvqGlobal is specified in a single place.\n\nI wondered if you are concerned this may lead to multiple function calls just to construct the object, so I went to look at the generated assembly to see how it looks like. This is the dump from TType::TType() and TType::TType(TBasicType, unsigned char, unsigned char):\n\n    (gdb) disassemble 0x000000000070c840\n    Dump of assembler code for function _ZN2sh5TTypeC2Ev:\n    \u003c+0\u003e:\tpush   %rbp\n    \u003c+1\u003e:\tmov    %rsp,%rbp\n    \u003c+4\u003e:\tmovq   $0x0,(%rdi)\n    \u003c+11\u003e:\tmovl   $0x1,0x8(%rdi)\n    \u003c+18\u003e:\tmovw   $0x0,0xc(%rdi)\n    \u003c+24\u003e:\tmovb   $0x0,0x12(%rdi)\n    \u003c+28\u003e:\tmovl   $0x0,0xe(%rdi)\n    \u003c+35\u003e:\tmov    $0xffffffff,%eax\n    \u003c+40\u003e:\tmovd   %eax,%xmm0\n    \u003c+44\u003e:\tmovdqu %xmm0,0x14(%rdi)\n    \u003c+49\u003e:\tpcmpeqd %xmm0,%xmm0\n    \u003c+53\u003e:\tmovdqu %xmm0,0x24(%rdi)\n    \u003c+58\u003e:\tmovl   $0xffffffff,0x34(%rdi)\n    \u003c+65\u003e:\tmovabs $0xffffffff00000000,%rax\n    \u003c+75\u003e:\tmov    %rax,0x38(%rdi)\n    \u003c+79\u003e:\tmovb   $0x0,0x40(%rdi)\n    \u003c+83\u003e:\tmovaps -0x60097a(%rip),%xmm0        # 0x10bf20\n    \u003c+90\u003e:\tmovups %xmm0,0x44(%rdi)\n    \u003c+94\u003e:\tmovw   $0x0,0x54(%rdi)\n    \u003c+100\u003e:\txorps  %xmm0,%xmm0\n    \u003c+103\u003e:\tmovups %xmm0,0x58(%rdi)\n    \u003c+107\u003e:\tmovups %xmm0,0x61(%rdi)\n    \u003c+111\u003e:\tmovq   $0x0,0x78(%rdi)\n    \u003c+119\u003e:\tpop    %rbp\n    \u003c+120\u003e:\tretq   \n    (gdb) disassemble 0x000000000070c8c0\n    Dump of assembler code for function _ZN2sh5TTypeC2ENS_10TBasicTypeEhh:\n    \u003c+0\u003e:\tpush   %rbp\n    \u003c+1\u003e:\tmov    %rsp,%rbp\n    \u003c+4\u003e:\tmov    %esi,(%rdi)\n    \u003c+6\u003e:\tmovabs $0x100000000,%rax\n    \u003c+16\u003e:\tmov    %rax,0x4(%rdi)\n    \u003c+20\u003e:\tmovw   $0x0,0xc(%rdi)\n    \u003c+26\u003e:\tmovb   $0x0,0x12(%rdi)\n    \u003c+30\u003e:\tmovl   $0x0,0xe(%rdi)\n    \u003c+37\u003e:\tmov    $0xffffffff,%eax\n    \u003c+42\u003e:\tmovd   %eax,%xmm0\n    \u003c+46\u003e:\tmovdqu %xmm0,0x14(%rdi)\n    \u003c+51\u003e:\tpcmpeqd %xmm0,%xmm0\n    \u003c+55\u003e:\tmovdqu %xmm0,0x24(%rdi)\n    \u003c+60\u003e:\tmovl   $0xffffffff,0x34(%rdi)\n    \u003c+67\u003e:\tmovabs $0xffffffff00000000,%rax\n    \u003c+77\u003e:\tmov    %rax,0x38(%rdi)\n    \u003c+81\u003e:\tmovb   $0x0,0x40(%rdi)\n    \u003c+85\u003e:\tmovaps -0x6009fc(%rip),%xmm0        # 0x10bf20\n    \u003c+92\u003e:\tmovups %xmm0,0x44(%rdi)\n    \u003c+96\u003e:\tmov    %dl,0x54(%rdi)\n    \u003c+99\u003e:\tmov    %cl,0x55(%rdi)\n    \u003c+102\u003e:\txorps  %xmm0,%xmm0\n    \u003c+105\u003e:\tmovups %xmm0,0x58(%rdi)\n    \u003c+109\u003e:\tmovups %xmm0,0x61(%rdi)\n    \u003c+113\u003e:\tmovq   $0x0,0x78(%rdi)\n    \u003c+121\u003e:\tpop    %rbp\n    \u003c+122\u003e:\tretq   \n\nAs you can see, the compiler has completely flattened the construction in a non-debug build.",
+      "parentUuid": "d680a511_7fc4f02a",
+      "revId": "f3c9ee67d573dee518ac683b17f8d6c9fc7e2106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2914166a_765c79f5",
         "filename": "src/compiler/translator/Types.cpp",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "f3c9ee67d573dee518ac683b17f8d6c9fc7e2106",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd34f069_18bfe9e8",
+        "filename": "src/compiler/translator/Types.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T15:41:46Z",
+      "side": 1,
+      "message": "This is intentional, and we often do this when the assignment is less trivial (like with move assignment: https://cs.chromium.org/search/?q\u003d%22*this+%3D+%22+file:libANGLE\u0026sq\u003dpackage:chromium\u0026type\u003dcs)\n\nIn particular, this is in preparation of the next change, that makes the copy assignment have special-handling of array sizes, and I think it\u0027s less error-prone if we don\u0027t duplicate that.",
+      "parentUuid": "2914166a_765c79f5",
+      "revId": "f3c9ee67d573dee518ac683b17f8d6c9fc7e2106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
