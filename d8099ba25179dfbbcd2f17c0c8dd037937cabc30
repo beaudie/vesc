@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "201b3c59_dcaa2690",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T17:17:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "faac1f39_62189f5d",
+      "range": {
+        "startLine": 448,
+        "startChar": 42,
+        "endLine": 448,
+        "endChar": 98
+      },
+      "revId": "d8099ba25179dfbbcd2f17c0c8dd037937cabc30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d118735d_b8aa4cad",
         "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-12-22T10:52:56Z",
       "side": 1,
       "message": "If glBindBufferRange is used, this could be larger than the user-provided size. If the front-end could update the binding size on buffer-redefinition, I think that would be best as this bug should affect every backend.\n\nOtherwise, using bufferHelper.getSize() should be only done if sizes[bufferIndex] is 0.\n\n---\n\nAlso, maybe make the xfb-related changes a separate CL?",
+      "range": {
+        "startLine": 269,
+        "startChar": 12,
+        "endLine": 269,
+        "endChar": 34
+      },
+      "revId": "d8099ba25179dfbbcd2f17c0c8dd037937cabc30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "135ce031_b8b0a0f2",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T17:17:45Z",
+      "side": 1,
+      "message": "With the current fix I only use bufferHelper.getSize() if sizes[bufferIndex] is 0. This fixes the VK validation error. Do you think it\u0027s necessary to pursue a front-end fix? I\u0027m not sure how resource binding works on the D3D backend, but the tests seem to always have been getting the correct output on all backends, the only error was the VK validation output which is fixed by this change.\n\nAlso, I\u0027ve refactored the change message to just account for making all of the dEQP 3.1 vtx attrib binding now that all the tests pass so perhaps it makes more sense to have the vtx offset and xform feedback fixes in this single CL now.",
+      "parentUuid": "d118735d_b8aa4cad",
       "range": {
         "startLine": 269,
         "startChar": 12,
