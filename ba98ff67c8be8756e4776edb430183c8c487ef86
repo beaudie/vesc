@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2119912_b2868983",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-23T16:13:40Z",
+      "side": 1,
+      "message": "nit: \u0027avoid max varyings\u0027 is a bit unclear - how about \u0027reserveExtraVarying\u0027?",
+      "range": {
+        "startLine": 218,
+        "startChar": 12,
+        "endLine": 218,
+        "endChar": 32
+      },
+      "revId": "ba98ff67c8be8756e4776edb430183c8c487ef86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
