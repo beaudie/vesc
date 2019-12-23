@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ab4e020_f934266b",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T17:24:28Z",
+      "side": 1,
+      "message": "Doh! Neglected to kill this comment. Will let the current dry run complete and address this with any other feedback.",
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fa32e5d_4f5bf6cd",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T17:24:28Z",
+      "side": 1,
+      "message": "This is the fix for the converted attrib buffer offsets to make sure the offset is 0 when we convert attribs into new backend buffer.",
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
