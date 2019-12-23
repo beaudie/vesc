@@ -16,6 +16,24 @@
       "revId": "b8806991845fb4cb710933ecffd127ddf233e628",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8c6ba8f_1dd92fce",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T21:18:35Z",
+      "side": 1,
+      "message": "You could always defer enabling the tests to the next CL, so you don\u0027t have to do this.",
+      "parentUuid": "cc3f567f_57d25072",
+      "revId": "b8806991845fb4cb710933ecffd127ddf233e628",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
