@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "8f9516c5_707b1a98",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T17:44:16Z",
+      "side": 1,
+      "message": "Unfortunate that this adds a whole 16-byte row to driver uniforms. You could add a comment that there is a vec3 gap here that could be used in the future.",
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ab4e020_f934266b",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 6
@@ -13,6 +30,92 @@
       "writtenOn": "2019-12-23T17:24:28Z",
       "side": 1,
       "message": "Doh! Neglected to kill this comment. Will let the current dry run complete and address this with any other feedback.",
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c25d4a03_7e944535",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T17:44:16Z",
+      "side": 1,
+      "message": "nit: I would do (gl_VertexIndex + gl_InstanceIndex * ANGLEUniforms.xfbVerticesPerDraw) * stride\n\nThe contents inside the parentheses become one multiply-add instruction.",
+      "range": {
+        "startLine": 450,
+        "startChar": 46,
+        "endLine": 451,
+        "endChar": 95
+      },
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c920936_6f85542e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T17:44:16Z",
+      "side": 1,
+      "message": "Please manually add the padding that\u0027s introduced here.",
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a39a9bd_264580a3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T17:44:16Z",
+      "side": 1,
+      "message": "You can call it `mXfbVertexCountPerInstance` similar to `mXfbBaseVertex`. The comment of the previous one makes it clear that this is for the current draw. You can refer to the other comment here too, like \"// Cache the current draw call\u0027s vertex count too, to support instanced draw calls with transform feedback.\"",
+      "range": {
+        "startLine": 719,
+        "startChar": 11,
+        "endLine": 719,
+        "endChar": 39
+      },
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35b55826_31f8b9e6",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T17:44:16Z",
+      "side": 1,
+      "message": "Now the question is, can offset be non-zero? That is, in the scenario you mentioned where the xfb binding is first set, then the buffer is defined, can the application bind the (undefined) buffer with a non-zero offset, or is that an error?",
+      "range": {
+        "startLine": 271,
+        "startChar": 51,
+        "endLine": 271,
+        "endChar": 73
+      },
       "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
