@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "29407073_4da1cc4c",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T19:13:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f9516c5_707b1a98",
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ab4e020_f934266b",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4e6a2f4_6f85844a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T19:13:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ab4e020_f934266b",
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "d0be0a47_63dd482e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T19:13:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c25d4a03_7e944535",
+      "range": {
+        "startLine": 450,
+        "startChar": 46,
+        "endLine": 451,
+        "endChar": 95
+      },
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c920936_6f85542e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -73,6 +133,24 @@
       "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3baecce7_a697c8fb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T19:13:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c920936_6f85542e",
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "d2d14203_a8980e42",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T19:13:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a39a9bd_264580a3",
+      "range": {
+        "startLine": 719,
+        "startChar": 11,
+        "endLine": 719,
+        "endChar": 39
+      },
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35b55826_31f8b9e6",
         "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
         "patchSetId": 6
@@ -110,6 +212,30 @@
       "writtenOn": "2019-12-23T17:44:16Z",
       "side": 1,
       "message": "Now the question is, can offset be non-zero? That is, in the scenario you mentioned where the xfb binding is first set, then the buffer is defined, can the application bind the (undefined) buffer with a non-zero offset, or is that an error?",
+      "range": {
+        "startLine": 271,
+        "startChar": 51,
+        "endLine": 271,
+        "endChar": 73
+      },
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44a06f73_25d029bf",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T19:13:21Z",
+      "side": 1,
+      "message": "I don\u0027t believe offset can be non-zero.\nglBufferData() is used to set the buffer size and it doesn\u0027t have an offset.\nglBufferSubData() can be used to update data at offsets, but doesn\u0027t change the buffer size which is what range is concerned with.\nDo you agree or am I missing anything?",
+      "parentUuid": "35b55826_31f8b9e6",
       "range": {
         "startLine": 271,
         "startChar": 51,
@@ -142,6 +268,30 @@
       "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0a24d03_dd123175",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T19:13:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc922cee_06317652",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 570,
+        "endChar": 54
+      },
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -182,6 +332,30 @@
       "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dbd4da3_f1e53202",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-12-23T19:13:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60856b17_1e2354be",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 61
+      },
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
