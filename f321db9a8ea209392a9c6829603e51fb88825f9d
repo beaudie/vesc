@@ -46,6 +46,30 @@
       "revId": "f321db9a8ea209392a9c6829603e51fb88825f9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72fdd6c7_761e0d1a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T19:12:31Z",
+      "side": 0,
+      "message": "Done. It\u0027s also green. We only run deqp-gles2 on AMD FYI. There\u0027s no way to test RX 550 until we submit the CL (which is why I suggested submitting and reverting if it breaks it).\n\nI\u0027m speculating that since RX 550 was set up after our CQ bot, and it\u0027s a newer card, we shouldn\u0027t have a problem there either.",
+      "parentUuid": "f970f434_70e100e9",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 427,
+        "endChar": 46
+      },
+      "revId": "f321db9a8ea209392a9c6829603e51fb88825f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
