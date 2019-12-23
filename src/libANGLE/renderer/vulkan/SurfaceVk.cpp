@@ -457,7 +457,14 @@ egl::Error WindowSurfaceVk::initialize(const egl::Display *display)
 {
     DisplayVk *displayVk = vk::GetImpl(display);
     angle::Result result = initializeImpl(displayVk);
-    return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
+    if (result == angle::Result::Incomplete)
+    {
+        return angle::ToEGL(result, displayVk, EGL_BAD_MATCH);
+    }
+    else
+    {
+        return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
+    }
 }
 
 angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
@@ -549,7 +556,12 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
             }
         }
 
-        ANGLE_VK_CHECK(displayVk, foundFormat, VK_ERROR_INITIALIZATION_FAILED);
+        // If a non-linear colorspace was requested but the non-linear format is
+        // not supported as a vulkan surface format, treat it as a non-fatal error
+        if (!foundFormat)
+        {
+            return angle::Result::Incomplete;
+        }
     }
 
     mCompositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
