@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0aac9d0b_85170573",
+        "filename": "src/tests/deqp_support/BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-23T17:50:46Z",
+      "side": 1,
+      "message": "can you also sort these somehow so the generation becomes stable? looks like the ordering changed randomly.",
+      "range": {
+        "startLine": 231,
+        "startChar": 6,
+        "endLine": 231,
+        "endChar": 36
+      },
+      "revId": "7bd56e84e0d201a05bf98e75391612ed921adaa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81e92c51_4f58c196",
+        "filename": "src/tests/deqp_support/deqp_data_autogen.gni",
+        "patchSetId": 7
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-23T17:50:46Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 316,
+        "startChar": 3,
+        "endLine": 316,
+        "endChar": 46
+      },
+      "revId": "7bd56e84e0d201a05bf98e75391612ed921adaa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
