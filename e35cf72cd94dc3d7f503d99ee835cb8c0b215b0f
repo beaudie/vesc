@@ -22,6 +22,30 @@
       "revId": "e35cf72cd94dc3d7f503d99ee835cb8c0b215b0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1111212_85b34bd9",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1386099
+      },
+      "writtenOn": "2019-12-23T09:20:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e19cabe1_828519a3",
+      "range": {
+        "startLine": 220,
+        "startChar": 9,
+        "endLine": 220,
+        "endChar": 23
+      },
+      "revId": "e35cf72cd94dc3d7f503d99ee835cb8c0b215b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
