@@ -22,6 +22,30 @@
       "revId": "f321db9a8ea209392a9c6829603e51fb88825f9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f970f434_70e100e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-12-23T17:57:17Z",
+      "side": 0,
+      "message": "Heads up that you didn\u0027t test the dEQP-win32 bot. Might be the failure is there. (Or potentially the 550. Not sure if we have manual try for that.)",
+      "parentUuid": "afeec514_95675937",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 427,
+        "endChar": 46
+      },
+      "revId": "f321db9a8ea209392a9c6829603e51fb88825f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
