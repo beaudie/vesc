@@ -248,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "6a342c96_cc26f634",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T21:16:03Z",
+      "side": 1,
+      "message": "I was thinking of glBindBufferRange that\u0027s being called before glBufferData.\n\nBut yes, it looks like that situation is impossible [1]:\n\n\u003e GL_INVALID_VALUE is generated ... if offset + size is greater than the value of GL_BUFFER_SIZE.\n\n[1]: https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBindBufferRange.xhtml",
+      "parentUuid": "44a06f73_25d029bf",
+      "range": {
+        "startLine": 271,
+        "startChar": 51,
+        "endLine": 271,
+        "endChar": 73
+      },
+      "revId": "4ffa781e8015b0cb7b8bf67a9fa3e4c071e57344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc922cee_06317652",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 6
