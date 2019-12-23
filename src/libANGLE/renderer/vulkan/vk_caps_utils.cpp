@@ -430,7 +430,7 @@ void RendererVk::ensureCapsInitialized() const
     //
     // Note: AMD has a weird behavior when we edge toward the maximum number of varyings and can
     // often crash. Reserving an additional varying just for them bringing the total to 2.
-    constexpr GLint kReservedVaryingCount = 2;
+    constexpr GLint kReservedVaryingCount = 1;
     mNativeCaps.maxVaryingVectors =
         LimitToInt((limitsVk.maxVertexOutputComponents / 4) - kReservedVaryingCount);
     mNativeCaps.maxVertexOutputComponents =
