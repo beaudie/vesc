@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afeec514_95675937",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-23T16:59:01Z",
+      "side": 0,
+      "message": "Gary, it looks like this workaround is no longer necessary: https://chromium-review.googlesource.com/c/angle/angle/+/1980272\n\nCould you please rip the comment here and just set `kReservedVaryingCount \u003d 1` (and remove the workaround definition etc, including the new include at the top of the file, by the way)?\n\nWe can land it then, and if some AMD bot somewhere had an issue, we can revert and commit this version instead.",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 427,
+        "endChar": 46
+      },
+      "revId": "f321db9a8ea209392a9c6829603e51fb88825f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
