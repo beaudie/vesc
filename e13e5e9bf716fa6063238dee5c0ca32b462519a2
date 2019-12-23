@@ -46,6 +46,30 @@
       "revId": "e13e5e9bf716fa6063238dee5c0ca32b462519a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56e695e7_0de2b2a4",
+        "filename": "src/tests/gl_tests/RenderbufferMultisampleTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-12-23T17:40:27Z",
+      "side": 1,
+      "message": "From the test suite run, I can see that all of the \"*/ES3_1_Vulkan_SwiftShader\" end2end tests are failing the same way.  Hmm.\n\nI wasn\u0027t planning to land this CL until we have ES 3.1 conformance on SwiftShader.  Now, it looks like I need to wait till SwiftShader supports \u003e1 integer samples.",
+      "parentUuid": "0343e1f2_2e09e26a",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 38
+      },
+      "revId": "e13e5e9bf716fa6063238dee5c0ca32b462519a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
