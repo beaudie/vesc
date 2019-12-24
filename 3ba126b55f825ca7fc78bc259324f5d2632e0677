@@ -386,6 +386,30 @@
       "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52e75619_28577dde",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-24T06:12:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "836fda1d_a5d8c591",
+      "range": {
+        "startLine": 81,
+        "startChar": 12,
+        "endLine": 81,
+        "endChar": 31
+      },
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
