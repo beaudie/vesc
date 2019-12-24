@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "79697c64_65d8d17b",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T08:04:10Z",
+      "side": 1,
+      "message": "I just worried that S can be an incompatible type with T. In that case, it will cause a run-time error if we misuse S.",
+      "parentUuid": "41df52f0_d58711b6",
+      "range": {
+        "startLine": 135,
+        "startChar": 24,
+        "endLine": 135,
+        "endChar": 25
+      },
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47c92c8c_3fef0bba",
         "filename": "src/compiler/translator/Common.h",
         "patchSetId": 8
