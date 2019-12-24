@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "747acd56_be05bb1a",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T04:40:24Z",
+      "side": 1,
+      "message": "Should be T ? Same with below one.",
+      "range": {
+        "startLine": 135,
+        "startChar": 24,
+        "endLine": 135,
+        "endChar": 25
+      },
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47c92c8c_3fef0bba",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T04:40:24Z",
+      "side": 1,
+      "message": "if (mData \u003d\u003d that.mData)\n{\n    return true;\n}",
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7e2a2f4_0810c173",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T04:40:24Z",
+      "side": 1,
+      "message": "\u0027ASSERT(count \u003c\u003d mSize)\u0027\nOr \u0027return count \u003d\u003d 0 ? TSpan() : TSpan(mData, std:min(count, mSize));\u0027\nSame for below cases.",
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "044a5828_652643cf",
+        "filename": "src/compiler/translator/Types.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T04:40:24Z",
+      "side": 1,
+      "message": "Use makeArraysInternal(*mArraySizesStorage);？",
+      "range": {
+        "startLine": 572,
+        "startChar": 4,
+        "endLine": 572,
+        "endChar": 28
+      },
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db2e676b_fdecb43c",
+        "filename": "src/compiler/translator/Types.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T04:40:24Z",
+      "side": 1,
+      "message": "Add makeArraysInternal(*mArraySizesStorage);？",
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43af9954_09b3817e",
+        "filename": "src/compiler/translator/Types.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T04:40:24Z",
+      "side": 1,
+      "message": "Use makeArraysInternal(*mArraySizesStorage);？",
+      "range": {
+        "startLine": 658,
+        "startChar": 8,
+        "endLine": 658,
+        "endChar": 32
+      },
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6032f9a9_88c51fce",
+        "filename": "src/compiler/translator/Types.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T04:40:24Z",
+      "side": 1,
+      "message": "t.mArraySizesStorage ?",
+      "range": {
+        "startLine": 143,
+        "startChar": 29,
+        "endLine": 143,
+        "endChar": 36
+      },
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06c2a066_fcb196b5",
+        "filename": "src/compiler/translator/Types.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T04:40:24Z",
+      "side": 1,
+      "message": "mArraySizesStorage?",
+      "range": {
+        "startLine": 366,
+        "startChar": 7,
+        "endLine": 366,
+        "endChar": 18
+      },
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e9cd2f3_0dcae897",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T04:40:24Z",
+      "side": 1,
+      "message": "Why not reuse makeArrays?",
+      "range": {
+        "startLine": 81,
+        "startChar": 12,
+        "endLine": 81,
+        "endChar": 31
+      },
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
