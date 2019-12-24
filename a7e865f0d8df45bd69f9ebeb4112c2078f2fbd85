@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "ec962bc0_f376f821",
+        "filename": "src/compiler/translator/SymbolTable_autogen.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-24T06:19:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3fb31dd3_aab2775b",
+      "range": {
+        "startLine": 1330,
+        "startChar": 82,
+        "endLine": 1330,
+        "endChar": 88
+      },
+      "revId": "a7e865f0d8df45bd69f9ebeb4112c2078f2fbd85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc2875db_3f3c1229",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 4

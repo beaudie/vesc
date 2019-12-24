@@ -22,6 +22,30 @@
       "revId": "a0ad73eb2c18c1d075ab28d6860b8ddde8cef4dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d39961f5_ef5625ce",
+        "filename": "src/compiler/translator/Types.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-24T06:19:02Z",
+      "side": 1,
+      "message": "No. There\u0027s no storage for the span given to the constexpr constructor, and there cannot be (as it can\u0027t be constexpr anymore). This is for the very special case of mArraySizes coming from a global array (which is the constexpr definition of textureGatherOffsets).",
+      "parentUuid": "65af3a73_158e1907",
+      "range": {
+        "startLine": 127,
+        "startChar": 10,
+        "endLine": 127,
+        "endChar": 28
+      },
+      "revId": "a0ad73eb2c18c1d075ab28d6860b8ddde8cef4dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
