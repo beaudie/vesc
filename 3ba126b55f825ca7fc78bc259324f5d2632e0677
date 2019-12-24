@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "94a757ed_de82425b",
+        "filename": "src/compiler/translator/Common.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-24T19:01:24Z",
+      "side": 1,
+      "message": "Oh, that shouldn\u0027t be a problem. The lack of cast in mData(vec.data()) would cause a compile error basically everywhere unless S is the same as T minus possibly some qualifiers (like const or volatile). That is, the span will always be the same type as the vector except possibly more qualified!",
+      "parentUuid": "79697c64_65d8d17b",
+      "range": {
+        "startLine": 135,
+        "startChar": 24,
+        "endLine": 135,
+        "endChar": 25
+      },
+      "revId": "3ba126b55f825ca7fc78bc259324f5d2632e0677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47c92c8c_3fef0bba",
         "filename": "src/compiler/translator/Common.h",
         "patchSetId": 8
