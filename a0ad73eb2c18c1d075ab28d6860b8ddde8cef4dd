@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65af3a73_158e1907",
+        "filename": "src/compiler/translator/Types.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T05:34:18Z",
+      "side": 1,
+      "message": "Do you need to initialize mArraySizeStorage using arraySizes?",
+      "range": {
+        "startLine": 127,
+        "startChar": 10,
+        "endLine": 127,
+        "endChar": 28
+      },
+      "revId": "a0ad73eb2c18c1d075ab28d6860b8ddde8cef4dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
