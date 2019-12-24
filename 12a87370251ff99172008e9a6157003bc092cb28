@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3634cae5_0d102ea5",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-12-24T08:15:29Z",
+      "side": 1,
+      "message": "nit: It seems that this line is not needed anymore.",
+      "range": {
+        "startLine": 675,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 33
+      },
+      "revId": "12a87370251ff99172008e9a6157003bc092cb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
