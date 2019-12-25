@@ -534,6 +534,17 @@
 
 // General Vulkan failures
 
+// Test failing due to struct sampler extraction bug w.r.t inactive samplers.
+// This test is also affected by bug 4284.
+4211 VULKAN : dEQP-GLES3.functional.uniform_api.random.44 = FAIL
+
+// Vertex attribute bind aliasing failures:
+4249 VULKAN : dEQP-GLES3.functional.attribute_location.bind_aliasing.cond_* = FAIL
+4249 VULKAN : dEQP-GLES3.functional.attribute_location.bind_aliasing.max_cond_* = FAIL
+
+// ANGLEPosition location assignment overlaps other varyings:
+4251 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.struct.float_uvec2_vec3 = FAIL
+
 // Tests failing due to the "flat" qualifier in the shader:
 3677 VULKAN : dEQP-GLES3.functional.fragment_out.basic.int.* = FAIL
 3677 VULKAN : dEQP-GLES3.functional.fragment_out.basic.uint.* = FAIL

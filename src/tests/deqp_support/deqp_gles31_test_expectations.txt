@@ -628,6 +628,11 @@
 
 // General Vulkan failures
 
+// Transform feedback bugs when using the extension and capturing arrays.
+// Some of these tests are also affected by 4251.
+4140 VULKAN : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.*.default_block_array_element = FAIL
+4140 VULKAN : dEQP-GLES31.functional.program_interface_query.transform_feedback_varying.type.*.array.* = FAIL
+
 // Front-end query bugs:
 3596 VULKAN : dEQP-GLES31.functional.program_interface_query.shader_storage_block.buffer_data_size.* = FAIL
 

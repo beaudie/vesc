@@ -14,6 +14,7 @@
 
 #include "common/utilities.h"
 #include "libANGLE/renderer/ProgramImpl.h"
+#include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
@@ -219,8 +220,7 @@ class ProgramVk : public ProgramImpl
     {
         if (!shaderInfo->valid())
         {
-            ANGLE_TRY(
-                shaderInfo->initShaders(contextVk, mShaderSources, enableLineRasterEmulation));
+            ANGLE_TRY(shaderInfo->initShaders(contextVk, mSpirvShaders, enableLineRasterEmulation));
         }
 
         ASSERT(shaderInfo->valid());
@@ -302,7 +302,7 @@ class ProgramVk : public ProgramImpl
         ~ShaderInfo();
 
         angle::Result initShaders(ContextVk *contextVk,
-                                  const gl::ShaderMap<std::string> &shaderSources,
+                                  const gl::ShaderMap<SpirvShader> &spirvShaders,
                                   bool enableLineRasterEmulation);
         void release(ContextVk *contextVk);
 
@@ -322,8 +322,8 @@ class ProgramVk : public ProgramImpl
     ShaderInfo mDefaultShaderInfo;
     ShaderInfo mLineRasterShaderInfo;
 
-    // We keep the translated linked shader sources to use with shader draw call patching.
-    gl::ShaderMap<std::string> mShaderSources;
+    // We keep the SPIR-V code to use with shader draw call patching.
+    gl::ShaderMap<SpirvShader> mSpirvShaders;
 
     // In their descriptor set, uniform buffers are placed first, then storage buffers, then atomic
     // counter buffers and then images.  These cached values contain the offsets where storage
