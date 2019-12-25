@@ -357,6 +357,42 @@ class Std140BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFacto
   public:
     sh::BlockLayoutEncoder *makeEncoder() override { return new sh::Std140BlockEncoder(); }
 };
+
+void LoadSpirvPatchFromStream(gl::BinaryInputStream *stream, SpirvPatch *patchOut)
+{
+    // Read the entry point additions by patch.
+    stream->readIntVector<uint32_t>(&patchOut->entryPointAdditions);
+
+    // Read the number of hunks in patch.
+    patchOut->hunks.resize(stream->readInt<size_t>());
+
+    // Read every hunk of line rasterization specialization
+    for (SpirvPatchHunk &hunk : patchOut->hunks)
+    {
+        stream->readInt(&hunk.offset);
+        stream->readInt(&hunk.size);
+        hunk.contents.resize(stream->readInt<size_t>());
+        stream->readRaw(hunk.contents.data(), hunk.contents.size());
+    }
+}
+
+void SaveSpirvPatchToStream(gl::BinaryOutputStream *stream, const SpirvPatch &patch)
+{
+    // Write the entry point additions by patch.
+    stream->writeIntVector(patch.entryPointAdditions);
+
+    // Write the number of hunks in line rasterization specialization
+    stream->writeInt(patch.hunks.size());
+
+    // Write every hunk in line rasterization specialization
+    for (const SpirvPatchHunk &hunk : patch.hunks)
+    {
+        stream->writeInt(hunk.offset);
+        stream->writeInt(hunk.size);
+        stream->writeInt(hunk.contents.size());
+        stream->writeRaw(hunk.contents.data(), hunk.contents.size());
+    }
+}
 }  // anonymous namespace
 
 // ProgramVk::ShaderInfo implementation.
@@ -365,22 +401,29 @@ ProgramVk::ShaderInfo::ShaderInfo() {}
 ProgramVk::ShaderInfo::~ShaderInfo() = default;
 
 angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
-                                                 const gl::ShaderMap<std::string> &shaderSources,
+                                                 const gl::ShaderMap<SpirvShader> &spirvShaders,
                                                  bool enableLineRasterEmulation)
 {
     ASSERT(!valid());
 
-    gl::ShaderMap<std::vector<uint32_t>> shaderCodes;
-    ANGLE_TRY(GlslangWrapperVk::GetShaderCode(
-        contextVk, contextVk->getCaps(), enableLineRasterEmulation, shaderSources, &shaderCodes));
+    bool isSpecialized = enableLineRasterEmulation;
+    gl::ShaderMap<std::vector<uint32_t>> specializedSpirv;
+
+    if (isSpecialized)
+    {
+        GlslangWrapperVk::GetSpecializedShaderSpirvCode(enableLineRasterEmulation, spirvShaders,
+                                                        &specializedSpirv);
+    }
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        if (!shaderSources[shaderType].empty())
+        if (!spirvShaders[shaderType].code.empty())
         {
-            ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
-                                              shaderCodes[shaderType].data(),
-                                              shaderCodes[shaderType].size() * sizeof(uint32_t)));
+            const std::vector<uint32_t> &spirv =
+                isSpecialized ? specializedSpirv[shaderType] : spirvShaders[shaderType].code;
+
+            ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(), spirv.data(),
+                                              spirv.size() * sizeof(uint32_t)));
 
             mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
         }
@@ -394,7 +437,17 @@ angle::Result ProgramVk::loadShaderSource(ContextVk *contextVk, gl::BinaryInputS
     // Read in shader sources for all shader types
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        mShaderSources[shaderType] = stream->readString();
+        SpirvShader *spirvShader = &mSpirvShaders[shaderType];
+
+        // Read the SPIR-V
+        spirvShader->code.resize(stream->readInt<size_t>());
+        stream->readRaw(spirvShader->code.data(), spirvShader->code.size());
+
+        // Read the offset of the OpEntryPoint instruction.
+        stream->readInt(&spirvShader->entryPointOffset);
+
+        // Read the line rasterization patch.
+        LoadSpirvPatchFromStream(stream, &spirvShader->lineRasterEmulationPatch);
     }
 
     return angle::Result::Continue;
@@ -405,7 +458,17 @@ void ProgramVk::saveShaderSource(gl::BinaryOutputStream *stream)
     // Write out shader sources for all shader types
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        stream->writeString(mShaderSources[shaderType]);
+        const SpirvShader &spirvShader = mSpirvShaders[shaderType];
+
+        // Write the SPIR-V
+        stream->writeInt(spirvShader.code.size());
+        stream->writeRaw(spirvShader.code.data(), spirvShader.code.size());
+
+        // Write the offset of the OpEntryPoint instruction.
+        stream->writeInt(spirvShader.entryPointOffset);
+
+        // Write the line rasterization patch.
+        SaveSpirvPatchToStream(stream, spirvShader.lineRasterEmulationPatch);
     }
 }
 
@@ -523,8 +586,7 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
 
 void ProgramVk::save(const gl::Context *context, gl::BinaryOutputStream *stream)
 {
-    // (geofflang): Look into saving shader modules in ShaderInfo objects (keep in mind that we
-    // compile shaders lazily)
+    // (geofflang): Look into saving shader modules in ShaderInfo objects.
     saveShaderSource(stream);
 
     // Serializes the uniformLayout data of mDefaultUniformBlocks
@@ -562,16 +624,23 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                            gl::InfoLog &infoLog)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    // Link resources before calling GetShaderSource to make sure they are ready for the set/binding
-    // assignment done in that function.
+    // Link resources before calling GetShaderSpirvCode to make sure they are ready for the
+    // set/binding assignment done in that function.
     linkResources(resources);
 
-    GlslangWrapperVk::GetShaderSource(contextVk->getRenderer()->getFeatures(), mState, resources,
-                                      &mShaderSources);
+    // Compile the shaders and retrieve SPIR-V.
+    mSpirvShaders        = gl::ShaderMap<SpirvShader>();
+    angle::Result status = GlslangWrapperVk::GetShaderSpirvCode(
+        contextVk, contextVk->getRenderer()->getFeatures(), contextVk->getCaps(), mState, resources,
+        &mSpirvShaders);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
 
     reset(contextVk);
 
-    angle::Result status = initDefaultUniformBlocks(context);
+    status = initDefaultUniformBlocks(context);
     if (status != angle::Result::Continue)
     {
         return std::make_unique<LinkEventDone>(status);

@@ -41,22 +41,24 @@ GlslangSourceOptions CreateSourceOptions()
 }
 }  // namespace
 
-void GlslangGetShaderSource(const gl::ProgramState &programState,
-                            const gl::ProgramLinkedResources &resources,
-                            gl::ShaderMap<std::string> *shaderSourcesOut)
-{
-    rx::GlslangGetShaderSource(CreateSourceOptions(), programState, resources, shaderSourcesOut);
-}
-
 angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
                                         const gl::Caps &glCaps,
-                                        bool enableLineRasterEmulation,
-                                        const gl::ShaderMap<std::string> &shaderSources,
-                                        gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
+                                        const gl::ProgramState &programState,
+                                        const gl::ProgramLinkedResources &resources,
+                                        gl::ShaderMap<SpirvShader> *spirvShadersOut)
 {
-    return rx::GlslangGetShaderSpirvCode(
-        [context](GlslangError error) { return HandleError(context, error); }, glCaps,
-        enableLineRasterEmulation, shaderSources, shaderCodeOut);
+    auto errorHandler = [context](GlslangError error) { return HandleError(context, error); };
+    return rx::GlslangGetShaderSpirvCode(CreateSourceOptions(), errorHandler, glCaps, programState,
+                                         resources, spirvShadersOut);
+}
+
+void GlslangGetSpecializedShaderSpirvCode(
+    bool enableLineRasterEmulation,
+    const gl::ShaderMap<SpirvShader> &spirvShaders,
+    gl::ShaderMap<std::vector<uint32_t>> *specializedSpirvShadersOut)
+{
+    rx::GlslangGetSpecializedShaderSpirvCode(enableLineRasterEmulation, spirvShaders,
+                                             specializedSpirvShadersOut);
 }
 }  // namespace mtl
 }  // namespace rx
