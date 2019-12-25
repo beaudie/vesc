@@ -22,6 +22,9 @@ ANGLE_DISABLE_SHADOWING_WARNING
 ANGLE_REENABLE_SHADOWING_WARNING
 ANGLE_REENABLE_EXTRA_SEMI_WARNING
 
+// SPIR-V tools include for AST transformations.
+#include <spirv-tools/libspirv.hpp>
+
 #include <array>
 #include <numeric>
 
@@ -56,11 +59,8 @@ constexpr char kParamsEnd                          = ')';
 constexpr char kUniformQualifier[]                 = "uniform";
 constexpr char kSSBOQualifier[]                    = "buffer";
 constexpr char kUnusedUniformSubstitution[]        = "// ";
-constexpr char kVersionDefine[]                    = "#version 450 core\n";
-constexpr char kLineRasterDefine[]                 = R"(#version 450 core
-
-#define ANGLE_ENABLE_LINE_SEGMENT_RASTERIZATION
-)";
+constexpr char kLineRasterSpecConstVarName[]       = "ANGLEEmulateLine";
+constexpr char kANGLEPositionVarName[]             = "ANGLEPosition";
 constexpr uint32_t kANGLEPositionLocationOffset    = 1;
 constexpr uint32_t kXfbANGLEPositionLocationOffset = 2;
 
@@ -803,7 +803,6 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
 
     // Substitute layout and qualifier strings for the position varying. Use the first free
     // varying register after the packed varyings.
-    constexpr char kVaryingName[] = "ANGLEPosition";
     std::stringstream layoutStream;
     layoutStream << "location = "
                  << (resources.varyingPacking.getMaxSemanticIndex() + kANGLEPositionLocationOffset);
@@ -811,8 +810,8 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
 
     for (IntermediateShaderSource &shaderSource : *shaderSources)
     {
-        shaderSource.insertLayoutSpecifier(kVaryingName, layout);
-        shaderSource.insertQualifierSpecifier(kVaryingName, "");
+        shaderSource.insertLayoutSpecifier(kANGLEPositionVarName, layout);
+        shaderSource.insertQualifierSpecifier(kANGLEPositionVarName, "");
     }
 }
 
@@ -1072,131 +1071,10 @@ void CleanupUnusedEntities(bool useOldRewriteStructSamplers,
     }
 }
 
-constexpr gl::ShaderMap<EShLanguage> kShLanguageMap = {
-    {gl::ShaderType::Vertex, EShLangVertex},
-    {gl::ShaderType::Geometry, EShLangGeometry},
-    {gl::ShaderType::Fragment, EShLangFragment},
-    {gl::ShaderType::Compute, EShLangCompute},
-};
-
-angle::Result GetShaderSpirvCode(GlslangErrorCallback callback,
-                                 const gl::Caps &glCaps,
-                                 const gl::ShaderMap<std::string> &shaderSources,
-                                 gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
-{
-    // Enable SPIR-V and Vulkan rules when parsing GLSL
-    EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
-
-    TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
-    GetBuiltInResourcesFromCaps(glCaps, &builtInResources);
-
-    glslang::TShader vertexShader(EShLangVertex);
-    glslang::TShader fragmentShader(EShLangFragment);
-    glslang::TShader geometryShader(EShLangGeometry);
-    glslang::TShader computeShader(EShLangCompute);
-
-    gl::ShaderMap<glslang::TShader *> shaders = {
-        {gl::ShaderType::Vertex, &vertexShader},
-        {gl::ShaderType::Fragment, &fragmentShader},
-        {gl::ShaderType::Geometry, &geometryShader},
-        {gl::ShaderType::Compute, &computeShader},
-    };
-    glslang::TProgram program;
-
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        if (shaderSources[shaderType].empty())
-        {
-            continue;
-        }
-
-        const char *shaderString = shaderSources[shaderType].c_str();
-        int shaderLength         = static_cast<int>(shaderSources[shaderType].size());
-
-        glslang::TShader *shader = shaders[shaderType];
-        shader->setStringsWithLengths(&shaderString, &shaderLength, 1);
-        shader->setEntryPoint("main");
-
-        bool result = shader->parse(&builtInResources, 450, ECoreProfile, false, false, messages);
-        if (!result)
-        {
-            ERR() << "Internal error parsing Vulkan shader corresponding to " << shaderType << ":\n"
-                  << shader->getInfoLog() << "\n"
-                  << shader->getInfoDebugLog() << "\n";
-            ANGLE_GLSLANG_CHECK(callback, false, GlslangError::InvalidShader);
-        }
-
-        program.addShader(shader);
-    }
-
-    bool linkResult = program.link(messages);
-    if (!linkResult)
-    {
-        ERR() << "Internal error linking Vulkan shaders:\n" << program.getInfoLog() << "\n";
-        ANGLE_GLSLANG_CHECK(callback, false, GlslangError::InvalidShader);
-    }
-
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        if (shaderSources[shaderType].empty())
-        {
-            continue;
-        }
-
-        glslang::TIntermediate *intermediate = program.getIntermediate(kShLanguageMap[shaderType]);
-        glslang::GlslangToSpv(*intermediate, (*shaderCodeOut)[shaderType]);
-    }
-
-    return angle::Result::Continue;
-}
-}  // anonymous namespace
-
-void GlslangInitialize()
-{
-    int result = ShInitialize();
-    ASSERT(result != 0);
-}
-
-void GlslangRelease()
-{
-    int result = ShFinalize();
-    ASSERT(result != 0);
-}
-
-std::string GlslangGetMappedSamplerName(const std::string &originalName)
-{
-    std::string samplerName = originalName;
-
-    // Samplers in structs are extracted.
-    std::replace(samplerName.begin(), samplerName.end(), '.', '_');
-
-    // Remove array elements
-    auto out = samplerName.begin();
-    for (auto in = samplerName.begin(); in != samplerName.end(); in++)
-    {
-        if (*in == '[')
-        {
-            while (*in != ']')
-            {
-                in++;
-                ASSERT(in != samplerName.end());
-            }
-        }
-        else
-        {
-            *out++ = *in;
-        }
-    }
-
-    samplerName.erase(out, samplerName.end());
-
-    return samplerName;
-}
-
-void GlslangGetShaderSource(const GlslangSourceOptions &options,
-                            const gl::ProgramState &programState,
-                            const gl::ProgramLinkedResources &resources,
-                            gl::ShaderMap<std::string> *shaderSourcesOut)
+void GetShaderSources(const GlslangSourceOptions &options,
+                      const gl::ProgramState &programState,
+                      const gl::ProgramLinkedResources &resources,
+                      gl::ShaderMap<std::string> *shaderSourcesOut)
 {
     gl::ShaderMap<IntermediateShaderSource> intermediateSources;
 
@@ -1268,41 +1146,825 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     }
 }
 
-angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
-                                        const gl::Caps &glCaps,
-                                        bool enableLineRasterEmulation,
-                                        const gl::ShaderMap<std::string> &shaderSources,
-                                        gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
+constexpr gl::ShaderMap<EShLanguage> kShLanguageMap = {
+    {gl::ShaderType::Vertex, EShLangVertex},
+    {gl::ShaderType::Geometry, EShLangGeometry},
+    {gl::ShaderType::Fragment, EShLangFragment},
+    {gl::ShaderType::Compute, EShLangCompute},
+};
+
+angle::Result GetShaderSpirvCode(GlslangErrorCallback callback,
+                                 const gl::Caps &glCaps,
+                                 const gl::ShaderMap<std::string> &shaderSources,
+                                 gl::ShaderMap<std::vector<uint32_t>> *spirvShadersOut)
 {
-    if (enableLineRasterEmulation)
+    // Enable SPIR-V and Vulkan rules when parsing GLSL
+    EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
+
+    TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
+    GetBuiltInResourcesFromCaps(glCaps, &builtInResources);
+
+    glslang::TShader vertexShader(EShLangVertex);
+    glslang::TShader fragmentShader(EShLangFragment);
+    glslang::TShader geometryShader(EShLangGeometry);
+    glslang::TShader computeShader(EShLangCompute);
+
+    gl::ShaderMap<glslang::TShader *> shaders = {
+        {gl::ShaderType::Vertex, &vertexShader},
+        {gl::ShaderType::Fragment, &fragmentShader},
+        {gl::ShaderType::Geometry, &geometryShader},
+        {gl::ShaderType::Compute, &computeShader},
+    };
+    glslang::TProgram program;
+
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        ASSERT(shaderSources[gl::ShaderType::Compute].empty());
-
-        gl::ShaderMap<std::string> patchedSources = shaderSources;
-
-        // #defines must come after the #version directive.
-        ANGLE_GLSLANG_CHECK(callback,
-                            angle::ReplaceSubstring(&patchedSources[gl::ShaderType::Vertex],
-                                                    kVersionDefine, kLineRasterDefine),
-                            GlslangError::InvalidShader);
-        ANGLE_GLSLANG_CHECK(callback,
-                            angle::ReplaceSubstring(&patchedSources[gl::ShaderType::Fragment],
-                                                    kVersionDefine, kLineRasterDefine),
-                            GlslangError::InvalidShader);
-
-        if (!shaderSources[gl::ShaderType::Geometry].empty())
+        if (shaderSources[shaderType].empty())
         {
-            ANGLE_GLSLANG_CHECK(callback,
-                                angle::ReplaceSubstring(&patchedSources[gl::ShaderType::Geometry],
-                                                        kVersionDefine, kLineRasterDefine),
-                                GlslangError::InvalidShader);
+            continue;
         }
 
-        return GetShaderSpirvCode(callback, glCaps, patchedSources, shaderCodeOut);
+        const char *shaderString = shaderSources[shaderType].c_str();
+        int shaderLength         = static_cast<int>(shaderSources[shaderType].size());
+
+        glslang::TShader *shader = shaders[shaderType];
+        shader->setStringsWithLengths(&shaderString, &shaderLength, 1);
+        shader->setEntryPoint("main");
+
+        bool result = shader->parse(&builtInResources, 450, ECoreProfile, false, false, messages);
+        if (!result)
+        {
+            ERR() << "Internal error parsing Vulkan shader corresponding to " << shaderType << ":\n"
+                  << shader->getInfoLog() << "\n"
+                  << shader->getInfoDebugLog() << "\n";
+            ANGLE_GLSLANG_CHECK(callback, false, GlslangError::InvalidShader);
+        }
+
+        program.addShader(shader);
     }
-    else
+
+    bool linkResult = program.link(messages);
+    if (!linkResult)
     {
-        return GetShaderSpirvCode(callback, glCaps, shaderSources, shaderCodeOut);
+        ERR() << "Internal error linking Vulkan shaders:\n" << program.getInfoLog() << "\n";
+        ANGLE_GLSLANG_CHECK(callback, false, GlslangError::InvalidShader);
+    }
+
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        if (shaderSources[shaderType].empty())
+        {
+            continue;
+        }
+
+        glslang::TIntermediate *intermediate = program.getIntermediate(kShLanguageMap[shaderType]);
+        glslang::GlslangToSpv(*intermediate, (*spirvShadersOut)[shaderType]);
+    }
+
+    return angle::Result::Continue;
+}
+
+void ValidateSpirvMessage(spv_message_level_t level,
+                          const char *source,
+                          const spv_position_t &position,
+                          const char *message)
+{
+    WARN() << "Level" << level << ": " << message;
+}
+
+bool ValidateSpirv(const std::vector<uint32_t> &spirvShader)
+{
+    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
+
+    spirvTools.SetMessageConsumer(ValidateSpirvMessage);
+    bool result = spirvTools.Validate(spirvShader);
+
+    if (!result)
+    {
+        std::string readableSpirv;
+        result = spirvTools.Disassemble(spirvShader, &readableSpirv,
+                                        SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES);
+        WARN() << "Invalid SPIR-V:\n" << readableSpirv;
+    }
+
+    return result;
+}
+
+// An in-place transformer of the SPIR-V.  It walks the instructions and modifies them as
+// necessary, for example to assign bindings or locations.  At the same time, it extracts
+// specialization code (such as for line raster emulation) as patches that can be applied at draw
+// time, if necessary.
+class SpirvTransformer final : angle::NonCopyable
+{
+  public:
+    SpirvTransformer(const std::vector<uint32_t> &originalSpirvShader, SpirvShader *spirvShader)
+        : mOriginalSpirvShader(originalSpirvShader), mSpirvShader(spirvShader)
+    {}
+
+    bool transform();
+
+  private:
+    // SPIR-V 1.0 Table 1: First Words of Physical Layout
+    enum HeaderIndex
+    {
+        kHeaderIndexMagic        = 0,
+        kHeaderIndexVersion      = 1,
+        kHeaderIndexGenerator    = 2,
+        kHeaderIndexIndexBound   = 3,
+        kHeaderIndexSchema       = 4,
+        kHeaderIndexInstructions = 5,
+    };
+
+    // SPIR-V 1.0 Section 3.32 Instructions
+    // Note: this is a subset of instructions, containing only those that are interesting.
+    enum Op
+    {
+        // Needed to find id of resources and varyings.
+        kOpName = 5,
+
+        // Needed to modify the shader interface and remove the ANGLEPosition varying.
+        kOpEntryPoint = 15,
+
+        // Needed to find the type of ANGLEPosition varying.
+        kOpTypePointer = 32,
+
+        // Needed to replace the specialization constant variables.
+        kOpConstantTrue     = 41,
+        kOpConstantFalse    = 42,
+        kOpSpecConstantTrue = 48,
+
+        // Needed to replace the declaration of ANGLEPosition varying with a global variable.
+        kOpVariable = 59,
+
+        // Needed to find specialization constant variables and modify location/bindings.
+        kOpDecorate = 71,
+    };
+
+    // SPIR-V 1.0 Section 3.1 Magic Number
+    static constexpr uint32_t kSpirvMagicNumber = 0x07230203;
+
+    // A prepass to resolve interesting ids:
+    void resolveIds();
+
+    // Transform instructions:
+    void transformInstruction();
+
+    // Instructions that potentially need transformation.  They return true if the instruction is
+    // transformed.  If false is returned, the instruction should be copied as-is.
+    bool transformEntryPoint(const uint32_t *instruction, size_t wordCount);
+    bool transformSpecConstantTrue(const uint32_t *instruction, size_t wordCount);
+    bool transformVariable(const uint32_t *instruction, size_t wordCount);
+    bool transformDecorate(const uint32_t *instruction, size_t wordCount);
+
+    // Instructions that are purely informational:
+    void visitName(const uint32_t *instruction);
+    void visitTypePointer(const uint32_t *instruction);
+
+    // Any other instructions:
+    void copyInstruction(const uint32_t *instruction, size_t wordCount);
+
+    // Patching helpers:
+    size_t getCurrentOutputOffset() const;
+    uint32_t getNewId();
+
+    // Create a patch hunk out of the instruction.  Currently, patched instructions are far and
+    // in between, so there's no value in trying to merge the hunks.
+    SpirvPatchHunk createPatchHunk(const uint32_t *instruction, size_t offset, size_t size);
+
+    // SPIR-V to transform:
+    const std::vector<uint32_t> &mOriginalSpirvShader;
+
+    // Transformed SPIR-V and specialization patches:
+    SpirvShader *mSpirvShader;
+
+    // Traversal state:
+    size_t mCurrentWord = 0;
+
+    // Transformation state:
+    static constexpr uint32_t kUninitializedId = 0xFFFFFFFFu;
+
+    // Line raster emulation specialization:
+    std::vector<const uint32_t *> mTypePointerInstructions;
+    uint32_t mANGLEPositionVarId       = kUninitializedId;
+    uint32_t mLineRasterSpecConstVarId = kUninitializedId;
+};
+
+bool SpirvTransformer::transform()
+{
+    // Glslang succeeded in outputting SPIR-V, so we assume it's valid.
+    ASSERT(mOriginalSpirvShader.size() >= kHeaderIndexInstructions);
+    // Since SPIR-V comes from a local call to glslang, it necessarily has the same endianness as
+    // the running architecture, so no byte-swapping is necessary.
+    ASSERT(mOriginalSpirvShader[kHeaderIndexMagic] == kSpirvMagicNumber);
+
+    // Make sure the transformer is not reused to avoid having to reinitialize it here.
+    ASSERT(mANGLEPositionVarId == kUninitializedId);
+
+    // Make sure the SpirvShader is not reused.
+    ASSERT(mSpirvShader->code.empty() && mSpirvShader->lineRasterEmulationPatch.hunks.empty());
+
+    // First, find all necessary ids.  This prepass is necessary to be able to transform
+    // OpEntryPoint in the second pass.
+    resolveIds();
+
+    // Allocate storage for type pointer instructions.  At index i, this vector holds a pointer to
+    // the OpTypePointer instruction that defines %i.
+    mTypePointerInstructions.resize(mOriginalSpirvShader[kHeaderIndexIndexBound] + 1, nullptr);
+
+    // Copy the header to SpirvShader
+    mSpirvShader->code.assign(mOriginalSpirvShader.begin(),
+                              mOriginalSpirvShader.begin() + kHeaderIndexInstructions);
+
+    mCurrentWord = kHeaderIndexInstructions;
+    while (mCurrentWord < mOriginalSpirvShader.size())
+    {
+        transformInstruction();
+    }
+
+    return true;
+}
+
+// SPIR-V 1.0 Table 2: Instruction Physical Layout
+uint32_t GetSpirvInstructionLength(const uint32_t *instruction)
+{
+    return instruction[0] >> 16;
+}
+uint32_t GetSpirvInstructionOp(const uint32_t *instruction)
+{
+    constexpr uint32_t kOpMask = 0xFFFFu;
+    return instruction[0] & kOpMask;
+}
+void SetSpirvInstructionLength(uint32_t *instruction, size_t length)
+{
+    ASSERT(length < 0xFFFFu);
+
+    constexpr uint32_t kLengthMask = 0xFFFF0000u;
+    instruction[0] &= ~kLengthMask;
+    instruction[0] |= length << 16;
+}
+void SetSpirvInstructionOp(uint32_t *instruction, uint32_t op)
+{
+    constexpr uint32_t kOpMask = 0xFFFFu;
+    instruction[0] &= ~kOpMask;
+    instruction[0] |= op;
+}
+
+void SpirvTransformer::resolveIds()
+{
+    size_t currentWord = kHeaderIndexInstructions;
+
+    while (currentWord < mOriginalSpirvShader.size())
+    {
+        const uint32_t *instruction = &mOriginalSpirvShader[currentWord];
+
+        const uint32_t wordCount = GetSpirvInstructionLength(instruction);
+        const uint32_t opCode    = GetSpirvInstructionOp(instruction);
+
+        if (opCode == kOpName)
+        {
+            visitName(instruction);
+        }
+        else if (opCode == kOpDecorate)
+        {
+            // Early out if the names section is finished.  This is purely an optimization, and it's
+            // ok to iterate over a few variations of Op*Decorate before OpDecorate is seen.  I.e.,
+            // this if doesn't need to be precise.
+            break;
+        }
+
+        // SPIR-V is structured in sections. OpName's appear before decorations, which are followed
+        // by variables and finally functions.  Because of the varying defined with line raster
+        // emulation, there are always going to be OpDecorate and OpVariable instructions.  Above,
+        // the loop early-outs if OpDecorate is seen, which means the names section is finished.  We
+        // should thus never reach a later section, such as the one defining variables.
+        ASSERT(opCode != kOpVariable);
+
+        currentWord += wordCount;
+    }
+}
+
+void SpirvTransformer::transformInstruction()
+{
+    const uint32_t *instruction = &mOriginalSpirvShader[mCurrentWord];
+
+    const uint32_t wordCount = GetSpirvInstructionLength(instruction);
+    const uint32_t opCode    = GetSpirvInstructionOp(instruction);
+
+    // Since glslang succeeded in producing SPIR-V, we assume it to be valid.
+    ASSERT(mCurrentWord + wordCount <= mOriginalSpirvShader.size());
+
+    // Advance to next instruction.
+    mCurrentWord += wordCount;
+
+    // Only look at interesting instructions.
+    bool transformed = false;
+    switch (opCode)
+    {
+        case kOpEntryPoint:
+            transformed = transformEntryPoint(instruction, wordCount);
+            break;
+        case kOpTypePointer:
+            visitTypePointer(instruction);
+            break;
+        case kOpSpecConstantTrue:
+            transformed = transformSpecConstantTrue(instruction, wordCount);
+            break;
+        case kOpVariable:
+            transformed = transformVariable(instruction, wordCount);
+            break;
+        case kOpDecorate:
+            transformed = transformDecorate(instruction, wordCount);
+            break;
+        default:
+            break;
+    }
+
+    // If the instruction was not transformed, copy it to output as is.
+    if (!transformed)
+    {
+        copyInstruction(instruction, wordCount);
+    }
+}
+
+void SpirvTransformer::visitName(const uint32_t *instruction)
+{
+    // We currently don't have any big-endian devices in the list of supported platforms.  Literal
+    // strings in SPIR-V are stored little-endian (SPIR-V 1.0 Section 2.2.1, Literal String), so if
+    // a big-endian device is to be supported, the string matching here should be specialized.
+    constexpr uint32_t endiannessTest = 1;
+    const bool isLittleEndian         = *reinterpret_cast<const uint8_t *>(&endiannessTest) == 1;
+    ASSERT(isLittleEndian);
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpName
+    constexpr size_t kIdIndex   = 1;
+    constexpr size_t kNameIndex = 2;
+
+    const uint32_t id = instruction[kIdIndex];
+    const char *name  = reinterpret_cast<const char *>(&instruction[kNameIndex]);
+
+    // Keep track of id of interesting variables.  No transformation is necessary.
+    if (strcmp(name, kANGLEPositionVarName) == 0)
+    {
+        ASSERT(mANGLEPositionVarId == kUninitializedId);
+        mANGLEPositionVarId = id;
+    }
+    else if (strcmp(name, kLineRasterSpecConstVarName) == 0)
+    {
+        ASSERT(mLineRasterSpecConstVarId == kUninitializedId);
+        mLineRasterSpecConstVarId = id;
+    }
+}
+
+void SpirvTransformer::visitTypePointer(const uint32_t *instruction)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpTypePointer
+    constexpr size_t kIdIndex = 1;
+
+    const uint32_t id = instruction[kIdIndex];
+
+    ASSERT(id < mTypePointerInstructions.size());
+    mTypePointerInstructions[id] = instruction;
+}
+
+bool SpirvTransformer::transformEntryPoint(const uint32_t *instruction, size_t wordCount)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpEntryPoint
+    constexpr size_t kNameIndex = 3;
+
+    // Calculate the length of entry point name in words.  Note that endianness of the string
+    // doesn't matter, since we are looking for the '\0' character and rounding up to the word size.
+    // This calculates (strlen(name)+1+3) / 4, which is equal to strlen(name)/4+1.
+    const size_t nameLength =
+        strlen(reinterpret_cast<const char *>(&instruction[kNameIndex])) / 4 + 1;
+    const uint32_t instructionLength = GetSpirvInstructionLength(instruction);
+    const size_t interfaceStart      = kNameIndex + nameLength;
+    const size_t interfaceCount      = instructionLength - interfaceStart;
+
+    // Create a copy of the entry point for modification.
+    std::vector<uint32_t> filteredEntryPoint(instruction, instruction + wordCount);
+
+    // Filter out ANGLEPosition from entry point interface declaration.
+    size_t writeIndex = 0;
+    for (size_t index = 0; index < interfaceCount; ++index)
+    {
+        uint32_t id = instruction[interfaceStart + index];
+        if (id == mANGLEPositionVarId)
+        {
+            // Line raster emulation should add this id to the entry point declaration when patched
+            // in.
+            mSpirvShader->lineRasterEmulationPatch.entryPointAdditions.push_back(id);
+            continue;
+        }
+
+        filteredEntryPoint[interfaceStart + writeIndex] = id;
+        ++writeIndex;
+    }
+
+    // Update the length of the instruction.
+    const size_t newLength = interfaceStart + writeIndex;
+    SetSpirvInstructionLength(filteredEntryPoint.data(), newLength);
+
+    // Copy to output.
+    const size_t currentOutputOffset = getCurrentOutputOffset();
+    copyInstruction(filteredEntryPoint.data(), newLength);
+
+    // Store the offset of this instruction to simplify shader patching.
+    ASSERT(mSpirvShader->entryPointOffset == 0);
+    mSpirvShader->entryPointOffset = currentOutputOffset;
+
+    return true;
+}
+
+bool SpirvTransformer::transformSpecConstantTrue(const uint32_t *instruction, size_t wordCount)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpSpecConstantTrue
+    constexpr size_t kIdIndex = 2;
+
+    const uint32_t id = instruction[kIdIndex];
+
+    ASSERT(mLineRasterSpecConstVarId != kUninitializedId);
+    if (id == mLineRasterSpecConstVarId)
+    {
+        const size_t currentOutputOffset = getCurrentOutputOffset();
+
+        // Make a copy of the instruction, and modify its opcode to OpConstantFalse.
+        // Note: The layout of OpSpecConstantTrue and OpConstantFalse is otherwise identical.
+        copyInstruction(instruction, wordCount);
+        SetSpirvInstructionOp(&mSpirvShader->code[currentOutputOffset], kOpConstantFalse);
+
+        // Create a patch hunk for line raster emulation.
+        mSpirvShader->lineRasterEmulationPatch.hunks.emplace_back(
+            createPatchHunk(instruction, currentOutputOffset, wordCount));
+
+        // Replace OpSpecConstantTrue with OpConstantTrue.
+        SetSpirvInstructionOp(&mSpirvShader->lineRasterEmulationPatch.hunks.back().contents[0],
+                              kOpConstantTrue);
+
+        return true;
+    }
+
+    // All specialization constants must be handled in this function.
+    UNREACHABLE();
+    return false;
+}
+
+bool SpirvTransformer::transformVariable(const uint32_t *instruction, size_t wordCount)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpVariable
+    constexpr size_t kTypeIdIndex       = 1;
+    constexpr size_t kIdIndex           = 2;
+    constexpr size_t kStorageClassIndex = 3;
+
+    const uint32_t id = instruction[kIdIndex];
+
+    if (id == mANGLEPositionVarId)
+    {
+        // Encountered: %ANGLEPosition = OpVariable %type Input
+        // This should be patched to:
+        //
+        //     %newType = OpTypePointer Private %v2float_index_taken_from_type_definition
+        //     %ANGLEPosition = OpVariable %newType Private
+        //
+        // Which effectively turns the varying into a global variable.
+
+        // Get the declaration of %type
+        const uint32_t typeId               = instruction[kTypeIdIndex];
+        const uint32_t *typeDeclInstruction = mTypePointerInstructions[typeId];
+        ASSERT(typeDeclInstruction != nullptr);
+
+        // SPIR-V 1.0 Section 3.32 Instructions, OpTypePointer
+        constexpr size_t kTypePointerIdIndex           = 1;
+        constexpr size_t kTypePointerStorageClassIndex = 2;
+        constexpr size_t kTypePointerInstructionLength = 4;
+
+        ASSERT(GetSpirvInstructionLength(typeDeclInstruction) == kTypePointerInstructionLength);
+
+        // Make a copy of the type declaration for modification.
+        std::array<uint32_t, kTypePointerInstructionLength> newTypeDeclaration = {
+            typeDeclInstruction[0],
+            typeDeclInstruction[1],
+            typeDeclInstruction[2],
+            typeDeclInstruction[3],
+        };
+
+        // SPIR-V 1.0 Section 3.7 Storage Class
+        constexpr uint32_t kStorageClassPrivate = 6;
+
+        const uint32_t newTypeId                          = getNewId();
+        newTypeDeclaration[kTypePointerIdIndex]           = newTypeId;
+        newTypeDeclaration[kTypePointerStorageClassIndex] = kStorageClassPrivate;
+
+        // Copy the new type declaration.
+        const size_t startOutputOffset = getCurrentOutputOffset();
+        copyInstruction(newTypeDeclaration.data(), newTypeDeclaration.size());
+
+        // Copy the variable declaration for modification.
+        const size_t currentOutputOffset = getCurrentOutputOffset();
+        copyInstruction(instruction, wordCount);
+
+        mSpirvShader->code[currentOutputOffset + kTypeIdIndex]       = newTypeId;
+        mSpirvShader->code[currentOutputOffset + kStorageClassIndex] = kStorageClassPrivate;
+
+        // Create a patch hunk for line raster emulation.
+        mSpirvShader->lineRasterEmulationPatch.hunks.emplace_back(createPatchHunk(
+            instruction, startOutputOffset, getCurrentOutputOffset() - startOutputOffset));
+
+        return true;
+    }
+
+    return false;
+}
+
+bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wordCount)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpDecorate
+    constexpr size_t kIdIndex         = 1;
+    constexpr size_t kDecorationIndex = 2;
+
+    uint32_t id = instruction[kIdIndex];
+
+    if (id == mANGLEPositionVarId)
+    {
+        // Encountered: OpDecorate %ANGLEPosition Location NNN
+        //
+        // This instruction should be removed.
+        //
+        // Note: If transform feedback extension is used, glslang decorates every varying with
+        // XfbBuffer and XfbStride.  This is benign since the Offset decoration is not specified
+        // for ANGLEPosition (see https://github.com/KhronosGroup/glslang/issues/1607).  These
+        // decorations are unnecessary though, and can be completely removed (and they don't need
+        // to be patched back for line rasterization).
+
+        // SPIR-V 1.0 Section 3.20 Decoration
+        constexpr uint32_t kDecorationLocation  = 30;
+        constexpr uint32_t kDecorationXfbBuffer = 36;
+        constexpr uint32_t kDecorationXfbStride = 37;
+        ASSERT(instruction[kDecorationIndex] == kDecorationLocation ||
+               instruction[kDecorationIndex] == kDecorationXfbBuffer ||
+               instruction[kDecorationIndex] == kDecorationXfbStride);
+
+        if (instruction[kDecorationIndex] == kDecorationLocation)
+        {
+            // Create a patch hunk for line raster emulation.
+            mSpirvShader->lineRasterEmulationPatch.hunks.emplace_back(
+                createPatchHunk(instruction, getCurrentOutputOffset(), 0));
+        }
+
+        return true;
+    }
+    else if (id == mLineRasterSpecConstVarId)
+    {
+        // Encountered: OpDecorate %ANGLEEmulateLine SpecId NNN
+        //
+        // Remove the instruction without creating a patch hunk.  The specialization constant is
+        // replaced with a constant in the patch, so there's no need for the decoration.
+
+        // SPIR-V 1.0 Section 3.20 Decoration
+        constexpr uint32_t kDecorationSpecId = 1;
+        ASSERT(instruction[kDecorationIndex] == kDecorationSpecId);
+
+        return true;
+    }
+
+    return false;
+}
+
+void SpirvTransformer::copyInstruction(const uint32_t *instruction, size_t wordCount)
+{
+    mSpirvShader->code.insert(mSpirvShader->code.end(), instruction, instruction + wordCount);
+}
+
+size_t SpirvTransformer::getCurrentOutputOffset() const
+{
+    return mSpirvShader->code.size();
+}
+
+uint32_t SpirvTransformer::getNewId()
+{
+    return mSpirvShader->code[kHeaderIndexIndexBound]++;
+}
+
+SpirvPatchHunk SpirvTransformer::createPatchHunk(const uint32_t *instruction,
+                                                 size_t offset,
+                                                 size_t size)
+{
+    size_t wordCount = GetSpirvInstructionLength(instruction);
+    return SpirvPatchHunk{offset, size, {instruction, instruction + wordCount}};
+}
+
+// Patch hunks reference the word offsets of the unpatched SPIR-V.  As such, they should all be
+// applied simultaneously.  An angle::FixedVector is used to collect all patches that need to be
+// applied.  This is the maximum possible number of patches, which constitutes:
+//
+//   - Line raster emulation.
+constexpr size_t kMaxSpirvPatchCount = 1;
+
+void ApplySpirvPatches(
+    const SpirvShader &spirvShader,
+    const angle::FixedVector<const SpirvPatch *, kMaxSpirvPatchCount> &patchesToApply,
+    std::vector<uint32_t> *specializedSpirvShaderOut)
+{
+    // Track the unpatched shader offset.  This will be used to determine when to apply a patch
+    // hunk.
+    size_t currentUnpatchedOffset = 0;
+
+    // Copy up to and including the entry point.  Note that the very first modification to the
+    // SPIR-V is to its entry point and there are no hunks that modify anything before it.
+    ASSERT(spirvShader.entryPointOffset != 0);
+    const size_t entryPointLength =
+        GetSpirvInstructionLength(&spirvShader.code[spirvShader.entryPointOffset]);
+
+    currentUnpatchedOffset = spirvShader.entryPointOffset + entryPointLength;
+    specializedSpirvShaderOut->assign(&spirvShader.code[0],
+                                      &spirvShader.code[currentUnpatchedOffset]);
+
+    // Patch the entry point by adding additional ids and modifying its length.
+    size_t newEntryPointLength = entryPointLength;
+    for (const SpirvPatch *patch : patchesToApply)
+    {
+        specializedSpirvShaderOut->insert(specializedSpirvShaderOut->end(),
+                                          patch->entryPointAdditions.begin(),
+                                          patch->entryPointAdditions.end());
+        newEntryPointLength += patch->entryPointAdditions.size();
+    }
+    SetSpirvInstructionLength(&(*specializedSpirvShaderOut)[spirvShader.entryPointOffset],
+                              newEntryPointLength);
+
+    // Keep track of which hunks are next to apply.
+    angle::FixedVector<size_t, kMaxSpirvPatchCount> nextHunks(patchesToApply.size(), 0);
+
+    while (true)
+    {
+        // The unpatched shader offset of the next hunk that should be applied.  Anything from
+        // currentUnpatchedOffset to nextUnpatchedHunkOffset can be directly copied.
+        size_t nextUnpatchedHunkOffset = spirvShader.code.size();
+        size_t nextPatchToApply        = patchesToApply.size();
+
+        // Find the patch hunk with the smallest unpatched offset.
+        // Note: a linear search is done here because the maximum number of patches is very low.  If
+        // they become nontrivially large, a heap could be used to find the hunk with the smallest
+        // offset.
+        for (size_t patchIndex = 0; patchIndex < patchesToApply.size(); ++patchIndex)
+        {
+            const SpirvPatch *patch         = patchesToApply[patchIndex];
+            const size_t nextPatchHunkIndex = nextHunks[patchIndex];
+            if (nextPatchHunkIndex >= patch->hunks.size())
+            {
+                // Ignore the patch if it no unapplied hunks remain.
+                continue;
+            }
+
+            const size_t hunkOffset = patch->hunks[nextPatchHunkIndex].offset;
+            if (hunkOffset < nextUnpatchedHunkOffset)
+            {
+                nextUnpatchedHunkOffset = hunkOffset;
+                nextPatchToApply        = patchIndex;
+            }
+        }
+
+        // Copy up to next patch hunk (or end of shader, if none).
+        specializedSpirvShaderOut->insert(specializedSpirvShaderOut->end(),
+                                          &spirvShader.code[currentUnpatchedOffset],
+                                          &spirvShader.code[nextUnpatchedHunkOffset]);
+
+        // If all patches were applied, we are done.
+        if (nextPatchToApply >= patchesToApply.size())
+        {
+            break;
+        }
+
+        // Apply the hunk.
+        const SpirvPatch *patch         = patchesToApply[nextPatchToApply];
+        const size_t nextPatchHunkIndex = nextHunks[nextPatchToApply];
+        const SpirvPatchHunk *hunk      = &patch->hunks[nextPatchHunkIndex];
+        specializedSpirvShaderOut->insert(specializedSpirvShaderOut->end(), hunk->contents.begin(),
+                                          hunk->contents.end());
+
+        // Mark the hunk as applied and move on to the next one.  Note: hunks are expected to be
+        // sorted by offset.
+        ASSERT(nextPatchHunkIndex + 1 == patch->hunks.size() ||
+               patch->hunks[nextPatchHunkIndex].offset <=
+                   patch->hunks[nextPatchHunkIndex + 1].offset);
+        ++nextHunks[nextPatchToApply];
+
+        // The hunk is replacing |hunk->size| words of the unpatched SPIR-V shader, so skip that
+        // many words.
+        currentUnpatchedOffset = nextUnpatchedHunkOffset + hunk->size;
+
+        ASSERT(currentUnpatchedOffset <= spirvShader.code.size());
+    }
+}
+
+}  // anonymous namespace
+
+void GlslangInitialize()
+{
+    int result = ShInitialize();
+    ASSERT(result != 0);
+}
+
+void GlslangRelease()
+{
+    int result = ShFinalize();
+    ASSERT(result != 0);
+}
+
+std::string GlslangGetMappedSamplerName(const std::string &originalName)
+{
+    std::string samplerName = originalName;
+
+    // Samplers in structs are extracted.
+    std::replace(samplerName.begin(), samplerName.end(), '.', '_');
+
+    // Remove array elements
+    auto out = samplerName.begin();
+    for (auto in = samplerName.begin(); in != samplerName.end(); in++)
+    {
+        if (*in == '[')
+        {
+            while (*in != ']')
+            {
+                in++;
+                ASSERT(in != samplerName.end());
+            }
+        }
+        else
+        {
+            *out++ = *in;
+        }
+    }
+
+    samplerName.erase(out, samplerName.end());
+
+    return samplerName;
+}
+
+angle::Result GlslangGetShaderSpirvCode(const GlslangSourceOptions &options,
+                                        GlslangErrorCallback callback,
+                                        const gl::Caps &glCaps,
+                                        const gl::ProgramState &programState,
+                                        const gl::ProgramLinkedResources &resources,
+                                        gl::ShaderMap<SpirvShader> *spirvShadersOut)
+{
+    // Get shader sources and replace @@ macros with their appropriate substitutions.
+    gl::ShaderMap<std::string> shaderSources;
+    GetShaderSources(options, programState, resources, &shaderSources);
+
+    // Compile the shaders and store the SPIR-V.
+    gl::ShaderMap<std::vector<uint32_t>> completeSpirvShaders;
+    ANGLE_TRY(GetShaderSpirvCode(callback, glCaps, shaderSources, &completeSpirvShaders));
+
+    // Transform the SPIR-V code by removing specializations and organizing them as patches.  Use
+    // GlslangGetSpecializedShaderSpirvCode to patch in the specializations at draw time.
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        const std::vector<uint32_t> completeSpirvShader = completeSpirvShaders[shaderType];
+
+        if (completeSpirvShader.empty())
+        {
+            continue;
+        }
+
+        SpirvShader *spirvShader = &(*spirvShadersOut)[shaderType];
+
+        SpirvTransformer transformer(completeSpirvShader, spirvShader);
+        ANGLE_GLSLANG_CHECK(callback, transformer.transform(), GlslangError::InvalidSpirv);
+
+        ASSERT(ValidateSpirv(spirvShader->code));
+    }
+
+    return angle::Result::Continue;
+}
+
+void GlslangGetSpecializedShaderSpirvCode(
+    bool enableLineRasterEmulation,
+    const gl::ShaderMap<SpirvShader> &spirvShaders,
+    gl::ShaderMap<std::vector<uint32_t>> *specializedSpirvShadersOut)
+{
+    // At least one specialization must be requested.  There is currently only one.
+    ASSERT(enableLineRasterEmulation);
+
+    // Make a copy of the binary for patching.
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        const SpirvShader &spirvShader = spirvShaders[shaderType];
+        if (spirvShader.code.empty())
+        {
+            continue;
+        }
+
+        // Decide which patches need to be applied.
+        angle::FixedVector<const SpirvPatch *, kMaxSpirvPatchCount> patchesToApply;
+
+        if (enableLineRasterEmulation)
+        {
+            patchesToApply.push_back(&spirvShader.lineRasterEmulationPatch);
+        }
+
+        // Apply all patches simultaneously.
+        ApplySpirvPatches(spirvShader, patchesToApply, &(*specializedSpirvShadersOut)[shaderType]);
+
+        ASSERT(ValidateSpirv((*specializedSpirvShadersOut)[shaderType]));
     }
 }
 }  // namespace rx
