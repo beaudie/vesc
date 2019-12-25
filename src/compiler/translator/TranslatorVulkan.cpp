@@ -163,6 +163,10 @@ constexpr ImmutableString kEmulatedDepthRangeParams = ImmutableString("ANGLEDept
 constexpr ImmutableString kUniformsBlockName        = ImmutableString("ANGLEUniformBlock");
 constexpr ImmutableString kUniformsVarName          = ImmutableString("ANGLEUniforms");
 
+// Specialization constant names
+constexpr ImmutableString kLineRasterEmulationSpecConstVarName =
+    ImmutableString("ANGLEEmulateLine");
+
 constexpr const char kViewport[]             = "viewport";
 constexpr const char kHalfRenderAreaHeight[] = "halfRenderAreaHeight";
 constexpr const char kViewportYScale[]       = "viewportYScale";
@@ -423,25 +427,18 @@ const TVariable *AddComputeDriverUniformsToShader(TIntermBlock *root, TSymbolTab
                                  kUniformsVarName);
 }
 
-TIntermPreprocessorDirective *GenerateLineRasterIfDef()
+TIntermSymbol *GenerateLineRasterSpecConstRef(TSymbolTable *symbolTable)
 {
-    return new TIntermPreprocessorDirective(
-        PreprocessorDirective::Ifdef, ImmutableString("ANGLE_ENABLE_LINE_SEGMENT_RASTERIZATION"));
-}
-
-TIntermPreprocessorDirective *GenerateEndIf()
-{
-    return new TIntermPreprocessorDirective(PreprocessorDirective::Endif, kEmptyImmutableString);
+    TVariable *specConstVar =
+        new TVariable(symbolTable, kLineRasterEmulationSpecConstVarName,
+                      StaticType::GetBasic<EbtBool>(), SymbolType::AngleInternal);
+    return new TIntermSymbol(specConstVar);
 }
 
 TVariable *AddANGLEPositionVaryingDeclaration(TIntermBlock *root,
                                               TSymbolTable *symbolTable,
                                               TQualifier qualifier)
 {
-    TIntermSequence *insertSequence = new TIntermSequence;
-
-    insertSequence->push_back(GenerateLineRasterIfDef());
-
     // Define a driver varying vec2 "ANGLEPosition".
     TType *varyingType               = new TType(EbtFloat, EbpMedium, qualifier, 2);
     TVariable *varyingVar            = new TVariable(symbolTable, ImmutableString("ANGLEPosition"),
@@ -449,9 +446,9 @@ TVariable *AddANGLEPositionVaryingDeclaration(TIntermBlock *root,
     TIntermSymbol *varyingDeclarator = new TIntermSymbol(varyingVar);
     TIntermDeclaration *varyingDecl  = new TIntermDeclaration;
     varyingDecl->appendDeclarator(varyingDeclarator);
-    insertSequence->push_back(varyingDecl);
 
-    insertSequence->push_back(GenerateEndIf());
+    TIntermSequence *insertSequence = new TIntermSequence;
+    insertSequence->push_back(varyingDecl);
 
     // Insert the declarations before Main.
     size_t mainIndex = FindMainIndex(root);
@@ -516,15 +513,18 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationVS(TCompiler *compiler,
     TIntermSymbol *varyingRef    = new TIntermSymbol(anglePosition);
     TIntermBinary *varyingAssign = new TIntermBinary(EOpAssign, varyingRef, clampedNDC);
 
+    TIntermBlock *emulationBlock = new TIntermBlock;
+    emulationBlock->appendStatement(ndcDecl);
+    emulationBlock->appendStatement(windowDecl);
+    emulationBlock->appendStatement(clampedDecl);
+    emulationBlock->appendStatement(varyingAssign);
+    TIntermIfElse *ifEmulation =
+        new TIntermIfElse(GenerateLineRasterSpecConstRef(symbolTable), emulationBlock, nullptr);
+
     // Ensure the statements run at the end of the main() function.
     TIntermFunctionDefinition *main = FindMain(root);
     TIntermBlock *mainBody          = main->getBody();
-    mainBody->appendStatement(GenerateLineRasterIfDef());
-    mainBody->appendStatement(ndcDecl);
-    mainBody->appendStatement(windowDecl);
-    mainBody->appendStatement(clampedDecl);
-    mainBody->appendStatement(varyingAssign);
-    mainBody->appendStatement(GenerateEndIf());
+    mainBody->appendStatement(ifEmulation);
     return compiler->validateAST(root);
 }
 
@@ -654,25 +654,33 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
     discardBlock->appendStatement(discard);
     TIntermIfElse *ifStatement = new TIntermIfElse(checkXY, discardBlock, nullptr);
 
+    TIntermBlock *emulationBlock       = new TIntermBlock;
+    TIntermSequence *emulationSequence = emulationBlock->getSequence();
+
+    std::array<TIntermNode *, 8> nodes = {
+        {pDecl, dDecl, fDecl, p_decl, d_decl, f_decl, iDecl, ifStatement}};
+    emulationSequence->insert(emulationSequence->begin(), nodes.begin(), nodes.end());
+
+    TIntermIfElse *ifEmulation =
+        new TIntermIfElse(GenerateLineRasterSpecConstRef(symbolTable), emulationBlock, nullptr);
+
     // Ensure the line raster code runs at the beginning of main().
     TIntermFunctionDefinition *main = FindMain(root);
     TIntermSequence *mainSequence   = main->getBody()->getSequence();
     ASSERT(mainSequence);
 
-    std::array<TIntermNode *, 9> nodes = {
-        {pDecl, dDecl, fDecl, p_decl, d_decl, f_decl, iDecl, ifStatement, GenerateEndIf()}};
-    mainSequence->insert(mainSequence->begin(), nodes.begin(), nodes.end());
+    mainSequence->insert(mainSequence->begin(), ifEmulation);
 
-    // If the shader does not use frag coord, we should insert it inside the ifdef.
+    // If the shader does not use frag coord, we should insert it inside the emulation if.
     if (!usesFragCoord)
     {
-        if (!InsertFragCoordCorrection(compiler, root, mainSequence, symbolTable, driverUniforms))
+        if (!InsertFragCoordCorrection(compiler, root, emulationSequence, symbolTable,
+                                       driverUniforms))
         {
             return false;
         }
     }
 
-    mainSequence->insert(mainSequence->begin(), GenerateLineRasterIfDef());
     return compiler->validateAST(root);
 }
 
@@ -840,6 +848,16 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         {
             return false;
         }
+
+        // Add specialization constant declarations.  Glslang wrapper itself selectively removes the
+        // specialization constant declarations and dependent code paths from the generated SPIR-V,
+        // so the specialization constants are always using their default values when creating the
+        // pipeline.  Therefore, the constant_id assigned here is arbitrary.  Furthermore, the
+        // default value of the specialization constants is to **enable** the specialization.
+        // TODO: actually, selecting based on constant id is simpler, so switch to that.  Let's see
+        // what the SPIR-V looks like to begin with.
+        sink << "layout(constant_id=0) const bool " << kLineRasterEmulationSpecConstVarName
+             << " = true;\n\n";
     }
 
     // Declare gl_FragColor and glFragData as webgl_FragColor and webgl_FragData
