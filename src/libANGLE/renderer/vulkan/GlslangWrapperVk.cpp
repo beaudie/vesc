@@ -39,24 +39,25 @@ GlslangSourceOptions CreateSourceOptions(const angle::FeaturesVk &features)
 }  // namespace
 
 // static
-void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
-                                       const gl::ProgramState &programState,
-                                       const gl::ProgramLinkedResources &resources,
-                                       gl::ShaderMap<std::string> *shaderSourcesOut)
+angle::Result GlslangWrapperVk::GetShaderSpirvCode(vk::Context *context,
+                                                   const angle::FeaturesVk &features,
+                                                   const gl::Caps &glCaps,
+                                                   const gl::ProgramState &programState,
+                                                   const gl::ProgramLinkedResources &resources,
+                                                   gl::ShaderMap<SpirvShader> *spirvShadersOut)
 {
-    GlslangGetShaderSource(CreateSourceOptions(features), programState, resources,
-                           shaderSourcesOut);
+    auto errorHandler = [context](GlslangError error) { return ErrorHandler(context, error); };
+    return GlslangGetShaderSpirvCode(CreateSourceOptions(features), errorHandler, glCaps,
+                                     programState, resources, spirvShadersOut);
 }
 
 // static
-angle::Result GlslangWrapperVk::GetShaderCode(vk::Context *context,
-                                              const gl::Caps &glCaps,
-                                              bool enableLineRasterEmulation,
-                                              const gl::ShaderMap<std::string> &shaderSources,
-                                              gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
+void GlslangWrapperVk::GetSpecializedShaderSpirvCode(
+    bool enableLineRasterEmulation,
+    const gl::ShaderMap<SpirvShader> &spirvShaders,
+    gl::ShaderMap<std::vector<uint32_t>> *specializedSpirvShadersOut)
 {
-    return GlslangGetShaderSpirvCode(
-        [context](GlslangError error) { return ErrorHandler(context, error); }, glCaps,
-        enableLineRasterEmulation, shaderSources, shaderCodeOut);
+    GlslangGetSpecializedShaderSpirvCode(enableLineRasterEmulation, spirvShaders,
+                                         specializedSpirvShadersOut);
 }
 }  // namespace rx

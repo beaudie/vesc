@@ -295,7 +295,14 @@ std::unique_ptr<LinkEvent> ProgramMtl::link(const gl::Context *context,
     // assignment done in that function.
     linkResources(resources);
 
-    mtl::GlslangGetShaderSource(mState, resources, &mShaderSource);
+    // Convert GLSL to spirv code
+    mSpirvShaders        = gl::ShaderMap<SpirvShader>();
+    angle::Result status = mtl::GlslangGetShaderSpirvCode(contextMtl, contextMtl->getCaps(), mState,
+                                                          resources, &mSpirvShaders);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
 
     // NOTE(hqle): Parallelize linking.
     return std::make_unique<LinkEventDone>(linkImpl(context, infoLog));
@@ -310,16 +317,11 @@ angle::Result ProgramMtl::linkImpl(const gl::Context *glContext, gl::InfoLog &in
 
     ANGLE_TRY(initDefaultUniformBlocks(glContext));
 
-    // Convert GLSL to spirv code
-    gl::ShaderMap<std::vector<uint32_t>> shaderCodes;
-    ANGLE_TRY(mtl::GlslangGetShaderSpirvCode(contextMtl, contextMtl->getCaps(), false,
-                                             mShaderSource, &shaderCodes));
-
     // Convert spirv code to MSL
     ANGLE_TRY(convertToMsl(glContext, gl::ShaderType::Vertex, infoLog,
-                           &shaderCodes[gl::ShaderType::Vertex]));
+                           &mSpirvShaders[gl::ShaderType::Vertex].code));
     ANGLE_TRY(convertToMsl(glContext, gl::ShaderType::Fragment, infoLog,
-                           &shaderCodes[gl::ShaderType::Fragment]));
+                           &mSpirvShaders[gl::ShaderType::Fragment].code));
 
     return angle::Result::Continue;
 }

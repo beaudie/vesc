@@ -80,6 +80,12 @@ class BinaryInputStream : angle::NonCopyable
 
     void readBytes(unsigned char outArray[], size_t count) { read<unsigned char>(outArray, count); }
 
+    template <typename T>
+    void readRaw(T *v, size_t num)
+    {
+        read(v, num);
+    }
+
     std::string readString()
     {
         std::string outString;
@@ -229,6 +235,12 @@ class BinaryOutputStream : angle::NonCopyable
     }
 
     void writeBytes(const unsigned char *bytes, size_t count) { write(bytes, count); }
+
+    template <typename T>
+    void writeRaw(T *v, size_t num)
+    {
+        write(v, num);
+    }
 
     size_t length() const { return mData.size(); }
 
