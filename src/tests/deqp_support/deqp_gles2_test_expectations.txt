@@ -300,6 +300,10 @@
 3240 D3D11 : dEQP-GLES2.functional.texture.vertex.cube.wrap.mirror_repeat = FAIL
 3240 D3D11 : dEQP-GLES2.functional.texture.vertex.cube.wrap.mirror_mirror = FAIL
 
+// Vertex attribute bind aliasing failures
+4249 VULKAN : dEQP-GLES2.functional.attribute_location.bind_aliasing.cond_* = FAIL
+4249 VULKAN : dEQP-GLES2.functional.attribute_location.bind_aliasing.max_cond_* = FAIL
+
 // Android Vulkan backend only failures
 2549 VULKAN ANDROID : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil* = SKIP
 4109 VULKAN ANDROID : dEQP-GLES2.functional.texture.mipmap.cube.projected.nearest_linear = FAIL

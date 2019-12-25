@@ -17,6 +17,7 @@
 #include "common/Optional.h"
 #include "common/utilities.h"
 #include "libANGLE/renderer/ProgramImpl.h"
+#include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/metal/mtl_command_buffer.h"
 #include "libANGLE/renderer/metal/mtl_resources.h"
 #include "libANGLE/renderer/metal/mtl_state_cache.h"
@@ -160,8 +161,8 @@ class ProgramMtl : public ProgramImpl
     gl::ShaderBitSet mSamplerBindingsDirty;
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
 
-    // We keep the translated linked shader sources to use with shader draw call patching.
-    gl::ShaderMap<std::string> mShaderSource;
+    // We keep the SPIR-V code to use with shader draw call patching.
+    gl::ShaderMap<SpirvShader> mSpirvShaders;
 
     mtl::RenderPipelineCache mMetalRenderPipelineCache;
 };
