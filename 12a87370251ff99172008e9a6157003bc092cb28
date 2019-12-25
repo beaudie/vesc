@@ -22,6 +22,30 @@
       "revId": "12a87370251ff99172008e9a6157003bc092cb28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "547192fc_57a8b7fc",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-25T04:04:31Z",
+      "side": 1,
+      "message": "I intentionally left it so future additions would be placed under here. I\u0027m sure we will have 3.2 failures too :)",
+      "parentUuid": "3634cae5_0d102ea5",
+      "range": {
+        "startLine": 675,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 33
+      },
+      "revId": "12a87370251ff99172008e9a6157003bc092cb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
