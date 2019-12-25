@@ -18,6 +18,7 @@ namespace rx
 enum class GlslangError
 {
     InvalidShader,
+    InvalidSpirv,
 };
 
 struct GlslangSourceOptions
@@ -39,26 +40,68 @@ struct GlslangSourceOptions
     bool emulateTransformFeedback           = false;
 };
 
+struct SpirvPatchHunk
+{
+    // Replace words [|offset|, |offset|+|size|) in unpatched SPIR-V with |contents|.  |size| can be
+    // empty, so can |contents|.
+    size_t offset = 0;
+    size_t size   = 0;
+    std::vector<uint32_t> contents;
+};
+
+struct SpirvPatch
+{
+    // Any possible entry point interface variable ids that need to be added by the patch.
+    // Note: Currently, there is no specialization that can remove interface variables.
+    std::vector<uint32_t> entryPointAdditions;
+    // Hunks to be replaced.  They must be sorted by |offset|.
+    std::vector<SpirvPatchHunk> hunks;
+};
+
+struct SpirvShader
+{
+    // SPIR-V output without special variations.
+    std::vector<uint32_t> code;
+    // Location of OpEntryPoint, to facilitate SPIR-V patching.
+    size_t entryPointOffset = 0;
+    // SPIR-V patch for line raster emulation.
+    SpirvPatch lineRasterEmulationPatch;
+};
+
 using GlslangErrorCallback = std::function<angle::Result(GlslangError)>;
 
 void GlslangInitialize();
 void GlslangRelease();
 
-// Get the mapped sampler name after the soure is transformed by GlslangGetShaderSource()
+// Get the mapped sampler name after the soure is transformed by GlslangGetShaderSpirvCode()
 std::string GlslangGetMappedSamplerName(const std::string &originalName);
 
-// Transform the source to include actual binding points for various shader
-// resources (textures, buffers, xfb, etc)
-void GlslangGetShaderSource(const GlslangSourceOptions &options,
-                            const gl::ProgramState &programState,
-                            const gl::ProgramLinkedResources &resources,
-                            gl::ShaderMap<std::string> *shaderSourcesOut);
-
-angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
+// Transform the source to include actual binding points for various shader resources (textures,
+// buffers, xfb, etc), then compile it and return the SPIR-V.  Specialization constants and varyings
+// with a priori known names are used to mark pieces of code that are used under special
+// circumstances.  These specialization instructions are kept separately as a "patch" to the
+// non-specialized SPIR-V.
+//
+// This function should be called at link time.
+angle::Result GlslangGetShaderSpirvCode(const GlslangSourceOptions &options,
+                                        GlslangErrorCallback callback,
                                         const gl::Caps &glCaps,
-                                        bool enableLineRasterEmulation,
-                                        const gl::ShaderMap<std::string> &shaderSources,
-                                        gl::ShaderMap<std::vector<uint32_t>> *shaderCodesOut);
+                                        const gl::ProgramState &programState,
+                                        const gl::ProgramLinkedResources &resources,
+                                        gl::ShaderMap<SpirvShader> *spirvShadersOut);
+
+// Specialize the SPIR-V with any possible patches (currently, only line raster emulation).
+// Creates a copy of the non-specialized SPIR-V (as it assumes at least one specialization is
+// necessary) and applies the necessary patches.  Note that since the patch hunks reference the
+// offset in SPIR-V before specialization, all necessary specializations should be applied at once,
+// and cannot be done one at a time.
+//
+// This function should be called at draw time, and is therefore expected to have minimal overhead,
+// even though it's only called in special cases.
+void GlslangGetSpecializedShaderSpirvCode(
+    bool enableLineRasterEmulation,
+    const gl::ShaderMap<SpirvShader> &spirvShaders,
+    gl::ShaderMap<std::vector<uint32_t>> *specializedSpirvShadersOut);
 
 }  // namespace rx
 
