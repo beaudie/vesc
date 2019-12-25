@@ -12,21 +12,23 @@
 #include "libANGLE/Caps.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/ProgramImpl.h"
+#include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/metal/mtl_common.h"
 
 namespace rx
 {
 namespace mtl
 {
-void GlslangGetShaderSource(const gl::ProgramState &programState,
-                            const gl::ProgramLinkedResources &resources,
-                            gl::ShaderMap<std::string> *shaderSourcesOut);
-
 angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
                                         const gl::Caps &glCaps,
-                                        bool enableLineRasterEmulation,
-                                        const gl::ShaderMap<std::string> &shaderSources,
-                                        gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut);
+                                        const gl::ProgramState &programState,
+                                        const gl::ProgramLinkedResources &resources,
+                                        gl::ShaderMap<SpirvShader> *spirvShadersOut);
+
+void GlslangGetSpecializedShaderSpirvCode(
+    bool enableLineRasterEmulation,
+    const gl::ShaderMap<SpirvShader> &spirvShaders,
+    gl::ShaderMap<std::vector<uint32_t>> *specializedSpirvShadersOut);
 }  // namespace mtl
 }  // namespace rx
 
