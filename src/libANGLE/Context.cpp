@@ -6404,14 +6404,19 @@ void Context::getIntegervRobust(GLenum pname, GLsizei bufSize, GLsizei *length, 
 
 void Context::getProgramiv(ShaderProgramID program, GLenum pname, GLint *params)
 {
-    Program *programObject = nullptr;
-    if (!mContextLost)
+    if (mContextLost)
     {
-        // Don't resolve link if checking the link completion status.
-        programObject = (pname == GL_COMPLETION_STATUS_KHR ? getProgramNoResolveLink(program)
-                                                           : getProgramResolveLink(program));
-        ASSERT(programObject);
+        if (pname == GL_COMPLETION_STATUS_KHR)
+        {
+            *params = GL_TRUE;
+        }
+        return;  // This must be a no-error context, since it skipped context-loss validation!
     }
+
+    // Don't resolve link if checking the link completion status.
+    Program *programObject = (pname == GL_COMPLETION_STATUS_KHR ? getProgramNoResolveLink(program)
+                                                                : getProgramResolveLink(program));
+    ASSERT(programObject);
     QueryProgramiv(this, programObject, pname, params);
 }
 
