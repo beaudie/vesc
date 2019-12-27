@@ -2785,6 +2785,7 @@ void State::setObjectDirty(GLenum target)
             break;
         case GL_DRAW_FRAMEBUFFER:
             setDrawFramebufferDirty();
+            mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
             break;
         case GL_FRAMEBUFFER:
             mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
