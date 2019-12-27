@@ -452,7 +452,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     void markContextLost(GraphicsResetStatus status);
 
-    bool isContextLost() const { return mContextLost; }
+    bool isContextLost() const { return mContextLost_setContextLostOnly; }
+    void setContextLost();
 
     GLenum getGraphicsResetStrategy() const { return mResetStrategy; }
     bool isResetNotificationEnabled();
@@ -511,8 +512,18 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const TextureCapsMap &getTextureCaps() const { return mState.getTextureCaps(); }
     const Extensions &getExtensions() const { return mState.getExtensions(); }
     const Limitations &getLimitations() const { return mState.getLimitations(); }
-    bool skipValidation() const { return mSkipValidation; }
     bool isGLES1() const;
+
+    bool skipValidation() const
+    {
+        // Ensure we don't skip validation when context becomes lost, since implementations
+        // generally assume a non-lost context, non-null objects, etc.
+        if (isContextLost())
+        {
+            ASSERT(!mSkipValidation);
+        }
+        return mSkipValidation;
+    }
 
     // Specific methods needed for validation.
     bool getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *numParams) const;
@@ -679,7 +690,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // Current/lost context flags
     bool mHasBeenCurrent;
-    bool mContextLost;
+    bool mContextLost_setContextLostOnly;
     GraphicsResetStatus mResetStatus;
     bool mContextLostForced;
     GLenum mResetStrategy;
