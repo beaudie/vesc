@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96e6f481_ef43479d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-27T22:29:54Z",
+      "side": 1,
+      "message": "Looks like this should go inside `IsWindows10OrGreater()` itself.",
+      "range": {
+        "startLine": 2367,
+        "startChar": 0,
+        "endLine": 2369,
+        "endChar": 5
+      },
+      "revId": "90bc13702fac637e993b4515f1df30aa39cef59b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
