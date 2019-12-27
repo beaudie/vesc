@@ -511,8 +511,11 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const TextureCapsMap &getTextureCaps() const { return mState.getTextureCaps(); }
     const Extensions &getExtensions() const { return mState.getExtensions(); }
     const Limitations &getLimitations() const { return mState.getLimitations(); }
-    bool skipValidation() const { return mSkipValidation; }
     bool isGLES1() const;
+
+    // Stop skipping validation when context becomes lost, since implementations
+    // generally assume a non-lost context, non-null objects, etc.
+    bool skipValidation() const { return mSkipValidation && !mContextLost; }
 
     // Specific methods needed for validation.
     bool getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *numParams) const;
