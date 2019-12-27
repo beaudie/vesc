@@ -2356,14 +2356,19 @@ void InitializeFeatures(const Renderer11DeviceCaps &deviceCaps,
                         const DXGI_ADAPTER_DESC &adapterDesc,
                         angle::FeaturesD3D *features)
 {
-    bool isNvidia                  = IsNvidia(adapterDesc.VendorId);
-    bool isIntel                   = IsIntel(adapterDesc.VendorId);
-    bool isSkylake                 = false;
-    bool isBroadwell               = false;
-    bool isHaswell                 = false;
-    bool isIvyBridge               = false;
-    bool isAMD                     = IsAMD(adapterDesc.VendorId);
-    bool isFeatureLevel9_3         = (deviceCaps.featureLevel <= D3D_FEATURE_LEVEL_9_3);
+    bool isNvidia          = IsNvidia(adapterDesc.VendorId);
+    bool isIntel           = IsIntel(adapterDesc.VendorId);
+    bool isSkylake         = false;
+    bool isBroadwell       = false;
+    bool isHaswell         = false;
+    bool isIvyBridge       = false;
+    bool isAMD             = IsAMD(adapterDesc.VendorId);
+    bool isFeatureLevel9_3 = (deviceCaps.featureLevel <= D3D_FEATURE_LEVEL_9_3);
+#if defined(ANGLE_ENABLE_WINDOWS_UWP)
+    bool isWin10 = true;
+#else
+    bool isWin10 = IsWindows10OrGreater();
+#endif
     IntelDriverVersion capsVersion = IntelDriverVersion(0);
     if (isIntel)
     {
@@ -2449,7 +2454,7 @@ void InitializeFeatures(const Renderer11DeviceCaps &deviceCaps,
     // This is targeted to work around a bug in AMD D3D driver that fails to allocate
     // ShaderResourceView for StructuredBuffer.
     ANGLE_FEATURE_CONDITION(features, dontTranslateUniformBlockToStructuredBuffer,
-                            isAMD && !IsWindows10OrGreater());
+                            isAMD && !isWin10);
 
     // Call platform hooks for testing overrides.
     auto *platform = ANGLEPlatformCurrent();
