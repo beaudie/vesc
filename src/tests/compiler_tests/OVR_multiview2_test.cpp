@@ -643,6 +643,29 @@ TEST_F(OVRMultiview2FragmentShaderOutputCodeTest, ViewportArray2IsNotEmitted)
     EXPECT_FALSE(foundInESSLCode("#extension GL_NV_viewport_array2"));
 }
 
+// The test checks native OVR_multiview2 extension.
+TEST_F(OVRMultiview2FragmentShaderOutputCodeTest, NativeOvrMultiview2Output)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "#extension GL_OVR_multiview2 : require\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+    compile(shaderString);
+    EXPECT_FALSE(foundInGLSLCode("#extension GL_NV_viewport_array2"));
+    EXPECT_FALSE(foundInESSLCode("#extension GL_NV_viewport_array2"));
+
+    EXPECT_TRUE(foundInESSLCode("#extension GL_OVR_multiview2"));
+    EXPECT_TRUE(foundInGLSLCode("#extension GL_OVR_multiview2"));
+
+    // no double extension
+    std::vector<const char *> notExpectedStrings1 = {"#extension GL_OVR_multiview",
+                                                     "#extension GL_OVR_multiview"};
+    EXPECT_FALSE(foundInCodeInOrder(SH_ESSL_OUTPUT, notExpectedStrings1));
+    EXPECT_FALSE(foundInCodeInOrder(SH_GLSL_COMPATIBILITY_OUTPUT, notExpectedStrings1));
+}
+
 // The test checks that the GL_NV_viewport_array2 extension is not emitted in a compute shader if
 // the SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER option is set.
 TEST_F(OVRMultiview2ComputeShaderOutputCodeTest, ViewportArray2IsNotEmitted)
@@ -722,6 +745,17 @@ TEST_F(OVRMultiview2VertexShaderOutputCodeTest, NativeOvrMultiview2Output)
 
     EXPECT_FALSE(foundInGLSLCode("gl_ViewportIndex"));
     EXPECT_FALSE(foundInESSLCode("gl_ViewportIndex"));
+
+    // no double extension
+    std::vector<const char *> notExpectedStrings1 = {"#extension GL_OVR_multiview",
+                                                     "#extension GL_OVR_multiview"};
+    EXPECT_FALSE(foundInCodeInOrder(SH_ESSL_OUTPUT, notExpectedStrings1));
+    EXPECT_FALSE(foundInCodeInOrder(SH_GLSL_COMPATIBILITY_OUTPUT, notExpectedStrings1));
+
+    // no double num_views
+    std::vector<const char *> notExpectedStrings2 = {"layout(num_views", "layout(num_views"};
+    EXPECT_FALSE(foundInCodeInOrder(SH_ESSL_OUTPUT, notExpectedStrings2));
+    EXPECT_FALSE(foundInCodeInOrder(SH_GLSL_COMPATIBILITY_OUTPUT, notExpectedStrings2));
 }
 
 }  // namespace
