@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eec5b1dd_8ed8b567",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-29T20:28:44Z",
+      "side": 1,
+      "message": "Copy-paste error",
+      "range": {
+        "startLine": 662,
+        "startChar": 39,
+        "endLine": 662,
+        "endChar": 40
+      },
+      "revId": "4a49209c41c585d42808c492c0aeffa7297bd1e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92a07757_197aebee",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-29T20:28:44Z",
+      "side": 1,
+      "message": "the ... is\n\nRemove both \"the\" and \"is\". It\u0027s a copy-paste from a test in the other file, so fix that comment too.",
+      "range": {
+        "startLine": 745,
+        "startChar": 13,
+        "endLine": 745,
+        "endChar": 53
+      },
+      "revId": "4a49209c41c585d42808c492c0aeffa7297bd1e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
