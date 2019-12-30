@@ -2123,6 +2123,15 @@ void ContextVk::updateSampleMask(const gl::State &glState)
     }
 }
 
+void ContextVk::updateRasterizationSamples()
+{
+    if (mDrawFramebuffer)
+    {
+        mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
+                                                          mDrawFramebuffer->getSamples());
+    }
+}
+
 void ContextVk::updateViewport(FramebufferVk *framebufferVk,
                                const gl::Rectangle &viewport,
                                float nearPlane,
@@ -2393,8 +2402,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
                 updateColorMask(glState.getBlendState());
                 updateSampleMask(glState);
-                mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
-                                                                  mDrawFramebuffer->getSamples());
+                updateRasterizationSamples();
                 mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                        glState.getRasterizerState(),
                                                        isViewportFlipEnabledForDrawFBO());
@@ -2730,6 +2738,15 @@ void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
     // Ensure that the RenderPass description is updated.
     invalidateCurrentGraphicsPipeline();
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition, renderPassDesc);
+}
+
+void ContextVk::onFramebufferDestroy(FramebufferVk *framebufferVk)
+{
+    if (mDrawFramebuffer == framebufferVk)
+    {
+        // No longer point at a destroyed draw framebuffer
+        mDrawFramebuffer = nullptr;
+    }
 }
 
 void ContextVk::invalidateCurrentTransformFeedbackBuffers()
