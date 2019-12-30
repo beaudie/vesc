@@ -22,6 +22,30 @@
       "revId": "90bc13702fac637e993b4515f1df30aa39cef59b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cde2d5d_b488804e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1381265
+      },
+      "writtenOn": "2019-12-30T21:49:28Z",
+      "side": 1,
+      "message": "Isn\u0027t this function from Microsoft\u0027s versionhelpers.h?",
+      "parentUuid": "96e6f481_ef43479d",
+      "range": {
+        "startLine": 2367,
+        "startChar": 0,
+        "endLine": 2369,
+        "endChar": 5
+      },
+      "revId": "90bc13702fac637e993b4515f1df30aa39cef59b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
