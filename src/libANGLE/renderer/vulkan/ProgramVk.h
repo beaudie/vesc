@@ -309,6 +309,8 @@ class ProgramVk : public ProgramImpl
         ANGLE_INLINE bool valid() const
         {
             return mShaders[gl::ShaderType::Vertex].get().valid() ||
+                   mShaders[gl::ShaderType::Fragment].get().valid() ||
+                   mShaders[gl::ShaderType::Geometry].get().valid() ||
                    mShaders[gl::ShaderType::Compute].get().valid();
         }
 
