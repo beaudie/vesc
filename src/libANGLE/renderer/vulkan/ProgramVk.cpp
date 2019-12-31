@@ -589,6 +589,21 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
     RendererVk *renderer                     = contextVk->getRenderer();
     gl::TransformFeedback *transformFeedback = glState.getCurrentTransformFeedback();
 
+    // Test: compile both variations of the shader to find any possible bugs
+    vk::ShaderProgramHelper *defaultShader = nullptr;
+    fprintf(stderr, "Compiling default...\n");
+    angle::Result result1 = initShaders(contextVk, false, &mDefaultShaderInfo, &defaultShader);
+    angle::Result result2 = angle::Result::Continue;
+    if (!mState.isCompute())
+    {
+        fprintf(stderr, "Compiling line raster...\n");
+        vk::ShaderProgramHelper *lineRasterShader = nullptr;
+        result2 = initShaders(contextVk, true, &mLineRasterShaderInfo, &lineRasterShader);
+    }
+    fprintf(stderr, "done\n");
+    ANGLE_TRY(result1);
+    ANGLE_TRY(result2);
+
     updateBindingOffsets();
 
     // Store a reference to the pipeline and descriptor set layouts. This will create them if they
