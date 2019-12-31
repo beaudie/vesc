@@ -46,6 +46,30 @@
       "revId": "90bc13702fac637e993b4515f1df30aa39cef59b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e62e818b_b50075fe",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-12-31T02:55:11Z",
+      "side": 1,
+      "message": "Didn\u0027t know that. So Microsoft\u0027s own function doesn\u0027t recognize UWP as Windows10? Do they have an `IsUWP()` that can be used instead, like `bool isWin10 \u003d IsWindows10OrGreater() || IsUWP();`?",
+      "parentUuid": "3cde2d5d_b488804e",
+      "range": {
+        "startLine": 2367,
+        "startChar": 0,
+        "endLine": 2369,
+        "endChar": 5
+      },
+      "revId": "90bc13702fac637e993b4515f1df30aa39cef59b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
