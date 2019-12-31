@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fba49855_3acaf2ae",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-31T23:30:54Z",
+      "side": 1,
+      "message": "Could this say explicitly \"on Windows 7 and earlier\"?",
+      "range": {
+        "startLine": 318,
+        "startChar": 17,
+        "endLine": 318,
+        "endChar": 18
+      },
+      "revId": "d9d74f048fe762334df623f904e76a1c9a6d71df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c2f6545_dedc81f2",
+        "filename": "include/platform/FeaturesD3D.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-31T23:30:54Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 210,
+        "startChar": 72,
+        "endLine": 210,
+        "endChar": 78
+      },
+      "revId": "d9d74f048fe762334df623f904e76a1c9a6d71df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19479001_5fb8ea3d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-12-31T23:30:54Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 2448,
+        "startChar": 64,
+        "endLine": 2448,
+        "endChar": 71
+      },
+      "revId": "d9d74f048fe762334df623f904e76a1c9a6d71df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
