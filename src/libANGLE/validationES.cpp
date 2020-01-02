@@ -5559,6 +5559,11 @@ bool ValidateReadPixelsBase(Context *context,
     Framebuffer *readFramebuffer = context->getState().getReadFramebuffer();
     ASSERT(readFramebuffer);
 
+    if (context->isRobustResourceInitEnabled())
+    {
+        ANGLE_VALIDATION_TRY(readFramebuffer->ensureReadAttachmentsInitialized(context));
+    }
+
     if (!ValidateFramebufferComplete(context, readFramebuffer))
     {
         return false;
