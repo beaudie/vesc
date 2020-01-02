@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b05a8978_19c2ce10",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-02T17:51:40Z",
+      "side": 1,
+      "message": "It looks like these three blocks can be reduced to:\n\n        for (const gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)\n        {\n            if (!shaderSources[shaderType].empty())\n            {\n                ANGLE_GLSLANG_CHECK(callback,\n                                    angle::ReplaceSubstring(\u0026patchedSources[shaderType],\n                                                            kVersionDefine, kLineRasterDefine),\n                                    GlslangError::InvalidShader);\n            }\n        }",
+      "revId": "6dce1494f3192a0c759cd5bf33bd71d040805395",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
