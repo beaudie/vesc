@@ -22,6 +22,30 @@
       "revId": "803eb376823a6e40bf5268278dbdee5b31a5fa99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2251e94f_8843d755",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-02T16:11:36Z",
+      "side": 1,
+      "message": "Done\n\nI looked at the other ContextVk::update* methods to see if they needed a similar check.  Looks like none of them are doing such a check.  Would you like other checks added?\n\nNote: It required adding the getter.",
+      "parentUuid": "ea860dcf_5b0372c6",
+      "range": {
+        "startLine": 2130,
+        "startChar": 31,
+        "endLine": 2130,
+        "endChar": 57
+      },
+      "revId": "803eb376823a6e40bf5268278dbdee5b31a5fa99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
