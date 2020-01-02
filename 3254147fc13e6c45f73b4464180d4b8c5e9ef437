@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f71a98b4_c2cc9b6f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-02T17:46:39Z",
+      "side": 1,
+      "message": "Could you please add a regression test for this scenario? Also some wording suggestions:\n\n\"Vulkan: Flush staged updates in ImageHelper::readPixels\"\n\n\".. were flushed. In the case where a texture was initialized with null data, the initial clear command was never flushed from the staged updates.\"",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 9
+      },
+      "revId": "3254147fc13e6c45f73b4464180d4b8c5e9ef437",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
