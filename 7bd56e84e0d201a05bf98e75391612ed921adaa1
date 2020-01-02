@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "05bb31c6_b6d8fb83",
+        "filename": "src/tests/deqp_support/BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-02T17:26:26Z",
+      "side": 1,
+      "message": "It would be surprising if python sort() is implemented differently on different platforms. Possibly the slash substitution is happening in a different place or there are some lists that aren\u0027t yet sorted. Could you take a close look at how the sort is happening (or not happening)?",
+      "parentUuid": "8d841281_9574fc66",
+      "range": {
+        "startLine": 231,
+        "startChar": 6,
+        "endLine": 231,
+        "endChar": 36
+      },
+      "revId": "7bd56e84e0d201a05bf98e75391612ed921adaa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81e92c51_4f58c196",
         "filename": "src/tests/deqp_support/deqp_data_autogen.gni",
         "patchSetId": 7
