@@ -3152,6 +3152,10 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
     changeLayout(copyAspectFlags, ImageLayout::TransferSrc, commandBuffer);
 
+    // Flush any staged updates before reading pixels from the image
+    ANGLE_TRY(flushStagedUpdates(contextVk, level, getLevelCount(), layer, getLayerCount(),
+                                 commandBuffer));
+
     const angle::Format *readFormat = &mFormat->actualImageFormat();
 
     if (copyAspectFlags != VK_IMAGE_ASPECT_COLOR_BIT)
