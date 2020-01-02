@@ -308,6 +308,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     void invalidateDefaultAttribute(size_t attribIndex);
     void invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask);
     void onDrawFramebufferChange(FramebufferVk *framebufferVk);
+    void onFramebufferDestroy(FramebufferVk *framebufferVk);
     void onHostVisibleBufferWrite() { mIsAnyHostVisibleBufferWritten = true; }
 
     void invalidateCurrentTransformFeedbackBuffers();
@@ -324,6 +325,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                        gl::Texture **textureOut);
     void updateColorMask(const gl::BlendState &blendState);
     void updateSampleMask(const gl::State &glState);
+    void updateRasterizationSamples(const gl::State &glState);
 
     void handleError(VkResult errorCode,
                      const char *file,

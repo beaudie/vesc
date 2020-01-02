@@ -2123,6 +2123,17 @@ void ContextVk::updateSampleMask(const gl::State &glState)
     }
 }
 
+void ContextVk::updateRasterizationSamples(const gl::State &glState)
+{
+    FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
+    if (framebufferVk && (mGraphicsPipelineDesc->getRasterizationSamples() !=
+                          static_cast<uint32_t>(framebufferVk->getSamples())))
+    {
+        mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
+                                                          framebufferVk->getSamples());
+    }
+}
+
 void ContextVk::updateViewport(FramebufferVk *framebufferVk,
                                const gl::Rectangle &viewport,
                                float nearPlane,
@@ -2393,8 +2404,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
                 updateColorMask(glState.getBlendState());
                 updateSampleMask(glState);
-                mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
-                                                                  mDrawFramebuffer->getSamples());
+                updateRasterizationSamples(glState);
                 mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                        glState.getRasterizerState(),
                                                        isViewportFlipEnabledForDrawFBO());
@@ -2730,6 +2740,15 @@ void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
     // Ensure that the RenderPass description is updated.
     invalidateCurrentGraphicsPipeline();
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition, renderPassDesc);
+}
+
+void ContextVk::onFramebufferDestroy(FramebufferVk *framebufferVk)
+{
+    if (mDrawFramebuffer == framebufferVk)
+    {
+        // No longer point at a destroyed draw framebuffer
+        mDrawFramebuffer = nullptr;
+    }
 }
 
 void ContextVk::invalidateCurrentTransformFeedbackBuffers()

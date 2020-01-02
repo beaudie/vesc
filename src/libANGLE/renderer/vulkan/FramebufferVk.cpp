@@ -147,6 +147,9 @@ void FramebufferVk::destroy(const gl::Context *context)
     ContextVk *contextVk = vk::GetImpl(context);
     mFramebuffer.release(contextVk);
 
+    // Must allow the context to no longer point at this FramebufferVk
+    contextVk->onFramebufferDestroy(this);
+
     mReadPixelBuffer.release(contextVk->getRenderer());
 }
 
@@ -1082,6 +1085,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     // The FBOs new attachment may have changed the renderable area
     const gl::State &glState = context->getState();
     contextVk->updateScissor(glState);
+    contextVk->updateRasterizationSamples(glState);
 
     mActiveColorComponents = gl_vk::GetColorComponentFlags(
         mActiveColorComponentMasksForClear[0].any(), mActiveColorComponentMasksForClear[1].any(),
