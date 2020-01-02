@@ -535,6 +535,29 @@ TEST_P(RobustResourceInitTest, ReadingUninitializedTexture)
     EXPECT_GL_NO_ERROR();
 }
 
+TEST_P(RobustResourceInitTest, ReadingUninitializedTextureWithNewSurface)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+
+    // Re-create display/surface/context, discarding current display/surface/context memory
+    // should not affect reading uninitialized texture
+    EGLWindow *window             = getEGLWindow();
+    ConfigParameters configParams = window->getConfigParams();
+    window->swap();
+    window->destroyGL();
+    window->initializeGL(
+        getOSWindow(),
+        angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ApplicationDir),
+        GetParam().eglParameters, configParams);
+    glViewport(0, 0, kWidth, kHeight);
+
+    GLTexture tex;
+    setupTexture(&tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    checkNonZeroPixels(&tex, 0, 0, kWidth, kHeight, GLColor::transparentBlack);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that calling glTexImage2D multiple times with the same size and no data resets all texture
 // data
 TEST_P(RobustResourceInitTest, ReuploadingClearsTexture)
