@@ -5620,6 +5620,11 @@ bool ValidateReadPixelsBase(Context *context,
         }
     }
 
+    if (context->isRobustResourceInitEnabled())
+    {
+        ANGLE_VALIDATION_TRY(readFramebuffer->ensureReadAttachmentsInitialized(context));
+    }
+
     GLenum currentFormat = GL_NONE;
     ANGLE_VALIDATION_TRY(
         readFramebuffer->getImplementationColorReadFormat(context, &currentFormat));

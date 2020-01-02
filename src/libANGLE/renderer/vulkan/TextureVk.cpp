@@ -1578,7 +1578,7 @@ angle::Result TextureVk::initializeContents(const gl::Context *context,
     const vk::Format &format =
         vk::GetImpl(context)->getRenderer()->getFormat(desc.format.info->sizedInternalFormat);
 
-    mImage->stageSubresourceRobustClear(imageIndex, format.intendedFormat());
+    mImage->stageSubresourceRobustClear(imageIndex, format);
 
     // Note that we cannot ensure the image is initialized because we might be calling subImage
     // on a non-complete cube map.
