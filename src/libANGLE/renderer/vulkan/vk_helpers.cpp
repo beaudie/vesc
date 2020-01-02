@@ -3147,8 +3147,13 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
 
     RendererVk *renderer = contextVk->getRenderer();
 
-    // Note that although we're reading from the image, we need to update the layout below.
+    // Flush any staged updates before reading pixels from the image
     CommandBuffer *commandBuffer;
+    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+    ANGLE_TRY(flushStagedUpdates(contextVk, level, getLevelCount(), layer, getLayerCount(),
+                                 commandBuffer));
+
+    // Note that although we're reading from the image, we need to update the layout below.
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
     changeLayout(copyAspectFlags, ImageLayout::TransferSrc, commandBuffer);
 
