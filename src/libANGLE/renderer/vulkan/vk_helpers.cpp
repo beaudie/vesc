@@ -2861,10 +2861,18 @@ void ImageHelper::stageSubresourceUpdateFromImage(ImageHelper *image,
     mSubresourceUpdates.emplace_back(image, copyToImage);
 }
 
-void ImageHelper::stageSubresourceRobustClear(const gl::ImageIndex &index,
-                                              const angle::Format &format)
+void ImageHelper::stageSubresourceRobustClear(const gl::ImageIndex &index, const Format &format)
 {
-    stageSubresourceClear(index, format, kWebGLInitColorValue, kWebGLInitDepthStencilValue);
+    if (format.hasEmulatedImageChannels())
+    {
+        stageSubresourceClear(index, format.intendedFormat(), kEmulatedInitColorValue,
+                              kWebGLInitDepthStencilValue);
+    }
+    else
+    {
+        stageSubresourceClear(index, format.intendedFormat(), kWebGLInitColorValue,
+                              kWebGLInitDepthStencilValue);
+    }
 }
 
 void ImageHelper::stageSubresourceEmulatedClear(const gl::ImageIndex &index,
