@@ -1082,6 +1082,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     // The FBOs new attachment may have changed the renderable area
     const gl::State &glState = context->getState();
     contextVk->updateScissor(glState);
+    contextVk->updateRasterizationSamples(glState);
 
     mActiveColorComponents = gl_vk::GetColorComponentFlags(
         mActiveColorComponentMasksForClear[0].any(), mActiveColorComponentMasksForClear[1].any(),

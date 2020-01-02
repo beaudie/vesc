@@ -324,6 +324,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                        gl::Texture **textureOut);
     void updateColorMask(const gl::BlendState &blendState);
     void updateSampleMask(const gl::State &glState);
+    void updateRasterizationSamples(const gl::State &glState);
 
     void handleError(VkResult errorCode,
                      const char *file,
