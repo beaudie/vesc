@@ -19,7 +19,10 @@ namespace rx
 {
 namespace
 {
-void FillTextureFormatCaps(RendererVk *renderer, VkFormat format, gl::TextureCaps *outTextureCaps)
+void FillTextureFormatCaps(RendererVk *renderer,
+                           VkFormat format,
+                           bool formatIsInt,
+                           gl::TextureCaps *outTextureCaps)
 {
     const VkPhysicalDeviceLimits &physicalDeviceLimits =
         renderer->getPhysicalDeviceProperties().limits;
@@ -45,8 +48,22 @@ void FillTextureFormatCaps(RendererVk *renderer, VkFormat format, gl::TextureCap
     {
         if (hasColorAttachmentFeatureBit)
         {
-            vk_gl::AddSampleCounts(physicalDeviceLimits.framebufferColorSampleCounts,
-                                   &outTextureCaps->sampleCounts);
+            if (formatIsInt)
+            {
+                // TODO(ianelliott): Address Vulkan drivers that only support a sample count of 1.
+                // In the near term (while working through the Vulkan-spec ramifications, continue
+                // to support a sample count of 1 for integer formats.
+                // See: http://anglebug.com/4197
+                vk_gl::AddSampleCounts(physicalDeviceLimits.sampledImageIntegerSampleCounts,
+                                       vk_gl::kSupportedSampleCountsPlusOne,
+                                       &outTextureCaps->sampleCounts);
+            }
+            else
+            {
+                vk_gl::AddSampleCounts(physicalDeviceLimits.framebufferColorSampleCounts,
+                                       vk_gl::kSupportedSampleCounts,
+                                       &outTextureCaps->sampleCounts);
+            }
         }
         if (hasDepthAttachmentFeatureBit)
         {
@@ -55,7 +72,7 @@ void FillTextureFormatCaps(RendererVk *renderer, VkFormat format, gl::TextureCap
             // sample counts.
             vk_gl::AddSampleCounts((physicalDeviceLimits.framebufferDepthSampleCounts &
                                     physicalDeviceLimits.framebufferStencilSampleCounts),
-                                   &outTextureCaps->sampleCounts);
+                                   vk_gl::kSupportedSampleCounts, &outTextureCaps->sampleCounts);
         }
     }
 }
@@ -231,7 +248,7 @@ void FormatTable::initialize(RendererVk *renderer,
         }
 
         gl::TextureCaps textureCaps;
-        FillTextureFormatCaps(renderer, format.vkImageFormat, &textureCaps);
+        FillTextureFormatCaps(renderer, format.vkImageFormat, angleFormat.isInt(), &textureCaps);
         outTextureCapsMap->set(formatID, textureCaps);
 
         if (textureCaps.texturable)

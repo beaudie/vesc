@@ -863,29 +863,31 @@ void GetExtentsAndLayerCount(gl::TextureType textureType,
 
 namespace vk_gl
 {
-void AddSampleCounts(VkSampleCountFlags sampleCounts, gl::SupportedSampleSet *setOut)
+void AddSampleCounts(VkSampleCountFlags sampleCounts,
+                     uint32_t filter,
+                     gl::SupportedSampleSet *setOut)
 {
     // The possible bits are VK_SAMPLE_COUNT_n_BIT = n, with n = 1 << b.  At the time of this
     // writing, b is in [0, 6], however, we test all 32 bits in case the enum is extended.
-    for (size_t bit : angle::BitSet32<32>(sampleCounts & kSupportedSampleCounts))
+    for (size_t bit : angle::BitSet32<32>(sampleCounts & filter))
     {
         setOut->insert(static_cast<GLuint>(1 << bit));
     }
 }
 
-GLuint GetMaxSampleCount(VkSampleCountFlags sampleCounts)
+GLuint GetMaxSampleCount(VkSampleCountFlags sampleCounts, uint32_t filter)
 {
     GLuint maxCount = 0;
-    for (size_t bit : angle::BitSet32<32>(sampleCounts & kSupportedSampleCounts))
+    for (size_t bit : angle::BitSet32<32>(sampleCounts & filter))
     {
         maxCount = static_cast<GLuint>(1 << bit);
     }
     return maxCount;
 }
 
-GLuint GetSampleCount(VkSampleCountFlags supportedCounts, GLuint requestedCount)
+GLuint GetSampleCount(VkSampleCountFlags supportedCounts, uint32_t filter, GLuint requestedCount)
 {
-    for (size_t bit : angle::BitSet32<32>(supportedCounts & kSupportedSampleCounts))
+    for (size_t bit : angle::BitSet32<32>(supportedCounts & filter))
     {
         GLuint sampleCount = static_cast<GLuint>(1 << bit);
         if (sampleCount >= requestedCount)
