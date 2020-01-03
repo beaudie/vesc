@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a034c0f4_25b03047",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-03T17:19:36Z",
+      "side": 1,
+      "message": "Low priority, but if the dirty bits only had *_CONTENTS or READ_BUFFER, then both these updates are unnecessary. Not sure about some of the other bits (specially DEFAULT_SAMPLES)\n\nCould be an optimization (and definitely split change) to condition this to only if the *_ATTACHMENT* bits are set (again, possibly with DEFAULT_SAMPLES?)",
+      "range": {
+        "startLine": 1086,
+        "startChar": 0,
+        "endLine": 1088,
+        "endChar": 51
+      },
+      "revId": "6249458d9cf1887b45e06719253284cae1972332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

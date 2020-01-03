@@ -46,6 +46,30 @@
       "revId": "803eb376823a6e40bf5268278dbdee5b31a5fa99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d179dcb5_2aa1aef0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-03T17:19:36Z",
+      "side": 1,
+      "message": "I think we have a tracker bug for that. One of your interns did some work for this (depth test state was it?). You don\u0027t need to do that now, but we may need a way to systematically do this. An ASSERT if mGraphicsPipelineDesc is setting a dirty bit where the content hasn\u0027t changed for example could help us find all these issues.\n\nA change for another time.",
+      "parentUuid": "2251e94f_8843d755",
+      "range": {
+        "startLine": 2130,
+        "startChar": 31,
+        "endLine": 2130,
+        "endChar": 57
+      },
+      "revId": "803eb376823a6e40bf5268278dbdee5b31a5fa99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
