@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e3990be_c129296b",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-03T03:47:52Z",
+      "side": 1,
+      "message": "Whitespace at end of line. I\u0027m surprised the presubmit hook (via git cl format) didn\u0027t complain about this.",
+      "range": {
+        "startLine": 1208,
+        "startChar": 0,
+        "endLine": 1208,
+        "endChar": 4
+      },
+      "revId": "e7f7915bcbe5d3734dc4724d22d2a5b4a1197a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
