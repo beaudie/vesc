@@ -662,20 +662,28 @@ namespace vk_gl
 //   If the image was created with VkImageCreateInfo::samples equal to VK_SAMPLE_COUNT_1_BIT, the
 //   instruction must: have MS = 0.
 //
-// This restriction was tracked in http://anglebug.com/4196 and Khronos-private Vulkan
+// This restriction was tracked in http://anglebug.com/4197 and Khronos-private Vulkan
 // specification issue https://gitlab.khronos.org/vulkan/vulkan/issues/1925.
 //
 // In addition, the Vulkan back-end will not support sample counts of 32 or 64, since there are no
 // standard sample locations for those sample counts.
 constexpr unsigned int kSupportedSampleCounts = (VK_SAMPLE_COUNT_2_BIT | VK_SAMPLE_COUNT_4_BIT |
                                                  VK_SAMPLE_COUNT_8_BIT | VK_SAMPLE_COUNT_16_BIT);
+// TODO(ianelliott): Address Vulkan drivers that only support a sample count of 1.  In the near
+// term (while working through the Vulkan-spec ramifications, continue to support a sample count of
+// 1 for integer formats.
+// See: http://anglebug.com/4197
+constexpr unsigned int kSupportedSampleCountsPlusOne =
+    (kSupportedSampleCounts | VK_SAMPLE_COUNT_1_BIT);
 
 // Find set bits in sampleCounts and add the corresponding sample count to the set.
-void AddSampleCounts(VkSampleCountFlags sampleCounts, gl::SupportedSampleSet *outSet);
+void AddSampleCounts(VkSampleCountFlags sampleCounts,
+                     uint32_t filter,
+                     gl::SupportedSampleSet *outSet);
 // Return the maximum sample count with a bit set in |sampleCounts|.
-GLuint GetMaxSampleCount(VkSampleCountFlags sampleCounts);
+GLuint GetMaxSampleCount(VkSampleCountFlags sampleCounts, uint32_t filter);
 // Return a supported sample count that's at least as large as the requested one.
-GLuint GetSampleCount(VkSampleCountFlags supportedCounts, GLuint requestedCount);
+GLuint GetSampleCount(VkSampleCountFlags supportedCounts, uint32_t filter, GLuint requestedCount);
 }  // namespace vk_gl
 
 }  // namespace rx

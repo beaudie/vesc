@@ -450,7 +450,8 @@ void RendererVk::ensureCapsInitialized() const
         limitsVk.framebufferColorSampleCounts & limitsVk.framebufferDepthSampleCounts &
         limitsVk.framebufferStencilSampleCounts & vk_gl::kSupportedSampleCounts;
 
-    mNativeCaps.maxSamples            = LimitToInt(vk_gl::GetMaxSampleCount(sampleCounts));
+    mNativeCaps.maxSamples =
+        LimitToInt(vk_gl::GetMaxSampleCount(sampleCounts, vk_gl::kSupportedSampleCounts));
     mNativeCaps.maxFramebufferSamples = mNativeCaps.maxSamples;
 
     mNativeCaps.subPixelBits = limitsVk.subPixelPrecisionBits;
@@ -613,9 +614,10 @@ egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
                                                    limits.framebufferStencilSampleCounts &
                                                    vk_gl::kSupportedSampleCounts;
 
-    vk_gl::AddSampleCounts(limits.framebufferColorSampleCounts & vk_gl::kSupportedSampleCounts,
+    vk_gl::AddSampleCounts(limits.framebufferColorSampleCounts, vk_gl::kSupportedSampleCounts,
                            &colorSampleCounts);
-    vk_gl::AddSampleCounts(depthStencilSampleCountsLimit, &depthStencilSampleCounts);
+    vk_gl::AddSampleCounts(depthStencilSampleCountsLimit, vk_gl::kSupportedSampleCounts,
+                           &depthStencilSampleCounts);
 
     // Always support 0 samples
     colorSampleCounts.insert(0);
