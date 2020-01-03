@@ -613,8 +613,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsTransformFeedbackState(const gl::Context *context,
                                                             vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsDescriptorSets(const gl::Context *context,
-                                                    vk::CommandBuffer *commandBuffer);
 
     // Handlers for compute pipeline dirty bits.
     angle::Result handleDirtyComputePipeline(const gl::Context *context,
@@ -625,8 +623,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                                    vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyComputeShaderResources(const gl::Context *context,
                                                     vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyComputeDescriptorSets(const gl::Context *context,
-                                                   vk::CommandBuffer *commandBuffer);
 
     // Common parts of the common dirty bit handlers.
     angle::Result handleDirtyTexturesImpl(const gl::Context *context,
@@ -635,9 +631,11 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     angle::Result handleDirtyShaderResourcesImpl(const gl::Context *context,
                                                  vk::CommandBuffer *commandBuffer,
                                                  vk::CommandGraphResource *recorder);
-    angle::Result handleDirtyDescriptorSetsImpl(vk::CommandBuffer *commandBuffer,
-                                                VkPipelineBindPoint bindPoint,
-                                                const DriverUniformsDescriptorSet &driverUniforms);
+    void bindDriverUniforms(vk::CommandBuffer *commandBuffer,
+                            VkPipelineBindPoint bindPoint,
+                            const DriverUniformsDescriptorSet &driverUniforms);
+    angle::Result handleDirtyDescriptorSets(const gl::Context *context,
+                                            vk::CommandBuffer *commandBuffer);
     angle::Result allocateDriverUniforms(size_t driverUniformsSize,
                                          DriverUniformsDescriptorSet *driverUniforms,
                                          VkBuffer *bufferOut,
