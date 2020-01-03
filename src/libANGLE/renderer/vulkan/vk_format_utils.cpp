@@ -19,7 +19,10 @@ namespace rx
 {
 namespace
 {
-void FillTextureFormatCaps(RendererVk *renderer, VkFormat format, gl::TextureCaps *outTextureCaps)
+void FillTextureFormatCaps(RendererVk *renderer,
+                           VkFormat format,
+                           bool formatIsInt,
+                           gl::TextureCaps *outTextureCaps)
 {
     const VkPhysicalDeviceLimits &physicalDeviceLimits =
         renderer->getPhysicalDeviceProperties().limits;
@@ -45,7 +48,9 @@ void FillTextureFormatCaps(RendererVk *renderer, VkFormat format, gl::TextureCap
     {
         if (hasColorAttachmentFeatureBit)
         {
-            vk_gl::AddSampleCounts(physicalDeviceLimits.framebufferColorSampleCounts,
+            vk_gl::AddSampleCounts(formatIsInt
+                                       ? physicalDeviceLimits.sampledImageIntegerSampleCounts
+                                       : physicalDeviceLimits.framebufferColorSampleCounts,
                                    &outTextureCaps->sampleCounts);
         }
         if (hasDepthAttachmentFeatureBit)
@@ -231,7 +236,7 @@ void FormatTable::initialize(RendererVk *renderer,
         }
 
         gl::TextureCaps textureCaps;
-        FillTextureFormatCaps(renderer, format.vkImageFormat, &textureCaps);
+        FillTextureFormatCaps(renderer, format.vkImageFormat, angleFormat.isInt(), &textureCaps);
         outTextureCapsMap->set(formatID, textureCaps);
 
         if (textureCaps.texturable)
