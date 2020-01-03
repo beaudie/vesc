@@ -583,8 +583,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
             &ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation;
     }
 
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
-        &ContextVk::handleDirtyGraphicsDescriptorSets;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] = &ContextVk::handleDirtyDescriptorSets;
 
     mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE] = &ContextVk::handleDirtyComputePipeline;
     mComputeDirtyBitHandlers[DIRTY_BIT_TEXTURES] = &ContextVk::handleDirtyComputeTextures;
@@ -592,8 +591,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyComputeDriverUniforms;
     mComputeDirtyBitHandlers[DIRTY_BIT_SHADER_RESOURCES] =
         &ContextVk::handleDirtyComputeShaderResources;
-    mComputeDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
-        &ContextVk::handleDirtyComputeDescriptorSets;
+    mComputeDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] = &ContextVk::handleDirtyDescriptorSets;
 
     mGraphicsDirtyBits = mNewGraphicsCommandBufferDirtyBits;
     mComputeDirtyBits  = mNewComputeCommandBufferDirtyBits;
@@ -1266,33 +1264,11 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Con
     return angle::Result::Continue;
 }
 
-ANGLE_INLINE angle::Result ContextVk::handleDirtyDescriptorSetsImpl(
-    vk::CommandBuffer *commandBuffer,
-    VkPipelineBindPoint bindPoint,
-    const DriverUniformsDescriptorSet &driverUniforms)
+angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
+                                                   vk::CommandBuffer *commandBuffer)
 {
     ANGLE_TRY(mProgram->updateDescriptorSets(this, commandBuffer));
-
-    // Bind the driver descriptor set.
-    commandBuffer->bindDescriptorSets(
-        mProgram->getPipelineLayout(), bindPoint, kDriverUniformsDescriptorSetIndex, 1,
-        &driverUniforms.descriptorSet, 1, &driverUniforms.dynamicOffset);
-
     return angle::Result::Continue;
-}
-
-angle::Result ContextVk::handleDirtyGraphicsDescriptorSets(const gl::Context *context,
-                                                           vk::CommandBuffer *commandBuffer)
-{
-    return handleDirtyDescriptorSetsImpl(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                         mDriverUniforms[PipelineType::Graphics]);
-}
-
-angle::Result ContextVk::handleDirtyComputeDescriptorSets(const gl::Context *context,
-                                                          vk::CommandBuffer *commandBuffer)
-{
-    return handleDirtyDescriptorSetsImpl(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE,
-                                         mDriverUniforms[PipelineType::Compute]);
 }
 
 angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
@@ -2717,15 +2693,12 @@ void ContextVk::invalidateCurrentShaderResources()
 void ContextVk::invalidateGraphicsDriverUniforms()
 {
     mGraphicsDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
-    mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
 }
 
 void ContextVk::invalidateDriverUniforms()
 {
     mGraphicsDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
-    mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     mComputeDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
-    mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
 }
 
 void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
@@ -2897,6 +2870,15 @@ void ContextVk::writeAtomicCounterBufferDriverUniformOffsets(uint32_t *offsetsOu
     }
 }
 
+void ContextVk::bindDriverUniforms(vk::CommandBuffer *commandBuffer,
+                                   VkPipelineBindPoint bindPoint,
+                                   const DriverUniformsDescriptorSet &driverUniforms)
+{
+    commandBuffer->bindDescriptorSets(
+        mProgram->getPipelineLayout(), bindPoint, kDriverUniformsDescriptorSetIndex, 1,
+        &driverUniforms.descriptorSet, 1, &driverUniforms.dynamicOffset);
+}
+
 angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *context,
                                                            vk::CommandBuffer *commandBuffer)
 {
@@ -2946,8 +2928,14 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
     writeAtomicCounterBufferDriverUniformOffsets(driverUniforms->acbBufferOffsets.data(),
                                                  driverUniforms->acbBufferOffsets.size());
 
-    return updateDriverUniformsDescriptorSet(buffer, newBuffer, sizeof(GraphicsDriverUniforms),
-                                             &mDriverUniforms[PipelineType::Graphics]);
+    ANGLE_TRY(updateDriverUniformsDescriptorSet(buffer, newBuffer, sizeof(GraphicsDriverUniforms),
+                                                &mDriverUniforms[PipelineType::Graphics]));
+
+    // Bind the driver descriptor set.
+    bindDriverUniforms(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                       mDriverUniforms[PipelineType::Graphics]);
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyComputeDriverUniforms(const gl::Context *context,
@@ -2968,8 +2956,14 @@ angle::Result ContextVk::handleDirtyComputeDriverUniforms(const gl::Context *con
     writeAtomicCounterBufferDriverUniformOffsets(driverUniforms->acbBufferOffsets.data(),
                                                  driverUniforms->acbBufferOffsets.size());
 
-    return updateDriverUniformsDescriptorSet(buffer, newBuffer, sizeof(ComputeDriverUniforms),
-                                             &mDriverUniforms[PipelineType::Compute]);
+    ANGLE_TRY(updateDriverUniformsDescriptorSet(buffer, newBuffer, sizeof(ComputeDriverUniforms),
+                                                &mDriverUniforms[PipelineType::Compute]));
+
+    // Bind the driver descriptor set.
+    bindDriverUniforms(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE,
+                       mDriverUniforms[PipelineType::Compute]);
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::allocateDriverUniforms(size_t driverUniformsSize,

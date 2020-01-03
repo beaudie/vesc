@@ -386,6 +386,10 @@ void main (void)
 // without Vulkan validation errors.
 TEST_P(StateChangeTestES3, DrawPausedXfbThenNonXfbLines)
 {
+    // glTransformFeedbackVaryings for program2 returns GL_INVALID_OPERATION on both Linux and
+    // windows.  http://anglebug.com/4265
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsOpenGL());
+
     std::vector<std::string> tfVaryings = {"gl_Position"};
     ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(program1, essl1_shaders::vs::Simple(),
                                         essl1_shaders::fs::Blue(), tfVaryings, GL_SEPARATE_ATTRIBS);
