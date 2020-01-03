@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b0ede56_063dba34",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-03T19:50:32Z",
+      "side": 1,
+      "message": "Presubmit is tripped up by the extra new line here.",
+      "revId": "bc97885a2d89b2530a66295daabbc9c318932984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afd9f474_a3ec8808",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-03T19:50:32Z",
+      "side": 0,
+      "message": "Why is this removed? Looks like the bot failures are from this.",
+      "range": {
+        "startLine": 870,
+        "startChar": 54,
+        "endLine": 870,
+        "endChar": 79
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
