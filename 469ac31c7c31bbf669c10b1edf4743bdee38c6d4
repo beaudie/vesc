@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "022689ec_4569c965",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2020-01-03T22:51:28Z",
+      "side": 1,
+      "message": "Possibly should use os_log_with_type() with OS_LOG_TYPE_ERROR on LOG_ERR/LOG_FATAL(/LOG_WARN?), and maybe OS_LOG_TYPE_INFO for LOG_INFO.\n\nhttps://developer.apple.com/documentation/os/os_log_type_t?language\u003dobjc#1647737",
+      "revId": "469ac31c7c31bbf669c10b1edf4743bdee38c6d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
