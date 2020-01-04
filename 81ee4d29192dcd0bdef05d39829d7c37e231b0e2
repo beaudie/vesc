@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afa02dbf_0f55eb1f",
+        "filename": "src/libANGLE/renderer/gl/cgl/WindowSurfaceCGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-04T03:38:33Z",
+      "side": 0,
+      "message": "Leaking now? removeFromSuperLayer is releasing?",
+      "range": {
+        "startLine": 178,
+        "startChar": 8,
+        "endLine": 178,
+        "endChar": 29
+      },
+      "revId": "81ee4d29192dcd0bdef05d39829d7c37e231b0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

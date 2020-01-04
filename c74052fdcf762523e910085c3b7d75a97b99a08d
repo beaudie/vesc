@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5edf7219_8ba9513b",
+        "filename": "src/common/PackedEnums.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-04T03:38:33Z",
+      "side": 1,
+      "message": "Not a fan of `#if`s on platform in arbitrary places. It can quickly turn into a mess of hard to follow platform dependent code. I don\u0027t know the surrounding code, but would it be simple to change this function to a member of say Display, with a default implementation and an override for DisplayEAGL or something?",
+      "range": {
+        "startLine": 384,
+        "startChar": 0,
+        "endLine": 384,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a12681b4_1c9aa67c",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-04T03:38:33Z",
+      "side": 1,
+      "message": "Really would prefer if this kind of code doesn\u0027t creep in. Imagine the horrors if every platform started `#if`ing their peculiarities in.\n\nWhy isn\u0027t this platform advertising textureFormatBGRA8888 but supporting GL_BGRA_EXT anyway? Can we make things work like every other platform?",
+      "range": {
+        "startLine": 1011,
+        "startChar": 0,
+        "endLine": 1013,
+        "endChar": 5
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc4cb6dd_c3cae53f",
+        "filename": "src/libANGLE/renderer/gl/eagl/ContextEAGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-04T03:38:33Z",
+      "side": 1,
+      "message": "I have a feeling these license files should turn into Copyright ... ANGLE ..., and with ANGLE\u0027s license.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c11abbf_bbc41f15",
+        "filename": "src/libANGLE/renderer/gl/eagl/WindowSurfaceEAGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-04T03:38:33Z",
+      "side": 1,
+      "message": "Is this set in stone? Even if for the sake of uniformity, I\u0027d still prefer if cross-platform APIs that ANGLE uses elsewhere is used.\n\nIs the EAGL code at all exercised on our bots?",
+      "range": {
+        "startLine": 67,
+        "startChar": 22,
+        "endLine": 67,
+        "endChar": 55
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da30226d_c5bef7c5",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6527,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-04T03:38:33Z",
+      "side": 1,
+      "message": "Again, would prefer if there wasn\u0027t an #if",
+      "range": {
+        "startLine": 6527,
+        "startChar": 0,
+        "endLine": 6527,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
