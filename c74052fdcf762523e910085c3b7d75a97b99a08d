@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f7e88d30_8616bc3c",
+        "filename": "src/common/PackedEnums.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-05T22:24:32Z",
+      "side": 1,
+      "message": "This change, I think, has been made unnecessary in my addition of support for the iOS Simulator in https://bugs.webkit.org/show_bug.cgi?id\u003d205618 - which needs to be upstreamed to ANGLE, but which is dependent on this upstreaming of the iOS backend.\n\nI would prefer to upstream this unmodified, and then work with Apple to undo this change. They will have to test the removal, since only they can build and test WebKit for iOS hardware.",
+      "parentUuid": "5edf7219_8ba9513b",
+      "range": {
+        "startLine": 384,
+        "startChar": 0,
+        "endLine": 384,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a12681b4_1c9aa67c",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-04T03:38:33Z",
       "side": 1,
       "message": "Really would prefer if this kind of code doesn\u0027t creep in. Imagine the horrors if every platform started `#if`ing their peculiarities in.\n\nWhy isn\u0027t this platform advertising textureFormatBGRA8888 but supporting GL_BGRA_EXT anyway? Can we make things work like every other platform?",
+      "range": {
+        "startLine": 1011,
+        "startChar": 0,
+        "endLine": 1013,
+        "endChar": 5
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f6f933b_5d1f5ce7",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-05T22:24:32Z",
+      "side": 1,
+      "message": "I\u0027m not 100% sure why this #ifdef was added but will ask colleagues at Apple. If it turns out this is needed, it\u0027s a tiny change to make in support of running WebKit\u0027s WebGL implementation on top of ANGLE on iOS, and I would strongly advocate for adding it.",
+      "parentUuid": "a12681b4_1c9aa67c",
       "range": {
         "startLine": 1011,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f9eaaaaa_f36cd25a",
+        "filename": "src/libANGLE/renderer/gl/eagl/ContextEAGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-05T22:24:32Z",
+      "side": 1,
+      "message": "We\u0027d have to ask our colleagues at Apple for permission to do that. (I will ask.) There is plenty of precedent for incorporating BSD-licensed code copyrighted by Apple into Chromium.",
+      "parentUuid": "fc4cb6dd_c3cae53f",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9c11abbf_bbc41f15",
         "filename": "src/libANGLE/renderer/gl/eagl/WindowSurfaceEAGL.h",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "b88d9f1d_691a0884",
+        "filename": "src/libANGLE/renderer/gl/eagl/WindowSurfaceEAGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-05T22:24:32Z",
+      "side": 1,
+      "message": "Chrome\u0027s rendering engine will never port to iOS. Apple\u0027s policies forbid third-party companies from building new web browser engines for iOS. (Chrome on iOS is a wrapper around Apple\u0027s WebView.)\n\nNo, we don\u0027t build ANGLE on iOS on our bots, so this code path is only tested on WebKit\u0027s bots when they build with their ANGLE backend for WebGL.\n\nI\u0027ll take this feedback to Apple but would prefer to not change this CL during upstreaming as mentioned above.",
+      "parentUuid": "9c11abbf_bbc41f15",
+      "range": {
+        "startLine": 67,
+        "startChar": 22,
+        "endLine": 67,
+        "endChar": 55
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da30226d_c5bef7c5",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fe32611_58fe5a9b",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6527,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-05T22:24:32Z",
+      "side": 1,
+      "message": "This is another piece of code which I think has been made unnecessary by my addition of support for the iOS Simulator in https://bugs.webkit.org/show_bug.cgi?id\u003d205618 . I will work to remove this change after this CL lands and the iOS Simulator support is upstreamed.",
+      "parentUuid": "da30226d_c5bef7c5",
+      "range": {
+        "startLine": 6527,
+        "startChar": 0,
+        "endLine": 6527,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
