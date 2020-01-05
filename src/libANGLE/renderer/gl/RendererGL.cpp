@@ -682,6 +682,19 @@ void RendererGL::setMaxShaderCompilerThreads(GLuint count)
     }
 }
 
+void RendererGL::setNeedsFlushBeforeDeleteTextures()
+{
+    mNeedsFlushBeforeDeleteTextures = true;
+}
+
+bool RendererGL::needsFlushBeforeDeleteTextures()
+{
+    bool value = mNeedsFlushBeforeDeleteTextures;
+    if (value)
+        mNeedsFlushBeforeDeleteTextures = false;
+    return value;
+}
+
 ScopedWorkerContextGL::ScopedWorkerContextGL(RendererGL *renderer, std::string *infoLog)
     : mRenderer(renderer)
 {
