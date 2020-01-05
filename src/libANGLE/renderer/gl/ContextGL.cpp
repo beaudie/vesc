@@ -901,4 +901,15 @@ void ContextGL::validateState() const
     stateManager->validateState();
 }
 
+void ContextGL::setNeedsFlushBeforeDeleteTextures()
+{
+    mRenderer->setNeedsFlushBeforeDeleteTextures();
+}
+
+bool ContextGL::needsFlushBeforeDeleteTextures()
+{
+    return mRenderer->needsFlushBeforeDeleteTextures();
+}
+
+
 }  // namespace rx

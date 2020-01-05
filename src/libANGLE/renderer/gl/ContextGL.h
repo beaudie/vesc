@@ -265,6 +265,9 @@ class ContextGL : public ContextImpl
 
     void validateState() const;
 
+    void setNeedsFlushBeforeDeleteTextures();
+    bool needsFlushBeforeDeleteTextures();
+
   private:
     angle::Result setDrawArraysState(const gl::Context *context,
                                      GLint first,
