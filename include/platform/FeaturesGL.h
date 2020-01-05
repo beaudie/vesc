@@ -394,6 +394,16 @@ struct FeaturesGL : FeatureSetBase
         "Quite some OpenGL ES drivers don't implement readPixels for RGBA/UNSIGNED_SHORT from "
         "EXT_texture_norm16 correctly",
         &members, "http://anglebug.com/4214"};
+
+    // Intel drivers on Mac - apparently for both older and current GPUs - have
+    // bugs where certain operations can be reordered across glBindFramebuffer
+    // calls. Flushing before and after glBindFramebuffer works around these.
+    // These bugs may exist on other platforms.
+    Feature flushBeforeAndAfterBindFramebuffer = {
+        "flush_before_and_after_bindframebuffer", FeatureCategory::OpenGLWorkarounds,
+        "Intel drivers (on Mac, possibly other platforms) incorrectly reorder some operations"
+        " across glBindFramebuffer calls. Flush before and after as a workaround.",
+        &members, "http://anglebug.com/4267"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
