@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "58c27a74_e0f97b1b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-06T19:58:43Z",
+      "side": 1,
+      "message": "I just added a comment in ContextVk.cpp that explains it.  The problem is that ContextVk::mDrawFramebuffer is not always updated/pointing at valid memory.  PTAL.",
+      "parentUuid": "d6c5fbf0_1d2a7714",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 67
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ce17d68_abd46b96",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-06T19:58:43Z",
+      "side": 1,
+      "message": "Jamie, I originally used ContextVk::mDrawFramebuffer.  There were lots of random crashes.  I found that it is not always pointing to something valid, where glState.getDrawFramebuffer() always is.  I chased this for a while and found there are various ways that the draw framebuffer can be changed (including destroyed) without ContextVk being aware (i.e. no plumbing for updating mDrawFramebuffer).\n\nIt seems to me that we should remove ContextVk::mDrawFramebuffer as it\u0027s redundant and not always valid.  However, I wondered if this was a case (like ImageHelper::mSamples) where it\u0027s intentional that the value is not always valid, and I was just unaware of the undocumented rules for when it is safe for using it.  I later saw some other ContextVk code using glState.getDrawFramebuffer(), and so I went with that.\n\nHow would you like to proceed?",
+      "range": {
+        "startLine": 2128,
+        "startChar": 47,
+        "endLine": 2128,
+        "endChar": 75
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "152de2f7_3720ddf0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -36,6 +83,30 @@
       "writtenOn": "2020-01-06T19:33:15Z",
       "side": 1,
       "message": "seems wiser to do this in onDrawFramebufferChange, right?",
+      "range": {
+        "startLine": 2125,
+        "startChar": 0,
+        "endLine": 2135,
+        "endChar": 1
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f81e0d64_c649b651",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-06T19:58:43Z",
+      "side": 1,
+      "message": "I went with Shabi\u0027s proposal to create this function that the current code and syncState can both call.\n\nAre you both agreed to move it?",
+      "parentUuid": "152de2f7_3720ddf0",
       "range": {
         "startLine": 2125,
         "startChar": 0,
