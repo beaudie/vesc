@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "e5879e1c_c7cb32b4",
+        "filename": "src/tests/deqp_support/BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-01-06T17:23:13Z",
+      "side": 1,
+      "message": "Okay, got it. Had a typo in my experimental changes that was confusing things on linux.\nWe now sort based on the name above, rather than the OS path (which appears to behave differently for \u0027/\u0027 vs. \u0027\\\u0027). Once the slashes are replaced with \u0027_\u0027 sorting is stable on both OSes.",
+      "parentUuid": "05bb31c6_b6d8fb83",
+      "range": {
+        "startLine": 231,
+        "startChar": 6,
+        "endLine": 231,
+        "endChar": 36
+      },
+      "revId": "7bd56e84e0d201a05bf98e75391612ed921adaa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81e92c51_4f58c196",
         "filename": "src/tests/deqp_support/deqp_data_autogen.gni",
         "patchSetId": 7
@@ -93,6 +117,30 @@
       "revId": "7bd56e84e0d201a05bf98e75391612ed921adaa1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1aa396c_42e980ae",
+        "filename": "src/tests/deqp_support/deqp_data_autogen.gni",
+        "patchSetId": 7
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-01-06T17:23:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81e92c51_4f58c196",
+      "range": {
+        "startLine": 316,
+        "startChar": 3,
+        "endLine": 316,
+        "endChar": 46
+      },
+      "revId": "7bd56e84e0d201a05bf98e75391612ed921adaa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
