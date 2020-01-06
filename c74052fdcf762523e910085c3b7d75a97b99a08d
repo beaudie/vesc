@@ -144,6 +144,57 @@
     },
     {
       "key": {
+        "uuid": "d42ab9f1_1d773809",
+        "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-06T16:22:16Z",
+      "side": 1,
+      "message": "This is probably out of the scope of this CL, but is there a way to do this platform stuff in the gn files? I see a lot of different combinations of PLATFORM_IOS, PLATFORM_MACOS, and PLATFORM_MACCATALYST in this CL and it would be more clear to use the build system instead of #ifdefs",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "404d4345_3fc50cb7",
+        "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-06T16:22:16Z",
+      "side": 1,
+      "message": "Use TODO with a linked angle bug",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14acb09b_8b6aea5e",
+        "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-06T16:22:16Z",
+      "side": 1,
+      "message": "comment doesn\u0027t match the #if",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a12681b4_1c9aa67c",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 2
@@ -306,6 +357,57 @@
       "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1704ce71_287bc30f",
+        "filename": "src/libANGLE/renderer/gl/eagl/WindowSurfaceEAGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-06T16:22:16Z",
+      "side": 1,
+      "message": "TODO with name or angle bug",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cfa6a4d_81db6edf",
+        "filename": "src/libANGLE/renderer/gl/eagl/WindowSurfaceEAGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-06T16:22:16Z",
+      "side": 1,
+      "message": "TODO with name or angle bug",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4cb275b_1e3ebf6f",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-06T16:22:16Z",
+      "side": 1,
+      "message": "Have you looked at all the other defined(ANGLE_PLATFORM_APPLE) checks to see if there are any other issues like this?",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
