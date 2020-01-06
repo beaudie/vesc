@@ -45,6 +45,29 @@
       "revId": "db357132741cca860866d438a9d927931a383f11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f33f592b_197cee66",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-01-06T19:28:22Z",
+      "side": 1,
+      "message": "As we discussed offline, if there is a serious performance regression in CSS rendering, it may make sense to restrict this workaround to WebGL only. Although the code that does that may belong in Chrome and not ANGLE.",
+      "range": {
+        "startLine": 1634,
+        "startChar": 4,
+        "endLine": 1634,
+        "endChar": 27
+      },
+      "revId": "db357132741cca860866d438a9d927931a383f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
