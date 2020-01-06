@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0ee1ef3_1b821881",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-01-06T23:08:58Z",
+      "side": 1,
+      "message": "Do you have a bug or follow-on CL in progress for this?",
+      "range": {
+        "startLine": 65,
+        "startChar": 55,
+        "endLine": 66,
+        "endChar": 30
+      },
+      "revId": "cbac50bca86cbe67535b0d9a27313a6de741d89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
