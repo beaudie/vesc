@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6c5fbf0_1d2a7714",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-06T19:33:15Z",
+      "side": 1,
+      "message": "At what point are we accessing an invalid framebuffer? And we will be accessing a nullptr framebuffer with your proposed fix. This seems also problematic. I suspect there might be an alternative solution.\n\nI\u0027d suggest putting back the bad code so we can track down where the problem is happening.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 67
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "152de2f7_3720ddf0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-06T19:33:15Z",
+      "side": 1,
+      "message": "seems wiser to do this in onDrawFramebufferChange, right?",
+      "range": {
+        "startLine": 2125,
+        "startChar": 0,
+        "endLine": 2135,
+        "endChar": 1
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
