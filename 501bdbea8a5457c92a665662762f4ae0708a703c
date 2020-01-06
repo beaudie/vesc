@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45d287c3_72db92d1",
+        "filename": "src/tests/gl_tests/ContextLostTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-06T19:37:40Z",
+      "side": 1,
+      "message": "nit: we don\u0027t use the dashes pattern- can you remove these two comments?",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 29
+      },
+      "revId": "501bdbea8a5457c92a665662762f4ae0708a703c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aa71d9a_b54c0454",
+        "filename": "src/tests/gl_tests/ContextLostTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-06T19:37:40Z",
+      "side": 1,
+      "message": "nit: we don\u0027t use the dashes pattern- can you remove these two comments?",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 18
+      },
+      "revId": "501bdbea8a5457c92a665662762f4ae0708a703c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
