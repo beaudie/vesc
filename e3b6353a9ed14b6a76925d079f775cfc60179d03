@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "b59a9969_a71d4221",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-06T20:02:15Z",
+      "side": 1,
+      "message": "I\u0027m fine with using glState.getDrawFramebuffer. I\u0027d like the onDestroy additional logic reverted as I\u0027d rather chase down where we\u0027re using in incorrectly. mDrawFraembuffer only gets updated on syncState.\n\nRemoving these little cache variables is probably fine. I originally added them as a micro-optimization. It might not actually save that many instructions or memory accesses. I\u0027d either defer that or move it to a split patch.",
+      "parentUuid": "4ce17d68_abd46b96",
+      "range": {
+        "startLine": 2128,
+        "startChar": 47,
+        "endLine": 2128,
+        "endChar": 75
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "152de2f7_3720ddf0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "I went with Shabi\u0027s proposal to create this function that the current code and syncState can both call.\n\nAre you both agreed to move it?",
       "parentUuid": "152de2f7_3720ddf0",
+      "range": {
+        "startLine": 2125,
+        "startChar": 0,
+        "endLine": 2135,
+        "endChar": 1
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de2461f2_3f694669",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-06T20:02:15Z",
+      "side": 1,
+      "message": "You shouldn\u0027t need to add a new public method even if you want to make a helper method b/w syncState and onDrawFBChange.",
+      "parentUuid": "f81e0d64_c649b651",
       "range": {
         "startLine": 2125,
         "startChar": 0,
