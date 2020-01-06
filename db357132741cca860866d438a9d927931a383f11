@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3ccf71e_24573f1f",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-06T02:53:04Z",
+      "side": 1,
+      "message": "Wow. How do OpenGL games run at all on mac+intel?\n\nGoing through the thread on bugs.webkit, and looking at https://chromium-review.googlesource.com/c/chromium/src/+/1912790/ this bug shouldn\u0027t be affecting newer drivers.\n\nSince the Chromium workaround was added by intel, it\u0027s sound to add the workaround to ANGLE too, but I wonder if the issue is really something else (because you observe it on newer drivers too), and that the flushes are just masking some other (possibly synchronization) problem.",
+      "range": {
+        "startLine": 399,
+        "startChar": 18,
+        "endLine": 400,
+        "endChar": 12
+      },
+      "revId": "db357132741cca860866d438a9d927931a383f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e99557d5_16879f48",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-06T02:53:04Z",
+      "side": 1,
+      "message": "Replace with: Some drivers",
+      "range": {
+        "startLine": 404,
+        "startChar": 9,
+        "endLine": 404,
+        "endChar": 57
+      },
+      "revId": "db357132741cca860866d438a9d927931a383f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
