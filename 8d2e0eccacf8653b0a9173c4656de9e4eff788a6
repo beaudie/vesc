@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a243590_7b712890",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-06T18:41:48Z",
+      "side": 1,
+      "message": "suggest: step for Googlers",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 23
+      },
+      "revId": "8d2e0eccacf8653b0a9173c4656de9e4eff788a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "290af891_96a0e25f",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-06T18:41:48Z",
+      "side": 1,
+      "message": "Could you please verify that installing this way doesn\u0027t cause issues with intellisense?",
+      "revId": "8d2e0eccacf8653b0a9173c4656de9e4eff788a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
