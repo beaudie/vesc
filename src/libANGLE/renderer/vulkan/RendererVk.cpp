@@ -1824,14 +1824,8 @@ void RendererVk::onCompletedSerial(Serial serial)
 
 void RendererVk::reloadVolkIfNeeded() const
 {
-    if (volkGetLoadedInstance() != mInstance)
-    {
-        volkLoadInstance(mInstance);
-    }
-
-    if (volkGetLoadedDevice() != mDevice)
-    {
-        volkLoadDevice(mDevice);
-    }
+    // Volk will only reload function ptrs if needed
+    volkLoadInstance(mInstance);
+    volkLoadDevice(mDevice);
 }
 }  // namespace rx
