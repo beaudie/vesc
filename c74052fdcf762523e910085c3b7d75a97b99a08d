@@ -97,6 +97,53 @@
     },
     {
       "key": {
+        "uuid": "23d71457_a4770230",
+        "filename": "src/common/PackedEnums.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-06T15:36:56Z",
+      "side": 1,
+      "message": "Suggestion: leave a TODO with the bug number and ensure we address the TODO before closing the bug and calling the work complete.",
+      "parentUuid": "98d7a7c8_417cf06c",
+      "range": {
+        "startLine": 384,
+        "startChar": 0,
+        "endLine": 384,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52e2f36a_61c974cc",
+        "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-06T15:36:56Z",
+      "side": 1,
+      "message": "drive-by nit: should be in a third_party subfolder or should have the copyright updated to the ANGLE copyright.",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 53
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a12681b4_1c9aa67c",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 2
@@ -330,6 +377,23 @@
       "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3daeb202_e6210086",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-06T15:36:56Z",
+      "side": 1,
+      "message": "Will we enable the ios build in GN at some point? Will be helpful for the Metal back-end as well.",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
