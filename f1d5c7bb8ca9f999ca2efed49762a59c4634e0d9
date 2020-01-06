@@ -1,0 +1,390 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e6c7850_7b593bbc",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Can this be renamed to something like \"resolveVariableIDs()\"?",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96fc0497_fbcbeda5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Rather than having a separate uint32 for each ID, possibly leading to a mix of used/unused values, I think this should be a map of variable name to variable ID.   Then, there should be a list of variable names you\u0027re looking for inside visitName().",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7a81962_0746a5c4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "This looks a little strange using a member that\u0027s specific to line rasterization emulation to determinge the state of this instance of the SpirvTransformer.   What happens when that emulation is no longer necessary?\n\nIf we really do want to make sure we\u0027re only here once, this should be a separate member that\u0027s unrelated to any specific patch type.",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c505d561_32bfa9e5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Are you expecting that every new patch type is added to this ASSERT()?   How will you enforce that?",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b25676b_490d1022",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "This should be it\u0027s own helper function.   Additionally, I\u0027d expect this to be something that\u0027s done during ANGLE\u0027s startup/initialization, rather than deep down in the SPIR-V translator, since it\u0027s something that can be know immediately and we shouldn\u0027t be hiding endian requirements this late.",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14cc9eb0_53411c8e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "As noted earlier, this should iterate through a list of names, rather than potentially creating a long list of if/elses that are specific to each patch type.   Then, when a name is found, it\u0027s added to a map of name:ID.   This lets the SpirvTransformer be as naive as possible about the actual patches, and we only need to add the new names to a list to get all of this code to pick them up for free.",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5b828c3_c865f3c8",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1546,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Why?   What happens if this stays in?\n\nIs the line rasterization emulation the only thing that will ever use ANGLEPosition?",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2eb2e40_4e9c61d4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "This can be:\n\n    size_t writeIndex \u003d interfaceStart;\n\nThen later, you can remove the addition when indexing into filteredEntryPoint:\n\n        filteredEntryPoint[writeIndex] \u003d id;\n\nAnd then newLength can be removed.",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0d882dc_f7e2b8ee",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Why doesn\u0027t the output from the from vertex shader need to be transformed also?",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54d64239_efc22ed0",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Can you describe here at a higher level what the transformation you\u0027re doing is (why are you converting the input varying into a global variable)?",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d4c6b92_6514840d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Why?   Specialization constants are constants already, so why is it replaced as part of patching?",
+      "range": {
+        "startLine": 1719,
+        "startChar": 66,
+        "endLine": 1720,
+        "endChar": 48
+      },
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b5c8e5a_f229a28d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Why is it better to use a FixedVector which requires a length to be specified here?\n\nCan this be a normal vector so this count doesn\u0027t need to be maintained when new patches are added?",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b240869c_04e42eac",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Is this an assertion that should be able to remain true forever, or is this just based on what the line rasterization emulation is patching so far?",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c42fafa_e4c969b9",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "What happens if this is a different value than kMaxSpirvPatchCount?\n\nIs there a benefit to using a FixedVector here rather than just a normal array?\n\n    std::array\u003csize_t, kMaxSpirvPatchCount\u003e nextHunks \u003d {};",
+      "range": {
+        "startLine": 1794,
+        "startChar": 62,
+        "endLine": 1794,
+        "endChar": 83
+      },
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb76ef5b_7662fe45",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1839,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Maybe a nit, but why a pointer instead of a reference here?",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3ee1975_8904347b",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "This exists in utilities.cpp as:\n\n    std::string StripLastArrayIndex(const std::string \u0026name)",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd7185ce_bc64a403",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1914,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Should these be saved?\n\nIn the case where every patch is required, we could just keep the original SPIR-V and not have to do anything.",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29ddf022_e0de9b87",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1957,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Same as above, can this just be a std::vector so we only have as many slots in the vector as there are patches to apply?",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcd5bd40_2a0b7fa1",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "I think this should be a list of patches, rather than having a separate struct member for each patch, to prevent this struct from getting a lot of members that may come and go through ANGLE\u0027s life.   If it\u0027s helpful to know what each SpirvPatch is for, an ID field can be added to SpirvPatch that contains an enum value for each patch type.\n\nThis also helps reduce the memory consumption for devices that don\u0027t need various patches (like those that support the line rasterization extension).",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e602ab6b_c9bb8e28",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "This comment can probably be removed, to prevent it from becoming out-dated if/when things are refactored in the future and this is missed (and not updated).\n\nAs an example, in your commit message you state that this could eventually be called during compile time, rather than link time.",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff492c31_b4729529",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "Is this necessary?\n\nI would have expected that we know ahead of time which patches are necessary so we only create those patches.   Then, here, we would just naively apply all of the patches that exist.",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69d7618d_f11044fd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-06T20:53:58Z",
+      "side": 1,
+      "message": "This should probably be moved before the return to free the necessary resources (e.g., pipelines, shader modules, etc.).",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
