@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "3a585aee_f50df654",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-06T20:01:28Z",
+      "side": 1,
+      "message": "BTW, I meant to bring this up, but most people were gone last week.",
+      "parentUuid": "4ce17d68_abd46b96",
+      "range": {
+        "startLine": 2128,
+        "startChar": 47,
+        "endLine": 2128,
+        "endChar": 75
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "152de2f7_3720ddf0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
