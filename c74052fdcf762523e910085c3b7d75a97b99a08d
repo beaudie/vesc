@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "98d7a7c8_417cf06c",
+        "filename": "src/common/PackedEnums.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-06T02:39:15Z",
+      "side": 1,
+      "message": "In my experience, once the code goes in, fixing things like this usually becomes low priority enough to rarely ever be done. If the other reviewers are ok with this though, I concede.\n\nOn the same subject, it\u0027s not great that Apple is the only one that can test these changes.",
+      "parentUuid": "7e58103b_2660f655",
+      "range": {
+        "startLine": 384,
+        "startChar": 0,
+        "endLine": 384,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a12681b4_1c9aa67c",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 2
@@ -167,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "22e80338_e70fa573",
+        "filename": "src/libANGLE/renderer/gl/eagl/ContextEAGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-06T02:39:15Z",
+      "side": 1,
+      "message": "Ok, if there is precedence to having code in Chromium not copy-righted to Google, that\u0027s fine.",
+      "parentUuid": "f9eaaaaa_f36cd25a",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c11abbf_bbc41f15",
         "filename": "src/libANGLE/renderer/gl/eagl/WindowSurfaceEAGL.h",
         "patchSetId": 2
@@ -249,6 +297,30 @@
       "side": 1,
       "message": "This is another piece of code which I think has been made unnecessary by my addition of support for the iOS Simulator in https://bugs.webkit.org/show_bug.cgi?id\u003d205618 . I will work to remove this change after this CL lands and the iOS Simulator support is upstreamed.",
       "parentUuid": "da30226d_c5bef7c5",
+      "range": {
+        "startLine": 6527,
+        "startChar": 0,
+        "endLine": 6527,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af4b92e_10c81b89",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6527,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-06T02:39:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0fe32611_58fe5a9b",
       "range": {
         "startLine": 6527,
         "startChar": 0,
