@@ -101,25 +101,21 @@ uint32_t volkGetInstanceVersion(void)
 
 void volkLoadInstance(VkInstance instance)
 {
+    if (loadedInstance != instance)
+    {
+        volkGenLoadInstance(instance, vkGetInstanceProcAddrStub);
+        volkGenLoadDevice(instance, vkGetInstanceProcAddrStub);
+    }
     loadedInstance = instance;
-    volkGenLoadInstance(instance, vkGetInstanceProcAddrStub);
-    volkGenLoadDevice(instance, vkGetInstanceProcAddrStub);
-}
-
-VkInstance volkGetLoadedInstance()
-{
-    return loadedInstance;
 }
 
 void volkLoadDevice(VkDevice device)
 {
-    loadedDevice = device;
-    volkGenLoadDevice(device, vkGetDeviceProcAddrStub);
-}
-
-VkDevice volkGetLoadedDevice()
-{
-    return loadedDevice;
+    if (loadedDevice != device)
+    {
+        volkGenLoadDevice(device, vkGetDeviceProcAddrStub);
+    }
+    loadedDevice != device;
 }
 
 void volkLoadDeviceTable(struct VolkDeviceTable* table, VkDevice device)
