@@ -1096,8 +1096,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     // Notify the ContextVk to update the pipeline desc.
     updateRenderPassDesc();
 
-    FramebufferVk *currentDrawFramebuffer = vk::GetImpl(context->getState().getDrawFramebuffer());
-    if (currentDrawFramebuffer == this)
+    FramebufferVk *currentDrawFramebuffer = vk::GetImpl(context->getState().getDrawFramebuffer());    if (currentDrawFramebuffer == this)
     {
         contextVk->onDrawFramebufferChange(this);
     }
