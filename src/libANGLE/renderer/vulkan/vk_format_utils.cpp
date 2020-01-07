@@ -19,7 +19,10 @@ namespace rx
 {
 namespace
 {
-void FillTextureFormatCaps(RendererVk *renderer, VkFormat format, gl::TextureCaps *outTextureCaps)
+void FillTextureFormatCaps(RendererVk *renderer,
+                           VkFormat format,
+                           bool formatIsInt,
+                           gl::TextureCaps *outTextureCaps)
 {
     const VkPhysicalDeviceLimits &physicalDeviceLimits =
         renderer->getPhysicalDeviceProperties().limits;
@@ -45,8 +48,44 @@ void FillTextureFormatCaps(RendererVk *renderer, VkFormat format, gl::TextureCap
     {
         if (hasColorAttachmentFeatureBit)
         {
-            vk_gl::AddSampleCounts(physicalDeviceLimits.framebufferColorSampleCounts,
-                                   &outTextureCaps->sampleCounts);
+            if (formatIsInt)
+            {
+                VkPhysicalDevice physicalDevice = renderer->getPhysicalDevice();
+                // VkFormat format = format;
+                VkImageType type     = VK_IMAGE_TYPE_2D;
+                VkImageTiling tiling = VK_IMAGE_TILING_OPTIMAL;
+                VkImageUsageFlags usage =
+                    VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+                    VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+                VkImageCreateFlags flags = 0;
+                VkImageFormatProperties imageFormatProperties;
+                VkResult result = VK_SUCCESS;
+                result          = vkGetPhysicalDeviceImageFormatProperties(
+                    physicalDevice, format, type, tiling, usage, flags, &imageFormatProperties);
+                // HACK: Override SwiftShader's value:
+                assert(imageFormatProperties.sampleCounts != VK_SAMPLE_COUNT_1_BIT);
+                const_cast<VkPhysicalDeviceLimits &>(physicalDeviceLimits)
+                    .sampledImageIntegerSampleCounts = imageFormatProperties.sampleCounts;
+                // TODO(ianelliott): Address Vulkan drivers that only support a sample count of 1.
+                // In the near term (while working through the Vulkan-spec ramifications, continue
+                // to support a sample count of 1 for integer formats.
+                // See: http://anglebug.com/4197
+#ifdef OLD_CODE
+                vk_gl::AddSampleCounts(physicalDeviceLimits.sampledImageIntegerSampleCounts,
+                                       vk_gl::kSupportedSampleCountsPlusOne,
+                                       &outTextureCaps->sampleCounts);
+#else   // OLD_CODE
+                vk_gl::AddSampleCounts(imageFormatProperties.sampleCounts,
+                                       vk_gl::kSupportedSampleCountsPlusOne,
+                                       &outTextureCaps->sampleCounts);
+#endif  // OLD_CODE
+            }
+            else
+            {
+                vk_gl::AddSampleCounts(physicalDeviceLimits.framebufferColorSampleCounts,
+                                       vk_gl::kSupportedSampleCounts,
+                                       &outTextureCaps->sampleCounts);
+            }
         }
         if (hasDepthAttachmentFeatureBit)
         {
@@ -55,7 +94,7 @@ void FillTextureFormatCaps(RendererVk *renderer, VkFormat format, gl::TextureCap
             // sample counts.
             vk_gl::AddSampleCounts((physicalDeviceLimits.framebufferDepthSampleCounts &
                                     physicalDeviceLimits.framebufferStencilSampleCounts),
-                                   &outTextureCaps->sampleCounts);
+                                   vk_gl::kSupportedSampleCounts, &outTextureCaps->sampleCounts);
         }
     }
 }
@@ -231,7 +270,7 @@ void FormatTable::initialize(RendererVk *renderer,
         }
 
         gl::TextureCaps textureCaps;
-        FillTextureFormatCaps(renderer, format.vkImageFormat, &textureCaps);
+        FillTextureFormatCaps(renderer, format.vkImageFormat, angleFormat.isInt(), &textureCaps);
         outTextureCapsMap->set(formatID, textureCaps);
 
         if (textureCaps.texturable)

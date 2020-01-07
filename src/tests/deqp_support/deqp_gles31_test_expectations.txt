@@ -658,9 +658,10 @@
 
 // The following are failing because of pixel/sub-pixel rendering differences than what is expected:
 4213 SWIFTSHADER : dEQP-GLES31.functional.texture.multisample.samples_1.sample_position = FAIL
-4213 SWIFTSHADER : dEQP-GLES31.functional.texture.multisample.samples_2.sample_position = FAIL
-4213 SWIFTSHADER : dEQP-GLES31.functional.texture.multisample.samples_3.sample_position = FAIL
-4213 SWIFTSHADER : dEQP-GLES31.functional.texture.multisample.samples_4.sample_position = FAIL
+// The following pass the dEQP test, but get Vulkan validation errors because they use a
+// multisampling shader with a sample count of 1:
+4197 VULKAN : dEQP-GLES31.functional.texture.multisample.samples_1.use_texture_*int_2d = FAIL
+4197 VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.texture_size.samples_1_texture_*int_2d = FAIL
 
 // Vulkan creates the image view with the same format as the texture.
 3885 VULKAN : dEQP-GLES31.functional.image_load_store.*.format_reinterpret.* = FAIL
