@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "592adc33_9f16d656",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-07T17:46:12Z",
+      "side": 1,
+      "message": "suggestion: Fix colored indexed point tests not using color in vertex buffer\n\nSpecifically to tell that this is a test *fix*, rather than a test change.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 72
+      },
+      "revId": "dbaeceea33c695efc9d7f4a9875c3792ca455918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dd61b0f_1efc88de",
+        "filename": "src/tests/gl_tests/IndexedPointsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-07T17:46:12Z",
+      "side": 1,
+      "message": "These tests are failing on AMD/windows. Which is very likely a driver bug. Please add suppressions (conditioned to Vulkan, AMD and windows), and tag the suppression with a bug link (like done for swiftshader above). You would need to create a new bug (anglebug.com/new) that basically says these tests fail on this configuration.",
+      "revId": "dbaeceea33c695efc9d7f4a9875c3792ca455918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
