@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d328d918_c62cba49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-07T01:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58c27a74_e0f97b1b",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 67
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ce17d68_abd46b96",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -120,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "cf5c0c3d_1ab6875d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-07T01:16:50Z",
+      "side": 1,
+      "message": "Okay,\n\nI removed the onDestroy change.  Since I\u0027m no longer using ContextVk::mDrawFramebuffer, I don\u0027t think I need it now.\n\nI\u0027ll defer removing mDrawFramebuffer to a split patch.",
+      "parentUuid": "b59a9969_a71d4221",
+      "range": {
+        "startLine": 2128,
+        "startChar": 47,
+        "endLine": 2128,
+        "endChar": 75
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "152de2f7_3720ddf0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -179,6 +227,30 @@
       "side": 1,
       "message": "You shouldn\u0027t need to add a new public method even if you want to make a helper method b/w syncState and onDrawFBChange.",
       "parentUuid": "f81e0d64_c649b651",
+      "range": {
+        "startLine": 2125,
+        "startChar": 0,
+        "endLine": 2135,
+        "endChar": 1
+      },
+      "revId": "e3b6353a9ed14b6a76925d079f775cfc60179d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b2091e5_e3c2cc21",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-07T01:16:50Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand the comment about a new public method.  It\u0027s like the methods around it (in both the header/cpp files).\n\nI\u0027ll work on the onDrawFBChange tomorrow.",
+      "parentUuid": "de2461f2_3f694669",
       "range": {
         "startLine": 2125,
         "startChar": 0,
