@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e1c5865_abae54bf",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:43:32Z",
+      "side": 1,
+      "message": "nit: Some drivers\n\nThese are public strings, and we don\u0027t generally want to point fingers when giving this information to users. They could also get out of date, which can be confusing to them.",
+      "range": {
+        "startLine": 404,
+        "startChar": 9,
+        "endLine": 404,
+        "endChar": 27
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3595fdf7_fb9107ee",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:43:32Z",
+      "side": 1,
+      "message": "So if texture A is copied to, deletion of unrelated texture B also requires a flush? I\u0027m going to guess that\u0027s not what you intended.\n\nIf I\u0027m right, why not track the bool in TextureGL itself?",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 71
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f866e1d7_3c16fe2c",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:43:32Z",
+      "side": 1,
+      "message": "You can use GLTexture from gl_raii.h so you don\u0027t need to Gen/Delete them.",
+      "range": {
+        "startLine": 488,
+        "startChar": 4,
+        "endLine": 488,
+        "endChar": 10
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba087878_3488adc9",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:43:32Z",
+      "side": 1,
+      "message": "Same with GLFramebuffer.",
+      "range": {
+        "startLine": 506,
+        "startChar": 4,
+        "endLine": 506,
+        "endChar": 10
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
