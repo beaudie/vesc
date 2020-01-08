@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "268326bc_608877fc",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e6c7850_7b593bbc",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96fc0497_fbcbeda5",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 12
@@ -30,6 +48,24 @@
       "writtenOn": "2020-01-06T20:53:58Z",
       "side": 1,
       "message": "Rather than having a separate uint32 for each ID, possibly leading to a mix of used/unused values, I think this should be a map of variable name to variable ID.   Then, there should be a list of variable names you\u0027re looking for inside visitName().",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01163b99_c81f3518",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Yes, indeed this is what I intend to do in a follow up change that assigns locations/bindings here (instead of on the source). Would you mind if this becomes a part of that work?",
+      "parentUuid": "96fc0497_fbcbeda5",
       "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7ae849c2_4f884bec",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7a81962_0746a5c4",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c505d561_32bfa9e5",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 12
@@ -64,6 +118,24 @@
       "writtenOn": "2020-01-06T20:53:58Z",
       "side": 1,
       "message": "Are you expecting that every new patch type is added to this ASSERT()?   How will you enforce that?",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5b65da9_8bbc741d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Preferably yes. I guess if more patches are added and they are put in some sort of list, the assert can be reworked to walk the whole list.",
+      "parentUuid": "c505d561_32bfa9e5",
       "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "12a4b79c_1850b3f8",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Refactored. And added an assert when initializing the Vulkan backend. I left the assert here to emphasize that the code here is making this assumption.",
+      "parentUuid": "5b25676b_490d1022",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14cc9eb0_53411c8e",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 12
@@ -98,6 +188,24 @@
       "writtenOn": "2020-01-06T20:53:58Z",
       "side": 1,
       "message": "As noted earlier, this should iterate through a list of names, rather than potentially creating a long list of if/elses that are specific to each patch type.   Then, when a name is found, it\u0027s added to a map of name:ID.   This lets the SpirvTransformer be as naive as possible about the actual patches, and we only need to add the new names to a list to get all of this code to pick them up for free.",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "866ece4b_7a2a3fe4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Will do in the next iteration.",
+      "parentUuid": "14cc9eb0_53411c8e",
       "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "c5c0c50b_39c42ae4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1546,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "A varying location is wasted (if the driver doesn\u0027t perform a cross-stage optimization to remove it, which JohnK is of the opinion not all drivers do), leading to inefficiencies.\n\n(The inefficiency being that these locations determine how much of a \"shader export cache\" is reserved for the shader invocation. Both exporting the unnecessary output variable is costly (in terms of GPU clocks), and larger number of locations could limit the number of parallel shaders invocations if they bust the size of the cache)",
+      "parentUuid": "b5b828c3_c865f3c8",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2eb2e40_4e9c61d4",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 12
@@ -135,6 +261,24 @@
       "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd153491_e62ec6a9",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2eb2e40_4e9c61d4",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "cd0ef960_a7d1a6eb",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "It does. Updated.",
+      "parentUuid": "e0d882dc_f7e2b8ee",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "54d64239_efc22ed0",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 12
@@ -172,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "a7ad1748_cc248336",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54d64239_efc22ed0",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d4c6b92_6514840d",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 12
@@ -183,6 +363,30 @@
       "writtenOn": "2020-01-06T20:53:58Z",
       "side": 1,
       "message": "Why?   Specialization constants are constants already, so why is it replaced as part of patching?",
+      "range": {
+        "startLine": 1719,
+        "startChar": 66,
+        "endLine": 1720,
+        "endChar": 48
+      },
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e8c1805_647bab1a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Either the patch or the unspecialized version of the SPIR-V will necessarily have to do this. For example, I currently default the specialization constant to false (based on feedback from Cody), which means the patch needs to replace it with a OpConstTrue.\n\nNote that SPIR-V has consciously made it such that replacing OpSpecConst* with OpConst* is trivial and just a matter of replacing the opcode.",
+      "parentUuid": "4d4c6b92_6514840d",
       "range": {
         "startLine": 1719,
         "startChar": 66,
@@ -212,6 +416,24 @@
     },
     {
       "key": {
+        "uuid": "26f4b6f6_c9a469cd",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "One less allocation. I did this in the past on Jamie\u0027s suggestion when the upper-bound of the vector was small and known.",
+      "parentUuid": "2b5c8e5a_f229a28d",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b240869c_04e42eac",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 12
@@ -226,6 +448,24 @@
       "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d48864fb_6b065338",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "It should remain true. There\u0027s really nothing interesting before OpEntryPoint. I added an assert to make sure every hunk has an offset that\u0027s larger than this.",
+      "parentUuid": "b240869c_04e42eac",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -252,6 +492,30 @@
     },
     {
       "key": {
+        "uuid": "c67f2017_6fc56f02",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Not much, just an assert in FixedVector if trying to access out of bounds. Changed to std::array.",
+      "parentUuid": "0c42fafa_e4c969b9",
+      "range": {
+        "startLine": 1794,
+        "startChar": 62,
+        "endLine": 1794,
+        "endChar": 83
+      },
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb76ef5b_7662fe45",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 12
@@ -266,6 +530,24 @@
       "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfe3a95d_bcd770a8",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1839,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Probably an artifact of an older iteration. Fixed.",
+      "parentUuid": "cb76ef5b_7662fe45",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -286,6 +568,24 @@
     },
     {
       "key": {
+        "uuid": "63e17e35_0adec4fa",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "I just moved this code. This is not exactly stripping last array index though. It\u0027s removing every array index. For example, if the sampler name is `some_struct_array[10].sampler[3]`, it becomes `some_struct_array.sampler`.",
+      "parentUuid": "c3ee1975_8904347b",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd7185ce_bc64a403",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 12
@@ -297,6 +597,24 @@
       "writtenOn": "2020-01-06T20:53:58Z",
       "side": 1,
       "message": "Should these be saved?\n\nIn the case where every patch is required, we could just keep the original SPIR-V and not have to do anything.",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ec8f309_d5172332",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1914,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "I think I address this in another comment. We can\u0027t tell which patches are required, and the subset of patches that need to be applied at draw time are only known then.\n\nIt _is_ worth it to not generate patches for features that are unused, like line raster emulation when the extension is present. This is automatically taken care of (for example, compute shaders here already fall into this category).\n\nYou\u0027re right that skipping the whole ordeal for example for compute shaders would be nice. It\u0027s starting to look like I may need to remove the whole patching system (initially at least, until proven that leaving unused varyings could be harmful), so I can address this then.",
+      "parentUuid": "bd7185ce_bc64a403",
       "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -320,6 +638,24 @@
     },
     {
       "key": {
+        "uuid": "89d2a795_9460b8f5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1957,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Same reply!",
+      "parentUuid": "29ddf022_e0de9b87",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dcd5bd40_2a0b7fa1",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 12
@@ -331,6 +667,24 @@
       "writtenOn": "2020-01-06T20:53:58Z",
       "side": 1,
       "message": "I think this should be a list of patches, rather than having a separate struct member for each patch, to prevent this struct from getting a lot of members that may come and go through ANGLE\u0027s life.   If it\u0027s helpful to know what each SpirvPatch is for, an ID field can be added to SpirvPatch that contains an enum value for each patch type.\n\nThis also helps reduce the memory consumption for devices that don\u0027t need various patches (like those that support the line rasterization extension).",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79fdbb05_66cdb4b8",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "I agree with the sentiment, but I\u0027m not sure what the best option really is, given that we currently only have a single patch.\n\nWould you be ok if we defer making the call once we get more patches? (I have one in an upcoming change)",
+      "parentUuid": "dcd5bd40_2a0b7fa1",
       "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -354,6 +708,24 @@
     },
     {
       "key": {
+        "uuid": "b65afd29_b30bb72e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "glCompileShader-time compiling would require at least refactoring this function to output a single shader (instead of a gl::ShaderMap of them). I still want to emphasize that it doesn\u0027t need to wait until draw time. Do you have suggestions for a better wording?",
+      "parentUuid": "e602ab6b_c9bb8e28",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff492c31_b4729529",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 12
@@ -365,6 +737,24 @@
       "writtenOn": "2020-01-06T20:53:58Z",
       "side": 1,
       "message": "Is this necessary?\n\nI would have expected that we know ahead of time which patches are necessary so we only create those patches.   Then, here, we would just naively apply all of the patches that exist.",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb70f2f8_4d158308",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "The fact that there\u0027s only one patch now does make this look silly, but this is done to make the code generic. With an upcoming change, we will get another patch that removes inactive varyings.\n\nNow you can do any of these:\n\n- Apply the line raster emulation patch at draw time\n- Apply both patches on PPO\u0027s \"implicit link\"\n\nNaturally if we ever need more patches (and they are really only necessary when some shader interface variable needs to be removed), you could have a mix and match of patches that enable the emulations we need for that draw, and not the rest.\n\n---\n\n\u003e I would have expected that we know ahead of time which patches are necessary\n\nAhead of which time? Do you mean for example that we know the line raster extension exists so we don\u0027t need to create a line raster emulation patch?\n\n\u003e so we only create those patches\n\nWe create all patches that might get patched in, but we may patch in only a subset of them.\n\nIf we always needed to apply all patches, then we could have just created one big patch :)",
+      "parentUuid": "ff492c31_b4729529",
       "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -385,6 +775,24 @@
       "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4503d67e_006d08f6",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-08T20:34:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69d7618d_f11044fd",
+      "revId": "f1d5c7bb8ca9f999ca2efed49762a59c4634e0d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
