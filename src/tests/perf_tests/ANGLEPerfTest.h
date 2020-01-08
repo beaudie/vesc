@@ -163,6 +163,7 @@ class ANGLERenderTest : public ANGLEPerfTest
     angle::PlatformMethods mPlatformMethods;
     ConfigParameters mConfigParams;
 
+    bool mIsTimestampQueryAvailable;
     GLuint mTimestampQuery;
 
     // Trace event record that can be output.
