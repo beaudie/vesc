@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "773504bb_cbdaf5cd",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-08T22:12:18Z",
+      "side": 1,
+      "message": "The IsWindows() inclusion was a mistake - fixed in the next patch set.",
+      "revId": "7c85be680db5db26bda6b168f45f801c6bfaf87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
