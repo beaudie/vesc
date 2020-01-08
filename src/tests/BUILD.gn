@@ -11,6 +11,7 @@ declare_args() {
   # Don't build dEQP by default.
   build_angle_deqp_tests = false
   build_angle_gles1_conform_tests = false
+  build_angle_capture_replay_tests = false
 }
 
 angle_test("test_utils_unittest_helper") {
@@ -225,6 +226,17 @@ if (is_win || is_linux || is_android || is_mac) {
 if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
   import("angle_perftests.gni")
 
+  # On Android, may need to populate the device with trace files
+  copy("angle_internal_capture_data") {
+    sources = [
+      "${angle_root}/src/tests/internal_capture_tests",
+    ]
+
+    outputs = [
+      "$root_out_dir/$angle_data_dir/{{source_file_part}}",
+    ]
+  }
+
   # This test suite is designed to run against a generic GL implementation.
   angle_test("angle_perftests") {
     include_dirs = [ "." ]
@@ -260,6 +272,13 @@ if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
     }
     if (is_linux) {
       data_deps += [ "${angle_root}/third_party/glmark2:glmark2_glx" ]
+    }
+
+    if (build_angle_capture_replay_tests) {
+      import("internal_capture_tests/angle_capture_replay_tests.gni")
+      sources += angle_capture_replay_sources
+      defines += angle_capture_replay_defines
+      data_deps += [ ":angle_internal_capture_data" ]
     }
   }
 }
