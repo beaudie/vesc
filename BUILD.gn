@@ -587,6 +587,7 @@ angle_source_set("libANGLE_headers") {
 if (angle_enable_vulkan || angle_enable_metal) {
   angle_source_set("angle_glslang_wrapper") {
     sources = [
+      "src/common/vulkan_glsl_constants.h",
       "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
       "src/libANGLE/renderer/glslang_wrapper_utils.h",
     ]
