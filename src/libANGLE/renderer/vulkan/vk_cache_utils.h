@@ -13,6 +13,7 @@
 
 #include "common/Color.h"
 #include "common/FixedVector.h"
+#include "common/vulkan_glsl_constants.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -363,6 +364,7 @@ class GraphicsPipelineDesc final
                                      const ShaderModule *vertexModule,
                                      const ShaderModule *fragmentModule,
                                      const ShaderModule *geometryModule,
+                                     vk::SpecializationConstantBitSet specConsts,
                                      Pipeline *pipelineOut) const;
 
     // Vertex input state. For ES 3.1 this should be separated into binding and attribute.
@@ -829,6 +831,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                            const vk::ShaderModule *vertexModule,
                                            const vk::ShaderModule *fragmentModule,
                                            const vk::ShaderModule *geometryModule,
+                                           vk::SpecializationConstantBitSet specConsts,
                                            const vk::GraphicsPipelineDesc &desc,
                                            const vk::GraphicsPipelineDesc **descPtrOut,
                                            vk::PipelineHelper **pipelineOut)
@@ -843,7 +846,8 @@ class GraphicsPipelineCache final : angle::NonCopyable
 
         return insertPipeline(contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
                               activeAttribLocationsMask, programAttribsTypeMask, vertexModule,
-                              fragmentModule, geometryModule, desc, descPtrOut, pipelineOut);
+                              fragmentModule, geometryModule, specConsts, desc, descPtrOut,
+                              pipelineOut);
     }
 
   private:
@@ -856,6 +860,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                  const vk::ShaderModule *vertexModule,
                                  const vk::ShaderModule *fragmentModule,
                                  const vk::ShaderModule *geometryModule,
+                                 vk::SpecializationConstantBitSet specConsts,
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,
                                  vk::PipelineHelper **pipelineOut);
