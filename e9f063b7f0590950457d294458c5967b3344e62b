@@ -22,6 +22,30 @@
       "revId": "e9f063b7f0590950457d294458c5967b3344e62b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "259283bf_589a6147",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6412,
+      "author": {
+        "id": 1184734
+      },
+      "writtenOn": "2020-01-08T21:02:26Z",
+      "side": 1,
+      "message": "That\u0027s true, though this patch adds an invariant that programObject is non-null. Shall I remove the duplicate code from queryutils.cpp?",
+      "parentUuid": "47fc3d97_1a29cfe7",
+      "range": {
+        "startLine": 6409,
+        "startChar": 8,
+        "endLine": 6412,
+        "endChar": 9
+      },
+      "revId": "e9f063b7f0590950457d294458c5967b3344e62b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
