@@ -19,6 +19,11 @@ struct android_app *sApp = nullptr;
 pthread_mutex_t sInitWindowMutex;
 pthread_cond_t sInitWindowCond;
 bool sInitWindowDone = false;
+
+// This value is available from Android API level 1
+// See SCREEN_ORIENTATION_LANDSCAPE in ActivityInfo
+const int kScreenOrientationLandscape = 0;
+
 }  // namespace
 
 AndroidWindow::AndroidWindow() {}
@@ -60,6 +65,18 @@ bool AndroidWindow::setPosition(int x, int y)
 {
     UNIMPLEMENTED();
     return false;
+}
+
+void SetScreenOrientation(struct android_app *app, int orientation)
+{
+    // Use reverse JNI to call the Java entry point that rotates
+    // the display to respect width and height
+    JNIEnv *jni;
+    app->activity->vm->AttachCurrentThread(&jni, NULL);
+    jclass clazz       = jni->GetObjectClass(app->activity->clazz);
+    jmethodID methodID = jni->GetMethodID(clazz, "setRequestedOrientation", "(I)V");
+    jni->CallVoidMethod(app->activity->clazz, methodID, orientation);
+    app->activity->vm->DetachCurrentThread();
 }
 
 bool AndroidWindow::resize(int width, int height)
@@ -124,6 +141,11 @@ void android_main(struct android_app *app)
     // Event handlers, invoked from source->process()
     app->onAppCmd     = onAppCmd;
     app->onInputEvent = onInputEvent;
+
+    // Set perf tests to run in landscape orientation
+    // TODO: Perform this in AndroidWindow::resize() based on width/height
+    // http://anglebug.com/4327
+    SetScreenOrientation(sApp, kScreenOrientationLandscape);
 
     // Message loop, polling for events indefinitely (due to -1 timeout)
     // Must be here in order to handle APP_CMD_INIT_WINDOW event,
