@@ -15,6 +15,7 @@
 #include <array>
 
 #include "angle_test_configs.h"
+#include "angle_test_platform.h"
 #include "common/angleutils.h"
 #include "common/system_utils.h"
 #include "common/vector_utils.h"

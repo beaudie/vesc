@@ -10,8 +10,10 @@
 #include "ANGLEPerfTest.h"
 
 #include "ANGLEPerfTestArgs.h"
+#include "common/debug.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
+#include "test_utils/ANGLETest.h"
 #include "third_party/perf/perf_test.h"
 #include "third_party/trace_event/trace_event.h"
 #include "util/shader_utils.h"
@@ -378,7 +380,8 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name, const RenderTestParams
                     OneFrame() ? 1 : testParams.iterationsPerStep),
       mTestParams(testParams),
       mGLWindow(nullptr),
-      mOSWindow(nullptr)
+      mOSWindow(nullptr),
+      mIsTimestampQueryAvailable(false)
 {
     // Force fast tests to make sure our slowest bots don't time out.
     if (OneFrame())
@@ -484,6 +487,8 @@ void ANGLERenderTest::SetUp()
         // FAIL returns.
     }
 
+    mIsTimestampQueryAvailable = IsGLExtensionEnabled("GL_EXT_disjoint_timer_query");
+
     if (!areExtensionPrerequisitesFulfilled())
     {
         mSkipTest = true;
@@ -586,7 +591,7 @@ void ANGLERenderTest::step()
 
 void ANGLERenderTest::startGpuTimer()
 {
-    if (mTestParams.trackGpuTime)
+    if (mTestParams.trackGpuTime && mIsTimestampQueryAvailable)
     {
         glBeginQueryEXT(GL_TIME_ELAPSED_EXT, mTimestampQuery);
     }
@@ -594,7 +599,7 @@ void ANGLERenderTest::startGpuTimer()
 
 void ANGLERenderTest::stopGpuTimer()
 {
-    if (mTestParams.trackGpuTime)
+    if (mTestParams.trackGpuTime && mIsTimestampQueryAvailable)
     {
         glEndQueryEXT(GL_TIME_ELAPSED_EXT);
         uint64_t gpuTimeNs = 0;
