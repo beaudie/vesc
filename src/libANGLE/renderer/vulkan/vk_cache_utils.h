@@ -28,6 +28,10 @@ using PipelineAndSerial   = ObjectAndSerial<Pipeline>;
 using RefCountedDescriptorSetLayout = RefCounted<DescriptorSetLayout>;
 using RefCountedPipelineLayout      = RefCounted<PipelineLayout>;
 
+// The maximum number of boolean specialization constants currently supported in a graphics
+// pipeline.  There's currently only one used, for line raster emulation.
+constexpr uint32_t kMaxSpecializationConstants = 1;
+
 // Packed Vk resource descriptions.
 // Most Vk types use many more bits than required to represent the underlying data.
 // Since ANGLE wants to cache things like RenderPasses and Pipeline State Objects using
@@ -363,6 +367,7 @@ class GraphicsPipelineDesc final
                                      const ShaderModule *vertexModule,
                                      const ShaderModule *fragmentModule,
                                      const ShaderModule *geometryModule,
+                                     uint8_t specConsts,
                                      Pipeline *pipelineOut) const;
 
     // Vertex input state. For ES 3.1 this should be separated into binding and attribute.
@@ -473,6 +478,9 @@ class GraphicsPipelineDesc final
                           float farPlane);
     void setScissor(const VkRect2D &scissor);
     void updateScissor(GraphicsPipelineTransitionBits *transition, const VkRect2D &scissor);
+
+    // Specialization constants.
+    void setSpecializationConstant(uint8_t id, bool enabled);
 
   private:
     VertexInputAttributes mVertexInputAttribs;
@@ -808,6 +816,9 @@ class RenderPassCache final : angle::NonCopyable
     OuterCache mPayload;
 };
 
+static_assert(vk::kMaxSpecializationConstants <= 8,
+              "GraphicsPipelineCache::getPipeline specConsts parameter size");
+
 // TODO(jmadill): Add cache trimming/eviction.
 class GraphicsPipelineCache final : angle::NonCopyable
 {
@@ -829,6 +840,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                            const vk::ShaderModule *vertexModule,
                                            const vk::ShaderModule *fragmentModule,
                                            const vk::ShaderModule *geometryModule,
+                                           uint8_t specConsts,
                                            const vk::GraphicsPipelineDesc &desc,
                                            const vk::GraphicsPipelineDesc **descPtrOut,
                                            vk::PipelineHelper **pipelineOut)
@@ -843,7 +855,8 @@ class GraphicsPipelineCache final : angle::NonCopyable
 
         return insertPipeline(contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
                               activeAttribLocationsMask, programAttribsTypeMask, vertexModule,
-                              fragmentModule, geometryModule, desc, descPtrOut, pipelineOut);
+                              fragmentModule, geometryModule, specConsts, desc, descPtrOut,
+                              pipelineOut);
     }
 
   private:
@@ -856,6 +869,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                  const vk::ShaderModule *vertexModule,
                                  const vk::ShaderModule *fragmentModule,
                                  const vk::ShaderModule *geometryModule,
+                                 uint8_t specConsts,
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,
                                  vk::PipelineHelper **pipelineOut);
