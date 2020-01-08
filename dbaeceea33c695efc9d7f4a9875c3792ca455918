@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e044b1ac_60dfc15a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1390393
+      },
+      "writtenOn": "2020-01-08T15:23:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "592adc33_9f16d656",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 72
+      },
+      "revId": "dbaeceea33c695efc9d7f4a9875c3792ca455918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4dd61b0f_1efc88de",
         "filename": "src/tests/gl_tests/IndexedPointsTest.cpp",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "dbaeceea33c695efc9d7f4a9875c3792ca455918",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ff86078_fefd585a",
+        "filename": "src/tests/gl_tests/IndexedPointsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1390393
+      },
+      "writtenOn": "2020-01-08T15:23:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4dd61b0f_1efc88de",
+      "revId": "dbaeceea33c695efc9d7f4a9875c3792ca455918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
