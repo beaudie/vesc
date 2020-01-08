@@ -27,6 +27,9 @@ namespace
 // This size is picked according to the required maxUniformBufferRange in the Vulkan spec.
 constexpr size_t kUniformBlockDynamicBufferMinSize = 16384u;
 
+// Specialization constant ids.
+constexpr uint8_t kLineRasterEmulationSpecConstId = 0;
+
 // Identical to Std140 encoder in all aspects, except it ignores opaque uniform types.
 class VulkanDefaultBlockEncoder : public sh::Std140BlockEncoder
 {
@@ -366,56 +369,100 @@ ProgramVk::ShaderInfo::~ShaderInfo() = default;
 
 angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
                                                  const gl::ShaderMap<std::string> &shaderSources,
-                                                 bool enableLineRasterEmulation)
+                                                 gl::ShaderMap<SpirvShader> *spirvShadersOut)
 {
     ASSERT(!valid());
 
-    gl::ShaderMap<std::vector<uint32_t>> shaderCodes;
-    ANGLE_TRY(GlslangWrapperVk::GetShaderCode(
-        contextVk, contextVk->getCaps(), enableLineRasterEmulation, shaderSources, &shaderCodes));
+    ANGLE_TRY(GlslangWrapperVk::GetShaderCode(contextVk, contextVk->getCaps(), shaderSources,
+                                              spirvShadersOut));
+
+    mIsInitialized = true;
+    return angle::Result::Continue;
+}
+
+void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
+{
+    for (SpirvShader &spirvShader : mSpirvShaders)
+    {
+        spirvShader.clear();
+    }
+    mIsInitialized = false;
+}
+
+// ProgramVk::ProgramInfo implementation.
+ProgramVk::ProgramInfo::ProgramInfo() {}
+
+ProgramVk::ProgramInfo::~ProgramInfo() = default;
+
+angle::Result ProgramVk::ProgramInfo::initProgram(ContextVk *contextVk,
+                                                  const ShaderInfo &shaderInfo,
+                                                  bool enableLineRasterEmulation)
+{
+    const gl::ShaderMap<SpirvShader> &spirvShaders = shaderInfo.getSpirvShaders();
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        if (!shaderSources[shaderType].empty())
+        const SpirvShader &spirvShader = spirvShaders[shaderType];
+
+        if (!spirvShader.empty())
         {
             ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
-                                              shaderCodes[shaderType].data(),
-                                              shaderCodes[shaderType].size() * sizeof(uint32_t)));
+                                              spirvShader.data(),
+                                              spirvShader.size() * sizeof(uint32_t)));
 
             mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
         }
     }
 
-    return angle::Result::Continue;
-}
-
-angle::Result ProgramVk::loadShaderSource(ContextVk *contextVk, gl::BinaryInputStream *stream)
-{
-    // Read in shader sources for all shader types
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    if (enableLineRasterEmulation)
     {
-        mShaderSources[shaderType] = stream->readString();
+        mProgramHelper.enableSpecializationConstant(kLineRasterEmulationSpecConstId);
     }
 
     return angle::Result::Continue;
 }
 
-void ProgramVk::saveShaderSource(gl::BinaryOutputStream *stream)
-{
-    // Write out shader sources for all shader types
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        stream->writeString(mShaderSources[shaderType]);
-    }
-}
-
-void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
+void ProgramVk::ProgramInfo::release(ContextVk *contextVk)
 {
     mProgramHelper.release(contextVk);
 
     for (vk::RefCounted<vk::ShaderAndSerial> &shader : mShaders)
     {
         shader.get().destroy(contextVk->getDevice());
+    }
+}
+
+angle::Result ProgramVk::loadSpirvShader(ContextVk *contextVk, gl::BinaryInputStream *stream)
+{
+    // Read in shader codes for all shader types
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        // Read the shader source
+        mShaderSources[shaderType] = stream->readString();
+
+        SpirvShader *spirvShader = &mShaderInfo.getSpirvShaders()[shaderType];
+
+        // Read the SPIR-V
+        spirvShader->resize(stream->readInt<size_t>());
+        stream->readRaw(spirvShader->data(), spirvShader->size());
+    }
+
+    return angle::Result::Continue;
+}
+
+void ProgramVk::saveSpirvShader(gl::BinaryOutputStream *stream)
+{
+    // Write out shader codes for all shader types
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        // Write the shader source
+        stream->writeString(mShaderSources[shaderType]);
+
+        const SpirvShader &spirvShader = mShaderInfo.getSpirvShaders()[shaderType];
+
+        // Write the SPIR-V
+        stream->writeInt(spirvShader.size());
+        stream->writeRaw(spirvShader.data(), spirvShader.size());
     }
 }
 
@@ -455,8 +502,9 @@ void ProgramVk::reset(ContextVk *contextVk)
         uniformBlock.storage.release(renderer);
     }
 
-    mDefaultShaderInfo.release(contextVk);
-    mLineRasterShaderInfo.release(contextVk);
+    mShaderInfo.release(contextVk);
+    mDefaultProgramInfo.release(contextVk);
+    mLineRasterProgramInfo.release(contextVk);
 
     mEmptyBuffer.release(renderer);
 
@@ -485,7 +533,7 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
     gl::ShaderMap<size_t> requiredBufferSize;
     requiredBufferSize.fill(0);
 
-    angle::Result status = loadShaderSource(contextVk, stream);
+    angle::Result status = loadSpirvShader(contextVk, stream);
     if (status != angle::Result::Continue)
     {
         return std::make_unique<LinkEventDone>(status);
@@ -525,7 +573,7 @@ void ProgramVk::save(const gl::Context *context, gl::BinaryOutputStream *stream)
 {
     // (geofflang): Look into saving shader modules in ShaderInfo objects (keep in mind that we
     // compile shaders lazily)
-    saveShaderSource(stream);
+    saveSpirvShader(stream);
 
     // Serializes the uniformLayout data of mDefaultUniformBlocks
     for (gl::ShaderType shaderType : gl::AllShaderTypes())

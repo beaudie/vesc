@@ -3564,8 +3564,7 @@ ShaderProgramHelper::~ShaderProgramHelper() = default;
 
 bool ShaderProgramHelper::valid() const
 {
-    // This will need to be extended for compute shader support.
-    return mShaders[gl::ShaderType::Vertex].valid();
+    return mShaders[gl::ShaderType::Vertex].valid() || mShaders[gl::ShaderType::Compute].valid();
 }
 
 void ShaderProgramHelper::destroy(VkDevice device)
@@ -3591,6 +3590,13 @@ void ShaderProgramHelper::release(ContextVk *contextVk)
 void ShaderProgramHelper::setShader(gl::ShaderType shaderType, RefCounted<ShaderAndSerial> *shader)
 {
     mShaders[shaderType].set(shader);
+}
+
+void ShaderProgramHelper::enableSpecializationConstant(uint8_t id)
+{
+    ASSERT(id < kMaxSpecializationConstants);
+
+    mSpecializationConstants |= 1u << id;
 }
 
 angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
