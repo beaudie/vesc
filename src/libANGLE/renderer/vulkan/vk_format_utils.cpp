@@ -19,10 +19,14 @@ namespace rx
 {
 namespace
 {
-void FillTextureFormatCaps(RendererVk *renderer, VkFormat format, gl::TextureCaps *outTextureCaps)
+void FillTextureFormatCaps(RendererVk *renderer,
+                           VkFormat format,
+                           bool formatIsInt,
+                           VkSampleCountFlags *maxColorSampleCounts,
+                           VkSampleCountFlags *maxIntegerSampleCounts,
+                           VkSampleCountFlags *maxDepthStencilSampleCounts,
+                           gl::TextureCaps *outTextureCaps)
 {
-    const VkPhysicalDeviceLimits &physicalDeviceLimits =
-        renderer->getPhysicalDeviceProperties().limits;
     bool hasColorAttachmentFeatureBit =
         renderer->hasImageFormatFeatureBits(format, VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
     bool hasDepthAttachmentFeatureBit =
@@ -41,21 +45,47 @@ void FillTextureFormatCaps(RendererVk *renderer, VkFormat format, gl::TextureCap
         (hasColorAttachmentFeatureBit || hasDepthAttachmentFeatureBit);
     outTextureCaps->renderbuffer = outTextureCaps->textureAttachment;
 
-    if (outTextureCaps->renderbuffer)
+    if (outTextureCaps->renderbuffer &&
+        (hasColorAttachmentFeatureBit || hasDepthAttachmentFeatureBit))
     {
+        // Query and record the sample counts for this format:
+        VkPhysicalDevice physicalDevice = renderer->getPhysicalDevice();
+        VkImageType type                = VK_IMAGE_TYPE_2D;
+        VkImageTiling tiling            = VK_IMAGE_TILING_OPTIMAL;
+        VkImageUsageFlags usage         = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+                                  VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+        VkImageCreateFlags flags = 0;
+        VkImageFormatProperties imageFormatProperties;
+        VkResult result = VK_SUCCESS;
+
         if (hasColorAttachmentFeatureBit)
         {
-            vk_gl::AddSampleCounts(physicalDeviceLimits.framebufferColorSampleCounts,
-                                   &outTextureCaps->sampleCounts);
+            usage |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
         }
         if (hasDepthAttachmentFeatureBit)
         {
-            // Some drivers report different depth and stencil sample counts.  We'll AND those
-            // counts together, limiting all depth and/or stencil formats to the lower number of
-            // sample counts.
-            vk_gl::AddSampleCounts((physicalDeviceLimits.framebufferDepthSampleCounts &
-                                    physicalDeviceLimits.framebufferStencilSampleCounts),
-                                   &outTextureCaps->sampleCounts);
+            usage |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+        }
+        result = vkGetPhysicalDeviceImageFormatProperties(physicalDevice, format, type, tiling,
+                                                          usage, flags, &imageFormatProperties);
+        vk_gl::AddSampleCounts(imageFormatProperties.sampleCounts, &outTextureCaps->sampleCounts);
+        if (hasColorAttachmentFeatureBit)
+        {
+            if (formatIsInt)
+            {
+                *maxIntegerSampleCounts =
+                    std::min(*maxIntegerSampleCounts, imageFormatProperties.sampleCounts);
+            }
+            else
+            {
+                *maxColorSampleCounts =
+                    std::min(*maxColorSampleCounts, imageFormatProperties.sampleCounts);
+            }
+        }
+        if (hasDepthAttachmentFeatureBit)
+        {
+            *maxDepthStencilSampleCounts =
+                std::min(*maxDepthStencilSampleCounts, imageFormatProperties.sampleCounts);
         }
     }
 }
@@ -207,7 +237,11 @@ bool operator!=(const Format &lhs, const Format &rhs)
 }
 
 // FormatTable implementation.
-FormatTable::FormatTable() {}
+FormatTable::FormatTable()
+    : mMaxColorSampleCounts(vk_gl::kSupportedSampleCounts),
+      mMaxIntegerSampleCounts(vk_gl::kSupportedSampleCounts),
+      mMaxDepthStencilSampleCounts(vk_gl::kSupportedSampleCounts)
+{}
 
 FormatTable::~FormatTable() {}
 
@@ -215,6 +249,8 @@ void FormatTable::initialize(RendererVk *renderer,
                              gl::TextureCapsMap *outTextureCapsMap,
                              std::vector<GLenum> *outCompressedTextureFormats)
 {
+    const VkPhysicalDeviceLimits &physicalDeviceLimits =
+        renderer->getPhysicalDeviceProperties().limits;
     for (size_t formatIndex = 0; formatIndex < angle::kNumANGLEFormats; ++formatIndex)
     {
         vk::Format &format               = mFormatData[formatIndex];
@@ -231,7 +267,9 @@ void FormatTable::initialize(RendererVk *renderer,
         }
 
         gl::TextureCaps textureCaps;
-        FillTextureFormatCaps(renderer, format.vkImageFormat, &textureCaps);
+        FillTextureFormatCaps(renderer, format.vkImageFormat, angleFormat.isInt(),
+                              &mMaxColorSampleCounts, &mMaxIntegerSampleCounts,
+                              &mMaxDepthStencilSampleCounts, &textureCaps);
         outTextureCapsMap->set(formatID, textureCaps);
 
         if (textureCaps.texturable)
@@ -245,6 +283,21 @@ void FormatTable::initialize(RendererVk *renderer,
             outCompressedTextureFormats->push_back(internalFormat);
         }
     }
+    // Override the physical-device limits with those calculated in FillTextureFormatCaps():
+    const_cast<VkPhysicalDeviceLimits &>(physicalDeviceLimits).sampledImageColorSampleCounts =
+        mMaxColorSampleCounts & vk_gl::kSupportedSampleCounts;
+    const_cast<VkPhysicalDeviceLimits &>(physicalDeviceLimits).sampledImageIntegerSampleCounts =
+        mMaxIntegerSampleCounts & vk_gl::kSupportedSampleCounts;
+    const_cast<VkPhysicalDeviceLimits &>(physicalDeviceLimits).sampledImageDepthSampleCounts =
+        mMaxDepthStencilSampleCounts & vk_gl::kSupportedSampleCounts;
+    const_cast<VkPhysicalDeviceLimits &>(physicalDeviceLimits).sampledImageStencilSampleCounts =
+        mMaxDepthStencilSampleCounts & vk_gl::kSupportedSampleCounts;
+    const_cast<VkPhysicalDeviceLimits &>(physicalDeviceLimits).framebufferColorSampleCounts =
+        mMaxColorSampleCounts & vk_gl::kSupportedSampleCounts;
+    const_cast<VkPhysicalDeviceLimits &>(physicalDeviceLimits).framebufferDepthSampleCounts =
+        mMaxDepthStencilSampleCounts & vk_gl::kSupportedSampleCounts;
+    const_cast<VkPhysicalDeviceLimits &>(physicalDeviceLimits).framebufferStencilSampleCounts =
+        mMaxDepthStencilSampleCounts & vk_gl::kSupportedSampleCounts;
 }
 
 VkImageUsageFlags GetMaximalImageUsageFlags(RendererVk *renderer, VkFormat format)

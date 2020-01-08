@@ -141,6 +141,9 @@ class FormatTable final : angle::NonCopyable
   private:
     // The table data is indexed by angle::FormatID.
     std::array<Format, angle::kNumANGLEFormats> mFormatData;
+    VkSampleCountFlags mMaxColorSampleCounts;
+    VkSampleCountFlags mMaxIntegerSampleCounts;
+    VkSampleCountFlags mMaxDepthStencilSampleCounts;
 };
 
 // This will return a reference to a VkFormatProperties with the feature flags supported
