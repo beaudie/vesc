@@ -3578,6 +3578,13 @@ void ShaderProgramHelper::setShader(gl::ShaderType shaderType, RefCounted<Shader
     mShaders[shaderType].set(shader);
 }
 
+void ShaderProgramHelper::enableSpecializationConstant(uint8_t id)
+{
+    ASSERT(id < kMaxSpecializationConstants);
+
+    mSpecializationConstants |= 1u << id;
+}
+
 angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
                                                       const PipelineLayout &pipelineLayout,
                                                       PipelineAndSerial **pipelineOut)

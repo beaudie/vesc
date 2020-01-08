@@ -27,6 +27,9 @@ namespace
 // This size is picked according to the required maxUniformBufferRange in the Vulkan spec.
 constexpr size_t kUniformBlockDynamicBufferMinSize = 16384u;
 
+// Specialization constant ids.
+constexpr uint8_t kLineRasterEmulationSpecConstId = 0;
+
 // Identical to Std140 encoder in all aspects, except it ignores opaque uniform types.
 class VulkanDefaultBlockEncoder : public sh::Std140BlockEncoder
 {
@@ -371,8 +374,8 @@ angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
     ASSERT(!valid());
 
     gl::ShaderMap<std::vector<uint32_t>> shaderCodes;
-    ANGLE_TRY(GlslangWrapperVk::GetShaderCode(
-        contextVk, contextVk->getCaps(), enableLineRasterEmulation, shaderSources, &shaderCodes));
+    ANGLE_TRY(GlslangWrapperVk::GetShaderCode(contextVk, contextVk->getCaps(), shaderSources,
+                                              &shaderCodes));
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
@@ -384,6 +387,11 @@ angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
 
             mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
         }
+    }
+
+    if (enableLineRasterEmulation)
+    {
+        mProgramHelper.enableSpecializationConstant(kLineRasterEmulationSpecConstId);
     }
 
     return angle::Result::Continue;

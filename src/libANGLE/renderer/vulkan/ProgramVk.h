@@ -295,6 +295,8 @@ class ProgramVk : public ProgramImpl
     // is in use.
     vk::DescriptorSetLayoutArray<vk::RefCountedDescriptorPoolBinding> mDescriptorPoolBindings;
 
+    // TODO: split into ShaderInfo and ProgramInfo.  There should be a single ShaderInfo, that
+    // contains the SPIR-V, and two ProgramInfos.
     class ShaderInfo final : angle::NonCopyable
     {
       public:

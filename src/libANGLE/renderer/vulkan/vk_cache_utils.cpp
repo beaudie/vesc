@@ -186,6 +186,7 @@ void UnpackBlendAttachmentState(const vk::PackedColorBlendAttachmentState &packe
 void SetPipelineShaderStageInfo(const VkStructureType type,
                                 const VkShaderStageFlagBits stage,
                                 const VkShaderModule module,
+                                const VkSpecializationInfo &specializationInfo,
                                 VkPipelineShaderStageCreateInfo *shaderStage)
 {
     shaderStage->sType               = type;
@@ -193,7 +194,7 @@ void SetPipelineShaderStageInfo(const VkStructureType type,
     shaderStage->stage               = stage;
     shaderStage->module              = module;
     shaderStage->pName               = "main";
-    shaderStage->pSpecializationInfo = nullptr;
+    shaderStage->pSpecializationInfo = &specializationInfo;
 }
 
 angle::Result InitializeRenderPassFromDesc(vk::Context *context,
@@ -538,13 +539,13 @@ void GraphicsPipelineDesc::initDefaults()
     mRasterizationAndMultisampleStateInfo.bits.alphaToCoverageEnable = 0;
     mRasterizationAndMultisampleStateInfo.bits.alphaToOneEnable      = 0;
 
-    mDepthStencilStateInfo.enable.depthTest  = 0;
-    mDepthStencilStateInfo.enable.depthWrite = 1;
-    SetBitField(mDepthStencilStateInfo.depthCompareOp, VK_COMPARE_OP_LESS);
+    mDepthStencilStateInfo.enable.depthTest       = 0;
+    mDepthStencilStateInfo.enable.depthWrite      = 1;
     mDepthStencilStateInfo.enable.depthBoundsTest = 0;
     mDepthStencilStateInfo.enable.stencilTest     = 0;
-    mDepthStencilStateInfo.minDepthBounds         = 0.0f;
-    mDepthStencilStateInfo.maxDepthBounds         = 0.0f;
+    SetBitField(mDepthStencilStateInfo.depthCompareOp, VK_COMPARE_OP_LESS);
+    mDepthStencilStateInfo.minDepthBounds = 0.0f;
+    mDepthStencilStateInfo.maxDepthBounds = 0.0f;
     SetBitField(mDepthStencilStateInfo.front.ops.fail, VK_STENCIL_OP_KEEP);
     SetBitField(mDepthStencilStateInfo.front.ops.pass, VK_STENCIL_OP_KEEP);
     SetBitField(mDepthStencilStateInfo.front.ops.depthFail, VK_STENCIL_OP_KEEP);
@@ -617,6 +618,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     const ShaderModule *vertexModule,
     const ShaderModule *fragmentModule,
     const ShaderModule *geometryModule,
+    uint8_t specConsts,
     Pipeline *pipelineOut) const
 {
     angle::FixedVector<VkPipelineShaderStageCreateInfo, 3> shaderStages;
@@ -631,11 +633,40 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     VkPipelineColorBlendStateCreateInfo blendState = {};
     VkGraphicsPipelineCreateInfo createInfo        = {};
 
+    uint32_t specializationEntryCount = 0;
+    std::array<VkSpecializationMapEntry, vk::kMaxSpecializationConstants> specializationEntries;
+    std::array<VkBool32, vk::kMaxSpecializationConstants> specializationValues;
+
+    // Collect specialization constants, if any.  They are default initialized to false, so only
+    // those specialization constants that need to be set to true are collected.  This will
+    // automatically exclude specialization constant ids that are yet to be used.
+    for (uint32_t id = 0; id < vk::kMaxSpecializationConstants; ++id)
+    {
+        const size_t idBit = 1u << id;
+        if ((specConsts & idBit) == 0)
+        {
+            continue;
+        }
+
+        const uint32_t offset                    = specializationEntryCount++;
+        specializationValues[offset]             = true;
+        specializationEntries[offset].constantID = id;
+        specializationEntries[offset].offset     = offset;
+        specializationEntries[offset].size       = sizeof(specializationValues[0]);
+    }
+
+    VkSpecializationInfo specializationInfo = {};
+    specializationInfo.mapEntryCount        = specializationEntryCount;
+    specializationInfo.pMapEntries          = specializationEntries.data();
+    specializationInfo.dataSize = specializationEntryCount * sizeof(specializationValues[0]);
+    specializationInfo.pData    = specializationValues.data();
+
     // Vertex shader is always expected to be present.
     ASSERT(vertexModule != nullptr);
     VkPipelineShaderStageCreateInfo vertexStage = {};
     SetPipelineShaderStageInfo(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-                               VK_SHADER_STAGE_VERTEX_BIT, vertexModule->getHandle(), &vertexStage);
+                               VK_SHADER_STAGE_VERTEX_BIT, vertexModule->getHandle(),
+                               specializationInfo, &vertexStage);
     shaderStages.push_back(vertexStage);
 
     if (geometryModule)
@@ -643,7 +674,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         VkPipelineShaderStageCreateInfo geometryStage = {};
         SetPipelineShaderStageInfo(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                                    VK_SHADER_STAGE_GEOMETRY_BIT, geometryModule->getHandle(),
-                                   &geometryStage);
+                                   specializationInfo, &geometryStage);
         shaderStages.push_back(geometryStage);
     }
 
@@ -654,7 +685,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         VkPipelineShaderStageCreateInfo fragmentStage = {};
         SetPipelineShaderStageInfo(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                                    VK_SHADER_STAGE_FRAGMENT_BIT, fragmentModule->getHandle(),
-                                   &fragmentStage);
+                                   specializationInfo, &fragmentStage);
         shaderStages.push_back(fragmentStage);
     }
 
@@ -1754,6 +1785,7 @@ angle::Result GraphicsPipelineCache::insertPipeline(
     const vk::ShaderModule *vertexModule,
     const vk::ShaderModule *fragmentModule,
     const vk::ShaderModule *geometryModule,
+    uint8_t specConsts,
     const vk::GraphicsPipelineDesc &desc,
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)
@@ -1767,7 +1799,7 @@ angle::Result GraphicsPipelineCache::insertPipeline(
         ANGLE_TRY(desc.initializePipeline(contextVk, pipelineCacheVk, compatibleRenderPass,
                                           pipelineLayout, activeAttribLocationsMask,
                                           programAttribsTypeMask, vertexModule, fragmentModule,
-                                          geometryModule, &newPipeline));
+                                          geometryModule, specConsts, &newPipeline));
     }
 
     // The Serial will be updated outside of this query.

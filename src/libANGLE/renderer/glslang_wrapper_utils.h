@@ -56,7 +56,6 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
 angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
                                         const gl::Caps &glCaps,
-                                        bool enableLineRasterEmulation,
                                         const gl::ShaderMap<std::string> &shaderSources,
                                         gl::ShaderMap<std::vector<uint32_t>> *shaderCodesOut);
 
