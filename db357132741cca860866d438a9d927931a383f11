@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e3b1b77a_fa4b0956",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-08T20:34:36Z",
+      "side": 1,
+      "message": "Should be resolved in latest patch set.",
+      "parentUuid": "1b58bf90_074ab808",
+      "range": {
+        "startLine": 399,
+        "startChar": 18,
+        "endLine": 400,
+        "endChar": 12
+      },
+      "revId": "db357132741cca860866d438a9d927931a383f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e99557d5_16879f48",
         "filename": "include/platform/FeaturesGL.h",
         "patchSetId": 1
@@ -116,6 +140,30 @@
       "revId": "db357132741cca860866d438a9d927931a383f11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f737db8e_9753e00c",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-08T20:34:36Z",
+      "side": 1,
+      "message": "Latest patch set should minimize the performance impact and is more correct.",
+      "parentUuid": "f33f592b_197cee66",
+      "range": {
+        "startLine": 1634,
+        "startChar": 4,
+        "endLine": 1634,
+        "endChar": 27
+      },
+      "revId": "db357132741cca860866d438a9d927931a383f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
