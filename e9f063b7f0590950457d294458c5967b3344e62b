@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47fc3d97_1a29cfe7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6412,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-08T20:58:00Z",
+      "side": 1,
+      "message": "This logic is in QueryProgramiv and this seems equivalent to what already happens: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/queryutils.cpp?l\u003d1181",
+      "range": {
+        "startLine": 6409,
+        "startChar": 8,
+        "endLine": 6412,
+        "endChar": 9
+      },
+      "revId": "e9f063b7f0590950457d294458c5967b3344e62b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
