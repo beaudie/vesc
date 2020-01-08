@@ -17,6 +17,7 @@
 #include "common/debug.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
+#include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/renderer/driver_utils.h"
@@ -1390,8 +1391,14 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
     ANGLE_FEATURE_CONDITION((&mFeatures), forceCPUPathForCubeMapCopy, IsWindows() && isIntel);
 
     // Work around incorrect NVIDIA point size range clamping.
-    // TODO(jmadill): Narrow driver range once fixed. http://anglebug.com/2970
-    ANGLE_FEATURE_CONDITION((&mFeatures), clampPointSize, isNvidia);
+    // Clamp is driver version is:
+    //   < 430 on Windows
+    //   < 421 otherwise
+    ANGLE_FEATURE_CONDITION(
+        (&mFeatures), clampPointSize,
+        isNvidia &&
+            angle::ParseNvidiaDriverVersion(this->mPhysicalDeviceProperties.driverVersion).major <
+                (IsWindows() ? 430 : 421));
 
     // Work around ineffective compute-graphics barriers on Nexus 5X.
     // TODO(syoussefi): Figure out which other vendors and driver versions are affected.

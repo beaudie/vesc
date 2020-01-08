@@ -107,7 +107,7 @@ class RendererVk : angle::NonCopyable
     const gl::Limitations &getNativeLimitations() const;
 
     uint32_t getQueueFamilyIndex() const { return mCurrentQueueFamilyIndex; }
-    const VkQueueFamilyProperties& getQueueFamilyProperties() const
+    const VkQueueFamilyProperties &getQueueFamilyProperties() const
     {
         return mQueueFamilyProperties[mCurrentQueueFamilyIndex];
     }
