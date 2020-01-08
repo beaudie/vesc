@@ -1042,11 +1042,19 @@ void CleanupUnusedEntities(bool useOldRewriteStructSamplers,
     }
 
     // Remove all the markers for unused varyings.
+    uint32_t unusedIndex = resources.varyingPacking.getMaxSemanticIndex();
     for (const std::string &varyingName : resources.varyingPacking.getInactiveVaryingNames())
     {
+        std::stringstream layoutStream;
+        layoutStream << "location = " << unusedIndex++;
         for (IntermediateShaderSource &shaderSource : *shaderSources)
         {
+#if 0
+            shaderSource.insertLayoutSpecifier(varyingName, layoutStream.str());
+            shaderSource.insertQualifierSpecifier(varyingName, "");
+#else
             shaderSource.eraseLayoutAndQualifierSpecifiers(varyingName, "");
+#endif
         }
     }
 
