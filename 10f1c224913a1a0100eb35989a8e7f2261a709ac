@@ -22,6 +22,30 @@
       "revId": "10f1c224913a1a0100eb35989a8e7f2261a709ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5802677_50300f4a",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2020-01-09T00:51:52Z",
+      "side": 1,
+      "message": "Yes, I believe this is the correct direction and it is possible because we have a solid base that supported VideoImage and related sampler in ANGLE now.  This will reduce the complex of the code path and make it more easier to iterate and maintain.\nI\u0027ll add this TODO, Thanks for your help on reviewing this.",
+      "parentUuid": "44f4b472_d118a3c4",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 15
+      },
+      "revId": "10f1c224913a1a0100eb35989a8e7f2261a709ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
