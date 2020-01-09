@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "2df50d31_f6345d04",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-09T19:38:03Z",
+      "side": 1,
+      "message": "Well, I\u0027d guess that glBindFramebuffer probably records a few barriers, so the command buffer is not exactly empty.\n\nThat said, I don\u0027t particularly have a strong feeling about this. After all, it\u0027s a driver bug workaround.",
+      "parentUuid": "a02c46d2_47dfb985",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 71
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f866e1d7_3c16fe2c",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 2
