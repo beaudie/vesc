@@ -239,6 +239,30 @@
     },
     {
       "key": {
+        "uuid": "56408c9b_48f49bb3",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T20:08:12Z",
+      "side": 1,
+      "message": "Jamie gave the same feedback you did, so I\u0027ve restructured the test to use the RAII constructors, and am using reset() to get the same deletion behavior. Thanks for your suggestion.",
+      "parentUuid": "993d351b_427e2e9a",
+      "range": {
+        "startLine": 488,
+        "startChar": 4,
+        "endLine": 488,
+        "endChar": 10
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba087878_3488adc9",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 2
@@ -307,6 +331,30 @@
       "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0152a92c_d8773a66",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T20:08:12Z",
+      "side": 1,
+      "message": "Restructured to use the RAII helpers based on your and Jamie\u0027s suggestions.",
+      "parentUuid": "9363ce7b_ddb1dca0",
+      "range": {
+        "startLine": 506,
+        "startChar": 4,
+        "endLine": 506,
+        "endChar": 10
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
