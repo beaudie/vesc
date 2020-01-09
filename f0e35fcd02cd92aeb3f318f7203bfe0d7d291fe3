@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "275724d1_0703a76f",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-09T14:56:58Z",
+      "side": 1,
+      "message": "nit: could you unset mNeedsFlushBeforeDeleteTextures here? Maybe finish too?",
+      "revId": "f0e35fcd02cd92aeb3f318f7203bfe0d7d291fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
