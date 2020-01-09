@@ -26,6 +26,7 @@ enum
 
     MAX_VERTEX_ATTRIBS         = 16,
     MAX_VERTEX_ATTRIB_BINDINGS = 16,
+    MAX_VERTEX_ATTRIB_STRIDE   = 2048,
 
     // Implementation upper limits, real maximums depend on the hardware
     IMPLEMENTATION_MAX_VARYING_VECTORS = 32,
