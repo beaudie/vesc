@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f7d3507_bd2e8043",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3562,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-09T21:22:38Z",
+      "side": 1,
+      "message": "Building on my comment below, if the cap is limited in RendererVk::ensureCapsInitialized(), does this still need to be done or would we get it for free?",
+      "revId": "b9b414bd247db1755f532c341c1beb73f863bed4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2273b68a_e52c2a19",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-09T21:22:38Z",
+      "side": 1,
+      "message": "Can this be done once in RendererVk::ensureCapsInitialized() rather than every setData() call?\n\n    mNativeCaps.maxVertexAttribStride \u003d\n        std::min(static_cast\u003cuint32_t\u003e(gl::MAX_VERTEX_ATTRIB_STRIDE),\n                 limitsVk.maxVertexInputBindingStride));\n\nOr do we not know which features need to be enabled that early?",
+      "revId": "b9b414bd247db1755f532c341c1beb73f863bed4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
