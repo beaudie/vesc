@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "a02c46d2_47dfb985",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T19:19:48Z",
+      "side": 1,
+      "message": "It\u0027s not free, as evidenced by the large performance regression reported in http://crbug.com/1032210 , which was a consequence of adding glFlush calls around glBindFramebuffer as a workaround for Intel driver bug http://crbug.com/1018028 . A glDeleteTextures call won\u0027t be a no-op, and will result in a real hardware flush.\n\nFrom testing, adding flushes before every glDeleteTextures call against a texture that has ever been copied to is redundant. In order to get the driver into a consistent state, what seems to be necessary is to flush the command buffer where the copies have been issued.",
+      "parentUuid": "e185f56b_04b5926c",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 71
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f866e1d7_3c16fe2c",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 2
