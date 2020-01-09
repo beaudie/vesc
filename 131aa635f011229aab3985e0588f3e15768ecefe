@@ -81,6 +81,24 @@
       "revId": "131aa635f011229aab3985e0588f3e15768ecefe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4210cee2_90520d0c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-09T15:56:16Z",
+      "side": 1,
+      "message": "It\u0027s definitely wrong to call const_cast. We\u0027ll have to think of an alternative solution before landing.",
+      "parentUuid": "4449c74c_dba61e81",
+      "revId": "131aa635f011229aab3985e0588f3e15768ecefe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
