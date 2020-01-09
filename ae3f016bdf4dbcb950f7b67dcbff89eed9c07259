@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46b94ab6_06ec4553",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2020-01-09T02:22:52Z",
+      "side": 1,
+      "message": "The name of this function sounds like an accessor, so it\u0027s a little surprising for it to modify state as well. Would it be OK to name this function flushIfNecessaryBeforeDeleteTextures() and actually perform the flush call here?",
+      "range": {
+        "startLine": 694,
+        "startChar": 8,
+        "endLine": 694,
+        "endChar": 39
+      },
+      "revId": "ae3f016bdf4dbcb950f7b67dcbff89eed9c07259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
