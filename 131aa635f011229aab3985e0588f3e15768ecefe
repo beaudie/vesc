@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b67f2208_9ff67ec0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-09T15:49:23Z",
+      "side": 1,
+      "message": "\u003e Does this refer to b/147387937 ?\n\nNo.  Sorry, but I was trying to keep the commit message brief.  I\u0027ll explain more.  \n\nANGLE has been making decisions about what sample counts are supported based on values in VkPhysicalDeviceLimits::*SampleCounts.  This includes queries about per-format sample counts as well as validation logic.  \n\nBecause of the issue described in the Khronos-private https://gitlab.khronos.org/vulkan/vulkan/issues/1925, Vulkan does not support multisampling with a sample count of 1.  ANGLE was modified to filter out VK_SAMPLE_COUNT_1_BIT, and use the other sample counts that were returned by the Vulkan drivers.  That worked for other drivers.  For SwiftShader, it only returns VK_SAMPLE_COUNT_1_BIT for VkPhysicalDeviceLimits::sampledImageIntegerSampleCounts. ANGLE is left with sample counts for integer formats, which means it can\u0027t be GLES 3.1 compliant on top of SwiftShader.  Or, so it seemed.\n\nJesse pointed out that VkPhysicalDeviceLimits::*SampleCounts are really \"convenience\" values.  The real per-format values should be obtained from VkImageFormatProperties::sampleCounts by calling vkGetPhysicalDeviceImageFormatProperties().  When I did that for all of the integer formats that ANGLE cares about, SwiftShader returns (VK_SAMPLE_COUNT_1_BIT | VK_SAMPLE_COUNT_4_BIT).\n\nIt appears that SwiftShader really supports sample counts of both 1 and 4 for all formats, and therefore should set VkPhysicalDeviceLimits::sampledImageIntegerSampleCounts to  (VK_SAMPLE_COUNT_1_BIT | VK_SAMPLE_COUNT_4_BIT).  Is my observation correct?",
+      "parentUuid": "54dc82f4_06683749",
+      "range": {
+        "startLine": 14,
+        "startChar": 37,
+        "endLine": 14,
+        "endChar": 69
+      },
+      "revId": "131aa635f011229aab3985e0588f3e15768ecefe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "580b8696_567cda7b",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2020-01-09T01:05:47Z",
       "side": 1,
       "message": "ISTM that other ANGLE code should avoid using these limits (possibly by hiding them somehow), or RendererVk should provide a direct way to override them (possibly with guarantees that they\u0027ll no longer change after a certain point?). As is, the RendererVk interface probably looks like these values are immutable, so other code could make the (mistaken) assumption that values can be cached, or they might make a decision based on the limit before this code is run.",
+      "revId": "131aa635f011229aab3985e0588f3e15768ecefe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4449c74c_dba61e81",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-09T15:49:23Z",
+      "side": 1,
+      "message": "Since RendererVk is caching these values, and that cache is being used later, I definitely took a short-cut by modifying the cached values.  I\u0027d like Jamie\u0027s thoughts on the best long-term way to address this.",
+      "parentUuid": "580b8696_567cda7b",
       "revId": "131aa635f011229aab3985e0588f3e15768ecefe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
