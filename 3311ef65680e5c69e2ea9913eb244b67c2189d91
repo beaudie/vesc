@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3107c7cd_525abc61",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-09T19:21:34Z",
+      "side": 0,
+      "message": "Have a hunch this is what caused the test failures.",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 45
+      },
+      "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

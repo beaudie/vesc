@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "557d18de_5b13c034",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-09T19:21:34Z",
+      "side": 1,
+      "message": "DONT_CARE isn\u0027t listed as valid in the spec, do applications use it?",
+      "range": {
+        "startLine": 195,
+        "startChar": 18,
+        "endLine": 195,
+        "endChar": 31
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31768709_e62050a1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-09T19:21:34Z",
+      "side": 1,
+      "message": "This can be\n\n   std::min(mQueueFamilyProperties[queueFamilyIndex].queueCount, static_cast\u003cuint32_t\u003e(QueuePriority::Max));",
+      "range": {
+        "startLine": 960,
+        "startChar": 26,
+        "endLine": 963,
+        "endChar": 84
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2b7f454_3ae0348f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-09T19:21:34Z",
+      "side": 1,
+      "message": "This would be a perfect case to add a new packed internal enum here: https://cs.chromium.org/chromium/src/third_party/angle/src/common/packed_egl_enums.json\n\nOur code gen will generate all the types, FromEGLenum, ToEGLenum, etc and you can use it on the PackedEnumMap, and pass it through all the validation/state tracking layers.",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 167,
+        "endChar": 6
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20c56dd6_f07bd795",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-09T19:21:34Z",
+      "side": 1,
+      "message": "nit: Please add an error message to this.",
+      "range": {
+        "startLine": 1304,
+        "startChar": 44,
+        "endLine": 1304,
+        "endChar": 45
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c47a19b4_5fb09699",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-09T19:21:34Z",
+      "side": 1,
+      "message": "Preference for using a switch.  Makes less of a diff to add more items later.",
+      "range": {
+        "startLine": 1306,
+        "startChar": 16,
+        "endLine": 1308,
+        "endChar": 84
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "400732e4_d4b0455b",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-09T19:21:34Z",
+      "side": 1,
+      "message": "Same comment about validity of EGL_DONT_CARE",
+      "range": {
+        "startLine": 1308,
+        "startChar": 58,
+        "endLine": 1308,
+        "endChar": 83
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15d09f51_7cbeafb9",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-09T19:21:34Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 1310,
+        "startChar": 44,
+        "endLine": 1310,
+        "endChar": 45
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
