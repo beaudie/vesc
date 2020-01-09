@@ -39,6 +39,52 @@
       "revId": "f0e35fcd02cd92aeb3f318f7203bfe0d7d291fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e05c8d39_24d707ec",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-09T16:25:44Z",
+      "side": 1,
+      "message": "Can you use the RAII types in gl_raii.h for textures and framebuffers in this test? You can trigger deletion by calling obj.reset().",
+      "range": {
+        "startLine": 491,
+        "startChar": 3,
+        "endLine": 492,
+        "endChar": 31
+      },
+      "revId": "f0e35fcd02cd92aeb3f318f7203bfe0d7d291fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4d217ed_578c9c65",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-09T16:25:44Z",
+      "side": 1,
+      "message": "nit: you can use ASSERT_GL_FRAMEBUFFER_COMPLETE",
+      "range": {
+        "startLine": 513,
+        "startChar": 4,
+        "endLine": 513,
+        "endChar": 88
+      },
+      "revId": "f0e35fcd02cd92aeb3f318f7203bfe0d7d291fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
