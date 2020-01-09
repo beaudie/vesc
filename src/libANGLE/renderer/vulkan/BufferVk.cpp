@@ -93,7 +93,8 @@ angle::Result BufferVk::setData(const gl::Context *context,
                                 size_t size,
                                 gl::BufferUsage usage)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk   = vk::GetImpl(context);
+    RendererVk *rendererVk = contextVk->getRenderer();
 
     if (size > static_cast<size_t>(mState.getSize()))
     {
@@ -121,6 +122,14 @@ angle::Result BufferVk::setData(const gl::Context *context,
         createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
         createInfo.queueFamilyIndexCount = 0;
         createInfo.pQueueFamilyIndices   = nullptr;
+
+        if (rendererVk->getFeatures().roundUpBuffersToMaxVertexAttribStride.enabled)
+        {
+            const VkDeviceSize maxVertexAttribStride = std::min(
+                static_cast<uint32_t>(gl::MAX_VERTEX_ATTRIB_STRIDE),
+                rendererVk->getPhysicalDeviceProperties().limits.maxVertexInputBindingStride);
+            createInfo.size = roundUp(createInfo.size, maxVertexAttribStride);
+        }
 
         // Assume host visible/coherent memory available.
         const VkMemoryPropertyFlags memoryPropertyFlags =
