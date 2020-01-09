@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "c4da1310_85e702af",
+        "filename": "src/common/PackedEnums.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T01:22:19Z",
+      "side": 1,
+      "message": "I\u0027ll aim to remove this change before this CL is landed. Putting up a WebKit change for Apple to review and test now.",
+      "parentUuid": "23d71457_a4770230",
+      "range": {
+        "startLine": 384,
+        "startChar": 0,
+        "endLine": 384,
+        "endChar": 71
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52e2f36a_61c974cc",
         "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
         "patchSetId": 2
@@ -132,6 +156,30 @@
       "writtenOn": "2020-01-06T15:36:56Z",
       "side": 1,
       "message": "drive-by nit: should be in a third_party subfolder or should have the copyright updated to the ANGLE copyright.",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 53
+      },
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47c687a2_1cf8e448",
+        "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T01:22:19Z",
+      "side": 1,
+      "message": "Asking colleagues at Apple about assigning copyright of this new code. It would be painful to have to move all of these new files into a third_party folder.",
+      "parentUuid": "52e2f36a_61c974cc",
       "range": {
         "startLine": 2,
         "startChar": 3,
@@ -161,6 +209,24 @@
     },
     {
       "key": {
+        "uuid": "3c7de714_45b40569",
+        "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T01:22:19Z",
+      "side": 1,
+      "message": "These are going to be needed for the time being in order for ANGLE to integrate into WebKit. WebKit\u0027s Xcode projects include all sources for all Apple platforms, and the files which don\u0027t apply to the current configuration have to be #ifdef\u0027d out.",
+      "parentUuid": "d42ab9f1_1d773809",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "404d4345_3fc50cb7",
         "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
         "patchSetId": 2
@@ -178,6 +244,24 @@
     },
     {
       "key": {
+        "uuid": "5687eba6_99f39cce",
+        "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T01:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "404d4345_3fc50cb7",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14acb09b_8b6aea5e",
         "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
         "patchSetId": 2
@@ -192,6 +276,24 @@
       "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a94230d1_bd0accb5",
+        "filename": "src/gpu_info_util/SystemInfo_ios.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T01:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14acb09b_8b6aea5e",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -377,6 +479,24 @@
     },
     {
       "key": {
+        "uuid": "e283a925_92d316c4",
+        "filename": "src/libANGLE/renderer/gl/eagl/WindowSurfaceEAGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T01:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1704ce71_287bc30f",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3cfa6a4d_81db6edf",
         "filename": "src/libANGLE/renderer/gl/eagl/WindowSurfaceEAGL.mm",
         "patchSetId": 2
@@ -394,6 +514,24 @@
     },
     {
       "key": {
+        "uuid": "e4464bb3_b733c889",
+        "filename": "src/libANGLE/renderer/gl/eagl/WindowSurfaceEAGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T01:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cfa6a4d_81db6edf",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4cb275b_1e3ebf6f",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 2
@@ -408,6 +546,24 @@
       "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0011ce30_95bcdb98",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T01:22:19Z",
+      "side": 1,
+      "message": "Yes, just did - this is the only one needing to be updated.",
+      "parentUuid": "c4cb275b_1e3ebf6f",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -496,6 +652,24 @@
       "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d58abd45_bd7d235b",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T01:22:19Z",
+      "side": 1,
+      "message": "Yes, I\u0027ll help to make that work in future CLs.",
+      "parentUuid": "3daeb202_e6210086",
+      "revId": "c74052fdcf762523e910085c3b7d75a97b99a08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

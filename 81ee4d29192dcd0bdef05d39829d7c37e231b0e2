@@ -46,6 +46,30 @@
       "revId": "81ee4d29192dcd0bdef05d39829d7c37e231b0e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48a930e4_35d46f4b",
+        "filename": "src/libANGLE/renderer/gl/cgl/WindowSurfaceCGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T01:22:19Z",
+      "side": 0,
+      "message": "Shabi, you\u0027re correct - the removal of this release call was incorrect, was causing leaks of CGLContextObjs, and is the cause of the angle_end2end_tests timeouts on mac-angle-rel. Cocoa allocs must be paired with releases.\n\nhttps://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmRules.html\n\nFixing in the revised patch set.",
+      "parentUuid": "6df3302f_560c52e5",
+      "range": {
+        "startLine": 178,
+        "startChar": 8,
+        "endLine": 178,
+        "endChar": 29
+      },
+      "revId": "81ee4d29192dcd0bdef05d39829d7c37e231b0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
