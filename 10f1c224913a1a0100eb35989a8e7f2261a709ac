@@ -46,6 +46,30 @@
       "revId": "10f1c224913a1a0100eb35989a8e7f2261a709ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d04a9a0_11ba0af4",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2020-01-09T02:45:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5802677_50300f4a",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 15
+      },
+      "revId": "10f1c224913a1a0100eb35989a8e7f2261a709ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
