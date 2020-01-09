@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b44dc7c1_cf0dc990",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-09T18:58:40Z",
+      "side": 1,
+      "message": "Spelling Nit: OVR_mutliview2 --\u003e OVR_multiview2",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15250b5b_e5edd34d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-09T18:58:40Z",
+      "side": 1,
+      "message": "There was recently a change to the WebGL multiview conformance test to only allow OVR_multiview2 when you ask for it as an extension. Without your change, Chromium fails the conformance test.\n\nDoes your change cause the conformance test to now pass?\n\nhttps://www.khronos.org/registry/webgl/sdk/tests/conformance2/extensions/ovr_multiview2.html",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 90
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f684df9_a191fab5",
+        "filename": "src/compiler/translator/Compiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-09T18:58:40Z",
+      "side": 1,
+      "message": "The definition of EmitMultiviewGLSL doesn\u0027t match between Compiler.h and Compiler.cpp. In the cpp version, the \u0027extension\u0027 parameter is const whereas const is missing from the header file version. \n\nPlease make these match.",
+      "range": {
+        "startLine": 308,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 44
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f65b6b30_5367abd4",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-09T18:58:40Z",
+      "side": 1,
+      "message": "Why are the if statements different in TranslatorGLSL::writeExtensionBehavior vs. TranslatorESSL::writeExtensionBehavior?",
+      "range": {
+        "startLine": 290,
+        "startChar": 8,
+        "endLine": 292,
+        "endChar": 55
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab62a7f8_152ce0da",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-09T18:58:40Z",
+      "side": 1,
+      "message": "Please be more clear in the comment about what you\u0027re testing as part of this new test.",
+      "range": {
+        "startLine": 662,
+        "startChar": 0,
+        "endLine": 662,
+        "endChar": 50
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
