@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "86920532_ea537445",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T19:31:30Z",
+      "side": 1,
+      "message": "Thanks, good idea - done. Also flushIfNecessaryBeforeDeleteTextures() just call flush().",
+      "parentUuid": "275724d1_0703a76f",
+      "revId": "f0e35fcd02cd92aeb3f318f7203bfe0d7d291fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8702c2ca_c24f8aa7",
         "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
         "patchSetId": 5
@@ -39,6 +57,30 @@
       "revId": "f0e35fcd02cd92aeb3f318f7203bfe0d7d291fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c24bcac9_ed1daad8",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T19:31:30Z",
+      "side": 1,
+      "message": "I would prefer to name these entry points more explicitly. They\u0027re only being added because of a macOS-specific driver bug, and it\u0027s not clear whether they will be useful more generally. If it turns out that a different workaround is needed in the future, then these mechanism will be removed.",
+      "parentUuid": "8702c2ca_c24f8aa7",
+      "range": {
+        "startLine": 685,
+        "startChar": 17,
+        "endLine": 685,
+        "endChar": 50
+      },
+      "revId": "f0e35fcd02cd92aeb3f318f7203bfe0d7d291fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
