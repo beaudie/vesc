@@ -186,6 +186,17 @@ void RendererVk::ensureCapsInitialized() const
         std::min(static_cast<uint32_t>(std::numeric_limits<uint16_t>::max()),
                  limitsVk.maxVertexInputBindingStride);
 
+    if (getFeatures().roundUpBuffersToMaxVertexAttribStride.enabled)
+    {
+        // With this workaround, we need to round up buffer sizes to maxVertexAttribStride.  To
+        // avoid memory waste, we should keep this value small.  According to gpuinfo.org,
+        // GL_MAX_VERTEX_ATTRIB_STRIDE takes the value 2048 in most drivers.  We thus choose the
+        // same value as maximum stride.
+        constexpr GLint kMaxVertexAttribStride = 2048;
+        mNativeCaps.maxVertexAttribStride =
+            std::min(kMaxVertexAttribStride, mNativeCaps.maxVertexAttribStride);
+    }
+
     mNativeCaps.maxElementsIndices  = std::numeric_limits<GLint>::max();
     mNativeCaps.maxElementsVertices = std::numeric_limits<GLint>::max();
 

@@ -1441,6 +1441,9 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
     // Disabled on AMD/windows due to buggy behavior.
     ANGLE_FEATURE_CONDITION((&mFeatures), disallowSeamfulCubeMapEmulation, IsWindows() && isAMD);
 
+    ANGLE_FEATURE_CONDITION((&mFeatures), roundUpBuffersToMaxVertexAttribStride,
+                            isAMD && mPhysicalDeviceFeatures.robustBufferAccess);
+
     ANGLE_FEATURE_CONDITION((&mFeatures), forceD16TexFilter, IsAndroid() && isQualcomm);
 
     ANGLE_FEATURE_CONDITION((&mFeatures), disableFlippingBlitWithCommand,
