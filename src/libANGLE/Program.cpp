@@ -1059,6 +1059,7 @@ ProgramState::ProgramState()
       mAttachedShaders{},
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
       mMaxActiveAttribLocation(0),
+      mDefaultUniformRange(0, 0),
       mSamplerUniformRange(0, 0),
       mImageUniformRange(0, 0),
       mAtomicCounterUniformRange(0, 0),
@@ -3613,6 +3614,9 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
         SamplerFormat format       = samplerUniform.typeInfo->samplerFormat;
         mState.mSamplerBindings.emplace_back(textureType, format, elementCount, false);
     }
+
+    // Whatever is left constitutes the default uniforms.
+    mState.mDefaultUniformRange = RangeUI(0, low);
 }
 
 bool Program::linkAtomicCounterBuffers()
@@ -5149,6 +5153,9 @@ void Program::serialize(const Context *context, angle::MemoryBuffer *binaryOut) 
     stream.writeInt(static_cast<int>(mState.mDrawBufferTypeMask.to_ulong()));
     stream.writeInt(static_cast<int>(mState.mActiveOutputVariables.to_ulong()));
 
+    stream.writeInt(mState.getDefaultUniformRange().low());
+    stream.writeInt(mState.getDefaultUniformRange().high());
+
     stream.writeInt(mState.getSamplerUniformRange().low());
     stream.writeInt(mState.getSamplerUniformRange().high());
 
@@ -5386,6 +5393,10 @@ angle::Result Program::deserialize(const Context *context,
                   "into 32 bits each");
     mState.mDrawBufferTypeMask    = gl::ComponentTypeMask(stream.readInt<uint32_t>());
     mState.mActiveOutputVariables = stream.readInt<gl::DrawBufferMask>();
+
+    unsigned int defaultUniformRangeLow  = stream.readInt<unsigned int>();
+    unsigned int defaultUniformRangeHigh = stream.readInt<unsigned int>();
+    mState.mDefaultUniformRange          = RangeUI(defaultUniformRangeLow, defaultUniformRangeHigh);
 
     unsigned int samplerRangeLow  = stream.readInt<unsigned int>();
     unsigned int samplerRangeHigh = stream.readInt<unsigned int>();
