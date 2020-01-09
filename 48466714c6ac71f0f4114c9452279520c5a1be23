@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "e185f56b_04b5926c",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-09T03:22:59Z",
+      "side": 1,
+      "message": "I understand. It\u0027s just surprising to me that a copy to some texture should cause a flush on deletion of an unrelated texture.\n\nI think it\u0027s better to try being more precise with the flushes, and if it doesn\u0027t work out, get conservative. If your concern is multiple consecutive flush calls, I\u0027d hazard a guess that flush calls with nothing to flush is a noop in any driver worth its salt.",
+      "parentUuid": "fdf2557b_aef35e29",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 71
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f866e1d7_3c16fe2c",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 2
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "993d351b_427e2e9a",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-09T03:22:59Z",
+      "side": 1,
+      "message": "It\u0027s certainly ok. I would add a comment with that information though, so future visitors won\u0027t change this.",
+      "parentUuid": "0a28ebd0_f641a046",
+      "range": {
+        "startLine": 488,
+        "startChar": 4,
+        "endLine": 488,
+        "endChar": 10
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ba087878_3488adc9",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 2
@@ -178,6 +226,30 @@
       "side": 1,
       "message": "I actually aimed to not explicitly delete the framebuffer - that\u0027s what I did in the test case for the bug report I filed with Apple. Is it OK if I leave this test in its current form?",
       "parentUuid": "ba087878_3488adc9",
+      "range": {
+        "startLine": 506,
+        "startChar": 4,
+        "endLine": 506,
+        "endChar": 10
+      },
+      "revId": "48466714c6ac71f0f4114c9452279520c5a1be23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9363ce7b_ddb1dca0",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-09T03:22:59Z",
+      "side": 1,
+      "message": "Again, add a comment saying why this is not deleted.",
+      "parentUuid": "7735e893_e3cc4f27",
       "range": {
         "startLine": 506,
         "startChar": 4,
