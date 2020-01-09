@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "580b8696_567cda7b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1150054
+      },
+      "writtenOn": "2020-01-09T01:05:47Z",
+      "side": 1,
+      "message": "ISTM that other ANGLE code should avoid using these limits (possibly by hiding them somehow), or RendererVk should provide a direct way to override them (possibly with guarantees that they\u0027ll no longer change after a certain point?). As is, the RendererVk interface probably looks like these values are immutable, so other code could make the (mistaken) assumption that values can be cached, or they might make a decision based on the limit before this code is run.",
+      "revId": "131aa635f011229aab3985e0588f3e15768ecefe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
