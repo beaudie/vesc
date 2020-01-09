@@ -16,6 +16,29 @@
       "revId": "f0e35fcd02cd92aeb3f318f7203bfe0d7d291fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8702c2ca_c24f8aa7",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-09T15:23:04Z",
+      "side": 1,
+      "message": "One naming comment. It is preferred if these two functions had less implementation detail in them.\n\nFor example, this could be \"onTextureCopy()\" and the next could be \"onTextureDelete\". The fact that we need to flush because of this, and whether there\u0027s a workaround involved etc, are not something the caller has to get involved with.\n\nThis also means that you can move the `if (features.flushBeforeDeleteTextureIfCopiedTo.enabled)` check inside this function and have the caller be blind to the workaround!",
+      "range": {
+        "startLine": 685,
+        "startChar": 17,
+        "endLine": 685,
+        "endChar": 50
+      },
+      "revId": "f0e35fcd02cd92aeb3f318f7203bfe0d7d291fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
