@@ -69,4 +69,6 @@ TEST_P(FloatingPointSurfaceTest, Drawing)
 ANGLE_INSTANTIATE_TEST(FloatingPointSurfaceTest,
                        ES2_D3D11(),
                        ES3_D3D11(),
-                       ES2_D3D11_PRESENT_PATH_FAST());
+                       ES2_D3D11_PRESENT_PATH_FAST(),
+                       ES2_VULKAN(),
+                       ES3_VULKAN());
