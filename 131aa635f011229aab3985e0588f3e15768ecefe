@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "54dc82f4_06683749",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1106294
+      },
+      "writtenOn": "2020-01-09T05:09:44Z",
+      "side": 1,
+      "message": "Does this refer to b/147387937 ?\n\nCould you clarify in what sense it\u0027s not accurate specifically? What Vulkan spec text is not adhered to? Do we need a Vulkan dEQP test for it to ensure SwiftShader and other drivers set these values correctly? Would that allow reverting this change?",
+      "range": {
+        "startLine": 14,
+        "startChar": 37,
+        "endLine": 14,
+        "endChar": 69
+      },
+      "revId": "131aa635f011229aab3985e0588f3e15768ecefe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "580b8696_567cda7b",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 1
