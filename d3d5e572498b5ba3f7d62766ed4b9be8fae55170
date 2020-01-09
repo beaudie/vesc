@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f6250f6e_0af758f5",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-09T20:32:51Z",
+      "side": 1,
+      "message": "You are correct, it is not mentioned in the extension spec. I looked at eglCreateContext, and that then references attrib_list processing in eglChooseConfig. There the spec text says \"If EGL_DONT_CARE is specified as an attribute value, then the\nattribute will not be checked. EGL_DONT_CARE may be specified for all attributes\nexcept EGL_LEVEL and EGL_MATCH_NATIVE_PIXMAP.\" So it seems that EGL_DONT_CARE is always allowed. And some novice programmers may set it so. I think i have seen in other implementations this has been allowed.\nI don\u0027t personally care, I was just trying to cover all possibilities. Your preference is not to  handle? and just reject at Validate?",
+      "parentUuid": "557d18de_5b13c034",
+      "range": {
+        "startLine": 195,
+        "startChar": 18,
+        "endLine": 195,
+        "endChar": 31
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31768709_e62050a1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-09T19:21:34Z",
       "side": 1,
       "message": "This can be\n\n   std::min(mQueueFamilyProperties[queueFamilyIndex].queueCount, static_cast\u003cuint32_t\u003e(QueuePriority::Max));",
+      "range": {
+        "startLine": 960,
+        "startChar": 26,
+        "endLine": 963,
+        "endChar": 84
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeec7eb6_b9223f62",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-09T20:32:51Z",
+      "side": 1,
+      "message": "Excellent, will do",
+      "parentUuid": "31768709_e62050a1",
       "range": {
         "startLine": 960,
         "startChar": 26,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e48c6dae_55650d6b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-09T20:32:51Z",
+      "side": 1,
+      "message": "Hmm, I hadn\u0027t seen this before. Will do.",
+      "parentUuid": "e2b7f454_3ae0348f",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 167,
+        "endChar": 6
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "20c56dd6_f07bd795",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2020-01-09T19:21:34Z",
       "side": 1,
       "message": "nit: Please add an error message to this.",
+      "range": {
+        "startLine": 1304,
+        "startChar": 44,
+        "endLine": 1304,
+        "endChar": 45
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e462e3c3_1ee2b233",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-09T20:32:51Z",
+      "side": 1,
+      "message": "Sure",
+      "parentUuid": "20c56dd6_f07bd795",
       "range": {
         "startLine": 1304,
         "startChar": 44,
@@ -140,6 +236,54 @@
     },
     {
       "key": {
+        "uuid": "93561150_c388d18f",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-09T20:32:51Z",
+      "side": 1,
+      "message": "If that is your preference. Sure.",
+      "parentUuid": "400732e4_d4b0455b",
+      "range": {
+        "startLine": 1308,
+        "startChar": 58,
+        "endLine": 1308,
+        "endChar": 83
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8137e6e6_19b24c27",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1308,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-09T20:32:51Z",
+      "side": 1,
+      "message": "OK.",
+      "parentUuid": "c47a19b4_5fb09699",
+      "range": {
+        "startLine": 1306,
+        "startChar": 16,
+        "endLine": 1308,
+        "endChar": 84
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15d09f51_7cbeafb9",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 4
@@ -151,6 +295,30 @@
       "writtenOn": "2020-01-09T19:21:34Z",
       "side": 1,
       "message": "Same here.",
+      "range": {
+        "startLine": 1310,
+        "startChar": 44,
+        "endLine": 1310,
+        "endChar": 45
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a25d172_03d5b832",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-09T20:32:51Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "15d09f51_7cbeafb9",
       "range": {
         "startLine": 1310,
         "startChar": 44,
