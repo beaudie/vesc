@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8d2806bf_5d5cef66",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-09T20:40:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d97940a1_2e9c322c",
+      "range": {
+        "startLine": 128,
+        "startChar": 10,
+        "endLine": 128,
+        "endChar": 98
+      },
+      "revId": "7c7a7cf6815ebe52596166ac8a341177e8d30c83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e37740d2_52f4159c",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "7c7a7cf6815ebe52596166ac8a341177e8d30c83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6af9cbb_c731aeeb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-09T20:40:44Z",
+      "side": 1,
+      "message": "Oh, don\u0027t know what limit I misread (which was 256) instead. Done.\n\nI applied the cap in the front-end as well, since almost all drivers advertise 2048 anyway.",
+      "parentUuid": "e37740d2_52f4159c",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 54
+      },
+      "revId": "7c7a7cf6815ebe52596166ac8a341177e8d30c83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
