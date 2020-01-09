@@ -46,6 +46,30 @@
       "revId": "e9f063b7f0590950457d294458c5967b3344e62b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4f8ea71_3399b602",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6412,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-09T15:19:33Z",
+      "side": 1,
+      "message": "Sure, that would be good.  I think we will have this same bug in glGetSynciv querying GL_SYNC_STATUS",
+      "parentUuid": "259283bf_589a6147",
+      "range": {
+        "startLine": 6409,
+        "startChar": 8,
+        "endLine": 6412,
+        "endChar": 9
+      },
+      "revId": "e9f063b7f0590950457d294458c5967b3344e62b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
