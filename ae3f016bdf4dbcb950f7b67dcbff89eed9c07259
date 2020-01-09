@@ -22,6 +22,30 @@
       "revId": "ae3f016bdf4dbcb950f7b67dcbff89eed9c07259",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f6f6967_1e7f54c1",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-09T02:34:18Z",
+      "side": 1,
+      "message": "Thanks, good idea. Done in the next patch set.",
+      "parentUuid": "46b94ab6_06ec4553",
+      "range": {
+        "startLine": 694,
+        "startChar": 8,
+        "endLine": 694,
+        "endChar": 39
+      },
+      "revId": "ae3f016bdf4dbcb950f7b67dcbff89eed9c07259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
