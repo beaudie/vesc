@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5e766d84_ad5ead9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1106294
+      },
+      "writtenOn": "2020-01-09T21:19:03Z",
+      "side": 1,
+      "message": "Thanks a ton for clarifying! Yes, I think you\u0027re right this is a one-line fix in SwiftShader. Feel free to upload a patch.",
+      "parentUuid": "b67f2208_9ff67ec0",
+      "range": {
+        "startLine": 14,
+        "startChar": 37,
+        "endLine": 14,
+        "endChar": 69
+      },
+      "revId": "131aa635f011229aab3985e0588f3e15768ecefe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a06cd5f0_152bc520",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 1
