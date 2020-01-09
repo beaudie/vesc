@@ -142,6 +142,7 @@ class RendererVk : angle::NonCopyable
         return mFeatures;
     }
     uint32_t getMaxVertexAttribDivisor() const { return mMaxVertexAttribDivisor; }
+    VkDeviceSize getMaxVertexAttribStride() const { return mMaxVertexAttribStride; }
 
     bool isMockICDEnabled() const { return mEnabledICD == vk::ICD::Mock; }
 
@@ -256,6 +257,7 @@ class RendererVk : angle::NonCopyable
     VkQueue mQueue;
     uint32_t mCurrentQueueFamilyIndex;
     uint32_t mMaxVertexAttribDivisor;
+    VkDeviceSize mMaxVertexAttribStride;
     VkDevice mDevice;
     AtomicSerialFactory mQueueSerialFactory;
     AtomicSerialFactory mShaderSerialFactory;
