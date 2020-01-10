@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "644afc76_1589c023",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3562,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-10T21:05:04Z",
+      "side": 1,
+      "message": "This will make ANGLE\u0027s limits a bit more uniform across the board (making life easier for applications). We do this for many limits already here.\n\nThat said, most GLES drivers advertise the same value, so there\u0027s not going to be any impact on applications.",
+      "parentUuid": "9f7d3507_bd2e8043",
+      "revId": "b9b414bd247db1755f532c341c1beb73f863bed4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2273b68a_e52c2a19",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "b9b414bd247db1755f532c341c1beb73f863bed4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9c8730a_757fe8e4",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-10T21:05:04Z",
+      "side": 1,
+      "message": "We do know. Done, I cached this value in RendererVk so it can be queried here.",
+      "parentUuid": "2273b68a_e52c2a19",
+      "revId": "b9b414bd247db1755f532c341c1beb73f863bed4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
