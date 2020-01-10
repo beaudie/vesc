@@ -118,6 +118,30 @@
       "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b1b79f7_64448692",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-10T21:57:41Z",
+      "side": 0,
+      "message": "So instead of caching the ContextVk in the surface - which can\u0027t be certain its valid, because it can be deleted. I have cached the VkQueue from the context, at makeCurrent into the SurfaceVk (Window or OffScreen) - this VkQueue will be persistent. It is working.\n\nThat said, lets consider that, calling vkDeviceWaitIdle instead of current vkQueueWaitIdle. Spec says this is equivalent to vkQueueWaitIdle on all the queues of the device. So current thread would wait for all of those. This would happen for every destroy surface.\n\nComments?",
+      "parentUuid": "9a13c65e_05a1a480",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 45
+      },
+      "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
