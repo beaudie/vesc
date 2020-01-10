@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "62792695_6f755545",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-10T16:25:58Z",
+      "side": 1,
+      "message": "git cl format presubmit should be fixed soon, see https://chromium-review.googlesource.com/c/chromium/tools/depot_tools/+/1987835",
+      "parentUuid": "a2cbdc36_63a5a47e",
+      "range": {
+        "startLine": 110,
+        "startChar": 33,
+        "endLine": 110,
+        "endChar": 35
+      },
+      "revId": "0702063941f44b451bfaa7e5a05f8ad167312d95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ff2d765_982a5284",
         "filename": "src/tests/angle_perftests.gni",
         "patchSetId": 2
@@ -82,6 +106,30 @@
       "writtenOn": "2020-01-10T15:52:31Z",
       "side": 1,
       "message": "nit: There are indeed useful macros and functions in ANGLETest.h that can be used in the perf tests, but it may be best to split those in a separate file so the ANGLETest* classed aren\u0027t included here. Please take the following functions out of ANGLETest.{h,cpp}, and put them in a new file, like angle_test_platform.{h,cpp}, then include that in both projects:\n\n// Driver vendors\nbool IsAdreno();\n\n// Renderer back-ends\n// Note: FL9_3 is explicitly *not* considered D3D11.\nbool IsD3D11();\nbool IsD3D11_FL93();\n// Is a D3D9-class renderer.\nbool IsD3D9();\n// Is D3D9 or SM9_3 renderer.\nbool IsD3DSM3();\nbool IsDesktopOpenGL();\nbool IsOpenGLES();\nbool IsOpenGL();\nbool IsNULL();\nbool IsVulkan();\nbool IsMetal();\n\n// Debug/Release\nbool IsDebug();\nbool IsRelease();\n\nbool EnsureGLExtensionEnabled(const std::string \u0026extName);\nbool IsEGLClientExtensionEnabled(const std::string \u0026extName);\nbool IsEGLDeviceExtensionEnabled(EGLDeviceEXT device, const std::string \u0026extName);\nbool IsEGLDisplayExtensionEnabled(EGLDisplay display, const std::string \u0026extName);\nbool IsGLExtensionEnabled(const std::string \u0026extName);\nbool IsGLExtensionRequestable(const std::string \u0026extName);\n\nWe use only one of these functions here, so taking the last set of functions (*Enabled/Requestable) is also fine.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 27
+      },
+      "revId": "0702063941f44b451bfaa7e5a05f8ad167312d95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2362a2af_7358c40e",
+        "filename": "src/tests/angle_perftests.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-10T16:25:58Z",
+      "side": 1,
+      "message": "+1 - I did something like this recently and never landed it.",
+      "parentUuid": "9ff2d765_982a5284",
       "range": {
         "startLine": 15,
         "startChar": 0,
