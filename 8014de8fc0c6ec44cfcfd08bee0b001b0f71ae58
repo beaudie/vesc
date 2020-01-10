@@ -22,6 +22,30 @@
       "revId": "8014de8fc0c6ec44cfcfd08bee0b001b0f71ae58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79597ef4_5cd3b090",
+        "filename": "infra/config/global/luci-milo.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-01-10T20:26:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9823b41_b1dc66a7",
+      "range": {
+        "startLine": 84,
+        "startChar": 43,
+        "endLine": 84,
+        "endChar": 48
+      },
+      "revId": "8014de8fc0c6ec44cfcfd08bee0b001b0f71ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
