@@ -46,6 +46,30 @@
       "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19d2dad0_9403b127",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-10T16:16:24Z",
+      "side": 0,
+      "message": "Forcing it use LOW VkQueue, the most likely - the failure went away. Now I need to figure out at this point what context/queue was used with this Surface (if still current) and use that.\n\nAt makeCurrent and unMakeCurrent I will set the Context and from that I can get the ContextVk with VkQueue.",
+      "parentUuid": "02f94e43_fd37eb36",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 45
+      },
+      "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
