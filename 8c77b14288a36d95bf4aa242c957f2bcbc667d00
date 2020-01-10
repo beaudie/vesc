@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9d8c2d0_ddd35afe",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1271180
+      },
+      "writtenOn": "2020-01-10T07:44:17Z",
+      "side": 1,
+      "message": "If no digits found by strtol, next\u0027s value is equal to version but not nullptr. And checking errno\u0027s value would make sure more safety.",
+      "revId": "8c77b14288a36d95bf4aa242c957f2bcbc667d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba668c30_16ecb95f",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1271180
+      },
+      "writtenOn": "2020-01-10T07:44:17Z",
+      "side": 1,
+      "message": "I think it\u0027s also necessary to do the error check here like before",
+      "revId": "8c77b14288a36d95bf4aa242c957f2bcbc667d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
