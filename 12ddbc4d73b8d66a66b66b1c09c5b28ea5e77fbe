@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "545f9c42_cf43b951",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1390393
+      },
+      "writtenOn": "2020-01-10T21:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f3ba1ff_0e48b2c1",
+      "range": {
+        "startLine": 327,
+        "startChar": 8,
+        "endLine": 327,
+        "endChar": 22
+      },
+      "revId": "12ddbc4d73b8d66a66b66b1c09c5b28ea5e77fbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e331216_76655e07",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "12ddbc4d73b8d66a66b66b1c09c5b28ea5e77fbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d49aaee_84e1edae",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1396,
+      "author": {
+        "id": 1390393
+      },
+      "writtenOn": "2020-01-10T21:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e331216_76655e07",
+      "revId": "12ddbc4d73b8d66a66b66b1c09c5b28ea5e77fbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
