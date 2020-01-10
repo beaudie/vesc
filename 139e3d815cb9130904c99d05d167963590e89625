@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1dc299d5_55841c14",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-10T16:02:55Z",
+      "side": 1,
+      "message": "This example (and the tests tests) make it look like GL_OVR_multiview shouldn\u0027t be supported when GL_OVER_multiview2 is required.\n\nThe wording of the spec however make it sounds like if the application exposes GL_OVR_multiview2, it should not also expose GL_OVR_multiview:\n\n\u003e The legacy #extension GL_OVR_multiview directive is not supported. The only supported shader extension string is GL_OVR_multiview2\n\nIs my understanding correct? In that case, there should also be tests like (assuming GL_OVR_multiview2 is present and WebGL, so in OVR_multiview2_test.cpp):\n\n    #version 300 es\n    #extension GL_OVR_multivew : require\n    ...\n\nAnd then make sure the compilation fails.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 6
+      },
+      "revId": "139e3d815cb9130904c99d05d167963590e89625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
