@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f3ba1ff_0e48b2c1",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-10T20:52:08Z",
+      "side": 1,
+      "message": "nit: If you need to specify it in a comment, might as well as specify it in the code:\n\nreturn VersionInfo{\n   ...\n};",
+      "range": {
+        "startLine": 327,
+        "startChar": 8,
+        "endLine": 327,
+        "endChar": 22
+      },
+      "revId": "12ddbc4d73b8d66a66b66b1c09c5b28ea5e77fbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e331216_76655e07",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1396,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-10T20:52:08Z",
+      "side": 1,
+      "message": "I would link to the bug (and comment) that specifies where these versions come from!",
+      "revId": "12ddbc4d73b8d66a66b66b1c09c5b28ea5e77fbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
