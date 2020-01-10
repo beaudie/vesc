@@ -70,6 +70,30 @@
       "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f821003_d73bbc04",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-10T18:58:19Z",
+      "side": 0,
+      "message": "Turns out that these surfaces are UnCurrent at the time of this flush/destroy.  So no current context. The current Queue will have to be remembered.",
+      "parentUuid": "19d2dad0_9403b127",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 45
+      },
+      "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
