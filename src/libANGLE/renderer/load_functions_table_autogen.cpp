@@ -2878,6 +2878,20 @@ LoadImageFunctionInfo RGBA4_to_B4G4R4A4_UNORM(GLenum type)
     }
 }
 
+LoadImageFunctionInfo RGBA4_to_R4G4B4A4_UNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadRGBA8ToRGBA4, true);
+        case GL_UNSIGNED_SHORT_4_4_4_4:
+            return LoadImageFunctionInfo(LoadRGBA4ToARGB4, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo RGBA4_to_R8G8B8A8_UNORM(GLenum type)
 {
     switch (type)
@@ -4252,6 +4266,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::B4G4R4A4_UNORM:
                     return RGBA4_to_B4G4R4A4_UNORM;
+                case FormatID::R4G4B4A4_UNORM:
+                    return RGBA4_to_R4G4B4A4_UNORM;
                 case FormatID::R8G8B8A8_UNORM:
                     return RGBA4_to_R8G8B8A8_UNORM;
                 default:
@@ -4336,6 +4352,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             break;
     }
     // clang-format on
+    WARN() << "internalFormat = " << internalFormat
+           << ", angleFormat = " << static_cast<int>(angleFormat);
     ASSERT(internalFormat == GL_NONE || angleFormat == angle::FormatID::NONE);
     static LoadFunctionMap emptyLoadFunctionsMap;
     return emptyLoadFunctionsMap;

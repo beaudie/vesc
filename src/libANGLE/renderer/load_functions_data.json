@@ -734,6 +734,10 @@
     "B4G4R4A4_UNORM": {
       "GL_UNSIGNED_BYTE": "LoadRGBA8ToBGRA4",
       "GL_UNSIGNED_SHORT_4_4_4_4": "LoadRGBA4ToARGB4"
+    },
+    "R4G4B4A4_UNORM": {
+      "GL_UNSIGNED_BYTE": "LoadRGBA8ToRGBA4",
+      "GL_UNSIGNED_SHORT_4_4_4_4": "LoadRGBA4ToARGB4"
     }
   },
   "GL_RGBA8": {

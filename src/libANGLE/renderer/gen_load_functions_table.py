@@ -86,6 +86,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum {internal_format}, FormatID {angle_fo
             break;
     }}
     // clang-format on
+    WARN() << "internalFormat = " << internalFormat << ", angleFormat = " <<
+        static_cast<int>(angleFormat);
     ASSERT(internalFormat == GL_NONE || angleFormat == angle::FormatID::NONE);
     static LoadFunctionMap emptyLoadFunctionsMap;
     return emptyLoadFunctionsMap;
