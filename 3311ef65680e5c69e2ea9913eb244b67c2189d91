@@ -94,6 +94,30 @@
       "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a13c65e_05a1a480",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-10T20:43:11Z",
+      "side": 0,
+      "message": "if we are uncurrent (and possibly destroying things) instead of caching some random copy of queue and having refcount logic, would it might make sense to do \"vkDeviceWaitIdle\" in this particular case?",
+      "parentUuid": "1f821003_d73bbc04",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 45
+      },
+      "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
