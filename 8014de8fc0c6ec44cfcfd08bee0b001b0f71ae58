@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9823b41_b1dc66a7",
+        "filename": "infra/config/global/luci-milo.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-10T15:16:10Z",
+      "side": 1,
+      "message": "can you please omit the -msvc from both the bot name and the category? For now we will assume winuwp \u003d\u003d msvc. If that changes in the future we can address it then.",
+      "range": {
+        "startLine": 84,
+        "startChar": 43,
+        "endLine": 84,
+        "endChar": 48
+      },
+      "revId": "8014de8fc0c6ec44cfcfd08bee0b001b0f71ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
