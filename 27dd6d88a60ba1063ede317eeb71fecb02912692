@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9b6212b2_25e8b411",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162506
+      },
+      "writtenOn": "2020-01-10T07:25:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b44dc7c1_cf0dc990",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "15250b5b_e5edd34d",
         "filename": "/COMMIT_MSG",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-09T18:58:40Z",
       "side": 1,
       "message": "There was recently a change to the WebGL multiview conformance test to only allow OVR_multiview2 when you ask for it as an extension. Without your change, Chromium fails the conformance test.\n\nDoes your change cause the conformance test to now pass?\n\nhttps://www.khronos.org/registry/webgl/sdk/tests/conformance2/extensions/ovr_multiview2.html",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 90
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dadc59d8_3007f3b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1162506
+      },
+      "writtenOn": "2020-01-10T07:25:06Z",
+      "side": 1,
+      "message": "No, it doesn\u0027t change that. I can have a look on it (and other failing ovr multiview tests). The reason why it fails those conformance tests is because to make OVR_multiview2 work you need to enable both - OVR_multiview and OVR_multiview2, i.e. need to do \n\nresources-\u003eOVR_multiview  \u003d 1;\nresources-\u003eOVR_multiview2 \u003d 1;\n\nI can investigate this and other failures.\n\nDo you want me to do it here or in a separate commit?",
+      "parentUuid": "15250b5b_e5edd34d",
       "range": {
         "startLine": 10,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "afc0cc74_8eb1de4c",
+        "filename": "src/compiler/translator/Compiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1162506
+      },
+      "writtenOn": "2020-01-10T07:25:06Z",
+      "side": 1,
+      "message": "As you can see, it was this way before my change. But yeah, I should\u0027ve fixed it.",
+      "parentUuid": "7f684df9_a191fab5",
+      "range": {
+        "startLine": 308,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 44
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f65b6b30_5367abd4",
         "filename": "src/compiler/translator/TranslatorGLSL.cpp",
         "patchSetId": 6
@@ -82,6 +154,30 @@
       "writtenOn": "2020-01-09T18:58:40Z",
       "side": 1,
       "message": "Why are the if statements different in TranslatorGLSL::writeExtensionBehavior vs. TranslatorESSL::writeExtensionBehavior?",
+      "range": {
+        "startLine": 290,
+        "startChar": 8,
+        "endLine": 292,
+        "endChar": 55
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1c074ef_13f84725",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1162506
+      },
+      "writtenOn": "2020-01-10T07:25:06Z",
+      "side": 1,
+      "message": "The original code was written differently in these two source files. Just wanted to minimize changes, but I can match the two.",
+      "parentUuid": "f65b6b30_5367abd4",
       "range": {
         "startLine": 290,
         "startChar": 8,
@@ -114,6 +210,30 @@
       "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb4fc07b_31a90d3a",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1162506
+      },
+      "writtenOn": "2020-01-10T07:25:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ab62a7f8_152ce0da",
+      "range": {
+        "startLine": 662,
+        "startChar": 0,
+        "endLine": 662,
+        "endChar": 50
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
