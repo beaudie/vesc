@@ -315,7 +315,9 @@ class VertexAttributeTest : public ANGLETest
     // Override a feature to force emulation of attribute formats.
     void overrideFeaturesVk(FeaturesVk *featuresVk) override
     {
-        featuresVk->overrideFeatures({"force_fallback_format"}, true);
+        // http://anglebug.com/4359 - work around Pixel2 issue
+        featuresVk->overrideFeatures({"force_fallback_format"},
+                                     !(IsAndroid() && (IsPixel2() || IsPixel2XL())));
     }
 
     GLuint compileMultiAttribProgram(GLint attribCount)
