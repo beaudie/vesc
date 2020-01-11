@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce388538_9dbf6e46",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-11T00:07:35Z",
+      "side": 1,
+      "message": "This check for EGL_DONT_CARE can be removed since we are no longer accepting that as a valid input for this attribute",
+      "revId": "27b373560339c767764e14f03998ef4cb372892a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
