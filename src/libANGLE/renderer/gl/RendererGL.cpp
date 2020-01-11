@@ -216,7 +216,8 @@ RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions,
       mUseDebugOutput(false),
       mCapsInitialized(false),
       mMultiviewImplementationType(MultiviewImplementationTypeGL::UNSPECIFIED),
-      mNativeParallelCompileEnabled(false)
+      mNativeParallelCompileEnabled(false),
+      mNeedsFlushBeforeDeleteTextures(false)
 {
     ASSERT(mFunctions);
     if (!display->getState().featuresAllDisabled)
