@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25b865e7_f5e02c9b",
+        "filename": "src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-11T05:20:24Z",
+      "side": 1,
+      "message": "Please add a `bool mIsIOSSimulator` which is initialized in the constructor based on this preprocessor directive (and use `#if ANGLE_PLATFORM_IOS_SIMULATOR` (not using `defined()`) as there is no guarantee we would never define it but set it to 0).\n\nThen remove the `#if`s in this and the cpp file. Where necessary, use a C++ `if` instead of preprocessor `#if`.",
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a48096f_f8ecde73",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-11T05:20:24Z",
+      "side": 1,
+      "message": "I wish there was a way instead to query which target to expect with this buffer type, instead of making assumptions based on the platform.\n\nIf that\u0027s not possible, I\u0027d at least invert the #if here:\n\n#if ANGLE_PLATFORM_IOS_SIMULATOR\n   ...\n#else\n   ...\n#endif\n\nAs the iOS simulator using EGL_TEXTURE_2D instead of RECTANGLE seems to be the exception IIUC, rather than the rule.",
+      "range": {
+        "startLine": 1844,
+        "startChar": 0,
+        "endLine": 1854,
+        "endChar": 30
+      },
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c14f9b34_afdf5493",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1870,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-11T05:20:24Z",
+      "side": 1,
+      "message": "I think this is already handled above where it says:\n\n        case EGL_IOSURFACE_ANGLE:\n            if (!displayExtensions.iosurfaceClientBuffer)\n            {\n                return EglBadParameter() \u003c\u003c \"\u003cbuftype\u003e EGL_IOSURFACE_ANGLE requires the \"\n                                            \"EGL_ANGLE_iosurface_client_buffer extension.\";\n            }\n\nso if we reach here, then the platform supports EGL_IOSURFACE_ANGLE. The `#if ANGLE_PLATFORM_APPLE` should thus be removed as well as whatever is in `#else`.",
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
