@@ -86,6 +86,9 @@ class DynamicBuffer : angle::NonCopyable
     // After a sequence of writes, call invalidate to ensure the data is visible to the host.
     angle::Result invalidate(ContextVk *contextVk);
 
+    // This updates the serial of the current buffer.
+    void updateSerial(Serial serial);
+
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
 

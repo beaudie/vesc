@@ -80,11 +80,17 @@ void BufferVk::release(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
     mBuffer.release(renderer);
+    mStagingBuffer.release(renderer);
 
     for (ConversionBuffer &buffer : mVertexConversionBuffers)
     {
         buffer.data.release(renderer);
     }
+}
+
+static size_t calculateStagingBufferSize(size_t size)
+{
+    return 1024 * 1024;
 }
 
 angle::Result BufferVk::setData(const gl::Context *context,
@@ -94,6 +100,20 @@ angle::Result BufferVk::setData(const gl::Context *context,
                                 gl::BufferUsage usage)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+
+    if (mState.getSize() == 0)
+    {
+        RendererVk *rendererVk = contextVk->getRenderer();
+
+        VkImageUsageFlags usageFlags =
+            VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+        size_t alignment = static_cast<size_t>(
+            rendererVk->getPhysicalDeviceProperties().limits.minMemoryMapAlignment);
+
+        mStagingBuffer.init(rendererVk, usageFlags, alignment, calculateStagingBufferSize(size),
+                            true);
+    }
 
     if (size > static_cast<size_t>(mState.getSize()))
     {
@@ -315,25 +335,27 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
     // Use map when available.
     if (mBuffer.isResourceInUse(contextVk))
     {
-        vk::StagingBuffer stagingBuffer;
-        ANGLE_TRY(stagingBuffer.init(contextVk, static_cast<VkDeviceSize>(size),
-                                     vk::StagingUsage::Write));
+        // Acquire a "new" staging buffer
+        bool needToReleasePreviousBuffers = false;
+        uint8_t *mapPointer               = nullptr;
+        VkDeviceSize stagingBufferOffset  = 0;
 
-        uint8_t *mapPointer = nullptr;
-        ANGLE_VK_TRY(contextVk,
-                     stagingBuffer.getDeviceMemory().map(device, 0, size, 0, &mapPointer));
+        ANGLE_TRY(mStagingBuffer.allocate(contextVk, size, &mapPointer, nullptr,
+                                          &stagingBufferOffset, &needToReleasePreviousBuffers));
+        if (needToReleasePreviousBuffers)
+        {
+            // Release previous staging buffers
+            mStagingBuffer.releaseInFlightBuffers(contextVk);
+        }
         ASSERT(mapPointer);
 
         memcpy(mapPointer, data, size);
-        stagingBuffer.getDeviceMemory().unmap(device);
 
         // Enqueue a copy command on the GPU.
-        VkBufferCopy copyRegion = {0, offset, size};
-        ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, stagingBuffer.getBuffer(),
+        VkBufferCopy copyRegion = {stagingBufferOffset, offset, size};
+        ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, mStagingBuffer.getCurrentBuffer()->getBuffer(),
                                          VK_ACCESS_HOST_WRITE_BIT, copyRegion));
-
-        // Immediately release staging buffer. We should probably be using a DynamicBuffer here.
-        stagingBuffer.release(contextVk);
+        mStagingBuffer.updateSerial(contextVk->getCurrentQueueSerial());
     }
     else
     {

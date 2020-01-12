@@ -557,6 +557,11 @@ void DynamicBuffer::destroyBufferList(VkDevice device, std::vector<BufferHelper 
     buffers->clear();
 }
 
+void DynamicBuffer::updateSerial(Serial serial)
+{
+    mBuffer->updateSerial(serial);
+}
+
 void DynamicBuffer::release(RendererVk *renderer)
 {
     reset();

@@ -138,6 +138,9 @@ class BufferVk : public BufferImpl
 
     vk::BufferHelper mBuffer;
 
+    // All staging buffer support is provided by a DynamicBuffer.
+    vk::DynamicBuffer mStagingBuffer;
+
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
 };

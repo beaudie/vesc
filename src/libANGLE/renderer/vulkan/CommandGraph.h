@@ -342,6 +342,14 @@ class SharedResourceUse final : angle::NonCopyable
         release();
     }
 
+    ANGLE_INLINE void updateSerial(Serial serial)
+    {
+        ASSERT(valid());
+        ASSERT(mUse->counter > 0);
+        ASSERT(mUse->serial <= serial);
+        mUse->serial = serial;
+    }
+
     ANGLE_INLINE void set(const SharedResourceUse &rhs)
     {
         ASSERT(rhs.valid());
@@ -406,6 +414,8 @@ class CommandGraphResource : angle::NonCopyable
 
     // queries, to know if the queue they are submitted on has finished execution.
     Serial getLatestSerial() const { return mUse.getSerial(); }
+
+    void updateSerial(Serial serial) { mUse.updateSerial(serial); }
 
     // Sets up dependency relations. 'this' resource is the resource being written to.
     void addWriteDependency(ContextVk *contextVk, CommandGraphResource *writingResource);
