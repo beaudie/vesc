@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0324a1f_a78aa2ee",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-01-13T19:22:16Z",
+      "side": 1,
+      "message": "Can you add here:\n  public_deps \u003d [\n    \":angle_common\",]\nand see if this fixes gn gen?\n\nBTW, adding UWP bots via \"CHOOSE TRYJOBS\" already works.",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 1
+      },
+      "revId": "80391a38e8a6ce4e3cdb56cd089d3c62246a5cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8e68a14_2942adb4",
+        "filename": "util/util.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-01-13T19:22:16Z",
+      "side": 1,
+      "message": "Can you please make this consistent?\nEither we add everything into util_sources here, or we still need util_win_sources to distinguish from other OSes.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 1
+      },
+      "revId": "80391a38e8a6ce4e3cdb56cd089d3c62246a5cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
