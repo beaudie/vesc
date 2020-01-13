@@ -16,6 +16,29 @@
       "revId": "a97f1bc8a60a5ad80bc617490287c6b3a9b0159a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbeb7dcc_82325394",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-01-13T21:34:33Z",
+      "side": 1,
+      "message": "I\u0027m losing track of what\u0027s getting passed to child processes and what\u0027s not.\nWould be nice to have more comments here or in README.\nAlso about the whole architecture of how tests are shared into child processes.\nMaybe a design doc?",
+      "range": {
+        "startLine": 679,
+        "startChar": 0,
+        "endLine": 697,
+        "endChar": 9
+      },
+      "revId": "a97f1bc8a60a5ad80bc617490287c6b3a9b0159a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
