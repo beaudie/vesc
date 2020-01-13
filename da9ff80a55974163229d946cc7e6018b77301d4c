@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f957e20e_ebbcca17",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-01-13T23:05:34Z",
+      "side": 1,
+      "message": "nit: static",
+      "range": {
+        "startLine": 221,
+        "startChar": 36,
+        "endLine": 221,
+        "endChar": 42
+      },
+      "revId": "da9ff80a55974163229d946cc7e6018b77301d4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
