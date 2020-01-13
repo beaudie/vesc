@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "42fc4815_465843d8",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-13T22:22:59Z",
+      "side": 1,
+      "message": "N/M done.",
+      "parentUuid": "24ecd76b_4173d1f2",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 10
+      },
+      "revId": "81e3f362c465466bac174afa5bd7682dc880044e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59f24cd5_afea6773",
         "filename": "util/BUILD.gn",
         "patchSetId": 1
@@ -140,6 +164,30 @@
       "revId": "81e3f362c465466bac174afa5bd7682dc880044e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0582309c_dba40f4a",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-13T22:22:59Z",
+      "side": 1,
+      "message": "N/m, note added (Done). I did try making it part of the static build and got build errors (not just gn check errors). Wasn\u0027t planning on fixing this as part of this CL.",
+      "parentUuid": "548e1ae5_8d68ccf3",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 7
+      },
+      "revId": "81e3f362c465466bac174afa5bd7682dc880044e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
