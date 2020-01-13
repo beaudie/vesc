@@ -48,10 +48,11 @@ void GetInterfaceBlockInfo(const std::vector<VarT> &fields,
                            const std::string &prefix,
                            BlockLayoutEncoder *encoder,
                            bool inRowMajorLayout,
+                           bool onlyActiveVariables,
                            BlockLayoutMap *blockInfoOut)
 {
     BlockLayoutMapVisitor visitor(blockInfoOut, prefix, encoder);
-    TraverseShaderVariables(fields, inRowMajorLayout, &visitor);
+    TraverseShaderVariables(fields, inRowMajorLayout, onlyActiveVariables, &visitor);
 }
 
 void TraverseStructVariable(const ShaderVariable &variable,
@@ -61,7 +62,7 @@ void TraverseStructVariable(const ShaderVariable &variable,
     const std::vector<ShaderVariable> &fields = variable.fields;
 
     visitor->enterStructAccess(variable, isRowMajorLayout);
-    TraverseShaderVariables(fields, isRowMajorLayout, visitor);
+    TraverseShaderVariables(fields, isRowMajorLayout, false, visitor);
     visitor->exitStructAccess(variable, isRowMajorLayout);
 }
 
@@ -197,7 +198,7 @@ size_t BlockLayoutEncoder::getShaderVariableSize(const ShaderVariable &structVar
     mCurrentOffset       = 0;
     BlockEncoderVisitor visitor("", "", this);
     enterAggregateType(structVar);
-    TraverseShaderVariables(structVar.fields, isRowMajor, &visitor);
+    TraverseShaderVariables(structVar.fields, isRowMajor, false, &visitor);
     exitAggregateType(structVar);
     size_t structVarSize = getCurrentOffset();
     mCurrentOffset       = currentOffset;
@@ -326,7 +327,7 @@ size_t Std430BlockEncoder::getBaseAlignment(const ShaderVariable &shaderVar) con
     if (shaderVar.isStruct())
     {
         BaseAlignmentVisitor visitor;
-        TraverseShaderVariables(shaderVar.fields, false, &visitor);
+        TraverseShaderVariables(shaderVar.fields, false, false, &visitor);
         return visitor.getBaseAlignment();
     }
 
@@ -345,17 +346,19 @@ void GetInterfaceBlockInfo(const std::vector<ShaderVariable> &fields,
 {
     // Matrix packing is always recorded in individual fields, so they'll set the row major layout
     // flag to true if needed.
-    GetInterfaceBlockInfo(fields, prefix, encoder, false, blockInfoOut);
+    // Iterates over all variables.
+    GetInterfaceBlockInfo(fields, prefix, encoder, false, false, blockInfoOut);
 }
 
-void GetUniformBlockInfo(const std::vector<ShaderVariable> &uniforms,
-                         const std::string &prefix,
-                         BlockLayoutEncoder *encoder,
-                         BlockLayoutMap *blockInfoOut)
+void GetActiveUniformBlockInfo(const std::vector<ShaderVariable> &uniforms,
+                               const std::string &prefix,
+                               BlockLayoutEncoder *encoder,
+                               BlockLayoutMap *blockInfoOut)
 {
     // Matrix packing is always recorded in individual fields, so they'll set the row major layout
     // flag to true if needed.
-    GetInterfaceBlockInfo(uniforms, prefix, encoder, false, blockInfoOut);
+    // Iterates only over the active variables.
+    GetInterfaceBlockInfo(uniforms, prefix, encoder, false, true, blockInfoOut);
 }
 
 // VariableNameVisitor implementation.

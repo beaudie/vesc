@@ -225,7 +225,7 @@ class BlockInfoVisitor final : public BlockEncoderVisitor
 
         BlockInfoVisitor childVisitor(variableName, mStorage, mShaderVarToFieldMap, mBlockInfoOut);
         childVisitor.getEncoder(mStorage)->enterAggregateType(structVar);
-        TraverseShaderVariables(structVar.fields, isRowMajor, &childVisitor);
+        TraverseShaderVariables(structVar.fields, isRowMajor, false, &childVisitor);
         childVisitor.getEncoder(mStorage)->exitAggregateType(structVar);
 
         int offset      = static_cast<int>(getEncoder(mStorage)->getCurrentOffset());
@@ -285,7 +285,7 @@ void GetShaderStorageBlockMembersInfo(const TInterfaceBlock *interfaceBlock,
     }
 
     BlockInfoVisitor visitor("", interfaceBlock->blockStorage(), shaderVarToFieldMap, blockInfoOut);
-    TraverseShaderVariables(block->fields, false, &visitor);
+    TraverseShaderVariables(block->fields, false, false, &visitor);
 }
 
 bool IsInArrayOfArraysChain(TIntermTyped *node)
