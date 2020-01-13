@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "24ecd76b_4173d1f2",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-13T22:13:44Z",
+      "side": 1,
+      "message": "It\u0027s fixed in the next CL. OK if I leave it as-is?",
+      "parentUuid": "0fc398aa_0f44c6f8",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 10
+      },
+      "revId": "81e3f362c465466bac174afa5bd7682dc880044e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59f24cd5_afea6773",
         "filename": "util/BUILD.gn",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "931e5664_7ec4c3bd",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-13T22:13:44Z",
+      "side": 1,
+      "message": "I\u0027d need to make it public_deps. However I don\u0027t think it needs to be public_deps.",
+      "parentUuid": "59f24cd5_afea6773",
+      "range": {
+        "startLine": 129,
+        "startChar": 6,
+        "endLine": 129,
+        "endChar": 38
+      },
+      "revId": "81e3f362c465466bac174afa5bd7682dc880044e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35aaf082_2d8e056c",
         "filename": "util/BUILD.gn",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2020-01-13T21:21:03Z",
       "side": 1,
       "message": "Could you please add a note that this is not in _util_sources because of is_shared_library condition?\nBTW, I don\u0027t understand what\u0027s preventing having this cpp file in the static library build as well.\nLooks like it was removed in https://chromium-review.googlesource.com/c/1395809 to get GN headers check to pass. Maybe there is another solution for that problem and we can move this cpp into _util_sources? Would be nicer to have it there.",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 7
+      },
+      "revId": "81e3f362c465466bac174afa5bd7682dc880044e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "548e1ae5_8d68ccf3",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-13T22:13:44Z",
+      "side": 1,
+      "message": "Is it alright if I try to land this as-is? I agree a note would be nice. However I doubt it\u0027ll be something anyone would have time to address right now.",
+      "parentUuid": "35aaf082_2d8e056c",
       "range": {
         "startLine": 219,
         "startChar": 0,
