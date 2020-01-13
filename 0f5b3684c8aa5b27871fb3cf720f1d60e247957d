@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e262c906_cea7e10b",
+        "filename": "src/tests/egl_tests/EGLStreamTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2020-01-13T05:06:50Z",
+      "side": 1,
+      "message": "DXGI_FORMAT_NV12",
+      "range": {
+        "startLine": 917,
+        "startChar": 32,
+        "endLine": 917,
+        "endChar": 48
+      },
+      "revId": "0f5b3684c8aa5b27871fb3cf720f1d60e247957d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b83c4718_277f2952",
+        "filename": "src/tests/egl_tests/EGLStreamTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2020-01-13T05:06:50Z",
+      "side": 1,
+      "message": "{0x10, 0x20, 0x30, 0x40, 0x50, 0x60}",
+      "range": {
+        "startLine": 931,
+        "startChar": 35,
+        "endLine": 931,
+        "endChar": 83
+      },
+      "revId": "0f5b3684c8aa5b27871fb3cf720f1d60e247957d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3653b32_be95b88d",
+        "filename": "src/tests/egl_tests/EGLStreamTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2020-01-13T05:06:50Z",
+      "side": 1,
+      "message": "2",
+      "range": {
+        "startLine": 934,
+        "startChar": 25,
+        "endLine": 934,
+        "endChar": 26
+      },
+      "revId": "0f5b3684c8aa5b27871fb3cf720f1d60e247957d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
