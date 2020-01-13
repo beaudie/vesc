@@ -1105,7 +1105,7 @@ void InterfaceBlockLinker::linkBlocks(const GetBlockSizeFunc &getBlockSize,
                         getVisitor(getMemberInfo, block.fieldPrefix(), block.fieldMappedPrefix(),
                                    shaderType, -1));
 
-                    sh::TraverseShaderVariables(block.fields, false, visitor.get());
+                    sh::TraverseShaderVariables(block.fields, false, false, visitor.get());
                 }
             }
         }
@@ -1128,7 +1128,7 @@ void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSizeFunc &getBlock
     std::unique_ptr<sh::ShaderVariableVisitor> visitor(
         getVisitor(getMemberInfo, interfaceBlock.fieldPrefix(), interfaceBlock.fieldMappedPrefix(),
                    shaderType, blockIndex));
-    sh::TraverseShaderVariables(interfaceBlock.fields, false, visitor.get());
+    sh::TraverseShaderVariables(interfaceBlock.fields, false, false, visitor.get());
 
     size_t lastBlockMemberIndex = getCurrentBlockMemberIndex();
 
