@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fc8e2a10_8aa91c01",
+        "filename": "src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-13T23:06:06Z",
+      "side": 1,
+      "message": "I just tried doing this. Not all of the #ifdefs can be translated into run-time if-statements. The Objective-C method [EAGLContext texImageIOSurface:target:internalFormat:width:height:format:type:plane:] does not exist in the iPhone simulator SDK. This is why these changes are phrased this way - to wall off the code so it is crystal clear what is needed specifically for the iOS Simulator. (FWIW, I wrote the iOS Simulator support, not Apple - stylistic errors are mine.)\n\nI\u0027m resolving this conversation since nearly all of the #ifdefs remaining in IOSurfaceSurfaceEAGL.mm are required in order for it to compile. This CL removes more #ifdefs related to iOS Simulator support than it adds.",
+      "parentUuid": "25b865e7_f5e02c9b",
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9588b9c2_cda476c3",
         "filename": "src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.mm",
         "patchSetId": 3
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "0d45dc05_ed82d2c1",
+        "filename": "src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-13T23:06:06Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "9588b9c2_cda476c3",
+      "range": {
+        "startLine": 108,
+        "startChar": 70,
+        "endLine": 108,
+        "endChar": 72
+      },
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afbb8c85_0969d050",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 3
@@ -53,6 +95,24 @@
       "writtenOn": "2020-01-13T14:58:39Z",
       "side": 1,
       "message": "Heads up: this is going to change when I land this patch: https://chromium-review.googlesource.com/c/angle/angle/+/1965434\nWe are going to check that textureTarget \u003d\u003d config-\u003etextureTarget.\nThe config is set in DisplayCGL/DisplayVkMac and will need to be added in DisplayEAGL. This should help avoid this platform-specific code",
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3bfb1bc_e70b93b3",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1843,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-13T23:06:06Z",
+      "side": 1,
+      "message": "Thanks, that will make this clearer and simpler. Is it OK if I add code here as a temporary change?",
+      "parentUuid": "afbb8c85_0969d050",
       "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -106,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "ffbea02c_b45f5ae6",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-13T23:06:06Z",
+      "side": 1,
+      "message": "iOS, the iOS Simulator, and Swangle use EGL_TEXTURE_2D. macOS and MacCatalyst (the SDK compiling iOS apps to desktop macOS) use EGL_TEXTURE_RECTANGLE_ANGLE. I will phrase this in terms of Mac/MacCatalyst, assume the #else branch is iOS, and Jonah\u0027s forthcoming CL adding Swangle support will remove the #ifdefs.",
+      "parentUuid": "aa2acf67_5e3a4d41",
+      "range": {
+        "startLine": 1844,
+        "startChar": 0,
+        "endLine": 1854,
+        "endChar": 30
+      },
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c14f9b34_afdf5493",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 3
@@ -120,6 +204,24 @@
       "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "303c54ce_ce4524aa",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1870,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-13T23:06:06Z",
+      "side": 1,
+      "message": "Fixed. I was confused by an earlier compilation error and incorrectly thought the #else was necessary.",
+      "parentUuid": "c14f9b34_afdf5493",
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
