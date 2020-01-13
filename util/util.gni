@@ -25,16 +25,17 @@ util_sources = [
   "util/OSWindow.h",
 ]
 
-util_win_sources = [
-  "util/windows/win32/Win32Pixmap.cpp",
-  "util/windows/win32/Win32Pixmap.h",
-  "util/windows/win32/Win32Window.cpp",
-  "util/windows/win32/Win32Window.h",
-  "util/windows/WGLWindow.h",
-]
+if (is_win) {
+  util_sources += [ "util/windows/WGLWindow.h" ]
 
-if (current_os != "winuwp") {
-  util_win_shared_sources = [ "util/windows/WGLWindow.cpp" ]
+  if (target_os != "winuwp") {
+    util_sources += [
+      "util/windows/win32/Win32Pixmap.cpp",
+      "util/windows/win32/Win32Pixmap.h",
+      "util/windows/win32/Win32Window.cpp",
+      "util/windows/win32/Win32Window.h",
+    ]
+  }
 }
 
 util_x11_sources = [
