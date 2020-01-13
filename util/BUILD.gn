@@ -28,13 +28,15 @@ _util_sources = [
 ]
 
 if (is_win) {
-  _util_sources += [
-    "windows/win32/Win32Pixmap.cpp",
-    "windows/win32/Win32Pixmap.h",
-    "windows/win32/Win32Window.cpp",
-    "windows/win32/Win32Window.h",
-    "windows/WGLWindow.h",
-  ]
+  _util_sources += [ "windows/WGLWindow.h" ]
+  if (!angle_is_winuwp) {
+    _util_sources += [
+      "windows/win32/Win32Pixmap.cpp",
+      "windows/win32/Win32Pixmap.h",
+      "windows/win32/Win32Window.cpp",
+      "windows/win32/Win32Window.h",
+    ]
+  }
 }
 
 if (angle_use_x11) {
@@ -264,12 +266,12 @@ angle_source_set("angle_test_utils") {
   ]
 
   if (is_win) {
-    sources += [
-      "windows/test_utils_win.cpp",
-      "windows/win32/test_utils_win32.cpp",
-    ]
-    if (!angle_is_winuwp) {
+    sources += [ "windows/test_utils_win.cpp" ]
+    if (angle_is_winuwp) {
+      sources += [ "windows/test_utils_winuwp.cpp" ]
+    } else {
       deps += [ ":angle_stack_walker" ]
+      sources += [ "windows/win32/test_utils_win32.cpp" ]
     }
   } else {
     sources += [
