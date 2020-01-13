@@ -253,7 +253,7 @@ void CaptureGetActiveUniform_length(const State &glState,
                                     GLchar *name,
                                     ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLsizei);
 }
 
 void CaptureGetActiveUniform_size(const State &glState,
@@ -267,7 +267,7 @@ void CaptureGetActiveUniform_size(const State &glState,
                                   GLchar *name,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLint);
 }
 
 void CaptureGetActiveUniform_type(const State &glState,
@@ -281,7 +281,7 @@ void CaptureGetActiveUniform_type(const State &glState,
                                   GLchar *name,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLenum);
 }
 
 void CaptureGetActiveUniform_name(const State &glState,
@@ -295,7 +295,7 @@ void CaptureGetActiveUniform_name(const State &glState,
                                   GLchar *name,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureString(name, paramCapture);
 }
 
 void CaptureGetAttachedShaders_count(const State &glState,
@@ -457,7 +457,8 @@ void CaptureGetShaderPrecisionFormat_range(const State &glState,
                                            GLint *precision,
                                            ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    // range specifies a pointer to two-element array containing log2 of min and max
+    paramCapture->readBufferSizeBytes = 2 * sizeof(GLint);
 }
 
 void CaptureGetShaderPrecisionFormat_precision(const State &glState,
@@ -468,7 +469,7 @@ void CaptureGetShaderPrecisionFormat_precision(const State &glState,
                                                GLint *precision,
                                                ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLint);
 }
 
 void CaptureGetShaderSource_length(const State &glState,
@@ -735,7 +736,9 @@ void CaptureTexSubImage2D_pixels(const State &glState,
                                  const void *pixels,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+
+    CaptureTexImage2D_pixels(glState, isCallValid, targetPacked, level, 0, width, height, 0, format,
+                             type, pixels, paramCapture);
 }
 
 void CaptureUniform1fv_value(const State &glState,

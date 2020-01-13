@@ -308,7 +308,10 @@ void CaptureGetInternalformativ_params(const State &glState,
                                        GLint *params,
                                        ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    if (params)
+    {
+        paramCapture->readBufferSizeBytes = bufSize * sizeof(GLint);
+    }
 }
 
 void CaptureGetProgramBinary_length(const State &glState,
