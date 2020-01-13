@@ -19,6 +19,46 @@
     },
     {
       "key": {
+        "uuid": "9588b9c2_cda476c3",
+        "filename": "src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-13T14:58:39Z",
+      "side": 1,
+      "message": "Add lines 109-112 into this default case instead",
+      "range": {
+        "startLine": 108,
+        "startChar": 70,
+        "endLine": 108,
+        "endChar": 72
+      },
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afbb8c85_0969d050",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1843,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-13T14:58:39Z",
+      "side": 1,
+      "message": "Heads up: this is going to change when I land this patch: https://chromium-review.googlesource.com/c/angle/angle/+/1965434\nWe are going to check that textureTarget \u003d\u003d config-\u003etextureTarget.\nThe config is set in DisplayCGL/DisplayVkMac and will need to be added in DisplayEAGL. This should help avoid this platform-specific code",
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a48096f_f8ecde73",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 3
@@ -30,6 +70,30 @@
       "writtenOn": "2020-01-11T05:20:24Z",
       "side": 1,
       "message": "I wish there was a way instead to query which target to expect with this buffer type, instead of making assumptions based on the platform.\n\nIf that\u0027s not possible, I\u0027d at least invert the #if here:\n\n#if ANGLE_PLATFORM_IOS_SIMULATOR\n   ...\n#else\n   ...\n#endif\n\nAs the iOS simulator using EGL_TEXTURE_2D instead of RECTANGLE seems to be the exception IIUC, rather than the rule.",
+      "range": {
+        "startLine": 1844,
+        "startChar": 0,
+        "endLine": 1854,
+        "endChar": 30
+      },
+      "revId": "dc2ea76e49994ae43387c839fffc3232ea0f9e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa2acf67_5e3a4d41",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-13T14:58:39Z",
+      "side": 1,
+      "message": "Swangle Mac uses EGL_TEXTURE_2D FYI",
+      "parentUuid": "4a48096f_f8ecde73",
       "range": {
         "startLine": 1844,
         "startChar": 0,
