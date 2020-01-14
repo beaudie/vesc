@@ -1,0 +1,226 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92b13361_336ae319",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "Can this be \"ANGLELineRasterEmulation\" to match the variable name?",
+      "range": {
+        "startLine": 168,
+        "startChar": 21,
+        "endLine": 168,
+        "endChar": 37
+      },
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ace7181b_bbc74155",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "This is a duplicate of the value above in TranslatorVulkan.cpp and should probably live in a shared header file somewhere instead.\n\nAdditionally, making this an enum would allow the values to automatically be unique.",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9950b3be_97412517",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "I don\u0027t really know the answer, but is this better than checking for at least one mSpirvShaders having SPIR-V in it?   Checking the map would be slower, but it would only be checked during debug builds with asserts enabled anyway.   It would allow us to remove the extra member that\u0027s only read during debug builds anyway.",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "040527b7_22d7775f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "Why do we need 2 programs still?   I would have expected everything about these to be the same, with the specialization constant being set at run-time.",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9c2b254_1e647569",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "This should be a BitSet type, to indicate this is a bit field.",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceeb5e5f_c9f1925b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "All of this assume specialization constants will only ever be boolean values, which is not a Vulkan requirement.\n\nMy first impression is that we should support uint values first, which we can treat as booleans, which would give us a bit more initial functionality without much change here.",
+      "range": {
+        "startLine": 640,
+        "startChar": 0,
+        "endLine": 642,
+        "endChar": 81
+      },
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05ce1576_a44a3b3c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "Updating specConsts to a BitSet also gives you operator[], which implements this check.",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dc121dd_4fc4b2c6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "Can all of this specialization constant work be moved into a helper function?",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc61e621_5eacd023",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "You also get this for free with an enum.",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8742e10c_5efb00b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "This magic number comes from the fact that \u0027specConsts\u0027 is a uint8?\n\nWhy are we limiting ourselves to just 8?   I don\u0027t see anything in the spec that limits the number of specialization constants.",
+      "range": {
+        "startLine": 819,
+        "startChar": 49,
+        "endLine": 819,
+        "endChar": 50
+      },
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5a5711c_eea1bb92",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3595,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "Oh, I thought this was setting the value to true.   Making these \u0027id\u0027 values a typed enum would remove the need for the ASSERT() and help with code readability.",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20ea809b_a32dc70b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T01:48:25Z",
+      "side": 1,
+      "message": "This should be a BitSet also, so indicate how the value is used.   The uint8 type doesn\u0027t really give any context.",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
