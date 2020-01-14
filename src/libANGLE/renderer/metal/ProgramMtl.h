@@ -162,6 +162,7 @@ class ProgramMtl : public ProgramImpl
 
     // We keep the translated linked shader sources to use with shader draw call patching.
     gl::ShaderMap<std::string> mShaderSource;
+    ShaderInterfaceVariableInfoMap mVariableInfoMap;
 
     mtl::RenderPipelineCache mMetalRenderPipelineCache;
 };
