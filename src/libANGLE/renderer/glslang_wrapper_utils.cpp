@@ -22,6 +22,9 @@ ANGLE_DISABLE_SHADOWING_WARNING
 ANGLE_REENABLE_SHADOWING_WARNING
 ANGLE_REENABLE_EXTRA_SEMI_WARNING
 
+// SPIR-V tools include for AST validation.
+#include <spirv-tools/libspirv.hpp>
+
 #include <array>
 #include <numeric>
 
@@ -56,6 +59,13 @@ constexpr char kParamsEnd                          = ')';
 constexpr char kInactiveVariableSubstitution[]     = "// ";
 constexpr uint32_t kANGLEPositionLocationOffset    = 1;
 constexpr uint32_t kXfbANGLEPositionLocationOffset = 2;
+
+constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
+    {gl::ShaderType::Vertex, sh::vk::kDefaultUniformsNameVS},
+    {gl::ShaderType::Geometry, sh::vk::kDefaultUniformsNameGS},
+    {gl::ShaderType::Fragment, sh::vk::kDefaultUniformsNameFS},
+    {gl::ShaderType::Compute, sh::vk::kDefaultUniformsNameCS},
+};
 
 template <size_t N>
 constexpr size_t ConstStrLen(const char (&)[N])
@@ -389,8 +399,42 @@ std::string IntermediateShaderSource::getShaderSource()
     return shaderSource;
 }
 
+bool GetImageNameWithoutIndices(std::string *name)
+{
+    // Strip indices from the name.  If there are non-zero indices, return false to indicate that
+    // this image uniform doesn't require set/binding.  That is done on index 0.
+    if (name->back() != ']')
+    {
+        return true;
+    }
+
+    size_t lastBracketClose = 0;
+    while (true)
+    {
+        size_t openBracket = name->find('[', lastBracketClose);
+        if (openBracket == std::string::npos)
+        {
+            break;
+        }
+        size_t closeBracket = name->find(']', openBracket);
+
+        // If the index between the brackets is not zero, ignore this uniform.
+        if (name->substr(openBracket + 1, closeBracket - openBracket - 1) != "0")
+        {
+            return false;
+        }
+        lastBracketClose = closeBracket;
+    }
+
+    // Strip all indices
+    *name = name->substr(0, name->find('['));
+    return true;
+}
+
 std::string GetMappedSamplerNameOld(const std::string &originalName)
 {
+    bool needsUserDefinedPrefix = originalName.find('.') == std::string::npos;
+
     std::string samplerName = gl::ParseResourceName(originalName, nullptr);
 
     // Samplers in structs are extracted.
@@ -399,6 +443,12 @@ std::string GetMappedSamplerNameOld(const std::string &originalName)
     // Samplers in arrays of structs are also extracted.
     std::replace(samplerName.begin(), samplerName.end(), '[', '_');
     samplerName.erase(std::remove(samplerName.begin(), samplerName.end(), ']'), samplerName.end());
+
+    if (needsUserDefinedPrefix)
+    {
+        samplerName = sh::kUserDefinedNamePrefix + samplerName;
+    }
+
     return samplerName;
 }
 
@@ -436,11 +486,11 @@ std::string GenerateTransformFeedbackVaryingOutput(const gl::TransformFeedbackVa
         {
             for (int row = 0; row < info.rowCount; ++row)
             {
-                result << "xfbOut" << bufferIndex << "[ANGLEUniforms.xfbBufferOffsets["
-                       << bufferIndex
+                result << "xfbOut" << bufferIndex << "[" << sh::vk::kDriverUniformsVarName
+                       << ".xfbBufferOffsets[" << bufferIndex
                        << "] + (gl_VertexIndex + gl_InstanceIndex * "
-                          "ANGLEUniforms.xfbVerticesPerDraw) * "
-                       << stride << " + " << offset << "] = " << info.glslAsFloat << "("
+                       << sh::vk::kDriverUniformsVarName << ".xfbVerticesPerDraw) * " << stride
+                       << " + " << offset << "] = " << info.glslAsFloat << "("
                        << varying.mappedName;
 
                 if (varying.isArray())
@@ -493,7 +543,8 @@ void GenerateTransformFeedbackEmulationOutputs(const GlslangSourceOptions &optio
                    "[]; };\n";
     }
 
-    std::string xfbOut  = "if (ANGLEUniforms.xfbActiveUnpaused != 0)\n{\n";
+    std::string xfbOut =
+        "if (" + std::string(sh::vk::kDriverUniformsVarName) + ".xfbActiveUnpaused != 0)\n{\n";
     size_t outputOffset = 0;
     for (size_t varyingIndex = 0; varyingIndex < varyings.size(); ++varyingIndex)
     {
@@ -653,6 +704,24 @@ void GenerateTransformFeedbackExtensionOutputs(const gl::ProgramState &programSt
     vertexShader->insertTransformFeedbackOutput(std::move(xfbOut));
 }
 
+ShaderInterfaceVariableInfo *AddShaderInterfaceVariable(ShaderInterfaceVariableInfoMap *infoMap,
+                                                        const std::string &varName)
+{
+    ASSERT(infoMap->find(varName) == infoMap->end());
+    return &(*infoMap)[varName];
+}
+
+ShaderInterfaceVariableInfo *AddResourceInfo(ShaderInterfaceVariableInfoMap *infoMap,
+                                             const std::string &varName,
+                                             uint32_t set,
+                                             uint32_t binding)
+{
+    ShaderInterfaceVariableInfo *info = AddShaderInterfaceVariable(infoMap, varName);
+    info->set                         = set;
+    info->binding                     = binding;
+    return info;
+}
+
 void AssignAttributeLocations(const gl::ProgramState &programState,
                               IntermediateShaderSource *shaderSource)
 {
@@ -809,74 +878,38 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
 }
 
 void AssignUniformBindings(const GlslangSourceOptions &options,
-                           gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+                           gl::ShaderMap<IntermediateShaderSource> *shaderSources,
+                           ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    // Bind the default uniforms for vertex and fragment shaders.
-    // See corresponding code in OutputVulkanGLSL.cpp.
-    const std::string uniformsDescriptorSet =
-        "set = " + Str(options.uniformsAndXfbDescriptorSetIndex);
-
-    constexpr char kDefaultUniformsBlockName[] = "defaultUniforms";
-    uint32_t bindingIndex                      = 0;
-    for (IntermediateShaderSource &shaderSource : *shaderSources)
-    {
-        if (!shaderSource.empty())
-        {
-            std::string defaultUniformsBinding =
-                uniformsDescriptorSet + ", binding = " + Str(bindingIndex++);
-
-            shaderSource.insertLayoutSpecifier(kDefaultUniformsBlockName, defaultUniformsBinding);
-        }
-    }
-
-    // Substitute layout string for the driver uniforms block.
-    const std::string driverBlockLayoutString =
-        "set = " + Str(options.driverUniformsDescriptorSetIndex) + ", binding = 0";
-    constexpr char kDriverBlockName[] = "ANGLEUniformBlock";
-
-    for (IntermediateShaderSource &shaderSource : *shaderSources)
-    {
-        shaderSource.insertLayoutSpecifier(kDriverBlockName, driverBlockLayoutString);
-    }
-}
-
-// Helper to go through shader stages and substitute layout macro.  The translator must have already
-// output the qualifiers.
-void AssignResourceBinding(gl::ShaderBitSet activeShaders,
-                           const std::string &name,
-                           const std::string &bindingString,
-                           gl::ShaderMap<IntermediateShaderSource> *shaderSources)
-{
+    // Assign binding to the default uniforms block of each shader stage.
+    uint32_t bindingIndex = 0;
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
         if (!shaderSource.empty())
         {
-            if (activeShaders[shaderType])
-            {
-                shaderSource.insertLayoutSpecifier(name, bindingString);
-            }
+            AddResourceInfo(variableInfoMapOut, kDefaultUniformNames[shaderType],
+                            options.uniformsAndXfbDescriptorSetIndex, bindingIndex++);
         }
     }
+
+    // Assign binding to the driver uniforms block
+    AddResourceInfo(variableInfoMapOut, sh::vk::kDriverUniformsVarName,
+                    options.driverUniformsDescriptorSetIndex, 0);
 }
 
 uint32_t AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
                                       const std::vector<gl::InterfaceBlock> &blocks,
                                       uint32_t bindingStart,
-                                      gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+                                      ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    const std::string resourcesDescriptorSet =
-        "set = " + Str(options.shaderResourceDescriptorSetIndex);
-
     uint32_t bindingIndex = bindingStart;
     for (const gl::InterfaceBlock &block : blocks)
     {
         if (!block.isArray || block.arrayElement == 0)
         {
-            const std::string bindingString =
-                resourcesDescriptorSet + ", binding = " + Str(bindingIndex++);
-
-            AssignResourceBinding(block.activeShaders(), block.name, bindingString, shaderSources);
+            AddResourceInfo(variableInfoMapOut, block.mappedName,
+                            options.shaderResourceDescriptorSetIndex, bindingIndex++);
         }
     }
 
@@ -886,26 +919,15 @@ uint32_t AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
 uint32_t AssignAtomicCounterBufferBindings(const GlslangSourceOptions &options,
                                            const std::vector<gl::AtomicCounterBuffer> &buffers,
                                            uint32_t bindingStart,
-                                           gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+                                           ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     if (buffers.size() == 0)
     {
         return bindingStart;
     }
 
-    constexpr char kAtomicCounterBlockName[] = "ANGLEAtomicCounters";
-    const std::string bindingString = "set = " + Str(options.shaderResourceDescriptorSetIndex) +
-                                      ", binding = " + Str(bindingStart);
-
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
-        if (!shaderSource.empty())
-        {
-            // All atomic counter buffers are placed under one binding shared between all stages.
-            shaderSource.insertLayoutSpecifier(kAtomicCounterBlockName, bindingString);
-        }
-    }
+    AddResourceInfo(variableInfoMapOut, sh::vk::kAtomicCountersVarName,
+                    options.shaderResourceDescriptorSetIndex, bindingStart);
 
     return bindingStart + 1;
 }
@@ -914,25 +936,20 @@ uint32_t AssignImageBindings(const GlslangSourceOptions &options,
                              const std::vector<gl::LinkedUniform> &uniforms,
                              const gl::RangeUI &imageUniformRange,
                              uint32_t bindingStart,
-                             gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+                             ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    const std::string resourcesDescriptorSet =
-        "set = " + Str(options.shaderResourceDescriptorSetIndex);
-
     uint32_t bindingIndex = bindingStart;
     for (unsigned int uniformIndex : imageUniformRange)
     {
         const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
-        const std::string bindingString =
-            resourcesDescriptorSet + ", binding = " + Str(bindingIndex++);
 
-        std::string name = imageUniform.name;
-        if (name.back() == ']')
+        std::string name = imageUniform.mappedName;
+        if (GetImageNameWithoutIndices(&name))
         {
-            name = name.substr(0, name.find('['));
+            AddResourceInfo(variableInfoMapOut, name, options.shaderResourceDescriptorSetIndex,
+                            bindingIndex);
         }
-
-        AssignResourceBinding(imageUniform.activeShaders(), name, bindingString, shaderSources);
+        ++bindingIndex;
     }
 
     return bindingIndex;
@@ -940,35 +957,33 @@ uint32_t AssignImageBindings(const GlslangSourceOptions &options,
 
 void AssignNonTextureBindings(const GlslangSourceOptions &options,
                               const gl::ProgramState &programState,
-                              gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+                              ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     uint32_t bindingStart = 0;
 
     const std::vector<gl::InterfaceBlock> &uniformBlocks = programState.getUniformBlocks();
     bindingStart =
-        AssignInterfaceBlockBindings(options, uniformBlocks, bindingStart, shaderSources);
+        AssignInterfaceBlockBindings(options, uniformBlocks, bindingStart, variableInfoMapOut);
 
     const std::vector<gl::InterfaceBlock> &storageBlocks = programState.getShaderStorageBlocks();
     bindingStart =
-        AssignInterfaceBlockBindings(options, storageBlocks, bindingStart, shaderSources);
+        AssignInterfaceBlockBindings(options, storageBlocks, bindingStart, variableInfoMapOut);
 
     const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers =
         programState.getAtomicCounterBuffers();
     bindingStart = AssignAtomicCounterBufferBindings(options, atomicCounterBuffers, bindingStart,
-                                                     shaderSources);
+                                                     variableInfoMapOut);
 
     const std::vector<gl::LinkedUniform> &uniforms = programState.getUniforms();
     const gl::RangeUI &imageUniformRange           = programState.getImageUniformRange();
     bindingStart =
-        AssignImageBindings(options, uniforms, imageUniformRange, bindingStart, shaderSources);
+        AssignImageBindings(options, uniforms, imageUniformRange, bindingStart, variableInfoMapOut);
 }
 
 void AssignTextureBindings(const GlslangSourceOptions &options,
                            const gl::ProgramState &programState,
-                           gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+                           ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    const std::string texturesDescriptorSet = "set = " + Str(options.textureDescriptorSetIndex);
-
     // Assign textures to a descriptor set and binding.
     uint32_t bindingIndex                          = 0;
     const std::vector<gl::LinkedUniform> &uniforms = programState.getUniforms();
@@ -983,16 +998,13 @@ void AssignTextureBindings(const GlslangSourceOptions &options,
             continue;
         }
 
-        const std::string bindingString =
-            texturesDescriptorSet + ", binding = " + Str(bindingIndex++);
-
         // Samplers in structs are extracted and renamed.
         const std::string samplerName = options.useOldRewriteStructSamplers
                                             ? GetMappedSamplerNameOld(samplerUniform.name)
                                             : GlslangGetMappedSamplerName(samplerUniform.name);
 
-        AssignResourceBinding(samplerUniform.activeShaders(), samplerName, bindingString,
-                              shaderSources);
+        AddResourceInfo(variableInfoMapOut, samplerName, options.textureDescriptorSetIndex,
+                        bindingIndex++);
     }
 }
 
@@ -1042,7 +1054,7 @@ constexpr gl::ShaderMap<EShLanguage> kShLanguageMap = {
 angle::Result GetShaderSpirvCode(GlslangErrorCallback callback,
                                  const gl::Caps &glCaps,
                                  const gl::ShaderMap<std::string> &shaderSources,
-                                 gl::ShaderMap<SpirvBlob> *spirvBlobsOut)
+                                 gl::ShaderMap<std::vector<uint32_t>> *spirvBlobsOut)
 {
     // Enable SPIR-V and Vulkan rules when parsing GLSL
     EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
@@ -1109,6 +1121,414 @@ angle::Result GetShaderSpirvCode(GlslangErrorCallback callback,
 
     return angle::Result::Continue;
 }
+
+void ValidateSpirvMessage(spv_message_level_t level,
+                          const char *source,
+                          const spv_position_t &position,
+                          const char *message)
+{
+    WARN() << "Level" << level << ": " << message;
+}
+
+bool ValidateSpirv(const std::vector<uint32_t> &spirvBlob)
+{
+    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
+
+    spirvTools.SetMessageConsumer(ValidateSpirvMessage);
+    bool result = spirvTools.Validate(spirvBlob);
+
+    if (!result)
+    {
+        std::string readableSpirv;
+        result = spirvTools.Disassemble(spirvBlob, &readableSpirv,
+                                        SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES);
+        WARN() << "Invalid SPIR-V:\n" << readableSpirv;
+    }
+
+    return result;
+}
+
+// A SPIR-V transformer.  It walks the instructions and modifies them as necessary, for example to
+// assign bindings or locations.
+class SpirvTransformer final : angle::NonCopyable
+{
+  public:
+    SpirvTransformer(const std::vector<uint32_t> &originalSpirvBlob,
+                     const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                     gl::ShaderType shaderType,
+                     SpirvBlob *spirvBlob)
+        : mOriginalSpirvBlob(originalSpirvBlob),
+          mShaderType(shaderType),
+          mVariableInfoMap(variableInfoMap),
+          mSpirvBlob(spirvBlob)
+    {}
+
+    bool transform();
+
+  private:
+    // SPIR-V 1.0 Table 1: First Words of Physical Layout
+    enum HeaderIndex
+    {
+        kHeaderIndexMagic        = 0,
+        kHeaderIndexVersion      = 1,
+        kHeaderIndexGenerator    = 2,
+        kHeaderIndexIndexBound   = 3,
+        kHeaderIndexSchema       = 4,
+        kHeaderIndexInstructions = 5,
+    };
+
+    // SPIR-V 1.0 Section 3.32 Instructions
+    // Note: this is a subset of instructions, containing only those that are interesting.
+    enum Op
+    {
+        // Informational opcodes:
+
+        // Needed to find id of shader interface variables.
+        kOpName = 5,
+
+        // Needed to find the id of a nameless interface block variable from its interface block
+        // name.
+        kOpTypeArray   = 28,
+        kOpTypePointer = 32,
+        kOpVariable    = 59,
+
+        // opcodes that may need transformation:
+
+        // Needed to modify shader interface variable location/set/bindings.
+        kOpDecorate = 71,
+
+        // Helper opcodes:
+
+        // Used to early out when resolving ids.
+        kOpFunction = 54,
+
+    };
+
+    // SPIR-V 1.0 Section 3.1 Magic Number
+    static constexpr uint32_t kSpirvMagicNumber = 0x07230203;
+
+    // A prepass to resolve interesting ids:
+    void resolveVariableIds();
+
+    // Transform instructions:
+    void transformInstruction();
+
+    // Instructions that are purely informational:
+    void visitName(const uint32_t *instruction);
+    void visitTypeHelper(const uint32_t *instruction, size_t idIndex, size_t typeIdIndex);
+    void visitTypeArray(const uint32_t *instruction);
+    void visitTypePointer(const uint32_t *instruction);
+    void visitVariable(const uint32_t *instruction);
+
+    // Instructions that potentially need transformation.  They return true if the instruction is
+    // transformed.  If false is returned, the instruction should be copied as-is.
+    bool transformDecorate(const uint32_t *instruction, size_t wordCount);
+
+    // Any other instructions:
+    void copyInstruction(const uint32_t *instruction, size_t wordCount);
+    size_t getCurrentOutputOffset() const;
+
+    // SPIR-V to transform:
+    const std::vector<uint32_t> &mOriginalSpirvBlob;
+    const gl::ShaderType mShaderType;
+
+    // Input shader variable info map:
+    const ShaderInterfaceVariableInfoMap &mVariableInfoMap;
+
+    // Transformed SPIR-V:
+    SpirvBlob *mSpirvBlob;
+
+    // Traversal state:
+    size_t mCurrentWord = 0;
+
+    // Transformation state:
+
+    // Shader variable info per id, if id is a shader variable.
+    std::vector<const ShaderInterfaceVariableInfo *> mVariableInfoById;
+};
+
+bool SpirvTransformer::transform()
+{
+    // Glslang succeeded in outputting SPIR-V, so we assume it's valid.
+    ASSERT(mOriginalSpirvBlob.size() >= kHeaderIndexInstructions);
+    // Since SPIR-V comes from a local call to glslang, it necessarily has the same endianness as
+    // the running architecture, so no byte-swapping is necessary.
+    ASSERT(mOriginalSpirvBlob[kHeaderIndexMagic] == kSpirvMagicNumber);
+
+    // Make sure the transformer is not reused to avoid having to reinitialize it here.
+    ASSERT(mCurrentWord == 0);
+
+    // Make sure the SpirvBlob is not reused.
+    ASSERT(mSpirvBlob->empty());
+
+    // First, find all necessary ids and associate them with the information required to transform
+    // their decorations.
+    resolveVariableIds();
+
+    // Copy the header to SpirvBlob
+    mSpirvBlob->assign(mOriginalSpirvBlob.begin(),
+                       mOriginalSpirvBlob.begin() + kHeaderIndexInstructions);
+
+    mCurrentWord = kHeaderIndexInstructions;
+    while (mCurrentWord < mOriginalSpirvBlob.size())
+    {
+        transformInstruction();
+    }
+
+    return true;
+}
+
+// SPIR-V 1.0 Table 2: Instruction Physical Layout
+uint32_t GetSpirvInstructionLength(const uint32_t *instruction)
+{
+    return instruction[0] >> 16;
+}
+
+uint32_t GetSpirvInstructionOp(const uint32_t *instruction)
+{
+    constexpr uint32_t kOpMask = 0xFFFFu;
+    return instruction[0] & kOpMask;
+}
+
+void SpirvTransformer::resolveVariableIds()
+{
+    // Allocate storage for id-to-info map.  If %i is the id of a name in mVariableInfoMap, index i
+    // in this vector will hold a pointer to the ShaderInterfaceVariableInfo object associated with
+    // that name in mVariableInfoMap.
+    mVariableInfoById.resize(mOriginalSpirvBlob[kHeaderIndexIndexBound] + 1, nullptr);
+
+    size_t currentWord = kHeaderIndexInstructions;
+
+    while (currentWord < mOriginalSpirvBlob.size())
+    {
+        const uint32_t *instruction = &mOriginalSpirvBlob[currentWord];
+
+        const uint32_t wordCount = GetSpirvInstructionLength(instruction);
+        const uint32_t opCode    = GetSpirvInstructionOp(instruction);
+
+        switch (opCode)
+        {
+            case kOpName:
+                visitName(instruction);
+                break;
+            case kOpTypeArray:
+                visitTypeArray(instruction);
+                break;
+            case kOpTypePointer:
+                visitTypePointer(instruction);
+                break;
+            case kOpVariable:
+                visitVariable(instruction);
+                break;
+            case kOpFunction:
+                // SPIR-V is structured in sections. Names appear before decorations, which are
+                // followed by type+variables and finally functions.  We are only interested in name
+                // and variable declarations (as well as type declarations for the sake of nameless
+                // interface blocks).  Early out when the function declaration section is met.
+                return;
+            default:
+                break;
+        }
+
+        currentWord += wordCount;
+    }
+}
+
+void SpirvTransformer::transformInstruction()
+{
+    const uint32_t *instruction = &mOriginalSpirvBlob[mCurrentWord];
+
+    const uint32_t wordCount = GetSpirvInstructionLength(instruction);
+    const uint32_t opCode    = GetSpirvInstructionOp(instruction);
+
+    // Since glslang succeeded in producing SPIR-V, we assume it to be valid.
+    ASSERT(mCurrentWord + wordCount <= mOriginalSpirvBlob.size());
+
+    // Advance to next instruction.
+    mCurrentWord += wordCount;
+
+    // Only look at interesting instructions.
+    bool transformed = false;
+    switch (opCode)
+    {
+        case kOpDecorate:
+            transformed = transformDecorate(instruction, wordCount);
+            break;
+        default:
+            break;
+    }
+
+    // If the instruction was not transformed, copy it to output as is.
+    if (!transformed)
+    {
+        copyInstruction(instruction, wordCount);
+    }
+}
+
+void SpirvTransformer::visitName(const uint32_t *instruction)
+{
+    // We currently don't have any big-endian devices in the list of supported platforms.  Literal
+    // strings in SPIR-V are stored little-endian (SPIR-V 1.0 Section 2.2.1, Literal String), so if
+    // a big-endian device is to be supported, the string matching here should be specialized.
+    ASSERT(IsLittleEndian());
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpName
+    constexpr size_t kIdIndex   = 1;
+    constexpr size_t kNameIndex = 2;
+
+    const uint32_t id = instruction[kIdIndex];
+    const char *name  = reinterpret_cast<const char *>(&instruction[kNameIndex]);
+
+    auto infoIter = mVariableInfoMap.find(name);
+    if (infoIter == mVariableInfoMap.end())
+    {
+        return;
+    }
+
+    // The names and ids are unique
+    ASSERT(id < mVariableInfoById.size());
+    ASSERT(mVariableInfoById[id] == nullptr);
+
+    // Associate the id of this name with its info.
+    mVariableInfoById[id] = &infoIter->second;
+}
+
+void SpirvTransformer::visitTypeHelper(const uint32_t *instruction,
+                                       const size_t idIndex,
+                                       const size_t typeIdIndex)
+{
+    const uint32_t id     = instruction[idIndex];
+    const uint32_t typeId = instruction[typeIdIndex];
+
+    // Every type id is declared only once.
+    ASSERT(typeId < mVariableInfoById.size());
+
+    if (mVariableInfoById[typeId] != nullptr)
+    {
+        // Carry the info forward from the base type.  This is only necessary for interface blocks,
+        // as the variable info is associated with the block name instead of the variable name (to
+        // support nameless interface blocks).  In that case, the variable itself doesn't yet have
+        // an associated info.
+        ASSERT(id < mVariableInfoById.size());
+        ASSERT(mVariableInfoById[id] == nullptr);
+
+        mVariableInfoById[id] = mVariableInfoById[typeId];
+    }
+}
+
+void SpirvTransformer::visitTypeArray(const uint32_t *instruction)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpTypeArray
+    constexpr size_t kIdIndex            = 1;
+    constexpr size_t kElementTypeIdIndex = 2;
+
+    visitTypeHelper(instruction, kIdIndex, kElementTypeIdIndex);
+}
+
+void SpirvTransformer::visitTypePointer(const uint32_t *instruction)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpTypePointer
+    constexpr size_t kIdIndex     = 1;
+    constexpr size_t kTypeIdIndex = 3;
+
+    visitTypeHelper(instruction, kIdIndex, kTypeIdIndex);
+}
+
+void SpirvTransformer::visitVariable(const uint32_t *instruction)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpVariable
+    constexpr size_t kTypeIdIndex = 1;
+    constexpr size_t kIdIndex     = 2;
+
+    visitTypeHelper(instruction, kIdIndex, kTypeIdIndex);
+}
+
+bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wordCount)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpDecorate
+    constexpr size_t kIdIndex              = 1;
+    constexpr size_t kDecorationIndex      = 2;
+    constexpr size_t kDecorationValueIndex = 3;
+
+    uint32_t id         = instruction[kIdIndex];
+    uint32_t decoration = instruction[kDecorationIndex];
+
+    const ShaderInterfaceVariableInfo *info = mVariableInfoById[id];
+
+    // If variable is not a shader interface variable that needs modification, there's nothing to
+    // do.
+    if (info == nullptr)
+    {
+        return false;
+    }
+
+    // SPIR-V 1.0 Section 3.20 Decoration
+    constexpr uint32_t kDecorationLocation      = 30;
+    constexpr uint32_t kDecorationComponent     = 31;
+    constexpr uint32_t kDecorationBinding       = 33;
+    constexpr uint32_t kDecorationDescriptorSet = 34;
+    constexpr uint32_t kDecorationOffset        = 35;
+    constexpr uint32_t kDecorationXfbBuffer     = 36;
+    constexpr uint32_t kDecorationXfbStride     = 37;
+
+    uint32_t newDecorationValue = ShaderInterfaceVariableInfo::kInvalid;
+
+    switch (decoration)
+    {
+        case kDecorationLocation:
+            if (info->activeStages[mShaderType])
+            {
+                newDecorationValue = info->location;
+            }
+            break;
+        case kDecorationComponent:
+            if (info->activeStages[mShaderType])
+            {
+                newDecorationValue = info->component;
+            }
+            break;
+        case kDecorationBinding:
+            newDecorationValue = info->binding;
+            break;
+        case kDecorationDescriptorSet:
+            newDecorationValue = info->set;
+            break;
+        case kDecorationOffset:
+            newDecorationValue = info->xfbOffset;
+            break;
+        case kDecorationXfbBuffer:
+            newDecorationValue = info->xfbBuffer;
+            break;
+        case kDecorationXfbStride:
+            newDecorationValue = info->xfbStride;
+            break;
+        default:
+            break;
+    }
+
+    // If the decoration is not something we care about modifying, there's nothing to do.
+    if (newDecorationValue == ShaderInterfaceVariableInfo::kInvalid)
+    {
+        return false;
+    }
+
+    // Copy the decoration declaration and modify it.
+    const size_t currentOutputOffset = getCurrentOutputOffset();
+    copyInstruction(instruction, wordCount);
+    (*mSpirvBlob)[currentOutputOffset + kDecorationValueIndex] = newDecorationValue;
+
+    return true;
+}
+
+void SpirvTransformer::copyInstruction(const uint32_t *instruction, size_t wordCount)
+{
+    mSpirvBlob->insert(mSpirvBlob->end(), instruction, instruction + wordCount);
+}
+
+size_t SpirvTransformer::getCurrentOutputOffset() const
+{
+    return mSpirvBlob->size();
+}
 }  // anonymous namespace
 
 void GlslangInitialize()
@@ -1125,6 +1545,8 @@ void GlslangRelease()
 
 std::string GlslangGetMappedSamplerName(const std::string &originalName)
 {
+    bool needsUserDefinedPrefix = originalName.find('.') == std::string::npos;
+
     std::string samplerName = originalName;
 
     // Samplers in structs are extracted.
@@ -1150,13 +1572,19 @@ std::string GlslangGetMappedSamplerName(const std::string &originalName)
 
     samplerName.erase(out, samplerName.end());
 
+    if (needsUserDefinedPrefix)
+    {
+        samplerName = sh::kUserDefinedNamePrefix + samplerName;
+    }
+
     return samplerName;
 }
 
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
-                            gl::ShaderMap<std::string> *shaderSourcesOut)
+                            gl::ShaderMap<std::string> *shaderSourcesOut,
+                            ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     gl::ShaderMap<IntermediateShaderSource> intermediateSources;
 
@@ -1215,9 +1643,9 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         AssignVaryingLocations(programState, resources, &intermediateSources, &xfbBufferMap);
     }
 
-    AssignUniformBindings(options, &intermediateSources);
-    AssignTextureBindings(options, programState, &intermediateSources);
-    AssignNonTextureBindings(options, programState, &intermediateSources);
+    AssignUniformBindings(options, &intermediateSources, variableInfoMapOut);
+    AssignTextureBindings(options, programState, variableInfoMapOut);
+    AssignNonTextureBindings(options, programState, variableInfoMapOut);
 
     CleanupUnusedEntities(options.useOldRewriteStructSamplers, programState, resources,
                           &intermediateSources);
@@ -1231,8 +1659,30 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
+                                        const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                         gl::ShaderMap<SpirvBlob> *spirvBlobsOut)
 {
-    return GetShaderSpirvCode(callback, glCaps, shaderSources, spirvBlobsOut);
+    gl::ShaderMap<std::vector<uint32_t>> initialSpirvBlobs;
+    ANGLE_TRY(GetShaderSpirvCode(callback, glCaps, shaderSources, &initialSpirvBlobs));
+
+    // Transform the SPIR-V code by assigning location/set/binding values.
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        const std::vector<uint32_t> initialSpirvBlob = initialSpirvBlobs[shaderType];
+
+        if (initialSpirvBlob.empty())
+        {
+            continue;
+        }
+
+        SpirvBlob *spirvBlob = &(*spirvBlobsOut)[shaderType];
+
+        SpirvTransformer transformer(initialSpirvBlob, variableInfoMap, shaderType, spirvBlob);
+        ANGLE_GLSLANG_CHECK(callback, transformer.transform(), GlslangError::InvalidSpirv);
+
+        ASSERT(ValidateSpirv(*spirvBlob));
+    }
+
+    return angle::Result::Continue;
 }
 }  // namespace rx
