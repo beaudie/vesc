@@ -71,6 +71,7 @@ TextureCaps GenerateMinimumTextureCaps(GLenum sizedInternalFormat,
     caps.filterable        = internalFormatInfo.filterSupport(clientVersion, extensions);
     caps.textureAttachment = internalFormatInfo.textureAttachmentSupport(clientVersion, extensions);
     caps.renderbuffer      = internalFormatInfo.renderbufferSupport(clientVersion, extensions);
+    caps.blendable         = internalFormatInfo.blendSupport(clientVersion, extensions);
 
     caps.sampleCounts.insert(0);
     if (internalFormatInfo.isRequiredRenderbufferFormat(clientVersion))
@@ -565,7 +566,7 @@ static bool DetermineSRGBTextureSupport(const TextureCapsMap &textureCaps)
     };
 
     return GetFormatSupport(textureCaps, requiredFilterFormats, true, true, false, false, false) &&
-           GetFormatSupport(textureCaps, requiredRenderFormats, true, false, true, true, false);
+           GetFormatSupport(textureCaps, requiredRenderFormats, true, false, true, true, true);
 }
 
 // Check for GL_ANGLE_depth_texture
@@ -634,11 +635,33 @@ static bool DetermineColorBufferFloatRGBASupport(const TextureCapsMap &textureCa
 // Check for GL_EXT_color_buffer_float
 static bool DetermineColorBufferFloatSupport(const TextureCapsMap &textureCaps)
 {
-    constexpr GLenum requiredFormats[] = {
-        GL_R16F, GL_RG16F, GL_RGBA16F, GL_R32F, GL_RG32F, GL_RGBA32F, GL_R11F_G11F_B10F,
+    constexpr GLenum nonBlendableFormats[] = {
+        GL_R32F,
+        GL_RG32F,
+        GL_RGBA32F,
     };
 
-    return GetFormatSupport(textureCaps, requiredFormats, true, false, true, true, false);
+    constexpr GLenum blendableFormats[] = {
+        GL_R16F,
+        GL_RG16F,
+        GL_RGBA16F,
+        GL_R11F_G11F_B10F,
+    };
+
+    return GetFormatSupport(textureCaps, nonBlendableFormats, true, false, true, true, false) &&
+           GetFormatSupport(textureCaps, blendableFormats, true, false, true, true, true);
+}
+
+// Check for GL_EXT_float_blend
+static bool DetermineFloatBlendSupport(const TextureCapsMap &textureCaps)
+{
+    constexpr GLenum requiredFormats[] = {
+        GL_R32F,
+        GL_RG32F,
+        GL_RGBA32F,
+    };
+
+    return GetFormatSupport(textureCaps, requiredFormats, true, false, true, true, true);
 }
 
 // Check for GL_EXT_texture_norm16
@@ -747,6 +770,7 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     colorBufferFloatRGB              = DetermineColorBufferFloatRGBSupport(textureCaps);
     colorBufferFloatRGBA             = DetermineColorBufferFloatRGBASupport(textureCaps);
     colorBufferFloat                 = DetermineColorBufferFloatSupport(textureCaps);
+    floatBlend                       = DetermineFloatBlendSupport(textureCaps);
     textureNorm16                    = DetermineTextureNorm16Support(textureCaps);
     textureCompressionBPTC           = DetermineBPTCTextureSupport(textureCaps);
     compressedTexturePVRTC           = DeterminePVRTCTextureSupport(textureCaps);
