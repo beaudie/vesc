@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffd662ae_2f32d60a",
+        "filename": "src/common/vulkan_glsl_constants.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T17:35:39Z",
+      "side": 1,
+      "message": "one limitation of this design is that it uses one set of constants for every type of program. Internal shaders I could see wanting a different set.",
+      "range": {
+        "startLine": 6,
+        "startChar": 22,
+        "endLine": 6,
+        "endChar": 32
+      },
+      "revId": "777dea095729192460302e6d3156784c6aa8d045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2ffb877_66aa9c60",
+        "filename": "src/common/vulkan_glsl_constants.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T17:35:39Z",
+      "side": 1,
+      "message": "how about SpecializationConstantID",
+      "range": {
+        "startLine": 21,
+        "startChar": 11,
+        "endLine": 21,
+        "endChar": 23
+      },
+      "revId": "777dea095729192460302e6d3156784c6aa8d045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50203010_5e4197fc",
+        "filename": "src/common/vulkan_glsl_constants.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T17:35:39Z",
+      "side": 1,
+      "message": "how about SpecializationConstantSet",
+      "range": {
+        "startLine": 29,
+        "startChar": 6,
+        "endLine": 29,
+        "endChar": 22
+      },
+      "revId": "777dea095729192460302e6d3156784c6aa8d045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53ed4bba_9a4261d2",
+        "filename": "src/common/vulkan_glsl_constants.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T17:35:39Z",
+      "side": 1,
+      "message": "same, SpecializationConstantMap",
+      "range": {
+        "startLine": 33,
+        "startChar": 6,
+        "endLine": 33,
+        "endChar": 19
+      },
+      "revId": "777dea095729192460302e6d3156784c6aa8d045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df172161_d6d4520e",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T17:35:39Z",
+      "side": 1,
+      "message": "Needs an update.",
+      "range": {
+        "startLine": 544,
+        "startChar": 3,
+        "endLine": 544,
+        "endChar": 84
+      },
+      "revId": "777dea095729192460302e6d3156784c6aa8d045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40d5cbc3_76c7d891",
+        "filename": "src/libANGLE/BinaryStream.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T17:35:39Z",
+      "side": 1,
+      "message": "how about using readBytes if we change outArray to uint8_t *?",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 0
+      },
+      "revId": "777dea095729192460302e6d3156784c6aa8d045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b0c3e84_b35c537d",
+        "filename": "src/libANGLE/BinaryStream.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T17:35:39Z",
+      "side": 1,
+      "message": "same q",
+      "range": {
+        "startLine": 238,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 5
+      },
+      "revId": "777dea095729192460302e6d3156784c6aa8d045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f05f0da6_0286b943",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T17:35:39Z",
+      "side": 1,
+      "message": "nit: how about SpirvBlob?",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 18
+      },
+      "revId": "777dea095729192460302e6d3156784c6aa8d045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40a3c00e_4aa85259",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T17:35:39Z",
+      "side": 1,
+      "message": "looking here, we should not need a new method to read/write bytes.",
+      "range": {
+        "startLine": 444,
+        "startChar": 7,
+        "endLine": 444,
+        "endChar": 66
+      },
+      "revId": "777dea095729192460302e6d3156784c6aa8d045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
