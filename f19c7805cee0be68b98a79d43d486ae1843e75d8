@@ -172,6 +172,24 @@
     },
     {
       "key": {
+        "uuid": "5328df50_7cbb9cf1",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T19:37:37Z",
+      "side": 1,
+      "message": "FYI, we already don\u0027t do any line emulation work if it\u0027s not used. The program object and Vulkan pipeline are simply never initialized, i.e. they are just null pointers. I would still keep two objects, you wouldn\u0027t want to be rebuilding the same pipelines over and over if the program bounces between lines and triangles (admittedly probably a niche case). Think of it as a cache of pipelines: whatever specialization constant combination the program actually uses is built once and kept.",
+      "parentUuid": "ec810398_d4000484",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9c2b254_1e647569",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 3
