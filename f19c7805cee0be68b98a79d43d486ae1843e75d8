@@ -154,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "ec810398_d4000484",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-14T19:29:41Z",
+      "side": 1,
+      "message": "Ah, pipeline creation time vs draw time was the part that wasn\u0027t sinking in for me.\n\nAs part of the PPO stuff, I\u0027m moving the work in ProgramVk::linkImpl() to ProgramPipelineVk::createPipelineLayout(), since that\u0027s really what it\u0027s doing at that point during the draw call.   We also keep track of the drawing mode, so I\u0027m able to only have a single pipeline with my changes since the pipeline is recreated when the lines-\u003etriangles transition occurs (and vice-versa), meaning we never have to do the line emulation work for the draw calls that don\u0027t require it.   It does mean we are doing a bit more work when the transition occurs, but hopefully it\u0027s still an overall win.   \n\nThat\u0027s the goal anyway; I\u0027m still working through getting tests to pass, so there may still be an issue with this approach that gets teased out.   Admittedly, I took this approach since it\u0027s simpler to track and recompile/recreate a single program/pipeline than multiple of them.   If it\u0027s no good, I should be able to add things back in.",
+      "parentUuid": "b84b308d_93898c63",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9c2b254_1e647569",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 3
