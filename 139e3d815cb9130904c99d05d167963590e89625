@@ -22,6 +22,29 @@
       "revId": "139e3d815cb9130904c99d05d167963590e89625",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b319c886_c27bb0c0",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 1
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T14:16:05Z",
+      "side": 1,
+      "message": "nit: wrap to 100 chars",
+      "range": {
+        "startLine": 808,
+        "startChar": 16,
+        "endLine": 808,
+        "endChar": 32
+      },
+      "revId": "139e3d815cb9130904c99d05d167963590e89625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
