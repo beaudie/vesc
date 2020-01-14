@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7a9f0941_a449710d",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92b13361_336ae319",
+      "range": {
+        "startLine": 168,
+        "startChar": 21,
+        "endLine": 168,
+        "endChar": 37
+      },
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ace7181b_bbc74155",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "139012e0_befc53a2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "Yes, I had been considering the same. Also, good point about enum. Done.",
+      "parentUuid": "ace7181b_bbc74155",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "116f9ce6_b4d40825",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "This is not only used for asserts. We test if `valid()` to know if we should call initShaders() as part of `getGraphicsPipeline` (or `getComputePipeline`). Those get called every time the program binding changes, and that\u0027s not exactly infrequent.",
+      "parentUuid": "9950b3be_97412517",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "040527b7_22d7775f",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
         "patchSetId": 3
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "b84b308d_93898c63",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "Specialization constants are provided at pipeline creation time. If the program is used to draw both lines and triangles, you need two pipelines around.\n\n\"Being set at run-time\" is what you get with uniforms. Using a \"driver uniform\" to select the behavior at runtime is a possibility, but then you end up with a big chunk of uniform-controlled  dead code in every shader which can\u0027t be eliminated (dead code, because you generally don\u0027t draw lines as much as everything else). The downsides are memory waste and instruction cache inefficiencies. Besides, line raster emulation will be the guinea pig for placing the specialization constant infrastructure in place :)",
+      "parentUuid": "040527b7_22d7775f",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9c2b254_1e647569",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 3
@@ -90,6 +168,24 @@
       "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10709199_a5a14734",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9c2b254_1e647569",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "05d2b52b_92d7e8ce",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "I\u0027d argue that if we do need uint constants in the shader, it\u0027s better to provide them as uniforms (as we currently do). The issue is that we need to create a different Vulkan pipeline if we need a different set of values for specialization constants. If we have N constants, with bool spec consts we already get a potential 2^N pipelines. Even if a single one of them is a true uint (not a bool underneath), that already gives 2^32 variations.\n\nIn other words, uint spec conts won\u0027t be practical for ANGLE (1). Needless to say also that we should be using spec consts sparingly.\n\n(1) it looks like uint spec consts are really just made for setting the compute shader\u0027s group size, so it can match the hardware\u0027s subgroup size as queried in Vulkan. ANGLE gets the compute shaders from the application where the group size is already set, so this use-case doesn\u0027t apply to ANGLE.",
+      "parentUuid": "ceeb5e5f_c9f1925b",
+      "range": {
+        "startLine": 640,
+        "startChar": 0,
+        "endLine": 642,
+        "endChar": 81
+      },
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05ce1576_a44a3b3c",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 3
@@ -130,6 +250,24 @@
       "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34e0d766_7d111a9a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05ce1576_a44a3b3c",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -150,6 +288,24 @@
     },
     {
       "key": {
+        "uuid": "7c710c86_54435c7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5dc121dd_4fc4b2c6",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc61e621_5eacd023",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 3
@@ -164,6 +320,24 @@
       "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57d41947_5ac80583",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc61e621_5eacd023",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +364,30 @@
     },
     {
       "key": {
+        "uuid": "0dbdc3a6_f9dcefb9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "No it was an artifact of a previous iteration where I packed the spec constants in one of the structs above.\n\nRemoved.",
+      "parentUuid": "8742e10c_5efb00b5",
+      "range": {
+        "startLine": 819,
+        "startChar": 49,
+        "endLine": 819,
+        "endChar": 50
+      },
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5a5711c_eea1bb92",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
@@ -207,6 +405,24 @@
     },
     {
       "key": {
+        "uuid": "56b3ac45_1825acb6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3595,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5a5711c_eea1bb92",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20ea809b_a32dc70b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 3
@@ -221,6 +437,24 @@
       "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f9837cb_b5320b57",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-14T16:45:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20ea809b_a32dc70b",
+      "revId": "f19c7805cee0be68b98a79d43d486ae1843e75d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
