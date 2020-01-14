@@ -789,7 +789,8 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
 
     if (defaultUniformCount > 0)
     {
-        sink << "\n@@ LAYOUT-defaultUniforms(std140) @@ uniform defaultUniforms\n{\n";
+        sink << "\nlayout(set=0, binding=" << outputGLSL->nextUnusedBinding()
+             << ", std140) uniform defaultUniforms\n{\n";
 
         DeclareDefaultUniformsTraverser defaultTraverser(&sink, getHashFunction(), &getNameMap());
         root->traverse(&defaultTraverser);

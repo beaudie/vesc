@@ -1166,6 +1166,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         if (glShader)
         {
             intermediateSources[shaderType].init(glShader->getTranslatedSource());
+            fprintf(stderr, "%s\n", glShader->getTranslatedSource().c_str());
         }
     }
 
@@ -1225,6 +1226,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        fprintf(stderr, "%s\n", (*shaderSourcesOut)[shaderType].c_str());
     }
 }
 
