@@ -14,6 +14,7 @@
 #include "volk.h"
 
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLE/trace.h"
 
 namespace rx
 {
@@ -666,6 +667,7 @@ ANGLE_INLINE VkResult CommandBuffer::begin(const VkCommandBufferBeginInfo &info)
 
 ANGLE_INLINE VkResult CommandBuffer::end()
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandBuffer::end");
     ASSERT(valid());
     return vkEndCommandBuffer(mHandle);
 }
@@ -1284,6 +1286,7 @@ ANGLE_INLINE VkResult DeviceMemory::map(VkDevice device,
                                         VkMemoryMapFlags flags,
                                         uint8_t **mapPointer) const
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "DeviceMemory::map");
     ASSERT(valid());
     return vkMapMemory(device, mHandle, offset, size, flags, reinterpret_cast<void **>(mapPointer));
 }
