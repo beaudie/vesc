@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 223
+#define ANGLE_SH_VERSION 224
 
 enum ShShaderSpec
 {
@@ -744,6 +744,21 @@ enum class SpecializationConstantId : uint32_t
     InvalidEnum = 1,
     EnumCount   = 1,
 };
+
+// Interface block name containing the aggregate default uniforms
+constexpr const char *kDefaultUniformsNameVS  = "defaultUniformsVS";
+constexpr const char *kDefaultUniformsNameTCS = "defaultUniformsTCS";
+constexpr const char *kDefaultUniformsNameTES = "defaultUniformsTES";
+constexpr const char *kDefaultUniformsNameGS  = "defaultUniformsGS";
+constexpr const char *kDefaultUniformsNameFS  = "defaultUniformsFS";
+constexpr const char *kDefaultUniformsNameCS  = "defaultUniformsCS";
+
+// Interface block and variable name containing driver uniforms
+constexpr const char *kDriverUniformsBlockName = "ANGLEUniformBlock";
+constexpr const char *kDriverUniformsVarName   = "ANGLEUniforms";
+
+// Interface block array variable name used for atomic counter emulation
+constexpr const char *kAtomicCountersVarName = "atomicCounters";
 
 }  // namespace vk
 }  // namespace sh

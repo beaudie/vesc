@@ -12,6 +12,7 @@
 #include "compiler/translator/TranslatorVulkan.h"
 
 #include "angle_gl.h"
+#include "common/PackedEnums.h"
 #include "common/utilities.h"
 #include "compiler/translator/BuiltinsWorkaroundGLSL.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
@@ -158,8 +159,15 @@ class DeclareDefaultUniformsTraverser : public TIntermTraverser
 constexpr ImmutableString kFlippedPointCoordName    = ImmutableString("flippedPointCoord");
 constexpr ImmutableString kFlippedFragCoordName     = ImmutableString("flippedFragCoord");
 constexpr ImmutableString kEmulatedDepthRangeParams = ImmutableString("ANGLEDepthRangeParams");
-constexpr ImmutableString kUniformsBlockName        = ImmutableString("ANGLEUniformBlock");
-constexpr ImmutableString kUniformsVarName          = ImmutableString("ANGLEUniforms");
+constexpr ImmutableString kUniformsBlockName        = ImmutableString(vk::kDriverUniformsBlockName);
+constexpr ImmutableString kUniformsVarName          = ImmutableString(vk::kDriverUniformsVarName);
+
+constexpr angle::ShaderMap<const char *> kDefaultUniformNames = {
+    {gl::ShaderType::Vertex, vk::kDefaultUniformsNameVS},
+    {gl::ShaderType::Geometry, vk::kDefaultUniformsNameGS},
+    {gl::ShaderType::Fragment, vk::kDefaultUniformsNameFS},
+    {gl::ShaderType::Compute, vk::kDefaultUniformsNameCS},
+};
 
 // Specialization constant names
 constexpr ImmutableString kLineRasterEmulationSpecConstVarName =
@@ -789,7 +797,9 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
 
     if (defaultUniformCount > 0)
     {
-        sink << "\n@@ LAYOUT-defaultUniforms(std140) @@ uniform defaultUniforms\n{\n";
+        gl::ShaderType shaderType = FromGLenum<gl::ShaderType>(getShaderType());
+        sink << "\nlayout(set=0, binding=" << outputGLSL->nextUnusedBinding()
+             << ", std140) uniform " << kDefaultUniformNames[shaderType] << "\n{\n";
 
         DeclareDefaultUniformsTraverser defaultTraverser(&sink, getHashFunction(), &getNameMap());
         root->traverse(&defaultTraverser);
