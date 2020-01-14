@@ -397,6 +397,7 @@ angle::Result CommandQueue::init(vk::Context *context)
 
 angle::Result CommandQueue::checkCompletedCommands(vk::Context *context)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::checkCompletedCommands");
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
@@ -948,6 +949,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    DirtyBits dirtyBitMask,
                                    vk::CommandBuffer **commandBufferOut)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::setupDraw");
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
     {
@@ -1914,6 +1916,7 @@ void ContextVk::flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuT
 
 void ContextVk::clearAllGarbage()
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::clearAllGarbage");
     for (vk::GarbageObject &garbage : mCurrentGarbage)
     {
         garbage.destroy(mRenderer);
@@ -1938,6 +1941,7 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
                                     GLint first,
                                     GLsizei count)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::drawArrays");
     vk::CommandBuffer *commandBuffer = nullptr;
     uint32_t clampedVertexCount      = gl::GetClampedVertexCount<uint32_t>(count);
 
@@ -1964,6 +1968,7 @@ angle::Result ContextVk::drawArraysInstanced(const gl::Context *context,
                                              GLsizei count,
                                              GLsizei instances)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::drawArraysInstanced");
     vk::CommandBuffer *commandBuffer = nullptr;
 
     if (mode == gl::PrimitiveMode::LineLoop)
@@ -1990,6 +1995,7 @@ angle::Result ContextVk::drawArraysInstancedBaseInstance(const gl::Context *cont
                                                          GLsizei instances,
                                                          GLuint baseInstance)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::drawArraysInstancedBaseInstance");
     vk::CommandBuffer *commandBuffer = nullptr;
 
     if (mode == gl::PrimitiveMode::LineLoop)
@@ -2017,6 +2023,7 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
                                       gl::DrawElementsType type,
                                       const void *indices)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::drawElements");
     vk::CommandBuffer *commandBuffer = nullptr;
     if (mode == gl::PrimitiveMode::LineLoop)
     {
@@ -2041,6 +2048,7 @@ angle::Result ContextVk::drawElementsBaseVertex(const gl::Context *context,
                                                 const void *indices,
                                                 GLint baseVertex)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::drawElementsBaseVertex");
     vk::CommandBuffer *commandBuffer = nullptr;
     if (mode == gl::PrimitiveMode::LineLoop)
     {
@@ -2065,6 +2073,7 @@ angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
                                                const void *indices,
                                                GLsizei instances)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::drawElementsInstanced");
     vk::CommandBuffer *commandBuffer = nullptr;
 
     if (mode == gl::PrimitiveMode::LineLoop)
@@ -2091,6 +2100,7 @@ angle::Result ContextVk::drawElementsInstancedBaseVertex(const gl::Context *cont
                                                          GLsizei instances,
                                                          GLint baseVertex)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::drawElementsInstancedBaseVertex");
     vk::CommandBuffer *commandBuffer = nullptr;
 
     if (mode == gl::PrimitiveMode::LineLoop)
@@ -2118,6 +2128,7 @@ angle::Result ContextVk::drawElementsInstancedBaseVertexBaseInstance(const gl::C
                                                                      GLint baseVertex,
                                                                      GLuint baseInstance)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::drawElementsInstancedBaseVertexBaseInstance");
     vk::CommandBuffer *commandBuffer = nullptr;
 
     if (mode == gl::PrimitiveMode::LineLoop)
@@ -2168,6 +2179,7 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
                                             gl::PrimitiveMode mode,
                                             const void *indirect)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::drawArraysIndirect");
     gl::Buffer *indirectBuffer            = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     vk::BufferHelper *currentIndirectBuf  = &vk::GetImpl(indirectBuffer)->getBuffer();
     VkDeviceSize currentIndirectBufOffset = reinterpret_cast<VkDeviceSize>(indirect);
@@ -2221,6 +2233,7 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
                                               gl::DrawElementsType type,
                                               const void *indirect)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::drawElementsIndirect");
     VkDeviceSize currentIndirectBufOffset = reinterpret_cast<VkDeviceSize>(indirect);
     gl::Buffer *indirectBuffer            = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     ASSERT(indirectBuffer);
@@ -3312,6 +3325,7 @@ angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageF
     memoryBarrier.srcAccessMask   = srcAccess;
     memoryBarrier.dstAccessMask   = dstAccess;
 
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::memoryBarrierImpl::MEMORY_BARRIER");
     commandBuffer->memoryBarrier(stageMask, stageMask, &memoryBarrier);
 
     return angle::Result::Continue;
@@ -3778,6 +3792,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
         memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;
 
+        ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushImpl::MEM_WRITE_HOST_READ_MEMORY_BARRIER");
         mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(
             VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_HOST_BIT, &memoryBarrier);
         mIsAnyHostVisibleBufferWritten = false;
@@ -4308,6 +4323,8 @@ angle::Result ContextVk::syncExternalMemory()
     memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
     memoryBarrier.dstAccessMask   = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
 
+    ANGLE_TRACE_EVENT0("gpu.angle",
+                       "ContextVk::syncExternalMemory::MEM_WRITE_MEM_RW_MEMORY_BARRIER");
     commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, &memoryBarrier);
     return angle::Result::Continue;
