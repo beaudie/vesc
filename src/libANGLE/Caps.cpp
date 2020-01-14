@@ -652,6 +652,18 @@ static bool DetermineColorBufferFloatSupport(const TextureCapsMap &textureCaps)
            GetFormatSupport(textureCaps, blendableFormats, true, false, true, true, true);
 }
 
+// Check for GL_EXT_float_blend
+static bool DetermineFloatBlendSupport(const TextureCapsMap &textureCaps)
+{
+    constexpr GLenum requiredFormats[] = {
+        GL_R32F,
+        GL_RG32F,
+        GL_RGBA32F,
+    };
+
+    return GetFormatSupport(textureCaps, requiredFormats, true, false, true, true, true);
+}
+
 // Check for GL_EXT_texture_norm16
 static bool DetermineTextureNorm16Support(const TextureCapsMap &textureCaps)
 {
@@ -758,6 +770,7 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     colorBufferFloatRGB              = DetermineColorBufferFloatRGBSupport(textureCaps);
     colorBufferFloatRGBA             = DetermineColorBufferFloatRGBASupport(textureCaps);
     colorBufferFloat                 = DetermineColorBufferFloatSupport(textureCaps);
+    floatBlend                       = DetermineFloatBlendSupport(textureCaps);
     textureNorm16                    = DetermineTextureNorm16Support(textureCaps);
     textureCompressionBPTC           = DetermineBPTCTextureSupport(textureCaps);
     compressedTexturePVRTC           = DeterminePVRTCTextureSupport(textureCaps);
