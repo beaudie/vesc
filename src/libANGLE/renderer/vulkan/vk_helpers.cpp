@@ -720,7 +720,6 @@ angle::Result CommandBufferHelper::flushToPrimary(ContextVk *contextVk,
             bufferBarrier.buffer              = mTransformFeedbackCounterBuffers[0];
             bufferBarrier.offset              = 0;
             bufferBarrier.size                = VK_WHOLE_SIZE;
-
             primary->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT,
                                      VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, 0u, 0u, nullptr, 1u,
                                      &bufferBarrier, 0u, nullptr);
