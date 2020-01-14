@@ -720,7 +720,9 @@ angle::Result CommandBufferHelper::flushToPrimary(ContextVk *contextVk,
             bufferBarrier.buffer              = mTransformFeedbackCounterBuffers[0];
             bufferBarrier.offset              = 0;
             bufferBarrier.size                = VK_WHOLE_SIZE;
-
+            ANGLE_TRACE_EVENT0(
+                "gpu.angle",
+                "CommandBufferHelper::flushToPrimary::XFB_WRITE_XFB_READ_MEMORY_BARRIER");
             primary->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT,
                                      VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, 0u, 0u, nullptr, 1u,
                                      &bufferBarrier, 0u, nullptr);
@@ -2960,6 +2962,7 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
         mCurrentShaderReadStageMask  = 0;
         mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     }
+    ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::forceChangeLayoutAndQueue::IMAGE_BARRIER");
     commandBuffer->imageBarrier(srcStageMask, transitionTo.dstStageMask, imageMemoryBarrier);
 
     mCurrentLayout           = newLayout;
@@ -3191,6 +3194,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
         barrier.dstAccessMask                 = VK_ACCESS_TRANSFER_READ_BIT;
 
         // We can do it for all layers at once.
+        ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::generateMipmapsWithBlit::IMAGE_BARRIER");
         commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
                                     barrier);
         VkImageBlit blit                   = {};
@@ -3227,6 +3231,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
     barrier.newLayout                     = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 
     // We can do it for all layers at once.
+    ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::generateMipmapsWithBlit::IMAGE_BARRIER");
     commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
                                 barrier);
     // This is just changing the internal state of the image helper so that the next call

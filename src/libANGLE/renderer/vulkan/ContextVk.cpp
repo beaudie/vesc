@@ -347,6 +347,7 @@ angle::Result CommandQueue::init(vk::Context *context)
 
 angle::Result CommandQueue::checkCompletedCommands(vk::Context *context)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::checkCompletedCommands");
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
@@ -1863,6 +1864,7 @@ void ContextVk::flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuT
 
 void ContextVk::clearAllGarbage()
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::clearAllGarbage");
     for (vk::GarbageObject &garbage : mCurrentGarbage)
     {
         garbage.destroy(mRenderer);
@@ -3269,6 +3271,7 @@ angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageF
     memoryBarrier.srcAccessMask   = srcAccess;
     memoryBarrier.dstAccessMask   = dstAccess;
 
+    ANGLE_TRACE_EVENT_INSTANT0("gpu.angle", "ContextVk::memoryBarrierImpl::MEMORY_BARRIER");
     commandBuffer->memoryBarrier(stageMask, stageMask, &memoryBarrier);
 
     return angle::Result::Continue;
@@ -3724,6 +3727,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
         memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;
 
+        ANGLE_TRACE_EVENT_INSTANT0("gpu.angle",
+                                   "ContextVk::flushImpl::MEM_WRITE_HOST_READ_MEMORY_BARRIER");
         mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(
             VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_HOST_BIT, &memoryBarrier);
         mIsAnyHostVisibleBufferWritten = false;
@@ -4248,6 +4253,8 @@ angle::Result ContextVk::syncExternalMemory()
     memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
     memoryBarrier.dstAccessMask   = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
 
+    ANGLE_TRACE_EVENT_INSTANT0("gpu.angle",
+                               "ContextVk::syncExternalMemory::MEM_WRITE_MEM_RW_MEMORY_BARRIER");
     commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, &memoryBarrier);
     return angle::Result::Continue;

@@ -1636,6 +1636,9 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     memoryBarrier.srcAccessMask   = VK_ACCESS_SHADER_WRITE_BIT;
     memoryBarrier.dstAccessMask   = VK_ACCESS_TRANSFER_READ_BIT;
 
+    ANGLE_TRACE_EVENT_INSTANT0(
+        "gpu.angle",
+        "UtilsVk::stencilBlitResolveNoShaderExport::SHADER_WRITE_TRANSFER_READ_MEMORY_BARRIER");
     // Use the all pipe stage to keep the state management simple.
     commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
                                    VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 1, &memoryBarrier, 0, nullptr,

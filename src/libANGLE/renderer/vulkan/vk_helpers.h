@@ -617,6 +617,7 @@ class PipelineBarrier : angle::NonCopyable
             memoryBarrier.dstAccessMask = mMemoryBarrierDstAccess;
             memoryBarrierCount++;
         }
+        ANGLE_TRACE_EVENT0("gpu.angle", "PipelineBarrier::execute::MEMORY_BARRIER");
         primary->pipelineBarrier(
             mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier, 0, nullptr,
             static_cast<uint32_t>(mImageMemoryBarriers.size()), mImageMemoryBarriers.data());
