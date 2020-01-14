@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f7454b1_5b296af1",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T14:46:13Z",
+      "side": 1,
+      "message": "one detail:\n\n\"The maximum number of characters that may be written into name,\nincluding the null terminator, is specified by bufSize\"\n\nSo if the length of the string exceeds \"bufSize\" there will be no null terminator and CaptureString will read past the end.",
+      "range": {
+        "startLine": 298,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 38
+      },
+      "revId": "161a8a9f6dabccac5a748a63fd607022c68d5a42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1c313a4_4faaf25f",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-14T14:46:13Z",
+      "side": 1,
+      "message": "I think bufSize is an upper limit, not an exact count. So this might over-read.",
+      "range": {
+        "startLine": 313,
+        "startChar": 44,
+        "endLine": 313,
+        "endChar": 52
+      },
+      "revId": "161a8a9f6dabccac5a748a63fd607022c68d5a42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
