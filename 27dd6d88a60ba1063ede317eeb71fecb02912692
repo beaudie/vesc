@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "b1bc24c8_03dedc53",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-14T20:59:04Z",
+      "side": 1,
+      "message": "For the sake of keeping changes small, please create a separate commit for the other improvements.\n\n(I see that you\u0027ve already done this, which is great)",
+      "parentUuid": "dadc59d8_3007f3b7",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 90
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f684df9_a191fab5",
         "filename": "src/compiler/translator/Compiler.h",
         "patchSetId": 6
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "b752740e_a4c12c67",
+        "filename": "src/compiler/translator/Compiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-14T20:59:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afc0cc74_8eb1de4c",
+      "range": {
+        "startLine": 308,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 44
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f65b6b30_5367abd4",
         "filename": "src/compiler/translator/TranslatorGLSL.cpp",
         "patchSetId": 6
@@ -178,6 +226,30 @@
       "side": 1,
       "message": "The original code was written differently in these two source files. Just wanted to minimize changes, but I can match the two.",
       "parentUuid": "f65b6b30_5367abd4",
+      "range": {
+        "startLine": 290,
+        "startChar": 8,
+        "endLine": 292,
+        "endChar": 55
+      },
+      "revId": "27dd6d88a60ba1063ede317eeb71fecb02912692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07c41ffb_6a27c3fb",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-14T20:59:04Z",
+      "side": 1,
+      "message": "Thank you for doing the matching.  Feel free to mark this issue as resolved.",
+      "parentUuid": "a1c074ef_13f84725",
       "range": {
         "startLine": 290,
         "startChar": 8,
