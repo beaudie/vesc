@@ -22,7 +22,7 @@ namespace
 {
 constexpr ImmutableString kAtomicCounterTypeName  = ImmutableString("ANGLE_atomic_uint");
 constexpr ImmutableString kAtomicCounterBlockName = ImmutableString("ANGLEAtomicCounters");
-constexpr ImmutableString kAtomicCounterVarName   = ImmutableString("atomicCounters");
+constexpr ImmutableString kAtomicCounterVarName   = ImmutableString(vk::kAtomicCountersVarName);
 constexpr ImmutableString kAtomicCounterFieldName = ImmutableString("counters");
 
 // DeclareAtomicCountersBuffer adds a storage buffer array that's used with atomic counters.

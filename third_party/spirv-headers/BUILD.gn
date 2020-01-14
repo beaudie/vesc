@@ -1,0 +1,17 @@
+# Copyright 2019 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# Build integration for spirv-headers.
+
+config("spirv_headers_public_config") {
+  include_dirs = [ "src/include" ]
+}
+
+source_set("spirv_headers") {
+  sources = [
+    "src/include/spirv/1.0/spirv.hpp",
+  ]
+
+  public_configs = [ ":spirv_headers_public_config" ]
+}
