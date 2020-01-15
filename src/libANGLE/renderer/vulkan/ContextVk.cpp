@@ -642,7 +642,7 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     mCommandQueue.destroy(device);
 
-    mCommandGraph.releaseResourceUses();
+    releaseResourceUses();
 
     mUtils.destroy(device);
 
@@ -803,7 +803,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
 
         gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getScissoredRenderArea(this);
-        if (!mDrawFramebuffer->appendToStartedRenderPass(&mCommandGraph, scissoredRenderArea,
+        if (!mDrawFramebuffer->appendToStartedRenderPass(this, scissoredRenderArea,
                                                          &mRenderPassCommandBuffer))
         {
             ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, scissoredRenderArea,
@@ -1315,8 +1315,9 @@ angle::Result ContextVk::flushCommandGraph(vk::PrimaryCommandBuffer *commandBatc
     }
     mIsAnyHostVisibleBufferWritten = false;
 
-    return mCommandGraph.submitCommands(this, getCurrentQueueSerial(), &mRenderPassCache,
-                                        commandBatch);
+    Serial serial = getCurrentQueueSerial();
+    releaseResourceUsesAndUpdateSerials(serial);
+    return mCommandGraph.submitCommands(this, serial, &mRenderPassCache, commandBatch);
 }
 
 angle::Result ContextVk::synchronizeCpuGpuTime()
@@ -3127,13 +3128,13 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
         {
             samplerVk     = nullptr;
             samplerSerial = kZeroSerial;
-            textureVk->onSamplerGraphAccess(&mCommandGraph);
+            textureVk->onSamplerGraphAccess(this);
         }
         else
         {
             samplerVk     = vk::GetImpl(sampler);
             samplerSerial = samplerVk->getSerial();
-            samplerVk->onSamplerGraphAccess(&mCommandGraph);
+            samplerVk->onSamplerGraphAccess(this);
         }
 
         vk::ImageHelper &image = textureVk->getImage();
@@ -3159,7 +3160,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
             image.changeLayout(aspectFlags, textureLayout, srcLayoutChange);
         }
 
-        textureVk->onImageViewGraphAccess(&mCommandGraph);
+        textureVk->onImageViewGraphAccess(this);
         image.addReadDependency(this, recorder);
 
         mActiveTextures[textureUnit].texture = textureVk;

@@ -326,7 +326,7 @@ angle::Result CommandGraphResource::recordCommands(ContextVk *contextVk,
     }
 
     // Store reference to usage in graph.
-    contextVk->getCommandGraph()->onResourceUse(mUse);
+    contextVk->onResourceUse(mUse);
 
     return angle::Result::Continue;
 }
@@ -366,7 +366,7 @@ void CommandGraphResource::addWriteDependency(ContextVk *contextVk,
 void CommandGraphResource::addReadDependency(ContextVk *contextVk,
                                              CommandGraphResource *readingResource)
 {
-    onGraphAccess(contextVk->getCommandGraph());
+    onGraphAccess(contextVk);
 
     CommandGraphNode *readingNode = readingResource->mCurrentWritingNode;
     ASSERT(readingNode);
@@ -396,7 +396,7 @@ void CommandGraphResource::startNewCommands(ContextVk *contextVk)
 
 void CommandGraphResource::onWriteImpl(ContextVk *contextVk, CommandGraphNode *writingNode)
 {
-    onGraphAccess(contextVk->getCommandGraph());
+    onGraphAccess(contextVk);
 
     // Make sure any open reads and writes finish before we execute 'writingNode'.
     if (!mCurrentReadingNodes.empty())
@@ -1006,8 +1006,6 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
     {
         dumpGraphDotFile(std::cout);
     }
-
-    releaseResourceUsesAndUpdateSerials(serial);
 
     std::vector<CommandGraphNode *> nodeStack;
 
