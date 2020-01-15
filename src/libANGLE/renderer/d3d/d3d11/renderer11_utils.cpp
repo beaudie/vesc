@@ -1638,10 +1638,6 @@ void GenerateCaps(ID3D11Device *device,
     extensions->maxDualSourceDrawBuffers = 1;
     extensions->texture3DOES             = true;
     extensions->baseVertexBaseInstance   = true;
-    if (!strstr(description, "Adreno"))
-    {
-        extensions->multisampledRenderToTexture = true;
-    }
     extensions->webglVideoTexture = true;
 
     // D3D11 cannot support reading depth texture as a luminance texture.
