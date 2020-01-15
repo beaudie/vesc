@@ -210,6 +210,24 @@
     },
     {
       "key": {
+        "uuid": "d36419ad_4b9c9621",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T17:31:15Z",
+      "side": 1,
+      "message": "I see. If you want to integrate the setData target binding into the heuristic that\u0027s fine. Please go ahead with something sensible initially so we can land this!\n\nBTW Map confuses me. I think you want something like a switch statement?",
+      "parentUuid": "041d64ed_1264fb8f",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d2cad1e6_5ad37cc6",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -305,6 +323,30 @@
     },
     {
       "key": {
+        "uuid": "35c32788_c427ebbe",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T17:31:15Z",
+      "side": 1,
+      "message": "Yeah, we do need the Calculate call. The concern I was having is that you\u0027re only allocating the staging buffer once. If \"size \u003e mState.getSize()\" the main buffer and device memory themselves are destroyed. So I think we should reallocate the staging buffer then as well. See the below code (if size \u003e mState.getSize)",
+      "parentUuid": "dc711a9f_feb373c9",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77a08266_191e9734",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -369,6 +411,29 @@
         "startChar": 12,
         "endLine": 110,
         "endChar": 81
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f447404_f45b7261",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T17:31:15Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 118,
+        "startChar": 4,
+        "endLine": 118,
+        "endChar": 53
       },
       "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -513,6 +578,24 @@
       "side": 1,
       "message": "@Mohan, talked with Jamie, and yes onGraphAccess seems the right thing to do. We do the same with buffers staged for image data. See ImageHelper::flushStagedUpdates.\n\nIf you are having issues with the buffers being deleted if you use onGraphAccess, by all means add a test for it so we can take a look.",
       "parentUuid": "e56c5e0b_950b040c",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "543025db_23f2dee7",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T17:31:15Z",
+      "side": 1,
+      "message": "The code you linked might not be correct. Could maybe reproduce a subtle bug with that. We should address that separately from this CL.",
+      "parentUuid": "35af8f41_19f37ffd",
       "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
