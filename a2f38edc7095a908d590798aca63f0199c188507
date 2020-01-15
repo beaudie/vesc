@@ -45,6 +45,30 @@
       "revId": "a2f38edc7095a908d590798aca63f0199c188507",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70ad45cf_870cb658",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2020-01-15T19:38:52Z",
+      "side": 1,
+      "message": "Sorry the cls are separated weirdly. The code for that is in this cl:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2001478",
+      "parentUuid": "f1ace2d3_6e6da4b2",
+      "range": {
+        "startLine": 35,
+        "startChar": 20,
+        "endLine": 35,
+        "endChar": 30
+      },
+      "revId": "a2f38edc7095a908d590798aca63f0199c188507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
