@@ -297,9 +297,10 @@ CommandGraphResource::~CommandGraphResource()
     mUse.release();
 }
 
-bool CommandGraphResource::isResourceInUse(ContextVk *contextVk) const
+angle::Result CommandGraphResource::finishDriverUse(ContextVk *contextVk)
 {
-    return mUse.isCurrentlyInGraph() || contextVk->isSerialInUse(mUse.getSerial());
+    ASSERT(mUse.isInUseByDriver(contextVk->getLastCompletedQueueSerial()));
+    return contextVk->finishToSerial(mUse.getSerial());
 }
 
 angle::Result CommandGraphResource::recordCommands(ContextVk *contextVk,
@@ -914,7 +915,7 @@ SharedGarbage &SharedGarbage::operator=(SharedGarbage &&rhs)
 
 bool SharedGarbage::destroyIfComplete(VkDevice device, Serial completedSerial)
 {
-    if (mLifetime.isCurrentlyInGraph() || mLifetime.getSerial() > completedSerial)
+    if (mLifetime.isCurrentlyInUse(completedSerial))
         return false;
 
     mLifetime.release();
