@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72b05497_f9d97666",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T18:11:32Z",
+      "side": 1,
+      "message": "Instead of storing the handle for the VkQueue can you store the priority here? The current design for the Vulkan back-end only stores object handles in one place for unique ownership scenarios.\n\nSimilarly the methods that currently take VkQueue could take a priority.",
+      "range": {
+        "startLine": 297,
+        "startChar": 4,
+        "endLine": 297,
+        "endChar": 19
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
