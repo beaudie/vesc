@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8473c450_e4e56724",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T15:30:55Z",
+      "side": 1,
+      "message": "dint see too much of value add by making it a method so left it as static, dont have issues with your suggestion",
+      "parentUuid": "e8ba8bab_09c06bec",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 15
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce0cc425_31bb502b",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
