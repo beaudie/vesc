@@ -940,7 +940,6 @@ CommandGraph::CommandGraph(bool enableGraphDiagnostics, angle::PoolAllocator *po
 CommandGraph::~CommandGraph()
 {
     ASSERT(empty());
-    ASSERT(mResourceUses.empty());
 }
 
 CommandGraphNode *CommandGraph::allocateNode(CommandGraphNodeFunction function)
@@ -1342,7 +1341,15 @@ void CommandGraph::addDependenciesToNextBarrier(size_t begin,
     }
 }
 
-void CommandGraph::releaseResourceUses()
+// ResourceUser implementation.
+ResourceUser::ResourceUser() = default;
+
+ResourceUser::~ResourceUser()
+{
+    ASSERT(mResourceUses.empty());
+}
+
+void ResourceUser::releaseResourceUses()
 {
     for (SharedResourceUse &use : mResourceUses)
     {
@@ -1352,7 +1359,7 @@ void CommandGraph::releaseResourceUses()
     mResourceUses.clear();
 }
 
-void CommandGraph::releaseResourceUsesAndUpdateSerials(Serial serial)
+void ResourceUser::releaseResourceUsesAndUpdateSerials(Serial serial)
 {
     for (SharedResourceUse &use : mResourceUses)
     {

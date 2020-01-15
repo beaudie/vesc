@@ -179,14 +179,14 @@ class TextureVk : public TextureImpl
         return *mImage;
     }
 
-    void onImageViewGraphAccess(vk::CommandGraph *commandGraph)
+    void onImageViewGraphAccess(vk::ResourceUser *resourceUser)
     {
-        mImageViews.onGraphAccess(commandGraph);
+        mImageViews.onGraphAccess(resourceUser);
     }
 
-    void onSamplerGraphAccess(vk::CommandGraph *commandGraph)
+    void onSamplerGraphAccess(vk::ResourceUser *resourceUser)
     {
-        mSampler.onGraphAccess(commandGraph);
+        mSampler.onGraphAccess(resourceUser);
     }
 
     void releaseOwnershipOfImage(const gl::Context *context);
