@@ -455,6 +455,8 @@ void Context::initialize()
 
     bindVertexArray({0});
 
+    bindProgramPipeline({0});
+
     if (getClientVersion() >= Version(3, 0))
     {
         // [OpenGL ES 3.0.2] section 2.14.1 pg 85:
@@ -489,6 +491,7 @@ void Context::initialize()
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
+    mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
 
@@ -542,6 +545,7 @@ void Context::initialize()
     mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
+    mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
 
@@ -599,6 +603,15 @@ egl::Error Context::onDestroy(const egl::Display *display)
     }
     mTransformFeedbackMap.clear();
 
+    for (auto programPipeline : mProgramPipelineMap)
+    {
+        if (programPipeline.second)
+        {
+            programPipeline.second->onDestroy(this);
+        }
+    }
+    mProgramPipelineMap.clear();
+
     for (BindingPointer<Texture> &zeroTexture : mZeroTextures)
     {
         if (zeroTexture.get() != nullptr)
@@ -619,7 +632,6 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mSyncManager->release(this);
     mState.mPathManager->release(this);
     mState.mFramebufferManager->release(this);
-    mState.mProgramPipelineManager->release(this);
     mState.mMemoryObjectManager->release(this);
     mState.mSemaphoreManager->release(this);
 
@@ -752,11 +764,6 @@ void Context::genFencesNV(GLsizei n, FenceNVID *fences)
     }
 }
 
-ProgramPipelineID Context::createProgramPipeline()
-{
-    return mState.mProgramPipelineManager->createProgramPipeline();
-}
-
 GLuint Context::createShaderProgramv(ShaderType type, GLsizei count, const GLchar *const *strings)
 {
     UNIMPLEMENTED();
@@ -791,6 +798,11 @@ void Context::deleteShader(ShaderProgramID shader)
 
 void Context::deleteProgram(ShaderProgramID program)
 {
+    if (isProgramInDefaultProgramPipeline(program))
+    {
+        resetDefaultProgramPipeline();
+    }
+
     mState.mShaderProgramManager->deleteProgram(this, program);
 }
 
@@ -821,16 +833,6 @@ void Context::deleteSync(GLsync sync)
     // and since our API is currently designed for being called from a single thread, we can delete
     // the fence immediately.
     mState.mSyncManager->deleteObject(this, static_cast<GLuint>(reinterpret_cast<uintptr_t>(sync)));
-}
-
-void Context::deleteProgramPipeline(ProgramPipelineID pipeline)
-{
-    if (mState.mProgramPipelineManager->getProgramPipeline(pipeline))
-    {
-        detachProgramPipeline(pipeline);
-    }
-
-    mState.mProgramPipelineManager->deleteObject(this, pipeline);
 }
 
 void Context::deleteMemoryObject(MemoryObjectID memoryObject)
@@ -1012,7 +1014,7 @@ TransformFeedback *Context::getTransformFeedback(TransformFeedbackID handle) con
 
 ProgramPipeline *Context::getProgramPipeline(ProgramPipelineID handle) const
 {
-    return mState.mProgramPipelineManager->getProgramPipeline(handle);
+    return mProgramPipelineMap.query(handle);
 }
 
 gl::LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) const
@@ -1177,9 +1179,26 @@ void Context::bindImageTexture(GLuint unit,
     mImageObserverBindings[unit].bind(tex);
 }
 
+void Context::resetDefaultProgramPipeline()
+{
+    // Destroy and recreate the default program pipeline to free the resources
+    ProgramPipelineID defaultPipelineID = {0};
+    deleteProgramPipeline(defaultPipelineID);
+    bindProgramPipeline({0});
+}
+
 void Context::useProgram(ShaderProgramID program)
 {
     ANGLE_CONTEXT_TRY(mState.setProgram(this, getProgramResolveLink(program)));
+
+    resetDefaultProgramPipeline();
+
+    if (program.value != 0)
+    {
+        // Assign the new program to the default program pipeline
+        useProgramStages({0}, GL_ALL_SHADER_BITS, program);
+    }
+
     mStateCache.onProgramExecutableChange(this);
 }
 
@@ -1187,7 +1206,9 @@ void Context::useProgramStages(ProgramPipelineID pipeline,
                                GLbitfield stages,
                                ShaderProgramID program)
 {
-    UNIMPLEMENTED();
+    Program *shaderProgram           = getProgramNoResolveLink(program);
+    ProgramPipeline *programPipeline = getProgramPipeline(pipeline);
+    ANGLE_CONTEXT_TRY(mState.useProgramStages(this, programPipeline, stages, shaderProgram));
 }
 
 void Context::bindTransformFeedback(GLenum target, TransformFeedbackID transformFeedbackHandle)
@@ -1200,9 +1221,9 @@ void Context::bindTransformFeedback(GLenum target, TransformFeedbackID transform
 
 void Context::bindProgramPipeline(ProgramPipelineID pipelineHandle)
 {
-    ProgramPipeline *pipeline = mState.mProgramPipelineManager->checkProgramPipelineAllocation(
-        mImplementation.get(), pipelineHandle);
-    mState.setProgramPipelineBinding(this, pipeline);
+    ProgramPipeline *pipeline = checkProgramPipelineAllocation(pipelineHandle);
+    ANGLE_CONTEXT_TRY(mState.setProgramPipelineBinding(this, pipeline));
+    mStateCache.onProgramPipelineChange(this);
 }
 
 void Context::beginQuery(QueryType target, QueryID query)
@@ -2860,6 +2881,19 @@ TransformFeedback *Context::checkTransformFeedbackAllocation(
     }
 
     return transformFeedback;
+}
+
+ProgramPipeline *Context::checkProgramPipelineAllocation(ProgramPipelineID programPipelineHandle)
+{
+    // Only called after a prior call to Gen.
+    ProgramPipeline *programPipeline = getProgramPipeline(programPipelineHandle);
+    if (!programPipeline)
+    {
+        programPipeline = new ProgramPipeline(mImplementation.get(), programPipelineHandle);
+        mProgramPipelineMap.assign(programPipelineHandle, programPipeline);
+    }
+
+    return programPipeline;
 }
 
 bool Context::isVertexArrayGenerated(VertexArrayID vertexArray)
@@ -5490,7 +5524,7 @@ void Context::attachShader(ShaderProgramID program, ShaderProgramID shader)
     Program *programObject = mState.mShaderProgramManager->getProgram(program);
     Shader *shaderObject   = mState.mShaderProgramManager->getShader(shader);
     ASSERT(programObject && shaderObject);
-    programObject->attachShader(shaderObject);
+    programObject->attachShader(this, shaderObject);
 }
 
 void Context::copyBufferSubData(BufferBinding readTarget,
@@ -7764,19 +7798,42 @@ bool Context::isCurrentTransformFeedback(const TransformFeedback *tf) const
 
 void Context::genProgramPipelines(GLsizei count, ProgramPipelineID *pipelines)
 {
-    for (int i = 0; i < count; i++)
+    for (int arrayIndex = 0; arrayIndex < count; arrayIndex++)
     {
-        pipelines[i] = createProgramPipeline();
+        ProgramPipelineID pipeline = {mProgramPipelineHandleAllocator.allocate()};
+        checkProgramPipelineAllocation(pipeline);
+        pipelines[arrayIndex] = pipeline;
+    }
+}
+
+void Context::deleteProgramPipeline(const ProgramPipelineID programPipelineID)
+{
+    ProgramPipeline *programPipeline = nullptr;
+    if (mProgramPipelineMap.erase(programPipelineID, &programPipeline))
+    {
+        if (programPipeline != nullptr)
+        {
+            detachProgramPipeline(programPipelineID);
+            programPipeline->onDestroy(this);
+        }
+
+        // Don't release the default pipeline handle
+        if (programPipelineID.value != 0)
+        {
+            mProgramPipelineHandleAllocator.release(programPipelineID.value);
+        }
     }
 }
 
 void Context::deleteProgramPipelines(GLsizei count, const ProgramPipelineID *pipelines)
 {
-    for (int i = 0; i < count; i++)
+    for (int arrayIndex = 0; arrayIndex < count; arrayIndex++)
     {
-        if (pipelines[i].value != 0)
+        ProgramPipelineID programPipelineID = pipelines[arrayIndex];
+
+        if (programPipelineID.value != 0)
         {
-            deleteProgramPipeline(pipelines[i]);
+            deleteProgramPipeline(programPipelineID);
         }
     }
 }
@@ -8268,7 +8325,7 @@ bool Context::isFramebufferGenerated(FramebufferID framebuffer) const
 
 bool Context::isProgramPipelineGenerated(ProgramPipelineID pipeline) const
 {
-    return mState.mProgramPipelineManager->isHandleGenerated(pipeline);
+    return (getProgramPipeline(pipeline) != nullptr);
 }
 
 bool Context::usingDisplayTextureShareGroup() const
@@ -8482,6 +8539,17 @@ void Context::onPostSwap() const
 {
     // Dump frame capture if enabled.
     mFrameCapture->onEndFrame(this);
+}
+
+bool Context::isProgramInDefaultProgramPipeline(ShaderProgramID program) const
+{
+    ProgramPipeline *programPipeline = mProgramPipelineMap.query({0});
+    if (programPipeline->usesShaderProgram(program))
+    {
+        return true;
+    }
+
+    return false;
 }
 
 void Context::getTexImage(TextureTarget target,
@@ -8699,6 +8767,8 @@ void StateCache::onProgramExecutableChange(Context *context)
     updateValidDrawModes(context);
     updateActiveShaderStorageBufferIndices(context);
 }
+
+void StateCache::onProgramPipelineChange(Context *context) {}
 
 void StateCache::onVertexArrayFormatChange(Context *context)
 {

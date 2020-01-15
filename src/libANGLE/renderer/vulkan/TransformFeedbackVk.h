@@ -67,7 +67,6 @@ class TransformFeedbackVk : public TransformFeedbackImpl
                              const gl::ProgramState &programState,
                              VkDescriptorSet descSet) const;
     void getBufferOffsets(ContextVk *contextVk,
-                          const gl::ProgramState &programState,
                           GLint drawCallFirstVertex,
                           int32_t *offsetsOut,
                           size_t offsetsSize) const;
