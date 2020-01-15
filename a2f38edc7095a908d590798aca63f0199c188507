@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1cf0d02e_ee6f2428",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T19:36:43Z",
+      "side": 1,
+      "message": "nit: framebuffer attachment",
+      "range": {
+        "startLine": 44,
+        "startChar": 53,
+        "endLine": 44,
+        "endChar": 72
+      },
+      "revId": "a2f38edc7095a908d590798aca63f0199c188507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1ace2d3_6e6da4b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T19:36:43Z",
+      "side": 1,
+      "message": "do you want to set this on the other back-ends somehow? maybe default it to renderable?",
+      "range": {
+        "startLine": 35,
+        "startChar": 20,
+        "endLine": 35,
+        "endChar": 30
+      },
+      "revId": "a2f38edc7095a908d590798aca63f0199c188507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
