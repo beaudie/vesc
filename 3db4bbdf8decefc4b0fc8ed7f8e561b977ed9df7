@@ -183,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "054feb31_de8af71e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-15T15:28:51Z",
+      "side": 1,
+      "message": "There\u0027s an issue Jamie where BufferHelper::copyFromBuffer doesn\u0027t set a dependency to the temp buffer (which is fine, we don\u0027t want to waste a graph node for it. We do the same with temp buffers staged for images), so DynamicBuffer::allocate may decide to pick this buffer out of mBufferFreeList since the serial is never set.",
+      "parentUuid": "d459137d_49f93ffa",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f65032f_fbe5c8cf",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 1
