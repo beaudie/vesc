@@ -93,6 +93,30 @@
       "revId": "a2f38edc7095a908d590798aca63f0199c188507",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d768a068_ca50fb0a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T21:24:59Z",
+      "side": 1,
+      "message": "Gotcha. Can you move this code chunk into http://crrev.com/c/2001478 ? That would complete the separation of concerns.",
+      "parentUuid": "70ad45cf_870cb658",
+      "range": {
+        "startLine": 35,
+        "startChar": 20,
+        "endLine": 35,
+        "endChar": 30
+      },
+      "revId": "a2f38edc7095a908d590798aca63f0199c188507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
