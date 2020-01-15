@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b646f66_adffa83d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-15T23:07:09Z",
+      "side": 1,
+      "message": "nit: I would still only specify VK_BUFFER_USAGE_TRANSFER_SRC_BIT, and defer adding these to if and when we directly work with the staging buffer. I think by that time we won\u0027t be calling it a \"staging\" buffer anymore.",
+      "range": {
+        "startLine": 124,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 77
+      },
+      "revId": "b380c52501f9e31949a37a1c2fa2424315712a12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
