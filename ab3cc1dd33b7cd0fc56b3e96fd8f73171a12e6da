@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b243a688_e5adf183",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-15T22:42:50Z",
+      "side": 1,
+      "message": "We\u0027re (slowly) moving towards suffixing each extension with the vendor name.  Could these be readDepthNV, etc?",
+      "range": {
+        "startLine": 131,
+        "startChar": 3,
+        "endLine": 141,
+        "endChar": 35
+      },
+      "revId": "ab3cc1dd33b7cd0fc56b3e96fd8f73171a12e6da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
