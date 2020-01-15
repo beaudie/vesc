@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "866e5f9a_e178c5ef",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T15:48:28Z",
+      "side": 1,
+      "message": "+1. Style consistency makes it easier to understand where the code is laid out.",
+      "parentUuid": "617faecf_d222e443",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 15
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce0cc425_31bb502b",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -144,6 +168,24 @@
       "side": 1,
       "message": "im thinking of something along the lines of a tuple like this - {buffer_type, closest_power_of_2(size), preferred_staging_buffer_size}",
       "parentUuid": "674ddca7_03fbc919",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e3ed0e8_bcc46f21",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T15:48:28Z",
+      "side": 1,
+      "message": "How would you use a tuple to pick a single size value? I\u0027d be fine with an initial size of like roundUpPow2 (see mathutil.h) * 2 or 4.",
+      "parentUuid": "3d943ddf_092837c5",
       "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -244,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "e51252c9_4670e12b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T15:48:28Z",
+      "side": 1,
+      "message": "FWIW the extra usage flags on buffers aren\u0027t as big a deal as they are on Images.",
+      "parentUuid": "ba4f1bb9_7592368c",
+      "range": {
+        "startLine": 109,
+        "startChar": 12,
+        "endLine": 110,
+        "endChar": 81
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42cf785f_e5dbd78a",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -327,6 +393,24 @@
       "side": 1,
       "message": "\u003e\u003e\u003e Here you\u0027re trying to record a previously submitted serial\ncurrent Q serial is yet to be submitted right? you are talking of the last submitted serial?\n\n\u003e\u003e\u003e That will mess up resource lifetime management\n\"contextVk-\u003egetCurrentQueueSerial()\" is the serial that gets \"recorded\" in \"releaseResourceUsesAndUpdateSerials()\" right?\n\n\u003e\u003e\u003e mStagingBuffer.getCurrentBuffer()-\u003eonGraphAccess(graph)\nunfortunately that will trigger a \"deletion\" of the staging buffer when \"releaseResourceUsesAndUpdateSerials\" gets called since mUse-\u003ecounter is not \u003e 1 since it never gets submitted to the command buffer",
       "parentUuid": "d459137d_49f93ffa",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e56c5e0b_950b040c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T15:48:28Z",
+      "side": 1,
+      "message": "\u003e current Q serial is yet to be submitted right? you are talking of the last submitted serial?\n\nOK, technically \"current\" is the \"next to be submitted\" serial. However it is not correct to use \"current\" here in multi-context scenarios. i.e.:\n\n- you record the \"current\"/\"next to be submitted\" serial here (1)\n- another context submits, and gets serial 1 as its submission\n- you submit this buffer work as serial 2 - buffer has lifetime associated with serial 1\n- serial 1 completes\n- other code causes buffer to be deleted while not yet completed\n- serial 2 completes\n\n\u003e \"contextVk-\u003egetCurrentQueueSerial()\" is the serial that gets \"recorded\" in \"releaseResourceUsesAndUpdateSerials()\" right?\n\nNot always. In single context scenarios yes. In multi-context, not necessarily.\n\n\u003e unfortunately that will trigger a \"deletion\" of the staging buffer when \"releaseResourceUsesAndUpdateSerials\" gets called since mUse-\u003ecounter is not \u003e 1 since it never gets submitted to the command buffer\n\nIs this speculative or from testing? CommandGraphResource::CommandGraphResource should increment mUse to 1. I would expect it to work fine.\n\n\u003e There\u0027s an issue Jamie where BufferHelper::copyFromBuffer doesn\u0027t set a dependency to the temp buffer (which is fine, we don\u0027t want to waste a graph node for it. We do the same with temp buffers staged for images), so DynamicBuffer::allocate may decide to pick this buffer out of mBufferFreeList since the serial is never set.\n\nI don\u0027t quite follow this?",
+      "parentUuid": "f821808e_d50cd2f6",
       "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
