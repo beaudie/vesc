@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce0cc425_31bb502b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T00:39:28Z",
+      "side": 1,
+      "message": "this will be guided by manhattan buffer usage profile we are gathering",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42cf785f_e5dbd78a",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T00:39:28Z",
+      "side": 1,
+      "message": "i had this in my suballocated buffer patch but ideally we want to tag a particular \"mNextAllocationOffset\" with a serial so we wait only for the serial of the offset instead of the serial of the whole buffer.",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
