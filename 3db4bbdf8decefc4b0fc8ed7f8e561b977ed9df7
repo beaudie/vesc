@@ -192,6 +192,24 @@
     },
     {
       "key": {
+        "uuid": "041d64ed_1264fb8f",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T16:41:38Z",
+      "side": 1,
+      "message": "conceptually im thinking of -\n\nMap\u003cBufferType, Map\u003cPowOfTwo_BufferSizes, DesiredStagingBufferSizes\u003e\u003e\n\nfrom preliminary data analysis, we really need to treat staging buffer differently based on the buffer type, if it is an unpack buffer it will hold texture data, the ratio of staging buffer size to buffer size needs to be many orders or magnitude more than what it would be if it were a vertex buffer or ubo",
+      "parentUuid": "0e3ed0e8_bcc46f21",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d2cad1e6_5ad37cc6",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -227,6 +245,30 @@
       "side": 1,
       "message": "I would probably make it inside an if \"(size \u003e 0 \u0026\u0026 size !\u003d mState.getSize())\" check. I\u0027m fine with leaving it if the size hasn\u0027t changed. Otherwise we should probably recreate it since we\u0027ll likely need to store a varying amount of data.",
       "parentUuid": "d2cad1e6_5ad37cc6",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a893ce84_548cc1b7",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T16:41:38Z",
+      "side": 1,
+      "message": "(mState.getSize() \u003d\u003d 0) is true only at the first glBufferData call when the buffer is being specified for the first time.\n\ni dont get the concern here, we initialize the staging buffer at the first glBufferData call and then \"allocate\" from it in all subsequent calls irrespective of the size (since we will allocate a new VkBuffer if the size needs to be different that our initial staging buffer number)",
+      "parentUuid": "a7df4940_ba8afbf2",
       "range": {
         "startLine": 104,
         "startChar": 8,
@@ -411,6 +453,24 @@
       "side": 1,
       "message": "\u003e current Q serial is yet to be submitted right? you are talking of the last submitted serial?\n\nOK, technically \"current\" is the \"next to be submitted\" serial. However it is not correct to use \"current\" here in multi-context scenarios. i.e.:\n\n- you record the \"current\"/\"next to be submitted\" serial here (1)\n- another context submits, and gets serial 1 as its submission\n- you submit this buffer work as serial 2 - buffer has lifetime associated with serial 1\n- serial 1 completes\n- other code causes buffer to be deleted while not yet completed\n- serial 2 completes\n\n\u003e \"contextVk-\u003egetCurrentQueueSerial()\" is the serial that gets \"recorded\" in \"releaseResourceUsesAndUpdateSerials()\" right?\n\nNot always. In single context scenarios yes. In multi-context, not necessarily.\n\n\u003e unfortunately that will trigger a \"deletion\" of the staging buffer when \"releaseResourceUsesAndUpdateSerials\" gets called since mUse-\u003ecounter is not \u003e 1 since it never gets submitted to the command buffer\n\nIs this speculative or from testing? CommandGraphResource::CommandGraphResource should increment mUse to 1. I would expect it to work fine.\n\n\u003e There\u0027s an issue Jamie where BufferHelper::copyFromBuffer doesn\u0027t set a dependency to the temp buffer (which is fine, we don\u0027t want to waste a graph node for it. We do the same with temp buffers staged for images), so DynamicBuffer::allocate may decide to pick this buffer out of mBufferFreeList since the serial is never set.\n\nI don\u0027t quite follow this?",
       "parentUuid": "f821808e_d50cd2f6",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35af8f41_19f37ffd",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T16:41:38Z",
+      "side": 1,
+      "message": "then, im trying to understand how this code in \"UtilsVk::allocateDescriptorSet\" is valid -\u003e\n\n\"bindingOut-\u003eget().updateSerial(contextVk-\u003egetCurrentQueueSerial());\"",
+      "parentUuid": "e56c5e0b_950b040c",
       "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
