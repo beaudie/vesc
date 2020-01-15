@@ -394,11 +394,10 @@ class ResourceUser
     ResourceUser();
     virtual ~ResourceUser();
 
-    void releaseResourceUses();
-
     void onResourceUse(const SharedResourceUse &resourceUse);
 
   protected:
+    void releaseResourceUses();
     void releaseResourceUsesAndUpdateSerials(Serial serial);
 
   private:
@@ -550,7 +549,7 @@ class CommandGraphResource : angle::NonCopyable
 // The Command Graph consists of an array of open Command Graph Nodes. It supports allocating new
 // nodes for the graph, which are linked via dependency relation calls in CommandGraphNode, and
 // also submitting the whole command graph via submitCommands.
-class CommandGraph final : angle::NonCopyable, public ResourceUser
+class CommandGraph final : angle::NonCopyable
 {
   public:
     explicit CommandGraph(bool enableGraphDiagnostics, angle::PoolAllocator *poolAllocator);

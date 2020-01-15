@@ -1176,7 +1176,7 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
         // Release the origin image and recreate it with new mipmap counts.
         releaseImage(contextVk);
 
-        mImage->onResourceRecreated(contextVk->getCommandGraph());
+        mImage->onResourceRecreated(contextVk);
 
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
     }
@@ -1345,7 +1345,7 @@ angle::Result TextureVk::changeLevels(ContextVk *contextVk,
     // recreated with the correct number of mip levels, base level, and max level.
     releaseImage(contextVk);
 
-    mImage->onResourceRecreated(contextVk->getCommandGraph());
+    mImage->onResourceRecreated(contextVk);
 
     return angle::Result::Continue;
 }
@@ -1597,7 +1597,7 @@ const vk::ImageView &TextureVk::getReadImageViewAndRecordUse(ContextVk *contextV
 {
     ASSERT(mImage->valid());
 
-    mImageViews.onGraphAccess(contextVk->getCommandGraph());
+    mImageViews.onGraphAccess(contextVk);
 
     if (mState.isStencilMode() && mImageViews.hasStencilReadImageView())
     {
@@ -1611,7 +1611,7 @@ const vk::ImageView &TextureVk::getFetchImageViewAndRecordUse(ContextVk *context
 {
     ASSERT(mImage->valid());
 
-    mImageViews.onGraphAccess(contextVk->getCommandGraph());
+    mImageViews.onGraphAccess(contextVk);
 
     // We don't currently support fetch for depth/stencil cube map textures.
     ASSERT(!mImageViews.hasStencilReadImageView() || !mImageViews.hasFetchImageView());

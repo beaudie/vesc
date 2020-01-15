@@ -1206,8 +1206,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     const gl::Rectangle &scissoredRenderArea = params.clearArea;
 
     vk::CommandBuffer *commandBuffer;
-    if (!framebuffer->appendToStartedRenderPass(contextVk->getCommandGraph(), scissoredRenderArea,
-                                                &commandBuffer))
+    if (!framebuffer->appendToStartedRenderPass(contextVk, scissoredRenderArea, &commandBuffer))
     {
         ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, scissoredRenderArea, &commandBuffer));
     }
@@ -1435,8 +1434,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     }
 
     vk::CommandBuffer *commandBuffer;
-    if (!framebuffer->appendToStartedRenderPass(contextVk->getCommandGraph(), params.blitArea,
-                                                &commandBuffer))
+    if (!framebuffer->appendToStartedRenderPass(contextVk, params.blitArea, &commandBuffer))
     {
         ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer));
     }
@@ -1546,7 +1544,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
 
     ANGLE_TRY(
         blitBuffer.get().init(contextVk, blitBufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
-    blitBuffer.get().onGraphAccess(contextVk->getCommandGraph());
+    blitBuffer.get().onGraphAccess(contextVk);
 
     BlitResolveStencilNoExportShaderParams shaderParams;
     if (isResolve)

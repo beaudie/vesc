@@ -94,7 +94,10 @@ class CommandQueue final : angle::NonCopyable
     vk::PersistentCommandPool mPrimaryCommandPool;
 };
 
-class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassOwner
+class ContextVk : public ContextImpl,
+                  public vk::Context,
+                  public vk::RenderPassOwner,
+                  public vk::ResourceUser
 {
   public:
     ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer);
