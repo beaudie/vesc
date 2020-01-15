@@ -1207,6 +1207,11 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         {
             intermediateSources[shaderType].init(glShader->getTranslatedSource());
         }
+        // It's possible for the shader not to be attached anymore once the draw occurs.
+        else if (programState.hasLinkedShaderStage(shaderType))
+        {
+            intermediateSources[shaderType].init(programState.getTranslatedSource(shaderType));
+        }
     }
 
     IntermediateShaderSource *vertexSource   = &intermediateSources[gl::ShaderType::Vertex];
@@ -1264,7 +1269,13 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        // To support program pipeline objects, only return shader source for shaders that were
+        // passed in by this gl::ProgramState to avoid overwriting previously link()'ed shaders.
+        gl::Shader *glShader = programState.getAttachedShader(shaderType);
+        if (glShader || programState.hasLinkedShaderStage(shaderType))
+        {
+            (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        }
     }
 }
 

@@ -424,11 +424,22 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     vk::ResourceUseList &getResourceUseList() { return mResourceUseList; }
 
+    ANGLE_INLINE bool useLineRaster(const gl::PrimitiveMode mode)
+    {
+        return getFeatures().basicGLLineRasterization.enabled && gl::IsLineMode(mode);
+    }
+
+    void invalidateCurrentShaderResources(ProgramVk *programVk);
+
+    ProgramPipelineVk *getProgramPipeline() const { return mProgramPipeline; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
     {
         DIRTY_BIT_DEFAULT_ATTRIBS,
+        // DIRTY_BIT_PIPELINE must be handled first so we have a pipeline to use when handling
+        // the remaining dirty bits
         DIRTY_BIT_PIPELINE,
         DIRTY_BIT_TEXTURES,
         DIRTY_BIT_VERTEX_BUFFERS,
@@ -472,8 +483,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     };
 
     // The GpuEventQuery struct holds together a timestamp query and enough data to create a
-    // trace event based on that. Use traceGpuEvent to insert such queries.  They will be readback
-    // when the results are available, without inserting a GPU bubble.
+    // trace event based on that. Use traceGpuEvent to insert such queries.  They will be
+    // readback when the results are available, without inserting a GPU bubble.
     //
     // - eventName will be the reported name of the event
     // - phase is either 'B' (duration begin), 'E' (duration end) or 'i' (instant // event).
@@ -492,9 +503,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         Serial serial;
     };
 
-    // Once a query result is available, the timestamp is read and a GpuEvent object is kept until
-    // the next clock sync, at which point the clock drift is compensated in the results before
-    // handing them off to the application.
+    // Once a query result is available, the timestamp is read and a GpuEvent object is kept
+    // until the next clock sync, at which point the clock drift is compensated in the results
+    // before handing them off to the application.
     struct GpuEvent final
     {
         uint64_t gpuTimestampCycles;
@@ -674,6 +685,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     void clearAllGarbage();
     angle::Result ensureSubmitFenceInitialized();
 
+    void dirtyProgramExecutableHelper(const gl::Context *context);
+
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
@@ -683,8 +696,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     WindowSurfaceVk *mCurrentWindowSurface;
 
-    // Keep a cached pipeline description structure that can be used to query the pipeline cache.
-    // Kept in a pointer so allocations can be aligned, and structs can be portably packed.
+    // Keep a cached pipeline description structure that can be used to query the pipeline
+    // cache. Kept in a pointer so allocations can be aligned, and structs can be portably
+    // packed.
     std::unique_ptr<vk::GraphicsPipelineDesc> mGraphicsPipelineDesc;
     vk::GraphicsPipelineTransitionBits mGraphicsPipelineTransition;
 
@@ -706,7 +720,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     // Cached back-end objects.
     VertexArrayVk *mVertexArray;
     FramebufferVk *mDrawFramebuffer;
-    ProgramVk *mProgram;
+    ProgramPipelineVk *mProgramPipeline;
 
     // Graph resource used to record dispatch commands and hold resource dependencies.
     vk::DispatchHelper mDispatcher;
@@ -717,8 +731,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     // Cache the current draw call's firstVertex to be passed to
     // TransformFeedbackVk::getBufferOffsets.  Unfortunately, gl_BaseVertex support in Vulkan is
-    // not yet ubiquitous, which would have otherwise removed the need for this value to be passed
-    // as a uniform.
+    // not yet ubiquitous, which would have otherwise removed the need for this value to be
+    // passed as a uniform.
     GLint mXfbBaseVertex;
     // Cache the current draw call's vertex count as well to support instanced draw calls
     GLuint mXfbVertexCountPerInstance;
@@ -730,14 +744,14 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     IncompleteTextureSet mIncompleteTextures;
 
-    // If the current surface bound to this context wants to have all rendering flipped vertically.
-    // Updated on calls to onMakeCurrent.
+    // If the current surface bound to this context wants to have all rendering flipped
+    // vertically. Updated on calls to onMakeCurrent.
     bool mFlipYForCurrentSurface;
     bool mFlipViewportForDrawFramebuffer;
     bool mFlipViewportForReadFramebuffer;
 
-    // If any host-visible buffer is written by the GPU since last submission, a barrier is inserted
-    // at the end of the command buffer to make that write available to the host.
+    // If any host-visible buffer is written by the GPU since last submission, a barrier is
+    // inserted at the end of the command buffer to make that write available to the host.
     bool mIsAnyHostVisibleBufferWritten;
 
     // Whether this context should do seamful cube map sampling emulation.
@@ -769,12 +783,12 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     RenderPassCache mRenderPassCache;
 
-    // mSubmitFence is the fence that's going to be signaled at the next submission.  This is used
-    // to support SyncVk objects, which may outlive the context (as EGLSync objects).
+    // mSubmitFence is the fence that's going to be signaled at the next submission.  This is
+    // used to support SyncVk objects, which may outlive the context (as EGLSync objects).
     //
-    // TODO(geofflang): this is in preparation for moving RendererVk functionality to ContextVk, and
-    // is otherwise unnecessary as the SyncVk objects don't actually outlive the renderer currently.
-    // http://anglebug.com/2701
+    // TODO(geofflang): this is in preparation for moving RendererVk functionality to ContextVk,
+    // and is otherwise unnecessary as the SyncVk objects don't actually outlive the renderer
+    // currently. http://anglebug.com/2701
     vk::Shared<vk::Fence> mSubmitFence;
 
     // Pool allocator used for command graph but may be expanded to other allocations
@@ -799,12 +813,13 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     std::vector<VkSemaphore> mWaitSemaphores;
     std::vector<VkPipelineStageFlags> mWaitSemaphoreStageMasks;
 
-    // Hold information from the last gpu clock sync for future gpu-to-cpu timestamp conversions.
+    // Hold information from the last gpu clock sync for future gpu-to-cpu timestamp
+    // conversions.
     GpuClockSyncInfo mGpuClockSync;
 
-    // The very first timestamp queried for a GPU event is used as origin, so event timestamps would
-    // have a value close to zero, to avoid losing 12 bits when converting these 64 bit values to
-    // double.
+    // The very first timestamp queried for a GPU event is used as origin, so event timestamps
+    // would have a value close to zero, to avoid losing 12 bits when converting these 64 bit
+    // values to double.
     uint64_t mGpuEventTimestampOrigin;
 
     // Generator for texure serials.
