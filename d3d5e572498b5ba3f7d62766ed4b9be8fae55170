@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "f687373a_2797c22f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-15T18:55:23Z",
+      "side": 1,
+      "message": "On latest version this has all been removed. No longer checking for EGL_DONT_CARE.",
+      "parentUuid": "925532e2_890135df",
+      "range": {
+        "startLine": 195,
+        "startChar": 18,
+        "endLine": 195,
+        "endChar": 31
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31768709_e62050a1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4

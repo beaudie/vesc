@@ -22,6 +22,30 @@
       "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cfd77a8_597f17c5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-15T18:55:23Z",
+      "side": 1,
+      "message": "Yes, at makeCurrent I could get priority from gl::Context and store here instead of VkQueue. If  you want to change to vkDeviceWait in the other question, then this goes away anyways.",
+      "parentUuid": "72b05497_f9d97666",
+      "range": {
+        "startLine": 297,
+        "startChar": 4,
+        "endLine": 297,
+        "endChar": 19
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
