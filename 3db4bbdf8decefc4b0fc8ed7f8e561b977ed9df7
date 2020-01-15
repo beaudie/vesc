@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "3d943ddf_092837c5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T15:29:08Z",
+      "side": 1,
+      "message": "im thinking of something along the lines of a tuple like this - {buffer_type, closest_power_of_2(size), preferred_staging_buffer_size}",
+      "parentUuid": "674ddca7_03fbc919",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d2cad1e6_5ad37cc6",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -118,6 +136,30 @@
       "writtenOn": "2020-01-15T04:37:35Z",
       "side": 1,
       "message": "Should be only VK_BUFFER_USAGE_TRANSFER_SRC_BIT, shouldn\u0027t it?",
+      "range": {
+        "startLine": 109,
+        "startChar": 12,
+        "endLine": 110,
+        "endChar": 81
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba4f1bb9_7592368c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T15:29:08Z",
+      "side": 1,
+      "message": "i did this to prep for a future optimization where we prevent the \"overdraw\" by using the staging buffer itself as the \"new\" front buffer. So we would have a *mFrontBuffer member var that either points to mBuffer or points to mStagingBuffer (with some offset value)\n\nthen we can remove the GPU copy and directly submit the staging buffer as the uniform/vertex buffers",
+      "parentUuid": "77a08266_191e9734",
       "range": {
         "startLine": 109,
         "startChar": 12,
@@ -201,6 +243,24 @@
     },
     {
       "key": {
+        "uuid": "f821808e_d50cd2f6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T15:29:08Z",
+      "side": 1,
+      "message": "\u003e\u003e\u003e Here you\u0027re trying to record a previously submitted serial\ncurrent Q serial is yet to be submitted right? you are talking of the last submitted serial?\n\n\u003e\u003e\u003e That will mess up resource lifetime management\n\"contextVk-\u003egetCurrentQueueSerial()\" is the serial that gets \"recorded\" in \"releaseResourceUsesAndUpdateSerials()\" right?\n\n\u003e\u003e\u003e mStagingBuffer.getCurrentBuffer()-\u003eonGraphAccess(graph)\nunfortunately that will trigger a \"deletion\" of the staging buffer when \"releaseResourceUsesAndUpdateSerials\" gets called since mUse-\u003ecounter is not \u003e 1 since it never gets submitted to the command buffer",
+      "parentUuid": "d459137d_49f93ffa",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f65032f_fbe5c8cf",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 1
@@ -212,6 +272,30 @@
       "writtenOn": "2020-01-15T15:01:22Z",
       "side": 1,
       "message": "you can remove these new methods.",
+      "range": {
+        "startLine": 345,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 5
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd38c67f_5b5a8561",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T15:29:08Z",
+      "side": 1,
+      "message": "yeah, once the correct path to update the serial has been found, i will",
+      "parentUuid": "3f65032f_fbe5c8cf",
       "range": {
         "startLine": 345,
         "startChar": 0,
