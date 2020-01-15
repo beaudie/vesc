@@ -501,6 +501,24 @@
     },
     {
       "key": {
+        "uuid": "aeba75c2_5bce8b75",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-15T16:51:06Z",
+      "side": 1,
+      "message": "@Mohan, talked with Jamie, and yes onGraphAccess seems the right thing to do. We do the same with buffers staged for image data. See ImageHelper::flushStagedUpdates.\n\nIf you are having issues with the buffers being deleted if you use onGraphAccess, by all means add a test for it so we can take a look.",
+      "parentUuid": "e56c5e0b_950b040c",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f65032f_fbe5c8cf",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 1
