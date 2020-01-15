@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e8ba8bab_09c06bec",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-15T04:37:35Z",
+      "side": 1,
+      "message": "Style: Remove static and move to anonymous namespace at the top. Also, use CamelCase.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 15
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce0cc425_31bb502b",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -19,6 +42,52 @@
     },
     {
       "key": {
+        "uuid": "d2cad1e6_5ad37cc6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-15T04:37:35Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we unconditionally init the staging buffer? What if this condition is false, but later the buffer isResourceInUse()?\n\nNote that just init()ializing the staging buffer doesn\u0027t make any allocations, so it\u0027s pretty benign.",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77a08266_191e9734",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-15T04:37:35Z",
+      "side": 1,
+      "message": "Should be only VK_BUFFER_USAGE_TRANSFER_SRC_BIT, shouldn\u0027t it?",
+      "range": {
+        "startLine": 109,
+        "startChar": 12,
+        "endLine": 110,
+        "endChar": 81
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42cf785f_e5dbd78a",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -30,6 +99,24 @@
       "writtenOn": "2020-01-15T00:39:28Z",
       "side": 1,
       "message": "i had this in my suballocated buffer patch but ideally we want to tag a particular \"mNextAllocationOffset\" with a serial so we wait only for the serial of the offset instead of the serial of the whole buffer.",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15a21ade_fedfebbe",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-15T04:37:35Z",
+      "side": 1,
+      "message": "You can do `mStagingBuffer.getCurrentBuffer()-\u003eupdateSerial()` to make it clear it\u0027s only this buffer whose serial is being updated, not every buffer in the DynamicBuffer object. Then you can remove the helper added in that class.",
+      "parentUuid": "42cf785f_e5dbd78a",
       "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
