@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "674ddca7_03fbc919",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T15:01:22Z",
+      "side": 1,
+      "message": "Probably should give some kind of value based on size before landing. It\u0027s okay if it\u0027s not perfect initially, can always tweak it later.",
+      "parentUuid": "ce0cc425_31bb502b",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d2cad1e6_5ad37cc6",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -53,6 +71,30 @@
       "writtenOn": "2020-01-15T04:37:35Z",
       "side": 1,
       "message": "Shouldn\u0027t we unconditionally init the staging buffer? What if this condition is false, but later the buffer isResourceInUse()?\n\nNote that just init()ializing the staging buffer doesn\u0027t make any allocations, so it\u0027s pretty benign.",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7df4940_ba8afbf2",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T15:01:22Z",
+      "side": 1,
+      "message": "I would probably make it inside an if \"(size \u003e 0 \u0026\u0026 size !\u003d mState.getSize())\" check. I\u0027m fine with leaving it if the size hasn\u0027t changed. Otherwise we should probably recreate it since we\u0027ll likely need to store a varying amount of data.",
+      "parentUuid": "d2cad1e6_5ad37cc6",
       "range": {
         "startLine": 104,
         "startChar": 8,
@@ -117,6 +159,47 @@
       "side": 1,
       "message": "You can do `mStagingBuffer.getCurrentBuffer()-\u003eupdateSerial()` to make it clear it\u0027s only this buffer whose serial is being updated, not every buffer in the DynamicBuffer object. Then you can remove the helper added in that class.",
       "parentUuid": "42cf785f_e5dbd78a",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d459137d_49f93ffa",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T15:01:22Z",
+      "side": 1,
+      "message": "Serials are assigned during command submission. Here you\u0027re trying to record a previously submitted serial during command recording. That will mess up resource lifetime management. Instead call mStagingBuffer.getCurrentBuffer()-\u003eonGraphAccess(graph). That\u0027ll queue the buffer to get a new serial during submission and will ensure it has the right lifetime.",
+      "parentUuid": "15a21ade_fedfebbe",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f65032f_fbe5c8cf",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T15:01:22Z",
+      "side": 1,
+      "message": "you can remove these new methods.",
+      "range": {
+        "startLine": 345,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 5
+      },
       "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
