@@ -14,7 +14,7 @@
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
-#include "libANGLE/renderer/vulkan/ProgramVk.h"
+#include "libANGLE/renderer/vulkan/ProgramPipelineVk.h"
 #include "libANGLE/renderer/vulkan/QueryVk.h"
 
 #include "common/debug.h"
@@ -275,7 +275,6 @@ void TransformFeedbackVk::updateDescriptorSet(ContextVk *contextVk,
 }
 
 void TransformFeedbackVk::getBufferOffsets(ContextVk *contextVk,
-                                           const gl::ProgramState &programState,
                                            GLint drawCallFirstVertex,
                                            int32_t *offsetsOut,
                                            size_t offsetsSize) const
@@ -286,7 +285,8 @@ void TransformFeedbackVk::getBufferOffsets(ContextVk *contextVk,
     GLsizeiptr verticesDrawn = mState.getVerticesDrawn();
     const std::vector<GLsizei> &bufferStrides =
         mState.getBoundProgram()->getTransformFeedbackStrides();
-    size_t xfbBufferCount = programState.getTransformFeedbackBufferCount();
+    size_t xfbBufferCount =
+        contextVk->getProgramPipeline()->getTransformFeedbackBufferCount(contextVk->getState());
 
     ASSERT(xfbBufferCount > 0);
 
