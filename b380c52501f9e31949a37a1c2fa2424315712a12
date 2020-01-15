@@ -22,6 +22,30 @@
       "revId": "b380c52501f9e31949a37a1c2fa2424315712a12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3585678_af2059f3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T23:09:54Z",
+      "side": 1,
+      "message": "i can go either ways, lemme know if you feel strongly about it and i will upload another patch",
+      "parentUuid": "9b646f66_adffa83d",
+      "range": {
+        "startLine": 124,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 77
+      },
+      "revId": "b380c52501f9e31949a37a1c2fa2424315712a12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
