@@ -112,11 +112,11 @@ class FramebufferVk : public FramebufferImpl
     RenderTargetVk *getColorReadRenderTarget() const;
 
     // This will clear the current write operation if it is complete.
-    bool appendToStartedRenderPass(vk::CommandGraph *graph,
+    bool appendToStartedRenderPass(vk::ResourceUser *resourceUser,
                                    const gl::Rectangle &renderArea,
                                    vk::CommandBuffer **commandBufferOut)
     {
-        return mFramebuffer.appendToStartedRenderPass(graph, renderArea, commandBufferOut);
+        return mFramebuffer.appendToStartedRenderPass(resourceUser, renderArea, commandBufferOut);
     }
 
     vk::FramebufferHelper *getFramebuffer() { return &mFramebuffer; }
