@@ -228,6 +228,24 @@
     },
     {
       "key": {
+        "uuid": "2248e30e_0f5a2c7d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T18:57:16Z",
+      "side": 1,
+      "message": "\u003e\u003e\u003e something like a switch statement?\nsounds fine to me. Need a couple of hours before i can put that part of code up",
+      "parentUuid": "d36419ad_4b9c9621",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d2cad1e6_5ad37cc6",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -347,6 +365,30 @@
     },
     {
       "key": {
+        "uuid": "8adfeb03_fe5a7036",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T18:57:16Z",
+      "side": 1,
+      "message": "lemme see if i can massage that in somehow",
+      "parentUuid": "35c32788_c427ebbe",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77a08266_191e9734",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -438,6 +480,30 @@
       "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "062a5f45_6f2c304c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T18:57:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9f447404_f45b7261",
+      "range": {
+        "startLine": 118,
+        "startChar": 4,
+        "endLine": 118,
+        "endChar": 53
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -596,6 +662,24 @@
       "side": 1,
       "message": "The code you linked might not be correct. Could maybe reproduce a subtle bug with that. We should address that separately from this CL.",
       "parentUuid": "35af8f41_19f37ffd",
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc87d5b7_239c6599",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T18:57:16Z",
+      "side": 1,
+      "message": "onGraphAccess(...) does seem to work, will push up a new patchset",
+      "parentUuid": "543025db_23f2dee7",
       "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
