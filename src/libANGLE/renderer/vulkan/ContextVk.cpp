@@ -3543,4 +3543,72 @@ bool ContextVk::shouldUseOldRewriteStructSamplers() const
 {
     return mRenderer->getFeatures().forceOldRewriteStructSamplers.enabled;
 }
+
+void ContextVk::onBufferRead(VkAccessFlags readAccessType, vk::BufferHelper *buffer)
+{
+    if (!buffer->canAccumulateRead(this, readAccessType))
+    {
+        mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
+    }
+
+    mOutsideRenderPassCommands.bufferRead(readAccessType, buffer);
+}
+
+void ContextVk::onBufferWrite(VkAccessFlags writeAccessType, vk::BufferHelper *buffer)
+{
+    if (!buffer->canAccumulateWrite(this, writeAccessType))
+    {
+        mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
+    }
+
+    mOutsideRenderPassCommands.bufferWrite(writeAccessType, buffer);
+}
+
+OutsideRenderPassCommandBuffer::OutsideRenderPassCommandBuffer() = default;
+
+OutsideRenderPassCommandBuffer::~OutsideRenderPassCommandBuffer() = default;
+
+void OutsideRenderPassCommandBuffer::flushToPrimary(vk::PrimaryCommandBuffer *primary)
+{
+    if (mGlobalMemoryBarrierSrcAccess)
+    {
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = mGlobalMemoryBarrierSrcAccess;
+        memoryBarrier.dstAccessMask   = mGlobalMemoryBarrierDstAccess;
+
+        primary->memoryBarrier(mGlobalMemoryBarrierStages, mGlobalMemoryBarrierStages,
+                               &memoryBarrier);
+    }
+
+    mGlobalMemoryBarrierStages    = 0;
+    mGlobalMemoryBarrierSrcAccess = 0;
+    mGlobalMemoryBarrierDstAccess = 0;
+
+    mCommandBuffer.executeCommands(primary->getHandle());
+
+    // Restart secondary buffer.
+    mCommandBuffer.reset();
+}
+
+void OutsideRenderPassCommandBuffer::bufferRead(VkAccessFlags readAccessType,
+                                                vk::BufferHelper *buffer)
+{
+    buffer->updateReadBarrier(readAccessType, &mGlobalMemoryBarrierSrcAccess,
+                              &mGlobalMemoryBarrierDstAccess);
+    mGlobalMemoryBarrierStages = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+}
+
+void OutsideRenderPassCommandBuffer::bufferWrite(VkAccessFlags writeAccessType,
+                                                 vk::BufferHelper *buffer)
+{
+    buffer->updateWriteBarrier(writeAccessType, &mGlobalMemoryBarrierSrcAccess,
+                               &mGlobalMemoryBarrierDstAccess);
+    mGlobalMemoryBarrierStages = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+}
+
+RenderPassCommandBuffer::RenderPassCommandBuffer() = default;
+
+RenderPassCommandBuffer::~RenderPassCommandBuffer() = default;
+
 }  // namespace rx
