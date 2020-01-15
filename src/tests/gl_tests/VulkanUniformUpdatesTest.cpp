@@ -58,6 +58,7 @@ class VulkanUniformUpdatesTest : public ANGLETest
 
     void limitMaxSets(GLuint program)
     {
+#if 0  // TIMTIM
         rx::ContextVk *contextVk = hackANGLE();
         rx::ProgramVk *programVk = hackProgram(program);
 
@@ -81,6 +82,7 @@ class VulkanUniformUpdatesTest : public ANGLETest
         VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                                textureCount};
         (void)texturePool->init(contextVk, &textureSetSize, 1);
+#endif
     }
 
     static constexpr size_t kTextureStagingBufferSizeForTesting = 128;
@@ -475,6 +477,8 @@ TEST_P(VulkanUniformUpdatesTest, TextureStagingBufferRecycling)
     }
 }
 
+#if 0  // TIMTIM
 ANGLE_INSTANTIATE_TEST(VulkanUniformUpdatesTest, ES2_VULKAN(), ES3_VULKAN());
+#endif
 
 }  // anonymous namespace
