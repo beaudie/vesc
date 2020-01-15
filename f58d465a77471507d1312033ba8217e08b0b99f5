@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3eec38a_354ee49b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T22:49:48Z",
+      "side": 1,
+      "message": "seems overspecialized to not use the size of the buffer at all in the staging buffer size. I\u0027m fine with landing it now and redesigning it later.",
+      "range": {
+        "startLine": 54,
+        "startChar": 44,
+        "endLine": 54,
+        "endChar": 80
+      },
+      "revId": "f58d465a77471507d1312033ba8217e08b0b99f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1763d9a4_2bd026d3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T22:49:48Z",
+      "side": 1,
+      "message": "nit: kPrefix for constants",
+      "range": {
+        "startLine": 122,
+        "startChar": 32,
+        "endLine": 122,
+        "endChar": 43
+      },
+      "revId": "f58d465a77471507d1312033ba8217e08b0b99f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac9d7346_c3212008",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-15T22:49:48Z",
+      "side": 1,
+      "message": "nit: cache in temporary",
+      "range": {
+        "startLine": 129,
+        "startChar": 25,
+        "endLine": 129,
+        "endChar": 72
+      },
+      "revId": "f58d465a77471507d1312033ba8217e08b0b99f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
