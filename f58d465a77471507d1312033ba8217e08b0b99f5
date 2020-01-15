@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "36863981_ed7d90e3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T23:04:00Z",
+      "side": 1,
+      "message": "yeah, i need to get the profiling data sorted out before i can put in anything more intelligent here.\n\nfor now, will do a max(size, (kStagingBufferBaseSize * kUnpackBufferStagingBufferMultiplier))",
+      "parentUuid": "a3eec38a_354ee49b",
+      "range": {
+        "startLine": 54,
+        "startChar": 44,
+        "endLine": 54,
+        "endChar": 80
+      },
+      "revId": "f58d465a77471507d1312033ba8217e08b0b99f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1763d9a4_2bd026d3",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "75a85105_569caf45",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T23:04:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1763d9a4_2bd026d3",
+      "range": {
+        "startLine": 122,
+        "startChar": 32,
+        "endLine": 122,
+        "endChar": 43
+      },
+      "revId": "f58d465a77471507d1312033ba8217e08b0b99f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac9d7346_c3212008",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "f58d465a77471507d1312033ba8217e08b0b99f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93d5c205_fb4668af",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T23:04:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac9d7346_c3212008",
+      "range": {
+        "startLine": 129,
+        "startChar": 25,
+        "endLine": 129,
+        "endChar": 72
+      },
+      "revId": "f58d465a77471507d1312033ba8217e08b0b99f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
