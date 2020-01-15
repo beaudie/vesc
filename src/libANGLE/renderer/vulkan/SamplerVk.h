@@ -36,7 +36,7 @@ class SamplerVk : public SamplerImpl
 
     void onSamplerGraphAccess(vk::ResourceUser *resourceUser)
     {
-        mSampler.onGraphAccess(resourceUser);
+        mSampler.onResourceUse(resourceUser);
     }
 
   private:

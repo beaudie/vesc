@@ -1597,7 +1597,7 @@ const vk::ImageView &TextureVk::getReadImageViewAndRecordUse(ContextVk *contextV
 {
     ASSERT(mImage->valid());
 
-    mImageViews.onGraphAccess(contextVk);
+    mImageViews.onResourceUse(contextVk);
 
     if (mState.isStencilMode() && mImageViews.hasStencilReadImageView())
     {
@@ -1611,7 +1611,7 @@ const vk::ImageView &TextureVk::getFetchImageViewAndRecordUse(ContextVk *context
 {
     ASSERT(mImage->valid());
 
-    mImageViews.onGraphAccess(contextVk);
+    mImageViews.onResourceUse(contextVk);
 
     // We don't currently support fetch for depth/stencil cube map textures.
     ASSERT(!mImageViews.hasStencilReadImageView() || !mImageViews.hasFetchImageView());

@@ -181,12 +181,12 @@ class TextureVk : public TextureImpl
 
     void onImageViewGraphAccess(vk::ResourceUser *resourceUser)
     {
-        mImageViews.onGraphAccess(resourceUser);
+        mImageViews.onResourceUse(resourceUser);
     }
 
     void onSamplerGraphAccess(vk::ResourceUser *resourceUser)
     {
-        mSampler.onGraphAccess(resourceUser);
+        mSampler.onResourceUse(resourceUser);
     }
 
     void releaseOwnershipOfImage(const gl::Context *context);

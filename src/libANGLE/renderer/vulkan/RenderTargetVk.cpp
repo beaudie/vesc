@@ -184,6 +184,6 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk)
 
 void RenderTargetVk::onImageViewGraphAccess(ContextVk *contextVk) const
 {
-    mImageViews->onGraphAccess(contextVk);
+    mImageViews->onResourceUse(contextVk);
 }
 }  // namespace rx

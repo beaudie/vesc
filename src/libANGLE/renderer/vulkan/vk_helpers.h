@@ -1077,7 +1077,7 @@ class ImageViewHelper : angle::NonCopyable
     bool hasFetchImageView() const { return mFetchImageView.valid(); }
 
     // Store reference to usage in graph.
-    void onGraphAccess(ResourceUser *resourceUser) const { resourceUser->onResourceUse(mUse); }
+    void onResourceUse(ResourceUser *resourceUser) const { resourceUser->onResourceUse(mUse); }
 
     // Creates views with multiple layers and levels.
     angle::Result initReadViews(ContextVk *contextVk,
@@ -1132,7 +1132,7 @@ class SamplerHelper final : angle::NonCopyable
     Sampler &get() { return mSampler; }
     const Sampler &get() const { return mSampler; }
 
-    void onGraphAccess(ResourceUser *resourceUser) { resourceUser->onResourceUse(mUse); }
+    void onResourceUse(ResourceUser *resourceUser) { resourceUser->onResourceUse(mUse); }
 
   private:
     SharedResourceUse mUse;
