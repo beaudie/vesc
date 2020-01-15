@@ -281,6 +281,30 @@
     },
     {
       "key": {
+        "uuid": "dc711a9f_feb373c9",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-15T16:43:09Z",
+      "side": 1,
+      "message": "\u003e\u003e\u003e since we will allocate a new VkBuffer if the size needs to be different that our initial staging buffer number\n\nsmall flaw here, we need to allocate to size got from Calculate...(...) not just the new size requested in the glBufferData call",
+      "parentUuid": "a893ce84_548cc1b7",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "3db4bbdf8decefc4b0fc8ed7f8e561b977ed9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77a08266_191e9734",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
