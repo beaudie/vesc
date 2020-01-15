@@ -142,6 +142,30 @@
       "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87e5470d_1d7c12f9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-15T18:06:35Z",
+      "side": 0,
+      "message": "I think that\u0027s reasonable, we\u0027re not concerned about performance of surface destruction.  I\u0027ll let others comment their thoughts.",
+      "parentUuid": "2b1b79f7_64448692",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 45
+      },
+      "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "925532e2_890135df",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-15T18:06:35Z",
+      "side": 1,
+      "message": "Yes, let\u0027s reject it and deal with issues if someone is using that value later.",
+      "parentUuid": "f6250f6e_0af758f5",
+      "range": {
+        "startLine": 195,
+        "startChar": 18,
+        "endLine": 195,
+        "endChar": 31
+      },
+      "revId": "d3d5e572498b5ba3f7d62766ed4b9be8fae55170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31768709_e62050a1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
