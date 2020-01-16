@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77688ab2_70d527cf",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2706,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-16T19:24:39Z",
+      "side": 1,
+      "message": "Could you also update the assignment here? https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp?l\u003d3487\n\nThis code shouldn\u0027t be used on FL \u003c 11.0 but it will keep us safe.",
+      "revId": "4be6ce9409cfab2608b61a461055da35127b1dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c0f1b65_0b8532d7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4060,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-16T19:24:39Z",
+      "side": 1,
+      "message": "nit: Could you simplify this to:\n\n    // Per the documentation on\n    // https://docs.microsoft.com/en-us/windows/win32/api/d3d11/ne-d3d11-d3d11_standard_multisample_quality_levels\n    // applications can only request the standard multisample pattern on\n    // feature levels 10_1 and above.\n    if (supportedSamples \u003e 0 \u0026\u0026 mDevice-\u003eGetFeatureLevel() \u003e\u003d D3D_FEATURE_LEVEL_10_1)\n    {\n        return D3D11_STANDARD_MULTISAMPLE_PATTERN;\n    }\n\n    return 0;\n\nIt\u0027s a bit easier to read/reason about.",
+      "range": {
+        "startLine": 4042,
+        "startChar": 0,
+        "endLine": 4060,
+        "endChar": 5
+      },
+      "revId": "4be6ce9409cfab2608b61a461055da35127b1dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
