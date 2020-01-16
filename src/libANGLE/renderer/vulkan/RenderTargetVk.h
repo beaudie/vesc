@@ -82,7 +82,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     angle::Result flushStagedUpdates(ContextVk *contextVk);
 
-    void onImageViewGraphAccess(ContextVk *contextVk) const;
+    void onImageViewUse(ContextVk *contextVk) const;
 
   private:
     vk::ImageHelper *mImage;

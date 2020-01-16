@@ -3127,13 +3127,13 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
         {
             samplerVk     = nullptr;
             samplerSerial = kZeroSerial;
-            textureVk->onSamplerGraphAccess(&mResourceUseList);
+            textureVk->onSamplerUse(&mResourceUseList);
         }
         else
         {
             samplerVk     = vk::GetImpl(sampler);
             samplerSerial = samplerVk->getSerial();
-            samplerVk->onSamplerGraphAccess(&mResourceUseList);
+            samplerVk->onSamplerUse(&mResourceUseList);
         }
 
         vk::ImageHelper &image = textureVk->getImage();
@@ -3159,7 +3159,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
             image.changeLayout(aspectFlags, textureLayout, srcLayoutChange);
         }
 
-        textureVk->onImageViewGraphAccess(&mResourceUseList);
+        textureVk->onImageViewUse(&mResourceUseList);
         image.addReadDependency(this, recorder);
 
         mActiveTextures[textureUnit].texture = textureVk;
