@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "92bf0534_f5108d05",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-16T17:47:49Z",
+      "side": 1,
+      "message": "Sure. this should result in a eglGetContextAttrib() to the underlying EGL.\nSo ContextImpl should have a getContextPriority(), not getActualPriority(). And then that implemented in ContextGL/ContextEGL. and also in ContextVk. That would be consistent. And in ContextEGL this should call the underlying eglGetContextAttrib(().",
+      "parentUuid": "56ca8f39_f17fab59",
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cb3c525d_1b9fefb4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
@@ -30,6 +48,30 @@
       "writtenOn": "2020-01-16T17:07:22Z",
       "side": 1,
       "message": "I agree with Jamie that this should be replaced by the priority given to the constructor. When you need the queue, just call renderer-\u003egetQueue(priority).",
+      "range": {
+        "startLine": 820,
+        "startChar": 12,
+        "endLine": 820,
+        "endChar": 18
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "793f2587_6241c835",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-16T17:47:49Z",
+      "side": 1,
+      "message": "OK. I removed this in favor of using vkDeviceWaitIdle, instead of vkQueueWaitIdle. I was just 2 seconds away from uploading.",
+      "parentUuid": "cb3c525d_1b9fefb4",
       "range": {
         "startLine": 820,
         "startChar": 12,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "5b196d87_1bacbf21",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-16T17:47:49Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "10395cd9_c87fbca2",
+      "range": {
+        "startLine": 1168,
+        "startChar": 22,
+        "endLine": 1168,
+        "endChar": 28
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a31cead_524adf75",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "d7327e45_cf275e00",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-16T17:47:49Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "4a31cead_524adf75",
+      "range": {
+        "startLine": 1166,
+        "startChar": 0,
+        "endLine": 1192,
+        "endChar": 5
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9df23c6c_0bc029c0",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
@@ -99,6 +189,24 @@
       "writtenOn": "2020-01-16T17:07:22Z",
       "side": 1,
       "message": "So the application can ask for Low and then query and see that it got Medium for example? Is it a problem if the application asks for Medium and gets Low instead? If that\u0027s not a problem, then the order doesn\u0027t really matter, does it?",
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29f3fd70_b050609f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-16T17:47:49Z",
+      "side": 1,
+      "message": "I was trying to address the fact that MEDIUM is the default. If there is 1 Q, then what ever was requested - its MEDIUM, If there are \u003e1, then high is unique, If \u003e3 then low is unique. You do identify a case I didn\u0027t cover. Trying to avoid requesting HIGH, but only 1 Q - so matching LOW first.\n\nOtherwise I had something like this\nfor (ctxPriority : egl::ContextPriority)\n{\n    if (mQueues[ctxPriority] \u003d\u003d queue)\n    {\n        *priority \u003d ctxPriority;\n        return true;\n    }\n    return false;\n}\nBut this seems to favor LOW, in cases of \u003c3 queues.",
+      "parentUuid": "9df23c6c_0bc029c0",
       "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
