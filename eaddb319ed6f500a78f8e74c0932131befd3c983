@@ -70,6 +70,30 @@
       "revId": "eaddb319ed6f500a78f8e74c0932131befd3c983",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9080b9b3_e55c67d8",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1184734
+      },
+      "writtenOn": "2020-01-16T22:55:44Z",
+      "side": 1,
+      "message": "I suppose I can, but this ought to be pretty cheap, especially if we put the members next to each other.",
+      "parentUuid": "67d2e04d_f428ea8a",
+      "range": {
+        "startLine": 514,
+        "startChar": 60,
+        "endLine": 514,
+        "endChar": 74
+      },
+      "revId": "eaddb319ed6f500a78f8e74c0932131befd3c983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
