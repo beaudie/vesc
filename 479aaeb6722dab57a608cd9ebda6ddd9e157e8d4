@@ -118,6 +118,30 @@
       "revId": "479aaeb6722dab57a608cd9ebda6ddd9e157e8d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8da79ec_4d0057f9",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-01-16T21:24:17Z",
+      "side": 1,
+      "message": "Anyway, I made the change for now. I\u0027m not sure it\u0027s correct, but I\u0027ll land it this way for now.",
+      "parentUuid": "72c35c96_4780292b",
+      "range": {
+        "startLine": 258,
+        "startChar": 48,
+        "endLine": 258,
+        "endChar": 60
+      },
+      "revId": "479aaeb6722dab57a608cd9ebda6ddd9e157e8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
