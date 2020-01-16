@@ -180,6 +180,10 @@ using ProgramSources = gl::ShaderMap<std::string>;
 using ShaderSourceMap  = std::map<gl::ShaderProgramID, std::string>;
 using ProgramSourceMap = std::map<gl::ShaderProgramID, ProgramSources>;
 
+// Map from texture ID and level to data
+using TextureLevel        = std::pair<gl::TextureID, GLuint>;
+using TextureLevelDataMap = std::map<TextureLevel, std::vector<uint8_t>>;
+
 class FrameCapture final : angle::NonCopyable
 {
   public:
@@ -221,6 +225,9 @@ class FrameCapture final : angle::NonCopyable
     // Cache most recently compiled and linked sources.
     ShaderSourceMap mCachedShaderSources;
     ProgramSourceMap mCachedProgramSources;
+
+    // Cache a shadow copy of texture level data
+    TextureLevelDataMap mCachedTextureLevelData;
 };
 
 template <typename CaptureFuncT, typename... ArgsT>
