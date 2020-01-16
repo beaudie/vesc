@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c4b0dae9_7bcdc9c9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T21:36:13Z",
+      "side": 1,
+      "message": "What\u0027s a non-negative synonym for \"unflushed\"? Pending yes, a bit vague.",
+      "parentUuid": "f89bb991_0e613c47",
+      "range": {
+        "startLine": 356,
+        "startChar": 29,
+        "endLine": 356,
+        "endChar": 36
+      },
+      "revId": "99f7f36716397bf1f3695a7c3333392c98bc8c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "69109d3f_3090b189",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-16T20:55:03Z",
       "side": 1,
       "message": "isInUseByGPU sounds better to me (ANGLE is a driver, so is the Vulkan driver underneath. Better to avoid \"driver\")",
+      "range": {
+        "startLine": 362,
+        "startChar": 31,
+        "endLine": 362,
+        "endChar": 37
+      },
+      "revId": "99f7f36716397bf1f3695a7c3333392c98bc8c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cc23861_89f0ee82",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T21:36:13Z",
+      "side": 1,
+      "message": "SwiftShader is also a driver and not a GPU. In ANGLE code we don\u0027t refer to ANGLE as a driver.",
+      "parentUuid": "69109d3f_3090b189",
       "range": {
         "startLine": 362,
         "startChar": 31,
