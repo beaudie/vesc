@@ -93,6 +93,30 @@
       "revId": "99f7f36716397bf1f3695a7c3333392c98bc8c4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d01d6156_1607e9d4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T21:37:07Z",
+      "side": 1,
+      "message": "In this case also I\u0027m referring to the Vulkan driver. Which is what we really mean.",
+      "parentUuid": "9cc23861_89f0ee82",
+      "range": {
+        "startLine": 362,
+        "startChar": 31,
+        "endLine": 362,
+        "endChar": 37
+      },
+      "revId": "99f7f36716397bf1f3695a7c3333392c98bc8c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
