@@ -39,6 +39,29 @@
       "revId": "4be6ce9409cfab2608b61a461055da35127b1dae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31632a5a_a90656cd",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T19:30:36Z",
+      "side": 1,
+      "message": "nit: lower-case g for style consistency",
+      "range": {
+        "startLine": 344,
+        "startChar": 9,
+        "endLine": 344,
+        "endChar": 29
+      },
+      "revId": "4be6ce9409cfab2608b61a461055da35127b1dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
