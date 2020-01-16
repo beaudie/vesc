@@ -46,6 +46,30 @@
       "revId": "479aaeb6722dab57a608cd9ebda6ddd9e157e8d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b6051b7_0e371696",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T16:32:28Z",
+      "side": 1,
+      "message": "this is GL, not Vulkan. renderbufer || textureAttachment seems correct to me as either can be attached to a framebuffer.",
+      "parentUuid": "110ecf90_035ad0e6",
+      "range": {
+        "startLine": 258,
+        "startChar": 48,
+        "endLine": 258,
+        "endChar": 60
+      },
+      "revId": "479aaeb6722dab57a608cd9ebda6ddd9e157e8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
