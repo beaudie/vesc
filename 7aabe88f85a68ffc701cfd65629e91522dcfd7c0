@@ -16,6 +16,24 @@
       "revId": "7aabe88f85a68ffc701cfd65629e91522dcfd7c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "069f7fb3_7ff2750d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T15:27:33Z",
+      "side": 1,
+      "message": "Well, a ContextVk/CommandGraph is indeed a user of the resources.\n\nI agree the name is bad. I was also thinking ResourceUseList/Manager/Handler however adding Manager/Helper/Handler to the end of something is kind of a bad name as well.",
+      "parentUuid": "34c8336c_d59d7dc0",
+      "revId": "7aabe88f85a68ffc701cfd65629e91522dcfd7c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
