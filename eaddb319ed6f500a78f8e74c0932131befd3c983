@@ -46,6 +46,30 @@
       "revId": "eaddb319ed6f500a78f8e74c0932131befd3c983",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67d2e04d_f428ea8a",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T19:40:10Z",
+      "side": 1,
+      "message": "Actually I\u0027m not a fan of this double member variable check since it\u0027s a super hotspot. Can you set mSkipValidation to false instead of the context is lost?",
+      "parentUuid": "3f34acdd_046a6426",
+      "range": {
+        "startLine": 514,
+        "startChar": 60,
+        "endLine": 514,
+        "endChar": 74
+      },
+      "revId": "eaddb319ed6f500a78f8e74c0932131befd3c983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
