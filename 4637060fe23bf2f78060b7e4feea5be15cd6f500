@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a3ca861_7e068704",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-16T01:37:18Z",
+      "side": 1,
+      "message": "Looks like this can move up into the previous conditional to remove a layer of nesting here.\n\nOr, reverse the checking so that activeShaders is checked first, since that\u0027s likely faster than getting and checking if the shader source is empty.",
+      "revId": "4637060fe23bf2f78060b7e4feea5be15cd6f500",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
