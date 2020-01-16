@@ -1345,7 +1345,14 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     std::vector<VkClearValue> attachmentClearValues;
 
     vk::CommandBuffer *writeCommands = nullptr;
-    ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &writeCommands));
+    if (contextVk->commandGraphEnabled())
+    {
+        ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &writeCommands));
+    }
+    else
+    {
+        writeCommands = &contextVk->getOutsideRenderPassCommandBuffer();
+    }
 
     // Initialize RenderPass info.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
@@ -1374,9 +1381,18 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         attachmentClearValues.emplace_back(kUninitializedClearValue);
     }
 
-    return mFramebuffer.beginRenderPass(contextVk, *framebuffer, renderArea, mRenderPassDesc,
-                                        renderPassAttachmentOps, attachmentClearValues,
-                                        commandBufferOut);
+    if (contextVk->commandGraphEnabled())
+    {
+        return mFramebuffer.beginRenderPass(contextVk, *framebuffer, renderArea, mRenderPassDesc,
+                                            renderPassAttachmentOps, attachmentClearValues,
+                                            commandBufferOut);
+    }
+    else
+    {
+        return contextVk->beginRenderPass(*framebuffer, renderArea, mRenderPassDesc,
+                                          renderPassAttachmentOps, attachmentClearValues,
+                                          commandBufferOut);
+    }
 }
 
 void FramebufferVk::updateActiveColorMasks(size_t colorIndexGL, bool r, bool g, bool b, bool a)
