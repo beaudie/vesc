@@ -94,6 +94,30 @@
       "revId": "479aaeb6722dab57a608cd9ebda6ddd9e157e8d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72c35c96_4780292b",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-01-16T18:20:49Z",
+      "side": 1,
+      "message": "In ANGLE\u0027s code, can you render to a textureAttachment that\u0027s not a renderBuffer?",
+      "parentUuid": "06672869_e2c0876a",
+      "range": {
+        "startLine": 258,
+        "startChar": 48,
+        "endLine": 258,
+        "endChar": 60
+      },
+      "revId": "479aaeb6722dab57a608cd9ebda6ddd9e157e8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
