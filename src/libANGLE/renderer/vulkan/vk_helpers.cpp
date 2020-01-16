@@ -1640,6 +1640,22 @@ void BufferHelper::changeQueue(uint32_t newQueueFamilyIndex, CommandBuffer *comm
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
 
+bool BufferHelper::canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType)
+{
+    // We only need to start a new command buffer when we need a new barrier.
+    // For simplicity's sake for now we always start a new command buffer.
+    // TODO(jmadill): Re-use the command buffer. http://anglebug.com/4029
+    return false;
+}
+
+bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType)
+{
+    // We only need to start a new command buffer when we need a new barrier.
+    // For simplicity's sake for now we always start a new command buffer.
+    // TODO(jmadill): Re-use the command buffer. http://anglebug.com/4029
+    return false;
+}
+
 // ImageHelper implementation.
 ImageHelper::ImageHelper()
     : CommandGraphResource(CommandGraphResourceType::Image),

@@ -22,7 +22,7 @@
 namespace angle
 {
 struct FeaturesVk;
-}
+}  // namespace angle
 
 namespace rx
 {
@@ -92,6 +92,56 @@ class CommandQueue final : angle::NonCopyable
 
     // Keeps a free list of reusable primary command buffers.
     vk::PersistentCommandPool mPrimaryCommandPool;
+};
+
+class OutsideRenderPassCommandBuffer final : angle::NonCopyable
+{
+  public:
+    OutsideRenderPassCommandBuffer();
+    ~OutsideRenderPassCommandBuffer();
+
+    void bufferRead(VkAccessFlags readAccessType, vk::BufferHelper *buffer);
+    void bufferWrite(VkAccessFlags writeAccessType, vk::BufferHelper *buffer);
+
+    void flushToPrimary(vk::PrimaryCommandBuffer *primary);
+
+    vk::CommandBuffer &getCommandBuffer() { return mCommandBuffer; }
+
+    void reset();
+
+  private:
+    VkFlags mGlobalMemoryBarrierSrcAccess;
+    VkFlags mGlobalMemoryBarrierDstAccess;
+    VkPipelineStageFlags mGlobalMemoryBarrierStages;
+
+    vk::CommandBuffer mCommandBuffer;
+};
+
+class RenderPassCommandBuffer final : angle::NonCopyable
+{
+  public:
+    RenderPassCommandBuffer();
+    ~RenderPassCommandBuffer();
+
+    void beginRenderPass(const vk::Framebuffer &framebuffer,
+                         const gl::Rectangle &renderArea,
+                         const vk::RenderPassDesc &renderPassDesc,
+                         const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                         const std::vector<VkClearValue> &clearValues,
+                         angle::PoolAllocator *poolAllocator,
+                         vk::CommandBuffer **commandBufferOut);
+
+    angle::Result flushToPrimary(ContextVk *contextVk, vk::PrimaryCommandBuffer *primary);
+
+    void reset();
+
+  private:
+    vk::RenderPassDesc mRenderPassDesc;
+    vk::AttachmentOpsArray mRenderPassAttachmentOps;
+    vk::Framebuffer mRenderPassFramebuffer;
+    gl::Rectangle mRenderPassRenderArea;
+    gl::AttachmentArray<VkClearValue> mRenderPassClearValues;
+    vk::CommandBuffer mCommandBuffer;
 };
 
 class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassOwner
@@ -277,6 +327,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     VkDevice getDevice() const;
 
     ANGLE_INLINE const angle::FeaturesVk &getFeatures() const { return mRenderer->getFeatures(); }
+    ANGLE_INLINE bool commandGraphEnabled() const { return getFeatures().commandGraph.enabled; }
 
     ANGLE_INLINE void invalidateVertexAndIndexBuffers()
     {
@@ -423,6 +474,20 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     const gl::OverlayType *getOverlay() const { return mState.getOverlay(); }
 
     vk::ResourceUseList &getResourceUseList() { return mResourceUseList; }
+
+    void onBufferRead(VkAccessFlags readAccessType, vk::BufferHelper *buffer);
+    void onBufferWrite(VkAccessFlags writeAccessType, vk::BufferHelper *buffer);
+    vk::CommandBuffer &getOutsideRenderPassCommandBuffer()
+    {
+        return mOutsideRenderPassCommands.getCommandBuffer();
+    }
+
+    void beginRenderPass(const vk::Framebuffer &framebuffer,
+                         const gl::Rectangle &renderArea,
+                         const vk::RenderPassDesc &renderPassDesc,
+                         const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                         const std::vector<VkClearValue> &clearValues,
+                         vk::CommandBuffer **commandBufferOut);
 
   private:
     // Dirty bits.
@@ -658,7 +723,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     angle::Result submitFrame(const VkSubmitInfo &submitInfo,
                               vk::PrimaryCommandBuffer &&commandBuffer);
-    angle::Result flushCommandGraph(vk::PrimaryCommandBuffer *commandBatch);
+    angle::Result flushCommands(vk::PrimaryCommandBuffer *commandBatch);
     void memoryBarrierImpl(GLbitfield barriers, VkPipelineStageFlags stageMask);
 
     angle::Result synchronizeCpuGpuTime();
@@ -782,6 +847,10 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     // See CommandGraph.h for a desription of the Command Graph.
     vk::CommandGraph mCommandGraph;
+
+    OutsideRenderPassCommandBuffer mOutsideRenderPassCommands;
+    RenderPassCommandBuffer mRenderPassCommands;
+    vk::PrimaryCommandBuffer mPrimaryCommands;
 
     // Internal shader library.
     vk::ShaderLibrary mShaderLibrary;
