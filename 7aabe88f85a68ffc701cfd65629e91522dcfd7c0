@@ -34,6 +34,24 @@
       "revId": "7aabe88f85a68ffc701cfd65629e91522dcfd7c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a52c6226_0e22aea6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-16T16:05:25Z",
+      "side": 1,
+      "message": "\u003e Well, a ContextVk/CommandGraph is indeed a user of the resources.\n\nRight, but this class in particular isn\u0027t using the resource, just tracking it.   The parameter that\u0027s passed around can have the \"User\" part in the name, I just think it\u0027s a little confusing here with it since this class is just doing the tracking.\n\nAdmittedly, not really a bit issue either way.",
+      "parentUuid": "069f7fb3_7ff2750d",
+      "revId": "7aabe88f85a68ffc701cfd65629e91522dcfd7c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
