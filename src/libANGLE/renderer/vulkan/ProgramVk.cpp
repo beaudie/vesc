@@ -1342,15 +1342,17 @@ void ProgramVk::updateBuffersDescriptorSet(ContextVk *contextVk,
         BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
-        if (isStorageBuffer)
+        // We set the SHADER_READ_BIT to be conservative.
+        VkAccessFlags accessFlags = isStorageBuffer
+                                        ? (VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT)
+                                        : VK_ACCESS_UNIFORM_READ_BIT;
+        if (contextVk->getFeatures().commandGraph.enabled)
         {
-            // We set the SHADER_READ_BIT to be conservative.
-            bufferHelper.onWrite(contextVk, recorder,
-                                 VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT);
+            bufferHelper.onRead(contextVk, recorder, accessFlags);
         }
         else
         {
-            bufferHelper.onRead(contextVk, recorder, VK_ACCESS_UNIFORM_READ_BIT);
+            contextVk->onBufferRead(accessFlags, &bufferHelper);
         }
 
         ++writeCount;
