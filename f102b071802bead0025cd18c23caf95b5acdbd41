@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09dd91f4_1013fabc",
+        "filename": "src/compiler/translator/blocklayout.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-16T01:31:22Z",
+      "side": 1,
+      "message": "It looks like this is the only place where \u0027onlyActiveVariables\u0027 is true, which feels a bit awkward having everyone else need to pass in false.\n\nI think this would be a good case to have both:\n\nTraverseShaderVariables()\nand\nTraverseActiveShaderVariables()",
+      "revId": "f102b071802bead0025cd18c23caf95b5acdbd41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
