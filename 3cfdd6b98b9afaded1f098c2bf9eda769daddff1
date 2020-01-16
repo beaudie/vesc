@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7f93afa5_22bdfb19",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-16T20:03:34Z",
+      "side": 1,
+      "message": "My point being that, if you don\u0027t intend to add the necessary functions in gl/*, you don\u0027t need to expose the extension here.",
+      "parentUuid": "92bf0534_f5108d05",
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cb3c525d_1b9fefb4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "OK. I removed this in favor of using vkDeviceWaitIdle, instead of vkQueueWaitIdle. I was just 2 seconds away from uploading.",
       "parentUuid": "cb3c525d_1b9fefb4",
+      "range": {
+        "startLine": 820,
+        "startChar": 12,
+        "endLine": 820,
+        "endChar": 18
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75e27eb3_9214ad4e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-16T20:03:34Z",
+      "side": 1,
+      "message": "This is in ContextVk, not SurfaceVk",
+      "parentUuid": "793f2587_6241c835",
       "range": {
         "startLine": 820,
         "startChar": 12,
@@ -210,6 +252,24 @@
       "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22d8bf55_a44b4df1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-16T20:03:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "29f3fd70_b050609f",
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
