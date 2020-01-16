@@ -180,6 +180,10 @@ using ProgramSources = gl::ShaderMap<std::string>;
 using ShaderSourceMap  = std::map<gl::ShaderProgramID, std::string>;
 using ProgramSourceMap = std::map<gl::ShaderProgramID, ProgramSources>;
 
+// Map from texture ID and texture level to compressed data
+using CompressedTextureLevel = std::pair<GLuint, GLuint>;
+using CompressedTextureMap   = std::map<CompressedTextureLevel, std::vector<uint8_t>>;
+
 class FrameCapture final : angle::NonCopyable
 {
   public:
@@ -221,6 +225,9 @@ class FrameCapture final : angle::NonCopyable
     // Cache most recently compiled and linked sources.
     ShaderSourceMap mCachedShaderSources;
     ProgramSourceMap mCachedProgramSources;
+
+    // Cache a shadow copy of compressed textures
+    CompressedTextureMap mCachedCompressedTextureLevels;
 };
 
 template <typename CaptureFuncT, typename... ArgsT>

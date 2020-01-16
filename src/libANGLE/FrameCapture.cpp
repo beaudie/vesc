@@ -1070,7 +1070,8 @@ bool IsDefaultCurrentValue(const gl::VertexAttribCurrentValueData &currentValue)
 void CaptureMidExecutionSetup(const gl::Context *context,
                               std::vector<CallCapture> *setupCalls,
                               const ShaderSourceMap &cachedShaderSources,
-                              const ProgramSourceMap &cachedProgramSources)
+                              const ProgramSourceMap &cachedProgramSources,
+                              const CompressedTextureMap &cachedTextureLevels)
 {
     const gl::State &apiState = context->getState();
     gl::State replayState(0, nullptr, nullptr, nullptr, EGL_OPENGL_ES_API,
@@ -1284,6 +1285,8 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
             angle::MemoryBuffer data;
 
+            bool captureCompressedImage = false;
+
             // Use ANGLE_get_image to read back pixel data.
             if (context->getExtensions().getImageANGLE)
             {
@@ -1311,26 +1314,44 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                     }
                     else
                     {
-                        // Will need to add glGetCompressedTexImage support to ANGLE_get_image.
-                        // TODO(jmadill): add glGetCompressedTexImage. http://anglebug.com/3944
-                        UNIMPLEMENTED();
+                        captureCompressedImage = true;
                     }
                 }
 
-                uint32_t dataSize = pixelBytes * desc.size.width * desc.size.height;
+                if (captureCompressedImage)
+                {
+                    unsigned level = index.getLevelIndex();
 
-                bool result = data.resize(dataSize);
-                ASSERT(result);
+                    CompressedTextureLevel textureLevel(texture->getId(), level);
 
-                gl::PixelPackState packState;
-                packState.alignment = 1;
+                    const auto &foundTextureLevel = cachedTextureLevels.find(textureLevel);
+                    ASSERT(foundTextureLevel != cachedTextureLevels.end());
+                    const std::vector<uint8_t> &capturedTextureLevel = foundTextureLevel->second;
 
-                (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
-                                           index.getLevelIndex(), getFormat, getType, data.data());
+                    cap(CaptureCompressedTexImage2D(
+                        replayState, true, index.getTarget(), index.getLevelIndex(), internalFormat,
+                        desc.size.width, desc.size.height, 0,
+                        static_cast<GLuint>(capturedTextureLevel.size()),
+                        capturedTextureLevel.data()));
+                }
+                else
+                {
+                    uint32_t dataSize = pixelBytes * desc.size.width * desc.size.height;
 
-                cap(CaptureTexImage2D(replayState, true, index.getTarget(), index.getLevelIndex(),
-                                      internalFormat, desc.size.width, desc.size.height, 0,
-                                      getFormat, getType, data.data()));
+                    bool result = data.resize(dataSize);
+                    ASSERT(result);
+
+                    gl::PixelPackState packState;
+                    packState.alignment = 1;
+
+                    (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
+                                               index.getLevelIndex(), getFormat, getType,
+                                               data.data());
+
+                    cap(CaptureTexImage2D(replayState, true, index.getTarget(),
+                                          index.getLevelIndex(), internalFormat, desc.size.width,
+                                          desc.size.height, 0, getFormat, getType, data.data()));
+                }
             }
             else
             {
@@ -2106,6 +2127,43 @@ void FrameCapture::maybeCaptureClientData(const gl::Context *context, const Call
             break;
         }
 
+        case gl::EntryPoint::CompressedTexImage2D:
+        {
+            // For compressed textures, track a shadow copy of the data
+            // for use during mid-execution capture, rather than reading it back
+            // with ANGLE_get_image
+
+            // If data is coming from a buffer, determine how to create a shadow copy
+            ASSERT(!context->getState().getTargetBuffer(gl::BufferBinding::PixelUnpack));
+
+            GLint level = call.params.getParam("level", ParamType::TGLint, 1).value.GLintVal;
+
+            GLsizei imageSize =
+                call.params.getParam("imageSize", ParamType::TGLsizei, 6).value.GLsizeiVal;
+
+            const uint8_t *data = static_cast<const uint8_t *>(
+                call.params.getParam("data", ParamType::TvoidConstPointer, 7)
+                    .value.voidConstPointerVal);
+
+            // If no data was provided, nothing to capture
+            if (!data)
+            {
+                return;
+            }
+
+            // Look up the currently bound 2D texture
+            gl::Texture *texture = context->getState().getTargetTexture(gl::TextureType::_2D);
+
+            // Create the copy
+            std::vector<uint8_t> compressedData;
+            compressedData.assign(data, data + imageSize);
+
+            // Track it along with the current texture ID and level
+            CompressedTextureLevel textureLevel(texture->getId(), level);
+            mCachedCompressedTextureLevels[textureLevel] = std::move(compressedData);
+            break;
+        }
+
         default:
             break;
     }
@@ -2209,8 +2267,8 @@ void FrameCapture::onEndFrame(const gl::Context *context)
     if (enabled() && mFrameIndex == mFrameStart)
     {
         mSetupCalls.clear();
-        CaptureMidExecutionSetup(context, &mSetupCalls, mCachedShaderSources,
-                                 mCachedProgramSources);
+        CaptureMidExecutionSetup(context, &mSetupCalls, mCachedShaderSources, mCachedProgramSources,
+                                 mCachedCompressedTextureLevels);
     }
 }
 
