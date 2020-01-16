@@ -142,6 +142,30 @@
       "revId": "479aaeb6722dab57a608cd9ebda6ddd9e157e8d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c11cc8af_629d4546",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T21:38:54Z",
+      "side": 1,
+      "message": "There are some weird edge formats where you can attach a renderbuffer or texture to a framebuffer but not both. The spec refers to renderbuffer and texture attachments as \u0027color buffers\u0027 or \u0027color attachments\u0027. Underneath they could be textures, renderbuffers or even surfaces.",
+      "parentUuid": "f8da79ec_4d0057f9",
+      "range": {
+        "startLine": 258,
+        "startChar": 48,
+        "endLine": 258,
+        "endChar": 60
+      },
+      "revId": "479aaeb6722dab57a608cd9ebda6ddd9e157e8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
