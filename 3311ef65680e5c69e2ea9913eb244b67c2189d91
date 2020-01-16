@@ -286,6 +286,30 @@
       "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75f38407_514d1f30",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-16T21:36:20Z",
+      "side": 0,
+      "message": "Well, you have the renderer pointer here, you can always get the queue from the renderer based on the cached priority. What am I missing?",
+      "parentUuid": "05c3c60d_57e0f7e1",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 45
+      },
+      "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
