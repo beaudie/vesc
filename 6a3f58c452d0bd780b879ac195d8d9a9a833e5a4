@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c651d36d_8157f11e",
+        "filename": "DEPS",
+        "patchSetId": 11
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-16T22:15:53Z",
+      "side": 1,
+      "message": "In theory, it should work on all platforms.  Could probably gate it to the ones we care about (Windows/Linux/Android).  I\u0027ve never actually run ANGLE on a Mac.",
+      "parentUuid": "1bee6580_22067bb0",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49f2d18d_5c06c747",
         "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2020-01-16T02:09:19Z",
       "side": 1,
       "message": "Is this the resolution that the replay is being rendered with?   Assuming so, why is it so small as compared to something like 1920x1080?",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fdf7da3_e1f97eb1",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-16T22:15:53Z",
+      "side": 1,
+      "message": "That\u0027s the resolution the benchmark was running when the capture was taken, which I think we\u0027ve all been defaulting to.  Interesting question though:  What resolution do we want to run at, and does it need to be the same on all platforms?  It is tempting to try recording at the native resolution of Android, but it differs between devices.  I\u0027m going to try recording at 1080p, see how that looks.  I also need to figure out a way to set the rotation for Android in the perf test harness.",
+      "parentUuid": "49f2d18d_5c06c747",
       "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9e8b33d4_4b54b099",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-16T22:15:53Z",
+      "side": 1,
+      "message": "Yep, wrote it up to support adding them easily, following patterns from other perf tests.  The work is already done to have it enabled, so I\u0027d rather not undo the work, I don\u0027t think it is too confusing.  Ideally we\u0027d follow these frames up with Manhattan as soon as the Capture/Replay can handle it.",
+      "parentUuid": "0cc39c04_79a14939",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "afddd811_af7bb70c",
         "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
         "patchSetId": 11
@@ -64,6 +118,24 @@
       "writtenOn": "2020-01-16T02:09:19Z",
       "side": 1,
       "message": "Since \u0027frame\u0027 is unsigned, it\u0027s probably worth adding an assert that endFrame \u003e startFrame to catch typos in the future and prevent staring at a screen waiting for an (effectively) infinite test to end.",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "863598f2_b2394acb",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-16T22:15:53Z",
+      "side": 1,
+      "message": "Good call, I\u0027ll add the assert to initializeBenchmark.",
+      "parentUuid": "afddd811_af7bb70c",
       "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
