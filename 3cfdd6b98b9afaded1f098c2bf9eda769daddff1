@@ -2,6 +2,109 @@
   "comments": [
     {
       "key": {
+        "uuid": "56ca8f39_f17fab59",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-16T17:07:22Z",
+      "side": 1,
+      "message": "Isn\u0027t there more work to be done by the GL backend then if this extension is supported? In the very least, an implementation of `getActualPriority()`?",
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb3c525d_1b9fefb4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-16T17:07:22Z",
+      "side": 1,
+      "message": "I agree with Jamie that this should be replaced by the priority given to the constructor. When you need the queue, just call renderer-\u003egetQueue(priority).",
+      "range": {
+        "startLine": 820,
+        "startChar": 12,
+        "endLine": 820,
+        "endChar": 18
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10395cd9_c87fbca2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-16T17:07:22Z",
+      "side": 1,
+      "message": "typo: Queue",
+      "range": {
+        "startLine": 1168,
+        "startChar": 22,
+        "endLine": 1168,
+        "endChar": 28
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a31cead_524adf75",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-16T17:07:22Z",
+      "side": 1,
+      "message": "Could be simplified:\n\n    VkQueue lowQueue;\n    vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexLow, \u0026lowQueue);\n    mQueues[egl::ContextPriority::Low]    \u003d lowQueue;\n    mQueues[egl::ContextPriority::Medium] \u003d lowQueue;\n    mQueues[egl::ContextPriority::High]   \u003d lowQueue;\n\n    // If at least 2 queues, High has its own queue\n    if (queueCount \u003e 1)\n    {\n        vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexHigh,\n                         \u0026mQueues[egl::ContextPriority::High]);\n    }\n\n    // If at least 3 queues, Medium has its own queue\n    if (queueCount \u003e 2)\n    {\n        vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexMedium,\n                         \u0026mQueues[egl::ContextPriority::Medium]);\n    }",
+      "range": {
+        "startLine": 1166,
+        "startChar": 0,
+        "endLine": 1192,
+        "endChar": 5
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9df23c6c_0bc029c0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-16T17:07:22Z",
+      "side": 1,
+      "message": "So the application can ask for Low and then query and see that it got Medium for example? Is it a problem if the application asks for Medium and gets Low instead? If that\u0027s not a problem, then the order doesn\u0027t really matter, does it?",
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72b05497_f9d97666",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 7

@@ -190,6 +190,30 @@
       "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa929f14_3d9b87f9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-16T17:07:22Z",
+      "side": 0,
+      "message": "Honestly, since the code to do the better thing (wait queue idle instead of device idle) is done anyway, I personally prefer having vkQueueWaitIdle here.",
+      "parentUuid": "7f7e04c4_ff0238bc",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 45
+      },
+      "revId": "3311ef65680e5c69e2ea9913eb244b67c2189d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
