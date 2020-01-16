@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "7b042afa_49ef1118",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-16T21:31:02Z",
+      "side": 1,
+      "message": "OK. that would be good, because the whole QueryContext on gl/* is empty. I assumed it would be already plumbed up and just a pass through to the underlying EGL. And we are focused on Vulkan. I think we assumed this in other places too. need to check that.",
+      "parentUuid": "7f93afa5_22bdfb19",
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cb3c525d_1b9fefb4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
@@ -114,6 +132,30 @@
       "side": 1,
       "message": "This is in ContextVk, not SurfaceVk",
       "parentUuid": "793f2587_6241c835",
+      "range": {
+        "startLine": 820,
+        "startChar": 12,
+        "endLine": 820,
+        "endChar": 18
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1e943d5_feff0919",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-16T21:31:02Z",
+      "side": 1,
+      "message": "Unclear. \nI have changed ContextVk to hold the priority passed in from updated constructor. \nSo line above is now:\negl::ContextPriority mContextPriority;\nAnd method:\ninline VkQueue getQueue() const { return mRenderer-\u003egetQueue(mContextPriority); }\n\nSurfaceVk however, the priority is not sufficient. I have already observed that at time of flush/ during SurfaceVk::Destroy, that it is uncurrent. So caching priority or context there would not be useful. Only thing persistent would be the Queue.",
+      "parentUuid": "75e27eb3_9214ad4e",
       "range": {
         "startLine": 820,
         "startChar": 12,
@@ -317,6 +359,30 @@
       "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa9c609c_35af6f16",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-16T21:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cfd77a8_597f17c5",
+      "range": {
+        "startLine": 297,
+        "startChar": 4,
+        "endLine": 297,
+        "endChar": 19
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
