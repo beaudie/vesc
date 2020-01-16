@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e7a4f08f_74806abd",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T21:34:30Z",
+      "side": 1,
+      "message": "nit: probably should move this to gl::State (basically ContextState)",
+      "range": {
+        "startLine": 697,
+        "startChar": 4,
+        "endLine": 697,
+        "endChar": 31
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56ca8f39_f17fab59",
         "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
         "patchSetId": 7
@@ -374,6 +397,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "4cfd77a8_597f17c5",
+      "range": {
+        "startLine": 297,
+        "startChar": 4,
+        "endLine": 297,
+        "endChar": 19
+      },
+      "revId": "3cfdd6b98b9afaded1f098c2bf9eda769daddff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8aaeb178_fc9b90b2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T21:34:30Z",
+      "side": 1,
+      "message": "Not seeing it in the ToT patch?",
+      "parentUuid": "aa9c609c_35af6f16",
       "range": {
         "startLine": 297,
         "startChar": 4,
