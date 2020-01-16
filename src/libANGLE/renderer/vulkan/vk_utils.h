@@ -107,12 +107,11 @@ struct Format;
 template <typename VulkanStruct1, typename VulkanStruct2>
 void AppendToPNextChain(VulkanStruct1 *chainStart, VulkanStruct2 *ptr)
 {
+    ASSERT(ptr->pNext == nullptr);
+
     VkBaseOutStructure *localPtr = reinterpret_cast<VkBaseOutStructure *>(chainStart);
-    while (localPtr->pNext)
-    {
-        localPtr = localPtr->pNext;
-    }
-    localPtr->pNext = reinterpret_cast<VkBaseOutStructure *>(ptr);
+    ptr->pNext                   = localPtr->pNext;
+    localPtr->pNext              = reinterpret_cast<VkBaseOutStructure *>(ptr);
 }
 
 extern const char *gLoaderLayersPathEnv;
