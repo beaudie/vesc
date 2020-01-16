@@ -16,6 +16,24 @@
       "revId": "e9e8e2cee6e94749fba6138746fe03110bf40861",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24c77786_199c9f11",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T17:47:57Z",
+      "side": 0,
+      "message": "Yes, sorry, got lost in the merge.",
+      "parentUuid": "db0a3ce8_1d90a9ef",
+      "revId": "e9e8e2cee6e94749fba6138746fe03110bf40861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -22,6 +22,30 @@
       "revId": "14f76ff60cf69e7ab0b1a456a42d5c45ac56e023",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "789b68fb_4ec11835",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T17:47:57Z",
+      "side": 1,
+      "message": "Reworded.",
+      "parentUuid": "6c66a668_96041dd5",
+      "range": {
+        "startLine": 815,
+        "startChar": 56,
+        "endLine": 815,
+        "endChar": 74
+      },
+      "revId": "14f76ff60cf69e7ab0b1a456a42d5c45ac56e023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
