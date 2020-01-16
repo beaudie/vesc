@@ -52,6 +52,24 @@
       "revId": "7aabe88f85a68ffc701cfd65629e91522dcfd7c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b71adeaa_d4d5f44a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-16T16:35:04Z",
+      "side": 1,
+      "message": "I switched the design to use composition instead of inheritance and made this class \"ResourceUseList\".",
+      "parentUuid": "a52c6226_0e22aea6",
+      "revId": "7aabe88f85a68ffc701cfd65629e91522dcfd7c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
