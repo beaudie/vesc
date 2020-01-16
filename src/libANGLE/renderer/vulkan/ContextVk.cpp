@@ -642,7 +642,7 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     mCommandQueue.destroy(device);
 
-    mCommandGraph.getResourceUseList().releaseResourceUses();
+    mResourceUseList.releaseResourceUses();
 
     mUtils.destroy(device);
 
@@ -803,8 +803,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
 
         gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getScissoredRenderArea(this);
-        if (!mDrawFramebuffer->appendToStartedRenderPass(&mCommandGraph.getResourceUseList(),
-                                                         scissoredRenderArea,
+        if (!mDrawFramebuffer->appendToStartedRenderPass(&mResourceUseList, scissoredRenderArea,
                                                          &mRenderPassCommandBuffer))
         {
             ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, scissoredRenderArea,
@@ -3128,13 +3127,13 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
         {
             samplerVk     = nullptr;
             samplerSerial = kZeroSerial;
-            textureVk->onSamplerGraphAccess(&mCommandGraph.getResourceUseList());
+            textureVk->onSamplerGraphAccess(&mResourceUseList);
         }
         else
         {
             samplerVk     = vk::GetImpl(sampler);
             samplerSerial = samplerVk->getSerial();
-            samplerVk->onSamplerGraphAccess(&mCommandGraph.getResourceUseList());
+            samplerVk->onSamplerGraphAccess(&mResourceUseList);
         }
 
         vk::ImageHelper &image = textureVk->getImage();
@@ -3160,7 +3159,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
             image.changeLayout(aspectFlags, textureLayout, srcLayoutChange);
         }
 
-        textureVk->onImageViewGraphAccess(&mCommandGraph.getResourceUseList());
+        textureVk->onImageViewGraphAccess(&mResourceUseList);
         image.addReadDependency(this, recorder);
 
         mActiveTextures[textureUnit].texture = textureVk;
