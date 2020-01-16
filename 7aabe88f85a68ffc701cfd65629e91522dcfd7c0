@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34c8336c_d59d7dc0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-16T02:15:56Z",
+      "side": 1,
+      "message": "I think \"ResourceTracker\" or \"ResourceUseTracker\" would be a better name for this class, since it\u0027s tracking the resources being used, rather than actually using the resources itself.",
+      "revId": "7aabe88f85a68ffc701cfd65629e91522dcfd7c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
