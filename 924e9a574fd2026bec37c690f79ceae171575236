@@ -118,6 +118,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4cc7b05c_257db8e0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-17T19:11:04Z",
+      "side": 1,
+      "message": "I adjusted my logic slightly, so right now:\n1Q \u003d {0.0} All medium\n2Q \u003d {0.0, 1.0} Medium and High. Low is medium\n3Q \u003d {0.0, ?, 1.0} LOW, Medium, High. \nJust need to guess whether Medium should be 0.4 or 0.5.",
+      "parentUuid": "67142e0e_efa4b0b2",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
