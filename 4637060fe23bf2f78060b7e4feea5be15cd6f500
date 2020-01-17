@@ -16,6 +16,24 @@
       "revId": "4637060fe23bf2f78060b7e4feea5be15cd6f500",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b7cf448_8054004f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-17T02:28:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a3ca861_7e068704",
+      "revId": "4637060fe23bf2f78060b7e4feea5be15cd6f500",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
