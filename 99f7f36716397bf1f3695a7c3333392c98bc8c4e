@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b7d40dfc_801edb84",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-17T03:11:03Z",
+      "side": 1,
+      "message": "This is where the isComplete() from above comes from: to keep with the destroyIfComplete() naming.",
+      "range": {
+        "startLine": 917,
+        "startChar": 18,
+        "endLine": 917,
+        "endChar": 34
+      },
+      "revId": "99f7f36716397bf1f3695a7c3333392c98bc8c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f89bb991_0e613c47",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 8
@@ -61,6 +84,30 @@
       "side": 1,
       "message": "hasRecordedCommands? hasCommandsToSubmit (this sounds best to me)? hasRecordedCommandsToSubmit?\n\nLet\u0027s see if Tim has a better suggestion.",
       "parentUuid": "c4b0dae9_7bcdc9c9",
+      "range": {
+        "startLine": 356,
+        "startChar": 29,
+        "endLine": 356,
+        "endChar": 36
+      },
+      "revId": "99f7f36716397bf1f3695a7c3333392c98bc8c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccf50e59_b4f22177",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-17T03:11:03Z",
+      "side": 1,
+      "message": "I agree that the angle/driver thing is a bit awkward here.\n\nMy votes are for:\nisInUseByANGLE() -\u003e hasPendingCommands()\nisInUseByDriver() -\u003e hasCommandsInFlight()\nisCurrentlyInUse() -\u003e isComplete()\n\nOtherwise, does the host (ANGLE) and device (Vulkan driver) terminology fit here?",
+      "parentUuid": "26b7c4e7_f3ee1a81",
       "range": {
         "startLine": 356,
         "startChar": 29,
