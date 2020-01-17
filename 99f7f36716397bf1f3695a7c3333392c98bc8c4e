@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "8a65ac13_e4e8513a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T21:42:23Z",
+      "side": 1,
+      "message": "Okay, I\u0027m happy with \u0027hasRecordedCommands\u0027 and \u0027hasRunningCommands\u0027. The bike shed has no obvious defects.",
+      "parentUuid": "fe363463_27a3c6af",
+      "range": {
+        "startLine": 356,
+        "startChar": 29,
+        "endLine": 356,
+        "endChar": 36
+      },
+      "revId": "99f7f36716397bf1f3695a7c3333392c98bc8c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "69109d3f_3090b189",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 8
