@@ -190,6 +190,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d1cc319f_899062f8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-17T20:22:13Z",
+      "side": 1,
+      "message": "the spec language describing \"VkDeviceQueueCreateInfo::pQueuePriorities\" is talking about the values to be set in a Vulkan structure that will be called with a Vulkan API by an application. I dont think any spec will be prescriptive about what an ICD should do with its HW.\n\nPriority levels are totally relative. In the case that a VK ICD says there are 2 Qs and we create 2 Qs with 0.5 and 1 priorities, all it means is that commands with priority 1 MAY be given more \"slices\" of GPU time than the one with priority 0.5 and this will continue to be true irrespective of whether VK ICD rounded down 0.5 to 0.0\n\nFYI - there is a small clarification missing from the spec, it should have said - \"This must be at least 2, if there are 2 Qs supported\". This got me initially because i thought the spec was mandating implementations to have atleast 2 Qs",
+      "parentUuid": "efa96a82_c056ac00",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
