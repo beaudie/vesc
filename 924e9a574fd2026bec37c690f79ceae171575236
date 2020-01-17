@@ -238,6 +238,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3275877d_0ecb943b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-17T21:19:59Z",
+      "side": 1,
+      "message": "\"In the example above, I believe the wording of the spec means that priorities in [0, 0.33) should fall in hw priority 0, (0.33, 0.66) should fall in hw priority 1 and (0.66, 1] should fall in hw priority 2.\"\nI agree with this, personally - round to nearest. So I think we should avoid guessing a round up, or round down. Just use 0.5 for medium when there are 3 or more levels.",
+      "parentUuid": "94cdbddf_b5edc0b6",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
