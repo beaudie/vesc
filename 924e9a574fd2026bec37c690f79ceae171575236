@@ -46,6 +46,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6e70e43_47f18e4e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-17T18:33:29Z",
+      "side": 1,
+      "message": "\"levels must be spread evenly over the range\" is the key language in the spec. Given that -\n1. All prioritites in EGL and Vulkan world are hints and not guarantees\n2. EGL only has 3 priority levels\n\ni do not get the concern/issue here at all",
+      "parentUuid": "41a00074_fe00ec4e",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
