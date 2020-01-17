@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d7ca09d7_5bb2ca74",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5626,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-17T16:46:19Z",
+      "side": 1,
+      "message": "TextureVk::initializeContents is supposed to be called by the frontend to clear the image if isRobustResourceInitEnabled(). That\u0027s why initImage() doesn\u0027t check for it.\n\nOk, it looks like this might be a bit more complicated to solve, so I won\u0027t block you on it. The idea is that calling syncState is harmless, because if the validation code didn\u0027t do it, something else would and the result is supposed to stay the same. The fact that it\u0027s not the same is the bug.\n\nTo give you context, imagine what would happen if validation was disabled (we have an extension for it). If you rely on validation to make things work, disabling validation would break functionality.\n\n+Jamie if he has any input.",
+      "parentUuid": "f82ea2eb_e37fbc4c",
+      "range": {
+        "startLine": 5623,
+        "startChar": 0,
+        "endLine": 5626,
+        "endChar": 5
+      },
+      "revId": "2a0cb2474d148ff66943b044f7d563cd90a43681",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d3e0d53_677f9bb6",
         "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
         "patchSetId": 6
