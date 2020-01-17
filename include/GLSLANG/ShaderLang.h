@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 222
+#define ANGLE_SH_VERSION 223
 
 enum ShShaderSpec
 {
@@ -327,6 +327,10 @@ const ShCompileOptions SH_ADD_BRESENHAM_LINE_RASTER_EMULATION = UINT64_C(1) << 5
 // for WebGL contexts becuase ARB_texture_rectangle may be necessary for the WebGL implementation
 // internally but shouldn't be exposed to WebGL user code.
 const ShCompileOptions SH_DISABLE_ARB_TEXTURE_RECTANGLE = UINT64_C(1) << 52;
+
+// This flag works around a driver bug by rewriting uses of row-major matrices
+// as column-major in ESSL 3.00 and greater shaders.
+const ShCompileOptions SH_REWRITE_ROW_MAJOR_MATRICES = UINT64_C(1) << 53;
 
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
