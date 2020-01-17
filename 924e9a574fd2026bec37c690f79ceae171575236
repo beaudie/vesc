@@ -22,6 +22,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41a00074_fe00ec4e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-17T18:05:57Z",
+      "side": 1,
+      "message": "I was referencing VkSpec 4.3.4 Queue Priority where priority is between 0.0(Lowest) and 1.0 (Highest). \"levels must be spread evenly over the range\". But we don\u0027t know what rounding will be used - up? nearest? down?\nSo I reasoned, and certainly, the more Qs, the lest likely that it will be an implementation. So if we go for medium at 0.33 to 0.40 and expect round up, then we hit most these cases adequately - and avoiding round up to 1.0. OK. I\u0027ll go with 0.40.\n1:Q \u003d {0.0}\n2:Q \u003d {0.0, 1.0}\n3:Q \u003d {0.0, 0.5, 1.0}\n--------------------------------\n4:Q \u003d {0.0, 0.33, 0.66, 1.0}\n5:Q \u003d {0.0, 0.25, 0.5, 0.75, 1.0}\n6:Q \u003d {0.0, 0.0, 0.4, 0.6, 0.8, 1.0}\n7:Q \u003d {0.0, 0.17, 0.33, 0.5, 0.67, 0.83, 1.0}\n8:Q \u003d {0.0, 0.14, 0.29, 0.43, 0.57, 0.71, 0.86, 1.0}",
+      "parentUuid": "3fc6c3a0_329c0315",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
