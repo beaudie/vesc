@@ -121,6 +121,5 @@
 // Shader support:
 4108 : KHR-GLES31.core.shader_image* = SKIP
 4108 SWIFTSHADER : KHR-GLES31.core.shader_image_size.*-nonMS-* = SKIP
-4300 : KHR-GLES31.core.shader_integer_mix.* = FAIL
 
 // OpenGL ES 3.2 / 3.1 extensions
