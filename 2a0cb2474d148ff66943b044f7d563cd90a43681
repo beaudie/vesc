@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "711fcc35_5398088c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5626,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T17:45:04Z",
+      "side": 1,
+      "message": "I don\u0027t fully understand what the bug is. If we can make a small test failure we should understand it better. I was not able to make the test that was in the CL fail with or without the patch.",
+      "parentUuid": "d7ca09d7_5bb2ca74",
+      "range": {
+        "startLine": 5623,
+        "startChar": 0,
+        "endLine": 5626,
+        "endChar": 5
+      },
+      "revId": "2a0cb2474d148ff66943b044f7d563cd90a43681",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d3e0d53_677f9bb6",
         "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
         "patchSetId": 6
