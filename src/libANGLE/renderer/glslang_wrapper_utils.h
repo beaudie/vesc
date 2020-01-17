@@ -38,6 +38,7 @@ struct GlslangSourceOptions
     bool useOldRewriteStructSamplers        = false;
     bool supportsTransformFeedbackExtension = false;
     bool emulateTransformFeedback           = false;
+    bool emulateLineRasterization           = false;
 };
 
 using SpirvBlob = std::vector<uint32_t>;
