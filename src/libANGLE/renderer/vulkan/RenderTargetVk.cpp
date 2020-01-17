@@ -61,12 +61,15 @@ angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk,
     ASSERT(commandBuffer->valid());
     ASSERT(!mImage->getFormat().actualImageFormat().hasDepthOrStencilBits());
 
-    // TODO(jmadill): Use automatic layout transition. http://anglebug.com/2361
+    // TODO(jmadill): Use automatic layout  transition. http://anglebug.com/2361
     mImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment,
                          commandBuffer);
 
-    // Set up dependencies between the RT resource and the Framebuffer.
-    mImage->addWriteDependency(contextVk, framebufferVk);
+    if (contextVk->commandGraphEnabled())
+    {
+        // Set up dependencies between the RT resource and the Framebuffer.
+        mImage->addWriteDependency(contextVk, framebufferVk);
+    }
 
     onImageViewAccess(contextVk);
 
