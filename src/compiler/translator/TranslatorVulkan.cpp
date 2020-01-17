@@ -446,9 +446,10 @@ TVariable *AddANGLEPositionVaryingDeclaration(TIntermBlock *root,
                                               TQualifier qualifier)
 {
     // Define a driver varying vec2 "ANGLEPosition".
-    TType *varyingType               = new TType(EbtFloat, EbpMedium, qualifier, 2);
-    TVariable *varyingVar            = new TVariable(symbolTable, ImmutableString("ANGLEPosition"),
-                                          varyingType, SymbolType::AngleInternal);
+    TType *varyingType = new TType(EbtFloat, EbpMedium, qualifier, 2);
+    TVariable *varyingVar =
+        new TVariable(symbolTable, ImmutableString(vk::kLineRasterEmulationPosition), varyingType,
+                      SymbolType::AngleInternal);
     TIntermSymbol *varyingDeclarator = new TIntermSymbol(varyingVar);
     TIntermDeclaration *varyingDecl  = new TIntermDeclaration;
     varyingDecl->appendDeclarator(varyingDeclarator);

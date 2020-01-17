@@ -45,16 +45,15 @@ class TOutputVulkanGLSL : public TOutputGLSL
 
   protected:
     void writeLayoutQualifier(TIntermTyped *variable) override;
-    void writeQualifier(TQualifier qualifier, const TType &type, const TSymbol *symbol) override;
     void writeVariableType(const TType &type,
                            const TSymbol *symbol,
                            bool isFunctionArgument) override;
 
     // Every resource that requires set & binding layout qualifiers is assigned set 0 and an
-    // arbitrary binding when outputting GLSL.  Every input/output that requires location and
-    // component layout qualifiers is assigned component 0 and an arbitrary location as well.
+    // arbitrary binding when outputting GLSL.  Every input/output that requires a location
+    // layout qualifiers is assigned an arbitrary location as well.
     //
-    // Glslang wrapper modifies set, binding, location and component decorations in SPIR-V directly.
+    // Glslang wrapper modifies set, binding and location decorations in SPIR-V directly.
     uint32_t mNextUnusedBinding;
     uint32_t mNextUnusedInputLocation;
     uint32_t mNextUnusedOutputLocation;
