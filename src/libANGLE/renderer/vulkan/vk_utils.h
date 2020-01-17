@@ -606,6 +606,7 @@ class Recycler final : angle::NonCopyable
     std::vector<T> mObjectFreeList;
 };
 
+void MakeDebugUtilsLabel(GLenum source, const char *marker, VkDebugUtilsLabelEXT *label);
 }  // namespace vk
 
 namespace gl_vk
