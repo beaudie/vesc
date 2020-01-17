@@ -37,6 +37,52 @@
     },
     {
       "key": {
+        "uuid": "1226b76d_6b06d3ba",
+        "filename": "DEPS",
+        "patchSetId": 11
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "nit: maybe restricted_captures? since we\u0027ll likely be sharing with partners. (note that the only other \"internal\" repo, the GLES 1 CTS, is also something we could share)",
+      "range": {
+        "startLine": 417,
+        "startChar": 13,
+        "endLine": 417,
+        "endChar": 30
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7169890_52f10093",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "this copy shouldn\u0027t be necessary. we should be able to add internal_captures directly to data_deps. some paths might be different on Android. they will be consistent.",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 5
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49f2d18d_5c06c747",
         "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
         "patchSetId": 11
@@ -90,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "f46d2228_0c0cff58",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "Probably should be something that\u0027s captured in the replay. I\u0027m fine with specializing it here to start.",
+      "parentUuid": "e1bef264_f804843a",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0cc39c04_79a14939",
         "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
         "patchSetId": 11
@@ -125,6 +189,24 @@
     },
     {
       "key": {
+        "uuid": "0111e616_67d762ef",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "+1 to flattening out the TRex understanding as proposed below.",
+      "parentUuid": "9e8b33d4_4b54b099",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "afddd811_af7bb70c",
         "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
         "patchSetId": 11
@@ -154,6 +236,184 @@
       "side": 1,
       "message": "Good call, I\u0027ll add the assert to initializeBenchmark.",
       "parentUuid": "afddd811_af7bb70c",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "299b5ad1_f41aa9b6",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "instead of using the start frame, can we use an enum? e.g.\n\nenum class CapturePerfTestID {\n  TRex200,\n  TRex800,\n  TRex900,\n  TRex1300,\n};\n\nin initializeBenchmark:\n\nswitch (testID)\n{\n    case CapturePerfTestID::TRex200:\n       mStartFrame \u003d trex_200_210::kReplayFrameStart;\n       mEndFrame \u003d trex_200_210::kReplayFrameStart;\n       mReplayFunc \u003d trex_200_210::ReplayContext1Frame;\n\n   ... and so on ...\n};\n\nin drawBenchmark:\n\nfor (uint32_t frame \u003d mStartFrame; frame \u003c mEndFrame; ++frame) {\n   mReplayFunc(frame);\n   swap();\n}\n\nIt\u0027s good to run the whole benchmark in \"drawBenchmark\" as that will be the way to calibrate and run the benchmark with the lowest variance and highest consistency. I\u0027d be curious as to how long an iteration takes.\n\nAlso why it\u0027s good to capture small ranges of frames (say 4-5. 10 might be okay.)",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 20
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44e441ba_fbfae6b7",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "We can omit these given above comments.",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 28
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f034129d_756c1803",
+        "filename": "src/tests/perf_tests/internal_captures/InternalCaptureTests.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "Can you please also document how to add new trace tests and include an upload wrapper script if necessary?",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e925fa15_3de8fd64",
+        "filename": "src/tests/perf_tests/internal_captures/InternalCaptureTests.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "nit: runhooks",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 12
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cbcc1c3_5eb07c9a",
+        "filename": "src/tests/perf_tests/internal_captures/InternalCaptureTests.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "nit: can we simply call these CapturePerfTest or CaptureBenchmark? Alternately we could use the term trace: TracePerfTest or TraceBenchmark.",
+      "range": {
+        "startLine": 32,
+        "startChar": 43,
+        "endLine": 32,
+        "endChar": 69
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53d1ad8b_e0700b6d",
+        "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "can you add a top-level comment?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 28
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67e0008d_b119ef7e",
+        "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "can you instead keep a list of perf tests here?",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 0
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2323be70_b9ece3e9",
+        "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T18:15:50Z",
+      "side": 1,
+      "message": "could you separate out the TRex logic from this? and make it handle perf tests specifically instead of \"trex tests\".\n\nalso one thing we should consider prioritizing is merging the .angledata files into one file that may be internally gzipped. that will make the setup for this simpler.\n\nanother thing I can possibly help with is making this an angle_source_set template instead of a weird variable definition.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 1
+      },
       "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
