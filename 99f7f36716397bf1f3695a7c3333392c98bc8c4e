@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "0a9ef124_ee24005b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-17T03:20:05Z",
+      "side": 1,
+      "message": "The first two sound ok to me. I\u0027m not sure isComplete() is very clear though. Like `framebuffer.isComplete()` is totally misleading. If you name the other two as hasPendingCommands() and hasCommandsInFlight(), the last one (which is the || of the two) might as well be hasCommands()? Or the more verbose hasPendingOrInFlightCommands().",
+      "parentUuid": "ccf50e59_b4f22177",
+      "range": {
+        "startLine": 356,
+        "startChar": 29,
+        "endLine": 356,
+        "endChar": 36
+      },
+      "revId": "99f7f36716397bf1f3695a7c3333392c98bc8c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "69109d3f_3090b189",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 8
