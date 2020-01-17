@@ -234,6 +234,30 @@
       "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ffb18eb_85be83d5",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-17T17:27:12Z",
+      "side": 1,
+      "message": "What happens if you had the code of ReadingUninitializedTexture followed by eglSwapBuffers followed by the code of BufferDataZeroSize? If that reproduces the problem, it could turn into a simpler code as a single test.",
+      "parentUuid": "dc3f57eb_6ba7da92",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 551,
+        "endChar": 48
+      },
+      "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
