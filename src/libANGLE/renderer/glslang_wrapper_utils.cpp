@@ -113,14 +113,6 @@ void GetBuiltInResourcesFromCaps(const gl::Caps &caps, TBuiltInResource *outBuil
     outBuiltInResources->maxVertexUniformVectors          = caps.maxVertexUniformVectors;
 }
 
-// Information used for Xfb layout qualifier
-struct XFBBufferInfo
-{
-    GLuint index;
-    GLuint offset;
-    GLuint stride;
-};
-
 struct VaryingNameEquals
 {
     VaryingNameEquals(const std::string &name_) : name(name_) {}
@@ -128,8 +120,6 @@ struct VaryingNameEquals
 
     std::string name;
 };
-
-using XfbBufferMap = std::map<std::string, XFBBufferInfo>;
 
 class IntermediateShaderSource final : angle::NonCopyable
 {
@@ -497,6 +487,60 @@ uint32_t CountExplicitOutputs(OutputIter outputsBegin,
     return std::accumulate(outputsBegin, outputsEnd, 0, reduce);
 }
 
+ShaderInterfaceVariableInfo *AddShaderInterfaceVariable(ShaderInterfaceVariableInfoMap *infoMap,
+                                                        const std::string &varName)
+{
+    ASSERT(infoMap->find(varName) == infoMap->end());
+    return &(*infoMap)[varName];
+}
+
+ShaderInterfaceVariableInfo *GetShaderInterfaceVariable(ShaderInterfaceVariableInfoMap *infoMap,
+                                                        const std::string &varName)
+{
+    ASSERT(infoMap->find(varName) != infoMap->end());
+    return &(*infoMap)[varName];
+}
+
+// Add set/binding information for a resource.
+ShaderInterfaceVariableInfo *AddResourceInfo(ShaderInterfaceVariableInfoMap *infoMap,
+                                             const std::string &varName,
+                                             uint32_t set,
+                                             uint32_t binding)
+{
+    ShaderInterfaceVariableInfo *info = AddShaderInterfaceVariable(infoMap, varName);
+    info->set                         = set;
+    info->binding                     = binding;
+    return info;
+}
+
+// Add location information for an in/out variable.
+ShaderInterfaceVariableInfo *AddLocationInfo(ShaderInterfaceVariableInfoMap *infoMap,
+                                             const std::string &varName,
+                                             uint32_t location,
+                                             uint32_t component,
+                                             gl::ShaderBitSet activeStages)
+{
+    ShaderInterfaceVariableInfo *info = AddShaderInterfaceVariable(infoMap, varName);
+    info->location                    = location;
+    info->component                   = component;
+    info->activeStages                = activeStages;
+    return info;
+}
+
+// Modify an existing out variable and add transform feedback information.
+ShaderInterfaceVariableInfo *SetXfbInfo(ShaderInterfaceVariableInfoMap *infoMap,
+                                        const std::string &varName,
+                                        uint32_t xfbBuffer,
+                                        uint32_t xfbOffset,
+                                        uint32_t xfbStride)
+{
+    ShaderInterfaceVariableInfo *info = GetShaderInterfaceVariable(infoMap, varName);
+    info->xfbBuffer                   = xfbBuffer;
+    info->xfbOffset                   = xfbOffset;
+    info->xfbStride                   = xfbStride;
+    return info;
+}
+
 std::string GenerateTransformFeedbackVaryingOutput(const gl::TransformFeedbackVarying &varying,
                                                    const gl::UniformTypeInfo &info,
                                                    size_t strideBytes,
@@ -599,13 +643,13 @@ void GenerateTransformFeedbackEmulationOutputs(const GlslangSourceOptions &optio
     vertexShader->insertTransformFeedbackOutput(std::move(xfbOut));
 }
 
-// Calculates XFB layout qualifier arguments for each tranform feedback varying, inserts
-// layout quailifier for built-in varyings here and gathers calculated arguments for non built-in
-// varyings for later use.
+// Calculates XFB layout qualifier arguments for each tranform feedback varying.  Stores calculated
+// values for the SPIR-V transformation.
 void GenerateTransformFeedbackExtensionOutputs(const gl::ProgramState &programState,
                                                IntermediateShaderSource *vertexShader,
                                                XfbBufferMap *xfbBufferMap,
-                                               const gl::ProgramLinkedResources &resources)
+                                               const gl::ProgramLinkedResources &resources,
+                                               ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     const std::vector<gl::TransformFeedbackVarying> &tfVaryings =
         programState.getLinkedTransformFeedbackVaryings();
@@ -613,17 +657,13 @@ void GenerateTransformFeedbackExtensionOutputs(const gl::ProgramState &programSt
     const bool isInterleaved =
         programState.getTransformFeedbackBufferMode() == GL_INTERLEAVED_ATTRIBS;
 
+    constexpr char xfbPositionVarName[] = "xfbANGLEPosition";
+
     std::string xfbDecl;
-    bool hasBuiltInVaryings     = false;
-    bool replacePositionVarying = false;
-    uint32_t currentOffset      = 0;
-    uint32_t currentStride      = 0;
-    uint32_t bufferIndex        = 0;
-    std::string varyingType;
-    std::string xfbIndices;
-    std::string xfbOffsets;
-    std::string xfbStrides;
-    std::string replacedPositionLayout;
+    std::string xfbOut;
+    uint32_t currentOffset = 0;
+    uint32_t currentStride = 0;
+    uint32_t bufferIndex   = 0;
 
     for (uint32_t varyingIndex = 0; varyingIndex < tfVaryings.size(); ++varyingIndex)
     {
@@ -644,113 +684,52 @@ void GenerateTransformFeedbackExtensionOutputs(const gl::ProgramState &programSt
             currentStride = varyingStrides[varyingIndex];
         }
 
+        const std::string &tfVaryingName = tfVaryings[varyingIndex].mappedName;
+
         if (tfVaryings[varyingIndex].isBuiltIn())
         {
-            xfbIndices  = Str(bufferIndex);
-            xfbOffsets  = Str(currentOffset);
-            xfbStrides  = Str(currentStride);
-            varyingType = gl::GetGLSLTypeString(tfVaryings[varyingIndex].type);
-
-            if (tfVaryings[varyingIndex].name.compare("gl_Position") == 0)
+            if (tfVaryingName == "gl_Position")
             {
-                replacePositionVarying = true;
+                uint32_t xfbPositionLocation = resources.varyingPacking.getMaxSemanticIndex() +
+                                               kXfbANGLEPositionLocationOffset;
 
-                std::string xfbReplacedPositionLocation =
-                    Str(resources.varyingPacking.getMaxSemanticIndex() +
-                        kXfbANGLEPositionLocationOffset);
+                AddLocationInfo(variableInfoMapOut, xfbPositionVarName, xfbPositionLocation,
+                                ShaderInterfaceVariableInfo::kInvalid,
+                                gl::ShaderBitSet(gl::ShaderMap::Vertex));
+                SetXfbInfo(variableInfoMapOut, xfbPositionVarName, bufferIndex, currentOffset,
+                           currentStride);
 
-                replacedPositionLayout = "layout(location = " + xfbReplacedPositionLocation +
-                                         ", xfb_buffer = " + xfbIndices +
-                                         ", xfb_offset = " + xfbOffsets +
-                                         ", xfb_stride = " + xfbStrides + ") out " + varyingType +
-                                         " xfbANGLEPosition;\n";
+                // Add declaration and initialization code for the new varying.
+                // TODO(syoussefi): add the following code under a specialization constant, so no
+                // code generation would be necessary here.  That would allow compilation of the
+                // shader at glCompileShader time.  http://anglebug.com/3394.
+                std::string varyingType = gl::GetGLSLTypeString(tfVaryings[varyingIndex].type);
+                xfbDecl = "layout(location = " + Str(xfbPositionLocation) + ") out " + varyingType +
+                          " " + xfbPositionVarName + ";\n";
+                xfbOut += "xfbANGLEPosition = gl_Position;\n";
             }
             else
             {
-                // Since built-in varyings are not in RegisterList, we can add layout qualifier
-                // here.
-                if (!hasBuiltInVaryings)
-                {
-                    hasBuiltInVaryings = true;
-
-                    xfbDecl += "out gl_PerVertex\n{\n";
-                    for (uint32_t index = 0; index < tfVaryings.size(); ++index)
-                    {
-                        // need to add gl_Position to gl_Pervertex because we declared layout for
-                        // replaced xfbANGLEPosition instead
-                        if (tfVaryings[index].name.compare("gl_Position") == 0)
-                        {
-                            xfbDecl += "vec4 gl_Position;\n";
-                            break;
-                        }
-                    }
-                }
-                xfbDecl += "layout(xfb_buffer = " + xfbIndices + ", xfb_offset = " + xfbOffsets +
-                           ", xfb_stride = " + xfbStrides + ") " + varyingType + " " +
-                           tfVaryings[varyingIndex].name + ";\n";
+                // Builtins don't have a location assignment.  This call just adds the entry to the
+                // map for SetXfbInfo to find it.
+                AddLocationInfo(variableInfoMapOut, tfVaryingName,
+                                ShaderInterfaceVariableInfo::kInvalid,
+                                ShaderInterfaceVariableInfo::kInvalid, gl::ShaderBitSet());
+                SetXfbInfo(variableInfoMapOut, tfVaryingName, bufferIndex, currentOffset,
+                           currentStride);
             }
         }
         else
         {
-            // Layout qualifier for non built-in varying will be written later, so we just save
-            // Xfb layout qualifier information into the xfbBufferMap.
-            XFBBufferInfo bufferInfo;
-            bufferInfo.index  = bufferIndex;
-            bufferInfo.offset = currentOffset;
-            bufferInfo.stride = currentStride;
-            xfbBufferMap->insert(make_pair(tfVaryings[varyingIndex].name, bufferInfo));
+            // Set xfb info for this varying.  AssignVaryingLocations should have already added
+            // location information for these varyings.
+            SetXfbInfo(variableInfoMapOut, tfVaryingName, bufferIndex, currentOffset,
+                       currentStride);
         }
     }
-
-    if (hasBuiltInVaryings)
-    {
-        // We should add non transform feedback built-in varyings to gl_PerVertex because once
-        // we declare gl_PerVertex, all built-in varyings used in shaders should be included
-        // in gl_PerVertex struct.
-        for (const sh::ShaderVariable &varying : resources.varyingPacking.getInputVaryings())
-        {
-            if (varying.isBuiltIn())
-            {
-                auto iter = std::find_if(tfVaryings.begin(), tfVaryings.end(),
-                                         VaryingNameEquals(varying.name));
-                if (iter == tfVaryings.end())
-                {
-                    xfbDecl += gl::GetGLSLTypeString(varying.type) + " " + varying.name + ";\n";
-                }
-            }
-        }
-        xfbDecl += "\n};\n";
-    }
-
-    xfbDecl += replacedPositionLayout;
 
     vertexShader->insertTransformFeedbackDeclaration(std::move(xfbDecl));
-
-    std::string xfbOut;
-    if (replacePositionVarying)
-    {
-        xfbOut += "xfbANGLEPosition = gl_Position;\n";
-    }
-
     vertexShader->insertTransformFeedbackOutput(std::move(xfbOut));
-}
-
-ShaderInterfaceVariableInfo *AddShaderInterfaceVariable(ShaderInterfaceVariableInfoMap *infoMap,
-                                                        const std::string &varName)
-{
-    ASSERT(infoMap->find(varName) == infoMap->end());
-    return &(*infoMap)[varName];
-}
-
-ShaderInterfaceVariableInfo *AddResourceInfo(ShaderInterfaceVariableInfoMap *infoMap,
-                                             const std::string &varName,
-                                             uint32_t set,
-                                             uint32_t binding)
-{
-    ShaderInterfaceVariableInfo *info = AddShaderInterfaceVariable(infoMap, varName);
-    info->set                         = set;
-    info->binding                     = binding;
-    return info;
 }
 
 void AssignAttributeLocations(const gl::ProgramState &programState,
@@ -809,7 +788,7 @@ void AssignOutputLocations(const gl::ProgramState &programState,
 void AssignVaryingLocations(const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<IntermediateShaderSource> *shaderSources,
-                            XfbBufferMap *xfbBufferMap)
+                            ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
 
     // Assign varying locations.
@@ -840,38 +819,27 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
         const std::string &name =
             varying.isStructField() ? varying.parentStructName : varying.varying->name;
 
-        std::string locationString = "location = " + Str(varyingReg.registerRow);
+        uint32_t location  = varyingReg.registerRow;
+        uint32_t component = ShaderInterfaceVariableInfo::kInvalid;
         if (varyingReg.registerColumn > 0)
         {
             ASSERT(!varying.varying->isStruct());
             ASSERT(!gl::IsMatrixType(varying.varying->type));
-            locationString += ", component = " + Str(varyingReg.registerColumn);
+            component = varyingReg.registerColumn;
         }
 
-        std::string *layoutSpecifier = &locationString;
+        AddLocationInfo(variableInfoMapOut, varying.varying->mappedName, location, component,
+                        varying.shaderStages);
 
-        std::string xfbSpecifier;
-        XfbBufferMap::iterator iter;
-        iter = xfbBufferMap->find(name);
-        if (iter != xfbBufferMap->end())
-        {
-            XFBBufferInfo item = iter->second;
-            xfbSpecifier       = "xfb_buffer = " + Str(item.index) +
-                           ", xfb_offset = " + Str(item.offset) +
-                           ", xfb_stride = " + Str(item.stride) + ", " + locationString;
-            layoutSpecifier = &xfbSpecifier;
-        }
+        // TODO: from here: for simplicity, do the change that removes inactive varyings first.
+        // Then the below loop can be removed in this change.  This otherwise won't work because
+        // there wouldn't be a way to remove the inactive varyings by commenting them out (the
+        // translator is outputting full layout + location).
 
         for (const gl::ShaderType stage : gl::kAllGraphicsShaderTypes)
         {
             IntermediateShaderSource *shaderSource = &(*shaderSources)[stage];
-            if (shaderSource->empty())
-            {
-                ASSERT(!varying.shaderStages[stage]);
-                continue;
-            }
-
-            if (!varying.shaderStages[stage])
+            if (!shaderSource->empty() && !varying.shaderStages[stage])
             {
                 // If not active in this stage, remove the varying declaration.  Imagine the
                 // following scenario:
@@ -886,12 +854,10 @@ void AssignVaryingLocations(const gl::ProgramState &programState,
                 shaderSource->eraseLayoutAndQualifierSpecifiers(name, "");
                 continue;
             }
-
-            shaderSource->insertLayoutSpecifier(
-                name, stage == gl::ShaderType::Fragment ? locationString : *layoutSpecifier);
-            shaderSource->insertQualifierSpecifier(name, "");
         }
     }
+
+    // TODO: From here
 
     // Substitute layout and qualifier strings for the position varying. Use the first free
     // varying register after the packed varyings.
@@ -1195,6 +1161,7 @@ class SpirvTransformer final : angle::NonCopyable
                      SpirvBlob *spirvBlob)
         : mOriginalSpirvBlob(originalSpirvBlob),
           mShaderType(shaderType),
+          mHasTransformFeedbackOutput(false),
           mVariableInfoMap(variableInfoMap),
           mSpirvBlob(spirvBlob)
     {}
@@ -1228,6 +1195,9 @@ class SpirvTransformer final : angle::NonCopyable
 
     // Instructions that potentially need transformation.  They return true if the instruction is
     // transformed.  If false is returned, the instruction should be copied as-is.
+    bool transformCapability(const uint32_t *instruction, size_t wordCount);
+    bool transformEntryPoint(const uint32_t *instruction, size_t wordCount);
+    bool transformExecutionMode(const uint32_t *instruction, size_t wordCount);
     bool transformDecorate(const uint32_t *instruction, size_t wordCount);
 
     // Any other instructions:
@@ -1237,6 +1207,7 @@ class SpirvTransformer final : angle::NonCopyable
     // SPIR-V to transform:
     const std::vector<uint32_t> &mOriginalSpirvBlob;
     const gl::ShaderType mShaderType;
+    bool mHasTransformFeedbackOutput;
 
     // Input shader variable info map:
     const ShaderInterfaceVariableInfoMap &mVariableInfoMap;
@@ -1296,6 +1267,22 @@ uint32_t GetSpirvInstructionOp(const uint32_t *instruction)
     return instruction[0] & kOpMask;
 }
 
+void SetSpirvInstructionLength(uint32_t *instruction, size_t length)
+{
+    ASSERT(length < 0xFFFFu);
+
+    constexpr uint32_t kLengthMask = 0xFFFF0000u;
+    instruction[0] &= ~kLengthMask;
+    instruction[0] |= length << 16;
+}
+
+void SetSpirvInstructionOp(uint32_t *instruction, uint32_t op)
+{
+    constexpr uint32_t kOpMask = 0xFFFFu;
+    instruction[0] &= ~kOpMask;
+    instruction[0] |= op;
+}
+
 void SpirvTransformer::resolveVariableIds()
 {
     // Allocate storage for id-to-info map.  If %i is the id of a name in mVariableInfoMap, index i
@@ -1327,10 +1314,11 @@ void SpirvTransformer::resolveVariableIds()
                 visitVariable(instruction);
                 break;
             case spv::OpFunction:
-                // SPIR-V is structured in sections. Names appear before decorations, which are
-                // followed by type+variables and finally functions.  We are only interested in name
-                // and variable declarations (as well as type declarations for the sake of nameless
-                // interface blocks).  Early out when the function declaration section is met.
+                // SPIR-V is structured in sections (SPIR-V 1.0 Section 2.4 Logical Layout of a
+                // Module). Names appear before decorations, which are followed by type+variables
+                // and finally functions.  We are only interested in name and variable declarations
+                // (as well as type declarations for the sake of nameless interface blocks).  Early
+                // out when the function declaration section is met.
                 return;
             default:
                 break;
@@ -1350,13 +1338,16 @@ void SpirvTransformer::transformInstruction()
     // Since glslang succeeded in producing SPIR-V, we assume it to be valid.
     ASSERT(mCurrentWord + wordCount <= mOriginalSpirvBlob.size());
 
-    // Advance to next instruction.
-    mCurrentWord += wordCount;
-
     // Only look at interesting instructions.
     bool transformed = false;
     switch (opCode)
     {
+        case spv::OpCapability:
+            transformed = transformCapability(instruction, wordCount);
+            break;
+        case spv::OpEntryPoint:
+            transformed = transformEntryPoint(instruction, wordCount);
+            break;
         case spv::OpDecorate:
             transformed = transformDecorate(instruction, wordCount);
             break;
@@ -1369,6 +1360,9 @@ void SpirvTransformer::transformInstruction()
     {
         copyInstruction(instruction, wordCount);
     }
+
+    // Advance to next instruction.
+    mCurrentWord += wordCount;
 }
 
 void SpirvTransformer::visitName(const uint32_t *instruction)
@@ -1395,8 +1389,18 @@ void SpirvTransformer::visitName(const uint32_t *instruction)
     ASSERT(id < mVariableInfoById.size());
     ASSERT(mVariableInfoById[id] == nullptr);
 
+    const ShaderInterfaceVariableInfo *info = &infoIter->second;
+
     // Associate the id of this name with its info.
-    mVariableInfoById[id] = &infoIter->second;
+    mVariableInfoById[id] = info;
+
+    // Note if the variable is captured by transform feedback.  In that case, the TransformFeedback
+    // capability needs to be added.
+    if (mShaderType != gl::ShaderType::Fragment &&
+        info->xfbBuffer != ShaderInterfaceVariableInfo::kInvalid && info->activeStages[mShaderType])
+    {
+        mHasTransformFeedbackOutput = true;
+    }
 }
 
 void SpirvTransformer::visitTypeHelper(const uint32_t *instruction,
@@ -1517,6 +1521,81 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
     return true;
 }
 
+bool SpirvTransformer::transformCapability(const uint32_t *instruction, size_t wordCount)
+{
+    if (!mHasTransformFeedbackOutput)
+    {
+        return false;
+    }
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpCapability
+    constexpr size_t kCapabilityIndex = 1;
+
+    uint32_t capability = instruction[kCapabilityIndex];
+
+    // Transform feedback capability shouldn't have already been specified.
+    ASSERT(capability != spv::CapabilityTransformFeedback);
+
+    // Vulkan shaders have either Shader, Geometry or Tessellation capability.  We find this
+    // capability, and add the TransformFeedback capability after it.
+    if (capability != spv::CapabilityShader && capability != spv::CapabilityGeometry &&
+        capability != spv::CapabilityTessellation)
+    {
+        return false;
+    }
+
+    // Copy the original capability declaration.
+    copyInstruction(instruction, wordCount);
+
+    // Create the TransformFeedback capability declaration.
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpCapability
+    constexpr size_t kCapabilityInstructionLength = 2;
+
+    std::array<uint32_t, kCapabilityInstructionLength> newCapabilityDeclaration = {
+        instruction[0],  // length+opcode is identical
+    };
+    // Fill the fields.
+    newCapabilityDeclaration[kCapabilityIndex] = spv::CapabilityTransformFeedback;
+
+    copyInstruction(newCapabilityDeclaration, kCapabilityInstructionLength);
+
+    return true;
+}
+
+bool SpirvTransformer::transformEntryPoint(const uint32_t *instruction, size_t wordCount)
+{
+    if (!mHasTransformFeedbackOutput)
+    {
+        return false;
+    }
+
+    // Copy the OpEntryPoint instruction.
+    copyInstruction(instruction, wordCount);
+
+    // Add an OpExecutionMode Xfb instruction.
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpEntryPoint
+    constexpr size_t kEntryPointIdIndex = 2;
+
+    // SPIR-V 1.0 Section 3.32 Instructions, OpExecutionMode
+    constexpr size_t kExecutionModeInstructionLength  = 3;
+    constexpr size_t kExecutionModeIdIndex            = 1;
+    constexpr size_t kExecutionModeExecutionModeIndex = 2;
+
+    std::array<uint32_t, kExecutionInstructionLength> newExecutionModeDeclaration = {};
+
+    // Fill the fields.
+    SetSpirvInstructionOp(newExecutionModeDeclaration, spv::OpExecutionMode);
+    SetSpirvInstructionLength(newExecutionModeDeclaration, kExecutionInstructionLength);
+    newExecutionModeDeclaration[kExecutionModeIdIndex]            = instruction[kEntryPointIdIndex];
+    newExecutionModeDeclaration[kExecutionModeExecutionModeIndex] = spv::ExecutionModeXfb;
+
+    copyInstruction(newExecutionModeDeclaration, kExecutionModeInstructionLength);
+
+    return true;
+}
+
 void SpirvTransformer::copyInstruction(const uint32_t *instruction, size_t wordCount)
 {
     mSpirvBlob->insert(mSpirvBlob->end(), instruction, instruction + wordCount);
@@ -1598,30 +1677,6 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     IntermediateShaderSource *fragmentSource = &intermediateSources[gl::ShaderType::Fragment];
     IntermediateShaderSource *computeSource  = &intermediateSources[gl::ShaderType::Compute];
 
-    XfbBufferMap xfbBufferMap;
-
-    // Write transform feedback output code.
-    if (!vertexSource->empty())
-    {
-        if (programState.getLinkedTransformFeedbackVaryings().empty())
-        {
-            vertexSource->insertTransformFeedbackDeclaration("");
-            vertexSource->insertTransformFeedbackOutput("");
-        }
-        else
-        {
-            if (options.supportsTransformFeedbackExtension)
-            {
-                GenerateTransformFeedbackExtensionOutputs(programState, vertexSource, &xfbBufferMap,
-                                                          resources);
-            }
-            else if (options.emulateTransformFeedback)
-            {
-                GenerateTransformFeedbackEmulationOutputs(options, programState, vertexSource);
-            }
-        }
-    }
-
     // Assign outputs to the fragment shader, if any.
     if (!fragmentSource->empty())
     {
@@ -1637,12 +1692,34 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     if (computeSource->empty())
     {
         // Assign varying locations.
-        AssignVaryingLocations(programState, resources, &intermediateSources, &xfbBufferMap);
+        AssignVaryingLocations(programState, resources, &intermediateSources, variableInfoMapOut);
     }
 
     AssignUniformBindings(options, &intermediateSources, variableInfoMapOut);
     AssignTextureBindings(options, programState, variableInfoMapOut);
     AssignNonTextureBindings(options, programState, variableInfoMapOut);
+
+    // Write transform feedback output code.
+    if (!vertexSource->empty())
+    {
+        if (programState.getLinkedTransformFeedbackVaryings().empty())
+        {
+            vertexSource->insertTransformFeedbackDeclaration("");
+            vertexSource->insertTransformFeedbackOutput("");
+        }
+        else
+        {
+            if (options.supportsTransformFeedbackExtension)
+            {
+                GenerateTransformFeedbackExtensionOutputs(programState, vertexSource, resources,
+                                                          variableInfoMapOut);
+            }
+            else if (options.emulateTransformFeedback)
+            {
+                GenerateTransformFeedbackEmulationOutputs(options, programState, vertexSource);
+            }
+        }
+    }
 
     CleanupUnusedEntities(options.useOldRewriteStructSamplers, programState, resources,
                           &intermediateSources);
