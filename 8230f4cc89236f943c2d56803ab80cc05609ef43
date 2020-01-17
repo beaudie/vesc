@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86d22442_a160e414",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T15:01:53Z",
+      "side": 1,
+      "message": "maybe make a new variable is_win_arm64 in the prior declare_args block and use that in the initial set of angle_enable_vulkan and angle_enable_gl?",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 3
+      },
+      "revId": "8230f4cc89236f943c2d56803ab80cc05609ef43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
