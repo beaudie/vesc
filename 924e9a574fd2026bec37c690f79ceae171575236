@@ -262,6 +262,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9359aec_dc16ca7e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-17T21:53:53Z",
+      "side": 1,
+      "message": "Except you don\u0027t know here (with current code) if there are 3 or more levels. You know if there are 3 or more **queues**. You can look at VkPhysicalDeviceLimits::discreteQueuePriorities though of course to get this information.\n\nOr, you can specify 0.4 and basically tell \"medium should lean towards low if not enough priority levels\".\n\nBasing the decision on VkPhysicalDeviceLimits::discreteQueuePriorities is perfectly fine BTW, let\u0027s do that.",
+      "parentUuid": "3275877d_0ecb943b",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
