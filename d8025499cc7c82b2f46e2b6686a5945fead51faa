@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fb2703d_1e2df629",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T12:17:57Z",
+      "side": 1,
+      "message": "nit: the staged clear",
+      "range": {
+        "startLine": 13,
+        "startChar": 19,
+        "endLine": 13,
+        "endChar": 39
+      },
+      "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5db5b4a_dd920961",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T12:17:57Z",
+      "side": 1,
+      "message": "nit: can you replace this sentence with \"no Framebuffer dirty bits are set\"",
+      "range": {
+        "startLine": 11,
+        "startChar": 52,
+        "endLine": 13,
+        "endChar": 4
+      },
+      "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e089d5fb_2eaf1d0d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T12:17:57Z",
+      "side": 1,
+      "message": "please move this check outside of the loop. it\u0027s very inefficient this way.",
+      "range": {
+        "startLine": 1682,
+        "startChar": 8,
+        "endLine": 1684,
+        "endChar": 9
+      },
+      "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84dfa83a_e141664f",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T12:17:57Z",
+      "side": 1,
+      "message": "nit: comment before each new test",
+      "range": {
+        "startLine": 538,
+        "startChar": 0,
+        "endLine": 538,
+        "endChar": 6
+      },
+      "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54cf9d3b_787bca4b",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T12:17:57Z",
+      "side": 1,
+      "message": "can you remove all of this please? not sure why you added it.",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 551,
+        "endChar": 48
+      },
+      "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
