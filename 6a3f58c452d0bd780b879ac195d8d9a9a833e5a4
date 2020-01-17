@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "e1bef264_f804843a",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-17T03:23:30Z",
+      "side": 1,
+      "message": "My vote would be for 1080p everywhere, since that\u0027s likely at least the base resolution for the majority of devices nowadays and should give more realistic comparisons between code changes in terms of CPU, GPU, memory, etc.",
+      "parentUuid": "5fdf7da3_e1f97eb1",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0cc39c04_79a14939",
         "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
         "patchSetId": 11
