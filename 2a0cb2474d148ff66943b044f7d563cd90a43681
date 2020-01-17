@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f82ea2eb_e37fbc4c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5626,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-01-17T10:05:34Z",
+      "side": 1,
+      "message": "Hi Shahbaz,\n\nThe reason we need to add init here is because that the latter getImplementationColorReadFormat and getImplementationColorReadType(in below code) will invoke syncState() and flush the staged udpates, then reset Framebuffer::mDirtyBits. Thus, the latter syncStateForReadPixels()--\u003eFramebuffer::syncState() in Context::readPixels would skip since it\u0027s mDirtyBits had been reset.\n\nIt looked to me we should not syncState() in the validation part which is intended to be executed in Context::readPixels()--\u003esyncStateForReadPixels(), but because of the syncState() below we need to init the read attachment here for workaround.\n\nI\u0027m wondering if we can add init part into the TextureVk::initImage like below:\n\ndiff --git a/src/libANGLE/renderer/vulkan/TextureVk.cpp b/src/libANGLE/renderer/vulkan/TextureVk.cpp\nindex dcf55be92..8e31f7c03 100644\n--- a/src/libANGLE/renderer/vulkan/TextureVk.cpp\n+++ b/src/libANGLE/renderer/vulkan/TextureVk.cpp\n@@ -1675,14 +1675,20 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,\n \n     // If the image has an emulated channel, always clear it.  These channels will be masked out in\n     // future writes, and shouldn\u0027t contain uninitialized values.\n-    if (format.hasEmulatedImageChannels())\n     {\n         uint32_t levelCount \u003d mImage-\u003egetLevelCount();\n \n         for (uint32_t level \u003d 0; level \u003c levelCount; ++level)\n         {\n             gl::ImageIndex index \u003d gl::ImageIndex::Make2DArrayRange(level, 0, layerCount);\n-            mImage-\u003estageSubresourceEmulatedClear(index, format.intendedFormat());\n+            if (format.hasEmulatedImageChannels())\n+            {\n+                mImage-\u003estageSubresourceEmulatedClear(index, format.intendedFormat());\n+            }\n+            else if (contextVk-\u003egetState().isRobustResourceInitEnabled())\n+            {\n+                mImage-\u003estageSubresourceRobustClear(index, format.intendedFormat());\n+            }\n             onStagingBufferChange();\n         }\n     }",
+      "parentUuid": "3dc2b6c4_bbdf9941",
+      "range": {
+        "startLine": 5623,
+        "startChar": 0,
+        "endLine": 5626,
+        "endChar": 5
+      },
+      "revId": "2a0cb2474d148ff66943b044f7d563cd90a43681",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d3e0d53_677f9bb6",
         "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
         "patchSetId": 6
@@ -36,6 +60,24 @@
       "writtenOn": "2020-01-17T02:49:29Z",
       "side": 1,
       "message": "What\u0027s the point of this if we are just reading back an uninitialized texture? And with your description of the bug, why didn\u0027t ReadingUninitializedTexture above this fail?",
+      "revId": "2a0cb2474d148ff66943b044f7d563cd90a43681",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b74fb8c_677598af",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-01-17T10:05:34Z",
+      "side": 1,
+      "message": "The test framework would do a eglSwapBuffer() before test run, then after the swap, test got the buffer marked dirty, and the ReadingUninitializedTexture single test can pass.\n\nHowever, when ran end2end with params: \"--gtest_filter\u003dRobustResourceInitTest.ReadingUninitializedTexture/ES2_Vulkan:RobustResourceInitTest.BufferDataZeroSize/ES2_Vulkan\", test BufferDataZeroSize passed without initializing surface memory and incoming test ReadingUninitializedTexture would fail.\n\nThe key point of this \"re-create display/surface/context\" is to reproduce the env to start reading uninitialized texture without swap ahead.",
+      "parentUuid": "6d3e0d53_677f9bb6",
       "revId": "2a0cb2474d148ff66943b044f7d563cd90a43681",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
