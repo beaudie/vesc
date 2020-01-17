@@ -310,6 +310,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b05c82c_d2ad303e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-17T23:48:27Z",
+      "side": 1,
+      "message": "\u003e The part that says \"... with at least one level at 1.0, and another at 0.0\" also\n\u003e makes it pretty clear this is about what the driver should do.\n\n\"with at least one level\" is talking about the value in \"VkDeviceQueueCreateInfo::pQueuePriorities\".\n\nThis statement is about what the driver should expect as input in \"VkDeviceQueueCreateInfo::pQueuePriorities\" or looked at it from another angle, the values the app is allowed to set in \"VkDeviceQueueCreateInfo::pQueuePriorities\" for the implementation returned limit \"discreteQueuePriorities\".\n\nIMO, it has nothing to do with the actual HW.\n\n\u003e Basing the decision on VkPhysicalDeviceLimits::discreteQueuePriorities is perfectly fine BTW\n\nthats fine but be cautious here. There are vendors that return discreteQueuePriorities \u003d 2, even though they can only support a queueCount of 1 for the graphics Q family. You will need to reconcile the queueCount with the Q family we are interested in, one that supports all ops we will need, before doing the math that decides the priority float values",
+      "parentUuid": "899f2345_1c93341a",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
