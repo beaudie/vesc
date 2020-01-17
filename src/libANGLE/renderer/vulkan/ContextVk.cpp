@@ -651,6 +651,7 @@ void ContextVk::onDestroy(const gl::Context *context)
     mShaderLibrary.destroy(device);
     mGpuEventQueryPool.destroy(device);
     mCommandPool.destroy(device);
+    mPrimaryCommands.destroy(device);
 
     for (vk::CommandPool &pool : mCommandPoolFreeList)
     {
@@ -752,6 +753,24 @@ angle::Result ContextVk::initialize()
 
     mUseOldRewriteStructSamplers = shouldUseOldRewriteStructSamplers();
 
+    if (!commandGraphEnabled())
+    {
+        mOutsideRenderPassCommands.getCommandBuffer().initialize(&mPoolAllocator);
+        ANGLE_TRY(startPrimaryCommandBuffer());
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::startPrimaryCommandBuffer()
+{
+    ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, mCommandPool, &mPrimaryCommands));
+
+    VkCommandBufferBeginInfo beginInfo = {};
+    beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags                    = 0;
+    beginInfo.pInheritanceInfo         = nullptr;
+    ANGLE_VK_TRY(this, mPrimaryCommands.begin(beginInfo));
     return angle::Result::Continue;
 }
 
@@ -1151,7 +1170,14 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(const gl::Context *con
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
         if (arrayBuffer)
         {
-            arrayBuffer->onRead(this, framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
+            if (commandGraphEnabled())
+            {
+                arrayBuffer->onRead(this, framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
+            }
+            else
+            {
+                onBufferRead(VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, arrayBuffer);
+            }
         }
     }
 
@@ -1168,8 +1194,15 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(const gl::Context *conte
                                    mVertexArray->getCurrentElementArrayBufferOffset(),
                                    gl_vk::kIndexTypeMap[mCurrentDrawElementsType]);
 
-    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
-    elementArrayBuffer->onRead(this, framebuffer, VK_ACCESS_INDEX_READ_BIT);
+    if (commandGraphEnabled())
+    {
+        vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+        elementArrayBuffer->onRead(this, framebuffer, VK_ACCESS_INDEX_READ_BIT);
+    }
+    else
+    {
+        onBufferRead(VK_ACCESS_INDEX_READ_BIT, elementArrayBuffer);
+    }
 
     return angle::Result::Continue;
 }
@@ -1307,8 +1340,10 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::flushCommandGraph(vk::PrimaryCommandBuffer *commandBatch)
+angle::Result ContextVk::flushCommands(vk::PrimaryCommandBuffer *commandBatch)
 {
+    ASSERT(commandGraphEnabled());
+
     if (mIsAnyHostVisibleBufferWritten)
     {
         mCommandGraph.makeHostVisibleBufferWriteAvailable();
@@ -1317,6 +1352,7 @@ angle::Result ContextVk::flushCommandGraph(vk::PrimaryCommandBuffer *commandBatc
 
     Serial serial = getCurrentQueueSerial();
     mResourceUseList.releaseResourceUsesAndUpdateSerials(serial);
+
     return mCommandGraph.submitCommands(this, serial, &mRenderPassCache, commandBatch);
 }
 
@@ -1668,7 +1704,15 @@ void ContextVk::clearAllGarbage()
 
 void ContextVk::handleDeviceLost()
 {
-    mCommandGraph.clear();
+    if (commandGraphEnabled())
+    {
+        mCommandGraph.clear();
+    }
+    else
+    {
+        mOutsideRenderPassCommands.reset();
+        mRenderPassCommands.reset();
+    }
 
     mCommandQueue.handleDeviceLost(mRenderer);
     clearAllGarbage();
@@ -2054,29 +2098,69 @@ std::string ContextVk::getRendererDescription() const
 
 void ContextVk::insertEventMarker(GLsizei length, const char *marker)
 {
-    std::string markerStr(marker, length <= 0 ? strlen(marker) : length);
-    mCommandGraph.insertDebugMarker(GL_DEBUG_SOURCE_APPLICATION, std::move(marker));
+    if (commandGraphEnabled())
+    {
+        std::string markerStr(marker, length <= 0 ? strlen(marker) : length);
+        mCommandGraph.insertDebugMarker(GL_DEBUG_SOURCE_APPLICATION, std::move(marker));
+    }
+    else
+    {
+        // TODO(jmadill): http://anglebug.com/4029
+        UNIMPLEMENTED();
+    }
 }
 
 void ContextVk::pushGroupMarker(GLsizei length, const char *marker)
 {
-    std::string markerStr(marker, length <= 0 ? strlen(marker) : length);
-    mCommandGraph.pushDebugMarker(GL_DEBUG_SOURCE_APPLICATION, std::move(marker));
+    if (commandGraphEnabled())
+    {
+        std::string markerStr(marker, length <= 0 ? strlen(marker) : length);
+        mCommandGraph.pushDebugMarker(GL_DEBUG_SOURCE_APPLICATION, std::move(marker));
+    }
+    else
+    {
+        // TODO(jmadill): http://anglebug.com/4029
+        UNIMPLEMENTED();
+    }
 }
 
 void ContextVk::popGroupMarker()
 {
-    mCommandGraph.popDebugMarker();
+    if (commandGraphEnabled())
+    {
+        mCommandGraph.popDebugMarker();
+    }
+    else
+    {
+        // TODO(jmadill): http://anglebug.com/4029
+        UNIMPLEMENTED();
+    }
 }
 
 void ContextVk::pushDebugGroup(GLenum source, GLuint id, const std::string &message)
 {
-    mCommandGraph.insertDebugMarker(source, std::string(message));
+    if (commandGraphEnabled())
+    {
+        mCommandGraph.insertDebugMarker(source, std::string(message));
+    }
+    else
+    {
+        // TODO(jmadill): http://anglebug.com/4029
+        UNIMPLEMENTED();
+    }
 }
 
 void ContextVk::popDebugGroup()
 {
-    mCommandGraph.popDebugMarker();
+    if (commandGraphEnabled())
+    {
+        mCommandGraph.popDebugMarker();
+    }
+    else
+    {
+        // TODO(jmadill): http://anglebug.com/4029
+        UNIMPLEMENTED();
+    }
 }
 
 bool ContextVk::isViewportFlipEnabledForDrawFBO() const
@@ -2843,7 +2927,15 @@ void ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageFlags stag
         dstAccess |= VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT;
     }
 
-    mCommandGraph.memoryBarrier(srcAccess, dstAccess, stageMask);
+    if (commandGraphEnabled())
+    {
+        mCommandGraph.memoryBarrier(srcAccess, dstAccess, stageMask);
+    }
+    else
+    {
+        // TODO(jmadill): http://anglebug.com/4029
+        UNIMPLEMENTED();
+    }
 }
 
 vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
@@ -3242,31 +3334,56 @@ bool ContextVk::shouldFlush()
 
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 {
-    if (mCommandGraph.empty() && !signalSemaphore && mWaitSemaphores.empty())
+    if (commandGraphEnabled())
     {
-        return angle::Result::Continue;
+        if (mCommandGraph.empty() && !signalSemaphore && mWaitSemaphores.empty())
+        {
+            return angle::Result::Continue;
+        }
+
+        ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flush");
+
+        vk::DeviceScoped<vk::PrimaryCommandBuffer> primaryCommands(getDevice());
+        ANGLE_TRY(
+            mCommandQueue.allocatePrimaryCommandBuffer(this, mCommandPool, &primaryCommands.get()));
+
+        if (!mCommandGraph.empty())
+        {
+            ANGLE_TRY(flushCommands(&primaryCommands.get()));
+        }
+
+        waitForSwapchainImageIfNecessary();
+
+        VkSubmitInfo submitInfo = {};
+        InitializeSubmitInfo(&submitInfo, primaryCommands.get(), mWaitSemaphores,
+                             &mWaitSemaphoreStageMasks, signalSemaphore);
+
+        ANGLE_TRY(submitFrame(submitInfo, primaryCommands.release()));
     }
-
-    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flush");
-
-    VkDevice device = getDevice();
-
-    vk::DeviceScoped<vk::PrimaryCommandBuffer> primaryCommands(device);
-    ANGLE_TRY(
-        mCommandQueue.allocatePrimaryCommandBuffer(this, mCommandPool, &primaryCommands.get()));
-
-    if (!mCommandGraph.empty())
+    else
     {
-        ANGLE_TRY(flushCommandGraph(&primaryCommands.get()));
+        if (mOutsideRenderPassCommands.empty() && mRenderPassCommands.empty() && !signalSemaphore &&
+            mWaitSemaphores.empty() && mPrimaryCommands.empty())
+        {
+            return angle::Result::Continue;
+        }
+
+        ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flush");
+
+        mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
+        ANGLE_TRY(mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
+        ANGLE_VK_TRY(this, mPrimaryCommands.end());
+
+        waitForSwapchainImageIfNecessary();
+
+        VkSubmitInfo submitInfo = {};
+        InitializeSubmitInfo(&submitInfo, mPrimaryCommands, mWaitSemaphores,
+                             &mWaitSemaphoreStageMasks, signalSemaphore);
+
+        ANGLE_TRY(submitFrame(submitInfo, std::move(mPrimaryCommands)));
+
+        ANGLE_TRY(startPrimaryCommandBuffer());
     }
-
-    waitForSwapchainImageIfNecessary();
-
-    VkSubmitInfo submitInfo = {};
-    InitializeSubmitInfo(&submitInfo, primaryCommands.get(), mWaitSemaphores,
-                         &mWaitSemaphoreStageMasks, signalSemaphore);
-
-    ANGLE_TRY(submitFrame(submitInfo, primaryCommands.release()));
 
     mWaitSemaphores.clear();
 
@@ -3542,5 +3659,158 @@ bool ContextVk::shouldEmulateSeamfulCubeMapSampling() const
 bool ContextVk::shouldUseOldRewriteStructSamplers() const
 {
     return mRenderer->getFeatures().forceOldRewriteStructSamplers.enabled;
+}
+
+void ContextVk::onBufferRead(VkAccessFlags readAccessType, vk::BufferHelper *buffer)
+{
+    if (!buffer->canAccumulateRead(this, readAccessType))
+    {
+        mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
+    }
+
+    mOutsideRenderPassCommands.bufferRead(readAccessType, buffer);
+}
+
+void ContextVk::onBufferWrite(VkAccessFlags writeAccessType, vk::BufferHelper *buffer)
+{
+    if (!buffer->canAccumulateWrite(this, writeAccessType))
+    {
+        mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
+    }
+
+    mOutsideRenderPassCommands.bufferWrite(writeAccessType, buffer);
+}
+
+void ContextVk::beginRenderPass(const vk::Framebuffer &framebuffer,
+                                const gl::Rectangle &renderArea,
+                                const vk::RenderPassDesc &renderPassDesc,
+                                const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                                const std::vector<VkClearValue> &clearValues,
+                                vk::CommandBuffer **commandBufferOut)
+{
+    mRenderPassCommands.beginRenderPass(framebuffer, renderArea, renderPassDesc,
+                                        renderPassAttachmentOps, clearValues, &mPoolAllocator,
+                                        commandBufferOut);
+}
+
+OutsideRenderPassCommandBuffer::OutsideRenderPassCommandBuffer()
+    : mGlobalMemoryBarrierSrcAccess(0),
+      mGlobalMemoryBarrierDstAccess(0),
+      mGlobalMemoryBarrierStages(0)
+{}
+
+OutsideRenderPassCommandBuffer::~OutsideRenderPassCommandBuffer() = default;
+
+void OutsideRenderPassCommandBuffer::flushToPrimary(vk::PrimaryCommandBuffer *primary)
+{
+    if (empty())
+        return;
+
+    if (mGlobalMemoryBarrierSrcAccess)
+    {
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = mGlobalMemoryBarrierSrcAccess;
+        memoryBarrier.dstAccessMask   = mGlobalMemoryBarrierDstAccess;
+
+        primary->memoryBarrier(mGlobalMemoryBarrierStages, mGlobalMemoryBarrierStages,
+                               &memoryBarrier);
+    }
+
+    mCommandBuffer.executeCommands(primary->getHandle());
+
+    // Restart secondary buffer.
+    reset();
+}
+
+void OutsideRenderPassCommandBuffer::bufferRead(VkAccessFlags readAccessType,
+                                                vk::BufferHelper *buffer)
+{
+    buffer->updateReadBarrier(readAccessType, &mGlobalMemoryBarrierSrcAccess,
+                              &mGlobalMemoryBarrierDstAccess);
+    mGlobalMemoryBarrierStages = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+}
+
+void OutsideRenderPassCommandBuffer::bufferWrite(VkAccessFlags writeAccessType,
+                                                 vk::BufferHelper *buffer)
+{
+    buffer->updateWriteBarrier(writeAccessType, &mGlobalMemoryBarrierSrcAccess,
+                               &mGlobalMemoryBarrierDstAccess);
+    mGlobalMemoryBarrierStages = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+}
+
+void OutsideRenderPassCommandBuffer::reset()
+{
+    mGlobalMemoryBarrierSrcAccess = 0;
+    mGlobalMemoryBarrierDstAccess = 0;
+    mGlobalMemoryBarrierStages    = 0;
+
+    mCommandBuffer.reset();
+}
+
+RenderPassCommandBuffer::RenderPassCommandBuffer() = default;
+
+RenderPassCommandBuffer::~RenderPassCommandBuffer()
+{
+    mRenderPassFramebuffer.setHandle(VK_NULL_HANDLE);
+}
+
+void RenderPassCommandBuffer::beginRenderPass(const vk::Framebuffer &framebuffer,
+                                              const gl::Rectangle &renderArea,
+                                              const vk::RenderPassDesc &renderPassDesc,
+                                              const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                                              const std::vector<VkClearValue> &clearValues,
+                                              angle::PoolAllocator *poolAllocator,
+                                              vk::CommandBuffer **commandBufferOut)
+{
+    mRenderPassDesc          = renderPassDesc;
+    mRenderPassAttachmentOps = renderPassAttachmentOps;
+    mRenderPassFramebuffer.setHandle(framebuffer.getHandle());
+    mRenderPassRenderArea = renderArea;
+    std::copy(clearValues.begin(), clearValues.end(), mRenderPassClearValues.begin());
+
+    mCommandBuffer.initialize(poolAllocator);
+    *commandBufferOut = &mCommandBuffer;
+}
+
+angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
+                                                      vk::PrimaryCommandBuffer *primary)
+{
+    if (empty())
+        return angle::Result::Continue;
+
+    // Pull a RenderPass from the cache.
+    RenderPassCache &renderPassCache = contextVk->getRenderPassCache();
+    Serial serial                    = contextVk->getCurrentQueueSerial();
+
+    vk::RenderPass *renderPass = nullptr;
+    ANGLE_TRY(renderPassCache.getRenderPassWithOps(contextVk, serial, mRenderPassDesc,
+                                                   mRenderPassAttachmentOps, &renderPass));
+
+    VkRenderPassBeginInfo beginInfo    = {};
+    beginInfo.sType                    = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    beginInfo.renderPass               = renderPass->getHandle();
+    beginInfo.framebuffer              = mRenderPassFramebuffer.getHandle();
+    beginInfo.renderArea.offset.x      = static_cast<uint32_t>(mRenderPassRenderArea.x);
+    beginInfo.renderArea.offset.y      = static_cast<uint32_t>(mRenderPassRenderArea.y);
+    beginInfo.renderArea.extent.width  = static_cast<uint32_t>(mRenderPassRenderArea.width);
+    beginInfo.renderArea.extent.height = static_cast<uint32_t>(mRenderPassRenderArea.height);
+    beginInfo.clearValueCount          = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
+    beginInfo.pClearValues             = mRenderPassClearValues.data();
+
+    // Run commands inside the RenderPass.
+    primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+    mCommandBuffer.executeCommands(primary->getHandle());
+    primary->endRenderPass();
+
+    // Restart the command buffer.
+    reset();
+
+    return angle::Result::Continue;
+}
+
+void RenderPassCommandBuffer::reset()
+{
+    mCommandBuffer.reset();
 }
 }  // namespace rx
