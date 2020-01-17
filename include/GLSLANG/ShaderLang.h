@@ -765,6 +765,9 @@ constexpr const char *kDriverUniformsVarName   = "ANGLEUniforms";
 // Interface block array variable name used for atomic counter emulation
 constexpr const char *kAtomicCountersVarName = "atomicCounters";
 
+// Line raster emulation varying
+constexpr const char *kLineRasterEmulationPosition = "ANGLEPosition";
+
 }  // namespace vk
 }  // namespace sh
 
