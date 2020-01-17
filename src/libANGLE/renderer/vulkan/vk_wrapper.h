@@ -206,6 +206,11 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                            const VkBuffer *buffers,
                            const VkDeviceSize *offsets);
 
+    void bindTransformFeedbackBuffers(size_t bindingCount,
+                                      const VkBuffer *buffers,
+                                      const VkDeviceSize *offsets,
+                                      const VkDeviceSize *sizes);
+
     void blitImage(const Image &srcImage,
                    VkImageLayout srcImageLayout,
                    const Image &dstImage,
@@ -1063,6 +1068,16 @@ ANGLE_INLINE void CommandBuffer::bindVertexBuffers(uint32_t firstBinding,
 {
     ASSERT(valid());
     vkCmdBindVertexBuffers(mHandle, firstBinding, bindingCount, buffers, offsets);
+}
+
+ANGLE_INLINE void CommandBuffer::bindTransformFeedbackBuffers(size_t bindingCount,
+                                                              const VkBuffer *buffers,
+                                                              const VkDeviceSize *offsets,
+                                                              const VkDeviceSize *sizes)
+{
+    ASSERT(valid());
+    vkCmdBindTransformFeedbackBuffersEXT(mHandle, 0, static_cast<uint32_t>(bindingCount), buffers,
+                                         offsets, sizes);
 }
 
 }  // namespace priv
