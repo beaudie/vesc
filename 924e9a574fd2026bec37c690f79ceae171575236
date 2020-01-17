@@ -142,6 +142,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90a7f73c_51b1c3f5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-17T19:13:20Z",
+      "side": 1,
+      "message": "spec says - \"The priority of each queue is a normalized floating point value between 0.0 and 1.0, which is then translated to a discrete priority level by the implementation.\"\n\nit feels to me that we are trying to second guess what a vulkan driver would do and are trying to account for that in some way. I think it is not the place for ANGLE to decide what an ICD would do and how it will map it to real HW levels. ANGLE should just follow spec and say if there are 3 Qs we request 3 priorities evenly distributed over the range [0 - 1]. Whether those levels are rounded up or rounded down or ignored completely (as some HW vendors are known to do) it is completely upto the implementation",
+      "parentUuid": "4cc7b05c_257db8e0",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
