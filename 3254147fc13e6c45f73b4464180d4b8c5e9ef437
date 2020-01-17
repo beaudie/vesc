@@ -22,6 +22,30 @@
       "revId": "3254147fc13e6c45f73b4464180d4b8c5e9ef437",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c8a2566_87f67d73",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-01-17T00:44:05Z",
+      "side": 1,
+      "message": "Updated commit message and added ReadingUninitializedTextureWithNewSurface for regression test.",
+      "parentUuid": "f71a98b4_c2cc9b6f",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 9
+      },
+      "revId": "3254147fc13e6c45f73b4464180d4b8c5e9ef437",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
