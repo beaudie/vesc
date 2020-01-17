@@ -214,6 +214,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "94cdbddf_b5edc0b6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-17T20:59:47Z",
+      "side": 1,
+      "message": "The language I quoted is not from VkDeviceQueueCreateInfo::pQueuePriorities, but from VkPhysicalDeviceLimits::discreteQueuePriorities, i.e. it\u0027s about the real hardware capability.\n\nThe part that says \"... with at least one level at 1.0, and another at 0.0\" also makes it pretty clear this is about what the driver should do.\n\nI agree with you that, per spec, we can\u0027t rely on the priorities actually doing anything. Practically speaking though, we want current/most/known hardware to really give higher priority to High than to Med.\n\nSo now the question is, do real drivers take pQueuePriorities and spread them to hw priorities or do they take each individual element of pQueuePriorities and assign it a hw priority based on the bucket it falls in?\n\nFor example, say the hw has 3 priority levels. If you provide pQueuePriorities as {0.98, 0.99, 1.0}, do *real* drivers assign low, med and high priorities to the three queues? Or would they all get high priority?\n\nIn the example above, I believe the wording of the spec means that priorities in [0, 0.33) should fall in hw priority 0, (0.33, 0.66) should fall in hw priority 1 and (0.66, 1] should fall in hw priority 2.",
+      "parentUuid": "d1cc319f_899062f8",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
