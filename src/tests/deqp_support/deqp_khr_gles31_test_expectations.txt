@@ -133,7 +133,4 @@
 4315 VULKAN : KHR-GLES31.core.shader_image_load_store.advanced-memory-order-vsfs = FAIL
 4108 VULKAN : KHR-GLES31.core.shader_image_size.*-nonMS-* = SKIP
 
-// Shader support:
-4300 : KHR-GLES31.core.shader_integer_mix.* = FAIL
-
 // OpenGL ES 3.2 / 3.1 extensions
