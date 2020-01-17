@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "fe363463_27a3c6af",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-17T12:09:27Z",
+      "side": 1,
+      "message": "Pending and in-flight aren\u0027t really precise and basically mean the same thing. isComplete assumes that something is started.",
+      "parentUuid": "0a9ef124_ee24005b",
+      "range": {
+        "startLine": 356,
+        "startChar": 29,
+        "endLine": 356,
+        "endChar": 36
+      },
+      "revId": "99f7f36716397bf1f3695a7c3333392c98bc8c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "69109d3f_3090b189",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 8
