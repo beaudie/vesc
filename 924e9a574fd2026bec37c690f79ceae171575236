@@ -166,6 +166,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "efa96a82_c056ac00",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-17T19:27:14Z",
+      "side": 1,
+      "message": "\"If there are 3 Qs, and the ICD does round down, then 0.4 could become 0.0. Then no real medium.\"\n\nFirst, note that 3 Qs doesn\u0027t mean 3 priorities. So, if there are 3 queues but 2 hardware priorities, then yes, low and medium map to hw low, and high maps to hw high. That was my intention from the beginning (i.e. to make sure high is definitely higher than med, even if it means med and low are the same).\n\n@Moham, we are not really second-guessing what the driver does. See the description of discreteQueuePriorities limit:\n\n\u003e discreteQueuePriorities is the number of discrete priorities that can be assigned to a queue based on the value of each member of VkDeviceQueueCreateInfo::pQueuePriorities. This must be at least 2, and levels must be spread evenly over the range, with at least one level at 1.0, and another at 0.0\n\nI think we disagree on what the \"levels must be spread evenly over the range\" phrase means. To me, it sounds like that\u0027s an instruction for the vendor specifying that they should map the [0, 1] range evenly to their hw priorities. It doesn\u0027t sound like a suggestion for the application to spread its requested priorities evenly.",
+      "parentUuid": "90a7f73c_51b1c3f5",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
