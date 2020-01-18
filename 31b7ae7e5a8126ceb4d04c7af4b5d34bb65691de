@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ff87211_a2ef9747",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-18T01:49:38Z",
+      "side": 1,
+      "message": "Note: this test was passing on Mac/AMD even without the workaround being enabled.",
+      "revId": "31b7ae7e5a8126ceb4d04c7af4b5d34bb65691de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa54960b_d81c2b10",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-18T01:49:38Z",
+      "side": 1,
+      "message": "Note: this test was passing on Mac/AMD even without the workaround being enabled.",
+      "range": {
+        "startLine": 1219,
+        "startChar": 7,
+        "endLine": 1219,
+        "endChar": 24
+      },
+      "revId": "31b7ae7e5a8126ceb4d04c7af4b5d34bb65691de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3ce15ac_2026c1bd",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2143,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-18T01:49:38Z",
+      "side": 1,
+      "message": "This test still fails on macOS even with the driver bug workaround.",
+      "range": {
+        "startLine": 2143,
+        "startChar": 7,
+        "endLine": 2143,
+        "endChar": 24
+      },
+      "revId": "31b7ae7e5a8126ceb4d04c7af4b5d34bb65691de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
