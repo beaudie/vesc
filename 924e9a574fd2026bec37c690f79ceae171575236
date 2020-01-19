@@ -358,6 +358,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d96f8005_2bee76b1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-01-19T18:15:52Z",
+      "side": 1,
+      "message": "\u003e Shouldn\u0027t that have been placed under the description of `VkDeviceQueueCreateInfo::pQueuePriorities` in that case?\n\nHence the embarrassment associated with this part of the spec, its poorly worded everywhere\n\n\u003e This confirms that \"relative queue priorities\" are not what Vulkan intended.\n\nLike how EGL tries to introduce relative priorities through this extension, Vulkan tried to do this too. I think they were doing fine until they tried to conflate global priorites and VR usecases all into one big mess of a spec language. I still think relative priorities works out very well even with current language, although it could use some clarity\n\nAs a driver vendor / app developer I interpreted the spec like how Tobias stated it -\n\n\u003e An app creates two queues and want[s] one to have a lower priority than the other.\n\u003e 1. If the delta between the two priorities is less than (1.0/discretePriorities) - then they should be assigned the same priority.\n\u003e 2. If the delta between the two priorities is greater than [mohan: i would say \u003e\u003d] (1.0/discretePriorities) - then you assign a delta in actual priority based on that.\n\u003e\n\u003e So any of ({0.9, 1.0}, {0.1, 0.0}, {0.5,0.55}) would get {NORMAL, NORMAL} - but any of ({0.5, 1.0}, {0.3, 0.8} or {0.0, 0.5}) would get {LOW, NORMAL} (or {NORMAL, HIGH} depending on your PoV). This gets more complex with more queues and priority levels - but it should be easy to extrapolate.\n\n\nGiven the niche usecases for this extension, I would not like to hold this review any longer, please make whatever changes are necessary to land it.",
+      "parentUuid": "66d6412e_516bfd44",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
