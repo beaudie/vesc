@@ -334,6 +334,30 @@
       "revId": "924e9a574fd2026bec37c690f79ceae171575236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66d6412e_516bfd44",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-19T02:56:02Z",
+      "side": 1,
+      "message": "\u003e This statement is about what the driver should expect as input in \"VkDeviceQueueCreateInfo::pQueuePriorities\" \n\nShouldn\u0027t that have been placed under the description of `VkDeviceQueueCreateInfo::pQueuePriorities` in that case?\n\n---\n\nSo I went to raise a question and instead found this: https://gitlab.khronos.org/vulkan/vulkan/issues/437#note_52783\n\nThere are two interesting points here:\n\n\u003e Actually there is even more specific spec language that makes relative queue priorities not work out: \u003cfollowed by the quote we are discussing\u003e\n\nThis confirms that \"relative queue priorities\" are not what Vulkan intended.\n\n\u003e The current API mechanism to express queue priority is pretty broken and it\u0027s not really possible to use the API as is to get something sensible. The only way to really address this is for a new API to replace the floating-point queue priority.\n\nSo basically no one is right here and the API is broken.\n\n---\n\nI still maintain that 0, 0.4 and 1.0 is better than 0, 0.5, 1.0 though. On 2-priority devices (with 3+ queues), if the driver assigns 0 and 0,5 to LOW and 1.0 to HIGH, so should it assign 0, 0.4 to LOW. The inverse is not true though, that if it assigns 0 and 0.4 to LOW, it wouldn\u0027t necessarily assign 0 and 0.5 to LOW.\n\nIn other words, on 2-priority devices (again, with 3+ queues), it\u0027s ambiguous if given 0, 0.5, 1.0, which hw priority 0.5 will be given, but it\u0027s highly likely that given 0, 0.4, 1.0, then 0.4 will be given the lower priority.\n\nDon\u0027t you think?",
+      "parentUuid": "9b05c82c_d2ad303e",
+      "range": {
+        "startLine": 970,
+        "startChar": 40,
+        "endLine": 970,
+        "endChar": 62
+      },
+      "revId": "924e9a574fd2026bec37c690f79ceae171575236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
