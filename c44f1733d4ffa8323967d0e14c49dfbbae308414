@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8074687c_489a262c",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-20T03:10:50Z",
+      "side": 1,
+      "message": "There are a couple of failures, with this at least one of them.\n\nSince this transformation was done for the Vulkan backend, it\u0027s possible that it\u0027s not setting the layout of the uniform blocks correctly after transformation? As in, it\u0027s changing blockNamed2 and blockNamed3 to std140? (though I don\u0027t recall if the interface blocks in the shader above are at all rewritten)\n\nNote that Vulkan GLSL doesn\u0027t allows shared and packed.",
+      "range": {
+        "startLine": 439,
+        "startChar": 4,
+        "endLine": 439,
+        "endChar": 34
+      },
+      "revId": "c44f1733d4ffa8323967d0e14c49dfbbae308414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
