@@ -282,6 +282,30 @@
       "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00096c01_ddd8ddf0",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-01-20T05:29:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dec55bc1_bd8b1deb",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 551,
+        "endChar": 48
+      },
+      "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
