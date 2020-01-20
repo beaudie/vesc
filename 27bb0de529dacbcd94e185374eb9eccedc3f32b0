@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1361a0b2_890ca58b",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-20T21:51:04Z",
+      "side": 1,
+      "message": "So is there an actual compatibility check for this already implemented?",
+      "revId": "27bb0de529dacbcd94e185374eb9eccedc3f32b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
