@@ -449,12 +449,14 @@ angle::Result ProgramVk::loadSpirvBlob(ContextVk *contextVk, gl::BinaryInputStre
 
             info.descriptorSet = stream->readInt<uint32_t>();
             info.binding       = stream->readInt<uint32_t>();
-            info.location      = stream->readInt<uint32_t>();
-            info.component     = stream->readInt<uint32_t>();
-            info.activeStages = gl::ShaderBitSet(static_cast<uint8_t>(stream->readInt<uint32_t>()));
-            info.xfbBuffer    = stream->readInt<uint32_t>();
-            info.xfbOffset    = stream->readInt<uint32_t>();
-            info.xfbStride    = stream->readInt<uint32_t>();
+            info.xfbBuffer     = stream->readInt<uint32_t>();
+            info.xfbOffset     = stream->readInt<uint32_t>();
+            info.xfbStride     = stream->readInt<uint32_t>();
+            for (gl::ShaderType shaderType : gl::AllShaderTypes())
+            {
+                info.location[shaderType]  = stream->readInt<uint32_t>();
+                info.component[shaderType] = stream->readInt<uint32_t>();
+            }
 
             mVariableInfoMap[varName] = info;
         }
@@ -483,12 +485,14 @@ void ProgramVk::saveSpirvBlob(gl::BinaryOutputStream *stream)
             stream->writeString(nameInfo.first);
             stream->writeIntOrNegOne(nameInfo.second.descriptorSet);
             stream->writeIntOrNegOne(nameInfo.second.binding);
-            stream->writeIntOrNegOne(nameInfo.second.location);
-            stream->writeIntOrNegOne(nameInfo.second.component);
-            stream->writeIntOrNegOne(nameInfo.second.activeStages.bits());
             stream->writeIntOrNegOne(nameInfo.second.xfbBuffer);
             stream->writeIntOrNegOne(nameInfo.second.xfbOffset);
             stream->writeIntOrNegOne(nameInfo.second.xfbStride);
+            for (gl::ShaderType shaderType : gl::AllShaderTypes())
+            {
+                stream->writeIntOrNegOne(nameInfo.second.location[shaderType]);
+                stream->writeIntOrNegOne(nameInfo.second.component[shaderType]);
+            }
         }
 
         const SpirvBlob &spirvBlob = mShaderInfo.getSpirvBlobs()[shaderType];
