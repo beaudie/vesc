@@ -30,6 +30,12 @@ class TOutputVulkanGLSL : public TOutputGLSL
     void writeStructType(const TStructure *structure);
 
     uint32_t nextUnusedBinding() { return mNextUnusedBinding++; }
+    uint32_t nextUnusedInputLocation(uint32_t consumedCount)
+    {
+        uint32_t nextUnused = mNextUnusedInputLocation;
+        mNextUnusedInputLocation += consumedCount;
+        return nextUnused;
+    }
 
   protected:
     void writeLayoutQualifier(TIntermTyped *variable) override;
@@ -39,9 +45,12 @@ class TOutputVulkanGLSL : public TOutputGLSL
                            bool isFunctionArgument) override;
 
     // Every resource that requires set & binding layout qualifiers is assigned set 0 and an
-    // arbitrary binding when outputting GLSL.  Glslang wrapper modifies set and binding decorations
-    // in SPIR-V directly.
+    // arbitrary binding when outputting GLSL.  Every input that requires location and component
+    // layout qualifiers is assigned component 0 and an arbitrary location as well.
+    //
+    // Glslang wrapper modifies set, binding, location and component decorations in SPIR-V directly.
     uint32_t mNextUnusedBinding;
+    uint32_t mNextUnusedInputLocation;
 };
 
 }  // namespace sh
