@@ -62,6 +62,30 @@
       "revId": "31b7ae7e5a8126ceb4d04c7af4b5d34bb65691de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2497ed7d_58485926",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2143,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-20T00:52:42Z",
+      "side": 1,
+      "message": "I failed to hook up the workaround correctly per syoussefi@\u0027s points on the bug.",
+      "parentUuid": "c3ce15ac_2026c1bd",
+      "range": {
+        "startLine": 2143,
+        "startChar": 7,
+        "endLine": 2143,
+        "endChar": 24
+      },
+      "revId": "31b7ae7e5a8126ceb4d04c7af4b5d34bb65691de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
