@@ -102,6 +102,30 @@
     },
     {
       "key": {
+        "uuid": "03646cd2_4c82216d",
+        "filename": "DEPS",
+        "patchSetId": 11
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-20T14:25:48Z",
+      "side": 1,
+      "message": "I was able to run the download hook from home. We will for sure need different ACLs for read and write. Do you know how that\u0027s set up right now? Do we need to make another ACL for write or read permissions?",
+      "parentUuid": "97c56c09_ddbadb9a",
+      "range": {
+        "startLine": 417,
+        "startChar": 13,
+        "endLine": 417,
+        "endChar": 30
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7169890_52f10093",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 11
@@ -137,6 +161,30 @@
       "side": 1,
       "message": "I wasn\u0027t able to add sources or a directory as a data_dep, it had to be an entity like this copy().  It would be different if there was an independent GN unit for building internal_captures, but this solution makes it a direct part of perf_tests.  That being said, I\u0027m not a GN expert, and I\u0027ll gladly take a more elegant solution.",
       "parentUuid": "a7169890_52f10093",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 5
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5cb3ad5_c7f44dd1",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-20T14:25:48Z",
+      "side": 1,
+      "message": "we can do\n\n data \u003d [\"${angle_root}/src/tests/perf_tests/internal_captures\"]\n\nor\n\n data \u003d [\"${angle_root}/src/tests/perf_tests/internal_captures/blah.angledata\"]\n\nAlthough it would be better if we have a subdirectory for trace data like\n\n data \u003d [\"${angle_root}/src/tests/perf_tests/internal_captures/data\"]",
+      "parentUuid": "91c4d30f_988de8eb",
       "range": {
         "startLine": 229,
         "startChar": 0,
@@ -373,6 +421,30 @@
     },
     {
       "key": {
+        "uuid": "faf2c2d8_8862e209",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-20T14:25:48Z",
+      "side": 1,
+      "message": "I meant run all the frames of the capture. So 1 \"iteration\" is one run of the whole capture.",
+      "parentUuid": "ee49e3da_2c9256fe",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 20
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "44e441ba_fbfae6b7",
         "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
         "patchSetId": 11
@@ -525,6 +597,30 @@
     },
     {
       "key": {
+        "uuid": "6d48eafc_5dfc7bca",
+        "filename": "src/tests/perf_tests/internal_captures/InternalCaptureTests.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-20T14:25:48Z",
+      "side": 1,
+      "message": "I should have used tracing. Maybe it\u0027s not too late to switch.",
+      "parentUuid": "7a7eab61_0ff75bc2",
+      "range": {
+        "startLine": 32,
+        "startChar": 43,
+        "endLine": 32,
+        "endChar": 69
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "53d1ad8b_e0700b6d",
         "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
         "patchSetId": 11
@@ -619,6 +715,30 @@
     },
     {
       "key": {
+        "uuid": "cca56faf_0f9d66c0",
+        "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-20T14:25:48Z",
+      "side": 1,
+      "message": "Sorry, to clarify: each capture is a separate perf test. So instead of keeping \n\ntrex \u003d [200, 800, 900] you keep _tests \u003d [ trex_200, trex_800, trex_900 ]\n\nI don\u0027t see anywhere where you need to know it\u0027s specifically trex. The places you explicitly spell trex I\u0027m sure we can fix.",
+      "parentUuid": "70f687da_b20dce58",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 0
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2323be70_b9ece3e9",
         "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
         "patchSetId": 11
@@ -654,6 +774,30 @@
       "side": 1,
       "message": "I can take a pass at making this more generic, although I figured we would just duplicate this loop to keep it simple.  The GN stuff takes more time than anything else with this project.",
       "parentUuid": "2323be70_b9ece3e9",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 1
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13d90e9f_75e6cc9a",
+        "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-20T14:25:48Z",
+      "side": 1,
+      "message": "Understood. If you need help ping me. I\u0027m pretty good with GN.",
+      "parentUuid": "4a1b1e11_d23a624d",
       "range": {
         "startLine": 17,
         "startChar": 0,
