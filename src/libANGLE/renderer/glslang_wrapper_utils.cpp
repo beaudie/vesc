@@ -757,19 +757,33 @@ ShaderInterfaceVariableInfo *AddResourceInfo(ShaderInterfaceVariableInfoMap *inf
     return info;
 }
 
-void AssignAttributeLocations(const gl::ProgramState &programState,
-                              IntermediateShaderSource *shaderSource)
+// Add location information for an in/out variable.
+ShaderInterfaceVariableInfo *AddLocationInfo(ShaderInterfaceVariableInfoMap *infoMap,
+                                             const std::string &varName,
+                                             uint32_t location,
+                                             uint32_t component,
+                                             gl::ShaderBitSet activeStages)
 {
-    ASSERT(!shaderSource->empty());
+    ShaderInterfaceVariableInfo *info = AddShaderInterfaceVariable(infoMap, varName);
+    info->location                    = location;
+    info->component                   = component;
+    info->activeStages                = activeStages;
+    return info;
+}
 
-    // Parse attribute locations and replace them in the vertex shader.
-    // See corresponding code in OutputVulkanGLSL.cpp.
+void AssignAttributeLocations(const gl::ProgramState &programState,
+                              ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+{
+    gl::ShaderBitSet vertexOnly;
+    vertexOnly.set(gl::ShaderType::Vertex);
+
+    // Assign attribute locations for the vertex shader.
     for (const sh::ShaderVariable &attribute : programState.getProgramInputs())
     {
         ASSERT(attribute.active);
 
-        std::string locationString = "location = " + Str(attribute.location);
-        shaderSource->insertLayoutSpecifier(attribute.name, locationString);
+        AddLocationInfo(variableInfoMapOut, attribute.mappedName, attribute.location,
+                        ShaderInterfaceVariableInfo::kInvalid, vertexOnly);
     }
 }
 
@@ -1632,7 +1646,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     // Assign attributes to the vertex shader, if any.
     if (!vertexSource->empty())
     {
-        AssignAttributeLocations(programState, vertexSource);
+        AssignAttributeLocations(programState, variableInfoMapOut);
     }
 
     if (computeSource->empty())
