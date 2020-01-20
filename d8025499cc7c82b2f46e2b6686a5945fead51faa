@@ -258,6 +258,30 @@
       "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dec55bc1_bd8b1deb",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-01-20T05:27:43Z",
+      "side": 1,
+      "message": "Just adding BufferDataZeroSize test code and eglSwapBUffers() before ReadingUninitializedTexture also fail the test, actually, we can use few tests to run together with ReadingUinitializedTexture to reproduce this failure as long as it doesn\u0027t read the Framebuffer, like \"ExpectedRendererSupport\" or \"Queries\".\n\nSo as this part of code shown, it\u0027s the re-creation of test framework GL triggered this issue, I will dig more to see if we can narrow down further.",
+      "parentUuid": "7ffb18eb_85be83d5",
+      "range": {
+        "startLine": 542,
+        "startChar": 0,
+        "endLine": 551,
+        "endChar": 48
+      },
+      "revId": "d8025499cc7c82b2f46e2b6686a5945fead51faa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
