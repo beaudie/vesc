@@ -783,8 +783,11 @@ void AssignAttributeLocations(const gl::ProgramState &programState,
 }
 
 void AssignOutputLocations(const gl::ProgramState &programState,
-                           IntermediateShaderSource *fragmentSource)
+                           ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
+    gl::ShaderBitSet fragmentOnly;
+    fragmentOnly.set(gl::ShaderType::Fragment);
+
     // Parse output locations and replace them in the fragment shader.
     // See corresponding code in OutputVulkanGLSL.cpp.
     // TODO(syoussefi): Add support for EXT_blend_func_extended.  http://anglebug.com/3385
@@ -798,23 +801,22 @@ void AssignOutputLocations(const gl::ProgramState &programState,
         {
             const sh::ShaderVariable &outputVar = outputVariables[outputLocation.index];
 
-            std::string name = outputVar.name;
-            std::string locationString;
+            uint32_t location = 0;
             if (outputVar.location != -1)
             {
-                locationString = "location = " + Str(outputVar.location);
+                location = outputVar.location;
             }
-            else if (std::find(implicitOutputs.begin(), implicitOutputs.end(), name) ==
+            else if (std::find(implicitOutputs.begin(), implicitOutputs.end(), outputVar.name) ==
                      implicitOutputs.end())
             {
                 // If there is only one output, it is allowed not to have a location qualifier, in
                 // which case it defaults to 0.  GLSL ES 3.00 spec, section 4.3.8.2.
                 ASSERT(CountExplicitOutputs(outputVariables.begin(), outputVariables.end(),
                                             implicitOutputs.begin(), implicitOutputs.end()) == 1);
-                locationString = "location = 0";
             }
 
-            fragmentSource->insertLayoutSpecifier(name, locationString);
+            AddLocationInfo(variableInfoMapOut, outputVar.mappedName, location,
+                            ShaderInterfaceVariableInfo::kInvalid, fragmentOnly);
         }
     }
 }
@@ -1626,7 +1628,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     // Assign outputs to the fragment shader, if any.
     if (!fragmentSource->empty())
     {
-        AssignOutputLocations(programState, fragmentSource);
+        AssignOutputLocations(programState, variableInfoMapOut);
     }
 
     // Assign attributes to the vertex shader, if any.
