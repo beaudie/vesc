@@ -1299,8 +1299,7 @@ bool ValidateTexEnvxv(Context *context,
 bool ValidateTexParameterx(Context *context, TextureType target, GLenum pname, GLfixed param)
 {
     ANGLE_VALIDATE_IS_GLES1(context);
-    GLfloat paramf = ConvertFixedToFloat(param);
-    return ValidateTexParameterBase(context, target, pname, -1, false, &paramf);
+    return ValidateTexParameterBaseForGLfixed(context, target, pname, -1, false, &param);
 }
 
 bool ValidateTexParameterxv(Context *context,
@@ -1309,12 +1308,7 @@ bool ValidateTexParameterxv(Context *context,
                             const GLfixed *params)
 {
     ANGLE_VALIDATE_IS_GLES1(context);
-    GLfloat paramsf[4] = {};
-    for (unsigned int i = 0; i < GetTexParameterCount(pname); i++)
-    {
-        paramsf[i] = ConvertFixedToFloat(params[i]);
-    }
-    return ValidateTexParameterBase(context, target, pname, -1, true, paramsf);
+    return ValidateTexParameterBaseForGLfixed(context, target, pname, -1, true, params);
 }
 
 bool ValidateTranslatef(Context *context, GLfloat x, GLfloat y, GLfloat z)

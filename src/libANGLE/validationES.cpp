@@ -5683,6 +5683,29 @@ bool ValidateReadPixelsBase(Context *context,
     return true;
 }
 
+bool ValidateTexParameterBaseForGLfixed(Context *context,
+                                        TextureType target,
+                                        GLenum pname,
+                                        GLsizei bufSize,
+                                        bool vectorParams,
+                                        const GLfixed *params)
+{
+    // Convert GLfixed parameter for GL_TEXTURE_MAX_ANISOTROPY_EXT independently
+    // since it compares against 1 and maxTextureAnisotropy instead of just 0
+    // (other values are fine to leave unconverted since they only check positive or negative or
+    // are used as enums)
+    GLfloat paramValue;
+    if (pname == GL_TEXTURE_MAX_ANISOTROPY_EXT)
+    {
+        paramValue = ConvertFixedToFloat(static_cast<GLfixed>(params[0]));
+    }
+    else
+    {
+        paramValue = static_cast<GLfloat>(params[0]);
+    }
+    return ValidateTexParameterBase(context, target, pname, bufSize, vectorParams, &paramValue);
+}
+
 template <typename ParamType>
 bool ValidateTexParameterBase(Context *context,
                               TextureType target,

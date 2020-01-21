@@ -510,6 +510,13 @@ bool ValidateGetTexParameterBase(Context *context,
                                  GLenum pname,
                                  GLsizei *length);
 
+bool ValidateTexParameterBaseForGLfixed(Context *context,
+                                        TextureType target,
+                                        GLenum pname,
+                                        GLsizei bufSize,
+                                        bool vectorParams,
+                                        const GLfixed *params);
+
 template <typename ParamType>
 bool ValidateTexParameterBase(Context *context,
                               TextureType target,
