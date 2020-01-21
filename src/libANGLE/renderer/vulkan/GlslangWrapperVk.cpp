@@ -54,10 +54,10 @@ angle::Result GlslangWrapperVk::GetShaderCode(vk::Context *context,
                                               const gl::Caps &glCaps,
                                               const gl::ShaderMap<std::string> &shaderSources,
                                               const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                              gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
+                                              gl::ShaderMap<SpirvBlob> *spirvBlobsOut)
 {
     return GlslangGetShaderSpirvCode(
         [context](GlslangError error) { return ErrorHandler(context, error); }, glCaps,
-        shaderSources, variableInfoMap, shaderCodeOut);
+        shaderSources, variableInfoMap, spirvBlobsOut);
 }
 }  // namespace rx
