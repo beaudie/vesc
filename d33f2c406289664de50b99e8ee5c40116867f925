@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c56de1e_1a07b619",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T21:21:22Z",
+      "side": 1,
+      "message": "nit: you should be able to use AllShaderTypes for this purpose instead of making the custom type?",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 208,
+        "endChar": 89
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "120aea16_e7b4eb93",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T21:21:22Z",
+      "side": 1,
+      "message": "again, why not use the manager like we do for Framebuffers?",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 613,
+        "endChar": 32
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c71e082e_c0583971",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T21:21:22Z",
+      "side": 1,
+      "message": "I\u0027m not sure why you needed to add a handle allocator and map here when we already have a resource manager type for program pipelines. What features or tests did this add/fix?",
+      "range": {
+        "startLine": 673,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 0
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51acc5b6_4c09b435",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T21:21:22Z",
+      "side": 1,
+      "message": "how come you need to store the translated sources in the state now?",
+      "range": {
+        "startLine": 533,
+        "startChar": 4,
+        "endLine": 533,
+        "endChar": 50
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1102e0b5_6f68620b",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T21:21:22Z",
+      "side": 1,
+      "message": "preference to make these just non-member normal global functions. Making them static members usually doesn\u0027t make them cleaner. Also statics should be Capitalized:\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#naming",
+      "range": {
+        "startLine": 1005,
+        "startChar": 0,
+        "endLine": 1018,
+        "endChar": 62
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9af7bc92_5167829a",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T21:21:22Z",
+      "side": 1,
+      "message": "hopefully we can find a design that doesn\u0027t need to keep this around.",
+      "range": {
+        "startLine": 1159,
+        "startChar": 4,
+        "endLine": 1159,
+        "endChar": 59
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18032bbc_a07f7661",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T21:21:22Z",
+      "side": 1,
+      "message": "trying to understand what this corresponds to in the spec.",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 34
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5d83354_c6839289",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T21:21:22Z",
+      "side": 1,
+      "message": "aren\u0027t the stages defined per program? i.e. we pull fragment from this program, vertex from another, etc.",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 37
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84e1ab64_0c402b1a",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T21:21:22Z",
+      "side": 1,
+      "message": "I was thinking a lot of ProgramState might move into ProgramPipelineState at some point. maybe in a later CL. Seems at least this should be in ProgramPipelineState rather than ProgramPipeline.",
+      "range": {
+        "startLine": 147,
+        "startChar": 1,
+        "endLine": 148,
+        "endChar": 46
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
