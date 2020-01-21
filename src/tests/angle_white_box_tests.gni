@@ -23,6 +23,7 @@ angle_white_box_tests_win_sources = [
   "gl_tests/D3D11InputLayoutCacheTest.cpp",
   "gl_tests/D3DTextureTest.cpp",
   "gl_tests/ErrorMessages.cpp",
+  "gl_tests/gles1/TextureParameterLargeValueTest.cpp",
 ]
 angle_white_box_tests_vulkan_sources = [
   "gl_tests/VulkanFormatTablesTest.cpp",
