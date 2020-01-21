@@ -357,6 +357,40 @@ class Std140BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFacto
   public:
     sh::BlockLayoutEncoder *makeEncoder() override { return new sh::Std140BlockEncoder(); }
 };
+
+void LoadSpirvPatchFromStream(gl::BinaryInputStream *stream, SpirvPatch *patchOut)
+{
+    // Read the entry point additions by the patch.
+    stream->readIntVector<uint32_t>(&patchOut->entryPointAdditions);
+
+    // Read the number of hunks in the patch.
+    patchOut->hunks.resize(stream->readInt<size_t>());
+
+    // Read every hunk of the patch.
+    for (SpirvPatchHunk &hunk : patchOut->hunks)
+    {
+        stream->readInt(&hunk.offset);
+        stream->readInt(&hunk.size);
+        stream->readIntVector<uint32_t>(&hunk.contents);
+    }
+}
+
+void SaveSpirvPatchToStream(gl::BinaryOutputStream *stream, const SpirvPatch &patch)
+{
+    // Write the entry point additions by the patch.
+    stream->writeIntVector(patch.entryPointAdditions);
+
+    // Write the number of hunks in the patch.
+    stream->writeInt(patch.hunks.size());
+
+    // Write every hunk of the patch.
+    for (const SpirvPatchHunk &hunk : patch.hunks)
+    {
+        stream->writeInt(hunk.offset);
+        stream->writeInt(hunk.size);
+        stream->writeIntVector(hunk.contents);
+    }
+}
 }  // anonymous namespace
 
 // ProgramVk::ShaderInfo implementation.
@@ -383,7 +417,13 @@ void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
 {
     for (SpirvBlob &spirvBlob : mSpirvBlobs)
     {
-        spirvBlob.clear();
+        spirvBlob.code.clear();
+        spirvBlob.entryPointOffset = 0;
+        for (SpirvPatchType patchType : angle::AllEnums<SpirvPatchType>())
+        {
+            spirvBlob.patches[patchType].entryPointAdditions.clear();
+            spirvBlob.patches[patchType].hunks.clear();
+        }
     }
     mIsInitialized = false;
 }
@@ -403,11 +443,11 @@ angle::Result ProgramVk::ProgramInfo::initProgram(ContextVk *contextVk,
     {
         const SpirvBlob &spirvBlob = spirvBlobs[shaderType];
 
-        if (!spirvBlob.empty())
+        if (!spirvBlob.code.empty())
         {
             ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
-                                              spirvBlob.data(),
-                                              spirvBlob.size() * sizeof(uint32_t)));
+                                              spirvBlob.code.data(),
+                                              spirvBlob.code.size() * sizeof(uint32_t)));
 
             mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
         }
@@ -443,7 +483,16 @@ angle::Result ProgramVk::loadSpirvBlob(ContextVk *contextVk, gl::BinaryInputStre
         SpirvBlob *spirvBlob = &mShaderInfo.getSpirvBlobs()[shaderType];
 
         // Read the SPIR-V
-        stream->readIntVector<uint32_t>(spirvBlob);
+        stream->readIntVector<uint32_t>(&spirvBlob->code);
+
+        // Read the offset of the OpEntryPoint instruction.
+        stream->readInt(&spirvBlob->entryPointOffset);
+
+        // Read the patches.
+        for (SpirvPatchType patchType : angle::AllEnums<SpirvPatchType>())
+        {
+            LoadSpirvPatchFromStream(stream, &spirvBlob->patches[patchType]);
+        }
     }
 
     // Read the expected bindings
@@ -482,7 +531,16 @@ void ProgramVk::saveSpirvBlob(gl::BinaryOutputStream *stream)
         const SpirvBlob &spirvBlob = mShaderInfo.getSpirvBlobs()[shaderType];
 
         // Write the SPIR-V
-        stream->writeIntVector(spirvBlob);
+        stream->writeIntVector(spirvBlob.code);
+
+        // Write the offset of the OpEntryPoint instruction.
+        stream->writeInt(spirvBlob.entryPointOffset);
+
+        // Write the patches.
+        for (SpirvPatchType patchType : angle::AllEnums<SpirvPatchType>())
+        {
+            SaveSpirvPatchToStream(stream, spirvBlob.patches[patchType]);
+        }
     }
 
     // Write the expected bindings
