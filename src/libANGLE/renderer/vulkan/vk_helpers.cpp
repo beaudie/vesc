@@ -1528,12 +1528,20 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
 {
     // 'recordCommands' will implicitly stop any reads from using the old buffer data.
     CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+    if (contextVk->commandGraphEnabled())
+    {
+        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+    }
+    else
+    {
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+    }
 
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0 || bufferAccessType != 0)
     {
         // Insert a barrier to ensure reads/writes are complete.
         // Use a global memory barrier to keep things simple.
+        // TODO(jmadill): Can we revisit this with http://anglebug.com/4029
         VkMemoryBarrier memoryBarrier = {};
         memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
         memoryBarrier.srcAccessMask   = mCurrentReadAccess | mCurrentWriteAccess | bufferAccessType;
@@ -2957,8 +2965,17 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         }
         else
         {
-            update.image.image->changeLayout(aspectFlags, ImageLayout::TransferSrc, commandBuffer);
-            update.image.image->addReadDependency(contextVk, this);
+            if (contextVk->commandGraphEnabled())
+            {
+                update.image.image->changeLayout(aspectFlags, ImageLayout::TransferSrc,
+                                                 commandBuffer);
+                update.image.image->addReadDependency(contextVk, this);
+            }
+            else
+            {
+                ANGLE_TRY(contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc,
+                                                 update.image.image));
+            }
 
             commandBuffer->copyImage(update.image.image->getImage(),
                                      update.image.image->getCurrentLayout(), mImage,
