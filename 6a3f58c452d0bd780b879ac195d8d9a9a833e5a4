@@ -126,6 +126,30 @@
     },
     {
       "key": {
+        "uuid": "22363b26_4bf0cc99",
+        "filename": "DEPS",
+        "patchSetId": 11
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97c56c09_ddbadb9a",
+      "range": {
+        "startLine": 417,
+        "startChar": 13,
+        "endLine": 417,
+        "endChar": 30
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7169890_52f10093",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 11
@@ -194,6 +218,30 @@
       "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc6ac851_2dd2c732",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "Okay, made this into a pure data addition, worked nicely.",
+      "parentUuid": "e5cb3ad5_c7f44dd1",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 5
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -286,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "a5ae6934_c8250a2f",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "31e325fc_2134efa7",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0cc39c04_79a14939",
         "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
         "patchSetId": 11
@@ -339,6 +405,24 @@
     },
     {
       "key": {
+        "uuid": "e85a7b72_b29553a9",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0111e616_67d762ef",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afddd811_af7bb70c",
         "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
         "patchSetId": 11
@@ -371,6 +455,24 @@
       "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d3c6147_6f0157c0",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "863598f2_b2394acb",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -445,6 +547,30 @@
     },
     {
       "key": {
+        "uuid": "35fe545d_c5c92d04",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "Okay, I\u0027ve migrated to this format.  But there isn\u0027t a swap we can call.  \"swap\" is called in ANGLERenderTest::step(), which calls drawBenchmark before swap.  This is why I had each step rendering a frame instead of all the frames, so you could see each frame in succession.  Is there a swap I can call from within drawBenchmark()?  With the code I\u0027ve currently uploaded, you only see one frame rendered.",
+      "parentUuid": "faf2c2d8_8862e209",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 20
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "44e441ba_fbfae6b7",
         "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
         "patchSetId": 11
@@ -465,6 +591,30 @@
       "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ee8da73_f3a69224",
+        "filename": "src/tests/perf_tests/CaptureReplayPerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44e441ba_fbfae6b7",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 28
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -497,6 +647,24 @@
       "side": 1,
       "message": "I\u0027ve added documentation for how the current traces were generated and uploaded.  I\u0027ll expand that to include what needs to happen for new captures.",
       "parentUuid": "f034129d_756c1803",
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14d6baed_1981414f",
+        "filename": "src/tests/perf_tests/internal_captures/InternalCaptureTests.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "I haven\u0027 done this update in the most recent patch set yet.",
+      "parentUuid": "acc7f4b1_b19dd86f",
       "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -547,6 +715,30 @@
       "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6bcf6c6_be1b9d82",
+        "filename": "src/tests/perf_tests/internal_captures/InternalCaptureTests.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "179c7ae0_5b7cba4d",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 12
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -621,6 +813,30 @@
     },
     {
       "key": {
+        "uuid": "e052c488_46ddc721",
+        "filename": "src/tests/perf_tests/internal_captures/InternalCaptureTests.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "I\u0027ve migrated to Trace instead of CaptureReplay in most places.",
+      "parentUuid": "6d48eafc_5dfc7bca",
+      "range": {
+        "startLine": 32,
+        "startChar": 43,
+        "endLine": 32,
+        "endChar": 69
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "53d1ad8b_e0700b6d",
         "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
         "patchSetId": 11
@@ -656,6 +872,30 @@
       "side": 1,
       "message": "Will do.",
       "parentUuid": "53d1ad8b_e0700b6d",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 28
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "937727dc_5062a99a",
+        "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "Haven\u0027t addressed this yet in latest upload.",
+      "parentUuid": "ee1e4667_54bcbe3c",
       "range": {
         "startLine": 1,
         "startChar": 0,
@@ -739,6 +979,30 @@
     },
     {
       "key": {
+        "uuid": "41ff8e65_e8424e2b",
+        "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "Okay, I migrated to tracking test and frame ranges together.  The only ugly bit is the define used to locate trace data.",
+      "parentUuid": "cca56faf_0f9d66c0",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 0
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2323be70_b9ece3e9",
         "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
         "patchSetId": 11
@@ -798,6 +1062,30 @@
       "side": 1,
       "message": "Understood. If you need help ping me. I\u0027m pretty good with GN.",
       "parentUuid": "4a1b1e11_d23a624d",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 1
+      },
+      "revId": "6a3f58c452d0bd780b879ac195d8d9a9a833e5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53ce78d9_cd3bb1ca",
+        "filename": "src/tests/perf_tests/internal_captures/angle_capture_replay_tests.gni",
+        "patchSetId": 11
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-21T04:26:49Z",
+      "side": 1,
+      "message": "I split out the trex logic, but haven\u0027t done any other major refactor.",
+      "parentUuid": "13d90e9f_75e6cc9a",
       "range": {
         "startLine": 17,
         "startChar": 0,
