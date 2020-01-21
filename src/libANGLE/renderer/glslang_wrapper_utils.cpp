@@ -941,34 +941,9 @@ angle::Result GetShaderSpirvCode(GlslangErrorCallback callback,
     return angle::Result::Continue;
 }
 
-void ValidateSpirvMessage(spv_message_level_t level,
-                          const char *source,
-                          const spv_position_t &position,
-                          const char *message)
-{
-    WARN() << "Level" << level << ": " << message;
-}
-
-bool ValidateSpirv(const std::vector<uint32_t> &spirvBlob)
-{
-    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
-
-    spirvTools.SetMessageConsumer(ValidateSpirvMessage);
-    bool result = spirvTools.Validate(spirvBlob);
-
-    if (!result)
-    {
-        std::string readableSpirv;
-        result = spirvTools.Disassemble(spirvBlob, &readableSpirv,
-                                        SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES);
-        WARN() << "Invalid SPIR-V:\n" << readableSpirv;
-    }
-
-    return result;
-}
-
 // A SPIR-V transformer.  It walks the instructions and modifies them as necessary, for example to
-// assign bindings or locations.
+// assign bindings or locations.  At the same time, it extracts patches (such as for inactive
+// varyings) that can be applied later, if necessary.
 class SpirvTransformer final : angle::NonCopyable
 {
   public:
@@ -1026,7 +1001,12 @@ class SpirvTransformer final : angle::NonCopyable
 
     // Any other instructions:
     size_t copyInstruction(const uint32_t *instruction, size_t wordCount);
+    size_t getCurrentOutputOffset() const;
     uint32_t getNewId();
+
+    // Create a patch hunk out of the instruction.  Currently, patched instructions are far and
+    // in between, so there's no value in trying to merge the hunks.
+    SpirvPatchHunk createPatchHunk(const uint32_t *instruction, size_t offset, size_t size);
 
     // SPIR-V to transform:
     const std::vector<uint32_t> &mSpirvBlobIn;
@@ -1037,7 +1017,7 @@ class SpirvTransformer final : angle::NonCopyable
     const ShaderInterfaceVariableInfoMap &mVariableInfoMap;
     ShaderInterfaceVariableInfo mBuiltinVariableInfo;
 
-    // Transformed SPIR-V:
+    // Transformed SPIR-V and patches:
     SpirvBlob *mSpirvBlobOut;
 
     // Traversal state:
@@ -1069,14 +1049,15 @@ bool SpirvTransformer::transform()
     ASSERT(mIsInFunctionSection == false);
 
     // Make sure the SpirvBlob is not reused.
-    ASSERT(mSpirvBlobOut->empty());
+    ASSERT(mSpirvBlobOut->code.empty());
 
     // First, find all necessary ids and associate them with the information required to transform
     // their decorations.
     resolveVariableIds();
 
     // Copy the header to SpirvBlob
-    mSpirvBlobOut->assign(mSpirvBlobIn.begin(), mSpirvBlobIn.begin() + kHeaderIndexInstructions);
+    mSpirvBlobOut->code.assign(mSpirvBlobIn.begin(),
+                               mSpirvBlobIn.begin() + kHeaderIndexInstructions);
 
     mCurrentWord = kHeaderIndexInstructions;
     while (mCurrentWord < mSpirvBlobIn.size())
@@ -1365,6 +1346,10 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
     // If it's an inactive varying, remove the decoration altogether.
     if (!info->activeStages[mShaderType])
     {
+        // Create a patch hunk for inactive varyings.  Note that every other inactive resource is
+        // already removed by the translator.
+        mSpirvBlobOut->inactiveVaryingsPatch.hunks.emplace_back(
+            createPatchHunk(instruction, getCurrentOutputOffset(), 0));
         return true;
     }
 
@@ -1393,7 +1378,7 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
 
     // Copy the decoration declaration and modify it.
     const size_t instructionOffset = copyInstruction(instruction, wordCount);
-    (*mSpirvBlobOut)[instructionOffset + kDecorationValueIndex] = newDecorationValue;
+    mSpirvBlobOut->code[instructionOffset + kDecorationValueIndex] = newDecorationValue;
 
     // If there are decorations to be added, add them right after the Location decoration is
     // encountered.
@@ -1407,9 +1392,9 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
     {
         // Copy the location decoration declaration and modify it to contain the Component
         // decoration.
-        const size_t instOffset                         = copyInstruction(instruction, wordCount);
-        (*mSpirvBlobOut)[instOffset + kDecorationIndex] = spv::DecorationComponent;
-        (*mSpirvBlobOut)[instOffset + kDecorationValueIndex] = info->component[mShaderType];
+        const size_t instOffset = copyInstruction(instruction, wordCount);
+        mSpirvBlobOut->code[instOffset + kDecorationIndex]      = spv::DecorationComponent;
+        mSpirvBlobOut->code[instOffset + kDecorationValueIndex] = info->component[mShaderType];
     }
 
     // Add Xfb decorations, if any.
@@ -1436,8 +1421,9 @@ bool SpirvTransformer::transformDecorate(const uint32_t *instruction, size_t wor
         for (size_t i = 0; i < kXfbDecorationCount; ++i)
         {
             const size_t xfbInstructionOffset = copyInstruction(instruction, wordCount);
-            (*mSpirvBlobOut)[xfbInstructionOffset + kDecorationIndex]      = xfbDecorations[i];
-            (*mSpirvBlobOut)[xfbInstructionOffset + kDecorationValueIndex] = xfbDecorationValues[i];
+            mSpirvBlobOut->code[xfbInstructionOffset + kDecorationIndex] = xfbDecorations[i];
+            mSpirvBlobOut->code[xfbInstructionOffset + kDecorationValueIndex] =
+                xfbDecorationValues[i];
         }
     }
 
@@ -1516,6 +1502,8 @@ bool SpirvTransformer::transformEntryPoint(const uint32_t *instruction, size_t w
 
         if (!info->activeStages[mShaderType])
         {
+            // Remember this id as part of the inactive varyings patch.
+            mSpirvBlobOut->inactiveVaryingsPatch.entryPointAdditions.push_back(id);
             continue;
         }
 
@@ -1528,7 +1516,11 @@ bool SpirvTransformer::transformEntryPoint(const uint32_t *instruction, size_t w
     SetSpirvInstructionLength(filteredEntryPoint.data(), newLength);
 
     // Copy to output.
-    copyInstruction(filteredEntryPoint.data(), newLength);
+    const size_t entryPointOffset = copyInstruction(filteredEntryPoint.data(), newLength);
+
+    // Store the offset of this instruction to simplify shader patching.
+    ASSERT(mSpirvBlobOut->entryPointOffset == 0);
+    mSpirvBlobOut->entryPointOffset = entryPointOffset;
 
     // Add an OpExecutionMode Xfb instruction if necessary.
     if (!mHasTransformFeedbackOutput)
@@ -1594,9 +1586,9 @@ bool SpirvTransformer::transformTypePointer(const uint32_t *instruction, size_t 
     // Copy the type declaration for modification.
     const size_t instructionOffset = copyInstruction(instruction, wordCount);
 
-    const uint32_t newTypeId                                 = getNewId();
-    (*mSpirvBlobOut)[instructionOffset + kIdIndex]           = newTypeId;
-    (*mSpirvBlobOut)[instructionOffset + kStorageClassIndex] = spv::StorageClassPrivate;
+    const uint32_t newTypeId                                    = getNewId();
+    mSpirvBlobOut->code[instructionOffset + kIdIndex]           = newTypeId;
+    mSpirvBlobOut->code[instructionOffset + kStorageClassIndex] = spv::StorageClassPrivate;
 
     // Remember the id of the replacement.
     ASSERT(id < mTypePointerTransformedId.size());
@@ -1645,8 +1637,12 @@ bool SpirvTransformer::transformVariable(const uint32_t *instruction, size_t wor
     ASSERT(typeId < mTypePointerTransformedId.size());
     ASSERT(mTypePointerTransformedId[typeId] != 0);
 
-    (*mSpirvBlobOut)[instructionOffset + kTypeIdIndex]       = mTypePointerTransformedId[typeId];
-    (*mSpirvBlobOut)[instructionOffset + kStorageClassIndex] = spv::StorageClassPrivate;
+    mSpirvBlobOut->code[instructionOffset + kTypeIdIndex]       = mTypePointerTransformedId[typeId];
+    mSpirvBlobOut->code[instructionOffset + kStorageClassIndex] = spv::StorageClassPrivate;
+
+    // Create a patch hunk for inactive varyings.
+    mSpirvBlobOut->inactiveVaryingsPatch.hunks.emplace_back(createPatchHunk(
+        instruction, instructionOffset, getCurrentOutputOffset() - instructionOffset));
 
     return true;
 }
@@ -1674,22 +1670,192 @@ bool SpirvTransformer::transformAccessChain(const uint32_t *instruction, size_t 
     ASSERT(typeId < mTypePointerTransformedId.size());
     ASSERT(mTypePointerTransformedId[typeId] != 0);
 
-    (*mSpirvBlobOut)[instructionOffset + kTypeIdIndex] = mTypePointerTransformedId[typeId];
+    mSpirvBlobOut->code[instructionOffset + kTypeIdIndex] = mTypePointerTransformedId[typeId];
+
+    // Create a patch hunk for inactive varyings.
+    mSpirvBlobOut->inactiveVaryingsPatch.hunks.emplace_back(createPatchHunk(
+        instruction, instructionOffset, getCurrentOutputOffset() - instructionOffset));
 
     return true;
 }
 
 size_t SpirvTransformer::copyInstruction(const uint32_t *instruction, size_t wordCount)
 {
-    size_t instructionOffset = mSpirvBlobOut->size();
-    mSpirvBlobOut->insert(mSpirvBlobOut->end(), instruction, instruction + wordCount);
+    size_t instructionOffset = getCurrentOutputOffset();
+    mSpirvBlobOut->code.insert(mSpirvBlobOut->code.end(), instruction, instruction + wordCount);
     return instructionOffset;
+}
+
+size_t SpirvTransformer::getCurrentOutputOffset() const
+{
+    return mSpirvBlobOut->code.size();
 }
 
 uint32_t SpirvTransformer::getNewId()
 {
-    return (*mSpirvBlobOut)[kHeaderIndexIndexBound]++;
+    return mSpirvBlobOut->code[kHeaderIndexIndexBound]++;
 }
+
+SpirvPatchHunk SpirvTransformer::createPatchHunk(const uint32_t *instruction,
+                                                 size_t offset,
+                                                 size_t size)
+{
+    size_t wordCount = GetSpirvInstructionLength(instruction);
+    return SpirvPatchHunk{offset, size, {instruction, instruction + wordCount}};
+}
+
+// Patch hunks reference the word offsets of the unpatched SPIR-V.  As such, they should all be
+// applied simultaneously.  An angle::FixedVector is used to collect all patches that need to be
+// applied.  This is the maximum possible number of patches, which constitutes:
+//
+//   - Inactive varyings.
+//
+constexpr size_t kMaxSpirvPatchCount = 1;
+
+void ApplySpirvPatches(
+    const SpirvBlob &spirvBlob,
+    const angle::FixedVector<const SpirvPatch *, kMaxSpirvPatchCount> &patchesToApply,
+    std::vector<uint32_t> *patchedSpirvBlob)
+{
+    // Track the unpatched shader offset.  This will be used to determine when to apply a patch
+    // hunk.
+    size_t currentUnpatchedOffset = 0;
+
+    // Copy up to and including the entry point.  Note that the very first modification to the
+    // SPIR-V is to its entry point and there are no hunks that modify anything before it.
+    ASSERT(spirvBlob.entryPointOffset != 0);
+    const size_t entryPointLength =
+        GetSpirvInstructionLength(&spirvBlob.code[spirvBlob.entryPointOffset]);
+
+    currentUnpatchedOffset = spirvBlob.entryPointOffset + entryPointLength;
+    patchedSpirvBlob->assign(spirvBlob.code.begin(),
+                             spirvBlob.code.begin() + currentUnpatchedOffset);
+
+    // Patch the entry point by adding additional ids and modifying its length.
+    size_t newEntryPointLength = entryPointLength;
+    for (const SpirvPatch *patch : patchesToApply)
+    {
+        patchedSpirvBlob->insert(patchedSpirvBlob->end(), patch->entryPointAdditions.begin(),
+                                 patch->entryPointAdditions.end());
+        newEntryPointLength += patch->entryPointAdditions.size();
+    }
+    SetSpirvInstructionLength(&(*patchedSpirvBlob)[spirvBlob.entryPointOffset],
+                              newEntryPointLength);
+
+    // Keep track of which hunks are next to apply.
+    std::array<size_t, kMaxSpirvPatchCount> nextHunks = {};
+
+    while (true)
+    {
+        // The unpatched shader offset of the next hunk that should be applied.  Anything from
+        // currentUnpatchedOffset to nextUnpatchedHunkOffset can be directly copied.
+        size_t nextUnpatchedHunkOffset = spirvBlob.code.size();
+        size_t nextPatchToApply        = patchesToApply.size();
+
+        // Find the patch hunk with the smallest unpatched offset.
+        // Note: a linear search is done here because the maximum number of patches is very low.  If
+        // they become nontrivially large, a heap could be used to find the hunk with the smallest
+        // offset.
+        for (size_t patchIndex = 0; patchIndex < patchesToApply.size(); ++patchIndex)
+        {
+            const SpirvPatch *patch         = patchesToApply[patchIndex];
+            const size_t nextPatchHunkIndex = nextHunks[patchIndex];
+            if (nextPatchHunkIndex >= patch->hunks.size())
+            {
+                // Ignore the patch if no unapplied hunks remain.
+                continue;
+            }
+
+            const size_t hunkOffset = patch->hunks[nextPatchHunkIndex].offset;
+            // Assert that no hunk is trying to modify the SPIR-V before the entry point.
+            ASSERT(hunkOffset > spirvBlob.entryPointOffset);
+
+            if (hunkOffset < nextUnpatchedHunkOffset)
+            {
+                nextUnpatchedHunkOffset = hunkOffset;
+                nextPatchToApply        = patchIndex;
+            }
+        }
+
+        // Copy up to next patch hunk (or end of shader, if none).
+        patchedSpirvBlob->insert(patchedSpirvBlob->end(),
+                                 spirvBlob.code.begin() + currentUnpatchedOffset,
+                                 spirvBlob.code.begin() + nextUnpatchedHunkOffset);
+
+        // If all patches were applied, we are done.
+        if (nextPatchToApply >= patchesToApply.size())
+        {
+            break;
+        }
+
+        // Apply the hunk.
+        const SpirvPatch *patch         = patchesToApply[nextPatchToApply];
+        const size_t nextPatchHunkIndex = nextHunks[nextPatchToApply];
+        const SpirvPatchHunk &hunk      = patch->hunks[nextPatchHunkIndex];
+        patchedSpirvBlob->insert(patchedSpirvBlob->end(), hunk.contents.begin(),
+                                 hunk.contents.end());
+
+        // Mark the hunk as applied and move on to the next one.  Note: hunks are expected to be
+        // sorted by offset.
+        ASSERT(nextPatchHunkIndex + 1 == patch->hunks.size() ||
+               patch->hunks[nextPatchHunkIndex].offset <=
+                   patch->hunks[nextPatchHunkIndex + 1].offset);
+        ++nextHunks[nextPatchToApply];
+
+        // The hunk is replacing |hunk.size| words of the unpatched SPIR-V shader, so skip that
+        // many words.
+        currentUnpatchedOffset = nextUnpatchedHunkOffset + hunk.size;
+
+        ASSERT(currentUnpatchedOffset <= spirvBlob.code.size());
+    }
+}
+
+void ValidateSpirvMessage(spv_message_level_t level,
+                          const char *source,
+                          const spv_position_t &position,
+                          const char *message)
+{
+    WARN() << "Level" << level << ": " << message;
+}
+
+bool ValidateSpirv(const std::vector<uint32_t> &spirvBlob, const std::string &modificationsInfo)
+{
+    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
+
+    spirvTools.SetMessageConsumer(ValidateSpirvMessage);
+    bool result = spirvTools.Validate(spirvBlob);
+
+    if (!result)
+    {
+        std::string readableSpirv;
+        result = spirvTools.Disassemble(spirvBlob, &readableSpirv,
+                                        SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES);
+        WARN() << "Invalid SPIR-V" << modificationsInfo << ":\n" << readableSpirv;
+    }
+
+    return result;
+}
+
+bool ValidateSpirvBlob(const SpirvBlob &spirvBlob)
+{
+    // Validate SPIR-V without patches.
+    bool valid = ValidateSpirv(spirvBlob.code, "");
+
+    // Validate SPIR-V with any number of patch combinations.  Currently only one patch, so this
+    // code is not generalized to any number of patches.
+    static_assert(kMaxSpirvPatchCount == 1,
+                  "Generalize the following code to validate all permutations");
+
+    angle::FixedVector<const SpirvPatch *, kMaxSpirvPatchCount> patchesToApply;
+    patchesToApply.push_back(&spirvBlob.inactiveVaryingsPatch);
+
+    std::vector<uint32_t> patchedSpirvBlob;
+    ApplySpirvPatches(spirvBlob, patchesToApply, &patchedSpirvBlob);
+    ValidateSpirv(patchedSpirvBlob, " with inactiveVaryingPatch");
+
+    return valid;
+}
+
 }  // anonymous namespace
 
 const uint32_t ShaderInterfaceVariableInfo::kInvalid;
@@ -1845,9 +2011,38 @@ angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
         SpirvTransformer transformer(initialSpirvBlob, variableInfoMap, shaderType, spirvBlob);
         ANGLE_GLSLANG_CHECK(callback, transformer.transform(), GlslangError::InvalidSpirv);
 
-        ASSERT(ValidateSpirv(*spirvBlob));
+        ASSERT(ValidateSpirvBlob(*spirvBlob));
     }
 
     return angle::Result::Continue;
+}
+
+void GlslangApplySpirvPatches(bool inactiveVaryings,
+                              const gl::ShaderMap<SpirvBlob> &spirvBlobs,
+                              gl::ShaderMap<std::vector<uint32_t>> *patchedSpirvBlobsOut)
+{
+    // At least one specialization must be requested.  There is currently only one.
+    ASSERT(inactiveVaryings);
+
+    // Make a copy of the binary for patching.
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        const SpirvBlob &spirvBlob = spirvBlobs[shaderType];
+        if (spirvBlob.code.empty())
+        {
+            continue;
+        }
+
+        // Decide which patches need to be applied.
+        angle::FixedVector<const SpirvPatch *, kMaxSpirvPatchCount> patchesToApply;
+
+        if (inactiveVaryings)
+        {
+            patchesToApply.push_back(&spirvBlob.inactiveVaryingsPatch);
+        }
+
+        // Apply all patches simultaneously.
+        ApplySpirvPatches(spirvBlob, patchesToApply, &(*patchedSpirvBlobsOut)[shaderType]);
+    }
 }
 }  // namespace rx

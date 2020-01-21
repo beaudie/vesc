@@ -41,7 +41,31 @@ struct GlslangSourceOptions
     bool emulateBresenhamLines              = false;
 };
 
-using SpirvBlob = std::vector<uint32_t>;
+struct SpirvPatchHunk
+{
+    // Replace words [|offset|, |offset|+|size|) in unpatched SPIR-V with |contents|.  |size| can be
+    // empty, so can |contents|.
+    size_t offset = 0;
+    size_t size   = 0;
+    std::vector<uint32_t> contents;
+};
+struct SpirvPatch
+{
+    // Any possible entry point interface variable ids that need to be added by the patch.
+    // Note: Currently, there is no specialization that can remove interface variables.
+    std::vector<uint32_t> entryPointAdditions;
+    // Hunks to be replaced.  They must be sorted by |offset|.
+    std::vector<SpirvPatchHunk> hunks;
+};
+struct SpirvBlob
+{
+    // SPIR-V output without patches.
+    std::vector<uint32_t> code;
+    // Location of OpEntryPoint, to facilitate SPIR-V patching.
+    size_t entryPointOffset = 0;
+    // SPIR-V patch to bring back removed inactive varyings.
+    SpirvPatch inactiveVaryingsPatch;
+};
 
 using GlslangErrorCallback = std::function<angle::Result(GlslangError)>;
 
@@ -79,21 +103,33 @@ void GlslangRelease();
 // Get the mapped sampler name after the soure is transformed by GlslangGetShaderSource()
 std::string GlslangGetMappedSamplerName(const std::string &originalName);
 
-// Transform the source to include actual binding points for various shader resources (textures,
-// buffers, xfb, etc).  For some variables, these values are instead output to the variableInfoMap
-// to be set during a SPIR-V transformation.  This is a transitory step towards moving all variables
-// to this map, at which point GlslangGetShaderSpirvCode will also be called by this function.
+// Transform the shader sources if necessary.  At the same time, shader interface variable
+// qualifiers (set, binding, location etc) are stored in variableInfoMap to be set during a SPIR-V
+// transformation.  This is a transitory step towards link-time shader compilation, at which point
+// GlslangGetShaderSpirvCode will also be called by this function.
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut);
 
+// Compile the shaders and apply a SPIR-V transformation.  Inactive varyings are removed and kept
+// separately as a "patch" to the unpatched SPIR-V.  These varyings can be patched back in (using
+// GlslangApplySpirvPatches) for Program Pipeline Objects, that may decide they are no longer
+// inactive.
 angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
                                         const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                         gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
+
+// Apply patches to the unpatched SPIR-V code (currently, only inactive varyings).  Creates a copy
+// of the unpatched SPIR-V (as it assumes at least one patch is necessary) and applies the necessary
+// patches.  Note that since the patch hunks reference the offset in SPIR-V before patching, all
+// necessary patches should be applied at once, and cannot be done one at a time.
+void GlslangApplySpirvPatches(bool inactiveVaryings,
+                              const gl::ShaderMap<SpirvBlob> &spirvBlobs,
+                              gl::ShaderMap<std::vector<uint32_t>> *patchedSpirvBlobsOut);
 
 }  // namespace rx
 

@@ -28,7 +28,7 @@ angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
                                         const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                        gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut);
+                                        gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
 }  // namespace mtl
 }  // namespace rx
 
