@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "355e68f3_05685ace",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-01-21T15:16:28Z",
+      "side": 1,
+      "message": "Comment can be tweaked now as ptr isn\u0027t necessarily put at \"end\" anymore, potentially:\n// Append ptr to pNext chain of chainStart\n\nAnd/or may make sense to tweak function name, such as \"InsertInPNextChain\" as append has connotation of the end of the chain.",
+      "revId": "29da785751ca28761ebad6244543133eba00c7d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
