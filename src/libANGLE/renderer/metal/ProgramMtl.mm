@@ -311,15 +311,15 @@ angle::Result ProgramMtl::linkImpl(const gl::Context *glContext, gl::InfoLog &in
     ANGLE_TRY(initDefaultUniformBlocks(glContext));
 
     // Convert GLSL to spirv code
-    gl::ShaderMap<std::vector<uint32_t>> shaderCodes;
+    gl::ShaderMap<SpirvBlob> spirvBlobs;
     ANGLE_TRY(mtl::GlslangGetShaderSpirvCode(contextMtl, contextMtl->getCaps(), mShaderSource,
-                                             mVariableInfoMap, &shaderCodes));
+                                             mVariableInfoMap, &spirvBlobs));
 
     // Convert spirv code to MSL
     ANGLE_TRY(convertToMsl(glContext, gl::ShaderType::Vertex, infoLog,
-                           &shaderCodes[gl::ShaderType::Vertex]));
+                           &spirvBlobs[gl::ShaderType::Vertex].code));
     ANGLE_TRY(convertToMsl(glContext, gl::ShaderType::Fragment, infoLog,
-                           &shaderCodes[gl::ShaderType::Fragment]));
+                           &spirvBlobs[gl::ShaderType::Fragment].code));
 
     return angle::Result::Continue;
 }
