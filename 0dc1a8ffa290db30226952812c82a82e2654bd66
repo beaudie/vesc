@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1c88059_9713baee",
+        "filename": "src/tests/perf_tests/TracePerf.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T13:58:52Z",
+      "side": 1,
+      "message": "nit: can we call this TracePerfTest or TraceBenchmark? PerfBenchmark is redundant.",
+      "range": {
+        "startLine": 90,
+        "startChar": 6,
+        "endLine": 90,
+        "endChar": 25
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ed69134_c28ef4fc",
+        "filename": "src/tests/perf_tests/TracePerf.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T13:58:52Z",
+      "side": 1,
+      "message": "you should swap between frames to maintain similar behaviour.",
+      "range": {
+        "startLine": 164,
+        "startChar": 8,
+        "endLine": 164,
+        "endChar": 19
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5d78cd9_36c6f6ae",
+        "filename": "src/tests/perf_tests/TracePerf.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T13:58:52Z",
+      "side": 1,
+      "message": "did you want to put in the Vulkan version as well? The traces should only really work with Vulkan.",
+      "range": {
+        "startLine": 208,
+        "startChar": 23,
+        "endLine": 208,
+        "endChar": 63
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef85f408_5457c017",
+        "filename": "src/tests/perf_tests/restricted_captures/angle_trace_perf_tests.gni",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T13:58:52Z",
+      "side": 1,
+      "message": "maybe in the future we can use a single .angledata file for each trace. and not need to use a subdirectory for each trace or something. LGTM for now.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 64
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a548fc84_10e339ac",
+        "filename": "util/android/AndroidWindow.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T13:58:52Z",
+      "side": 1,
+      "message": "nit: \u0027SetScreenOrientation\u0027 caps",
+      "range": {
+        "startLine": 70,
+        "startChar": 5,
+        "endLine": 70,
+        "endChar": 25
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d823d03_fe9d2f3b",
+        "filename": "util/android/AndroidWindow.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T13:58:52Z",
+      "side": 1,
+      "message": "can you tag the TODO with a bug to make sure we handle it?",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 60
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
