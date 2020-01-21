@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "ac7c39cd_2d7e7b23",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-21T22:38:48Z",
+      "side": 1,
+      "message": "The first problem I hit was that the *TypedResourceManager::checkObjectAllocation() doesn\u0027t allow allocating an object with an ID of \u00270\u0027:\nhttps://cs.corp.google.com/cobalt/third_party/angle/src/libANGLE/ResourceManager.h?rcl\u003d4958bb9377ab7ee580a8c993f31eb14d2a57d91a\u0026l\u003d96\n\nRather than trying to workaround this within TypedResourceManager, I took your suggestion to follow the default vertex array implementation a bit further by mirroring it as closely as possible with the hope that that code has been pretty well hardened by now.   This lets me essentially copy what\u0027s already being done for vertex arrays in places like the declaration, how the default program pipeline is allocated when the Context is init\u0027ed, and so on:\n\n    ResourceMap\u003cVertexArray, VertexArrayID\u003e mVertexArrayMap;\n    HandleAllocator mVertexArrayHandleAllocator;\n...\n    bindVertexArray({0});\n    bindProgramPipeline({0});",
+      "parentUuid": "c71e082e_c0583971",
+      "range": {
+        "startLine": 673,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 0
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51acc5b6_4c09b435",
         "filename": "src/libANGLE/Program.h",
         "patchSetId": 14
@@ -82,6 +106,30 @@
       "writtenOn": "2020-01-21T21:21:22Z",
       "side": 1,
       "message": "how come you need to store the translated sources in the state now?",
+      "range": {
+        "startLine": 533,
+        "startChar": 4,
+        "endLine": 533,
+        "endChar": 50
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a98bff3_1ef1821c",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-21T22:38:48Z",
+      "side": 1,
+      "message": "(The following will be updated in the doc.)\n\nWith the change to get the translated source at draw time, rather than link time, we need to keep the source around in case the shader is detached before the draw call is issued.   The glCreateShaderProgramv() documentation gives a good example how this scenario:\n\n    const GLuint shader \u003d glCreateShader(type);\n    if (shader) {\n        glShaderSource(shader, count, strings, NULL);\n        glCompileShader(shader);\n        const GLuint program \u003d glCreateProgram();\n        if (program) {\n            GLint compiled \u003d GL_FALSE;\n            glGetShaderiv(shader, GL_COMPILE_STATUS, \u0026compiled);\n            glProgramParameteri(program, GL_PROGRAM_SEPARABLE, GL_TRUE);\n            if (compiled) {\n                glAttachShader(program, shader);\n                glLinkProgram(program);\n                glDetachShader(program, shader);   \u003c\u003c---- The problem call.\n            }\n            /* append-shader-info-log-to-program-info-log */\n        }\n        glDeleteShader(shader);\n        return program;\n    } else {\n        return 0;\n    }\n\nWhile this is how glCreateShaderProgramv() is intended to behave (and so is specific to program pipelines), there are also several dEQP (and likely end2end) tests that behave this way as well - including some that are intended to specifically test that a program without any shaders attached can still be used to draw.\n\nUnfortunately, this causes problems in GlslangGetShaderSource() which assumes that the shaders are still attached when that\u0027s called:\nhttps://cs.corp.google.com/cobalt/third_party/angle/src/libANGLE/renderer/glslang_wrapper_utils.cpp?rcl\u003d4958bb9377ab7ee580a8c993f31eb14d2a57d91a\u0026l\u003d1056\n\nSo, we need to keep that source around when the shader is detached so we can come back later and re-generate the translated source code.   Note, there is a lot of other work that\u0027s required in the back end to get the rest of the functions in there (AssignUniformBindings, AssignTextureBindings, etc.) to work correctly, which is part of the actual program pipeline implementation CL.   This particular piece is just necessary for the changes to allow deferring getting the shader source until draw time.",
+      "parentUuid": "51acc5b6_4c09b435",
       "range": {
         "startLine": 533,
         "startChar": 4,
@@ -140,6 +188,30 @@
     },
     {
       "key": {
+        "uuid": "db2dd617_b9fff5a6",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-21T22:38:48Z",
+      "side": 1,
+      "message": "Yeah, this is a tough one though.\n\nThe problem is that the ProgramLinkedResources is filled in by the front end during Program::link(), but is required by the program pipeline in the backend during draw time (just after creating the pipeline layout).   The shader\u0027s source needs to be updated after the pipeline layout is created, since that\u0027s how the descriptor set/binding values are determined.\n\nMaking this a member variable was the most straightforward way to keep this data around in a way that could be queried for each program in the pipeline when the draw command was eventually issued some time after the initial link.   Unfortunately, the program pipeline can\u0027t be used, since the glLinkProgram can occur before any glUseProgram, so the program isn\u0027t in any pipeline (default or otherwise) yet.",
+      "parentUuid": "9af7bc92_5167829a",
+      "range": {
+        "startLine": 1159,
+        "startChar": 4,
+        "endLine": 1159,
+        "endChar": 59
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "18032bbc_a07f7661",
         "filename": "src/libANGLE/ProgramPipeline.h",
         "patchSetId": 14
@@ -163,6 +235,30 @@
     },
     {
       "key": {
+        "uuid": "f4d80ff4_863dad4a",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-21T22:38:48Z",
+      "side": 1,
+      "message": "glActiveShaderProgram\nhttps://www.khronos.org/registry/OpenGL-Refpages/es3.1/html/glActiveShaderProgram.xhtml\n\nUsing a pointer (rather than storing the ID) just makes it easier to handle glUniform calls since it removes the need to loop through the programs in the pipeline to find the matching ID for each glUniform call.",
+      "parentUuid": "18032bbc_a07f7661",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 34
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b5d83354_c6839289",
         "filename": "src/libANGLE/ProgramPipeline.h",
         "patchSetId": 14
@@ -174,6 +270,30 @@
       "writtenOn": "2020-01-21T21:21:22Z",
       "side": 1,
       "message": "aren\u0027t the stages defined per program? i.e. we pull fragment from this program, vertex from another, etc.",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 37
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b9954a6_6d68ed61",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-21T22:38:48Z",
+      "side": 1,
+      "message": "This bitfield is intended to track which stages the program pipeline currently has programs bound for.   This CL doesn\u0027t require this information, however it is necessary for the full program pipeline implementation in the backend:\n\nProgramPipeline.h\n    size_t getLinkedShaderStageCount() const { return mState.mLinkedShaderStages.count(); }\n\nProgramPipelineVk::createPipelineLayout()\n{\n...\n    // Initialize descriptor pools.\n    std::array\u003cVkDescriptorPoolSize, 2\u003e uniformAndXfbSetSize \u003d {\n        {{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,\n          static_cast\u003cuint32_t\u003e(glPipeline-\u003egetLinkedShaderStageCount())},\n         {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS}}};\n...\n    mDynamicBufferOffsets.resize(glPipeline-\u003egetLinkedShaderStageCount());\n\nWe don\u0027t actually need to know the exact shader stages (the count is all we care about), but this mirrors what\u0027s currently being done in Program.h and ProgramVk::linkImpl().",
+      "parentUuid": "b5d83354_c6839289",
       "range": {
         "startLine": 67,
         "startChar": 4,
