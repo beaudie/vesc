@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ba978e6_f14396f7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-21T04:16:43Z",
+      "side": 1,
+      "message": "The stack trace is already in the bug, so at least remove this uninteresting part.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 76
+      },
+      "revId": "5a15685080f29919f03f81e9f14d11e28aefae25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5252f4da_6fc5c252",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-21T04:16:43Z",
+      "side": 1,
+      "message": "Remove this whitespace to fix presubmit.",
+      "revId": "5a15685080f29919f03f81e9f14d11e28aefae25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
