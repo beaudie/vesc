@@ -111,4 +111,22 @@ TEST_P(TextureParameterTest, Set)
     }
 }
 
+// Make sure we don't improperly cast an int into a float in ANGLE's internals
+TEST_P(TextureParameterTest, IntConversionsAndIntBounds)
+{
+    // Test integers that can't be represented as floats, INT_MIN, and INT_MAX
+    constexpr GLint kFirstIntThatCannotBeFloat = 16777217;
+    constexpr unsigned int kParameterLength    = 4;
+    constexpr GLint crop[kParameterLength]     = {
+        -kFirstIntThatCannotBeFloat, kFirstIntThatCannotBeFloat, std::numeric_limits<GLint>::max(),
+        std::numeric_limits<GLint>::min()};
+    glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, crop);
+    GLint cropStored[kParameterLength] = {0};
+    glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, cropStored);
+    for (unsigned int i = 0; i < kParameterLength; i++)
+    {
+        ASSERT_EQ(crop[i], cropStored[i]);
+    }
+}
+
 ANGLE_INSTANTIATE_TEST_ES1(TextureParameterTest);
