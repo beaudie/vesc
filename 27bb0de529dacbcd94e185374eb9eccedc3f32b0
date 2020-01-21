@@ -16,6 +16,24 @@
       "revId": "27bb0de529dacbcd94e185374eb9eccedc3f32b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8d00f00_c1318c0d",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-21T00:17:05Z",
+      "side": 1,
+      "message": "Not in the validation code.\n\nThis part of the GLES spec is strange IMHO.  There doesn\u0027t appear to be any consequences described if the format and texture\u0027s internal format are not \"compatible\".  I\u0027ve looked a number of times.  I\u0027m wondering if something was lost in translation from Desktop OpenGL?\n\nThe compatibility paragraph starts with:\n\n\u003e When a texture is bound to an image unit, the format parameter for the image unit need not exactly match the texture internal format as long as the formats are considered compatible.\n\nIt never says what to do if they are not compatible (for Vulkan, if a \"must:\" is not satisfied, it means the result is undefined; but I don\u0027t know about GLES).  The next paragraph says that a re-interpretation is done.  I haven\u0027t looked to see how the shader part of ANGLE treats this.  Looks like you implemented the image load and store functionality.  Do you know?",
+      "parentUuid": "1361a0b2_890ca58b",
+      "revId": "27bb0de529dacbcd94e185374eb9eccedc3f32b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
