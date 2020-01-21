@@ -52,6 +52,24 @@
       "revId": "27bb0de529dacbcd94e185374eb9eccedc3f32b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77f8de1a_2e82bf90",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-21T14:13:14Z",
+      "side": 1,
+      "message": "In this case this part is also important:\n\n\u003e For textures allocated by the GL, an image unit format is compatible with a texture internal  format if they match by size. For textures allocated outside the GL, format compatibility is  determined by matching by size or by class, in an implementation dependent manner.\n\nSo this only applies to textures allocated \"outside the GL\". Anyway this CL only implements the query logic so still LGTM.",
+      "parentUuid": "9ba3a2b1_44143c44",
+      "revId": "27bb0de529dacbcd94e185374eb9eccedc3f32b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
