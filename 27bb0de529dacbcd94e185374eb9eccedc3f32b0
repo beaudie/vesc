@@ -34,6 +34,24 @@
       "revId": "27bb0de529dacbcd94e185374eb9eccedc3f32b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ba3a2b1_44143c44",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-21T04:13:22Z",
+      "side": 1,
+      "message": "Well, I just added code to create views and assign binding to images. The rest was already done in ANGLE and \"just worked\".\n\nI took a look at the spec, and it looks like we should detect incompatible formats and ignore load/stores on the binding. A little bit above your quote has the following:\n\n\u003e Invalid image loads will return a vector where the value of R, G, and B components is 0 and the value of the A component is undefined. Invalid image stores will have no effect. An access is considered invalid if:\n\u003e\n\u003e ...\n\u003e\n\u003e - the internal format of the texture bound to the image unit is incompatible with the specified format ...\n\nThe solution might be to bind a dummy white 1x1 image (by the frontend) when incompatible. I think OOB reads from the image would give (0, 0, 0, ?) and OOB writes would be dropped, right? If not, we may have to create a same-size dummy image.",
+      "parentUuid": "f8d00f00_c1318c0d",
+      "revId": "27bb0de529dacbcd94e185374eb9eccedc3f32b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
