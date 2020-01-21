@@ -6783,6 +6783,16 @@ uint32_t RoundUpPow2(uint32_t value, uint32_t alignment)
     return (value + alignment - 1) & ~(alignment - 1);
 }
 
+void CreateAtomicCounterBuffer()
+{
+    unsigned int acData = 0u;
+    GLBuffer atomicCounterBuffer;
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounterBuffer);
+    glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(acData), &acData, GL_STATIC_DRAW);
+    glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, atomicCounterBuffer);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Fill provided buffer with matrices based on the given dimensions.  The buffer should be large
 // enough to accomodate the data.
 uint32_t FillBuffer(const std::pair<uint32_t, uint32_t> matrixDims[],
@@ -6864,6 +6874,7 @@ bool VerifyBuffer(GLuint buffer, const float data[], uint32_t dataSize)
 // Some very specific corner cases that are not covered here are tested in the subsequent tests.
 TEST_P(GLSLTest_ES31, MixedRowAndColumnMajorMatrices)
 {
+#if 0
     // Fails on Nvidia because having |Matrices| qualified as row-major in one UBO makes the other
     // UBO also see it as row-major despite explicit column-major qualifier.
     // http://anglebug.com/3830
@@ -6878,15 +6889,18 @@ TEST_P(GLSLTest_ES31, MixedRowAndColumnMajorMatrices)
 
     // Fails to compile the shader on Android.  http://anglebug.com/3839
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGL());
+#endif
 
     // Fails on assertion in translation to D3D.  http://anglebug.com/3841
     ANGLE_SKIP_TEST_IF(IsD3D11());
 
+#if 0
     // Fails on SSBO validation on Android/Vulkan.  http://anglebug.com/3840
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
 
     // Fails input verification as well as std140 SSBO validation.  http://anglebug.com/3844
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsVulkan());
+#endif
 
     constexpr char kFS[] = R"(#version 310 es
 precision highp float;
@@ -6905,6 +6919,8 @@ struct Matrices
     mat3x2 m3c2r;
     Inner inner;
 };
+
+layout(binding=0) uniform atomic_uint ac;
 
 // For simplicity, the layouts are either of:
 // - col-major mat4, row-major rest
@@ -7057,8 +7073,8 @@ void main()
     EXPECT(result, verifyMatrices(ssbo430rIn.m), true);
 
     // Only assign to SSBO from a single pixel.
-    bool isOriginPixel = all(lessThan(gl_FragCoord.xy, vec2(1.0, 1.0)));
-    if (isOriginPixel)
+    uint acValue = atomicCounterIncrement(ac);
+    if (acValue == 0u)
     {
         ssbo140cOut.m4c4r = copyMat4(ssbo140cIn.m4c4r);
         copyMatrices(ssbo430cIn.m, ssbo140cOut.m);
@@ -7137,6 +7153,8 @@ void main()
     InitBuffer(program, "Ssbo430rOut", ssboStd430RowMajorOut, 7, dataZeros, sizeStd430RowMajor,
                false);
     EXPECT_GL_NO_ERROR();
+
+    CreateAtomicCounterBuffer();
 
     drawQuad(program, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
@@ -7582,11 +7600,13 @@ void main(void)
 // Test that multiple nested assignments are handled correctly.
 TEST_P(GLSLTest_ES31, MixedRowAndColumnMajorMatrices_WriteSideEffect)
 {
+#if 0
     // http://anglebug.com/3831
     ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGL());
 
     // Fails on windows AMD on GL: http://anglebug.com/3838
     ANGLE_SKIP_TEST_IF(IsWindows() && IsOpenGL() && IsAMD());
+#endif
 
     // Fails on D3D due to mistranslation: http://anglebug.com/3841
     ANGLE_SKIP_TEST_IF(IsD3D11());
@@ -7594,6 +7614,8 @@ TEST_P(GLSLTest_ES31, MixedRowAndColumnMajorMatrices_WriteSideEffect)
     constexpr char kFS[] = R"(#version 310 es
 precision highp float;
 out vec4 outColor;
+
+layout(binding=0) uniform atomic_uint ac;
 
 layout(std140, column_major) uniform Ubo
 {
@@ -7612,8 +7634,8 @@ void main()
     bool result = true;
 
     // Only assign to SSBO from a single pixel.
-    bool isOriginPixel = all(lessThan(gl_FragCoord.xy, vec2(1.0, 1.0)));
-    if (isOriginPixel)
+    uint acValue = atomicCounterIncrement(ac);
+    if (acValue == 0u)
     {
         if ((ssbo.m2 = ssbo.m1 = ubo.m1) != ubo.m2)
         {
@@ -7649,6 +7671,8 @@ void main()
     InitBuffer(program, "Ssbo", ssbo, 0, zeros, size, false);
     EXPECT_GL_NO_ERROR();
 
+    CreateAtomicCounterBuffer();
+
     drawQuad(program, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 
@@ -7658,18 +7682,24 @@ void main()
 // Test that assignments to array of array of matrices are handled correctly.
 TEST_P(GLSLTest_ES31, MixedRowAndColumnMajorMatrices_WriteArrayOfArray)
 {
+#if 0
     // Fails on windows AMD on GL: http://anglebug.com/3838
     ANGLE_SKIP_TEST_IF(IsWindows() && IsOpenGL() && IsAMD());
+#endif
 
     // Fails on D3D due to mistranslation: http://anglebug.com/3841
     ANGLE_SKIP_TEST_IF(IsD3D11());
 
+#if 0
     // Fails compiling shader on Android/Vulkan.  http://anglebug.com/4290
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+#endif
 
     constexpr char kFS[] = R"(#version 310 es
 precision highp float;
 out vec4 outColor;
+
+layout(binding=0) uniform atomic_uint ac;
 
 layout(std140, column_major) uniform Ubo
 {
@@ -7688,8 +7718,8 @@ void main()
     bool result = true;
 
     // Only assign to SSBO from a single pixel.
-    bool isOriginPixel = all(lessThan(gl_FragCoord.xy, vec2(1.0, 1.0)));
-    if (isOriginPixel)
+    uint acValue = atomicCounterIncrement(ac);
+    if (acValue == 0u)
     {
         ssbo.m1 = ubo.m1;
         ssbo.m2 = ubo.m2;
@@ -7720,6 +7750,8 @@ void main()
     InitBuffer(program, "Ubo", ubo, 0, data, size, true);
     InitBuffer(program, "Ssbo", ssbo, 0, zeros, size, false);
     EXPECT_GL_NO_ERROR();
+
+    CreateAtomicCounterBuffer();
 
     drawQuad(program, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
