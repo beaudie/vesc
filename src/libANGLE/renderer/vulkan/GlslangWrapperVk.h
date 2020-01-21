@@ -35,7 +35,7 @@ class GlslangWrapperVk
                                        const gl::Caps &glCaps,
                                        const gl::ShaderMap<std::string> &shaderSources,
                                        const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                       gl::ShaderMap<std::vector<uint32_t>> *shaderCodesOut);
+                                       gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
 };
 }  // namespace rx
 
