@@ -1095,6 +1095,10 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         // create a new entry in the command graph.
         mFramebuffer.finishCurrentCommands(contextVk);
     }
+    else
+    {
+        ANGLE_TRY(contextVk->endRenderPass());
+    }
 
     // Notify the ContextVk to update the pipeline desc.
     updateRenderPassDesc();
