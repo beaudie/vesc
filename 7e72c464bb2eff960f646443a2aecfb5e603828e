@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e9d8df0_260ed3ea",
+        "filename": "src/libANGLE/queryconversions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-22T18:21:49Z",
+      "side": 1,
+      "message": "I would suggest GLint64 to make sure no precision will be lost in the new intermediate step.",
+      "range": {
+        "startLine": 73,
+        "startChar": 48,
+        "endLine": 73,
+        "endChar": 53
+      },
+      "revId": "7e72c464bb2eff960f646443a2aecfb5e603828e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
