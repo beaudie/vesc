@@ -1012,9 +1012,17 @@ class Program final : angle::NonCopyable, public LabeledObject
                                                   bool validateGeometryShaderInputVarying,
                                                   std::string *mismatchedStructFieldName);
 
-    bool linkValidateShaderInterfaceMatching(Shader *generatingShader,
-                                             Shader *consumingShader,
-                                             InfoLog &infoLog) const;
+    static void getFilteredVaryings(const std::vector<sh::ShaderVariable> &varyings,
+                                    std::vector<const sh::ShaderVariable *> *filteredVaryingsOut);
+    static bool doShaderVariablesMatch(gl::Shader *generatingShader,
+                                       gl::Shader *consumingShader,
+                                       const sh::ShaderVariable &input,
+                                       const sh::ShaderVariable &output,
+                                       bool validateGeometryShaderInputs,
+                                       gl::InfoLog &infoLog);
+    static bool linkValidateShaderInterfaceMatching(Shader *generatingShader,
+                                                    Shader *consumingShader,
+                                                    InfoLog &infoLog);
 
     // Check for aliased path rendering input bindings (if any).
     // If more than one binding refer statically to the same location the link must fail.
