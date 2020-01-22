@@ -9,6 +9,7 @@
 
 #ifndef LIBANGLE_RENDERER_VULKAN_CONTEXTVK_H_
 #define LIBANGLE_RENDERER_VULKAN_CONTEXTVK_H_
+#include <thread>
 
 #include "volk.h"
 
@@ -814,6 +815,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     // List of all resources currently being used by this ContextVk's recorded commands.
     vk::ResourceUseList mResourceUseList;
+    // Thread for submitting commands
+    std::thread mSubmitThread;
 };
 }  // namespace rx
 

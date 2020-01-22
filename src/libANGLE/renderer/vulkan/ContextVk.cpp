@@ -1288,6 +1288,7 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
                                      vk::PrimaryCommandBuffer &&commandBuffer)
 {
     ANGLE_TRY(ensureSubmitFenceInitialized());
+    mSubmitThread.join();
     ANGLE_TRY(mCommandQueue.submitFrame(this, submitInfo, mSubmitFence, &mCurrentGarbage,
                                         &mCommandPool, std::move(commandBuffer)));
 
@@ -1317,7 +1318,11 @@ angle::Result ContextVk::flushCommandGraph(vk::PrimaryCommandBuffer *commandBatc
 
     Serial serial = getCurrentQueueSerial();
     mResourceUseList.releaseResourceUsesAndUpdateSerials(serial);
-    return mCommandGraph.submitCommands(this, serial, &mRenderPassCache, commandBatch);
+    // mCommandGraph.submitCommands(this, serial, &mRenderPassCache, commandBatch);
+    mSubmitThread = std::thread(&vk::CommandGraph::submitCommands, &mCommandGraph, this, serial,
+                                &mRenderPassCache, commandBatch);
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::synchronizeCpuGpuTime()
@@ -3267,7 +3272,6 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
                          &mWaitSemaphoreStageMasks, signalSemaphore);
 
     ANGLE_TRY(submitFrame(submitInfo, primaryCommands.release()));
-
     mWaitSemaphores.clear();
 
     return angle::Result::Continue;
