@@ -118,6 +118,53 @@
       "revId": "d961472ad3601afb3746825fe1bf975ee00fb1fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "921cb816_23ae426d",
+        "filename": "src/tests/compiler_tests/OVR_multiview2_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-22T00:26:01Z",
+      "side": 1,
+      "message": "Apologies, Artem, I had through your change to lines 97 and 112 of OVR_multiview_test.cpp applied to this test.",
+      "parentUuid": "8551d358_6f96f5af",
+      "range": {
+        "startLine": 585,
+        "startChar": 69,
+        "endLine": 585,
+        "endChar": 86
+      },
+      "revId": "d961472ad3601afb3746825fe1bf975ee00fb1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a87bc4bd_636806d9",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-22T00:26:01Z",
+      "side": 1,
+      "message": "Out of curiosity, why did this line and line 112 of the same file need to change? I did not see this mentioned in the change description.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 1
+      },
+      "revId": "d961472ad3601afb3746825fe1bf975ee00fb1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
