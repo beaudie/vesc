@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d3ddf33d_dfd6b664",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-22T17:12:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4e41342_b63b4308",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "49d1d609a42f375c2570a84b8c7d41413c450d2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d401202_5c94c4ed",
         "filename": "src/tests/perf_tests/TracePerf.cpp",
         "patchSetId": 14
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-21T16:36:36Z",
       "side": 1,
       "message": "nit: can you update this and call it TraceBenchmark.cpp?",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 12
+      },
+      "revId": "49d1d609a42f375c2570a84b8c7d41413c450d2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d31bb417_afbb3539",
+        "filename": "src/tests/perf_tests/TracePerf.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-22T17:12:09Z",
+      "side": 1,
+      "message": "Based on our conversation, switched them all to TracePerfTest.",
+      "parentUuid": "3d401202_5c94c4ed",
       "range": {
         "startLine": 6,
         "startChar": 3,

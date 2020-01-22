@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5e2720d7_7ad08adf",
+        "filename": "src/tests/perf_tests/TracePerf.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-22T17:12:09Z",
+      "side": 1,
+      "message": "Went with TracePerfTest.",
+      "parentUuid": "c1c88059_9713baee",
+      "range": {
+        "startLine": 90,
+        "startChar": 6,
+        "endLine": 90,
+        "endChar": 25
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ed69134_c28ef4fc",
         "filename": "src/tests/perf_tests/TracePerf.cpp",
         "patchSetId": 13
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d919170e_67a032ba",
+        "filename": "src/tests/perf_tests/TracePerf.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-22T17:12:09Z",
+      "side": 1,
+      "message": "Okay, I had to add an accessor for the GLWindow, but it is working.",
+      "parentUuid": "3ed69134_c28ef4fc",
+      "range": {
+        "startLine": 164,
+        "startChar": 8,
+        "endLine": 164,
+        "endChar": 19
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5d78cd9_36c6f6ae",
         "filename": "src/tests/perf_tests/TracePerf.cpp",
         "patchSetId": 13
@@ -68,6 +116,30 @@
       "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e45348dd_c91b0c23",
+        "filename": "src/tests/perf_tests/TracePerf.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-22T17:12:09Z",
+      "side": 1,
+      "message": "Oh man, yeah, got a little copy/paste heavy there.  Added the Vulkan versions.",
+      "parentUuid": "f5d78cd9_36c6f6ae",
+      "range": {
+        "startLine": 208,
+        "startChar": 23,
+        "endLine": 208,
+        "endChar": 63
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "3e7d9035_0a6217be",
+        "filename": "util/android/AndroidWindow.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-22T17:12:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a548fc84_10e339ac",
+      "range": {
+        "startLine": 70,
+        "startChar": 5,
+        "endLine": 70,
+        "endChar": 25
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d823d03_fe9d2f3b",
         "filename": "util/android/AndroidWindow.cpp",
         "patchSetId": 13
@@ -137,6 +233,30 @@
       "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01765c78_3732707d",
+        "filename": "util/android/AndroidWindow.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-22T17:12:09Z",
+      "side": 1,
+      "message": "Done, http://anglebug.com/4327",
+      "parentUuid": "1d823d03_fe9d2f3b",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 60
+      },
+      "revId": "0dc1a8ffa290db30226952812c82a82e2654bd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
