@@ -3259,21 +3259,20 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         }
 
         // Ensure the image is in read-only layout
-        if (image.isLayoutChangeNecessary(textureLayout))
+        if (commandGraphEnabled())
         {
-            vk::CommandBuffer *srcLayoutChange;
-            if (commandGraphEnabled())
+            if (image.isLayoutChangeNecessary(textureLayout))
             {
+                vk::CommandBuffer *srcLayoutChange;
+                VkImageAspectFlags aspectFlags = image.getAspectFlags();
+                ASSERT(aspectFlags != 0);
                 ANGLE_TRY(image.recordCommands(this, &srcLayoutChange));
+                image.changeLayout(aspectFlags, textureLayout, srcLayoutChange);
             }
-            else
-            {
-                ANGLE_TRY(getOutsideRenderPassCommandBuffer(&srcLayoutChange));
-            }
-
-            VkImageAspectFlags aspectFlags = image.getAspectFlags();
-            ASSERT(aspectFlags != 0);
-            image.changeLayout(aspectFlags, textureLayout, srcLayoutChange);
+        }
+        else
+        {
+            ANGLE_TRY(onImageRead(image.getAspectFlags(), textureLayout, &image));
         }
 
         textureVk->onImageViewUse(&mResourceUseList);
@@ -3687,6 +3686,7 @@ bool ContextVk::shouldUseOldRewriteStructSamplers() const
     return mRenderer->getFeatures().forceOldRewriteStructSamplers.enabled;
 }
 
+// Note: should this flush the RP commands?
 void ContextVk::onBufferRead(VkAccessFlags readAccessType, vk::BufferHelper *buffer)
 {
     if (!buffer->canAccumulateRead(this, readAccessType))
@@ -3695,8 +3695,10 @@ void ContextVk::onBufferRead(VkAccessFlags readAccessType, vk::BufferHelper *buf
     }
 
     mOutsideRenderPassCommands.bufferRead(readAccessType, buffer);
+    buffer->onResourceAccess(&mResourceUseList);
 }
 
+// Note: should this flush the RP commands?
 void ContextVk::onBufferWrite(VkAccessFlags writeAccessType, vk::BufferHelper *buffer)
 {
     if (!buffer->canAccumulateWrite(this, writeAccessType))
@@ -3705,6 +3707,34 @@ void ContextVk::onBufferWrite(VkAccessFlags writeAccessType, vk::BufferHelper *b
     }
 
     mOutsideRenderPassCommands.bufferWrite(writeAccessType, buffer);
+    buffer->onResourceAccess(&mResourceUseList);
+}
+
+angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
+                                     vk::ImageLayout imageLayout,
+                                     vk::ImageHelper *image)
+{
+    if (image->isLayoutChangeNecessary(imageLayout))
+    {
+        vk::CommandBuffer *commandBuffer;
+        ANGLE_TRY(getOutsideRenderPassCommandBuffer(&commandBuffer));
+        image->changeLayout(aspectFlags, imageLayout, commandBuffer);
+    }
+    image->onResourceAccess(&mResourceUseList);
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::onImageWrite(VkImageAspectFlags aspectFlags,
+                                      vk::ImageLayout imageLayout,
+                                      vk::ImageHelper *image)
+{
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(getOutsideRenderPassCommandBuffer(&commandBuffer));
+
+    image->changeLayout(aspectFlags, imageLayout, commandBuffer);
+    image->onResourceAccess(&mResourceUseList);
+
+    return angle::Result::Continue;
 }
 
 void ContextVk::beginRenderPass(const vk::Framebuffer &framebuffer,
@@ -3721,6 +3751,11 @@ void ContextVk::beginRenderPass(const vk::Framebuffer &framebuffer,
 
     mRenderPassCommands.beginRenderPass(framebuffer, renderArea, renderPassDesc,
                                         renderPassAttachmentOps, clearValues, commandBufferOut);
+}
+
+angle::Result ContextVk::endRenderPass()
+{
+    return mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
 }
 
 OutsideRenderPassCommandBuffer::OutsideRenderPassCommandBuffer()
@@ -3778,7 +3813,7 @@ void OutsideRenderPassCommandBuffer::reset()
     mCommandBuffer.reset();
 }
 
-RenderPassCommandBuffer::RenderPassCommandBuffer() = default;
+RenderPassCommandBuffer::RenderPassCommandBuffer() : mClearValues{}, mRenderPassStarted(false) {}
 
 RenderPassCommandBuffer::~RenderPassCommandBuffer()
 {
@@ -3806,6 +3841,8 @@ void RenderPassCommandBuffer::beginRenderPass(const vk::Framebuffer &framebuffer
     std::copy(clearValues.begin(), clearValues.end(), mClearValues.begin());
 
     *commandBufferOut = &mCommandBuffer;
+
+    mRenderPassStarted = true;
 }
 
 angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
@@ -3847,5 +3884,6 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
 void RenderPassCommandBuffer::reset()
 {
     mCommandBuffer.reset();
+    mRenderPassStarted = false;
 }
 }  // namespace rx
