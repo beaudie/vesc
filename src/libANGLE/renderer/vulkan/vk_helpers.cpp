@@ -1528,12 +1528,20 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
 {
     // 'recordCommands' will implicitly stop any reads from using the old buffer data.
     CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+    if (contextVk->commandGraphEnabled())
+    {
+        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+    }
+    else
+    {
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+    }
 
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0 || bufferAccessType != 0)
     {
         // Insert a barrier to ensure reads/writes are complete.
         // Use a global memory barrier to keep things simple.
+        // TODO(jmadill): Can we revisit this with http://anglebug.com/4029
         VkMemoryBarrier memoryBarrier = {};
         memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
         memoryBarrier.srcAccessMask   = mCurrentReadAccess | mCurrentWriteAccess | bufferAccessType;
@@ -2192,9 +2200,18 @@ void ImageHelper::Copy(ImageHelper *srcImage,
 angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint maxLevel)
 {
     CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+    if (contextVk->commandGraphEnabled())
+    {
+        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
 
-    changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, commandBuffer);
+        changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, commandBuffer);
+    }
+    else
+    {
+        ANGLE_TRY(
+            contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, this));
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+    }
 
     // We are able to use blitImage since the image format we are using supports it. This
     // is a faster way we can generate the mips.
@@ -2274,8 +2291,6 @@ void ImageHelper::resolve(ImageHelper *dest,
                           CommandBuffer *commandBuffer)
 {
     ASSERT(mCurrentLayout == ImageLayout::TransferSrc);
-    dest->changeLayout(region.dstSubresource.aspectMask, ImageLayout::TransferDst, commandBuffer);
-
     commandBuffer->resolveImage(getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dest->getImage(),
                                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 }
@@ -2852,7 +2867,14 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     uint64_t subresourceUploadsInProgress            = 0;
 
     // Start in TransferDst.
-    changeLayout(aspectFlags, ImageLayout::TransferDst, commandBuffer);
+    if (contextVk->commandGraphEnabled())
+    {
+        changeLayout(aspectFlags, ImageLayout::TransferDst, commandBuffer);
+    }
+    else
+    {
+        ANGLE_TRY(contextVk->onImageWrite(aspectFlags, ImageLayout::TransferDst, this));
+    }
 
     for (SubresourceUpdate &update : mSubresourceUpdates)
     {
@@ -2957,8 +2979,17 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         }
         else
         {
-            update.image.image->changeLayout(aspectFlags, ImageLayout::TransferSrc, commandBuffer);
-            update.image.image->addReadDependency(contextVk, this);
+            if (contextVk->commandGraphEnabled())
+            {
+                update.image.image->changeLayout(aspectFlags, ImageLayout::TransferSrc,
+                                                 commandBuffer);
+                update.image.image->addReadDependency(contextVk, this);
+            }
+            else
+            {
+                ANGLE_TRY(contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc,
+                                                 update.image.image));
+            }
 
             commandBuffer->copyImage(update.image.image->getImage(),
                                      update.image.image->getCurrentLayout(), mImage,
@@ -2983,7 +3014,14 @@ angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
 {
     // Clear the image.
     CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+    if (contextVk->commandGraphEnabled())
+    {
+        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+    }
+    else
+    {
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+    }
     return flushStagedUpdates(contextVk, 0, mLevelCount, 0, mLayerCount, commandBuffer);
 }
 
@@ -3060,12 +3098,21 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
 
     *bufferSize = sourceArea.width * sourceArea.height * sourceArea.depth * pixelBytes * layerCount;
 
-    CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
-
-    // Transition the image to readable layout
     const VkImageAspectFlags aspectFlags = getAspectFlags();
-    changeLayout(aspectFlags, ImageLayout::TransferSrc, commandBuffer);
+
+    CommandBuffer *commandBuffer = nullptr;
+    if (contextVk->commandGraphEnabled())
+    {
+        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+
+        // Transition the image to readable layout
+        changeLayout(aspectFlags, ImageLayout::TransferSrc, commandBuffer);
+    }
+    else
+    {
+        ANGLE_TRY(contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc, this));
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+    }
 
     // Allocate staging buffer data
     ANGLE_TRY(allocateStagingMemory(contextVk, *bufferSize, outDataPtr, bufferOut, bufferOffsetsOut,
