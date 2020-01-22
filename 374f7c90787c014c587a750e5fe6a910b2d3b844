@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5b62ac83_51aeb69d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-01-22T15:54:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1153b646_16f73b70",
+      "revId": "374f7c90787c014c587a750e5fe6a910b2d3b844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a8db3cc_0b406136",
         "filename": "src/libANGLE/queryconversions.cpp",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "374f7c90787c014c587a750e5fe6a910b2d3b844",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ca21c2f_dd8d8e97",
+        "filename": "src/libANGLE/queryconversions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-01-22T15:54:45Z",
+      "side": 1,
+      "message": "Exactly. The cast of a negative float to unsigned int on ARM becomes 0.\nCasting to a signed int and then unsigned int gives us the behavior we want.",
+      "parentUuid": "6a8db3cc_0b406136",
+      "revId": "374f7c90787c014c587a750e5fe6a910b2d3b844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
