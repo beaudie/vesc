@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1153b646_16f73b70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-22T15:48:45Z",
+      "side": 1,
+      "message": "Nit: Missing \"sure\" (i.e. \"Not sure what was intended\")",
+      "revId": "374f7c90787c014c587a750e5fe6a910b2d3b844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a8db3cc_0b406136",
+        "filename": "src/libANGLE/queryconversions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-22T15:48:45Z",
+      "side": 1,
+      "message": "Just to verify what I think is being implied ... On Intel, the original cast to uint will take a -1.0 float and convert it to 0xffffffff, where on Arm, the original cast converts any negative float to 0.  True?\n\nThe new code causes the cast on both Intel and Arm to do the same conversion?",
+      "revId": "374f7c90787c014c587a750e5fe6a910b2d3b844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
