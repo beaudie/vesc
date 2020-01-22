@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bb305598_9e34ac29",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T15:27:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67b83186_1f5b2af3",
+      "range": {
+        "startLine": 1144,
+        "startChar": 0,
+        "endLine": 1146,
+        "endChar": 17
+      },
+      "revId": "e2dfd7aab4cfda78bf8f1c2b348529062002458b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3771cf4_df121c98",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "e2dfd7aab4cfda78bf8f1c2b348529062002458b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f889141_3b4f39ea",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3204,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T15:27:04Z",
+      "side": 1,
+      "message": "I agree this is not trivial to follow, but `parseGlobalLayoutQualifier` is only called in such a situation. If you look at glslang.y:\n\n    | type_qualifier SEMICOLON {\n        context-\u003eparseGlobalLayoutQualifier(*$1);\n        $$ \u003d nullptr;\n    }\n\nWhere type_qualifier is just a set of qualifiers (layout(...), storage (i.e. in/out), precision, interpolation, invariant, precise). I.e. this function is called when there is no variable declaration (hence \"global qualifier\" in the name).",
+      "parentUuid": "a3771cf4_df121c98",
+      "range": {
+        "startLine": 3204,
+        "startChar": 37,
+        "endLine": 3204,
+        "endChar": 65
+      },
+      "revId": "e2dfd7aab4cfda78bf8f1c2b348529062002458b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
