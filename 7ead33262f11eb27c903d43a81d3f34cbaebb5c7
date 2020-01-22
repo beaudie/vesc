@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "489c5b28_8aa49529",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-22T22:20:21Z",
+      "side": 1,
+      "message": "The tricky parts are:\n\n - how to coalesce barriers. deferring commands helps a lot with that\n - how to best set up beginRenderPass args like the load/store ops and automatic transitions\n\nWhat I really want is an API that lets me rewrite recorded Vulkan CBs.",
+      "parentUuid": "2c45ff72_f8d0242d",
+      "revId": "7ead33262f11eb27c903d43a81d3f34cbaebb5c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7017b5_7dc1ec6c",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 22
