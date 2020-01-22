@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "399d2c95_54b87981",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T19:11:17Z",
+      "side": 1,
+      "message": "minor nit: this could stay outside the if, if `vk::CommandBuffer *commandBuffer;` is declared above. Then copyRegion can remain where it was too.",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 47
+      },
+      "revId": "7ead33262f11eb27c903d43a81d3f34cbaebb5c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c45ff72_f8d0242d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T19:11:17Z",
+      "side": 1,
+      "message": "Random thought: after all this, it could also be interesting to see if it\u0027s faster to directly record into primary command buffers, then vkQueueSubmit them all at once, instead of putting them all in one command buffer.",
+      "revId": "7ead33262f11eb27c903d43a81d3f34cbaebb5c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7017b5_7dc1ec6c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T19:11:17Z",
+      "side": 1,
+      "message": "I thought the latest idea was still to have one render pass command buffer per framebuffer object? Are we going full-linear then?",
+      "revId": "7ead33262f11eb27c903d43a81d3f34cbaebb5c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a08f7fc3_88b8ef57",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T19:11:17Z",
+      "side": 1,
+      "message": "You are calling onWrite now for uniform buffers. I know this code will go away, but until that point, this seems like could cause a regression. Could you keep the old code inside the if and the new code inside the else?",
+      "range": {
+        "startLine": 1351,
+        "startChar": 12,
+        "endLine": 1351,
+        "endChar": 67
+      },
+      "revId": "7ead33262f11eb27c903d43a81d3f34cbaebb5c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ced5eb2d_283780ca",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T19:11:17Z",
+      "side": 1,
+      "message": "space",
+      "range": {
+        "startLine": 64,
+        "startChar": 43,
+        "endLine": 64,
+        "endChar": 44
+      },
+      "revId": "7ead33262f11eb27c903d43a81d3f34cbaebb5c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbc00037_e3800711",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T19:11:17Z",
+      "side": 1,
+      "message": "Could be useful to mark these new functions to make it clear they are used by the \"alternative\" command graph. Once the work is done and the old command graph is ripped out, it would be easier to figure out what can be removed and what should remain.",
+      "range": {
+        "startLine": 559,
+        "startChar": 0,
+        "endLine": 569,
+        "endChar": 58
+      },
+      "revId": "7ead33262f11eb27c903d43a81d3f34cbaebb5c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24c1fb21_47d01e29",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T19:11:17Z",
+      "side": 1,
+      "message": "How about modifying ANGLE_INSTANTIATE_TEST_ES2_AND_ES3 to look like this?\n\n#define ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(testName, ...)                        \\\n    const PlatformParameters testName##params[] \u003d {ANGLE_ALL_TEST_PLATFORMS_ES2, \\\n                                                   ANGLE_ALL_TEST_PLATFORMS_ES3, ##__VA_ARGS__}; \\\n\n(and in fact do that for all the other macros too)",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 90
+      },
+      "revId": "7ead33262f11eb27c903d43a81d3f34cbaebb5c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
