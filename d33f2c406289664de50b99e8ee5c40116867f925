@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "65fcaafd_a2f4f85f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T16:45:50Z",
+      "side": 1,
+      "message": "Would it make sense for the program to create a PPO that points to itself, and bind it instead of recreating the PPO on every program change? That would make program switching faster.",
+      "range": {
+        "startLine": 1185,
+        "startChar": 0,
+        "endLine": 1187,
+        "endChar": 29
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c71e082e_c0583971",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 14
@@ -142,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "275d7ec4_ef23b8f1",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T16:45:50Z",
+      "side": 1,
+      "message": "As a transitory measure, I think it would be best if you kept the untranslated sources in ProgramVk itself at link time. Then the ProgramPipelineVk object can get those sources from ProgramVk.",
+      "parentUuid": "6a98bff3_1ef1821c",
+      "range": {
+        "startLine": 533,
+        "startChar": 4,
+        "endLine": 533,
+        "endChar": 50
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1102e0b5_6f68620b",
         "filename": "src/libANGLE/Program.h",
         "patchSetId": 14
@@ -200,6 +247,30 @@
       "side": 1,
       "message": "Yeah, this is a tough one though.\n\nThe problem is that the ProgramLinkedResources is filled in by the front end during Program::link(), but is required by the program pipeline in the backend during draw time (just after creating the pipeline layout).   The shader\u0027s source needs to be updated after the pipeline layout is created, since that\u0027s how the descriptor set/binding values are determined.\n\nMaking this a member variable was the most straightforward way to keep this data around in a way that could be queried for each program in the pipeline when the draw command was eventually issued some time after the initial link.   Unfortunately, the program pipeline can\u0027t be used, since the glLinkProgram can occur before any glUseProgram, so the program isn\u0027t in any pipeline (default or otherwise) yet.",
       "parentUuid": "9af7bc92_5167829a",
+      "range": {
+        "startLine": 1159,
+        "startChar": 4,
+        "endLine": 1159,
+        "endChar": 59
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7852110_c18ad566",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T16:45:50Z",
+      "side": 1,
+      "message": "Doesn\u0027t the PPO kind of need to do a full relink? That is, it should create its own ProgramLinkedResources independently from the programs, shouldn\u0027t it?",
+      "parentUuid": "db2dd617_b9fff5a6",
       "range": {
         "startLine": 1159,
         "startChar": 4,
@@ -306,6 +377,29 @@
     },
     {
       "key": {
+        "uuid": "85e0176c_52e7053d",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T16:45:50Z",
+      "side": 1,
+      "message": "Don\u0027t forget GEOMETRY!",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 39
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "84e1ab64_0c402b1a",
         "filename": "src/libANGLE/ProgramPipeline.h",
         "patchSetId": 14
@@ -323,6 +417,103 @@
         "endLine": 148,
         "endChar": 46
       },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b92909d4_011b1461",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T16:45:50Z",
+      "side": 1,
+      "message": "You can enclose this in an `if (mProgramPipeline-\u003eneedsLink())` (with that function inline) to keep this as cheap as possible when no draw-time linking is needed.",
+      "range": {
+        "startLine": 1061,
+        "startChar": 0,
+        "endLine": 1065,
+        "endChar": 49
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08a61fff_1fe8c224",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T16:45:50Z",
+      "side": 1,
+      "message": "You probably don\u0027t want to be doing this on every bind. If you keep this call where it previously was, `updateUniforms` itself can check if needs to createLayout+relink.",
+      "range": {
+        "startLine": 1095,
+        "startChar": 4,
+        "endLine": 1095,
+        "endChar": 54
+      },
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d667864_16d7d375",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2766,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T16:45:50Z",
+      "side": 1,
+      "message": "Why?",
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6b5f851_e51eae1d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2799,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T16:45:50Z",
+      "side": 1,
+      "message": "Ideally shouldn\u0027t need these.",
+      "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd210aef_ca8ef432",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T16:45:50Z",
+      "side": 1,
+      "message": "nit: Did you by any chance use a software that rewrapped the comments and maybe it didn\u0027t use 100 width?",
       "revId": "d33f2c406289664de50b99e8ee5c40116867f925",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
