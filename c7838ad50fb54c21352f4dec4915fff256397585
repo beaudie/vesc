@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "036c9b1a_1235d76e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3675,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-22T19:07:13Z",
+      "side": 1,
+      "message": "Depends on if the buffer was previously used in this renderpass (if any). Tracking that is what\u0027s missing from this work.",
+      "revId": "c7838ad50fb54c21352f4dec4915fff256397585",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
