@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d4b6f067_8f8e8636",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-22T22:10:04Z",
+      "side": 1,
+      "message": "You end up with an extra comma in the resulting macro when __VA_ARGS__ is \"\". That gives a compiler error.\n\nYou could take the new construct I added that accepts optional arguments. I\u0027m fine with leaving this as-is though.",
+      "parentUuid": "80f54c77_9a4579e2",
+      "range": {
+        "startLine": 644,
+        "startChar": 0,
+        "endLine": 647,
+        "endChar": 62
+      },
+      "revId": "1b9985bcd9e81111189589b13d86ae2d78bc07c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "630fa491_460960d3",
         "filename": "src/tests/test_utils/angle_test_configs.cpp",
         "patchSetId": 7
