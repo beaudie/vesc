@@ -604,7 +604,6 @@ class Recycler final : angle::NonCopyable
   private:
     std::vector<T> mObjectFreeList;
 };
-
 }  // namespace vk
 
 namespace gl_vk
