@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bd2ff16e_bef0b063",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-23T00:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24531751_41fa2e07",
+      "range": {
+        "startLine": 537,
+        "startChar": 33,
+        "endLine": 537,
+        "endChar": 50
+      },
+      "revId": "9df3b5d63e0ab2f36fc29d41590adc7bd43dff5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36da6b41_6eb218e8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-20T17:59:21Z",
       "side": 1,
       "message": "why are you passing a queue to submit frame in a context that already has a bound priority? Seems like you should use the one set in the Context.",
+      "range": {
+        "startLine": 71,
+        "startChar": 30,
+        "endLine": 71,
+        "endChar": 38
+      },
+      "revId": "9df3b5d63e0ab2f36fc29d41590adc7bd43dff5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0b06bf6_49570ee8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-23T00:40:00Z",
+      "side": 1,
+      "message": "This is CommandQueue not ContextVK.",
+      "parentUuid": "36da6b41_6eb218e8",
       "range": {
         "startLine": 71,
         "startChar": 30,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3a7b8a5c_1e46b4a4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-23T00:40:00Z",
+      "side": 1,
+      "message": "Simplified to deviceWaitIdle(...)",
+      "parentUuid": "8143d930_6bef0bcf",
+      "range": {
+        "startLine": 426,
+        "startChar": 10,
+        "endLine": 426,
+        "endChar": 82
+      },
+      "revId": "9df3b5d63e0ab2f36fc29d41590adc7bd43dff5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "340691d6_91271ec4",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 10
@@ -91,6 +163,30 @@
       "revId": "9df3b5d63e0ab2f36fc29d41590adc7bd43dff5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df707c0c_c6eaf587",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-23T00:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "340691d6_91271ec4",
+      "range": {
+        "startLine": 299,
+        "startChar": 25,
+        "endLine": 299,
+        "endChar": 41
+      },
+      "revId": "9df3b5d63e0ab2f36fc29d41590adc7bd43dff5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
