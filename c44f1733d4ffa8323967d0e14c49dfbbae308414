@@ -22,6 +22,30 @@
       "revId": "c44f1733d4ffa8323967d0e14c49dfbbae308414",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19b213d4_debbff22",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-23T22:17:00Z",
+      "side": 1,
+      "message": "Thanks for highlighting this. I\u0027ve debugged the cause of this particular failure and am attempting a fix per https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d2273#c22 .",
+      "parentUuid": "8074687c_489a262c",
+      "range": {
+        "startLine": 439,
+        "startChar": 4,
+        "endLine": 439,
+        "endChar": 34
+      },
+      "revId": "c44f1733d4ffa8323967d0e14c49dfbbae308414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
