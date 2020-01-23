@@ -2,7 +2,7 @@
   "scripts/egl.xml":
     "842e24514c4cfe09fba703c17a0fd292",
   "scripts/egl_angle_ext.xml":
-    "24d4348e6c064b6837f46c955cc219a8",
+    "a496c3783dcf92fdf66c9b1c2531ac4d",
   "scripts/entry_point_packed_gl_enums.json":
     "bcf97f16fd4cd4d4e50d66622982e67e",
   "scripts/generate_entry_points.py":
