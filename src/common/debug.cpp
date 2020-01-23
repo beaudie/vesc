@@ -209,12 +209,13 @@ void Trace(LogSeverity severity, const char *message)
     }
 
     if (severity == LOG_FATAL || severity == LOG_ERR || severity == LOG_WARN ||
-        severity == LOG_INFO)
+        severity == LOG_INFO || severity == LOG_EVENT)
     {
 #if defined(ANGLE_PLATFORM_ANDROID)
         android_LogPriority android_priority = ANDROID_LOG_ERROR;
         switch (severity)
         {
+            case LOG_EVENT:
             case LOG_INFO:
                 android_priority = ANDROID_LOG_INFO;
                 break;
@@ -254,7 +255,8 @@ void Trace(LogSeverity severity, const char *message)
                 default:
                     UNREACHABLE();
             }
-            os_log_with_type(OS_LOG_DEFAULT, apple_log_type, "ANGLE: %s: %s\n", LogSeverityName(severity), str.c_str());
+            os_log_with_type(OS_LOG_DEFAULT, apple_log_type, "ANGLE: %s: %s\n",
+                             LogSeverityName(severity), str.c_str());
         }
 #else
         // Note: we use fprintf because <iostream> includes static initializers.
