@@ -158,7 +158,7 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
         {
             return angle::Result::Continue;
         }
-        ANGLE_TRY(contextVk->finishToSerial(mQueryHelper.getStoredQueueSerial()));
+        // ANGLE_TRY(contextVk->finishToSerial(mQueryHelper.getStoredQueueSerial()));
     }
 
     VkQueryResultFlags flags = (wait ? VK_QUERY_RESULT_WAIT_BIT : 0) | VK_QUERY_RESULT_64_BIT;

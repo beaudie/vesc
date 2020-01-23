@@ -135,6 +135,7 @@ angle::Result BufferVk::setData(const gl::Context *context,
                                 gl::BufferUsage usage)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+    setFastMappable(target);
 
     if (size > static_cast<size_t>(mState.getSize()))
     {
@@ -163,11 +164,20 @@ angle::Result BufferVk::setData(const gl::Context *context,
         createInfo.queueFamilyIndexCount = 0;
         createInfo.pQueueFamilyIndices   = nullptr;
 
-        // Assume host visible/coherent memory available.
-        const VkMemoryPropertyFlags memoryPropertyFlags =
-            (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+        size_t alignment = static_cast<size_t>(
+            contextVk->getRenderer()->getPhysicalDeviceProperties().limits.minMemoryMapAlignment);
 
-        ANGLE_TRY(mBuffer.init(contextVk, createInfo, memoryPropertyFlags));
+        mBuffer.init(contextVk->getRenderer(), usageFlags, alignment, size, true);
+        bool needToReleasePreviousBuffers = false;
+        uint8_t *mapPointer               = nullptr;
+
+        ANGLE_TRY(mBuffer.allocate(contextVk, size, &mapPointer, nullptr, nullptr,
+                                   &needToReleasePreviousBuffers));
+        if (needToReleasePreviousBuffers)
+        {
+            // Release previous staging buffers
+            mBuffer.releaseInFlightBuffers(contextVk);
+        }
 
         // Initialize the staging buffer
         initializeStagingBuffer(contextVk, target, size);
@@ -187,7 +197,7 @@ angle::Result BufferVk::setSubData(const gl::Context *context,
                                    size_t size,
                                    size_t offset)
 {
-    ASSERT(mBuffer.valid());
+    ASSERT(mBuffer.getCurrentBuffer()->valid());
 
     ContextVk *contextVk = vk::GetImpl(context);
     ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, offset));
@@ -201,7 +211,7 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
                                     GLintptr destOffset,
                                     GLsizeiptr size)
 {
-    ASSERT(mBuffer.valid());
+    ASSERT(mBuffer.getCurrentBuffer()->valid());
 
     ContextVk *contextVk = vk::GetImpl(context);
     auto *sourceBuffer   = GetAs<BufferVk>(source);
@@ -211,26 +221,28 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
     if (contextVk->commandGraphEnabled())
     {
         // Handle self-dependency especially.
-        if (sourceBuffer->mBuffer.getBuffer().getHandle() == mBuffer.getBuffer().getHandle())
+        if (sourceBuffer->mBuffer.getCurrentBuffer()->getBuffer().getHandle() ==
+            mBuffer.getCurrentBuffer()->getBuffer().getHandle())
         {
             // We set the TRANSFER_READ_BIT to be conservative.
-            mBuffer.onSelfReadWrite(contextVk,
-                                    VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT);
+            mBuffer.getCurrentBuffer()->onSelfReadWrite(
+                contextVk, VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT);
 
-            ANGLE_TRY(mBuffer.recordCommands(contextVk, &commandBuffer));
+            ANGLE_TRY(mBuffer.getCurrentBuffer()->recordCommands(contextVk, &commandBuffer));
         }
         else
         {
-            ANGLE_TRY(mBuffer.recordCommands(contextVk, &commandBuffer));
+            ANGLE_TRY(mBuffer.getCurrentBuffer()->recordCommands(contextVk, &commandBuffer));
 
-            sourceBuffer->mBuffer.onReadByBuffer(contextVk, &mBuffer, VK_ACCESS_TRANSFER_READ_BIT,
-                                                 VK_ACCESS_TRANSFER_WRITE_BIT);
+            sourceBuffer->mBuffer.getCurrentBuffer()->onReadByBuffer(
+                contextVk, mBuffer.getCurrentBuffer(), VK_ACCESS_TRANSFER_READ_BIT,
+                VK_ACCESS_TRANSFER_WRITE_BIT);
         }
     }
     else
     {
         contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, &sourceBuffer->getBuffer());
-        contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, &mBuffer);
+        contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, mBuffer.getCurrentBuffer());
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
     }
 
@@ -239,8 +251,8 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
                                      static_cast<VkDeviceSize>(destOffset),
                                      static_cast<VkDeviceSize>(size)};
 
-    commandBuffer->copyBuffer(sourceBuffer->getBuffer().getBuffer(), mBuffer.getBuffer(), 1,
-                              &copyRegion);
+    commandBuffer->copyBuffer(sourceBuffer->getBuffer().getBuffer(),
+                              mBuffer.getCurrentBuffer()->getBuffer(), 1, &copyRegion);
 
     // The new destination buffer data may require a conversion for the next draw, so mark it dirty.
     onDataChanged();
@@ -250,7 +262,7 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
 
 angle::Result BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr)
 {
-    ASSERT(mBuffer.valid());
+    ASSERT(mBuffer.getCurrentBuffer()->valid());
 
     return mapImpl(vk::GetImpl(context), mapPtr);
 }
@@ -275,27 +287,62 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
                                      GLbitfield access,
                                      void **mapPtr)
 {
-    ASSERT(mBuffer.valid());
+    ASSERT(mBuffer.getCurrentBuffer()->valid());
+    ASSERT(mapPtr);
+
+    *mapPtr = nullptr;
 
     if ((access & GL_MAP_UNSYNCHRONIZED_BIT) == 0)
     {
-        // If there are pending commands for the buffer, flush them.
-        if (mBuffer.hasRecordedCommands())
+        if (mFastMappable &&
+            mBuffer.getCurrentBuffer()->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
         {
-            ANGLE_TRY(contextVk->flushImpl(nullptr));
-        }
+            bool needToReleasePreviousBuffers = false;
+            size_t bufferSize                 = static_cast<size_t>(mState.getSize());
+            uint8_t *srcPtr                   = nullptr;
+            uint8_t *dstPtr                   = nullptr;
+            ANGLE_TRY(mBuffer.getCurrentBuffer()->map(contextVk, &srcPtr));
+            ASSERT(srcPtr);
 
-        // Make sure the driver is done with the buffer.
-        if (mBuffer.hasRunningCommands(contextVk->getLastCompletedQueueSerial()))
+            ANGLE_TRY(mBuffer.allocate(contextVk, bufferSize, &dstPtr, nullptr, nullptr,
+                                       &needToReleasePreviousBuffers));
+            if (needToReleasePreviousBuffers)
+            {
+                // Release previous staging buffers
+                mBuffer.releaseInFlightBuffers(contextVk);
+            }
+            ASSERT(*mapPtr);
+
+            memcpy(dstPtr, srcPtr, bufferSize);
+            *mapPtr = reinterpret_cast<void *>(dstPtr + offset);
+        }
+        else
         {
-            ANGLE_TRY(mBuffer.finishRunningCommands(contextVk));
-        }
+            // If there are pending commands for the buffer, flush them.
+            if (mBuffer.getCurrentBuffer()->hasRecordedCommands())
+            {
+                ANGLE_TRY(contextVk->flushImpl(nullptr));
+            }
 
-        ASSERT(!mBuffer.isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()));
+            // Make sure the driver is done with the buffer.
+            if (mBuffer.getCurrentBuffer()->hasRunningCommands(
+                    contextVk->getLastCompletedQueueSerial()))
+            {
+                ANGLE_TRY(mBuffer.getCurrentBuffer()->finishRunningCommands(contextVk));
+            }
+
+            ASSERT(!mBuffer.getCurrentBuffer()->isCurrentlyInUse(
+                contextVk->getLastCompletedQueueSerial()));
+        }
     }
 
-    ANGLE_VK_TRY(contextVk, mBuffer.getDeviceMemory().map(contextVk->getDevice(), offset, length, 0,
-                                                          reinterpret_cast<uint8_t **>(mapPtr)));
+    if (*mapPtr == nullptr)
+    {
+        ANGLE_VK_TRY(contextVk, mBuffer.getCurrentBuffer()->getDeviceMemory().map(
+                                    contextVk->getDevice(), offset, length, 0,
+                                    reinterpret_cast<uint8_t **>(mapPtr)));
+    }
+
     return angle::Result::Continue;
 }
 
@@ -312,10 +359,10 @@ angle::Result BufferVk::unmap(const gl::Context *context, GLboolean *result)
 
 void BufferVk::unmapImpl(ContextVk *contextVk)
 {
-    ASSERT(mBuffer.valid());
+    ASSERT(mBuffer.getCurrentBuffer()->valid());
 
-    mBuffer.getDeviceMemory().unmap(contextVk->getDevice());
-    mBuffer.onExternalWrite(VK_ACCESS_HOST_WRITE_BIT);
+    mBuffer.getCurrentBuffer()->getDeviceMemory().unmap(contextVk->getDevice());
+    mBuffer.getCurrentBuffer()->onExternalWrite(VK_ACCESS_HOST_WRITE_BIT);
 
     markConversionBuffersDirty();
 }
@@ -341,20 +388,20 @@ angle::Result BufferVk::getIndexRange(const gl::Context *context,
 
     ANGLE_TRACE_EVENT0("gpu.angle", "BufferVk::getIndexRange");
     // Needed before reading buffer or we could get stale data.
-    ANGLE_TRY(mBuffer.finishRunningCommands(contextVk));
+    ANGLE_TRY(mBuffer.getCurrentBuffer()->finishRunningCommands(contextVk));
 
     // TODO(jmadill): Consider keeping a shadow system memory copy in some cases.
-    ASSERT(mBuffer.valid());
+    ASSERT(mBuffer.getCurrentBuffer()->valid());
 
     const GLuint &typeBytes = gl::GetDrawElementsTypeSize(type);
 
     uint8_t *mapPointer = nullptr;
-    ANGLE_VK_TRY(contextVk, mBuffer.getDeviceMemory().map(contextVk->getDevice(), offset,
-                                                          typeBytes * count, 0, &mapPointer));
+    ANGLE_VK_TRY(contextVk, mBuffer.getCurrentBuffer()->getDeviceMemory().map(
+                                contextVk->getDevice(), offset, typeBytes * count, 0, &mapPointer));
 
     *outRange = gl::ComputeIndexRange(type, mapPointer, count, primitiveRestartEnabled);
 
-    mBuffer.getDeviceMemory().unmap(contextVk->getDevice());
+    mBuffer.getCurrentBuffer()->getDeviceMemory().unmap(contextVk->getDevice());
     return angle::Result::Continue;
 }
 
@@ -366,7 +413,7 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
     VkDevice device = contextVk->getDevice();
 
     // Use map when available.
-    if (mBuffer.isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
+    if (mBuffer.getCurrentBuffer()->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
     {
         // Acquire a "new" staging buffer
         bool needToReleasePreviousBuffers = false;
@@ -386,21 +433,22 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
 
         // Enqueue a copy command on the GPU.
         VkBufferCopy copyRegion = {stagingBufferOffset, offset, size};
-        ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, mStagingBuffer.getCurrentBuffer()->getBuffer(),
-                                         VK_ACCESS_HOST_WRITE_BIT, copyRegion));
+        ANGLE_TRY(mBuffer.getCurrentBuffer()->copyFromBuffer(
+            contextVk, mStagingBuffer.getCurrentBuffer()->getBuffer(), VK_ACCESS_HOST_WRITE_BIT,
+            copyRegion));
         mStagingBuffer.getCurrentBuffer()->onResourceAccess(&contextVk->getResourceUseList());
     }
     else
     {
         uint8_t *mapPointer = nullptr;
-        ANGLE_VK_TRY(contextVk,
-                     mBuffer.getDeviceMemory().map(device, offset, size, 0, &mapPointer));
+        ANGLE_VK_TRY(contextVk, mBuffer.getCurrentBuffer()->getDeviceMemory().map(
+                                    device, offset, size, 0, &mapPointer));
         ASSERT(mapPointer);
 
         memcpy(mapPointer, data, size);
 
-        mBuffer.getDeviceMemory().unmap(device);
-        mBuffer.onExternalWrite(VK_ACCESS_HOST_WRITE_BIT);
+        mBuffer.getCurrentBuffer()->getDeviceMemory().unmap(device);
+        mBuffer.getCurrentBuffer()->onExternalWrite(VK_ACCESS_HOST_WRITE_BIT);
     }
 
     // Update conversions
@@ -422,16 +470,17 @@ angle::Result BufferVk::copyToBuffer(ContextVk *contextVk,
     else
     {
         contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, destBuffer);
-        contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, &mBuffer);
+        contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, mBuffer.getCurrentBuffer());
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
     }
 
-    commandBuffer->copyBuffer(mBuffer.getBuffer(), destBuffer->getBuffer(), copyCount, copies);
+    commandBuffer->copyBuffer(mBuffer.getCurrentBuffer()->getBuffer(), destBuffer->getBuffer(),
+                              copyCount, copies);
 
     if (contextVk->commandGraphEnabled())
     {
-        mBuffer.onReadByBuffer(contextVk, destBuffer, VK_ACCESS_TRANSFER_READ_BIT,
-                               VK_ACCESS_TRANSFER_WRITE_BIT);
+        mBuffer.getCurrentBuffer()->onReadByBuffer(
+            contextVk, destBuffer, VK_ACCESS_TRANSFER_READ_BIT, VK_ACCESS_TRANSFER_WRITE_BIT);
     }
     return angle::Result::Continue;
 }
