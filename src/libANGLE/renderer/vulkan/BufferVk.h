@@ -83,14 +83,26 @@ class BufferVk : public BufferImpl
 
     const vk::BufferHelper &getBuffer() const
     {
-        ASSERT(mBuffer.valid());
-        return mBuffer;
+        ASSERT(mBuffer.getCurrentBuffer()->valid());
+        return *mBuffer.getCurrentBuffer();
     }
 
     vk::BufferHelper &getBuffer()
     {
-        ASSERT(mBuffer.valid());
-        return mBuffer;
+        ASSERT(mBuffer.getCurrentBuffer()->valid());
+        return *mBuffer.getCurrentBuffer();
+    }
+
+    ANGLE_INLINE void setFastMappable(gl::BufferBinding target)
+    {
+        switch (target)
+        {
+            case gl::BufferBinding::PixelUnpack:
+                mFastMappable = true;
+                break;
+            default:
+                mFastMappable = false;
+        }
     }
 
     angle::Result mapImpl(ContextVk *contextVk, void **mapPtr);
@@ -137,13 +149,15 @@ class BufferVk : public BufferImpl
         size_t offset;
     };
 
-    vk::BufferHelper mBuffer;
+    vk::DynamicBuffer mBuffer;
 
     // All staging buffer support is provided by a DynamicBuffer.
     vk::DynamicBuffer mStagingBuffer;
 
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
+
+    bool mFastMappable;
 };
 
 }  // namespace rx
