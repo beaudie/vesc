@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f689280_3f29f34d",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T16:00:04Z",
+      "side": 1,
+      "message": "nit: constexpr arrays are slightly nicer than pointers. there\u0027s some context for this that popped up in chromium a while back. if you\u0027re curious I can probably dig it up.",
+      "range": {
+        "startLine": 739,
+        "startChar": 0,
+        "endLine": 739,
+        "endChar": 52
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdf299a2_ff9c3263",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T16:00:04Z",
+      "side": 1,
+      "message": "nit: kEn..",
+      "range": {
+        "startLine": 188,
+        "startChar": 23,
+        "endLine": 188,
+        "endChar": 38
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a12bb42_26e738b5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T16:00:04Z",
+      "side": 1,
+      "message": "is your idea to only use this single transformer for this single purpose, to use a single for multiple transformations, or to chain multiple transformers?",
+      "range": {
+        "startLine": 1167,
+        "startChar": 6,
+        "endLine": 1167,
+        "endChar": 23
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d53dec8a_d60c6cec",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T16:00:04Z",
+      "side": 1,
+      "message": "is there nowhere we can pull this from somewhere existing?",
+      "range": {
+        "startLine": 1183,
+        "startChar": 0,
+        "endLine": 1192,
+        "endChar": 6
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd6214d3_3a69e84a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T16:00:04Z",
+      "side": 1,
+      "message": "nit: mSpirvBlobIn for example",
+      "range": {
+        "startLine": 1216,
+        "startChar": 33,
+        "endLine": 1216,
+        "endChar": 51
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76521caa_af45a9f6",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1223,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T16:00:04Z",
+      "side": 1,
+      "message": "nit: can you name this like \"mSpirvBlobOut\" or something to make explicit the output?",
+      "range": {
+        "startLine": 1223,
+        "startChar": 15,
+        "endLine": 1223,
+        "endChar": 25
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaa0f5ff_f21b8fe6",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T16:00:04Z",
+      "side": 1,
+      "message": "It\u0027d be nice if we could fill in the new instructions in a single code location and also use as few (large) mem copies as possible.\n\nBecause this transformer doesn\u0027t change the size I suggest you copy the whole set of instructions initially then modify the transformed copy in-place.\n\nIf in the future we need to size-modifying transformations we can build up a list of transformations, and using construct the transformed spir-v with fewer copies.",
+      "range": {
+        "startLine": 1345,
+        "startChar": 0,
+        "endLine": 1349,
+        "endChar": 5
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b97ed7b_6726926d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T16:00:04Z",
+      "side": 1,
+      "message": "nit: std::numeric_limits\u003cuint32_t\u003e::max()",
+      "range": {
+        "startLine": 52,
+        "startChar": 41,
+        "endLine": 52,
+        "endChar": 52
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "922238d8_ba8a2102",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T16:00:04Z",
+      "side": 1,
+      "message": "maybe make this a part of GetShaderSource? It can\u0027t be part of reset() obviously. so maybe just make the wrapper API reset it.",
+      "range": {
+        "startLine": 298,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 29
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
