@@ -607,7 +607,7 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
                 if (visit == InVisit)
                 {
                     if (mClampingStrategy == SH_CLAMP_WITH_CLAMP_INTRINSIC)
-                        out << "[int(clamp(float(";
+                        out << "[(clamp(int(";
                     else
                         out << "[webgl_int_clamp(";
                 }
@@ -617,7 +617,7 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
                     TType leftType     = left->getType();
 
                     if (mClampingStrategy == SH_CLAMP_WITH_CLAMP_INTRINSIC)
-                        out << "), 0.0, float(";
+                        out << "), 0, int(";
                     else
                         out << ", 0, ";
 
