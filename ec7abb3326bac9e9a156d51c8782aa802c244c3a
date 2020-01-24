@@ -16,6 +16,24 @@
       "revId": "ec7abb3326bac9e9a156d51c8782aa802c244c3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ad83c2b_53116867",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2816,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T20:45:52Z",
+      "side": 1,
+      "message": "Talked offline. Best we could come up with is a special class that verifies unique calling. For now left this off. Would be nice to have in the future.",
+      "parentUuid": "c5bd2dfb_18cb08a4",
+      "revId": "ec7abb3326bac9e9a156d51c8782aa802c244c3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
