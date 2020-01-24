@@ -2271,7 +2271,7 @@ void ContextVk::updateDepthRange(float nearPlane, float farPlane)
     mGraphicsPipelineDesc->updateDepthRange(&mGraphicsPipelineTransition, nearPlane, farPlane);
 }
 
-void ContextVk::updateScissor(const gl::State &glState)
+angle::Result ContextVk::updateScissor(const gl::State &glState)
 {
     FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
     gl::Rectangle renderArea     = framebufferVk->getCompleteRenderArea();
@@ -2289,7 +2289,23 @@ void ContextVk::updateScissor(const gl::State &glState)
     mGraphicsPipelineDesc->updateScissor(&mGraphicsPipelineTransition,
                                          gl_vk::GetRect(scissoredArea));
 
-    framebufferVk->onScissorChange(this);
+    if (commandGraphEnabled())
+    {
+        framebufferVk->onScissorChange(this);
+    }
+    else
+    {
+        if (!mRenderPassCommands.empty())
+        {
+            const gl::Rectangle &newRenderArea = framebufferVk->getScissoredRenderArea(this);
+            if (!mRenderPassCommands.getRenderArea().encloses(newRenderArea))
+            {
+                ANGLE_TRY(endRenderPass());
+            }
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::syncState(const gl::Context *context,
@@ -2311,7 +2327,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
         {
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
             case gl::State::DIRTY_BIT_SCISSOR:
-                updateScissor(glState);
+                ANGLE_TRY(updateScissor(glState));
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
             {
@@ -2319,7 +2335,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateViewport(framebufferVk, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
                 // Update the scissor, which will be constrained to the viewport
-                updateScissor(glState);
+                ANGLE_TRY(updateScissor(glState));
                 break;
             }
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
@@ -2494,7 +2510,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                        glState.getRasterizerState(),
                                                        isViewportFlipEnabledForDrawFBO());
-                updateScissor(glState);
+                ANGLE_TRY(updateScissor(glState));
                 const gl::DepthStencilState depthStencilState = glState.getDepthStencilState();
                 mGraphicsPipelineDesc->updateDepthTestEnabled(&mGraphicsPipelineTransition,
                                                               depthStencilState, drawFramebuffer);
@@ -3274,21 +3290,20 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         }
 
         // Ensure the image is in read-only layout
-        if (image.isLayoutChangeNecessary(textureLayout))
+        if (commandGraphEnabled())
         {
-            vk::CommandBuffer *srcLayoutChange;
-            if (commandGraphEnabled())
+            if (image.isLayoutChangeNecessary(textureLayout))
             {
+                vk::CommandBuffer *srcLayoutChange;
+                VkImageAspectFlags aspectFlags = image.getAspectFlags();
+                ASSERT(aspectFlags != 0);
                 ANGLE_TRY(image.recordCommands(this, &srcLayoutChange));
+                image.changeLayout(aspectFlags, textureLayout, srcLayoutChange);
             }
-            else
-            {
-                ANGLE_TRY(getOutsideRenderPassCommandBuffer(&srcLayoutChange));
-            }
-
-            VkImageAspectFlags aspectFlags = image.getAspectFlags();
-            ASSERT(aspectFlags != 0);
-            image.changeLayout(aspectFlags, textureLayout, srcLayoutChange);
+        }
+        else
+        {
+            ANGLE_TRY(onImageRead(image.getAspectFlags(), textureLayout, &image));
         }
 
         textureVk->onImageViewUse(&mResourceUseList);
@@ -3409,7 +3424,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flush");
 
         mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
-        ANGLE_TRY(mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
+        ANGLE_TRY(endRenderPass());
         ANGLE_VK_TRY(this, mPrimaryCommands.end());
 
         Serial serial = getCurrentQueueSerial();
@@ -3702,6 +3717,7 @@ bool ContextVk::shouldUseOldRewriteStructSamplers() const
     return mRenderer->getFeatures().forceOldRewriteStructSamplers.enabled;
 }
 
+// Note: should this flush the RP commands?
 void ContextVk::onBufferRead(VkAccessFlags readAccessType, vk::BufferHelper *buffer)
 {
     if (!buffer->canAccumulateRead(this, readAccessType))
@@ -3710,8 +3726,10 @@ void ContextVk::onBufferRead(VkAccessFlags readAccessType, vk::BufferHelper *buf
     }
 
     mOutsideRenderPassCommands.bufferRead(readAccessType, buffer);
+    buffer->onResourceAccess(&mResourceUseList);
 }
 
+// Note: should this flush the RP commands?
 void ContextVk::onBufferWrite(VkAccessFlags writeAccessType, vk::BufferHelper *buffer)
 {
     if (!buffer->canAccumulateWrite(this, writeAccessType))
@@ -3720,6 +3738,34 @@ void ContextVk::onBufferWrite(VkAccessFlags writeAccessType, vk::BufferHelper *b
     }
 
     mOutsideRenderPassCommands.bufferWrite(writeAccessType, buffer);
+    buffer->onResourceAccess(&mResourceUseList);
+}
+
+angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
+                                     vk::ImageLayout imageLayout,
+                                     vk::ImageHelper *image)
+{
+    if (image->isLayoutChangeNecessary(imageLayout))
+    {
+        vk::CommandBuffer *commandBuffer;
+        ANGLE_TRY(getOutsideRenderPassCommandBuffer(&commandBuffer));
+        image->changeLayout(aspectFlags, imageLayout, commandBuffer);
+    }
+    image->onResourceAccess(&mResourceUseList);
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::onImageWrite(VkImageAspectFlags aspectFlags,
+                                      vk::ImageLayout imageLayout,
+                                      vk::ImageHelper *image)
+{
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(getOutsideRenderPassCommandBuffer(&commandBuffer));
+
+    image->changeLayout(aspectFlags, imageLayout, commandBuffer);
+    image->onResourceAccess(&mResourceUseList);
+
+    return angle::Result::Continue;
 }
 
 void ContextVk::beginRenderPass(const vk::Framebuffer &framebuffer,
@@ -3736,6 +3782,12 @@ void ContextVk::beginRenderPass(const vk::Framebuffer &framebuffer,
 
     mRenderPassCommands.beginRenderPass(framebuffer, renderArea, renderPassDesc,
                                         renderPassAttachmentOps, clearValues, commandBufferOut);
+}
+
+angle::Result ContextVk::endRenderPass()
+{
+    onRenderPassFinished();
+    return mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
 }
 
 OutsideRenderPassCommandBuffer::OutsideRenderPassCommandBuffer()
@@ -3793,7 +3845,7 @@ void OutsideRenderPassCommandBuffer::reset()
     mCommandBuffer.reset();
 }
 
-RenderPassCommandBuffer::RenderPassCommandBuffer() = default;
+RenderPassCommandBuffer::RenderPassCommandBuffer() : mClearValues{}, mRenderPassStarted(false) {}
 
 RenderPassCommandBuffer::~RenderPassCommandBuffer()
 {
@@ -3821,6 +3873,8 @@ void RenderPassCommandBuffer::beginRenderPass(const vk::Framebuffer &framebuffer
     std::copy(clearValues.begin(), clearValues.end(), mClearValues.begin());
 
     *commandBufferOut = &mCommandBuffer;
+
+    mRenderPassStarted = true;
 }
 
 angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
@@ -3862,5 +3916,6 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
 void RenderPassCommandBuffer::reset()
 {
     mCommandBuffer.reset();
+    mRenderPassStarted = false;
 }
 }  // namespace rx
