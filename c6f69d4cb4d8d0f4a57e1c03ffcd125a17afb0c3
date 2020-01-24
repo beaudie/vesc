@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "483f567e_8e45ac86",
+        "filename": "DEPS",
+        "patchSetId": 17
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T21:46:48Z",
+      "side": 1,
+      "message": "there\u0027s a feature called a \u0027gn gclient args file\u0027 that we can use instead of needing to use a separate gn argument.\n\nSee https://source.chromium.org/chromium/chromium/src/+/master:DEPS;l\u003d30?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F",
+      "range": {
+        "startLine": 415,
+        "startChar": 1,
+        "endLine": 426,
+        "endChar": 5
+      },
+      "revId": "c6f69d4cb4d8d0f4a57e1c03ffcd125a17afb0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
