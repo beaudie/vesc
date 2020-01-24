@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c8d66d62_f6d4f8dc",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T20:45:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85b7fe7e_874e233f",
+      "range": {
+        "startLine": 421,
+        "startChar": 8,
+        "endLine": 421,
+        "endChar": 99
+      },
+      "revId": "5ba5be94038c2f73670c3cb6405068892e135490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cad7e680_63e5bdc6",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 29
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "54af7aa8_b84ce02b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 3383,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T20:45:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cad7e680_63e5bdc6",
+      "revId": "5ba5be94038c2f73670c3cb6405068892e135490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "125cb314_be6bc13f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 29
@@ -53,6 +95,24 @@
       "writtenOn": "2020-01-24T15:15:18Z",
       "side": 1,
       "message": "bug reference?",
+      "revId": "5ba5be94038c2f73670c3cb6405068892e135490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81e3a95a_ee457a27",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T20:45:40Z",
+      "side": 1,
+      "message": "No bug for this yet. Wasn\u0027t sure if I was going to handle it as part of 4029 so didn\u0027t make this a TODO.",
+      "parentUuid": "125cb314_be6bc13f",
       "revId": "5ba5be94038c2f73670c3cb6405068892e135490",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
