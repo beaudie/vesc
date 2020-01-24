@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5bd2dfb_18cb08a4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2816,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T15:22:49Z",
+      "side": 1,
+      "message": "Would be nice to ASSERT that this is only done once, i.e. that during syncState, we don\u0027t call invalidateCurrentTextures more than once.",
+      "revId": "ec7abb3326bac9e9a156d51c8782aa802c244c3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
