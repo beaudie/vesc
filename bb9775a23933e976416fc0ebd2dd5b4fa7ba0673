@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "cac3fe21_28a6dae0",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T21:29:58Z",
+      "side": 1,
+      "message": "This was the thread:\n\nhttps://groups.google.com/a/chromium.org/forum/?utm_medium\u003demail\u0026utm_source\u003dfooter#!msg/chromium-dev/LBEni2QeZtQ/g7EwTHSJCgAJ\n\nEven better than pointer or array-in-header - declare them as in the header and define them in the cpp.\n\nhttps://groups.google.com/a/chromium.org/forum/?utm_medium\u003demail\u0026utm_source\u003dfooter#!msg/chromium-dev/SyIIaptlkrA/dviuUvoLBwAJ",
+      "parentUuid": "f56da811_3fb69909",
+      "range": {
+        "startLine": 739,
+        "startChar": 0,
+        "endLine": 739,
+        "endChar": 52
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6ac8f9c4_6cf2bda3",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 20
@@ -451,6 +475,30 @@
       "side": 1,
       "message": "I agree with keeping what we know works for now and opening a bug to add the functionality that Jamie is describing.",
       "parentUuid": "83d44e6b_86ab583e",
+      "range": {
+        "startLine": 1345,
+        "startChar": 0,
+        "endLine": 1349,
+        "endChar": 5
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "490dffaf_b498fb66",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T21:29:58Z",
+      "side": 1,
+      "message": "I see. I didn\u0027t realize varying transformations resize the spir-v.  SGTM.",
+      "parentUuid": "4ca85faa_8ee3f153",
       "range": {
         "startLine": 1345,
         "startChar": 0,
