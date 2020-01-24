@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85b7fe7e_874e233f",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-01-24T15:15:18Z",
+      "side": 1,
+      "message": "Can this and line 432 below could be pulled out and put before the return as common code?",
+      "range": {
+        "startLine": 421,
+        "startChar": 8,
+        "endLine": 421,
+        "endChar": 99
+      },
+      "revId": "5ba5be94038c2f73670c3cb6405068892e135490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cad7e680_63e5bdc6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 3383,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-01-24T15:15:18Z",
+      "side": 1,
+      "message": "Fairly involved \"if\" check.\nCould potentially offload to inline utility function \"isWorkToDo(),\" \"needToFlush(),\" or something like that to simplify code here.",
+      "revId": "5ba5be94038c2f73670c3cb6405068892e135490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "125cb314_be6bc13f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-01-24T15:15:18Z",
+      "side": 1,
+      "message": "bug reference?",
+      "revId": "5ba5be94038c2f73670c3cb6405068892e135490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
