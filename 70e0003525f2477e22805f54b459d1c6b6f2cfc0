@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef7b7da1_3aac785b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T21:41:10Z",
+      "side": 1,
+      "message": "non-blocking nit: inline is redundant here. all in-class methods are implicitly inline.",
+      "range": {
+        "startLine": 279,
+        "startChar": 4,
+        "endLine": 279,
+        "endChar": 10
+      },
+      "revId": "70e0003525f2477e22805f54b459d1c6b6f2cfc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "021d0e85_8f4596e0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-24T21:41:10Z",
+      "side": 1,
+      "message": "nit: you can remove this method and use mQueues directly in RendererVk.",
+      "range": {
+        "startLine": 163,
+        "startChar": 4,
+        "endLine": 163,
+        "endChar": 100
+      },
+      "revId": "70e0003525f2477e22805f54b459d1c6b6f2cfc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
