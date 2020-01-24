@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "772e76fd_733e555c",
+        "filename": "extensions/EGL_CHROMIUM_sync_control.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T03:06:53Z",
+      "side": 1,
+      "message": "missing space",
+      "range": {
+        "startLine": 115,
+        "startChar": 66,
+        "endLine": 115,
+        "endChar": 67
+      },
+      "revId": "5bcd10bf0b05049cd5c4140ba023df144d74c7a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a826705_5f480990",
+        "filename": "src/libANGLE/validationEGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T03:06:53Z",
+      "side": 1,
+      "message": "Can be private to the cpp file",
+      "range": {
+        "startLine": 186,
+        "startChar": 6,
+        "endLine": 186,
+        "endChar": 33
+      },
+      "revId": "5bcd10bf0b05049cd5c4140ba023df144d74c7a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
