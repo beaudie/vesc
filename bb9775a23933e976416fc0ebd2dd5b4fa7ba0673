@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f56da811_3fb69909",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T19:02:22Z",
+      "side": 1,
+      "message": "That would be an interesting read!\n\nI was originally skeptical array here could cause trouble building/linking, but apparently not now that I tried it.\n\nBy the way, using `constexpr char str[]` here instead of `constexpr const char *str` increases binary size by 96 bytes (just doing this for this single variable). Tried `constexpr const char str[]` and `static constexpr const char str[]` and the binary size is still 96 bytes higher.\n\nDo you still want me to do change this to an array?\n\n---\n\nEdit: Changing all these to char [] increases binary size by 976 bytes.",
+      "parentUuid": "2f689280_3f29f34d",
+      "range": {
+        "startLine": 739,
+        "startChar": 0,
+        "endLine": 739,
+        "endChar": 52
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cdf299a2_ff9c3263",
         "filename": "src/common/angleutils.h",
         "patchSetId": 20
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "0818d63c_80df01ed",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T19:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdf299a2_ff9c3263",
+      "range": {
+        "startLine": 188,
+        "startChar": 23,
+        "endLine": 188,
+        "endChar": 38
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a12bb42_26e738b5",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 20
@@ -59,6 +107,30 @@
       "writtenOn": "2020-01-24T16:00:04Z",
       "side": 1,
       "message": "is your idea to only use this single transformer for this single purpose, to use a single for multiple transformations, or to chain multiple transformers?",
+      "range": {
+        "startLine": 1167,
+        "startChar": 6,
+        "endLine": 1167,
+        "endChar": 23
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17962975_c818c1cd",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T19:02:22Z",
+      "side": 1,
+      "message": "A single transformation for everything. There isn\u0027t much to do other than changing decoration values + some varying related modifications. They can all be easily done in one go.",
+      "parentUuid": "6a12bb42_26e738b5",
       "range": {
         "startLine": 1167,
         "startChar": 6,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "d0798587_12cb9de0",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T19:02:22Z",
+      "side": 1,
+      "message": "Didn\u0027t find any. spirv-headers has many constants, but not these. Nor does it have constants used to parse instructions (which I also had to define in this class whenever used).\n\nI was considering contributing that to spirv-headers, but don\u0027t have time for that now.",
+      "parentUuid": "d53dec8a_d60c6cec",
+      "range": {
+        "startLine": 1183,
+        "startChar": 0,
+        "endLine": 1192,
+        "endChar": 6
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd6214d3_3a69e84a",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 20
@@ -114,6 +210,30 @@
       "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7143d6c4_477be2ea",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T19:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd6214d3_3a69e84a",
+      "range": {
+        "startLine": 1216,
+        "startChar": 33,
+        "endLine": 1216,
+        "endChar": 51
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "ba53efa1_ec0ccfb2",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1223,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T19:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76521caa_af45a9f6",
+      "range": {
+        "startLine": 1223,
+        "startChar": 15,
+        "endLine": 1223,
+        "endChar": 25
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aaa0f5ff_f21b8fe6",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 20
@@ -151,6 +295,30 @@
       "writtenOn": "2020-01-24T16:00:04Z",
       "side": 1,
       "message": "It\u0027d be nice if we could fill in the new instructions in a single code location and also use as few (large) mem copies as possible.\n\nBecause this transformer doesn\u0027t change the size I suggest you copy the whole set of instructions initially then modify the transformed copy in-place.\n\nIf in the future we need to size-modifying transformations we can build up a list of transformations, and using construct the transformed spir-v with fewer copies.",
+      "range": {
+        "startLine": 1345,
+        "startChar": 0,
+        "endLine": 1349,
+        "endChar": 5
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83d44e6b_86ab583e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T19:02:22Z",
+      "side": 1,
+      "message": "Can we keep it as is in the spirit of simplicity?\n\nI agree that copying in a bigger chunk would be nicer. Unfortunately I don\u0027t have much time to experiment with this. An easy win could be to stop at first OpFunction and copy the rest, because there is no transformation done on the code. And the functions take up the majority of the SPIR-V (unless super simple shader). I\u0027ll add this optimization right away.\n\nI tried in-place transformation. It gets a bit contrived (with varying transformations since they do resize the spir-v a little bit).",
+      "parentUuid": "aaa0f5ff_f21b8fe6",
       "range": {
         "startLine": 1345,
         "startChar": 0,
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "19be1d59_8c1d81b5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T19:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b97ed7b_6726926d",
+      "range": {
+        "startLine": 52,
+        "startChar": 41,
+        "endLine": 52,
+        "endChar": 52
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "922238d8_ba8a2102",
         "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
         "patchSetId": 20
@@ -206,6 +398,30 @@
       "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dd890fa_b73ea7d6",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-24T19:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "922238d8_ba8a2102",
+      "range": {
+        "startLine": 298,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 29
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
