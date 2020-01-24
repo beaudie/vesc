@@ -33,6 +33,8 @@ GLenum NativePixelFormatToGLInternalFormat(int pixelFormat);
 
 AHardwareBuffer *ANativeWindowBufferToAHardwareBuffer(ANativeWindowBuffer *windowBuffer);
 
+int AHardwareBufferFormatIsSupported(uint32_t format);
+
 }  // namespace android
 }  // namespace angle
 
