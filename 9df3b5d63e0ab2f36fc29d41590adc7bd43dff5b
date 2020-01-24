@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "8cf3f0ba_57e542f1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-24T21:31:09Z",
+      "side": 1,
+      "message": "Change to ContextPriority",
+      "parentUuid": "949f6767_fd9623fd",
+      "range": {
+        "startLine": 71,
+        "startChar": 30,
+        "endLine": 71,
+        "endChar": 38
+      },
+      "revId": "9df3b5d63e0ab2f36fc29d41590adc7bd43dff5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8143d930_6bef0bcf",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
