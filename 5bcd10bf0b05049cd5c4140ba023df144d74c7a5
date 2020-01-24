@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "5e9f2652_5d557ec9",
+        "filename": "src/libANGLE/renderer/d3d/SurfaceD3D.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-24T20:16:32Z",
+      "side": 1,
+      "message": "Would Chrome still try to call this function on Windows? It gracefully handles an error being generated?",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 31
+      },
+      "revId": "5bcd10bf0b05049cd5c4140ba023df144d74c7a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a826705_5f480990",
         "filename": "src/libANGLE/validationEGL.h",
         "patchSetId": 2
