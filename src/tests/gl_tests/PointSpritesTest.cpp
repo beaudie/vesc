@@ -417,6 +417,8 @@ void main(void)
 // spites.
 TEST_P(PointSpritesTest, PointSpriteAlternatingDrawTypes)
 {
+    ANGLE_SKIP_TEST_IF(IsFuchsia() && IsARM() && IsVulkan());
+
     GLfloat pointSizeRange[2] = {};
     glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, pointSizeRange);
     GLfloat maxPointSize = pointSizeRange[1];
