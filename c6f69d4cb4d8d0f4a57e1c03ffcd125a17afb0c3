@@ -22,6 +22,30 @@
       "revId": "c6f69d4cb4d8d0f4a57e1c03ffcd125a17afb0c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0d2fce1_ef1ba673",
+        "filename": "DEPS",
+        "patchSetId": 17
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-25T01:50:57Z",
+      "side": 1,
+      "message": "Ack - Let\u0027s do that with a follow up.",
+      "parentUuid": "483f567e_8e45ac86",
+      "range": {
+        "startLine": 415,
+        "startChar": 1,
+        "endLine": 426,
+        "endChar": 5
+      },
+      "revId": "c6f69d4cb4d8d0f4a57e1c03ffcd125a17afb0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
