@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e106c6e_4b68d74d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-27T17:36:47Z",
+      "side": 1,
+      "message": "nit: return (preferredDevice.empty() || preferredDevice \u003d\u003d deviceName)",
+      "range": {
+        "startLine": 494,
+        "startChar": 17,
+        "endLine": 496,
+        "endChar": 36
+      },
+      "revId": "6c411fe76bc4670816ea92306b9c5f56125b3a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
