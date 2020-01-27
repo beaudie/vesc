@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68503ac4_68587709",
+        "filename": "src/compiler/translator/ValidateVaryingLocations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-27T21:25:25Z",
+      "side": 1,
+      "message": "I thought this fix sounded familiar - I made this change a few months ago:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1952173\n\nSeems like this is an easy mistake to make, but hopefully this is the last one.   I don\u0027t know enough about what the various sizes represent, but is there a way to try and catch this earlier or even have the code handle the isMatrix() checking for us?   Maybe an ASSERT(!isMatrix()) in getSecondarySize() would work?   Or maybe these usages are rare enough that it\u0027s not worth the effort.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 5
+      },
+      "revId": "6789f0bec29869b639c158422693deadbf843afa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
