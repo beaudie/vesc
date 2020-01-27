@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "438dd1ba_04516a0a",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-27T15:07:55Z",
+      "side": 1,
+      "message": "requesting we still make these extern instead of constexpr-pointer-in-header",
+      "range": {
+        "startLine": 739,
+        "startChar": 1,
+        "endLine": 739,
+        "endChar": 52
+      },
+      "revId": "947bf9e4c700de757fb249854ca93f04a5941d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

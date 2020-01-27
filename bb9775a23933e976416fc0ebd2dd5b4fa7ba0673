@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "329c732f_0c2d130e",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-27T15:07:55Z",
+      "side": 1,
+      "message": "Clang might be clever and de-duplicate the pointers. We have run into issues with GCC where it isn\u0027t smart enough to match them between objects.",
+      "parentUuid": "c446c91e_65086aa5",
+      "range": {
+        "startLine": 739,
+        "startChar": 0,
+        "endLine": 739,
+        "endChar": 52
+      },
+      "revId": "bb9775a23933e976416fc0ebd2dd5b4fa7ba0673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6ac8f9c4_6cf2bda3",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 20
