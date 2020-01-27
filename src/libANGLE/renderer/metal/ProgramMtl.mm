@@ -295,8 +295,6 @@ std::unique_ptr<LinkEvent> ProgramMtl::link(const gl::Context *context,
     // assignment done in that function.
     linkResources(resources);
 
-    mtl::GlslangGetShaderSource(mState, resources, &mShaderSource, &mVariableInfoMap);
-
     // NOTE(hqle): Parallelize linking.
     return std::make_unique<LinkEventDone>(linkImpl(context, infoLog));
 }
@@ -310,10 +308,15 @@ angle::Result ProgramMtl::linkImpl(const gl::Context *glContext, gl::InfoLog &in
 
     ANGLE_TRY(initDefaultUniformBlocks(glContext));
 
+    // Gather variable info and transform sources.
+    gl::ShaderMap<std::string> shaderSources;
+    ShaderInterfaceVariableInfoMap variableInfoMap;
+    mtl::GlslangGetShaderSource(mState, resources, &shaderSource, &variableInfoMap);
+
     // Convert GLSL to spirv code
     gl::ShaderMap<SpirvBlob> spirvBlobs;
-    ANGLE_TRY(mtl::GlslangGetShaderSpirvCode(contextMtl, contextMtl->getCaps(), mShaderSource,
-                                             mVariableInfoMap, &spirvBlobs));
+    ANGLE_TRY(mtl::GlslangGetShaderSpirvCode(contextMtl, contextMtl->getCaps(), shaderSource,
+                                             variableInfoMap, &spirvBlobs));
 
     // Convert spirv code to MSL
     ANGLE_TRY(convertToMsl(glContext, gl::ShaderType::Vertex, infoLog,
