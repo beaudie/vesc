@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f731206_9e03b0ab",
+        "filename": "src/tests/compiler_tests/ShaderValidation_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5704,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-27T19:13:10Z",
+      "side": 1,
+      "message": "nit: I think you swapped the comments on these tests?",
+      "range": {
+        "startLine": 5703,
+        "startChar": 0,
+        "endLine": 5704,
+        "endChar": 73
+      },
+      "revId": "ac33a053f85c3ac5f821911353f7dbd1e524b17e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
