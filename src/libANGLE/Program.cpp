@@ -1601,7 +1601,7 @@ angle::Result Program::link(const Context *context)
         }
 
         if (!resources->varyingPacking.collectAndPackUserVaryings(
-                mInfoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames()))
+                mInfoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames(), isSeparable()))
         {
             return angle::Result::Continue;
         }
