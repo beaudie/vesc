@@ -357,7 +357,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         auto it = mExtensionBehavior.find(TExtension::ARB_texture_rectangle);
         if (it != mExtensionBehavior.end())
         {
-            mExtensionBehavior.erase(it);
+            it->second = EBhDisable;
         }
     }
 
