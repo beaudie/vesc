@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fd555bf_22b7d3e0",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-27T21:48:37Z",
+      "side": 1,
+      "message": "Why is this line necessary?   This is defined in the ShaderInterfaceVariableInfo class, so I would have assumed it\u0027s accessible within ShaderInterfaceVariableInfo() below without any extra work.",
+      "revId": "fe71b7e088822d14be54f149e077223e203168f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
