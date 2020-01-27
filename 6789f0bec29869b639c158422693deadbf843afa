@@ -22,6 +22,30 @@
       "revId": "6789f0bec29869b639c158422693deadbf843afa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e81dbe1_50705f07",
+        "filename": "src/compiler/translator/ValidateVaryingLocations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-27T21:58:16Z",
+      "side": 1,
+      "message": "Yes that change gave me the confidence that this is the right thing to do.\n\nSo I\u0027m not sure I have time to look too deep into this, but I have a feeling secondarySize is 1 unless it\u0027s a matrix.  In that case, the above `totalLocation +\u003d fieldType-\u003egetSecondarySize()` was just a `++totalLocation`.\n\nI wonder if it would make sense to swap nominal and secondary sizes for matrices. In that case, both the above can stay `+\u003d secondary` and the two `else if`s here can become just a single `secondary * arraySizeProduct`. That\u0027s a riskier change though, maybe another time.",
+      "parentUuid": "68503ac4_68587709",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 5
+      },
+      "revId": "6789f0bec29869b639c158422693deadbf843afa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
