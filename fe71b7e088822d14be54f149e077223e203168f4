@@ -16,6 +16,24 @@
       "revId": "fe71b7e088822d14be54f149e077223e203168f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e62f9c4_dd4fc9e4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-27T22:01:54Z",
+      "side": 1,
+      "message": "The constructor below makes it such that the compiler can no longer replace every usage of that variable with a constant (in other C++ files, if used), so now it needs actual storage.",
+      "parentUuid": "1fd555bf_22b7d3e0",
+      "revId": "fe71b7e088822d14be54f149e077223e203168f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
