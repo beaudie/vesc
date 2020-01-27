@@ -21,14 +21,14 @@ namespace egl
 class Debug;
 class Thread;
 
-std::mutex &GetGlobalMutex();
+std::recursive_mutex &GetGlobalMutex();
 Thread *GetCurrentThread();
 Debug *GetDebug();
 void SetContextCurrent(Thread *thread, gl::Context *context);
 }  // namespace egl
 
 #define ANGLE_SCOPED_GLOBAL_LOCK() \
-    std::lock_guard<std::mutex> globalMutexLock(egl::GetGlobalMutex())
+    std::lock_guard<std::recursive_mutex> globalMutexLock(egl::GetGlobalMutex())
 
 namespace gl
 {
@@ -56,10 +56,10 @@ ANGLE_INLINE Context *GetValidGlobalContext()
     return thread->getValidContext();
 }
 
-ANGLE_INLINE std::unique_lock<std::mutex> GetShareGroupLock(const Context *context)
+ANGLE_INLINE std::unique_lock<std::recursive_mutex> GetShareGroupLock(const Context *context)
 {
-    return context->isShared() ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
-                               : std::unique_lock<std::mutex>();
+    return context->isShared() ? std::unique_lock<std::recursive_mutex>(egl::GetGlobalMutex())
+                               : std::unique_lock<std::recursive_mutex>();
 }
 }  // namespace gl
 
