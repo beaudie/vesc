@@ -1212,12 +1212,12 @@ bool ValidateSpirv(const std::vector<uint32_t> &spirvBlob)
     spirvTools.SetMessageConsumer(ValidateSpirvMessage);
     bool result = spirvTools.Validate(spirvBlob);
 
-    if (!result)
+    // if (!result)
     {
         std::string readableSpirv;
         result = spirvTools.Disassemble(spirvBlob, &readableSpirv,
-                                        SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES);
-        WARN() << "Invalid SPIR-V:\n" << readableSpirv;
+                                        0);  // SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES);
+        WARN() << readableSpirv;
     }
 
     return result;
@@ -1862,12 +1862,24 @@ bool SpirvTransformer::transformVariable(const uint32_t *instruction, size_t wor
 
     // Furthermore, if it's not an inactive varying output, there's nothing to do.  Note that
     // inactive varying inputs are already pruned by the translator.
+    if (!(storageClass != spv::StorageClassInput || info->activeStages[mShaderType]))
+    {
+        WARN() << "1: Storage class " << storageClass << ", mShaderType: " << mShaderType
+               << ", id: " << id << ", typeId: " << typeId << ", active? "
+               << info->activeStages[mShaderType] << "\n";
+    }
     ASSERT(storageClass != spv::StorageClassInput || info->activeStages[mShaderType]);
     if (info->activeStages[mShaderType])
     {
         return false;
     }
 
+    if (!(storageClass == spv::StorageClassOutput))
+    {
+        WARN() << "2: Storage class " << storageClass << ", mShaderType: " << mShaderType
+               << ", id: " << id << ", typeId: " << typeId << ", active? "
+               << info->activeStages[mShaderType] << "\n";
+    }
     ASSERT(storageClass == spv::StorageClassOutput);
 
     // Copy the variable declaration for modification.  Change its type to the corresponding type
@@ -1875,7 +1887,21 @@ bool SpirvTransformer::transformVariable(const uint32_t *instruction, size_t wor
     // instruction.
     const size_t instructionOffset = copyInstruction(instruction, wordCount);
 
+    if (!(typeId < mTypePointerTransformedId.size()))
+    {
+        WARN() << "3: Storage class " << storageClass << ", mShaderType: " << mShaderType
+               << ", id: " << id << ", typeId: " << typeId << ", active? "
+               << info->activeStages[mShaderType]
+               << "max type id: " << mTypePointerTransformedId.size() << "\n";
+    }
     ASSERT(typeId < mTypePointerTransformedId.size());
+    if (!(mTypePointerTransformedId[typeId] != 0))
+    {
+        WARN() << "4: Storage class " << storageClass << ", mShaderType: " << mShaderType
+               << ", id: " << id << ", typeId: " << typeId << ", active? "
+               << info->activeStages[mShaderType]
+               << "typePointer[id]: " << mTypePointerTransformedId[typeId] << "\n";
+    }
     ASSERT(mTypePointerTransformedId[typeId] != 0);
 
     (*mSpirvBlobOut)[instructionOffset + kTypeIdIndex]       = mTypePointerTransformedId[typeId];
@@ -1999,6 +2025,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         if (glShader)
         {
             intermediateSources[shaderType].init(glShader->getTranslatedSource());
+            WARN() << glShader->getTranslatedSource();
         }
     }
 
@@ -2063,6 +2090,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        // fprintf(stderr, "%s\n", (*shaderSourcesOut)[shaderType].c_str());
     }
 }
 
@@ -2085,6 +2113,7 @@ angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
             continue;
         }
 
+        ValidateSpirv(initialSpirvBlob);
         SpirvBlob *spirvBlob = &(*spirvBlobsOut)[shaderType];
 
         SpirvTransformer transformer(initialSpirvBlob, variableInfoMap, shaderType, spirvBlob);
