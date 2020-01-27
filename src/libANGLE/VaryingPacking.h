@@ -190,7 +190,8 @@ class VaryingPacking final : angle::NonCopyable
 
     bool collectAndPackUserVaryings(gl::InfoLog &infoLog,
                                     const ProgramMergedVaryings &mergedVaryings,
-                                    const std::vector<std::string> &tfVaryings);
+                                    const std::vector<std::string> &tfVaryings,
+                                    const bool isSeparableProgram);
 
     struct Register
     {
