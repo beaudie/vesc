@@ -1805,8 +1805,7 @@ bool ValidateSpirv(const std::vector<uint32_t> &spirvBlob, const std::string &mo
     if (!result)
     {
         std::string readableSpirv;
-        result = spirvTools.Disassemble(spirvBlob, &readableSpirv,
-                                        SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES);
+        spirvTools.Disassemble(spirvBlob, &readableSpirv, SPV_BINARY_TO_TEXT_OPTION_FRIENDLY_NAMES);
         WARN() << "Invalid SPIR-V" << modificationsInfo << ":\n" << readableSpirv;
     }
 

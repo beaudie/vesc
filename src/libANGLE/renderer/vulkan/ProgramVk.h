@@ -219,13 +219,6 @@ class ProgramVk : public ProgramImpl
                                            ProgramInfo *programInfo,
                                            vk::ShaderProgramHelper **shaderProgramOut)
     {
-        // Compile shaders if not already.  This is done only once regardless of specialization
-        // constants.
-        if (!mShaderInfo.valid())
-        {
-            ANGLE_TRY(mShaderInfo.initShaders(contextVk, mShaderSources, mVariableInfoMap,
-                                              &mShaderInfo.getSpirvBlobs()));
-        }
         ASSERT(mShaderInfo.valid());
 
         // Create the program pipeline.  This is done lazily and once per combination of
@@ -314,8 +307,7 @@ class ProgramVk : public ProgramImpl
 
         angle::Result initShaders(ContextVk *contextVk,
                                   const gl::ShaderMap<std::string> &shaderSources,
-                                  const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                  gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
+                                  const ShaderInterfaceVariableInfoMap &variableInfoMap);
         void release(ContextVk *contextVk);
 
         ANGLE_INLINE bool valid() const { return mIsInitialized; }
@@ -351,12 +343,6 @@ class ProgramVk : public ProgramImpl
     ProgramInfo mDefaultProgramInfo;
     ProgramInfo mLineRasterProgramInfo;
 
-    // We keep the translated linked shader sources and the expected location/set/binding mapping to
-    // use with shader draw call compilation.
-    // TODO(syoussefi): Remove when shader compilation is done at link time.
-    // http://anglebug.com/3394
-    gl::ShaderMap<std::string> mShaderSources;
-    ShaderInterfaceVariableInfoMap mVariableInfoMap;
     // We keep the SPIR-V code to use for draw call pipeline creation.
     ShaderInfo mShaderInfo;
 
