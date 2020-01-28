@@ -22,6 +22,30 @@
       "revId": "f70dce4b0f1108238ab247bc1cb8558f5f055ff7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcea4b43_72854e43",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-01-28T18:42:40Z",
+      "side": 1,
+      "message": "Done, oops. That\u0027s my normal style but Fuchsia uses the opposite :)",
+      "parentUuid": "58829a67_7024f998",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "f70dce4b0f1108238ab247bc1cb8558f5f055ff7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
