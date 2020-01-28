@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2169da91_680094c6",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-01-28T21:46:18Z",
+      "side": 1,
+      "message": "Does this work by:\n1. Apply the filter for the whole suite\n2. Divide the suite into shards and create a new filter just for the tests in the shard\n3. Apply the filter for the current shard\nIf yes, could you add a comment explaining this?",
+      "range": {
+        "startLine": 749,
+        "startChar": 0,
+        "endLine": 751,
+        "endChar": 0
+      },
+      "revId": "de46d9ad6ad68265c97b3160ebc5f839492ff71e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
