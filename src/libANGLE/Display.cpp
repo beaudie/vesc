@@ -1222,7 +1222,12 @@ void Display::setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID
 // static
 EGLClientBuffer Display::GetNativeClientBuffer(const AHardwareBuffer *buffer)
 {
+#if defined(ANGLE_PLATFORM_ANDROID)
     return angle::android::AHardwareBufferToClientBuffer(buffer);
+#else
+    UNREACHABLE();
+    return nullptr;
+#endif
 }
 
 Error Display::waitClient(const gl::Context *context)

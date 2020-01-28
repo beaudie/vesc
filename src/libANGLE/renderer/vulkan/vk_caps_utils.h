@@ -60,8 +60,8 @@ static ANGLE_INLINE EGLenum GetConfigCaveat(GLenum format)
 
     switch (format)
     {
-        // For now we only mark rgb10a2 as a slow config
         case GL_RGB10_A2_EXT:
+        case GL_RGBA16F:
             return EGL_SLOW_CONFIG;
         default:
             return EGL_NONE;
