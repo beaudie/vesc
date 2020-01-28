@@ -16,6 +16,24 @@
       "revId": "7400b978d6fb208e994e6ca5973661fb7600abbc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca88c369_e2bf02a4",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-28T18:20:56Z",
+      "side": 1,
+      "message": "I don\u0027t know. Sorry.",
+      "parentUuid": "e2104782_263dc598",
+      "revId": "7400b978d6fb208e994e6ca5973661fb7600abbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
