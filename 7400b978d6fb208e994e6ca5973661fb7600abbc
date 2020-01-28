@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2104782_263dc598",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-28T18:13:22Z",
+      "side": 1,
+      "message": "Why isn\u0027t the above `bufferSRVDesc \u003d {};` sufficient? Does that struct have a default constructor that\u0027s not initializing Flags?",
+      "revId": "7400b978d6fb208e994e6ca5973661fb7600abbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
