@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacc7223_498cc25a",
+        "filename": "src/compiler/translator/tree_ops/RemoveInactiveInterfaceVariables.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T17:30:53Z",
+      "side": 1,
+      "message": "I assume this funky naming is a GL thing.   For my own sake:\n\nattributes: Program inputs to the VS\ninputVaryings: FS inputs (output by the VS)\noutputVariables: Program outputs from the FS\n\nDoes that look correct?",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 59
+      },
+      "revId": "9cc49aecb75bb4efb957af05a985d7547805edb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3597ac58_762cb9d8",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T17:30:53Z",
+      "side": 1,
+      "message": "The test FewerShaderOutputsThanAttachments above also generates a validation layer warning but the test passes, while this one is expected to fail.   How does gtest or someone else debugging the test know the difference between an expected vs unexpected validation layer error and how to determine pass/fail?",
+      "range": {
+        "startLine": 627,
+        "startChar": 25,
+        "endLine": 628,
+        "endChar": 40
+      },
+      "revId": "9cc49aecb75bb4efb957af05a985d7547805edb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
