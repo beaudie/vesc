@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ea3ffc3_402a6589",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T03:24:26Z",
+      "side": 1,
+      "message": "I like removing this typedef.",
+      "revId": "8f2825db62a1e806fd624e621e66f031b0e3d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcedf6e0_8febbc84",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1745,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T03:24:26Z",
+      "side": 1,
+      "message": "I think this would be better as a reference (like the FS and CS declarations) and then the places that require a pointer to modify the source can take the address when passing it to the function.   It would help the consistency here and remove the \"why is this a pointer?\" I\u0027d inevitably ask myself every time I came across this again in the future.",
+      "revId": "8f2825db62a1e806fd624e621e66f031b0e3d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
