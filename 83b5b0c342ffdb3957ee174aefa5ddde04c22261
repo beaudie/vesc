@@ -22,6 +22,30 @@
       "revId": "83b5b0c342ffdb3957ee174aefa5ddde04c22261",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a268b9c4_872912da",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6085,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-28T15:08:50Z",
+      "side": 1,
+      "message": "Rejiggeration done. (I need sleep)",
+      "parentUuid": "ef8cfecb_fca0c857",
+      "range": {
+        "startLine": 6085,
+        "startChar": 4,
+        "endLine": 6085,
+        "endChar": 61
+      },
+      "revId": "83b5b0c342ffdb3957ee174aefa5ddde04c22261",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
