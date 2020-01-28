@@ -577,6 +577,10 @@ config("libANGLE_config") {
   if (angle_use_x11) {
     defines += [ "ANGLE_USE_X11" ]
   }
+
+  if (angle_enable_overlay) {
+    defines += [ "ANGLE_ENABLE_OVERLAY=1" ]
+  }
 }
 
 angle_source_set("libANGLE_headers") {
@@ -726,10 +730,6 @@ angle_source_set("libANGLE_base") {
 
   if (is_debug) {
     defines += [ "ANGLE_GENERATE_SHADER_DEBUG_INFO" ]
-  }
-
-  if (angle_enable_overlay) {
-    defines += [ "ANGLE_ENABLE_OVERLAY=1" ]
   }
 
   configs += [ ":debug_annotations_config" ]
