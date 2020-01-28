@@ -357,19 +357,12 @@ std::vector<TestIdentifier> GetFilteredTests(std::map<TestIdentifier, FileLine> 
     return FilterTests(fileLinesOut, gtestIDFilter, alsoRunDisabledTests);
 }
 
-std::vector<TestIdentifier> GetCompiledInTests(std::map<TestIdentifier, FileLine> *fileLinesOut,
-                                               bool alsoRunDisabledTests)
-{
-    TestIdentifierFilter passthroughFilter = [](const TestIdentifier &id) { return true; };
-    return FilterTests(fileLinesOut, passthroughFilter, alsoRunDisabledTests);
-}
-
 std::vector<TestIdentifier> GetShardTests(int shardIndex,
                                           int shardCount,
                                           std::map<TestIdentifier, FileLine> *fileLinesOut,
                                           bool alsoRunDisabledTests)
 {
-    std::vector<TestIdentifier> allTests = GetCompiledInTests(fileLinesOut, alsoRunDisabledTests);
+    std::vector<TestIdentifier> allTests = GetFilteredTests(fileLinesOut, alsoRunDisabledTests);
     std::vector<TestIdentifier> shardTests;
 
     for (int testIndex = shardIndex; testIndex < static_cast<int>(allTests.size());
@@ -713,12 +706,6 @@ TestSuite::TestSuite(int *argc, char **argv)
             exit(1);
         }
 
-        if (mShardCount > 0)
-        {
-            printf("Cannot use filter file in conjunction with sharding parameters.\n");
-            exit(1);
-        }
-
         uint32_t fileSize = 0;
         if (!GetFileSize(mFilterFile.c_str(), &fileSize))
         {
@@ -750,20 +737,17 @@ TestSuite::TestSuite(int *argc, char **argv)
     testing::internal::UnitTestImpl *impl = testing::internal::GetUnitTestImpl();
     impl->RegisterParameterizedTests();
 
+    testing::internal::ParseGoogleTestFlagsOnly(argc, argv);
+
     if (mShardCount > 0)
     {
-        if (hasFilter)
-        {
-            printf("Cannot use gtest_filter in conjunction with sharding parameters.\n");
-            exit(1);
-        }
-
         mTestQueue = GetShardTests(mShardIndex, mShardCount, &mTestFileLines, alsoRunDisabledTests);
         mFilterString = GetTestFilter(mTestQueue);
 
         // Note that we only add a filter string if we previously deleted a shader index/count
         // argument. So we will have space for the new filter string in argv.
         AddArg(argc, argv, mFilterString.c_str());
+        testing::internal::ParseGoogleTestFlagsOnly(argc, argv);
     }
 
     testing::InitGoogleTest(argc, argv);
