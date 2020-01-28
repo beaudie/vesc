@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3786b5e7_e581e98f",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T17:03:22Z",
+      "side": 1,
+      "message": "Since this is declared as kLineRasterEmulationPosition and the actual name can change without this comment being updated, this portion should be update to something like:\n\n    // Define a driver varying vec2 to hold the line rasterization emulation position",
+      "range": {
+        "startLine": 446,
+        "startChar": 37,
+        "endLine": 446,
+        "endChar": 50
+      },
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7a14157_db2b2aa3",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T17:03:22Z",
+      "side": 1,
+      "message": "Why is this setting all stages as active?   Don\u0027t the resources typically know which stages are actively using it with: ActiveVariable::activeShaders()?   I think we typically only mark the active stages in the descriptor set layouts, but maybe I\u0027m misunderstanding a piece here.",
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5498bdcf_e34c3a4b",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T17:03:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 847,
+        "startChar": 83,
+        "endLine": 847,
+        "endChar": 96
+      },
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72442a25_9803fdf1",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T17:03:22Z",
+      "side": 1,
+      "message": "This was already checked above on line 1622.",
+      "range": {
+        "startLine": 1656,
+        "startChar": 48,
+        "endLine": 1656,
+        "endChar": 81
+      },
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
