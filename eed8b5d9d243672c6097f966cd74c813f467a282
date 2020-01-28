@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c3118199_12e0c629",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-28T13:57:42Z",
+      "side": 1,
+      "message": "nit: ANGLE doesn\u0027t use underscores in variable names.",
+      "range": {
+        "startLine": 455,
+        "startChar": 40,
+        "endLine": 455,
+        "endChar": 71
+      },
+      "revId": "eed8b5d9d243672c6097f966cd74c813f467a282",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0d8cc046_b2772c53",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 3
@@ -46,6 +69,30 @@
       "revId": "eed8b5d9d243672c6097f966cd74c813f467a282",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5c6fb4d_7874867a",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-28T13:57:42Z",
+      "side": 1,
+      "message": "It\u0027s checking a member function then a member variable. How about we make it check a single cached variable? It\u0027s on the hottest path.",
+      "parentUuid": "c2dc84fd_adf959e0",
+      "range": {
+        "startLine": 517,
+        "startChar": 9,
+        "endLine": 517,
+        "endChar": 23
+      },
+      "revId": "eed8b5d9d243672c6097f966cd74c813f467a282",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
