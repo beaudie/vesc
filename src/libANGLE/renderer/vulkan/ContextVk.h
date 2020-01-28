@@ -475,7 +475,11 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     vk::Shared<vk::Fence> getLastSubmittedFence() const;
 
     // This should only be called from ResourceVk.
-    vk::CommandGraph *getCommandGraph() { return &mCommandGraph; }
+    vk::CommandGraph *getCommandGraph()
+    {
+        ASSERT(commandGraphEnabled());
+        return &mCommandGraph;
+    }
 
     vk::ShaderLibrary &getShaderLibrary() { return mShaderLibrary; }
     UtilsVk &getUtils() { return mUtils; }
@@ -551,6 +555,20 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
             mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
         }
         return mRenderPassCommands;
+    }
+
+    angle::Result getPrimaryCommandBuffer(vk::PrimaryCommandBuffer **primaryCommands)
+    {
+        if (!mOutsideRenderPassCommands.empty())
+        {
+            mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
+        }
+        if (!mRenderPassCommands.empty())
+        {
+            ANGLE_TRY(endRenderPass());
+        }
+        *primaryCommands = &mPrimaryCommands;
+        return angle::Result::Continue;
     }
 
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
