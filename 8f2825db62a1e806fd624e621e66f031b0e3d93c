@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7ad41191_59c7c5f3",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-28T03:28:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6ea3ffc3_402a6589",
+      "revId": "8f2825db62a1e806fd624e621e66f031b0e3d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fcedf6e0_8febbc84",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "8f2825db62a1e806fd624e621e66f031b0e3d93c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b652ded_374e3137",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1745,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-28T03:28:52Z",
+      "side": 1,
+      "message": "Style guide disallows non const references. So if it can be modified, it should be a pointer.\n\nSo in ANGLE, if you ever ask yourself \"why is this a pointer?\", the answer is because it needs to be modified :)",
+      "parentUuid": "fcedf6e0_8febbc84",
+      "revId": "8f2825db62a1e806fd624e621e66f031b0e3d93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
