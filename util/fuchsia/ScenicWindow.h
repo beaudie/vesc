@@ -53,6 +53,15 @@ class ANGLE_UTIL_EXPORT ScenicWindow : public OSWindow
     void setVisible(bool isVisible) override;
     void signalTestEvent() override;
 
+    // Inserts a new present fence and returns a copy for scenic.
+    zx::event newPresentFence();
+
+    // Presents the window to Scenic.
+    //
+    // We need to do this once per EGL window surface after adding the
+    // surface's image pipe as a child of our window.
+    void present();
+
     // FIDL callbacks:
     void OnScenicEvents(std::vector<fuchsia::ui::scenic::Event> events);
     void OnScenicError(zx_status_t status);
@@ -70,6 +79,10 @@ class ANGLE_UTIL_EXPORT ScenicWindow : public OSWindow
     scenic::Session mScenicSession;
     scenic::ShapeNode mShape;
     scenic::Material mMaterial;
+
+    // Present fences.
+    static constexpr int kMaxConcurrentPresents = 1;
+    std::vector<zx::event> mPresentFences;
 
     // Scenic view.
     std::unique_ptr<scenic::View> mView;

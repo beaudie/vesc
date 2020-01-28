@@ -87,8 +87,7 @@ bool ScenicWindow::initialize(const std::string &name, int width, int height)
     // Create view.
     mView = std::make_unique<scenic::View>(&mScenicSession, std::move(viewToken), name);
     mView->AddChild(mShape);
-    mScenicSession.Present2(0, 0,
-                            [](fuchsia::scenic::scheduling::FuturePresentationTimes info) {});
+    present();
 
     // Present view.
     mPresenter->PresentView(std::move(viewHolderToken), nullptr);
@@ -115,8 +114,7 @@ void ScenicWindow::resetNativeWindow()
 
     mMaterial.SetTexture(imagePipeId);
     mScenicSession.ReleaseResource(imagePipeId);
-    mScenicSession.Present2(0, 0,
-                            [](fuchsia::scenic::scheduling::FuturePresentationTimes info) {});
+    present();
 
     mFuchsiaEGLWindow.reset(fuchsia_egl_window_create(imagePipeHandle, mWidth, mHeight));
 }
@@ -160,6 +158,35 @@ bool ScenicWindow::resize(int width, int height)
 void ScenicWindow::setVisible(bool isVisible) {}
 
 void ScenicWindow::signalTestEvent() {}
+
+zx::event ScenicWindow::newPresentFence()
+{
+    zx::event presentFence;
+    zx_status_t status = zx::event::create(0, &presentFence);
+    ASSERT(status == ZX_OK);
+
+    zx::event presentFenceDuplicate;
+    status = presentFence.duplicate(ZX_RIGHT_SAME_RIGHTS, &presentFenceDuplicate);
+    ASSERT(status == ZX_OK);
+    mPresentFences.push_back(std::move(presentFenceDuplicate));
+
+    return presentFence;
+}
+
+void ScenicWindow::present()
+{
+    mScenicSession.EnqueueReleaseFence(newPresentFence());
+    mScenicSession.Present2(0, 0, [](fuchsia::scenic::scheduling::FuturePresentationTimes info) {});
+
+    if (mPresentFences.size() > kMaxConcurrentPresents)
+    {
+        // Wait for and remove the oldest fence.
+        auto fenceIt = mPresentFences.begin();
+        zx_signals_t signals;
+        fenceIt->wait_one(ZX_EVENT_SIGNALED, zx::time::infinite(), &signals);
+        mPresentFences.erase(fenceIt);
+    }
+}
 
 void ScenicWindow::OnScenicEvents(std::vector<fuchsia::ui::scenic::Event> events)
 {
