@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "28c8a982_6925989e",
+        "filename": "src/compiler/translator/tree_ops/RemoveInactiveInterfaceVariables.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-28T19:04:00Z",
+      "side": 1,
+      "message": "Recall that this is a transformation on a single shader so:\n\n- attributes: \"in\" variables, if vertex shader\n- inputVaryings: \"in\" variables, if any other stage\n- outputVariables: \"out\" variables\", if fragment shader\n- outputVarings: \"out\" variables, if any other stage (not pass to this function).\n\nThe translator is making a distinction between VS and others (for \"in\") and FS and others (for \"out\") for probably no good reason!",
+      "parentUuid": "bacc7223_498cc25a",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 59
+      },
+      "revId": "9cc49aecb75bb4efb957af05a985d7547805edb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3597ac58_762cb9d8",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-28T17:30:53Z",
       "side": 1,
       "message": "The test FewerShaderOutputsThanAttachments above also generates a validation layer warning but the test passes, while this one is expected to fail.   How does gtest or someone else debugging the test know the difference between an expected vs unexpected validation layer error and how to determine pass/fail?",
+      "range": {
+        "startLine": 627,
+        "startChar": 25,
+        "endLine": 628,
+        "endChar": 40
+      },
+      "revId": "9cc49aecb75bb4efb957af05a985d7547805edb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63e5aa81_3e3e85ee",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-28T19:04:00Z",
+      "side": 1,
+      "message": "\u003e while this one is expected to fail\n\nThis one is also expected to pass. They show the same behavior (VVL warning) if inactive fragment outputs are removed. If they are not removed, this test won\u0027t give a warning (but obviously the end effect is the same, that the inactive output is undefined).\n\nI added it to ensure that whatever happens, this doesn\u0027t crash (for example on an ASSERT, as I ended up noticing the issue).",
+      "parentUuid": "3597ac58_762cb9d8",
       "range": {
         "startLine": 627,
         "startChar": 25,
