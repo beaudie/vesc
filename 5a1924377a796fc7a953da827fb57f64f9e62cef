@@ -16,6 +16,24 @@
       "revId": "5a1924377a796fc7a953da827fb57f64f9e62cef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccab3366_238e4e94",
+        "filename": "src/tests/gl_tests/PointSpritesTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-28T13:35:04Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "6455f4db_9fe0d1bb",
+      "revId": "5a1924377a796fc7a953da827fb57f64f9e62cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
