@@ -46,6 +46,30 @@
       "revId": "25d3ad69b96f57280d21de7d567d11274a3c1368",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a946b516_6a904221",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-01-28T18:50:09Z",
+      "side": 1,
+      "message": "It\u0027s not landed upstream yet and the timeline for landing and rolling it out it into our toolchain is not completely clear to me so I\u0027d rather not wait. I don\u0027t think this workaround will even affect other platforms (if it did, VANGLE would have been crashing at init on that platform. It only makes a difference in combination with the -Oz -fno-common options).\n\nRe: bots, I\u0027d definitely like to get them. I think we can get some devices from Fuchsia team, but need to figure out how we can bring up and manage them.",
+      "parentUuid": "6f6f8d88_d0ae3863",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 31
+      },
+      "revId": "25d3ad69b96f57280d21de7d567d11274a3c1368",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
