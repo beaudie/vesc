@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7818fbfc_80634ba6",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-28T17:06:52Z",
+      "side": 1,
+      "message": "same nit about []",
+      "range": {
+        "startLine": 769,
+        "startChar": 21,
+        "endLine": 769,
+        "endChar": 22
+      },
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3786b5e7_e581e98f",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 14
@@ -81,6 +104,29 @@
         "startChar": 48,
         "endLine": 1656,
         "endChar": 81
+      },
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f25069d0_47a0bf4f",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapperVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-28T17:06:52Z",
+      "side": 1,
+      "message": "maybe call this emulateBresenhamLines if you\u0027re going to rename it.",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 37
       },
       "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
