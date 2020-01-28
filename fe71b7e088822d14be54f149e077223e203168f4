@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "2a43b7bc_29b8238e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-28T17:03:05Z",
+      "side": 1,
+      "message": "nit: you could set a reference here. You can return non-const \u0026s too. We just can\u0027t pass them as params. Up to you.",
+      "range": {
+        "startLine": 530,
+        "startChar": 38,
+        "endLine": 531,
+        "endChar": 61
+      },
+      "revId": "fe71b7e088822d14be54f149e077223e203168f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fd555bf_22b7d3e0",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 8
