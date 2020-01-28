@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65f183b6_352a1af5",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7371,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-28T18:47:16Z",
+      "side": 0,
+      "message": "Except the two \"read side effect\" tests that trigger a bug in the translator, you might want to triage the rest of the MixedRowAndColumnMajorMatrices* tests that have a suppression for IsOSX(). They are probably fixed.\n\nIn fact, there are suppressions all over the place in MixedRowAndColumnMajorMatrices* for various OpenGL vendors, so enabling the workaround for more of them may make sense.",
+      "revId": "f144b77bc8464e4ed84ace4f1f2af416ded05c4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
