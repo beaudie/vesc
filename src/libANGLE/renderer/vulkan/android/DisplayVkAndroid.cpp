@@ -13,6 +13,7 @@
 #include <android/native_window.h>
 #include <vulkan/vulkan.h>
 
+#include "common/android_util.h"
 #include "common/version.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.h"
@@ -51,8 +52,44 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
 {
     // TODO (Issue 4062): Add conditional support for GL_RGB10_A2 and GL_RGBA16F when the
     // Android Vulkan loader adds conditional support for them.
-    constexpr GLenum kColorFormats[] = {GL_RGBA8, GL_RGB8, GL_RGB565};
-    return egl_vk::GenerateConfigs(kColorFormats, egl_vk::kConfigDepthStencilFormats, this);
+    // constexpr GLenum kColorFormats[] = {GL_RGBA8, GL_RGB8, GL_RGB565};
+    struct FormatMap
+    {
+        uint32_t vkFormat;
+        GLenum glFormat;
+    };
+    std::vector<FormatMap> androidTargetColorFormats(
+        {{AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM, GL_RGBA8},
+         {AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM, GL_RGB8},
+         {AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM, GL_RGB565},
+         {AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM, GL_RGB10_A2},
+         {AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT, GL_RGBA16F}});
+    std::vector<GLenum> availableTargetColorFormats;
+    for (FormatMap formatCombo : androidTargetColorFormats)
+    {
+        if (angle::android::AHardwareBufferFormatIsSupported(formatCombo.vkFormat))
+        {
+            availableTargetColorFormats.push_back(formatCombo.glFormat);
+        }
+    }
+
+    std::vector<FormatMap> androidTargetDepthFormats({
+        {AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT, GL_DEPTH24_STENCIL8},
+        {AHARDWAREBUFFER_FORMAT_D24_UNORM, GL_DEPTH_COMPONENT24},
+        {AHARDWAREBUFFER_FORMAT_D16_UNORM, GL_DEPTH_COMPONENT16},
+    });
+    std::vector<GLenum> availableTargetDepthFormats({GL_NONE});
+    for (FormatMap formatCombo : androidTargetDepthFormats)
+    {
+        if (angle::android::AHardwareBufferFormatIsSupported(formatCombo.vkFormat))
+        {
+            availableTargetDepthFormats.push_back(formatCombo.glFormat);
+        }
+    }
+
+    return egl_vk::GenerateConfigs(
+        availableTargetColorFormats.data(), availableTargetColorFormats.size(),
+        availableTargetDepthFormats.data(), availableTargetDepthFormats.size(), this);
 }
 
 bool DisplayVkAndroid::checkConfigSupport(egl::Config *config)

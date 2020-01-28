@@ -116,8 +116,8 @@ use_goma = true               # Remove this if you don't have goma
 ```
 Additional flags to build the Vulkan backend, enable only if running on Android O or higher:
 ```
-android32_ndk_api_level = 26
-android64_ndk_api_level = 26
+android32_ndk_api_level = 29
+android64_ndk_api_level = 29
 ```
 
 These ANGLE targets are supported:

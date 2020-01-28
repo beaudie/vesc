@@ -251,6 +251,15 @@ config("angle_common_config") {
   if (is_android) {
     libs = [ "log" ]
   }
+  if (is_android && (angle_enable_gl || angle_enable_vulkan)) {
+    # In API level 26 ANativeWindow APIs were moved from libandroid.so
+    # into a separate library, libnativewindow.so
+    if (ndk_api_level_at_least_26) {
+      libs += [ "nativewindow" ]
+    } else {
+      libs += [ "android" ]
+    }
+  }
 }
 
 angle_source_set("angle_system_utils") {
@@ -572,16 +581,6 @@ config("libANGLE_config") {
 
   if (is_win) {
     cflags += [ "/wd4530" ]  # C++ exception handler used, but unwind semantics are not enabled.
-  }
-
-  if (is_android && (angle_enable_gl || angle_enable_vulkan)) {
-    # In API level 26 ANativeWindow APIs were moved from libandroid.so
-    # into a separate library, libnativewindow.so
-    if (ndk_api_level_at_least_26) {
-      libs += [ "nativewindow" ]
-    } else {
-      libs += [ "android" ]
-    }
   }
 
   if (angle_use_x11) {
