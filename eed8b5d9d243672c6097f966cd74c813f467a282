@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "d333ecda_72450898",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-28T15:48:06Z",
+      "side": 1,
+      "message": "Feel free to leave a comment next to the variable. Should be safe as mContextLost.",
+      "parentUuid": "4a6931ec_c9a2c05b",
+      "range": {
+        "startLine": 455,
+        "startChar": 40,
+        "endLine": 455,
+        "endChar": 71
+      },
+      "revId": "eed8b5d9d243672c6097f966cd74c813f467a282",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0d8cc046_b2772c53",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 3
@@ -204,6 +228,30 @@
       "side": 1,
       "message": "I can do this if you want, but I will state my general preference for relying on empty branch eliding in optimized builds, rather than more convoluted ASSERT expressions:\nhttps://godbolt.org/z/9WzBPe\n(Comment out #define NDEBUG to re-enable the assert)",
       "parentUuid": "5199541b_747fa9fd",
+      "range": {
+        "startLine": 517,
+        "startChar": 9,
+        "endLine": 517,
+        "endChar": 23
+      },
+      "revId": "eed8b5d9d243672c6097f966cd74c813f467a282",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4312504b_5ee59164",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-28T15:48:06Z",
+      "side": 1,
+      "message": "I like the more complex assert. It\u0027s how we have done this in the past.",
+      "parentUuid": "1e3720bc_3f6c7042",
       "range": {
         "startLine": 517,
         "startChar": 9,
