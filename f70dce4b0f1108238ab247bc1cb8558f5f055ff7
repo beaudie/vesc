@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58829a67_7024f998",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-28T02:50:16Z",
+      "side": 1,
+      "message": "For uniformity with the rest of the repo, please use \"Fuchsia: ...\".\n\n(The same for all the other CLs, so I won\u0027t repeat this)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "f70dce4b0f1108238ab247bc1cb8558f5f055ff7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
