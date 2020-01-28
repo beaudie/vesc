@@ -617,7 +617,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     }
 
     // Clamping uniform array bounds needs to happen after validateLimitations pass.
-    if (compileOptions & SH_CLAMP_INDIRECT_ARRAY_BOUNDS && mShaderType != GL_COMPUTE_SHADER)
+    if (compileOptions & SH_CLAMP_INDIRECT_ARRAY_BOUNDS &&
+        (mShaderType != GL_COMPUTE_SHADER && IsWebGLBasedSpec(mShaderSpec)))
     {
         mArrayBoundsClamper.MarkIndirectArrayBoundsForClamping(root);
     }
