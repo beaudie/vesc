@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f6f8d88_d0ae3863",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-28T02:55:07Z",
+      "side": 1,
+      "message": "Why not then wait for the fix to roll?\n\nAlso, why aren\u0027t we seeing the build broken? We should add whatever build configuration is broken to the bots, so that such bugs are caught on clang rolls automatically in the future.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 31
+      },
+      "revId": "25d3ad69b96f57280d21de7d567d11274a3c1368",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
