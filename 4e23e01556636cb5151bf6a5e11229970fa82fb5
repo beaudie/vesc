@@ -1,0 +1,146 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "814d06d7_9a632148",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T03:08:30Z",
+      "side": 1,
+      "message": "nit: originalName isn\u0027t modified, so this could just be:\n\n    if (MappedSamplerNameNeedsUserDefinedPrefix(originalName))",
+      "revId": "4e23e01556636cb5151bf6a5e11229970fa82fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eca0c135_358b2df1",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T03:08:30Z",
+      "side": 1,
+      "message": "nit: I think all of these calls to AddResourceInfo() should follow the same pattern when it comes to how bindingIndex/bindingStart is incremented.   There are currently 3 ways:\n\nAssignInterfaceBlockBindings(): bindingIndex++\nAssignAtomicCounterBufferBindings(): bindingStart + 1\nAssignImageBindings(): ++bindingIndex\n\nMy vote is that they all follow the same patter as AssignImageBindings() (I prefer to avoid modifying values as they\u0027re used in calls, so I like the extra `++bindingIndex` line), including AssignAtomicCounterBufferBindings() where a running count of bindingIndex isn\u0027t actually required.   Seeing the same repetitive pattern is just a little helpful thing (for me, anyway) to reduce complexity when looking at all of these together and catching errors in the future.",
+      "revId": "4e23e01556636cb5151bf6a5e11229970fa82fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f18dbe9_2016fc12",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T03:08:30Z",
+      "side": 1,
+      "message": "Why did you remove the `SpirvBlob` typedef?",
+      "revId": "4e23e01556636cb5151bf6a5e11229970fa82fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "648fc7a2_ccda219b",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T03:08:30Z",
+      "side": 1,
+      "message": "Will this be a hidden gotcha when it\u0027s time for us to move to Vulkan 1.2 some years in the future (assuming Android eventually moves forward to something eventually)?   Are there any other version-specific definitions being used already?\n\nHow would/could we track these types of things?   Could there be a block of definitions or a generic CURRENT_VULKAN_LEVEL that gets incremented?\n\nOr will moving ANGLE forward take a lot of other moving pieces that trying to track/expose/generalize them all isn\u0027t really feasible?",
+      "range": {
+        "startLine": 1161,
+        "startChar": 36,
+        "endLine": 1161,
+        "endChar": 54
+      },
+      "revId": "4e23e01556636cb5151bf6a5e11229970fa82fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04aab7f6_977afa92",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T03:08:30Z",
+      "side": 1,
+      "message": "Oh, you\u0027re using it here still.   My vote would be to keep using it everywhere.",
+      "revId": "4e23e01556636cb5151bf6a5e11229970fa82fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7199a9d4_40c68100",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T03:08:30Z",
+      "side": 1,
+      "message": "nit: same, could be:\n\n    if (MappedSamplerNameNeedsUserDefinedPrefix(originalName))",
+      "revId": "4e23e01556636cb5151bf6a5e11229970fa82fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89d13a91_7eb5b15e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T03:08:30Z",
+      "side": 1,
+      "message": "Is it possible to do just a plain memcpy(sizeof(ShaderInterfaceVariableInfo)) of this data?\n\nMy concern is that it\u0027s easy to add members and have them be missed here or have the read/write ordering get messed up without any way to catch it automatically (compile or runtime).   It would be nice to just have the struct read/written as a blob of data that\u0027s always handled correctly by the compiler.\n\nHowever, that leads to the next issue of what happens in the future if/when members are added?   I don\u0027t actually know how this data is used; is it ever expected that this data persists across invocations of different versions of ANGLE?   For example, would this blob data survive across invocations of Angry Birds with ANGLE being updated (or rolled back) in between?   Or is stuff like this automatically invalidated some other way before we get here?",
+      "revId": "4e23e01556636cb5151bf6a5e11229970fa82fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35c4b6be_f5cfed5a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-28T03:08:30Z",
+      "side": 1,
+      "message": "Would this make more sense inside ShaderInfo, since this map and the SPIR-V blobs (already part of ShaderInfo) typically move around together and are shader-specific?",
+      "revId": "4e23e01556636cb5151bf6a5e11229970fa82fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
