@@ -2306,12 +2306,6 @@ angle::Result ContextVk::syncState(const gl::Context *context,
 {
     const gl::State &glState = context->getState();
 
-    if ((dirtyBits & mPipelineDirtyBitsMask).any() &&
-        (glState.getProgram() == nullptr || !glState.getProgram()->isCompute()))
-    {
-        invalidateVertexAndIndexBuffers();
-    }
-
     for (auto iter = dirtyBits.begin(), endIter = dirtyBits.end(); iter != endIter; ++iter)
     {
         size_t dirtyBit = *iter;
@@ -2552,6 +2546,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     // later.
                     invalidateDefaultAttributes(
                         context->getStateCache().getActiveDefaultAttribsMask());
+                    invalidateVertexAndIndexBuffers();
                     bool useVertexBuffer = (mProgram->getState().getMaxActiveAttribLocation() > 0);
                     mNonIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);
                     mIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);
