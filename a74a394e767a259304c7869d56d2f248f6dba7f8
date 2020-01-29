@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "a53283d7_a82438ad",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2519,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-29T18:43:03Z",
+      "side": 1,
+      "message": "Nit: Doesn\u0027t the ANGLE coding style mandate open curly braces in their own line?",
+      "range": {
+        "startLine": 2519,
+        "startChar": 99,
+        "endLine": 2519,
+        "endChar": 100
+      },
+      "revId": "a74a394e767a259304c7869d56d2f248f6dba7f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02527944_917ad7b1",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2528,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-01-29T18:43:03Z",
+      "side": 1,
+      "message": "Nit: Asserting you have a non-null pointer and then immediately dereferencing it seems superfluous.",
+      "range": {
+        "startLine": 2528,
+        "startChar": 16,
+        "endLine": 2528,
+        "endChar": 34
+      },
+      "revId": "a74a394e767a259304c7869d56d2f248f6dba7f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "73e1056c_2f8784aa",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 3
