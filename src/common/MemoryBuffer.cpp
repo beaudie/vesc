@@ -141,7 +141,7 @@ void ScratchBuffer::tick()
 void ScratchBuffer::clear()
 {
     mResetCounter = mLifetime;
-    mScratchMemory.resize(0);
+    mScratchMemory.clear();
 }
 
 }  // namespace angle
