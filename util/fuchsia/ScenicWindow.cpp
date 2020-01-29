@@ -90,7 +90,7 @@ bool ScenicWindow::initialize(const std::string &name, int width, int height)
     present();
 
     // Present view.
-    mPresenter->PresentView(std::move(viewHolderToken), nullptr);
+    mPresenter->PresentOrReplaceView(std::move(viewHolderToken), nullptr);
 
     mWidth  = width;
     mHeight = height;
