@@ -73,10 +73,12 @@ class ScratchBuffer final : NonCopyable
 
     // Ticks the release counter for the scratch buffer. Also done implicitly in get().
     void tick();
+    void largeTick();
 
     void clear();
 
   private:
+    void tickImpl(uint32_t tickCount);
     bool getImpl(size_t requestedSize, MemoryBuffer **memoryBufferOut, Optional<uint8_t> initValue);
 
     const uint32_t mLifetime;
