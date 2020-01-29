@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac784461_ab7009ba",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-29T15:46:35Z",
+      "side": 1,
+      "message": "Change this to enableableExtension and it will be disabled for WebGL in Chrome.",
+      "range": {
+        "startLine": 883,
+        "startChar": 47,
+        "endLine": 883,
+        "endChar": 62
+      },
+      "revId": "8fd1d809378b4e1b5c5c52c264f8c2d3e2fc8ef5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
