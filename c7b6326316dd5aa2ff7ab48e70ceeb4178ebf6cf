@@ -1,0 +1,203 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d7138c0_a1c95d17",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "The \u00270\u0027 size here looks odd, since it feels like nothing is actually being saved.   How do we know that \u00270\u0027 is the right value here?",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fa7b94b_093ba240",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "Based on the checks above (line 1625), this is actually just for inactive output varyings, since inactive input varyings are removed from the GLSL before being compiled to SPIR-V (I think?).   Should this clarification be made by updating the comments and names related to this patching (e.g., inactiveOutputVaryingsPatch)?",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a727552e_bb4e8f1c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "I just noticed this is under an assert.   Can we enable this during release builds too or is it too expensive in terms of performance for the errors it could detect?",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab7672c7_9f31814b",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2020,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "I\u0027m not able to find this being called anywhere.   How is this (and the SPIR-V patching) being tested?",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72b5c606_2a98f66c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "I think this would be better as something like a bitmap or a list of booleans, rather than a parameter directly.   We are already planning on adding the line rasterization emulation as the next type of patching, and I\u0027m envisioning a future with something like:\n\nGlslangApplySpirvPatches(true, false, false, true, spirvBlobs, patchedSpirvBlobsOut)\n\nwhere the list of true/false has no meaning to a reader elsewhere in the code where this is called.\n\nInstead, I think it would be nicer to turn these into an enum so everyone agrees on their index (and lengths are updated automatically) and then desired patchlist is created and passed around as a single entity.   Then we could see something like (please excuse my ugly pseudo-code):\n\nenum PatchTypes {\n  INACTIVE_VARYINGS,\n  BRESENHAM_EMULATION,\n  NUM_PATCHES\n}\n\nstd::array\u003cint, NUM_PATCHES\u003e patchlist \u003d {false};\n\nif (enableLineRasterization)\n  patchlist[BRESENHAM_EMULATION] \u003d true;\n\nGlslangApplySpirvPatches(patchlist, spirvBlobs, patchedSpirvBlobsOut);",
+      "range": {
+        "startLine": 130,
+        "startChar": 30,
+        "endLine": 130,
+        "endChar": 51
+      },
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae9878ac_8566cc87",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "*inactive varyings\n\nThis should probably just be something like \"Read every hunk for the patch\" to avoid this getting out of date when new patches are added.",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e4482d6_f4d6e39a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "same",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7045c6c1_ae6f0b56",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "same",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58e1d93f_ae4c54a0",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "If we can loop here, hopefully this can be updated to something like \"Read the patches\".",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beaed152_ec4d19e7",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "Is there a way for this to loop NUM_PATCHES so it\u0027s not missed in the future when new patches are added?   Adding a new line here seems like an easy thing to miss.",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a97ac2c9_0374996d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-29T18:03:36Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 534,
+        "endChar": 72
+      },
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
