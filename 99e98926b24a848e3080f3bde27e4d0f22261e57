@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9aa6ce3_4f33cd42",
+        "filename": "src/common/MemoryBuffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-29T20:57:43Z",
+      "side": 1,
+      "message": "nit: can you comment here as to why this is safe?",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 9
+      },
+      "revId": "99e98926b24a848e3080f3bde27e4d0f22261e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
