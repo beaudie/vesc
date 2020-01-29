@@ -314,6 +314,16 @@
 3306 VULKAN ANDROID : dEQP-GLES2.functional.polygon_offset.default_factor_1_slope = FAIL
 3306 VULKAN ANDROID : dEQP-GLES2.functional.polygon_offset.fixed16_factor_1_slope = FAIL
 
+// Failing on the Pixel 2 due to Qualcomm Vulkan driver
+4344 VULKAN ANDROID : dEQP-GLES2.functional_fragment_ops_interaction_basic_shader_1 = FAIL
+4344 VULKAN ANDROID : dEQP-GLES2.functional_fragment_ops_interaction_basic_shader_30 = FAIL
+4344 VULKAN ANDROID : dEQP-GLES2.functional_fragment_ops_interaction_basic_shader_35 = FAIL
+4344 VULKAN ANDROID : dEQP-GLES2.functional_fragment_ops_interaction_basic_shader_38 = FAIL
+4344 VULKAN ANDROID : dEQP-GLES2.functional_fragment_ops_interaction_basic_shader_60 = FAIL
+4344 VULKAN ANDROID : dEQP-GLES2.functional_fragment_ops_interaction_basic_shader_62 = FAIL
+4344 VULKAN ANDROID : dEQP-GLES2.functional_fragment_ops_random_62 = FAIL
+4344 VULKAN ANDROID : dEQP-GLES2.functional_fragment_ops_random_78 = FAIL
+
 // These tests also fail on AMD windows driver as it is not allowed to use emulation due to errors.
 3243 VULKAN WIN AMD : dEQP-GLES2.functional.shaders.texture_functions.vertex.texturecubelod = FAIL
 3243 VULKAN WIN AMD : dEQP-GLES2.functional.texture.mipmap.cube.basic.linear_nearest = FAIL
