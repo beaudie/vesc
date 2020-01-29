@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a856013_34d32ad6",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-29T04:25:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7818fbfc_80634ba6",
+      "range": {
+        "startLine": 769,
+        "startChar": 21,
+        "endLine": 769,
+        "endChar": 22
+      },
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3786b5e7_e581e98f",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 14
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b487a25e_22c4a544",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-29T04:25:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3786b5e7_e581e98f",
+      "range": {
+        "startLine": 446,
+        "startChar": 37,
+        "endLine": 446,
+        "endChar": 50
+      },
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7a14157_db2b2aa3",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 14
@@ -62,6 +110,24 @@
       "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d0d2283_7315eef2",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-29T04:25:09Z",
+      "side": 1,
+      "message": "Simplicity. It doesn\u0027t really matter since inactive resources are pruned by the translator, so they cannot be encountered when walking the SPIR-V.\n\n\"Resources\" (i.e. samplers, images and interface blocks) have unique bindings throughout all stages. So for example sampler S takes binding N in every stage it might be used. The descriptor set has only one entry for S (at index N).",
+      "parentUuid": "c7a14157_db2b2aa3",
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "50b61493_c2a0c8a5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-29T04:25:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5498bdcf_e34c3a4b",
+      "range": {
+        "startLine": 847,
+        "startChar": 83,
+        "endLine": 847,
+        "endChar": 96
+      },
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72442a25_9803fdf1",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 14
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "d38361b2_81c75c8b",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-29T04:25:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72442a25_9803fdf1",
+      "range": {
+        "startLine": 1656,
+        "startChar": 48,
+        "endLine": 1656,
+        "endChar": 81
+      },
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f25069d0_47a0bf4f",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapperVk.cpp",
         "patchSetId": 14
@@ -131,6 +245,30 @@
       "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "905f1837_5983bde5",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapperVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-29T04:25:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f25069d0_47a0bf4f",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 37
+      },
+      "revId": "5ed7bb2ab922414c280afc1b7e562bcfe685e8a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
