@@ -1142,6 +1142,10 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     enabledFeatures.features.geometryShader = mPhysicalDeviceFeatures.geometryShader;
     enabledFeatures.features.shaderImageGatherExtended =
         mPhysicalDeviceFeatures.shaderImageGatherExtended;
+    enabledFeatures.shaderSampledImageArrayDynamicIndexing =
+        mPhysicalDeviceFeatures.shaderSampledImageArrayDynamicIndexing;
+    enabledFeatures.shaderStorageBufferArrayDynamicIndexing =
+        mPhysicalDeviceFeatures.shaderStorageBufferArrayDynamicIndexing;
 
     if (!vk::CommandBuffer::ExecutesInline())
     {
@@ -1527,7 +1531,7 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
     ANGLE_FEATURE_CONDITION((&mFeatures), bindEmptyForUnusedDescriptorSets,
                             IsAndroid() && isQualcomm);
 
-    ANGLE_FEATURE_CONDITION((&mFeatures), forceOldRewriteStructSamplers, IsAndroid());
+    ANGLE_FEATURE_CONDITION((&mFeatures), forceOldRewriteStructSamplers, false);
 
     ANGLE_FEATURE_CONDITION((&mFeatures), perFrameWindowSizeQuery,
                             isIntel || (IsWindows() && isAMD) || IsFuchsia());
