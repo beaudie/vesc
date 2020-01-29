@@ -2898,6 +2898,27 @@ void ContextVk::onTransformFeedbackStateChanged()
     }
 }
 
+void ContextVk::onUtilsDraw(uint32_t usedDescriptorSet)
+{
+    // UtilsVk currently only uses set 0
+    ASSERT(usedDescriptorSet == kDriverUniformsDescriptorSetIndex);
+    // Driver uniforms on the graphics pipeline are always created.
+    ASSERT(mDriverUniforms[PipelineType::Graphics].descriptorSet != VK_NULL_HANDLE);
+    mGraphicsDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS_BINDING);
+}
+
+void ContextVk::onUtilsDispatch(uint32_t usedDescriptorSet)
+{
+    // UtilsVk currently only uses set 0
+    ASSERT(usedDescriptorSet == kDriverUniformsDescriptorSetIndex);
+    // If no atomic counter buffers were used, the driver uniforms descriptor set may have never
+    // been allocated.
+    if (mDriverUniforms[PipelineType::Compute].descriptorSet != VK_NULL_HANDLE)
+    {
+        mComputeDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS_BINDING);
+    }
+}
+
 angle::Result ContextVk::dispatchCompute(const gl::Context *context,
                                          GLuint numGroupsX,
                                          GLuint numGroupsY,

@@ -751,6 +751,14 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
     {
         commandBuffer->bindDescriptorSets(pipelineLayout.get(), pipelineBindPoint, 0, 1,
                                           &descriptorSet, 0, nullptr);
+        if (isCompute)
+        {
+            contextVk->onUtilsDispatch(0);
+        }
+        else
+        {
+            contextVk->onUtilsDraw(0);
+        }
     }
 
     if (pushConstants)
