@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73e1056c_2f8784aa",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2545,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-29T18:26:24Z",
+      "side": 1,
+      "message": "seeing as you\u0027re not using any captures at all I\u0027d recommend making this a static helper function.",
+      "range": {
+        "startLine": 2517,
+        "startChar": 0,
+        "endLine": 2545,
+        "endChar": 10
+      },
+      "revId": "a74a394e767a259304c7869d56d2f248f6dba7f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
