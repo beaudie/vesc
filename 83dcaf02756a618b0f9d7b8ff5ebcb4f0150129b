@@ -2,6 +2,121 @@
   "comments": [
     {
       "key": {
+        "uuid": "d8134b09_e97931e0",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-29T15:41:05Z",
+      "side": 1,
+      "message": "I think you can use ANGLE_VK_TRY here.",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 9
+      },
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4fada0b_525dbf32",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-29T15:41:05Z",
+      "side": 1,
+      "message": "Same with ANGLE_VK_TRY",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 5
+      },
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87b29e74_643b07d9",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-29T15:41:05Z",
+      "side": 1,
+      "message": "This assert doesn\u0027t seem valid anymore.",
+      "range": {
+        "startLine": 235,
+        "startChar": 4,
+        "endLine": 235,
+        "endChar": 30
+      },
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b4d824c_0cfa914f",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-29T15:41:05Z",
+      "side": 1,
+      "message": "nit: This could go into the initializer list.",
+      "range": {
+        "startLine": 236,
+        "startChar": 4,
+        "endLine": 237,
+        "endChar": 92
+      },
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7cbe852_2339e344",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-29T15:41:05Z",
+      "side": 1,
+      "message": "nit: You could pass pFd direclty here.",
+      "range": {
+        "startLine": 330,
+        "startChar": 58,
+        "endLine": 330,
+        "endChar": 61
+      },
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8db4ca8_c9334555",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
         "patchSetId": 1
@@ -13,6 +128,24 @@
       "writtenOn": "2020-01-28T23:10:44Z",
       "side": 1,
       "message": "Maybe one \"initialize()\" without fd and a second with fd.?",
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b26b8a19_bcbfea62",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-29T15:41:05Z",
+      "side": 1,
+      "message": "Yea, I think that\u0027s a better interface.  You can have them call eachother internally with the invalid fence ID.  The definition of kInvalidFenceFd can also move into the .cpp file then.",
+      "parentUuid": "a8db4ca8_c9334555",
       "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
