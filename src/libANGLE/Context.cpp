@@ -706,6 +706,9 @@ egl::Error Context::unMakeCurrent(const egl::Display *display)
 {
     ANGLE_TRY(unsetDefaultFramebuffer());
 
+    mScratchBuffer.largeTick();
+    mZeroFilledBuffer.largeTick();
+
     return angle::ResultToEGL(mImplementation->onUnMakeCurrent(this));
 }
 

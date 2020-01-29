@@ -110,9 +110,8 @@ bool ScratchBuffer::getImpl(size_t requestedSize,
         tick();
     }
 
-    if (mResetCounter == 0 || mScratchMemory.size() < requestedSize)
+    if (mScratchMemory.size() < requestedSize)
     {
-        clear();
         if (!mScratchMemory.resize(requestedSize))
         {
             return false;
@@ -132,16 +131,34 @@ bool ScratchBuffer::getImpl(size_t requestedSize,
 
 void ScratchBuffer::tick()
 {
+    tickImpl(1);
+}
+
+void ScratchBuffer::largeTick()
+{
+    // Tick 1/8 of the total lifetime
+    tickImpl(std::max(mLifetime >> 4, 1u));
+}
+
+void ScratchBuffer::tickImpl(uint32_t tickCount)
+{
     if (mResetCounter > 0)
     {
-        --mResetCounter;
+        mResetCounter -= std::min(tickCount, mResetCounter);
+        if (mResetCounter == 0)
+        {
+            clear();
+        }
     }
 }
 
 void ScratchBuffer::clear()
 {
     mResetCounter = mLifetime;
-    mScratchMemory.clear();
+    if (!mScratchMemory.empty())
+    {
+        mScratchMemory.clear();
+    }
 }
 
 }  // namespace angle
