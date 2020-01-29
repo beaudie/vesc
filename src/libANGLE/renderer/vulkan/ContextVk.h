@@ -167,9 +167,11 @@ class RenderPassCommandBuffer final : angle::NonCopyable
         mAttachmentOps[attachmentIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
 
+    const gl::Rectangle &getRenderArea() const { return mRenderArea; }
+
     angle::Result flushToPrimary(ContextVk *contextVk, vk::PrimaryCommandBuffer *primary);
 
-    bool empty() const { return mCommandBuffer.empty(); }
+    bool empty() const { return !mRenderPassStarted; }
     void reset();
 
   private:
@@ -179,6 +181,7 @@ class RenderPassCommandBuffer final : angle::NonCopyable
     gl::Rectangle mRenderArea;
     gl::AttachmentArray<VkClearValue> mClearValues;
     vk::CommandBuffer mCommandBuffer;
+    bool mRenderPassStarted;
 };
 
 class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassOwner
@@ -503,7 +506,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     Serial generateTextureSerial() { return mTextureSerialFactory.generate(); }
     const vk::TextureDescriptorDesc &getActiveTexturesDesc() const { return mActiveTexturesDesc; }
 
-    void updateScissor(const gl::State &glState);
+    angle::Result updateScissor(const gl::State &glState);
 
     bool emulateSeamfulCubeMapSampling() const { return mEmulateSeamfulCubeMapSampling; }
 
@@ -513,13 +516,22 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     vk::ResourceUseList &getResourceUseList() { return mResourceUseList; }
 
-    void onBufferRead(VkAccessFlags readAccessType, vk::BufferHelper *buffer);
-    void onBufferWrite(VkAccessFlags writeAccessType, vk::BufferHelper *buffer);
+    angle::Result onBufferRead(VkAccessFlags readAccessType, vk::BufferHelper *buffer);
+    angle::Result onBufferWrite(VkAccessFlags writeAccessType, vk::BufferHelper *buffer);
+
+    angle::Result onImageRead(VkImageAspectFlags aspectFlags,
+                              vk::ImageLayout imageLayout,
+                              vk::ImageHelper *image);
+
+    angle::Result onImageWrite(VkImageAspectFlags aspectFlags,
+                               vk::ImageLayout imageLayout,
+                               vk::ImageHelper *image);
+
     angle::Result getOutsideRenderPassCommandBuffer(vk::CommandBuffer **commandBufferOut)
     {
         if (!mRenderPassCommands.empty())
         {
-            ANGLE_TRY(mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
+            ANGLE_TRY(endRenderPass());
         }
         *commandBufferOut = &mOutsideRenderPassCommands.getCommandBuffer();
         return angle::Result::Continue;
@@ -542,6 +554,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     }
 
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
+    angle::Result endRenderPass();
 
   private:
     // Dirty bits.

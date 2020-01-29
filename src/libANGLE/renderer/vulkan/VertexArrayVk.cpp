@@ -463,6 +463,8 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 {
                     BufferVk *bufferVk         = vk::GetImpl(bufferGL);
                     mCurrentElementArrayBuffer = &bufferVk->getBuffer();
+                    ANGLE_TRY(contextVk->onBufferRead(VK_ACCESS_INDEX_READ_BIT,
+                                                      mCurrentElementArrayBuffer));
                 }
                 else
                 {
@@ -480,6 +482,8 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 mLineLoopBufferFirstIndex.reset();
                 mLineLoopBufferLastIndex.reset();
                 contextVk->setIndexBufferDirty();
+                ANGLE_TRY(
+                    contextVk->onBufferRead(VK_ACCESS_INDEX_READ_BIT, mCurrentElementArrayBuffer));
                 mDirtyLineLoopTranslation = true;
                 break;
 
@@ -623,6 +627,12 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
                 // Converted buffer is tightly packed
                 stride = vertexFormat.actualBufferFormat().pixelBytes;
+
+                if (!contextVk->commandGraphEnabled())
+                {
+                    ANGLE_TRY(contextVk->onBufferRead(VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+                                                      mCurrentArrayBuffers[attribIndex]));
+                }
             }
             else
             {
@@ -641,6 +651,12 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                     mCurrentArrayBufferHandles[attribIndex] = bufferHelper.getBuffer().getHandle();
                     mCurrentArrayBufferOffsets[attribIndex] = binding.getOffset();
                     stride                                  = binding.getStride();
+
+                    if (!contextVk->commandGraphEnabled())
+                    {
+                        ANGLE_TRY(contextVk->onBufferRead(VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
+                                                          mCurrentArrayBuffers[attribIndex]));
+                    }
                 }
             }
         }
