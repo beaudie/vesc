@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a200f00_0c9b7739",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-29T08:35:13Z",
+      "side": 1,
+      "message": "Shabi: per our offline discussion I investigated turning on this driver bug workaround for Mesa versions less than 19.3.0, but ANGLE\u0027s GL backend doesn\u0027t currently have a good way to restrict workarounds by driver version (nor, really, by driver vendor, like \"Mesa\") so I\u0027m leaving this for now.",
+      "revId": "91afde2122ff4e66a673ed64724df5358f9d9b94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
