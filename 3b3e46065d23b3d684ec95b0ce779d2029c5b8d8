@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "acdcd6c7_41aeaf00",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T17:01:41Z",
+      "side": 1,
+      "message": "This is happening when writing a call to Uniform4iv with a count of zero, and no data pointer.  I\u0027ll circle back and see if that\u0027s what the app sent down.",
+      "parentUuid": "349b7a3a_76b108b9",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a89320d8_152dfad5",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "It does.",
       "parentUuid": "a89320d8_152dfad5",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 277,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4a47a66_4e6603b3",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T17:01:41Z",
+      "side": 1,
+      "message": "After stepping through with the debugger, this wasn\u0027t hit, I carried it over from the base template.  Will adjust this code when we decide how to handle the former.",
+      "parentUuid": "9ccbae6a_106aefbc",
       "range": {
         "startLine": 274,
         "startChar": 0,
@@ -349,6 +397,30 @@
     },
     {
       "key": {
+        "uuid": "58e352e9_7b74c8a1",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T17:01:41Z",
+      "side": 1,
+      "message": "This case (having a pixel unpack buffer bound when populating a texture) is hit with the following entrypoints:\n\nCaptureTexImage2D_pixels\nCaptureCompressedTexImage2D_data\nCaptureTexImage3D_pixels\n\nSo if you\u0027re telling me that isn\u0027t handled elsewhere, we\u0027ll need to hook up something that captures that data.",
+      "parentUuid": "15ff27ac_25b962c8",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bf9cd4fd_e8ab7581",
         "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
         "patchSetId": 1
@@ -360,6 +432,30 @@
       "writtenOn": "2020-01-30T14:06:20Z",
       "side": 1,
       "message": "probably fine to change this to an ASSERT.",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a70e3fb_d9991f06",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T17:01:41Z",
+      "side": 1,
+      "message": "This condition is being hit with Manhattan during CaptureTexImage2D_pixels, i.e. there is not a pixel unpack buffer and there is no texture pointer.  I think we\u0027ll need to handle that gracefully rather than asserting.",
+      "parentUuid": "bf9cd4fd_e8ab7581",
       "range": {
         "startLine": 64,
         "startChar": 0,
