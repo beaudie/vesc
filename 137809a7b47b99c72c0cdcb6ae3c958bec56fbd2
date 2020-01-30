@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f66c489e_5a838bed",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-01-30T17:32:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1294b496_90dea72d",
+      "range": {
+        "startLine": 53,
+        "startChar": 18,
+        "endLine": 53,
+        "endChar": 31
+      },
+      "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "96b01b7f_e43036d7",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2020-01-30T15:27:20Z",
       "side": 1,
       "message": "It would be interesting to be able to use EGL with desktop GL too. But since there\u0027s an ongoing experiment it would need to be behind some kind of flags/controls",
+      "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27d8d21e_c7e27927",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-01-30T17:32:27Z",
+      "side": 1,
+      "message": "Make sense. Is there an example somewhere about similar flag ?",
+      "parentUuid": "96b01b7f_e43036d7",
       "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -71,6 +113,24 @@
       "side": 1,
       "message": "This was my concern too.",
       "parentUuid": "76a69403_83c33dbc",
+      "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fa026fd_79d8f527",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-01-30T17:32:27Z",
+      "side": 1,
+      "message": "Good idea, I will do something similar than Vulkan then.",
+      "parentUuid": "085b521b_2d588dcc",
       "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
