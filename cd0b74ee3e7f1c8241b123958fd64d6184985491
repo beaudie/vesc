@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ff43a1f_2d2e3c03",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4390,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:15:25Z",
+      "side": 1,
+      "message": "map and faster lookup are quite contrary to each other for small \"n\". ease of coding should be paramount. I think what you have here is still easy to use.",
+      "range": {
+        "startLine": 4390,
+        "startChar": 7,
+        "endLine": 4390,
+        "endChar": 50
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ffa3946_3b70cb01",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4392,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:15:25Z",
+      "side": 1,
+      "message": "naming suggestion: varyingNameToBlahMap\n\nwhat\u0027s blah?",
+      "range": {
+        "startLine": 4392,
+        "startChar": 45,
+        "endLine": 4392,
+        "endChar": 59
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30786f8e_2ce26385",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4393,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:15:25Z",
+      "side": 1,
+      "message": "naming suggestion: varyingLocationToBlahMap",
+      "range": {
+        "startLine": 4393,
+        "startChar": 37,
+        "endLine": 4393,
+        "endChar": 63
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7205832_413e1e3c",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:15:25Z",
+      "side": 1,
+      "message": "can this scope be extracted into a helper?",
+      "range": {
+        "startLine": 375,
+        "startChar": 24,
+        "endLine": 375,
+        "endChar": 62
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2ca264c_38489818",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:15:25Z",
+      "side": 1,
+      "message": "how about something like VaryingInShaderRef\n\nStage to me means \"shader\"",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 32
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60db0dc5_e4940dc6",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:15:25Z",
+      "side": 1,
+      "message": "Is this better as a copyable type?",
+      "range": {
+        "startLine": 35,
+        "startChar": 34,
+        "endLine": 35,
+        "endChar": 52
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aa9f861_d9e1af8a",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:15:25Z",
+      "side": 1,
+      "message": "nit: might as well make this return \u0026",
+      "range": {
+        "startLine": 81,
+        "startChar": 30,
+        "endLine": 81,
+        "endChar": 37
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
