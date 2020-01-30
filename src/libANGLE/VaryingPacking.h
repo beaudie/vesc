@@ -25,34 +25,77 @@ namespace gl
 class InfoLog;
 struct ProgramVaryingRef;
 
-using ProgramMergedVaryings = std::map<std::string, ProgramVaryingRef>;
+using ProgramMergedVaryings = std::vector<ProgramVaryingRef>;
+
+// A varying can have different names between stages if matched by the location layout qualifier.
+// Additionally, same name varyings could still be of two identical struct types with different
+// names.  This struct contains information on the varying in one of the two stages.  PackedVarying
+// will thus contain two copies of this along with common information, such as interpolation or
+// field index.
+struct PackedVaryingSingleStage : angle::NonCopyable
+{
+    PackedVaryingSingleStage(ShaderType stageIn, const sh::ShaderVariable *varyingIn);
+    PackedVaryingSingleStage(PackedVaryingSingleStage &&other);
+    ~PackedVaryingSingleStage();
+
+    PackedVaryingSingleStage &operator=(PackedVaryingSingleStage &&other);
+
+    const sh::ShaderVariable *varying;
+
+    ShaderType stage;
+
+    // Struct name
+    std::string parentStructName;
+    std::string parentStructMappedName;
+};
 
 struct PackedVarying : angle::NonCopyable
 {
-    PackedVarying(const sh::ShaderVariable &varyingIn, sh::InterpolationType interpolationIn);
-    PackedVarying(const sh::ShaderVariable &varyingIn,
+    // Throughout this file, the "front" stage refers to the stage that outputs the varying, and the
+    // "back" stage refers to the stage that takes the varying as input.  Note that this struct
+    // contains linked varyings, which means both front and back stage varyings are valid, except
+    // for the following which may have only one valid stage.
+    //
+    //  - transform-feedback-captured varyings
+    //  - builtins
+    //  - separable program stages,
+    //
+    PackedVarying(PackedVaryingSingleStage &&frontVaryingIn,
+                  PackedVaryingSingleStage &&backVaryingIn,
+                  sh::InterpolationType interpolationIn);
+    PackedVarying(PackedVaryingSingleStage &&frontVaryingIn,
+                  PackedVaryingSingleStage &&backVaryingIn,
                   sh::InterpolationType interpolationIn,
-                  const std::string &parentStructNameIn,
-                  const std::string &parentStructMappedNameIn,
                   GLuint fieldIndexIn);
     PackedVarying(PackedVarying &&other);
     ~PackedVarying();
 
     PackedVarying &operator=(PackedVarying &&other);
 
-    bool isStructField() const { return !parentStructName.empty(); }
+    bool isStructField() const { return !frontVarying.parentStructName.empty(); }
 
     bool isArrayElement() const { return arrayIndex != GL_INVALID_INDEX; }
 
-    std::string fullName() const
+    // Return either front or back varying, whichever is available.  Only used when the name of the
+    // varying is not important, but only the type is interesting.
+    const sh::ShaderVariable *varying() const
     {
+        return frontVarying.varying ? frontVarying.varying : backVarying.varying;
+    }
+
+    std::string fullName(ShaderType stage) const
+    {
+        ASSERT(stage == frontVarying.stage || stage == backVarying.stage);
+        const PackedVaryingSingleStage &varying =
+            stage == frontVarying.stage ? frontVarying : backVarying;
+
         std::stringstream fullNameStr;
         if (isStructField())
         {
-            fullNameStr << parentStructName << ".";
+            fullNameStr << varying.parentStructName << ".";
         }
 
-        fullNameStr << varying->name;
+        fullNameStr << varying.varying->name;
         if (arrayIndex != GL_INVALID_INDEX)
         {
             fullNameStr << "[" << arrayIndex << "]";
@@ -63,21 +106,15 @@ struct PackedVarying : angle::NonCopyable
     // Transform feedback varyings can be only referenced in the VS.
     bool vertexOnly() const
     {
-        ShaderBitSet vertex;
-        vertex.set(ShaderType::Vertex);
-        return shaderStages == vertex;
+        return frontVarying.stage == ShaderType::Vertex &&
+               backVarying.stage == ShaderType::InvalidEnum;
     }
 
-    const sh::ShaderVariable *varying;
-
-    ShaderBitSet shaderStages;
+    PackedVaryingSingleStage frontVarying;
+    PackedVaryingSingleStage backVarying;
 
     // Cached so we can store sh::ShaderVariable to point to varying fields.
     sh::InterpolationType interpolation;
-
-    // Struct name
-    std::string parentStructName;
-    std::string parentStructMappedName;
 
     GLuint arrayIndex;
 
@@ -112,14 +149,7 @@ struct PackedVaryingRegister final
 
     std::string tfVaryingName() const
     {
-        if (packedVarying->isArrayElement() || packedVarying->isStructField())
-        {
-            return packedVarying->fullName();
-        }
-        else
-        {
-            return packedVarying->varying->name;
-        }
+        return packedVarying->fullName(packedVarying->frontVarying.stage);
     }
 
     // Index to the array of varyings.
@@ -182,12 +212,10 @@ class VaryingPacking final : angle::NonCopyable
         return static_cast<unsigned int>(mRegisterList.size());
     }
 
-    const std::vector<std::string> &getInactiveVaryingMappedNames() const
+    const ShaderMap<std::vector<std::string>> &getInactiveVaryingMappedNames() const
     {
         return mInactiveVaryingMappedNames;
     }
-
-    const std::vector<sh::ShaderVariable> &getInputVaryings() const { return mInputVaryings; }
 
   private:
     bool packVarying(const PackedVarying &packedVarying);
@@ -201,9 +229,8 @@ class VaryingPacking final : angle::NonCopyable
 
     std::vector<Register> mRegisterMap;
     std::vector<PackedVaryingRegister> mRegisterList;
-    std::vector<sh::ShaderVariable> mInputVaryings;
     std::vector<PackedVarying> mPackedVaryings;
-    std::vector<std::string> mInactiveVaryingMappedNames;
+    ShaderMap<std::vector<std::string>> mInactiveVaryingMappedNames;
 
     PackMode mPackMode;
 };
