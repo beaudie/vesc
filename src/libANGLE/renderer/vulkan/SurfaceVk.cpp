@@ -514,6 +514,14 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     gl::Extents extents(static_cast<int>(width), static_cast<int>(height), 1);
 
+    // Use the surface's transform, which in many cases is identity
+    mPreTransform = mSurfaceCaps.currentTransform;
+    if (mPreTransform & k90DegreeRotationVariants)
+    {
+        // The Surface is rotated such that the width and height must be swapped:
+        std::swap(extents.width, extents.height);
+    }
+
     uint32_t presentModeCount = 0;
     ANGLE_VK_TRY(displayVk, vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, mSurface,
                                                                       &presentModeCount, nullptr));
@@ -526,13 +534,6 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     // Select appropriate present mode based on vsync parameter.  Default to 1 (FIFO), though it
     // will get clamped to the min/max values specified at display creation time.
     setSwapInterval(renderer->getFeatures().disableFifoPresentMode.enabled ? 0 : 1);
-
-    // Default to identity transform.
-    mPreTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-    if ((mSurfaceCaps.supportedTransforms & mPreTransform) == 0)
-    {
-        mPreTransform = mSurfaceCaps.currentTransform;
-    }
 
     uint32_t surfaceFormatCount = 0;
     ANGLE_VK_TRY(displayVk, vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, mSurface,
@@ -902,6 +903,11 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
                 currentExtents.height = height;
             }
         }
+        if (mPreTransform & k90DegreeRotationVariants)
+        {
+            // The Surface is rotated such that the width and height must be swapped:
+            std::swap(currentExtents.width, currentExtents.height);
+        }
 
         // Check for window resize and recreate swapchain if necessary.
         // Work-around for some device which does not return OUT_OF_DATE after window resizing
@@ -1155,11 +1161,9 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
     // continuing.
     // If VK_SUBOPTIMAL_KHR is returned it's because the device orientation changed and we should
-    // recreate the swapchain with a new window orientation. We aren't quite ready for that so just
-    // ignore for now.
-    // TODO: Check for preRotation: http://anglebug.com/3502
-    *presentOutOfDate = result == VK_ERROR_OUT_OF_DATE_KHR;
-    if (!*presentOutOfDate && result != VK_SUBOPTIMAL_KHR)
+    // recreate the swapchain with a new window orientation.
+    *presentOutOfDate = ((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR));
+    if (!*presentOutOfDate)
     {
         ANGLE_VK_TRY(contextVk, result);
     }

@@ -264,6 +264,10 @@ class WindowSurfaceVk : public SurfaceVk
     VkPresentModeKHR mDesiredSwapchainPresentMode;  // Desired mode set through setSwapInterval()
     uint32_t mMinImageCount;
     VkSurfaceTransformFlagBitsKHR mPreTransform;
+    static constexpr VkSurfaceTransformFlagsKHR k90DegreeRotationVariants =
+        (VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR | VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR |
+         VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR |
+         VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR);
     VkCompositeAlphaFlagBitsKHR mCompositeAlpha;
 
     // A circular buffer that stores the submission fence of the context on every swap.  The CPU is
