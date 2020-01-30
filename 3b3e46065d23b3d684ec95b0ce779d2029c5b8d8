@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "19138011_3f6a4e6e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T16:11:30Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "6b2823e5_12f24bba",
+      "range": {
+        "startLine": 227,
+        "startChar": 51,
+        "endLine": 227,
+        "endChar": 59
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2580245c_cb3d5068",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-30T14:06:20Z",
       "side": 1,
       "message": "can this be an ASSERT? not sure when this happens.",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "349b7a3a_76b108b9",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T16:11:30Z",
+      "side": 1,
+      "message": "It does happen, Manhattan will crash on capture without this check.  Does it indicate an error earlier?  I haven\u0027t dug into which call caused it.",
+      "parentUuid": "2580245c_cb3d5068",
       "range": {
         "startLine": 254,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9ccbae6a_106aefbc",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T16:11:30Z",
+      "side": 1,
+      "message": "It does.",
+      "parentUuid": "a89320d8_152dfad5",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 277,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "906617f2_12957bc1",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2020-01-30T14:06:20Z",
       "side": 1,
       "message": "this is surprising. did you really get a warning about this?",
+      "range": {
+        "startLine": 838,
+        "startChar": 25,
+        "endLine": 838,
+        "endChar": 31
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49785893_8d7399b5",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T16:11:30Z",
+      "side": 1,
+      "message": "Yes, the Release build on Linux (is_debug \u003d false) of a capture will fail with:\n\nerror: ignoring return value of function declared with \u0027warn_unused_result\u0027 attribute [-Werror,-Wunused-result]\n    fread(gBinaryData, 1, size, fp);",
+      "parentUuid": "906617f2_12957bc1",
       "range": {
         "startLine": 838,
         "startChar": 25,
@@ -129,6 +225,24 @@
     },
     {
       "key": {
+        "uuid": "37d7be27_9a0aed09",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T16:11:30Z",
+      "side": 1,
+      "message": "Right, this function only captures the data parameter, which is not dependent on the destination offsets.  Those parameters are captured with generated code in capture_gles_2_0_autogen.cpp:CaptureCompressedTexSubImage2D()",
+      "parentUuid": "43f403b5_2f49e1e6",
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9d59dcb_0acaa44a",
         "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
         "patchSetId": 1
@@ -146,6 +260,24 @@
     },
     {
       "key": {
+        "uuid": "68e41283_3b20b958",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T16:11:30Z",
+      "side": 1,
+      "message": "Same answer here.",
+      "parentUuid": "e9d59dcb_0acaa44a",
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "768bc2b9_5b4d160a",
         "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
         "patchSetId": 1
@@ -157,6 +289,30 @@
       "writtenOn": "2020-01-30T14:06:20Z",
       "side": 1,
       "message": "nit: I believe in that case \u0027data\u0027 becomes an offset into the pixel unpack buffer. you should capture something in that case.",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15ff27ac_25b962c8",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T16:11:30Z",
+      "side": 1,
+      "message": "All of the TexImage*_data functions early return like this, so I was hoping it was already handled somewhere else.  I\u0027ll see if those cases are ever hit by Manhattan or TRex and address it soon if so.  At a minimum, we should probably assert in both of these \"continue\" cases.",
+      "parentUuid": "768bc2b9_5b4d160a",
       "range": {
         "startLine": 59,
         "startChar": 4,
@@ -206,6 +362,24 @@
       "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a24f4ecd_72e2e9d8",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T16:11:30Z",
+      "side": 1,
+      "message": "capture_gles_3_0_autogen.cpp:CaptureDrawElementsInstanced()",
+      "parentUuid": "f14d6545_061349b2",
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +452,30 @@
     },
     {
       "key": {
+        "uuid": "a7566390_7ee65308",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T16:11:30Z",
+      "side": 1,
+      "message": "Can do.  This pattern was picked up from CaptureTexImage2D_pixels.",
+      "parentUuid": "09b4a725_fd76a91e",
+      "range": {
+        "startLine": 628,
+        "startChar": 4,
+        "endLine": 628,
+        "endChar": 10
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c9ea706_64490cae",
         "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
         "patchSetId": 1
@@ -289,6 +487,30 @@
       "writtenOn": "2020-01-30T14:06:20Z",
       "side": 1,
       "message": "I don\u0027t quite see why you can\u0027t use CaptureString here.",
+      "range": {
+        "startLine": 672,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 57
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5318373_e6a85dbc",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-30T16:11:30Z",
+      "side": 1,
+      "message": "This loop was modelled after CaptureShaderSource_string, which also has to capture a sequence of strings.  They can probably both be refactored to use CaptureString in sequence, or a new CaptureStrings.",
+      "parentUuid": "4c9ea706_64490cae",
       "range": {
         "startLine": 672,
         "startChar": 0,
