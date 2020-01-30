@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "6b2823e5_12f24bba",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "you shouldn\u0027t need to ever add \"\u003d\u003d true\" to statements",
+      "range": {
+        "startLine": 227,
+        "startChar": 51,
+        "endLine": 227,
+        "endChar": 59
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2580245c_cb3d5068",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "can this be an ASSERT? not sure when this happens.",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a89320d8_152dfad5",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "again, when does this happen?",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 277,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "906617f2_12957bc1",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "this is surprising. did you really get a warning about this?",
+      "range": {
+        "startLine": 838,
+        "startChar": 25,
+        "endLine": 838,
+        "endChar": 31
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ee4088d0_fa2f0998",
         "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
         "patchSetId": 1
@@ -13,6 +105,24 @@
       "writtenOn": "2020-01-30T00:29:21Z",
       "side": 1,
       "message": "This is a SubImage call, shouldn\u0027t you be passing down the xoffset \u0026 yoffset?\nIf we just want to capture the whole texture instead of a subimage, where can we get the proper width \u0026 height?",
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43f403b5_2f49e1e6",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "xoffset/yoffset is where to write. he\u0027s just capturing what\u0027s passed in via \u0027data\u0027.",
+      "parentUuid": "ee4088d0_fa2f0998",
       "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -36,6 +146,52 @@
     },
     {
       "key": {
+        "uuid": "768bc2b9_5b4d160a",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "nit: I believe in that case \u0027data\u0027 becomes an offset into the pixel unpack buffer. you should capture something in that case.",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf9cd4fd_e8ab7581",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "probably fine to change this to an ASSERT.",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f14d6545_061349b2",
         "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
         "patchSetId": 1
@@ -47,6 +203,98 @@
       "writtenOn": "2020-01-30T00:29:21Z",
       "side": 1,
       "message": "Where is the instancecount saved?",
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2291440_dca4c6ca",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 614,
+        "startChar": 0,
+        "endLine": 617,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b73852ed_8573d948",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 618,
+        "startChar": 0,
+        "endLine": 622,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09b4a725_fd76a91e",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "maybe capture these to a bool and ASSERT the bool is true?",
+      "range": {
+        "startLine": 628,
+        "startChar": 4,
+        "endLine": 628,
+        "endChar": 10
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c9ea706_64490cae",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T14:06:20Z",
+      "side": 1,
+      "message": "I don\u0027t quite see why you can\u0027t use CaptureString here.",
+      "range": {
+        "startLine": 672,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 57
+      },
       "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
