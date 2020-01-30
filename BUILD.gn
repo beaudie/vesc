@@ -731,6 +731,10 @@ angle_source_set("libANGLE_base") {
       sources += libangle_gl_egl_dl_sources
       sources += libangle_gl_ozone_sources
     }
+    if (is_linux) {
+      sources += libangle_gl_egl_sources
+      sources += libangle_gl_egl_dl_sources
+    }
   }
 
   if (angle_enable_null) {
