@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "0b72ec97_6236babe",
+        "filename": "src/libANGLE/Config.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-30T22:13:18Z",
+      "side": 1,
+      "message": "Suggest naming this \"pbufferTextureTarget\" then.",
+      "range": {
+        "startLine": 46,
+        "startChar": 12,
+        "endLine": 46,
+        "endChar": 25
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d68ee6c_aca83e17",
+        "filename": "src/libANGLE/renderer/gl/eagl/DisplayEAGL.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-30T22:13:18Z",
+      "side": 1,
+      "message": "For safety I think you should replicate the ANGLE_PLATFORM_MACCATALYST #ifdef, which has been removed from validationEGL.cpp, here.\n\n#if !ANGLE_PLATFORM_MACCATALYST\n  config.textureTarget \u003d EGL_TEXTURE_2D;\n#else\n  config.textureTarget \u003d EGL_TEXTURE_RECTANGLE_ANGLE;\n#endif\n\nWe aren\u0027t in a position to test this configuration in ANGLE in WebKit but I\u0027m pretty sure this will be needed.",
+      "range": {
+        "startLine": 207,
+        "startChar": 11,
+        "endLine": 207,
+        "endChar": 24
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8baca421_886584eb",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 13
