@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee4088d0_fa2f0998",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-01-30T00:29:21Z",
+      "side": 1,
+      "message": "This is a SubImage call, shouldn\u0027t you be passing down the xoffset \u0026 yoffset?\nIf we just want to capture the whole texture instead of a subimage, where can we get the proper width \u0026 height?",
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9d59dcb_0acaa44a",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-01-30T00:29:21Z",
+      "side": 1,
+      "message": "Same as above, doing subimage but looks like we are trying to capture whole image.",
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f14d6545_061349b2",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-01-30T00:29:21Z",
+      "side": 1,
+      "message": "Where is the instancecount saved?",
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
