@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3724e427_3aff9349",
+        "filename": "src/libANGLE/renderer/EGLSyncImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T13:44:30Z",
+      "side": 1,
+      "message": "nit: we don\u0027t typically use pPrefix notation in ANGLE. \u0027fdOut\u0027 would be more similar to our typical naming.",
+      "range": {
+        "startLine": 51,
+        "startChar": 77,
+        "endLine": 51,
+        "endChar": 80
+      },
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b92d7617_15fd2b38",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
         "patchSetId": 1
@@ -13,6 +36,47 @@
       "writtenOn": "2020-01-30T00:35:15Z",
       "side": 1,
       "message": "Do you think we need to check with VkExternalFenceProperties before setting this flag?\nVK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT",
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7983957_4e91dcaa",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T13:44:30Z",
+      "side": 1,
+      "message": "My reading is that the extension defines new functions and enums. It does not determine if the bits are supported by the driver\u0027s use case. i.e. the driver could expose the extension and still not support the capability.",
+      "parentUuid": "b92d7617_15fd2b38",
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b22189b4_cf67abc1",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T13:44:30Z",
+      "side": 1,
+      "message": "nit: can you use the same init syntax as the other places in the code?\n\nfenceImportInfo \u003d {}\n\nNothing wrong with either syntax. Better just to be consistent.",
+      "range": {
+        "startLine": 56,
+        "startChar": 32,
+        "endLine": 56,
+        "endChar": 48
+      },
       "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -42,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "47329b91_f8263749",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T13:44:30Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "d8134b09_e97931e0",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 9
+      },
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c4fada0b_525dbf32",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 1
@@ -53,6 +141,30 @@
       "writtenOn": "2020-01-29T15:41:05Z",
       "side": 1,
       "message": "Same with ANGLE_VK_TRY",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 5
+      },
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c2522c9_54fb69bc",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T13:44:30Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "c4fada0b_525dbf32",
       "range": {
         "startLine": 150,
         "startChar": 0,
@@ -134,6 +246,29 @@
     },
     {
       "key": {
+        "uuid": "4849f382_e07380b9",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T13:44:30Z",
+      "side": 1,
+      "message": "can this please be put in a namespace?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 35
+      },
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8db4ca8_c9334555",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
         "patchSetId": 1
@@ -163,6 +298,24 @@
       "side": 1,
       "message": "Yea, I think that\u0027s a better interface.  You can have them call eachother internally with the invalid fence ID.  The definition of kInvalidFenceFd can also move into the .cpp file then.",
       "parentUuid": "a8db4ca8_c9334555",
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a1e06f7_e71a0e64",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T13:44:30Z",
+      "side": 1,
+      "message": "sounds good. just name them distinctly instead of using overloading. easier to read.",
+      "parentUuid": "b26b8a19_bcbfea62",
       "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
