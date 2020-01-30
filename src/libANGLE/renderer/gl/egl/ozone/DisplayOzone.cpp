@@ -351,7 +351,6 @@ bool DisplayOzone::Buffer::createRenderbuffers()
 
 DisplayOzone::DisplayOzone(const egl::DisplayState &state)
     : DisplayEGL(state),
-      mRenderer(nullptr),
       mGBM(nullptr),
       mConnector(nullptr),
       mMode(nullptr),
@@ -1071,16 +1070,6 @@ WorkerContext *DisplayOzone::createWorkerContext(std::string *infoLog,
         return nullptr;
     }
     return new WorkerContextOzone(context, mEGL);
-}
-
-void DisplayOzone::initializeFrontendFeatures(angle::FrontendFeatures *features) const
-{
-    mRenderer->initializeFrontendFeatures(features);
-}
-
-void DisplayOzone::populateFeatureList(angle::FeatureList *features)
-{
-    mRenderer->getFeatures().populateFeatureList(features);
 }
 
 }  // namespace rx
