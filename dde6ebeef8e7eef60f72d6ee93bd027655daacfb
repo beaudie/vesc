@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21464631_5e076b6b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:36:05Z",
+      "side": 1,
+      "message": "we probably need to do something for 180 deg as well, right?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 0
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "678b2980_c4345761",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:36:05Z",
+      "side": 1,
+      "message": "nit: style wise, compare !\u003d 0 to avoid an implicit cast",
+      "range": {
+        "startLine": 519,
+        "startChar": 8,
+        "endLine": 519,
+        "endChar": 48
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d6a1626_38144371",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:36:05Z",
+      "side": 1,
+      "message": "No idea if this is necessary and/or sufficient. Will rely on your testing.",
+      "range": {
+        "startLine": 522,
+        "startChar": 7,
+        "endLine": 522,
+        "endChar": 49
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbd07f39_c4bcbc47",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:36:05Z",
+      "side": 1,
+      "message": "ensure this is enabled for android.",
+      "range": {
+        "startLine": 880,
+        "startChar": 48,
+        "endLine": 880,
+        "endChar": 71
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8789b563_e3cc73c9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:36:05Z",
+      "side": 1,
+      "message": "I\u0027d probably make this a part of createSwapChain.",
+      "range": {
+        "startLine": 906,
+        "startChar": 0,
+        "endLine": 910,
+        "endChar": 9
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99a1d561_c5c6bfd9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T21:36:05Z",
+      "side": 1,
+      "message": "can we put this in the cpp?",
+      "range": {
+        "startLine": 267,
+        "startChar": 0,
+        "endLine": 270,
+        "endChar": 68
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
