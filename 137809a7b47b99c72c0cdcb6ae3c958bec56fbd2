@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1294b496_90dea72d",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-30T15:27:20Z",
+      "side": 1,
+      "message": "Nit: could change to ANGLE_PLATFORM_LINUX",
+      "range": {
+        "startLine": 53,
+        "startChar": 18,
+        "endLine": 53,
+        "endChar": 31
+      },
+      "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b01b7f_e43036d7",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-30T15:27:20Z",
+      "side": 1,
+      "message": "It would be interesting to be able to use EGL with desktop GL too. But since there\u0027s an ongoing experiment it would need to be behind some kind of flags/controls",
+      "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76a69403_83c33dbc",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-30T15:27:20Z",
+      "side": 1,
+      "message": "As far as I know not everything running on Linux is going to have mesa/EGL, is that right? In that case this DisplayEGL would fail.\nWhat are your thoughs on doing a check/wrapper function (like the way Vulkan is instantiated below) that checks whether or not EGL is available, and has a GLX backup?",
+      "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
