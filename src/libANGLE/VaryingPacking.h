@@ -27,32 +27,69 @@ struct ProgramVaryingRef;
 
 using ProgramMergedVaryings = std::map<std::string, ProgramVaryingRef>;
 
+// A varying can have different names between stages if matched by the location layout qualifier.
+// Additionally, same name varyings could still be of two identical struct types with different
+// names.  This struct contains information on the varying in one of the two stages.  PackedVarying
+// will thus contain two copies of this along with common information, such as interpolation or
+// field index.
+struct PackedVaryingSingleStage : angle::NonCopyable
+{
+    PackedVaryingSingleStage(gl::ShaderType stage, const sh::ShaderVariable *varyingIn);
+    PackedVaryingSingleStage(gl::ShaderType stage,
+                             const sh::ShaderVariable *varyingIn,
+                             const std::string &parentStructNameIn,
+                             const std::string &parentStructMappedNameIn);
+    PackedVaryingSingleStage(PackedVaryingSingleStage &&other);
+    ~PackedVaryingSingleStage();
+
+    PackedVaryingSingleStage &operator=(PackedVaryingSingleStage &&other);
+
+    const sh::ShaderVariable *varying;
+
+    gl::ShaderType stage;
+
+    // Struct name
+    std::string parentStructName;
+    std::string parentStructMappedName;
+};
+
 struct PackedVarying : angle::NonCopyable
 {
-    PackedVarying(const sh::ShaderVariable &varyingIn, sh::InterpolationType interpolationIn);
-    PackedVarying(const sh::ShaderVariable &varyingIn,
+    // Throughout this file, the "front" stage refers to the stage that outputs the varying, and the
+    // "back" stage refers to the stage that takes the varying as input.  Note that this struct
+    // contains linked varyings, which means both front and back stage varyings are valid, except
+    // for transform-feedback-captured varyings, which may only have a valid front stage varying.
+    PackedVarying(PackedVaryingSingleStage &&frontVaryingIn,
+                  PackedVaryingSingleStage &&backVaryingIn,
+                  sh::InterpolationType interpolationIn);
+    PackedVarying(PackedVaryingSingleStage &&frontVaryingIn,
+                  PackedVaryingSingleStage &&backVaryingIn,
                   sh::InterpolationType interpolationIn,
-                  const std::string &parentStructNameIn,
-                  const std::string &parentStructMappedNameIn,
                   GLuint fieldIndexIn);
     PackedVarying(PackedVarying &&other);
     ~PackedVarying();
 
     PackedVarying &operator=(PackedVarying &&other);
 
-    bool isStructField() const { return !parentStructName.empty(); }
+    bool isStructField() const { return !frontVarying.parentStructName.empty(); }
 
     bool isArrayElement() const { return arrayIndex != GL_INVALID_INDEX; }
 
-    std::string fullName() const
+    const PackedVaryingSingleStage &varying(gl::ShaderType stage)
+    {
+        ASSERT(stage == frontVarying.stage || stage == backVarying.stage);
+        return stage == frontVarying.stage ? frontVarying : backVarying;
+    }
+
+    std::string fullName(gl::ShaderType stage) const
     {
         std::stringstream fullNameStr;
         if (isStructField())
         {
-            fullNameStr << parentStructName << ".";
+            fullNameStr << varying(stage).parentStructName << ".";
         }
 
-        fullNameStr << varying->name;
+        fullNameStr << varying(stage).varying->name;
         if (arrayIndex != GL_INVALID_INDEX)
         {
             fullNameStr << "[" << arrayIndex << "]";
