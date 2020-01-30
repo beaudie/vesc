@@ -160,10 +160,6 @@ class DisplayOzone final : public DisplayEGL
                                        EGLContext sharedContext,
                                        const native_egl::AttributeVector workerAttribs) override;
 
-    void initializeFrontendFeatures(angle::FrontendFeatures *features) const override;
-
-    void populateFeatureList(angle::FeatureList *features) override;
-
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
 
@@ -181,8 +177,6 @@ class DisplayOzone final : public DisplayEGL
                                 unsigned int tv_usec,
                                 void *data);
     void pageFlipHandler(unsigned int sequence, uint64_t tv);
-
-    std::shared_ptr<RendererEGL> mRenderer;
 
     gbm_device *mGBM;
     drmModeConnectorPtr mConnector;
