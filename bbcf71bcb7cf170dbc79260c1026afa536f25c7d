@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8baca421_886584eb",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-01-30T18:54:08Z",
+      "side": 1,
+      "message": "Are we allowed to skip querying vkGetMemoryHostPointerPropertiesEXT etc to get the required alignment and memory type, since we know swiftshader\u0027s properties?",
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
