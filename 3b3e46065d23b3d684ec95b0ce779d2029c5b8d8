@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "d67c23da_8561bb6f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T17:06:42Z",
+      "side": 1,
+      "message": "Weird. Sounds fine to do this. Really odd that they call Uniform with a count of zero.",
+      "parentUuid": "acdcd6c7_41aeaf00",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a89320d8_152dfad5",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -250,6 +274,30 @@
       "side": 1,
       "message": "Drive by: Maybe ASSERT(result \u003d\u003d size); instead",
       "parentUuid": "49785893_8d7399b5",
+      "range": {
+        "startLine": 838,
+        "startChar": 25,
+        "endLine": 838,
+        "endChar": 31
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ca7bda5_926e47aa",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T17:06:42Z",
+      "side": 1,
+      "message": "just making (void)fread(...) should do the trick. don\u0027t use ASSERT, we don\u0027t want to rely on ANGLE internal macros in the cpp replay.",
+      "parentUuid": "89405556_d80bb6dc",
       "range": {
         "startLine": 838,
         "startChar": 25,
@@ -421,6 +469,30 @@
     },
     {
       "key": {
+        "uuid": "cf47edf3_b616fb51",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T17:06:42Z",
+      "side": 1,
+      "message": "Yes, you need to capture the value of the unpack pointer somehow. Unpack isn\u0027t supported in 2.0 by default so we didn\u0027t implement it yet.",
+      "parentUuid": "58e352e9_7b74c8a1",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bf9cd4fd_e8ab7581",
         "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
         "patchSetId": 1
@@ -456,6 +528,30 @@
       "side": 1,
       "message": "This condition is being hit with Manhattan during CaptureTexImage2D_pixels, i.e. there is not a pixel unpack buffer and there is no texture pointer.  I think we\u0027ll need to handle that gracefully rather than asserting.",
       "parentUuid": "bf9cd4fd_e8ab7581",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bccd8a59_17ca30ea",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T17:06:42Z",
+      "side": 1,
+      "message": "Sorry, you\u0027re right. !data means init storage with no data. please disregard.",
+      "parentUuid": "4a70e3fb_d9991f06",
       "range": {
         "startLine": 64,
         "startChar": 0,
@@ -546,6 +642,30 @@
       "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40a51f22_a083c566",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-30T17:06:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b73852ed_8573d948",
+      "range": {
+        "startLine": 618,
+        "startChar": 0,
+        "endLine": 622,
+        "endChar": 5
+      },
+      "revId": "3b3e46065d23b3d684ec95b0ce779d2029c5b8d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
