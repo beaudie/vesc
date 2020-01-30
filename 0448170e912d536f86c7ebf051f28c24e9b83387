@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5058f3ae_5c0526de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-30T22:14:54Z",
+      "side": 1,
+      "message": "Not implemented yet. For as many years as I worked with this, its never been clear on how to create a sync point fence FD. Always just get one from SurfaceFlinger\nIf I got that, then I can enhance the e2e test.",
+      "parentUuid": "dba644e2_dac99bcd",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 62
+      },
+      "revId": "0448170e912d536f86c7ebf051f28c24e9b83387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3468882a_2cc1b3b9",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-01-30T19:17:20Z",
       "side": 1,
       "message": "EGL_NO_NATIVE_FENCE_FD_ANDROID?",
+      "range": {
+        "startLine": 22,
+        "startChar": 32,
+        "endLine": 22,
+        "endChar": 34
+      },
+      "revId": "0448170e912d536f86c7ebf051f28c24e9b83387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "921d6f0e_aa5c9d2d",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-30T22:14:54Z",
+      "side": 1,
+      "message": "This seemed to be the only ANDROID specific reference. and wasn\u0027t sure if that would be OK in this Vulkan generic space. But did have to use below. Vulkan spec says -1 but doesn\u0027t give a name for it. errno doesn\u0027t seem to have one either. So if the ANDROID define is OK with you., its OK with me.",
+      "parentUuid": "3468882a_2cc1b3b9",
       "range": {
         "startLine": 22,
         "startChar": 32,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "738e1a27_283a2179",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-30T22:14:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8fb54c51_d40de585",
+      "range": {
+        "startLine": 249,
+        "startChar": 5,
+        "endLine": 250,
+        "endChar": 28
+      },
+      "revId": "0448170e912d536f86c7ebf051f28c24e9b83387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ecd60d27_42969c42",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "0448170e912d536f86c7ebf051f28c24e9b83387",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ea10816_140335f9",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-01-30T22:14:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ecd60d27_42969c42",
+      "range": {
+        "startLine": 327,
+        "startChar": 7,
+        "endLine": 327,
+        "endChar": 99
+      },
+      "revId": "0448170e912d536f86c7ebf051f28c24e9b83387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
