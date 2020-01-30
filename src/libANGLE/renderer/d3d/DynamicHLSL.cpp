@@ -414,7 +414,7 @@ void DynamicHLSL::generateVaryingLinkHLSL(const VaryingPacking &varyingPacking,
     for (GLuint registerIndex = 0u; registerIndex < registerInfos.size(); ++registerIndex)
     {
         const PackedVaryingRegister &registerInfo = registerInfos[registerIndex];
-        const auto &varying                       = *registerInfo.packedVarying->varying;
+        const auto &varying                       = *registerInfo.packedVarying->varying();
         ASSERT(!varying.isStruct());
 
         // TODO: Add checks to ensure D3D interpolation modifiers don't result in too many
@@ -599,14 +599,15 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
     {
         const PackedVaryingRegister &registerInfo = registerInfos[registerIndex];
         const auto &packedVarying                 = *registerInfo.packedVarying;
-        const auto &varying                       = *packedVarying.varying;
+        const auto &varying                       = *packedVarying.frontVarying.varying;
         ASSERT(!varying.isStruct());
 
         vertexGenerateOutput << "    output.v" << registerIndex << " = ";
 
         if (packedVarying.isStructField())
         {
-            vertexGenerateOutput << DecorateVariable(packedVarying.parentStructName) << ".";
+            vertexGenerateOutput << DecorateVariable(packedVarying.frontVarying.parentStructName)
+                                 << ".";
         }
 
         vertexGenerateOutput << DecorateVariable(varying.name);
@@ -798,7 +799,7 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
     {
         const PackedVaryingRegister &registerInfo = registerInfos[registerIndex];
         const auto &packedVarying                 = *registerInfo.packedVarying;
-        const auto &varying                       = *packedVarying.varying;
+        const auto &varying                       = *packedVarying.backVarying.varying;
         ASSERT(!varying.isBuiltIn() && !varying.isStruct());
 
         // Don't reference VS-only transform feedback varyings in the PS. Note that we're relying on
@@ -810,7 +811,7 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
 
         if (packedVarying.isStructField())
         {
-            pixelPrologue << DecorateVariable(packedVarying.parentStructName) << ".";
+            pixelPrologue << DecorateVariable(packedVarying.backVarying.parentStructName) << ".";
         }
 
         pixelPrologue << DecorateVariable(varying.name);
