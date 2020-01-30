@@ -406,12 +406,13 @@ void InitShaderStorageBlockLinker(const ProgramState &state, ShaderStorageBlockL
 
 // Find the matching varying or field by name.
 const sh::ShaderVariable *FindVaryingOrField(const ProgramMergedVaryings &varyings,
+                                             ShaderType stage,
                                              const std::string &name)
 {
     const sh::ShaderVariable *var = nullptr;
-    for (const auto &ref : varyings)
+    for (const ProgramVaryingRef &ref : varyings)
     {
-        const sh::ShaderVariable *varying = ref.second.get();
+        const sh::ShaderVariable *varying = ref.get(stage);
         if (varying->name == name)
         {
             var = varying;
@@ -1583,7 +1584,7 @@ angle::Result Program::link(const Context *context)
             return angle::Result::Continue;
         }
 
-        const auto &mergedVaryings = getMergedVaryings();
+        const ProgramMergedVaryings &mergedVaryings = getMergedVaryings();
 
         gl::Shader *vertexShader = mState.mAttachedShaders[ShaderType::Vertex];
         if (vertexShader)
@@ -1594,8 +1595,11 @@ angle::Result Program::link(const Context *context)
         InitUniformBlockLinker(mState, &resources->uniformBlockLinker);
         InitShaderStorageBlockLinker(mState, &resources->shaderStorageBlockLinker);
 
+        ShaderType tfStage = mState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry
+                                                                           : ShaderType::Vertex;
+
         if (!linkValidateTransformFeedback(context->getClientVersion(), mInfoLog, mergedVaryings,
-                                           context->getCaps()))
+                                           tfStage, context->getCaps()))
         {
             return angle::Result::Continue;
         }
@@ -1606,7 +1610,7 @@ angle::Result Program::link(const Context *context)
             return angle::Result::Continue;
         }
 
-        gatherTransformFeedbackVaryings(mergedVaryings);
+        gatherTransformFeedbackVaryings(mergedVaryings, tfStage);
         mState.updateTransformFeedbackStrides();
     }
 
@@ -4102,6 +4106,7 @@ bool Program::linkValidateBuiltInVaryings(InfoLog &infoLog) const
 bool Program::linkValidateTransformFeedback(const Version &version,
                                             InfoLog &infoLog,
                                             const ProgramMergedVaryings &varyings,
+                                            ShaderType stage,
                                             const Caps &caps) const
 {
 
@@ -4142,7 +4147,7 @@ bool Program::linkValidateTransformFeedback(const Version &version,
         std::vector<unsigned int> subscripts;
         std::string baseName = ParseResourceName(tfVaryingName, &subscripts);
 
-        const sh::ShaderVariable *var = FindVaryingOrField(varyings, baseName);
+        const sh::ShaderVariable *var = FindVaryingOrField(varyings, stage, baseName);
         if (var == nullptr)
         {
             infoLog << "Transform feedback varying " << tfVaryingName
@@ -4323,7 +4328,8 @@ bool Program::linkValidateGlobalNames(InfoLog &infoLog) const
     return true;
 }
 
-void Program::gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyings)
+void Program::gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyings,
+                                              ShaderType stage)
 {
     // Gather the linked varyings that are used for transform feedback, they should all exist.
     mState.mLinkedTransformFeedbackVaryings.clear();
@@ -4336,9 +4342,9 @@ void Program::gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyi
         {
             subscript = subscripts.back();
         }
-        for (const auto &ref : varyings)
+        for (const ProgramVaryingRef &ref : varyings)
         {
-            const sh::ShaderVariable *varying = ref.second.get();
+            const sh::ShaderVariable *varying = ref.get(stage);
             if (baseName == varying->name)
             {
                 mState.mLinkedTransformFeedbackVaryings.emplace_back(
@@ -4361,25 +4367,113 @@ void Program::gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyi
 
 ProgramMergedVaryings Program::getMergedVaryings() const
 {
+    ASSERT(mState.mAttachedShaders[ShaderType::Compute] == nullptr);
+
+    // Varyings are matched between pairs of consecutive stages, by location if assigned or
+    // by name otherwise.  Note that it's possible for one stage to specify location and the other
+    // not: https://cvs.khronos.org/bugzilla/show_bug.cgi?id=16261
+
+    // Map stages to the previous active stage in the rendering pipeline.  When looking at input
+    // varyings of a stage, this is used to find the stage whose output varyings are being linked
+    // with them.
+    ShaderMap<ShaderType> previousActiveStage;
+
+    // Note that kAllGraphicsShaderTypes is sorted according to the rendering pipeline.
+    ShaderType lastActiveStage = ShaderType::InvalidEnum;
+    for (ShaderType stage : kAllGraphicsShaderTypes)
+    {
+        previousActiveStage[stage] = lastActiveStage;
+        if (mState.mAttachedShaders[stage])
+        {
+            lastActiveStage = stage;
+        }
+    }
+
+    // First, go through output varyings and create two maps (one by name, one by location) for
+    // faster lookup when matching input varyings.
+
+    ShaderMap<std::map<std::string, size_t>> outputVaryings;
+    ShaderMap<std::map<int, size_t>> outputVaryingsWithLocation;
+
     ProgramMergedVaryings merged;
 
+    // Gather output varyings.
     for (Shader *shader : mState.mAttachedShaders)
     {
-        if (shader)
+        if (!shader)
         {
-            ShaderType shaderType = shader->getType();
-            for (const sh::ShaderVariable &varying : shader->getOutputVaryings())
+            continue;
+        }
+        ShaderType stage = shader->getType();
+
+        for (const sh::ShaderVariable &varying : shader->getOutputVaryings())
+        {
+            merged.push_back({});
+            ProgramVaryingRef *ref = &merged.back();
+
+            ref->frontShader      = &varying;
+            ref->frontShaderStage = stage;
+
+            // Always map by name.  Even if location is provided in this stage, it may not be in the
+            // paired stage.
+            outputVaryings[stage][varying.name] = merged.size() - 1;
+
+            // If location is provided, also keep it in a map by location.
+            if (varying.location != -1)
             {
-                ProgramVaryingRef *ref = &merged[varying.name];
-                ref->frontShader       = &varying;
-                ref->frontShaderStage  = shaderType;
+                outputVaryingsWithLocation[stage][varying.location] = merged.size() - 1;
             }
-            for (const sh::ShaderVariable &varying : shader->getInputVaryings())
+        }
+    }
+
+    // Gather input varyings, and match them with output varyings of the previous stage.
+    for (Shader *shader : mState.mAttachedShaders)
+    {
+        if (!shader)
+        {
+            continue;
+        }
+        ShaderType stage         = shader->getType();
+        ShaderType previousStage = previousActiveStage[stage];
+
+        for (const sh::ShaderVariable &varying : shader->getInputVaryings())
+        {
+            size_t mergedIndex = merged.size();
+            if (previousStage != ShaderType::InvalidEnum)
             {
-                ProgramVaryingRef *ref = &merged[varying.name];
-                ref->backShader        = &varying;
-                ref->backShaderStage   = shaderType;
+                // If location is provided, see if we can match by location.
+                if (varying.location != -1)
+                {
+                    auto byLocationIter =
+                        outputVaryingsWithLocation[previousStage].find(varying.location);
+                    if (byLocationIter != outputVaryingsWithLocation[previousStage].end())
+                    {
+                        mergedIndex = byLocationIter->second;
+                    }
+                }
+
+                // If not found, try to match by name.
+                if (mergedIndex == merged.size())
+                {
+                    auto byNameIter = outputVaryings[previousStage].find(varying.name);
+                    if (byNameIter != outputVaryings[previousStage].end())
+                    {
+                        mergedIndex = byNameIter->second;
+                    }
+                }
             }
+
+            // If no previous stage, or not matched by location or name, create a new entry for it.
+            if (mergedIndex == merged.size())
+            {
+                merged.push_back({});
+                mergedIndex = merged.size() - 1;
+            }
+
+            ProgramVaryingRef *ref = &merged[mergedIndex];
+
+            ref->backShader      = &varying;
+            ref->backShaderStage = stage;
         }
     }
 
