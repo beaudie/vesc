@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8f56520c_6c2f3a52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-30T23:33:49Z",
+      "side": 1,
+      "message": "Yes!  I\u0027ll update the commit message.",
+      "parentUuid": "21464631_5e076b6b",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 0
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "678b2980_c4345761",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9949fde_db4931c5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-30T23:33:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "678b2980_c4345761",
+      "range": {
+        "startLine": 519,
+        "startChar": 8,
+        "endLine": 519,
+        "endChar": 48
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a0ed88b3_3d9a4aad",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-30T23:33:49Z",
+      "side": 1,
+      "message": "Sorry, I\u0027ll create a design doc with pointers to articles and Yiwei\u0027s demo.",
+      "parentUuid": "0d6a1626_38144371",
+      "range": {
+        "startLine": 522,
+        "startChar": 7,
+        "endLine": 522,
+        "endChar": 49
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dbd07f39_c4bcbc47",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52e7fecd_abed4c2a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-30T23:33:49Z",
+      "side": 1,
+      "message": "I helped our intern debug and create this feature.  It was needed for drivers that didn\u0027t return OUT_OF_DATE when they should have.  I heavily tested this on Android back in the M timeframe.  For Q+, it now returns SUBOPTIMAL for orientation changes.  I\u0027ll re-test all of this heavily as part of this effort.",
+      "parentUuid": "dbd07f39_c4bcbc47",
+      "range": {
+        "startLine": 880,
+        "startChar": 48,
+        "endLine": 880,
+        "endChar": 71
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "663017fa_510635b4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-30T23:33:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8789b563_e3cc73c9",
+      "range": {
+        "startLine": 906,
+        "startChar": 0,
+        "endLine": 910,
+        "endChar": 9
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99a1d561_c5c6bfd9",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 1
@@ -137,6 +257,30 @@
       "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb7156fc_d675694c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-01-30T23:33:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99a1d561_c5c6bfd9",
+      "range": {
+        "startLine": 267,
+        "startChar": 0,
+        "endLine": 270,
+        "endChar": 68
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
