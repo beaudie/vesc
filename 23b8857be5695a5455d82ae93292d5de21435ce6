@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f1857559_81bd62ce",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T21:49:11Z",
+      "side": 0,
+      "message": "Should be fine to remove it. The spec is quite clear that drivers are not required to error check the ranges.",
+      "parentUuid": "33452540_dfa8f174",
+      "revId": "23b8857be5695a5455d82ae93292d5de21435ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e952f62_abd66ace",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-01-31T21:15:59Z",
       "side": 0,
       "message": "Presumably this is where the slow down is at, which is also used in vulkan by GetVertexRangeInfo() for VertexArrayVk::updateStreamedAttribs().   Can/Should that function be re-implemented in a more performant way so we can improve all usages and keep the error handling rather than allowing undefined behavior?\n\nAsked another way, will we have to solve the problem with getIndexRange() later anyway due to updateStreamedAttribs() using it also, or can getIndexRange() be removed everywhere (for vulkan)?",
+      "revId": "23b8857be5695a5455d82ae93292d5de21435ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d6b9330_ae67063f",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T21:49:11Z",
+      "side": 0,
+      "message": "It\u0027s needed for WebGL validation (in some edge cases) and streaming. It\u0027s calculated on-demand so no need to worry about affecting the other cases unless they pop up in the CQ.",
+      "parentUuid": "1e952f62_abd66ace",
       "revId": "23b8857be5695a5455d82ae93292d5de21435ce6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
