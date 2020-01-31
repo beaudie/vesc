@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae7526c_299e2fee",
+        "filename": "src/libANGLE/BinaryStream.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-31T22:25:53Z",
+      "side": 1,
+      "message": "It seems like it would be better to just create a new writeUint():\n\n    template \u003cclass UintT\u003e\n    void writeUint(UintT param)\n    {\n        ASSERT(angle::IsValueInRangeForNumericType\u003cuint32_t\u003e(param));\n        uint32_t uintValue \u003d static_cast\u003cuint32_t\u003e(param);\n        write(\u0026uintValue, 1);\n    }\n\nOf course, writeIntOrNegOne() would need to be updated also, but it looks like everyone is calling it with unsigned ints already anyway and treating them as unsigned through the whole process feels like the right thing to do.",
+      "parentUuid": "639d33d8_6abf57ad",
+      "revId": "0447f9c54e8410bd0962a5587a7e803077c17ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "043e06e4_9652ed17",
         "filename": "src/libANGLE/VaryingPacking.cpp",
         "patchSetId": 11
@@ -70,6 +88,24 @@
       "writtenOn": "2020-01-31T04:56:03Z",
       "side": 1,
       "message": "Need to take the function rewriting code out of sampler rewrite and apply it to array of array of images too.\n\nMight make sense to split sampler rewrite in two:\n\n- One transformation that takes samplers out of structs, generating array of array of samplers\n- One transformation that flattens array of array of samplers and images in one go.",
+      "revId": "0447f9c54e8410bd0962a5587a7e803077c17ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "256e5d5c_d24af299",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-31T22:25:53Z",
+      "side": 1,
+      "message": "Yeah, this came up in anglebug.com/3882 also and I was trying to see if it was possible to actually do both RewriteStructSamplers() and RewriteStructSamplersOld(), since RewriteStructSamplers() does the flattening you\u0027re describing while RewriteStructSamplersOld() extracts the samples from the structs.   I wasn\u0027t ever able to get the flattened array translations from RewriteStructSamplers() to be fed correctly into RewriteStructSamplersOld() though, so I couldn\u0027t get everything to pass on Android (where RewriteStructSamplersOld() is still required).\n\nThis was my CL from a while ago:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1803656\n\nUnfortunately, that RewriteStructSamplers() code is pretty complicated (as all translator stuff is), which is why I was hoping to be able to chain them together rather than diving in and trying to muck with any of it.",
+      "parentUuid": "7ca6c022_30c1b757",
       "revId": "0447f9c54e8410bd0962a5587a7e803077c17ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
