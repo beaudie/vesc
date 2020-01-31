@@ -715,6 +715,31 @@ class TextureDescriptorDesc
     };
     gl::ActiveTextureArray<TexUnitSerials> mSerials;
 };
+
+// This is IMPLEMENTATION_MAX_DRAW_BUFFERS + 1 for DS attachment
+constexpr size_t kMaxFramebufferAttachments = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1;
+class FramebufferDesc
+{
+  public:
+    FramebufferDesc();
+    ~FramebufferDesc();
+
+    FramebufferDesc(const FramebufferDesc &other);
+    FramebufferDesc &operator=(const FramebufferDesc &other);
+
+    void update(uint32_t width, uint32_t height, const Serial serials[kMaxFramebufferAttachments]);
+    size_t hash() const;
+    void reset();
+
+    bool operator==(const FramebufferDesc &other) const;
+
+  private:
+    // Assign all serial values to kInvalid
+    void clearSerials();
+    uint32_t mWidth;
+    uint32_t mHeight;
+    Serial mSerials[kMaxFramebufferAttachments];
+};
 }  // namespace vk
 }  // namespace rx
 
@@ -755,6 +780,12 @@ template <>
 struct hash<rx::vk::TextureDescriptorDesc>
 {
     size_t operator()(const rx::vk::TextureDescriptorDesc &key) const { return key.hash(); }
+};
+
+template <>
+struct hash<rx::vk::FramebufferDesc>
+{
+    size_t operator()(const rx::vk::FramebufferDesc &key) const { return key.hash(); }
 };
 }  // namespace std
 

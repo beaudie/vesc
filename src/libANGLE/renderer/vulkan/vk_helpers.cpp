@@ -1696,7 +1696,9 @@ ImageHelper::ImageHelper()
       mMaxLevel(0),
       mLayerCount(0),
       mLevelCount(0)
-{}
+{
+    memset(&mSerial, 0, sizeof(Serial));
+}
 
 ImageHelper::ImageHelper(ImageHelper &&other)
     : CommandGraphResource(CommandGraphResourceType::Image),
@@ -1720,6 +1722,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
     other.mMaxLevel      = 0;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
+    memset(&other.mSerial, 0, sizeof(Serial));
 }
 
 ImageHelper::~ImageHelper()
@@ -2155,6 +2158,17 @@ gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
     // you shrink the extents by half.
     return gl::Extents(std::max(1u, mExtents.width >> mipLevel),
                        std::max(1u, mExtents.height >> mipLevel), mExtents.depth);
+}
+
+Serial ImageHelper::getAssignSerial(ContextVk *contextVk)
+{
+    // TODO: Do we need to dirty the Serial anytime underlying image changes?
+    //  if so, should set tracking bool and check it here
+    if (mSerial == 0)
+    {
+        mSerial = contextVk->generateFramebufferSerial();
+    }
+    return mSerial;
 }
 
 // static

@@ -130,6 +130,9 @@ class FramebufferVk : public FramebufferImpl
     GLint getSamples() const;
 
     const vk::RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
+    uint32_t getWidth() const { return mWidth; }
+    uint32_t getHeight() const { return mHeight; }
+    const Serial *getAttachmentSerials() const { return mAttachmentSerials; }
 
   private:
     FramebufferVk(RendererVk *renderer,
@@ -199,6 +202,12 @@ class FramebufferVk : public FramebufferImpl
     // the framebuffer does not, we need to mask out the alpha channel. This DrawBufferMask will
     // contain the mask to apply to the alpha channel when drawing.
     gl::DrawBufferMask mEmulatedAlphaAttachmentMask;
+
+    uint32_t mWidth;
+    uint32_t mHeight;
+    // Serials for attachments on this framebuffer
+    Serial mAttachmentSerials[vk::kMaxFramebufferAttachments];
+    std::unordered_map<vk::FramebufferDesc, vk::Framebuffer *> mFramebufferCache;
 };
 }  // namespace rx
 
