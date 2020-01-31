@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1f64a164_e910acf0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-01-31T23:03:27Z",
+      "side": 1,
+      "message": "I\u0027ve copied the details to the bug. To summarize here:\n\nWhen running flatland on android-10.0.0_r21 (Pixel 3), ~EglImage calls\neglDestroyImageKHR then eglTerminate.  Summary of the backtrace:\neglTerminate \u003e DestroySurfaceKHR \u003e Surface::hook_perform \u003e Surface::disconnect\n\u003e BufferQueueProducer::disconnect \u003e ~EglImage \u003e eglDestroyImageKHR.  So we grab\nthe mutex multiple times from the same thread.",
+      "parentUuid": "65a07b6d_de5f841c",
+      "range": {
+        "startLine": 10,
+        "startChar": 24,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "3847b896ea994988c8f3996b1362d3836e02a405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f4c5a84_73e711ce",
         "filename": "src/libGLESv2/global_state.h",
         "patchSetId": 1
