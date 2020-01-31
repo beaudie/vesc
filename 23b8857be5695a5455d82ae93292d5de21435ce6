@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "33452540_dfa8f174",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-01-31T21:43:25Z",
+      "side": 0,
+      "message": "I suspect we\u0027ll want to tie this to a workaround flag so that we can enable/disable it.\nSee FeaturesVk.h for examples.",
+      "revId": "23b8857be5695a5455d82ae93292d5de21435ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e952f62_abd66ace",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 1
