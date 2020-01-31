@@ -440,7 +440,7 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
                                         void *pixels)
 {
     // Clip read area to framebuffer.
-    const gl::Extents &fbSize = getState().getReadAttachment()->getSize();
+    const gl::Extents &fbSize = getState().getReadAttachment(format)->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
     ContextVk *contextVk = vk::GetImpl(context);
 
@@ -466,8 +466,24 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
         params.reverseRowOrder = !params.reverseRowOrder;
     }
 
-    ANGLE_TRY(readPixelsImpl(contextVk, params.area, params, VK_IMAGE_ASPECT_COLOR_BIT,
-                             getColorReadRenderTarget(),
+    RenderTargetVk *renderTarget         = nullptr;
+    VkImageAspectFlagBits aspectFlagBits = VK_IMAGE_ASPECT_COLOR_BIT;
+    switch (format)
+    {
+        case GL_DEPTH_COMPONENT:
+            renderTarget   = getDepthStencilRenderTarget();
+            aspectFlagBits = VK_IMAGE_ASPECT_DEPTH_BIT;
+            break;
+        case GL_STENCIL_INDEX_OES:
+            renderTarget   = getDepthStencilRenderTarget();
+            aspectFlagBits = VK_IMAGE_ASPECT_STENCIL_BIT;
+            break;
+        default:
+            renderTarget   = getColorReadRenderTarget();
+            aspectFlagBits = VK_IMAGE_ASPECT_COLOR_BIT;
+            break;
+    }
+    ANGLE_TRY(readPixelsImpl(contextVk, params.area, params, aspectFlagBits, renderTarget,
                              static_cast<uint8_t *>(pixels) + outputSkipBytes));
     mReadPixelBuffer.releaseInFlightBuffers(contextVk);
     return angle::Result::Continue;

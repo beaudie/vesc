@@ -410,7 +410,7 @@ size_t FramebufferState::getReadIndex() const
     return readIndex;
 }
 
-const FramebufferAttachment *FramebufferState::getReadAttachment() const
+const FramebufferAttachment *FramebufferState::getReadAttachment(GLenum format) const
 {
     if (mReadBufferState == GL_NONE)
     {
@@ -419,7 +419,11 @@ const FramebufferAttachment *FramebufferState::getReadAttachment() const
 
     size_t readIndex = getReadIndex();
     const gl::FramebufferAttachment &framebufferAttachment =
-        isDefault() ? mDefaultFramebufferReadAttachment : mColorAttachments[readIndex];
+        (format == GL_DEPTH_COMPONENT)
+            ? mDepthAttachment
+            : ((format == GL_STENCIL_INDEX_OES) ? *getStencilOrDepthStencilAttachment()
+                                                : (isDefault() ? mDefaultFramebufferReadAttachment
+                                                               : mColorAttachments[readIndex]));
 
     return framebufferAttachment.isAttached() ? &framebufferAttachment : nullptr;
 }
@@ -891,12 +895,12 @@ const FramebufferAttachment *Framebuffer::getStencilOrDepthStencilAttachment() c
 
 const FramebufferAttachment *Framebuffer::getReadColorAttachment() const
 {
-    return mState.getReadAttachment();
+    return mState.getReadAttachment(GL_COLOR_ATTACHMENT0);
 }
 
 GLenum Framebuffer::getReadColorAttachmentType() const
 {
-    const FramebufferAttachment *readAttachment = mState.getReadAttachment();
+    const FramebufferAttachment *readAttachment = mState.getReadAttachment(GL_COLOR_ATTACHMENT0);
     return (readAttachment != nullptr ? readAttachment->type() : GL_NONE);
 }
 
