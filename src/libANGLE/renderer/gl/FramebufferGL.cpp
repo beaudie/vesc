@@ -627,7 +627,7 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
     // Clip read area to framebuffer.
-    const auto *readAttachment = mState.getReadAttachment();
+    const auto *readAttachment = mState.getReadPixelsAttachment(format);
     const gl::Extents fbSize   = readAttachment->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
     gl::Rectangle clippedArea;
@@ -650,10 +650,13 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
     if (features.readPixelsUsingImplementationColorReadFormatForNorm16.enabled &&
         readType == GL_UNSIGNED_SHORT)
     {
-        ANGLE_CHECK(contextGL, readFormat == GL_RED || readFormat == GL_RG || readFormat == GL_RGBA,
-                    "glReadPixels: GL_IMPLEMENTATION_COLOR_READ_FORMAT advertised by the driver is "
-                    "not handled by RGBA16 readPixels workaround.",
-                    GL_INVALID_OPERATION);
+        ANGLE_CHECK(
+            contextGL,
+            readFormat == GL_RED || readFormat == GL_RG || readFormat == GL_RGBA ||
+                ((readFormat == GL_DEPTH_COMPONENT) && (context->getExtensions().readDepthNV)),
+            "glReadPixels: GL_IMPLEMENTATION_COLOR_READ_FORMAT advertised by the driver is "
+            "not handled by RGBA16 readPixels workaround.",
+            GL_INVALID_OPERATION);
     }
 
     stateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, mFramebufferID);
