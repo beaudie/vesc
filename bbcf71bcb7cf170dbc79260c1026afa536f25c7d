@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "eb9a0659_950096f0",
+        "filename": "src/libANGLE/Config.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-01-31T20:09:44Z",
+      "side": 1,
+      "message": "bindToTextureTarget sounds good to me.",
+      "parentUuid": "0df4e824_b98dc9ea",
+      "range": {
+        "startLine": 46,
+        "startChar": 12,
+        "endLine": 46,
+        "endChar": 25
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d68ee6c_aca83e17",
         "filename": "src/libANGLE/renderer/gl/eagl/DisplayEAGL.mm",
         "patchSetId": 13
