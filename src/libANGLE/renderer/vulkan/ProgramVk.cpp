@@ -1436,20 +1436,12 @@ void ProgramVk::updateBuffersDescriptorSet(ContextVk *contextVk,
             {
                 bufferHelper.onWrite(contextVk, recorder, accessFlags);
             }
-            else
-            {
-                contextVk->onBufferWrite(accessFlags, &bufferHelper);
-            }
         }
         else
         {
             if (contextVk->getFeatures().commandGraph.enabled)
             {
                 bufferHelper.onRead(contextVk, recorder, VK_ACCESS_UNIFORM_READ_BIT);
-            }
-            else
-            {
-                contextVk->onBufferRead(VK_ACCESS_UNIFORM_READ_BIT, &bufferHelper);
             }
         }
 
