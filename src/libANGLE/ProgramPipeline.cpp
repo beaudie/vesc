@@ -55,4 +55,100 @@ rx::ProgramPipelineImpl *ProgramPipeline::getImplementation() const
     return mProgramPipeline.get();
 }
 
+int ProgramPipeline::getInfoLogLength() const
+{
+    UNIMPLEMENTED();
+    return 0;
+}
+
+void ProgramPipeline::getInfoLog(GLsizei bufSize, GLsizei *length, char *infoLog) const {}
+
+bool ProgramPipeline::hasLinkedShaderStage(ShaderType shaderType) const
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ProgramPipeline::isCompute() const
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+const AttributesMask &ProgramPipeline::getActiveAttribLocationsMask() const
+{
+    UNIMPLEMENTED();
+    const static AttributesMask attributesMask;
+    return attributesMask;
+}
+
+const ActiveTextureMask &ProgramPipeline::getActiveSamplersMask() const
+{
+    UNIMPLEMENTED();
+    const static ActiveTextureMask activeTextureMask;
+    return activeTextureMask;
+}
+
+const ActiveTextureArray<gl::TextureType> &ProgramPipeline::getActiveSamplerTypes() const
+{
+    UNIMPLEMENTED();
+    const static ActiveTextureArray<gl::TextureType> activeTextureArray = {};
+    return activeTextureArray;
+}
+
+const ActiveTextureMask &ProgramPipeline::getActiveImagesMask() const
+{
+    UNIMPLEMENTED();
+    const static ActiveTextureMask activeTextureMask;
+    return activeTextureMask;
+}
+
+SamplerFormat ProgramPipeline::getSamplerFormatForTextureUnitIndex(size_t textureUnitIndex) const
+{
+    UNIMPLEMENTED();
+    return SamplerFormat::InvalidEnum;
+}
+
+ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
+{
+    UNIMPLEMENTED();
+    const ProgramMergedVaryings programMergedVaryings;
+    return programMergedVaryings;
+}
+
+angle::Result ProgramPipeline::link(const gl::Context *context)
+{
+    UNIMPLEMENTED();
+    return angle::Result::Stop;
+}
+
+bool ProgramPipeline::linkVaryings(InfoLog &infoLog) const
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ProgramPipeline::linkValidateGlobalNames(InfoLog &infoLog) const
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+void ProgramPipeline::validate(const Caps &caps)
+{
+    UNIMPLEMENTED();
+}
+
+bool ProgramPipeline::validateSamplers(InfoLog *infoLog, const Caps &caps)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ProgramPipeline::hasAnyDirtyBit() const
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
 }  // namespace gl

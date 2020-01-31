@@ -1631,6 +1631,17 @@ bool Program::isLinking() const
     return (mLinkingState.get() && mLinkingState->linkEvent->isLinking());
 }
 
+bool Program::hasLinkedShaderStage(ShaderType shaderType) const
+{
+    ASSERT(shaderType != ShaderType::InvalidEnum);
+    return mState.hasLinkedShaderStage(shaderType);
+}
+
+bool Program::isCompute() const
+{
+    return mState.isCompute();
+}
+
 void Program::resolveLinkImpl(const Context *context)
 {
     ASSERT(mLinkingState.get());
@@ -2465,6 +2476,26 @@ const std::vector<GLsizei> &Program::getTransformFeedbackStrides() const
     return mState.mTransformFeedbackStrides;
 }
 
+const ActiveTextureMask &Program::getActiveSamplersMask() const
+{
+    return mState.mActiveSamplersMask;
+}
+
+const ActiveTextureMask &Program::getActiveImagesMask() const
+{
+    return mState.mActiveImagesMask;
+}
+
+const ActiveTextureArray<TextureType> &Program::getActiveSamplerTypes() const
+{
+    return mState.mActiveSamplerTypes;
+}
+
+bool Program::hasAnyDirtyBit() const
+{
+    return mDirtyBits.any();
+}
+
 GLint Program::getFragDataLocation(const std::string &name) const
 {
     ASSERT(mLinkResolved);
@@ -2935,6 +2966,18 @@ void Program::validate(const Caps &caps)
     }
 }
 
+bool Program::validateSamplers(InfoLog *infoLog, const Caps &caps)
+{
+    // Skip cache if we're using an infolog, so we get the full error.
+    // Also skip the cache if the sample mapping has changed, or if we haven't ever validated.
+    if (infoLog == nullptr && mCachedValidateSamplersResult.valid())
+    {
+        return mCachedValidateSamplersResult.value();
+    }
+
+    return validateSamplersImpl(infoLog, caps);
+}
+
 bool Program::validateSamplersImpl(InfoLog *infoLog, const Caps &caps)
 {
     ASSERT(mLinkResolved);
@@ -2966,6 +3009,12 @@ bool Program::isValidated() const
 {
     ASSERT(mLinkResolved);
     return mValidated;
+}
+
+const AttributesMask &Program::getActiveAttribLocationsMask() const
+{
+    ASSERT(mLinkResolved);
+    return mState.mActiveAttribLocationsMask;
 }
 
 void Program::getActiveUniformBlockName(const GLuint blockIndex,
@@ -5477,6 +5526,11 @@ void Program::postResolveLink(const gl::Context *context)
         mState.mBaseVertexLocation   = getUniformLocation("gl_BaseVertex");
         mState.mBaseInstanceLocation = getUniformLocation("gl_BaseInstance");
     }
+}
+
+SamplerFormat Program::getSamplerFormatForTextureUnitIndex(size_t textureUnitIndex) const
+{
+    return getState().getSamplerFormatForTextureUnitIndex(textureUnitIndex);
 }
 
 }  // namespace gl

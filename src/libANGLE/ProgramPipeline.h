@@ -15,6 +15,8 @@
 
 #include "common/angleutils.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/InfoLog.h"
+#include "libANGLE/ProgramHelper.h"
 #include "libANGLE/RefCountObject.h"
 
 namespace rx
@@ -42,7 +44,9 @@ class ProgramPipelineState final : angle::NonCopyable
     std::string mLabel;
 };
 
-class ProgramPipeline final : public RefCountObject<ProgramPipelineID>, public LabeledObject
+class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
+                              public LabeledObject,
+                              public ProgramHelper
 {
   public:
     ProgramPipeline(rx::GLImplFactory *factory, ProgramPipelineID handle);
@@ -54,6 +58,28 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>, public L
     const std::string &getLabel() const override;
 
     rx::ProgramPipelineImpl *getImplementation() const;
+
+    // ProgramHelper Interface
+    int getInfoLogLength() const override;
+    void getInfoLog(GLsizei bufSize, GLsizei *length, char *infoLog) const override;
+
+    bool hasLinkedShaderStage(ShaderType shaderType) const override;
+    bool isCompute() const override;
+
+    const AttributesMask &getActiveAttribLocationsMask() const override;
+
+    const ActiveTextureMask &getActiveSamplersMask() const override;
+    const ActiveTextureArray<gl::TextureType> &getActiveSamplerTypes() const override;
+    const ActiveTextureMask &getActiveImagesMask() const override;
+    SamplerFormat getSamplerFormatForTextureUnitIndex(size_t textureUnitIndex) const override;
+
+    ProgramMergedVaryings getMergedVaryings() const override;
+    angle::Result link(const gl::Context *context) override;
+    bool linkVaryings(InfoLog &infoLog) const override;
+    bool linkValidateGlobalNames(InfoLog &infoLog) const override;
+    void validate(const Caps &caps) override;
+    bool validateSamplers(InfoLog *infoLog, const Caps &caps) override;
+    bool hasAnyDirtyBit() const override;
 
   private:
     std::unique_ptr<rx::ProgramPipelineImpl> mProgramPipeline;
