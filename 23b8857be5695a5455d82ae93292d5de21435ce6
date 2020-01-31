@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e952f62_abd66ace",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-01-31T21:15:59Z",
+      "side": 0,
+      "message": "Presumably this is where the slow down is at, which is also used in vulkan by GetVertexRangeInfo() for VertexArrayVk::updateStreamedAttribs().   Can/Should that function be re-implemented in a more performant way so we can improve all usages and keep the error handling rather than allowing undefined behavior?\n\nAsked another way, will we have to solve the problem with getIndexRange() later anyway due to updateStreamedAttribs() using it also, or can getIndexRange() be removed everywhere (for vulkan)?",
+      "revId": "23b8857be5695a5455d82ae93292d5de21435ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
