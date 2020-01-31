@@ -95,6 +95,12 @@ constexpr VkImageUsageFlags kSurfaceVKColorImageUsageFlags =
 constexpr VkImageUsageFlags kSurfaceVKDepthStencilImageUsageFlags =
     kSurfaceVKImageUsageFlags | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
 
+// The following transforms require the swapchain width and height to be swapped
+constexpr VkSurfaceTransformFlagsKHR k90DegreeRotationVariants =
+    VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR | VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR |
+    VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR |
+    VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR;
+
 }  // namespace
 
 SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfaceState) {}
@@ -514,6 +520,9 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     gl::Extents extents(static_cast<int>(width), static_cast<int>(height), 1);
 
+    // Use the surface's transform, which in many cases is identity
+    mPreTransform = mSurfaceCaps.currentTransform;
+
     uint32_t presentModeCount = 0;
     ANGLE_VK_TRY(displayVk, vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, mSurface,
                                                                       &presentModeCount, nullptr));
@@ -526,13 +535,6 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     // Select appropriate present mode based on vsync parameter.  Default to 1 (FIFO), though it
     // will get clamped to the min/max values specified at display creation time.
     setSwapInterval(renderer->getFeatures().disableFifoPresentMode.enabled ? 0 : 1);
-
-    // Default to identity transform.
-    mPreTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-    if ((mSurfaceCaps.supportedTransforms & mPreTransform) == 0)
-    {
-        mPreTransform = mSurfaceCaps.currentTransform;
-    }
 
     uint32_t surfaceFormatCount = 0;
     ANGLE_VK_TRY(displayVk, vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, mSurface,
@@ -773,8 +775,17 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.imageColorSpace          = MapEglColorSpaceToVkColorSpace(
         static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
     // Note: Vulkan doesn't allow 0-width/height swapchains.
-    swapchainInfo.imageExtent.width     = std::max(extents.width, 1);
-    swapchainInfo.imageExtent.height    = std::max(extents.height, 1);
+    if ((mPreTransform & k90DegreeRotationVariants) == 0)
+    {
+        // The Surface is rotated such that the width and height must be swapped:
+        swapchainInfo.imageExtent.width  = std::max(extents.height, 1);
+        swapchainInfo.imageExtent.height = std::max(extents.width, 1);
+    }
+    else
+    {
+        swapchainInfo.imageExtent.width  = std::max(extents.width, 1);
+        swapchainInfo.imageExtent.height = std::max(extents.height, 1);
+    }
     swapchainInfo.imageArrayLayers      = 1;
     swapchainInfo.imageUsage            = imageUsageFlags;
     swapchainInfo.imageSharingMode      = VK_SHARING_MODE_EXCLUSIVE;
@@ -1155,11 +1166,9 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
     // continuing.
     // If VK_SUBOPTIMAL_KHR is returned it's because the device orientation changed and we should
-    // recreate the swapchain with a new window orientation. We aren't quite ready for that so just
-    // ignore for now.
-    // TODO: Check for preRotation: http://anglebug.com/3502
-    *presentOutOfDate = result == VK_ERROR_OUT_OF_DATE_KHR;
-    if (!*presentOutOfDate && result != VK_SUBOPTIMAL_KHR)
+    // recreate the swapchain with a new window orientation.
+    *presentOutOfDate = ((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR));
+    if (!*presentOutOfDate)
     {
         ANGLE_VK_TRY(contextVk, result);
     }
