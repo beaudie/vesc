@@ -1733,6 +1733,7 @@ ImageHelper::ImageHelper()
     : CommandGraphResource(CommandGraphResourceType::Image),
       mFormat(nullptr),
       mSamples(1),
+      mSerial(rx::kZeroSerial),
       mCurrentLayout(ImageLayout::Undefined),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mBaseLevel(0),
@@ -1763,6 +1764,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
     other.mMaxLevel      = 0;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
+    other.mSerial        = rx::kZeroSerial;
 }
 
 ImageHelper::~ImageHelper()
@@ -1790,6 +1792,7 @@ angle::Result ImageHelper::init(Context *context,
                                 uint32_t mipLevels,
                                 uint32_t layerCount)
 {
+    mSerial = rx::kZeroSerial;
     return initExternal(context, textureType, extents, format, samples, usage,
                         ImageLayout::Undefined, nullptr, baseLevel, maxLevel, mipLevels,
                         layerCount);
@@ -2194,6 +2197,15 @@ gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
     // you shrink the extents by half.
     return gl::Extents(std::max(1u, mExtents.width >> mipLevel),
                        std::max(1u, mExtents.height >> mipLevel), mExtents.depth);
+}
+
+Serial ImageHelper::getAssignSerial(ContextVk *contextVk)
+{
+    if (mSerial.getValue() == 0)
+    {
+        mSerial = contextVk->generateFramebufferSerial();
+    }
+    return mSerial;
 }
 
 // static
@@ -3519,11 +3531,13 @@ angle::Result FramebufferHelper::init(ContextVk *contextVk,
                                       const VkFramebufferCreateInfo &createInfo)
 {
     ANGLE_VK_TRY(contextVk, mFramebuffer.init(contextVk->getDevice(), createInfo));
+    activate();
     return angle::Result::Continue;
 }
 
 void FramebufferHelper::release(ContextVk *contextVk)
 {
+    deactivate();
     contextVk->addGarbage(&mFramebuffer);
 }
 
