@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c96f8191_8dbeb736",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T12:50:18Z",
+      "side": 1,
+      "message": "nit: I\u0027d prefer if these were just \u0027invalidateDriverUniformsDescriptorSet\u0027 or something like that.",
+      "range": {
+        "startLine": 406,
+        "startChar": 0,
+        "endLine": 410,
+        "endChar": 53
+      },
+      "revId": "77cdb6c2c30a5ec6767603f745324d7ca02131dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
