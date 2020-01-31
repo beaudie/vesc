@@ -124,7 +124,8 @@ angle::Result RenderTargetCache<RenderTargetT>::updateReadColorRenderTarget(
     const gl::Context *context,
     const gl::FramebufferState &state)
 {
-    return updateCachedRenderTarget(context, state.getReadAttachment(), &mReadRenderTarget);
+    return updateCachedRenderTarget(context, state.getReadAttachment(GL_COLOR_ATTACHMENT0),
+                                    &mReadRenderTarget);
 }
 
 template <typename RenderTargetT>

@@ -127,6 +127,8 @@ void GenerateTextureCapsMap(const FormatTable &formatTable,
     tmpTextureExtensions.textureStorage    = true;
     tmpTextureExtensions.depthTextureOES   = true;
     tmpTextureExtensions.depthTextureANGLE = true;
+    tmpTextureExtensions.readDepthNV       = false;
+    tmpTextureExtensions.readStencilNV     = false;
 
     auto formatVerifier = [&](const gl::InternalFormat &internalFormatInfo) {
         angle::FormatID angleFormatId =
