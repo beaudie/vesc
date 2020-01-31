@@ -166,6 +166,9 @@ class FramebufferVk : public FramebufferImpl
     void clearCache(ContextVk *contextVk);
     void updateDepthStencilAttachmentSerial(ContextVk *contextVk);
 
+    RenderTargetVk *getRenderTarget(GLenum format) const;
+    VkImageAspectFlagBits getAspectFlagBits(GLenum format) const;
+
     WindowSurfaceVk *mBackbuffer;
 
     vk::RenderPassDesc mRenderPassDesc;
