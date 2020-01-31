@@ -114,11 +114,11 @@ class FramebufferVk : public FramebufferImpl
                                    const gl::Rectangle &renderArea,
                                    vk::CommandBuffer **commandBufferOut)
     {
-        return mFramebuffer.appendToStartedRenderPass(resourceUseList, renderArea,
-                                                      commandBufferOut);
+        return mFramebuffer->appendToStartedRenderPass(resourceUseList, renderArea,
+                                                       commandBufferOut);
     }
 
-    vk::FramebufferHelper *getFramebuffer() { return &mFramebuffer; }
+    vk::FramebufferHelper *getFramebuffer() { return mFramebuffer.get(); }
 
     angle::Result startNewRenderPass(ContextVk *context,
                                      const gl::Rectangle &renderArea,
@@ -128,6 +128,7 @@ class FramebufferVk : public FramebufferImpl
     GLint getSamples() const;
 
     const vk::RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
+    const Serial *getAttachmentSerials() const { return mAttachmentSerials; }
 
   private:
     FramebufferVk(RendererVk *renderer,
@@ -183,7 +184,7 @@ class FramebufferVk : public FramebufferImpl
     WindowSurfaceVk *mBackbuffer;
 
     vk::RenderPassDesc mRenderPassDesc;
-    vk::FramebufferHelper mFramebuffer;
+    std::unique_ptr<vk::FramebufferHelper> mFramebuffer;
     RenderTargetCache<RenderTargetVk> mRenderTargetCache;
 
     // These two variables are used to quickly compute if we need to do a masked clear. If a color
@@ -197,6 +198,12 @@ class FramebufferVk : public FramebufferImpl
     // the framebuffer does not, we need to mask out the alpha channel. This DrawBufferMask will
     // contain the mask to apply to the alpha channel when drawing.
     gl::DrawBufferMask mEmulatedAlphaAttachmentMask;
+
+    // Serials for attachments on this framebuffer
+    Serial mAttachmentSerials[vk::kMaxFramebufferAttachments];
+    std::unordered_map<vk::FramebufferDesc, vk::Framebuffer *> mFramebufferCache;
+    // tmp hack to keep FB*s alive
+    std::vector<std::unique_ptr<vk::FramebufferHelper>> mCachedFramebuffers;
 };
 }  // namespace rx
 

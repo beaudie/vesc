@@ -106,9 +106,6 @@ constexpr size_t kInFlightCommandsLimit = 100u;
 // Initially dumping the command graphs is disabled.
 constexpr bool kEnableCommandGraphDiagnostics = false;
 
-// Used as fallback serial for null sampler objects
-constexpr Serial kZeroSerial = Serial();
-
 void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                           const vk::PrimaryCommandBuffer &commandBuffer,
                           const std::vector<VkSemaphore> &waitSemaphores,
@@ -2498,6 +2495,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
 
                 gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
                 mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
+
+                mActiveFramebufferDesc.update(mDrawFramebuffer->getAttachmentSerials());
                 updateFlipViewportDrawFramebuffer(glState);
                 updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
@@ -3286,7 +3285,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         if (sampler == nullptr)
         {
             samplerVk     = nullptr;
-            samplerSerial = kZeroSerial;
+            samplerSerial = rx::kZeroSerial;
             textureVk->onSamplerUse(&mResourceUseList);
         }
         else
