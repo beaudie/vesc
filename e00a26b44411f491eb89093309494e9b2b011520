@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b51dfb94_48b741b3",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-31T15:13:55Z",
+      "side": 1,
+      "message": "Jamie, curious if I\u0027m using srcDepthPitch appropriately here.  Should this just be:\n\n  size_t captureSize \u003d (srcRowPitch * height) * srcDepthPitch + srcSkipBytes;",
+      "range": {
+        "startLine": 639,
+        "startChar": 4,
+        "endLine": 639,
+        "endChar": 88
+      },
+      "revId": "e00a26b44411f491eb89093309494e9b2b011520",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
