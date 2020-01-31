@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "65a07b6d_de5f841c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-01-31T17:49:28Z",
+      "side": 1,
+      "message": "We have the details in an email thread that spell out where the locks were grabbed.  Brandon, can you add the details to the bug so we don\u0027t lose them?",
+      "parentUuid": "246f9871_c4f873de",
+      "range": {
+        "startLine": 10,
+        "startChar": 24,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "3847b896ea994988c8f3996b1362d3836e02a405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f4c5a84_73e711ce",
         "filename": "src/libGLESv2/global_state.h",
         "patchSetId": 1
