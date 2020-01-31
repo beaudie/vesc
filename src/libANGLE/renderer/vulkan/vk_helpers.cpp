@@ -3314,6 +3314,14 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
         resolvedImage.get().onResourceAccess(&contextVk->getResourceUseList());
     }
 
+    auto layoutChangeAspectFlags = copyAspectFlags;
+    if ((layoutChangeAspectFlags == VK_IMAGE_ASPECT_DEPTH_BIT) ||
+        (layoutChangeAspectFlags == VK_IMAGE_ASPECT_STENCIL_BIT))
+    {
+        layoutChangeAspectFlags = static_cast<VkImageAspectFlagBits>(VK_IMAGE_ASPECT_DEPTH_BIT |
+                                                                     VK_IMAGE_ASPECT_STENCIL_BIT);
+    }
+
     // Note that although we're reading from the image, we need to update the layout below.
     CommandBuffer *commandBuffer;
     if (contextVk->commandGraphEnabled())
@@ -3321,19 +3329,19 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
         ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
         if (isMultisampled)
         {
-            resolvedImage.get().changeLayout(copyAspectFlags, ImageLayout::TransferDst,
+            resolvedImage.get().changeLayout(layoutChangeAspectFlags, ImageLayout::TransferDst,
                                              commandBuffer);
         }
-        changeLayout(copyAspectFlags, ImageLayout::TransferSrc, commandBuffer);
+        changeLayout(layoutChangeAspectFlags, ImageLayout::TransferSrc, commandBuffer);
     }
     else
     {
         if (isMultisampled)
         {
-            ANGLE_TRY(contextVk->onImageWrite(copyAspectFlags, ImageLayout::TransferDst,
+            ANGLE_TRY(contextVk->onImageWrite(layoutChangeAspectFlags, ImageLayout::TransferDst,
                                               &resolvedImage.get()));
         }
-        ANGLE_TRY(contextVk->onImageRead(copyAspectFlags, ImageLayout::TransferSrc, this));
+        ANGLE_TRY(contextVk->onImageRead(layoutChangeAspectFlags, ImageLayout::TransferSrc, this));
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
     }
 
@@ -3384,12 +3392,12 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
 
         if (contextVk->commandGraphEnabled())
         {
-            resolvedImage.get().changeLayout(copyAspectFlags, ImageLayout::TransferSrc,
+            resolvedImage.get().changeLayout(layoutChangeAspectFlags, ImageLayout::TransferSrc,
                                              commandBuffer);
         }
         else
         {
-            ANGLE_TRY(contextVk->onImageRead(copyAspectFlags, ImageLayout::TransferSrc,
+            ANGLE_TRY(contextVk->onImageRead(layoutChangeAspectFlags, ImageLayout::TransferSrc,
                                              &resolvedImage.get()));
         }
 
