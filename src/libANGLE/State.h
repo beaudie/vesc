@@ -19,6 +19,7 @@
 #include "libANGLE/GLES1State.h"
 #include "libANGLE/Overlay.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/ProgramHelper.h"
 #include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Renderbuffer.h"
@@ -309,6 +310,17 @@ class State : angle::NonCopyable
             mProgram->resolveLink(context);
         }
         return mProgram;
+    }
+
+    // If both a Program and a ProgramPipeline are bound, the Program will
+    // always override the ProgramPipeline.
+    ProgramHelper *getProgramHelper() const
+    {
+        if (mProgram)
+        {
+            return mProgram;
+        }
+        return mProgramPipeline.get();
     }
 
     // Transform feedback object (not buffer) binding manipulation

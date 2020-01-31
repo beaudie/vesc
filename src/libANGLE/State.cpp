@@ -540,8 +540,10 @@ void State::reset(const Context *context)
 
 ANGLE_INLINE void State::unsetActiveTextures(ActiveTextureMask textureMask)
 {
+    ProgramHelper *programHelper = getProgramHelper();
+
     // Unset any relevant bound textures.
-    for (size_t textureIndex : mProgram->getActiveSamplersMask())
+    for (size_t textureIndex : programHelper->getActiveSamplersMask())
     {
         mActiveTexturesCache[textureIndex] = nullptr;
         mCompleteTextureBindings[textureIndex].reset();
@@ -572,14 +574,15 @@ ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
         }
     }
 
-    if (mProgram)
+    ProgramHelper *programHelper = getProgramHelper();
+
+    if (programHelper)
     {
         const SamplerState &samplerState =
             sampler ? sampler->getSamplerState() : texture->getSamplerState();
         mTexturesIncompatibleWithSamplers[textureIndex] =
             !texture->getTextureState().compatibleWithSamplerFormat(
-                mProgram->getState().getSamplerFormatForTextureUnitIndex(textureIndex),
-                samplerState);
+                programHelper->getSamplerFormatForTextureUnitIndex(textureIndex), samplerState);
     }
     else
     {
@@ -1172,8 +1175,11 @@ void State::setSamplerTexture(const Context *context, TextureType type, Texture 
 {
     mSamplerTextures[type][mActiveSampler].set(context, texture);
 
-    if (mProgram && mProgram->getActiveSamplersMask()[mActiveSampler] &&
-        IsTextureCompatibleWithSampler(type, mProgram->getActiveSamplerTypes()[mActiveSampler]))
+    ProgramHelper *programHelper = getProgramHelper();
+
+    if (programHelper && programHelper->getActiveSamplersMask()[mActiveSampler] &&
+        IsTextureCompatibleWithSampler(type,
+                                       programHelper->getActiveSamplerTypes()[mActiveSampler]))
     {
         updateActiveTexture(context, mActiveSampler, texture);
     }
@@ -2674,10 +2680,12 @@ angle::Result State::syncTexturesInit(const Context *context)
 {
     ASSERT(mRobustResourceInit);
 
-    if (!mProgram)
+    ProgramHelper *programHelper = getProgramHelper();
+
+    if (!programHelper)
         return angle::Result::Continue;
 
-    for (size_t textureUnitIndex : mProgram->getActiveSamplersMask())
+    for (size_t textureUnitIndex : programHelper->getActiveSamplersMask())
     {
         Texture *texture = mActiveTexturesCache[textureUnitIndex];
         if (texture)
@@ -2690,9 +2698,11 @@ angle::Result State::syncTexturesInit(const Context *context)
 
 angle::Result State::syncImagesInit(const Context *context)
 {
+    ProgramHelper *programHelper = getProgramHelper();
+
     ASSERT(mRobustResourceInit);
-    ASSERT(mProgram);
-    for (size_t imageUnitIndex : mProgram->getActiveImagesMask())
+    ASSERT(programHelper);
+    for (size_t imageUnitIndex : programHelper->getActiveImagesMask())
     {
         Texture *texture = mImageUnits[imageUnitIndex].texture.get();
         if (texture)
@@ -2941,9 +2951,11 @@ void State::setImageUnit(const Context *context,
 // Handle a dirty texture event.
 void State::onActiveTextureChange(const Context *context, size_t textureUnit)
 {
-    if (mProgram)
+    ProgramHelper *programHelper = getProgramHelper();
+
+    if (programHelper)
     {
-        TextureType type = mProgram->getActiveSamplerTypes()[textureUnit];
+        TextureType type = programHelper->getActiveSamplerTypes()[textureUnit];
         if (type != TextureType::InvalidEnum)
         {
             Texture *activeTexture = getTextureForActiveSampler(type, textureUnit);
@@ -2954,9 +2966,11 @@ void State::onActiveTextureChange(const Context *context, size_t textureUnit)
 
 void State::onActiveTextureStateChange(const Context *context, size_t textureUnit)
 {
-    if (mProgram)
+    ProgramHelper *programHelper = getProgramHelper();
+
+    if (programHelper)
     {
-        TextureType type = mProgram->getActiveSamplerTypes()[textureUnit];
+        TextureType type = programHelper->getActiveSamplerTypes()[textureUnit];
         if (type != TextureType::InvalidEnum)
         {
             Texture *activeTexture = getTextureForActiveSampler(type, textureUnit);
@@ -2968,7 +2982,9 @@ void State::onActiveTextureStateChange(const Context *context, size_t textureUni
 
 void State::onImageStateChange(const Context *context, size_t unit)
 {
-    if (mProgram)
+    ProgramHelper *programHelper = getProgramHelper();
+
+    if (programHelper)
     {
         const ImageUnit &image = mImageUnits[unit];
 
