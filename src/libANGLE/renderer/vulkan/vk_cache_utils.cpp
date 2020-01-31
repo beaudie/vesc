@@ -1650,6 +1650,48 @@ bool TextureDescriptorDesc::operator==(const TextureDescriptorDesc &other) const
     return memcmp(mSerials.data(), other.mSerials.data(), sizeof(TexUnitSerials) * mMaxIndex) == 0;
 }
 
+FramebufferDesc::FramebufferDesc() : mWidth(0), mHeight(0)
+{
+    clearSerials();
+}
+
+FramebufferDesc::~FramebufferDesc()                            = default;
+FramebufferDesc::FramebufferDesc(const FramebufferDesc &other) = default;
+FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = default;
+
+void FramebufferDesc::update(uint32_t width,
+                             uint32_t height,
+                             const Serial serials[kMaxFramebufferAttachments])
+{
+    mWidth  = width;
+    mHeight = height;
+    memcpy(mSerials, serials, sizeof(Serial) * kMaxFramebufferAttachments);
+}
+
+size_t FramebufferDesc::hash() const
+{
+    return angle::ComputeGenericHash(
+        &mWidth, sizeof(uint32_t) * 2 + sizeof(Serial) * kMaxFramebufferAttachments);
+}
+
+void FramebufferDesc::clearSerials()
+{
+    memset(mSerials, 0, sizeof(Serial) * kMaxFramebufferAttachments);
+}
+
+void FramebufferDesc::reset()
+{
+    mWidth  = 0;
+    mHeight = 0;
+    clearSerials();
+}
+
+bool FramebufferDesc::operator==(const FramebufferDesc &other) const
+{
+    return memcmp(&mWidth, &other.mWidth,
+                  sizeof(uint32_t) * 2 + sizeof(Serial) * kMaxFramebufferAttachments) == 0;
+}
+
 }  // namespace vk
 
 // RenderPassCache implementation.

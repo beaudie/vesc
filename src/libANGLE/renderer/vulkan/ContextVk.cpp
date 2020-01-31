@@ -2446,6 +2446,10 @@ angle::Result ContextVk::syncState(const gl::Context *context,
 
                 gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
                 mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
+
+                mActiveFramebufferDesc.update(mDrawFramebuffer->getWidth(),
+                                              mDrawFramebuffer->getHeight(),
+                                              mDrawFramebuffer->getAttachmentSerials());
                 updateFlipViewportDrawFramebuffer(glState);
                 updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
