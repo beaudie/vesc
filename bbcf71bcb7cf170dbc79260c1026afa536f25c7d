@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "63104fbc_f03630e7",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T19:41:43Z",
+      "side": 1,
+      "message": "we already have angle.GetExecutableDirectory in system_utils. How does the application dir differ from the executable dir?",
+      "range": {
+        "startLine": 58,
+        "startChar": 12,
+        "endLine": 58,
+        "endChar": 29
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0b72ec97_6236babe",
         "filename": "src/libANGLE/Config.h",
         "patchSetId": 13
@@ -153,6 +176,29 @@
     },
     {
       "key": {
+        "uuid": "7fcb9c1b_aa0eb66d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T19:41:43Z",
+      "side": 1,
+      "message": "nit: you can leave this as a direct return. saves an instruction or two in some cases.",
+      "range": {
+        "startLine": 1370,
+        "startChar": 0,
+        "endLine": 1372,
+        "endChar": 35
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0dd7fe48_5f53e7d0",
         "filename": "src/libANGLE/renderer/vulkan/mac/DisplayVkMac.mm",
         "patchSetId": 13
@@ -168,6 +214,167 @@
         "startLine": 78,
         "startChar": 4,
         "endLine": 78,
+        "endChar": 48
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "093bf1ab_c1aa9b8e",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T19:41:43Z",
+      "side": 1,
+      "message": "nit: 2020",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77ee16fa_c229a00e",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T19:41:43Z",
+      "side": 1,
+      "message": "is this just for Mac or could it be shared with iOS?",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e39ac060_dae2e696",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T19:41:43Z",
+      "side": 1,
+      "message": "nit: can probably make this constexpr. also you can use std::array.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 12
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4c98180_c0d702d8",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T19:41:43Z",
+      "side": 1,
+      "message": "nit: you can use a range-for here.",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 76
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6228965a_ee3aec67",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T19:41:43Z",
+      "side": 1,
+      "message": "nit: should be lowerCamelCase for non-static members, same below.",
+      "range": {
+        "startLine": 96,
+        "startChar": 11,
+        "endLine": 96,
+        "endChar": 27
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "175eb6f1_011683b6",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T19:41:43Z",
+      "side": 1,
+      "message": "nit: for ANGLE variables avoid underscore",
+      "range": {
+        "startLine": 105,
+        "startChar": 15,
+        "endLine": 105,
+        "endChar": 26
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39687274_9178a86f",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T19:41:43Z",
+      "side": 1,
+      "message": "possible to file a bug for this on the ANGLE or Khronos trackers?",
+      "range": {
+        "startLine": 375,
+        "startChar": 4,
+        "endLine": 375,
         "endChar": 48
       },
       "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
