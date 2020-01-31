@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "59473692_7619402a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "A patch hunk replaces contents at [offset, offset + size) with the hunk contents. If the hunk is purely adding something and not removing anything, then size would be 0.\n\n`createPatchHunk` takes the instruction (which is the hunk contents), offset and size (as described in the previous paragraph). In this case, an instruction is being removed with no replacement, thus the hunk would add it back without removing anything.\n\nIf you have suggestions to make it clearer, I\u0027m all ears.",
+      "parentUuid": "3d7138c0_a1c95d17",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fa7b94b_093ba240",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2c15b3c_1c325f7a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fa7b94b_093ba240",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "65b7034f_b4a289ba",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "It\u0027s validating the blob and any possible permutation of patches (well, currently only one), so the cost could be significant. Remember that with dcheck_always_on, ASSERTs still fire, so we still have coverage on the bots.",
+      "parentUuid": "a727552e_bb4e8f1c",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab7672c7_9f31814b",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 7
@@ -67,6 +121,24 @@
       "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7210dcc_148d4bb4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2020,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "ValidateSpirvBlob calls ApplySpirvPatches to make sure patching is done correctly.\n\nI had this function tested in https://chromium-review.googlesource.com/c/angle/angle/+/1984109 but yes, there are no current users. PPOs would be the first.",
+      "parentUuid": "ab7672c7_9f31814b",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "a12c70ca_58a47e02",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "I like the idea, done.\n\nI won\u0027t bother patching out bresenham emulation though. Most implementations will have the extension, which means the code is never generated. For the rest, it looks like some, if not all implementations remove that added varying when not used, so there\u0027s little reason to patch it out.",
+      "parentUuid": "72b5c606_2a98f66c",
+      "range": {
+        "startLine": 130,
+        "startChar": 30,
+        "endLine": 130,
+        "endChar": 51
+      },
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae9878ac_8566cc87",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 7
@@ -107,6 +203,24 @@
       "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2776a58_bfdefeff",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae9878ac_8566cc87",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -127,6 +241,24 @@
     },
     {
       "key": {
+        "uuid": "5d092cb4_7d570aac",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e4482d6_f4d6e39a",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7045c6c1_ae6f0b56",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 7
@@ -141,6 +273,24 @@
       "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "518a5f61_b3eb0288",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7045c6c1_ae6f0b56",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -161,6 +311,24 @@
     },
     {
       "key": {
+        "uuid": "1f249abf_706e52a6",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58e1d93f_ae4c54a0",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "beaed152_ec4d19e7",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 7
@@ -175,6 +343,24 @@
       "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdd80264_f3e186ad",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "beaed152_ec4d19e7",
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -198,6 +384,30 @@
       "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15b03f04_b78d42b2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-01-31T02:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a97ac2c9_0374996d",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 534,
+        "endChar": 72
+      },
+      "revId": "c7b6326316dd5aa2ff7ab48e70ceeb4178ebf6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
