@@ -1650,6 +1650,47 @@ bool TextureDescriptorDesc::operator==(const TextureDescriptorDesc &other) const
     return memcmp(mSerials.data(), other.mSerials.data(), sizeof(TexUnitSerials) * mMaxIndex) == 0;
 }
 
+FramebufferDesc::FramebufferDesc()
+{
+    clearSerials();
+}
+
+FramebufferDesc::~FramebufferDesc()                            = default;
+FramebufferDesc::FramebufferDesc(const FramebufferDesc &other) = default;
+FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = default;
+
+void FramebufferDesc::update(const AttachmentSerial serials[kMaxFramebufferAttachments])
+{
+    memcpy(mSerials, serials, sizeof(AttachmentSerial) * kMaxFramebufferAttachments);
+}
+
+void FramebufferDesc::update(uint32_t index, AttachmentSerial serial)
+{
+    ASSERT(index < kMaxFramebufferAttachments);
+    mSerials[index] = serial;
+}
+
+size_t FramebufferDesc::hash() const
+{
+    return angle::ComputeGenericHash(&mSerials,
+                                     sizeof(AttachmentSerial) * kMaxFramebufferAttachments);
+}
+
+void FramebufferDesc::clearSerials()
+{
+    memset(mSerials, 0, sizeof(AttachmentSerial) * kMaxFramebufferAttachments);
+}
+
+void FramebufferDesc::reset()
+{
+    clearSerials();
+}
+
+bool FramebufferDesc::operator==(const FramebufferDesc &other) const
+{
+    return memcmp(&mSerials, &other.mSerials, sizeof(Serial) * kMaxFramebufferAttachments) == 0;
+}
+
 }  // namespace vk
 
 // RenderPassCache implementation.
