@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36d38fdf_067eb122",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4915,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-31T20:08:19Z",
+      "side": 1,
+      "message": "Does it cause any failures to just set the unclamped values always?  From your comment it sounds like D3D and GL will do the right thing when given unclamped values.\n\nIt\u0027s undesireable to set the GL state differently based on the extensions, querying these values would be inconstant.  I would prefer to never clamp here and then clamp in the backends when needed.  I guess there are no tests covering the querying.",
+      "range": {
+        "startLine": 4915,
+        "startChar": 3,
+        "endLine": 4915,
+        "endChar": 50
+      },
+      "revId": "91fe1d501628f462eca1c7cf9dd506e4bc2ae9e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
