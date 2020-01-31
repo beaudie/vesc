@@ -69,6 +69,24 @@
       "revId": "23b8857be5695a5455d82ae93292d5de21435ce6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f07c78a_30d22b5a",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-01-31T21:55:35Z",
+      "side": 0,
+      "message": "I agree that getIndexRange likely has room to optimize as well, for other usages. But even if we optimize it perfectly, this validation is still negative on performance since it will have to walk the list at least. IMO,even if we optimize getIndexRange, we should still do this undefined behavior to get back perf, given that this is in draw path.",
+      "parentUuid": "1e952f62_abd66ace",
+      "revId": "23b8857be5695a5455d82ae93292d5de21435ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
