@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0df4e824_b98dc9ea",
+        "filename": "src/libANGLE/Config.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-31T19:32:56Z",
+      "side": 1,
+      "message": "Recommend either leaving it as EGL_TEXTURE_TARGET to re-use the existing enum or \"bindToTextureTarget\" to match the bindToTextureRGB and bindToTextureRGBA naming.",
+      "parentUuid": "0b72ec97_6236babe",
+      "range": {
+        "startLine": 46,
+        "startChar": 12,
+        "endLine": 46,
+        "endChar": 25
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d68ee6c_aca83e17",
         "filename": "src/libANGLE/renderer/gl/eagl/DisplayEAGL.mm",
         "patchSetId": 13
@@ -48,6 +72,52 @@
     },
     {
       "key": {
+        "uuid": "1a78f915_6cc1a01c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-31T19:32:56Z",
+      "side": 1,
+      "message": "Can remove the std::string wrapping if the other is an std::string.",
+      "range": {
+        "startLine": 238,
+        "startChar": 59,
+        "endLine": 238,
+        "endChar": 70
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a17fedc2_283d7dfc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-31T19:32:56Z",
+      "side": 1,
+      "message": "No need to turn this back to a c_str",
+      "range": {
+        "startLine": 238,
+        "startChar": 48,
+        "endLine": 238,
+        "endChar": 56
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8baca421_886584eb",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 13
@@ -59,6 +129,47 @@
       "writtenOn": "2020-01-30T18:54:08Z",
       "side": 1,
       "message": "Are we allowed to skip querying vkGetMemoryHostPointerPropertiesEXT etc to get the required alignment and memory type, since we know swiftshader\u0027s properties?",
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9348b9a5_08b09961",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-31T19:32:56Z",
+      "side": 1,
+      "message": "Probably but I would prefer to keep it explicit to be future-proof.",
+      "parentUuid": "8baca421_886584eb",
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dd7fe48_5f53e7d0",
+        "filename": "src/libANGLE/renderer/vulkan/mac/DisplayVkMac.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-31T19:32:56Z",
+      "side": 1,
+      "message": "If you check the vk extension, this could pass the bots before landing the changes swiftshader side.",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 48
+      },
       "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
