@@ -1696,7 +1696,9 @@ ImageHelper::ImageHelper()
       mMaxLevel(0),
       mLayerCount(0),
       mLevelCount(0)
-{}
+{
+    memset(&mSerial, 0, sizeof(Serial));
+}
 
 ImageHelper::ImageHelper(ImageHelper &&other)
     : CommandGraphResource(CommandGraphResourceType::Image),
@@ -1720,6 +1722,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
     other.mMaxLevel      = 0;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
+    memset(&other.mSerial, 0, sizeof(Serial));
 }
 
 ImageHelper::~ImageHelper()
@@ -1747,6 +1750,7 @@ angle::Result ImageHelper::init(Context *context,
                                 uint32_t mipLevels,
                                 uint32_t layerCount)
 {
+    mSerial = rx::kZeroSerial;
     return initExternal(context, textureType, extents, format, samples, usage,
                         ImageLayout::Undefined, nullptr, baseLevel, maxLevel, mipLevels,
                         layerCount);
@@ -2155,6 +2159,15 @@ gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
     // you shrink the extents by half.
     return gl::Extents(std::max(1u, mExtents.width >> mipLevel),
                        std::max(1u, mExtents.height >> mipLevel), mExtents.depth);
+}
+
+Serial ImageHelper::getAssignSerial(ContextVk *contextVk)
+{
+    if (mSerial == 0)
+    {
+        mSerial = contextVk->generateFramebufferSerial();
+    }
+    return mSerial;
 }
 
 // static
