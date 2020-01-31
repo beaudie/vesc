@@ -1650,6 +1650,40 @@ bool TextureDescriptorDesc::operator==(const TextureDescriptorDesc &other) const
     return memcmp(mSerials.data(), other.mSerials.data(), sizeof(TexUnitSerials) * mMaxIndex) == 0;
 }
 
+FramebufferDesc::FramebufferDesc()
+{
+    clearSerials();
+}
+
+FramebufferDesc::~FramebufferDesc()                            = default;
+FramebufferDesc::FramebufferDesc(const FramebufferDesc &other) = default;
+FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = default;
+
+void FramebufferDesc::update(const Serial serials[kMaxFramebufferAttachments])
+{
+    memcpy(mSerials, serials, sizeof(Serial) * kMaxFramebufferAttachments);
+}
+
+size_t FramebufferDesc::hash() const
+{
+    return angle::ComputeGenericHash(&mSerials, sizeof(Serial) * kMaxFramebufferAttachments);
+}
+
+void FramebufferDesc::clearSerials()
+{
+    memset(mSerials, 0, sizeof(Serial) * kMaxFramebufferAttachments);
+}
+
+void FramebufferDesc::reset()
+{
+    clearSerials();
+}
+
+bool FramebufferDesc::operator==(const FramebufferDesc &other) const
+{
+    return memcmp(&mSerials, &other.mSerials, sizeof(Serial) * kMaxFramebufferAttachments) == 0;
+}
+
 }  // namespace vk
 
 // RenderPassCache implementation.
