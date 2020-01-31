@@ -110,9 +110,6 @@ constexpr size_t kInFlightCommandsLimit = 100u;
 // Initially dumping the command graphs is disabled.
 constexpr bool kEnableCommandGraphDiagnostics = false;
 
-// Used as fallback serial for null sampler objects
-constexpr Serial kZeroSerial = Serial();
-
 void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                           const vk::PrimaryCommandBuffer &commandBuffer,
                           const std::vector<VkSemaphore> &waitSemaphores,
@@ -2212,7 +2209,8 @@ angle::Result ContextVk::clearWithRenderPassOp(
     // exactly as specified by the scissor for the loadOp to clear only that area.  See
     // ContextVk::updateScissor for more information.
     vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
-    if (!framebuffer->valid() || !framebuffer->renderPassStartedButEmpty() ||
+    if (framebuffer == nullptr || !framebuffer->valid() ||
+        !framebuffer->renderPassStartedButEmpty() ||
         framebuffer->getRenderPassRenderArea() != clearArea)
     {
         mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
@@ -3552,7 +3550,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         if (sampler == nullptr)
         {
             samplerVk     = nullptr;
-            samplerSerial = kZeroSerial;
+            samplerSerial = rx::kZeroSerial;
         }
         else
         {
