@@ -1647,6 +1647,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // Seems to affect both Intel and AMD GPUs. Enable workaround for all GPUs on macOS.
     ANGLE_FEATURE_CONDITION(features, rewriteRowMajorMatrices,
                             IsApple() && functions->standard == STANDARD_GL_DESKTOP);
+
+    // Workarund for incorrect sampling from DXT1 sRGB textures in Intel OpenGL on Windows.
+    ANGLE_FEATURE_CONDITION(features, avoidDXT1sRGBTextureFormat, IsWindows() && isIntel);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
