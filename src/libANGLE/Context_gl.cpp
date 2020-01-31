@@ -9,6 +9,7 @@
 
 #include "Context.h"
 #include "common/debug.h"
+#include "libANGLE/InfoLog.h"
 
 namespace gl
 {
