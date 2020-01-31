@@ -1650,6 +1650,53 @@ bool TextureDescriptorDesc::operator==(const TextureDescriptorDesc &other) const
     return memcmp(mSerials.data(), other.mSerials.data(), sizeof(TexUnitSerials) * mMaxIndex) == 0;
 }
 
+FramebufferDesc::FramebufferDesc()
+{
+    mSerials.clear();
+}
+
+FramebufferDesc::~FramebufferDesc()                                  = default;
+FramebufferDesc::FramebufferDesc(const TextureDescriptorDesc &other) = default;
+FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = default;
+
+void FramebufferDesc::update(
+    uint32_t width,
+    uint32_t height,
+    const std::vector<Serial>
+        &serials)  // size_t index, Serial textureSerial, Serial samplerSerial)
+{
+    // TODO: Should only do this in debug case
+    for (const auto &serial : serials)
+    {
+        ASSERT(serial < std::numeric_limits<uint32_t>::max());
+    }
+    mSignatures.emplace_back(width, height, serials);
+}
+
+size_t FramebufferDesc::hash() const
+{
+    return angle::ComputeGenericHash(
+        &mSignatures,
+        sizeof(Signature) * mSignatures.size());  // sizeof(TexUnitSerials) * mMaxIndex);
+}
+
+void FramebufferDesc::reset()
+{
+    mSignatures.clear();
+}
+
+bool FramebufferDesc::operator==(const FramebufferDesc &other) const
+{
+    if (mSignatures.size() != other.getSize())
+        return false;
+
+    if (mSignatures.size() == 0)
+        return true;
+
+    return memcmp(mSignatures.data(), other.mSignatures.data(),
+                  sizeof(Signature) * mSignatures.size()) == 0;
+}
+
 }  // namespace vk
 
 // RenderPassCache implementation.

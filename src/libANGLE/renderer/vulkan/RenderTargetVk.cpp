@@ -54,6 +54,15 @@ void RenderTargetVk::reset()
     mLayerIndex = 0;
 }
 
+angle::Result RenderTargetVk::getAssignSerial(ContextVk *contextVk)
+{
+    if (mSerial == 0)
+    {
+        mSerial = contextVk->generateFramebufferSerial();
+    }
+    return mSerial;
+}
+
 angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk,
                                           vk::FramebufferHelper *framebufferVk,
                                           vk::CommandBuffer *commandBuffer)

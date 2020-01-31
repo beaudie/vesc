@@ -1143,10 +1143,12 @@ void FramebufferVk::updateRenderPassDesc()
 
 angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut)
 {
+    const vk::FramebufferDesc &framebufferDesc = contextVk->getActiveFramebuffersDesc();
     // If we've already created our cached Framebuffer, return it.
-    if (mFramebuffer.valid())
+    auto iter = mFramebufferCache.find(framebufferDesc);
+    if (iter != mFramebufferCache.end())
     {
-        *framebufferOut = &mFramebuffer.getFramebuffer();
+        *framebufferOut = iter->second;
         return angle::Result::Continue;
     }
 
@@ -1171,6 +1173,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
 
         const vk::ImageView *imageView = nullptr;
         ANGLE_TRY(colorRenderTarget->getImageView(contextVk, &imageView));
+        mAttachmentSerials.push_back(colorRenderTarget->getAssignSerial(contextVk));
 
         attachments.push_back(imageView->getHandle());
 
@@ -1183,6 +1186,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
     {
         const vk::ImageView *imageView = nullptr;
         ANGLE_TRY(depthStencilRenderTarget->getImageView(contextVk, &imageView));
+        mAttachmentSerials.push_back(depthStencilRenderTarget->getAssignSerial(contextVk));
 
         attachments.push_back(imageView->getHandle());
 
@@ -1198,7 +1202,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
         attachmentsSize.width  = mState.getDefaultWidth();
         attachmentsSize.depth  = 0;
     }
-
+    mWidth                                  = attachmentsSize.width;
+    mHeight                                 = attachmentsSize.height;
     VkFramebufferCreateInfo framebufferInfo = {};
 
     framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -1206,13 +1211,14 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
     framebufferInfo.renderPass      = compatibleRenderPass->getHandle();
     framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
     framebufferInfo.pAttachments    = attachments.data();
-    framebufferInfo.width           = static_cast<uint32_t>(attachmentsSize.width);
-    framebufferInfo.height          = static_cast<uint32_t>(attachmentsSize.height);
+    framebufferInfo.width           = static_cast<uint32_t>(mWidth);
+    framebufferInfo.height          = static_cast<uint32_t>(mHeight);
     framebufferInfo.layers          = 1;
 
     ANGLE_TRY(mFramebuffer.init(contextVk, framebufferInfo));
 
     *framebufferOut = &mFramebuffer.getFramebuffer();
+    mFramebufferCache.emplace(framebufferDesc, &mFramebuffer.getFramebuffer());
     return angle::Result::Continue;
 }
 
