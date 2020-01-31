@@ -777,6 +777,10 @@ class ImageHelper final : public CommandGraphResource
 
     gl::Extents getSize(const gl::ImageIndex &index) const;
 
+    // Return unique Serial for underlying image, first assigning it if it hasn't been set yet
+    Serial getAssignSerial(ContextVk *contextVk);
+    void resetSerial() { mSerial = rx::kZeroSerial; }
+
     static void Copy(ImageHelper *srcImage,
                      ImageHelper *dstImage,
                      const gl::Offset &srcOffset,
@@ -1058,6 +1062,7 @@ class ImageHelper final : public CommandGraphResource
     VkExtent3D mExtents;
     const Format *mFormat;
     GLint mSamples;
+    Serial mSerial;
 
     // Current state.
     ImageLayout mCurrentLayout;
