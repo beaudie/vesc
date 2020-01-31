@@ -106,9 +106,6 @@ constexpr size_t kInFlightCommandsLimit = 100u;
 // Initially dumping the command graphs is disabled.
 constexpr bool kEnableCommandGraphDiagnostics = false;
 
-// Used as fallback serial for null sampler objects
-constexpr Serial kZeroSerial = Serial();
-
 void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                           const vk::PrimaryCommandBuffer &commandBuffer,
                           const std::vector<VkSemaphore> &waitSemaphores,
@@ -786,6 +783,9 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
 
         gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getScissoredRenderArea(this);
+        // TODO: When invalidating FBVK as null ptr, mDrawFB->append* call below causes assert in
+        // cmdGraph code
+        //  in CommandGraph.h line 316 b/c cmd graph is not valid (mUse == nullptr)
         if (!commandGraphEnabled() ||
             !mDrawFramebuffer->appendToStartedRenderPass(&mResourceUseList, scissoredRenderArea,
                                                          &mRenderPassCommandBuffer))
@@ -2421,12 +2421,16 @@ angle::Result ContextVk::updateScissor(const gl::State &glState)
     if (commandGraphEnabled())
     {
         vk::FramebufferHelper *framebuffer = framebufferVk->getFramebuffer();
+
+        // if (framebuffer && framebuffer->valid())
+        //{
         framebuffer->updateCurrentAccessNodes();
         if (framebuffer->hasStartedRenderPass() &&
             !framebuffer->getRenderPassRenderArea().encloses(scissoredRenderArea))
         {
             framebuffer->finishCurrentCommands(this);
         }
+        //}
     }
     else
     {
@@ -2634,6 +2638,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
 
                 gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
                 mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
+
+                // mActiveFramebufferDesc.update(mDrawFramebuffer->getAttachmentSerials());
+                // ASSERT(mActiveFramebufferDesc == mDrawFramebuffer->getFramebufferDesc());
                 updateFlipViewportDrawFramebuffer(glState);
                 updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
@@ -3007,6 +3014,7 @@ void ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)
                                                           framebufferVk->getSamples());
     }
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition, renderPassDesc);
+    mActiveFramebufferDesc = framebufferVk->getFramebufferDesc();
 }
 
 void ContextVk::invalidateCurrentTransformFeedbackBuffers()
@@ -3435,7 +3443,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         if (sampler == nullptr)
         {
             samplerVk     = nullptr;
-            samplerSerial = kZeroSerial;
+            samplerSerial = rx::kZeroSerial;
         }
         else
         {
