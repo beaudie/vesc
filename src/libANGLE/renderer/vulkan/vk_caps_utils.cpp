@@ -141,6 +141,13 @@ void RendererVk::ensureCapsInitialized() const
     // We support getting image data for Textures and Renderbuffers.
     mNativeExtensions.getImageANGLE = true;
 
+    // We can only read depth and/or stencil separately if separateDepthStencilLayouts is enabled
+    if (mSeparateDepthStencilLayoutsFeatures.separateDepthStencilLayouts == VK_FALSE)
+    {
+        mNativeExtensions.readDepthNV   = false;
+        mNativeExtensions.readStencilNV = false;
+    }
+
     mNativeExtensions.gpuShader5EXT = vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures);
 
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
