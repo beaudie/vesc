@@ -627,7 +627,8 @@ angle::Result TextureGL::copyImage(const gl::Context *context,
     stateManager->bindTexture(getType(), mTextureID);
 
     const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(source);
-    gl::Extents fbSize = sourceFramebufferGL->getState().getReadAttachment()->getSize();
+    gl::Extents fbSize =
+        sourceFramebufferGL->getState().getReadAttachment(GL_COLOR_ATTACHMENT0)->getSize();
 
     // Did the read area go outside the framebuffer?
     bool outside = sourceArea.x < 0 || sourceArea.y < 0 ||
@@ -749,8 +750,8 @@ angle::Result TextureGL::copySubImage(const gl::Context *context,
                                       const gl::Rectangle &sourceArea,
                                       gl::Framebuffer *source)
 {
-    const FunctionsGL *functions = GetFunctionsGL(context);
-    StateManagerGL *stateManager = GetStateManagerGL(context);
+    const FunctionsGL *functions      = GetFunctionsGL(context);
+    StateManagerGL *stateManager      = GetStateManagerGL(context);
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
     gl::TextureTarget target                 = index.getTarget();
@@ -758,7 +759,8 @@ angle::Result TextureGL::copySubImage(const gl::Context *context,
     const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(source);
 
     // Clip source area to framebuffer.
-    const gl::Extents fbSize = sourceFramebufferGL->getState().getReadAttachment()->getSize();
+    const gl::Extents fbSize =
+        sourceFramebufferGL->getState().getReadAttachment(GL_COLOR_ATTACHMENT0)->getSize();
     gl::Rectangle clippedArea;
     if (!ClipRectangle(sourceArea, gl::Rectangle(0, 0, fbSize.width, fbSize.height), &clippedArea))
     {
