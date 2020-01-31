@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c3338f2f_f1eb8ae9",
+        "filename": "src/common/MemoryBuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-31T23:16:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aac6980_c048708c",
+      "range": {
+        "startLine": 80,
+        "startChar": 47,
+        "endLine": 80,
+        "endChar": 52
+      },
+      "revId": "a03401d46452b3a1c8b32b6001ec6f931f6d976b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4206b764_99e0d754",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "94d0ec5a_84ae5eb9",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-31T23:16:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4206b764_99e0d754",
+      "range": {
+        "startLine": 1079,
+        "startChar": 25,
+        "endLine": 1079,
+        "endChar": 52
+      },
+      "revId": "a03401d46452b3a1c8b32b6001ec6f931f6d976b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0baf028d_23159993",
         "filename": "src/libANGLE/Display.h",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2020-01-31T19:45:50Z",
       "side": 1,
       "message": "I don\u0027t think you want to pass these by value. Seems like you\u0027d want to use RValue-references. Are you pretty familiar with the language requirements?",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 71
+      },
+      "revId": "a03401d46452b3a1c8b32b6001ec6f931f6d976b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db168a9c_7e4913eb",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-01-31T23:16:59Z",
+      "side": 1,
+      "message": "Yea, this only does moves, no copies (angle::ScratchBuffer is NoCopy).  All call sites are  using std::move or passing r-value references, there are compile errors if I change them.\n\nIt gets moved into the function parameter and then moved again into the vector.\n\nOpen to using r-value references here to potentially avoid one move if the compiler ends up being dumb.",
+      "parentUuid": "0baf028d_23159993",
       "range": {
         "startLine": 212,
         "startChar": 0,
