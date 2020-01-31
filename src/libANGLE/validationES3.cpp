@@ -1489,16 +1489,21 @@ bool ValidateDrawRangeElements(Context *context,
         return true;
     }
 
-    // Note that resolving the index range is a bit slow. We should probably optimize this.
-    IndexRange indexRange;
-    ANGLE_VALIDATION_TRY(context->getState().getVertexArray()->getIndexRange(context, type, count,
-                                                                             indices, &indexRange));
-
-    if (indexRange.end > end || indexRange.start < start)
+    // This validation is not required for OpenGLES3 and has significant amount of performance
+    // impact. Restrict it to webGL to avoid crashing
+    if (context->isWebGL())
     {
-        // GL spec says that behavior in this case is undefined - generating an error is fine.
-        context->validationError(GL_INVALID_OPERATION, kExceedsElementRange);
-        return false;
+        // Note that resolving the index range is a bit slow. We should probably optimize this.
+        IndexRange indexRange;
+        ANGLE_VALIDATION_TRY(context->getState().getVertexArray()->getIndexRange(
+            context, type, count, indices, &indexRange));
+
+        if (indexRange.end > end || indexRange.start < start)
+        {
+            // GL spec says that behavior in this case is undefined - generating an error is fine.
+            context->validationError(GL_INVALID_OPERATION, kExceedsElementRange);
+            return false;
+        }
     }
     return true;
 }
