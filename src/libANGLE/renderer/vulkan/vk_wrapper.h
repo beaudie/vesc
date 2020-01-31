@@ -413,6 +413,7 @@ class Framebuffer final : public WrappedObject<Framebuffer, VkFramebuffer>
     void setHandle(VkFramebuffer handle);
 
     VkResult init(VkDevice device, const VkFramebufferCreateInfo &createInfo);
+    bool active = false;
 };
 
 class DeviceMemory final : public WrappedObject<DeviceMemory, VkDeviceMemory>
@@ -1168,7 +1169,8 @@ ANGLE_INLINE void Framebuffer::destroy(VkDevice device)
 
 ANGLE_INLINE VkResult Framebuffer::init(VkDevice device, const VkFramebufferCreateInfo &createInfo)
 {
-    ASSERT(!valid());
+    ASSERT(!valid() && !active);
+    active = true;
     return vkCreateFramebuffer(device, &createInfo, nullptr, &mHandle);
 }
 
