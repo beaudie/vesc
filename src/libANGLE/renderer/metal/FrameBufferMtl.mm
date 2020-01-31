@@ -174,7 +174,7 @@ angle::Result FramebufferMtl::readPixels(const gl::Context *context,
                                          void *pixels)
 {
     // Clip read area to framebuffer.
-    const gl::Extents &fbSize = getState().getReadAttachment()->getSize();
+    const gl::Extents &fbSize = getState().getReadAttachment(format)->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
 
     gl::Rectangle clippedArea;

@@ -908,6 +908,10 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
     mProvokingVertexFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_FEATURES_EXT;
 
+    mSeparateDepthStencilLayoutsFeatures = {};
+    mSeparateDepthStencilLayoutsFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES_KHR;
+
     mVertexAttributeDivisorFeatures = {};
     mVertexAttributeDivisorFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT;
@@ -947,6 +951,11 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
         vk::AddToPNextChain(&deviceFeatures, &mProvokingVertexFeatures);
     }
 
+    if (ExtensionFound(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mSeparateDepthStencilLayoutsFeatures);
+    }
+
     // Query attribute divisor features and properties
     if (ExtensionFound(VK_EXT_VERTEX_ATTRIBUTE_DIVISOR_EXTENSION_NAME, deviceExtensionNames))
     {
@@ -967,12 +976,13 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
 
     // Clean up pNext chains
-    mLineRasterizationFeatures.pNext        = nullptr;
-    mProvokingVertexFeatures.pNext          = nullptr;
-    mVertexAttributeDivisorFeatures.pNext   = nullptr;
-    mVertexAttributeDivisorProperties.pNext = nullptr;
-    mTransformFeedbackFeatures.pNext        = nullptr;
-    mPhysicalDeviceSubgroupProperties.pNext = nullptr;
+    mLineRasterizationFeatures.pNext           = nullptr;
+    mProvokingVertexFeatures.pNext             = nullptr;
+    mSeparateDepthStencilLayoutsFeatures.pNext = nullptr;
+    mVertexAttributeDivisorFeatures.pNext      = nullptr;
+    mVertexAttributeDivisorProperties.pNext    = nullptr;
+    mTransformFeedbackFeatures.pNext           = nullptr;
+    mPhysicalDeviceSubgroupProperties.pNext    = nullptr;
 }
 
 angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex)
