@@ -77,10 +77,24 @@ MemoryBuffer &MemoryBuffer::operator=(MemoryBuffer &&other)
 }
 
 // ScratchBuffer implementation.
+ScratchBuffer::ScratchBuffer() : ScratchBuffer(1000u) {}
 
 ScratchBuffer::ScratchBuffer(uint32_t lifetime) : mLifetime(lifetime), mResetCounter(lifetime) {}
 
 ScratchBuffer::~ScratchBuffer() {}
+
+ScratchBuffer::ScratchBuffer(ScratchBuffer &&other)
+{
+    *this = std::move(other);
+}
+
+ScratchBuffer &ScratchBuffer::operator=(ScratchBuffer &&other)
+{
+    std::swap(mLifetime, other.mLifetime);
+    std::swap(mResetCounter, other.mResetCounter);
+    std::swap(mScratchMemory, other.mScratchMemory);
+    return *this;
+}
 
 bool ScratchBuffer::get(size_t requestedSize, MemoryBuffer **memoryBufferOut)
 {
@@ -110,9 +124,8 @@ bool ScratchBuffer::getImpl(size_t requestedSize,
         tick();
     }
 
-    if (mResetCounter == 0 || mScratchMemory.size() < requestedSize)
+    if (mScratchMemory.size() < requestedSize)
     {
-        mScratchMemory.resize(0);
         if (!mScratchMemory.resize(requestedSize))
         {
             return false;
@@ -135,13 +148,20 @@ void ScratchBuffer::tick()
     if (mResetCounter > 0)
     {
         --mResetCounter;
+        if (mResetCounter == 0)
+        {
+            clear();
+        }
     }
 }
 
 void ScratchBuffer::clear()
 {
     mResetCounter = mLifetime;
-    mScratchMemory.resize(0);
+    if (mScratchMemory.size() > 0)
+    {
+        mScratchMemory.resize(0);
+    }
 }
 
 }  // namespace angle
