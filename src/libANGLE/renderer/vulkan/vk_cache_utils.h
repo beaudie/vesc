@@ -715,6 +715,40 @@ class TextureDescriptorDesc
     };
     gl::ActiveTextureArray<TexUnitSerials> mSerials;
 };
+
+// This is IMPLEMENTATION_MAX_DRAW_BUFFERS + 1 for DS attachment
+constexpr size_t kMaxFramebufferAttachments = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1;
+// Color serials are at index [0:gl::IMPLEMENTATION_MAX_DRAW_BUFFERS-1]
+// Depth Stencil index is at gl::IMPLEMENTATION_MAX_DRAW_BUFFERS
+constexpr size_t kFramebufferDescDepthStencilIndex = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+struct AttachmentSerial
+{
+    uint16_t level;
+    uint16_t layer;
+    uint32_t imageSerial;
+};
+constexpr AttachmentSerial kZeroAttachmentSerial = {0, 0, 0};
+class FramebufferDesc
+{
+  public:
+    FramebufferDesc();
+    ~FramebufferDesc();
+
+    FramebufferDesc(const FramebufferDesc &other);
+    FramebufferDesc &operator=(const FramebufferDesc &other);
+
+    void update(const AttachmentSerial serials[kMaxFramebufferAttachments]);
+    void update(uint32_t index, AttachmentSerial serial);
+    AttachmentSerial get(uint32_t index) const { return mSerials[index]; }
+    size_t hash() const;
+    void reset();
+
+    bool operator==(const FramebufferDesc &other) const;
+
+  private:
+    void clearSerials();
+    AttachmentSerial mSerials[kMaxFramebufferAttachments];
+};
 }  // namespace vk
 }  // namespace rx
 
@@ -755,6 +789,12 @@ template <>
 struct hash<rx::vk::TextureDescriptorDesc>
 {
     size_t operator()(const rx::vk::TextureDescriptorDesc &key) const { return key.hash(); }
+};
+
+template <>
+struct hash<rx::vk::FramebufferDesc>
+{
+    size_t operator()(const rx::vk::FramebufferDesc &key) const { return key.hash(); }
 };
 }  // namespace std
 
