@@ -54,6 +54,20 @@ void RenderTargetVk::reset()
     mLayerIndex = 0;
 }
 
+vk::AttachmentSerial RenderTargetVk::getAssignSerial(ContextVk *contextVk)
+{
+    ASSERT(mImage && mImage->valid());
+    vk::AttachmentSerial attachmentSerial;
+    ASSERT(mLayerIndex < std::numeric_limits<uint16_t>::max());
+    attachmentSerial.layer = static_cast<uint16_t>(mLayerIndex);
+    ASSERT(mLevelIndex < std::numeric_limits<uint16_t>::max());
+    attachmentSerial.level = static_cast<uint16_t>(mLevelIndex);
+    Serial imageSerial     = mImage->getAssignSerial(contextVk);
+    ASSERT(imageSerial.getValue() < std::numeric_limits<uint32_t>::max());
+    attachmentSerial.imageSerial = static_cast<uint32_t>(imageSerial.getValue());
+    return attachmentSerial;
+}
+
 angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk,
                                           vk::FramebufferHelper *framebufferVk,
                                           vk::CommandBuffer *commandBuffer)
