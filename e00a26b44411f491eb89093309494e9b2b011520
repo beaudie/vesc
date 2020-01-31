@@ -22,6 +22,30 @@
       "revId": "e00a26b44411f491eb89093309494e9b2b011520",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad246c2a_12c269dc",
+        "filename": "src/libANGLE/capture_gles_3_0_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-01-31T15:21:29Z",
+      "side": 1,
+      "message": "It actually depends if it\u0027s 3D or 2D array I think. Looking more closely I believe you can call computePackUnpackEndByte here to get the copy size.",
+      "parentUuid": "b51dfb94_48b741b3",
+      "range": {
+        "startLine": 639,
+        "startChar": 4,
+        "endLine": 639,
+        "endChar": 88
+      },
+      "revId": "e00a26b44411f491eb89093309494e9b2b011520",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
