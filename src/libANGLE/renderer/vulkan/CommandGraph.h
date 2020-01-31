@@ -679,17 +679,12 @@ class CommandGraph final : angle::NonCopyable
 // CommandGraphResource inlines.
 ANGLE_INLINE bool CommandGraphResource::hasStartedRenderPass() const
 {
-    return hasChildlessWritingNode() && mCurrentWritingNode->getInsideRenderPassCommands()->valid();
+    return false;
 }
 
 ANGLE_INLINE void CommandGraphResource::updateCurrentAccessNodes()
 {
-    // Clear dependencies if this is a new access.
-    if (!mUse.hasRecordedCommands())
-    {
-        mCurrentWritingNode = nullptr;
-        mCurrentReadingNodes.clear();
-    }
+    return;
 }
 
 ANGLE_INLINE void CommandGraphResource::onResourceRecreated(ResourceUseList *resourceUseList)
@@ -710,8 +705,6 @@ ANGLE_INLINE bool CommandGraphResource::appendToStartedRenderPass(ResourceUseLis
                                                                   const gl::Rectangle &renderArea,
                                                                   CommandBuffer **commandBufferOut)
 {
-    updateCurrentAccessNodes();
-
     if (hasStartedRenderPass())
     {
         // Store reference in resource list.
