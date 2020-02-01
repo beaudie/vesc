@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "608a0a09_72c38253",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4390,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-01T19:22:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2ff43a1f_2d2e3c03",
+      "range": {
+        "startLine": 4390,
+        "startChar": 7,
+        "endLine": 4390,
+        "endChar": 50
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ffa3946_3b70cb01",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f2d5eed_75c23c6b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4392,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-01T19:22:30Z",
+      "side": 1,
+      "message": "Done. blah \u003d index in the list of varyings (`merged`).",
+      "parentUuid": "0ffa3946_3b70cb01",
+      "range": {
+        "startLine": 4392,
+        "startChar": 45,
+        "endLine": 4392,
+        "endChar": 59
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9403bfb9_62c65ed3",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-01T19:22:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30786f8e_2ce26385",
+      "range": {
+        "startLine": 4393,
+        "startChar": 37,
+        "endLine": 4393,
+        "endChar": 63
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7205832_413e1e3c",
         "filename": "src/libANGLE/VaryingPacking.cpp",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0712f629_48a68246",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-01T19:22:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7205832_413e1e3c",
+      "range": {
+        "startLine": 375,
+        "startChar": 24,
+        "endLine": 375,
+        "endChar": 62
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +236,54 @@
     },
     {
       "key": {
+        "uuid": "f1505231_0762fedc",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-01T19:22:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2ca264c_38489818",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 32
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0f38963b_abf06953",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-01T19:22:30Z",
+      "side": 1,
+      "message": "It has strings, so preferably no.",
+      "parentUuid": "60db0dc5_e4940dc6",
+      "range": {
+        "startLine": 35,
+        "startChar": 34,
+        "endLine": 35,
+        "endChar": 52
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6aa9f861_d9e1af8a",
         "filename": "src/libANGLE/VaryingPacking.h",
         "patchSetId": 2
@@ -160,6 +304,30 @@
       "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "229ba592_5f2e6f32",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-01T19:22:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6aa9f861_d9e1af8a",
+      "range": {
+        "startLine": 81,
+        "startChar": 30,
+        "endLine": 81,
+        "endChar": 37
+      },
+      "revId": "cd0b74ee3e7f1c8241b123958fd64d6184985491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
