@@ -102,6 +102,24 @@
     },
     {
       "key": {
+        "uuid": "1fb202a6_0892faba",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-01T00:22:54Z",
+      "side": 1,
+      "message": "Thx for the suggestion I will have a go.",
+      "parentUuid": "5ec60797_a885e33c",
+      "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76a69403_83c33dbc",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 3
@@ -149,6 +167,24 @@
       "side": 1,
       "message": "Good idea, I will do something similar than Vulkan then.",
       "parentUuid": "085b521b_2d588dcc",
+      "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f91f273d_ce2e66fd",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-01T00:22:54Z",
+      "side": 1,
+      "message": "Mhh Vulkan checks seem to all be fake, i.e. all return true. Still I will try to come up with something",
+      "parentUuid": "3fa026fd_79d8f527",
       "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
