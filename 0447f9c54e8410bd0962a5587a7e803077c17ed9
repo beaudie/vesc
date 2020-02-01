@@ -112,6 +112,24 @@
     },
     {
       "key": {
+        "uuid": "87ccb74c_ccee76b7",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-01T18:25:54Z",
+      "side": 1,
+      "message": "We need shaderSampledImageArrayDynamicIndexing to be able to support array of array of samplers with the current code, so we should ask vendors to support it. Once done, the old method should just be thrown away.\n\nThe alternative would be to inline any function that takes a subarray of such multi-dimensional arrays so we don\u0027t need to pass in an offset into the flattened array, but that\u0027s a complicated transformation on its own.",
+      "parentUuid": "256e5d5c_d24af299",
+      "revId": "0447f9c54e8410bd0962a5587a7e803077c17ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c16573bf_4fe2c9ef",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 11
