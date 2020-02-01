@@ -51,6 +51,7 @@
 #    if defined(ANGLE_PLATFORM_WINDOWS)
 #        include "libANGLE/renderer/gl/wgl/DisplayWGL.h"
 #    elif defined(ANGLE_USE_X11)
+#        include "libANGLE/renderer/gl/egl/DisplayEGL.h"
 #        include "libANGLE/renderer/gl/glx/DisplayGLX.h"
 #    elif defined(ANGLE_PLATFORM_MACOS) || defined(ANGLE_PLATFORM_MACCATALYST)
 #        include "libANGLE/renderer/gl/cgl/DisplayCGL.h"
@@ -266,8 +267,8 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType, const DisplaySt
 #if defined(ANGLE_ENABLE_OPENGL)
 #    if defined(ANGLE_PLATFORM_WINDOWS)
             impl = new rx::DisplayWGL(state);
-#    elif defined(ANGLE_USE_X11)
-            impl = new rx::DisplayGLX(state);
+#    elif defined(ANGLE_PLATFORM_LINUX)
+            impl = new rx::DisplayEGL(state);
 #    elif defined(ANGLE_USE_OZONE)
             impl = new rx::DisplayOzone(state);
 #    elif defined(ANGLE_PLATFORM_ANDROID)
