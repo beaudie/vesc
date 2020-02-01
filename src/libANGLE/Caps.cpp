@@ -722,6 +722,15 @@ static bool DetermineBPTCTextureSupport(const TextureCapsMap &textureCaps)
     return GetFormatSupport(textureCaps, requiredFormats, true, true, false, false, false);
 }
 
+static bool DetermineRGTCTextureSupport(const TextureCapsMap &textureCaps)
+{
+    constexpr GLenum requiredFormats[] = {
+        GL_COMPRESSED_RED_RGTC1_EXT, GL_COMPRESSED_SIGNED_RED_RGTC1_EXT,
+        GL_COMPRESSED_RED_GREEN_RGTC2_EXT, GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT};
+
+    return GetFormatSupport(textureCaps, requiredFormats, true, true, false, false, false);
+}
+
 // Check for GL_IMG_texture_compression_pvrtc support
 static bool DeterminePVRTCTextureSupport(const TextureCapsMap &textureCaps)
 {
@@ -807,6 +816,7 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     floatBlend                          = DetermineFloatBlendSupport(textureCaps);
     textureNorm16                       = DetermineTextureNorm16Support(textureCaps);
     textureCompressionBPTC              = DetermineBPTCTextureSupport(textureCaps);
+    textureCompressionRGTC              = DetermineRGTCTextureSupport(textureCaps);
     compressedTexturePVRTC              = DeterminePVRTCTextureSupport(textureCaps);
     compressedTexturePVRTCsRGB          = DeterminePVRTCsRGBTextureSupport(textureCaps);
 }

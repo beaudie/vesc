@@ -213,6 +213,18 @@
   "BPTC_RGBA_UNORM_BLOCK": {
     "blockPixelBytes": "16"
   },
+  "RGTC1_RED_UNORM_BLOCK": {
+    "blockPixelBytes": "8"
+  },
+  "RGTC1_SIGNED_RED_SNORM_BLOCK": {
+    "blockPixelBytes": "8"
+  },
+  "RGTC2_RED_GREEN_UNORM_BLOCK": {
+    "blockPixelBytes": "8"
+  },
+  "RGTC2_SIGNED_RED_GREEN_SNORM_BLOCK": {
+    "blockPixelBytes": "8"
+  },
   "EAC_R11_SNORM_BLOCK": {
     "blockPixelBytes": "8"
   },

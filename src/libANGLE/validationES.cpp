@@ -61,6 +61,10 @@ bool CompressedTextureFormatRequiresExactSize(GLenum internalFormat)
         case GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT:
         case GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT:
         case GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT:
+        case GL_COMPRESSED_RED_RGTC1_EXT:
+        case GL_COMPRESSED_SIGNED_RED_RGTC1_EXT:
+        case GL_COMPRESSED_RED_GREEN_RGTC2_EXT:
+        case GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT:
             return true;
 
         default:

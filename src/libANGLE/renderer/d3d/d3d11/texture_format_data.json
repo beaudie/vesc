@@ -199,6 +199,34 @@
     "componentType": "float",
     "swizzleFormat": "GL_RGBA32F"
   },
+  "RGTC1_RED_UNORM_BLOCK": {
+    "texFormat": "DXGI_FORMAT_BC4_UNORM",
+    "srvFormat": "DXGI_FORMAT_BC4_UNORM",
+    "channels": "r",
+    "componentType": "unorm",
+    "swizzleFormat": "GL_R8"
+  },
+  "RGTC1_SIGNED_RED_SNORM_BLOCK": {
+    "texFormat": "DXGI_FORMAT_BC4_SNORM",
+    "srvFormat": "DXGI_FORMAT_BC4_SNORM",
+    "channels": "r",
+    "componentType": "snorm",
+    "swizzleFormat": "GL_R8_SNORM"
+  },
+  "RGTC2_RED_GREEN_UNORM_BLOCK": {
+    "texFormat": "DXGI_FORMAT_BC5_UNORM",
+    "srvFormat": "DXGI_FORMAT_BC5_UNORM",
+    "channels": "rg",
+    "componentType": "unorm",
+    "swizzleFormat": "GL_RG8"
+  },
+  "RGTC2_SIGNED_RED_GREEN_SNORM_BLOCK": {
+    "texFormat": "DXGI_FORMAT_BC5_SNORM",
+    "srvFormat": "DXGI_FORMAT_BC5_SNORM",
+    "channels": "rg",
+    "componentType": "snorm",
+    "swizzleFormat": "GL_RG8_SNORM"
+  },
   "D24_UNORM_S8_UINT": {
     "FL10Plus": {
       "texFormat": "DXGI_FORMAT_R24G8_TYPELESS",

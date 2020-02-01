@@ -961,6 +961,13 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     AddCompressedFormat(&map, GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT,   4,  4, 1, 128, 4, true,  RequireExt<&Extensions::textureCompressionBPTC>, AlwaysSupported, NeverSupported,      NeverSupported, NeverSupported);
     AddCompressedFormat(&map, GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT,   4,  4, 1, 128, 4, false, RequireExt<&Extensions::textureCompressionBPTC>, AlwaysSupported, NeverSupported,      NeverSupported, NeverSupported);
     AddCompressedFormat(&map, GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT, 4,  4, 1, 128, 4, false, RequireExt<&Extensions::textureCompressionBPTC>, AlwaysSupported, NeverSupported,      NeverSupported, NeverSupported);
+    
+    // From EXT_texture_compression_rgtc
+    //                       | Internal format                         | W | H |D | BS |CC| SRGB | Texture supported                              | Filterable     | Texture attachment | Renderbuffer  | Blend
+    AddCompressedFormat(&map, GL_COMPRESSED_RED_RGTC1_EXT,               4,  4, 1,  64, 4, false, RequireExt<&Extensions::textureCompressionRGTC>, AlwaysSupported, NeverSupported,      NeverSupported, NeverSupported);
+    AddCompressedFormat(&map, GL_COMPRESSED_SIGNED_RED_RGTC1_EXT,        4,  4, 1,  64, 4, true,  RequireExt<&Extensions::textureCompressionRGTC>, AlwaysSupported, NeverSupported,      NeverSupported, NeverSupported);
+    AddCompressedFormat(&map, GL_COMPRESSED_RED_GREEN_RGTC2_EXT,         4,  4, 1,  64, 4, false, RequireExt<&Extensions::textureCompressionRGTC>, AlwaysSupported, NeverSupported,      NeverSupported, NeverSupported);
+    AddCompressedFormat(&map, GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT,  4,  4, 1,  64, 4, false, RequireExt<&Extensions::textureCompressionRGTC>, AlwaysSupported, NeverSupported,      NeverSupported, NeverSupported);
 
     // From GL_IMG_texture_compression_pvrtc
     //                       | Internal format                       | W | H | D | BS |CC| SRGB | Texture supported                                 | Filterable     | Texture attachment | Renderbuffer  | Blend

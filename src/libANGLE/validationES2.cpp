@@ -582,6 +582,10 @@ bool ValidateES2CopyTexImageParameters(Context *context,
             case GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT:
             case GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT:
             case GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT:
+            case GL_COMPRESSED_RED_RGTC1_EXT:
+            case GL_COMPRESSED_SIGNED_RED_RGTC1_EXT:
+            case GL_COMPRESSED_RED_GREEN_RGTC2_EXT:
+            case GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT:
                 context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                 return false;
             case GL_DEPTH_COMPONENT:
