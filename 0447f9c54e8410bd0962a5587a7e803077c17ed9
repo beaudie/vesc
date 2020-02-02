@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "6a05bb91_65e89bc1",
+        "filename": "src/libANGLE/BinaryStream.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-02T08:02:48Z",
+      "side": 1,
+      "message": "I\u0027ll let Jamie comment on this as well. With the above added, this will support both signed and unsigned integers.",
+      "parentUuid": "1ae7526c_299e2fee",
+      "revId": "0447f9c54e8410bd0962a5587a7e803077c17ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "043e06e4_9652ed17",
         "filename": "src/libANGLE/VaryingPacking.cpp",
         "patchSetId": 11
