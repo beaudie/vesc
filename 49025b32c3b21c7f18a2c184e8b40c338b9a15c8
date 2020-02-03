@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "11510f62_3ddf272e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-03T17:33:53Z",
+      "side": 1,
+      "message": "Done, refactored a bit to elevate the compressed handling.",
+      "parentUuid": "d5c996a0_f0439c0b",
+      "range": {
+        "startLine": 1300,
+        "startChar": 21,
+        "endLine": 1314,
+        "endChar": 21
+      },
+      "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "080664b1_d17d6afc",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b5a89b2_58c44e57",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-03T17:33:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "080664b1_d17d6afc",
+      "range": {
+        "startLine": 2130,
+        "startChar": 29,
+        "endLine": 2130,
+        "endChar": 49
+      },
+      "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ef80268b_26f2b6a0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-03T17:33:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c49b2ed_1d789c61",
+      "range": {
+        "startLine": 2155,
+        "startChar": 72,
+        "endLine": 2155,
+        "endChar": 92
+      },
+      "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e7caae0_461aca77",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e1a90900_3f50b6f5",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-03T17:33:53Z",
+      "side": 1,
+      "message": "Sure, the idea being \"you can track any texture data here, doesn\u0027t just have to be compressed\".  I\u0027ll update the names and comments as well.",
+      "parentUuid": "8e7caae0_461aca77",
+      "range": {
+        "startLine": 184,
+        "startChar": 41,
+        "endLine": 184,
+        "endChar": 47
+      },
+      "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e65152c_da76de33",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4b665ca_9049add8",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-03T17:33:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e65152c_da76de33",
+      "range": {
+        "startLine": 185,
+        "startChar": 6,
+        "endLine": 185,
+        "endChar": 29
+      },
+      "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
