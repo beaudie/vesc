@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0ca1ac21_668e632f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-03T18:11:31Z",
+      "side": 1,
+      "message": "I\u0027d lean towards evicting the cache so it doesn\u0027t grow.  Could be done in maybeCaptureClientData, or a new call since we wouldn\u0027t be capturing anything.  Or could rename the function to \"processClientData\" or \"processClientDataSnapshots\", as that\u0027s what its comment alludes to:\n\n    // Process client data snapshots\n    maybeCaptureClientData(context, call);",
+      "parentUuid": "242689ad_e673ce57",
+      "range": {
+        "startLine": 2106,
+        "startChar": 29,
+        "endLine": 2106,
+        "endChar": 49
+      },
+      "revId": "94665d14a2ee84032d9fd28282d68ab0072b81a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5a95d898_baec2148",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-03T17:46:26Z",
       "side": 1,
       "message": "I don\u0027t think you need a TODO here. if you\u0027re using an unpack buffer then the data you need will be captured correctly when the buffer is updated. buffer capture is quite a bit easier since we can map them and read them back during capture.",
+      "range": {
+        "startLine": 2112,
+        "startChar": 0,
+        "endLine": 2112,
+        "endChar": 76
+      },
+      "revId": "94665d14a2ee84032d9fd28282d68ab0072b81a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "109f9a36_62e6f674",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-03T18:11:31Z",
+      "side": 1,
+      "message": "Ack, will drop it.",
+      "parentUuid": "5a95d898_baec2148",
       "range": {
         "startLine": 2112,
         "startChar": 0,
