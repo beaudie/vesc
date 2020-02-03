@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bdc6d5c_8fd4e8db",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-03T17:45:21Z",
+      "side": 1,
+      "message": "Should this be updated to FindOutputVaryingOrField() due to the ref.frontShaderStage check?",
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a54f7882_67096397",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-03T17:45:21Z",
+      "side": 1,
+      "message": "It looks like these are trying to ASSERT that this get() isn\u0027t returning nullptr.   Can this be made more clear by doing:\n\n    ASSERT(stage \u003d\u003d frontShaderStage || stage \u003d\u003d backShaderStage);\n    const sh::ShaderVariable *shader \u003d stage \u003d\u003d frontShaderStage ? frontShader : backShader;\n    ASSERT(shader);\n    return shader;\n\nIt\u0027s easy to get lost in these negative logic checks.",
+      "range": {
+        "startLine": 574,
+        "startChar": 0,
+        "endLine": 575,
+        "endChar": 66
+      },
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb571734_b0dafc63",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-03T17:45:21Z",
+      "side": 1,
+      "message": "Is this naming backwards, since the frontShader outputs to the backShader input?   Or is this all from the perspective of the program as a whole (VS inputs and FS outputs), rather than varyings between stages (VS output to FS input)?",
+      "range": {
+        "startLine": 340,
+        "startChar": 0,
+        "endLine": 341,
+        "endChar": 54
+      },
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bca4322_43860dd4",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-03T17:45:21Z",
+      "side": 1,
+      "message": "If we only want to do this for shaders that are in the program:\n\n        for (gl::Shader *shader : programState.getAttachedShaders())\n        {\n            AddLocationInfo(variableInfoMapOut, sh::vk::kLineRasterEmulationPosition,\n                            lineRasterEmulationPositionLocation,\n                            ShaderInterfaceVariableInfo::kInvalid, shader-\u003egetType());\n        }",
+      "range": {
+        "startLine": 557,
+        "startChar": 0,
+        "endLine": 562,
+        "endChar": 9
+      },
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2141c18a_ecab5a05",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-03T17:45:21Z",
+      "side": 1,
+      "message": "Same as above.   Should this be limited to just the shader stages in this program?",
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
