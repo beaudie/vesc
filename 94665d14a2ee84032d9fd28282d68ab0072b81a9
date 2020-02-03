@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "242689ad_e673ce57",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-03T17:46:26Z",
+      "side": 1,
+      "message": "one additional issue:\n\nthis cache can become stale and potentially have incorrect data. if the application creates textures 1, updates its data, then deletes texture 1, the cache won\u0027t be evicted. a subsequent texture create call may return \"1\" again which would potentially give incorrect data. \n\nyou could potentially evict the cache on delete. or you could use serials instead of ids to index the textures.",
+      "range": {
+        "startLine": 2106,
+        "startChar": 29,
+        "endLine": 2106,
+        "endChar": 49
+      },
+      "revId": "94665d14a2ee84032d9fd28282d68ab0072b81a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a95d898_baec2148",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-03T17:46:26Z",
+      "side": 1,
+      "message": "I don\u0027t think you need a TODO here. if you\u0027re using an unpack buffer then the data you need will be captured correctly when the buffer is updated. buffer capture is quite a bit easier since we can map them and read them back during capture.",
+      "range": {
+        "startLine": 2112,
+        "startChar": 0,
+        "endLine": 2112,
+        "endChar": 76
+      },
+      "revId": "94665d14a2ee84032d9fd28282d68ab0072b81a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
