@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "9dc8e949_2fef7f5e",
+        "filename": "src/libANGLE/BinaryStream.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-03T15:58:56Z",
+      "side": 1,
+      "message": "I\u0027d be more happy to have a single method that can write both. If that\u0027s not possible then two methods sounds fine. The long complicated type alias doesn\u0027t bother me.",
+      "parentUuid": "6a05bb91_65e89bc1",
+      "revId": "0447f9c54e8410bd0962a5587a7e803077c17ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "043e06e4_9652ed17",
         "filename": "src/libANGLE/VaryingPacking.cpp",
         "patchSetId": 11
