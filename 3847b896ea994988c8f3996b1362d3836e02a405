@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "9f69e147_6abdb3dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-03T14:58:41Z",
+      "side": 1,
+      "message": "Thanks. Could you also update the CL description? eglTerminate calls vkDestroySurfaceKHR (to confirm?) which calls into eglDestroyImageKHR",
+      "parentUuid": "1f64a164_e910acf0",
+      "range": {
+        "startLine": 10,
+        "startChar": 24,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "3847b896ea994988c8f3996b1362d3836e02a405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f4c5a84_73e711ce",
         "filename": "src/libGLESv2/global_state.h",
         "patchSetId": 1
