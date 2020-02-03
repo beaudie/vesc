@@ -33,6 +33,24 @@
       "revId": "fa70b55b76bb7e4e1b5a8881f6298a71a93f2d27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bc935ac_48476813",
+        "filename": "src/libANGLE/renderer/gl/null_functions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-02-03T15:01:19Z",
+      "side": 1,
+      "message": "generate_gl_dispatch_table.py decided to update the year here because of gl.xml update.",
+      "parentUuid": "abed64c1_cf725315",
+      "revId": "fa70b55b76bb7e4e1b5a8881f6298a71a93f2d27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
