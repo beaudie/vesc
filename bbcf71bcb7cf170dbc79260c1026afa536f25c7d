@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "4ae19872_9672fd56",
+        "filename": "src/libANGLE/Config.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-02-03T22:46:47Z",
+      "side": 1,
+      "message": "Ah gosh, sorry, I didn\u0027t mean to make you allocate a new enum - was only suggesting changing the name of the variable which accepted the EGL_TEXTURE_TARGET enum. Fine either way.",
+      "parentUuid": "72cb260e_b4e91f92",
+      "range": {
+        "startLine": 46,
+        "startChar": 12,
+        "endLine": 46,
+        "endChar": 25
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d68ee6c_aca83e17",
         "filename": "src/libANGLE/renderer/gl/eagl/DisplayEAGL.mm",
         "patchSetId": 13
