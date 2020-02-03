@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "41fb17b4_bc87ab91",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "It\u0027s the difference between\n../Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/81.0.4044.0/Libraries/\nand\n../Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/81.0.4044.0/Helpers/Chromium Helper (GPU).app/Contents/MacOS\n\n\nI\u0027ll rename this to be more clear",
+      "parentUuid": "63104fbc_f03630e7",
+      "range": {
+        "startLine": 58,
+        "startChar": 12,
+        "endLine": 58,
+        "endChar": 29
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0b72ec97_6236babe",
         "filename": "src/libANGLE/Config.h",
         "patchSetId": 13
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "72cb260e_b4e91f92",
+        "filename": "src/libANGLE/Config.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "Done. Added EGL_BIND_TO_TEXTURE_TARGET_ANGLE enum.",
+      "parentUuid": "eb9a0659_950096f0",
+      "range": {
+        "startLine": 46,
+        "startChar": 12,
+        "endLine": 46,
+        "endChar": 25
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d68ee6c_aca83e17",
         "filename": "src/libANGLE/renderer/gl/eagl/DisplayEAGL.mm",
         "patchSetId": 13
@@ -116,6 +164,30 @@
       "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47be5898_a4650aee",
+        "filename": "src/libANGLE/renderer/gl/eagl/DisplayEAGL.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d68ee6c_aca83e17",
+      "range": {
+        "startLine": 207,
+        "startChar": 11,
+        "endLine": 207,
+        "endChar": 24
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -162,6 +234,54 @@
       "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62e0d91c_0be6d0b9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a78f915_6cc1a01c",
+      "range": {
+        "startLine": 238,
+        "startChar": 59,
+        "endLine": 238,
+        "endChar": 70
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aedb5a89_16831827",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a17fedc2_283d7dfc",
+      "range": {
+        "startLine": 238,
+        "startChar": 48,
+        "endLine": 238,
+        "endChar": 56
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -223,6 +343,30 @@
     },
     {
       "key": {
+        "uuid": "273290a2_95ffecf9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fcb9c1b_aa0eb66d",
+      "range": {
+        "startLine": 1370,
+        "startChar": 0,
+        "endLine": 1372,
+        "endChar": 35
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0dd7fe48_5f53e7d0",
         "filename": "src/libANGLE/renderer/vulkan/mac/DisplayVkMac.mm",
         "patchSetId": 13
@@ -243,6 +387,30 @@
       "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fefa0a3f_1a331391",
+        "filename": "src/libANGLE/renderer/vulkan/mac/DisplayVkMac.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "Yes we talked about this, forgot to implement that thanks!",
+      "parentUuid": "0dd7fe48_5f53e7d0",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 48
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -269,6 +437,30 @@
     },
     {
       "key": {
+        "uuid": "2ad04d8c_7f73d687",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "093bf1ab_c1aa9b8e",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77ee16fa_c229a00e",
         "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.h",
         "patchSetId": 13
@@ -280,6 +472,30 @@
       "writtenOn": "2020-01-31T19:41:43Z",
       "side": 1,
       "message": "is this just for Mac or could it be shared with iOS?",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b74b3bb6_8bd1c632",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "I don\u0027t know, does swiftshader build on iOS? The vulkan loader?\n@kbr",
+      "parentUuid": "77ee16fa_c229a00e",
       "range": {
         "startLine": 26,
         "startChar": 6,
@@ -315,6 +531,30 @@
     },
     {
       "key": {
+        "uuid": "08231cde_8df5fac0",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e39ac060_dae2e696",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 12
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4c98180_c0d702d8",
         "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
         "patchSetId": 13
@@ -335,6 +575,30 @@
       "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35ef54bf_4a02ad9b",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "I need to return the index anyway",
+      "parentUuid": "a4c98180_c0d702d8",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 76
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -361,6 +625,30 @@
     },
     {
       "key": {
+        "uuid": "4a51b62c_74bbca39",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6228965a_ee3aec67",
+      "range": {
+        "startLine": 96,
+        "startChar": 11,
+        "endLine": 96,
+        "endChar": 27
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "175eb6f1_011683b6",
         "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
         "patchSetId": 13
@@ -384,6 +672,30 @@
     },
     {
       "key": {
+        "uuid": "cf55da7e_a029fe75",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "175eb6f1_011683b6",
+      "range": {
+        "startLine": 105,
+        "startChar": 15,
+        "endLine": 105,
+        "endChar": 26
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39687274_9178a86f",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 13
@@ -404,6 +716,30 @@
       "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fdbad41_b81006d2",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T21:26:05Z",
+      "side": 1,
+      "message": "http://anglebug.com/4376",
+      "parentUuid": "39687274_9178a86f",
+      "range": {
+        "startLine": 375,
+        "startChar": 4,
+        "endLine": 375,
+        "endChar": 48
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
