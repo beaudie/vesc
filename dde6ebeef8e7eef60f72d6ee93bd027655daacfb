@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "6c5edd85_85fe9180",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-03T16:01:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "52e7fecd_abed4c2a",
+      "range": {
+        "startLine": 880,
+        "startChar": 48,
+        "endLine": 880,
+        "endChar": 71
+      },
+      "revId": "dde6ebeef8e7eef60f72d6ee93bd027655daacfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8789b563_e3cc73c9",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
