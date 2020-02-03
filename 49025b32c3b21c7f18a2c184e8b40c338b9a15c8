@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5c996a0_f0439c0b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-03T15:05:14Z",
+      "side": 1,
+      "message": "can you remove all of this? your new method is strictly superior.",
+      "range": {
+        "startLine": 1300,
+        "startChar": 21,
+        "endLine": 1314,
+        "endChar": 21
+      },
+      "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "080664b1_d17d6afc",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-03T15:05:14Z",
+      "side": 1,
+      "message": "can you put an UNIMPLEMENTED in CompressedSubImage2D?",
+      "range": {
+        "startLine": 2130,
+        "startChar": 29,
+        "endLine": 2130,
+        "endChar": 49
+      },
+      "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c49b2ed_1d789c61",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-03T15:05:14Z",
+      "side": 1,
+      "message": "you should use the target parameter. could extend to cube.",
+      "range": {
+        "startLine": 2155,
+        "startChar": 72,
+        "endLine": 2155,
+        "endChar": 92
+      },
+      "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e7caae0_461aca77",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-03T15:05:14Z",
+      "side": 1,
+      "message": "can you make one of these TextureID? Use texture-\u003eid()\n\nalso for naming, How about just TextureLevel ?",
+      "range": {
+        "startLine": 184,
+        "startChar": 41,
+        "endLine": 184,
+        "endChar": 47
+      },
+      "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e65152c_da76de33",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-03T15:05:14Z",
+      "side": 1,
+      "message": "for naming, how about TextureLevelDataMap ?",
+      "range": {
+        "startLine": 185,
+        "startChar": 6,
+        "endLine": 185,
+        "endChar": 29
+      },
+      "revId": "49025b32c3b21c7f18a2c184e8b40c338b9a15c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
