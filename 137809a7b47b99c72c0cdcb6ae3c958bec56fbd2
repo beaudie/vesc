@@ -188,6 +188,24 @@
       "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e27e41f_19564938",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-03T14:38:52Z",
+      "side": 1,
+      "message": "With the above comments making a \"device type\", you can move these checks into validationEGL like so:\nhttps://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/validationEGL.cpp?q\u003dvalidationEGL\u0026sq\u003dpackage:chromium\u0026dr\u003dC\u0026l\u003d563\n\nThat means you can leave this code how it is, it\u0027ll never be reached unless it passes validation",
+      "parentUuid": "f91f273d_ce2e66fd",
+      "revId": "137809a7b47b99c72c0cdcb6ae3c958bec56fbd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
