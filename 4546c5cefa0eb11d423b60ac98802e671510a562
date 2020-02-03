@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01726087_cd572706",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-03T21:59:16Z",
+      "side": 0,
+      "message": "The only changes I introduced in this file are the new files above:\n\n\"src/libANGLE/InfoLog.h\",\n\"src/libANGLE/ProgramHelper.h\",\n\"src/libANGLE/ProgramHelper.cpp\",\n\nThe rest of the changes are due to updates in \u0027git cl format\u0027 alphabetizing the filenames.",
+      "revId": "4546c5cefa0eb11d423b60ac98802e671510a562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
