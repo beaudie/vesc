@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "473929a0_687d9c55",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T18:34:59Z",
+      "side": 0,
+      "message": "Why aren\u0027t these calls necessary anymore?",
+      "revId": "7d3a8d821f586acbddc9e565b0b963d005b58efa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

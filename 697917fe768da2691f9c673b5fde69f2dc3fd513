@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f756fde2_f8708204",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2286,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T18:34:59Z",
+      "side": 1,
+      "message": "This very closely matches FramebufferVk::onScissorChange(), while onScissorChange() gives a nice explanation of why this is being done:\n\n  void FramebufferVk::onScissorChange(ContextVk *contextVk)\n  {\n    gl::Rectangle scissoredRenderArea \u003d getScissoredRenderArea(contextVk);\n\n    // If the scissor has grown beyond the previous scissoredRenderArea, make sure the render pass\n    // is restarted.  Otherwise, we can continue using the same renderpass area.\n    //\n    // Without a scissor, the render pass area covers the whole of the framebuffer.  With a\n    // scissored clear, the render pass area could be smaller than the framebuffer size.  When the\n    // scissor changes, if the scissor area is completely encompassed by the render pass area, it\u0027s\n    // possible to continue using the same render pass.  However, if the current render pass area\n    // is too small, we need to start a new one.  The latter can happen if a scissored clear starts\n    // a render pass, the scissor is disabled and a draw call is issued to affect the whole\n    // framebuffer.\n    mFramebuffer.updateCurrentAccessNodes();\n    if (mFramebuffer.hasStartedRenderPass() \u0026\u0026\n      !mFramebuffer.getRenderPassRenderArea().encloses(scissoredRenderArea))\n    {\n      mFramebuffer.finishCurrentCommands(contextVk);\n    }\n  }\n\nHow do we make sure any new changes made in onScissorChange() are mirrored here also?   My initial thought is that the commandGraphEnabled() checking should be moved into onScissorChange().",
+      "range": {
+        "startLine": 2282,
+        "startChar": 0,
+        "endLine": 2286,
+        "endChar": 13
+      },
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "907d3e27_353338f6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3744,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T18:34:59Z",
+      "side": 1,
+      "message": "What\u0027s the difference between flushing the RP commands and ending the RP?",
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d6e79e0_81492d27",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3746,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T18:34:59Z",
+      "side": 1,
+      "message": "It\u0027s probably worth adding an assert to these functions to make sure we only get into here when the command graph is not enabled:\n\n    ASSERT(!contextVk-\u003ecommandGraphEnabled())",
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e58058a3_2b571200",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3811,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T18:34:59Z",
+      "side": 1,
+      "message": "Why isn\u0027t isLayoutChangeNecessary() checked here also, like onImageRead() above?   It looks like none of the calls beforehand checked that either when changing the layout for writes; why do we know/assume it\u0027s always required?",
+      "range": {
+        "startLine": 3808,
+        "startChar": 0,
+        "endLine": 3811,
+        "endChar": 65
+      },
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1abbc591_9260981d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T18:34:59Z",
+      "side": 1,
+      "message": "onImageRead() and onImageWrite() both call getOutsideRenderPassCommandBuffer() (well, onImageRead() can anyway) - is there a way to reduce this from 3 calls to 1?   Maybe call it once early and pass it to both onImageRead() and onImageWrite() instead.",
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a117e3a5_3e257e98",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T18:34:59Z",
+      "side": 1,
+      "message": "This can rearranged to reduce the branching for the command graph disabled case:\n\n  if (contextVk-\u003egetFeatures().commandGraph.enabled)\n  {\n    if (isStorageBuffer)\n    {\n      // We set the SHADER_READ_BIT to be conservative.\n      VkAccessFlags accessFlags \u003d VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;\n      bufferHelper.onWrite(contextVk, recorder, accessFlags);\n    }\n    else\n    {\n      bufferHelper.onRead(contextVk, recorder, VK_ACCESS_UNIFORM_READ_BIT);\n    }\n  }",
+      "range": {
+        "startLine": 1431,
+        "startChar": 0,
+        "endLine": 1446,
+        "endChar": 9
+      },
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32adccdd_6efa57ad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3350,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T18:34:59Z",
+      "side": 1,
+      "message": "nit: flip this conditional to match the others.",
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a78f0dc_5d8be0dd",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T18:34:59Z",
+      "side": 1,
+      "message": "Why are these changes just being tested with ES2?",
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
