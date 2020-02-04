@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b83fb820_ebbf11ff",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1302,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T00:43:19Z",
+      "side": 1,
+      "message": "Why is this only being done if the command graph is not enabled?",
+      "revId": "7d3a8d821f586acbddc9e565b0b963d005b58efa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88adf891_ec80e07b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-04T00:43:19Z",
+      "side": 1,
+      "message": "It looks like this work is being done twice, since updateOverlay() is called in this same code path via ContextVk::flushImpl(), but only if the command graph is enabled and is not empty.\n\nCan the commandGraphEnabled() checking be removed so the overlay is always updated so the duplicate code in CommandGraph::updateOverlay() can be removed?",
+      "range": {
+        "startLine": 1304,
+        "startChar": 0,
+        "endLine": 1307,
+        "endChar": 32
+      },
+      "revId": "7d3a8d821f586acbddc9e565b0b963d005b58efa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
