@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a6b47cdf_d7e627a7",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-04T05:02:59Z",
+      "side": 1,
+      "message": "Fixed this by adding a check for DeleteTextures here, which clears the cache for a given texutreID.  Also changed how we track the data to first track the textureID, then lookup the data by level.  This allows us to delete all texture levels for a texture without knowing how many levels it had.  This was a problem since we capture the call *after* the texture has been deleted and could no longer easily look up what active levels it had.",
+      "parentUuid": "0ca1ac21_668e632f",
+      "range": {
+        "startLine": 2106,
+        "startChar": 29,
+        "endLine": 2106,
+        "endChar": 49
+      },
+      "revId": "94665d14a2ee84032d9fd28282d68ab0072b81a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a95d898_baec2148",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "6a01f051_d2045415",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-04T05:02:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "109f9a36_62e6f674",
+      "range": {
+        "startLine": 2112,
+        "startChar": 0,
+        "endLine": 2112,
+        "endChar": 76
+      },
+      "revId": "94665d14a2ee84032d9fd28282d68ab0072b81a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b272daa_14d82b11",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
@@ -110,6 +158,24 @@
       "revId": "94665d14a2ee84032d9fd28282d68ab0072b81a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bae2ccd_31903f1b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2131,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-04T05:02:59Z",
+      "side": 1,
+      "message": "Yeah, I struggled with whether to look up all the parameters up front, or wait until they are needed.  I went ahead and rearranged a bit, looking things up as needed.",
+      "parentUuid": "7b272daa_14d82b11",
+      "revId": "94665d14a2ee84032d9fd28282d68ab0072b81a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
