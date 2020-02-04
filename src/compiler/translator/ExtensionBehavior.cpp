@@ -26,6 +26,7 @@
     OP(EXT_YUV_target)                           \
     OP(NV_EGL_stream_consumer_external)          \
     OP(NV_shader_framebuffer_fetch)              \
+    OP(NV_shader_noperspective_interpolation)    \
     OP(OES_EGL_image_external)                   \
     OP(OES_EGL_image_external_essl3)             \
     OP(OES_standard_derivatives)                 \

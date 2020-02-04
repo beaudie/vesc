@@ -161,6 +161,7 @@ void InitBuiltInResources(ShBuiltInResources *resources)
     resources->WEBGL_debug_shader_precision             = 0;
     resources->EXT_shader_framebuffer_fetch             = 0;
     resources->NV_shader_framebuffer_fetch              = 0;
+    resources->NV_shader_noperspective_interpolation    = 0;
     resources->ARM_shader_framebuffer_fetch             = 0;
     resources->OVR_multiview                            = 0;
     resources->OVR_multiview2                           = 0;
