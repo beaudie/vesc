@@ -881,10 +881,7 @@ bool UniformLinker::gatherUniformLocationsAndCheckConflicts(
                 return false;
             }
             reservedLocations.insert(apiBoundLocation);
-            if (!uniform.active)
-            {
-                ignoredLocations->insert(apiBoundLocation);
-            }
+            ignoredLocations->insert(apiBoundLocation);
         }
     }
 
