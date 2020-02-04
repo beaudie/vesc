@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8733b712_c584aa22",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T19:12:37Z",
+      "side": 1,
+      "message": "this should be context-\u003eisBufferAccessValidationEnabled. also comment will need updating.",
+      "range": {
+        "startLine": 1494,
+        "startChar": 7,
+        "endLine": 1494,
+        "endChar": 27
+      },
+      "revId": "1012cfdd67984b32b8d9805db4a9d7f8980b24cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
