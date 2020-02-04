@@ -293,6 +293,36 @@ struct ImageBinding
     bool unreferenced;
 };
 
+struct ProgramBinding
+{
+    ProgramBinding() : location(GL_INVALID_INDEX), aliased(false) {}
+    ProgramBinding(GLuint index) : location(index), aliased(false) {}
+
+    GLuint location;
+    // Whether another binding was set that may potentially alias this.
+    bool aliased;
+};
+
+// Uniforms and Fragment Outputs require special treatment due to array notation (e.g., "[0]")
+class ProgramAliasedBindings final : angle::NonCopyable
+{
+  public:
+    ProgramAliasedBindings();
+    ~ProgramAliasedBindings();
+
+    void bindLocation(GLuint index, const std::string &name);
+    int getBindingByName(const std::string &name) const;
+    int getBindingByLocation(GLuint location) const;
+    int getBinding(const sh::ShaderVariable &variable) const;
+
+    using const_iterator = std::unordered_map<std::string, ProgramBinding>::const_iterator;
+    const_iterator begin() const;
+    const_iterator end() const;
+
+  private:
+    std::unordered_map<std::string, ProgramBinding> mBindings;
+};
+
 class ProgramState final : angle::NonCopyable
 {
   public:
@@ -404,6 +434,11 @@ class ProgramState final : angle::NonCopyable
     }
     ShaderType getFirstAttachedShaderStageType() const;
     ShaderType getLastAttachedShaderStageType() const;
+
+    const ProgramAliasedBindings &getUniformLocationBindings() const
+    {
+        return mUniformLocationBindings;
+    }
 
   private:
     friend class MemoryProgramCache;
@@ -517,16 +552,10 @@ class ProgramState final : angle::NonCopyable
 
     // Cached mask of active images.
     ActiveTextureMask mActiveImagesMask;
-};
 
-struct ProgramBinding
-{
-    ProgramBinding() : location(GL_INVALID_INDEX), aliased(false) {}
-    ProgramBinding(GLuint index) : location(index), aliased(false) {}
-
-    GLuint location;
-    // Whether another binding was set that may potentially alias this.
-    bool aliased;
+    // Note that this has nothing to do with binding layout qualifiers that can be set for some
+    // uniforms in GLES3.1+. It is used to pre-set the location of uniforms.
+    ProgramAliasedBindings mUniformLocationBindings;
 };
 
 class ProgramBindings final : angle::NonCopyable
@@ -545,25 +574,6 @@ class ProgramBindings final : angle::NonCopyable
 
   private:
     std::unordered_map<std::string, GLuint> mBindings;
-};
-
-// Uniforms and Fragment Outputs require special treatment due to array notation (e.g., "[0]")
-class ProgramAliasedBindings final : angle::NonCopyable
-{
-  public:
-    ProgramAliasedBindings();
-    ~ProgramAliasedBindings();
-
-    void bindLocation(GLuint index, const std::string &name);
-    int getBindingByName(const std::string &name) const;
-    int getBinding(const sh::ShaderVariable &variable) const;
-
-    using const_iterator = std::unordered_map<std::string, ProgramBinding>::const_iterator;
-    const_iterator begin() const;
-    const_iterator end() const;
-
-  private:
-    std::unordered_map<std::string, ProgramBinding> mBindings;
 };
 
 struct ProgramVaryingRef
@@ -1097,10 +1107,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     bool mValidated;
 
     ProgramBindings mAttributeBindings;
-
-    // Note that this has nothing to do with binding layout qualifiers that can be set for some
-    // uniforms in GLES3.1+. It is used to pre-set the location of uniforms.
-    ProgramAliasedBindings mUniformLocationBindings;
 
     // CHROMIUM_path_rendering
     ProgramBindings mFragmentInputBindings;

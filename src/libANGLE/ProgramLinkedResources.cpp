@@ -683,7 +683,6 @@ bool UniformLinker::link(const Caps &caps,
             return false;
         }
     }
-
     // Flatten the uniforms list (nested fields) into a simple list (no nesting).
     // Also check the maximum uniform vector and sampler counts.
     if (!flattenUniformsAndCheckCaps(caps, infoLog))
