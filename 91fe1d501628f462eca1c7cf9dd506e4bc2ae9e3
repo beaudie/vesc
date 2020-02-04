@@ -46,6 +46,30 @@
       "revId": "91fe1d501628f462eca1c7cf9dd506e4bc2ae9e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec976966_94feb86a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4915,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-02-04T22:34:32Z",
+      "side": 1,
+      "message": "Hmm. Actually, testing that in Chrome today, WebGL lets the application set the blend color to (2.0, 0.0, 0.0, 0.0) and the query of getParameter(gl.BLEND_COLOR) reports [2.0, 0.0, 0.0, 0.0]. There probably aren\u0027t conformance / rendering tests covering this; let\u0027s file an issue on KhronosGroup/WebGL and write some. I think it would be fine to clamp in the backends as Geoff suggests.",
+      "parentUuid": "1d5c96a6_bed8cf49",
+      "range": {
+        "startLine": 4915,
+        "startChar": 3,
+        "endLine": 4915,
+        "endChar": 50
+      },
+      "revId": "91fe1d501628f462eca1c7cf9dd506e4bc2ae9e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
