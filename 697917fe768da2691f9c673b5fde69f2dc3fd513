@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "007e66a4_a472211a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2286,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T21:55:35Z",
+      "side": 1,
+      "message": "Done. Merged them into ContextVk.",
+      "parentUuid": "f756fde2_f8708204",
+      "range": {
+        "startLine": 2282,
+        "startChar": 0,
+        "endLine": 2286,
+        "endChar": 13
+      },
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "907d3e27_353338f6",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 20
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "830af0c6_5dbf8aee",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3744,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T21:55:35Z",
+      "side": 1,
+      "message": "Whoops. Obsolete comment. Removed. endRenderPass \u003d\u003d\u003d flushing the RP",
+      "parentUuid": "907d3e27_353338f6",
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d6e79e0_81492d27",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 20
@@ -56,6 +98,24 @@
       "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "114ded67_b0bdaf6f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3746,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T21:55:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d6e79e0_81492d27",
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "2a594141_260f157a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3811,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T21:55:35Z",
+      "side": 1,
+      "message": "Vulkan requires a barrier whenever writing to something. Added a short comment.",
+      "parentUuid": "e58058a3_2b571200",
+      "range": {
+        "startLine": 3808,
+        "startChar": 0,
+        "endLine": 3811,
+        "endChar": 65
+      },
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1abbc591_9260981d",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 20
@@ -93,6 +177,24 @@
       "writtenOn": "2020-02-04T18:34:59Z",
       "side": 1,
       "message": "onImageRead() and onImageWrite() both call getOutsideRenderPassCommandBuffer() (well, onImageRead() can anyway) - is there a way to reduce this from 3 calls to 1?   Maybe call it once early and pass it to both onImageRead() and onImageWrite() instead.",
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5efc75e5_4a794dda",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T21:55:35Z",
+      "side": 1,
+      "message": "It\u0027s not within the API contract to keep the commandBuffer pointer around between different image writes. Can refine this later down the line if necessary. For now this is in a very underused code path. Sounds OK?",
+      "parentUuid": "1abbc591_9260981d",
       "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "a31da049_dd291aaa",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T21:55:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a117e3a5_3e257e98",
+      "range": {
+        "startLine": 1431,
+        "startChar": 0,
+        "endLine": 1446,
+        "endChar": 9
+      },
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "32adccdd_6efa57ad",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 20
@@ -139,6 +265,24 @@
     },
     {
       "key": {
+        "uuid": "452ec775_24acdd15",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3350,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T21:55:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32adccdd_6efa57ad",
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a78f0dc_5d8be0dd",
         "filename": "src/tests/test_utils/angle_test_instantiate.h",
         "patchSetId": 20
@@ -150,6 +294,24 @@
       "writtenOn": "2020-02-04T18:34:59Z",
       "side": 1,
       "message": "Why are these changes just being tested with ES2?",
+      "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e197403b_75df99fc",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T21:55:35Z",
+      "side": 1,
+      "message": "ES3 doesn\u0027t work yet. Just ES2.",
+      "parentUuid": "4a78f0dc_5d8be0dd",
       "revId": "697917fe768da2691f9c673b5fde69f2dc3fd513",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
