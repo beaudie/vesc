@@ -22,6 +22,30 @@
       "revId": "91fe1d501628f462eca1c7cf9dd506e4bc2ae9e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d5c96a6_bed8cf49",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4915,
+      "author": {
+        "id": 1184734
+      },
+      "writtenOn": "2020-02-04T20:29:11Z",
+      "side": 1,
+      "message": "Unfortunately, I believe that branching here is what\u0027s needed for the correct behavior in WebGL. (I\u0027ll ping Ken) WebGL needs to have this behavior:\n```\nglBlendColor(2.0f, 0, 0, 0);\nglEnableExtension(EXT_color_buffer_half_float)\nfloat cur[4];\nglGetFloatv(GL_BLEND_COLOR, \u0026cur);\nassert(cur[0] \u003d\u003d 1.0f);\nglBlendColor(2.0f, 0, 0, 0);\nglGetFloatv(GL_BLEND_COLOR, \u0026cur);\nassert(cur[0] \u003d\u003d 2.0f);\n```",
+      "parentUuid": "36d38fdf_067eb122",
+      "range": {
+        "startLine": 4915,
+        "startChar": 3,
+        "endLine": 4915,
+        "endChar": 50
+      },
+      "revId": "91fe1d501628f462eca1c7cf9dd506e4bc2ae9e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
