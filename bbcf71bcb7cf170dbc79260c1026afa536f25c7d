@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ca13068a_39f12b1d",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-04T19:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41fb17b4_bc87ab91",
+      "range": {
+        "startLine": 58,
+        "startChar": 12,
+        "endLine": 58,
+        "endChar": 29
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b72ec97_6236babe",
         "filename": "src/libANGLE/Config.h",
         "patchSetId": 13
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "The latest CL does look nice - let\u0027s leave as is. Thanks again for revising this.",
       "parentUuid": "4ae19872_9672fd56",
+      "range": {
+        "startLine": 46,
+        "startChar": 12,
+        "endLine": 46,
+        "endChar": 25
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d792918c_08e9113d",
+        "filename": "src/libANGLE/Config.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-04T19:14:39Z",
+      "side": 1,
+      "message": "I figured EGL_TEXTURE_TARGET already has some existing connotations so a new one is a bit cleaner",
+      "parentUuid": "1882dc27_1b38fbc9",
       "range": {
         "startLine": 46,
         "startChar": 12,
@@ -368,6 +416,24 @@
     },
     {
       "key": {
+        "uuid": "a25ca8b5_be4d766d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-04T19:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9348b9a5_08b09961",
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7fcb9c1b_aa0eb66d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
@@ -553,6 +619,30 @@
       "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f71c0d27_a6ca44e2",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-04T19:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b74b3bb6_8bd1c632",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "bbcf71bcb7cf170dbc79260c1026afa536f25c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
