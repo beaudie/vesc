@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/GlslangWrapperVk.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 
@@ -359,79 +360,6 @@ class Std140BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFacto
 };
 }  // anonymous namespace
 
-// ProgramVk::ShaderInfo implementation.
-ProgramVk::ShaderInfo::ShaderInfo() {}
-
-ProgramVk::ShaderInfo::~ShaderInfo() = default;
-
-angle::Result ProgramVk::ShaderInfo::initShaders(
-    ContextVk *contextVk,
-    const gl::ShaderMap<std::string> &shaderSources,
-    const ShaderInterfaceVariableInfoMap &variableInfoMap,
-    gl::ShaderMap<SpirvBlob> *spirvBlobsOut)
-{
-    ASSERT(!valid());
-
-    ANGLE_TRY(GlslangWrapperVk::GetShaderCode(contextVk, contextVk->getCaps(), shaderSources,
-                                              variableInfoMap, spirvBlobsOut));
-
-    mIsInitialized = true;
-    return angle::Result::Continue;
-}
-
-void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
-{
-    for (SpirvBlob &spirvBlob : mSpirvBlobs)
-    {
-        spirvBlob.clear();
-    }
-    mIsInitialized = false;
-}
-
-// ProgramVk::ProgramInfo implementation.
-ProgramVk::ProgramInfo::ProgramInfo() {}
-
-ProgramVk::ProgramInfo::~ProgramInfo() = default;
-
-angle::Result ProgramVk::ProgramInfo::initProgram(ContextVk *contextVk,
-                                                  const ShaderInfo &shaderInfo,
-                                                  bool enableLineRasterEmulation)
-{
-    const gl::ShaderMap<SpirvBlob> &spirvBlobs = shaderInfo.getSpirvBlobs();
-
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        const SpirvBlob &spirvBlob = spirvBlobs[shaderType];
-
-        if (!spirvBlob.empty())
-        {
-            ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
-                                              spirvBlob.data(),
-                                              spirvBlob.size() * sizeof(uint32_t)));
-
-            mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
-        }
-    }
-
-    if (enableLineRasterEmulation)
-    {
-        mProgramHelper.enableSpecializationConstant(
-            sh::vk::SpecializationConstantId::LineRasterEmulation);
-    }
-
-    return angle::Result::Continue;
-}
-
-void ProgramVk::ProgramInfo::release(ContextVk *contextVk)
-{
-    mProgramHelper.release(contextVk);
-
-    for (vk::RefCounted<vk::ShaderAndSerial> &shader : mShaders)
-    {
-        shader.get().destroy(contextVk->getDevice());
-    }
-}
-
 angle::Result ProgramVk::loadSpirvBlob(ContextVk *contextVk, gl::BinaryInputStream *stream)
 {
     // Read in shader codes for all shader types
@@ -509,13 +437,7 @@ ProgramVk::DefaultUniformBlock::DefaultUniformBlock() {}
 
 ProgramVk::DefaultUniformBlock::~DefaultUniformBlock() = default;
 
-ProgramVk::ProgramVk(const gl::ProgramState &state)
-    : ProgramImpl(state),
-      mDynamicBufferOffsets{},
-      mStorageBlockBindingsOffset(0),
-      mAtomicCounterBufferBindingsOffset(0),
-      mImageBindingsOffset(0)
-{}
+ProgramVk::ProgramVk(const gl::ProgramState &state) : ProgramImpl(state), ProgramHelperVk() {}
 
 ProgramVk::~ProgramVk() = default;
 
@@ -1884,4 +1806,71 @@ angle::Result ProgramVk::updateDescriptorSets(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
+
+// ProgramHelperVk Interface
+
+bool ProgramVk::hasDefaultUniforms() const
+{
+    return !mState.getDefaultUniformRange().empty();
+}
+bool ProgramVk::hasTextures() const
+{
+    return !mState.getSamplerBindings().empty();
+}
+bool ProgramVk::hasUniformBuffers() const
+{
+    return !mState.getUniformBlocks().empty();
+}
+bool ProgramVk::hasStorageBuffers() const
+{
+    return !mState.getShaderStorageBlocks().empty();
+}
+bool ProgramVk::hasAtomicCounterBuffers() const
+{
+    return !mState.getAtomicCounterBuffers().empty();
+}
+bool ProgramVk::hasImages() const
+{
+    return !mState.getImageBindings().empty();
+}
+bool ProgramVk::hasTransformFeedbackOutput() const
+{
+    return !mState.getLinkedTransformFeedbackVaryings().empty();
+}
+
+bool ProgramVk::dirtyUniforms() const
+{
+    return mDefaultUniformBlocksDirty.any();
+}
+
+angle::Result ProgramVk::getGraphicsPipeline(ContextVk *contextVk,
+                                             gl::PrimitiveMode mode,
+                                             const vk::GraphicsPipelineDesc &desc,
+                                             const gl::AttributesMask &activeAttribLocations,
+                                             const vk::GraphicsPipelineDesc **descPtrOut,
+                                             vk::PipelineHelper **pipelineOut)
+{
+    vk::ShaderProgramHelper *shaderProgram;
+    bool enableLineRasterEmulation =
+        contextVk->getFeatures().basicGLLineRasterization.enabled && gl::IsLineMode(mode);
+    ANGLE_TRY(initGraphicsProgram(contextVk, enableLineRasterEmulation, &shaderProgram));
+    ASSERT(shaderProgram->isGraphicsProgram());
+    RendererVk *renderer             = contextVk->getRenderer();
+    vk::PipelineCache *pipelineCache = nullptr;
+    ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
+    return shaderProgram->getGraphicsPipeline(
+        contextVk, &contextVk->getRenderPassCache(), *pipelineCache,
+        contextVk->getCurrentQueueSerial(), mPipelineLayout.get(), desc, activeAttribLocations,
+        mState.getAttributesTypeMask(), descPtrOut, pipelineOut);
+}
+
+angle::Result ProgramVk::getComputePipeline(ContextVk *contextVk,
+                                            vk::PipelineAndSerial **pipelineOut)
+{
+    vk::ShaderProgramHelper *shaderProgram;
+    ANGLE_TRY(initComputeProgram(contextVk, &shaderProgram));
+    ASSERT(!shaderProgram->isGraphicsProgram());
+    return shaderProgram->getComputePipeline(contextVk, mPipelineLayout.get(), pipelineOut);
+}
+
 }  // namespace rx

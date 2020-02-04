@@ -2764,8 +2764,10 @@ OverlayImpl *ContextVk::createOverlay(const gl::OverlayState &state)
 
 void ContextVk::invalidateCurrentDefaultUniforms()
 {
-    ASSERT(mProgram);
-    if (mProgram->hasDefaultUniforms())
+    ProgramHelperVk *programHelperVk = getProgramHelper();
+    ASSERT(programHelperVk);
+
+    if (programHelperVk->hasDefaultUniforms())
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
         mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -2774,8 +2776,10 @@ void ContextVk::invalidateCurrentDefaultUniforms()
 
 angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context)
 {
-    ASSERT(mProgram);
-    if (mProgram->hasTextures())
+    ProgramHelperVk *programHelperVk = getProgramHelper();
+    ASSERT(programHelperVk);
+
+    if (programHelperVk->hasTextures())
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_TEXTURES);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -2793,9 +2797,11 @@ angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context)
 
 void ContextVk::invalidateCurrentShaderResources()
 {
-    ASSERT(mProgram);
-    if (mProgram->hasUniformBuffers() || mProgram->hasStorageBuffers() ||
-        mProgram->hasAtomicCounterBuffers() || mProgram->hasImages())
+    ProgramHelperVk *programHelperVk = getProgramHelper();
+    ASSERT(programHelperVk);
+
+    if (programHelperVk->hasUniformBuffers() || programHelperVk->hasStorageBuffers() ||
+        programHelperVk->hasAtomicCounterBuffers() || programHelperVk->hasImages())
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -3108,8 +3114,11 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(
     VkPipelineBindPoint bindPoint,
     const DriverUniformsDescriptorSet &driverUniforms)
 {
+    ProgramHelperVk *programHelperVk = getProgramHelper();
+    ASSERT(programHelperVk);
+
     commandBuffer->bindDescriptorSets(
-        mProgram->getPipelineLayout(), bindPoint, kDriverUniformsDescriptorSetIndex, 1,
+        programHelperVk->getPipelineLayout(), bindPoint, kDriverUniformsDescriptorSetIndex, 1,
         &driverUniforms.descriptorSet, 1, &driverUniforms.dynamicOffset);
 }
 
