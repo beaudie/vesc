@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6f87e8b4_903743fd",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-04T15:54:35Z",
+      "side": 1,
+      "message": "Thanks, will change it to int32_t since level is a GLint.",
+      "parentUuid": "2a60bbb9_276eeddb",
+      "range": {
+        "startLine": 1296,
+        "startChar": 17,
+        "endLine": 1296,
+        "endChar": 70
+      },
+      "revId": "8a63c9bbefbb861cfb28537469c3c4ed22f31be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "50a6f8b2_6cb0b8cd",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-04T13:36:37Z",
       "side": 1,
       "message": "nit: can you please use a normal map and use TextureID? Better to keep a solid design in place.",
+      "range": {
+        "startLine": 185,
+        "startChar": 33,
+        "endLine": 185,
+        "endChar": 46
+      },
+      "revId": "8a63c9bbefbb861cfb28537469c3c4ed22f31be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09fa95ec_fd1cdb2e",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-04T15:54:35Z",
+      "side": 1,
+      "message": "Sorry, I keep gravitating back to unordered_map, just worried about perf.  But I haven\u0027t taken the time to gather data.  I\u0027ll change it back to a map.\n\nThe change to using value instead of TextureID is due to compile errors:\n\n    error: no matching member function for call to \u0027find\u0027\n        const auto \u0026foundTextureLevels \u003d mCachedTextureLevelData.find(textureIDs[i]);\n                                          ~~~~~~~~~~~~~~~~~~~~~~~^~~~\n\nI\u0027ll fix it with a custom comparator for TextureLevelDataMap instead.",
+      "parentUuid": "50a6f8b2_6cb0b8cd",
       "range": {
         "startLine": 185,
         "startChar": 33,
