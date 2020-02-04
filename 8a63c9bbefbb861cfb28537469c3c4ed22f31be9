@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5eefe6b7_990a72fb",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-04T16:28:54Z",
+      "side": 1,
+      "message": "Sure, done.",
+      "parentUuid": "2c154f13_2b36194d",
+      "range": {
+        "startLine": 1296,
+        "startChar": 17,
+        "endLine": 1296,
+        "endChar": 70
+      },
+      "revId": "8a63c9bbefbb861cfb28537469c3c4ed22f31be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "50a6f8b2_6cb0b8cd",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 4
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Hm. TextureID should have operators defined. Can you share with me a failing reproduction case? See PackedEnums.h under \"// Util funcs for resourceIDs\"",
       "parentUuid": "09fa95ec_fd1cdb2e",
+      "range": {
+        "startLine": 185,
+        "startChar": 33,
+        "endLine": 185,
+        "endChar": 46
+      },
+      "revId": "8a63c9bbefbb861cfb28537469c3c4ed22f31be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "485fe24e_a4024489",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-04T16:28:54Z",
+      "side": 1,
+      "message": "Something about the nesting of maps is tripping it up.  Here\u0027s another more descriptive error:\n\nerror: no viable overloaded operator[] for type \u0027angle::TextureLevelDataMap\u0027 (aka \u0027map\u003cint, map\u003cgl::TextureID, vector\u003cunsigned char\u003e \u003e \u003e\u0027)\n                mCachedTextureLevelData[texture-\u003eid()] \u003d std::move(textureLevels);\n                ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~\n\nI just uploaded the version that doesn\u0027t compile for me.",
+      "parentUuid": "adf17887_eccce66f",
       "range": {
         "startLine": 185,
         "startChar": 33,
