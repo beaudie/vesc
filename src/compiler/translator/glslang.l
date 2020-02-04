@@ -156,9 +156,10 @@ O           [0-7]
 "case"         { return ES3_keyword(context, CASE); }
 "default"      { return ES2_reserved_ES3_keyword(context, DEFAULT); }
 
-"centroid"     { return ES3_keyword(context, CENTROID); }
-"flat"         { return ES2_reserved_ES3_keyword(context, FLAT); }
-"smooth"       { return ES3_keyword(context, SMOOTH); }
+"centroid"      { return ES3_keyword(context, CENTROID); }
+"flat"          { return ES2_reserved_ES3_keyword(context, FLAT); }
+"smooth"        { return ES3_keyword(context, SMOOTH); }
+"noperspective" { return ES3_keyword(context, NOPERSPECTIVE); }
 
 "in"           { return IN_QUAL; }
 "out"          { return OUT_QUAL; }
@@ -262,7 +263,6 @@ O           [0-7]
 
     /* Reserved keywords for GLSL ES 3.00 that are not reserved for GLSL ES 1.00 */
 "resource"          |
-"noperspective"     |
 "patch"             |
 "sample"            |
 "subroutine"        |

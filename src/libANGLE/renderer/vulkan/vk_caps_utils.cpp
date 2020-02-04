@@ -146,6 +146,9 @@ void RendererVk::ensureCapsInitialized() const
     // Vulkan natively supports standard derivatives
     mNativeExtensions.standardDerivativesOES = true;
 
+    // Vulkan natively supports noperspective interpolation
+    mNativeExtensions.noperspectiveInterpolation = true;
+
     // Vulkan natively supports 32-bit indices, entry in kIndexTypeMap
     mNativeExtensions.elementIndexUintOES = true;
 
