@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1d98a4_b5f45ab2",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-04T00:18:51Z",
+      "side": 1,
+      "message": "nit: I think it would be nice to collect the interface functions into a block of code just to make it clear what these are (though override tells you as well).",
+      "revId": "5d45d0281f7aa28a2771301a44c4b998eccebb74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
