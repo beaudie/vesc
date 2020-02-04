@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/ProgramHelperVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -213,7 +214,6 @@ class ProgramVk : public ProgramImpl
     }
     uint32_t getImageBindingsOffset() const { return mImageBindingsOffset; }
 
-    class ProgramInfo;
     ANGLE_INLINE angle::Result initProgram(ContextVk *contextVk,
                                            bool enableLineRasterEmulation,
                                            ProgramInfo *programInfo,
@@ -305,48 +305,6 @@ class ProgramVk : public ProgramImpl
     // Keep bindings to the descriptor pools. This ensures the pools stay valid while the Program
     // is in use.
     vk::DescriptorSetLayoutArray<vk::RefCountedDescriptorPoolBinding> mDescriptorPoolBindings;
-
-    class ShaderInfo final : angle::NonCopyable
-    {
-      public:
-        ShaderInfo();
-        ~ShaderInfo();
-
-        angle::Result initShaders(ContextVk *contextVk,
-                                  const gl::ShaderMap<std::string> &shaderSources,
-                                  const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                  gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
-        void release(ContextVk *contextVk);
-
-        ANGLE_INLINE bool valid() const { return mIsInitialized; }
-
-        gl::ShaderMap<SpirvBlob> &getSpirvBlobs() { return mSpirvBlobs; }
-        const gl::ShaderMap<SpirvBlob> &getSpirvBlobs() const { return mSpirvBlobs; }
-
-      private:
-        gl::ShaderMap<SpirvBlob> mSpirvBlobs;
-        bool mIsInitialized = false;
-    };
-
-    class ProgramInfo final : angle::NonCopyable
-    {
-      public:
-        ProgramInfo();
-        ~ProgramInfo();
-
-        angle::Result initProgram(ContextVk *contextVk,
-                                  const ShaderInfo &shaderInfo,
-                                  bool enableLineRasterEmulation);
-        void release(ContextVk *contextVk);
-
-        ANGLE_INLINE bool valid() const { return mProgramHelper.valid(); }
-
-        vk::ShaderProgramHelper *getShaderProgram() { return &mProgramHelper; }
-
-      private:
-        vk::ShaderProgramHelper mProgramHelper;
-        gl::ShaderMap<vk::RefCounted<vk::ShaderAndSerial>> mShaders;
-    };
 
     ProgramInfo mDefaultProgramInfo;
     ProgramInfo mLineRasterProgramInfo;
