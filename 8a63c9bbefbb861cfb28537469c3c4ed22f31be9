@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a60bbb9_276eeddb",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T13:36:37Z",
+      "side": 1,
+      "message": "nit: either use \u0027int\u0027 or uint32_t\n\nhttps://google.github.io/styleguide/cppguide.html#Integer_Types",
+      "range": {
+        "startLine": 1296,
+        "startChar": 17,
+        "endLine": 1296,
+        "endChar": 70
+      },
+      "revId": "8a63c9bbefbb861cfb28537469c3c4ed22f31be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50a6f8b2_6cb0b8cd",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-04T13:36:37Z",
+      "side": 1,
+      "message": "nit: can you please use a normal map and use TextureID? Better to keep a solid design in place.",
+      "range": {
+        "startLine": 185,
+        "startChar": 33,
+        "endLine": 185,
+        "endChar": 46
+      },
+      "revId": "8a63c9bbefbb861cfb28537469c3c4ed22f31be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
