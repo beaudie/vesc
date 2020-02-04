@@ -16,6 +16,8 @@
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/vulkan/OverlayVk.h"
 #include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
+#include "libANGLE/renderer/vulkan/ProgramHelperVk.h"
+#include "libANGLE/renderer/vulkan/ProgramVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
@@ -198,6 +200,18 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     angle::Result initialize() override;
 
     void onDestroy(const gl::Context *context) override;
+
+    // If both a Program and a ProgramPipeline are bound, the Program will
+    // always override the ProgramPipeline.
+    ProgramHelperVk *getProgramHelper() const
+    {
+        if (mProgram)
+        {
+            return mProgram;
+        }
+        // TODO(timvp): Support Program Pipelines: http://anglebug.com/3570
+        return nullptr;
+    }
 
     // Flush and finish.
     angle::Result flush(const gl::Context *context) override;
