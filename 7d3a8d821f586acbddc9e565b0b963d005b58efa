@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "3d2c9272_d6bf7845",
+        "filename": "src/libANGLE/Overlay_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-02-04T17:38:19Z",
+      "side": 1,
+      "message": "Const values for the magic #s here and below?",
+      "range": {
+        "startLine": 164,
+        "startChar": 12,
+        "endLine": 167,
+        "endChar": 46
+      },
+      "revId": "7d3a8d821f586acbddc9e565b0b963d005b58efa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7fb4cfc_bf0e0a82",
+        "filename": "src/libANGLE/overlay_widgets.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-02-04T17:38:19Z",
+      "side": 1,
+      "message": "Not directly related to this change but would be nice to have a cheat-sheet in this comment indicating approximate colors represented by various RGBA combinations that are used below.",
+      "revId": "7d3a8d821f586acbddc9e565b0b963d005b58efa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b83fb820_ebbf11ff",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
