@@ -462,7 +462,8 @@ DynamicBuffer::DynamicBuffer()
       mNextAllocationOffset(0),
       mLastFlushOrInvalidateOffset(0),
       mSize(0),
-      mAlignment(0)
+      mAlignment(0),
+      mMemoryPropertyFlags(0)
 {}
 
 DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
@@ -474,6 +475,7 @@ DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
       mLastFlushOrInvalidateOffset(other.mLastFlushOrInvalidateOffset),
       mSize(other.mSize),
       mAlignment(other.mAlignment),
+      mMemoryPropertyFlags(other.mMemoryPropertyFlags),
       mInFlightBuffers(std::move(other.mInFlightBuffers))
 {
     other.mBuffer = nullptr;
@@ -485,8 +487,22 @@ void DynamicBuffer::init(RendererVk *renderer,
                          size_t initialSize,
                          bool hostVisible)
 {
-    mUsage       = usage;
-    mHostVisible = hostVisible;
+    VkMemoryPropertyFlags memoryPropertyFlags =
+        (hostVisible) ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+
+    initWithFlags(renderer, usage, alignment, initialSize, memoryPropertyFlags, false);
+}
+
+void DynamicBuffer::initWithFlags(RendererVk *renderer,
+                                  VkBufferUsageFlags usage,
+                                  size_t alignment,
+                                  size_t initialSize,
+                                  VkMemoryPropertyFlags memoryPropertyFlags,
+                                  bool disableSubAllocation)
+{
+    mUsage               = usage;
+    mHostVisible         = ((memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0);
+    mMemoryPropertyFlags = memoryPropertyFlags;
 
     // Check that we haven't overriden the initial size of the buffer in setMinimumSizeForTesting.
     if (mInitialSize == 0)
@@ -523,9 +539,7 @@ angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
 
-    const VkMemoryPropertyFlags memoryProperty =
-        mHostVisible ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(buffer->init(contextVk, createInfo, memoryProperty));
+    ANGLE_TRY(buffer->init(contextVk, createInfo, mMemoryPropertyFlags));
 
     ASSERT(!mBuffer);
     mBuffer = buffer.release();
@@ -540,7 +554,8 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
                                       VkDeviceSize *offsetOut,
                                       bool *newBufferAllocatedOut)
 {
-    size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
+    size_t sizeToAllocate =
+        sizeInBytes == mInitialSize ? sizeInBytes : roundUp(sizeInBytes, mAlignment);
 
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
     checkedNextWriteOffset += sizeToAllocate;
@@ -556,11 +571,15 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
             mBuffer = nullptr;
         }
 
-        if (sizeToAllocate > mSize)
+        // If suballocation is disabled, ensure the next allocation is the same
+        // size as the buffers in the free list. This prevents suballocation if every
+        // buffer is exactly the size as requested.
+        bool needToClearFreeList = (sizeToAllocate > mSize);
+        if (needToClearFreeList)
         {
             mSize = std::max(mInitialSize, sizeToAllocate);
 
-            // Clear the free list since the free buffers are now too small.
+            // Clear the free list since the free buffers are not adequate.
             for (BufferHelper *toFree : mBufferFreeList)
             {
                 toFree->release(contextVk->getRenderer());
@@ -612,7 +631,11 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
         *ptrOut = mappedMemory + mNextAllocationOffset;
     }
 
-    *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
+    if (offsetOut != nullptr)
+    {
+        *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
+    }
+
     mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
     return angle::Result::Continue;
 }
@@ -683,7 +706,8 @@ void DynamicBuffer::releaseInFlightBuffers(ContextVk *contextVk)
     for (BufferHelper *toRelease : mInFlightBuffers)
     {
         // If the dynamic buffer was resized we cannot reuse the retained buffer.
-        if (toRelease->getSize() < mSize)
+        bool needToRelease = (toRelease->getSize() < mSize);
+        if (needToRelease)
         {
             toRelease->release(contextVk->getRenderer());
         }
@@ -759,6 +783,7 @@ void DynamicBuffer::setMinimumSizeForTesting(size_t minSize)
 
 void DynamicBuffer::reset()
 {
+    mInitialSize                 = 0;
     mSize                        = 0;
     mNextAllocationOffset        = 0;
     mLastFlushOrInvalidateOffset = 0;
