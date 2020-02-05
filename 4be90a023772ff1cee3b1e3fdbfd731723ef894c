@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7dd7499e_dfd2f5bd",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-05T15:19:01Z",
+      "side": 1,
+      "message": "Quoth the spec:\n\n\"When reading pixels from a color buffer, the buffer selected for reading is termed the read buffer\".\n\nThe extension:\n\n\"If the \u003cformat\u003e is DEPTH_COMPONENT, then values are obtained from the depth buffer.\"\n\nSo we should keep the \"read buffer\" or \"read attachment\" as color only. And only when the format parameter is DEPTH_COMPONENT (or stencil, etc) do we read from the depth or stencil attachments.\n\nLooking at the FramebufferVk code I also didn\u0027t see where you needed to clarify the read vs depth attachment. Was it just for querying the FB size? You can probably get that via a switch like you do for getting the RT.",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 64
+      },
+      "revId": "4be90a023772ff1cee3b1e3fdbfd731723ef894c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b527819_5a485093",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-05T15:19:01Z",
+      "side": 1,
+      "message": "Can you please add a comment somewhere as to why you\u0027re requesting this feature? Also include a note that it\u0027s not strictly necessary and a bit of coding could discard the unused depth or stencil values.",
+      "range": {
+        "startLine": 1180,
+        "startChar": 0,
+        "endLine": 1184,
+        "endChar": 5
+      },
+      "revId": "4be90a023772ff1cee3b1e3fdbfd731723ef894c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
