@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "538e3202_d2f5f80d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramHelperVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T04:14:09Z",
+      "side": 1,
+      "message": "Again, I would prefer composition over inheritance. Also again, it\u0027s ok with me to optimize that after PPOs are done in the interest of getting there faster!",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 11
+      },
+      "revId": "bd013fa51aed11a0ae9a13c678b86fb4df30b1b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
