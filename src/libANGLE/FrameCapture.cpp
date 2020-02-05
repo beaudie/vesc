@@ -1512,10 +1512,32 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         const gl::FramebufferAttachment *depthAttachment = framebuffer->getDepthAttachment();
         if (depthAttachment)
         {
-            ASSERT(depthAttachment->type() == GL_RENDERBUFFER);
             GLuint resourceID = depthAttachment->getResource()->getId();
-            cap(CaptureFramebufferRenderbuffer(replayState, true, GL_FRAMEBUFFER,
-                                               GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, {resourceID}));
+            switch (depthAttachment->type())
+            {
+                case GL_RENDERBUFFER:
+                {
+                    cap(CaptureFramebufferRenderbuffer(replayState, true, GL_FRAMEBUFFER,
+                                                       GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
+                                                       {resourceID}));
+                    break;
+                }
+                case GL_TEXTURE:
+                {
+                    // TODO: Layer attachments. http://anglebug.com/3662
+                    ASSERT(depthAttachment->getTexture()->getType() == gl::TextureType::_2D);
+
+                    gl::ImageIndex index = depthAttachment->getTextureImageIndex();
+
+                    cap(CaptureFramebufferTexture2D(
+                        replayState, true, GL_FRAMEBUFFER, depthAttachment->getBinding(),
+                        index.getTarget(), {resourceID}, index.getLevelIndex()));
+                    break;
+                }
+                default:
+                    UNIMPLEMENTED();
+                    break;
+            }
         }
 
         const gl::FramebufferAttachment *stencilAttachment = framebuffer->getStencilAttachment();
