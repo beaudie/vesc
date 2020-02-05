@@ -285,6 +285,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     bool isViewportFlipEnabledForDrawFBO() const;
     bool isViewportFlipEnabledForReadFBO() const;
+    float getPreRotationMatrixEntry(int index) const;
 
     // State sync with dirty bits.
     angle::Result syncState(const gl::Context *context,
@@ -690,6 +691,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     void updateDepthRange(float nearPlane, float farPlane);
     void updateFlipViewportDrawFramebuffer(const gl::State &glState);
     void updateFlipViewportReadFramebuffer(const gl::State &glState);
+    void updatePreRotationMatrix(const gl::State &glState);
 
     angle::Result updateActiveTextures(const gl::Context *context);
     angle::Result updateActiveImages(const gl::Context *context,
@@ -802,6 +804,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     gl::PrimitiveMode mCurrentDrawMode;
 
     WindowSurfaceVk *mCurrentWindowSurface;
+    std::vector<float> mPreRotationMatrix;
 
     // Keep a cached pipeline description structure that can be used to query the pipeline cache.
     // Kept in a pointer so allocations can be aligned, and structs can be portably packed.
