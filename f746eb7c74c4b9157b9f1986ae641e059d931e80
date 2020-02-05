@@ -16,6 +16,24 @@
       "revId": "f746eb7c74c4b9157b9f1986ae641e059d931e80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7f19045_a19e1fcb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3833,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-05T16:44:34Z",
+      "side": 1,
+      "message": "Mostly like you said, to avoid the check. Added the ASSERT.",
+      "parentUuid": "a51ce637_4087442a",
+      "revId": "f746eb7c74c4b9157b9f1986ae641e059d931e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
