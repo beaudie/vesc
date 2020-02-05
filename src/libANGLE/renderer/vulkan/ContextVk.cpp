@@ -70,6 +70,9 @@ struct GraphicsDriverUniforms
 
     // We'll use x, y, z for near / far / diff respectively.
     std::array<float, 4> depthRange;
+
+    // Used to pre-rotate gl_Position for swapchain images on Android.
+    std::array<float, 4> preRotation;
 };
 
 struct ComputeDriverUniforms
@@ -3079,7 +3082,9 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
         {},
         {},
         {},
-        {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f}};
+        {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f},
+        // FIXME: HACK ALERT: THIS IS HARD-CODED TO THE UNITY MATRIX
+        {1.0f, 0.0f, 0.0f, 1.0f}};
 
     if (xfbActiveUnpaused)
     {
