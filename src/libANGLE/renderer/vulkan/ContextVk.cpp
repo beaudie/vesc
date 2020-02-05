@@ -1196,7 +1196,8 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
     if (mProgram->hasUniformBuffers() || mProgram->hasStorageBuffers() ||
         mProgram->hasAtomicCounterBuffers() || mProgram->hasImages())
     {
-        ANGLE_TRY(mProgram->updateShaderResourcesDescriptorSet(this, recorder));
+        ANGLE_TRY(mProgram->updateShaderResourcesDescriptorSet(this, &mResourceUseList,
+                                                               &mRenderPassCommands, recorder));
     }
     return angle::Result::Continue;
 }
@@ -1220,6 +1221,25 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
 {
     if (mProgram->hasTransformFeedbackOutput() && mState.isTransformFeedbackActive())
     {
+        if (!commandGraphEnabled())
+        {
+            size_t bufferCount = mProgram->getState().getTransformFeedbackBufferCount();
+            const std::vector<gl::OffsetBindingPointer<gl::Buffer>> &xfbBuffers =
+                mState.getCurrentTransformFeedback()->getIndexedBuffers();
+
+            for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+            {
+                const gl::OffsetBindingPointer<gl::Buffer> &xfbBuffer = xfbBuffers[bufferIndex];
+                gl::Buffer *buffer                                    = xfbBuffer.get();
+                ASSERT(buffer != nullptr);
+                BufferVk *bufferVk             = vk::GetImpl(buffer);
+                vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
+
+                mRenderPassCommands.bufferWrite(
+                    &mResourceUseList, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT, &bufferHelper);
+            }
+        }
+
         ANGLE_TRY(mProgram->updateTransformFeedbackDescriptorSet(
             this, mDrawFramebuffer->getFramebuffer()));
     }
@@ -1239,15 +1259,24 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     size_t bufferCount = mProgram->getState().getTransformFeedbackBufferCount();
     gl::TransformFeedbackBuffersArray<VkBuffer> bufferHandles;
 
+    const std::vector<gl::OffsetBindingPointer<gl::Buffer>> &xfbBuffers =
+        mState.getCurrentTransformFeedback()->getIndexedBuffers();
+
     for (bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
     {
-        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
-            mState.getCurrentTransformFeedback()->getIndexedBuffer(bufferIndex);
-        gl::Buffer *buffer = bufferBinding.get();
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = xfbBuffers[bufferIndex];
+        gl::Buffer *buffer                                        = bufferBinding.get();
         ASSERT(buffer != nullptr);
+        BufferVk *bufferVk = vk::GetImpl(buffer);
 
-        vk::BufferHelper &bufferHelper = vk::GetImpl(buffer)->getBuffer();
+        vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
         bufferHandles[bufferIndex]     = bufferHelper.getBuffer().getHandle();
+
+        if (!commandGraphEnabled())
+        {
+            mRenderPassCommands.bufferWrite(
+                &mResourceUseList, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT, &bufferHelper);
+        }
     }
 
     const TransformFeedbackBufferRange &xfbBufferRangeExtension =
@@ -1257,8 +1286,11 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
         static_cast<uint32_t>(bufferCount), bufferHandles.data(),
         xfbBufferRangeExtension.offsets.data(), xfbBufferRangeExtension.sizes.data());
 
-    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
-    transformFeedbackVk->addFramebufferDependency(this, mProgram->getState(), framebuffer);
+    if (commandGraphEnabled())
+    {
+        vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+        transformFeedbackVk->addFramebufferDependency(this, mProgram->getState(), framebuffer);
+    }
 
     return angle::Result::Continue;
 }
@@ -1278,8 +1310,17 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Con
 
     vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
     bool rebindBuffer = transformFeedbackVk->getTransformFeedbackBufferRebindState();
-    framebuffer->setActiveTransformFeedbackInfo(bufferCount, counterBufferHandles.data(),
-                                                rebindBuffer);
+
+    if (commandGraphEnabled())
+    {
+        framebuffer->setActiveTransformFeedbackInfo(bufferCount, counterBufferHandles.data(),
+                                                    rebindBuffer);
+    }
+    else
+    {
+        mRenderPassCommands.beginTransformFeedback(bufferCount, counterBufferHandles.data(),
+                                                   rebindBuffer);
+    }
 
     transformFeedbackVk->unsetTransformFeedbackBufferRebindState();
 
@@ -2133,8 +2174,15 @@ angle::Result ContextVk::pushDebugGroup(const gl::Context *context,
     }
     else
     {
-        // TODO(jmadill): http://anglebug.com/4029
-        UNIMPLEMENTED();
+        if (vkCmdInsertDebugUtilsLabelEXT)
+        {
+            vk::PrimaryCommandBuffer *primary;
+            ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+
+            VkDebugUtilsLabelEXT label;
+            vk::MakeDebugUtilsLabel(source, message.c_str(), &label);
+            vkCmdInsertDebugUtilsLabelEXT(primary->getHandle(), &label);
+        }
     }
 
     return angle::Result::Continue;
@@ -2148,8 +2196,12 @@ angle::Result ContextVk::popDebugGroup(const gl::Context *context)
     }
     else
     {
-        // TODO(jmadill): http://anglebug.com/4029
-        UNIMPLEMENTED();
+        if (vkCmdEndDebugUtilsLabelEXT)
+        {
+            vk::PrimaryCommandBuffer *primary;
+            ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+            vkCmdEndDebugUtilsLabelEXT(primary->getHandle());
+        }
     }
 
     return angle::Result::Continue;
@@ -3981,7 +4033,12 @@ void OutsideRenderPassCommandBuffer::reset()
 }
 
 RenderPassCommandBuffer::RenderPassCommandBuffer()
-    : mCounter(0), mClearValues{}, mRenderPassStarted(false)
+    : mCounter(0),
+      mClearValues{},
+      mRenderPassStarted(false),
+      mTransformFeedbackCounterBuffers{},
+      mValidTransformFeedbackBufferCount(0),
+      mRebindTransformFeedbackBuffers(false)
 {}
 
 RenderPassCommandBuffer::~RenderPassCommandBuffer()
@@ -4015,6 +4072,19 @@ void RenderPassCommandBuffer::beginRenderPass(const vk::Framebuffer &framebuffer
     mCounter++;
 }
 
+void RenderPassCommandBuffer::beginTransformFeedback(size_t validBufferCount,
+                                                     const VkBuffer *counterBuffers,
+                                                     bool rebindBuffer)
+{
+    mValidTransformFeedbackBufferCount = static_cast<uint32_t>(validBufferCount);
+    mRebindTransformFeedbackBuffers    = rebindBuffer;
+
+    for (size_t index = 0; index < validBufferCount; index++)
+    {
+        mTransformFeedbackCounterBuffers[index] = counterBuffers[index];
+    }
+}
+
 angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
                                                       vk::PrimaryCommandBuffer *primary)
 {
@@ -4044,8 +4114,41 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
 
     // Run commands inside the RenderPass.
     primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
-    mCommandBuffer.executeCommands(primary->getHandle());
-    primary->endRenderPass();
+
+    if (mValidTransformFeedbackBufferCount == 0)
+    {
+        mCommandBuffer.executeCommands(primary->getHandle());
+        primary->endRenderPass();
+    }
+    else
+    {
+        uint32_t numCounterBuffers =
+            (mRebindTransformFeedbackBuffers) ? 0 : mValidTransformFeedbackBufferCount;
+
+        primary->beginTransformFeedbackEXT(0, numCounterBuffers,
+                                           mTransformFeedbackCounterBuffers.data(), nullptr);
+        mCommandBuffer.executeCommands(primary->getHandle());
+        primary->endTransformFeedbackEXT(0, mValidTransformFeedbackBufferCount,
+                                         mTransformFeedbackCounterBuffers.data(), nullptr);
+
+        primary->endRenderPass();
+
+        // Would be better to accumulate this barrier using the command APIs.
+        VkBufferMemoryBarrier bufferBarrier = {};
+        bufferBarrier.sType                 = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+        bufferBarrier.pNext                 = nullptr;
+        bufferBarrier.srcAccessMask         = VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT;
+        bufferBarrier.dstAccessMask         = VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT;
+        bufferBarrier.srcQueueFamilyIndex   = VK_QUEUE_FAMILY_IGNORED;
+        bufferBarrier.dstQueueFamilyIndex   = VK_QUEUE_FAMILY_IGNORED;
+        bufferBarrier.buffer                = mTransformFeedbackCounterBuffers[0];
+        bufferBarrier.offset                = 0;
+        bufferBarrier.size                  = VK_WHOLE_SIZE;
+
+        primary->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT,
+                                 VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, 0u, 0u, nullptr, 1u,
+                                 &bufferBarrier, 0u, nullptr);
+    }
 
     // Restart the command buffer.
     reset();
@@ -4056,6 +4159,8 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
 void RenderPassCommandBuffer::reset()
 {
     mCommandBuffer.reset();
-    mRenderPassStarted = false;
+    mRenderPassStarted                 = false;
+    mValidTransformFeedbackBufferCount = 0;
+    mRebindTransformFeedbackBuffers    = false;
 }
 }  // namespace rx
