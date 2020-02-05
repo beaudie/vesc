@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5821ad0_64b0d7e7",
+        "filename": "src/libANGLE/ProgramHelper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T03:23:02Z",
+      "side": 1,
+      "message": "2020",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "a9da11071df5c2512431c92baeb5d68581c0eb7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43e0a318_84f52960",
+        "filename": "src/libANGLE/ProgramHelper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T03:23:02Z",
+      "side": 1,
+      "message": "How about using composition instead of inheritance? The Program class could implement these functions as inline `return mHelper.X()` (if at all needed). The net effect would be that there are no indirect (virtual) calls.\n\nThat also means that ProgramHelper would contain all the information it needs to respond to these queries / perform these actions, which would help avoid duplicating declarations between Program and ProgramPipeline.\n\n---\n\nCould also be done as a final cleanup once everything is working, I don\u0027t mind.",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 11
+      },
+      "revId": "a9da11071df5c2512431c92baeb5d68581c0eb7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
