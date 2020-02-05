@@ -3965,6 +3965,7 @@ void RenderPassCommandBuffer::beginRenderPass(const vk::Framebuffer &framebuffer
     *commandBufferOut = &mCommandBuffer;
 
     mRenderPassStarted = true;
+    mCounter++;
 }
 
 angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
