@@ -34,6 +34,24 @@
       "revId": "6feaff5cf253113f305de7b92d29b7bbcf54d7dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03e42a18_f6d29273",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-05T16:44:07Z",
+      "side": 1,
+      "message": "\u003e end outside of a render pass instance (i.e. contain entire render pass instances).\n\nIt can contain multiple RPs as long as they are \"sandwiched\".\n\nAs it stands the code should work correctly. We might need to do an optimization to keep RPs open for some queries in the middle of a RP (based on the first clause). We can tackle this as a follow up performance optimization.",
+      "parentUuid": "e7005ea6_6029b873",
+      "revId": "6feaff5cf253113f305de7b92d29b7bbcf54d7dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
