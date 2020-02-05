@@ -210,27 +210,8 @@ ContextImpl *DisplayAndroid::createContext(const gl::State &state,
     {
         renderer = mRenderer;
     }
-    else
-    {
-        EGLContext nativeShareContext = EGL_NO_CONTEXT;
-        if (shareContext)
-        {
-            ContextEGL *shareContextEGL = GetImplAs<ContextEGL>(shareContext);
-            nativeShareContext          = shareContextEGL->getContext();
-        }
 
-        // Create a new renderer for this context.  It only needs to share with the user's requested
-        // share context because there are no internal resources in DisplayAndroid that are shared
-        // at the GL level.
-        egl::Error error = createRenderer(nativeShareContext, false, &renderer);
-        if (error.isError())
-        {
-            ERR() << "Failed to create a shared renderer: " << error.getMessage();
-            return nullptr;
-        }
-    }
-
-    return new ContextEGL(state, errorSet, renderer);
+    return new ContextEGL(state, errorSet, this, shareContext, renderer);
 }
 
 bool DisplayAndroid::isValidNativeWindow(EGLNativeWindowType window) const
@@ -346,11 +327,11 @@ void DisplayAndroid::destroyNativeContext(EGLContext context)
 
 void DisplayAndroid::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
+    DisplayEGL::generateExtensions(outExtensions);
+
     // Surfaceless can be support if the native driver supports it or we know that we are running on
     // a single thread (mVirtualizedContexts == true)
     outExtensions->surfacelessContext = mSupportsSurfaceless || mVirtualizedContexts;
-
-    DisplayEGL::generateExtensions(outExtensions);
 }
 
 egl::Error DisplayAndroid::createRenderer(EGLContext shareContext,
