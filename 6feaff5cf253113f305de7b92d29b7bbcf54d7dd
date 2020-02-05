@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad6d02a7_6b79f1bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-05T02:02:06Z",
+      "side": 1,
+      "message": "From the vulkan spec:\n\n\u003e A query must either begin and end inside the same subpass of a render pass instance, or must both begin and end outside of a render pass instance (i.e. contain entire render pass instances).\n\nThis may be a silly question, but is it a problem if multiple render passes are started and ended between the beginQuery() and endQuery() calls (assuming that\u0027s possible)?",
+      "revId": "6feaff5cf253113f305de7b92d29b7bbcf54d7dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
