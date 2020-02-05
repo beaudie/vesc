@@ -1321,7 +1321,15 @@ angle::Result TextureVk::changeLevels(ContextVk *contextVk,
     if (mImage->valid() && mImage->hasStagedUpdates())
     {
         vk::CommandBuffer *commandBuffer = nullptr;
-        ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+
+        if (contextVk->commandGraphEnabled())
+        {
+            ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+        }
+        else
+        {
+            ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+        }
         ANGLE_TRY(mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0),
                                              mImage->getLevelCount(), getNativeImageLayer(0),
                                              mImage->getLayerCount(), commandBuffer));
@@ -1371,11 +1379,15 @@ angle::Result TextureVk::changeLevels(ContextVk *contextVk,
         }
     }
 
-    // Create a new node for the image and add a global memory barrier for the staging buffers.
-    // They are written to and staged to be read from when ensureImageInitialized() is called.
-    mImage->finishCurrentCommands(contextVk);
-    mImage->addGlobalMemoryBarrier(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT,
-                                   VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
+    // FIXME: else case?
+    if (contextVk->commandGraphEnabled())
+    {
+        // Create a new node for the image and add a global memory barrier for the staging buffers.
+        // They are written to and staged to be read from when ensureImageInitialized() is called.
+        mImage->finishCurrentCommands(contextVk);
+        mImage->addGlobalMemoryBarrier(VK_ACCESS_TRANSFER_WRITE_BIT, VK_ACCESS_TRANSFER_READ_BIT,
+                                       VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
+    }
 
     // Inform the front end that we've updated the staging buffer
     onStagingBufferChange();
