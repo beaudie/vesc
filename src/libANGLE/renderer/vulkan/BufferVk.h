@@ -84,14 +84,14 @@ class BufferVk : public BufferImpl
 
     const vk::BufferHelper &getBuffer() const
     {
-        ASSERT(mBuffer.valid());
-        return mBuffer;
+        ASSERT(mBuffer && mBuffer->valid());
+        return *mBuffer;
     }
 
     vk::BufferHelper &getBuffer()
     {
-        ASSERT(mBuffer.valid());
-        return mBuffer;
+        ASSERT(mBuffer && mBuffer->valid());
+        return *mBuffer;
     }
 
     angle::Result mapImpl(ContextVk *contextVk, void **mapPtr);
@@ -163,7 +163,10 @@ class BufferVk : public BufferImpl
         size_t offset;
     };
 
-    vk::BufferHelper mBuffer;
+    vk::BufferHelper *mBuffer;
+
+    // Pool of BufferHelpers for mBuffer to acquire from
+    vk::BufferHelperPool mBufferPool;
 
     // All staging buffer support is provided by a DynamicBuffer.
     vk::DynamicBuffer mStagingBuffer;
