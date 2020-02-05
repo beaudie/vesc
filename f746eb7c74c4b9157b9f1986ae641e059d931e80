@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a51ce637_4087442a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3833,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T04:03:57Z",
+      "side": 1,
+      "message": "You can `ASSERT(image-\u003eisLayoutChangeNecessary())`\n\n---\n\nNot sure why there are two functions here though, `onImageWrite` could call `onImageRead` to the same effect.",
+      "revId": "f746eb7c74c4b9157b9f1986ae641e059d931e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
