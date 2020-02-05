@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0e6118a_311b6d51",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-05T17:02:50Z",
+      "side": 1,
+      "message": "Ideally we would probably not want to enumerate required extensions for this backend, especially something like surfaceless_context which we can pretty easily workaround.\nHowever, given that this is new code and isn\u0027t in use yet, this would maybe be ok.\n\nI\u0027m adding Jamie to the CL so he can comment on this",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 187,
+        "endChar": 6
+      },
+      "revId": "c3e1fd82e6321693bd71563d627e397078fcc1d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
