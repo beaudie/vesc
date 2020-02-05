@@ -506,7 +506,11 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
         *ptrOut = mappedMemory + mNextAllocationOffset;
     }
 
-    *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
+    if (offsetOut != nullptr)
+    {
+        *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
+    }
+
     mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
     return angle::Result::Continue;
 }

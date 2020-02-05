@@ -95,6 +95,7 @@ class DynamicBuffer : angle::NonCopyable
     // This frees resources immediately.
     void destroy(VkDevice device);
 
+    const BufferHelper *getCurrentBuffer() const { return mBuffer; }
     BufferHelper *getCurrentBuffer() { return mBuffer; }
 
     void updateAlignment(RendererVk *renderer, size_t alignment);
