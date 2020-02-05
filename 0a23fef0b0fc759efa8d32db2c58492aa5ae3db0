@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac7fa601_f95c564d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3764,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-02-05T18:29:24Z",
+      "side": 1,
+      "message": "Continually making this check prior to endRenderPass() call. Better to build it into endRenderPass() itself? endRenderPassIfNeeded()?",
+      "revId": "0a23fef0b0fc759efa8d32db2c58492aa5ae3db0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
