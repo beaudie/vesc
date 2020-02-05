@@ -265,9 +265,9 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         }
         else
         {
-            void *mapPtr = nullptr;
+            uint8_t *mapPtr = nullptr;
 
-            ANGLE_TRY(unpackBufferVk->mapImpl(contextVk, &mapPtr));
+            ANGLE_TRY(bufferHelper.map(contextVk, &mapPtr));
 
             const uint8_t *source =
                 static_cast<const uint8_t *>(mapPtr) + reinterpret_cast<ptrdiff_t>(pixels);
@@ -278,7 +278,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                 gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, source, vkFormat,
                 inputRowPitch, inputDepthPitch, inputSkipBytes));
 
-            unpackBufferVk->unmapImpl(contextVk);
+            bufferHelper.unmap(contextVk->getDevice());
             onStagingBufferChange();
         }
     }
