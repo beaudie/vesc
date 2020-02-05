@@ -95,6 +95,7 @@ class DynamicBuffer : angle::NonCopyable
     // This frees resources immediately.
     void destroy(VkDevice device);
 
+    const BufferHelper *getCurrentBuffer() const { return mBuffer; }
     BufferHelper *getCurrentBuffer() { return mBuffer; }
 
     void updateAlignment(RendererVk *renderer, size_t alignment);
@@ -102,9 +103,9 @@ class DynamicBuffer : angle::NonCopyable
     // For testing only!
     void setMinimumSizeForTesting(size_t minSize);
 
-  private:
+  protected:
     void reset();
-    angle::Result allocateNewBuffer(ContextVk *contextVk);
+    angle::Result allocateNewBuffer(ContextVk *contextVk, VkMemoryPropertyFlags memoryProperty);
     void releaseBufferListToRenderer(RendererVk *renderer, std::vector<BufferHelper *> *buffers);
     void destroyBufferList(VkDevice device, std::vector<BufferHelper *> *buffers);
 
@@ -575,6 +576,39 @@ class BufferHelper final : public Resource
     // For memory barriers.
     VkFlags mCurrentWriteAccess;
     VkFlags mCurrentReadAccess;
+};
+
+// Taking from the Double/Triple-Buffer strategy, the FrontBuffer class holds
+// a collection of buffers as the "front buffer" for a glBuffer. This allows ANGLE
+// to immediately give the application an available buffer to write to if the
+// "front buffer" is in-use by the GPU during this time. This class
+// inherits from the DynamicBuffer class in order to leverage it's bookkeeping logic.
+// It keeps track of active VkBuffers and keeps it around until it is no longer in use
+// and marks buffers available for future use in a free list.
+class FrontBuffer : public DynamicBuffer
+{
+  public:
+    FrontBuffer();
+    FrontBuffer(FrontBuffer &&other);
+    ~FrontBuffer();
+
+    void init(RendererVk *renderer,
+              VkBufferUsageFlags usage,
+              size_t alignment,
+              size_t initialSize,
+              VkMemoryPropertyFlags mMemoryPropertyFlags);
+
+    angle::Result allocate(ContextVk *contextVk,
+                           size_t sizeInBytes,
+                           uint8_t **ptrOut,
+                           VkBuffer *bufferOut,
+                           VkDeviceSize *offsetOut,
+                           bool *newBufferAllocatedOut);
+
+    bool valid() const { return mBuffer->valid(); }
+
+  private:
+    VkMemoryPropertyFlags mMemoryPropertyFlags;
 };
 
 // Imagine an image going through a few layout transitions:

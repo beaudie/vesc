@@ -412,7 +412,8 @@ DynamicBuffer::~DynamicBuffer()
     ASSERT(mBuffer == nullptr);
 }
 
-angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
+angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk,
+                                               VkMemoryPropertyFlags memoryProperty)
 {
     std::unique_ptr<BufferHelper> buffer = std::make_unique<BufferHelper>();
 
@@ -425,8 +426,6 @@ angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
 
-    const VkMemoryPropertyFlags memoryProperty =
-        mHostVisible ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     ANGLE_TRY(buffer->init(contextVk, createInfo, memoryProperty));
 
     ASSERT(!mBuffer);
@@ -475,7 +474,10 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
         if (mBufferFreeList.empty() ||
             mBufferFreeList.front()->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
         {
-            ANGLE_TRY(allocateNewBuffer(contextVk));
+            const VkMemoryPropertyFlags memoryProperty = mHostVisible
+                                                             ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+                                                             : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+            ANGLE_TRY(allocateNewBuffer(contextVk, memoryProperty));
         }
         else
         {
@@ -514,7 +516,11 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
         *ptrOut = mappedMemory + mNextAllocationOffset;
     }
 
-    *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
+    if (offsetOut != nullptr)
+    {
+        *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
+    }
+
     mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
     return angle::Result::Continue;
 }
@@ -664,6 +670,102 @@ void DynamicBuffer::reset()
     mSize                        = 0;
     mNextAllocationOffset        = 0;
     mLastFlushOrInvalidateOffset = 0;
+}
+
+// FrontBuffer implementation.
+FrontBuffer::FrontBuffer() : DynamicBuffer(), mMemoryPropertyFlags(0) {}
+
+FrontBuffer::~FrontBuffer() {}
+
+void FrontBuffer::init(RendererVk *renderer,
+                       VkBufferUsageFlags usage,
+                       size_t alignment,
+                       size_t initialSize,
+                       VkMemoryPropertyFlags memoryPropertyFlags)
+{
+    mMemoryPropertyFlags = memoryPropertyFlags;
+    bool isHostVisible   = ((mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0);
+    DynamicBuffer::init(renderer, usage, alignment, initialSize, isHostVisible);
+}
+
+angle::Result FrontBuffer::allocate(ContextVk *contextVk,
+                                    size_t sizeInBytes,
+                                    uint8_t **ptrOut,
+                                    VkBuffer *bufferOut,
+                                    VkDeviceSize *offsetOut,
+                                    bool *newBufferAllocatedOut)
+{
+    // Is the the buffer being respecified
+    if (sizeInBytes != mSize)
+    {
+        if (mBuffer)
+        {
+            ANGLE_TRY(flush(contextVk));
+            mBuffer->unmap(contextVk->getDevice());
+
+            mInFlightBuffers.push_back(mBuffer);
+            mBuffer = nullptr;
+        }
+
+        mSize = sizeInBytes;
+
+        // Clear the free list since the free buffers are now too small.
+        for (BufferHelper *toFree : mBufferFreeList)
+        {
+            toFree->release(contextVk->getRenderer());
+        }
+        mBufferFreeList.clear();
+
+        // The front of the free list should be the oldest. Thus if it is in use the rest of the
+        // free list should be in use as well.
+        if (mBufferFreeList.empty() ||
+            mBufferFreeList.front()->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
+        {
+            ANGLE_TRY(allocateNewBuffer(contextVk, mMemoryPropertyFlags));
+        }
+        else
+        {
+            mBuffer = mBufferFreeList.front();
+            mBufferFreeList.erase(mBufferFreeList.begin());
+        }
+
+        ASSERT(mBuffer->getSize() == mSize);
+
+        mNextAllocationOffset        = 0;
+        mLastFlushOrInvalidateOffset = 0;
+
+        if (newBufferAllocatedOut != nullptr)
+        {
+            *newBufferAllocatedOut = true;
+        }
+    }
+    else if (newBufferAllocatedOut != nullptr)
+    {
+        *newBufferAllocatedOut = false;
+    }
+
+    ASSERT(mBuffer != nullptr);
+
+    if (bufferOut != nullptr)
+    {
+        *bufferOut = mBuffer->getBuffer().getHandle();
+    }
+
+    // Optionally map() the buffer if possible
+    if (ptrOut)
+    {
+        ASSERT(mHostVisible);
+        uint8_t *mappedMemory;
+        ANGLE_TRY(mBuffer->map(contextVk, &mappedMemory));
+        *ptrOut = mappedMemory + mNextAllocationOffset;
+    }
+
+    if (offsetOut != nullptr)
+    {
+        *offsetOut = static_cast<VkDeviceSize>(mNextAllocationOffset);
+    }
+
+    return angle::Result::Continue;
 }
 
 // DescriptorPoolHelper implementation.
