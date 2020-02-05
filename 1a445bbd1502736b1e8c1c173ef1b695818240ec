@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "49c04db3_cd777c3b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T03:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bdc6d5c_8fd4e8db",
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a54f7882_67096397",
         "filename": "src/libANGLE/Program.h",
         "patchSetId": 7
@@ -39,6 +57,30 @@
       "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fb3113c_e9a69d41",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T03:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a54f7882_67096397",
+      "range": {
+        "startLine": 574,
+        "startChar": 0,
+        "endLine": 575,
+        "endChar": 66
+      },
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,53 @@
     },
     {
       "key": {
+        "uuid": "1a8b51f1_d83858c0",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T03:06:51Z",
+      "side": 1,
+      "message": "I do feel it\u0027s backward (it\u0027s not VS input and FS output, it\u0027s about varyings so VS output and FS input), but it follows the convention the code was already using. I suggest a proper cleanup as a separate CL.\n\nI think whoever decided to call these input and output was probably thinking of the varying as a \"pipe\", which gets its input from the previous shader stage and outputs it to the next shader stage. A bit contrived. I\u0027m not sure switching input and output makes it any clearer though.",
+      "parentUuid": "eb571734_b0dafc63",
+      "range": {
+        "startLine": 340,
+        "startChar": 0,
+        "endLine": 341,
+        "endChar": 54
+      },
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "86693b30_ea1c7afe",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T03:06:51Z",
+      "side": 1,
+      "message": "Ok I may investigate at some point in the future (if I remember it!) but I would have expected `backVarying.varying \u003d\u003d nullptr` and `backVarying.stage \u003d\u003d ShaderType::InvalidEnum` to be the same.\n\n---\n\nProbably in statements like this:\n\n    VaryingInShaderRef backVarying(ref.backShaderStage, nullptr);\n\nbackShaderStage is not invalid, but the varying wasn\u0027t packed because it was inactive.\n\nNo harm in the code being like this. Thanks for fixing it Jamie.",
+      "range": {
+        "startLine": 109,
+        "startChar": 59,
+        "endLine": 109,
+        "endChar": 89
+      },
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bca4322_43860dd4",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 7
@@ -88,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "d4a79126_3aa4fd05",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T03:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bca4322_43860dd4",
+      "range": {
+        "startLine": 557,
+        "startChar": 0,
+        "endLine": 562,
+        "endChar": 9
+      },
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2141c18a_ecab5a05",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 7
@@ -102,6 +215,24 @@
       "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "851b36ac_48d3e6a5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T03:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2141c18a_ecab5a05",
+      "revId": "1a445bbd1502736b1e8c1c173ef1b695818240ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
