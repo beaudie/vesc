@@ -16,6 +16,24 @@
       "revId": "9973c86cc7136fd6dbcb8612d85a8935d8421710",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a6c7117_d7929b09",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-05T22:14:52Z",
+      "side": 1,
+      "message": "Done, an optimization habit. Can do a micro-optimization pass later.\n\nDoing the check outside the call is often faster if you can\u0027t inline. If you inline it doesn\u0027t make a difference.",
+      "parentUuid": "90765caa_cf94cab6",
+      "revId": "9973c86cc7136fd6dbcb8612d85a8935d8421710",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
