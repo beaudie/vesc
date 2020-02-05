@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41d83ae1_82822cf8",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-05T13:22:57Z",
+      "side": 1,
+      "message": "nit: don\u0027t need auto here as it hides a simple type. easier to read with the explicit type.",
+      "range": {
+        "startLine": 756,
+        "startChar": 4,
+        "endLine": 756,
+        "endChar": 9
+      },
+      "revId": "3d168191bbfc35225212f2f5daccdcd311787584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
