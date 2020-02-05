@@ -103,9 +103,9 @@ class DynamicBuffer : angle::NonCopyable
     // For testing only!
     void setMinimumSizeForTesting(size_t minSize);
 
-  private:
+  protected:
     void reset();
-    angle::Result allocateNewBuffer(ContextVk *contextVk);
+    angle::Result allocateNewBuffer(ContextVk *contextVk, VkMemoryPropertyFlags memoryProperty);
     void releaseBufferListToRenderer(RendererVk *renderer, std::vector<BufferHelper *> *buffers);
     void destroyBufferList(RendererVk *renderer, std::vector<BufferHelper *> *buffers);
 
@@ -191,6 +191,45 @@ class DynamicShadowBuffer : public angle::NonCopyable
     size_t mInitialSize;
     size_t mSize;
     angle::MemoryBuffer mBuffer;
+};
+
+// The BufferHelperPool class holds a collection of BufferHelpers. This allows ANGLE
+// to immediately give the application an available buffer to write to if the
+// current buffer is in-use by the GPU at this time. This class
+// inherits from the DynamicBuffer class in order to leverage it's bookkeeping logic.
+// It keeps track of active BufferHelpers and keeps it around until it is no longer in use
+// and marks buffers available for future use in a free list.
+class BufferHelperPool : public DynamicBuffer
+{
+  public:
+    BufferHelperPool();
+    ~BufferHelperPool();
+
+    // Initializes the pool
+    void init(RendererVk *renderer,
+              VkBufferUsageFlags usage,
+              VkMemoryPropertyFlags mMemoryPropertyFlags);
+
+    // Acquires a BufferHelper from the pool
+    angle::Result acquireBufferHelper(ContextVk *contextVk,
+                                      size_t sizeInBytes,
+                                      uint8_t **ptrOut,
+                                      BufferHelper **bufferHelperOut);
+
+    // Prevent direct access to the pool's mBuffer
+    BufferHelper *getCurrentBuffer() = delete;
+
+  private:
+    // Allocate a new buffer or use one from the free list
+    angle::Result allocate(ContextVk *contextVk,
+                           size_t sizeInBytes,
+                           uint8_t **ptrOut,
+                           bool *newBufferAllocatedOut);
+
+    // This releases all the buffers that have been allocated since this was last called.
+    void releaseInFlightBuffers(ContextVk *contextVk);
+
+    VkMemoryPropertyFlags mMemoryPropertyFlags;
 };
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
