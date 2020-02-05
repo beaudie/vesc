@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8adde37c_8a30a0d7",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-05T21:44:42Z",
+      "side": 1,
+      "message": "Remove this comment now?\nClose the associated bug?",
+      "revId": "49471c571bc0414e8c943b68a53f5666ab726bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
