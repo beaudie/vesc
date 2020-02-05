@@ -16,6 +16,24 @@
       "revId": "6feaff5cf253113f305de7b92d29b7bbcf54d7dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7005ea6_6029b873",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-05T04:07:50Z",
+      "side": 1,
+      "message": "It probably is. Should be easy to write a test for.\n\nThat said, getPrimaryCommandBuffer already closes the render pass, so this is always recorded outside of it.",
+      "parentUuid": "ad6d02a7_6b79f1bc",
+      "revId": "6feaff5cf253113f305de7b92d29b7bbcf54d7dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
