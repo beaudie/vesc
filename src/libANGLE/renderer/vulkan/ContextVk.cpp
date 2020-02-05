@@ -1270,8 +1270,18 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
                                                 xfbBufferRangeExtension.offsets.data(),
                                                 xfbBufferRangeExtension.sizes.data());
 
-    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
-    transformFeedbackVk->addFramebufferDependency(this, mProgram->getState(), framebuffer);
+    if (commandGraphEnabled())
+    {
+        vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+        transformFeedbackVk->addFramebufferDependency(this, mProgram->getState(), framebuffer);
+    }
+    else
+    {
+        const std::vector<gl::OffsetBindingPointer<gl::Buffer>> &xfbBuffers =
+            mState.getCurrentTransformFeedback()->getIndexedBuffers();
+        for (const gl::OffsetBindingPointer<gl::Buffer> &buffer :)
+            for (transformFeedbackVk->get)
+    }
 
     return angle::Result::Continue;
 }
@@ -2146,8 +2156,15 @@ angle::Result ContextVk::pushDebugGroup(const gl::Context *context,
     }
     else
     {
-        // TODO(jmadill): http://anglebug.com/4029
-        UNIMPLEMENTED();
+        if (vkCmdInsertDebugUtilsLabelEXT)
+        {
+            vk::PrimaryCommandBuffer *primary;
+            ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+
+            VkDebugUtilsLabelEXT label;
+            vk::MakeDebugUtilsLabel(source, message.c_str(), &label);
+            vkCmdInsertDebugUtilsLabelEXT(primary->getHandle(), &label);
+        }
     }
 
     return angle::Result::Continue;
@@ -2161,8 +2178,12 @@ angle::Result ContextVk::popDebugGroup(const gl::Context *context)
     }
     else
     {
-        // TODO(jmadill): http://anglebug.com/4029
-        UNIMPLEMENTED();
+        if (vkCmdEndDebugUtilsLabelEXT)
+        {
+            vk::PrimaryCommandBuffer *primary;
+            ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+            vkCmdEndDebugUtilsLabelEXT(primary->getHandle());
+        }
     }
 
     return angle::Result::Continue;
