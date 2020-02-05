@@ -180,11 +180,12 @@ constexpr const char kXfbVerticesPerDraw[]   = "xfbVerticesPerDraw";
 constexpr const char kXfbBufferOffsets[]     = "xfbBufferOffsets";
 constexpr const char kAcbBufferOffsets[]     = "acbBufferOffsets";
 constexpr const char kDepthRange[]           = "depthRange";
+constexpr const char kPreRotation[]          = "preRotation";
 
-constexpr size_t kNumGraphicsDriverUniforms                                                = 9;
+constexpr size_t kNumGraphicsDriverUniforms                                                = 10;
 constexpr std::array<const char *, kNumGraphicsDriverUniforms> kGraphicsDriverUniformNames = {
     {kViewport, kHalfRenderAreaHeight, kViewportYScale, kNegViewportYScale, kXfbActiveUnpaused,
-     kXfbVerticesPerDraw, kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange}};
+     kXfbVerticesPerDraw, kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange, kPreRotation}};
 
 constexpr size_t kNumComputeDriverUniforms                                               = 1;
 constexpr std::array<const char *, kNumComputeDriverUniforms> kComputeDriverUniformNames = {
@@ -332,6 +333,36 @@ ANGLE_NO_DISCARD bool AppendVertexShaderDepthCorrectionToMain(TCompiler *compile
     return RunAtTheEndOfShader(compiler, root, assignment, symbolTable);
 }
 
+// This operation performs Android pre-rotation and y-flip.  For Android (and potentially other
+// platforms), the device may rotate, such that the orientation of the application is rotated
+// relative to the native orientation of the device.  This is corrected in part by multiplying
+// gl_Position by a mat2.
+// The equations reduce to an expression:
+//
+//     gl_Position.xy = gl_Position.xy * preRotation
+ANGLE_NO_DISCARD bool AppendPreRotation(TCompiler *compiler,
+                                        TIntermBlock *root,
+                                        TSymbolTable *symbolTable,
+                                        const TVariable *driverUniforms)
+{
+#if 0  // STARTED
+    TIntermBinary *preRotationRef   = CreateDriverUniformRef(driverUniforms, kPreRotation);
+    TIntermSymbol *glPos            = new TIntermSymbol(BuiltInVariable::gl_Position());
+    TIntermSwizzle *glPosXY         = CreateSwizzle(glPos, 0, 1);
+
+    // Create the expression "(gl_Position.xy * preRotation)"
+    TIntermBinary *zRotated = new TIntermBinary(EOpMul, glPosXY, preRotationRef);
+
+    // Create the assignment "gl_Position.xy = (gl_Position.xy * preRotation)"
+    TIntermBinary *assignment  = new TIntermBinary(TOperator::EOpAssign, glPosXY, zRotated);
+
+    // Append the assignment as a statement at the end of the shader.
+    return RunAtTheEndOfShader(compiler, root, assignment, symbolTable);
+#else
+    return true;
+#endif
+}
+
 ANGLE_NO_DISCARD bool AppendVertexShaderTransformFeedbackOutputToMain(TCompiler *compiler,
                                                                       TIntermBlock *root,
                                                                       TSymbolTable *symbolTable)
@@ -390,6 +421,7 @@ const TVariable *AddGraphicsDriverUniformsToShader(TIntermBlock *root, TSymbolTa
         new TType(EbtInt, 4),
         new TType(EbtUInt, 4),
         emulatedDepthRangeType,
+        new TType(EbtFloat, 4),
     }};
 
     for (size_t uniformIndex = 0; uniformIndex < kNumGraphicsDriverUniforms; ++uniformIndex)
@@ -973,6 +1005,10 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             return false;
         }
         if (!AppendVertexShaderDepthCorrectionToMain(this, root, &getSymbolTable()))
+        {
+            return false;
+        }
+        if (!AppendPreRotation(this, root, &getSymbolTable(), driverUniforms))
         {
             return false;
         }
