@@ -22,6 +22,30 @@
       "revId": "c3e1fd82e6321693bd71563d627e397078fcc1d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52c2fc34_318c3269",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-06T06:15:43Z",
+      "side": 1,
+      "message": "I wanted to keep things simple. Also providing that modern EGL implementations support surfaceless without workaround and also if rx::DisplayEGL will be initially only used with Mesa.",
+      "parentUuid": "d0e6118a_311b6d51",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 187,
+        "endChar": 6
+      },
+      "revId": "c3e1fd82e6321693bd71563d627e397078fcc1d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
