@@ -253,8 +253,7 @@ TEST_P(StateChangeTest, FramebufferIncompleteStencilAttachment)
 // Test that Framebuffer completeness caching works when depth-stencil attachments change.
 TEST_P(StateChangeTest, FramebufferIncompleteDepthStencilAttachment)
 {
-    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 &&
-                       !IsGLExtensionEnabled("GL_OES_packed_depth_stencil"));
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
 
     glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
