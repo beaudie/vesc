@@ -376,6 +376,12 @@ void Context::initialize()
 
     initCaps();
 
+    // Disable validation skipping if the backend cannot support it
+    if (!mSupportedExtensions.canEnableNoError)
+    {
+        mSkipValidation = false;
+    }
+
     if (mDisplay->getFrontendFeatures().syncFramebufferBindingsOnTexImage.enabled)
     {
         mTexImageDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
@@ -3495,7 +3501,7 @@ Extensions Context::generateSupportedExtensions() const
     supportedExtensions.multiDraw             = true;
 
     // Enable the no error extension if the context was created with the flag.
-    supportedExtensions.noError = mSkipValidation;
+    supportedExtensions.noError = supportedExtensions.canEnableNoError && mSkipValidation;
 
     // Enable surfaceless to advertise we'll have the correct behavior when there is no default FBO
     supportedExtensions.surfacelessContextOES = mSurfacelessSupported;

@@ -489,6 +489,10 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeCaps.subPixelBits = limitsVk.subPixelPrecisionBits;
 
+    // Frontend GL validation layer can be disabled without functionally impacting the Vulkan
+    // backend
+    mNativeExtensions.canEnableNoError = true;
+
     // Enable Program Binary extension.
     mNativeExtensions.getProgramBinaryOES = true;
     mNativeCaps.programBinaryFormats.push_back(GL_PROGRAM_BINARY_ANGLE);
