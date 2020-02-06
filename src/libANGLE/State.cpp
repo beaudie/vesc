@@ -310,6 +310,7 @@ State::State(ContextID contextIn,
       mReadFramebuffer(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
+      mExecutable(nullptr),
       mProvokingVertex(gl::ProvokingVertexConvention::LastVertexConvention),
       mVertexArray(nullptr),
       mActiveSampler(0),
@@ -438,7 +439,8 @@ void State::initialize(Context *context)
         mActiveQueries[type].set(context, nullptr);
     }
 
-    mProgram = nullptr;
+    mProgram    = nullptr;
+    mExecutable = nullptr;
 
     mReadFramebuffer = nullptr;
     mDrawFramebuffer = nullptr;
@@ -501,8 +503,8 @@ void State::reset(const Context *context)
     {
         mProgram->release(context);
     }
-    mProgram = nullptr;
-
+    mProgram    = nullptr;
+    mExecutable = nullptr;
     mProgramPipeline.set(context, nullptr);
 
     if (mTransformFeedback.get())
@@ -1529,11 +1531,25 @@ bool State::removeTransformFeedbackBinding(const Context *context,
 void State::setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline)
 {
     mProgramPipeline.set(context, pipeline);
+
+    // A bound Program always overrides the ProgramPipeline, so only update the
+    // current ProgramExecutable if there isn't currently a Program bound.
+    if (!mProgram && pipeline)
+    {
+        mExecutable = &mProgramPipeline->getExecutable();
+    }
 }
 
 void State::detachProgramPipeline(const Context *context, ProgramPipelineID pipeline)
 {
     mProgramPipeline.set(context, nullptr);
+
+    // A bound Program always overrides the ProgramPipeline, so only update the
+    // current ProgramExecutable if there isn't currently a Program bound.
+    if (!mProgram)
+    {
+        mExecutable = nullptr;
+    }
 }
 
 bool State::isQueryActive(QueryType type) const
@@ -2860,6 +2876,16 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
     //  that was already in use as a result of a previous call to UseProgram, then the
     //  generated executable code will be installed as part of the current rendering state."
     ASSERT(program->isLinked());
+
+    if (program->id().value == 0)
+    {
+        // No program is currently bound
+        mExecutable = nullptr;
+    }
+    else
+    {
+        mExecutable = &program->getExecutable();
+    }
 
     mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
 
