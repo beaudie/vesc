@@ -1291,7 +1291,7 @@ angle::Result ProgramD3D::loadBinaryShaderExecutables(d3d::Context *contextD3D,
             stream->readInt<unsigned int>(), gl::TextureType::_2D));
     }
 
-    initializeUniformStorage(mState.getLinkedShaderStages());
+    initializeUniformStorage(mState.getProgramExecutable().getLinkedShaderStages());
 
     dirtyAllUniforms();
 
@@ -2331,7 +2331,7 @@ const std::vector<D3DUBOCacheUseSB> &ProgramD3D::getShaderUniformBufferCacheUseS
 
 void ProgramD3D::dirtyAllUniforms()
 {
-    mShaderUniformsDirty = mState.getLinkedShaderStages();
+    mShaderUniformsDirty = mState.getProgramExecutable().getLinkedShaderStages();
 }
 
 void ProgramD3D::markUniformsClean()
