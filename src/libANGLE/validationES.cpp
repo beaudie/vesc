@@ -411,9 +411,9 @@ bool ValidateVertexShaderAttributeTypeMatch(Context *context)
     vaoAttribTypeBits = (vaoAttribEnabledMask & vaoAttribTypeBits);
     vaoAttribTypeBits |= (~vaoAttribEnabledMask & stateCurrentValuesTypeBits);
 
-    return ValidateComponentTypeMasks(program->getAttributesTypeMask().to_ulong(),
-                                      vaoAttribTypeBits, program->getAttributesMask().to_ulong(),
-                                      0xFFFF);
+    return ValidateComponentTypeMasks(
+        program->getExecutable().getAttributesTypeMask().to_ulong(), vaoAttribTypeBits,
+        program->getExecutable().getAttributesMask().to_ulong(), 0xFFFF);
 }
 
 bool IsCompatibleDrawModeWithGeometryShader(PrimitiveMode drawMode,
@@ -701,9 +701,8 @@ bool ValidateDrawArraysInstancedBase(Context *context,
 bool ValidateDrawInstancedANGLE(Context *context)
 {
     // Verify there is at least one active attribute with a divisor of zero
-    const State &state = context->getState();
-
-    Program *program = state.getLinkedProgram(context);
+    const State &state                  = context->getState();
+    const ProgramExecutable *executable = state.getExecutable();
 
     const auto &attribs  = state.getVertexArray()->getVertexAttributes();
     const auto &bindings = state.getVertexArray()->getVertexBindings();
@@ -711,7 +710,7 @@ bool ValidateDrawInstancedANGLE(Context *context)
     {
         const VertexAttribute &attrib = attribs[attributeIndex];
         const VertexBinding &binding  = bindings[attrib.bindingIndex];
-        if (program->isAttribLocationActive(attributeIndex) && binding.getDivisor() == 0)
+        if (executable->isAttribLocationActive(attributeIndex) && binding.getDivisor() == 0)
         {
             return true;
         }
@@ -2738,8 +2737,8 @@ const char *ValidateDrawStates(Context *context)
         // vertex shader stage or fragment shader stage is a undefined behaviour.
         // But ANGLE should clearly generate an INVALID_OPERATION error instead of
         // produce undefined result.
-        if (!program->hasLinkedShaderStage(ShaderType::Vertex) ||
-            !program->hasLinkedShaderStage(ShaderType::Fragment))
+        if (!program->getExecutable().hasLinkedShaderStage(ShaderType::Vertex) ||
+            !program->getExecutable().hasLinkedShaderStage(ShaderType::Fragment))
         {
             return kNoActiveGraphicsShaderStage;
         }
@@ -2902,7 +2901,7 @@ void RecordDrawModeError(Context *context, PrimitiveMode mode)
         ASSERT(program);
 
         // Do geometry shader specific validations
-        if (program->hasLinkedShaderStage(ShaderType::Geometry))
+        if (program->getExecutable().hasLinkedShaderStage(ShaderType::Geometry))
         {
             if (!IsCompatibleDrawModeWithGeometryShader(
                     mode, program->getGeometryShaderInputPrimitiveType()))
@@ -4338,7 +4337,7 @@ bool ValidateGetProgramivBase(Context *context,
                 context->validationError(GL_INVALID_OPERATION, kProgramNotLinked);
                 return false;
             }
-            if (!programObject->hasLinkedShaderStage(ShaderType::Compute))
+            if (!programObject->getExecutable().hasLinkedShaderStage(ShaderType::Compute))
             {
                 context->validationError(GL_INVALID_OPERATION, kNoActiveComputeShaderStage);
                 return false;
@@ -4365,7 +4364,7 @@ bool ValidateGetProgramivBase(Context *context,
                 context->validationError(GL_INVALID_OPERATION, kProgramNotLinked);
                 return false;
             }
-            if (!programObject->hasLinkedShaderStage(ShaderType::Geometry))
+            if (!programObject->getExecutable().hasLinkedShaderStage(ShaderType::Geometry))
             {
                 context->validationError(GL_INVALID_OPERATION, kNoActiveGeometryShaderStage);
                 return false;

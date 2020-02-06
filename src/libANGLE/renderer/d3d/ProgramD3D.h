@@ -344,7 +344,7 @@ class ProgramD3D : public ProgramImpl
 
     bool hasShaderStage(gl::ShaderType shaderType) const
     {
-        return mState.getLinkedShaderStages()[shaderType];
+        return mState.getExecutable().getLinkedShaderStages()[shaderType];
     }
 
     void assignImage2DRegisters(unsigned int startImageIndex,

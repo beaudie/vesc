@@ -554,7 +554,7 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
     {
         uint32_t lineRasterEmulationPositionLocation = locationsUsedForEmulation++;
 
-        for (const gl::ShaderType shaderType : programState.getLinkedShaderStages())
+        for (const gl::ShaderType shaderType : programState.getExecutable().getLinkedShaderStages())
         {
             AddLocationInfo(variableInfoMapOut, sh::vk::kLineRasterEmulationPosition,
                             lineRasterEmulationPositionLocation,
@@ -609,7 +609,7 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
     // Add an entry for inactive varyings.
     const gl::ShaderMap<std::vector<std::string>> &inactiveVaryingMappedNames =
         resources.varyingPacking.getInactiveVaryingMappedNames();
-    for (const gl::ShaderType shaderType : programState.getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : programState.getExecutable().getLinkedShaderStages())
     {
         for (const std::string &varyingName : inactiveVaryingMappedNames[shaderType])
         {
