@@ -541,7 +541,7 @@ void AssignOutputLocations(const gl::ProgramState &programState,
 }
 
 void AssignVaryingLocations(const GlslangSourceOptions &options,
-                            const gl::ProgramState &programState,
+                            const gl::ProgramExecutable &programExecutable,
                             const gl::ProgramLinkedResources &resources,
                             uint32_t locationsUsedForXfbExtension,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut)
@@ -554,7 +554,7 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
     {
         uint32_t lineRasterEmulationPositionLocation = locationsUsedForEmulation++;
 
-        for (const gl::ShaderType shaderType : programState.getLinkedShaderStages())
+        for (const gl::ShaderType shaderType : programExecutable.getLinkedShaderStages())
         {
             AddLocationInfo(variableInfoMapOut, sh::vk::kLineRasterEmulationPosition,
                             lineRasterEmulationPositionLocation,
@@ -609,7 +609,7 @@ void AssignVaryingLocations(const GlslangSourceOptions &options,
     // Add an entry for inactive varyings.
     const gl::ShaderMap<std::vector<std::string>> &inactiveVaryingMappedNames =
         resources.varyingPacking.getInactiveVaryingMappedNames();
-    for (const gl::ShaderType shaderType : programState.getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : programExecutable.getLinkedShaderStages())
     {
         for (const std::string &varyingName : inactiveVaryingMappedNames[shaderType])
         {
@@ -1753,6 +1753,7 @@ std::string GlslangGetMappedSamplerName(const std::string &originalName)
 
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             const gl::ProgramState &programState,
+                            const gl::ProgramExecutable &programExecutable,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut)
@@ -1809,7 +1810,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     if (computeSource.empty())
     {
         // Assign varying locations.
-        AssignVaryingLocations(options, programState, resources, locationsUsedForXfbExtension,
+        AssignVaryingLocations(options, programExecutable, resources, locationsUsedForXfbExtension,
                                variableInfoMapOut);
 
         if (!programState.getLinkedTransformFeedbackVaryings().empty() &&

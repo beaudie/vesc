@@ -61,9 +61,10 @@ ShaderImpl *ContextGL::createShader(const gl::ShaderState &data)
     return new ShaderGL(data, shader, mRenderer->getMultiviewImplementationType(), mRenderer);
 }
 
-ProgramImpl *ContextGL::createProgram(const gl::ProgramState &data)
+ProgramImpl *ContextGL::createProgram(const gl::ProgramState &data,
+                                      const gl::ProgramExecutable &executable)
 {
-    return new ProgramGL(data, getFunctions(), getFeaturesGL(), getStateManager(),
+    return new ProgramGL(data, executable, getFunctions(), getFeaturesGL(), getStateManager(),
                          getExtensions().pathRendering, mRenderer);
 }
 

@@ -202,7 +202,8 @@ class ContextNULL : public ContextImpl
     // Shader creation
     CompilerImpl *createCompiler() override;
     ShaderImpl *createShader(const gl::ShaderState &data) override;
-    ProgramImpl *createProgram(const gl::ProgramState &data) override;
+    ProgramImpl *createProgram(const gl::ProgramState &data,
+                               const gl::ProgramExecutable &executable) override;
 
     // Framebuffer creation
     FramebufferImpl *createFramebuffer(const gl::FramebufferState &data) override;

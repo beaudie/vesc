@@ -71,7 +71,9 @@ inline bool LinkEventDone::isLinking()
 class ProgramImpl : angle::NonCopyable
 {
   public:
-    ProgramImpl(const gl::ProgramState &state) : mState(state) {}
+    ProgramImpl(const gl::ProgramState &state, const gl::ProgramExecutable &programExecutable)
+        : mState(state), mProgramExecutable(programExecutable)
+    {}
     virtual ~ProgramImpl() {}
     virtual void destroy(const gl::Context *context) {}
 
@@ -167,6 +169,7 @@ class ProgramImpl : angle::NonCopyable
 
   protected:
     const gl::ProgramState &mState;
+    const gl::ProgramExecutable &mProgramExecutable;
 };
 
 inline angle::Result ProgramImpl::syncState(const gl::Context *context,

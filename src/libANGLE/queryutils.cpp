@@ -648,13 +648,13 @@ GLint GetInputResourceProperty(const Program *program, GLuint index, GLenum prop
         // stage other than the first will not be enumerated. Since we found the variable to get
         // this far, we know it exists in the first attached shader stage.
         case GL_REFERENCED_BY_VERTEX_SHADER:
-            return program->getState().getFirstAttachedShaderStageType() == ShaderType::Vertex;
+            return program->getFirstAttachedShaderStageType() == ShaderType::Vertex;
         case GL_REFERENCED_BY_FRAGMENT_SHADER:
-            return program->getState().getFirstAttachedShaderStageType() == ShaderType::Fragment;
+            return program->getFirstAttachedShaderStageType() == ShaderType::Fragment;
         case GL_REFERENCED_BY_COMPUTE_SHADER:
-            return program->getState().getFirstAttachedShaderStageType() == ShaderType::Compute;
+            return program->getFirstAttachedShaderStageType() == ShaderType::Compute;
         case GL_REFERENCED_BY_GEOMETRY_SHADER_EXT:
-            return program->getState().getFirstAttachedShaderStageType() == ShaderType::Geometry;
+            return program->getFirstAttachedShaderStageType() == ShaderType::Geometry;
 
         default:
             UNREACHABLE();
@@ -680,7 +680,7 @@ GLint GetOutputResourceProperty(const Program *program, GLuint index, const GLen
 
         case GL_LOCATION_INDEX_EXT:
             // EXT_blend_func_extended
-            if (program->getState().getLastAttachedShaderStageType() == gl::ShaderType::Fragment)
+            if (program->getLastAttachedShaderStageType() == gl::ShaderType::Fragment)
             {
                 return program->getFragDataIndex(outputVariable.name);
             }
@@ -691,13 +691,13 @@ GLint GetOutputResourceProperty(const Program *program, GLuint index, const GLen
         // written to individual color buffers. If the program only contains a Compute Shader, then
         // there are no user-defined outputs.
         case GL_REFERENCED_BY_VERTEX_SHADER:
-            return program->getState().getLastAttachedShaderStageType() == ShaderType::Vertex;
+            return program->getLastAttachedShaderStageType() == ShaderType::Vertex;
         case GL_REFERENCED_BY_FRAGMENT_SHADER:
-            return program->getState().getLastAttachedShaderStageType() == ShaderType::Fragment;
+            return program->getLastAttachedShaderStageType() == ShaderType::Fragment;
         case GL_REFERENCED_BY_COMPUTE_SHADER:
-            return program->getState().getLastAttachedShaderStageType() == ShaderType::Compute;
+            return program->getLastAttachedShaderStageType() == ShaderType::Compute;
         case GL_REFERENCED_BY_GEOMETRY_SHADER_EXT:
-            return program->getState().getLastAttachedShaderStageType() == ShaderType::Geometry;
+            return program->getLastAttachedShaderStageType() == ShaderType::Geometry;
 
         default:
             UNREACHABLE();
@@ -1194,7 +1194,7 @@ void QueryProgramiv(Context *context, const Program *program, GLenum pname, GLin
             *params = program->isValidated();
             return;
         case GL_INFO_LOG_LENGTH:
-            *params = program->getInfoLogLength();
+            *params = program->getProgramExecutable().getInfoLogLength();
             return;
         case GL_ATTACHED_SHADERS:
             *params = program->getAttachedShadersCount();

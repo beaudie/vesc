@@ -14,7 +14,9 @@
 namespace rx
 {
 
-ProgramNULL::ProgramNULL(const gl::ProgramState &state) : ProgramImpl(state) {}
+ProgramNULL::ProgramNULL(const gl::ProgramState &state, const gl::ProgramExecutable &executable)
+    : ProgramImpl(state, executable)
+{}
 
 ProgramNULL::~ProgramNULL() {}
 

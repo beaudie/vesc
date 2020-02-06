@@ -18,7 +18,7 @@ namespace rx
 class ProgramNULL : public ProgramImpl
 {
   public:
-    ProgramNULL(const gl::ProgramState &state);
+    ProgramNULL(const gl::ProgramState &state, const gl::ProgramExecutable &executable);
     ~ProgramNULL() override;
 
     std::unique_ptr<LinkEvent> load(const gl::Context *context,

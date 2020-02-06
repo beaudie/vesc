@@ -576,9 +576,10 @@ angle::Result GLES1Renderer::linkProgram(Context *context,
 
     if (!programObject->isLinked())
     {
-        GLint infoLogLength = programObject->getInfoLogLength();
+        GLint infoLogLength = programObject->getProgramExecutable().getInfoLogLength();
         std::vector<char> infoLog(infoLogLength, 0);
-        programObject->getInfoLog(infoLogLength - 1, nullptr, infoLog.data());
+        programObject->getProgramExecutable().getInfoLog(infoLogLength - 1, nullptr,
+                                                         infoLog.data());
 
         ERR() << "Internal GLES 1 shader link failed. Info log: " << infoLog.data();
         ANGLE_CHECK(context, false, "GLES1Renderer program link failed.", GL_INVALID_OPERATION);

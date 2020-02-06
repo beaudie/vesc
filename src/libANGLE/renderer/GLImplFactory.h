@@ -58,9 +58,10 @@ class GLImplFactory : angle::NonCopyable
     virtual ~GLImplFactory();
 
     // Shader creation
-    virtual CompilerImpl *createCompiler()                           = 0;
-    virtual ShaderImpl *createShader(const gl::ShaderState &data)    = 0;
-    virtual ProgramImpl *createProgram(const gl::ProgramState &data) = 0;
+    virtual CompilerImpl *createCompiler()                                      = 0;
+    virtual ShaderImpl *createShader(const gl::ShaderState &data)               = 0;
+    virtual ProgramImpl *createProgram(const gl::ProgramState &data,
+                                       const gl::ProgramExecutable &executable) = 0;
 
     // Framebuffer creation
     virtual FramebufferImpl *createFramebuffer(const gl::FramebufferState &data) = 0;

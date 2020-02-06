@@ -28,6 +28,8 @@
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/InfoLog.h"
+#include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/angletypes.h"
@@ -48,7 +50,6 @@ struct Caps;
 class Context;
 struct Extensions;
 class Framebuffer;
-class InfoLog;
 class Shader;
 class ShaderProgramManager;
 class State;
@@ -82,79 +83,6 @@ enum class LinkMismatchError
     // Interface block specific
     LAYOUT_QUALIFIER_MISMATCH,
     MATRIX_PACKING_MISMATCH,
-};
-
-class InfoLog : angle::NonCopyable
-{
-  public:
-    InfoLog();
-    ~InfoLog();
-
-    size_t getLength() const;
-    void getLog(GLsizei bufSize, GLsizei *length, char *infoLog) const;
-
-    void appendSanitized(const char *message);
-    void reset();
-
-    // This helper class ensures we append a newline after writing a line.
-    class StreamHelper : angle::NonCopyable
-    {
-      public:
-        StreamHelper(StreamHelper &&rhs) : mStream(rhs.mStream) { rhs.mStream = nullptr; }
-
-        StreamHelper &operator=(StreamHelper &&rhs)
-        {
-            std::swap(mStream, rhs.mStream);
-            return *this;
-        }
-
-        ~StreamHelper()
-        {
-            // Write newline when destroyed on the stack
-            if (mStream)
-            {
-                (*mStream) << std::endl;
-            }
-        }
-
-        template <typename T>
-        StreamHelper &operator<<(const T &value)
-        {
-            (*mStream) << value;
-            return *this;
-        }
-
-      private:
-        friend class InfoLog;
-
-        StreamHelper(std::stringstream *stream) : mStream(stream) { ASSERT(stream); }
-
-        std::stringstream *mStream;
-    };
-
-    template <typename T>
-    StreamHelper operator<<(const T &value)
-    {
-        ensureInitialized();
-        StreamHelper helper(mLazyStream.get());
-        helper << value;
-        return helper;
-    }
-
-    std::string str() const { return mLazyStream ? mLazyStream->str() : ""; }
-
-    bool empty() const;
-
-  private:
-    void ensureInitialized()
-    {
-        if (!mLazyStream)
-        {
-            mLazyStream.reset(new std::stringstream());
-        }
-    }
-
-    std::unique_ptr<std::stringstream> mLazyStream;
 };
 
 void LogLinkMismatch(InfoLog &infoLog,
@@ -435,14 +363,6 @@ class ProgramState final : angle::NonCopyable
     int getNumViews() const { return mNumViews; }
     bool usesMultiview() const { return mNumViews != -1; }
 
-    const ShaderBitSet &getLinkedShaderStages() const { return mLinkedShaderStages; }
-    bool hasLinkedShaderStage(ShaderType shaderType) const
-    {
-        return mLinkedShaderStages[shaderType];
-    }
-    size_t getLinkedShaderStageCount() const { return mLinkedShaderStages.count(); }
-    bool isCompute() const { return hasLinkedShaderStage(ShaderType::Compute); }
-
     bool hasAttachedShader() const;
 
     const ActiveTextureMask &getActiveSamplersMask() const { return mActiveSamplersMask; }
@@ -450,8 +370,6 @@ class ProgramState final : angle::NonCopyable
     {
         return mActiveSamplerFormats[textureUnitIndex];
     }
-    ShaderType getFirstAttachedShaderStageType() const;
-    ShaderType getLastAttachedShaderStageType() const;
 
     const ProgramAliasedBindings &getUniformLocationBindings() const
     {
@@ -465,8 +383,8 @@ class ProgramState final : angle::NonCopyable
     void updateTransformFeedbackStrides();
     void updateActiveSamplers();
     void updateActiveImages();
-    void updateProgramInterfaceInputs();
-    void updateProgramInterfaceOutputs();
+    void updateProgramInterfaceInputs(const ShaderType firstAttachedShaderType);
+    void updateProgramInterfaceOutputs(const ShaderType lastAttachedShaderType);
 
     // Scans the sampler bindings for type conflicts with sampler 'textureUnitIndex'.
     void setSamplerUniformTextureTypeAndFormat(size_t textureUnitIndex);
@@ -537,7 +455,6 @@ class ProgramState final : angle::NonCopyable
 
     bool mBinaryRetrieveableHint;
     bool mSeparable;
-    ShaderBitSet mLinkedShaderStages;
 
     // ANGLE_multiview.
     int mNumViews;
@@ -643,13 +560,6 @@ class Program final : angle::NonCopyable, public LabeledObject
         return mLinked;
     }
 
-    bool hasLinkedShaderStage(ShaderType shaderType) const
-    {
-        ASSERT(shaderType != ShaderType::InvalidEnum);
-        return mState.hasLinkedShaderStage(shaderType);
-    }
-    bool isCompute() const { return mState.isCompute(); }
-
     angle::Result loadBinary(const Context *context,
                              GLenum binaryFormat,
                              const void *binary,
@@ -666,8 +576,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     void setSeparable(bool separable);
     bool isSeparable() const;
 
-    int getInfoLogLength() const;
-    void getInfoLog(GLsizei bufSize, GLsizei *length, char *infoLog) const;
     void getAttachedShaders(GLsizei maxCount, GLsizei *count, ShaderProgramID *shaders) const;
 
     GLuint getAttributeLocation(const std::string &name) const;
@@ -908,6 +816,8 @@ class Program final : angle::NonCopyable, public LabeledObject
         return mState;
     }
 
+    const ProgramExecutable &getProgramExecutable() const { return mProgramExecutable; }
+
     static LinkMismatchError LinkValidateVariablesBase(
         const sh::ShaderVariable &variable1,
         const sh::ShaderVariable &variable2,
@@ -991,6 +901,9 @@ class Program final : angle::NonCopyable, public LabeledObject
     angle::Result serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
 
     rx::Serial serial() const { return mSerial; }
+
+    ShaderType getFirstAttachedShaderStageType() const;
+    ShaderType getLastAttachedShaderStageType() const;
 
   private:
     struct LinkingState;
@@ -1102,6 +1015,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     rx::Serial mSerial;
     ProgramState mState;
+    ProgramExecutable mProgramExecutable;
     rx::ProgramImpl *mProgram;
 
     bool mValidated;
@@ -1124,8 +1038,6 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     ShaderProgramManager *mResourceManager;
     const ShaderProgramID mHandle;
-
-    InfoLog mInfoLog;
 
     // Cache for sampler validation
     Optional<bool> mCachedValidateSamplersResult;

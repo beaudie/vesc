@@ -389,9 +389,10 @@ ShaderImpl *ContextNULL::createShader(const gl::ShaderState &data)
     return new ShaderNULL(data);
 }
 
-ProgramImpl *ContextNULL::createProgram(const gl::ProgramState &data)
+ProgramImpl *ContextNULL::createProgram(const gl::ProgramState &data,
+                                        const gl::ProgramExecutable &executable)
 {
-    return new ProgramNULL(data);
+    return new ProgramNULL(data, executable);
 }
 
 FramebufferImpl *ContextNULL::createFramebuffer(const gl::FramebufferState &data)

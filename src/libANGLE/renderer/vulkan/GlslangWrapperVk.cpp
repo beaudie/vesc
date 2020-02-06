@@ -41,12 +41,13 @@ GlslangSourceOptions CreateSourceOptions(const angle::FeaturesVk &features)
 // static
 void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
                                        const gl::ProgramState &programState,
+                                       const gl::ProgramExecutable &programExecutable,
                                        const gl::ProgramLinkedResources &resources,
                                        gl::ShaderMap<std::string> *shaderSourcesOut,
                                        ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    GlslangGetShaderSource(CreateSourceOptions(features), programState, resources, shaderSourcesOut,
-                           variableInfoMapOut);
+    GlslangGetShaderSource(CreateSourceOptions(features), programState, programExecutable,
+                           resources, shaderSourcesOut, variableInfoMapOut);
 }
 
 // static

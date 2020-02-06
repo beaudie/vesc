@@ -85,6 +85,7 @@ std::string GlslangGetMappedSamplerName(const std::string &originalName);
 // to this map, at which point GlslangGetShaderSpirvCode will also be called by this function.
 void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             const gl::ProgramState &programState,
+                            const gl::ProgramExecutable &programExecutable,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut);

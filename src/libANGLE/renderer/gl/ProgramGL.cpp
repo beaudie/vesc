@@ -30,12 +30,13 @@ namespace rx
 {
 
 ProgramGL::ProgramGL(const gl::ProgramState &data,
+                     const gl::ProgramExecutable &executable,
                      const FunctionsGL *functions,
                      const angle::FeaturesGL &features,
                      StateManagerGL *stateManager,
                      bool enablePathRendering,
                      const std::shared_ptr<RendererGL> &renderer)
-    : ProgramImpl(data),
+    : ProgramImpl(data, executable),
       mFunctions(functions),
       mFeatures(features),
       mStateManager(stateManager),
@@ -229,9 +230,10 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
         std::vector<std::string> transformFeedbackVaryingMappedNames;
         for (const auto &tfVarying : mState.getTransformFeedbackVaryingNames())
         {
-            gl::ShaderType tfShaderType = mState.hasLinkedShaderStage(gl::ShaderType::Geometry)
-                                              ? gl::ShaderType::Geometry
-                                              : gl::ShaderType::Vertex;
+            gl::ShaderType tfShaderType =
+                mProgramExecutable.hasLinkedShaderStage(gl::ShaderType::Geometry)
+                    ? gl::ShaderType::Geometry
+                    : gl::ShaderType::Vertex;
             std::string tfVaryingMappedName =
                 mState.getAttachedShader(tfShaderType)
                     ->getTransformFeedbackVaryingMappedName(tfVarying);

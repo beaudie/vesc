@@ -333,7 +333,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     // Shader creation
     CompilerImpl *createCompiler() override;
     ShaderImpl *createShader(const gl::ShaderState &state) override;
-    ProgramImpl *createProgram(const gl::ProgramState &state) override;
+    ProgramImpl *createProgram(const gl::ProgramState &state,
+                               const gl::ProgramExecutable &executable) override;
 
     // Framebuffer creation
     FramebufferImpl *createFramebuffer(const gl::FramebufferState &state) override;

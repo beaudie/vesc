@@ -30,6 +30,7 @@ class ProgramGL : public ProgramImpl
 {
   public:
     ProgramGL(const gl::ProgramState &data,
+              const gl::ProgramExecutable &executable,
               const FunctionsGL *functions,
               const angle::FeaturesGL &features,
               StateManagerGL *stateManager,

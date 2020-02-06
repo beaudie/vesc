@@ -30,7 +30,7 @@ ANGLE_INLINE bool UseLineRaster(const ContextVk *contextVk, gl::PrimitiveMode mo
 class ProgramVk : public ProgramImpl
 {
   public:
-    ProgramVk(const gl::ProgramState &state);
+    ProgramVk(const gl::ProgramState &state, const gl::ProgramExecutable &programExecutable);
     ~ProgramVk() override;
     void destroy(const gl::Context *context) override;
 

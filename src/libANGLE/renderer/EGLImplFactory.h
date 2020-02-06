@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_RENDERER_EGLIMPLFACTORY_H_
 #define LIBANGLE_RENDERER_EGLIMPLFACTORY_H_
 
+#include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/Stream.h"
 
 namespace egl
