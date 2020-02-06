@@ -1813,7 +1813,8 @@ void StateManagerGL::syncState(const gl::Context *context,
                     }
                 }
 
-                if (!program || !program->hasLinkedShaderStage(gl::ShaderType::Compute))
+                if (!program ||
+                    !program->getExecutable().hasLinkedShaderStage(gl::ShaderType::Compute))
                 {
                     propagateProgramToVAO(program,
                                           GetImplAs<VertexArrayGL>(state.getVertexArray()));
