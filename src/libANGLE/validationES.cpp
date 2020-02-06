@@ -1142,6 +1142,7 @@ bool ValidateAttachmentTarget(const Context *context, GLenum attachment)
 
             case GL_DEPTH_STENCIL_ATTACHMENT:
                 if (!context->getExtensions().webglCompatibility &&
+                    !context->getExtensions().packedDepthStencilOES &&
                     context->getClientMajorVersion() < 3)
                 {
                     context->validationError(GL_INVALID_ENUM, kInvalidAttachment);

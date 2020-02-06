@@ -430,7 +430,8 @@ struct Extensions
     GLuint maxLabelLength          = 0;
 
     // KHR_no_error
-    bool noError = false;
+    bool noError          = false;
+    bool canEnableNoError = false;
 
     // GL_ANGLE_lossy_etc_decode
     bool lossyETCDecode = false;
