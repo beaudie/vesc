@@ -19,6 +19,7 @@
 #include "libANGLE/GLES1State.h"
 #include "libANGLE/Overlay.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Renderbuffer.h"
@@ -292,6 +293,10 @@ class State : angle::NonCopyable
         ASSERT(mVertexArray != nullptr);
         return mVertexArray;
     }
+
+    // If both a Program and a ProgramPipeline are bound, the Program will
+    // always override the ProgramPipeline.
+    const ProgramExecutable *getExecutable() const { return mExecutable; }
 
     // Program binding manipulation
     angle::Result setProgram(const Context *context, Program *newProgram);
@@ -837,6 +842,7 @@ class State : angle::NonCopyable
     BindingPointer<Renderbuffer> mRenderbuffer;
     Program *mProgram;
     BindingPointer<ProgramPipeline> mProgramPipeline;
+    ProgramExecutable *mExecutable;
 
     // GL_ANGLE_provoking_vertex
     ProvokingVertexConvention mProvokingVertex;
