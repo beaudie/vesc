@@ -1176,7 +1176,8 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 invalidateProgramShaderStorageBuffers();
                 invalidateDriverUniforms();
                 const gl::Program *program = state.getProgram();
-                if (!program || !program->hasLinkedShaderStage(gl::ShaderType::Compute))
+                if (!program ||
+                    !program->getExecutable().hasLinkedShaderStage(gl::ShaderType::Compute))
                 {
                     mInternalDirtyBits.set(DIRTY_BIT_PRIMITIVE_TOPOLOGY);
                     invalidateVertexBuffer();
