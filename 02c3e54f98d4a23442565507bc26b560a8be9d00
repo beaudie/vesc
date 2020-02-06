@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "54fc5e7a_a224f319",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-06T02:00:49Z",
+      "side": 1,
+      "message": "nit: date \u0026 top level comment",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e46bc87a_3dacde24",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 3
@@ -30,6 +53,29 @@
       "writtenOn": "2020-02-06T01:16:52Z",
       "side": 1,
       "message": "This is an example of a member that\u0027s accessed the same way throughout, but the data itself is populated differently based on Programs vs ProgramPipelines.\n\nThis CL only supports Programs and Program::updateLinkedShaderStages() already exists, so there isn\u0027t much that\u0027s exciting to see there yet, but ProgramPipeline::updateLinkedShaderStages() would eventually exist as well.   If you\u0027re interested what that would look like, see ProgramPipeline::useProgramStages() (line 129) in the \"Support Program Pipeline Objects\" CL:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1934432/55/src/libANGLE/ProgramPipeline.cpp\n\nThere, whenever glUseProgramStages() is called a linked Program is added to the ProgramPipeline, so the current state of the linked program stages is updated for the ProgramPipeline.   Once this CL is merged into there, this ProgramExecutable::mLinkedShaderStages would actually hold the updated value to be queried by the rest of ANGLE.",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc66acdd_cd46bed3",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-06T02:00:49Z",
+      "side": 1,
+      "message": "nit: how about program-\u003egetExecutable().get...",
+      "range": {
+        "startLine": 1196,
+        "startChar": 30,
+        "endLine": 1197,
+        "endChar": 66
+      },
       "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
