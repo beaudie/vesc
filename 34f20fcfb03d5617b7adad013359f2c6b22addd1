@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "849e686b_c997e92b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2279,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-06T23:47:33Z",
+      "side": 1,
+      "message": "NOTE: Testing on a Pixel 4 XL, with AngryBirds (which puts itself in landscape mode and stays there), if I hack this line to reverse the correctedWidth and correctedHeight parameters, the content is no longer squashed on the left-side of the landscape display.  However, with only this hack, I only see the right half of the game content on the left-side of the display.",
+      "revId": "34f20fcfb03d5617b7adad013359f2c6b22addd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20ed8588_e83f3722",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2282,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-06T23:47:33Z",
+      "side": 1,
+      "message": "NOTE: Testing on a Pixel 4 XL, with AngryBirds, if I also add the following line here (before the next):\n\n    vkViewport.y \u003d -vkViewport.height;\n\nI only see the right half of the game content on the left-side of the landscape display.",
+      "revId": "34f20fcfb03d5617b7adad013359f2c6b22addd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ea19954_0295a544",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-06T23:47:33Z",
+      "side": 1,
+      "message": "I\u0027m sure this method can be done in a more elegant fashion (advice welcome), but I\u0027m keeping it split out for now because I may need to make modifications, and this is a convenient form to modify.",
+      "revId": "34f20fcfb03d5617b7adad013359f2c6b22addd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aedc1b73_427b90f0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2719,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-06T23:47:33Z",
+      "side": 1,
+      "message": "Seems like I need to set a flag here (and for 270) that lets other code know that the width and height need to be swapped (e.g. like the y-flip bools).\n\nLooking at the other code that may need to be modified, they don\u0027t all have access to ContextVk.  In some cases, they have access to (or are in) FramebufferVk (e.g. FramebufferVk::getScissoredRenderArea).",
+      "revId": "34f20fcfb03d5617b7adad013359f2c6b22addd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
