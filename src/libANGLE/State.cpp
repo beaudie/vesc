@@ -310,6 +310,7 @@ State::State(ContextID contextIn,
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
       mProgramPipeline(nullptr),
+      mExecutable(nullptr),
       mProvokingVertex(gl::ProvokingVertexConvention::LastVertexConvention),
       mVertexArray(nullptr),
       mActiveSampler(0),
@@ -438,7 +439,8 @@ void State::initialize(Context *context)
         mActiveQueries[type].set(context, nullptr);
     }
 
-    mProgram = nullptr;
+    mProgram    = nullptr;
+    mExecutable = nullptr;
 
     mReadFramebuffer = nullptr;
     mDrawFramebuffer = nullptr;
@@ -501,8 +503,8 @@ void State::reset(const Context *context)
     {
         mProgram->release(context);
     }
-    mProgram = nullptr;
-
+    mProgram         = nullptr;
+    mExecutable      = nullptr;
     mProgramPipeline = nullptr;
 
     if (mTransformFeedback.get())
@@ -1574,6 +1576,14 @@ bool State::detachProgramPipeline(const Context *context, ProgramPipelineID pipe
         mProgramPipeline = nullptr;
         mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
         mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+
+        // A bound Program always overrides the ProgramPipeline, so only update the
+        // current ProgramExecutable if there isn't currently a Program bound.
+        if (!mProgram)
+        {
+            mExecutable = nullptr;
+        }
+
         return true;
     }
 
@@ -2926,6 +2936,8 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
     //  generated executable code will be installed as part of the current rendering state."
     ASSERT(program->isLinked());
 
+    mExecutable = &program->getExecutable();
+
     mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
 
     if (program->hasAnyDirtyBit())
@@ -2970,6 +2982,13 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
 angle::Result State::onProgramPipelineExecutableChange(const Context *context,
                                                        ProgramPipeline *programPipeline)
 {
+    // A bound Program always overrides the ProgramPipeline, so only update the
+    // current ProgramExecutable if there isn't currently a Program bound.
+    if (!mProgram)
+    {
+        mExecutable = &mProgramPipeline->getExecutable();
+    }
+
     mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
 
     if (programPipeline->hasAnyDirtyBit())

@@ -1194,7 +1194,7 @@ void QueryProgramiv(Context *context, const Program *program, GLenum pname, GLin
             *params = program->isValidated();
             return;
         case GL_INFO_LOG_LENGTH:
-            *params = program->getInfoLogLength();
+            *params = program->getExecutable().getInfoLogLength();
             return;
         case GL_ATTACHED_SHADERS:
             *params = program->getAttachedShadersCount();
@@ -3662,7 +3662,7 @@ void QueryProgramPipelineiv(const Context *context,
         {
             // the length of the info log, including the null terminator, is returned in params. If
             // there is no info log, zero is returned.
-            *params = programPipeline->getInfoLogLength();
+            *params = programPipeline->getExecutable().getInfoLogLength();
             break;
         }
 

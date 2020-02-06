@@ -18,6 +18,7 @@
 #include "common/angleutils.h"
 #include "common/utilities.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/RefCountObject.h"
 
 namespace rx
@@ -39,6 +40,9 @@ class ProgramPipelineState final : angle::NonCopyable
 
     const std::string &getLabel() const;
 
+    const ProgramExecutable &getExecutable() const { return mExecutable; }
+    ProgramExecutable &getExecutable() { return mExecutable; }
+
     void activeShaderProgram(Program *shaderProgram);
     void useProgramStages(GLbitfield stages, Program *shaderProgram);
 
@@ -50,13 +54,6 @@ class ProgramPipelineState final : angle::NonCopyable
 
     const Program *getShaderProgram(ShaderType shaderType) const { return mPrograms[shaderType]; }
 
-    bool hasLinkedShaderStage(ShaderType shaderType) const
-    {
-        return mPrograms[shaderType] && mPrograms[shaderType]->hasLinkedShaderStage(shaderType);
-    }
-
-    bool isCompute() const { return hasLinkedShaderStage(ShaderType::Compute); }
-
   private:
     void useProgramStage(ShaderType shaderType, Program *shaderProgram);
 
@@ -64,11 +61,12 @@ class ProgramPipelineState final : angle::NonCopyable
 
     std::string mLabel;
 
+    ProgramExecutable mExecutable;
+
     // The active shader program
     Program *mActiveShaderProgram;
     // The shader programs for each stage.
     ShaderMap<Program *> mPrograms;
-    ShaderBitSet mLinkedShaderStages;
 
     GLboolean mValid;
 };
@@ -84,13 +82,15 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>, public L
     void setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;
 
+    const ProgramPipelineState &getState() const { return mState; }
+
+    const ProgramExecutable &getExecutable() const { return mState.getExecutable(); }
+    ProgramExecutable &getExecutable() { return mState.getExecutable(); }
+
     rx::ProgramPipelineImpl *getImplementation() const;
 
     void activeShaderProgram(Program *shaderProgram);
     void useProgramStages(GLbitfield stages, Program *shaderProgram);
-
-    int getInfoLogLength() const;
-    void getInfoLog(GLsizei bufSize, GLsizei *length, char *infoLog) const;
 
     Program *getActiveShaderProgram() { return mState.getActiveShaderProgram(); }
     Program *getLinkedActiveShaderProgram(const Context *context)
@@ -106,19 +106,6 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>, public L
     Program *getShaderProgram(ShaderType shaderType) const { return mState.mPrograms[shaderType]; }
 
     GLboolean isValid() { return mState.isValid(); }
-
-    bool hasLinkedShaderStage(ShaderType shaderType) const
-    {
-        ASSERT(shaderType != ShaderType::InvalidEnum);
-        return mState.hasLinkedShaderStage(shaderType);
-    }
-
-    size_t getLinkedShaderStageCount() const { return mState.mLinkedShaderStages.count(); }
-
-    bool isCompute() const { return mState.isCompute(); }
-
-    // Vertex Shader
-    const AttributesMask &getActiveAttribLocationsMask() const;
 
     // Fragment Shader
     const gl::ActiveTextureMask &getActiveSamplersMask() const;
@@ -158,17 +145,14 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>, public L
 
   private:
     void updateLinkedShaderStages();
+    void updateExecutableAttributes();
+    void updateExecutable();
 
     std::unique_ptr<rx::ProgramPipelineImpl> mProgramPipelineImpl;
 
     ProgramPipelineState mState;
 
-    InfoLog mInfoLog;
-
     DirtyBits mDirtyBits;
-
-    // Default AttributesMask to return of there is no vertex shader in the pipeline
-    AttributesMask mActiveAttribLocationsMask;
 };
 }  // namespace gl
 
