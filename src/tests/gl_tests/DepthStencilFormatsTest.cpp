@@ -239,6 +239,9 @@ void main()
 
     bool depthTextureCubeSupport = IsGLExtensionEnabled("GL_OES_depth_texture_cube_map");
 
+    bool packedDepthStencilSupport =
+        (IsGLExtensionEnabled("GL_OES_packed_depth_stencil") && getClientMajorVersion() < 3);
+
     // http://anglebug.com/3454
     ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows() && IsD3D9());
 
@@ -519,7 +522,8 @@ void main()
             // GL_INVALID_OPERATION is generated if textarget and texture are not compatible
             // However, that's not the behavior I'm seeing, nor does it seem that a depth_stencil
             // buffer isn't compatible with a depth attachment (e.g. stencil is unused).
-            if (type.attachment == GL_DEPTH_ATTACHMENT)
+            // This is valid in ES2 though if we expose OES_packed_depth_stencil
+            if (!packedDepthStencilSupport && type.attachment == GL_DEPTH_ATTACHMENT)
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, fbo);
                 glFramebufferTexture2D(GL_FRAMEBUFFER, type.attachment, GL_TEXTURE_2D, 0, 0);
