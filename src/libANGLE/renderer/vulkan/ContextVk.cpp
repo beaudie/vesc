@@ -1055,7 +1055,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(mProgramPipeline->getGraphicsPipeline(
             context, mCurrentDrawMode, *mGraphicsPipelineDesc,
-            mProgramPipeline->getNonBuiltinAttribLocationsMask(getState()), &descPtr,
+            context->getState().getExecutable()->getNonBuiltinAttribLocationsMask(), &descPtr,
             &mCurrentGraphicsPipeline));
         mGraphicsPipelineTransition.reset();
     }
@@ -1070,7 +1070,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
 
             ANGLE_TRY(mProgramPipeline->getGraphicsPipeline(
                 context, mCurrentDrawMode, *mGraphicsPipelineDesc,
-                mProgramPipeline->getNonBuiltinAttribLocationsMask(getState()), &descPtr,
+                context->getState().getExecutable()->getNonBuiltinAttribLocationsMask(), &descPtr,
                 &mCurrentGraphicsPipeline));
 
             oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr,
@@ -1109,7 +1109,8 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(const gl::Context 
                                                               vk::CommandGraphResource *recorder)
 {
     ASSERT(mProgramPipeline);
-
+    const gl::State &glState                       = mState;
+    const gl::ProgramExecutable *programExecutable = glState.getExecutable();
     const gl::ActiveTextureMask &activeTextures =
         mProgramPipeline->getActiveSamplersMask(context->getState());
 
@@ -1124,7 +1125,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(const gl::Context 
         // layers. Therefore we can't verify it has no staged updates right here.
 
         vk::ImageLayout textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
-        if (mProgramPipeline->getState().isCompute())
+        if (programExecutable->isCompute())
         {
             textureLayout = vk::ImageLayout::ComputeShaderReadOnly;
         }
@@ -1184,8 +1185,7 @@ angle::Result ContextVk::handleDirtyComputeTextures(const gl::Context *context,
 angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(const gl::Context *context,
                                                           vk::CommandBuffer *commandBuffer)
 {
-    ASSERT(mProgramPipeline);
-    uint32_t maxAttrib = mProgramPipeline->getMaxActiveAttribLocation(getState());
+    uint32_t maxAttrib = context->getState().getExecutable()->getMaxActiveAttribLocation();
     const gl::AttribArray<VkBuffer> &bufferHandles = mVertexArray->getCurrentArrayBufferHandles();
     const gl::AttribArray<VkDeviceSize> &bufferOffsets =
         mVertexArray->getCurrentArrayBufferOffsets();
@@ -1199,7 +1199,8 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(const gl::Context *con
     // Mark all active vertex buffers as accessed by the graph.
     if (commandGraphEnabled())
     {
-        gl::AttributesMask attribsMask = mProgramPipeline->getActiveAttribLocationsMask(getState());
+        const gl::ProgramExecutable *executable = context->getState().getExecutable();
+        gl::AttributesMask attribsMask          = executable->getActiveAttribLocationsMask();
         for (size_t attribIndex : attribsMask)
         {
             vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
@@ -1211,7 +1212,8 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(const gl::Context *con
     }
     else
     {
-        gl::AttributesMask attribsMask = mProgram->getState().getActiveAttribLocationsMask();
+        const gl::ProgramExecutable *executable = context->getState().getExecutable();
+        gl::AttributesMask attribsMask          = executable->getActiveAttribLocationsMask();
         for (size_t attribIndex : attribsMask)
         {
             vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
@@ -2436,11 +2438,12 @@ angle::Result ContextVk::updateScissor(const gl::State &glState)
 
 angle::Result ContextVk::dirtyProgramExecutableHelper(const gl::Context *context)
 {
-    const gl::State &glState = context->getState();
+    const gl::State &glState                = context->getState();
+    const gl::ProgramExecutable *executable = glState.getExecutable();
 
     ANGLE_TRY(invalidateCurrentTextures(context));
     invalidateCurrentShaderResources();
-    if (glState.getProgramPipeline() && glState.getProgramPipeline()->isCompute())
+    if (executable && executable->isCompute())
     {
         invalidateCurrentComputePipeline();
     }
@@ -2450,9 +2453,8 @@ angle::Result ContextVk::dirtyProgramExecutableHelper(const gl::Context *context
         // later.
         invalidateDefaultAttributes(context->getStateCache().getActiveDefaultAttribsMask());
         invalidateVertexAndIndexBuffers();
-        bool useVertexBuffer = false;
-        ASSERT(mProgramPipeline);
-        useVertexBuffer = (mProgramPipeline->getMaxActiveAttribLocation(getState()) > 0);
+        bool useVertexBuffer =
+            (context->getState().getExecutable()->getMaxActiveAttribLocation() > 0);
         mNonIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);
         mIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);
         mCurrentGraphicsPipeline = nullptr;
@@ -2466,10 +2468,11 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                    const gl::State::DirtyBits &dirtyBits,
                                    const gl::State::DirtyBits &bitMask)
 {
-    const gl::State &glState = context->getState();
+    const gl::State &glState                       = context->getState();
+    const gl::ProgramExecutable *programExecutable = glState.getExecutable();
 
     if ((dirtyBits & mPipelineDirtyBitsMask).any() &&
-        (glState.getProgram() == nullptr || !glState.getProgram()->isCompute()))
+        (programExecutable == nullptr || !programExecutable->isCompute()))
     {
         invalidateCurrentGraphicsPipeline();
     }
@@ -2718,6 +2721,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
+                ASSERT(programExecutable);
                 invalidateCurrentDefaultUniforms();
                 ASSERT(gl::State::DIRTY_BIT_TEXTURE_BINDINGS >
                        gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE);
@@ -3436,8 +3440,10 @@ void ContextVk::handleError(VkResult errorCode,
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 {
-    const gl::State &glState             = mState;
-    gl::ProgramPipeline *programPipeline = glState.getProgramPipeline();
+    const gl::State &glState                       = mState;
+    const gl::ProgramExecutable *programExecutable = glState.getExecutable();
+    gl::ProgramPipeline *programPipeline           = glState.getProgramPipeline();
+    ASSERT(programExecutable);
     ASSERT(programPipeline);
 
     uint32_t prevMaxIndex = mActiveTexturesDesc.getMaxIndex();
@@ -3488,7 +3494,9 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 angle::Result ContextVk::updateActiveImages(const gl::Context *context,
                                             vk::CommandGraphResource *recorder)
 {
-    const gl::State &glState = mState;
+    const gl::State &glState                       = mState;
+    const gl::ProgramExecutable *programExecutable = glState.getExecutable();
+    ASSERT(programExecutable);
 
     mActiveImages.fill(nullptr);
 
@@ -3530,7 +3538,7 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
             // layers. Therefore we can't verify it has no staged updates right here.
 
             vk::ImageLayout imageLayout = vk::ImageLayout::AllGraphicsShadersWrite;
-            if (program->isCompute())
+            if (programExecutable->isCompute())
             {
                 imageLayout = vk::ImageLayout::ComputeShaderWrite;
             }

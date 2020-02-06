@@ -506,8 +506,9 @@ angle::Result ProgramPipelineVk::createPipelineLayout(const gl::Context *glConte
                                                &mDescriptorSetLayouts[kTextureDescriptorSetIndex]));
 
     // Driver uniforms:
-    VkShaderStageFlags driverUniformsStages =
-        mState.isCompute() ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_ALL_GRAPHICS;
+    VkShaderStageFlags driverUniformsStages = mState.getExecutable().isCompute()
+                                                  ? VK_SHADER_STAGE_COMPUTE_BIT
+                                                  : VK_SHADER_STAGE_ALL_GRAPHICS;
     vk::DescriptorSetLayoutDesc driverUniformsSetDesc =
         contextVk->getDriverUniformsDescriptorSetDesc(driverUniformsStages);
     ANGLE_TRY(renderer->getDescriptorSetLayout(
@@ -530,7 +531,7 @@ angle::Result ProgramPipelineVk::createPipelineLayout(const gl::Context *glConte
     // Initialize descriptor pools.
     std::array<VkDescriptorPoolSize, 2> uniformAndXfbSetSize = {
         {{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
-          static_cast<uint32_t>(glPipeline->getLinkedShaderStageCount())},
+          static_cast<uint32_t>(glPipeline->getExecutable().getLinkedShaderStageCount())},
          {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS}}};
 
 #if 0  // TIMTIM
@@ -597,7 +598,7 @@ angle::Result ProgramPipelineVk::createPipelineLayout(const gl::Context *glConte
                                                                            &textureSetSize, 1));
     }
 
-    mDynamicBufferOffsets.resize(glPipeline->getLinkedShaderStageCount());
+    mDynamicBufferOffsets.resize(glPipeline->getExecutable().getLinkedShaderStageCount());
 
     // Initialize an "empty" buffer for use with default uniform blocks where there are no uniforms,
     // or atomic counter buffer array indices that are unused.
@@ -711,7 +712,7 @@ angle::Result ProgramPipelineVk::getGraphicsPipeline(
     return shaderProgram->getGraphicsPipeline(
         contextVk, &contextVk->getRenderPassCache(), *pipelineCache,
         contextVk->getCurrentQueueSerial(), getPipelineLayout(), desc, activeAttribLocations,
-        vertProgram->getState().getAttributesTypeMask(), descPtrOut, pipelineOut);
+        vertProgram->getState().getExecutable().getAttributesTypeMask(), descPtrOut, pipelineOut);
 }
 
 angle::Result ProgramPipelineVk::allocateDescriptorSet(ContextVk *contextVk,
@@ -955,8 +956,9 @@ angle::Result ProgramPipelineVk::updateDescriptorSets(ContextVk *contextVk,
         }
     }
 
-    const VkPipelineBindPoint pipelineBindPoint =
-        mState.isCompute() ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS;
+    const VkPipelineBindPoint pipelineBindPoint = mState.getExecutable().isCompute()
+                                                      ? VK_PIPELINE_BIND_POINT_COMPUTE
+                                                      : VK_PIPELINE_BIND_POINT_GRAPHICS;
 
     for (uint32_t descriptorSetIndex = descriptorSetStart; descriptorSetIndex < descriptorSetRange;
          ++descriptorSetIndex)
@@ -1092,21 +1094,21 @@ void ProgramPipelineVk::invalidateCurrentShaderResources(ContextVk *contextVk)
 unsigned int ProgramPipelineVk::getMaxActiveAttribLocation(const gl::State &glState) const
 {
     const ProgramVk *program = getShaderProgram(glState, gl::ShaderType::Vertex);
-    return program->getState().getMaxActiveAttribLocation();
+    return program->getState().getExecutable().getMaxActiveAttribLocation();
 }
 
 const gl::AttributesMask &ProgramPipelineVk::getActiveAttribLocationsMask(
     const gl::State &glState) const
 {
     const ProgramVk *program = getShaderProgram(glState, gl::ShaderType::Vertex);
-    return program->getState().getActiveAttribLocationsMask();
+    return program->getState().getExecutable().getActiveAttribLocationsMask();
 }
 
 const gl::AttributesMask &ProgramPipelineVk::getNonBuiltinAttribLocationsMask(
     const gl::State &glState) const
 {
     const ProgramVk *program = getShaderProgram(glState, gl::ShaderType::Vertex);
-    return program->getState().getNonBuiltinAttribLocationsMask();
+    return program->getState().getExecutable().getNonBuiltinAttribLocationsMask();
 }
 
 bool ProgramPipelineVk::hasTextures(const gl::State &glState)

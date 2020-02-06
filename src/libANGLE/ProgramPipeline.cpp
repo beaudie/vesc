@@ -46,7 +46,8 @@ void ProgramPipelineState::useProgramStage(const ShaderType shaderType, Program 
     // If program refers to a program object with a valid shader attached for an indicated shader
     // stage, glUseProgramStages installs the executable code for that stage in the indicated
     // program pipeline object pipeline.
-    if ((shaderProgram->id().value != 0) && shaderProgram->hasLinkedShaderStage(shaderType))
+    if ((shaderProgram->id().value != 0) &&
+        shaderProgram->getExecutable().hasLinkedShaderStage(shaderType))
     {
         mPrograms[shaderType] = shaderProgram;
     }
@@ -92,8 +93,6 @@ ProgramPipeline::ProgramPipeline(rx::GLImplFactory *factory, ProgramPipelineID h
       mProgramPipelineImpl(factory->createProgramPipeline(mState))
 {
     ASSERT(mProgramPipelineImpl);
-
-    mActiveAttribLocationsMask.reset();
 }
 
 ProgramPipeline::~ProgramPipeline()
@@ -130,29 +129,48 @@ void ProgramPipeline::useProgramStages(GLbitfield stages, Program *shaderProgram
 {
     mState.useProgramStages(stages, shaderProgram);
     updateLinkedShaderStages();
+    updateExecutable();
 }
 
 void ProgramPipeline::updateLinkedShaderStages()
 {
-    mState.mLinkedShaderStages.reset();
+    mState.mExecutable.mLinkedShaderStages.reset();
 
     for (const ShaderType shaderType : gl::AllShaderTypes())
     {
         if (mState.mPrograms[shaderType])
         {
-            mState.mLinkedShaderStages.set(shaderType);
+            mState.mExecutable.mLinkedShaderStages.set(shaderType);
         }
     }
 }
 
-int ProgramPipeline::getInfoLogLength() const
+void ProgramPipeline::updateExecutableAttributes()
 {
-    return static_cast<int>(mInfoLog.getLength());
+    Program *vertexProgram = getShaderProgram(gl::ShaderType::Vertex);
+
+    if (!vertexProgram)
+    {
+        return;
+    }
+
+    const ProgramExecutable &vertexExecutable     = vertexProgram->getExecutable();
+    mState.mExecutable.mActiveAttribLocationsMask = vertexExecutable.mActiveAttribLocationsMask;
+    mState.mExecutable.mMaxActiveAttribLocation   = vertexExecutable.mMaxActiveAttribLocation;
+    mState.mExecutable.mAttributesTypeMask        = vertexExecutable.mAttributesTypeMask;
+    mState.mExecutable.mAttributesMask            = vertexExecutable.mAttributesMask;
 }
 
-void ProgramPipeline::getInfoLog(GLsizei bufSize, GLsizei *length, char *infoLog) const
+void ProgramPipeline::updateExecutable()
 {
-    return mInfoLog.getLog(bufSize, length, infoLog);
+    // Vertex Shader ProgramExecutable properties
+    updateExecutableAttributes();
+
+    // Fragment Shader ProgramExecutable properties
+
+    // Compute Shader ProgramExecutable properties
+
+    // All Shader ProgramExecutable properties
 }
 
 const gl::ActiveTextureMask &ProgramPipeline::getActiveSamplersMask() const
@@ -197,21 +215,9 @@ const ActiveTextureMask &ProgramPipeline::getActiveImagesMask() const
     return activeTextureMask;
 }
 
-const AttributesMask &ProgramPipeline::getActiveAttribLocationsMask() const
-{
-    const Program *vertProgram = getShaderProgram(gl::ShaderType::Vertex);
-    if (vertProgram)
-    {
-        return vertProgram->getActiveAttribLocationsMask();
-    }
-
-    // Return an empty AttributesMask if there's no vertex shader in the pipeline.
-    return mActiveAttribLocationsMask;
-}
-
 ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
 {
-    ASSERT(!isCompute());
+    ASSERT(!getExecutable().isCompute());
 
     // Varyings are matched between pairs of consecutive stages, by location if assigned or
     // by name otherwise.  Note that it's possible for one stage to specify location and the other
@@ -343,8 +349,9 @@ ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
 // The code gets compiled into binaries.
 angle::Result ProgramPipeline::link(const Context *context)
 {
-    mInfoLog.reset();
     const State &state = context->getState();
+    InfoLog &infoLog   = mState.mExecutable.getInfoLog();
+    infoLog.reset();
 
     // Map the varyings to the register file
     gl::PackMode packMode = PackMode::ANGLE_RELAXED;
@@ -359,12 +366,12 @@ angle::Result ProgramPipeline::link(const Context *context)
         packMode = PackMode::WEBGL_STRICT;
     }
 
-    if (!linkVaryings(mInfoLog))
+    if (!linkVaryings(infoLog))
     {
         return angle::Result::Stop;
     }
 
-    if (!linkValidateGlobalNames(mInfoLog))
+    if (!linkValidateGlobalNames(infoLog))
     {
         return angle::Result::Stop;
     }
@@ -380,7 +387,7 @@ angle::Result ProgramPipeline::link(const Context *context)
         {
             program->getResources().varyingPacking.reset();
             ANGLE_TRY(program->linkMergedVaryings(context, program->getResources().varyingPacking,
-                                                  mergedVaryings));
+                                                  mergedVaryings, infoLog));
         }
     }
 
@@ -560,8 +567,9 @@ bool ProgramPipeline::linkValidateGlobalNames(InfoLog &infoLog) const
 
 void ProgramPipeline::validate(const Caps &caps)
 {
-    mState.mValid = true;
-    mInfoLog.reset();
+    InfoLog &infoLog = mState.mExecutable.getInfoLog();
+    mState.mValid    = true;
+    infoLog.reset();
 
     for (const ShaderType shaderType : gl::AllShaderTypes())
     {
@@ -569,17 +577,17 @@ void ProgramPipeline::validate(const Caps &caps)
         if (shaderProgram)
         {
             shaderProgram->validate(caps);
-            std::string shaderInfoString = shaderProgram->getInfoLogString();
+            std::string shaderInfoString = shaderProgram->getExecutable().getInfoLogString();
             if (shaderInfoString.length())
             {
                 mState.mValid = false;
-                mInfoLog << shaderInfoString << "\n";
+                infoLog << shaderInfoString << "\n";
                 return;
             }
         }
     }
 
-    if (!linkVaryings(mInfoLog))
+    if (!linkVaryings(infoLog))
     {
         mState.mValid = false;
 
@@ -589,10 +597,10 @@ void ProgramPipeline::validate(const Caps &caps)
             if (shaderProgram)
             {
                 shaderProgram->validate(caps);
-                std::string shaderInfoString = shaderProgram->getInfoLogString();
+                std::string shaderInfoString = shaderProgram->getExecutable().getInfoLogString();
                 if (shaderInfoString.length())
                 {
-                    mInfoLog << shaderInfoString << "\n";
+                    infoLog << shaderInfoString << "\n";
                 }
             }
         }
