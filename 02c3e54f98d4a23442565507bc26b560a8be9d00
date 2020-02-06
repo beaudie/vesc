@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "35b346c4_f52ecb52",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-06T02:46:40Z",
+      "side": 1,
+      "message": "I imagine eventually you would want a ProgramExecutableState as well, which is what\u0027s shared with the backend (and has all the data), with ProgramExecutable getting lists of things to link (from Program or PPO) and populate it.\n\nThen a lot of current \"program-\u003egetState()\"s become \"programExecutable-\u003egetState()\" and otherwise be used exactly the same way.",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e46bc87a_3dacde24",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 3
@@ -56,6 +73,29 @@
       "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a39893b9_0f742b16",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-06T02:46:40Z",
+      "side": 1,
+      "message": "At some point in the future, it would be nice to have this cached and calculated on program / program pipeline binding change. Then the cost of accessing the ProgramExecutable would be the same as the cost of accessing the Program has been so far.\n\nDefinitely a separate CL though.",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 308,
+        "endChar": 9
+      },
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
