@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e46bc87a_3dacde24",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-06T01:16:52Z",
+      "side": 1,
+      "message": "This is an example of a member that behaves the same for Programs or ProgramPipelines, so all accesses/modifications of it are done through ProgramExecutable.",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd7eac1e_52ab925d",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-06T01:16:52Z",
+      "side": 1,
+      "message": "This is an example of a member that\u0027s accessed the same way throughout, but the data itself is populated differently based on Programs vs ProgramPipelines.\n\nThis CL only supports Programs and Program::updateLinkedShaderStages() already exists, so there isn\u0027t much that\u0027s exciting to see there yet, but ProgramPipeline::updateLinkedShaderStages() would eventually exist as well.   If you\u0027re interested what that would look like, see ProgramPipeline::useProgramStages() (line 129) in the \"Support Program Pipeline Objects\" CL:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1934432/55/src/libANGLE/ProgramPipeline.cpp\n\nThere, whenever glUseProgramStages() is called a linked Program is added to the ProgramPipeline, so the current state of the linked program stages is updated for the ProgramPipeline.   Once this CL is merged into there, this ProgramExecutable::mLinkedShaderStages would actually hold the updated value to be queried by the rest of ANGLE.",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27f0f91f_cc092bc6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-06T01:16:52Z",
+      "side": 1,
+      "message": "Here\u0027s a good example of ContextVk not needing to know whether a Program or PPO is currently being worked on, just whether it\u0027s a Compute executable or not.   The gl::State handles returning the correct ProgramExecutable, which then knows how to correctly respond to isCompute().",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
