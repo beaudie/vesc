@@ -169,11 +169,16 @@ class RendererVk : angle::NonCopyable
     angle::Result queueSubmit(vk::Context *context,
                               egl::ContextPriority priority,
                               const VkSubmitInfo &submitInfo,
-                              const vk::Fence &fence,
+                              const vk::Fence *fence,
                               Serial *serialOut);
     angle::Result queueWaitIdle(vk::Context *context, egl::ContextPriority priority);
     angle::Result deviceWaitIdle(vk::Context *context);
     VkResult queuePresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
+
+    // Fire off a single command buffer immediately with default priority.
+    angle::Result queueSubmitOneOff(vk::Context *context,
+                                    const vk::PrimaryCommandBuffer &primary,
+                                    Serial *serialOut);
 
     angle::Result newSharedFence(vk::Context *context, vk::Shared<vk::Fence> *sharedFenceOut);
     inline void resetSharedFence(vk::Shared<vk::Fence> *sharedFenceIn)
@@ -224,6 +229,8 @@ class RendererVk : angle::NonCopyable
     {
         return (mSharedGarbage.size() > mGarbageCollectionFlushThreshold);
     }
+
+    bool enableValidationLayers() const { return mEnableValidationLayers; }
 
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);

@@ -280,8 +280,8 @@ using GarbageList = std::vector<GarbageObject>;
 // A list of garbage objects and the associated serial after which the objects can be destroyed.
 using GarbageAndSerial = ObjectAndSerial<GarbageList>;
 
-// Houses multiple lists of garbage objects. Each sub-list has a different lifetime. They should
-// be sorted such that later-living garbage is ordered later in the list.
+// Houses multiple lists of garbage objects. Each sub-list GetAvailableValidationLayers a different
+// lifetime. They should be sorted such that later-living garbage is ordered later in the list.
 using GarbageQueue = std::vector<GarbageAndSerial>;
 
 class MemoryProperties final : angle::NonCopyable
@@ -307,9 +307,10 @@ class StagingBuffer final : angle::NonCopyable
   public:
     StagingBuffer();
     void release(ContextVk *contextVk);
+    void collectGarbage(RendererVk *renderer, Serial serial, vk::GarbageObject &&extraGarbage);
     void destroy(VkDevice device);
 
-    angle::Result init(ContextVk *context, VkDeviceSize size, StagingUsage usage);
+    angle::Result init(Context *context, VkDeviceSize size, StagingUsage usage);
 
     Buffer &getBuffer() { return mBuffer; }
     const Buffer &getBuffer() const { return mBuffer; }
@@ -323,6 +324,13 @@ class StagingBuffer final : angle::NonCopyable
     size_t mSize;
 };
 
+constexpr int kBufferInitValue = 55;
+
+angle::Result InitMappableDeviceMemory(vk::Context *context,
+                                       vk::DeviceMemory *deviceMemory,
+                                       VkDeviceSize size,
+                                       int value);
+
 angle::Result AllocateBufferMemory(Context *context,
                                    VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
@@ -334,7 +342,9 @@ angle::Result AllocateImageMemory(Context *context,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
                                   const void *extraAllocationInfo,
                                   Image *image,
-                                  DeviceMemory *deviceMemoryOut);
+                                  DeviceMemory *deviceMemoryOut,
+                                  VkDeviceSize *sizeOut);
+
 angle::Result AllocateImageMemoryWithRequirements(Context *context,
                                                   VkMemoryPropertyFlags memoryPropertyFlags,
                                                   const VkMemoryRequirements &memoryRequirements,

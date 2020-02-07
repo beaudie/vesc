@@ -1828,12 +1828,13 @@ bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatu
 angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       egl::ContextPriority priority,
                                       const VkSubmitInfo &submitInfo,
-                                      const vk::Fence &fence,
+                                      const vk::Fence *fence,
                                       Serial *serialOut)
 {
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
-        ANGLE_VK_TRY(context, vkQueueSubmit(mQueues[priority], 1, &submitInfo, fence.getHandle()));
+        VkFence handle = fence ? fence->getHandle() : VK_NULL_HANDLE;
+        ANGLE_VK_TRY(context, vkQueueSubmit(mQueues[priority], 1, &submitInfo, handle));
     }
 
     ANGLE_TRY(cleanupGarbage(context, false));
@@ -1843,6 +1844,18 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
     mCurrentQueueSerial       = mQueueSerialFactory.generate();
 
     return angle::Result::Continue;
+}
+
+angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
+                                            const vk::PrimaryCommandBuffer &primary,
+                                            Serial *serialOut)
+{
+    VkSubmitInfo submitInfo       = {};
+    submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers    = primary.ptr();
+
+    return queueSubmit(context, egl::ContextPriority::Medium, submitInfo, nullptr, serialOut);
 }
 
 angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriority priority)
