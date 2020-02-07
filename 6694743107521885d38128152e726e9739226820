@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cfa18996_223d2470",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-07T18:36:50Z",
+      "side": 1,
+      "message": "1) convertVertexBufferCPU: should be safe, GetVertexCount checks the buffer size\n2) convertVertexBufferGPU: should be safe via robust buffer access\n\nEither case wouldn\u0027t be directly related to this fix which only applies to non-converted buffers.",
+      "parentUuid": "7c6b0374_a3e83e44",
+      "revId": "6694743107521885d38128152e726e9739226820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c721c6e_4346d947",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "6694743107521885d38128152e726e9739226820",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34dc172f_4f6357a9",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-07T18:36:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c721c6e_4346d947",
+      "range": {
+        "startLine": 644,
+        "startChar": 53,
+        "endLine": 644,
+        "endChar": 55
+      },
+      "revId": "6694743107521885d38128152e726e9739226820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
