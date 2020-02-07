@@ -892,9 +892,18 @@ class ImageHelper final : public CommandGraphResource
     // purpose of performing a transition (which may then not be issued).
     bool isLayoutChangeNecessary(ImageLayout newLayout) const;
 
+    template <typename CommandBufferT>
     void changeLayout(VkImageAspectFlags aspectMask,
                       ImageLayout newLayout,
-                      CommandBuffer *commandBuffer);
+                      CommandBufferT *commandBuffer)
+    {
+        if (!isLayoutChangeNecessary(newLayout))
+        {
+            return;
+        }
+
+        forceChangeLayoutAndQueue(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
+    }
 
     bool isQueueChangeNeccesary(uint32_t newQueueFamilyIndex) const
     {
