@@ -39,6 +39,30 @@
       "revId": "49471c571bc0414e8c943b68a53f5666ab726bfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e640ecaa_9ade12d2",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2109,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-07T14:23:49Z",
+      "side": 1,
+      "message": "That was true for capturing from the beginning, but for mid-execution capture, the unpack buffer could no longer be bound when we need to use this data to populate a new compressed texture.  Is there a back up of the buffer as well that I\u0027m not seeing?",
+      "parentUuid": "2f4e84df_0cec952b",
+      "range": {
+        "startLine": 2104,
+        "startChar": 0,
+        "endLine": 2109,
+        "endChar": 88
+      },
+      "revId": "49471c571bc0414e8c943b68a53f5666ab726bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
