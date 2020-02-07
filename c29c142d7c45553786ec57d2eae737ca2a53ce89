@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c97ce01_07c9bdca",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-07T13:19:01Z",
+      "side": 1,
+      "message": "any possibility of using a helper function to combine with the top repeated code?\n\nalso can you use the if (texture) {} else { ASSERT(renderbuffer) } pattern instead of the switch?",
+      "range": {
+        "startLine": 1516,
+        "startChar": 0,
+        "endLine": 1536,
+        "endChar": 17
+      },
+      "revId": "c29c142d7c45553786ec57d2eae737ca2a53ce89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
