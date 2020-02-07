@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7c6b0374_a3e83e44",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-07T18:27:08Z",
+      "side": 1,
+      "message": "Should this have the same checking?   Or is there something else that\u0027s guaranteeing lastAllocationOffset \u003c bufferVk-\u003egetSize()?",
+      "revId": "6694743107521885d38128152e726e9739226820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3c721c6e_4346d947",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 1
