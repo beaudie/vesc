@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2499531d_e3bcc2cc",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-07T20:28:47Z",
+      "side": 1,
+      "message": "Removed the TODO, but the bug is a general one, can\u0027t be closed yet.",
+      "parentUuid": "8adde37c_8a30a0d7",
+      "revId": "49471c571bc0414e8c943b68a53f5666ab726bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f4e84df_0cec952b",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
