@@ -322,6 +322,13 @@ class SharedResourceUse final : angle::NonCopyable
         mUse->counter++;
     }
 
+    // Specifically for use with garbage that is used as a one-off.
+    void initWithSerial(Serial serial)
+    {
+        init();
+        mUse->serial = serial;
+    }
+
     ANGLE_INLINE void release()
     {
         ASSERT(valid());

@@ -598,6 +598,8 @@ class BufferHelper final : public CommandGraphResource
                              VkAccessFlags *barrierDstOut);
     void onWriteAccess(ContextVk *contextVk, VkAccessFlags writeAccessType);
 
+    angle::Result initializeMemory(Context *context, VkDeviceSize size);
+
     // Vulkan objects.
     Buffer mBuffer;
     BufferView mBufferView;
@@ -962,10 +964,12 @@ class ImageHelper final : public CommandGraphResource
                                       GLuint *inputSkipBytes);
 
   private:
+    // Generalized to accept both "primary" and "secondary" command buffers.
+    template <typename CommandBufferT>
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                    ImageLayout newLayout,
                                    uint32_t newQueueFamilyIndex,
-                                   CommandBuffer *commandBuffer);
+                                   CommandBufferT *commandBuffer);
 
     void stageSubresourceClear(const gl::ImageIndex &index,
                                const angle::Format &format,
@@ -987,6 +991,8 @@ class ImageHelper final : public CommandGraphResource
                            uint32_t baseArrayLayer,
                            uint32_t layerCount,
                            CommandBuffer *commandBuffer);
+
+    angle::Result initializeMemory(Context *context, VkDeviceSize size);
 
     enum class UpdateSource
     {
