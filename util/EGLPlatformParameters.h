@@ -49,7 +49,7 @@ struct EGLPlatformParameters
     {
         return std::tie(renderer, majorVersion, minorVersion, deviceType, presentPath,
                         debugLayersEnabled, contextVirtualization, commandGraphFeature,
-                        transformFeedbackFeature, platformMethods);
+                        transformFeedbackFeature, allocateNonZeroMemoryFeature, platformMethods);
     }
 
     EGLint renderer                         = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
@@ -61,6 +61,7 @@ struct EGLPlatformParameters
     EGLint contextVirtualization            = EGL_DONT_CARE;
     EGLint commandGraphFeature              = EGL_DONT_CARE;
     EGLint transformFeedbackFeature         = EGL_DONT_CARE;
+    EGLint allocateNonZeroMemoryFeature     = EGL_DONT_CARE;
     angle::PlatformMethods *platformMethods = nullptr;
 };
 
