@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c84274f4_f19fdbc4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-07T15:23:58Z",
+      "side": 1,
+      "message": "countBufferCount -\u003e counterBufferCount (I think?)",
+      "range": {
+        "startLine": 216,
+        "startChar": 13,
+        "endLine": 216,
+        "endChar": 29
+      },
+      "revId": "3f6c0e5f63f07267cacabb6c714b1c095b4147c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
