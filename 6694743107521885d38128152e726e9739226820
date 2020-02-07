@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c721c6e_4346d947",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-07T17:13:16Z",
+      "side": 1,
+      "message": "if",
+      "range": {
+        "startLine": 644,
+        "startChar": 53,
+        "endLine": 644,
+        "endChar": 55
+      },
+      "revId": "6694743107521885d38128152e726e9739226820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
