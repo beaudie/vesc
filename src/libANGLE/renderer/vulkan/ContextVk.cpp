@@ -1093,20 +1093,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(const gl::Context 
                                                               vk::CommandBuffer *commandBuffer,
                                                               vk::CommandGraphResource *recorder)
 {
-    if (commandGraphEnabled())
-    {
-        ANGLE_TRY(updateActiveTextures(context));
-
-        const gl::ActiveTextureMask &activeTextures = mProgram->getState().getActiveSamplersMask();
-        for (size_t textureUnit : activeTextures)
-        {
-            vk::TextureUnit &unit = mActiveTextures[textureUnit];
-            TextureVk *textureVk  = unit.texture;
-            ASSERT(textureVk);
-            vk::ImageHelper &image = textureVk->getImage();
-            image.addReadDependency(this, recorder);
-        }
-    }
+    ANGLE_TRY(updateActiveTextures(context, recorder));
 
     if (mProgram->hasTextures())
     {
@@ -2833,11 +2820,6 @@ angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context)
         mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
 
-    if (!commandGraphEnabled())
-    {
-        ANGLE_TRY(updateActiveTextures(context));
-    }
-
     return angle::Result::Continue;
 }
 
@@ -3261,7 +3243,8 @@ void ContextVk::handleError(VkResult errorCode,
     mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
 }
 
-angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
+angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
+                                              vk::CommandGraphResource *recorder)
 {
     const gl::State &glState   = mState;
     const gl::Program *program = glState.getProgram();
@@ -3326,10 +3309,13 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
                 ANGLE_TRY(image.recordCommands(this, &srcLayoutChange));
                 image.changeLayout(aspectFlags, textureLayout, srcLayoutChange);
             }
+
+            image.addReadDependency(this, recorder);
         }
         else
         {
-            ANGLE_TRY(onImageRead(image.getAspectFlags(), textureLayout, &image));
+            mRenderPassCommands.imageRead(&mResourceUseList, image.getAspectFlags(), textureLayout,
+                                          &image);
         }
 
         textureVk->onImageViewUse(&mResourceUseList);
@@ -3860,8 +3846,17 @@ angle::Result ContextVk::endRenderPass()
     return mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
 }
 
+void ContextVk::onRenderPassImageWrite(VkImageAspectFlags aspectFlags,
+                                       vk::ImageLayout imageLayout,
+                                       vk::ImageHelper *image)
+{
+    mRenderPassCommands.imageWrite(&mResourceUseList, aspectFlags, imageLayout, image);
+}
+
 CommandBufferHelper::CommandBufferHelper()
-    : mGlobalMemoryBarrierSrcAccess(0),
+    : mImageBarrierSrcStageMask(0),
+      mImageBarrierDstStageMask(0),
+      mGlobalMemoryBarrierSrcAccess(0),
       mGlobalMemoryBarrierDstAccess(0),
       mGlobalMemoryBarrierStages(0)
 {}
@@ -3888,23 +3883,80 @@ void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
     mGlobalMemoryBarrierStages = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
 }
 
-void CommandBufferHelper::recordBarrier(vk::PrimaryCommandBuffer *primary)
+void CommandBufferHelper::imageBarrier(VkPipelineStageFlags srcStageMask,
+                                       VkPipelineStageFlags dstStageMask,
+                                       const VkImageMemoryBarrier &imageMemoryBarrier)
 {
-    if (mGlobalMemoryBarrierSrcAccess == 0)
+    mImageBarrierSrcStageMask |= srcStageMask;
+    mImageBarrierDstStageMask |= dstStageMask;
+    mImageMemoryBarriers.push_back(imageMemoryBarrier);
+}
+
+void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
+                                    VkImageAspectFlags aspectFlags,
+                                    vk::ImageLayout imageLayout,
+                                    vk::ImageHelper *image)
+{
+    image->onResourceAccess(resourceUseList);
+    if (image->isLayoutChangeNecessary(imageLayout))
+    {
+        image->changeLayout(aspectFlags, imageLayout, this);
+    }
+}
+
+void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
+                                     VkImageAspectFlags aspectFlags,
+                                     vk::ImageLayout imageLayout,
+                                     vk::ImageHelper *image)
+{
+    image->onResourceAccess(resourceUseList);
+    image->changeLayout(aspectFlags, imageLayout, this);
+}
+
+void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
+{
+    if (mImageMemoryBarriers.empty() && mGlobalMemoryBarrierSrcAccess == 0)
     {
         return;
     }
 
+    VkPipelineStageFlags srcStages = 0;
+    VkPipelineStageFlags dstStages = 0;
+
     VkMemoryBarrier memoryBarrier = {};
-    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-    memoryBarrier.srcAccessMask   = mGlobalMemoryBarrierSrcAccess;
-    memoryBarrier.dstAccessMask   = mGlobalMemoryBarrierDstAccess;
+    uint32_t memoryBarrierCount   = 0;
 
-    primary->memoryBarrier(mGlobalMemoryBarrierStages, mGlobalMemoryBarrierStages, &memoryBarrier);
+    if (mGlobalMemoryBarrierSrcAccess != 0)
+    {
+        memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask = mGlobalMemoryBarrierSrcAccess;
+        memoryBarrier.dstAccessMask = mGlobalMemoryBarrierDstAccess;
 
-    mGlobalMemoryBarrierSrcAccess = 0;
-    mGlobalMemoryBarrierDstAccess = 0;
-    mGlobalMemoryBarrierStages    = 0;
+        memoryBarrierCount++;
+        srcStages |= mGlobalMemoryBarrierStages;
+        dstStages |= mGlobalMemoryBarrierStages;
+
+        mGlobalMemoryBarrierSrcAccess = 0;
+        mGlobalMemoryBarrierDstAccess = 0;
+        mGlobalMemoryBarrierStages    = 0;
+    }
+
+    if (!mImageMemoryBarriers.empty())
+    {
+        srcStages |= mImageBarrierSrcStageMask;
+        dstStages |= mImageBarrierDstStageMask;
+        primary->pipelineBarrier(srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0,
+                                 nullptr, static_cast<uint32_t>(mImageMemoryBarriers.size()),
+                                 mImageMemoryBarriers.data());
+        mImageMemoryBarriers.clear();
+        mImageBarrierSrcStageMask = 0;
+        mImageBarrierDstStageMask = 0;
+    }
+    else
+    {
+        primary->pipelineBarrier(srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0,
+                                 nullptr, 0, nullptr);
+    }
 }
 
 OutsideRenderPassCommandBuffer::OutsideRenderPassCommandBuffer() = default;
@@ -3916,7 +3968,7 @@ void OutsideRenderPassCommandBuffer::flushToPrimary(vk::PrimaryCommandBuffer *pr
     if (empty())
         return;
 
-    recordBarrier(primary);
+    executeBarriers(primary);
     mCommandBuffer.executeCommands(primary->getHandle());
 
     // Restart secondary buffer.
@@ -3969,7 +4021,7 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
     if (empty())
         return angle::Result::Continue;
 
-    recordBarrier(primary);
+    executeBarriers(primary);
 
     // Pull a RenderPass from the cache.
     RenderPassCache &renderPassCache = contextVk->getRenderPassCache();

@@ -105,14 +105,31 @@ struct CommandBufferHelper : angle::NonCopyable
                      VkAccessFlags writeAccessType,
                      vk::BufferHelper *buffer);
 
+    void imageRead(vk::ResourceUseList *resourceUseList,
+                   VkImageAspectFlags aspectFlags,
+                   vk::ImageLayout imageLayout,
+                   vk::ImageHelper *image);
+
+    void imageWrite(vk::ResourceUseList *resourceUseList,
+                    VkImageAspectFlags aspectFlags,
+                    vk::ImageLayout imageLayout,
+                    vk::ImageHelper *image);
+
+    void imageBarrier(VkPipelineStageFlags srcStageMask,
+                      VkPipelineStageFlags dstStageMask,
+                      const VkImageMemoryBarrier &imageMemoryBarrier);
+
     vk::CommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
   protected:
     CommandBufferHelper();
     ~CommandBufferHelper();
 
-    void recordBarrier(vk::PrimaryCommandBuffer *primary);
+    void executeBarriers(vk::PrimaryCommandBuffer *primary);
 
+    VkPipelineStageFlags mImageBarrierSrcStageMask;
+    VkPipelineStageFlags mImageBarrierDstStageMask;
+    std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
     VkFlags mGlobalMemoryBarrierSrcAccess;
     VkFlags mGlobalMemoryBarrierDstAccess;
     VkPipelineStageFlags mGlobalMemoryBarrierStages;
@@ -559,6 +576,10 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                vk::ImageLayout imageLayout,
                                vk::ImageHelper *image);
 
+    void onRenderPassImageWrite(VkImageAspectFlags aspectFlags,
+                                vk::ImageLayout imageLayout,
+                                vk::ImageHelper *image);
+
     angle::Result getOutsideRenderPassCommandBuffer(vk::CommandBuffer **commandBufferOut)
     {
         if (!mRenderPassCommands.empty())
@@ -741,7 +762,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     void updateFlipViewportDrawFramebuffer(const gl::State &glState);
     void updateFlipViewportReadFramebuffer(const gl::State &glState);
 
-    angle::Result updateActiveTextures(const gl::Context *context);
+    angle::Result updateActiveTextures(const gl::Context *context,
+                                       vk::CommandGraphResource *recorder);
     angle::Result updateActiveImages(const gl::Context *context,
                                      vk::CommandGraphResource *recorder);
     angle::Result updateDefaultAttribute(size_t attribIndex);

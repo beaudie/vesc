@@ -2152,18 +2152,6 @@ bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout) const
     return !sameLayoutAndNoNeedForBarrier;
 }
 
-void ImageHelper::changeLayout(VkImageAspectFlags aspectMask,
-                               ImageLayout newLayout,
-                               CommandBuffer *commandBuffer)
-{
-    if (!isLayoutChangeNecessary(newLayout))
-    {
-        return;
-    }
-
-    forceChangeLayoutAndQueue(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
-}
-
 void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                        ImageLayout newLayout,
                                        uint32_t newQueueFamilyIndex,
@@ -2212,7 +2200,7 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
     imageMemoryBarrier.dstQueueFamilyIndex  = newQueueFamilyIndex;
     imageMemoryBarrier.image                = mImage.getHandle();
 
-    // TODO(jmadill): Is this needed for mipped/layer images?
+    // Transition the whole resource.
     imageMemoryBarrier.subresourceRange.aspectMask     = aspectMask;
     imageMemoryBarrier.subresourceRange.baseMipLevel   = 0;
     imageMemoryBarrier.subresourceRange.levelCount     = mLevelCount;
@@ -2220,10 +2208,16 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
     imageMemoryBarrier.subresourceRange.layerCount     = mLayerCount;
 
     commandBuffer->imageBarrier(transitionFrom.srcStageMask, transitionTo.dstStageMask,
-                                &imageMemoryBarrier);
+                                imageMemoryBarrier);
     mCurrentLayout           = newLayout;
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
+
+// Explicitly instantiate forceChangeLayoutAndQueue with CommandBufferHelper.
+template void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
+                                                     ImageLayout newLayout,
+                                                     uint32_t newQueueFamilyIndex,
+                                                     CommandBufferHelper *commandBuffer);
 
 void ImageHelper::clearColor(const VkClearColorValue &color,
                              uint32_t baseMipLevel,
@@ -2378,7 +2372,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
 
         // We can do it for all layers at once.
         commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                    &barrier);
+                                    barrier);
         VkImageBlit blit                   = {};
         blit.srcOffsets[0]                 = {0, 0, 0};
         blit.srcOffsets[1]                 = {mipWidth, mipHeight, 1};
@@ -2413,7 +2407,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
 
     // We can do it for all layers at once.
     commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
-                                &barrier);
+                                barrier);
     // This is just changing the internal state of the image helper so that the next call
     // to changeLayout will use this layout as the "oldLayout" argument.
     mCurrentLayout = ImageLayout::TransferSrc;
