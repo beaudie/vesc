@@ -75,6 +75,10 @@ EXPORTS
     eglGetNativeClientBufferANDROID             @81
     eglDupNativeFenceFDANDROID                  @82
     eglGetMscRateCHROMIUM                       @83
+    eglClientWaitSyncKHR                        @84
+    eglCreateSyncKHR                            @85
+    eglDestroySyncKHR                           @86
+    eglWaitSyncKHR                              @87
 
     ; 1.5 entry points
     eglCreateSync                               @38

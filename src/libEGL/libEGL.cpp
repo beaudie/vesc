@@ -301,13 +301,31 @@ EGLSync EGLAPIENTRY eglCreateSync(EGLDisplay dpy, EGLenum type, const EGLAttrib 
     return EGL_CreateSync(dpy, type, attrib_list);
 }
 
+EGLSync EGLAPIENTRY eglCreateSyncKHR(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list)
+{
+    EnsureEGLLoaded();
+    return EGL_CreateSync(dpy, type, attrib_list);
+}
+
 EGLBoolean EGLAPIENTRY eglDestroySync(EGLDisplay dpy, EGLSync sync)
 {
     EnsureEGLLoaded();
     return EGL_DestroySync(dpy, sync);
 }
 
+EGLBoolean EGLAPIENTRY eglDestroySyncKHR(EGLDisplay dpy, EGLSync sync)
+{
+    EnsureEGLLoaded();
+    return EGL_DestroySync(dpy, sync);
+}
+
 EGLint EGLAPIENTRY eglClientWaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags, EGLTime timeout)
+{
+    EnsureEGLLoaded();
+    return EGL_ClientWaitSync(dpy, sync, flags, timeout);
+}
+
+EGLint EGLAPIENTRY eglClientWaitSyncKHR(EGLDisplay dpy, EGLSync sync, EGLint flags, EGLTime timeout)
 {
     EnsureEGLLoaded();
     return EGL_ClientWaitSync(dpy, sync, flags, timeout);
@@ -365,6 +383,12 @@ EGLSurface EGLAPIENTRY eglCreatePlatformPixmapSurface(EGLDisplay dpy,
 }
 
 EGLBoolean EGLAPIENTRY eglWaitSync(EGLDisplay dpy, EGLSync sync, EGLint flags)
+{
+    EnsureEGLLoaded();
+    return EGL_WaitSync(dpy, sync, flags);
+}
+
+EGLBoolean EGLAPIENTRY eglWaitSyncKHR(EGLDisplay dpy, EGLSync sync, EGLint flags)
 {
     EnsureEGLLoaded();
     return EGL_WaitSync(dpy, sync, flags);
