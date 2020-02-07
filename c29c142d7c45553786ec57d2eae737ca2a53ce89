@@ -22,6 +22,30 @@
       "revId": "c29c142d7c45553786ec57d2eae737ca2a53ce89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d3080b1_5109bc78",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-07T20:28:57Z",
+      "side": 1,
+      "message": "Okay, moved this to a helper function, and also using it for stencil below.",
+      "parentUuid": "8c97ce01_07c9bdca",
+      "range": {
+        "startLine": 1516,
+        "startChar": 0,
+        "endLine": 1536,
+        "endChar": 17
+      },
+      "revId": "c29c142d7c45553786ec57d2eae737ca2a53ce89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
