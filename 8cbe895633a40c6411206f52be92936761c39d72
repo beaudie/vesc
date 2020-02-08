@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "975e652a_9c074453",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-08T05:23:21Z",
+      "side": 1,
+      "message": "Is there a way to do without these? They will remain largely untested, and seem an unnecessary complication for a test helper.\n\nWhat\u0027s wrong with recording the initialization the usual way and submit everything that\u0027s recorded so far?",
+      "range": {
+        "startLine": 180,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 55
+      },
+      "revId": "8cbe895633a40c6411206f52be92936761c39d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
