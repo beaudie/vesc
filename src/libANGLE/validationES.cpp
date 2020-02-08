@@ -477,6 +477,52 @@ void SetRobustLengthParam(GLsizei *length, GLsizei value)
     }
 }
 
+bool IsS3TCFormat(const GLenum format)
+{
+    switch (format)
+    {
+        case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
+        case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
+        case GL_COMPRESSED_RGBA_S3TC_DXT3_EXT:
+        case GL_COMPRESSED_RGBA_S3TC_DXT5_EXT:
+        case GL_COMPRESSED_SRGB_S3TC_DXT1_EXT:
+        case GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT:
+        case GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT:
+        case GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+bool IsRGTCFormat(const GLenum format)
+{
+    switch (format)
+    {
+        case GL_COMPRESSED_RED_RGTC1_EXT:
+        case GL_COMPRESSED_SIGNED_RED_RGTC1_EXT:
+        case GL_COMPRESSED_RED_GREEN_RGTC2_EXT:
+        case GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+bool IsASTC2DFormat(const GLenum format)
+{
+    if ((format >= GL_COMPRESSED_RGBA_ASTC_4x4_KHR &&
+         format <= GL_COMPRESSED_RGBA_ASTC_12x12_KHR) ||
+        (format >= GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR &&
+         format <= GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR))
+    {
+        return true;
+    }
+    return false;
+}
+
 bool IsETC2EACFormat(const GLenum format)
 {
     // ES 3.1, Table 8.19
