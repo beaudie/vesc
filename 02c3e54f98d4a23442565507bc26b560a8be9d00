@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6b6c6865_3255c838",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-08T01:08:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54fc5e7a_a224f319",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35b346c4_f52ecb52",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2020-02-06T02:46:40Z",
       "side": 1,
       "message": "I imagine eventually you would want a ProgramExecutableState as well, which is what\u0027s shared with the backend (and has all the data), with ProgramExecutable getting lists of things to link (from Program or PPO) and populate it.\n\nThen a lot of current \"program-\u003egetState()\"s become \"programExecutable-\u003egetState()\" and otherwise be used exactly the same way.",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adc5047e_c955d291",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-08T01:08:26Z",
+      "side": 1,
+      "message": "I was thinking more that ProgramExecutable is the state of the executable, and just contains the members in it directly.   Otherwise, I\u0027m not sure what would be in ProgramExecutable vs ProgramExecutableState - it seems like everything would just be in ProgramExecutableState without any need for ProgramExecutable other than to implement shared functions.\n\nWith Jamie\u0027s request to have ProgramExecutable be a peer of ProgramState, rather than a member of it, the backend requires its own reference to the ProgramExecutable just like the ProgramState:\n\nclass ProgramImpl : angle::NonCopyable\n{\n...\n  protected:\n    const gl::ProgramState \u0026mState;\n    const gl::ProgramExecutable \u0026mProgramExecutable;\n};\n\nThis is because the backend doesn\u0027t have access to the corresponding frontend Program to get the ProgramExecutable from (it was getting it through the mState before), so it needs the reference to it just like the ProgramState.\n\nWith both your\u0027s and Jamie\u0027s suggestion it would change from:\nmState.getProgramExecutable().mLinkedShaderStages\nto:\nmProgramExecutable.getState().mLinkedShaderStages\n\nPersonally, I\u0027d prefer to avoid the extra ProgramExecutableState abstraction, since I think the \"executable\" part already implies it\u0027s mutable:\nmProgramExecutable.mLinkedShaderStages",
+      "parentUuid": "35b346c4_f52ecb52",
       "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "34b088b5_d1e6c5ca",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-08T01:08:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e46bc87a_3dacde24",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd7eac1e_52ab925d",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 3
@@ -73,6 +133,24 @@
       "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d18cf1c_092fb741",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-08T01:08:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bd7eac1e_52ab925d",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +200,30 @@
     },
     {
       "key": {
+        "uuid": "e33deed5_0d0d5990",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-08T01:08:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc66acdd_cd46bed3",
+      "range": {
+        "startLine": 1196,
+        "startChar": 30,
+        "endLine": 1197,
+        "endChar": 66
+      },
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27f0f91f_cc092bc6",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 3
@@ -136,6 +238,24 @@
       "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07b6789a_9cf1ffc9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-08T01:08:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "27f0f91f_cc092bc6",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
