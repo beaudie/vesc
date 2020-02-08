@@ -37,6 +37,9 @@ class Program;
 class Shader;
 
 void SetRobustLengthParam(GLsizei *length, GLsizei value);
+bool IsS3TCFormat(const GLenum format);
+bool IsRGTCFormat(const GLenum format);
+bool IsASTC2DFormat(const GLenum format);
 bool IsETC2EACFormat(const GLenum format);
 bool ValidTextureTarget(const Context *context, TextureType type);
 bool ValidTexture2DTarget(const Context *context, TextureType type);
