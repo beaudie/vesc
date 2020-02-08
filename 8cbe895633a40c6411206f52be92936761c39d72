@@ -22,6 +22,30 @@
       "revId": "8cbe895633a40c6411206f52be92936761c39d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39263064_19e3f4f8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-08T05:25:34Z",
+      "side": 1,
+      "message": "We don\u0027t have access to the ContextVk. Some of these init calls come from SurfaceVk.",
+      "parentUuid": "975e652a_9c074453",
+      "range": {
+        "startLine": 180,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 55
+      },
+      "revId": "8cbe895633a40c6411206f52be92936761c39d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
