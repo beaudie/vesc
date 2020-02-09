@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "d6f92385_1574db38",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-09T14:09:35Z",
+      "side": 1,
+      "message": "I think Shabi\u0027s thinking of the back-end using inheritance to add the additional state. The decision is if you want something like Program + ProgramState -\u003e ProgramImpl -\u003e ProgramVk - Executable + ExecutableState -\u003e ExecutableImpl -\u003e ExecutableVk or if we just want Executable + ExecutableVk.",
+      "parentUuid": "adc5047e_c955d291",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e46bc87a_3dacde24",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 3

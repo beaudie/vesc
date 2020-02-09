@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27d486fd_a6416ad7",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-09T14:09:35Z",
+      "side": 1,
+      "message": "nit: how about just \"getExecutable\" ? We already know it\u0027s a program executable.",
+      "range": {
+        "startLine": 819,
+        "startChar": 29,
+        "endLine": 819,
+        "endChar": 49
+      },
+      "revId": "642a2e4b3c9d544295edd67f33f17b10e080b3a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50331314_cc0a904e",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-09T14:09:35Z",
+      "side": 1,
+      "message": "similarly, mExecutable? Like \"ProgramState\" maps to \"getState/mState\".\n\nAlso I suggest you make this part of ProgramState so it is accessible in the back-end.",
+      "range": {
+        "startLine": 1018,
+        "startChar": 22,
+        "endLine": 1018,
+        "endChar": 40
+      },
+      "revId": "642a2e4b3c9d544295edd67f33f17b10e080b3a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aad77999_9609b576",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-09T14:09:35Z",
+      "side": 1,
+      "message": "You can remove this when the executable is accessible from mState.",
+      "range": {
+        "startLine": 33,
+        "startChar": 43,
+        "endLine": 33,
+        "endChar": 91
+      },
+      "revId": "642a2e4b3c9d544295edd67f33f17b10e080b3a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
