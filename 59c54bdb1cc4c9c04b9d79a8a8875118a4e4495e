@@ -281,6 +281,30 @@
       "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a70f8630_8b8fec71",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-09T14:00:32Z",
+      "side": 1,
+      "message": "Ideally there would be no possible error generated in this function. And you could avoid needing to call ERR(). For example by skipping the createRenderer until later. Can you call createRenderer inside ContextEGL::initialize or something like that?",
+      "parentUuid": "39cdb84b_d4054da4",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 0
+      },
+      "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
