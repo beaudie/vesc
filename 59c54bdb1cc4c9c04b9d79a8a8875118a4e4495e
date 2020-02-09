@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c7b88741_930e1ca7",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-09T02:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b84715fa_b856390a",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 30
+      },
+      "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e80fd303_af28d0b7",
         "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71ca28e2_780c52e3",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-09T02:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e80fd303_af28d0b7",
+      "range": {
+        "startLine": 184,
+        "startChar": 9,
+        "endLine": 184,
+        "endChar": 27
+      },
+      "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5d829661_d4b5c87a",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-09T02:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6ad7043_260ee9b8",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 38
+      },
+      "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be5249f9_63d64c80",
         "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7645faf1_44630bf9",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-09T02:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be5249f9_63d64c80",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 5
+      },
+      "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "6628d8cf_db73757c",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-09T02:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97975895_a08d7c19",
+      "range": {
+        "startLine": 223,
+        "startChar": 0,
+        "endLine": 223,
+        "endChar": 23
+      },
+      "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e35f0fd9_c175215d",
         "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
         "patchSetId": 7
@@ -128,6 +248,30 @@
       "writtenOn": "2020-02-07T13:14:09Z",
       "side": 1,
       "message": "this function should just return a context pointer. any work that can fail should be done on ContextImpl::initialize. There should be no need to swallow errors here.",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 0
+      },
+      "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39cdb84b_d4054da4",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-09T02:59:13Z",
+      "side": 1,
+      "message": "Since it depends on the input parameter `const gl::Context *shareContext`, do you mean I should just remove the `return nullptr` ? if yes what should I do with the error returned by createRenderer ? (Just ignore it ?) Thx!",
+      "parentUuid": "e35f0fd9_c175215d",
       "range": {
         "startLine": 329,
         "startChar": 0,
