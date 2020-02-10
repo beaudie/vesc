@@ -22,6 +22,29 @@
       "revId": "88d45b646bef6e7113a6a55fbc954e9bc8a16ed1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b39975a7_875025f3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-10T20:03:33Z",
+      "side": 1,
+      "message": "ContextVk::endRenderPass() calls mRenderPassCommands.flushToPrimary() - should mOutsideRenderPassCommands.flushToPrimary be moved inside endRenderPass() so it\u0027s always called before mRenderPassCommands.flushToPrimary()?",
+      "range": {
+        "startLine": 1016,
+        "startChar": 0,
+        "endLine": 1017,
+        "endChar": 35
+      },
+      "revId": "88d45b646bef6e7113a6a55fbc954e9bc8a16ed1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
