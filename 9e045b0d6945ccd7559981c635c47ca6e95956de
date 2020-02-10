@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b11d19c4_e0d4d189",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4154,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T20:20:10Z",
+      "side": 1,
+      "message": "I was hesitant about changing how the code worked without the protection of Vulkan Validation Layers. I added a TODO to clean this up when we do a fix up on XFB (still needed for 3206)",
+      "parentUuid": "af4f08f5_ad3dce33",
+      "range": {
+        "startLine": 4153,
+        "startChar": 0,
+        "endLine": 4154,
+        "endChar": 96
+      },
+      "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d00e87b_2800d335",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 12
@@ -63,6 +87,24 @@
       "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1495b98e_c51c9c8d",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T20:20:10Z",
+      "side": 1,
+      "message": "It is currently implemented in ANGLE itself by knowing how many primitives we are writing. We could replace ANGLE\u0027s tracking with driver calls. See reference code.",
+      "parentUuid": "7d00e87b_2800d335",
+      "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +125,47 @@
     },
     {
       "key": {
+        "uuid": "cd2b20f6_d4ae0b6e",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T20:20:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7a5f94c4_6b3e164e",
+      "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b211446d_6b3eac3e",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T20:20:10Z",
+      "side": 1,
+      "message": "Tim: for reference.",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 0
+      },
+      "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6583f562_f9ed688f",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 12
@@ -94,6 +177,30 @@
       "writtenOn": "2020-02-10T19:52:56Z",
       "side": 1,
       "message": "Why is this the right value to initialize things to?   Just to make sure everything has completed with this fence?",
+      "range": {
+        "startLine": 64,
+        "startChar": 46,
+        "endLine": 64,
+        "endChar": 82
+      },
+      "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05683a6b_3fbf1882",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T20:20:10Z",
+      "side": 1,
+      "message": "I don\u0027t know off the top of my head. I\u0027m simply copying what the prior code was doing in CommandGraph.cpp.",
+      "parentUuid": "6583f562_f9ed688f",
       "range": {
         "startLine": 64,
         "startChar": 46,
@@ -138,6 +245,24 @@
       "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f021171_acb8c696",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1392,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T20:20:10Z",
+      "side": 1,
+      "message": "Thanks for bringing this up. I think the barrier is done correctly \"lazily\" via on the onBufferRead/etc methods now. Removed the FIXME.",
+      "parentUuid": "2f906f62_757c725d",
+      "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
