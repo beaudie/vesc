@@ -69,6 +69,29 @@
       "revId": "22c5bb393d62523eab8b9661f34b4387e7f9e6b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c511c42_1ab3c8d1",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2642,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-10T19:21:34Z",
+      "side": 1,
+      "message": "It looks like you are clearing the framebuffer with a random value, drawing to it, then ensuring the framebuffer still contains the random value?  Would this be better to clear to a different color, then ensure the rendered texture has the new expected value?",
+      "range": {
+        "startLine": 2642,
+        "startChar": 12,
+        "endLine": 2642,
+        "endChar": 19
+      },
+      "revId": "22c5bb393d62523eab8b9661f34b4387e7f9e6b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
