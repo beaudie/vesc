@@ -22,6 +22,30 @@
       "revId": "170c61ee078ce69685b50f9d5ee1172dfab91d8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa6aad94_c2acdba2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T21:18:25Z",
+      "side": 1,
+      "message": "It\u0027s no longer needed with the refactor. See comments from Shabi and Tim. Seeing as it\u0027s a point of confusion I\u0027ll see if I can add a comment in a later CL. Would like to land this one as it has a green run.",
+      "parentUuid": "6d234389_860d5027",
+      "range": {
+        "startLine": 1394,
+        "startChar": 8,
+        "endLine": 1398,
+        "endChar": 75
+      },
+      "revId": "170c61ee078ce69685b50f9d5ee1172dfab91d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
