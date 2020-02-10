@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5016f113_7bb6bddd",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T20:20:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0711212_167e9187",
+      "revId": "22c5bb393d62523eab8b9661f34b4387e7f9e6b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2fba062_f6ebf5c8",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "3999ee03_7303cf6a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T20:20:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "396ad48a_0de813cb",
+      "revId": "22c5bb393d62523eab8b9661f34b4387e7f9e6b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c511c42_1ab3c8d1",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 6
@@ -92,6 +128,30 @@
       "revId": "22c5bb393d62523eab8b9661f34b4387e7f9e6b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed0f901a_dea5bd6d",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2642,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T20:20:00Z",
+      "side": 1,
+      "message": "The test is drawing and clearing to different framebuffers. It\u0027s clearing a texture to a randomized color using a user framebuffer, drawing with that texture to a portion of the default framebuffer (the real window), then repeating this for four quads in the FB. Then it is verifying the colors came out in the right order and that the commands didn\u0027t get jumbled.\n\nAdded a couple comments.",
+      "parentUuid": "3c511c42_1ab3c8d1",
+      "range": {
+        "startLine": 2642,
+        "startChar": 12,
+        "endLine": 2642,
+        "endChar": 19
+      },
+      "revId": "22c5bb393d62523eab8b9661f34b4387e7f9e6b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
