@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d0711212_167e9187",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T18:46:07Z",
+      "side": 1,
+      "message": "ASSERTing that pNext is nullptr sounds like a good idea. Note that this code isn\u0027t changed - it\u0027s just changing a pointer type to a reference type.",
+      "parentUuid": "e9b46e30_456af1d6",
+      "revId": "22c5bb393d62523eab8b9661f34b4387e7f9e6b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2fba062_f6ebf5c8",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2020-02-10T18:33:43Z",
       "side": 1,
       "message": "Ah, looks like we were passing around pointers to stack memory which could be gone later when we actually needed it?",
+      "revId": "22c5bb393d62523eab8b9661f34b4387e7f9e6b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "396ad48a_0de813cb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T18:46:07Z",
+      "side": 1,
+      "message": "Yes, the object is ephemeral so we need to make a copy. You\u0027re right that the pNext value would be invalid if non-null.",
+      "parentUuid": "f2fba062_f6ebf5c8",
       "revId": "22c5bb393d62523eab8b9661f34b4387e7f9e6b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
