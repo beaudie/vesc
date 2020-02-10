@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c95e72b6_2a4e72c0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T21:57:43Z",
+      "side": 1,
+      "message": "setupDraw/setupDispatch are special in that they prepare to flush the dirty bits. The external ContextVk APIs manage the flushing automatically.",
+      "parentUuid": "180dfdb7_64b5933c",
+      "range": {
+        "startLine": 1015,
+        "startChar": 11,
+        "endLine": 1015,
+        "endChar": 84
+      },
+      "revId": "88d45b646bef6e7113a6a55fbc954e9bc8a16ed1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b39975a7_875025f3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-10T20:03:33Z",
       "side": 1,
       "message": "ContextVk::endRenderPass() calls mRenderPassCommands.flushToPrimary() - should mOutsideRenderPassCommands.flushToPrimary be moved inside endRenderPass() so it\u0027s always called before mRenderPassCommands.flushToPrimary()?",
+      "range": {
+        "startLine": 1016,
+        "startChar": 0,
+        "endLine": 1017,
+        "endChar": 35
+      },
+      "revId": "88d45b646bef6e7113a6a55fbc954e9bc8a16ed1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b27a3da_d68b57cb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T21:57:43Z",
+      "side": 1,
+      "message": "If I were to flush outside RP commands every endRenderPass I\u0027d flush them every time. See \"getOutsideRenderPassCommandBuffer\".\n\nWhen exactly to flush isn\u0027t yet micro-optimized and could potentially be improved. Mostly wanted to get a working prototype with a sound API (the read/write access stuff) set in place before turning to micro-optimization.\n\nInside ContextVk the rules are a bit looser since there are special cases with the setupDraw/setupDispatch functions.",
+      "parentUuid": "b39975a7_875025f3",
       "range": {
         "startLine": 1016,
         "startChar": 0,
