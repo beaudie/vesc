@@ -120,6 +120,24 @@
     },
     {
       "key": {
+        "uuid": "6381642f_c2f5ae1b",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T21:39:32Z",
+      "side": 1,
+      "message": "Option 1:\n\nwhat you have now\n\nOption 2:\n\n namespace gl\n {\n class ExecutableState {\n   // front-end executable state.\n };\n\n class Executable {\n private:\n   rx::ExecutableImpl *mImplementation;\n   ExecutableState mState;\n }\n }\n\n namespace rx\n {\n class ExecutableImpl {\n    ExecutableImpl(const ExecutableState \u0026state) : mState(state) {}\n  protected:\n    const ExecutableState \u0026mState;\n    // probably not much else.\n };\n }\n\n namespace rx\n {\n class ExecutableVk : public ExecutableImpl {\n private:\n   // special Vulkan state.\n }\n }\n\nI\u0027m personally OK with what you have now. Just trying to explain what Shabi means.",
+      "parentUuid": "75561506_19a81ccf",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e46bc87a_3dacde24",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 3

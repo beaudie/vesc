@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "6f664407_83d6fca4",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-10T21:39:32Z",
+      "side": 1,
+      "message": "Sorry. Miscommunication. I meant to make a getExecutable helper that pulls it from the state without needing to call getState. It belongs in the State. You won\u0027t need to add a new parameter to the ProgramImpl constructor.",
+      "parentUuid": "22490d44_721af491",
+      "range": {
+        "startLine": 1018,
+        "startChar": 22,
+        "endLine": 1018,
+        "endChar": 40
+      },
+      "revId": "642a2e4b3c9d544295edd67f33f17b10e080b3a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aad77999_9609b576",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
         "patchSetId": 4
