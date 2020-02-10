@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d234389_860d5027",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-10T20:46:30Z",
+      "side": 1,
+      "message": "Where is this handled for the linear case?  Or was this code redundant?",
+      "range": {
+        "startLine": 1394,
+        "startChar": 8,
+        "endLine": 1398,
+        "endChar": 75
+      },
+      "revId": "170c61ee078ce69685b50f9d5ee1172dfab91d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
