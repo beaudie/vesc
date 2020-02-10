@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "180dfdb7_64b5933c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-10T20:00:51Z",
+      "side": 1,
+      "message": "Would be nice if the API was designed in such a way as to automatically prevent the above from happening. Otherwise we might end up in a similar situation as before, where we \"finishCurrentCommands\" in various places.",
+      "range": {
+        "startLine": 1015,
+        "startChar": 11,
+        "endLine": 1015,
+        "endChar": 84
+      },
+      "revId": "88d45b646bef6e7113a6a55fbc954e9bc8a16ed1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
