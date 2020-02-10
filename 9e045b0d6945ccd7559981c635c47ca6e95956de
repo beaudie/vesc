@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "af4f08f5_ad3dce33",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 4154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-10T20:06:43Z",
+      "side": 1,
+      "message": "On the contrary, write-after-read hazards don\u0027t need a memory barrier (execution barrier is sufficient), so source\u003dread and dest\u003dwrite is rarely useful.\n\nIn this particular case, the barrier is from xfb-write (draw calls that write xfb output) to xfb-read (future draw calls that will use the xfb results).",
+      "parentUuid": "015b7e73_a35131d2",
+      "range": {
+        "startLine": 4153,
+        "startChar": 0,
+        "endLine": 4154,
+        "endChar": 96
+      },
+      "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d00e87b_2800d335",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 12
@@ -93,6 +117,24 @@
       "writtenOn": "2020-02-10T19:52:56Z",
       "side": 1,
       "message": "nit: TODO/UNIMPLEMENTED()",
+      "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f906f62_757c725d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1392,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-10T20:06:43Z",
+      "side": 1,
+      "message": "Probably don\u0027t need the finishCurrentCommands() (its equivalent), but the barrier is necessary. Unless I missed something, there\u0027s no barrier added when flushing staging buffers to the image, and usually not needed since the buffers is populated by the CPU. This case is exceptional in that the staging buffers are filled by the GPU.",
+      "parentUuid": "8e24889c_ef01a40d",
       "revId": "9e045b0d6945ccd7559981c635c47ca6e95956de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
