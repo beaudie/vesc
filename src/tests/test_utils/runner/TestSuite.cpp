@@ -38,7 +38,7 @@ constexpr char kResultFileArg[]  = "--results-file=";
 #if defined(NDEBUG)
 constexpr int kDefaultTestTimeout = 20;
 #else
-constexpr int kDefaultTestTimeout = 60;
+constexpr int kDefaultTestTimeout  = 60;
 #endif
 #if defined(NDEBUG)
 constexpr int kDefaultBatchTimeout = 600;
