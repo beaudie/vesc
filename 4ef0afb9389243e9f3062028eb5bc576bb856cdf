@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ee6ce6e_50fd7d39",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2020-02-11T22:21:43Z",
+      "side": 1,
+      "message": "There should still be at least 1 stencil test",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 80
+      },
+      "revId": "4ef0afb9389243e9f3062028eb5bc576bb856cdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
