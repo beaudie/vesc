@@ -156,6 +156,24 @@
     },
     {
       "key": {
+        "uuid": "20d8f14e_6958c575",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-11T08:01:47Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t think there will be anything in Executable that we wouldn\u0027t want to share with the backend\n\nMaybe not data, but there is functionality we wouldn\u0027t want to share with the backend. I imagine Executable would at some point assume responsibility for (parts of) the linking process (to populate its (or its State\u0027s) data). Then the Executable/ExecutableState split makes sure the backend cannot call those functions.\n\nI\u0027m ok with this too and we can move on. It\u0027s always possible to refactor later.",
+      "parentUuid": "20926ce3_3062eebc",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e46bc87a_3dacde24",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 3
