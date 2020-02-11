@@ -353,6 +353,30 @@
       "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f5d4b92_e665fb28",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-11T16:29:27Z",
+      "side": 1,
+      "message": "Hi Jamie, I just uploaded the change, please take a look to the diff between patch set 8 and 9, thx!",
+      "parentUuid": "f6fe57f2_8f2f2009",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 0
+      },
+      "revId": "59c54bdb1cc4c9c04b9d79a8a8875118a4e4495e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
