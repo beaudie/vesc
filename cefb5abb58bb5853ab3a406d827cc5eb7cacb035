@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b150f330_bf63a5c0",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T22:45:50Z",
+      "side": 1,
+      "message": "When the separable vertex shader program is added to the PPO with glUseProgramStages(), the vertex program has already been linked so it already knows all of the attribute information.   This means the PPO\u0027s executable needs to just grab the information from the VS\u0027s executable and it\u0027ll have the correct information.",
+      "revId": "cefb5abb58bb5853ab3a406d827cc5eb7cacb035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1debe50_8db3ba14",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T22:45:50Z",
+      "side": 1,
+      "message": "The PPO\u0027s ProgramExecutable needs to collect various pieces of information from the Program\u0027s that are in the PPOs.\n\nThe ProgramExecutable currently only has attribute information in it right now, so we only care about updating that information the separable VS program has already collected when the program was linked (before it was attached to the PPO).\n\nThe data copied/collated/rebuilt is expected to grow as the PPO stuff progresses.",
+      "revId": "cefb5abb58bb5853ab3a406d827cc5eb7cacb035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
