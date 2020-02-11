@@ -138,6 +138,24 @@
     },
     {
       "key": {
+        "uuid": "20926ce3_3062eebc",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T00:46:19Z",
+      "side": 1,
+      "message": "Ah, ok; follow the same Program/ProgramImpl(ProgramState)/ProgramVk approach with Executable/ExecutableImpl(ExecutableState)/ExecutableVk.\n\nI don\u0027t think there will be anything in Executable that we wouldn\u0027t want to share with the backend, so if the intent is that *only* things in ExecutableState are shared, then everything would end up in ExecutableState and Executable would just be an empty class to hold ExecutableState.\n\nMy understanding is also that the only way for ProgramVk to access ExecutableVk members/functions would be via ProgramVk::mState, since there wouldn\u0027t be any ExecutableVk members in the backend directly.   For example, we would have to get the vulkan pipeline layout by going through the ProgramState:\nvk::GetImpl(programVk-\u003emState-\u003egetExecutable())-\u003emPipelineLayout\n\nInstead, I was expecting for ProgramVk/ProgramPipelineVk to have their own ExecutableVk members which contains the shared members/functions:\nprogramVk-\u003egetExecutable().mPipelineLayout\n\nI think since Executable is already inside ProgramState and ProgramVk/ProgramPipelineVk are already essentially their own \"state\"s (there is no ProgramStateVk), having the standalone Executable (instantiated by ProgramState) and ExecutableVk (instantiated by ProgramVk/ProgramPipelineVk) makes sense for now.\n\nThis is certainly something that\u0027s worth revisiting once things become concrete with more substantial content for each though.   I\u0027ll add this as an alternative to the design doc so it\u0027s not lost, if everyone is ok with moving forward with this simplified version for now.",
+      "parentUuid": "6381642f_c2f5ae1b",
+      "revId": "02c3e54f98d4a23442565507bc26b560a8be9d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e46bc87a_3dacde24",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 3
