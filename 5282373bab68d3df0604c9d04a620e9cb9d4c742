@@ -22,6 +22,30 @@
       "revId": "5282373bab68d3df0604c9d04a620e9cb9d4c742",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65da30c9_a9f20f2c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T18:55:13Z",
+      "side": 1,
+      "message": "All of them, since \u0027kCacheOpToString\u0027 is always initialized when the end2end tests are invoked.",
+      "parentUuid": "cc8afa75_bef87539",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 13
+      },
+      "revId": "5282373bab68d3df0604c9d04a620e9cb9d4c742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
