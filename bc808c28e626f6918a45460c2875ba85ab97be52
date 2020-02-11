@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c89cd66d_17da6cb7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T18:53:53Z",
+      "side": 1,
+      "message": "These contradict each other a bit and would be better with the first sentence removed.\n\nThe description of \u0027allocateNonZeroMemory\u0027 is enough to describe what this feature does.",
+      "range": {
+        "startLine": 1618,
+        "startChar": 7,
+        "endLine": 1618,
+        "endChar": 58
+      },
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f6ee7c9_d0d80c46",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T18:53:53Z",
+      "side": 1,
+      "message": "Is it possible that the real buffer that\u0027s being allocated is used in commands that have a higher priority than this command that is initializing it, causing this to be preempted?",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4119fb90_52fb638b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1507,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T18:53:53Z",
+      "side": 1,
+      "message": "This flag will never be enabled in release builds.   Paying the code-size cost is unfortunately unavoidable as a run-time option, but all of these checks should probably use ANGLE_UNLIKELY() to help reduce the branching cost.",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e9495a2_edb29462",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T18:53:53Z",
+      "side": 1,
+      "message": "\"transfer bits\" includes VK_BUFFER_USAGE_TRANSFER_SRC_BIT, which isn\u0027t being checked for.   \n\nThis would be more accurate to say something like:\n\n    // This memory can\u0027t be mapped, so the buffer must be marked\n    // as a transfer destination so we can use a staging resource\n    // to initialize it to a non-zero value.\n\nThat leads to my real question though: why can\u0027t we map the memory if it\u0027s marked VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT and do the memset() on the buffer directly like InitMappableDeviceMemory() is doing for the staging buffer?",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "201a9b80_9375981f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T18:53:53Z",
+      "side": 1,
+      "message": "StagingBuffer::init() has this line:\n\n    ANGLE_TRY(AllocateBufferMemory(contextVk, flags, \u0026flagsOut, nullptr, \u0026mBuffer, \u0026mDeviceMemory));\n\nThat makes its way down to FindAndAllocateCompatibleMemory() which calls vk::InitMappableDeviceMemory() also.\n\nWhy are both calls necessary and why are they both checking opposite conditions for VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT?",
+      "range": {
+        "startLine": 1526,
+        "startChar": 0,
+        "endLine": 1527,
+        "endChar": 66
+      },
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "311fdcc7_a7c5ff1d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T18:53:53Z",
+      "side": 1,
+      "message": "It looks like this comment may need updating/removal, since it\u0027s gated by the allocateNonZeroMemory feature flag rather than the validation layers.",
+      "range": {
+        "startLine": 77,
+        "startChar": 7,
+        "endLine": 77,
+        "endChar": 69
+      },
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7864dd7_bae20501",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T18:53:53Z",
+      "side": 1,
+      "message": "Why is checking VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT is enabled, when BufferHelper::init() checks the opposite?",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30d54693_a0bc493d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T18:53:53Z",
+      "side": 1,
+      "message": "Looks like something weird happened with this comment.",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d20d6a0f_94fb60a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-11T18:53:53Z",
+      "side": 1,
+      "message": "Is there anything special about this value, or is it just something that\u0027s appropriately random?",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
