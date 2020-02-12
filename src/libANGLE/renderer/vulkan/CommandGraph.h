@@ -170,7 +170,7 @@ class CommandGraphNode final : angle::NonCopyable
     // Commands for traversing the node on a flush operation.
     VisitedState visitedState() const;
     void visitParents(std::vector<CommandGraphNode *> *stack);
-    angle::Result visitAndExecute(Context *context,
+    angle::Result visitAndExecute(ContextVk *context,
                                   Serial serial,
                                   RenderPassCache *renderPassCache,
                                   PrimaryCommandBuffer *primaryCommandBuffer);
