@@ -22,6 +22,30 @@
       "revId": "af0b20884139ffd7ae652d843d6c8ad1ae993dda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d5b4fac_fafb98ba",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-12T20:23:48Z",
+      "side": 1,
+      "message": "Good catch. Done.",
+      "parentUuid": "96a7c69b_0dc1bf09",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 6
+      },
+      "revId": "af0b20884139ffd7ae652d843d6c8ad1ae993dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
