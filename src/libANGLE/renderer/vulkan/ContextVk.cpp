@@ -2188,6 +2188,21 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::clearWithRenderPassOp(
+    const gl::Rectangle &clearArea,
+    gl::DrawBufferMask clearColorBuffers,
+    bool clearDepth,
+    bool clearStencil,
+    const VkClearColorValue &clearColorValue,
+    const VkClearDepthStencilValue &clearDepthStencilValue)
+{
+    mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
+
+    return mDrawFramebuffer->clearWithRenderPassOp(
+        this, clearArea, clearColorBuffers, clearDepth, clearStencil, clearColorValue,
+        clearDepthStencilValue, &mRenderPassCommandBuffer);
+}
+
 gl::GraphicsResetStatus ContextVk::getResetStatus()
 {
     if (mRenderer->isDeviceLost())
