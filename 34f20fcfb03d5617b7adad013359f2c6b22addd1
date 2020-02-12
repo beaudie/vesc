@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5452837a_c139ede1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2279,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-12T07:49:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "849e686b_c997e92b",
+      "revId": "34f20fcfb03d5617b7adad013359f2c6b22addd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20ed8588_e83f3722",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "34f20fcfb03d5617b7adad013359f2c6b22addd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20384ccd_8fca9c29",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2282,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-12T07:49:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20ed8588_e83f3722",
+      "revId": "34f20fcfb03d5617b7adad013359f2c6b22addd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "c45be849_6ae1e76a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2705,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-12T07:49:53Z",
+      "side": 1,
+      "message": "I have an idea of how to improve this: have this function record an index into an array of constant rotation matrices (one index per rotation angle).  I\u0027ll implement this soon.",
+      "parentUuid": "4ea19954_0295a544",
+      "revId": "34f20fcfb03d5617b7adad013359f2c6b22addd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aedc1b73_427b90f0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -67,6 +121,24 @@
       "revId": "34f20fcfb03d5617b7adad013359f2c6b22addd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da9d8fee_6fb7782c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2719,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-12T07:49:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aedc1b73_427b90f0",
+      "revId": "34f20fcfb03d5617b7adad013359f2c6b22addd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
