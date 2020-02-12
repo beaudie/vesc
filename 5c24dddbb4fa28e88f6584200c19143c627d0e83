@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea6c0459_1f6c35eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-12T18:31:53Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 9,
+        "startChar": 22,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "5c24dddbb4fa28e88f6584200c19143c627d0e83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "936789ea_21a64347",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-12T18:31:53Z",
+      "side": 1,
+      "message": "Cache in a local variable.\n\nAlso, why check the kernel version? Why not mesa version?",
+      "range": {
+        "startLine": 1595,
+        "startChar": 48,
+        "endLine": 1595,
+        "endChar": 88
+      },
+      "revId": "5c24dddbb4fa28e88f6584200c19143c627d0e83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
