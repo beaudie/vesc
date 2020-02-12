@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "314d689c_3b4d39cb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2199,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-12T12:56:13Z",
+      "side": 1,
+      "message": "I think the bot failures are because of this line. This can now start a new render pass command buffer and the ContextVk doesn\u0027t get dirty bits set to rebind the pipeline, descriptor sets, etc.\n\nTo fix that I added mGraphicsDirtyBits |\u003d mNewGraphicsCommandBufferDirtyBits to this line.",
+      "range": {
+        "startLine": 2199,
+        "startChar": 29,
+        "endLine": 2199,
+        "endChar": 50
+      },
+      "revId": "640eec8ca0635544de818dfe2575cb36839ddca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
