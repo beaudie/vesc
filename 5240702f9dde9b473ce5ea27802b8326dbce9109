@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ca23dde_15dad250",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-12T22:35:17Z",
+      "side": 1,
+      "message": "I think we want this inside the if below as it is a relatively expensive operation that we don\u0027t need to do every swapbuffer, only when things are changing.",
+      "revId": "5240702f9dde9b473ce5ea27802b8326dbce9109",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
