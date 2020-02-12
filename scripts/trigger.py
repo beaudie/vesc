@@ -54,6 +54,40 @@ def main():
         '--shards=%d' % args.shards, '-s', sha
     ]
 
+    # Add in required base software. This should be kept in sync with the
+    # `chromium_swarming` recipe module in build.git. All references to
+    # `swarming_module` below are purely due to this.
+    cipd_packages = [
+        ('infra/python/cpython/${platform}', 'version:2.7.15.chromium14'),
+        ('infra/python/cpython3/${platform}', 'version:3.8.0b1.chromium.1'),
+        ('infra/tools/luci/logdog/butler/${platform}',
+         'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
+        ('infra/tools/luci/vpython-native/${platform}',
+         'git_revision:e317c7d2c17d4c3460ee37524dfce4e1dee4306a'),
+        ('infra/tools/luci/vpython/${platform}',
+         'git_revision:e317c7d2c17d4c3460ee37524dfce4e1dee4306a'),
+    ]
+
+    for pkg, vers in cipd_packages:
+        swarmings_args.append('--cipd-package=.swarming_module:%s:%s' % (pkg, vers))
+
+    # Add packages to $PATH
+    swarmings_args.extend([
+        '--env-prefix=PATH',
+        '.swarming_module',
+        '--env-prefix=PATH',
+        '.swarming_module/bin',
+    ])
+
+    # Add cache directives for vpython.
+    vpython_cache_path = '.swarming_module_cache/vpython'
+    swarmings_args.extend([
+        '--named-cache=swarming_module_cache_vpython',
+        vpython_cache_path,
+        '--env-prefix=VPYTHON_VIRTUALENV_ROOT',
+        vpython_cache_path,
+    ])
+
     if unknown:
         swarmings_args += ["--"] + unknown
 
