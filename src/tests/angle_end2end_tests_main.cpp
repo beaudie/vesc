@@ -8,10 +8,12 @@
 #include "test_utils/runner/TestSuite.h"
 
 void ANGLEProcessTestArgs(int *argc, char *argv[]);
+void RegisterContextCompatibilityTests();
 
 int main(int argc, char **argv)
 {
     angle::TestSuite testSuite(&argc, argv);
     ANGLEProcessTestArgs(&argc, argv);
+    RegisterContextCompatibilityTests();
     return testSuite.run();
 }
