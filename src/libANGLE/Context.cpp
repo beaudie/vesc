@@ -2760,7 +2760,7 @@ void Context::handleError(GLenum errorCode,
     mErrors.handleError(errorCode, message, file, function, line);
 }
 
-void Context::validationError(GLenum errorCode, const char *message)
+void Context::validationError(GLenum errorCode, const char *message) const
 {
     mErrors.validationError(errorCode, message);
 }
