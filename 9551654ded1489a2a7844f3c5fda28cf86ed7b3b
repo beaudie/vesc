@@ -16,6 +16,24 @@
       "revId": "9551654ded1489a2a7844f3c5fda28cf86ed7b3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ca40aea_90fc1ede",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-12T22:28:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58ba2232_a4b692db",
+      "revId": "9551654ded1489a2a7844f3c5fda28cf86ed7b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
