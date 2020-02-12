@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58ba2232_a4b692db",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-02-12T21:26:53Z",
+      "side": 1,
+      "message": "Maybe also add here:\n    # HACK(iannucci): These packages SHOULD NOT BE HERE.\n    # Remove method once Swarming Pool Task Templates are implemented.\n    # crbug.com/812428\n\nWould be nice to move this into a separate function, so we know it ends before \"if unknown\"",
+      "revId": "9551654ded1489a2a7844f3c5fda28cf86ed7b3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
