@@ -1175,7 +1175,13 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     framebufferInfo.pAttachments    = imageView->ptr();
     framebufferInfo.width           = renderArea.x + renderArea.width;
     framebufferInfo.height          = renderArea.y + renderArea.height;
-    framebufferInfo.layers          = 1;
+    if (contextVk->isRotatedAspectRatio())
+    {
+        // The surface is rotated 90/270 degrees.  This changes the aspect ratio of
+        // the surface.  Swap the width and height of the framebuffer.
+        std::swap(framebufferInfo.width, framebufferInfo.height);
+    }
+    framebufferInfo.layers = 1;
 
     vk::Framebuffer framebuffer;
     ANGLE_VK_TRY(contextVk, framebuffer.init(contextVk->getDevice(), framebufferInfo));

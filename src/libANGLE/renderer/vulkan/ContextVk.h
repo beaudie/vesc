@@ -285,6 +285,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     bool isViewportFlipEnabledForDrawFBO() const;
     bool isViewportFlipEnabledForReadFBO() const;
+    bool isRotatedAspectRatio() const;
+    float getPreRotationMatrixEntry(int index) const;
 
     // State sync with dirty bits.
     angle::Result syncState(const gl::Context *context,
@@ -690,6 +692,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     void updateDepthRange(float nearPlane, float farPlane);
     void updateFlipViewportDrawFramebuffer(const gl::State &glState);
     void updateFlipViewportReadFramebuffer(const gl::State &glState);
+    void updatePreRotationMatrix(const gl::State &glState);
 
     angle::Result updateActiveTextures(const gl::Context *context);
     angle::Result updateActiveImages(const gl::Context *context,
@@ -802,6 +805,14 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     gl::PrimitiveMode mCurrentDrawMode;
 
     WindowSurfaceVk *mCurrentWindowSurface;
+    // The vertex shader will rotate gl_Position.xy with the following pre-rotation matrix.  When
+    // the device/surface is not rotated, or when rendering to an offscreen framebuffer, this will
+    // be the identity matrix.
+    std::vector<float> mPreRotationMatrix;
+    // When the device/surface is rotated such that the surface's aspect ratio is different than
+    // the native device (e.g. 90 degrees), the width and height of the viewport, scissor, and
+    // render area must be swapped.
+    bool mRotatedAspectRatio;
 
     // Keep a cached pipeline description structure that can be used to query the pipeline cache.
     // Kept in a pointer so allocations can be aligned, and structs can be portably packed.
