@@ -704,8 +704,16 @@ def just_the_name(param):
     return param[type_name_sep_index(param) + 1:]
 
 
-def make_param(param_type, param_name):
-    return param_type + " " + param_name
+def const_if_needed(param_type, const):
+    if not const:
+        return param_type
+    if not param_type.startswith('const'):
+        param_type = 'const ' + param_type
+    return param_type.replace('**', '* const *')
+
+
+def make_param(param_type, param_name, const):
+    return const_if_needed(param_type, const) + " " + param_name
 
 
 def just_the_type_packed(param, entry):
@@ -948,12 +956,12 @@ def format_capture_method(command, cmd_name, proto, params, all_param_types, cap
         return template_capture_method_with_return_value.format(**format_args)
 
 
-def get_internal_params(cmd_name, params, cmd_packed_gl_enums):
+def get_internal_params(cmd_name, params, cmd_packed_gl_enums, const=False):
     packed_gl_enums = get_packed_enums(cmd_packed_gl_enums, cmd_name)
     return ", ".join([
         make_param(
             just_the_type_packed(param, packed_gl_enums),
-            just_the_name_packed(param, packed_gl_enums)) for param in params
+            just_the_name_packed(param, packed_gl_enums), const) for param in params
     ])
 
 
@@ -987,7 +995,7 @@ def format_libgles_entry_point_def(cmd_name, proto, params, is_explicit_context)
 
 def format_validation_proto(cmd_name, params, cmd_packed_gl_enums):
     internal_params = get_internal_params(cmd_name, ["Context *context"] + params,
-                                          cmd_packed_gl_enums)
+                                          cmd_packed_gl_enums, True)
     return template_validation_proto % (cmd_name[2:], internal_params)
 
 

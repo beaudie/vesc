@@ -17,121 +17,145 @@ namespace gl
 {
 class Context;
 
-bool ValidateBeginQueryIndexed(Context *context, GLenum target, GLuint index, QueryID idPacked);
-bool ValidateDrawTransformFeedback(Context *context, GLenum mode, TransformFeedbackID idPacked);
-bool ValidateDrawTransformFeedbackStream(Context *context,
-                                         GLenum mode,
-                                         TransformFeedbackID idPacked,
-                                         GLuint stream);
-bool ValidateEndQueryIndexed(Context *context, GLenum target, GLuint index);
-bool ValidateGetActiveSubroutineName(Context *context,
-                                     ShaderProgramID programPacked,
-                                     GLenum shadertype,
-                                     GLuint index,
-                                     GLsizei bufsize,
-                                     GLsizei *length,
-                                     GLchar *name);
-bool ValidateGetActiveSubroutineUniformName(Context *context,
-                                            ShaderProgramID programPacked,
-                                            GLenum shadertype,
-                                            GLuint index,
-                                            GLsizei bufsize,
-                                            GLsizei *length,
-                                            GLchar *name);
-bool ValidateGetActiveSubroutineUniformiv(Context *context,
-                                          ShaderProgramID programPacked,
-                                          GLenum shadertype,
-                                          GLuint index,
-                                          GLenum pname,
-                                          GLint *values);
-bool ValidateGetProgramStageiv(Context *context,
-                               ShaderProgramID programPacked,
-                               GLenum shadertype,
-                               GLenum pname,
-                               GLint *values);
-bool ValidateGetQueryIndexediv(Context *context,
-                               GLenum target,
-                               GLuint index,
-                               GLenum pname,
-                               GLint *params);
-bool ValidateGetSubroutineIndex(Context *context,
-                                ShaderProgramID programPacked,
-                                GLenum shadertype,
+bool ValidateBeginQueryIndexed(const Context *context,
+                               const GLenum target,
+                               const GLuint index,
+                               const QueryID idPacked);
+bool ValidateDrawTransformFeedback(const Context *context,
+                                   const GLenum mode,
+                                   const TransformFeedbackID idPacked);
+bool ValidateDrawTransformFeedbackStream(const Context *context,
+                                         const GLenum mode,
+                                         const TransformFeedbackID idPacked,
+                                         const GLuint stream);
+bool ValidateEndQueryIndexed(const Context *context, const GLenum target, const GLuint index);
+bool ValidateGetActiveSubroutineName(const Context *context,
+                                     const ShaderProgramID programPacked,
+                                     const GLenum shadertype,
+                                     const GLuint index,
+                                     const GLsizei bufsize,
+                                     const GLsizei *length,
+                                     const GLchar *name);
+bool ValidateGetActiveSubroutineUniformName(const Context *context,
+                                            const ShaderProgramID programPacked,
+                                            const GLenum shadertype,
+                                            const GLuint index,
+                                            const GLsizei bufsize,
+                                            const GLsizei *length,
+                                            const GLchar *name);
+bool ValidateGetActiveSubroutineUniformiv(const Context *context,
+                                          const ShaderProgramID programPacked,
+                                          const GLenum shadertype,
+                                          const GLuint index,
+                                          const GLenum pname,
+                                          const GLint *values);
+bool ValidateGetProgramStageiv(const Context *context,
+                               const ShaderProgramID programPacked,
+                               const GLenum shadertype,
+                               const GLenum pname,
+                               const GLint *values);
+bool ValidateGetQueryIndexediv(const Context *context,
+                               const GLenum target,
+                               const GLuint index,
+                               const GLenum pname,
+                               const GLint *params);
+bool ValidateGetSubroutineIndex(const Context *context,
+                                const ShaderProgramID programPacked,
+                                const GLenum shadertype,
                                 const GLchar *name);
-bool ValidateGetSubroutineUniformLocation(Context *context,
-                                          ShaderProgramID programPacked,
-                                          GLenum shadertype,
+bool ValidateGetSubroutineUniformLocation(const Context *context,
+                                          const ShaderProgramID programPacked,
+                                          const GLenum shadertype,
                                           const GLchar *name);
-bool ValidateGetUniformSubroutineuiv(Context *context,
-                                     GLenum shadertype,
-                                     GLint location,
-                                     GLuint *params);
-bool ValidateGetUniformdv(Context *context,
-                          ShaderProgramID programPacked,
-                          GLint location,
-                          GLdouble *params);
-bool ValidatePatchParameterfv(Context *context, GLenum pname, const GLfloat *values);
-bool ValidateUniform1d(Context *context, GLint location, GLdouble x);
-bool ValidateUniform1dv(Context *context, GLint location, GLsizei count, const GLdouble *value);
-bool ValidateUniform2d(Context *context, GLint location, GLdouble x, GLdouble y);
-bool ValidateUniform2dv(Context *context, GLint location, GLsizei count, const GLdouble *value);
-bool ValidateUniform3d(Context *context, GLint location, GLdouble x, GLdouble y, GLdouble z);
-bool ValidateUniform3dv(Context *context, GLint location, GLsizei count, const GLdouble *value);
-bool ValidateUniform4d(Context *context,
-                       GLint location,
-                       GLdouble x,
-                       GLdouble y,
-                       GLdouble z,
-                       GLdouble w);
-bool ValidateUniform4dv(Context *context, GLint location, GLsizei count, const GLdouble *value);
-bool ValidateUniformMatrix2dv(Context *context,
-                              GLint location,
-                              GLsizei count,
-                              GLboolean transpose,
+bool ValidateGetUniformSubroutineuiv(const Context *context,
+                                     const GLenum shadertype,
+                                     const GLint location,
+                                     const GLuint *params);
+bool ValidateGetUniformdv(const Context *context,
+                          const ShaderProgramID programPacked,
+                          const GLint location,
+                          const GLdouble *params);
+bool ValidatePatchParameterfv(const Context *context, const GLenum pname, const GLfloat *values);
+bool ValidateUniform1d(const Context *context, const GLint location, const GLdouble x);
+bool ValidateUniform1dv(const Context *context,
+                        const GLint location,
+                        const GLsizei count,
+                        const GLdouble *value);
+bool ValidateUniform2d(const Context *context,
+                       const GLint location,
+                       const GLdouble x,
+                       const GLdouble y);
+bool ValidateUniform2dv(const Context *context,
+                        const GLint location,
+                        const GLsizei count,
+                        const GLdouble *value);
+bool ValidateUniform3d(const Context *context,
+                       const GLint location,
+                       const GLdouble x,
+                       const GLdouble y,
+                       const GLdouble z);
+bool ValidateUniform3dv(const Context *context,
+                        const GLint location,
+                        const GLsizei count,
+                        const GLdouble *value);
+bool ValidateUniform4d(const Context *context,
+                       const GLint location,
+                       const GLdouble x,
+                       const GLdouble y,
+                       const GLdouble z,
+                       const GLdouble w);
+bool ValidateUniform4dv(const Context *context,
+                        const GLint location,
+                        const GLsizei count,
+                        const GLdouble *value);
+bool ValidateUniformMatrix2dv(const Context *context,
+                              const GLint location,
+                              const GLsizei count,
+                              const GLboolean transpose,
                               const GLdouble *value);
-bool ValidateUniformMatrix2x3dv(Context *context,
-                                GLint location,
-                                GLsizei count,
-                                GLboolean transpose,
+bool ValidateUniformMatrix2x3dv(const Context *context,
+                                const GLint location,
+                                const GLsizei count,
+                                const GLboolean transpose,
                                 const GLdouble *value);
-bool ValidateUniformMatrix2x4dv(Context *context,
-                                GLint location,
-                                GLsizei count,
-                                GLboolean transpose,
+bool ValidateUniformMatrix2x4dv(const Context *context,
+                                const GLint location,
+                                const GLsizei count,
+                                const GLboolean transpose,
                                 const GLdouble *value);
-bool ValidateUniformMatrix3dv(Context *context,
-                              GLint location,
-                              GLsizei count,
-                              GLboolean transpose,
+bool ValidateUniformMatrix3dv(const Context *context,
+                              const GLint location,
+                              const GLsizei count,
+                              const GLboolean transpose,
                               const GLdouble *value);
-bool ValidateUniformMatrix3x2dv(Context *context,
-                                GLint location,
-                                GLsizei count,
-                                GLboolean transpose,
+bool ValidateUniformMatrix3x2dv(const Context *context,
+                                const GLint location,
+                                const GLsizei count,
+                                const GLboolean transpose,
                                 const GLdouble *value);
-bool ValidateUniformMatrix3x4dv(Context *context,
-                                GLint location,
-                                GLsizei count,
-                                GLboolean transpose,
+bool ValidateUniformMatrix3x4dv(const Context *context,
+                                const GLint location,
+                                const GLsizei count,
+                                const GLboolean transpose,
                                 const GLdouble *value);
-bool ValidateUniformMatrix4dv(Context *context,
-                              GLint location,
-                              GLsizei count,
-                              GLboolean transpose,
+bool ValidateUniformMatrix4dv(const Context *context,
+                              const GLint location,
+                              const GLsizei count,
+                              const GLboolean transpose,
                               const GLdouble *value);
-bool ValidateUniformMatrix4x2dv(Context *context,
-                                GLint location,
-                                GLsizei count,
-                                GLboolean transpose,
+bool ValidateUniformMatrix4x2dv(const Context *context,
+                                const GLint location,
+                                const GLsizei count,
+                                const GLboolean transpose,
                                 const GLdouble *value);
-bool ValidateUniformMatrix4x3dv(Context *context,
-                                GLint location,
-                                GLsizei count,
-                                GLboolean transpose,
+bool ValidateUniformMatrix4x3dv(const Context *context,
+                                const GLint location,
+                                const GLsizei count,
+                                const GLboolean transpose,
                                 const GLdouble *value);
-bool ValidateUniformSubroutinesuiv(Context *context,
-                                   GLenum shadertype,
-                                   GLsizei count,
+bool ValidateUniformSubroutinesuiv(const Context *context,
+                                   const GLenum shadertype,
+                                   const GLsizei count,
                                    const GLuint *indices);
 }  // namespace gl
 

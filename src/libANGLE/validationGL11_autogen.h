@@ -17,47 +17,50 @@ namespace gl
 {
 class Context;
 
-bool ValidateAreTexturesResident(Context *context,
-                                 GLsizei n,
+bool ValidateAreTexturesResident(const Context *context,
+                                 const GLsizei n,
                                  const GLuint *textures,
-                                 GLboolean *residences);
-bool ValidateArrayElement(Context *context, GLint i);
-bool ValidateCopyTexImage1D(Context *context,
-                            GLenum target,
-                            GLint level,
-                            GLenum internalformat,
-                            GLint x,
-                            GLint y,
-                            GLsizei width,
-                            GLint border);
-bool ValidateCopyTexSubImage1D(Context *context,
-                               GLenum target,
-                               GLint level,
-                               GLint xoffset,
-                               GLint x,
-                               GLint y,
-                               GLsizei width);
-bool ValidateEdgeFlagPointer(Context *context, GLsizei stride, const void *pointer);
-bool ValidateIndexPointer(Context *context, GLenum type, GLsizei stride, const void *pointer);
-bool ValidateIndexub(Context *context, GLubyte c);
-bool ValidateIndexubv(Context *context, const GLubyte *c);
-bool ValidateInterleavedArrays(Context *context,
-                               GLenum format,
-                               GLsizei stride,
+                                 const GLboolean *residences);
+bool ValidateArrayElement(const Context *context, const GLint i);
+bool ValidateCopyTexImage1D(const Context *context,
+                            const GLenum target,
+                            const GLint level,
+                            const GLenum internalformat,
+                            const GLint x,
+                            const GLint y,
+                            const GLsizei width,
+                            const GLint border);
+bool ValidateCopyTexSubImage1D(const Context *context,
+                               const GLenum target,
+                               const GLint level,
+                               const GLint xoffset,
+                               const GLint x,
+                               const GLint y,
+                               const GLsizei width);
+bool ValidateEdgeFlagPointer(const Context *context, const GLsizei stride, const void *pointer);
+bool ValidateIndexPointer(const Context *context,
+                          const GLenum type,
+                          const GLsizei stride,
+                          const void *pointer);
+bool ValidateIndexub(const Context *context, const GLubyte c);
+bool ValidateIndexubv(const Context *context, const GLubyte *c);
+bool ValidateInterleavedArrays(const Context *context,
+                               const GLenum format,
+                               const GLsizei stride,
                                const void *pointer);
-bool ValidatePopClientAttrib(Context *context);
-bool ValidatePrioritizeTextures(Context *context,
-                                GLsizei n,
+bool ValidatePopClientAttrib(const Context *context);
+bool ValidatePrioritizeTextures(const Context *context,
+                                const GLsizei n,
                                 const GLuint *textures,
                                 const GLfloat *priorities);
-bool ValidatePushClientAttrib(Context *context, GLbitfield mask);
-bool ValidateTexSubImage1D(Context *context,
-                           GLenum target,
-                           GLint level,
-                           GLint xoffset,
-                           GLsizei width,
-                           GLenum format,
-                           GLenum type,
+bool ValidatePushClientAttrib(const Context *context, const GLbitfield mask);
+bool ValidateTexSubImage1D(const Context *context,
+                           const GLenum target,
+                           const GLint level,
+                           const GLint xoffset,
+                           const GLsizei width,
+                           const GLenum format,
+                           const GLenum type,
                            const void *pixels);
 }  // namespace gl
 

@@ -17,74 +17,76 @@ namespace gl
 {
 class Context;
 
-bool ValidateClearBufferData(Context *context,
-                             GLenum target,
-                             GLenum internalformat,
-                             GLenum format,
-                             GLenum type,
+bool ValidateClearBufferData(const Context *context,
+                             const GLenum target,
+                             const GLenum internalformat,
+                             const GLenum format,
+                             const GLenum type,
                              const void *data);
-bool ValidateClearBufferSubData(Context *context,
-                                GLenum target,
-                                GLenum internalformat,
-                                GLintptr offset,
-                                GLsizeiptr size,
-                                GLenum format,
-                                GLenum type,
+bool ValidateClearBufferSubData(const Context *context,
+                                const GLenum target,
+                                const GLenum internalformat,
+                                const GLintptr offset,
+                                const GLsizeiptr size,
+                                const GLenum format,
+                                const GLenum type,
                                 const void *data);
-bool ValidateGetInternalformati64v(Context *context,
-                                   GLenum target,
-                                   GLenum internalformat,
-                                   GLenum pname,
-                                   GLsizei bufSize,
-                                   GLint64 *params);
-bool ValidateGetProgramResourceLocationIndex(Context *context,
-                                             ShaderProgramID programPacked,
-                                             GLenum programInterface,
+bool ValidateGetInternalformati64v(const Context *context,
+                                   const GLenum target,
+                                   const GLenum internalformat,
+                                   const GLenum pname,
+                                   const GLsizei bufSize,
+                                   const GLint64 *params);
+bool ValidateGetProgramResourceLocationIndex(const Context *context,
+                                             const ShaderProgramID programPacked,
+                                             const GLenum programInterface,
                                              const GLchar *name);
-bool ValidateInvalidateBufferData(Context *context, BufferID bufferPacked);
-bool ValidateInvalidateBufferSubData(Context *context,
-                                     BufferID bufferPacked,
-                                     GLintptr offset,
-                                     GLsizeiptr length);
-bool ValidateInvalidateTexImage(Context *context, TextureID texturePacked, GLint level);
-bool ValidateInvalidateTexSubImage(Context *context,
-                                   TextureID texturePacked,
-                                   GLint level,
-                                   GLint xoffset,
-                                   GLint yoffset,
-                                   GLint zoffset,
-                                   GLsizei width,
-                                   GLsizei height,
-                                   GLsizei depth);
-bool ValidateMultiDrawArraysIndirect(Context *context,
-                                     GLenum mode,
+bool ValidateInvalidateBufferData(const Context *context, const BufferID bufferPacked);
+bool ValidateInvalidateBufferSubData(const Context *context,
+                                     const BufferID bufferPacked,
+                                     const GLintptr offset,
+                                     const GLsizeiptr length);
+bool ValidateInvalidateTexImage(const Context *context,
+                                const TextureID texturePacked,
+                                const GLint level);
+bool ValidateInvalidateTexSubImage(const Context *context,
+                                   const TextureID texturePacked,
+                                   const GLint level,
+                                   const GLint xoffset,
+                                   const GLint yoffset,
+                                   const GLint zoffset,
+                                   const GLsizei width,
+                                   const GLsizei height,
+                                   const GLsizei depth);
+bool ValidateMultiDrawArraysIndirect(const Context *context,
+                                     const GLenum mode,
                                      const void *indirect,
-                                     GLsizei drawcount,
-                                     GLsizei stride);
-bool ValidateMultiDrawElementsIndirect(Context *context,
-                                       GLenum mode,
-                                       GLenum type,
+                                     const GLsizei drawcount,
+                                     const GLsizei stride);
+bool ValidateMultiDrawElementsIndirect(const Context *context,
+                                       const GLenum mode,
+                                       const GLenum type,
                                        const void *indirect,
-                                       GLsizei drawcount,
-                                       GLsizei stride);
-bool ValidateShaderStorageBlockBinding(Context *context,
-                                       ShaderProgramID programPacked,
-                                       GLuint storageBlockIndex,
-                                       GLuint storageBlockBinding);
-bool ValidateTextureView(Context *context,
-                         TextureID texturePacked,
-                         GLenum target,
-                         GLuint origtexture,
-                         GLenum internalformat,
-                         GLuint minlevel,
-                         GLuint numlevels,
-                         GLuint minlayer,
-                         GLuint numlayers);
-bool ValidateVertexAttribLFormat(Context *context,
-                                 GLuint attribindex,
-                                 GLint size,
-                                 GLenum type,
-                                 GLuint relativeoffset);
+                                       const GLsizei drawcount,
+                                       const GLsizei stride);
+bool ValidateShaderStorageBlockBinding(const Context *context,
+                                       const ShaderProgramID programPacked,
+                                       const GLuint storageBlockIndex,
+                                       const GLuint storageBlockBinding);
+bool ValidateTextureView(const Context *context,
+                         const TextureID texturePacked,
+                         const GLenum target,
+                         const GLuint origtexture,
+                         const GLenum internalformat,
+                         const GLuint minlevel,
+                         const GLuint numlevels,
+                         const GLuint minlayer,
+                         const GLuint numlayers);
+bool ValidateVertexAttribLFormat(const Context *context,
+                                 const GLuint attribindex,
+                                 const GLint size,
+                                 const GLenum type,
+                                 const GLuint relativeoffset);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_GL43_AUTOGEN_H_

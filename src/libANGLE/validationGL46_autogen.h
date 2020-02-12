@@ -17,24 +17,27 @@ namespace gl
 {
 class Context;
 
-bool ValidateMultiDrawArraysIndirectCount(Context *context,
-                                          GLenum mode,
+bool ValidateMultiDrawArraysIndirectCount(const Context *context,
+                                          const GLenum mode,
                                           const void *indirect,
-                                          GLintptr drawcount,
-                                          GLsizei maxdrawcount,
-                                          GLsizei stride);
-bool ValidateMultiDrawElementsIndirectCount(Context *context,
-                                            GLenum mode,
-                                            GLenum type,
+                                          const GLintptr drawcount,
+                                          const GLsizei maxdrawcount,
+                                          const GLsizei stride);
+bool ValidateMultiDrawElementsIndirectCount(const Context *context,
+                                            const GLenum mode,
+                                            const GLenum type,
                                             const void *indirect,
-                                            GLintptr drawcount,
-                                            GLsizei maxdrawcount,
-                                            GLsizei stride);
-bool ValidatePolygonOffsetClamp(Context *context, GLfloat factor, GLfloat units, GLfloat clamp);
-bool ValidateSpecializeShader(Context *context,
-                              GLuint shader,
+                                            const GLintptr drawcount,
+                                            const GLsizei maxdrawcount,
+                                            const GLsizei stride);
+bool ValidatePolygonOffsetClamp(const Context *context,
+                                const GLfloat factor,
+                                const GLfloat units,
+                                const GLfloat clamp);
+bool ValidateSpecializeShader(const Context *context,
+                              const GLuint shader,
                               const GLchar *pEntryPoint,
-                              GLuint numSpecializationConstants,
+                              const GLuint numSpecializationConstants,
                               const GLuint *pConstantIndex,
                               const GLuint *pConstantValue);
 }  // namespace gl

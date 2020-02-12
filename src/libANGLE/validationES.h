@@ -506,7 +506,7 @@ bool ValidateGetShaderivBase(Context *context,
                              GLenum pname,
                              GLsizei *length);
 
-bool ValidateGetTexParameterBase(Context *context,
+bool ValidateGetTexParameterBase(const Context *context,
                                  TextureType target,
                                  GLenum pname,
                                  GLsizei *length);
@@ -629,7 +629,7 @@ bool ValidateFramebufferNotMultisampled(Context *context,
                                         Framebuffer *framebuffer,
                                         bool needResourceSamples);
 
-bool ValidateMultitextureUnit(Context *context, GLenum texture);
+bool ValidateMultitextureUnit(const Context *context, GLenum texture);
 
 bool ValidateTransformFeedbackPrimitiveMode(const Context *context,
                                             PrimitiveMode transformFeedbackPrimitiveMode,

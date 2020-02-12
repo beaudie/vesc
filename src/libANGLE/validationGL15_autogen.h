@@ -17,13 +17,18 @@ namespace gl
 {
 class Context;
 
-bool ValidateGetBufferSubData(Context *context,
-                              GLenum target,
-                              GLintptr offset,
-                              GLsizeiptr size,
-                              void *data);
-bool ValidateGetQueryObjectiv(Context *context, QueryID idPacked, GLenum pname, GLint *params);
-bool ValidateMapBuffer(Context *context, BufferBinding targetPacked, GLenum access);
+bool ValidateGetBufferSubData(const Context *context,
+                              const GLenum target,
+                              const GLintptr offset,
+                              const GLsizeiptr size,
+                              const void *data);
+bool ValidateGetQueryObjectiv(const Context *context,
+                              const QueryID idPacked,
+                              const GLenum pname,
+                              const GLint *params);
+bool ValidateMapBuffer(const Context *context,
+                       const BufferBinding targetPacked,
+                       const GLenum access);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_GL15_AUTOGEN_H_

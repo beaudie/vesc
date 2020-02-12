@@ -17,29 +17,29 @@ namespace gl
 {
 class Context;
 
-bool ValidateMultiDrawElementsBaseVertex(Context *context,
-                                         PrimitiveMode modePacked,
+bool ValidateMultiDrawElementsBaseVertex(const Context *context,
+                                         const PrimitiveMode modePacked,
                                          const GLsizei *count,
-                                         DrawElementsType typePacked,
+                                         const DrawElementsType typePacked,
                                          const void *const *indices,
-                                         GLsizei drawcount,
+                                         const GLsizei drawcount,
                                          const GLint *basevertex);
-bool ValidateProvokingVertex(Context *context, ProvokingVertexConvention modePacked);
-bool ValidateTexImage2DMultisample(Context *context,
-                                   GLenum target,
-                                   GLsizei samples,
-                                   GLenum internalformat,
-                                   GLsizei width,
-                                   GLsizei height,
-                                   GLboolean fixedsamplelocations);
-bool ValidateTexImage3DMultisample(Context *context,
-                                   GLenum target,
-                                   GLsizei samples,
-                                   GLenum internalformat,
-                                   GLsizei width,
-                                   GLsizei height,
-                                   GLsizei depth,
-                                   GLboolean fixedsamplelocations);
+bool ValidateProvokingVertex(const Context *context, const ProvokingVertexConvention modePacked);
+bool ValidateTexImage2DMultisample(const Context *context,
+                                   const GLenum target,
+                                   const GLsizei samples,
+                                   const GLenum internalformat,
+                                   const GLsizei width,
+                                   const GLsizei height,
+                                   const GLboolean fixedsamplelocations);
+bool ValidateTexImage3DMultisample(const Context *context,
+                                   const GLenum target,
+                                   const GLsizei samples,
+                                   const GLenum internalformat,
+                                   const GLsizei width,
+                                   const GLsizei height,
+                                   const GLsizei depth,
+                                   const GLboolean fixedsamplelocations);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_GL32_AUTOGEN_H_

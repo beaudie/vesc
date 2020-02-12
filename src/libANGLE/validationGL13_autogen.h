@@ -17,68 +17,104 @@ namespace gl
 {
 class Context;
 
-bool ValidateCompressedTexImage1D(Context *context,
-                                  GLenum target,
-                                  GLint level,
-                                  GLenum internalformat,
-                                  GLsizei width,
-                                  GLint border,
-                                  GLsizei imageSize,
+bool ValidateCompressedTexImage1D(const Context *context,
+                                  const GLenum target,
+                                  const GLint level,
+                                  const GLenum internalformat,
+                                  const GLsizei width,
+                                  const GLint border,
+                                  const GLsizei imageSize,
                                   const void *data);
-bool ValidateCompressedTexSubImage1D(Context *context,
-                                     GLenum target,
-                                     GLint level,
-                                     GLint xoffset,
-                                     GLsizei width,
-                                     GLenum format,
-                                     GLsizei imageSize,
+bool ValidateCompressedTexSubImage1D(const Context *context,
+                                     const GLenum target,
+                                     const GLint level,
+                                     const GLint xoffset,
+                                     const GLsizei width,
+                                     const GLenum format,
+                                     const GLsizei imageSize,
                                      const void *data);
-bool ValidateGetCompressedTexImage(Context *context, GLenum target, GLint level, void *img);
-bool ValidateLoadTransposeMatrixd(Context *context, const GLdouble *m);
-bool ValidateLoadTransposeMatrixf(Context *context, const GLfloat *m);
-bool ValidateMultTransposeMatrixd(Context *context, const GLdouble *m);
-bool ValidateMultTransposeMatrixf(Context *context, const GLfloat *m);
-bool ValidateMultiTexCoord1d(Context *context, GLenum target, GLdouble s);
-bool ValidateMultiTexCoord1dv(Context *context, GLenum target, const GLdouble *v);
-bool ValidateMultiTexCoord1f(Context *context, GLenum target, GLfloat s);
-bool ValidateMultiTexCoord1fv(Context *context, GLenum target, const GLfloat *v);
-bool ValidateMultiTexCoord1i(Context *context, GLenum target, GLint s);
-bool ValidateMultiTexCoord1iv(Context *context, GLenum target, const GLint *v);
-bool ValidateMultiTexCoord1s(Context *context, GLenum target, GLshort s);
-bool ValidateMultiTexCoord1sv(Context *context, GLenum target, const GLshort *v);
-bool ValidateMultiTexCoord2d(Context *context, GLenum target, GLdouble s, GLdouble t);
-bool ValidateMultiTexCoord2dv(Context *context, GLenum target, const GLdouble *v);
-bool ValidateMultiTexCoord2f(Context *context, GLenum target, GLfloat s, GLfloat t);
-bool ValidateMultiTexCoord2fv(Context *context, GLenum target, const GLfloat *v);
-bool ValidateMultiTexCoord2i(Context *context, GLenum target, GLint s, GLint t);
-bool ValidateMultiTexCoord2iv(Context *context, GLenum target, const GLint *v);
-bool ValidateMultiTexCoord2s(Context *context, GLenum target, GLshort s, GLshort t);
-bool ValidateMultiTexCoord2sv(Context *context, GLenum target, const GLshort *v);
-bool ValidateMultiTexCoord3d(Context *context, GLenum target, GLdouble s, GLdouble t, GLdouble r);
-bool ValidateMultiTexCoord3dv(Context *context, GLenum target, const GLdouble *v);
-bool ValidateMultiTexCoord3f(Context *context, GLenum target, GLfloat s, GLfloat t, GLfloat r);
-bool ValidateMultiTexCoord3fv(Context *context, GLenum target, const GLfloat *v);
-bool ValidateMultiTexCoord3i(Context *context, GLenum target, GLint s, GLint t, GLint r);
-bool ValidateMultiTexCoord3iv(Context *context, GLenum target, const GLint *v);
-bool ValidateMultiTexCoord3s(Context *context, GLenum target, GLshort s, GLshort t, GLshort r);
-bool ValidateMultiTexCoord3sv(Context *context, GLenum target, const GLshort *v);
-bool ValidateMultiTexCoord4d(Context *context,
-                             GLenum target,
-                             GLdouble s,
-                             GLdouble t,
-                             GLdouble r,
-                             GLdouble q);
-bool ValidateMultiTexCoord4dv(Context *context, GLenum target, const GLdouble *v);
-bool ValidateMultiTexCoord4fv(Context *context, GLenum target, const GLfloat *v);
-bool ValidateMultiTexCoord4i(Context *context, GLenum target, GLint s, GLint t, GLint r, GLint q);
-bool ValidateMultiTexCoord4iv(Context *context, GLenum target, const GLint *v);
-bool ValidateMultiTexCoord4s(Context *context,
-                             GLenum target,
-                             GLshort s,
-                             GLshort t,
-                             GLshort r,
-                             GLshort q);
-bool ValidateMultiTexCoord4sv(Context *context, GLenum target, const GLshort *v);
+bool ValidateGetCompressedTexImage(const Context *context,
+                                   const GLenum target,
+                                   const GLint level,
+                                   const void *img);
+bool ValidateLoadTransposeMatrixd(const Context *context, const GLdouble *m);
+bool ValidateLoadTransposeMatrixf(const Context *context, const GLfloat *m);
+bool ValidateMultTransposeMatrixd(const Context *context, const GLdouble *m);
+bool ValidateMultTransposeMatrixf(const Context *context, const GLfloat *m);
+bool ValidateMultiTexCoord1d(const Context *context, const GLenum target, const GLdouble s);
+bool ValidateMultiTexCoord1dv(const Context *context, const GLenum target, const GLdouble *v);
+bool ValidateMultiTexCoord1f(const Context *context, const GLenum target, const GLfloat s);
+bool ValidateMultiTexCoord1fv(const Context *context, const GLenum target, const GLfloat *v);
+bool ValidateMultiTexCoord1i(const Context *context, const GLenum target, const GLint s);
+bool ValidateMultiTexCoord1iv(const Context *context, const GLenum target, const GLint *v);
+bool ValidateMultiTexCoord1s(const Context *context, const GLenum target, const GLshort s);
+bool ValidateMultiTexCoord1sv(const Context *context, const GLenum target, const GLshort *v);
+bool ValidateMultiTexCoord2d(const Context *context,
+                             const GLenum target,
+                             const GLdouble s,
+                             const GLdouble t);
+bool ValidateMultiTexCoord2dv(const Context *context, const GLenum target, const GLdouble *v);
+bool ValidateMultiTexCoord2f(const Context *context,
+                             const GLenum target,
+                             const GLfloat s,
+                             const GLfloat t);
+bool ValidateMultiTexCoord2fv(const Context *context, const GLenum target, const GLfloat *v);
+bool ValidateMultiTexCoord2i(const Context *context,
+                             const GLenum target,
+                             const GLint s,
+                             const GLint t);
+bool ValidateMultiTexCoord2iv(const Context *context, const GLenum target, const GLint *v);
+bool ValidateMultiTexCoord2s(const Context *context,
+                             const GLenum target,
+                             const GLshort s,
+                             const GLshort t);
+bool ValidateMultiTexCoord2sv(const Context *context, const GLenum target, const GLshort *v);
+bool ValidateMultiTexCoord3d(const Context *context,
+                             const GLenum target,
+                             const GLdouble s,
+                             const GLdouble t,
+                             const GLdouble r);
+bool ValidateMultiTexCoord3dv(const Context *context, const GLenum target, const GLdouble *v);
+bool ValidateMultiTexCoord3f(const Context *context,
+                             const GLenum target,
+                             const GLfloat s,
+                             const GLfloat t,
+                             const GLfloat r);
+bool ValidateMultiTexCoord3fv(const Context *context, const GLenum target, const GLfloat *v);
+bool ValidateMultiTexCoord3i(const Context *context,
+                             const GLenum target,
+                             const GLint s,
+                             const GLint t,
+                             const GLint r);
+bool ValidateMultiTexCoord3iv(const Context *context, const GLenum target, const GLint *v);
+bool ValidateMultiTexCoord3s(const Context *context,
+                             const GLenum target,
+                             const GLshort s,
+                             const GLshort t,
+                             const GLshort r);
+bool ValidateMultiTexCoord3sv(const Context *context, const GLenum target, const GLshort *v);
+bool ValidateMultiTexCoord4d(const Context *context,
+                             const GLenum target,
+                             const GLdouble s,
+                             const GLdouble t,
+                             const GLdouble r,
+                             const GLdouble q);
+bool ValidateMultiTexCoord4dv(const Context *context, const GLenum target, const GLdouble *v);
+bool ValidateMultiTexCoord4fv(const Context *context, const GLenum target, const GLfloat *v);
+bool ValidateMultiTexCoord4i(const Context *context,
+                             const GLenum target,
+                             const GLint s,
+                             const GLint t,
+                             const GLint r,
+                             const GLint q);
+bool ValidateMultiTexCoord4iv(const Context *context, const GLenum target, const GLint *v);
+bool ValidateMultiTexCoord4s(const Context *context,
+                             const GLenum target,
+                             const GLshort s,
+                             const GLshort t,
+                             const GLshort r,
+                             const GLshort q);
+bool ValidateMultiTexCoord4sv(const Context *context, const GLenum target, const GLshort *v);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_GL13_AUTOGEN_H_

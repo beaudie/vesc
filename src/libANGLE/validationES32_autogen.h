@@ -17,201 +17,212 @@ namespace gl
 {
 class Context;
 
-bool ValidateBlendBarrier(Context *context);
-bool ValidateBlendEquationSeparatei(Context *context, GLuint buf, GLenum modeRGB, GLenum modeAlpha);
-bool ValidateBlendEquationi(Context *context, GLuint buf, GLenum mode);
-bool ValidateBlendFuncSeparatei(Context *context,
-                                GLuint buf,
-                                GLenum srcRGB,
-                                GLenum dstRGB,
-                                GLenum srcAlpha,
-                                GLenum dstAlpha);
-bool ValidateBlendFunci(Context *context, GLuint buf, GLenum src, GLenum dst);
-bool ValidateColorMaski(Context *context,
-                        GLuint index,
-                        GLboolean r,
-                        GLboolean g,
-                        GLboolean b,
-                        GLboolean a);
-bool ValidateCopyImageSubData(Context *context,
-                              GLuint srcName,
-                              GLenum srcTarget,
-                              GLint srcLevel,
-                              GLint srcX,
-                              GLint srcY,
-                              GLint srcZ,
-                              GLuint dstName,
-                              GLenum dstTarget,
-                              GLint dstLevel,
-                              GLint dstX,
-                              GLint dstY,
-                              GLint dstZ,
-                              GLsizei srcWidth,
-                              GLsizei srcHeight,
-                              GLsizei srcDepth);
-bool ValidateDebugMessageCallback(Context *context, GLDEBUGPROC callback, const void *userParam);
-bool ValidateDebugMessageControl(Context *context,
-                                 GLenum source,
-                                 GLenum type,
-                                 GLenum severity,
-                                 GLsizei count,
+bool ValidateBlendBarrier(const Context *context);
+bool ValidateBlendEquationSeparatei(const Context *context,
+                                    const GLuint buf,
+                                    const GLenum modeRGB,
+                                    const GLenum modeAlpha);
+bool ValidateBlendEquationi(const Context *context, const GLuint buf, const GLenum mode);
+bool ValidateBlendFuncSeparatei(const Context *context,
+                                const GLuint buf,
+                                const GLenum srcRGB,
+                                const GLenum dstRGB,
+                                const GLenum srcAlpha,
+                                const GLenum dstAlpha);
+bool ValidateBlendFunci(const Context *context,
+                        const GLuint buf,
+                        const GLenum src,
+                        const GLenum dst);
+bool ValidateColorMaski(const Context *context,
+                        const GLuint index,
+                        const GLboolean r,
+                        const GLboolean g,
+                        const GLboolean b,
+                        const GLboolean a);
+bool ValidateCopyImageSubData(const Context *context,
+                              const GLuint srcName,
+                              const GLenum srcTarget,
+                              const GLint srcLevel,
+                              const GLint srcX,
+                              const GLint srcY,
+                              const GLint srcZ,
+                              const GLuint dstName,
+                              const GLenum dstTarget,
+                              const GLint dstLevel,
+                              const GLint dstX,
+                              const GLint dstY,
+                              const GLint dstZ,
+                              const GLsizei srcWidth,
+                              const GLsizei srcHeight,
+                              const GLsizei srcDepth);
+bool ValidateDebugMessageCallback(const Context *context,
+                                  const GLDEBUGPROC callback,
+                                  const void *userParam);
+bool ValidateDebugMessageControl(const Context *context,
+                                 const GLenum source,
+                                 const GLenum type,
+                                 const GLenum severity,
+                                 const GLsizei count,
                                  const GLuint *ids,
-                                 GLboolean enabled);
-bool ValidateDebugMessageInsert(Context *context,
-                                GLenum source,
-                                GLenum type,
-                                GLuint id,
-                                GLenum severity,
-                                GLsizei length,
+                                 const GLboolean enabled);
+bool ValidateDebugMessageInsert(const Context *context,
+                                const GLenum source,
+                                const GLenum type,
+                                const GLuint id,
+                                const GLenum severity,
+                                const GLsizei length,
                                 const GLchar *buf);
-bool ValidateDisablei(Context *context, GLenum target, GLuint index);
-bool ValidateDrawElementsBaseVertex(Context *context,
-                                    PrimitiveMode modePacked,
-                                    GLsizei count,
-                                    DrawElementsType typePacked,
+bool ValidateDisablei(const Context *context, const GLenum target, const GLuint index);
+bool ValidateDrawElementsBaseVertex(const Context *context,
+                                    const PrimitiveMode modePacked,
+                                    const GLsizei count,
+                                    const DrawElementsType typePacked,
                                     const void *indices,
-                                    GLint basevertex);
-bool ValidateDrawElementsInstancedBaseVertex(Context *context,
-                                             PrimitiveMode modePacked,
-                                             GLsizei count,
-                                             DrawElementsType typePacked,
+                                    const GLint basevertex);
+bool ValidateDrawElementsInstancedBaseVertex(const Context *context,
+                                             const PrimitiveMode modePacked,
+                                             const GLsizei count,
+                                             const DrawElementsType typePacked,
                                              const void *indices,
-                                             GLsizei instancecount,
-                                             GLint basevertex);
-bool ValidateDrawRangeElementsBaseVertex(Context *context,
-                                         PrimitiveMode modePacked,
-                                         GLuint start,
-                                         GLuint end,
-                                         GLsizei count,
-                                         DrawElementsType typePacked,
+                                             const GLsizei instancecount,
+                                             const GLint basevertex);
+bool ValidateDrawRangeElementsBaseVertex(const Context *context,
+                                         const PrimitiveMode modePacked,
+                                         const GLuint start,
+                                         const GLuint end,
+                                         const GLsizei count,
+                                         const DrawElementsType typePacked,
                                          const void *indices,
-                                         GLint basevertex);
-bool ValidateEnablei(Context *context, GLenum target, GLuint index);
-bool ValidateFramebufferTexture(Context *context,
-                                GLenum target,
-                                GLenum attachment,
-                                TextureID texturePacked,
-                                GLint level);
-bool ValidateGetDebugMessageLog(Context *context,
-                                GLuint count,
-                                GLsizei bufSize,
-                                GLenum *sources,
-                                GLenum *types,
-                                GLuint *ids,
-                                GLenum *severities,
-                                GLsizei *lengths,
-                                GLchar *messageLog);
-bool ValidateGetGraphicsResetStatus(Context *context);
-bool ValidateGetObjectLabel(Context *context,
-                            GLenum identifier,
-                            GLuint name,
-                            GLsizei bufSize,
-                            GLsizei *length,
-                            GLchar *label);
-bool ValidateGetObjectPtrLabel(Context *context,
+                                         const GLint basevertex);
+bool ValidateEnablei(const Context *context, const GLenum target, const GLuint index);
+bool ValidateFramebufferTexture(const Context *context,
+                                const GLenum target,
+                                const GLenum attachment,
+                                const TextureID texturePacked,
+                                const GLint level);
+bool ValidateGetDebugMessageLog(const Context *context,
+                                const GLuint count,
+                                const GLsizei bufSize,
+                                const GLenum *sources,
+                                const GLenum *types,
+                                const GLuint *ids,
+                                const GLenum *severities,
+                                const GLsizei *lengths,
+                                const GLchar *messageLog);
+bool ValidateGetGraphicsResetStatus(const Context *context);
+bool ValidateGetObjectLabel(const Context *context,
+                            const GLenum identifier,
+                            const GLuint name,
+                            const GLsizei bufSize,
+                            const GLsizei *length,
+                            const GLchar *label);
+bool ValidateGetObjectPtrLabel(const Context *context,
                                const void *ptr,
-                               GLsizei bufSize,
-                               GLsizei *length,
-                               GLchar *label);
-bool ValidateGetPointerv(Context *context, GLenum pname, void **params);
-bool ValidateGetSamplerParameterIiv(Context *context,
-                                    SamplerID samplerPacked,
-                                    GLenum pname,
-                                    GLint *params);
-bool ValidateGetSamplerParameterIuiv(Context *context,
-                                     SamplerID samplerPacked,
-                                     GLenum pname,
-                                     GLuint *params);
-bool ValidateGetTexParameterIiv(Context *context,
-                                TextureType targetPacked,
-                                GLenum pname,
-                                GLint *params);
-bool ValidateGetTexParameterIuiv(Context *context,
-                                 TextureType targetPacked,
-                                 GLenum pname,
-                                 GLuint *params);
-bool ValidateGetnUniformfv(Context *context,
-                           ShaderProgramID programPacked,
-                           GLint location,
-                           GLsizei bufSize,
-                           GLfloat *params);
-bool ValidateGetnUniformiv(Context *context,
-                           ShaderProgramID programPacked,
-                           GLint location,
-                           GLsizei bufSize,
-                           GLint *params);
-bool ValidateGetnUniformuiv(Context *context,
-                            ShaderProgramID programPacked,
-                            GLint location,
-                            GLsizei bufSize,
-                            GLuint *params);
-bool ValidateIsEnabledi(Context *context, GLenum target, GLuint index);
-bool ValidateMinSampleShading(Context *context, GLfloat value);
-bool ValidateObjectLabel(Context *context,
-                         GLenum identifier,
-                         GLuint name,
-                         GLsizei length,
+                               const GLsizei bufSize,
+                               const GLsizei *length,
+                               const GLchar *label);
+bool ValidateGetPointerv(const Context *context, const GLenum pname, const void *const *params);
+bool ValidateGetSamplerParameterIiv(const Context *context,
+                                    const SamplerID samplerPacked,
+                                    const GLenum pname,
+                                    const GLint *params);
+bool ValidateGetSamplerParameterIuiv(const Context *context,
+                                     const SamplerID samplerPacked,
+                                     const GLenum pname,
+                                     const GLuint *params);
+bool ValidateGetTexParameterIiv(const Context *context,
+                                const TextureType targetPacked,
+                                const GLenum pname,
+                                const GLint *params);
+bool ValidateGetTexParameterIuiv(const Context *context,
+                                 const TextureType targetPacked,
+                                 const GLenum pname,
+                                 const GLuint *params);
+bool ValidateGetnUniformfv(const Context *context,
+                           const ShaderProgramID programPacked,
+                           const GLint location,
+                           const GLsizei bufSize,
+                           const GLfloat *params);
+bool ValidateGetnUniformiv(const Context *context,
+                           const ShaderProgramID programPacked,
+                           const GLint location,
+                           const GLsizei bufSize,
+                           const GLint *params);
+bool ValidateGetnUniformuiv(const Context *context,
+                            const ShaderProgramID programPacked,
+                            const GLint location,
+                            const GLsizei bufSize,
+                            const GLuint *params);
+bool ValidateIsEnabledi(const Context *context, const GLenum target, const GLuint index);
+bool ValidateMinSampleShading(const Context *context, const GLfloat value);
+bool ValidateObjectLabel(const Context *context,
+                         const GLenum identifier,
+                         const GLuint name,
+                         const GLsizei length,
                          const GLchar *label);
-bool ValidateObjectPtrLabel(Context *context, const void *ptr, GLsizei length, const GLchar *label);
-bool ValidatePatchParameteri(Context *context, GLenum pname, GLint value);
-bool ValidatePopDebugGroup(Context *context);
-bool ValidatePrimitiveBoundingBox(Context *context,
-                                  GLfloat minX,
-                                  GLfloat minY,
-                                  GLfloat minZ,
-                                  GLfloat minW,
-                                  GLfloat maxX,
-                                  GLfloat maxY,
-                                  GLfloat maxZ,
-                                  GLfloat maxW);
-bool ValidatePushDebugGroup(Context *context,
-                            GLenum source,
-                            GLuint id,
-                            GLsizei length,
+bool ValidateObjectPtrLabel(const Context *context,
+                            const void *ptr,
+                            const GLsizei length,
+                            const GLchar *label);
+bool ValidatePatchParameteri(const Context *context, const GLenum pname, const GLint value);
+bool ValidatePopDebugGroup(const Context *context);
+bool ValidatePrimitiveBoundingBox(const Context *context,
+                                  const GLfloat minX,
+                                  const GLfloat minY,
+                                  const GLfloat minZ,
+                                  const GLfloat minW,
+                                  const GLfloat maxX,
+                                  const GLfloat maxY,
+                                  const GLfloat maxZ,
+                                  const GLfloat maxW);
+bool ValidatePushDebugGroup(const Context *context,
+                            const GLenum source,
+                            const GLuint id,
+                            const GLsizei length,
                             const GLchar *message);
-bool ValidateReadnPixels(Context *context,
-                         GLint x,
-                         GLint y,
-                         GLsizei width,
-                         GLsizei height,
-                         GLenum format,
-                         GLenum type,
-                         GLsizei bufSize,
-                         void *data);
-bool ValidateSamplerParameterIiv(Context *context,
-                                 SamplerID samplerPacked,
-                                 GLenum pname,
+bool ValidateReadnPixels(const Context *context,
+                         const GLint x,
+                         const GLint y,
+                         const GLsizei width,
+                         const GLsizei height,
+                         const GLenum format,
+                         const GLenum type,
+                         const GLsizei bufSize,
+                         const void *data);
+bool ValidateSamplerParameterIiv(const Context *context,
+                                 const SamplerID samplerPacked,
+                                 const GLenum pname,
                                  const GLint *param);
-bool ValidateSamplerParameterIuiv(Context *context,
-                                  SamplerID samplerPacked,
-                                  GLenum pname,
+bool ValidateSamplerParameterIuiv(const Context *context,
+                                  const SamplerID samplerPacked,
+                                  const GLenum pname,
                                   const GLuint *param);
-bool ValidateTexBuffer(Context *context,
-                       GLenum target,
-                       GLenum internalformat,
-                       BufferID bufferPacked);
-bool ValidateTexBufferRange(Context *context,
-                            GLenum target,
-                            GLenum internalformat,
-                            BufferID bufferPacked,
-                            GLintptr offset,
-                            GLsizeiptr size);
-bool ValidateTexParameterIiv(Context *context,
-                             TextureType targetPacked,
-                             GLenum pname,
+bool ValidateTexBuffer(const Context *context,
+                       const GLenum target,
+                       const GLenum internalformat,
+                       const BufferID bufferPacked);
+bool ValidateTexBufferRange(const Context *context,
+                            const GLenum target,
+                            const GLenum internalformat,
+                            const BufferID bufferPacked,
+                            const GLintptr offset,
+                            const GLsizeiptr size);
+bool ValidateTexParameterIiv(const Context *context,
+                             const TextureType targetPacked,
+                             const GLenum pname,
                              const GLint *params);
-bool ValidateTexParameterIuiv(Context *context,
-                              TextureType targetPacked,
-                              GLenum pname,
+bool ValidateTexParameterIuiv(const Context *context,
+                              const TextureType targetPacked,
+                              const GLenum pname,
                               const GLuint *params);
-bool ValidateTexStorage3DMultisample(Context *context,
-                                     TextureType targetPacked,
-                                     GLsizei samples,
-                                     GLenum internalformat,
-                                     GLsizei width,
-                                     GLsizei height,
-                                     GLsizei depth,
-                                     GLboolean fixedsamplelocations);
+bool ValidateTexStorage3DMultisample(const Context *context,
+                                     const TextureType targetPacked,
+                                     const GLsizei samples,
+                                     const GLenum internalformat,
+                                     const GLsizei width,
+                                     const GLsizei height,
+                                     const GLsizei depth,
+                                     const GLboolean fixedsamplelocations);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES32_AUTOGEN_H_

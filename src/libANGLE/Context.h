@@ -448,7 +448,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                      const char *function,
                      unsigned int line);
 
-    void validationError(GLenum errorCode, const char *message);
+    void validationError(GLenum errorCode, const char *message) const;
 
     void markContextLost(GraphicsResetStatus status);
 
@@ -643,7 +643,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool mDisplayTextureShareGroup;
 
     // Recorded errors
-    ErrorSet mErrors;
+    mutable ErrorSet mErrors;
 
     // Stores for each buffer binding type whether is it allowed to be used in this context.
     angle::PackedEnumBitSet<BufferBinding> mValidBufferBindings;
