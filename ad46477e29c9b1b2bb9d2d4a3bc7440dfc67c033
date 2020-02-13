@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "582d4ca0_a8ba2918",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-13T16:05:47Z",
+      "side": 1,
+      "message": "Works for me.",
+      "parentUuid": "cc12bfaf_8c16a8cf",
+      "range": {
+        "startLine": 794,
+        "startChar": 21,
+        "endLine": 794,
+        "endChar": 33
+      },
+      "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a928bef_20df4350",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -83,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "e2c886cb_8054030e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2346,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-13T16:05:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2ac34a9_653c7f67",
+      "range": {
+        "startLine": 2346,
+        "startChar": 22,
+        "endLine": 2346,
+        "endChar": 45
+      },
+      "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aae8250_9c013526",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -103,6 +151,30 @@
       "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cf4a6ee_7162b701",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2356,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-13T16:05:47Z",
+      "side": 1,
+      "message": "Better, thanks.",
+      "parentUuid": "5aae8250_9c013526",
+      "range": {
+        "startLine": 2356,
+        "startChar": 41,
+        "endLine": 2356,
+        "endChar": 86
+      },
+      "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -129,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "9bc51335_5e208e9e",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-13T16:05:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3fe725f_94ac4dae",
+      "range": {
+        "startLine": 176,
+        "startChar": 6,
+        "endLine": 176,
+        "endChar": 20
+      },
+      "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7b5a11c_51521bc2",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 1
@@ -149,6 +245,30 @@
       "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ad17285_a1353c23",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-13T16:05:47Z",
+      "side": 1,
+      "message": "Went with captureMappedBufferSnapshot per coding standard for member functions.",
+      "parentUuid": "b7b5a11c_51521bc2",
+      "range": {
+        "startLine": 204,
+        "startChar": 9,
+        "endLine": 204,
+        "endChar": 36
+      },
+      "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
