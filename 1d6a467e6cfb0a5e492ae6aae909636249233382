@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a950490_e5c2cf06",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-13T17:00:44Z",
+      "side": 1,
+      "message": "Are these actually crashing on the bots (presumably not, since things have been green)?\n\nIf it\u0027s just that they are marked crashing in my spreadsheet, these should stay as just FAIL since we aren\u0027t using SwS on the bots.   My script isn\u0027t smart enough to interpret SKIP/FAIL (and it would be too late anyway), so the results don\u0027t need to match here.",
+      "revId": "1d6a467e6cfb0a5e492ae6aae909636249233382",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
