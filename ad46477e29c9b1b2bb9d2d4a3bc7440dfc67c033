@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "cc12bfaf_8c16a8cf",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:31:17Z",
+      "side": 1,
+      "message": "nit: I would include the word \u0027map\u0027 in there somewhere like \u0027gMappedBufferData\u0027",
+      "range": {
+        "startLine": 794,
+        "startChar": 21,
+        "endLine": 794,
+        "endChar": 33
+      },
+      "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a928bef_20df4350",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -13,6 +36,75 @@
       "writtenOn": "2020-02-13T03:13:02Z",
       "side": 1,
       "message": "Note, I\u0027m not guarding these by anything, so they will always be generated, not sure if worth the effort to pipe something, like the BufferDataMap size, but I can add it.",
+      "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5aae8250_9c013526",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2356,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:31:17Z",
+      "side": 1,
+      "message": "nit: I believe you can use make_pair?",
+      "range": {
+        "startLine": 2356,
+        "startChar": 41,
+        "endLine": 2356,
+        "endChar": 86
+      },
+      "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3fe725f_94ac4dae",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:31:17Z",
+      "side": 1,
+      "message": "how about commenting what the pair is?",
+      "range": {
+        "startLine": 176,
+        "startChar": 6,
+        "endLine": 176,
+        "endChar": 20
+      },
+      "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7b5a11c_51521bc2",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:31:17Z",
+      "side": 1,
+      "message": "how about CaptureMappedBufferSnapshot?",
+      "range": {
+        "startLine": 204,
+        "startChar": 9,
+        "endLine": 204,
+        "endChar": 36
+      },
       "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
