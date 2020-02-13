@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93649905_109e1065",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:00:53Z",
+      "side": 1,
+      "message": "We should this into the render pass. Otherwise it would mess up for user FBOs and it would depend on the state of the currently bound FB instead of the recorded one.\n\nAlso heads up that my command graph disabling landed so this code path won\u0027t be actively used.",
+      "range": {
+        "startLine": 654,
+        "startChar": 16,
+        "endLine": 670,
+        "endChar": 17
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c419c2d_7d477fea",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:00:53Z",
+      "side": 1,
+      "message": "nit: you can make this a PackedEnumMap to avoid needing to use the cast to int index. You can keep it constexpr. Look for other examples in ANGLE.",
+      "range": {
+        "startLine": 184,
+        "startChar": 15,
+        "endLine": 184,
+        "endChar": 20
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70255807_fa293919",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:00:53Z",
+      "side": 1,
+      "message": "nit: just pad this out to 8 elements per entry so you can memcpy from it directly.",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 0
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1c4e275_03343502",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3960,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:00:53Z",
+      "side": 1,
+      "message": "same comments here.",
+      "range": {
+        "startLine": 3960,
+        "startChar": 7,
+        "endLine": 3960,
+        "endChar": 42
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "083f388d_aa00173f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:00:53Z",
+      "side": 1,
+      "message": "nit: Identity",
+      "range": {
+        "startLine": 599,
+        "startChar": 8,
+        "endLine": 599,
+        "endChar": 26
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8205dd7_b8bd0d2c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:00:53Z",
+      "side": 1,
+      "message": "nit: can you make separate states for read/draw FBs? like\n\nmCurrentRotationForDrawFramebuffer/ReadFramebuffer\n\nMirrors how the flip works. Then separate queries as well.",
+      "range": {
+        "startLine": 820,
+        "startChar": 24,
+        "endLine": 820,
+        "endChar": 40
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a7d3f40_39b71234",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:00:53Z",
+      "side": 1,
+      "message": "nit: instead of keeping a bool can make the \"is\" function check mCurrentRotation.",
+      "range": {
+        "startLine": 821,
+        "startChar": 0,
+        "endLine": 824,
+        "endChar": 29
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fe446c5_8c6ab299",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1401,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:00:53Z",
+      "side": 1,
+      "message": "nit: how about a small helper function \"Is90DegreeRotation(mPreTransform)\"",
+      "range": {
+        "startLine": 1401,
+        "startChar": 5,
+        "endLine": 1401,
+        "endChar": 57
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
