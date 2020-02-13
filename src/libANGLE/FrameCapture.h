@@ -173,6 +173,8 @@ class DataCounters final : angle::NonCopyable
 // Used by the CPP replay to filter out unnecessary code.
 using HasResourceTypeMap = angle::PackedEnumBitSet<ResourceIDType>;
 
+using BufferDataMap = std::map<gl::BufferBinding, std::pair<GLintptr, GLsizei>>;
+
 // A dictionary of sources indexed by shader type.
 using ProgramSources = gl::ShaderMap<std::string>;
 
@@ -199,6 +201,7 @@ class FrameCapture final : angle::NonCopyable
     void captureClientArraySnapshot(const gl::Context *context,
                                     size_t vertexCount,
                                     size_t instanceCount);
+    void captureClientBufferSnapshot(const gl::Context *context, const CallCapture &call);
 
     void captureCompressedTextureData(const gl::Context *context, const CallCapture &call);
 
@@ -223,6 +226,7 @@ class FrameCapture final : angle::NonCopyable
     gl::AttribArray<size_t> mClientArraySizes;
     size_t mReadBufferSize;
     HasResourceTypeMap mHasResourceType;
+    BufferDataMap mBufferDataMap;
 
     // Cache most recently compiled and linked sources.
     ShaderSourceMap mCachedShaderSources;
