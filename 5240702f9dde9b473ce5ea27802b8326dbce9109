@@ -16,6 +16,24 @@
       "revId": "5240702f9dde9b473ce5ea27802b8326dbce9109",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3d5eeef_94cd6557",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-13T00:30:00Z",
+      "side": 1,
+      "message": "Let\u0027s \"talk about\" this.  If we\u0027re in this path, we\u0027re either going to re-create the swapchain (e.g. (swapIntervalChanged\u003d\u003dtrue) || (presentOutOfDate\u003d\u003dtrue))) OR we\u0027re on a buggy device that doesn\u0027t return OUT_OF_DATE when resized (what the perFrameWindowSizeQuery feature is about) and we need to do work for every swap.\n\nThe next line must be done for Android in order to pick up the currentTransform.  For example, if the user rotates the device from 90 to 270 degrees, the size won\u0027t change, but SUBOPTIMAL will send us down this path, but not into the if below.  Is it okay if I keep this here?  Otherwise, we may want to do it in the if below, but do it again just before calling recreateSwapchain.  Thoughts?",
+      "parentUuid": "9ca23dde_15dad250",
+      "revId": "5240702f9dde9b473ce5ea27802b8326dbce9109",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
