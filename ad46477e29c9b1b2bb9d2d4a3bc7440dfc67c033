@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a928bef_20df4350",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-13T03:13:02Z",
+      "side": 1,
+      "message": "Note, I\u0027m not guarding these by anything, so they will always be generated, not sure if worth the effort to pipe something, like the BufferDataMap size, but I can add it.",
+      "revId": "ad46477e29c9b1b2bb9d2d4a3bc7440dfc67c033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
