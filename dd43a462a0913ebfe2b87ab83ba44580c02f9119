@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23d6bbf3_4161b05c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2212,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T01:14:35Z",
+      "side": 1,
+      "message": "nit: can omit the \"m\" prefix for local variables\n\nalso I\u0027m a bit worried that mDrawFramebuffer can get out of sync when used outside of setupDraw. Can you instead pass the FramebufferVk pointer?",
+      "range": {
+        "startLine": 2212,
+        "startChar": 27,
+        "endLine": 2212,
+        "endChar": 40
+      },
+      "revId": "dd43a462a0913ebfe2b87ab83ba44580c02f9119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77ddcb3f_95d9c2a7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2253,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T01:14:35Z",
+      "side": 1,
+      "message": "nit: how about using the m variable instead of calling the get?",
+      "range": {
+        "startLine": 2253,
+        "startChar": 12,
+        "endLine": 2253,
+        "endChar": 38
+      },
+      "revId": "dd43a462a0913ebfe2b87ab83ba44580c02f9119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
