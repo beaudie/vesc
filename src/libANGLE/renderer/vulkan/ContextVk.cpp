@@ -70,6 +70,10 @@ struct GraphicsDriverUniforms
 
     // We'll use x, y, z for near / far / diff respectively.
     std::array<float, 4> depthRange;
+
+    // Used to pre-rotate gl_Position for swapchain images on Android (a mat2, which is padded to
+    // the size of two vec4's).
+    std::array<float, 8> preRotation;
 };
 
 struct ComputeDriverUniforms
@@ -173,6 +177,31 @@ void ApplySampleCoverage(const gl::State &glState,
 
     *maskOut &= coverageMask;
 }
+
+// When an Android surface is rotated differently than the device's native orientation, ANGLE must
+// rotate gl_Position in the vertex shader.  The following are the rotation matrices used.
+//
+// Note: these are mat2's that are appropriately padded (4 floats per row).
+using PreRotationMatrixValues = std::array<float, 8>;
+constexpr angle::PackedEnumMap<rx::SurfaceRotationType,
+                               PreRotationMatrixValues,
+                               angle::EnumSize<rx::SurfaceRotationType>()>
+    kPreRotationMatrices = {
+        {{rx::SurfaceRotationType::Identity, {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::Rotated90Degrees,
+          {{0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::Rotated180Degrees,
+          {{-1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::Rotated270Degrees,
+          {{0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::FlippedIdentity,
+          {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::FlippedRotated90Degrees,
+          {{0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::FlippedRotated180Degrees,
+          {{-1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::FlippedRotated270Degrees,
+          {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}}}};
 
 }  // anonymous namespace
 
@@ -518,6 +547,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mCurrentComputePipeline(nullptr),
       mCurrentDrawMode(gl::PrimitiveMode::InvalidEnum),
       mCurrentWindowSurface(nullptr),
+      mCurrentRotationDrawFramebuffer(SurfaceRotationType::Identity),
+      mCurrentRotationReadFramebuffer(SurfaceRotationType::Identity),
       mVertexArray(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
@@ -2197,6 +2228,21 @@ bool ContextVk::isViewportFlipEnabledForReadFBO() const
     return mFlipViewportForReadFramebuffer;
 }
 
+bool ContextVk::isRotatedAspectRatioDrawFramebuffer() const
+{
+    return ((mCurrentRotationDrawFramebuffer == SurfaceRotationType::Rotated90Degrees) ||
+            (mCurrentRotationDrawFramebuffer == SurfaceRotationType::Rotated270Degrees) ||
+            (mCurrentRotationDrawFramebuffer == SurfaceRotationType::FlippedRotated90Degrees) ||
+            (mCurrentRotationDrawFramebuffer == SurfaceRotationType::FlippedRotated270Degrees));
+}
+bool ContextVk::isRotatedAspectRatioReadFramebuffer() const
+{
+    return ((mCurrentRotationReadFramebuffer == SurfaceRotationType::Rotated90Degrees) ||
+            (mCurrentRotationReadFramebuffer == SurfaceRotationType::Rotated270Degrees) ||
+            (mCurrentRotationReadFramebuffer == SurfaceRotationType::FlippedRotated90Degrees) ||
+            (mCurrentRotationReadFramebuffer == SurfaceRotationType::FlippedRotated270Degrees));
+}
+
 void ContextVk::updateColorMask(const gl::BlendState &blendState)
 {
     mClearColorMask =
@@ -2264,11 +2310,20 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
         correctedHeight = viewportBoundsRangeHigh - correctedY;
     }
 
+    gl::Box framebufferDimensions = framebufferVk->getState().getDimensions();
+    if (isRotatedAspectRatioDrawFramebuffer())
+    {
+        // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
+        // Swap the width and height of the viewport we calculate, and the framebuffer height that
+        // we use to calculate it with.
+        std::swap(correctedWidth, correctedHeight);
+        std::swap(framebufferDimensions.width, framebufferDimensions.height);
+    }
     gl::Rectangle correctedRect =
         gl::Rectangle(correctedX, correctedY, correctedWidth, correctedHeight);
 
     gl_vk::GetViewport(correctedRect, nearPlane, farPlane, invertViewport,
-                       framebufferVk->getState().getDimensions().height, &vkViewport);
+                       framebufferDimensions.height, &vkViewport);
     mGraphicsPipelineDesc->updateViewport(&mGraphicsPipelineTransition, vkViewport);
     invalidateGraphicsDriverUniforms();
 }
@@ -2292,6 +2347,12 @@ void ContextVk::updateScissor(const gl::State &glState)
     if (isViewportFlipEnabledForDrawFBO())
     {
         scissoredArea.y = renderArea.height - scissoredArea.y - scissoredArea.height;
+    }
+    if (isRotatedAspectRatioDrawFramebuffer())
+    {
+        // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
+        // Swap the width and height of the scissor we use.
+        std::swap(scissoredArea.width, scissoredArea.height);
     }
 
     mGraphicsPipelineDesc->updateScissor(&mGraphicsPipelineTransition,
@@ -2479,6 +2540,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING:
                 updateFlipViewportReadFramebuffer(context->getState());
+                updateSurfaceRotationReadFramebuffer(glState);
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
             {
@@ -2493,6 +2555,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
                 mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
                 updateFlipViewportDrawFramebuffer(glState);
+                updateSurfaceRotationDrawFramebuffer(glState);
                 updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
                 updateColorMask(glState.getBlendState());
@@ -2662,6 +2725,8 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
     const gl::State &glState = context->getState();
     updateFlipViewportDrawFramebuffer(glState);
     updateFlipViewportReadFramebuffer(glState);
+    updateSurfaceRotationDrawFramebuffer(glState);
+    updateSurfaceRotationReadFramebuffer(glState);
     invalidateDriverUniforms();
 
     return angle::Result::Continue;
@@ -2686,6 +2751,60 @@ void ContextVk::updateFlipViewportReadFramebuffer(const gl::State &glState)
     gl::Framebuffer *readFramebuffer = glState.getReadFramebuffer();
     mFlipViewportForReadFramebuffer =
         readFramebuffer->isDefault() && mRenderer->getFeatures().flipViewportY.enabled;
+}
+
+void ContextVk::updateSurfaceRotationDrawFramebuffer(const gl::State &glState)
+{
+    gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
+    if (mCurrentWindowSurface && drawFramebuffer->isDefault())
+    {
+        switch (mCurrentWindowSurface->getPreTransform())
+        {
+            case VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR:
+                // Do not rotate gl_Position (surface matches the device's orientation):
+//#define FORCE_Y_FLIP_ROTATION
+#ifdef FORCE_Y_FLIP_ROTATION
+                mCurrentRotationDrawFramebuffer = SurfaceRotationType::FlippedIdentity;
+#else   // FORCE_Y_FLIP_ROTATION
+                mCurrentRotationDrawFramebuffer = SurfaceRotationType::Identity;
+#endif  // FORCE_Y_FLIP_ROTATION
+                break;
+            case VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR:
+                // Rotate gl_Position 90 degrees:
+                mCurrentRotationDrawFramebuffer = SurfaceRotationType::Rotated90Degrees;
+                break;
+            case VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR:
+                // Rotate gl_Position 180 degrees:
+                mCurrentRotationDrawFramebuffer = SurfaceRotationType::Rotated180Degrees;
+                break;
+            case VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR:
+                // Rotate gl_Position 270 degrees:
+                mCurrentRotationDrawFramebuffer = SurfaceRotationType::Rotated180Degrees;
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+    else if (isViewportFlipEnabledForDrawFBO())
+    {
+        // Do not rotate gl_Position (offscreen framebuffer):
+#ifdef FORCE_Y_FLIP_ROTATION
+        mCurrentRotationDrawFramebuffer = SurfaceRotationType::FlippedIdentity;
+#else   // FORCE_Y_FLIP_ROTATION
+        mCurrentRotationDrawFramebuffer = SurfaceRotationType::Identity;
+#endif  // FORCE_Y_FLIP_ROTATION
+    }
+    else
+    {
+        // Do not rotate gl_Position (offscreen framebuffer):
+        mCurrentRotationDrawFramebuffer = SurfaceRotationType::Identity;
+    }
+}
+void ContextVk::updateSurfaceRotationReadFramebuffer(const gl::State &glState)
+{
+    // TODO(ianelliott): determine if we really need this method
+    mCurrentRotationReadFramebuffer = SurfaceRotationType::Identity;
 }
 
 gl::Caps ContextVk::getNativeCaps() const
@@ -3079,7 +3198,10 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
         {},
         {},
         {},
-        {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f}};
+        {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f},
+        {}};
+    memcpy(&driverUniforms->preRotation, &kPreRotationMatrices[mCurrentRotationDrawFramebuffer],
+           sizeof(PreRotationMatrixValues));
 
     if (xfbActiveUnpaused)
     {
@@ -3763,7 +3885,15 @@ void ContextVk::beginRenderPass(const vk::Framebuffer &framebuffer,
         mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
     }
 
-    mRenderPassCommands.beginRenderPass(framebuffer, renderArea, renderPassDesc,
+    gl::Rectangle rotatedRenderArea = renderArea;
+    if (isRotatedAspectRatioDrawFramebuffer())
+    {
+        // The surface is rotated 90/270 degrees.  This changes the aspect ratio of
+        // the surface.  Swap the width and height of the renderArea.
+        std::swap(rotatedRenderArea.width, rotatedRenderArea.height);
+    }
+
+    mRenderPassCommands.beginRenderPass(framebuffer, rotatedRenderArea, renderPassDesc,
                                         renderPassAttachmentOps, clearValues, commandBufferOut);
 }
 
