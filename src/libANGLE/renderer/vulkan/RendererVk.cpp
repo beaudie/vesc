@@ -1202,6 +1202,13 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         vk::AddToPNextChain(&createInfo, &mProvokingVertexFeatures);
     }
 
+    if (mSeparateDepthStencilLayoutsFeatures.separateDepthStencilLayouts)
+    {
+        enabledDeviceExtensions.push_back(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME);
+        enabledDeviceExtensions.push_back(VK_KHR_CREATE_RENDERPASS_2_EXTENSION_NAME);
+        vk::AddToPNextChain(&createInfo, &mSeparateDepthStencilLayoutsFeatures);
+    }
+
     if (mVertexAttributeDivisorFeatures.vertexAttributeInstanceRateDivisor)
     {
         enabledDeviceExtensions.push_back(VK_EXT_VERTEX_ATTRIBUTE_DIVISOR_EXTENSION_NAME);
