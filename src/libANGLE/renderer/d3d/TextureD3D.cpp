@@ -123,13 +123,15 @@ angle::Result TextureD3D::getImageAndSyncFromStorage(const gl::Context *context,
 GLint TextureD3D::getLevelZeroWidth() const
 {
     ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelWidth())) > getBaseLevel());
-    return getBaseLevelWidth() << mBaseLevel;
+    ImageD3D *levelZeroImage = getImage(getImageIndex(0, 0));
+    return levelZeroImage->getWidth();
 }
 
 GLint TextureD3D::getLevelZeroHeight() const
 {
     ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelHeight())) > getBaseLevel());
-    return getBaseLevelHeight() << mBaseLevel;
+    ImageD3D *levelZeroImage = getImage(getImageIndex(0, 0));
+    return levelZeroImage->getHeight();
 }
 
 GLint TextureD3D::getLevelZeroDepth() const
