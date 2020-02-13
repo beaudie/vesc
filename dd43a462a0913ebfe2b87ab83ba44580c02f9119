@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1df5b644_84318e95",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2212,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:06:59Z",
+      "side": 1,
+      "message": "The pointer is only updated in ContextVk::syncState for case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING. You can take a look yourself. I was worried about this dirty bit not getting called before a clear. I checked in Context.cpp and looks like we do sync this dirty bit on clear calls. So probably is safe. I don\u0027t think there\u0027s a threading concern. Contexts cannot be accessed multithreaded simultaneously.",
+      "parentUuid": "3b45aa8b_c7200e73",
+      "range": {
+        "startLine": 2212,
+        "startChar": 27,
+        "endLine": 2212,
+        "endChar": 40
+      },
+      "revId": "dd43a462a0913ebfe2b87ab83ba44580c02f9119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "77ddcb3f_95d9c2a7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
@@ -93,6 +117,53 @@
       "revId": "dd43a462a0913ebfe2b87ab83ba44580c02f9119",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37f141e4_94eb0bec",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2253,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:06:59Z",
+      "side": 1,
+      "message": "You can put the flush at the top of this function, then use the \"m\" variable for this call and the other two. That way the flush will be issued before depth/stencil correctly.",
+      "parentUuid": "d0e31d94_32c26365",
+      "range": {
+        "startLine": 2253,
+        "startChar": 12,
+        "endLine": 2253,
+        "endChar": 38
+      },
+      "revId": "dd43a462a0913ebfe2b87ab83ba44580c02f9119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6325c893_1a97ed01",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2712,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T14:06:59Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 2712,
+        "startChar": 28,
+        "endLine": 2712,
+        "endChar": 62
+      },
+      "revId": "dd43a462a0913ebfe2b87ab83ba44580c02f9119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
