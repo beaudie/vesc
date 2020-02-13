@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "84dc9f96_a88c76c5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T17:35:25Z",
+      "side": 1,
+      "message": "We should put/store/keep/etc this int the RP. You\u0027re checking the current state of the context here instead of the state needed for the RP. Current state \u003d last bound. The state would differ for the backbuffer vs user FBO.",
+      "parentUuid": "0b33fbea_29d47b9b",
+      "range": {
+        "startLine": 654,
+        "startChar": 16,
+        "endLine": 670,
+        "endChar": 17
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2c419c2d_7d477fea",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
