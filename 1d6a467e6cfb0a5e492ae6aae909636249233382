@@ -16,6 +16,24 @@
       "revId": "1d6a467e6cfb0a5e492ae6aae909636249233382",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07de48bf_35d9f84e",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-13T17:10:03Z",
+      "side": 1,
+      "message": "No, the bots don\u0027t run Android with SwiftShader, so not crashing there.\n\nI want your results reflected in here because people tend to treat it as a source of truth.  We should be able to update your script to bring over \"crash\" results and get the right bug.\n\nI\u0027ll move this SKIP below and narrow it to Android.",
+      "parentUuid": "2a950490_e5c2cf06",
+      "revId": "1d6a467e6cfb0a5e492ae6aae909636249233382",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
