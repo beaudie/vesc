@@ -348,7 +348,15 @@ angle::Result CommandGraphResource::beginRenderPass(
         startNewCommands(contextVk);
     }
 
-    mCurrentWritingNode->storeRenderPassInfo(framebuffer, renderArea, renderPassDesc,
+    gl::Rectangle rotatedRenderArea = renderArea;
+    if (contextVk->isRotatedAspectRatioDrawFramebuffer())
+    {
+        // The surface is rotated 90/270 degrees.  This changes the aspect ratio of
+        // the surface.  Swap the width and height of the renderArea.
+        std::swap(rotatedRenderArea.width, rotatedRenderArea.height);
+    }
+
+    mCurrentWritingNode->storeRenderPassInfo(framebuffer, rotatedRenderArea, renderPassDesc,
                                              renderPassAttachmentOps, clearValues);
 
     mCurrentWritingNode->setRenderPassOwner(contextVk);
