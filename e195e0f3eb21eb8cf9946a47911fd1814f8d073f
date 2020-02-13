@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c220f9c_54868fe4",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:48:36Z",
+      "side": 1,
+      "message": "I think there may be a subtle bug here. If the state value function is for an int type, and the value is an integer value that is not float-representable, this will round the value to the nearest float-representable value. It might even be possible to make a regression test.\n\nInstead you might want to make your new converter function convert the GLfixed to whatever the type of \"params\" is, otherwise pass through to CastQueryValueTo.",
+      "range": {
+        "startLine": 412,
+        "startChar": 0,
+        "endLine": 416,
+        "endChar": 87
+      },
+      "revId": "e195e0f3eb21eb8cf9946a47911fd1814f8d073f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba639a29_37df3b2d",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1302,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:48:36Z",
+      "side": 1,
+      "message": "nit: seems like you could make this helper function local to this file.",
+      "range": {
+        "startLine": 1302,
+        "startChar": 11,
+        "endLine": 1302,
+        "endChar": 45
+      },
+      "revId": "e195e0f3eb21eb8cf9946a47911fd1814f8d073f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a998858d_c36988f7",
+        "filename": "src/tests/gl_tests/gles1/BootAnimationTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:48:36Z",
+      "side": 1,
+      "message": "nit: you can probably remove this for production. at least when not in debug.",
+      "range": {
+        "startLine": 72,
+        "startChar": 7,
+        "endLine": 72,
+        "endChar": 31
+      },
+      "revId": "e195e0f3eb21eb8cf9946a47911fd1814f8d073f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbe28cb2_42c6acef",
+        "filename": "src/tests/gl_tests/gles1/BootAnimationTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:48:36Z",
+      "side": 1,
+      "message": "nit: please default init (\u003d EGL_NO_DISPLAY, etc)",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 24
+      },
+      "revId": "e195e0f3eb21eb8cf9946a47911fd1814f8d073f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aa1d15b_0f1a32e7",
+        "filename": "src/tests/gl_tests/gles1/BootAnimationTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:48:36Z",
+      "side": 1,
+      "message": "I\u0027m not sure why you used an inheritance pattern here. Seems like you could easily just use one class. Can you clean that up?",
+      "range": {
+        "startLine": 87,
+        "startChar": 6,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "e195e0f3eb21eb8cf9946a47911fd1814f8d073f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b524fbd_cead4ba0",
+        "filename": "src/tests/gl_tests/gles1/BootAnimationTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:48:36Z",
+      "side": 1,
+      "message": "nit: can we reduce this a bit for production to make the test run a bit faster, like 8?",
+      "range": {
+        "startLine": 222,
+        "startChar": 23,
+        "endLine": 222,
+        "endChar": 43
+      },
+      "revId": "e195e0f3eb21eb8cf9946a47911fd1814f8d073f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1116f513_e949e7e2",
+        "filename": "src/tests/gl_tests/gles1/BootAnimationTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-13T13:48:36Z",
+      "side": 1,
+      "message": "nit: constants should all be named kStart, kMax, kEnding, etc",
+      "range": {
+        "startLine": 223,
+        "startChar": 18,
+        "endLine": 223,
+        "endChar": 43
+      },
+      "revId": "e195e0f3eb21eb8cf9946a47911fd1814f8d073f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
