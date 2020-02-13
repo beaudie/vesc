@@ -69,6 +69,30 @@
       "revId": "dd43a462a0913ebfe2b87ab83ba44580c02f9119",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0e31d94_32c26365",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2253,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-02-13T01:38:33Z",
+      "side": 1,
+      "message": "getRenderPassCommandBuffer() may issue a flushToPrimary() call. I can issue flushToPrimrary() here and the use m variable, which seems cleaner to me.\n\nDo we have a bug here that if app is clearing the depth buffer only, the flush will not issued? It seems to me the flush is needed as long as we are clearing any of color/depth/stencil buffer.",
+      "parentUuid": "77ddcb3f_95d9c2a7",
+      "range": {
+        "startLine": 2253,
+        "startChar": 12,
+        "endLine": 2253,
+        "endChar": 38
+      },
+      "revId": "dd43a462a0913ebfe2b87ab83ba44580c02f9119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
