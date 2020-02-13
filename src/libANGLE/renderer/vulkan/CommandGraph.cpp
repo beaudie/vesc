@@ -606,7 +606,7 @@ void CommandGraphNode::visitParents(std::vector<CommandGraphNode *> *stack)
     mVisitedState = VisitedState::Ready;
 }
 
-angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
+angle::Result CommandGraphNode::visitAndExecute(ContextVk *context,
                                                 Serial serial,
                                                 RenderPassCache *renderPassCache,
                                                 PrimaryCommandBuffer *primaryCommandBuffer)
@@ -651,10 +651,23 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                 beginInfo.framebuffer           = mRenderPassFramebuffer.getHandle();
                 beginInfo.renderArea.offset.x   = static_cast<uint32_t>(mRenderPassRenderArea.x);
                 beginInfo.renderArea.offset.y   = static_cast<uint32_t>(mRenderPassRenderArea.y);
-                beginInfo.renderArea.extent.width =
-                    static_cast<uint32_t>(mRenderPassRenderArea.width);
-                beginInfo.renderArea.extent.height =
-                    static_cast<uint32_t>(mRenderPassRenderArea.height);
+                if (context->isRotatedAspectRatio())
+                {
+                    // The surface is rotated 90/270 degrees.  This changes the aspect ratio of
+                    // the surface.  Swap the width and height of the renderArea.
+                    beginInfo.renderArea.extent.width =
+                        static_cast<uint32_t>(mRenderPassRenderArea.height);
+                    beginInfo.renderArea.extent.height =
+                        static_cast<uint32_t>(mRenderPassRenderArea.width);
+                }
+                else
+                {
+                    // The surface is rotated 0/180 degrees.  Use the normal renderArea.
+                    beginInfo.renderArea.extent.width =
+                        static_cast<uint32_t>(mRenderPassRenderArea.width);
+                    beginInfo.renderArea.extent.height =
+                        static_cast<uint32_t>(mRenderPassRenderArea.height);
+                }
                 beginInfo.clearValueCount =
                     static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
                 beginInfo.pClearValues = mRenderPassClearValues.data();
