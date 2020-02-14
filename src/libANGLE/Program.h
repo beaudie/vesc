@@ -330,7 +330,6 @@ class ProgramState final : angle::NonCopyable
     {
         return mTransformFeedbackStrides;
     }
-    size_t getTransformFeedbackBufferCount() const { return mTransformFeedbackStrides.size(); }
     const std::vector<AtomicCounterBuffer> &getAtomicCounterBuffers() const
     {
         return mAtomicCounterBuffers;
@@ -339,6 +338,8 @@ class ProgramState final : angle::NonCopyable
     // Count the number of uniform and storage buffer declarations, counting arrays as one.
     size_t getUniqueUniformBlockCount() const;
     size_t getUniqueStorageBlockCount() const;
+    size_t getAtomicCounterBuffersCount() const;
+    size_t getTransformFeedbackBufferCount() const;
 
     GLuint getUniformIndexFromName(const std::string &name) const;
     GLuint getUniformIndexFromLocation(GLint location) const;
