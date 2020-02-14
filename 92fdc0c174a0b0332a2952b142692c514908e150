@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1e618113_9da16f50",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 8672,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-14T00:54:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60112324_ddd7d00f",
+      "range": {
+        "startLine": 8672,
+        "startChar": 49,
+        "endLine": 8672,
+        "endChar": 62
+      },
+      "revId": "92fdc0c174a0b0332a2952b142692c514908e150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bba70d12_3d30b16d",
         "filename": "src/libANGLE/InfoLog.h",
         "patchSetId": 14
@@ -45,6 +69,30 @@
       "revId": "92fdc0c174a0b0332a2952b142692c514908e150",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "710fc3fd_cdba33b8",
+        "filename": "src/libANGLE/InfoLog.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-14T00:54:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bba70d12_3d30b16d",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 2
+      },
+      "revId": "92fdc0c174a0b0332a2952b142692c514908e150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "8fb4693a_8c457c8a",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-14T00:54:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84fdacf3_57a81e17",
+      "range": {
+        "startLine": 35,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 11
+      },
+      "revId": "92fdc0c174a0b0332a2952b142692c514908e150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb74fdf5_6acd64a9",
         "filename": "src/libANGLE/ProgramExecutable.cpp",
         "patchSetId": 14
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e3a09e97_cd758c3c",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-14T00:54:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb74fdf5_6acd64a9",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 11
+      },
+      "revId": "92fdc0c174a0b0332a2952b142692c514908e150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "282195b0_39c00d33",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 14
@@ -114,6 +210,30 @@
       "revId": "92fdc0c174a0b0332a2952b142692c514908e150",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5093510a_0e86b3d6",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-14T00:54:34Z",
+      "side": 1,
+      "message": "Yeah, friend classes can be a bit of a code smell.   This is certainly something that can be looked at closer once more of the pieces are in place and we understand how each of these various members are being used.\n\nI\u0027ll add a TODO to revisit this.",
+      "parentUuid": "282195b0_39c00d33",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 30
+      },
+      "revId": "92fdc0c174a0b0332a2952b142692c514908e150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
