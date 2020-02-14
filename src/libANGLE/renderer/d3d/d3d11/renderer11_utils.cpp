@@ -2213,6 +2213,11 @@ BlendStateKey::BlendStateKey()
     memset(this, 0, sizeof(BlendStateKey));
 }
 
+BlendStateKey::BlendStateKey(const BlendStateKey &other)
+{
+    memcpy(this, &other, sizeof(BlendStateKey));
+}
+
 bool operator==(const BlendStateKey &a, const BlendStateKey &b)
 {
     return memcmp(&a, &b, sizeof(BlendStateKey)) == 0;
