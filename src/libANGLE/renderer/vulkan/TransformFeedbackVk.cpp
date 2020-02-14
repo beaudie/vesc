@@ -161,14 +161,11 @@ angle::Result TransformFeedbackVk::bindIndexedBuffer(
 
 void TransformFeedbackVk::updateDescriptorSetLayout(
     ContextVk *contextVk,
+    size_t xfbBufferCount,
     vk::DescriptorSetLayoutDesc *descSetLayoutOut) const
 {
     if (!contextVk->getFeatures().emulateTransformFeedback.enabled)
         return;
-
-    const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
-    ASSERT(executable);
-    size_t xfbBufferCount = executable->getTransformFeedbackBufferCount(contextVk->getState());
 
     for (uint32_t bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
     {
