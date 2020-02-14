@@ -1129,6 +1129,16 @@ size_t ProgramState::getUniqueStorageBlockCount() const
     return CountUniqueBlocks(mShaderStorageBlocks);
 }
 
+size_t ProgramState::getAtomicCounterBuffersCount() const
+{
+    return mAtomicCounterBuffers.empty() ? 0 : 1;
+}
+
+size_t ProgramState::getTransformFeedbackBufferCount() const
+{
+    return mTransformFeedbackStrides.size();
+}
+
 GLuint ProgramState::getUniformIndexFromName(const std::string &name) const
 {
     return GetResourceIndexFromName(mUniforms, name);
