@@ -1253,7 +1253,8 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
 
     if (executable->hasTextures(mState))
     {
-        ANGLE_TRY(mProgram->updateTexturesDescriptorSet(this));
+        ANGLE_TRY(
+            mProgram->getExecutable().updateTexturesDescriptorSet(mProgram->getState(), this));
     }
 
     return angle::Result::Continue;
@@ -1334,8 +1335,8 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
     if (executable->hasUniformBuffers(mState) || executable->hasStorageBuffers(mState) ||
         executable->hasAtomicCounterBuffers(mState) || executable->hasImages(mState))
     {
-        ANGLE_TRY(mProgram->updateShaderResourcesDescriptorSet(this, &mResourceUseList,
-                                                               commandBufferHelper, recorder));
+        ANGLE_TRY(mProgram->getExecutable().updateShaderResourcesDescriptorSet(
+            mProgram->getState(), this, &mResourceUseList, commandBufferHelper));
     }
     return angle::Result::Continue;
 }
@@ -1379,8 +1380,8 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
                 &mResourceUseList, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT, &bufferHelper);
         }
 
-        ANGLE_TRY(mProgram->updateTransformFeedbackDescriptorSet(
-            this, mDrawFramebuffer->getFramebuffer()));
+        ANGLE_TRY(mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
+            mProgram->getState(), mProgram->getDefaultUniformBlocks(), this));
     }
     return angle::Result::Continue;
 }
@@ -1458,7 +1459,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Con
 angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer)
 {
-    ANGLE_TRY(mProgram->updateDescriptorSets(this, commandBuffer));
+    ANGLE_TRY(mProgram->getExecutable().updateDescriptorSets(this, commandBuffer));
     return angle::Result::Continue;
 }
 
