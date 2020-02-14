@@ -609,9 +609,11 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                          const std::vector<VkClearValue> &clearValues,
                          vk::CommandBuffer **commandBufferOut);
 
-    RenderPassCommandBuffer &getRenderPassCommandBuffer()
+    bool hasStartedRenderPass() const { return !mRenderPassCommands.empty(); }
+
+    RenderPassCommandBuffer &getStartedRenderPassCommands()
     {
-        mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
+        ASSERT(hasStartedRenderPass());
         return mRenderPassCommands;
     }
 

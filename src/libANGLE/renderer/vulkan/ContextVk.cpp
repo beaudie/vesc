@@ -2200,6 +2200,9 @@ angle::Result ContextVk::clearWithRenderPassOp(
     const VkClearColorValue &clearColorValue,
     const VkClearDepthStencilValue &clearDepthStencilValue)
 {
+    // Validate cache variable is in sync.
+    ASSERT(mDrawFramebuffer == vk::GetImpl(mState.getDrawFramebuffer()));
+
     ASSERT(!commandGraphEnabled());
     // Start a new render pass if:
     //
@@ -2210,11 +2213,11 @@ angle::Result ContextVk::clearWithRenderPassOp(
     // exactly as specified by the scissor for the loadOp to clear only that area.  See
     // ContextVk::updateScissor for more information.
     vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
-    if (!framebuffer->valid() || !framebuffer->renderPassStartedButEmpty() ||
-        framebuffer->getRenderPassRenderArea() != clearArea)
+    if (!framebuffer->valid() || !mRenderPassCommands.empty() ||
+        mRenderPassCommands.getRenderArea() != clearArea)
     {
+        ANGLE_TRY(endRenderPass());
         mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
-
         ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, clearArea, &mRenderPassCommandBuffer));
     }
     else
@@ -2265,14 +2268,14 @@ angle::Result ContextVk::clearWithRenderPassOp(
     {
         if (clearDepth)
         {
-            getRenderPassCommandBuffer().clearRenderPassDepthAttachment(
-                attachmentIndexVk, clearDepthStencilValue.depth);
+            mRenderPassCommands.clearRenderPassDepthAttachment(attachmentIndexVk,
+                                                               clearDepthStencilValue.depth);
         }
 
         if (clearStencil)
         {
-            getRenderPassCommandBuffer().clearRenderPassStencilAttachment(
-                attachmentIndexVk, clearDepthStencilValue.stencil);
+            mRenderPassCommands.clearRenderPassStencilAttachment(attachmentIndexVk,
+                                                                 clearDepthStencilValue.stencil);
         }
     }
 
@@ -4070,11 +4073,7 @@ void ContextVk::beginRenderPass(const vk::Framebuffer &framebuffer,
 {
     ASSERT(!commandGraphEnabled());
 
-    if (!mOutsideRenderPassCommands.empty())
-    {
-        mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
-    }
-
+    mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
     mRenderPassCommands.beginRenderPass(framebuffer, renderArea, renderPassDesc,
                                         renderPassAttachmentOps, clearValues, commandBufferOut);
 }
