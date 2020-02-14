@@ -8,6 +8,8 @@
 
 #include "libANGLE/ProgramExecutable.h"
 
+#include "libANGLE/Context.h"
+
 namespace gl
 {
 
@@ -43,6 +45,160 @@ AttributesMask ProgramExecutable::getAttributesMask() const
     // TODO(timvp): http://anglebug.com/3570: Enable this assert here somehow.
     //    ASSERT(mLinkResolved);
     return mAttributesMask;
+}
+
+bool ProgramExecutable::hasDefaultUniforms(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return !program->getState().getDefaultUniformRange().empty();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return false;
+}
+
+bool ProgramExecutable::hasTextures(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return !program->getState().getSamplerBindings().empty();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return false;
+}
+
+bool ProgramExecutable::hasUniformBuffers(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return !program->getState().getUniformBlocks().empty();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return false;
+}
+
+bool ProgramExecutable::hasStorageBuffers(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return !program->getState().getShaderStorageBlocks().empty();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return false;
+}
+
+bool ProgramExecutable::hasAtomicCounterBuffers(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return !program->getState().getAtomicCounterBuffers().empty();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return false;
+}
+
+bool ProgramExecutable::hasImages(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return !program->getState().getImageBindings().empty();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return false;
+}
+
+bool ProgramExecutable::hasTransformFeedbackOutput(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return !program->getState().getLinkedTransformFeedbackVaryings().empty();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return false;
+}
+
+size_t ProgramExecutable::getUniqueUniformBlockCount(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return program->getState().getUniqueUniformBlockCount();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return 0;
+}
+
+size_t ProgramExecutable::getUniqueStorageBlockCount(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return program->getState().getUniqueStorageBlockCount();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return 0;
+}
+
+size_t ProgramExecutable::getAtomicCounterBuffersCount(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return program->getState().getAtomicCounterBuffersCount();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return 0;
+}
+
+size_t ProgramExecutable::getTransformFeedbackBufferCount(const gl::State &glState) const
+{
+    gl::Program *program = glState.getProgram();
+
+    if (program)
+    {
+        return program->getState().getTransformFeedbackBufferCount();
+    }
+
+    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+
+    return 0;
 }
 
 }  // namespace gl
