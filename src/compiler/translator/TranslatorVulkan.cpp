@@ -18,6 +18,7 @@
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/OutputVulkanGLSL.h"
 #include "compiler/translator/StaticType.h"
+#include "compiler/translator/tree_ops/EmulatePrecision.h"
 #include "compiler/translator/tree_ops/NameEmbeddedUniformStructs.h"
 #include "compiler/translator/tree_ops/RemoveInactiveInterfaceVariables.h"
 #include "compiler/translator/tree_ops/RewriteAtomicCounters.h"
@@ -1008,9 +1009,23 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
 {
 
     TInfoSinkBase &sink = getInfoSink().obj;
-    TOutputVulkanGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(),
-                                 getNameMap(), &getSymbolTable(), getShaderType(),
-                                 getShaderVersion(), getOutputType(), compileOptions);
+
+    bool precisionEmulation =
+        getResources().WEBGL_debug_shader_precision && getPragma().debugShaderPrecision;
+
+    if (precisionEmulation)
+    {
+        EmulatePrecision emulatePrecision(&getSymbolTable());
+        root->traverse(&emulatePrecision);
+        if (!emulatePrecision.updateTree(this, root))
+        {
+            return false;
+        }
+        emulatePrecision.writeEmulationHelpers(sink, getShaderVersion(), SH_GLSL_VULKAN_OUTPUT);
+    }
+    TOutputVulkanGLSL outputGLSL(
+        sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(), &getSymbolTable(),
+        getShaderType(), getShaderVersion(), getOutputType(), precisionEmulation, compileOptions);
 
     if (!translateImpl(root, compileOptions, perfDiagnostics, nullptr, &outputGLSL))
     {
