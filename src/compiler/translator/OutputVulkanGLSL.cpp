@@ -168,4 +168,14 @@ void TOutputVulkanGLSL::writeStructType(const TStructure *structure)
     }
 }
 
+bool TOutputVulkanGLSL::writeVariablePrecision(TPrecision precision)
+{
+    if (precision == EbpUndefined)
+        return false;
+
+    TInfoSinkBase &out = objSink();
+    out << getPrecisionString(precision);
+    return true;
+}
+
 }  // namespace sh

@@ -48,6 +48,7 @@ class TOutputVulkanGLSL : public TOutputGLSL
     void writeVariableType(const TType &type,
                            const TSymbol *symbol,
                            bool isFunctionArgument) override;
+    bool writeVariablePrecision(TPrecision) override;
 
     // Every resource that requires set & binding layout qualifiers is assigned set 0 and an
     // arbitrary binding when outputting GLSL.  Every input/output that requires a location
