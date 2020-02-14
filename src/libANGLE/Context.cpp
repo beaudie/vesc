@@ -3293,6 +3293,11 @@ size_t Context::getExtensionStringCount() const
 
 bool Context::isExtensionRequestable(const char *name)
 {
+    // TODO(khushalsagar) : Temporary change to make sure chrome requests this
+    // extension before we make it optionally enabled.
+    if (strcmp(name, "GL_ANGLE_robust_client_memory") == 0)
+        return true;
+
     const ExtensionInfoMap &extensionInfos = GetExtensionInfoMap();
     auto extension                         = extensionInfos.find(name);
 
