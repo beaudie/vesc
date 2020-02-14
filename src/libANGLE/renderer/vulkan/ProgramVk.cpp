@@ -516,6 +516,8 @@ void ProgramVk::reset(ContextVk *contextVk)
 
     mTextureDescriptorsCache.clear();
     mDescriptorBuffersCache.clear();
+
+    mExecutable.reset();
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
@@ -605,12 +607,12 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
 
     // Gather variable info and transform sources.
     gl::ShaderMap<std::string> shaderSources;
-    ShaderInterfaceVariableInfoMap variableInfoMap;
     GlslangWrapperVk::GetShaderSource(contextVk->getRenderer()->getFeatures(), mState, resources,
-                                      &shaderSources, &variableInfoMap);
+                                      &shaderSources, &mExecutable.mVariableInfoMap);
 
     // Compile the shaders.
-    angle::Result status = mShaderInfo.initShaders(contextVk, shaderSources, variableInfoMap);
+    angle::Result status =
+        mShaderInfo.initShaders(contextVk, shaderSources, mExecutable.mVariableInfoMap);
     if (status != angle::Result::Continue)
     {
         return std::make_unique<LinkEventDone>(status);
