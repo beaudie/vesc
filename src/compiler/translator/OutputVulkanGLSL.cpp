@@ -168,4 +168,9 @@ void TOutputVulkanGLSL::writeStructType(const TStructure *structure)
     }
 }
 
+bool TOutputVulkanGLSL::writeVariablePrecision(TPrecision precision)
+{
+    return TOutputGLSL::writeVariablePrecision(precision);
+}
+
 }  // namespace sh
