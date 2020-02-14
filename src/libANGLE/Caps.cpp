@@ -950,7 +950,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_webgl_compatibility"] = esOnlyExtension(&Extensions::webglCompatibility);
         map["GL_ANGLE_request_extension"] = esOnlyExtension(&Extensions::requestExtension);
         map["GL_CHROMIUM_bind_generates_resource"] = esOnlyExtension(&Extensions::bindGeneratesResource);
-        map["GL_ANGLE_robust_client_memory"] = esOnlyExtension(&Extensions::robustClientMemory);
+        map["GL_ANGLE_robust_client_memory"] = enableableExtension(&Extensions::robustClientMemory);
         map["GL_EXT_texture_sRGB_decode"] = esOnlyExtension(&Extensions::textureSRGBDecode);
         map["GL_EXT_sRGB_write_control"] = esOnlyExtension(&Extensions::sRGBWriteControl);
         map["GL_CHROMIUM_color_buffer_float_rgb"] = enableableExtension(&Extensions::colorBufferFloatRGB);
