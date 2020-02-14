@@ -3320,6 +3320,13 @@ void Context::disableExtension(const char *name)
 
 void Context::setExtensionEnabled(const char *name, bool enabled)
 {
+    if (strcmp(name, "GL_ANGLE_robust_client_memory") == 0 && mSkipValidation)
+    {
+        ERR() << "GL_ANGLE_robust_client_memory requires that the context is created with "
+                 "validation enabled";
+        return;
+    }
+
     // OVR_multiview is implicitly enabled when OVR_multiview2 is enabled
     if (strcmp(name, "GL_OVR_multiview2") == 0)
     {
@@ -3395,6 +3402,7 @@ Extensions Context::generateSupportedExtensions() const
 {
     Extensions supportedExtensions = mImplementation->getNativeExtensions();
 
+    supportedExtensions.robustClientMemory = true;
     // Explicitly enable GL_KHR_parallel_shader_compile
     supportedExtensions.parallelShaderCompile = true;
 
@@ -3500,9 +3508,6 @@ Extensions Context::generateSupportedExtensions() const
     supportedExtensions.maxDebugLoggedMessages  = 1024;
     supportedExtensions.maxDebugGroupStackDepth = 1024;
     supportedExtensions.maxLabelLength          = 1024;
-
-    // Explicitly enable GL_ANGLE_robust_client_memory
-    supportedExtensions.robustClientMemory = true;
 
     // Determine robust resource init availability from EGL.
     supportedExtensions.robustResourceInitialization = mState.isRobustResourceInitEnabled();
