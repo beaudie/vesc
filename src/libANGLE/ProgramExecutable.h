@@ -49,6 +49,20 @@ class ProgramExecutable
     const ComponentTypeMask &getAttributesTypeMask() const { return mAttributesTypeMask; }
     AttributesMask getAttributesMask() const;
 
+    bool hasDefaultUniforms(const gl::State &glState) const;
+    bool hasTextures(const gl::State &glState) const;
+    bool hasUniformBuffers(const gl::State &glState) const;
+    bool hasStorageBuffers(const gl::State &glState) const;
+    bool hasAtomicCounterBuffers(const gl::State &glState) const;
+    bool hasImages(const gl::State &glState) const;
+    bool hasTransformFeedbackOutput(const gl::State &glState) const;
+
+    // Count the number of uniform and storage buffer declarations, counting arrays as one.
+    size_t getUniqueUniformBlockCount(const gl::State &glState) const;
+    size_t getUniqueStorageBlockCount(const gl::State &glState) const;
+    size_t getAtomicCounterBuffersCount(const gl::State &glState) const;
+    size_t getTransformFeedbackBufferCount(const gl::State &glState) const;
+
   private:
     // TODO(timvp): http://anglebug.com/3570: Investigate removing these friend
     // class declarations and accessing the necessary members with getters/setters.
