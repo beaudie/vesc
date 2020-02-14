@@ -287,14 +287,13 @@ angle::Result Clear11::ensureResourcesInitialized(const gl::Context *context)
     mDepthStencilStateKey.stencilBackFunc          = GL_ALWAYS;
 
     // Initialize BlendStateKey with defaults
-    mBlendStateKey.blendState.blend                 = false;
-    mBlendStateKey.blendState.sourceBlendRGB        = GL_ONE;
-    mBlendStateKey.blendState.sourceBlendAlpha      = GL_ONE;
-    mBlendStateKey.blendState.destBlendRGB          = GL_ZERO;
-    mBlendStateKey.blendState.destBlendAlpha        = GL_ZERO;
-    mBlendStateKey.blendState.blendEquationRGB      = GL_FUNC_ADD;
-    mBlendStateKey.blendState.blendEquationAlpha    = GL_FUNC_ADD;
-    mBlendStateKey.blendState.sampleAlphaToCoverage = false;
+    mBlendStateKey.blendState.blend              = false;
+    mBlendStateKey.blendState.sourceBlendRGB     = GL_ONE;
+    mBlendStateKey.blendState.sourceBlendAlpha   = GL_ONE;
+    mBlendStateKey.blendState.destBlendRGB       = GL_ZERO;
+    mBlendStateKey.blendState.destBlendAlpha     = GL_ZERO;
+    mBlendStateKey.blendState.blendEquationRGB   = GL_FUNC_ADD;
+    mBlendStateKey.blendState.blendEquationAlpha = GL_FUNC_ADD;
 
     mResourcesInitialized = true;
     return angle::Result::Continue;
