@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/ProgramExecutableVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -307,9 +308,10 @@ class ProgramVk : public ProgramImpl
         ShaderInfo();
         ~ShaderInfo();
 
-        angle::Result initShaders(ContextVk *contextVk,
-                                  const gl::ShaderMap<std::string> &shaderSources,
-                                  const ShaderInterfaceVariableInfoMap &variableInfoMap);
+        angle::Result initShaders(
+            ContextVk *contextVk,
+            const gl::ShaderMap<std::string> &shaderSources,
+            const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap);
         void release(ContextVk *contextVk);
 
         ANGLE_INLINE bool valid() const { return mIsInitialized; }
@@ -362,6 +364,8 @@ class ProgramVk : public ProgramImpl
     // cache management. It can also allow fewer descriptors for shaders which use fewer
     // textures/buffers.
     vk::DescriptorSetLayoutArray<vk::DynamicDescriptorPool> mDynamicDescriptorPools;
+
+    ProgramExecutableVk mExecutable;
 };
 
 }  // namespace rx
