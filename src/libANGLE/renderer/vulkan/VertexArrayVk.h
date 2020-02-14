@@ -107,6 +107,7 @@ class VertexArrayVk : public VertexArrayImpl
     angle::Result convertIndexBufferCPU(ContextVk *contextVk,
                                         gl::DrawElementsType indexType,
                                         size_t indexCount,
+                                        BufferVk *bufferVk,
                                         const void *sourcePointer);
 
     const gl::AttributesMask &getStreamingVertexAttribsMask() const
@@ -150,7 +151,6 @@ class VertexArrayVk : public VertexArrayImpl
 
     vk::DynamicBuffer mDynamicVertexData;
     vk::DynamicBuffer mDynamicIndexData;
-    vk::DynamicBuffer mTranslatedByteIndexData;
     vk::DynamicBuffer mTranslatedByteIndirectData;
 
     vk::LineLoopHelper mLineLoopHelper;

@@ -22,10 +22,7 @@ class RendererVk;
 // Conversion buffers hold translated index and vertex data.
 struct ConversionBuffer
 {
-    ConversionBuffer(RendererVk *renderer,
-                     VkBufferUsageFlags usageFlags,
-                     size_t initialSize,
-                     size_t alignment);
+    ConversionBuffer(RendererVk *renderer, VkBufferUsageFlags usageFlags);
     ~ConversionBuffer();
 
     ConversionBuffer(ConversionBuffer &&other);
@@ -108,6 +105,7 @@ class BufferVk : public BufferImpl
                                const VkBufferCopy *copies);
 
     ConversionBuffer *getVertexConversionBuffer(RendererVk *renderer,
+                                                VkBufferUsageFlags usageFlags,
                                                 angle::FormatID formatID,
                                                 GLuint stride,
                                                 size_t offset);
@@ -124,6 +122,7 @@ class BufferVk : public BufferImpl
     struct VertexConversionBuffer : public ConversionBuffer
     {
         VertexConversionBuffer(RendererVk *renderer,
+                               VkBufferUsageFlags usageFlags,
                                angle::FormatID formatIDIn,
                                GLuint strideIn,
                                size_t offsetIn);

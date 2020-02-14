@@ -31,6 +31,7 @@ static_assert(gl::isPow2(kBufferSizeGranularity), "use as alignment, must be pow
 
 // Start with a fairly small buffer size. We can increase this dynamically as we convert more data.
 constexpr size_t kConvertedArrayBufferInitialSize = 1024 * 8;
+constexpr size_t kConvertedIndexBufferInitialSize = 1024 * 8;
 
 // Base size for all staging buffers
 constexpr size_t kStagingBufferBaseSize = 1024;
@@ -61,12 +62,28 @@ size_t CalculateStagingBufferSize(gl::BufferBinding target, size_t size, size_t 
 }  // namespace
 
 // ConversionBuffer implementation.
-ConversionBuffer::ConversionBuffer(RendererVk *renderer,
-                                   VkBufferUsageFlags usageFlags,
-                                   size_t initialSize,
-                                   size_t alignment)
+ConversionBuffer::ConversionBuffer(RendererVk *renderer, VkBufferUsageFlags usageFlags)
     : dirty(true), lastAllocationOffset(0)
 {
+    size_t initialSize, alignment;
+
+    if (usageFlags & vk::kVertexBufferUsageFlags)
+    {
+        initialSize = kConvertedArrayBufferInitialSize;
+        alignment   = vk::kVertexBufferAlignment;
+    }
+    else if (usageFlags & vk::kIndexBufferUsageFlags)
+    {
+        initialSize = kConvertedIndexBufferInitialSize;
+        alignment   = vk::kIndexBufferAlignment;
+    }
+    else
+    {
+        ASSERT(false && "Revisit: not been used before");
+        initialSize = 1024 * 4;
+        alignment   = 4;
+    }
+
     data.init(renderer, usageFlags, alignment, initialSize, true);
 }
 
@@ -76,13 +93,11 @@ ConversionBuffer::ConversionBuffer(ConversionBuffer &&other) = default;
 
 // BufferVk::VertexConversionBuffer implementation.
 BufferVk::VertexConversionBuffer::VertexConversionBuffer(RendererVk *renderer,
+                                                         VkBufferUsageFlags usageFlags,
                                                          angle::FormatID formatIDIn,
                                                          GLuint strideIn,
                                                          size_t offsetIn)
-    : ConversionBuffer(renderer,
-                       vk::kVertexBufferUsageFlags,
-                       kConvertedArrayBufferInitialSize,
-                       vk::kVertexBufferAlignment),
+    : ConversionBuffer(renderer, usageFlags),
       formatID(formatIDIn),
       stride(strideIn),
       offset(offsetIn)
@@ -437,19 +452,21 @@ angle::Result BufferVk::copyToBuffer(ContextVk *contextVk,
 }
 
 ConversionBuffer *BufferVk::getVertexConversionBuffer(RendererVk *renderer,
+                                                      VkBufferUsageFlags usageFlags,
                                                       angle::FormatID formatID,
                                                       GLuint stride,
                                                       size_t offset)
 {
     for (VertexConversionBuffer &buffer : mVertexConversionBuffers)
     {
-        if (buffer.formatID == formatID && buffer.stride == stride && buffer.offset == offset)
+        if (buffer.formatID == formatID && buffer.stride == stride && buffer.offset == offset &&
+            buffer.data.usageFlags() == usageFlags)
         {
             return &buffer;
         }
     }
 
-    mVertexConversionBuffers.emplace_back(renderer, formatID, stride, offset);
+    mVertexConversionBuffers.emplace_back(renderer, usageFlags, formatID, stride, offset);
     return &mVertexConversionBuffers.back();
 }
 
