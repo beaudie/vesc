@@ -1,0 +1,395 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19ae38ac_371e31dc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2211,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "working on fixing this. will conflict with my CL.",
+      "range": {
+        "startLine": 2210,
+        "startChar": 7,
+        "endLine": 2211,
+        "endChar": 52
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f01e97bb_51589179",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "nit: probably generateAttachmentImageSerial/generateRenderTargetSerial/generateImageSerial makes more sense... serials are assigned to RTs/images rather than FBOs.\n\n(Not sure if I already nit picked on this. Sorry if I am flip flopping)",
+      "range": {
+        "startLine": 572,
+        "startChar": 11,
+        "endLine": 572,
+        "endChar": 36
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eff17201_642dfac8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "nit: no need to cache this in the ContextVk. Can easily be accessed via the current FBO.",
+      "range": {
+        "startLine": 965,
+        "startChar": 3,
+        "endLine": 965,
+        "endChar": 47
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b26c7310_95b6bb07",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "nit: \u0027texture\u0027",
+      "range": {
+        "startLine": 1025,
+        "startChar": 22,
+        "endLine": 1025,
+        "endChar": 29
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32220f88_dfbc9e69",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "nit: make a typed local alias to make the type explicit and easier to read.\n\nSee https://google.github.io/styleguide/cppguide.html#Type_deduction and look for the sub-section titled \u0027Local variable type deduction\u0027",
+      "range": {
+        "startLine": 150,
+        "startChar": 7,
+        "endLine": 150,
+        "endChar": 41
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74c71fba_07055386",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "can omit this when we shift to PoD weak pointers.",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 41
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81c7410d_01875aa8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "I believe mFramebuffer should be valid if mFramebuffer is not nullptr, correct me if I\u0027m wrong.",
+      "range": {
+        "startLine": 181,
+        "startChar": 11,
+        "endLine": 181,
+        "endChar": 33
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02785fc6_3b4edaa6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "will need to clean this up.",
+      "range": {
+        "startLine": 196,
+        "startChar": 3,
+        "endLine": 196,
+        "endChar": 72
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7230edc2_85365274",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "nit: can move this inline now.",
+      "range": {
+        "startLine": 1125,
+        "startChar": 16,
+        "endLine": 1125,
+        "endChar": 36
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33670255_de434601",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "tiny nit: Framebuffer - no need for the contraction here.",
+      "range": {
+        "startLine": 1226,
+        "startChar": 38,
+        "endLine": 1226,
+        "endChar": 40
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb2f9e68_3a007c8b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "you should be using the one in _this_ FB",
+      "range": {
+        "startLine": 1232,
+        "startChar": 4,
+        "endLine": 1232,
+        "endChar": 87
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d7ec2c0_f0f973da",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "we should make this a POD pointer.. see below.",
+      "range": {
+        "startLine": 189,
+        "startChar": 4,
+        "endLine": 189,
+        "endChar": 56
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13a67008_d347ea1b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "we should store these by value. let me know what issues you run into. by-value \u003d\u003d the most efficient and simplest code.\n\nwe can let the command graph path die out.",
+      "range": {
+        "startLine": 205,
+        "startChar": 44,
+        "endLine": 205,
+        "endChar": 82
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0503fc87_6243fa78",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "ah, forgot about the layer/level. you can use the SetBitField macro in vk_cache_utils for this. Maybe can move that into the header.",
+      "range": {
+        "startLine": 61,
+        "startChar": 3,
+        "endLine": 62,
+        "endChar": 64
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "761de799_41a932a4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "do you need two update methods here?",
+      "range": {
+        "startLine": 742,
+        "startChar": 4,
+        "endLine": 743,
+        "endChar": 57
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d98d55b_f8dc4f0b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "do you need a get method?",
+      "range": {
+        "startLine": 744,
+        "startChar": 0,
+        "endLine": 744,
+        "endChar": 74
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bf0399d_2d6c8c51",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-14T22:00:13Z",
+      "side": 1,
+      "message": "How about we just use gl::AttachmentArray? And use separate indexes for depth/stencil. That would stop any potential confusion over separate depth/stencil. As unlikely as it may be.",
+      "range": {
+        "startLine": 752,
+        "startChar": 4,
+        "endLine": 752,
+        "endChar": 21
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
