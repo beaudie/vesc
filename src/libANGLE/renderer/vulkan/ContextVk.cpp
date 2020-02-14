@@ -1153,7 +1153,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
         const vk::GraphicsPipelineDesc *descPtr;
 
         // TODO(timvp): http://anglebug.com/3570: Move back to ProgramVk::link()
-        ANGLE_TRY(mProgram->createPipelineLayout(context));
+        ANGLE_TRY(mProgram->getExecutable().createPipelineLayout(mProgram->getState(), context));
 
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(mProgram->getGraphicsPipeline(
@@ -1196,7 +1196,7 @@ angle::Result ContextVk::handleDirtyComputePipeline(const gl::Context *context,
     if (!mCurrentComputePipeline)
     {
         // TODO(timvp): http://anglebug.com/3570: Move back to ProgramVk::link()
-        ANGLE_TRY(mProgram->createPipelineLayout(context));
+        ANGLE_TRY(mProgram->getExecutable().createPipelineLayout(mProgram->getState(), context));
         ANGLE_TRY(mProgram->getComputePipeline(this, &mCurrentComputePipeline));
     }
 
@@ -1213,9 +1213,9 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     vk::Resource *recorder,
     CommandBufferHelper *commandBufferHelper)
 {
-    const gl::State &glState                       = mState;
-    const gl::ProgramExecutable *programExecutable = glState.getExecutable();
-    const gl::ActiveTextureMask &activeTextures    = mProgram->getState().getActiveSamplersMask();
+    const gl::ProgramExecutable *executable     = mState.getExecutable();
+    const gl::ActiveTextureMask &activeTextures = mProgram->getState().getActiveSamplersMask();
+    ASSERT(executable);
 
     for (size_t textureUnit : activeTextures)
     {
@@ -1228,7 +1228,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         // layers. Therefore we can't verify it has no staged updates right here.
 
         vk::ImageLayout textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
-        if (programExecutable->isCompute())
+        if (executable->isCompute())
         {
             textureLayout = vk::ImageLayout::ComputeShaderReadOnly;
         }
@@ -1249,9 +1249,10 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         }
     }
 
-    if (mProgram->hasTextures())
+    if (executable->hasTextures(mState))
     {
-        ANGLE_TRY(mProgram->updateTexturesDescriptorSet(this));
+        ANGLE_TRY(
+            mProgram->getExecutable().updateTexturesDescriptorSet(mProgram->getState(), this));
     }
 
     return angle::Result::Continue;
@@ -1321,16 +1322,19 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
     vk::Resource *recorder,
     CommandBufferHelper *commandBufferHelper)
 {
-    if (mProgram->hasImages())
+    const gl::ProgramExecutable *executable = mState.getExecutable();
+    ASSERT(executable);
+
+    if (executable->hasImages(mState))
     {
         ANGLE_TRY(updateActiveImages(context, recorder, commandBufferHelper));
     }
 
-    if (mProgram->hasUniformBuffers() || mProgram->hasStorageBuffers() ||
-        mProgram->hasAtomicCounterBuffers() || mProgram->hasImages())
+    if (executable->hasUniformBuffers(mState) || executable->hasStorageBuffers(mState) ||
+        executable->hasAtomicCounterBuffers(mState) || executable->hasImages(mState))
     {
-        ANGLE_TRY(mProgram->updateShaderResourcesDescriptorSet(this, &mResourceUseList,
-                                                               commandBufferHelper, recorder));
+        ANGLE_TRY(mProgram->getExecutable().updateShaderResourcesDescriptorSet(
+            mProgram->getState(), this, &mResourceUseList, commandBufferHelper));
     }
     return angle::Result::Continue;
 }
@@ -1353,7 +1357,10 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     const gl::Context *context,
     vk::CommandBuffer *commandBuffer)
 {
-    if (mProgram->hasTransformFeedbackOutput() && mState.isTransformFeedbackActive())
+    const gl::ProgramExecutable *executable = mState.getExecutable();
+    ASSERT(executable);
+
+    if (executable->hasTransformFeedbackOutput(mState) && mState.isTransformFeedbackActive())
     {
         size_t bufferCount = mProgram->getState().getTransformFeedbackBufferCount();
         const std::vector<gl::OffsetBindingPointer<gl::Buffer>> &xfbBuffers =
@@ -1371,8 +1378,8 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
                 &mResourceUseList, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT, &bufferHelper);
         }
 
-        ANGLE_TRY(mProgram->updateTransformFeedbackDescriptorSet(
-            this, mDrawFramebuffer->getFramebuffer()));
+        ANGLE_TRY(mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
+            mProgram->getState(), mProgram->getDefaultUniformBlocks(), this));
     }
     return angle::Result::Continue;
 }
@@ -1381,7 +1388,10 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     const gl::Context *context,
     vk::CommandBuffer *commandBuffer)
 {
-    if (!mProgram->hasTransformFeedbackOutput() || !mState.isTransformFeedbackActive())
+    const gl::ProgramExecutable *executable = mState.getExecutable();
+    ASSERT(executable);
+
+    if (!executable->hasTransformFeedbackOutput(mState) || !mState.isTransformFeedbackActive())
         return angle::Result::Continue;
 
     size_t bufferIndex                       = 0;
@@ -1420,7 +1430,11 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Context *context,
                                                                    vk::CommandBuffer *commandBuffer)
 {
-    if (!mProgram->hasTransformFeedbackOutput() || !mState.isTransformFeedbackActiveUnpaused())
+    const gl::ProgramExecutable *executable = mState.getExecutable();
+    ASSERT(executable);
+
+    if (!executable->hasTransformFeedbackOutput(mState) ||
+        !mState.isTransformFeedbackActiveUnpaused())
         return angle::Result::Continue;
 
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
@@ -1443,7 +1457,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Con
 angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer)
 {
-    ANGLE_TRY(mProgram->updateDescriptorSets(this, commandBuffer));
+    ANGLE_TRY(mProgram->getExecutable().updateDescriptorSets(this, commandBuffer));
     return angle::Result::Continue;
 }
 
@@ -3052,8 +3066,10 @@ OverlayImpl *ContextVk::createOverlay(const gl::OverlayState &state)
 
 void ContextVk::invalidateCurrentDefaultUniforms()
 {
-    ASSERT(mProgram);
-    if (mProgram->hasDefaultUniforms())
+    const gl::ProgramExecutable *executable = mState.getExecutable();
+    ASSERT(executable);
+
+    if (executable->hasDefaultUniforms(mState))
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
         mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -3062,8 +3078,10 @@ void ContextVk::invalidateCurrentDefaultUniforms()
 
 angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context)
 {
-    ASSERT(mProgram);
-    if (mProgram->hasTextures())
+    const gl::ProgramExecutable *executable = mState.getExecutable();
+    ASSERT(executable);
+
+    if (executable->hasTextures(mState))
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_TEXTURES);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -3078,9 +3096,11 @@ angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context)
 
 void ContextVk::invalidateCurrentShaderResources()
 {
-    ASSERT(mProgram);
-    if (mProgram->hasUniformBuffers() || mProgram->hasStorageBuffers() ||
-        mProgram->hasAtomicCounterBuffers() || mProgram->hasImages())
+    const gl::ProgramExecutable *executable = mState.getExecutable();
+    ASSERT(executable);
+
+    if (executable->hasUniformBuffers(mState) || executable->hasStorageBuffers(mState) ||
+        executable->hasAtomicCounterBuffers(mState) || executable->hasImages(mState))
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
