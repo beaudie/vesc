@@ -290,6 +290,7 @@ angle::Result VertexArrayVk::handleLineLoopIndirectDraw(const gl::Context *conte
 angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
                                                    gl::DrawElementsType indexType,
                                                    size_t indexCount,
+                                                   BufferVk *bufferVk,
                                                    const void *sourcePointer)
 {
     ASSERT(!mState.getElementArrayBuffer() || indexType == gl::DrawElementsType::UnsignedByte);
@@ -314,7 +315,18 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
     {
         // Unsigned bytes don't have direct support in Vulkan so we have to expand the
         // memory to a GLushort.
-        const GLubyte *in     = static_cast<const GLubyte *>(sourcePointer);
+        const GLubyte *in;
+        if (bufferVk)
+        {
+            void *src;
+            ANGLE_TRY(bufferVk->mapImpl(contextVk, &src));
+            in = (GLubyte *)src + (uintptr_t)sourcePointer;
+        }
+        else
+        {
+            in = static_cast<const GLubyte *>(sourcePointer);
+        }
+
         GLushort *expandedDst = reinterpret_cast<GLushort *>(dst);
         bool primitiveRestart = contextVk->getState().isPrimitiveRestartEnabled();
 

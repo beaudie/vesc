@@ -107,6 +107,7 @@ class VertexArrayVk : public VertexArrayImpl
     angle::Result convertIndexBufferCPU(ContextVk *contextVk,
                                         gl::DrawElementsType indexType,
                                         size_t indexCount,
+                                        BufferVk *bufferVk,
                                         const void *sourcePointer);
 
     const gl::AttributesMask &getStreamingVertexAttribsMask() const

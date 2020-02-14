@@ -475,6 +475,10 @@ class BufferHelper final : public CommandGraphResource
     const Buffer &getBuffer() const { return mBuffer; }
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
     VkDeviceSize getSize() const { return mSize; }
+    bool hostVisible() const
+    {
+        return (mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+    }
 
     // Helpers for setting the graph dependencies *and* setting the appropriate barrier.  These are
     // made for dependencies to non-buffer resources, as only one of two resources participating in
