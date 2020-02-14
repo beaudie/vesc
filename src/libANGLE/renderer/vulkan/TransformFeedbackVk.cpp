@@ -176,39 +176,6 @@ void TransformFeedbackVk::updateDescriptorSetLayout(
     }
 }
 
-void TransformFeedbackVk::addFramebufferDependency(ContextVk *contextVk,
-                                                   const gl::ProgramState &programState,
-                                                   vk::FramebufferHelper *framebuffer) const
-{
-    const std::vector<gl::OffsetBindingPointer<gl::Buffer>> &xfbBuffers =
-        mState.getIndexedBuffers();
-    size_t xfbBufferCount = programState.getTransformFeedbackBufferCount();
-
-    ASSERT(xfbBufferCount > 0);
-    ASSERT(programState.getTransformFeedbackBufferMode() != GL_INTERLEAVED_ATTRIBS ||
-           xfbBufferCount == 1);
-
-    VkAccessFlags writeAccessType = VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT;
-    if (!contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
-    {
-        writeAccessType = VK_ACCESS_SHADER_WRITE_BIT;
-    }
-
-    // Set framebuffer dependent to the transform feedback buffers.  This is especially done
-    // separately from |updateDescriptorSet|, to avoid introducing unnecessary buffer barriers
-    // every time the descriptor set is updated (which, as the set is shared with default uniforms,
-    // could get updated frequently).
-    for (size_t bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
-    {
-        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = xfbBuffers[bufferIndex];
-        gl::Buffer *buffer                                        = bufferBinding.get();
-        ASSERT(buffer != nullptr);
-
-        vk::BufferHelper &bufferHelper = vk::GetImpl(buffer)->getBuffer();
-        bufferHelper.onWrite(contextVk, framebuffer, writeAccessType);
-    }
-}
-
 void TransformFeedbackVk::initDescriptorSet(ContextVk *contextVk,
                                             size_t xfbBufferCount,
                                             vk::BufferHelper *emptyBuffer,
@@ -322,19 +289,7 @@ angle::Result TransformFeedbackVk::onTransformFeedbackStateChanged(ContextVk *co
     FramebufferVk *framebufferVk       = vk::GetImpl(contextVk->getState().getDrawFramebuffer());
     vk::FramebufferHelper *framebuffer = framebufferVk->getFramebuffer();
 
-    if (contextVk->commandGraphEnabled())
-    {
-        framebuffer->updateCurrentAccessNodes();
-        if (framebuffer->hasStartedRenderPass())
-        {
-            framebuffer->finishCurrentCommands(contextVk);
-        }
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->endRenderPass());
-    }
-
+    ANGLE_TRY(contextVk->endRenderPass());
     return angle::Result::Continue;
 }
 

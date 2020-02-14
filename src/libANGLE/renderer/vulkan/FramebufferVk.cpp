@@ -31,10 +31,6 @@ namespace rx
 
 namespace
 {
-// The value to assign an alpha channel that's emulated.  The type is unsigned int, though it will
-// automatically convert to the actual data type.
-constexpr unsigned int kEmulatedAlphaValue = 1;
-
 constexpr size_t kMinReadPixelsBufferSize = 128000;
 
 // Alignment value to accommodate the largest known, for now, uncompressed Vulkan format
@@ -69,7 +65,7 @@ bool HasDstBlitFeature(RendererVk *renderer, RenderTargetVk *dstRenderTarget)
 
 // Returns false if destination has any channel the source doesn't.  This means that channel was
 // emulated and using the Vulkan blit command would overwrite that emulated channel.
-bool areSrcAndDstColorChannelsBlitCompatible(RenderTargetVk *srcRenderTarget,
+bool AreSrcAndDstColorChannelsBlitCompatible(RenderTargetVk *srcRenderTarget,
                                              RenderTargetVk *dstRenderTarget)
 {
     const angle::Format &srcFormat = srcRenderTarget->getImageFormat().intendedFormat();
@@ -87,7 +83,7 @@ bool areSrcAndDstColorChannelsBlitCompatible(RenderTargetVk *srcRenderTarget,
            (dstFormat.alphaBits > 0 || srcFormat.alphaBits == 0);
 }
 
-bool areSrcAndDstDepthStencilChannelsBlitCompatible(RenderTargetVk *srcRenderTarget,
+bool AreSrcAndDstDepthStencilChannelsBlitCompatible(RenderTargetVk *srcRenderTarget,
                                                     RenderTargetVk *dstRenderTarget)
 {
     const angle::Format &srcFormat = srcRenderTarget->getImageFormat().intendedFormat();
@@ -95,25 +91,6 @@ bool areSrcAndDstDepthStencilChannelsBlitCompatible(RenderTargetVk *srcRenderTar
 
     return (dstFormat.depthBits > 0 || srcFormat.depthBits == 0) &&
            (dstFormat.stencilBits > 0 || srcFormat.stencilBits == 0);
-}
-
-void SetEmulatedAlphaValue(const vk::Format &format, VkClearColorValue *value)
-{
-    if (format.vkFormatIsInt)
-    {
-        if (format.vkFormatIsUnsigned)
-        {
-            value->uint32[3] = kEmulatedAlphaValue;
-        }
-        else
-        {
-            value->int32[3] = kEmulatedAlphaValue;
-        }
-    }
-    else
-    {
-        value->float32[3] = kEmulatedAlphaValue;
-    }
 }
 }  // anonymous namespace
 
@@ -164,22 +141,9 @@ angle::Result FramebufferVk::invalidate(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     mFramebuffer.onResourceAccess(&contextVk->getResourceUseList());
 
-    if (mFramebuffer.valid())
+    if (mFramebuffer.valid() && contextVk->hasStartedRenderPass())
     {
-        if (contextVk->commandGraphEnabled())
-        {
-            if (mFramebuffer.hasStartedRenderPass())
-            {
-                ANGLE_TRY(invalidateImpl(contextVk, count, attachments));
-            }
-        }
-        else
-        {
-            if (contextVk->hasStartedRenderPass())
-            {
-                ANGLE_TRY(invalidateImpl(contextVk, count, attachments));
-            }
-        }
+        ANGLE_TRY(invalidateImpl(contextVk, count, attachments));
     }
 
     return angle::Result::Continue;
@@ -195,24 +159,10 @@ angle::Result FramebufferVk::invalidateSub(const gl::Context *context,
 
     // RenderPass' storeOp cannot be made conditional to a specific region, so we only apply this
     // hint if the requested area encompasses the render area.
-    if (mFramebuffer.valid())
+    if (mFramebuffer.valid() && contextVk->hasStartedRenderPass() &&
+        area.encloses(contextVk->getStartedRenderPassCommands().getRenderArea()))
     {
-        if (contextVk->commandGraphEnabled())
-        {
-            if (mFramebuffer.hasStartedRenderPass() &&
-                area.encloses(mFramebuffer.getRenderPassRenderArea()))
-            {
-                ANGLE_TRY(invalidateImpl(contextVk, count, attachments));
-            }
-        }
-        else
-        {
-            if (contextVk->hasStartedRenderPass() &&
-                area.encloses(contextVk->getStartedRenderPassCommands().getRenderArea()))
-            {
-                ANGLE_TRY(invalidateImpl(contextVk, count, attachments));
-            }
-        }
+        ANGLE_TRY(invalidateImpl(contextVk, count, attachments));
     }
 
     return angle::Result::Continue;
@@ -255,8 +205,6 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     {
         return angle::Result::Continue;
     }
-
-    mFramebuffer.updateCurrentAccessNodes();
 
     // This function assumes that only enabled attachments are asked to be cleared.
     ASSERT((clearColorBuffers & mState.getEnabledDrawBuffers()) == clearColorBuffers);
@@ -320,18 +268,9 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
             clearBuffersWithRenderPassLoadOp = clearColorBuffers;
         }
 
-        if (contextVk->commandGraphEnabled())
-        {
-            ANGLE_TRY(clearWithRenderPassOp(
-                contextVk, scissoredRenderArea, clearBuffersWithRenderPassLoadOp, clearDepth,
-                clearStencilWithRenderPassLoadOp, clearColorValue, modifiedDepthStencilValue));
-        }
-        else
-        {
-            ANGLE_TRY(contextVk->clearWithRenderPassOp(
-                scissoredRenderArea, clearBuffersWithRenderPassLoadOp, clearDepth,
-                clearStencilWithRenderPassLoadOp, clearColorValue, modifiedDepthStencilValue));
-        }
+        ANGLE_TRY(contextVk->clearWithRenderPassOp(
+            scissoredRenderArea, clearBuffersWithRenderPassLoadOp, clearDepth,
+            clearStencilWithRenderPassLoadOp, clearColorValue, modifiedDepthStencilValue));
 
         // Fallback to other methods for whatever isn't cleared here.
         clearDepth = false;
@@ -563,28 +502,9 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
     }
 
     vk::CommandBuffer *commandBuffer = nullptr;
-    if (contextVk->commandGraphEnabled())
-    {
-        if (srcImage->isLayoutChangeNecessary(vk::ImageLayout::TransferSrc))
-        {
-            vk::CommandBuffer *srcLayoutChange;
-            ANGLE_TRY(srcImage->recordCommands(contextVk, &srcLayoutChange));
-            srcImage->changeLayout(imageAspectMask, vk::ImageLayout::TransferSrc, srcLayoutChange);
-        }
-        ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
-
-        srcImage->addReadDependency(contextVk, &mFramebuffer);
-
-        // Requirement of the copyImageToBuffer, the dst image must be in
-        // VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL layout.
-        dstImage->changeLayout(imageAspectMask, vk::ImageLayout::TransferDst, commandBuffer);
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->onImageRead(imageAspectMask, vk::ImageLayout::TransferSrc, srcImage));
-        ANGLE_TRY(contextVk->onImageWrite(imageAspectMask, vk::ImageLayout::TransferDst, dstImage));
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-    }
+    ANGLE_TRY(contextVk->onImageRead(imageAspectMask, vk::ImageLayout::TransferSrc, srcImage));
+    ANGLE_TRY(contextVk->onImageWrite(imageAspectMask, vk::ImageLayout::TransferDst, dstImage));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     VkImageBlit blit                   = {};
     blit.srcSubresource.aspectMask     = blitAspectMask;
@@ -789,7 +709,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                 canBlitWithCommand && HasDstBlitFeature(renderer, drawRenderTarget);
             areChannelsBlitCompatible =
                 areChannelsBlitCompatible &&
-                areSrcAndDstColorChannelsBlitCompatible(readRenderTarget, drawRenderTarget);
+                AreSrcAndDstColorChannelsBlitCompatible(readRenderTarget, drawRenderTarget);
         }
 
         if (canBlitWithCommand && areChannelsBlitCompatible)
@@ -833,7 +753,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                                   HasSrcBlitFeature(renderer, readRenderTarget) &&
                                   HasDstBlitFeature(renderer, drawRenderTarget);
         bool areChannelsBlitCompatible =
-            areSrcAndDstDepthStencilChannelsBlitCompatible(readRenderTarget, drawRenderTarget);
+            AreSrcAndDstDepthStencilChannelsBlitCompatible(readRenderTarget, drawRenderTarget);
 
         if (canBlitWithCommand && areChannelsBlitCompatible)
         {
@@ -905,26 +825,8 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
                                                      vk::ImageHelper *srcImage)
 {
     vk::CommandBuffer *commandBuffer = nullptr;
-    if (contextVk->commandGraphEnabled())
-    {
-        if (srcImage->isLayoutChangeNecessary(vk::ImageLayout::TransferSrc))
-        {
-            vk::CommandBuffer *srcLayoutChange;
-            ANGLE_TRY(srcImage->recordCommands(contextVk, &srcLayoutChange));
-            srcImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferSrc,
-                                   srcLayoutChange);
-        }
-
-        ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
-
-        // Source's layout change should happen before rendering
-        srcImage->addReadDependency(contextVk, &mFramebuffer);
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->onImageRead(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferSrc,
-                                         srcImage));
-    }
+    ANGLE_TRY(
+        contextVk->onImageRead(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferSrc, srcImage));
 
     VkImageResolve resolveRegion                = {};
     resolveRegion.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -946,20 +848,9 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
     for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
     {
         RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
-        if (contextVk->commandGraphEnabled())
-        {
-            vk::ImageHelper *drawImage =
-                drawRenderTarget->getImageForWrite(contextVk, &mFramebuffer);
-            drawImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
-                                    commandBuffer);
-        }
-        else
-        {
-            ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT,
-                                              vk::ImageLayout::TransferDst,
-                                              &drawRenderTarget->getImage()));
-            ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-        }
+        ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
+                                          &drawRenderTarget->getImage()));
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
         resolveRegion.dstSubresource.mipLevel       = drawRenderTarget->getLevelIndex();
         resolveRegion.dstSubresource.baseArrayLayer = drawRenderTarget->getLayerIndex();
@@ -1054,15 +945,8 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     {
         if (invalidateColorBuffers.test(colorIndexGL))
         {
-            if (contextVk->commandGraphEnabled())
-            {
-                mFramebuffer.invalidateRenderPassColorAttachment(attachmentIndexVk);
-            }
-            else
-            {
-                contextVk->getStartedRenderPassCommands().invalidateRenderPassColorAttachment(
-                    attachmentIndexVk);
-            }
+            contextVk->getStartedRenderPassCommands().invalidateRenderPassColorAttachment(
+                attachmentIndexVk);
         }
         ++attachmentIndexVk;
     }
@@ -1072,28 +956,14 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     {
         if (invalidateDepthBuffer)
         {
-            if (contextVk->commandGraphEnabled())
-            {
-                mFramebuffer.invalidateRenderPassDepthAttachment(attachmentIndexVk);
-            }
-            else
-            {
-                contextVk->getStartedRenderPassCommands().invalidateRenderPassDepthAttachment(
-                    attachmentIndexVk);
-            }
+            contextVk->getStartedRenderPassCommands().invalidateRenderPassDepthAttachment(
+                attachmentIndexVk);
         }
 
         if (invalidateStencilBuffer)
         {
-            if (contextVk->commandGraphEnabled())
-            {
-                mFramebuffer.invalidateRenderPassStencilAttachment(attachmentIndexVk);
-            }
-            else
-            {
-                contextVk->getStartedRenderPassCommands().invalidateRenderPassStencilAttachment(
-                    attachmentIndexVk);
-            }
+            contextVk->getStartedRenderPassCommands().invalidateRenderPassStencilAttachment(
+                attachmentIndexVk);
         }
     }
 
@@ -1110,14 +980,7 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     // this pattern, this optimization may not be necessary if no application does this.  It is
     // expected that an application would invalidate() when it's done with the framebuffer, so the
     // render pass would have closed either way.
-    if (contextVk->commandGraphEnabled())
-    {
-        mFramebuffer.finishCurrentCommands(contextVk);
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->endRenderPass());
-    }
+    ANGLE_TRY(contextVk->endRenderPass());
 
     return angle::Result::Continue;
 }
@@ -1181,16 +1044,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
 
     mFramebuffer.release(contextVk);
 
-    if (contextVk->commandGraphEnabled())
-    {
-        // Will freeze the current set of dependencies on this FBO. The next time we render we will
-        // create a new entry in the command graph.
-        mFramebuffer.finishCurrentCommands(contextVk);
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->endRenderPass());
-    }
+    ANGLE_TRY(contextVk->endRenderPass());
 
     // Notify the ContextVk to update the pipeline desc.
     updateRenderPassDesc();
@@ -1309,74 +1163,6 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
     return angle::Result::Continue;
 }
 
-angle::Result FramebufferVk::clearWithRenderPassOp(
-    ContextVk *contextVk,
-    const gl::Rectangle &clearArea,
-    gl::DrawBufferMask clearColorBuffers,
-    bool clearDepth,
-    bool clearStencil,
-    const VkClearColorValue &clearColorValue,
-    const VkClearDepthStencilValue &clearDepthStencilValue)
-{
-    ASSERT(contextVk->commandGraphEnabled());
-    // Start a new render pass if:
-    //
-    // - no render pass has started,
-    // - there is a render pass started but it contains commands; we cannot modify its ops, so new
-    // render pass is needed,
-    // - the current render area doesn't match the clear area.  We need the render area to be
-    // exactly as specified by the scissor for the loadOp to clear only that area.  See
-    // ContextVk::updateScissor for more information.
-
-    if (!mFramebuffer.valid() || !mFramebuffer.renderPassStartedButEmpty() ||
-        mFramebuffer.getRenderPassRenderArea() != clearArea)
-    {
-        vk::CommandBuffer *commandBuffer;
-        ANGLE_TRY(startNewRenderPass(contextVk, clearArea, &commandBuffer));
-    }
-
-    size_t attachmentIndexVk = 0;
-
-    // Go through clearColorBuffers and set the appropriate loadOp and clear values.
-    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
-    {
-        if (clearColorBuffers.test(colorIndexGL))
-        {
-            RenderTargetVk *renderTarget = getColorDrawRenderTarget(colorIndexGL);
-
-            // If the render target doesn't have alpha, but its emulated format has it, clear the
-            // alpha to 1.
-            VkClearColorValue value = clearColorValue;
-            if (mEmulatedAlphaAttachmentMask[colorIndexGL])
-            {
-                SetEmulatedAlphaValue(renderTarget->getImageFormat(), &value);
-            }
-
-            mFramebuffer.clearRenderPassColorAttachment(attachmentIndexVk, value);
-        }
-        ++attachmentIndexVk;
-    }
-
-    // Set the appropriate loadOp and clear values for depth and stencil.
-    RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
-    if (depthStencilRenderTarget)
-    {
-        if (clearDepth)
-        {
-            mFramebuffer.clearRenderPassDepthAttachment(attachmentIndexVk,
-                                                        clearDepthStencilValue.depth);
-        }
-
-        if (clearStencil)
-        {
-            mFramebuffer.clearRenderPassStencilAttachment(attachmentIndexVk,
-                                                          clearDepthStencilValue.stencil);
-        }
-    }
-
-    return angle::Result::Continue;
-}
-
 angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
                                            const gl::Rectangle &clearArea,
                                            gl::DrawBufferMask clearColorBuffers,
@@ -1444,15 +1230,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     vk::AttachmentOpsArray renderPassAttachmentOps;
     std::vector<VkClearValue> attachmentClearValues;
 
-    vk::CommandBuffer *writeCommands = nullptr;
-    if (contextVk->commandGraphEnabled())
-    {
-        ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &writeCommands));
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->endRenderPass());
-    }
+    ANGLE_TRY(contextVk->endRenderPass());
 
     // Initialize RenderPass info.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
@@ -1481,18 +1259,9 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         attachmentClearValues.emplace_back(kUninitializedClearValue);
     }
 
-    if (contextVk->commandGraphEnabled())
-    {
-        return mFramebuffer.beginRenderPass(contextVk, *framebuffer, renderArea, mRenderPassDesc,
-                                            renderPassAttachmentOps, attachmentClearValues,
-                                            commandBufferOut);
-    }
-    else
-    {
-        return contextVk->beginRenderPass(*framebuffer, renderArea, mRenderPassDesc,
-                                          renderPassAttachmentOps, attachmentClearValues,
-                                          commandBufferOut);
-    }
+    return contextVk->beginRenderPass(*framebuffer, renderArea, mRenderPassDesc,
+                                      renderPassAttachmentOps, attachmentClearValues,
+                                      commandBufferOut);
 }
 
 void FramebufferVk::updateActiveColorMasks(size_t colorIndexGL, bool r, bool g, bool b, bool a)
