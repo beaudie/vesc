@@ -884,11 +884,38 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
             mVertexArray->updateCurrentElementArrayBufferOffset(mLastIndexBufferOffset);
         }
 
-        if (indexType == gl::DrawElementsType::UnsignedByte &&
-            mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
+        if (indexType == gl::DrawElementsType::UnsignedByte)
         {
             BufferVk *bufferVk = vk::GetImpl(elementArrayBuffer);
-            ANGLE_TRY(mVertexArray->convertIndexBufferGPU(this, bufferVk, indices));
+            bool useCPU;
+
+            if (bufferVk->getBuffer().hostVisible() &&
+                !bufferVk->getBuffer().isCurrentlyInUse(getLastCompletedQueueSerial()))
+            {
+                useCPU = true;
+                mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+            }
+            else
+            {
+                useCPU = false;
+            }
+
+            if (mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
+            {
+                if (useCPU)
+                {
+                    void *src = nullptr;
+                    ANGLE_TRY(bufferVk->mapImpl(this, &src));
+                    src = (void *)((uintptr_t)src + (uintptr_t)indices);
+                    ANGLE_TRY(
+                        mVertexArray->convertIndexBufferCPU(this, indexType, indexCount, src));
+                    bufferVk->unmapImpl(this);
+                }
+                else
+                {
+                    ANGLE_TRY(mVertexArray->convertIndexBufferGPU(this, bufferVk, indices));
+                }
+            }
         }
     }
 
