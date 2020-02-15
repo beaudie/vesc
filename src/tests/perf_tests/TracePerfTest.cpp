@@ -167,67 +167,53 @@ void TracePerfTest::drawBenchmark()
     stopGpuTimer();
 }
 
-TracePerfParams TRexReplayPerfOpenGLOrGLESParams_200_210()
+TracePerfParams GL(const TracePerfParams &in)
+{
+    TracePerfParams out = in;
+    out.eglParameters   = OPENGL_OR_GLES();
+    return out;
+}
+
+TracePerfParams Vulkan(const TracePerfParams &in)
+{
+    TracePerfParams out = in;
+    out.eglParameters   = VULKAN();
+    return out;
+}
+
+// Note: WGL replay currently broken because interface locations are not remapped.
+ANGLE_MAYBE_UNUSED TracePerfParams WGL(const TracePerfParams &in)
+{
+    TracePerfParams out = in;
+    out.driver          = angle::GLESDriverType::SystemWGL;
+    return out;
+}
+
+TracePerfParams TRex_200_210()
 {
     TracePerfParams params;
-    params.eglParameters = OPENGL_OR_GLES();
-    params.testID        = TracePerfTestID::TRex200;
+    params.testID = TracePerfTestID::TRex200;
     return params;
 }
 
-TracePerfParams TRexReplayPerfOpenGLOrGLESParams_800_810()
+TracePerfParams TRex_800_810()
 {
     TracePerfParams params;
-    params.eglParameters = OPENGL_OR_GLES();
-    params.testID        = TracePerfTestID::TRex800;
+    params.testID = TracePerfTestID::TRex800;
     return params;
 }
 
-TracePerfParams TRexReplayPerfOpenGLOrGLESParams_900_910()
+TracePerfParams TRex_900_910()
 {
     TracePerfParams params;
-    params.eglParameters = OPENGL_OR_GLES();
-    params.testID        = TracePerfTestID::TRex900;
+    params.testID = TracePerfTestID::TRex900;
     return params;
 }
 
-TracePerfParams TRexReplayPerfOpenGLOrGLESParams_1300_1310()
+TracePerfParams TRex_1300_1310()
 {
     TracePerfParams params;
-    params.eglParameters = OPENGL_OR_GLES();
-    params.testID        = TracePerfTestID::TRex1300;
-    return params;
-}
-
-TracePerfParams TRexReplayPerfVulkanParams_200_210()
-{
-    TracePerfParams params;
-    params.eglParameters = VULKAN();
-    params.testID        = TracePerfTestID::TRex200;
-    return params;
-}
-
-TracePerfParams TRexReplayPerfVulkanParams_800_810()
-{
-    TracePerfParams params;
-    params.eglParameters = VULKAN();
-    params.testID        = TracePerfTestID::TRex800;
-    return params;
-}
-
-TracePerfParams TRexReplayPerfVulkanParams_900_910()
-{
-    TracePerfParams params;
-    params.eglParameters = VULKAN();
-    params.testID        = TracePerfTestID::TRex900;
-    return params;
-}
-
-TracePerfParams TRexReplayPerfVulkanParams_1300_1310()
-{
-    TracePerfParams params;
-    params.eglParameters = VULKAN();
-    params.testID        = TracePerfTestID::TRex1300;
+    params.testID = TracePerfTestID::TRex1300;
     return params;
 }
 
@@ -237,13 +223,13 @@ TEST_P(TracePerfTest, Run)
 }
 
 ANGLE_INSTANTIATE_TEST(TracePerfTest,
-                       TRexReplayPerfOpenGLOrGLESParams_200_210(),
-                       TRexReplayPerfOpenGLOrGLESParams_800_810(),
-                       TRexReplayPerfOpenGLOrGLESParams_900_910(),
-                       TRexReplayPerfOpenGLOrGLESParams_1300_1310(),
-                       TRexReplayPerfVulkanParams_200_210(),
-                       TRexReplayPerfVulkanParams_800_810(),
-                       TRexReplayPerfVulkanParams_900_910(),
-                       TRexReplayPerfVulkanParams_1300_1310());
+                       GL(TRex_200_210()),
+                       GL(TRex_800_810()),
+                       GL(TRex_900_910()),
+                       GL(TRex_1300_1310()),
+                       Vulkan(TRex_200_210()),
+                       Vulkan(TRex_800_810()),
+                       Vulkan(TRex_900_910()),
+                       Vulkan(TRex_1300_1310()));
 
 }  // anonymous namespace
