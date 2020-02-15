@@ -721,6 +721,8 @@ angle::Result ContextVk::initialize()
 
     if (!commandGraphEnabled())
     {
+        // Push a scope in the pool allocator so we can easily reinitialize on flush.
+        mPoolAllocator.push();
         mOutsideRenderPassCommands.getCommandBuffer().initialize(&mPoolAllocator);
         mRenderPassCommands.initialize(&mPoolAllocator);
         ANGLE_TRY(startPrimaryCommandBuffer());
@@ -3710,6 +3712,10 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
                              &mWaitSemaphoreStageMasks, signalSemaphore);
 
         ANGLE_TRY(submitFrame(submitInfo, std::move(mPrimaryCommands)));
+
+        // Reset and free pool allocations.
+        mPoolAllocator.pop();
+        mPoolAllocator.push();
 
         ANGLE_TRY(startPrimaryCommandBuffer());
     }
