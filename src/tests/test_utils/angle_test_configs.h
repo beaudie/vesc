@@ -207,6 +207,13 @@ inline PlatformParameters WithNoFixture(const PlatformParameters &params)
     return withNoFixture;
 }
 
+inline PlatformParameters WithNoCommandGraph(const PlatformParameters &params)
+{
+    PlatformParameters withNoCommandGraph                = params;
+    withNoCommandGraph.eglParameters.commandGraphFeature = EGL_FALSE;
+    return withNoCommandGraph;
+}
+
 inline PlatformParameters WithNoTransformFeedback(const PlatformParameters &params)
 {
     PlatformParameters withNoTransformFeedback                     = params;
