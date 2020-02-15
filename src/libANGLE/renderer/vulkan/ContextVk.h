@@ -29,6 +29,23 @@ namespace rx
 class RendererVk;
 class WindowSurfaceVk;
 
+// The possible rotations of the surface/draw framebuffer, used for pre-rotating gl_Position
+// in the vertex shader.
+enum class SurfaceRotationType : int
+{
+    Identity                 = 0,
+    Rotated90Degrees         = 1,
+    Rotated180Degrees        = 2,
+    Rotated270Degrees        = 3,
+    FlippedIdentity          = 4,
+    FlippedRotated90Degrees  = 5,
+    FlippedRotated180Degrees = 6,
+    FlippedRotated270Degrees = 7,
+
+    InvalidEnum = 8,
+    EnumCount   = 8,
+};
+
 struct CommandBatch final : angle::NonCopyable
 {
     CommandBatch();
@@ -286,7 +303,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     bool isViewportFlipEnabledForDrawFBO() const;
     bool isViewportFlipEnabledForReadFBO() const;
     bool isRotatedAspectRatio() const;
-    float getPreRotationMatrixEntry(int index) const;
 
     // State sync with dirty bits.
     angle::Result syncState(const gl::Context *context,
@@ -590,16 +606,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
         InvalidEnum = 2,
         EnumCount   = 2,
-    };
-
-    // The possible rotations of the surface/draw framebuffer, used for pre-rotating gl_Position
-    // in the vertex shader.
-    enum class SurfaceRotationType : int
-    {
-        NonRotated        = 0,
-        Rotated90Degrees  = 1,
-        Rotated180Degrees = 2,
-        Rotated270Degrees = 3,
     };
 
     // The GpuEventQuery struct holds together a timestamp query and enough data to create a

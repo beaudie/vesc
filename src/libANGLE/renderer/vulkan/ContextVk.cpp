@@ -179,13 +179,29 @@ void ApplySampleCoverage(const gl::State &glState,
 }
 
 // When an Android surface is rotated differently than the device's native orientation, ANGLE must
-// rotate gl_Position in the vertex shader.  The following are the four rotation matrices used.
-using PreRotationMatrixValues                                         = std::array<float, 4>;
-constexpr std::array<PreRotationMatrixValues, 4> kPreRotationMatrices = {
-    {{{1.0f, 0.0f, 0.0f, 1.0f}},     // Rotate   0 degrees (i.e. identity matrix)
-     {{0.0f, -1.0f, 1.0f, 0.0f}},    // Rotate  90 degrees
-     {{-1.0f, 0.0f, 0.0f, -1.0f}},   // Rotate 180 degrees
-     {{0.0f, 1.0f, -1.0f, 0.0f}}}};  // Rotate 270 degrees
+// rotate gl_Position in the vertex shader.  The following are the rotation matrices used.
+//
+// Note: these are mat2's that are appropriately padded (4 floats per row).
+using PreRotationMatrixValues = std::array<float, 8>;
+constexpr angle::PackedEnumMap<rx::SurfaceRotationType,
+                               PreRotationMatrixValues,
+                               angle::EnumSize<rx::SurfaceRotationType>()>
+    kPreRotationMatrices = {
+        {{rx::SurfaceRotationType::Identity, {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::Rotated90Degrees,
+          {{0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::Rotated180Degrees,
+          {{-1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::Rotated270Degrees,
+          {{0.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::FlippedIdentity,
+          {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::FlippedRotated90Degrees,
+          {{0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::FlippedRotated180Degrees,
+          {{-1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotationType::FlippedRotated270Degrees,
+          {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}}}};
 
 }  // anonymous namespace
 
@@ -531,7 +547,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mCurrentComputePipeline(nullptr),
       mCurrentDrawMode(gl::PrimitiveMode::InvalidEnum),
       mCurrentWindowSurface(nullptr),
-      mCurrentRotation(SurfaceRotationType::NonRotated),
+      mCurrentRotation(SurfaceRotationType::Identity),
       mRotatedAspectRatio(false),
       mVertexArray(nullptr),
       mDrawFramebuffer(nullptr),
@@ -2217,11 +2233,6 @@ bool ContextVk::isRotatedAspectRatio() const
     return mRotatedAspectRatio;
 }
 
-float ContextVk::getPreRotationMatrixEntry(int index) const
-{
-    return kPreRotationMatrices[static_cast<int>(mCurrentRotation)][index];
-}
-
 void ContextVk::updateColorMask(const gl::BlendState &blendState)
 {
     mClearColorMask =
@@ -2740,7 +2751,12 @@ void ContextVk::updateSurfaceRotation(const gl::State &glState)
         {
             case VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR:
                 // Do not rotate gl_Position (surface matches the device's orientation):
-                mCurrentRotation    = SurfaceRotationType::NonRotated;
+#define FORCE_Y_FLIP_ROTATION
+#ifdef FORCE_Y_FLIP_ROTATION
+                mCurrentRotation = SurfaceRotationType::FlippedIdentity;
+#else   // FORCE_Y_FLIP_ROTATION
+                mCurrentRotation = SurfaceRotationType::Identity;
+#endif  // FORCE_Y_FLIP_ROTATION
                 mRotatedAspectRatio = false;
                 break;
             case VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR:
@@ -2766,7 +2782,7 @@ void ContextVk::updateSurfaceRotation(const gl::State &glState)
     else
     {
         // Do not rotate gl_Position (offscreen framebuffer):
-        mCurrentRotation    = SurfaceRotationType::NonRotated;
+        mCurrentRotation    = SurfaceRotationType::Identity;
         mRotatedAspectRatio = false;
     }
 }
@@ -3163,8 +3179,9 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
         {},
         {},
         {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f},
-        {getPreRotationMatrixEntry(0), getPreRotationMatrixEntry(1), 0.0f, 0.0f,
-         getPreRotationMatrixEntry(2), getPreRotationMatrixEntry(3), 0.0f, 0.0f}};
+        {}};
+    memcpy(&driverUniforms->preRotation, &kPreRotationMatrices[mCurrentRotation],
+           sizeof(PreRotationMatrixValues));
 
     if (xfbActiveUnpaused)
     {

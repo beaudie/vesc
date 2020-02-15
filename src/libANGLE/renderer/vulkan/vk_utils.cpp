@@ -830,8 +830,13 @@ void GetViewport(const gl::Rectangle &viewport,
 
     if (invertViewport)
     {
+#define FORCE_Y_FLIP_ROTATION
+#ifdef FORCE_Y_FLIP_ROTATION
+        viewportOut->y = static_cast<float>(renderAreaHeight - viewport.y - viewportOut->height);
+#else   // FORCE_Y_FLIP_ROTATION
         viewportOut->y      = static_cast<float>(renderAreaHeight - viewport.y);
         viewportOut->height = -viewportOut->height;
+#endif  // FORCE_Y_FLIP_ROTATION
     }
 }
 
