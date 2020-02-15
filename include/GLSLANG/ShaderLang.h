@@ -763,12 +763,12 @@ extern const char kDefaultUniformsNameGS[];
 extern const char kDefaultUniformsNameFS[];
 extern const char kDefaultUniformsNameCS[];
 
-// Interface block and variable name containing driver uniforms
+// Interface block and variable names containing driver uniforms
 extern const char kDriverUniformsBlockName[];
 extern const char kDriverUniformsVarName[];
 
-// Interface block array variable name used for atomic counter emulation
-extern const char kAtomicCountersVarName[];
+// Interface block array name used for atomic counter emulation
+extern const char kAtomicCountersBlockName[];
 
 // Line raster emulation varying
 extern const char kLineRasterEmulationPosition[];
