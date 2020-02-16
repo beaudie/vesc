@@ -481,6 +481,11 @@ bool IsConfigSupported(const PlatformParameters &param)
 
 bool IsPlatformAvailable(const PlatformParameters &param)
 {
+    // Disable "null" device when not on ANGLE.
+    if (param.driver != GLESDriverType::AngleEGL &&
+        param.getDeviceType() == EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
+        return false;
+
     switch (param.getRenderer())
     {
         case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
