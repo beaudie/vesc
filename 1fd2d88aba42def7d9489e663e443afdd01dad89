@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "105b25af_a4ef011a",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-16T15:26:27Z",
+      "side": 1,
+      "message": "don\u0027t forget to tick this guy",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "1fd2d88aba42def7d9489e663e443afdd01dad89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d9d1b2a_5354fcbf",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-16T15:26:27Z",
+      "side": 1,
+      "message": "One concern: Are you reserving a different uniform block now? Does ANGLE need to reserve another one from the driver? If so that could cause additional issues as we might need to lock down the number of buffers we reserve for the minimum spec.",
+      "range": {
+        "startLine": 771,
+        "startChar": 18,
+        "endLine": 771,
+        "endChar": 42
+      },
+      "revId": "1fd2d88aba42def7d9489e663e443afdd01dad89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
