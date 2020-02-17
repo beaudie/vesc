@@ -103,6 +103,8 @@ class DisplayVk : public DisplayImpl, public vk::Context
                                                EGLNativeWindowType window) = 0;
     void generateCaps(egl::Caps *outCaps) const override;
 
+    virtual angle::Result waitNativeImpl(EGLNativeDisplayType displayId);
+
     mutable angle::ScratchBuffer mScratchBuffer;
 
     std::string mStoredErrorString;

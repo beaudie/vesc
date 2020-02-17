@@ -121,4 +121,10 @@ DisplayImpl *CreateVulkanXcbDisplay(const egl::DisplayState &state)
 {
     return new DisplayVkXcb(state);
 }
+
+angle::Result DisplayVkXcb::waitNativeImpl(EGLNativeDisplayType displayId)
+{
+    XSync(displayId, False);
+    return angle::Result::Continue;
+}
 }  // namespace rx
