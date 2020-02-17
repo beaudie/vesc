@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "4b079c90_8b744c70",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-17T13:56:08Z",
+      "side": 1,
+      "message": "Rules are rules. We tick this guy on any change. Not a big deal obviously as it\u0027s not going to break anything.",
+      "parentUuid": "0782e6cd_0e50a672",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "1fd2d88aba42def7d9489e663e443afdd01dad89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d9d1b2a_5354fcbf",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 3
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "See the other comment. There\u0027s no change in behavior here, just that SPIR-V transformation takes the interface block name instead of the variable name (consistent with the other interface blocks)",
       "parentUuid": "7d9d1b2a_5354fcbf",
+      "range": {
+        "startLine": 771,
+        "startChar": 18,
+        "endLine": 771,
+        "endChar": 42
+      },
+      "revId": "1fd2d88aba42def7d9489e663e443afdd01dad89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2c6efb0_235c2808",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-17T13:56:08Z",
+      "side": 1,
+      "message": "Okay. Were we previously reserving an extra block for these guys? Just wondering now how many we reserve maximum.",
+      "parentUuid": "44773aca_c0859693",
       "range": {
         "startLine": 771,
         "startChar": 18,
