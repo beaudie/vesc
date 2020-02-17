@@ -1672,7 +1672,7 @@ bool ValidateBeginQueryBase(Context *context, QueryType target, QueryID id)
         return false;
     }
 
-    Query *queryObject = context->getQuery(id, true, target);
+    Query *queryObject = context->getQuery(id);
 
     // check that name was obtained with glGenQueries
     if (!queryObject)
@@ -1748,7 +1748,7 @@ bool ValidateQueryCounterEXT(Context *context, QueryID id, QueryType target)
         return false;
     }
 
-    Query *queryObject = context->getQuery(id, true, target);
+    Query *queryObject = context->getQuery(id);
     if (queryObject == nullptr)
     {
         context->validationError(GL_INVALID_OPERATION, kInvalidQueryId);
@@ -1872,7 +1872,7 @@ bool ValidateGetQueryObjectValueBase(Context *context, QueryID id, GLenum pname,
         }
     }
 
-    Query *queryObject = context->getQuery(id, false, QueryType::InvalidEnum);
+    Query *queryObject = context->getQuery(id);
 
     if (!queryObject)
     {

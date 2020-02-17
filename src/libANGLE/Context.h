@@ -385,7 +385,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     Renderbuffer *getRenderbuffer(RenderbufferID handle) const;
     VertexArray *getVertexArray(VertexArrayID handle) const;
     Sampler *getSampler(SamplerID handle) const;
-    Query *getQuery(QueryID handle, bool create, QueryType type);
+    Query *getOrCreateQuery(QueryID handle, QueryType type);
     Query *getQuery(QueryID handle) const;
     TransformFeedback *getTransformFeedback(TransformFeedbackID handle) const;
     ProgramPipeline *getProgramPipeline(ProgramPipelineID handle) const;
