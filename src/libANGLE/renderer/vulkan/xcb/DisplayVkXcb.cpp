@@ -121,4 +121,10 @@ DisplayImpl *CreateVulkanXcbDisplay(const egl::DisplayState &state)
 {
     return new DisplayVkXcb(state);
 }
+
+egl::Error DisplayVkXcb::waitNativeVk(EGLNativeDisplayType display)
+{
+    XSync(display, False);
+    return egl::NoError();
+}
 }  // namespace rx

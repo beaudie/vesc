@@ -34,6 +34,7 @@ class DisplayVkXcb : public DisplayVk
     bool checkConfigSupport(egl::Config *config) override;
 
     const char *getWSIExtension() const override;
+    egl::Error waitNativeVk(EGLNativeDisplayType display) override;
 
   private:
     xcb_connection_t *mXcbConnection;

@@ -23,7 +23,7 @@ namespace rx
 {
 
 DisplayVk::DisplayVk(const egl::DisplayState &state)
-    : DisplayImpl(state), vk::Context(new RendererVk()), mScratchBuffer(1000u)
+    : DisplayImpl(state), vk::Context(new RendererVk()), mScratchBuffer(1000u), mDisplay(nullptr)
 {}
 
 DisplayVk::~DisplayVk()
@@ -36,6 +36,7 @@ egl::Error DisplayVk::initialize(egl::Display *display)
     ASSERT(mRenderer != nullptr && display != nullptr);
     angle::Result result = mRenderer->initialize(this, display, getWSIExtension(), getWSILayer());
     ANGLE_TRY(angle::ToEGL(result, this, EGL_NOT_INITIALIZED));
+    mDisplay = display;
     return egl::NoError();
 }
 
@@ -92,8 +93,14 @@ egl::Error DisplayVk::waitClient(const gl::Context *context)
 
 egl::Error DisplayVk::waitNative(const gl::Context *context, EGLint engine)
 {
-    UNIMPLEMENTED();
-    return egl::EglBadAccess();
+    ANGLE_TRACE_EVENT0("gpu.angle", "DisplayVk::waitNative");
+    ASSERT(mDisplay);
+    return waitNativeVk(mDisplay->getNativeDisplayId());
+}
+
+egl::Error DisplayVk::waitNativeVk(EGLNativeDisplayType display)
+{
+    return egl::NoError();
 }
 
 SurfaceImpl *DisplayVk::createWindowSurface(const egl::SurfaceState &state,
