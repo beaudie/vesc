@@ -507,7 +507,6 @@ Display *Display::GetDisplayFromDevice(Device *device, const AttributeMap &attri
 
 Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice)
     : mImplementation(nullptr),
-      mDisplayId(displayId),
       mAttributeMap(),
       mConfigSet(),
       mContextSet(),
@@ -525,7 +524,9 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mBlobCache(gl::kDefaultMaxProgramCacheMemoryBytes),
       mMemoryProgramCache(mBlobCache),
       mGlobalTextureShareGroupUsers(0)
-{}
+{
+    mState.mDisplayId = displayId;
+}
 
 Display::~Display()
 {
@@ -535,7 +536,7 @@ Display::~Display()
     if (mPlatform == EGL_PLATFORM_ANGLE_ANGLE)
     {
         ANGLEPlatformDisplayMap *displays      = GetANGLEPlatformDisplayMap();
-        ANGLEPlatformDisplayMap::iterator iter = displays->find(mDisplayId);
+        ANGLEPlatformDisplayMap::iterator iter = displays->find(mState.mDisplayId);
         if (iter != displays->end())
         {
             displays->erase(iter);
