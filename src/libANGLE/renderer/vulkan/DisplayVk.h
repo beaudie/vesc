@@ -103,9 +103,13 @@ class DisplayVk : public DisplayImpl, public vk::Context
                                                EGLNativeWindowType window) = 0;
     void generateCaps(egl::Caps *outCaps) const override;
 
+    virtual egl::Error waitNativeVk(Display *display);
+
     mutable angle::ScratchBuffer mScratchBuffer;
 
     std::string mStoredErrorString;
+
+    Display *mDisplay;
 };
 
 }  // namespace rx
