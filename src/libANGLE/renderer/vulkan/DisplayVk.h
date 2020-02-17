@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_DISPLAYVK_H_
 #define LIBANGLE_RENDERER_VULKAN_DISPLAYVK_H_
 
+#include <EGL/eglplatform.h>
 #include "common/MemoryBuffer.h"
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
@@ -103,9 +104,13 @@ class DisplayVk : public DisplayImpl, public vk::Context
                                                EGLNativeWindowType window) = 0;
     void generateCaps(egl::Caps *outCaps) const override;
 
+    virtual egl::Error waitNativeVk(Display *display);
+
     mutable angle::ScratchBuffer mScratchBuffer;
 
     std::string mStoredErrorString;
+
+    Display *mDisplay;
 };
 
 }  // namespace rx
