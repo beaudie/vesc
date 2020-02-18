@@ -35,6 +35,7 @@
 #include "compiler/translator/tree_ops/PruneNoOps.h"
 #include "compiler/translator/tree_ops/RegenerateStructNames.h"
 #include "compiler/translator/tree_ops/RemoveArrayLengthMethod.h"
+#include "compiler/translator/tree_ops/RemoveDeadCodeNaive.h"
 #include "compiler/translator/tree_ops/RemoveDynamicIndexing.h"
 #include "compiler/translator/tree_ops/RemoveInvariantDeclaration.h"
 #include "compiler/translator/tree_ops/RemovePow.h"
@@ -738,6 +739,11 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     }
 
     if (!RemoveArrayLengthMethod(this, root))
+    {
+        return false;
+    }
+
+    if (!RemoveDeadCodeNaive(this, root, &mSymbolTable))
     {
         return false;
     }
