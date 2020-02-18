@@ -467,6 +467,7 @@ ProgramVk::DefaultUniformBlock::~DefaultUniformBlock() = default;
 ProgramVk::ProgramVk(const gl::ProgramState &state)
     : ProgramImpl(state),
       mDynamicBufferOffsets{},
+      mPipelineLayoutCreated(false),
       mStorageBlockBindingsOffset(0),
       mAtomicCounterBufferBindingsOffset(0),
       mImageBindingsOffset(0)
@@ -482,12 +483,6 @@ void ProgramVk::destroy(const gl::Context *context)
 
 void ProgramVk::reset(ContextVk *contextVk)
 {
-    for (auto &descriptorSetLayout : mDescriptorSetLayouts)
-    {
-        descriptorSetLayout.reset();
-    }
-    mPipelineLayout.reset();
-
     RendererVk *renderer = contextVk->getRenderer();
 
     for (auto &uniformBlock : mDefaultUniformBlocks)
@@ -496,6 +491,20 @@ void ProgramVk::reset(ContextVk *contextVk)
     }
 
     mShaderInfo.release(contextVk);
+
+    resetPipeline(contextVk);
+}
+
+void ProgramVk::resetPipeline(ContextVk *contextVk)
+{
+    for (auto &descriptorSetLayout : mDescriptorSetLayouts)
+    {
+        descriptorSetLayout.reset();
+    }
+    mPipelineLayout.reset();
+
+    RendererVk *renderer = contextVk->getRenderer();
+
     mDefaultProgramInfo.release(contextVk);
     mLineRasterProgramInfo.release(contextVk);
 
@@ -503,6 +512,7 @@ void ProgramVk::reset(ContextVk *contextVk)
 
     mDescriptorSets.clear();
     mEmptyDescriptorSets.fill(VK_NULL_HANDLE);
+    mPipelineLayoutCreated = false;
 
     for (vk::RefCountedDescriptorPoolBinding &binding : mDescriptorPoolBindings)
     {
@@ -551,13 +561,7 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
     }
 
     // Initialize and resize the mDefaultUniformBlocks' memory
-    angle::Result status = resizeUniformBlockMemory(contextVk, requiredBufferSize);
-    if (status != angle::Result::Continue)
-    {
-        return std::make_unique<LinkEventDone>(status);
-    }
-
-    return std::make_unique<LinkEventDone>(linkImpl(context, infoLog));
+    return std::make_unique<LinkEventDone>(resizeUniformBlockMemory(contextVk, requiredBufferSize));
 }
 
 void ProgramVk::save(const gl::Context *context, gl::BinaryOutputStream *stream)
@@ -618,24 +622,22 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
         return std::make_unique<LinkEventDone>(status);
     }
 
-    status = initDefaultUniformBlocks(context);
-    if (status != angle::Result::Continue)
-    {
-        return std::make_unique<LinkEventDone>(status);
-    }
-
-    // TODO(jie.a.chen@intel.com): Parallelize linking.
-    // http://crbug.com/849576
-    return std::make_unique<LinkEventDone>(linkImpl(context, infoLog));
+    return std::make_unique<LinkEventDone>(initDefaultUniformBlocks(context));
 }
 
-angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &infoLog)
+angle::Result ProgramVk::createPipelineLayout(const gl::Context *glContext)
 {
     const gl::State &glState                 = glContext->getState();
     ContextVk *contextVk                     = vk::GetImpl(glContext);
     RendererVk *renderer                     = contextVk->getRenderer();
     gl::TransformFeedback *transformFeedback = glState.getCurrentTransformFeedback();
 
+    if (mPipelineLayoutCreated)
+    {
+        return angle::Result::Continue;
+    }
+
+    resetPipeline(contextVk);
     updateBindingOffsets();
 
     // Store a reference to the pipeline and descriptor set layouts. This will create them if they
@@ -782,7 +784,11 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
     emptyBufferInfo.pQueueFamilyIndices   = nullptr;
 
     constexpr VkMemoryPropertyFlags kMemoryType = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    return mEmptyBuffer.init(contextVk, emptyBufferInfo, kMemoryType);
+    angle::Result status = mEmptyBuffer.init(contextVk, emptyBufferInfo, kMemoryType);
+
+    mPipelineLayoutCreated = true;
+
+    return status;
 }
 
 void ProgramVk::updateBindingOffsets()
@@ -1235,6 +1241,11 @@ void ProgramVk::getUniformuiv(const gl::Context *context, GLint location, GLuint
 
 angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
 {
+    if (!dirtyUniforms())
+    {
+        return angle::Result::Continue;
+    }
+
     ASSERT(dirtyUniforms());
 
     bool anyNewBufferAllocated = false;

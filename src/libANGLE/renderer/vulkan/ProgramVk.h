@@ -136,6 +136,8 @@ class ProgramVk : public ProgramImpl
 
     bool dirtyUniforms() const { return mDefaultUniformBlocksDirty.any(); }
 
+    angle::Result createPipelineLayout(const gl::Context *glContext);
+
     angle::Result getGraphicsPipeline(ContextVk *contextVk,
                                       gl::PrimitiveMode mode,
                                       const vk::GraphicsPipelineDesc &desc,
@@ -177,6 +179,7 @@ class ProgramVk : public ProgramImpl
                             const GLfloat *value);
 
     void reset(ContextVk *contextVk);
+    void resetPipeline(ContextVk *contextVk);
     angle::Result allocateDescriptorSet(ContextVk *contextVk, uint32_t descriptorSetIndex);
     angle::Result allocateDescriptorSetAndGetInfo(ContextVk *contextVk,
                                                   uint32_t descriptorSetIndex,
@@ -208,7 +211,6 @@ class ProgramVk : public ProgramImpl
 
     template <typename T>
     void setUniformImpl(GLint location, GLsizei count, const T *v, GLenum entryPointType);
-    angle::Result linkImpl(const gl::Context *glContext, gl::InfoLog &infoLog);
     void linkResources(const gl::ProgramLinkedResources &resources);
 
     void updateBindingOffsets();
@@ -297,6 +299,7 @@ class ProgramVk : public ProgramImpl
     // deleted while this program is in use.
     vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
+    bool mPipelineLayoutCreated;
 
     // Keep bindings to the descriptor pools. This ensures the pools stay valid while the Program
     // is in use.
