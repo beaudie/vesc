@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "a330b01f_42dca05a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-18T16:24:25Z",
+      "side": 1,
+      "message": "\u003e On mobile likely using the CPU conversion can outperform the GPU in some (or all?) cases\n\nI find it hard to believe that serial conversion on the CPU is \"generally\" faster than parallel conversion on the GPU! Maybe on some corner cases (like very few indices)\n\nI obviously can\u0027t stop anyone from adding hacks and technical debt, but I suggest to at least consider implementing anglebug.com/4405 first which may make this unnecessary.",
+      "parentUuid": "7e154680_47db8f71",
+      "range": {
+        "startLine": 880,
+        "startChar": 20,
+        "endLine": 880,
+        "endChar": 55
+      },
+      "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2239f632_64368c10",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
