@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "71b7c3e1_1af49a6a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-18T16:01:28Z",
+      "side": 1,
+      "message": "A new buffer is allocated for the result, but the input buffer could be in use by the GPU (for example because it was written to by a compute shader), regardless of whether the memory is host-visible. So yes, there are scenarios where this could lead to finishToSerial.\n\nAlso, if you can do this on the CPU without needing to wait for the GPU, you can also do it on the GPU for example at the beginning of the frame or basically any time before the renderpass starts, don\u0027t you think? So the issue is not so much CPU vs GPU work as it is about reordering the operations so that this is done before the renderpass.\n\nI don\u0027t think it ever makes sense to do something on the CPU when you could have otherwise done it on the GPU. There is already so much happening on the CPU, it doesn\u0027t make sense to offload work from the GPU to the CPU!\n\nJamie, IIUC, without the graph it\u0027s still possible to record to the command buffer that\u0027s run before the renderpass while the renderpass has started, isn\u0027t that so? We should then find out why this is closing the renderpass and resolve that issue instead.",
+      "parentUuid": "45719051_64e654ac",
+      "range": {
+        "startLine": 880,
+        "startChar": 20,
+        "endLine": 880,
+        "endChar": 55
+      },
+      "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2239f632_64368c10",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
