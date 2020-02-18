@@ -812,8 +812,8 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     if (mProgram->dirtyUniforms())
     {
-        ANGLE_TRY(mProgram->updateUniforms(this));
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+        mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE);
     }
 
     // Update transform feedback offsets on every draw call.
@@ -1030,8 +1030,8 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context,
 
     if (mProgram->dirtyUniforms())
     {
-        ANGLE_TRY(mProgram->updateUniforms(this));
         mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+        mComputeDirtyBits.set(DIRTY_BIT_PIPELINE);
     }
 
     DirtyBits dirtyBits = mComputeDirtyBits;
@@ -1069,6 +1069,8 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
     {
         const vk::GraphicsPipelineDesc *descPtr;
 
+        ANGLE_TRY(mProgram->createPipelineLayout(context));
+
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(mProgram->getGraphicsPipeline(
             this, mCurrentDrawMode, *mGraphicsPipelineDesc,
@@ -1097,6 +1099,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
         mGraphicsPipelineTransition.reset();
     }
     commandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
+    ANGLE_TRY(mProgram->updateUniforms(this));
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
     mCurrentGraphicsPipeline->updateSerial(getCurrentQueueSerial());
@@ -1108,10 +1111,12 @@ angle::Result ContextVk::handleDirtyComputePipeline(const gl::Context *context,
 {
     if (!mCurrentComputePipeline)
     {
+        ANGLE_TRY(mProgram->createPipelineLayout(context));
         ANGLE_TRY(mProgram->getComputePipeline(this, &mCurrentComputePipeline));
     }
 
     commandBuffer->bindComputePipeline(mCurrentComputePipeline->get());
+    ANGLE_TRY(mProgram->updateUniforms(this));
     mCurrentComputePipeline->updateSerial(getCurrentQueueSerial());
 
     return angle::Result::Continue;
