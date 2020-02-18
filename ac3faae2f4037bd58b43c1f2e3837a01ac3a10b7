@@ -189,6 +189,30 @@
       "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "795d5db5_7e2921f6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-02-18T19:30:06Z",
+      "side": 1,
+      "message": "We have to do whole buffer conversion if we want to use dirty bit to avoid repeated conversion. Or alternatively you will have to record the dirty ranges if you want to avoid the whole buffer conversion. The unsigned byte index buffer usage is not that popular to warrant a more complicated solution and whole buffer data usually will be consumed anyway, so I think this is the right approach. But we need to be careful that if people store both unsigned byte and unsigned int data in the same buffer, we must switch back to the unconverted buffer for data other than unsigned byte. Even though I am pretty sure no one actually use it that way, such usage is within specification.",
+      "parentUuid": "2239f632_64368c10",
+      "range": {
+        "startLine": 883,
+        "startChar": 80,
+        "endLine": 883,
+        "endChar": 81
+      },
+      "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
