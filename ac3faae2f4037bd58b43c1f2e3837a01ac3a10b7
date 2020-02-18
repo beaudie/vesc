@@ -22,6 +22,30 @@
       "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b4e28b5_33382f08",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-02-18T05:50:27Z",
+      "side": 1,
+      "message": "It is using dynamic buffer which my understanding is always allocate new space to avoid hitting finishToSerial. Yes it will use more memory, but not more than the GPU copy as well. Regardless CPU or GPU, both are using dynamic buffer.\n\nThe glBufferData call probably not in the render pass. But the conversion happens not at bufferData time but at draw time since data type was only known at draw time. So it will break the render pass.\n\nThis is with command graph disabled. If you look at my test example (attached to the bug), it cut the GPU time in half, partly because the GPU copy prevents the glClear call folds into the draw call.",
+      "parentUuid": "1837db6e_963d8e75",
+      "range": {
+        "startLine": 880,
+        "startChar": 20,
+        "endLine": 880,
+        "endChar": 55
+      },
+      "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
