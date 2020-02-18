@@ -193,6 +193,30 @@
     },
     {
       "key": {
+        "uuid": "7caf27c3_479ef563",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-18T21:32:36Z",
+      "side": 1,
+      "message": "\u003e This is especially true on mobile tiled renderer, where breaking render pass is expensive.\n\nObviously the goal is not the break the renderpass, so I\u0027m not suggesting a solution that does that.\n\n\u003e In addition, most mobile games are GPU limited not CPU limited.\n\nGood to know.\n\n\u003e You can not move the conversion outside render pass since only at the draw call time you know the data type is unsigned byte.\n\nI don\u0027t agree with this. If you can do the conversion on the CPU, you can also do it before the renderpass on the GPU. There are many cases where we do things at draw time, but schedule them to be done before the renderpass, for example flushing staged texture updates, or changing image layouts.\n\n---\n\nI would still like to see anglebug.com/4405 done first, which is an even better optimization since you won\u0027t need to do this work in the first place.",
+      "parentUuid": "03eb7c23_1aa52e3b",
+      "range": {
+        "startLine": 880,
+        "startChar": 20,
+        "endLine": 880,
+        "endChar": 55
+      },
+      "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2239f632_64368c10",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
