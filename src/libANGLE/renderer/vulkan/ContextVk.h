@@ -29,6 +29,23 @@ namespace rx
 class RendererVk;
 class WindowSurfaceVk;
 
+// The possible rotations of the surface/draw framebuffer, used for pre-rotating gl_Position
+// in the vertex shader.
+enum class SurfaceRotationType : int
+{
+    Identity                 = 0,
+    Rotated90Degrees         = 1,
+    Rotated180Degrees        = 2,
+    Rotated270Degrees        = 3,
+    FlippedIdentity          = 4,
+    FlippedRotated90Degrees  = 5,
+    FlippedRotated180Degrees = 6,
+    FlippedRotated270Degrees = 7,
+
+    InvalidEnum = 8,
+    EnumCount   = 8,
+};
+
 struct CommandBatch final : angle::NonCopyable
 {
     CommandBatch();
@@ -285,8 +302,11 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     bool isViewportFlipEnabledForDrawFBO() const;
     bool isViewportFlipEnabledForReadFBO() const;
-    bool isRotatedAspectRatio() const;
-    float getPreRotationMatrixEntry(int index) const;
+    // When the device/surface is rotated such that the surface's aspect ratio is different than
+    // the native device (e.g. 90 degrees), the width and height of the viewport, scissor, and
+    // render area must be swapped.
+    bool isRotatedAspectRatioDrawFramebuffer() const;
+    bool isRotatedAspectRatioReadFramebuffer() const;
 
     // State sync with dirty bits.
     angle::Result syncState(const gl::Context *context,
@@ -592,16 +612,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         EnumCount   = 2,
     };
 
-    // The possible rotations of the surface/draw framebuffer, used for pre-rotating gl_Position
-    // in the vertex shader.
-    enum class SurfaceRotationType : int
-    {
-        NonRotated        = 0,
-        Rotated90Degrees  = 1,
-        Rotated180Degrees = 2,
-        Rotated270Degrees = 3,
-    };
-
     // The GpuEventQuery struct holds together a timestamp query and enough data to create a
     // trace event based on that. Use traceGpuEvent to insert such queries.  They will be readback
     // when the results are available, without inserting a GPU bubble.
@@ -702,7 +712,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     void updateDepthRange(float nearPlane, float farPlane);
     void updateFlipViewportDrawFramebuffer(const gl::State &glState);
     void updateFlipViewportReadFramebuffer(const gl::State &glState);
-    void updateSurfaceRotation(const gl::State &glState);
+    void updateSurfaceRotationDrawFramebuffer(const gl::State &glState);
+    void updateSurfaceRotationReadFramebuffer(const gl::State &glState);
 
     angle::Result updateActiveTextures(const gl::Context *context);
     angle::Result updateActiveImages(const gl::Context *context,
@@ -815,13 +826,10 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     gl::PrimitiveMode mCurrentDrawMode;
 
     WindowSurfaceVk *mCurrentWindowSurface;
-    // Records the current rotation of the surface/draw framebuffer, derived from
+    // Records the current rotation of the surface (draw/read) framebuffer, derived from
     // mCurrentWindowSurface->getPreTransform().
-    SurfaceRotationType mCurrentRotation;
-    // When the device/surface is rotated such that the surface's aspect ratio is different than
-    // the native device (e.g. 90 degrees), the width and height of the viewport, scissor, and
-    // render area must be swapped.
-    bool mRotatedAspectRatio;
+    SurfaceRotationType mCurrentRotationDrawFramebuffer;
+    SurfaceRotationType mCurrentRotationReadFramebuffer;
 
     // Keep a cached pipeline description structure that can be used to query the pipeline cache.
     // Kept in a pointer so allocations can be aligned, and structs can be portably packed.

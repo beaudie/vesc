@@ -1175,7 +1175,7 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     framebufferInfo.pAttachments    = imageView->ptr();
     framebufferInfo.width           = renderArea.x + renderArea.width;
     framebufferInfo.height          = renderArea.y + renderArea.height;
-    if (contextVk->isRotatedAspectRatio())
+    if (contextVk->isRotatedAspectRatioDrawFramebuffer())
     {
         // The surface is rotated 90/270 degrees.  This changes the aspect ratio of
         // the surface.  Swap the width and height of the framebuffer.

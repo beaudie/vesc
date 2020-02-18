@@ -103,6 +103,11 @@ constexpr VkSurfaceTransformFlagsKHR k90DegreeRotationVariants =
     VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR |
     VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR;
 
+bool Is90DegreeRotation(VkSurfaceTransformFlagsKHR transform)
+{
+    return ((transform & k90DegreeRotationVariants) != 0);
+}
+
 }  // namespace
 
 SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfaceState) {}
@@ -764,7 +769,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     VkFormat nativeFormat    = format.vkImageFormat;
 
     gl::Extents rotatedExtents = extents;
-    if ((mPreTransform & k90DegreeRotationVariants) != 0)
+    if (Is90DegreeRotation(mPreTransform))
     {
         // The Surface is oriented such that its aspect ratio no longer matches that of the
         // device.  In this case, the width and height of the swapchain images must be swapped to
@@ -1398,7 +1403,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
     framebufferInfo.pAttachments    = imageViews.data();
     framebufferInfo.width           = static_cast<uint32_t>(extents.width);
     framebufferInfo.height          = static_cast<uint32_t>(extents.height);
-    if ((mPreTransform & k90DegreeRotationVariants) != 0)
+    if (Is90DegreeRotation(mPreTransform))
     {
         std::swap(framebufferInfo.width, framebufferInfo.height);
     }

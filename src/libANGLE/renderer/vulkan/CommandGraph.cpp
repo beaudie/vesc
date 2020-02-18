@@ -651,7 +651,7 @@ angle::Result CommandGraphNode::visitAndExecute(ContextVk *context,
                 beginInfo.framebuffer           = mRenderPassFramebuffer.getHandle();
                 beginInfo.renderArea.offset.x   = static_cast<uint32_t>(mRenderPassRenderArea.x);
                 beginInfo.renderArea.offset.y   = static_cast<uint32_t>(mRenderPassRenderArea.y);
-                if (context->isRotatedAspectRatio())
+                if (context->isRotatedAspectRatioDrawFramebuffer())
                 {
                     // The surface is rotated 90/270 degrees.  This changes the aspect ratio of
                     // the surface.  Swap the width and height of the renderArea.
