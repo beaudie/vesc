@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "0016be7a_790b8482",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-18T04:17:38Z",
+      "side": 1,
+      "message": "It\u0027s useful in Chrome to do two-stage rolls. So if we change an API in an incompatible way we can transition in Chrome with #ifdefs. It would be nice to remove (or autogenerate) at some point. At least having a presubmit would help.",
+      "parentUuid": "5d6362f6_b3325687",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "1fd2d88aba42def7d9489e663e443afdd01dad89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d9d1b2a_5354fcbf",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 3
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "Yes. 8 in fact, which is part of the reason we got SwS to support 16 storage blocks.",
       "parentUuid": "e2c6efb0_235c2808",
+      "range": {
+        "startLine": 771,
+        "startChar": 18,
+        "endLine": 771,
+        "endChar": 42
+      },
+      "revId": "1fd2d88aba42def7d9489e663e443afdd01dad89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3638ab6d_022875d2",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-18T04:17:38Z",
+      "side": 1,
+      "message": "I see, okay. Good to know. We need to expose 12 to the user so if we reserve 8 we\u0027d need 20 from the driver at minimum for ES 3.1? Maybe at some point we can see how many we can consolidate. Maybe I\u0027m mixing up interface blocks / SSBOs / uniform blocks.",
+      "parentUuid": "03c322c2_081f849d",
       "range": {
         "startLine": 771,
         "startChar": 18,
