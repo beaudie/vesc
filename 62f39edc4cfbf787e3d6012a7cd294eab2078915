@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a81b1c6f_f4838318",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-18T15:10:04Z",
+      "side": 1,
+      "message": "We turned it off because it fails validation:\n\nhttp://anglebug.com/4229\n\nFiguring that bug out is pretty high on my priority list since it blocks all testing.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 63
+      },
+      "revId": "62f39edc4cfbf787e3d6012a7cd294eab2078915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
