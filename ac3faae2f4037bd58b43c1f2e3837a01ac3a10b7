@@ -169,6 +169,30 @@
     },
     {
       "key": {
+        "uuid": "03eb7c23_1aa52e3b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-18T20:00:10Z",
+      "side": 1,
+      "message": "This is a good discussion and I think a lot of interesting ideas are being brought up.\n\nThis seems like a good place to be objective and use the benchmark data to inform our decision about whether to take the change or not.\n\nOnce CQ is green and we are confident the change is correctly implemented, we can benchmark it again and see if there is an improvement on mobile or not.   If it improves mobile but hurts desktop, we can add the additional logic to handle both cases correctly.\n\nIf there are additional ideas to improve things further, we can track those with bugs (like anglebug.com/4405) to revisit them in the future.   Those changes may invalidate the changes here at some point, but the incremental improvement now should at least allow us to move forward to the next issue and buy us some time to investigate those additional fixes and make sure we\u0027re confident we end up with the right answer for both mobile and desktop.",
+      "parentUuid": "9d04dee5_ec216853",
+      "range": {
+        "startLine": 880,
+        "startChar": 20,
+        "endLine": 880,
+        "endChar": 55
+      },
+      "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2239f632_64368c10",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
