@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b68c361_9d8b5ba7",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-18T03:25:57Z",
+      "side": 1,
+      "message": "Instead of caching the egl::Display pointer (our backend objects don\u0027t hold a reference to the frontend ones), you can do either of the following:\n\n1. Cache mDisplay-\u003egetNativeDisplayId()\n2. Pass egl::Display to DisplayImpl::waitNative()\n3. Move Display::mDisplayId to DisplayState\n\nOption 2 or 3 is preferable to me.",
+      "range": {
+        "startLine": 98,
+        "startChar": 24,
+        "endLine": 98,
+        "endChar": 54
+      },
+      "revId": "2550e5058dbf72677a9d11bf2a94d7a6e1a85546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
