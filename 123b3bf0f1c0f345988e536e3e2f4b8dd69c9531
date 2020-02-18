@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e2ba65f_c6f92e54",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-18T16:15:49Z",
+      "side": 1,
+      "message": "FYI, my guess is that perhaps this is skipping some storage class it shouldn\u0027t. Jonah, if you can log what storage classes are skipped, that could be useful.",
+      "revId": "123b3bf0f1c0f345988e536e3e2f4b8dd69c9531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
