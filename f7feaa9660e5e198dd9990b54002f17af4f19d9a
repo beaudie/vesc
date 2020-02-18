@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d35c2e87_bc8703da",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-18T15:00:14Z",
+      "side": 1,
+      "message": "Can you contribute these to the upstream gl.xml as well? FYI Khronos is working on a new proposal for enum groups, see https://github.com/KhronosGroup/OpenGL-Registry/issues/335\n\nWe also have gl_angle_ext.xml although I\u0027m not sure if you could extend the enum groups there.",
+      "revId": "f7feaa9660e5e198dd9990b54002f17af4f19d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
