@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "a416d2b1_3a7640ff",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-18T17:27:16Z",
+      "side": 1,
+      "message": "I think I did what you asked.  PTAL and resolve if you\u0027re satisfied.",
+      "parentUuid": "96610bab_2164b7e8",
+      "range": {
+        "startLine": 654,
+        "startChar": 16,
+        "endLine": 670,
+        "endChar": 17
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2c419c2d_7d477fea",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -202,6 +226,30 @@
       "writtenOn": "2020-02-13T14:00:53Z",
       "side": 1,
       "message": "same comments here.",
+      "range": {
+        "startLine": 3960,
+        "startChar": 7,
+        "endLine": 3960,
+        "endChar": 42
+      },
+      "revId": "5c24fc96ade9a73993bf6d4d9fd34681cf9ef238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e38031af_f1c32392",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3960,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-18T17:27:16Z",
+      "side": 1,
+      "message": "Again, I think I did you what wanted.  PTAL and resolve if you\u0027re satisfied.",
+      "parentUuid": "f1c4e275_03343502",
       "range": {
         "startLine": 3960,
         "startChar": 7,
