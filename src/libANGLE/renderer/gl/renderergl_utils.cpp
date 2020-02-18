@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
+#include <array>
 #include <limits>
 
 #include "common/mathutil.h"
@@ -1473,6 +1474,39 @@ void GenerateCaps(const FunctionsGL *functions,
                                  functions->hasGLESExtension("GL_EXT_memory_object_fd");
     extensions->semaphoreFd = functions->hasGLExtension("GL_EXT_semaphore_fd") ||
                               functions->hasGLESExtension("GL_EXT_semaphore_fd");
+#if defined(ANGLE_PLATFORM_LINUX)
+    // GL_EXT_semaphore_fd doesn't work properly for Mesa 19.3.4 and earlier versions on AMD GPUs.
+    // https://crbug.com/1046462
+    do
+    {
+        if (!extensions->semaphoreFd)
+            break;
+
+        if (!functions->isAtLeastGL(gl::Version(4, 5)))
+            break;
+
+        VendorID vendor = GetVendorID(functions);
+        if (!IsAMD(vendor))
+            break;
+
+        std::string nativeVersionString(
+            reinterpret_cast<const char *>(functions->getString(GL_VERSION)));
+        // Example: 4.5 (Core Profile) Mesa 19.2.8
+        size_t pos = nativeVersionString.find("Mesa");
+        if (pos == std::string::npos)
+            break;
+
+        std::array<int, 3> good_version = {19, 3, 5};
+        std::array<int, 3> version;
+        if (std::sscanf(nativeVersionString.c_str() + pos, "Mesa %d.%d.%d", version.data(),
+                        version.data() + 1, version.data() + 2) != 3)
+            break;
+        if (version >= good_version)
+            break;
+
+        extensions->semaphoreFd = false;
+    } while (false);
+#endif
     extensions->gpuShader5EXT = functions->isAtLeastGL(gl::Version(4, 0)) ||
                                 functions->isAtLeastGLES(gl::Version(3, 2)) ||
                                 functions->hasGLExtension("GL_ARB_gpu_shader5") ||
