@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "507c4b68_94e54875",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-18T18:29:27Z",
+      "side": 1,
+      "message": "Should these be updated to use the block name also?",
+      "range": {
+        "startLine": 744,
+        "startChar": 48,
+        "endLine": 744,
+        "endChar": 68
+      },
+      "revId": "123b3bf0f1c0f345988e536e3e2f4b8dd69c9531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e2ba65f_c6f92e54",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 4
@@ -13,6 +36,23 @@
       "writtenOn": "2020-02-18T16:15:49Z",
       "side": 1,
       "message": "FYI, my guess is that perhaps this is skipping some storage class it shouldn\u0027t. Jonah, if you can log what storage classes are skipped, that could be useful.",
+      "revId": "123b3bf0f1c0f345988e536e3e2f4b8dd69c9531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efb20a5d_238d9b60",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-18T18:29:27Z",
+      "side": 1,
+      "message": "It may be the case that only \u0027gl_PerVertex\u0027 can make it this far, but this block is handling all built-ins so this comment should be generalized a bit more:\n\n    // Cannot create a Private type declaration from built-ins.",
       "revId": "123b3bf0f1c0f345988e536e3e2f4b8dd69c9531",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
