@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5d6362f6_b3325687",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-18T02:51:54Z",
+      "side": 1,
+      "message": "Done.\n\nThough we might as well just remove this. There are no users as far as I can make it.",
+      "parentUuid": "4b079c90_8b744c70",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "1fd2d88aba42def7d9489e663e443afdd01dad89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d9d1b2a_5354fcbf",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 3
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Okay. Were we previously reserving an extra block for these guys? Just wondering now how many we reserve maximum.",
       "parentUuid": "44773aca_c0859693",
+      "range": {
+        "startLine": 771,
+        "startChar": 18,
+        "endLine": 771,
+        "endChar": 42
+      },
+      "revId": "1fd2d88aba42def7d9489e663e443afdd01dad89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "03c322c2_081f849d",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-18T02:51:54Z",
+      "side": 1,
+      "message": "Yes. 8 in fact, which is part of the reason we got SwS to support 16 storage blocks.",
+      "parentUuid": "e2c6efb0_235c2808",
       "range": {
         "startLine": 771,
         "startChar": 18,
