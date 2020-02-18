@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "9d04dee5_ec216853",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-02-18T19:23:48Z",
+      "side": 1,
+      "message": "On desktop GPU and if the index data is on VRAM, you will have to move data to VRAM anyway, and doing conversion using GPU usually is the right thing (not always). But when the data is in system memory, it does not make sense to let GPU to move data across the bus and do a simple conversion. This is especially true on mobile tiled renderer, where breaking render pass is expensive. In addition, most mobile games are GPU limited not CPU limited. You can not move the conversion outside render pass since only at the draw call time you know the data type is unsigned byte.\n\nI am ok with adding another feature flag, or even better a compile time flag so that desktop and mobile can take different route. There will be more scenarios like this will pop up later.",
+      "parentUuid": "a330b01f_42dca05a",
+      "range": {
+        "startLine": 880,
+        "startChar": 20,
+        "endLine": 880,
+        "endChar": 55
+      },
+      "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2239f632_64368c10",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
