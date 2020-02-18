@@ -46,6 +46,30 @@
       "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45719051_64e654ac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-18T12:56:32Z",
+      "side": 1,
+      "message": "Manhattan and T-Rex don\u0027t need reordering here. As Charlie said we\u0027re about to draw with the buffer anyway. It is possible that we could instrument a path that doesn\u0027t use the GPU at all with host coherent memory.",
+      "parentUuid": "4b4e28b5_33382f08",
+      "range": {
+        "startLine": 880,
+        "startChar": 20,
+        "endLine": 880,
+        "endChar": 55
+      },
+      "revId": "ac3faae2f4037bd58b43c1f2e3837a01ac3a10b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
