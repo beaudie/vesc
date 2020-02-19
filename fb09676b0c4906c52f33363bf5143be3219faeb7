@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0d85a51d_d3b03286",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-02-19T18:05:44Z",
+      "side": 1,
+      "message": "Yes, that\u0027s how telemetry test harness works, for example, for WebGL CTS.\nValid names are Release, Debug, Release_x64 and Debug_x64.\n\nTelemetry test harness searches for all Chromium instances (you can have several side-by-side). Bots configuration tells which one should be used in tests, but only these 4 directories is searched.",
+      "parentUuid": "a806dadd_db2fcf01",
+      "range": {
+        "startLine": 8,
+        "startChar": 68,
+        "endLine": 8,
+        "endChar": 129
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2dcd757d_c1b880b4",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 2
