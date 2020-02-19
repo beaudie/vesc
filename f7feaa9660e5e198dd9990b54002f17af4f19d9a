@@ -16,6 +16,24 @@
       "revId": "f7feaa9660e5e198dd9990b54002f17af4f19d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f05c3fc8_5c876540",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-19T20:27:50Z",
+      "side": 1,
+      "message": "Added local draft ANGLE spec.\n\nYou mentioned we have some enum values reserved, what\u0027s the range for those?",
+      "parentUuid": "d35c2e87_bc8703da",
+      "revId": "f7feaa9660e5e198dd9990b54002f17af4f19d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
