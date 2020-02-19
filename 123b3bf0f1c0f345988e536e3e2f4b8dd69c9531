@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8d0dadec_758624cf",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-19T02:27:46Z",
+      "side": 1,
+      "message": "These are block names. The default uniform blocks are nameless, so their usage looks similar to the original shader.",
+      "parentUuid": "507c4b68_94e54875",
+      "range": {
+        "startLine": 744,
+        "startChar": 48,
+        "endLine": 744,
+        "endChar": 68
+      },
+      "revId": "123b3bf0f1c0f345988e536e3e2f4b8dd69c9531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e2ba65f_c6f92e54",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 4
@@ -56,6 +80,24 @@
       "revId": "123b3bf0f1c0f345988e536e3e2f4b8dd69c9531",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea633696_a93db305",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-19T02:27:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efb20a5d_238d9b60",
+      "revId": "123b3bf0f1c0f345988e536e3e2f4b8dd69c9531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
