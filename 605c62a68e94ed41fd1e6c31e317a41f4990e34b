@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0c2e0891_5ffca86a",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T18:42:27Z",
+      "side": 1,
+      "message": "note, we should export \u0027checkout_angle_internal\u0027 and not \u0027build_angle_trace_perf_tests\u0027",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "605c62a68e94ed41fd1e6c31e317a41f4990e34b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7d3d9be_6449053f",
         "filename": "src/tests/perf_tests/restricted_traces/RestrictedTraceTests.md",
         "patchSetId": 1
