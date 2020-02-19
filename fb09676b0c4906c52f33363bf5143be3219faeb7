@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a806dadd_db2fcf01",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "Is this true?   I don\u0027t think I\u0027ve run into any issues with required directory names yet, especially since the binary knows where it\u0027s running from so it should be able to build up paths relative to that.",
+      "range": {
+        "startLine": 8,
+        "startChar": 68,
+        "endLine": 8,
+        "endChar": 129
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2dcd757d_c1b880b4",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 2
@@ -25,6 +48,191 @@
     },
     {
       "key": {
+        "uuid": "d0fa8d3a_a5520aeb",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "I agree.   I think it would be better to just list the Debug and Release build args that the bots are using, rather than trying to point users into the waterfall logs.\n\nThe real goal here is to get users into the same state as the CQ bots, so it\u0027s as straightforward as possible for them to recreate failures when debugging their CLs.",
+      "parentUuid": "2dcd757d_c1b880b4",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5196b75_7c6c7162",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "Build an ANGLE target using the following command:\n\n```\n$ ninja -C out/Debug \u003ctarget\u003e\n```\nor\n```\n$ ninja -C out/Release \u003ctarget\u003e\n```\n\nThe following ANGLE build targets are supported:\n\n```\ntranslator\nlibEGL\nlibGLESv2\nangle_unittests\nangle_end2end_tests\nangle_white_box_tests\nangle_deqp_gles2_tests\nangle_deqp_khr_gles2_tests\nangle_deqp_gles3_tests\nangle_deqp_khr_gles3_tests\nangle_deqp_gles31_tests\nangle_deqp_khr_gles31_tests\nangle_deqp_egl_tests\nangle_perftests\nangle_white_box_perftests\nangle\nthird_party/angle:angle_apks\n```\n\nNOTE: I\u0027ve added a few that were missing from your list (_khr_, gles31, angle_apks).   I\u0027m not sure how to get an exhaustive list (and I\u0027m not sure what libEGL/libGLESv2 are useful for), but this should at least cover most everything.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 228
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55310579_11bb5e90",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "I\u0027ve never had to do this.\n\nI run Android tests exactly the same as Linux/Windows:\n\ntimvp@timvp:~/code/chromium/src$ ninja -v -C out/Debug angle_deqp_gles3_tests \u0026\u0026 \\\n    ./out/Debug/angle_deqp_gles3_tests \\\n    --gtest_filter\u003ddEQP.GLES3/functional_shaders_derivate_dfdy*vec* \\\n    --use-angle\u003dvulkan --single-process-tests --adb-path /usr/bin/adb \\\n    --verbose --local-output",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 119
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cc35d5d_3abc1b89",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "This is not true when running locally.   This whole block should be removed, since it\u0027s unrelated to building/running on Android and will add unnecessary complexity for outside developers.   We want everyone using ANGLE\u0027s gtest suite to run these tests, since that\u0027s what the bots do (and it\u0027s far easier to explain and execute).\n\nGenerating the TestResults.qpa is done automatically when running dEQP:\n\n```\n~/code/chromium/src$ ninja -v -C out/Debug angle_deqp_gles3_tests \u0026\u0026 \\\n    ./out/Debug/angle_deqp_gles3_tests \\\n    --gtest_filter\u003ddEQP.GLES3/functional_shaders_derivate_dfdy*vec* \\\n    --use-angle\u003dvulkan --single-process-tests --adb-path /usr/bin/adb \\\n    --verbose --local-output\n```\n\nAnd then can be offloaded with adb:\n\n```\n$ adb pull /sdcard/chromium_tests_root/gen/vk_gl_cts_data/data/TestResults.qpa\n```\n\nIf you\u0027d like these commands to be documented somewhere, there should be a separate document that\u0027s specific to dEQP since there are differences in how to run dEQP in Android, ANGLE, and the Khronos CTS.\n\nAdditionally, if you\u0027d like to mention the qpa file, it\u0027s worth noting that ANGLE contains a checkout of Cherry (third_party/cherry/) to view the contents of TestResults.qpa.",
+      "range": {
+        "startLine": 39,
+        "startChar": 70,
+        "endLine": 39,
+        "endChar": 267
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbb18e0b_1c04d711",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "Avoid short-hand in documentation:\n\nOpenGL ES",
+      "range": {
+        "startLine": 53,
+        "startChar": 30,
+        "endLine": 53,
+        "endChar": 34
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4db80c5c_1ed06a92",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "OpenGL ES",
+      "range": {
+        "startLine": 55,
+        "startChar": 57,
+        "endLine": 55,
+        "endChar": 61
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d2dc212_51538878",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "with",
+      "range": {
+        "startLine": 59,
+        "startChar": 67,
+        "endLine": 59,
+        "endChar": 76
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "863e0789_46d3f136",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 61,
+        "startChar": 344,
+        "endLine": 61,
+        "endChar": 345
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d7c8b2d_9dd2ade4",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 2
@@ -41,6 +249,282 @@
         "startChar": 0,
         "endLine": 85,
         "endChar": 33
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be2d615e_e69fe3f6",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "Since you\u0027re including the command\u0027s output, the command itself should be prefixed with the `$` to separate the command from its output:\n\n$ adb shell pm path com.chromium.angle\npackage:/data/app/com.chromium.angle-HpkUceNFjoLYKPbIVxFWLQ\u003d\u003d/base.apk",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 69
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf2f4b3b_a2849f6d",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "OpenGL ES",
+      "range": {
+        "startLine": 96,
+        "startChar": 26,
+        "endLine": 96,
+        "endChar": 30
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40a69510_acbb939d",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "OpenGL ES",
+      "range": {
+        "startLine": 103,
+        "startChar": 24,
+        "endLine": 103,
+        "endChar": 28
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ff93283_3e2ff244",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "These should probably be explained a bit more.   Otherwise it looks like \u0027angle\u0027 is just a magic value that\u0027s being repeated without reason.\n\nThis will also help future-proof the documentation a bit when we start using ANGLE by default for some apps and showing how to force the app back to using the native GLES driver.\n\nSee:\nhttps://g3doc.corp.google.com/company/users/timvp/ANGLE/ADB_Commands.md#using-angle-for-specific-apps\n\n1.  Force loading ANGLE for a particular app.\n\n    ```shell\n    $ adb shell settings put global angle_gl_driver_selection_pkgs \u003cpackage name\u003e\n    $ adb shell settings put global angle_gl_driver_selection_values \u003cdriver\u003e\n    ```\n\n    *   For dEQP\n\n        ```shell\n        $ adb shell settings put global angle_gl_driver_selection_pkgs com.drawelements.deqp\n        $ adb shell settings put global angle_gl_driver_selection_values angle\n        ```\n\n    The following values are supported for `angle_gl_driver_selection_values`:\n\n    *   `angle`: Use ANGLE.\n\n    *   `native`: Use the native OpenGL driver.\n\n    *   `default`: Use the default driver (allow the rules file to determine\n        which driver to use).",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 68
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "073dd439_8f6dd57c",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "OpenGL ES",
+      "range": {
+        "startLine": 108,
+        "startChar": 24,
+        "endLine": 108,
+        "endChar": 28
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc7a7ea3_92352d56",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "driver choice",
+      "range": {
+        "startLine": 109,
+        "startChar": 192,
+        "endLine": 109,
+        "endChar": 199
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50a185df_92005e7f",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "OpenGL ES",
+      "range": {
+        "startLine": 114,
+        "startChar": 19,
+        "endLine": 114,
+        "endChar": 23
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b750e87_c08176ab",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "Include how to both enable and disable this setting:\n\n*   Enable\n\n```shell\n$ adb shell settings put global angle_gl_driver_all_angle 1\n```\n\n*   Disable\n\n```shell\n$ adb shell settings put global angle_gl_driver_all_angle 0\n```",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 57
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c5bae19_bfba148e",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "Same as above, separate the command from the output:\n\n$ adb logcat -d | grep ANGLE\nV GraphicsEnvironment: ANGLE developer option for \u003cpackage name\u003e: angle\nI GraphicsEnvironment: ANGLE package enabled: com.chromium.angle\nI ANGLE   : Version (2.1.0.f87fac56d22f), Renderer (Vulkan 1.1.87(Adreno (TM) 615 (0x06010501)))",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 96
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e36b8276_05a21e39",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "may",
+      "range": {
+        "startLine": 135,
+        "startChar": 64,
+        "endLine": 135,
+        "endChar": 68
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "897edab9_cb10be3c",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 135,
+        "startChar": 37,
+        "endLine": 135,
+        "endChar": 38
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8bc82ed_f03d37fd",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T17:38:17Z",
+      "side": 1,
+      "message": "$ adb logcat -d | grep ANGLE\nV GraphicsEnvironment: ANGLE developer option for \u003cpackage name\u003e: angle\nE GraphicsEnvironment: Invalid number of ANGLE packages. Required: 1, Found: 0\nE GraphicsEnvironment: Failed to find ANGLE package.",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 52
       },
       "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
