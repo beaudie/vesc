@@ -1021,53 +1021,32 @@ void QueryHelper::deinit()
 
 angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
 {
-    if (contextVk->commandGraphEnabled())
-    {
-        contextVk->getCommandGraph()->beginQuery(getQueryPool(), getQuery());
-    }
-    else
-    {
-        vk::PrimaryCommandBuffer *primaryCommands;
-        ANGLE_TRY(contextVk->getPrimaryCommandBuffer(&primaryCommands));
-        VkQueryPool queryPool = getQueryPool()->getHandle();
-        primaryCommands->resetQueryPool(queryPool, mQuery, 1);
-        primaryCommands->beginQuery(queryPool, mQuery, 0);
-    }
+    vk::PrimaryCommandBuffer *primaryCommands;
+    ANGLE_TRY(contextVk->getPrimaryCommandBuffer(&primaryCommands));
+    VkQueryPool queryPool = getQueryPool()->getHandle();
+    primaryCommands->resetQueryPool(queryPool, mQuery, 1);
+    primaryCommands->beginQuery(queryPool, mQuery, 0);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
     return angle::Result::Continue;
 }
 
 angle::Result QueryHelper::endQuery(ContextVk *contextVk)
 {
-    if (contextVk->commandGraphEnabled())
-    {
-        contextVk->getCommandGraph()->endQuery(getQueryPool(), getQuery());
-    }
-    else
-    {
-        vk::PrimaryCommandBuffer *primaryCommands;
-        ANGLE_TRY(contextVk->getPrimaryCommandBuffer(&primaryCommands));
-        VkQueryPool queryPool = getQueryPool()->getHandle();
-        primaryCommands->endQuery(queryPool, mQuery);
-    }
+    vk::PrimaryCommandBuffer *primaryCommands;
+    ANGLE_TRY(contextVk->getPrimaryCommandBuffer(&primaryCommands));
+    VkQueryPool queryPool = getQueryPool()->getHandle();
+    primaryCommands->endQuery(queryPool, mQuery);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
     return angle::Result::Continue;
 }
 
 angle::Result QueryHelper::writeTimestamp(ContextVk *contextVk)
 {
-    if (contextVk->commandGraphEnabled())
-    {
-        contextVk->getCommandGraph()->writeTimestamp(getQueryPool(), getQuery());
-    }
-    else
-    {
-        vk::PrimaryCommandBuffer *primaryCommands;
-        ANGLE_TRY(contextVk->getPrimaryCommandBuffer(&primaryCommands));
-        VkQueryPool queryPool = getQueryPool()->getHandle();
-        primaryCommands->resetQueryPool(queryPool, mQuery, 1);
-        primaryCommands->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, mQuery);
-    }
+    vk::PrimaryCommandBuffer *primaryCommands;
+    ANGLE_TRY(contextVk->getPrimaryCommandBuffer(&primaryCommands));
+    VkQueryPool queryPool = getQueryPool()->getHandle();
+    primaryCommands->resetQueryPool(queryPool, mQuery, 1);
+    primaryCommands->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, mQuery);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
     return angle::Result::Continue;
 }
@@ -1457,8 +1436,7 @@ void LineLoopHelper::Draw(uint32_t count, uint32_t baseVertex, CommandBuffer *co
 
 // BufferHelper implementation.
 BufferHelper::BufferHelper()
-    : CommandGraphResource(CommandGraphResourceType::Buffer),
-      mMemoryPropertyFlags{},
+    : mMemoryPropertyFlags{},
       mSize(0),
       mMappedMemory(nullptr),
       mViewFormat(nullptr),
@@ -1541,21 +1519,6 @@ bool BufferHelper::needsOnWriteBarrier(VkAccessFlags writeAccessType,
     return needsBarrier;
 }
 
-void BufferHelper::onWriteAccess(ContextVk *contextVk, VkAccessFlags writeAccessType)
-{
-    VkAccessFlags barrierSrc, barrierDst;
-    if (needsOnWriteBarrier(writeAccessType, &barrierSrc, &barrierDst))
-    {
-        addGlobalMemoryBarrier(barrierSrc, barrierDst, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
-    }
-
-    bool hostVisible = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
-    if (hostVisible && writeAccessType != VK_ACCESS_HOST_WRITE_BIT)
-    {
-        contextVk->onHostVisibleBufferWrite();
-    }
-}
-
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
                                            const Buffer &buffer,
                                            VkAccessFlags bufferAccessType,
@@ -1563,14 +1526,7 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
 {
     // 'recordCommands' will implicitly stop any reads from using the old buffer data.
     CommandBuffer *commandBuffer = nullptr;
-    if (contextVk->commandGraphEnabled())
-    {
-        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-    }
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0 || bufferAccessType != 0)
     {
@@ -1730,8 +1686,7 @@ void BufferHelper::updateWriteBarrier(VkAccessFlags writeAccessType,
 
 // ImageHelper implementation.
 ImageHelper::ImageHelper()
-    : CommandGraphResource(CommandGraphResourceType::Image),
-      mFormat(nullptr),
+    : mFormat(nullptr),
       mSamples(1),
       mCurrentLayout(ImageLayout::Undefined),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
@@ -1742,8 +1697,7 @@ ImageHelper::ImageHelper()
 {}
 
 ImageHelper::ImageHelper(ImageHelper &&other)
-    : CommandGraphResource(CommandGraphResourceType::Image),
-      mImage(std::move(other.mImage)),
+    : mImage(std::move(other.mImage)),
       mDeviceMemory(std::move(other.mDeviceMemory)),
       mExtents(other.mExtents),
       mFormat(other.mFormat),
@@ -2231,18 +2185,8 @@ void ImageHelper::Copy(ImageHelper *srcImage,
 angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint maxLevel)
 {
     CommandBuffer *commandBuffer = nullptr;
-    if (contextVk->commandGraphEnabled())
-    {
-        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
-
-        changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, commandBuffer);
-    }
-    else
-    {
-        ANGLE_TRY(
-            contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, this));
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-    }
+    ANGLE_TRY(contextVk->onImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, this));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     // We are able to use blitImage since the image format we are using supports it. This
     // is a faster way we can generate the mips.
@@ -2898,14 +2842,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     uint64_t subresourceUploadsInProgress            = 0;
 
     // Start in TransferDst.
-    if (contextVk->commandGraphEnabled())
-    {
-        changeLayout(aspectFlags, ImageLayout::TransferDst, commandBuffer);
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->onImageWrite(aspectFlags, ImageLayout::TransferDst, this));
-    }
+    ANGLE_TRY(contextVk->onImageWrite(aspectFlags, ImageLayout::TransferDst, this));
 
     for (SubresourceUpdate &update : mSubresourceUpdates)
     {
@@ -3004,31 +2941,15 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             BufferHelper *currentBuffer = bufferUpdate.bufferHelper;
             ASSERT(currentBuffer && currentBuffer->valid());
 
-            if (contextVk->commandGraphEnabled())
-            {
-                currentBuffer->onResourceAccess(&contextVk->getResourceUseList());
-            }
-            else
-            {
-                ANGLE_TRY(contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, currentBuffer));
-            }
+            ANGLE_TRY(contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, currentBuffer));
 
             commandBuffer->copyBufferToImage(currentBuffer->getBuffer().getHandle(), mImage,
                                              getCurrentLayout(), 1, &update.buffer.copyRegion);
         }
         else
         {
-            if (contextVk->commandGraphEnabled())
-            {
-                update.image.image->changeLayout(aspectFlags, ImageLayout::TransferSrc,
-                                                 commandBuffer);
-                update.image.image->addReadDependency(contextVk, this);
-            }
-            else
-            {
-                ANGLE_TRY(contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc,
-                                                 update.image.image));
-            }
+            ANGLE_TRY(
+                contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc, update.image.image));
 
             commandBuffer->copyImage(update.image.image->getImage(),
                                      update.image.image->getCurrentLayout(), mImage,
@@ -3053,14 +2974,7 @@ angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
 {
     // Clear the image.
     CommandBuffer *commandBuffer = nullptr;
-    if (contextVk->commandGraphEnabled())
-    {
-        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-    }
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
     return flushStagedUpdates(contextVk, 0, mLevelCount, 0, mLayerCount, commandBuffer);
 }
 
@@ -3144,19 +3058,9 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
                                     nullptr));
 
     CommandBuffer *commandBuffer = nullptr;
-    if (contextVk->commandGraphEnabled())
-    {
-        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
-
-        // Transition the image to readable layout
-        changeLayout(aspectFlags, ImageLayout::TransferSrc, commandBuffer);
-    }
-    else
-    {
-        ANGLE_TRY(contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc, this));
-        ANGLE_TRY(contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, *bufferOut));
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-    }
+    ANGLE_TRY(contextVk->onImageRead(aspectFlags, ImageLayout::TransferSrc, this));
+    ANGLE_TRY(contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, *bufferOut));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     VkBufferImageCopy regions[2] = {};
     // Default to non-combined DS case
@@ -3312,26 +3216,13 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
 
     // Note that although we're reading from the image, we need to update the layout below.
     CommandBuffer *commandBuffer;
-    if (contextVk->commandGraphEnabled())
+    if (isMultisampled)
     {
-        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
-        if (isMultisampled)
-        {
-            resolvedImage.get().changeLayout(copyAspectFlags, ImageLayout::TransferDst,
-                                             commandBuffer);
-        }
-        changeLayout(copyAspectFlags, ImageLayout::TransferSrc, commandBuffer);
+        ANGLE_TRY(contextVk->onImageWrite(copyAspectFlags, ImageLayout::TransferDst,
+                                          &resolvedImage.get()));
     }
-    else
-    {
-        if (isMultisampled)
-        {
-            ANGLE_TRY(contextVk->onImageWrite(copyAspectFlags, ImageLayout::TransferDst,
-                                              &resolvedImage.get()));
-        }
-        ANGLE_TRY(contextVk->onImageRead(copyAspectFlags, ImageLayout::TransferSrc, this));
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-    }
+    ANGLE_TRY(contextVk->onImageRead(copyAspectFlags, ImageLayout::TransferSrc, this));
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
     const angle::Format *readFormat = &mFormat->actualImageFormat();
 
@@ -3378,16 +3269,8 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
 
         resolve(&resolvedImage.get(), resolveRegion, commandBuffer);
 
-        if (contextVk->commandGraphEnabled())
-        {
-            resolvedImage.get().changeLayout(copyAspectFlags, ImageLayout::TransferSrc,
-                                             commandBuffer);
-        }
-        else
-        {
-            ANGLE_TRY(contextVk->onImageRead(copyAspectFlags, ImageLayout::TransferSrc,
-                                             &resolvedImage.get()));
-        }
+        ANGLE_TRY(contextVk->onImageRead(copyAspectFlags, ImageLayout::TransferSrc,
+                                         &resolvedImage.get()));
 
         // Make the resolved image the target of buffer copy.
         src                           = &resolvedImage.get();
@@ -3510,8 +3393,7 @@ bool ImageHelper::SubresourceUpdate::isUpdateToLayerLevel(uint32_t layerIndex,
 }
 
 // FramebufferHelper implementation.
-FramebufferHelper::FramebufferHelper() : CommandGraphResource(CommandGraphResourceType::Framebuffer)
-{}
+FramebufferHelper::FramebufferHelper() = default;
 
 FramebufferHelper::~FramebufferHelper() = default;
 
@@ -3715,7 +3597,7 @@ void SamplerHelper::release(RendererVk *renderer)
 }
 
 // DispatchHelper implementation.
-DispatchHelper::DispatchHelper() : CommandGraphResource(CommandGraphResourceType::Dispatcher) {}
+DispatchHelper::DispatchHelper() = default;
 
 DispatchHelper::~DispatchHelper() = default;
 

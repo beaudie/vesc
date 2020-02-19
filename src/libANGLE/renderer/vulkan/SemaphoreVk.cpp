@@ -85,14 +85,7 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
     if (!bufferBarriers.empty() || !textureBarriers.empty())
     {
         // Create one global memory barrier to cover all barriers.
-        if (contextVk->commandGraphEnabled())
-        {
-            contextVk->getCommandGraph()->syncExternalMemory();
-        }
-        else
-        {
-            ANGLE_TRY(contextVk->syncExternalMemory());
-        }
+        ANGLE_TRY(contextVk->syncExternalMemory());
     }
 
     uint32_t rendererQueueFamilyIndex = contextVk->getRenderer()->getQueueFamilyIndex();
@@ -106,18 +99,7 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
             vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
             vk::CommandBuffer *commandBuffer;
-            if (contextVk->commandGraphEnabled())
-            {
-                // If there were GL commands using this buffer prior to this call, that's a
-                // synchronization error on behalf of the program.
-                ASSERT(!bufferHelper.hasRecordedCommands());
-
-                ANGLE_TRY(bufferHelper.recordCommands(contextVk, &commandBuffer));
-            }
-            else
-            {
-                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-            }
+            ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
             // Queue ownership transfer.
             bufferHelper.changeQueue(rendererQueueFamilyIndex, commandBuffer);
@@ -139,17 +121,8 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
             image.onExternalLayoutChange(layout);
 
             vk::CommandBuffer *commandBuffer;
-            if (contextVk->commandGraphEnabled())
-            {
-                // If there were GL commands using this image prior to this call, that's a
-                // synchronization error on behalf of the program.
-                ASSERT(!image.hasRecordedCommands());
-                ANGLE_TRY(image.recordCommands(contextVk, &commandBuffer));
-            }
-            else
-            {
-                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-            }
+            ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
+
             // Queue ownership transfer.
             image.changeLayoutAndQueue(image.getAspectFlags(), layout, rendererQueueFamilyIndex,
                                        commandBuffer);
@@ -175,14 +148,7 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
             vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
             vk::CommandBuffer *commandBuffer;
-            if (contextVk->commandGraphEnabled())
-            {
-                ANGLE_TRY(bufferHelper.recordCommands(contextVk, &commandBuffer));
-            }
-            else
-            {
-                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-            }
+            ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
             // Queue ownership transfer.
             bufferHelper.changeQueue(VK_QUEUE_FAMILY_EXTERNAL, commandBuffer);
@@ -208,14 +174,7 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
             }
 
             vk::CommandBuffer *commandBuffer;
-            if (contextVk->commandGraphEnabled())
-            {
-                ANGLE_TRY(image.recordCommands(contextVk, &commandBuffer));
-            }
-            else
-            {
-                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
-            }
+            ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(&commandBuffer));
 
             // Queue ownership transfer and layout transition.
             image.changeLayoutAndQueue(image.getAspectFlags(), layout, VK_QUEUE_FAMILY_EXTERNAL,
@@ -226,14 +185,7 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
     if (!bufferBarriers.empty() || !textureBarriers.empty())
     {
         // Create one global memory barrier to cover all barriers.
-        if (contextVk->commandGraphEnabled())
-        {
-            contextVk->getCommandGraph()->syncExternalMemory();
-        }
-        else
-        {
-            ANGLE_TRY(contextVk->syncExternalMemory());
-        }
+        ANGLE_TRY(contextVk->syncExternalMemory());
     }
 
     return contextVk->flushImpl(&mSemaphore);
