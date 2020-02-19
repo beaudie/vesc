@@ -228,9 +228,10 @@ class ProgramVk : public ProgramImpl
         ShaderInfo();
         ~ShaderInfo();
 
-        angle::Result initShaders(ContextVk *contextVk,
-                                  const gl::ShaderMap<std::string> &shaderSources,
-                                  const ShaderInterfaceVariableInfoMap &variableInfoMap);
+        angle::Result initShaders(
+            ContextVk *contextVk,
+            const gl::ShaderMap<std::string> &shaderSources,
+            const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap);
         void release(ContextVk *contextVk);
 
         ANGLE_INLINE bool valid() const { return mIsInitialized; }
