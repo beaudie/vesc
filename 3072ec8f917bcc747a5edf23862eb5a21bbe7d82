@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e43a185d_0499af2f",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T19:31:16Z",
+      "side": 1,
+      "message": "nit: please pass the DisplayID in here to init it in the initializer list.",
+      "range": {
+        "startLine": 395,
+        "startChar": 14,
+        "endLine": 395,
+        "endChar": 26
+      },
+      "revId": "3072ec8f917bcc747a5edf23862eb5a21bbe7d82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cedff04_b08cbcdc",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T19:31:16Z",
+      "side": 1,
+      "message": "nit: no \u0027m\u0027 prefix for public members.",
+      "range": {
+        "startLine": 62,
+        "startChar": 25,
+        "endLine": 62,
+        "endChar": 35
+      },
+      "revId": "3072ec8f917bcc747a5edf23862eb5a21bbe7d82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
