@@ -776,7 +776,6 @@ size_t CountUniqueBlocks(const std::vector<InterfaceBlock> &blocks)
 // Saves the linking context for later use in resolveLink().
 struct Program::LinkingState
 {
-    std::unique_ptr<ProgramLinkedResources> resources;
     egl::BlobCache::Key programHash;
     std::unique_ptr<rx::LinkEvent> linkEvent;
     bool linkingFromBinary;
@@ -1511,17 +1510,16 @@ angle::Result Program::link(const Context *context)
     bool result = linkValidateShaders(infoLog);
     ASSERT(result);
 
-    std::unique_ptr<ProgramLinkedResources> resources;
     if (mState.mAttachedShaders[ShaderType::Compute])
     {
-        resources.reset(new ProgramLinkedResources(
+        mResources.reset(new ProgramLinkedResources(
             0, PackMode::ANGLE_RELAXED, &mState.mUniformBlocks, &mState.mUniforms,
             &mState.mShaderStorageBlocks, &mState.mBufferVariables, &mState.mAtomicCounterBuffers));
 
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context->getCaps(), context->getClientVersion(), infoLog,
                           mState.mUniformLocationBindings, &combinedImageUniforms,
-                          &resources->unusedUniforms))
+                          &mResources->unusedUniforms))
         {
             return angle::Result::Continue;
         }
@@ -1550,8 +1548,8 @@ angle::Result Program::link(const Context *context)
             return angle::Result::Continue;
         }
 
-        InitUniformBlockLinker(mState, &resources->uniformBlockLinker);
-        InitShaderStorageBlockLinker(mState, &resources->shaderStorageBlockLinker);
+        InitUniformBlockLinker(mState, &mResources->uniformBlockLinker);
+        InitShaderStorageBlockLinker(mState, &mResources->shaderStorageBlockLinker);
     }
     else
     {
@@ -1568,7 +1566,7 @@ angle::Result Program::link(const Context *context)
             packMode = PackMode::WEBGL_STRICT;
         }
 
-        resources.reset(new ProgramLinkedResources(
+        mResources.reset(new ProgramLinkedResources(
             static_cast<GLuint>(data.getCaps().maxVaryingVectors), packMode, &mState.mUniformBlocks,
             &mState.mUniforms, &mState.mShaderStorageBlocks, &mState.mBufferVariables,
             &mState.mAtomicCounterBuffers));
@@ -1586,7 +1584,7 @@ angle::Result Program::link(const Context *context)
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context->getCaps(), context->getClientVersion(), infoLog,
                           mState.mUniformLocationBindings, &combinedImageUniforms,
-                          &resources->unusedUniforms))
+                          &mResources->unusedUniforms))
         {
             return angle::Result::Continue;
         }
@@ -1619,8 +1617,8 @@ angle::Result Program::link(const Context *context)
             mState.mNumViews = vertexShader->getNumViews();
         }
 
-        InitUniformBlockLinker(mState, &resources->uniformBlockLinker);
-        InitShaderStorageBlockLinker(mState, &resources->shaderStorageBlockLinker);
+        InitUniformBlockLinker(mState, &mResources->uniformBlockLinker);
+        InitShaderStorageBlockLinker(mState, &mResources->shaderStorageBlockLinker);
 
         ShaderType tfStage = mState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry
                                                                            : ShaderType::Vertex;
@@ -1631,7 +1629,7 @@ angle::Result Program::link(const Context *context)
             return angle::Result::Continue;
         }
 
-        if (!resources->varyingPacking.collectAndPackUserVaryings(
+        if (!mResources->varyingPacking.collectAndPackUserVaryings(
                 infoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames(), isSeparable()))
         {
             return angle::Result::Continue;
@@ -1646,8 +1644,7 @@ angle::Result Program::link(const Context *context)
     mLinkingState.reset(new LinkingState());
     mLinkingState->linkingFromBinary = false;
     mLinkingState->programHash       = programHash;
-    mLinkingState->linkEvent         = mProgram->link(context, *resources, infoLog);
-    mLinkingState->resources         = std::move(resources);
+    mLinkingState->linkEvent         = mProgram->link(context, *mResources, infoLog);
     mLinkResolved                    = false;
 
     // Must be after mProgram->link() to avoid misleading the linker about output variables.

@@ -45,7 +45,10 @@ class ProgramExecutableVk
     void reset(ContextVk *contextVk);
 
     void clearVariableInfoMap();
-    ShaderInterfaceVariableInfoMap &getShaderInterfaceVariableInfoMap() { return mVariableInfoMap; }
+    gl::ShaderMap<ShaderInterfaceVariableInfoMap> &getShaderInterfaceVariableInfoMap()
+    {
+        return mVariableInfoMap;
+    }
 
     angle::Result createPipelineLayout(const gl::ProgramState &programState,
                                        const gl::Context *glContext);
@@ -86,6 +89,11 @@ class ProgramExecutableVk
                                                   uint32_t descriptorSetIndex,
                                                   bool *newPoolAllocatedOut);
 
+    void AddInterfaceBlockDescriptorSetDesc(const std::vector<gl::InterfaceBlock> &blocks,
+                                            const gl::ShaderType shaderType,
+                                            VkDescriptorType descType,
+                                            vk::DescriptorSetLayoutDesc *descOut);
+
     void updateDefaultUniformsDescriptorSet(
         const gl::ProgramState &programState,
         gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
@@ -93,17 +101,20 @@ class ProgramExecutableVk
     void updateTransformFeedbackDescriptorSetImpl(const gl::ProgramState &programState,
                                                   ContextVk *contextVk);
     void updateBuffersDescriptorSet(ContextVk *contextVk,
+                                    const gl::ShaderType shaderType,
                                     vk::ResourceUseList *resourceUseList,
                                     CommandBufferHelper *commandBufferHelper,
                                     vk::CommandGraphResource *recorder,
                                     const std::vector<gl::InterfaceBlock> &blocks,
                                     VkDescriptorType descriptorType);
     void updateAtomicCounterBuffersDescriptorSet(const gl::ProgramState &programState,
+                                                 const gl::ShaderType shaderType,
                                                  ContextVk *contextVk,
                                                  vk::ResourceUseList *resourceUseList,
                                                  CommandBufferHelper *commandBufferHelper,
                                                  vk::CommandGraphResource *recorder);
     angle::Result updateImagesDescriptorSet(const gl::ProgramState &programState,
+                                            const gl::ShaderType shaderType,
                                             ContextVk *contextVk,
                                             vk::CommandGraphResource *recorder);
 
@@ -145,7 +156,7 @@ class ProgramExecutableVk
 
     gl::ShaderVector<uint32_t> mDynamicBufferOffsets;
 
-    ShaderInterfaceVariableInfoMap mVariableInfoMap;
+    gl::ShaderMap<ShaderInterfaceVariableInfoMap> mVariableInfoMap;
 };
 
 }  // namespace rx
