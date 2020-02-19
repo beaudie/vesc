@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "db0006e1_bf8201e6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-19T20:51:48Z",
+      "side": 1,
+      "message": "nit: Since I believe the comment above applies here, I\u0027d remove the newline above to make it one block.  That or add a new comment stating that you\u0027re passing a message to cleanupGarbage().",
+      "revId": "e0b944e2392c199f03aeb07da51a20d632800a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "38a3d397_afca1ee4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -18,6 +35,99 @@
         "startChar": 12,
         "endLine": 1513,
         "endChar": 55
+      },
+      "revId": "e0b944e2392c199f03aeb07da51a20d632800a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cec2ef05_142bb4fc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-19T20:51:48Z",
+      "side": 1,
+      "message": "It looks like this is critical to the logic and should be uncommented.",
+      "parentUuid": "38a3d397_afca1ee4",
+      "range": {
+        "startLine": 1512,
+        "startChar": 12,
+        "endLine": 1513,
+        "endChar": 55
+      },
+      "revId": "e0b944e2392c199f03aeb07da51a20d632800a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb551dbf_0365b2fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-19T20:51:48Z",
+      "side": 1,
+      "message": "We want this to be non-zero initialized, right?  Where does it get vk:kBufferInitValue?",
+      "range": {
+        "startLine": 1525,
+        "startChar": 32,
+        "endLine": 1525,
+        "endChar": 58
+      },
+      "revId": "e0b944e2392c199f03aeb07da51a20d632800a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "145db661_358bc24c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-19T20:51:48Z",
+      "side": 1,
+      "message": "Similar to Tim\u0027s comments, it looks like this is presuming the memory can be mapped, but it is invoked below when we detect the memory can\u0027t be mapped.  Looking closer, this is initializing the staging buffer (which we ensure is mappable), not the destination image.  Correct?\n\nWhy can we map the StagingBuffer here, but not in the BufferHelper::initializeMemory case?",
+      "range": {
+        "startLine": 1924,
+        "startChar": 18,
+        "endLine": 1924,
+        "endChar": 42
+      },
+      "revId": "e0b944e2392c199f03aeb07da51a20d632800a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae0cf659_c13361b8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1970,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-19T20:51:48Z",
+      "side": 1,
+      "message": "Might be worth an INFO message or assert to save future cycles.",
+      "range": {
+        "startLine": 1970,
+        "startChar": 15,
+        "endLine": 1970,
+        "endChar": 87
       },
       "revId": "e0b944e2392c199f03aeb07da51a20d632800a4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
