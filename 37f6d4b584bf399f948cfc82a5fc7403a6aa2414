@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33323732_65258336",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-02-19T21:01:23Z",
+      "side": 1,
+      "message": "I think some configurations were intentionally omitted before, but will be included now, is this intentional?\nFor example \"Offscreen(DrawCallD3D11()), StateChange::VertexAttrib\" wasn\u0027t there before.\n\nWe might need to increase test timeouts on perf bots if we start running more tests.\n\nAlso, we had tests with Offscreen + NullDevice before, I think we won\u0027t get them now?\nLike \"NullDevice(Offscreen(DrawCallOpenGL())), StateChange::NoChange\".",
+      "range": {
+        "startLine": 414,
+        "startChar": 52,
+        "endLine": 414,
+        "endChar": 68
+      },
+      "revId": "37f6d4b584bf399f948cfc82a5fc7403a6aa2414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c470c669_12e4ac4f",
+        "filename": "src/tests/perf_tests/DrawElementsPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-02-19T21:01:23Z",
+      "side": 1,
+      "message": "I see you\u0027ve disabled this on WGL, but it wasn\u0027t there for D3D9 as well.",
+      "range": {
+        "startLine": 239,
+        "startChar": 76,
+        "endLine": 239,
+        "endChar": 86
+      },
+      "revId": "37f6d4b584bf399f948cfc82a5fc7403a6aa2414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9386c1c5_1e7c5b6b",
+        "filename": "src/tests/perf_tests/DrawElementsPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-02-19T21:01:23Z",
+      "side": 1,
+      "message": "Same question as before, seems we have more combinations now than originally?",
+      "range": {
+        "startLine": 241,
+        "startChar": 56,
+        "endLine": 241,
+        "endChar": 67
+      },
+      "revId": "37f6d4b584bf399f948cfc82a5fc7403a6aa2414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
