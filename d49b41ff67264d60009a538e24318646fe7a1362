@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b890259_26e63d8f",
+        "filename": "src/libANGLE/renderer/gl/egl/ozone/DisplayOzone.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-02-19T21:20:01Z",
+      "side": 1,
+      "message": "I believed the post merge issues on Ozone were because I was missing the 6 lines above. Indeed DisplayEGL has now a default implementation for `makeCurrent` so we now need to make sure to not use it in DisplayOzone, to keep existing behavior in current master.",
+      "revId": "d49b41ff67264d60009a538e24318646fe7a1362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
