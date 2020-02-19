@@ -425,7 +425,6 @@ std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
         for (const CommandHeader *currentCommand                      = command;
              currentCommand->id != CommandID::Invalid; currentCommand = NextCommand(currentCommand))
         {
-            result += separator;
             switch (currentCommand->id)
             {
                 case CommandID::BeginQuery:
@@ -549,6 +548,7 @@ std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
                     break;
                 }
             }
+            result += separator;
         }
     }
     return result;
