@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8841688b_c5997208",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-19T18:22:56Z",
+      "side": 0,
+      "message": "This and the added import are the only real changes in this file, the rest of clang-format.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 38
+      },
+      "revId": "38bb9fdf36e8d38ab0ae966fa6b652025ebc08a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

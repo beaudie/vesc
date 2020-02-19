@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7d3d9be_6449053f",
+        "filename": "src/tests/perf_tests/restricted_traces/RestrictedTraceTests.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-19T18:22:56Z",
+      "side": 1,
+      "message": "Note: \"gclient runhooks\" was not sufficient to create gclient_args.gni",
+      "range": {
+        "startLine": 26,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 12
+      },
+      "revId": "605c62a68e94ed41fd1e6c31e317a41f4990e34b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
