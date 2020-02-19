@@ -542,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "426e2371_cd57da34",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-02-19T18:02:55Z",
+      "side": 1,
+      "message": "Now storing by value.",
+      "parentUuid": "af54c29b_ae5015f0",
+      "range": {
+        "startLine": 189,
+        "startChar": 4,
+        "endLine": 189,
+        "endChar": 56
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13a67008_d347ea1b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 21
@@ -577,6 +601,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "13a67008_d347ea1b",
+      "range": {
+        "startLine": 205,
+        "startChar": 44,
+        "endLine": 205,
+        "endChar": 82
+      },
+      "revId": "b0d1d99250b5e4817a4749884cc5df0b8864d9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1039ac69_bc0fe9fb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-02-19T18:02:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81a2f4be_86984fd7",
       "range": {
         "startLine": 205,
         "startChar": 44,
