@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f725bae0_02df3a3b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T18:11:59Z",
+      "side": 1,
+      "message": "is it possible to revert the changes to this file so it doesn\u0027t conflict with my change to remove the command graph?",
+      "range": {
+        "startLine": 680,
+        "startChar": 1,
+        "endLine": 688,
+        "endChar": 0
+      },
+      "revId": "b641d30527af03be7893e4a202dcef0c31bcecda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc83e8ae_c5c60ad0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T18:11:59Z",
+      "side": 1,
+      "message": "nit: AttachmentImageSerialFactory",
+      "range": {
+        "startLine": 1024,
+        "startChar": 18,
+        "endLine": 1024,
+        "endChar": 43
+      },
+      "revId": "b641d30527af03be7893e4a202dcef0c31bcecda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a249d56a_c16d99fb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T18:11:59Z",
+      "side": 1,
+      "message": "nit: can you use a local temporary ref to point to entry.second so the type is visible?",
+      "range": {
+        "startLine": 152,
+        "startChar": 8,
+        "endLine": 152,
+        "endChar": 19
+      },
+      "revId": "b641d30527af03be7893e4a202dcef0c31bcecda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2664fec3_c6d2eba9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T18:11:59Z",
+      "side": 1,
+      "message": "can you remove the mFramebuffer-\u003evalid() part of the below if and ASSERT(mFramebuffer-\u003evalid()) if we\u0027re inside the !\u003d nullptr condition? I believe it should be invariant.",
+      "range": {
+        "startLine": 177,
+        "startChar": 32,
+        "endLine": 178,
+        "endChar": 4
+      },
+      "revId": "b641d30527af03be7893e4a202dcef0c31bcecda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bee5c634_0854ee00",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T18:11:59Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 199,
+        "startChar": 8,
+        "endLine": 199,
+        "endChar": 56
+      },
+      "revId": "b641d30527af03be7893e4a202dcef0c31bcecda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "404c51bb_55e522d3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T18:11:59Z",
+      "side": 1,
+      "message": "nit: ASSERT(mFramebuffer)",
+      "range": {
+        "startLine": 117,
+        "startChar": 15,
+        "endLine": 117,
+        "endChar": 27
+      },
+      "revId": "b641d30527af03be7893e4a202dcef0c31bcecda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
