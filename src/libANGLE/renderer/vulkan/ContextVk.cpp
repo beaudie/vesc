@@ -446,7 +446,7 @@ angle::Result CommandQueue::submitFrame(vk::Context *context,
     batch.fence.copy(device, sharedFence);
 
     ANGLE_TRY(
-        renderer->queueSubmit(context, priority, submitInfo, batch.fence.get(), &batch.serial));
+        renderer->queueSubmit(context, priority, submitInfo, &batch.fence.get(), &batch.serial));
 
     if (!currentGarbage->empty())
     {
@@ -3897,7 +3897,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
 
     Serial throwAwaySerial;
     ANGLE_TRY(
-        mRenderer->queueSubmit(this, mContextPriority, submitInfo, fence.get(), &throwAwaySerial));
+        mRenderer->queueSubmit(this, mContextPriority, submitInfo, &fence.get(), &throwAwaySerial));
 
     // Wait for the submission to finish.  Given no semaphores, there is hope that it would execute
     // in parallel with what's already running on the GPU.
