@@ -142,7 +142,7 @@ class OutsideRenderPassCommandBuffer final : public CommandBufferHelper
     OutsideRenderPassCommandBuffer();
     ~OutsideRenderPassCommandBuffer();
 
-    void flushToPrimary(vk::PrimaryCommandBuffer *primary);
+    void flushToPrimary(ContextVk *contextVk, vk::PrimaryCommandBuffer *primary);
 
     bool empty() const { return mCommandBuffer.empty(); }
     void reset();
@@ -620,7 +620,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     angle::Result getPrimaryCommandBuffer(vk::PrimaryCommandBuffer **primaryCommands)
     {
-        mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
+        mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
         ANGLE_TRY(endRenderPass());
         *primaryCommands = &mPrimaryCommands;
         return angle::Result::Continue;
@@ -630,6 +630,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     angle::Result endRenderPass();
 
     angle::Result syncExternalMemory();
+
+    void addCommandBufferDiagnostics(const std::string &commandBufferDiagnostics);
 
   private:
     // Dirty bits.
@@ -884,6 +886,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     angle::Result ensureSubmitFenceInitialized();
     angle::Result startPrimaryCommandBuffer();
     bool hasRecordedCommands();
+    void dumpCommandStreamDiagnostics(std::ostream &out);
 
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
@@ -1032,6 +1035,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     vk::ResourceUseList mResourceUseList;
 
     egl::ContextPriority mContextPriority;
+
+    std::vector<std::string> mCommandBufferDiagnostics;
 };
 }  // namespace rx
 
