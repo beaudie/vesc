@@ -23,11 +23,7 @@ Add the following to ANGLE's .gclient file:
 ```
 Then use gclient to pull down binary files from a cloud storage bucket.
 ```
-gclient runhooks
-```
-To build the tests, add the following GN argument:
-```
-build_angle_trace_perf_tests = true
+gclient sync
 ```
 Build the angle_perftests:
 ```
