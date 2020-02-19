@@ -76,6 +76,7 @@ Debug_ARM/
 Debug_Win32/
 Debug_x64/
 diag.txt
+gclient_args.gni
 ipch
 lib/*
 out

@@ -6,6 +6,11 @@
 use_relative_paths = True
 use_relative_hooks = True
 
+gclient_gn_args_file = 'gclient_args.gni'
+gclient_gn_args = [
+  'checkout_angle_internal',
+]
+
 vars = {
   'android_git': 'https://android.googlesource.com',
   'chromium_git': 'https://chromium.googlesource.com',
