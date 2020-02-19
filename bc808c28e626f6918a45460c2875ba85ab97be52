@@ -137,6 +137,24 @@
     },
     {
       "key": {
+        "uuid": "1489e30b_5f1575b1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1507,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T19:50:00Z",
+      "side": 1,
+      "message": "It\u0027s not proven that unlikely does nothing. Only that we didn\u0027t see anything in our tests. So I\u0027m not sure what the right this is to do. Going to mark this resolved for now.",
+      "parentUuid": "afe930f2_ee918334",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e9495a2_edb29462",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
@@ -240,6 +258,30 @@
       "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3c5d67f_8d513515",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T19:50:00Z",
+      "side": 1,
+      "message": "Right. See CL description and other comment for reasoning. If it\u0027s host visible we map it, otherwise we try to copy to it.",
+      "parentUuid": "2af464ea_d2f0c18a",
+      "range": {
+        "startLine": 1526,
+        "startChar": 0,
+        "endLine": 1527,
+        "endChar": 66
+      },
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
