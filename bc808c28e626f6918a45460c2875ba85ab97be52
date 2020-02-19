@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "509050ac_4edc6675",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:03:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c89cd66d_17da6cb7",
+      "range": {
+        "startLine": 1618,
+        "startChar": 7,
+        "endLine": 1618,
+        "endChar": 58
+      },
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f6ee7c9_d0d80c46",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 14
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "4672a4b4_2ed5cd93",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:03:47Z",
+      "side": 1,
+      "message": "You\u0027re probably right. I marked it as high priority instead.",
+      "parentUuid": "1f6ee7c9_d0d80c46",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4119fb90_52fb638b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
@@ -53,6 +95,24 @@
       "writtenOn": "2020-02-11T18:53:53Z",
       "side": 1,
       "message": "This flag will never be enabled in release builds.   Paying the code-size cost is unfortunately unavoidable as a run-time option, but all of these checks should probably use ANGLE_UNLIKELY() to help reduce the branching cost.",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b64c7bfd_5c0aadd7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1507,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:03:47Z",
+      "side": 1,
+      "message": "In my experimentation and on the perf bots ANGLE_UNLIKELY had no noticeable impact in performance. The macro adds code clutter and overhead that doesn\u0027t help with maintainability. Moreover buffer allocation is a costly operation that will be heavily dominated by other instructions than one variable check.\n\nWould you be okay with skipping this suggestion?",
+      "parentUuid": "4119fb90_52fb638b",
       "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "1e36c66b_d1bf4f5f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:03:47Z",
+      "side": 1,
+      "message": "Done. We do map the memory if it is mappable and init it there. It\u0027s done in another point in the code. Left a comment.",
+      "parentUuid": "7e9495a2_edb29462",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "201a9b80_9375981f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
@@ -87,6 +165,30 @@
       "writtenOn": "2020-02-11T18:53:53Z",
       "side": 1,
       "message": "StagingBuffer::init() has this line:\n\n    ANGLE_TRY(AllocateBufferMemory(contextVk, flags, \u0026flagsOut, nullptr, \u0026mBuffer, \u0026mDeviceMemory));\n\nThat makes its way down to FindAndAllocateCompatibleMemory() which calls vk::InitMappableDeviceMemory() also.\n\nWhy are both calls necessary and why are they both checking opposite conditions for VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT?",
+      "range": {
+        "startLine": 1526,
+        "startChar": 0,
+        "endLine": 1527,
+        "endChar": 66
+      },
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d413aade_61db4214",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:03:47Z",
+      "side": 1,
+      "message": "You\u0027re right. This call is redundant. Removed. This code isn\u0027t checking a condition though. Not sure what you\u0027re asking?",
+      "parentUuid": "201a9b80_9375981f",
       "range": {
         "startLine": 1526,
         "startChar": 0,
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "80310392_5752a4b6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:03:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "311fdcc7_a7c5ff1d",
+      "range": {
+        "startLine": 77,
+        "startChar": 7,
+        "endLine": 77,
+        "endChar": 69
+      },
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7864dd7_bae20501",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 14
@@ -133,6 +259,24 @@
       "writtenOn": "2020-02-11T18:53:53Z",
       "side": 1,
       "message": "Why is checking VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT is enabled, when BufferHelper::init() checks the opposite?",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5e623f2_9a66c488",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:03:47Z",
+      "side": 1,
+      "message": "If the memory we allocate is mappable, we can do the non-zero init here.\n\nIf it\u0027s not mappable, and can be a transfer destination, we can use a non-zero init staging buffer.\n\nIf it\u0027s not mappable and not transfer-dst, there\u0027s nothing we can do at the moment. Theoretically we could use a compute shader? Anyway it wasn\u0027t necessary for the tests.\n\nI updated the CL description. PTAL?",
+      "parentUuid": "b7864dd7_bae20501",
       "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -156,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "ef9a9528_6c3b2e67",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:03:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30d54693_a0bc493d",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d20d6a0f_94fb60a0",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 14
@@ -170,6 +332,24 @@
       "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "773d0532_4df02ef5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:03:47Z",
+      "side": 1,
+      "message": "Nothing special. Added comment.",
+      "parentUuid": "d20d6a0f_94fb60a0",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
