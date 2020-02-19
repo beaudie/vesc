@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38a3d397_afca1ee4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T18:22:19Z",
+      "side": 1,
+      "message": "remove?",
+      "range": {
+        "startLine": 1512,
+        "startChar": 12,
+        "endLine": 1513,
+        "endChar": 55
+      },
+      "revId": "e0b944e2392c199f03aeb07da51a20d632800a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

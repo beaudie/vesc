@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "afe930f2_ee918334",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1507,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T18:22:19Z",
+      "side": 1,
+      "message": "Sounds good.\n\nIs it worth opening a fix-it week bug to remove ANGLE_UNLIKELY()?",
+      "parentUuid": "b64c7bfd_5c0aadd7",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e9495a2_edb29462",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
@@ -189,6 +207,30 @@
       "side": 1,
       "message": "You\u0027re right. This call is redundant. Removed. This code isn\u0027t checking a condition though. Not sure what you\u0027re asking?",
       "parentUuid": "201a9b80_9375981f",
+      "range": {
+        "startLine": 1526,
+        "startChar": 0,
+        "endLine": 1527,
+        "endChar": 66
+      },
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2af464ea_d2f0c18a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T18:22:19Z",
+      "side": 1,
+      "message": "Sorry, the earlier version of this CL had this above in BufferHelper::init() which is checking the VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT before getting here:\n\n       if ((memoryPropertyFlags \u0026 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) \u003d\u003d 0 \u0026\u0026\n            (requestedCreateInfo.usage \u0026 VK_BUFFER_USAGE_TRANSFER_DST_BIT) !\u003d 0)\n        {\n            [[[ initializeMemory() called InitMappableDeviceMemory() ]]]\n            ANGLE_TRY(initializeMemory(contextVk, size));\n        }\n\nHowever, down in FindAndAllocateCompatibleMemory() the call to InitMappableDeviceMemory() was inside of a conditional checking the opposite:\n\n        if ((*memoryPropertyFlagsOut \u0026 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) !\u003d 0)\n        {\n            // Can map the memory.\n            ANGLE_TRY(vk::InitMappableDeviceMemory(context, deviceMemoryOut,\n                                                   memoryRequirements.size, vk::kBufferInitValue));\n        }\n\nWhen both calls to InitMappableDeviceMemory() were still present, they were conditionally done based on opposite values of VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT being set:\n\nBufferHelper::init()\n  - VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT \u003d\u003d 0\nFindAndAllocateCompatibleMemory()\n  - VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT !\u003d 0",
+      "parentUuid": "d413aade_61db4214",
       "range": {
         "startLine": 1526,
         "startChar": 0,
@@ -280,6 +322,24 @@
       "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c28541e8_8776a375",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-19T18:22:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c5e623f2_9a66c488",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
