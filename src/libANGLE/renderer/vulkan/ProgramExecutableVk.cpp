@@ -65,7 +65,10 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
 
 void ProgramExecutableVk::clearVariableInfoMap()
 {
-    mVariableInfoMap.clear();
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        mVariableInfoMap[shaderType].clear();
+    }
 }
 
 void ProgramExecutableVk::updateBindingOffsets(const gl::State &glState)
