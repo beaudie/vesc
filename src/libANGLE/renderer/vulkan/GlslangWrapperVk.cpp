@@ -39,22 +39,24 @@ GlslangSourceOptions CreateSourceOptions(const angle::FeaturesVk &features)
 }  // namespace
 
 // static
-void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
-                                       const gl::ProgramState &programState,
-                                       const gl::ProgramLinkedResources &resources,
-                                       gl::ShaderMap<std::string> *shaderSourcesOut,
-                                       ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+void GlslangWrapperVk::GetShaderSource(
+    const angle::FeaturesVk &features,
+    const gl::ProgramState &programState,
+    const gl::ProgramLinkedResources &resources,
+    gl::ShaderMap<std::string> *shaderSourcesOut,
+    gl::ShaderMap<ShaderInterfaceVariableInfoMap> *variableInfoMapOut)
 {
     GlslangGetShaderSource(CreateSourceOptions(features), programState, resources, shaderSourcesOut,
                            variableInfoMapOut);
 }
 
 // static
-angle::Result GlslangWrapperVk::GetShaderCode(vk::Context *context,
-                                              const gl::Caps &glCaps,
-                                              const gl::ShaderMap<std::string> &shaderSources,
-                                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                              gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
+angle::Result GlslangWrapperVk::GetShaderCode(
+    vk::Context *context,
+    const gl::Caps &glCaps,
+    const gl::ShaderMap<std::string> &shaderSources,
+    const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap,
+    gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
 {
     return GlslangGetShaderSpirvCode(
         [context](GlslangError error) { return ErrorHandler(context, error); }, glCaps,

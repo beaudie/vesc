@@ -45,7 +45,10 @@ class ProgramExecutableVk
     void reset(ContextVk *contextVk);
 
     void clearVariableInfoMap();
-    ShaderInterfaceVariableInfoMap &getShaderInterfaceVariableInfoMap() { return mVariableInfoMap; }
+    gl::ShaderMap<ShaderInterfaceVariableInfoMap> &getShaderInterfaceVariableInfoMap()
+    {
+        return mVariableInfoMap;
+    }
 
     angle::Result createPipelineLayout(const gl::ProgramState &programState,
                                        const gl::Context *glContext);
@@ -145,7 +148,7 @@ class ProgramExecutableVk
 
     gl::ShaderVector<uint32_t> mDynamicBufferOffsets;
 
-    ShaderInterfaceVariableInfoMap mVariableInfoMap;
+    gl::ShaderMap<ShaderInterfaceVariableInfoMap> mVariableInfoMap;
 };
 
 }  // namespace rx
