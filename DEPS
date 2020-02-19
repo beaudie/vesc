@@ -6,6 +6,11 @@
 use_relative_paths = True
 use_relative_hooks = True
 
+gclient_gn_args_file = 'build/config/gclient_args.gni'
+gclient_gn_args = [
+  'build_angle_trace_perf_tests',
+]
+
 vars = {
   'android_git': 'https://android.googlesource.com',
   'chromium_git': 'https://chromium.googlesource.com',
@@ -64,6 +69,9 @@ vars = {
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
   'catapult_revision': '1b3fb455bf1849f1e6187e1eaeaef32b9f30d3c5',
+
+  # If we're building internal sources, automatically build trace perf tests
+  'build_angle_trace_perf_tests': 'checkout_angle_internal',
 }
 
 deps = {
