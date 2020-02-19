@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2dcd757d_c1b880b4",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:01:03Z",
+      "side": 1,
+      "message": "probably best to replace with your recommended args.",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d7c8b2d_9dd2ade4",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T15:01:03Z",
+      "side": 1,
+      "message": "can you fold these instructions into the first section? Maybe with a sub-item on different targets? e.g. tests vs apks",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 33
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
