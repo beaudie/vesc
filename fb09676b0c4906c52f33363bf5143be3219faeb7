@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "11cf6f4f_926d1d5b",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-02-19T21:34:50Z",
+      "side": 1,
+      "message": "My idea in pointing to waterfall bots was that we can change the configuration on the bots and forget to change the document. Having only one copy of this avoids a potential confusion.",
+      "parentUuid": "d0fa8d3a_a5520aeb",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5196b75_7c6c7162",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 2
@@ -190,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "e3b5e085_2a930de7",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-02-19T21:34:50Z",
+      "side": 1,
+      "message": "This was changed at some point and I forgot we had this in the doc and didn\u0027t update it.\n./out/Release/angle_end2end_tests runs ./out/Release/bin/run_angle_end2end_tests now.",
+      "parentUuid": "add87681_ea4fab74",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 119
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6cc35d5d_3abc1b89",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 2
@@ -225,6 +273,30 @@
       "side": 1,
       "message": "You could split it into a separate subsection in this document. Or you could move them into the dEQP.md file under an Android section. If there\u0027s corrections or simplifications to the process it would be good to update the instructions.",
       "parentUuid": "6cc35d5d_3abc1b89",
+      "range": {
+        "startLine": 39,
+        "startChar": 70,
+        "endLine": 39,
+        "endChar": 267
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8c49f9a_7227a6a8",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-02-19T21:34:50Z",
+      "side": 1,
+      "message": "Tim, this IS true when running locally.\nThis is not about Swarming shards, but about gtest shards.\nTests are grouped in batches of 256 and the run of the latest batch overwrites all the previous batches TestResults.qpa.\n\nIf you use --gtest_filter, then you might get the right TestResults.qpa. Either there are less than 256 tests with the filter, or, I think recently gtest stopped dividing tests into batches when --gtest_filter is used. Though, it only works if you have less than 1024 tests after the filter, see anglebug.com/4396.\n\nNot sure which directory is correct now, \n/sdcard/chromium_tests_root/gen/vk_gl_cts_data/data/TestResults.qpa\nor\n/sdcard/chromium_tests_root/third_party/angle/third_party/deqp/src/data/TestResults.qpa\n\nThis might be different for KHR vs non-KHR dEQP tests.\n\nCherry is documented in doc/dEQP.md.",
+      "parentUuid": "cbc21234_3f849ca1",
       "range": {
         "startLine": 39,
         "startChar": 70,
