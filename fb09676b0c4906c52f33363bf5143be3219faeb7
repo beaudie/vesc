@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "5a74ce6c_2e0324f6",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T17:58:39Z",
+      "side": 1,
+      "message": "-translator -libEGL -libGLESv2 -third_party/angle:angle_apks +angle_apks\n\nwe should probably add a group target for angle tests, so then we have\n\n\u0027angle\u0027, \u0027angle_tests\u0027, and \u0027angle_apks\u0027\n\nCan use the big list though with the aforementioned changes.",
+      "parentUuid": "c5196b75_7c6c7162",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 228
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55310579_11bb5e90",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 2
@@ -118,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "add87681_ea4fab74",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T17:58:39Z",
+      "side": 1,
+      "message": "I thought the run targets are necessary for Android. I\u0027m pretty surprised you can launch native executables like that. +yuly for comments.",
+      "parentUuid": "55310579_11bb5e90",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 119
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6cc35d5d_3abc1b89",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 2
@@ -129,6 +177,30 @@
       "writtenOn": "2020-02-19T17:38:17Z",
       "side": 1,
       "message": "This is not true when running locally.   This whole block should be removed, since it\u0027s unrelated to building/running on Android and will add unnecessary complexity for outside developers.   We want everyone using ANGLE\u0027s gtest suite to run these tests, since that\u0027s what the bots do (and it\u0027s far easier to explain and execute).\n\nGenerating the TestResults.qpa is done automatically when running dEQP:\n\n```\n~/code/chromium/src$ ninja -v -C out/Debug angle_deqp_gles3_tests \u0026\u0026 \\\n    ./out/Debug/angle_deqp_gles3_tests \\\n    --gtest_filter\u003ddEQP.GLES3/functional_shaders_derivate_dfdy*vec* \\\n    --use-angle\u003dvulkan --single-process-tests --adb-path /usr/bin/adb \\\n    --verbose --local-output\n```\n\nAnd then can be offloaded with adb:\n\n```\n$ adb pull /sdcard/chromium_tests_root/gen/vk_gl_cts_data/data/TestResults.qpa\n```\n\nIf you\u0027d like these commands to be documented somewhere, there should be a separate document that\u0027s specific to dEQP since there are differences in how to run dEQP in Android, ANGLE, and the Khronos CTS.\n\nAdditionally, if you\u0027d like to mention the qpa file, it\u0027s worth noting that ANGLE contains a checkout of Cherry (third_party/cherry/) to view the contents of TestResults.qpa.",
+      "range": {
+        "startLine": 39,
+        "startChar": 70,
+        "endLine": 39,
+        "endChar": 267
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbc21234_3f849ca1",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-19T17:58:39Z",
+      "side": 1,
+      "message": "You could split it into a separate subsection in this document. Or you could move them into the dEQP.md file under an Android section. If there\u0027s corrections or simplifications to the process it would be good to update the instructions.",
+      "parentUuid": "6cc35d5d_3abc1b89",
       "range": {
         "startLine": 39,
         "startChar": 70,
