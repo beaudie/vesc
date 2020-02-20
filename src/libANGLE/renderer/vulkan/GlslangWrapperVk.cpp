@@ -21,7 +21,10 @@ angle::Result ErrorHandler(vk::Context *context, GlslangError)
     return angle::Result::Stop;
 }
 
-GlslangSourceOptions CreateSourceOptions(const angle::FeaturesVk &features)
+}  // namespace
+
+// static
+GlslangSourceOptions GlslangWrapperVk::CreateSourceOptions(const angle::FeaturesVk &features)
 {
     GlslangSourceOptions options;
     options.uniformsAndXfbDescriptorSetIndex = kUniformsAndXfbDescriptorSetIndex;
@@ -36,7 +39,6 @@ GlslangSourceOptions CreateSourceOptions(const angle::FeaturesVk &features)
     options.emulateBresenhamLines    = features.basicGLLineRasterization.enabled;
     return options;
 }
-}  // namespace
 
 // static
 void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
