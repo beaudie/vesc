@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7b1426a_110211d7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-20T22:09:55Z",
+      "side": 1,
+      "message": "Is returning a char* here better than just a char?   These don\u0027t seem to really need to be full strings (with null terminator), rather than just returning the actual char value (\u0027C\u0027, \u0027L\u0027, etc.).",
+      "revId": "b00d1883b7d06d6670a04476a221d73f01940c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f30d52c7_340ecfe1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-20T22:09:55Z",
+      "side": 1,
+      "message": "Is it necessary to pass \u0027std::cout\u0027 here?   That\u0027s essentially a global that\u0027s available everywhere, so dumpCommandStreamDiagnostics() has access to it already.\n\ndumpCommandStreamDiagnostics() should probably just not take any parameters for now, and then we can add them in the future if we find that there really are different streams/strings/files/etc. we\u0027d like to pass in.",
+      "range": {
+        "startLine": 1457,
+        "startChar": 41,
+        "endLine": 1457,
+        "endChar": 50
+      },
+      "revId": "b00d1883b7d06d6670a04476a221d73f01940c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41f17fa0_b01baec0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4376,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-20T22:09:55Z",
+      "side": 1,
+      "message": "I think this block would be better in a separate helper function to help segregate it off a bit better since it\u0027s more of a debug feature and not entirely related to flushing commands.",
+      "revId": "b00d1883b7d06d6670a04476a221d73f01940c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
