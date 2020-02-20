@@ -85,6 +85,9 @@ class ProgramExecutableVk
     angle::Result allocateDescriptorSetAndGetInfo(ContextVk *contextVk,
                                                   uint32_t descriptorSetIndex,
                                                   bool *newPoolAllocatedOut);
+    void AddInterfaceBlockDescriptorSetDesc(const std::vector<gl::InterfaceBlock> &blocks,
+                                            VkDescriptorType descType,
+                                            vk::DescriptorSetLayoutDesc *descOut);
 
     void updateDefaultUniformsDescriptorSet(
         const gl::ProgramState &programState,

@@ -63,6 +63,12 @@ class ProgramExecutable
     size_t getAtomicCounterBuffersCount(const gl::State &glState) const;
     size_t getTransformFeedbackBufferCount(const gl::State &glState) const;
 
+    const uint32_t *getLocationsUsedForXfbExtension() const
+    {
+        return &mLocationsUsedForXfbExtension;
+    }
+    uint32_t *getLocationsUsedForXfbExtension() { return &mLocationsUsedForXfbExtension; }
+
   private:
     // TODO(timvp): http://anglebug.com/3570: Investigate removing these friend
     // class declarations and accessing the necessary members with getters/setters.
@@ -79,6 +85,8 @@ class ProgramExecutable
     ComponentTypeMask mAttributesTypeMask;
     // mAttributesMask is identical to mActiveAttribLocationsMask with built-in attributes removed.
     AttributesMask mAttributesMask;
+
+    uint32_t mLocationsUsedForXfbExtension = 0;
 };
 
 }  // namespace gl
