@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4960e1d_bf1d6447",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-20T13:30:59Z",
+      "side": 1,
+      "message": "nit:going forward we\u0027re trying to suffix all the extension names, can you update this to glImportSemaphoreANGLE ?\n\nAlso add the initializer.",
+      "range": {
+        "startLine": 396,
+        "startChar": 9,
+        "endLine": 396,
+        "endChar": 34
+      },
+      "revId": "375486c98f16392da26af7f60b349e76454ac703",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20476d16_d8cd2c8a",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-20T13:30:59Z",
+      "side": 1,
+      "message": "Same comment.",
+      "range": {
+        "startLine": 405,
+        "startChar": 4,
+        "endLine": 405,
+        "endChar": 31
+      },
+      "revId": "375486c98f16392da26af7f60b349e76454ac703",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
