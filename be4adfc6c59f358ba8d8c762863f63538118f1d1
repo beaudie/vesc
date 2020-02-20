@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b85255eb_490c6a0c",
+        "filename": "src/common/vulkan_fuchsia_ext.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-20T18:55:34Z",
+      "side": 1,
+      "message": "Yes, the test includes it too.",
+      "parentUuid": "40e86781_f0d6cd8c",
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6ae66a03_80e43ba5",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 7
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "1541b13d_6ff2a8ac",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-20T18:55:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ae66a03_80e43ba5",
+      "range": {
+        "startLine": 396,
+        "startChar": 9,
+        "endLine": 396,
+        "endChar": 28
+      },
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1f71329_2218e19d",
         "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
         "patchSetId": 7
@@ -53,6 +95,24 @@
       "writtenOn": "2020-02-20T13:44:59Z",
       "side": 1,
       "message": "You will need to pass a Context pointer to this function.  Returning angle::Result::Stop won\u0027t generate a GL error.  I think you want to use ANGLE_CHECK:\n\n   ANGLE_CHECK(context, status \u003d\u003d ZX_OK, \"message\", GL_INVALID_OPERATION)",
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecf867f1_ec9cb4b6",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-20T18:55:34Z",
+      "side": 1,
+      "message": "That results in\n\n../../third_party/angle/src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp:54:17: error: \u0027this\u0027 argument to member function \u0027handleError\u0027 has type \u0027const gl::Context\u0027, but function is not marked const\n    ANGLE_CHECK(context, status \u003d\u003d ZX_OK, \"failed to duplicate vmo\", GL_INVALID_OPERATION);\n                ^~~~~~~\n../../third_party/angle/src/libANGLE/Error.h:154:13: note: expanded from macro \u0027ANGLE_CHECK\u0027\n            CONTEXT-\u003ehandleError(ERROR, MESSAGE, __FILE__, ANGLE_FUNCTION, __LINE__); \\\n            ^~~~~~~\n../../third_party/angle/src/libANGLE/Context.h:445:10: note: \u0027handleError\u0027 declared here\n    void handleError(GLenum errorCode,\n\nDoesn\u0027t seem like ANGLE_CHECK is used in vulkan, so I\u0027m short on examples - what should we do here?",
+      "parentUuid": "f1f71329_2218e19d",
       "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -79,6 +139,30 @@
       "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0399bb0f_f8b9fcb3",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-20T18:55:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b51ae959_a478ebe8",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 17
+      },
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
