@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "45356837_3f3fc72c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-20T04:14:37Z",
+      "side": 1,
+      "message": "Given that the queue priorities don\u0027t guarantee anything, this is still not entirely safe.\n\nTechnically this should signal some semaphore which is waited on by the next submission on every queue to ensure it is done before all of them (or signal multiple semaphores, one per queue, if two queues cannot wait on the same semaphore signal).",
+      "parentUuid": "4672a4b4_2ed5cd93",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4119fb90_52fb638b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
