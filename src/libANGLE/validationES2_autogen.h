@@ -225,11 +225,11 @@ bool ValidateGetUniformLocation(Context *context,
                                 const GLchar *name);
 bool ValidateGetUniformfv(Context *context,
                           ShaderProgramID programPacked,
-                          GLint location,
+                          UniformLocation locationPacked,
                           GLfloat *params);
 bool ValidateGetUniformiv(Context *context,
                           ShaderProgramID programPacked,
-                          GLint location,
+                          UniformLocation locationPacked,
                           GLint *params);
 bool ValidateGetVertexAttribPointerv(Context *context, GLuint index, GLenum pname, void **pointer);
 bool ValidateGetVertexAttribfv(Context *context, GLuint index, GLenum pname, GLfloat *params);
@@ -317,39 +317,76 @@ bool ValidateTexSubImage2D(Context *context,
                            GLenum format,
                            GLenum type,
                            const void *pixels);
-bool ValidateUniform1f(Context *context, GLint location, GLfloat v0);
-bool ValidateUniform1fv(Context *context, GLint location, GLsizei count, const GLfloat *value);
-bool ValidateUniform1i(Context *context, GLint location, GLint v0);
-bool ValidateUniform1iv(Context *context, GLint location, GLsizei count, const GLint *value);
-bool ValidateUniform2f(Context *context, GLint location, GLfloat v0, GLfloat v1);
-bool ValidateUniform2fv(Context *context, GLint location, GLsizei count, const GLfloat *value);
-bool ValidateUniform2i(Context *context, GLint location, GLint v0, GLint v1);
-bool ValidateUniform2iv(Context *context, GLint location, GLsizei count, const GLint *value);
-bool ValidateUniform3f(Context *context, GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
-bool ValidateUniform3fv(Context *context, GLint location, GLsizei count, const GLfloat *value);
-bool ValidateUniform3i(Context *context, GLint location, GLint v0, GLint v1, GLint v2);
-bool ValidateUniform3iv(Context *context, GLint location, GLsizei count, const GLint *value);
+bool ValidateUniform1f(Context *context, UniformLocation locationPacked, GLfloat v0);
+bool ValidateUniform1fv(Context *context,
+                        UniformLocation locationPacked,
+                        GLsizei count,
+                        const GLfloat *value);
+bool ValidateUniform1i(Context *context, UniformLocation locationPacked, GLint v0);
+bool ValidateUniform1iv(Context *context,
+                        UniformLocation locationPacked,
+                        GLsizei count,
+                        const GLint *value);
+bool ValidateUniform2f(Context *context, UniformLocation locationPacked, GLfloat v0, GLfloat v1);
+bool ValidateUniform2fv(Context *context,
+                        UniformLocation locationPacked,
+                        GLsizei count,
+                        const GLfloat *value);
+bool ValidateUniform2i(Context *context, UniformLocation locationPacked, GLint v0, GLint v1);
+bool ValidateUniform2iv(Context *context,
+                        UniformLocation locationPacked,
+                        GLsizei count,
+                        const GLint *value);
+bool ValidateUniform3f(Context *context,
+                       UniformLocation locationPacked,
+                       GLfloat v0,
+                       GLfloat v1,
+                       GLfloat v2);
+bool ValidateUniform3fv(Context *context,
+                        UniformLocation locationPacked,
+                        GLsizei count,
+                        const GLfloat *value);
+bool ValidateUniform3i(Context *context,
+                       UniformLocation locationPacked,
+                       GLint v0,
+                       GLint v1,
+                       GLint v2);
+bool ValidateUniform3iv(Context *context,
+                        UniformLocation locationPacked,
+                        GLsizei count,
+                        const GLint *value);
 bool ValidateUniform4f(Context *context,
-                       GLint location,
+                       UniformLocation locationPacked,
                        GLfloat v0,
                        GLfloat v1,
                        GLfloat v2,
                        GLfloat v3);
-bool ValidateUniform4fv(Context *context, GLint location, GLsizei count, const GLfloat *value);
-bool ValidateUniform4i(Context *context, GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
-bool ValidateUniform4iv(Context *context, GLint location, GLsizei count, const GLint *value);
+bool ValidateUniform4fv(Context *context,
+                        UniformLocation locationPacked,
+                        GLsizei count,
+                        const GLfloat *value);
+bool ValidateUniform4i(Context *context,
+                       UniformLocation locationPacked,
+                       GLint v0,
+                       GLint v1,
+                       GLint v2,
+                       GLint v3);
+bool ValidateUniform4iv(Context *context,
+                        UniformLocation locationPacked,
+                        GLsizei count,
+                        const GLint *value);
 bool ValidateUniformMatrix2fv(Context *context,
-                              GLint location,
+                              UniformLocation locationPacked,
                               GLsizei count,
                               GLboolean transpose,
                               const GLfloat *value);
 bool ValidateUniformMatrix3fv(Context *context,
-                              GLint location,
+                              UniformLocation locationPacked,
                               GLsizei count,
                               GLboolean transpose,
                               const GLfloat *value);
 bool ValidateUniformMatrix4fv(Context *context,
-                              GLint location,
+                              UniformLocation locationPacked,
                               GLsizei count,
                               GLboolean transpose,
                               const GLfloat *value);

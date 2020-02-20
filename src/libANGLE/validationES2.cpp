@@ -3754,7 +3754,7 @@ bool ValidateFlushMappedBufferRangeEXT(Context *context,
 
 bool ValidateBindUniformLocationCHROMIUM(Context *context,
                                          ShaderProgramID program,
-                                         GLint location,
+                                         UniformLocation location,
                                          const GLchar *name)
 {
     if (!context->getExtensions().bindUniformLocation)
@@ -3769,14 +3769,14 @@ bool ValidateBindUniformLocationCHROMIUM(Context *context,
         return false;
     }
 
-    if (location < 0)
+    if (location.value < 0)
     {
         context->validationError(GL_INVALID_VALUE, kNegativeLocation);
         return false;
     }
 
     const Caps &caps = context->getCaps();
-    if (static_cast<long>(location) >=
+    if (static_cast<long>(location.value) >=
         (caps.maxVertexUniformVectors + caps.maxFragmentUniformVectors) * 4)
     {
         context->validationError(GL_INVALID_VALUE, kInvalidBindUniformLocation);
@@ -6210,78 +6210,88 @@ bool ValidateStencilOpSeparate(Context *context,
     return ValidateStencilOp(context, fail, zfail, zpass);
 }
 
-bool ValidateUniform1f(Context *context, GLint location, GLfloat x)
+bool ValidateUniform1f(Context *context, UniformLocation location, GLfloat x)
 {
     return ValidateUniform(context, GL_FLOAT, location, 1);
 }
 
-bool ValidateUniform1fv(Context *context, GLint location, GLsizei count, const GLfloat *v)
+bool ValidateUniform1fv(Context *context, UniformLocation location, GLsizei count, const GLfloat *v)
 {
     return ValidateUniform(context, GL_FLOAT, location, count);
 }
 
-bool ValidateUniform1i(Context *context, GLint location, GLint x)
+bool ValidateUniform1i(Context *context, UniformLocation location, GLint x)
 {
     return ValidateUniform1iv(context, location, 1, &x);
 }
 
-bool ValidateUniform2fv(Context *context, GLint location, GLsizei count, const GLfloat *v)
+bool ValidateUniform2fv(Context *context, UniformLocation location, GLsizei count, const GLfloat *v)
 {
     return ValidateUniform(context, GL_FLOAT_VEC2, location, count);
 }
 
-bool ValidateUniform2i(Context *context, GLint location, GLint x, GLint y)
+bool ValidateUniform2i(Context *context, UniformLocation location, GLint x, GLint y)
 {
     return ValidateUniform(context, GL_INT_VEC2, location, 1);
 }
 
-bool ValidateUniform2iv(Context *context, GLint location, GLsizei count, const GLint *v)
+bool ValidateUniform2iv(Context *context, UniformLocation location, GLsizei count, const GLint *v)
 {
     return ValidateUniform(context, GL_INT_VEC2, location, count);
 }
 
-bool ValidateUniform3f(Context *context, GLint location, GLfloat x, GLfloat y, GLfloat z)
+bool ValidateUniform3f(Context *context, UniformLocation location, GLfloat x, GLfloat y, GLfloat z)
 {
     return ValidateUniform(context, GL_FLOAT_VEC3, location, 1);
 }
 
-bool ValidateUniform3fv(Context *context, GLint location, GLsizei count, const GLfloat *v)
+bool ValidateUniform3fv(Context *context, UniformLocation location, GLsizei count, const GLfloat *v)
 {
     return ValidateUniform(context, GL_FLOAT_VEC3, location, count);
 }
 
-bool ValidateUniform3i(Context *context, GLint location, GLint x, GLint y, GLint z)
+bool ValidateUniform3i(Context *context, UniformLocation location, GLint x, GLint y, GLint z)
 {
     return ValidateUniform(context, GL_INT_VEC3, location, 1);
 }
 
-bool ValidateUniform3iv(Context *context, GLint location, GLsizei count, const GLint *v)
+bool ValidateUniform3iv(Context *context, UniformLocation location, GLsizei count, const GLint *v)
 {
     return ValidateUniform(context, GL_INT_VEC3, location, count);
 }
 
-bool ValidateUniform4f(Context *context, GLint location, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
+bool ValidateUniform4f(Context *context,
+                       UniformLocation location,
+                       GLfloat x,
+                       GLfloat y,
+                       GLfloat z,
+                       GLfloat w)
 {
     return ValidateUniform(context, GL_FLOAT_VEC4, location, 1);
 }
 
-bool ValidateUniform4fv(Context *context, GLint location, GLsizei count, const GLfloat *v)
+bool ValidateUniform4fv(Context *context, UniformLocation location, GLsizei count, const GLfloat *v)
 {
     return ValidateUniform(context, GL_FLOAT_VEC4, location, count);
 }
 
-bool ValidateUniform4i(Context *context, GLint location, GLint x, GLint y, GLint z, GLint w)
+bool ValidateUniform4i(Context *context,
+                       UniformLocation location,
+                       GLint x,
+                       GLint y,
+                       GLint z,
+                       GLint w)
 {
     return ValidateUniform(context, GL_INT_VEC4, location, 1);
 }
 
-bool ValidateUniform4iv(Context *context, GLint location, GLsizei count, const GLint *v)
+bool ValidateUniform4iv(Context *context, UniformLocation location, GLsizei count, const GLint *v)
 {
     return ValidateUniform(context, GL_INT_VEC4, location, count);
 }
 
 bool ValidateUniformMatrix2fv(Context *context,
-                              GLint location,
+                              UniformLocation location,
                               GLsizei count,
                               GLboolean transpose,
                               const GLfloat *value)
@@ -6290,7 +6300,7 @@ bool ValidateUniformMatrix2fv(Context *context,
 }
 
 bool ValidateUniformMatrix3fv(Context *context,
-                              GLint location,
+                              UniformLocation location,
                               GLsizei count,
                               GLboolean transpose,
                               const GLfloat *value)
@@ -6299,7 +6309,7 @@ bool ValidateUniformMatrix3fv(Context *context,
 }
 
 bool ValidateUniformMatrix4fv(Context *context,
-                              GLint location,
+                              UniformLocation location,
                               GLsizei count,
                               GLboolean transpose,
                               const GLfloat *value)
@@ -6874,13 +6884,16 @@ bool ValidateGetTexParameterIuivOES(Context *context,
 
 bool ValidateGetUniformfv(Context *context,
                           ShaderProgramID program,
-                          GLint location,
+                          UniformLocation location,
                           GLfloat *params)
 {
     return ValidateGetUniformBase(context, program, location);
 }
 
-bool ValidateGetUniformiv(Context *context, ShaderProgramID program, GLint location, GLint *params)
+bool ValidateGetUniformiv(Context *context,
+                          ShaderProgramID program,
+                          UniformLocation location,
+                          GLint *params)
 {
     return ValidateGetUniformBase(context, program, location);
 }

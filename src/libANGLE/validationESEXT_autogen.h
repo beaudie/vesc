@@ -224,13 +224,13 @@ bool ValidateGetTexParameterivRobustANGLE(Context *context,
                                           GLint *params);
 bool ValidateGetUniformfvRobustANGLE(Context *context,
                                      ShaderProgramID programPacked,
-                                     GLint location,
+                                     UniformLocation locationPacked,
                                      GLsizei bufSize,
                                      GLsizei *length,
                                      GLfloat *params);
 bool ValidateGetUniformivRobustANGLE(Context *context,
                                      ShaderProgramID programPacked,
-                                     GLint location,
+                                     UniformLocation locationPacked,
                                      GLsizei bufSize,
                                      GLsizei *length,
                                      GLint *params);
@@ -411,7 +411,7 @@ bool ValidateGetVertexAttribIuivRobustANGLE(Context *context,
                                             GLuint *params);
 bool ValidateGetUniformuivRobustANGLE(Context *context,
                                       ShaderProgramID programPacked,
-                                      GLint location,
+                                      UniformLocation locationPacked,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLuint *params);
@@ -519,19 +519,19 @@ bool ValidateReadnPixelsRobustANGLE(Context *context,
                                     void *data);
 bool ValidateGetnUniformfvRobustANGLE(Context *context,
                                       ShaderProgramID programPacked,
-                                      GLint location,
+                                      UniformLocation locationPacked,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLfloat *params);
 bool ValidateGetnUniformivRobustANGLE(Context *context,
                                       ShaderProgramID programPacked,
-                                      GLint location,
+                                      UniformLocation locationPacked,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLint *params);
 bool ValidateGetnUniformuivRobustANGLE(Context *context,
                                        ShaderProgramID programPacked,
-                                       GLint location,
+                                       UniformLocation locationPacked,
                                        GLsizei bufSize,
                                        GLsizei *length,
                                        GLuint *params);
@@ -641,7 +641,7 @@ bool ValidateGetTranslatedShaderSourceANGLE(Context *context,
 // GL_CHROMIUM_bind_uniform_location
 bool ValidateBindUniformLocationCHROMIUM(Context *context,
                                          ShaderProgramID programPacked,
-                                         GLint location,
+                                         UniformLocation locationPacked,
                                          const GLchar *name);
 
 // GL_CHROMIUM_copy_compressed_texture
@@ -1000,12 +1000,12 @@ bool ValidateRenderbufferStorageMultisampleEXT(Context *context,
 bool ValidateGetGraphicsResetStatusEXT(Context *context);
 bool ValidateGetnUniformfvEXT(Context *context,
                               ShaderProgramID programPacked,
-                              GLint location,
+                              UniformLocation locationPacked,
                               GLsizei bufSize,
                               GLfloat *params);
 bool ValidateGetnUniformivEXT(Context *context,
                               ShaderProgramID programPacked,
-                              GLint location,
+                              UniformLocation locationPacked,
                               GLsizei bufSize,
                               GLint *params);
 bool ValidateReadnPixelsEXT(Context *context,

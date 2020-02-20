@@ -233,7 +233,7 @@ bool ValidateGetQueryObjectui64vRobustANGLE(Context *context,
 
 bool ValidateUniformCommonBase(Context *context,
                                gl::Program *program,
-                               GLint location,
+                               UniformLocation location,
                                GLsizei count,
                                const LinkedUniform **uniformOut);
 bool ValidateUniform1ivValue(Context *context,
@@ -254,10 +254,10 @@ ANGLE_INLINE bool ValidateUniformValue(Context *context, GLenum valueType, GLenu
 }
 
 bool ValidateUniformMatrixValue(Context *context, GLenum valueType, GLenum uniformType);
-bool ValidateUniform(Context *context, GLenum uniformType, GLint location, GLsizei count);
+bool ValidateUniform(Context *context, GLenum uniformType, UniformLocation location, GLsizei count);
 bool ValidateUniformMatrix(Context *context,
                            GLenum matrixType,
-                           GLint location,
+                           UniformLocation location,
                            GLsizei count,
                            GLboolean transpose);
 bool ValidateGetBooleanvRobustANGLE(Context *context,
@@ -377,50 +377,50 @@ bool ValidateFramebufferTextureBase(Context *context,
                                     TextureID texture,
                                     GLint level);
 
-bool ValidateGetUniformBase(Context *context, ShaderProgramID program, GLint location);
+bool ValidateGetUniformBase(Context *context, ShaderProgramID program, UniformLocation location);
 bool ValidateGetnUniformfvEXT(Context *context,
                               ShaderProgramID program,
-                              GLint location,
+                              UniformLocation location,
                               GLsizei bufSize,
                               GLfloat *params);
 bool ValidateGetnUniformfvRobustANGLE(Context *context,
                                       ShaderProgramID program,
-                                      GLint location,
+                                      UniformLocation location,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLfloat *params);
 bool ValidateGetnUniformivEXT(Context *context,
                               ShaderProgramID program,
-                              GLint location,
+                              UniformLocation location,
                               GLsizei bufSize,
                               GLint *params);
 bool ValidateGetnUniformivRobustANGLE(Context *context,
                                       ShaderProgramID program,
-                                      GLint location,
+                                      UniformLocation location,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLint *params);
 bool ValidateGetnUniformuivRobustANGLE(Context *context,
                                        ShaderProgramID program,
-                                       GLint location,
+                                       UniformLocation location,
                                        GLsizei bufSize,
                                        GLsizei *length,
                                        GLuint *params);
 bool ValidateGetUniformfvRobustANGLE(Context *context,
                                      ShaderProgramID program,
-                                     GLint location,
+                                     UniformLocation location,
                                      GLsizei bufSize,
                                      GLsizei *length,
                                      GLfloat *params);
 bool ValidateGetUniformivRobustANGLE(Context *context,
                                      ShaderProgramID program,
-                                     GLint location,
+                                     UniformLocation location,
                                      GLsizei bufSize,
                                      GLsizei *length,
                                      GLint *params);
 bool ValidateGetUniformuivRobustANGLE(Context *context,
                                       ShaderProgramID program,
-                                      GLint location,
+                                      UniformLocation location,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLuint *params);

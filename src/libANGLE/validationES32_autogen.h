@@ -132,17 +132,17 @@ bool ValidateGetTexParameterIuiv(Context *context,
                                  GLuint *params);
 bool ValidateGetnUniformfv(Context *context,
                            ShaderProgramID programPacked,
-                           GLint location,
+                           UniformLocation locationPacked,
                            GLsizei bufSize,
                            GLfloat *params);
 bool ValidateGetnUniformiv(Context *context,
                            ShaderProgramID programPacked,
-                           GLint location,
+                           UniformLocation locationPacked,
                            GLsizei bufSize,
                            GLint *params);
 bool ValidateGetnUniformuiv(Context *context,
                             ShaderProgramID programPacked,
-                            GLint location,
+                            UniformLocation locationPacked,
                             GLsizei bufSize,
                             GLuint *params);
 bool ValidateIsEnabledi(Context *context, GLenum target, GLuint index);

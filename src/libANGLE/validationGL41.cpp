@@ -38,7 +38,7 @@ bool ValidateGetVertexAttribLdv(Context *context, GLuint index, GLenum pname, GL
 
 bool ValidateProgramUniform1d(Context *context,
                               ShaderProgramID program,
-                              GLint location,
+                              UniformLocation location,
                               GLdouble v0)
 {
     return true;
@@ -46,7 +46,7 @@ bool ValidateProgramUniform1d(Context *context,
 
 bool ValidateProgramUniform1dv(Context *context,
                                ShaderProgramID program,
-                               GLint location,
+                               UniformLocation location,
                                GLsizei count,
                                const GLdouble *value)
 {
@@ -55,7 +55,7 @@ bool ValidateProgramUniform1dv(Context *context,
 
 bool ValidateProgramUniform2d(Context *context,
                               ShaderProgramID program,
-                              GLint location,
+                              UniformLocation location,
                               GLdouble v0,
                               GLdouble v1)
 {
@@ -64,7 +64,7 @@ bool ValidateProgramUniform2d(Context *context,
 
 bool ValidateProgramUniform2dv(Context *context,
                                ShaderProgramID program,
-                               GLint location,
+                               UniformLocation location,
                                GLsizei count,
                                const GLdouble *value)
 {
@@ -73,7 +73,7 @@ bool ValidateProgramUniform2dv(Context *context,
 
 bool ValidateProgramUniform3d(Context *context,
                               ShaderProgramID program,
-                              GLint location,
+                              UniformLocation location,
                               GLdouble v0,
                               GLdouble v1,
                               GLdouble v2)
@@ -83,7 +83,7 @@ bool ValidateProgramUniform3d(Context *context,
 
 bool ValidateProgramUniform3dv(Context *context,
                                ShaderProgramID program,
-                               GLint location,
+                               UniformLocation location,
                                GLsizei count,
                                const GLdouble *value)
 {
@@ -92,7 +92,7 @@ bool ValidateProgramUniform3dv(Context *context,
 
 bool ValidateProgramUniform4d(Context *context,
                               ShaderProgramID program,
-                              GLint location,
+                              UniformLocation location,
                               GLdouble v0,
                               GLdouble v1,
                               GLdouble v2,
@@ -103,7 +103,7 @@ bool ValidateProgramUniform4d(Context *context,
 
 bool ValidateProgramUniform4dv(Context *context,
                                ShaderProgramID program,
-                               GLint location,
+                               UniformLocation location,
                                GLsizei count,
                                const GLdouble *value)
 {
@@ -112,7 +112,7 @@ bool ValidateProgramUniform4dv(Context *context,
 
 bool ValidateProgramUniformMatrix2dv(Context *context,
                                      ShaderProgramID program,
-                                     GLint location,
+                                     UniformLocation location,
                                      GLsizei count,
                                      GLboolean transpose,
                                      const GLdouble *value)
@@ -122,7 +122,7 @@ bool ValidateProgramUniformMatrix2dv(Context *context,
 
 bool ValidateProgramUniformMatrix2x3dv(Context *context,
                                        ShaderProgramID program,
-                                       GLint location,
+                                       UniformLocation location,
                                        GLsizei count,
                                        GLboolean transpose,
                                        const GLdouble *value)
@@ -132,7 +132,7 @@ bool ValidateProgramUniformMatrix2x3dv(Context *context,
 
 bool ValidateProgramUniformMatrix2x4dv(Context *context,
                                        ShaderProgramID program,
-                                       GLint location,
+                                       UniformLocation location,
                                        GLsizei count,
                                        GLboolean transpose,
                                        const GLdouble *value)
@@ -142,7 +142,7 @@ bool ValidateProgramUniformMatrix2x4dv(Context *context,
 
 bool ValidateProgramUniformMatrix3dv(Context *context,
                                      ShaderProgramID program,
-                                     GLint location,
+                                     UniformLocation location,
                                      GLsizei count,
                                      GLboolean transpose,
                                      const GLdouble *value)
@@ -152,7 +152,7 @@ bool ValidateProgramUniformMatrix3dv(Context *context,
 
 bool ValidateProgramUniformMatrix3x2dv(Context *context,
                                        ShaderProgramID program,
-                                       GLint location,
+                                       UniformLocation location,
                                        GLsizei count,
                                        GLboolean transpose,
                                        const GLdouble *value)
@@ -162,7 +162,7 @@ bool ValidateProgramUniformMatrix3x2dv(Context *context,
 
 bool ValidateProgramUniformMatrix3x4dv(Context *context,
                                        ShaderProgramID program,
-                                       GLint location,
+                                       UniformLocation location,
                                        GLsizei count,
                                        GLboolean transpose,
                                        const GLdouble *value)
@@ -172,7 +172,7 @@ bool ValidateProgramUniformMatrix3x4dv(Context *context,
 
 bool ValidateProgramUniformMatrix4dv(Context *context,
                                      ShaderProgramID program,
-                                     GLint location,
+                                     UniformLocation location,
                                      GLsizei count,
                                      GLboolean transpose,
                                      const GLdouble *value)
@@ -182,7 +182,7 @@ bool ValidateProgramUniformMatrix4dv(Context *context,
 
 bool ValidateProgramUniformMatrix4x2dv(Context *context,
                                        ShaderProgramID program,
-                                       GLint location,
+                                       UniformLocation location,
                                        GLsizei count,
                                        GLboolean transpose,
                                        const GLdouble *value)
@@ -192,7 +192,7 @@ bool ValidateProgramUniformMatrix4x2dv(Context *context,
 
 bool ValidateProgramUniformMatrix4x3dv(Context *context,
                                        ShaderProgramID program,
-                                       GLint location,
+                                       UniformLocation location,
                                        GLsizei count,
                                        GLboolean transpose,
                                        const GLdouble *value)

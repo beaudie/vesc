@@ -308,7 +308,7 @@ bool ValidateGetTexParameterIuiv(Context *context,
 
 bool ValidateGetnUniformfv(Context *context,
                            ShaderProgramID program,
-                           GLint location,
+                           UniformLocation location,
                            GLsizei bufSize,
                            GLfloat *params)
 {
@@ -317,7 +317,7 @@ bool ValidateGetnUniformfv(Context *context,
 
 bool ValidateGetnUniformiv(Context *context,
                            ShaderProgramID program,
-                           GLint location,
+                           UniformLocation location,
                            GLsizei bufSize,
                            GLint *params)
 {
@@ -326,7 +326,7 @@ bool ValidateGetnUniformiv(Context *context,
 
 bool ValidateGetnUniformuiv(Context *context,
                             ShaderProgramID program,
-                            GLint location,
+                            UniformLocation location,
                             GLsizei bufSize,
                             GLuint *params)
 {
