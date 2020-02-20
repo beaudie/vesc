@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "949a0cad_696bd0f8",
+        "filename": "src/common/vulkan_fuchsia_ext.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-20T20:34:30Z",
+      "side": 1,
+      "message": "Try include/vulkan - SwiftShader might need to use this path as well. include/ is accessible everywhere.",
+      "parentUuid": "b85255eb_490c6a0c",
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6ae66a03_80e43ba5",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 7
