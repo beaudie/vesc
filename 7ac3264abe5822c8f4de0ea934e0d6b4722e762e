@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1a0985c_e8eba2ee",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-02-20T17:59:13Z",
+      "side": 1,
+      "message": "I also find this serial confusing as well. It actually is an unique seed value, not the same as the context\u0027s serial number (which tracks GPU progress). If my understanding is correct, this really should be called seedValue instead of serial. But looks like you just using the existing names, so might leave to other CL in future.",
+      "range": {
+        "startLine": 79,
+        "startChar": 38,
+        "endLine": 79,
+        "endChar": 44
+      },
+      "revId": "7ac3264abe5822c8f4de0ea934e0d6b4722e762e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5aaceab6_d8fa3f8c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-02-20T17:59:13Z",
+      "side": 1,
+      "message": "Do we still need this API given that you already have clearSerials()?",
+      "range": {
+        "startLine": 1674,
+        "startChar": 22,
+        "endLine": 1674,
+        "endChar": 27
+      },
+      "revId": "7ac3264abe5822c8f4de0ea934e0d6b4722e762e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
