@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "862fc4d2_f8ab16c3",
+        "filename": "src/libANGLE/renderer/vulkan/doc/ShaderModuleCompilation.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-20T13:01:03Z",
+      "side": 1,
+      "message": "nit: wording suggestion: The translator initially assigns resources and in/out variables arbitrary descriptor sets and location indices.",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 32
+      },
+      "revId": "f78b94907c086ac768dfe39a56c20d1ec78ef8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96c23a0b_f463c37e",
+        "filename": "src/libANGLE/renderer/vulkan/doc/ShaderModuleCompilation.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-20T13:01:03Z",
+      "side": 1,
+      "message": "nit: wording suggestion: Some conditional feature code is resolved at draw-time via Vulkan specialization constants. For example, [Bresenham line rasterization] emulation.",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 17,
+        "endChar": 16
+      },
+      "revId": "f78b94907c086ac768dfe39a56c20d1ec78ef8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09c205e1_59164574",
+        "filename": "src/libANGLE/renderer/vulkan/doc/ShaderModuleCompilation.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-20T13:01:03Z",
+      "side": 1,
+      "message": "nit: wording suggestion: Bit of a run-on sentence. Suggest a full stop before this sentence (During the link we use glslang to convert Vulkan-compatible GLSL into SPIR-V). Then \"We also transform the SPIR-V by updating the arbitrary descriptor set and location indices from step 1 with real values. We also ...\"",
+      "range": {
+        "startLine": 24,
+        "startChar": 70,
+        "endLine": 25,
+        "endChar": 11
+      },
+      "revId": "f78b94907c086ac768dfe39a56c20d1ec78ef8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6645bc9c_191d2bae",
+        "filename": "src/libANGLE/renderer/vulkan/doc/ShaderModuleCompilation.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-20T13:01:03Z",
+      "side": 1,
+      "message": "nit: instead of \u0027can\u0027 suggest you specify what we do - e.g. \"We also resolve the appropriate specialization constants and create a VkPipeline.\" We will be creating a VkPipeline if we\u0027re drawing.\n\nNote that this section links to GlslangWrapperVk but your SVG diagram does not show any use of GlslangWrapperVk at draw time.",
+      "range": {
+        "startLine": 31,
+        "startChar": 24,
+        "endLine": 32,
+        "endChar": 15
+      },
+      "revId": "f78b94907c086ac768dfe39a56c20d1ec78ef8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
