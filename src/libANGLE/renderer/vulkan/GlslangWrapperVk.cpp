@@ -21,7 +21,10 @@ angle::Result ErrorHandler(vk::Context *context, GlslangError)
     return angle::Result::Stop;
 }
 
-GlslangSourceOptions CreateSourceOptions(const angle::FeaturesVk &features)
+}  // namespace
+
+// static
+GlslangSourceOptions GlslangWrapperVk::CreateSourceOptions(const angle::FeaturesVk &features)
 {
     GlslangSourceOptions options;
 
@@ -33,7 +36,6 @@ GlslangSourceOptions CreateSourceOptions(const angle::FeaturesVk &features)
 
     return options;
 }
-}  // namespace
 
 // static
 void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
@@ -43,8 +45,9 @@ void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
                                        gl::ShaderMap<std::string> *shaderSourcesOut,
                                        ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    GlslangGetShaderSource(CreateSourceOptions(features), programState, resources,
-                           programInterfaceInfo, shaderSourcesOut, variableInfoMapOut);
+    GlslangSourceOptions options = CreateSourceOptions(features);
+    GlslangGetShaderSource(options, programState, resources, programInterfaceInfo, shaderSourcesOut,
+                           variableInfoMapOut);
 }
 
 // static
