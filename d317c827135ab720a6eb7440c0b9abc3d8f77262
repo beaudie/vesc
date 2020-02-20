@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d4fb338_ba73399e",
+        "filename": "src/libANGLE/renderer/gl/SemaphoreGL.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-20T21:10:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9ba9f6e5_b06ed618",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 0
+      },
+      "revId": "d317c827135ab720a6eb7440c0b9abc3d8f77262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "737a58f2_4df57556",
         "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "d317c827135ab720a6eb7440c0b9abc3d8f77262",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "733cf3bf_59ebdb8d",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-20T21:10:31Z",
+      "side": 1,
+      "message": "Done, on top of preliminary patch: https://chromium-review.googlesource.com/c/angle/angle/+/2067500",
+      "parentUuid": "737a58f2_4df57556",
+      "range": {
+        "startLine": 281,
+        "startChar": 27,
+        "endLine": 281,
+        "endChar": 44
+      },
+      "revId": "d317c827135ab720a6eb7440c0b9abc3d8f77262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

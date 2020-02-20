@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "c03e9838_dc576b72",
+        "filename": "src/common/vulkan_fuchsia_ext.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-20T21:10:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "949a0cad_696bd0f8",
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ae66a03_80e43ba5",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 7
@@ -134,6 +152,24 @@
       "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "410131cd_7f03bc00",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-20T21:10:31Z",
+      "side": 1,
+      "message": "Oops, of course it doesn\u0027t have to be const. Using ANGLE_VK_CHECK now.",
+      "parentUuid": "ecf867f1_ec9cb4b6",
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
