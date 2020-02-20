@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40e86781_f0d6cd8c",
+        "filename": "src/common/vulkan_fuchsia_ext.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-20T13:44:59Z",
+      "side": 1,
+      "message": "This should probably live in a more generic include directory.  Jamie, do you have a suggestion?\n\nIt also needs to be used by our tests?",
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ae66a03_80e43ba5",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-20T13:44:59Z",
+      "side": 1,
+      "message": "Should port these fixes back to the previous CL.",
+      "range": {
+        "startLine": 396,
+        "startChar": 9,
+        "endLine": 396,
+        "endChar": 28
+      },
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1f71329_2218e19d",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-20T13:44:59Z",
+      "side": 1,
+      "message": "You will need to pass a Context pointer to this function.  Returning angle::Result::Stop won\u0027t generate a GL error.  I think you want to use ANGLE_CHECK:\n\n   ANGLE_CHECK(context, status \u003d\u003d ZX_OK, \"message\", GL_INVALID_OPERATION)",
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b51ae959_a478ebe8",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-20T13:44:59Z",
+      "side": 1,
+      "message": "Can this be move to the .cpp?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 17
+      },
+      "revId": "be4adfc6c59f358ba8d8c762863f63538118f1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
