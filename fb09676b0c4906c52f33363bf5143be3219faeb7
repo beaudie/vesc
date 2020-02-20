@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "8430fa19_a3c5e56d",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-02-20T19:06:43Z",
+      "side": 1,
+      "message": "I agree that would be best to just provide recommended Debug/Release args and can provide a little blurb on how to look up args from bots as an FYI.\n\nHere are the args that I use for Release perf testing:\ntarget_cpu \u003d \"arm64\"\ntarget_os \u003d \"android\"\nandroid32_ndk_api_level \u003d 26\nandroid64_ndk_api_level \u003d 26\nandroid_sdk_release \u003d \"q\"\nangle_enable_vulkan_validation_layers \u003d false\ndcheck_always_on \u003d false\nangle_libs_suffix \u003d \"_angle\"\nffmpeg_branding \u003d \"Chrome\"\nis_component_build \u003d false\nis_debug \u003d false\nproprietary_codecs \u003d true\nsymbol_level \u003d 0\nstrip_debug_info \u003d true\nis_official_build \u003d true #enables level of optimization beyond release\nangle_enable_vulkan \u003d true\nangle_enable_null \u003d false\nangle_enable_gl_null \u003d false\nenable_resource_whitelist_generation \u003d false",
+      "parentUuid": "11cf6f4f_926d1d5b",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5196b75_7c6c7162",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 2
