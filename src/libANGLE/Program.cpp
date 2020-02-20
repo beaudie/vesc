@@ -1079,6 +1079,7 @@ ImageBinding::~ImageBinding() = default;
 ProgramState::ProgramState()
     : mLabel(),
       mAttachedShaders{},
+      mLocationsUsedForXfbExtension(0),
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
       mDefaultUniformRange(0, 0),
       mSamplerUniformRange(0, 0),
@@ -1915,6 +1916,7 @@ void Program::unlink()
     mState.mBaseInstanceLocation              = -1;
     mState.mCachedBaseVertex                  = 0;
     mState.mCachedBaseInstance                = 0;
+    mState.mLocationsUsedForXfbExtension      = 0;
 
     mValidated = false;
 
