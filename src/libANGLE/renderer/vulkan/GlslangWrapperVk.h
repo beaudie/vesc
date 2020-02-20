@@ -25,6 +25,8 @@ namespace rx
 class GlslangWrapperVk
 {
   public:
+    static GlslangSourceOptions CreateSourceOptions(const angle::FeaturesVk &features);
+
     static void GetShaderSource(const angle::FeaturesVk &features,
                                 const gl::ProgramState &programState,
                                 const gl::ProgramLinkedResources &resources,
