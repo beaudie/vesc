@@ -44,13 +44,15 @@ class ProgramExecutableVk
 
     void reset(ContextVk *contextVk);
 
+    void save(gl::BinaryOutputStream *stream);
+    std::unique_ptr<rx::LinkEvent> load(gl::BinaryInputStream *stream);
+
     void clearVariableInfoMap();
     ShaderInterfaceVariableInfoMap &getShaderInterfaceVariableInfoMap() { return mVariableInfoMap; }
 
     angle::Result createPipelineLayout(const gl::ProgramState &programState,
                                        const gl::Context *glContext);
 
-    angle::Result updateUniforms(ContextVk *contextVk);
     angle::Result updateTexturesDescriptorSet(const gl::ProgramState &programState,
                                               ContextVk *contextVk);
     angle::Result updateShaderResourcesDescriptorSet(const gl::ProgramState &programState,
@@ -85,6 +87,14 @@ class ProgramExecutableVk
     angle::Result allocateDescriptorSetAndGetInfo(ContextVk *contextVk,
                                                   uint32_t descriptorSetIndex,
                                                   bool *newPoolAllocatedOut);
+    void AddInterfaceBlockDescriptorSetDesc(const std::vector<gl::InterfaceBlock> &blocks,
+                                            VkDescriptorType descType,
+                                            vk::DescriptorSetLayoutDesc *descOut);
+    void AddImageDescriptorSetDesc(const gl::ProgramState &programState,
+                                   vk::DescriptorSetLayoutDesc *descOut);
+    void AddTextureDescriptorSetDesc(const gl::ProgramState &programState,
+                                     bool useOldRewriteStructSamplers,
+                                     vk::DescriptorSetLayoutDesc *descOut);
 
     void updateDefaultUniformsDescriptorSet(
         const gl::ProgramState &programState,
