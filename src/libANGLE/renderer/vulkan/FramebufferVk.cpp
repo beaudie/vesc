@@ -17,11 +17,11 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/renderer_utils.h"
-#include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/trace.h"
@@ -139,7 +139,7 @@ angle::Result FramebufferVk::invalidate(const gl::Context *context,
                                         const GLenum *attachments)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    mFramebuffer.onResourceAccess(&contextVk->getResourceUseList());
+    mFramebuffer.retain(&contextVk->getResourceUseList());
 
     if (mFramebuffer.valid() && contextVk->hasStartedRenderPass())
     {
@@ -155,7 +155,7 @@ angle::Result FramebufferVk::invalidateSub(const gl::Context *context,
                                            const gl::Rectangle &area)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    mFramebuffer.onResourceAccess(&contextVk->getResourceUseList());
+    mFramebuffer.retain(&contextVk->getResourceUseList());
 
     // RenderPass' storeOp cannot be made conditional to a specific region, so we only apply this
     // hint if the requested area encompasses the render area.
@@ -732,7 +732,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         {
             const vk::ImageView *readImageView = nullptr;
             ANGLE_TRY(readRenderTarget->getImageView(contextVk, &readImageView));
-            readRenderTarget->onImageViewAccess(contextVk);
+            readRenderTarget->retainImageViews(contextVk);
             ANGLE_TRY(utilsVk.colorBlitResolve(contextVk, this, &readRenderTarget->getImage(),
                                                readImageView, params));
         }
