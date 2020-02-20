@@ -30,6 +30,7 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/InfoLog.h"
 #include "libANGLE/ProgramExecutable.h"
+#include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/angletypes.h"
@@ -375,6 +376,11 @@ class ProgramState final : angle::NonCopyable
     const ProgramExecutable &getProgramExecutable() const { return mExecutable; }
     ProgramExecutable &getProgramExecutable() { return mExecutable; }
 
+    const uint32_t &getLocationsUsedForXfbExtension() const
+    {
+        return mLocationsUsedForXfbExtension;
+    }
+
   private:
     friend class MemoryProgramCache;
     friend class Program;
@@ -394,6 +400,7 @@ class ProgramState final : angle::NonCopyable
 
     ShaderMap<Shader *> mAttachedShaders;
 
+    uint32_t mLocationsUsedForXfbExtension;
     std::vector<std::string> mTransformFeedbackVaryingNames;
     std::vector<TransformFeedbackVarying> mLinkedTransformFeedbackVaryings;
     GLenum mTransformFeedbackBufferMode;
