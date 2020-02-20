@@ -3,47 +3,31 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// CommandGraph:
-//    Deferred work constructed by GL calls, that will later be flushed to Vulkan.
+// ResourceVk:
+//    Resource lifetime tracking in the Vulkan back-end.
 //
 
-#ifndef LIBANGLE_RENDERER_VULKAN_COMMAND_GRAPH_H_
-#define LIBANGLE_RENDERER_VULKAN_COMMAND_GRAPH_H_
+#ifndef LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
+#define LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
 
-#include "libANGLE/renderer/vulkan/SecondaryCommandBuffer.h"
-#include "libANGLE/renderer/vulkan/vk_cache_utils.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
 {
-
 namespace vk
 {
-class CommandGraph;
-
-// Receives notifications when a render pass command buffer is no longer able to record. Can be
-// used with inheritance. Faster than using an interface class since it has inlined methods. Could
-// be used with composition by adding a getCommandBuffer method.
-class RenderPassOwner
-{
-  public:
-    RenderPassOwner() = default;
-    virtual ~RenderPassOwner() {}
-
-    ANGLE_INLINE void onRenderPassFinished() { mRenderPassCommandBuffer = nullptr; }
-
-  protected:
-    CommandBuffer *mRenderPassCommandBuffer = nullptr;
-};
-
-// Tracks how a resource is used in a command graph and in a VkQueue. The reference count indicates
-// the number of times a resource is used in the graph. The serial indicates the last current use
-// of a resource in the VkQueue. The reference count and serial together can determine if a
-// resource is in use.
+// Tracks how a resource is used by ANGLE and by a VkQueue. The reference count indicates the number
+// of times a resource is retained by ANGLE. The serial indicates the most recent use of a resource
+// in the VkQueue. The reference count and serial together can determine if a resource is currently
+// in use.
 struct ResourceUse
 {
     ResourceUse() = default;
 
+    // The number of times a resource is retained by ANGLE.
     uint32_t counter = 0;
+
+    // The most recent time of use in a VkQueue.
     Serial serial;
 };
 
@@ -98,7 +82,7 @@ class SharedResourceUse final : angle::NonCopyable
     }
 
     // The base counter value for a live resource is "1". Any value greater than one indicates
-    // the resource is in use by a vk::CommandGraph.
+    // the resource is in use by a command buffer.
     ANGLE_INLINE bool hasRecordedCommands() const
     {
         ASSERT(valid());
@@ -160,30 +144,21 @@ class ResourceUseList final : angle::NonCopyable
     std::vector<SharedResourceUse> mResourceUses;
 };
 
-// ResourceUser inlines.
 ANGLE_INLINE void ResourceUseList::add(const SharedResourceUse &resourceUse)
 {
-    // Disabled the assert because of difficulties with ImageView references.
-    // TODO(jmadill): Clean up with graph redesign. http://anglebug.com/4029
-    // ASSERT(!empty());
     SharedResourceUse newUse;
     newUse.set(resourceUse);
     mResourceUses.emplace_back(std::move(newUse));
 }
 
-// This is a helper class for back-end objects used in Vk command buffers. It records a serial
-// at command recording times indicating an order in the queue. We use Fences to detect when
-// commands finish, and then release any unreferenced and deleted resources based on the stored
-// queue serial in a special 'garbage' queue. Resources also track current read and write
-// dependencies. Only one command buffer node can be writing to the Resource at a time, but many
-// can be reading from it. Together the dependencies will form a command graph at submission time.
-class CommandGraphResource : angle::NonCopyable
+// This is a helper class for back-end objects used in Vk command buffers. They keep a record
+// of their use in ANGLE and VkQueues via SharedResourceUse.
+class Resource : angle::NonCopyable
 {
   public:
-    virtual ~CommandGraphResource();
+    virtual ~Resource();
 
-    // Returns true if the resource has commands in the graph.  This is used to know if a flush
-    // should be performed, e.g. if we need to wait for the GPU to finish with the resource.
+    // Returns true if the resource is used by ANGLE in an unflushed command buffer.
     bool hasRecordedCommands() const { return mUse.hasRecordedCommands(); }
 
     // Determine if the driver has finished execution with this resource.
@@ -201,34 +176,17 @@ class CommandGraphResource : angle::NonCopyable
     // Ensures the driver is caught up to this resource and it is only in use by ANGLE.
     angle::Result finishRunningCommands(ContextVk *contextVk);
 
-    // Updates the in-use serial tracked for this resource. Will clear dependencies if the resource
-    // was not used in this set of command nodes.
-    // TODO(jmadill): Merge and rename. http://anglebug.com/4029
-    void onResourceAccess(ResourceUseList *resourceUseList);
-
-    // If a resource is recreated, as in released and reinitialized, the next access to the
-    // resource will not create an edge from its last node and will create a new independent node.
-    // This is because mUse is reset and the graph believes it's an entirely new resource.  In very
-    // particular cases, such as recreating an image with full mipchain or adding STORAGE_IMAGE flag
-    // to its uses, this function is used to preserve the link between the previous and new
-    // nodes allocated for this resource.
-    // TODO(jmadill): Merge and rename. http://anglebug.com/4029
-    void onResourceRecreated(ResourceUseList *resourceUseList);
+    // Adds the resource to a resource use list.
+    void retain(ResourceUseList *resourceUseList);
 
   protected:
-    CommandGraphResource();
+    Resource();
 
     // Current resource lifetime.
     SharedResourceUse mUse;
 };
 
-ANGLE_INLINE void CommandGraphResource::onResourceRecreated(ResourceUseList *resourceUseList)
-{
-    // Store reference in resource list.
-    resourceUseList->add(mUse);
-}
-
-ANGLE_INLINE void CommandGraphResource::onResourceAccess(ResourceUseList *resourceUseList)
+ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList)
 {
     // Store reference in resource list.
     resourceUseList->add(mUse);
@@ -236,4 +194,4 @@ ANGLE_INLINE void CommandGraphResource::onResourceAccess(ResourceUseList *resour
 }  // namespace vk
 }  // namespace rx
 
-#endif  // LIBANGLE_RENDERER_VULKAN_COMMAND_GRAPH_H_
+#endif  // LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
