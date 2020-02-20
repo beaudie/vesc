@@ -967,7 +967,7 @@ void CaptureUpdateResourceIDs(const CallCapture &call,
     }
 }
 
-void MaybeCaptureUpdateResourceIDs(std::vector<CallCapture> *callsOut)
+void MaybeCaptureUpdateResourceIDsAndLocations(std::vector<CallCapture> *callsOut)
 {
     const CallCapture &call = callsOut->back();
 
@@ -1071,6 +1071,10 @@ void MaybeCaptureUpdateResourceIDs(std::vector<CallCapture> *callsOut)
             break;
         }
 
+        case gl::EntryPoint::LinkProgram:
+            // TODO(jmadill): Capture uniform locations.
+            break;
+
         default:
             break;
     }
@@ -1158,7 +1162,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
         // Generate binding.
         cap(CaptureGenBuffers(replayState, true, 1, &id));
-        MaybeCaptureUpdateResourceIDs(setupCalls);
+        MaybeCaptureUpdateResourceIDsAndLocations(setupCalls);
 
         // Always use the array buffer binding point to upload data to keep things simple.
         if (buffer != replayState.getArrayBuffer())
@@ -1272,7 +1276,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
         // Gen the Texture.
         cap(CaptureGenTextures(replayState, true, 1, &id));
-        MaybeCaptureUpdateResourceIDs(setupCalls);
+        MaybeCaptureUpdateResourceIDsAndLocations(setupCalls);
         cap(CaptureBindTexture(replayState, true, texture->getType(), id));
 
         currentTextureBindings[texture->getType()] = id;
@@ -1479,7 +1483,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
         // Generate renderbuffer id.
         cap(CaptureGenRenderbuffers(replayState, true, 1, &id));
-        MaybeCaptureUpdateResourceIDs(setupCalls);
+        MaybeCaptureUpdateResourceIDsAndLocations(setupCalls);
         cap(CaptureBindRenderbuffer(replayState, true, GL_RENDERBUFFER, id));
 
         currentRenderbuffer = id;
@@ -1525,7 +1529,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             continue;
 
         cap(CaptureGenFramebuffers(replayState, true, 1, &id));
-        MaybeCaptureUpdateResourceIDs(setupCalls);
+        MaybeCaptureUpdateResourceIDsAndLocations(setupCalls);
         cap(CaptureBindFramebuffer(replayState, true, GL_FRAMEBUFFER, id));
         currentDrawFramebuffer = currentReadFramebuffer = id;
 
@@ -2375,7 +2379,7 @@ void FrameCapture::captureCall(const gl::Context *context, CallCapture &&call)
     mFrameCalls.emplace_back(std::move(call));
 
     // Process resource ID updates.
-    MaybeCaptureUpdateResourceIDs(&mFrameCalls);
+    MaybeCaptureUpdateResourceIDsAndLocations(&mFrameCalls);
 }
 
 void FrameCapture::captureClientArraySnapshot(const gl::Context *context,
