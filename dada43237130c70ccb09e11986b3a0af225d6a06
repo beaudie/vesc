@@ -16,6 +16,24 @@
       "revId": "dada43237130c70ccb09e11986b3a0af225d6a06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "419d6930_f54bce27",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4087,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-20T17:44:17Z",
+      "side": 1,
+      "message": "Yeah we can rename these. Agree probably best for another CL.",
+      "parentUuid": "99666b68_4d36471f",
+      "revId": "dada43237130c70ccb09e11986b3a0af225d6a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
