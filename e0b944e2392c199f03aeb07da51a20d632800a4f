@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "97ca2f85_5ec5afb3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-20T22:21:19Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like you changed anything here.  I\u0027ll just leave a note here so we can remember, bumping mLastCompletedQueueSerial to Infinite tells cleanupGarbage to delete everything.",
+      "parentUuid": "cfdcd8be_b6e9608d",
+      "revId": "e0b944e2392c199f03aeb07da51a20d632800a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38a3d397_afca1ee4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -237,6 +255,30 @@
       "side": 1,
       "message": "Don\u0027t want to get too noisy on this one. The comment should suffice for now (it\u0027s pretty marginal). That OK?",
       "parentUuid": "ae0cf659_c13361b8",
+      "range": {
+        "startLine": 1970,
+        "startChar": 15,
+        "endLine": 1970,
+        "endChar": 87
+      },
+      "revId": "e0b944e2392c199f03aeb07da51a20d632800a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65613aed_b4296fdc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1970,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-20T22:21:19Z",
+      "side": 1,
+      "message": "An else UNIMPLEMENTED() would probably suffice, but I\u0027m not too hung up on it.  I just don\u0027t like silent failures. :)  Feel free to follow up on it later to save testing cycles.\n\n            if (mLevelCount \u003d\u003d 1 \u0026\u0026 mLayerCount \u003d\u003d 1 \u0026\u0026\n                getAspectFlags() \u003d\u003d VK_IMAGE_ASPECT_COLOR_BIT \u0026\u0026 mSamples \u003d\u003d 1)\n            {\n                ANGLE_TRY(initializeMemory(context, size));\n            }\n            else\n            {\n                UNIMPLEMENTED();\n                return angle::Result::Continue;\n            }",
+      "parentUuid": "20e1618b_2429579c",
       "range": {
         "startLine": 1970,
         "startChar": 15,
