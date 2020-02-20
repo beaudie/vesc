@@ -21,6 +21,13 @@ enum class GlslangError
     InvalidSpirv,
 };
 
+constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
+    {gl::ShaderType::Vertex, sh::vk::kDefaultUniformsNameVS},
+    {gl::ShaderType::Geometry, sh::vk::kDefaultUniformsNameGS},
+    {gl::ShaderType::Fragment, sh::vk::kDefaultUniformsNameFS},
+    {gl::ShaderType::Compute, sh::vk::kDefaultUniformsNameCS},
+};
+
 struct GlslangSourceOptions
 {
     // Uniforms set index:
@@ -76,7 +83,10 @@ using ShaderInterfaceVariableInfoMap = std::unordered_map<std::string, ShaderInt
 void GlslangInitialize();
 void GlslangRelease();
 
+bool GetImageNameWithoutIndices(std::string *name);
+
 // Get the mapped sampler name after the soure is transformed by GlslangGetShaderSource()
+std::string GetMappedSamplerNameOld(const std::string &originalName);
 std::string GlslangGetMappedSamplerName(const std::string &originalName);
 
 // Transform the source to include actual binding points for various shader resources (textures,
@@ -89,7 +99,7 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut);
 
-angle::Result GlslangGetShaderSpirvCode(GlslangErrorCallback callback,
+angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
                                         const ShaderInterfaceVariableInfoMap &variableInfoMap,
