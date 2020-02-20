@@ -21,22 +21,26 @@ angle::Result ErrorHandler(vk::Context *context, GlslangError)
     return angle::Result::Stop;
 }
 
-GlslangSourceOptions CreateSourceOptions(const angle::FeaturesVk &features)
+}  // namespace
+
+// static
+GlslangSourceOptions GlslangWrapperVk::CreateSourceOptions(const angle::FeaturesVk &features)
 {
     GlslangSourceOptions options;
-    options.uniformsAndXfbDescriptorSetIndex = kUniformsAndXfbDescriptorSetIndex;
-    options.textureDescriptorSetIndex        = kTextureDescriptorSetIndex;
-    options.shaderResourceDescriptorSetIndex = kShaderResourceDescriptorSetIndex;
-    options.driverUniformsDescriptorSetIndex = kDriverUniformsDescriptorSetIndex;
-    options.xfbBindingIndexStart             = kXfbBindingIndexStart;
-    options.useOldRewriteStructSamplers      = features.forceOldRewriteStructSamplers.enabled;
+    options.uniformsAndXfbDescriptorSetIndex  = kUniformsAndXfbDescriptorSetIndex;
+    options.currentUniformBindingIndex        = 0;
+    options.textureDescriptorSetIndex         = kTextureDescriptorSetIndex;
+    options.currentTextureBindingIndex        = 0;
+    options.shaderResourceDescriptorSetIndex  = kShaderResourceDescriptorSetIndex;
+    options.currentShaderResourceBindingIndex = 0;
+    options.driverUniformsDescriptorSetIndex  = kDriverUniformsDescriptorSetIndex;
+    options.useOldRewriteStructSamplers       = features.forceOldRewriteStructSamplers.enabled;
     options.supportsTransformFeedbackExtension =
         features.supportsTransformFeedbackExtension.enabled;
     options.emulateTransformFeedback = features.emulateTransformFeedback.enabled;
     options.emulateBresenhamLines    = features.basicGLLineRasterization.enabled;
     return options;
 }
-}  // namespace
 
 // static
 void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
@@ -45,8 +49,8 @@ void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
                                        gl::ShaderMap<std::string> *shaderSourcesOut,
                                        ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    GlslangGetShaderSource(CreateSourceOptions(features), programState, resources, shaderSourcesOut,
-                           variableInfoMapOut);
+    GlslangSourceOptions options = CreateSourceOptions(features);
+    GlslangGetShaderSource(options, programState, resources, shaderSourcesOut, variableInfoMapOut);
 }
 
 // static
