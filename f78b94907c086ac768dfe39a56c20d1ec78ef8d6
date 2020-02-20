@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7c8f543a_dfd5eb84",
+        "filename": "src/libANGLE/renderer/vulkan/doc/ShaderModuleCompilation.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-20T14:51:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "862fc4d2_f8ab16c3",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 32
+      },
+      "revId": "f78b94907c086ac768dfe39a56c20d1ec78ef8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96c23a0b_f463c37e",
         "filename": "src/libANGLE/renderer/vulkan/doc/ShaderModuleCompilation.md",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "f78b94907c086ac768dfe39a56c20d1ec78ef8d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c7ec265_6411c254",
+        "filename": "src/libANGLE/renderer/vulkan/doc/ShaderModuleCompilation.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-20T14:51:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96c23a0b_f463c37e",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 17,
+        "endChar": 16
+      },
+      "revId": "f78b94907c086ac768dfe39a56c20d1ec78ef8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ae319495_88c98ec6",
+        "filename": "src/libANGLE/renderer/vulkan/doc/ShaderModuleCompilation.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-20T14:51:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09c205e1_59164574",
+      "range": {
+        "startLine": 24,
+        "startChar": 70,
+        "endLine": 25,
+        "endChar": 11
+      },
+      "revId": "f78b94907c086ac768dfe39a56c20d1ec78ef8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6645bc9c_191d2bae",
         "filename": "src/libANGLE/renderer/vulkan/doc/ShaderModuleCompilation.md",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "f78b94907c086ac768dfe39a56c20d1ec78ef8d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20ba1239_eaa31cad",
+        "filename": "src/libANGLE/renderer/vulkan/doc/ShaderModuleCompilation.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-20T14:51:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6645bc9c_191d2bae",
+      "range": {
+        "startLine": 31,
+        "startChar": 24,
+        "endLine": 32,
+        "endChar": 15
+      },
+      "revId": "f78b94907c086ac768dfe39a56c20d1ec78ef8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
