@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99666b68_4d36471f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4087,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-02-20T15:20:19Z",
+      "side": 1,
+      "message": "Is this necessary? If so it seems like the \"getPrimaryCommandBuffer()\" function should be re-named. It\u0027s not just \"getting\" the primary, it\u0027s flushing outside renderPass commands. Seems like that\u0027s a side effect that\u0027s the actual purpose of the function in this case.",
+      "revId": "dada43237130c70ccb09e11986b3a0af225d6a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
