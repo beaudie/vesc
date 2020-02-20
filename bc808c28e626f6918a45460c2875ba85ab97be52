@@ -102,6 +102,24 @@
     },
     {
       "key": {
+        "uuid": "a4048e74_33a91992",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1880,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-20T21:18:39Z",
+      "side": 1,
+      "message": "Right. In the latest CL I have disabled the context priority extension if the non-zero allocation feature is enabled. I also changed this method to accept a priority as an argument so the decision is entirely done by the feature.\n\nAlso, don\u0027t let this keep you up night. :) It\u0027s a debugging tool for making some tests fail consistently instead of flakily. We can make sure people don\u0027t abuse the new APIs.",
+      "parentUuid": "45356837_3f3fc72c",
+      "revId": "bc808c28e626f6918a45460c2875ba85ab97be52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4119fb90_52fb638b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
