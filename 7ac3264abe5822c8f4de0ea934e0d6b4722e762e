@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f3578d34_7d3e7a55",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-20T20:15:26Z",
+      "side": 1,
+      "message": "We use Serials to uniquely identify resources. The term serial comes form the fact that the identifiers are monotonically increasing.. they\u0027re serially allocated. It\u0027s an overloaded term since the timeline of the Queue also has a serial. We could specialize the classes and call one type a QueueSerial or something.",
+      "parentUuid": "d1a0985c_e8eba2ee",
+      "range": {
+        "startLine": 79,
+        "startChar": 38,
+        "endLine": 79,
+        "endChar": 44
+      },
+      "revId": "7ac3264abe5822c8f4de0ea934e0d6b4722e762e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5aaceab6_d8fa3f8c",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 28
