@@ -30,6 +30,7 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/InfoLog.h"
 #include "libANGLE/ProgramExecutable.h"
+#include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/angletypes.h"
