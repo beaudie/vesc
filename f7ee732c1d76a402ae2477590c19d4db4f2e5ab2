@@ -22,6 +22,30 @@
       "revId": "f7ee732c1d76a402ae2477590c19d4db4f2e5ab2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86f4ca32_710562a2",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-02-20T20:45:26Z",
+      "side": 1,
+      "message": "As this struct is written in this CL, there are 2 extra bytes at the end, so the compiler fails with those pragmas.\n\nThe packing of BlendStateKey seems to be as tight as it can be here:\n32 (BlendState) + 8 (rtvMasks) + 1 (rtvMax) + 1 (satc) \u003d 42, this gets padded to 44.\n\nHow should I change that?",
+      "parentUuid": "8b47a301_4b86c80d",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 0
+      },
+      "revId": "f7ee732c1d76a402ae2477590c19d4db4f2e5ab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
