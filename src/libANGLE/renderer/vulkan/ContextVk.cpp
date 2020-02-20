@@ -598,6 +598,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mVertexArray(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
+      mExecutable(nullptr),
       mLastIndexBufferOffset(0),
       mCurrentDrawElementsType(gl::DrawElementsType::InvalidEnum),
       mXfbBaseVertex(0),
@@ -1243,15 +1244,13 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         vk::ImageLayout textureLayout;
         if (textureVk->isBoundAsImageTexture())
         {
-            textureLayout = executable->isCompute()
-                                ? vk::ImageLayout::ComputeShaderWrite
-                                : vk::ImageLayout::AllGraphicsShadersWrite;
+            textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderWrite
+                                                    : vk::ImageLayout::AllGraphicsShadersWrite;
         }
         else
         {
-            textureLayout = executable->isCompute()
-                                ? vk::ImageLayout::ComputeShaderReadOnly
-                                : vk::ImageLayout::AllGraphicsShadersReadOnly;
+            textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderReadOnly
+                                                    : vk::ImageLayout::AllGraphicsShadersReadOnly;
         }
         commandBufferHelper->imageRead(&mResourceUseList, image.getAspectFlags(), textureLayout,
                                        &image);
@@ -2800,7 +2799,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING:
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
-                mProgram = vk::GetImpl(glState.getProgram());
+                mProgram    = vk::GetImpl(glState.getProgram());
+                mExecutable = &mProgram->getExecutable();
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
