@@ -46,7 +46,8 @@ void GlslangGetShaderSource(const gl::ProgramState &programState,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    rx::GlslangGetShaderSource(CreateSourceOptions(), programState, resources, shaderSourcesOut,
+    GlslangSourceOptions options = CreateSourceOptions();
+    rx::GlslangGetShaderSource(options, programState, resources, shaderSourcesOut,
                                variableInfoMapOut);
 }
 
