@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "76ef1f13_0cf7291a",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-20T20:19:12Z",
+      "side": 1,
+      "message": "We should probably remove the redundant and non-necessary ones... how about something like this:\n\nRelease:\n\ntarget_cpu \u003d \"arm64\"\ntarget_os \u003d \"android\"\nandroid32_ndk_api_level \u003d 26\nandroid64_ndk_api_level \u003d 26\nandroid_sdk_release \u003d \"q\"\nangle_libs_suffix \u003d \"_angle\"\nffmpeg_branding \u003d \"Chrome\"\nis_component_build \u003d false\nis_debug \u003d false\nis_official_build \u003d true #enables level of optimization beyond release\n\ndcheck_always_on \u003d true # only enable if you want ASSERTs and layers\n\nDebug:\n\ntarget_cpu \u003d \"arm64\"\ntarget_os \u003d \"android\"\nandroid32_ndk_api_level \u003d 26\nandroid64_ndk_api_level \u003d 26\nandroid_sdk_release \u003d \"q\"\nis_debug \u003d true\nangle_libs_suffix \u003d \"_angle\"\nis_component_build \u003d true\n\nHaven\u0027t tested these out though.",
+      "parentUuid": "8430fa19_a3c5e56d",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5196b75_7c6c7162",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 2
