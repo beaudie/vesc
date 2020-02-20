@@ -30,9 +30,8 @@ void initGlslangProgramInterfaceInfo(GlslangProgramInterfaceInfo *programInterfa
     programInterfaceInfo->textureDescriptorSetIndex        = 0;
     programInterfaceInfo->driverUniformsDescriptorSetIndex = kDriverUniformsBindingIndex;
     // NOTE(hqle): Unused for now, until we support ES 3.0
-    programInterfaceInfo->shaderResourceDescriptorSetIndex = -1;
-    programInterfaceInfo->xfbBindingIndexStart             = -1;
-    programInterfaceInfo->locationsUsedForXfbExtension     = 0;
+    options.shaderResourceDescriptorSetIndex           = -1;
+    programInterfaceInfo->locationsUsedForXfbExtension = 0;
 
     static_assert(kDefaultUniformsBindingIndex != 0, "kDefaultUniformsBindingIndex must not be 0");
     static_assert(kDriverUniformsBindingIndex != 0, "kDriverUniformsBindingIndex must not be 0");
@@ -50,11 +49,12 @@ void GlslangGetShaderSource(const gl::ProgramState &programState,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
+    GlslangSourceOptions options = CreateSourceOptions();
     GlslangProgramInterfaceInfo programInterfaceInfo;
     initGlslangProgramInterfaceInfo(&programInterfaceInfo);
 
-    rx::GlslangGetShaderSource(CreateSourceOptions(), programState, resources,
-                               &programInterfaceInfo, shaderSourcesOut, variableInfoMapOut);
+    rx::GlslangGetShaderSource(options, programState, resources, &programInterfaceInfo,
+                               shaderSourcesOut, variableInfoMapOut);
 }
 
 angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
