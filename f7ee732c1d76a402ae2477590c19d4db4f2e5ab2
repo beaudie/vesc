@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b47a301_4b86c80d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-20T20:21:17Z",
+      "side": 1,
+      "message": "can you use ANGLE_ENABLE_STRUCT_PADDING_WARNINGS to verify these structs get packed correctly?",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 0
+      },
+      "revId": "f7ee732c1d76a402ae2477590c19d4db4f2e5ab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
