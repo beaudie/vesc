@@ -32,7 +32,6 @@ GlslangSourceOptions CreateSourceOptions()
     options.driverUniformsDescriptorSetIndex = kDriverUniformsBindingIndex;
     // NOTE(hqle): Unused for now, until we support ES 3.0
     options.shaderResourceDescriptorSetIndex = -1;
-    options.xfbBindingIndexStart             = -1;
 
     static_assert(kDefaultUniformsBindingIndex != 0, "kDefaultUniformsBindingIndex must not be 0");
     static_assert(kDriverUniformsBindingIndex != 0, "kDriverUniformsBindingIndex must not be 0");
@@ -46,7 +45,8 @@ void GlslangGetShaderSource(const gl::ProgramState &programState,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    rx::GlslangGetShaderSource(CreateSourceOptions(), programState, resources, shaderSourcesOut,
+    GlslangSourceOptions options = CreateSourceOptions();
+    rx::GlslangGetShaderSource(options, programState, resources, shaderSourcesOut,
                                variableInfoMapOut);
 }
 
