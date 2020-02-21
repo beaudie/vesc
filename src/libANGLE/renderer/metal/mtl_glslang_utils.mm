@@ -43,7 +43,7 @@ GlslangSourceOptions CreateSourceOptions()
 void GlslangGetShaderSource(const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
-                            ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+                            ShaderMapInterfaceVariableInfoMap *variableInfoMapOut)
 {
     GlslangSourceOptions options = CreateSourceOptions();
     rx::GlslangGetShaderSource(options, programState, resources, shaderSourcesOut,
@@ -53,7 +53,7 @@ void GlslangGetShaderSource(const gl::ProgramState &programState,
 angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
-                                        const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                                        const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
                                         gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
 {
     return rx::GlslangGetShaderSpirvCode(
