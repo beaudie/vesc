@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "17f11d1b_36b14baf",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T03:35:47Z",
+      "side": 1,
+      "message": "Yeah. Happens in a later CL.",
+      "parentUuid": "efe8f458_1c897ebd",
+      "revId": "7d637fdb35744ac1055c2146c086282c38ec0949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aeaa30ed_8dc80862",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "7d637fdb35744ac1055c2146c086282c38ec0949",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3879ca6_faf1ab4b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3469,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T03:35:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aeaa30ed_8dc80862",
+      "revId": "7d637fdb35744ac1055c2146c086282c38ec0949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ff869d47_a5cc8b7f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T03:35:47Z",
+      "side": 1,
+      "message": "No more command graph, no more command graph size widget.",
+      "parentUuid": "4822f9b0_4710b634",
+      "revId": "7d637fdb35744ac1055c2146c086282c38ec0949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afeb7579_68065774",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
@@ -67,6 +121,24 @@
       "revId": "7d637fdb35744ac1055c2146c086282c38ec0949",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "249f5d68_f703bc93",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T03:35:47Z",
+      "side": 1,
+      "message": "Yeah, probably. The compute shader shouldn\u0027t need a RP. Good observation.",
+      "parentUuid": "afeb7579_68065774",
+      "revId": "7d637fdb35744ac1055c2146c086282c38ec0949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

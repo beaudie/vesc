@@ -34,6 +34,24 @@
       "revId": "c35a0a027a34e7fea7bb025fa5d949d40d4fac14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5861ec45_e40c8eb0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3485,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T03:35:47Z",
+      "side": 1,
+      "message": "Comment\u0027s outdated. Removed. Thanks for noticing.",
+      "parentUuid": "0d3cb513_833955c4",
+      "revId": "c35a0a027a34e7fea7bb025fa5d949d40d4fac14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
