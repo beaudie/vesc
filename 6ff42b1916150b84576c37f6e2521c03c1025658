@@ -16,6 +16,24 @@
       "revId": "6ff42b1916150b84576c37f6e2521c03c1025658",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e64839c3_3c63a290",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-21T18:51:14Z",
+      "side": 1,
+      "message": "We\u0027ve had this discussion before:\n\nSee:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2003234/8/src/libANGLE/renderer/vulkan/CommandGraph.h#356\n\nThe context is different now that there isn\u0027t a command graph anymore, so maybe there is a better answer now.",
+      "parentUuid": "5f5cac76_c69864d5",
+      "revId": "6ff42b1916150b84576c37f6e2521c03c1025658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
