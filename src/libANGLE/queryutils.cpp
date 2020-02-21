@@ -1412,6 +1412,31 @@ void QueryTexParameterfv(const Context *context,
     QueryTexParameterBase<false>(context, texture, pname, params);
 }
 
+void QueryTexParameterxv(const Context *context,
+                         const Texture *texture,
+                         GLenum pname,
+                         GLfixed *params)
+{
+    GLfloat paramsf[4] = {};
+    QueryTexParameterBase<false>(context, texture, pname, paramsf);
+
+    if (pname == GL_TEXTURE_CROP_RECT_OES)
+    {
+        for (size_t i = 0; i < 4; i++)
+        {
+            params[i] = ConvertFloatToFixed(paramsf[i]);
+        }
+    }
+    else if (pname == GL_TEXTURE_MAX_ANISOTROPY_EXT)
+    {
+        params[0] = ConvertFloatToFixed(paramsf[0]);
+    }
+    else
+    {
+        params[0] = static_cast<GLfixed>(paramsf[0]);
+    }
+}
+
 void QueryTexParameteriv(const Context *context,
                          const Texture *texture,
                          GLenum pname,
