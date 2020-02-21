@@ -3276,13 +3276,25 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
 {
     const angle::Format &angleFormat = GetFormatFromFormatType(format, type);
 
-    // Depth/stencil readback is not yet implemented.
-    // TODO(http://anglebug.com/4058): Depth/stencil readback.
-    if (angleFormat.depthBits > 0 || angleFormat.stencilBits > 0)
+    VkImageAspectFlagBits aspectFlags = VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM;
+    if (angleFormat.redBits > 0 || angleFormat.blueBits > 0 || angleFormat.greenBits > 0 ||
+        angleFormat.alphaBits > 0)
     {
-        UNIMPLEMENTED();
-        return angle::Result::Continue;
+        aspectFlags = VK_IMAGE_ASPECT_COLOR_BIT;
     }
+    else
+    {
+        if (angleFormat.depthBits > 0)
+        {
+            aspectFlags = VK_IMAGE_ASPECT_DEPTH_BIT;
+        }
+        if (angleFormat.stencilBits > 0)
+        {
+            aspectFlags = VK_IMAGE_ASPECT_STENCIL_BIT;
+        }
+    }
+
+    ASSERT(aspectFlags != VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM);
 
     PackPixelsParams params;
     GLuint outputSkipBytes = 0;
