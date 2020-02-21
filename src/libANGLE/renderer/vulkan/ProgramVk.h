@@ -180,93 +180,18 @@ class ProgramVk : public ProgramImpl
     angle::Result linkImpl(const gl::Context *glContext, gl::InfoLog &infoLog);
     void linkResources(const gl::ProgramLinkedResources &resources);
 
-    class ProgramInfo;
-    ANGLE_INLINE angle::Result initProgram(ContextVk *contextVk,
-                                           bool enableLineRasterEmulation,
-                                           ProgramInfo *programInfo,
-                                           vk::ShaderProgramHelper **shaderProgramOut)
-    {
-        ASSERT(mShaderInfo.valid());
-
-        // Create the program pipeline.  This is done lazily and once per combination of
-        // specialization constants.
-        if (!programInfo->valid())
-        {
-            ANGLE_TRY(programInfo->initProgram(contextVk, mShaderInfo, enableLineRasterEmulation));
-        }
-        ASSERT(programInfo->valid());
-
-        *shaderProgramOut = programInfo->getShaderProgram();
-        return angle::Result::Continue;
-    }
-
-    ANGLE_INLINE angle::Result initGraphicsProgram(ContextVk *contextVk,
-                                                   gl::PrimitiveMode mode,
-                                                   vk::ShaderProgramHelper **shaderProgramOut)
-    {
-        bool enableLineRasterEmulation = UseLineRaster(contextVk, mode);
-
-        ProgramInfo &programInfo =
-            enableLineRasterEmulation ? mLineRasterProgramInfo : mDefaultProgramInfo;
-
-        return initProgram(contextVk, enableLineRasterEmulation, &programInfo, shaderProgramOut);
-    }
-
-    ANGLE_INLINE angle::Result initComputeProgram(ContextVk *contextVk,
-                                                  vk::ShaderProgramHelper **shaderProgramOut)
-    {
-        return initProgram(contextVk, false, &mDefaultProgramInfo, shaderProgramOut);
-    }
+    angle::Result initProgram(ContextVk *contextVk,
+                              bool enableLineRasterEmulation,
+                              ProgramInfo *programInfo,
+                              vk::ShaderProgramHelper **shaderProgramOut);
+    angle::Result initGraphicsProgram(ContextVk *contextVk,
+                                      gl::PrimitiveMode mode,
+                                      vk::ShaderProgramHelper **shaderProgramOut);
+    angle::Result initComputeProgram(ContextVk *contextVk,
+                                     vk::ShaderProgramHelper **shaderProgramOut);
 
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
-
-    class ShaderInfo final : angle::NonCopyable
-    {
-      public:
-        ShaderInfo();
-        ~ShaderInfo();
-
-        angle::Result initShaders(ContextVk *contextVk,
-                                  const gl::ShaderMap<std::string> &shaderSources,
-                                  const ShaderMapInterfaceVariableInfoMap &variableInfoMap);
-        void release(ContextVk *contextVk);
-
-        ANGLE_INLINE bool valid() const { return mIsInitialized; }
-
-        const gl::ShaderMap<SpirvBlob> &getSpirvBlobs() const { return mSpirvBlobs; }
-
-        // Save and load implementation for GLES Program Binary support.
-        void load(gl::BinaryInputStream *stream);
-        void save(gl::BinaryOutputStream *stream);
-
-      private:
-        gl::ShaderMap<SpirvBlob> mSpirvBlobs;
-        bool mIsInitialized = false;
-    };
-
-    class ProgramInfo final : angle::NonCopyable
-    {
-      public:
-        ProgramInfo();
-        ~ProgramInfo();
-
-        angle::Result initProgram(ContextVk *contextVk,
-                                  const ShaderInfo &shaderInfo,
-                                  bool enableLineRasterEmulation);
-        void release(ContextVk *contextVk);
-
-        ANGLE_INLINE bool valid() const { return mProgramHelper.valid(); }
-
-        vk::ShaderProgramHelper *getShaderProgram() { return &mProgramHelper; }
-
-      private:
-        vk::ShaderProgramHelper mProgramHelper;
-        gl::ShaderMap<vk::RefCounted<vk::ShaderAndSerial>> mShaders;
-    };
-
-    ProgramInfo mDefaultProgramInfo;
-    ProgramInfo mLineRasterProgramInfo;
 
     // We keep the SPIR-V code to use for draw call pipeline creation.
     ShaderInfo mShaderInfo;
