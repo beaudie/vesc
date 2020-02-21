@@ -63,6 +63,10 @@ void QueryTexParameterfv(const Context *context,
                          const Texture *texture,
                          GLenum pname,
                          GLfloat *params);
+void QueryTexParameterxv(const Context *context,
+                         const Texture *texture,
+                         GLenum pname,
+                         GLfixed *params);
 void QueryTexParameteriv(const Context *context,
                          const Texture *texture,
                          GLenum pname,
@@ -125,7 +129,9 @@ angle::Result QuerySynciv(const Context *context,
                           GLint *values);
 
 void SetTexParameterf(Context *context, Texture *texture, GLenum pname, GLfloat param);
+void SetTexParameterx(Context *context, Texture *texture, GLenum pname, GLfixed param);
 void SetTexParameterfv(Context *context, Texture *texture, GLenum pname, const GLfloat *params);
+void SetTexParameterxv(Context *context, Texture *texture, GLenum pname, const GLfixed *params);
 void SetTexParameteri(Context *context, Texture *texture, GLenum pname, GLint param);
 void SetTexParameteriv(Context *context, Texture *texture, GLenum pname, const GLint *params);
 void SetTexParameterIiv(Context *context, Texture *texture, GLenum pname, const GLint *params);
