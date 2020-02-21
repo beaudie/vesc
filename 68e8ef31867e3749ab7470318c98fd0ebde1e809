@@ -22,6 +22,30 @@
       "revId": "68e8ef31867e3749ab7470318c98fd0ebde1e809",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "984c8d9d_33c704ff",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2648,
+      "author": {
+        "id": 1145109
+      },
+      "writtenOn": "2020-02-21T20:07:22Z",
+      "side": 1,
+      "message": "Oh. Is that the style in ANGLE? I\u0027m used to chromium style guide which requires braces only for multi-line statements.",
+      "parentUuid": "637bc534_60f12569",
+      "range": {
+        "startLine": 2644,
+        "startChar": 1,
+        "endLine": 2648,
+        "endChar": 20
+      },
+      "revId": "68e8ef31867e3749ab7470318c98fd0ebde1e809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
