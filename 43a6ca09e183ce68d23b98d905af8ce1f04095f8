@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c306e4b0_ea924c10",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2764,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-02-21T15:34:44Z",
+      "side": 1,
+      "message": "Just wondering, is there any \"versioning\" stored in these replays? What if the replays that are eventually used on the bots break because of some ANGLE change and we need to recapture them?",
+      "revId": "43a6ca09e183ce68d23b98d905af8ce1f04095f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
