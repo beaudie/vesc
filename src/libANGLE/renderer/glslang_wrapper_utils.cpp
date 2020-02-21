@@ -1888,6 +1888,26 @@ void GlslangGetShaderSource(GlslangSourceOptions &options,
     AssignNonTextureBindings(options, programState, variableInfoMapOut);
 }
 
+angle::Result TransformSpirvCode(const GlslangErrorCallback &callback,
+                                 const gl::ShaderType shaderType,
+                                 const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                                 const SpirvBlob &initialSpirvBlob,
+                                 SpirvBlob *spirvBlobOut)
+{
+    if (initialSpirvBlob.empty())
+    {
+        return angle::Result::Continue;
+    }
+
+    // Transform the SPIR-V code by assigning location/set/binding values.
+    SpirvTransformer transformer(initialSpirvBlob, variableInfoMap, shaderType, spirvBlobOut);
+    ANGLE_GLSLANG_CHECK(callback, transformer.transform(), GlslangError::InvalidSpirv);
+
+    ASSERT(ValidateSpirv(*spirvBlobOut));
+
+    return angle::Result::Continue;
+}
+
 angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
@@ -1897,24 +1917,15 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
     gl::ShaderMap<SpirvBlob> initialSpirvBlobs;
     ANGLE_TRY(GetShaderSpirvCode(callback, glCaps, shaderSources, &initialSpirvBlobs));
 
-    // Transform the SPIR-V code by assigning location/set/binding values.
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        const std::vector<uint32_t> initialSpirvBlob = initialSpirvBlobs[shaderType];
-
-        if (initialSpirvBlob.empty())
+        angle::Result status =
+            TransformSpirvCode(callback, shaderType, variableInfoMap[shaderType],
+                               initialSpirvBlobs[shaderType], &(*spirvBlobsOut)[shaderType]);
+        if (status != angle::Result::Continue)
         {
-            continue;
+            return status;
         }
-
-        SpirvBlob *spirvBlob = &(*spirvBlobsOut)[shaderType];
-
-        // Transform the SPIR-V code by assigning location/set/binding values.
-        SpirvTransformer transformer(initialSpirvBlob, variableInfoMap[shaderType], shaderType,
-                                     spirvBlob);
-        ANGLE_GLSLANG_CHECK(callback, transformer.transform(), GlslangError::InvalidSpirv);
-
-        ASSERT(ValidateSpirv(*spirvBlob));
     }
 
     return angle::Result::Continue;
