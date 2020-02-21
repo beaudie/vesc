@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c4b85027_f7c8cca6",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T15:08:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "be432b65_5e0ed4f3",
+      "revId": "0ad3e644001ebd87465f221b6c701fd348e71ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee3b92a0_14ebf28e",
         "filename": "src/tests/perf_tests/DrawCallPerfParams.h",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-02-21T14:24:53Z",
       "side": 1,
       "message": "Do you still need the D3D9 version?",
+      "revId": "0ad3e644001ebd87465f221b6c701fd348e71ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d43f571_26b2aa4e",
+        "filename": "src/tests/perf_tests/DrawCallPerfParams.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T15:08:55Z",
+      "side": 1,
+      "message": "I guess it\u0027s unused right now. I could remove it.",
+      "parentUuid": "ee3b92a0_14ebf28e",
       "revId": "0ad3e644001ebd87465f221b6c701fd348e71ec3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
