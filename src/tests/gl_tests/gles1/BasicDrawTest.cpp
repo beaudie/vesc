@@ -80,4 +80,61 @@ TEST_P(BasicDrawTest, EnableDisableTexture)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+TEST_P(BasicDrawTest, SanityCheckTest)
+{
+    // test glClearColorx, glClearDepthx, glLineWidthx, glPolygonOffsetx
+    glClearColorx(0x4000, 0x8000, 0x8000, 0x8000);
+    glClearDepthx(0x8000);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    EXPECT_PIXEL_NEAR(0, 0, 64, 128, 128, 128, 1.0);
+
+    // Fail Depth Test and can't draw the red triangle
+    std::vector<float> Positions = {-1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
+    glEnable(GL_DEPTH_TEST);
+    glLineWidthx(0x10000);
+    glPolygonOffsetx(0, 0);
+    glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, Positions.data());
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    EXPECT_PIXEL_NEAR(0, 0, 64, 128, 128, 128, 1.0);
+    glDisable(GL_DEPTH_TEST);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // test glDepthRangex and glGetFixedv
+    glDepthRangex(0x8000, 0x10000);
+    GLfixed depth_range[2];
+    glGetFixedv(GL_DEPTH_RANGE, depth_range);
+    EXPECT_EQ(0x8000, depth_range[0]);
+    EXPECT_EQ(0x10000, depth_range[1]);
+
+    // test glTexParameterx, glTexParameterxv and glGetTexParameterxv
+    GLfixed params[4] = {};
+    glTexParameterx(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    glGetTexParameterxv(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, params);
+    EXPECT_GL_TRUE(params[0]);
+
+    GLfixed cropRect[4] = {0x10, 0x20, 0x10, 0x10};
+    glTexParameterxv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, cropRect);
+    glGetTexParameterxv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, params);
+    for (int i = 0; i < 4; i++)
+    {
+        EXPECT_EQ(cropRect[i], params[i]);
+    }
+
+    // test glEnable, GL_SAMPLE_COVERAGE
+    GLfixed isSampleCoverage;
+    GLfixed samplecoveragevalue;
+    GLfixed samplecoverageinvert;
+    glEnable(GL_SAMPLE_COVERAGE);
+    glGetFixedv(GL_SAMPLE_COVERAGE, &isSampleCoverage);
+    EXPECT_EQ(0x10000, isSampleCoverage);
+    glSampleCoveragex(0x8000, true);
+    glGetFixedv(GL_SAMPLE_COVERAGE_VALUE, &samplecoveragevalue);
+    EXPECT_EQ(0x8000, samplecoveragevalue);
+    glGetFixedv(GL_SAMPLE_COVERAGE_INVERT, &samplecoverageinvert);
+    EXPECT_EQ(0x10000, samplecoverageinvert);
+}
+
 ANGLE_INSTANTIATE_TEST_ES1(BasicDrawTest);
