@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fcbc9735_f409402d",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-02-21T17:12:13Z",
+      "side": 1,
+      "message": "The timeouts I was thinking about are the ones per gtest batch. I think the default is something like 2 minutes for 256 tests. Since we don\u0027t have many perftests, they are usually grouped into 1 gtest batch. I think on Android I\u0027ve increased that to 10 minutes or something. Not sure what we have for Windows.",
+      "parentUuid": "175e93fb_ec1d5a3a",
+      "range": {
+        "startLine": 414,
+        "startChar": 52,
+        "endLine": 414,
+        "endChar": 68
+      },
+      "revId": "37f6d4b584bf399f948cfc82a5fc7403a6aa2414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c470c669_12e4ac4f",
         "filename": "src/tests/perf_tests/DrawElementsPerf.cpp",
         "patchSetId": 1
