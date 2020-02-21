@@ -246,6 +246,7 @@ bool ValidateMaterialCommon(const Context *context,
     switch (pname)
     {
         case MaterialParameter::Ambient:
+        case MaterialParameter::AmbientAndDiffuse:
         case MaterialParameter::Diffuse:
         case MaterialParameter::Specular:
         case MaterialParameter::Emission:
@@ -660,13 +661,11 @@ bool ValidateClearColorx(const Context *context,
                          GLfixed blue,
                          GLfixed alpha)
 {
-    UNIMPLEMENTED();
     return true;
 }
 
 bool ValidateClearDepthx(const Context *context, GLfixed depth)
 {
-    UNIMPLEMENTED();
     return true;
 }
 
@@ -734,7 +733,12 @@ bool ValidateCullFace(const Context *context, GLenum mode)
 
 bool ValidateDepthRangex(const Context *context, GLfixed n, GLfixed f)
 {
-    UNIMPLEMENTED();
+    if (context->getExtensions().webglCompatibility && n > f)
+    {
+        context->validationError(GL_INVALID_OPERATION, kInvalidDepthRange);
+        return false;
+    }
+
     return true;
 }
 
@@ -760,7 +764,7 @@ bool ValidateFogfv(const Context *context, GLenum pname, const GLfloat *params)
 
 bool ValidateFogx(const Context *context, GLenum pname, GLfixed param)
 {
-    GLfloat asFloat = ConvertFixedToFloat(param);
+    GLfloat asFloat = pname == GL_FOG_MODE ? ConvertToGLenum(param) : ConvertFixedToFloat(param);
     return ValidateFogCommon(context, pname, &asFloat);
 }
 
@@ -769,9 +773,16 @@ bool ValidateFogxv(const Context *context, GLenum pname, const GLfixed *params)
     unsigned int paramCount = GetFogParameterCount(pname);
     GLfloat paramsf[4]      = {};
 
-    for (unsigned int i = 0; i < paramCount; i++)
+    if (pname == GL_FOG_MODE)
     {
-        paramsf[i] = ConvertFixedToFloat(params[i]);
+        paramsf[0] = ConvertToGLenum(params[0]);
+    }
+    else
+    {
+        for (unsigned int i = 0; i < paramCount; i++)
+        {
+            paramsf[i] = ConvertFixedToFloat(params[i]);
+        }
     }
 
     return ValidateFogCommon(context, pname, paramsf);
@@ -830,8 +841,9 @@ bool ValidateGetClipPlanex(const Context *context, GLenum plane, const GLfixed *
 
 bool ValidateGetFixedv(const Context *context, GLenum pname, const GLfixed *params)
 {
-    UNIMPLEMENTED();
-    return true;
+    GLenum nativeType;
+    unsigned int numParams = 0;
+    return ValidateStateQuery(context, pname, &nativeType, &numParams);
 }
 
 bool ValidateGetLightfv(const Context *context,
@@ -961,7 +973,12 @@ bool ValidateLightxv(const Context *context,
 
 bool ValidateLineWidthx(const Context *context, GLfixed width)
 {
-    UNIMPLEMENTED();
+    if (width <= 0)
+    {
+        context->validationError(GL_INVALID_VALUE, kInvalidWidth);
+        return false;
+    }
+
     return true;
 }
 
@@ -1201,7 +1218,6 @@ bool ValidatePointSizex(const Context *context, GLfixed size)
 
 bool ValidatePolygonOffsetx(const Context *context, GLfixed factor, GLfixed units)
 {
-    UNIMPLEMENTED();
     return true;
 }
 
@@ -1243,7 +1259,6 @@ bool ValidateRotatex(const Context *context, GLfixed angle, GLfixed x, GLfixed y
 
 bool ValidateSampleCoveragex(const Context *context, GLclampx value, GLboolean invert)
 {
-    UNIMPLEMENTED();
     return true;
 }
 
@@ -1326,8 +1341,9 @@ bool ValidateTexEnvx(const Context *context,
                      TextureEnvParameter pname,
                      GLfixed param)
 {
-    GLfloat paramf = static_cast<GLfloat>(param);
-    return ValidateTexEnvCommon(context, target, pname, &paramf);
+    GLfloat paramsf[4] = {};
+    ConvertTextureEnvFromFixed(pname, &param, paramsf);
+    return ValidateTexEnvCommon(context, target, pname, paramsf);
 }
 
 bool ValidateTexEnvxv(const Context *context,
@@ -1335,19 +1351,15 @@ bool ValidateTexEnvxv(const Context *context,
                       TextureEnvParameter pname,
                       const GLfixed *params)
 {
-    GLfloat paramsf[4];
-    for (unsigned int i = 0; i < GetTextureEnvParameterCount(pname); i++)
-    {
-        paramsf[i] = static_cast<GLfloat>(params[i]);
-    }
+    GLfloat paramsf[4] = {};
+    ConvertTextureEnvFromFixed(pname, params, paramsf);
     return ValidateTexEnvCommon(context, target, pname, paramsf);
 }
 
 bool ValidateTexParameterx(const Context *context, TextureType target, GLenum pname, GLfixed param)
 {
     ANGLE_VALIDATE_IS_GLES1(context);
-    GLfloat paramf = ConvertFixedToFloat(param);
-    return ValidateTexParameterBase(context, target, pname, -1, false, &paramf);
+    return ValidateTexParameterBase(context, target, pname, -1, false, &param);
 }
 
 bool ValidateTexParameterxv(const Context *context,
@@ -1356,12 +1368,7 @@ bool ValidateTexParameterxv(const Context *context,
                             const GLfixed *params)
 {
     ANGLE_VALIDATE_IS_GLES1(context);
-    GLfloat paramsf[4] = {};
-    for (unsigned int i = 0; i < GetTexParameterCount(pname); i++)
-    {
-        paramsf[i] = ConvertFixedToFloat(params[i]);
-    }
-    return ValidateTexParameterBase(context, target, pname, -1, true, paramsf);
+    return ValidateTexParameterBase(context, target, pname, -1, true, params);
 }
 
 bool ValidateTranslatef(const Context *context, GLfloat x, GLfloat y, GLfloat z)

@@ -104,6 +104,9 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeExtensions.vertexHalfFloatOES = true;
 
+    // Enable EXT_multisample_compatibility
+    mNativeExtensions.multisampleCompatibility = true;
+
     // Enabled in HW if VK_EXT_vertex_attribute_divisor available, otherwise emulated
     mNativeExtensions.instancedArraysANGLE = true;
     mNativeExtensions.instancedArraysEXT   = true;
