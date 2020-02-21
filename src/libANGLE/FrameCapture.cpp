@@ -19,6 +19,8 @@
 #include "common/system_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/Query.h"
+#include "libANGLE/ResourceMap.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/capture_gles_2_0_autogen.h"
@@ -1867,6 +1869,26 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     {
         cap(CaptureScissor(replayState, true, currentScissor.x, currentScissor.y,
                            currentScissor.width, currentScissor.height));
+    }
+
+    // Create existing queries
+    const gl::QueryMap *queryMap = context->getQueriesForCapture();
+    for (const auto &queryIter : *queryMap)
+    {
+        gl::QueryID queryID = queryIter.second->id();
+        cap(CaptureGenQueries(replayState, true, 1, &queryID));
+        MaybeCaptureUpdateResourceIDs(setupCalls);
+    }
+
+    // TODO: Start any active queries
+    const gl::ActiveQueryMap &activeQueries = apiState.getActiveQueriesForCapture();
+    for (const auto &activeQueryIter : activeQueries)
+    {
+        const gl::Query *activeQuery = activeQueryIter.get();
+        if (activeQuery)
+        {
+            UNIMPLEMENTED();
+        }
     }
 
     // Allow the replayState object to be destroyed conveniently.
