@@ -160,106 +160,6 @@ class Std140BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFacto
 };
 }  // anonymous namespace
 
-// ProgramVk::ShaderInfo implementation.
-ProgramVk::ShaderInfo::ShaderInfo() {}
-
-ProgramVk::ShaderInfo::~ShaderInfo() = default;
-
-angle::Result ProgramVk::ShaderInfo::initShaders(
-    ContextVk *contextVk,
-    const gl::ShaderMap<std::string> &shaderSources,
-    const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap)
-{
-    ASSERT(!valid());
-
-    ANGLE_TRY(GlslangWrapperVk::GetShaderCode(contextVk, contextVk->getCaps(), shaderSources,
-                                              variableInfoMap, &mSpirvBlobs));
-
-    mIsInitialized = true;
-    return angle::Result::Continue;
-}
-
-void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
-{
-    for (SpirvBlob &spirvBlob : mSpirvBlobs)
-    {
-        spirvBlob.clear();
-    }
-    mIsInitialized = false;
-}
-
-void ProgramVk::ShaderInfo::load(gl::BinaryInputStream *stream)
-{
-    // Read in shader codes for all shader types
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        SpirvBlob *spirvBlob = &mSpirvBlobs[shaderType];
-
-        // Read the SPIR-V
-        stream->readIntVector<uint32_t>(spirvBlob);
-    }
-
-    mIsInitialized = true;
-}
-
-void ProgramVk::ShaderInfo::save(gl::BinaryOutputStream *stream)
-{
-    ASSERT(valid());
-
-    // Write out shader codes for all shader types
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        const SpirvBlob &spirvBlob = mSpirvBlobs[shaderType];
-
-        // Write the SPIR-V
-        stream->writeIntVector(spirvBlob);
-    }
-}
-
-// ProgramVk::ProgramInfo implementation.
-ProgramVk::ProgramInfo::ProgramInfo() {}
-
-ProgramVk::ProgramInfo::~ProgramInfo() = default;
-
-angle::Result ProgramVk::ProgramInfo::initProgram(ContextVk *contextVk,
-                                                  const ShaderInfo &shaderInfo,
-                                                  bool enableLineRasterEmulation)
-{
-    const gl::ShaderMap<SpirvBlob> &spirvBlobs = shaderInfo.getSpirvBlobs();
-
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        const SpirvBlob &spirvBlob = spirvBlobs[shaderType];
-
-        if (!spirvBlob.empty())
-        {
-            ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
-                                              spirvBlob.data(),
-                                              spirvBlob.size() * sizeof(uint32_t)));
-
-            mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
-        }
-    }
-
-    if (enableLineRasterEmulation)
-    {
-        mProgramHelper.enableSpecializationConstant(
-            sh::vk::SpecializationConstantId::LineRasterEmulation);
-    }
-
-    return angle::Result::Continue;
-}
-
-void ProgramVk::ProgramInfo::release(ContextVk *contextVk)
-{
-    mProgramHelper.release(contextVk);
-
-    for (vk::RefCounted<vk::ShaderAndSerial> &shader : mShaders)
-    {
-        shader.get().destroy(contextVk->getDevice());
-    }
-}
-
 // ProgramVk implementation.
 ProgramVk::ProgramVk(const gl::ProgramState &state) : ProgramImpl(state) {}
 
@@ -276,8 +176,6 @@ void ProgramVk::reset(ContextVk *contextVk)
     RendererVk *renderer = contextVk->getRenderer();
 
     mShaderInfo.release(contextVk);
-    mDefaultProgramInfo.release(contextVk);
-    mLineRasterProgramInfo.release(contextVk);
 
     for (auto &uniformBlock : mDefaultUniformBlocks)
     {
@@ -856,6 +754,43 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
     }
 
     return angle::Result::Continue;
+}
+
+angle::Result ProgramVk::initProgram(ContextVk *contextVk,
+                                     bool enableLineRasterEmulation,
+                                     ProgramInfo *programInfo,
+                                     vk::ShaderProgramHelper **shaderProgramOut)
+{
+    ASSERT(mShaderInfo.valid());
+
+    // Create the program pipeline.  This is done lazily and once per combination of
+    // specialization constants.
+    if (!programInfo->valid())
+    {
+        ANGLE_TRY(programInfo->initProgram(contextVk, mShaderInfo, enableLineRasterEmulation));
+    }
+    ASSERT(programInfo->valid());
+
+    *shaderProgramOut = programInfo->getShaderProgram();
+    return angle::Result::Continue;
+}
+
+angle::Result ProgramVk::initGraphicsProgram(ContextVk *contextVk,
+                                             gl::PrimitiveMode mode,
+                                             vk::ShaderProgramHelper **shaderProgramOut)
+{
+    bool enableLineRasterEmulation = UseLineRaster(contextVk, mode);
+
+    ProgramInfo &programInfo = enableLineRasterEmulation ? mExecutable.mLineRasterProgramInfo
+                                                         : mExecutable.mDefaultProgramInfo;
+
+    return initProgram(contextVk, enableLineRasterEmulation, &programInfo, shaderProgramOut);
+}
+
+angle::Result ProgramVk::initComputeProgram(ContextVk *contextVk,
+                                            vk::ShaderProgramHelper **shaderProgramOut)
+{
+    return initProgram(contextVk, false, &mExecutable.mDefaultProgramInfo, shaderProgramOut);
 }
 
 void ProgramVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
