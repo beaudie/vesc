@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67104208_42f0dc7e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-21T00:14:37Z",
+      "side": 0,
+      "message": "Should each of these `ASSERT(mCommandGraph.empty());` be checking the renderpass commands are empty instead?:\n\n    mOutsideRenderPassCommands.empty();\n    mRenderPassCommands.empty();",
+      "revId": "f65d6c6ff4ae903ee51e39d2848e4723faf1a933",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "538b920a_e3db5f7a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-21T00:14:37Z",
+      "side": 0,
+      "message": "Why isn\u0027t this being attempted anymore?",
+      "range": {
+        "startLine": 1522,
+        "startChar": 9,
+        "endLine": 1523,
+        "endChar": 63
+      },
+      "revId": "f65d6c6ff4ae903ee51e39d2848e4723faf1a933",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

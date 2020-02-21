@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efe8f458_1c897ebd",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-21T00:14:37Z",
+      "side": 1,
+      "message": "Does this mean merge and rename onResourceAccess() and onResourceRecreated()?",
+      "revId": "7d637fdb35744ac1055c2146c086282c38ec0949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeaa30ed_8dc80862",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3469,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-21T00:14:37Z",
+      "side": 1,
+      "message": "Oh, maybe this would be better to ASSERT() with instead everywhere mCommandGraph.empty() was being checked.",
+      "revId": "7d637fdb35744ac1055c2146c086282c38ec0949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4822f9b0_4710b634",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-21T00:14:37Z",
+      "side": 1,
+      "message": "Why does this need to be removed?",
+      "revId": "7d637fdb35744ac1055c2146c086282c38ec0949",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
