@@ -22,6 +22,30 @@
       "revId": "cc4f798d460251859eef0cb437683ba64af70437",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be87d6ca_059bc328",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-21T18:25:27Z",
+      "side": 1,
+      "message": "Not sure, all I know is that ANGLE\u0027s presubmit rejected my latest patch based on GN files being significantly different from what \"git cl format\" produces.",
+      "parentUuid": "6932116c_de2c34d0",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 3
+      },
+      "revId": "cc4f798d460251859eef0cb437683ba64af70437",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
