@@ -34,6 +34,24 @@
       "revId": "6ff42b1916150b84576c37f6e2521c03c1025658",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef369511_50ba486f",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T21:38:20Z",
+      "side": 1,
+      "message": "I kind of like the \u0027usedIn\u0027 verbiage. Its consistent if \u0027Resources\u0027 that have \u0027ResourceUse\u0027 are \u0027usedIn\u0027 command buffers. So went with that.",
+      "parentUuid": "e64839c3_3c63a290",
+      "revId": "6ff42b1916150b84576c37f6e2521c03c1025658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
