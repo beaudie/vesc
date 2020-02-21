@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6932116c_de2c34d0",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-21T17:26:38Z",
+      "side": 1,
+      "message": "What\u0027s prompting this reformat that hasn\u0027t been an issue so far? Why isn\u0027t the public_configs line here not reformatted?",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 3
+      },
+      "revId": "cc4f798d460251859eef0cb437683ba64af70437",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
