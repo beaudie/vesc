@@ -101,11 +101,18 @@ void GlslangGetShaderSource(GlslangSourceOptions &options,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
                             ShaderMapInterfaceVariableInfoMap *variableInfoMapOut);
 
-angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
-                                        const gl::Caps &glCaps,
-                                        const gl::ShaderMap<std::string> &shaderSources,
-                                        const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
-                                        gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
+angle::Result TransformSpirvCode(const GlslangErrorCallback &callback,
+                                 const gl::ShaderType shaderType,
+                                 const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                                 std::vector<uint32_t> &initialSpirvBlob,
+                                 SpirvBlob *spirvBlobOut);
+
+angle::Result GlslangGetShaderSpirvCode(
+    const GlslangErrorCallback &callback,
+    const gl::Caps &glCaps,
+    const gl::ShaderMap<std::string> &shaderSources,
+    const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
+    gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
 
 }  // namespace rx
 
