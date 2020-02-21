@@ -1412,6 +1412,14 @@ void QueryTexParameterfv(const Context *context,
     QueryTexParameterBase<false>(context, texture, pname, params);
 }
 
+void QueryTexParameterxv(const Context *context,
+                         const Texture *texture,
+                         GLenum pname,
+                         GLfixed *params)
+{
+    QueryTexParameterBase<false>(context, texture, pname, params);
+}
+
 void QueryTexParameteriv(const Context *context,
                          const Texture *texture,
                          GLenum pname,
