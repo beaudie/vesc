@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "175e93fb_ec1d5a3a",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T12:40:19Z",
+      "side": 1,
+      "message": "Which timeout are you thinking of? I think the shard timeout is like an hour. That should be plenty. I also removed D3D9 to help compensate for the new permutations.\n\nYou\u0027re right about some missing permutations. I wanted to prioritize consistency and simplicity over maintaining prior configs. FWIW we don\u0027t really monitor these tests right now because of the noise.",
+      "parentUuid": "33323732_65258336",
+      "range": {
+        "startLine": 414,
+        "startChar": 52,
+        "endLine": 414,
+        "endChar": 68
+      },
+      "revId": "37f6d4b584bf399f948cfc82a5fc7403a6aa2414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c470c669_12e4ac4f",
         "filename": "src/tests/perf_tests/DrawElementsPerf.cpp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "705af187_9c5516c9",
+        "filename": "src/tests/perf_tests/DrawElementsPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T12:40:19Z",
+      "side": 1,
+      "message": "OK, disabled for D3D9 as well.",
+      "parentUuid": "c470c669_12e4ac4f",
+      "range": {
+        "startLine": 239,
+        "startChar": 76,
+        "endLine": 239,
+        "endChar": 86
+      },
+      "revId": "37f6d4b584bf399f948cfc82a5fc7403a6aa2414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9386c1c5_1e7c5b6b",
         "filename": "src/tests/perf_tests/DrawElementsPerf.cpp",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "37f6d4b584bf399f948cfc82a5fc7403a6aa2414",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5e06f11_5e8dbc9d",
+        "filename": "src/tests/perf_tests/DrawElementsPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T12:40:19Z",
+      "side": 1,
+      "message": "Same idea of preferring a simple test configuration style over maintaining the prior test sets.",
+      "parentUuid": "9386c1c5_1e7c5b6b",
+      "range": {
+        "startLine": 241,
+        "startChar": 56,
+        "endLine": 241,
+        "endChar": 67
+      },
+      "revId": "37f6d4b584bf399f948cfc82a5fc7403a6aa2414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
