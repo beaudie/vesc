@@ -68,8 +68,8 @@ struct ShaderInterfaceVariableInfo
     // variables that share the same name, such as a vertex attribute and a fragment output.  They
     // will share this object since they have the same name, but will find possibly different
     // locations in their respective slots.
-    gl::ShaderMap<uint32_t> location;
-    gl::ShaderMap<uint32_t> component;
+    uint32_t location  = kInvalid;
+    uint32_t component = kInvalid;
     // The stages this shader interface variable is active.
     gl::ShaderBitSet activeStages;
     // Used for transform feedback extension to decorate vertex shader output.
@@ -79,6 +79,7 @@ struct ShaderInterfaceVariableInfo
 };
 
 using ShaderInterfaceVariableInfoMap = std::unordered_map<std::string, ShaderInterfaceVariableInfo>;
+using ShaderMapInterfaceVariableInfoMap = gl::ShaderMap<ShaderInterfaceVariableInfoMap>;
 
 void GlslangInitialize();
 void GlslangRelease();
@@ -98,12 +99,12 @@ void GlslangGetShaderSource(GlslangSourceOptions &options,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
-                            ShaderInterfaceVariableInfoMap *variableInfoMapOut);
+                            ShaderMapInterfaceVariableInfoMap *variableInfoMapOut);
 
 angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
-                                        const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                                        const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
                                         gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
 
 }  // namespace rx
