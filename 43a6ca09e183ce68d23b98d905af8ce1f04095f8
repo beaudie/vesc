@@ -16,6 +16,24 @@
       "revId": "43a6ca09e183ce68d23b98d905af8ce1f04095f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63b17669_7669c43e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2764,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T15:36:49Z",
+      "side": 1,
+      "message": "Well, there\u0027s no \"harness\" that replays them. They are totally standalone. So although one replay captured from ANGLE version 1 will differ from version 2, both versions should work independently since they\u0027re c++ programs.\n\nThat being said we should definitely start including the ANGLE version in the replay. As a comment for example.",
+      "parentUuid": "c306e4b0_ea924c10",
+      "revId": "43a6ca09e183ce68d23b98d905af8ce1f04095f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
