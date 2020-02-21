@@ -70,6 +70,30 @@
       "revId": "cc4f798d460251859eef0cb437683ba64af70437",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e28c2c89_16f85941",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-21T21:48:12Z",
+      "side": 1,
+      "message": "Ok, so the reason that standalone and chromium don\u0027t agree is that we haven\u0027t rolled //build and //buildtools past some changes to the formatting.\n\nThis patch does that now.",
+      "parentUuid": "8b8b53e8_97634273",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 3
+      },
+      "revId": "cc4f798d460251859eef0cb437683ba64af70437",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
