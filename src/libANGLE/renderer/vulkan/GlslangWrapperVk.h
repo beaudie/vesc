@@ -31,12 +31,12 @@ class GlslangWrapperVk
                                 const gl::ProgramState &programState,
                                 const gl::ProgramLinkedResources &resources,
                                 gl::ShaderMap<std::string> *shaderSourcesOut,
-                                ShaderInterfaceVariableInfoMap *variableInfoMapOut);
+                                ShaderMapInterfaceVariableInfoMap *variableInfoMapOut);
 
     static angle::Result GetShaderCode(vk::Context *context,
                                        const gl::Caps &glCaps,
                                        const gl::ShaderMap<std::string> &shaderSources,
-                                       const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                                       const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
                                        gl::ShaderMap<std::vector<uint32_t>> *shaderCodesOut);
 };
 }  // namespace rx
