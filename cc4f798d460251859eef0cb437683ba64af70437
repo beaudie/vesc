@@ -94,6 +94,30 @@
       "revId": "cc4f798d460251859eef0cb437683ba64af70437",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "74d7f35c_9cce9043",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-21T21:49:06Z",
+      "side": 1,
+      "message": "Oh, dang. You mean ANGLE hasn\u0027t? Or fuchsia/other projects haven\u0027t? I think ANGLE rolled pretty recently. \n\nAnyway glad you figured this out!",
+      "parentUuid": "e28c2c89_16f85941",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 3
+      },
+      "revId": "cc4f798d460251859eef0cb437683ba64af70437",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
