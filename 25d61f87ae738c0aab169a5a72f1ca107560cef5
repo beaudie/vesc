@@ -22,6 +22,30 @@
       "revId": "25d61f87ae738c0aab169a5a72f1ca107560cef5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9e367a2_ff777e1a",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-21T18:10:03Z",
+      "side": 1,
+      "message": "Oh right, got it for free with the last location.\n\nDone.",
+      "parentUuid": "5a0d2088_260eea3a",
+      "range": {
+        "startLine": 9,
+        "startChar": 24,
+        "endLine": 9,
+        "endChar": 36
+      },
+      "revId": "25d61f87ae738c0aab169a5a72f1ca107560cef5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
