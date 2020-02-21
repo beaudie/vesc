@@ -19,6 +19,8 @@
 #include "common/system_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/Query.h"
+#include "libANGLE/ResourceMap.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/capture_gles_2_0_autogen.h"
@@ -1960,6 +1962,39 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     {
         cap(CaptureScissor(replayState, true, currentScissor.x, currentScissor.y,
                            currentScissor.width, currentScissor.height));
+    }
+
+    // Create existing queries
+    const gl::QueryMap *queryMap = context->getQueriesForCapture();
+    for (const auto &queryIter : *queryMap)
+    {
+        ASSERT(queryIter.first);
+        if (!queryIter.second)
+        {
+            // The query was never created
+            continue;
+        }
+
+        gl::QueryID queryID     = queryIter.second->id();
+        gl::QueryType queryType = queryIter.second->getType();
+
+        cap(CaptureGenQueries(replayState, true, 1, &queryID));
+        MaybeCaptureUpdateResourceIDs(setupCalls);
+
+        // Begin and immediately end the query to generate the backing objects
+        cap(CaptureBeginQuery(replayState, true, queryType, queryID));
+        cap(CaptureEndQuery(replayState, true, queryType));
+    }
+
+    // TODO: Start any active queries (http://anglebug.com/3662)
+    const gl::ActiveQueryMap &activeQueries = apiState.getActiveQueriesForCapture();
+    for (const auto &activeQueryIter : activeQueries)
+    {
+        const gl::Query *activeQuery = activeQueryIter.get();
+        if (activeQuery)
+        {
+            UNIMPLEMENTED();
+        }
     }
 
     // Allow the replayState object to be destroyed conveniently.
