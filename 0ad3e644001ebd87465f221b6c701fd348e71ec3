@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be432b65_5e0ed4f3",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-21T14:24:53Z",
+      "side": 1,
+      "message": "Seeing this in action with a third dimension makes it clearer what these helpers are doing.\n/thumbs up",
+      "revId": "0ad3e644001ebd87465f221b6c701fd348e71ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee3b92a0_14ebf28e",
+        "filename": "src/tests/perf_tests/DrawCallPerfParams.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-21T14:24:53Z",
+      "side": 1,
+      "message": "Do you still need the D3D9 version?",
+      "revId": "0ad3e644001ebd87465f221b6c701fd348e71ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
