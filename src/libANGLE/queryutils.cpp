@@ -1395,6 +1395,14 @@ void QueryTexParameterfv(const Context *context,
     QueryTexParameterBase<false>(context, texture, pname, params);
 }
 
+void QueryTexParameterxv(const Context *context,
+                         const Texture *texture,
+                         GLenum pname,
+                         GLfixed *params)
+{
+    QueryTexParameterBase<false>(context, texture, pname, params);
+}
+
 void QueryTexParameteriv(const Context *context,
                          const Texture *texture,
                          GLenum pname,
@@ -1614,7 +1622,17 @@ void SetTexParameterf(Context *context, Texture *texture, GLenum pname, GLfloat 
     SetTexParameterBase<false>(context, texture, pname, &param);
 }
 
+void SetTexParameterx(Context *context, Texture *texture, GLenum pname, GLfixed param)
+{
+    SetTexParameterBase<false>(context, texture, pname, &param);
+}
+
 void SetTexParameterfv(Context *context, Texture *texture, GLenum pname, const GLfloat *params)
+{
+    SetTexParameterBase<false>(context, texture, pname, params);
+}
+
+void SetTexParameterxv(Context *context, Texture *texture, GLenum pname, const GLfixed *params)
 {
     SetTexParameterBase<false>(context, texture, pname, params);
 }
