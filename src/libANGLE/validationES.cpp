@@ -2131,8 +2131,8 @@ bool ValidateUniformCommonBase(Context *context,
 
     if (location == -1)
     {
-        // Silently ignore the uniform command
-        return false;
+        // These commands are ignored later in the Context code.
+        return true;
     }
 
     const auto &uniformLocations = program->getUniformLocations();
@@ -2146,8 +2146,8 @@ bool ValidateUniformCommonBase(Context *context,
     const auto &uniformLocation = uniformLocations[castedLocation];
     if (uniformLocation.ignored)
     {
-        // Silently ignore the uniform command
-        return false;
+        // These commands are ignored later in the Context code.
+        return true;
     }
 
     if (!uniformLocation.used())
