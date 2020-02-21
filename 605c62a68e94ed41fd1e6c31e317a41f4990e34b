@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "83edde1c_84d02587",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-21T16:52:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c2e0891_5ffca86a",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "605c62a68e94ed41fd1e6c31e317a41f4990e34b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7d3d9be_6449053f",
         "filename": "src/tests/perf_tests/restricted_traces/RestrictedTraceTests.md",
         "patchSetId": 1
