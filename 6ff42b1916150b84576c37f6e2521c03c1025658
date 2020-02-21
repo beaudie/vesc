@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f5cac76_c69864d5",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-21T15:46:01Z",
+      "side": 1,
+      "message": "Does the resource have recorded commands or is the resource used by recorded commands?\nMaybe usedByCommands() or usedInCommands()?",
+      "revId": "6ff42b1916150b84576c37f6e2521c03c1025658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
