@@ -111,4 +111,28 @@ TEST_P(TextureParameterTest, Set)
     }
 }
 
+// Checks that texture parameters can be set by glTexParameterx, glTexParameterxv
+// and get by glGetTexParameterxv.
+TEST_P(TextureParameterTest, SetFixedPoint)
+{
+    std::array<GLfixed, 4> params = {};
+
+    glTexParameterx(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    EXPECT_GL_NO_ERROR();
+
+    glGetTexParameterxv(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, params.data());
+    EXPECT_GL_NO_ERROR();
+    EXPECT_GL_TRUE(params[0]);
+
+    std::array<GLfixed, 4> cropRect = {0x10, 0x20, 0x10, 0x10};
+
+    glTexParameterxv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, cropRect.data());
+    EXPECT_GL_NO_ERROR();
+
+    glGetTexParameterxv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, params.data());
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_EQ(cropRect, params);
+}
+
 ANGLE_INSTANTIATE_TEST_ES1(TextureParameterTest);
