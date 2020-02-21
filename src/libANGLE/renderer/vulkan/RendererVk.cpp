@@ -2048,12 +2048,12 @@ void RendererVk::onCompletedSerial(Serial serial)
 
 void RendererVk::reloadVolkIfNeeded() const
 {
-    if (volkGetLoadedInstance() != mInstance)
+    if (mInstance && volkGetLoadedInstance() != mInstance)
     {
         volkLoadInstance(mInstance);
     }
 
-    if (volkGetLoadedDevice() != mDevice)
+    if (mDevice && volkGetLoadedDevice() != mDevice)
     {
         volkLoadDevice(mDevice);
     }
