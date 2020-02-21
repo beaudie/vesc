@@ -2212,7 +2212,7 @@ angle::Result ContextVk::insertEventMarker(GLsizei length, const char *marker)
         return angle::Result::Continue;
 
     vk::PrimaryCommandBuffer *primary;
-    ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+    ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
 
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(GL_DEBUG_SOURCE_APPLICATION, marker, &label);
@@ -2227,7 +2227,7 @@ angle::Result ContextVk::pushGroupMarker(GLsizei length, const char *marker)
         return angle::Result::Continue;
 
     vk::PrimaryCommandBuffer *primary;
-    ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+    ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
 
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(GL_DEBUG_SOURCE_APPLICATION, marker, &label);
@@ -2242,7 +2242,7 @@ angle::Result ContextVk::popGroupMarker()
         return angle::Result::Continue;
 
     vk::PrimaryCommandBuffer *primary;
-    ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+    ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
     primary->endDebugUtilsLabelEXT();
 
     return angle::Result::Continue;
@@ -2257,7 +2257,7 @@ angle::Result ContextVk::pushDebugGroup(const gl::Context *context,
         return angle::Result::Continue;
 
     vk::PrimaryCommandBuffer *primary;
-    ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+    ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
 
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(source, message.c_str(), &label);
@@ -2272,7 +2272,7 @@ angle::Result ContextVk::popDebugGroup(const gl::Context *context)
         return angle::Result::Continue;
 
     vk::PrimaryCommandBuffer *primary;
-    ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+    ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
     primary->endDebugUtilsLabelEXT();
 
     return angle::Result::Continue;
@@ -3090,7 +3090,7 @@ angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageF
     }
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(getOutsideRenderPassCommandBuffer(&commandBuffer));
+    ANGLE_TRY(endRenderPassAndGetCommandBuffer(&commandBuffer));
 
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
@@ -3836,7 +3836,7 @@ angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
     if (image->isLayoutChangeNecessary(imageLayout))
     {
         vk::CommandBuffer *commandBuffer;
-        ANGLE_TRY(getOutsideRenderPassCommandBuffer(&commandBuffer));
+        ANGLE_TRY(endRenderPassAndGetCommandBuffer(&commandBuffer));
         image->changeLayout(aspectFlags, imageLayout, commandBuffer);
     }
     image->retain(&mResourceUseList);
@@ -3853,7 +3853,7 @@ angle::Result ContextVk::onImageWrite(VkImageAspectFlags aspectFlags,
     ASSERT(image->isLayoutChangeNecessary(imageLayout));
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(getOutsideRenderPassCommandBuffer(&commandBuffer));
+    ANGLE_TRY(endRenderPassAndGetCommandBuffer(&commandBuffer));
 
     image->changeLayout(aspectFlags, imageLayout, commandBuffer);
     image->retain(&mResourceUseList);
@@ -3861,15 +3861,16 @@ angle::Result ContextVk::onImageWrite(VkImageAspectFlags aspectFlags,
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::beginRenderPass(const vk::Framebuffer &framebuffer,
-                                         const gl::Rectangle &renderArea,
-                                         const vk::RenderPassDesc &renderPassDesc,
-                                         const vk::AttachmentOpsArray &renderPassAttachmentOps,
-                                         const std::vector<VkClearValue> &clearValues,
-                                         vk::CommandBuffer **commandBufferOut)
+angle::Result ContextVk::flushAndBeginRenderPass(
+    const vk::Framebuffer &framebuffer,
+    const gl::Rectangle &renderArea,
+    const vk::RenderPassDesc &renderPassDesc,
+    const vk::AttachmentOpsArray &renderPassAttachmentOps,
+    const std::vector<VkClearValue> &clearValues,
+    vk::CommandBuffer **commandBufferOut)
 {
     vk::PrimaryCommandBuffer *primary;
-    ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+    ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
     mRenderPassCommands.beginRenderPass(framebuffer, renderArea, renderPassDesc,
                                         renderPassAttachmentOps, clearValues, commandBufferOut);
     return angle::Result::Continue;
@@ -3891,7 +3892,7 @@ void ContextVk::onRenderPassImageWrite(VkImageAspectFlags aspectFlags,
 angle::Result ContextVk::syncExternalMemory()
 {
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(getOutsideRenderPassCommandBuffer(&commandBuffer));
+    ANGLE_TRY(endRenderPassAndGetCommandBuffer(&commandBuffer));
 
     VkMemoryBarrier memoryBarrier = {};
     memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
