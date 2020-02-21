@@ -99,6 +99,12 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
                             gl::ShaderMap<ShaderInterfaceVariableInfoMap> *variableInfoMapOut);
 
+angle::Result TransformSpirvCode(
+    const GlslangErrorCallback &callback,
+    const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap,
+    gl::ShaderMap<SpirvBlob> &initialSpirvBlobs,
+    gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
+
 angle::Result GlslangGetShaderSpirvCode(
     const GlslangErrorCallback &callback,
     const gl::Caps &glCaps,

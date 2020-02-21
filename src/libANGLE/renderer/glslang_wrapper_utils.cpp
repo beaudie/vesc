@@ -1887,16 +1887,12 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     AssignNonTextureBindings(options, programState, variableInfoMapOut);
 }
 
-angle::Result GlslangGetShaderSpirvCode(
+angle::Result TransformSpirvCode(
     const GlslangErrorCallback &callback,
-    const gl::Caps &glCaps,
-    const gl::ShaderMap<std::string> &shaderSources,
     const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap,
+    gl::ShaderMap<SpirvBlob> &initialSpirvBlobs,
     gl::ShaderMap<SpirvBlob> *spirvBlobsOut)
 {
-    gl::ShaderMap<SpirvBlob> initialSpirvBlobs;
-    ANGLE_TRY(GetShaderSpirvCode(callback, glCaps, shaderSources, &initialSpirvBlobs));
-
     // Transform the SPIR-V code by assigning location/set/binding values.
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
@@ -1918,5 +1914,18 @@ angle::Result GlslangGetShaderSpirvCode(
     }
 
     return angle::Result::Continue;
+}
+
+angle::Result GlslangGetShaderSpirvCode(
+    const GlslangErrorCallback &callback,
+    const gl::Caps &glCaps,
+    const gl::ShaderMap<std::string> &shaderSources,
+    const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap,
+    gl::ShaderMap<SpirvBlob> *spirvBlobsOut)
+{
+    gl::ShaderMap<SpirvBlob> initialSpirvBlobs;
+    ANGLE_TRY(GetShaderSpirvCode(callback, glCaps, shaderSources, &initialSpirvBlobs));
+
+    return TransformSpirvCode(callback, variableInfoMap, initialSpirvBlobs, spirvBlobsOut);
 }
 }  // namespace rx
