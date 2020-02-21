@@ -17,7 +17,7 @@ angle_shared_library("fuchsia_egl") {
   public = [
     "fuchsia_egl.h",
   ]
-  public_configs = [":config"]
+  public_configs = [ ":config" ]
   deps = [
     ":backend",
   ]

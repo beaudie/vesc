@@ -100,7 +100,9 @@ angle_source_set("angle_util_loader_headers") {
     sources += [ "windows/wgl_loader_autogen.h" ]
   }
 
-  public_deps = [ "$angle_root:includes" ]
+  public_deps = [
+    "$angle_root:includes",
+  ]
 
   public_configs = [ ":angle_util_loader_headers_config" ]
 }
@@ -118,7 +120,9 @@ angle_source_set("angle_util_loader") {
     sources += [ "windows/wgl_loader_autogen.cpp" ]
   }
 
-  deps = [ ":angle_util_loader_headers" ]
+  deps = [
+    ":angle_util_loader_headers",
+  ]
 
   public_configs += [
     "$angle_root:no_gl_prototypes",
@@ -253,7 +257,9 @@ config("angle_test_util_config") {
 
 angle_source_set("angle_test_utils") {
   public_configs = [ ":angle_test_util_config" ]
-  deps = [ "$angle_root:angle_common" ]
+  deps = [
+    "$angle_root:angle_common",
+  ]
   sources = [
     "Timer.cpp",
     "Timer.h",

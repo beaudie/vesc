@@ -172,7 +172,9 @@ group("angle_vulkan_entry_points") {
       "//third_party/fuchsia-sdk/sdk/pkg/vulkan",
     ]
   } else if (!is_android && !is_ggp) {
-    data_deps = [ "$angle_root/third_party/vulkan-loader/src:libvulkan" ]
+    data_deps = [
+      "$angle_root/third_party/vulkan-loader/src:libvulkan",
+    ]
   }
 }
 
