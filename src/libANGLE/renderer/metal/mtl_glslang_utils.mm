@@ -43,18 +43,19 @@ GlslangSourceOptions CreateSourceOptions()
 void GlslangGetShaderSource(const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
                             gl::ShaderMap<std::string> *shaderSourcesOut,
-                            ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+                            gl::ShaderMap<ShaderInterfaceVariableInfoMap> *variableInfoMapOut)
 {
     GlslangSourceOptions options = CreateSourceOptions();
     rx::GlslangGetShaderSource(options, programState, resources, shaderSourcesOut,
                                variableInfoMapOut);
 }
 
-angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
-                                        const gl::Caps &glCaps,
-                                        const gl::ShaderMap<std::string> &shaderSources,
-                                        const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                        gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
+angle::Result GlslangGetShaderSpirvCode(
+    ErrorHandler *context,
+    const gl::Caps &glCaps,
+    const gl::ShaderMap<std::string> &shaderSources,
+    const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap,
+    gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
 {
     return rx::GlslangGetShaderSpirvCode(
         [context](GlslangError error) { return HandleError(context, error); }, glCaps,
