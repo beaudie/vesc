@@ -1891,6 +1891,15 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         }
     }
 
+    // Transform Feedback
+    const gl::TransformFeedbackMap *xfbMap = context->getTransformFeedbacksForCapture();
+    for (const auto &xfbIter : *xfbMap)
+    {
+        gl::TransformFeedbackID xfbID = xfbIter.second->id();
+        cap(CaptureGenTransformFeedbacks(replayState, true, 1, &xfbID));
+        MaybeCaptureUpdateResourceIDs(setupCalls);
+    }
+
     // Allow the replayState object to be destroyed conveniently.
     replayState.setBufferBinding(context, gl::BufferBinding::Array, nullptr);
 }
