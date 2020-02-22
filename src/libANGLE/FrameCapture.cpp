@@ -1630,6 +1630,27 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             cap(CaptureDeleteShader(replayState, true, tempShaderID));
         }
 
+        // Gather XFB varyings
+        std::vector<std::string> varyings;
+        GLenum type = program->getState().getTransformFeedbackBufferMode();
+        for (gl::TransformFeedbackVarying xfbVarying :
+             program->getState().getLinkedTransformFeedbackVaryings())
+        {
+            varyings.push_back(xfbVarying.nameWithArrayIndex());
+        }
+
+        if (varyings.size() > 0)
+        {
+            const char **varyingsStrings = new const char *[varyings.size()];
+            for (uint32_t i = 0; i < varyings.size(); ++i)
+            {
+                varyingsStrings[i] = varyings[i].data();
+            }
+
+            cap(CaptureTransformFeedbackVaryings(
+                replayState, true, id, static_cast<GLint>(varyings.size()), varyingsStrings, type));
+        }
+
         cap(CaptureLinkProgram(replayState, true, id));
     }
 
