@@ -22,6 +22,30 @@
       "revId": "8c9d52131f97a9aac84d24cfd6b135643d1705c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a6dd05d_9455a531",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-02-22T03:33:58Z",
+      "side": 1,
+      "message": "AIUI that\u0027s correct; we have to include all of the stages we want to synchronize, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT would also do nothing.",
+      "parentUuid": "6a5c6812_b81a75ec",
+      "range": {
+        "startLine": 129,
+        "startChar": 63,
+        "endLine": 129,
+        "endChar": 97
+      },
+      "revId": "8c9d52131f97a9aac84d24cfd6b135643d1705c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
