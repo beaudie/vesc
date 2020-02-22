@@ -1721,6 +1721,29 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             cap(CaptureDeleteShader(replayState, true, tempShaderID));
         }
 
+        // Gather XFB varyings
+        std::vector<std::string> varyings;
+        GLenum type = program->getState().getTransformFeedbackBufferMode();
+        for (gl::TransformFeedbackVarying xfbVarying :
+             program->getState().getLinkedTransformFeedbackVaryings())
+        {
+            varyings.push_back(xfbVarying.nameWithArrayIndex());
+        }
+
+        if (varyings.size() > 0)
+        {
+            const char **varyingsStrings = new const char *[varyings.size()];
+            for (uint32_t i = 0; i < varyings.size(); ++i)
+            {
+                varyingsStrings[i] = varyings[i].data();
+            }
+
+            cap(CaptureTransformFeedbackVaryings(
+                replayState, true, id, static_cast<GLint>(varyings.size()), varyingsStrings, type));
+
+            delete[] varyingsStrings;
+        }
+
         cap(CaptureLinkProgram(replayState, true, id));
         CaptureUpdateUniformLocations(program, setupCalls);
     }
@@ -1995,6 +2018,21 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         {
             UNIMPLEMENTED();
         }
+    }
+
+    // Transform Feedback
+    const gl::TransformFeedbackMap *xfbMap = context->getTransformFeedbacksForCapture();
+    for (const auto &xfbIter : *xfbMap)
+    {
+        if (!xfbIter.second)
+        {
+            // The object was never created
+            continue;
+        }
+
+        gl::TransformFeedbackID xfbID = xfbIter.second->id();
+        cap(CaptureGenTransformFeedbacks(replayState, true, 1, &xfbID));
+        MaybeCaptureUpdateResourceIDs(setupCalls);
     }
 
     // Allow the replayState object to be destroyed conveniently.
