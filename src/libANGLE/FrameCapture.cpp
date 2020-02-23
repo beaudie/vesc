@@ -1896,9 +1896,15 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     const gl::QueryMap *queryMap = context->getQueriesForCapture();
     for (const auto &queryIter : *queryMap)
     {
-        gl::QueryID queryID = queryIter.second->id();
+        gl::QueryID queryID     = queryIter.second->id();
+        gl::QueryType queryType = queryIter.second->getType();
+
         cap(CaptureGenQueries(replayState, true, 1, &queryID));
         MaybeCaptureUpdateResourceIDs(setupCalls);
+
+        // Begin and immediately end the query to generate the backing objects
+        cap(CaptureBeginQuery(replayState, true, queryType, queryID));
+        cap(CaptureEndQuery(replayState, true, queryType));
     }
 
     // TODO: Start any active queries
