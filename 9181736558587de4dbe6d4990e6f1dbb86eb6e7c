@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee84a018_c6dc9623",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-23T19:15:31Z",
+      "side": 0,
+      "message": "Can you mention this bug in the CL as well?",
+      "range": {
+        "startLine": 958,
+        "startChar": 46,
+        "endLine": 958,
+        "endChar": 50
+      },
+      "revId": "9181736558587de4dbe6d4990e6f1dbb86eb6e7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
