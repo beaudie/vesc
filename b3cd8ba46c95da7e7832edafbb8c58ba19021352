@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c0125c3_07bfb0fd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-02-24T19:32:42Z",
+      "side": 1,
+      "message": "My confusion is the endRenderPass here, which has the similar name as vkCmdEndRenderPass but actually not exact the same. The endRenderPass itself is only two line of code and this function is also two lines of code. I personally find juet get rid of this compound APIwith just two/three lines of code is much easier to understand. For example, in the above copyToBuffer()\n{\n....\n    // get rid of onRenderPassFinished and merge what onRenderPassFinished() does into flushRenderPassToPrimaryCommandBuffer; \n    contextVk-\u003eflushRenderPassToPrimaryCommandBuffer();\n    commandBuffer \u003d contextVk-\u003egetOutsideCommandBuffer();\n}",
+      "range": {
+        "startLine": 594,
+        "startChar": 18,
+        "endLine": 594,
+        "endChar": 50
+      },
+      "revId": "b3cd8ba46c95da7e7832edafbb8c58ba19021352",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
