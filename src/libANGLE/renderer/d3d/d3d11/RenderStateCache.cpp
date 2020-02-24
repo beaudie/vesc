@@ -45,27 +45,53 @@ void RenderStateCache::clear()
 // static
 d3d11::BlendStateKey RenderStateCache::GetBlendStateKey(const gl::Context *context,
                                                         Framebuffer11 *framebuffer11,
-                                                        const gl::BlendState &blendState,
+                                                        const gl::BlendStateArray &blendStateArray,
                                                         bool sampleAlphaToCoverage)
 {
     d3d11::BlendStateKey key;
     const gl::AttachmentList &colorbuffers = framebuffer11->getColorAttachmentsForRender(context);
-    const UINT8 blendStateMask =
-        gl_d3d11::ConvertColorMask(blendState.colorMaskRed, blendState.colorMaskGreen,
-                                   blendState.colorMaskBlue, blendState.colorMaskAlpha);
 
-    key.blendState            = blendState;
+    // Filling all elements of the BlendStateArray inside the key for the caching to work correctly.
+    for (size_t i = 0; i < blendStateArray.size(); i++)
+    {
+        const gl::BlendState &blendState = blendStateArray[i];
+        gl::BlendState &keyBlendState    = key.blendStateArray[i];
+
+        // With blending disabled, factors and equations are ignored when building
+        // D3D11_RENDER_TARGET_BLEND_DESC, so we can reduce the amount of unique keys by enforcing
+        // default values.
+        keyBlendState = gl::BlendState();
+        if (blendState.blend)
+        {
+            keyBlendState.blend              = true;
+            keyBlendState.sourceBlendRGB     = blendState.sourceBlendRGB;
+            keyBlendState.sourceBlendAlpha   = blendState.sourceBlendAlpha;
+            keyBlendState.destBlendRGB       = blendState.destBlendRGB;
+            keyBlendState.destBlendAlpha     = blendState.destBlendAlpha;
+            keyBlendState.blendEquationRGB   = blendState.blendEquationRGB;
+            keyBlendState.blendEquationAlpha = blendState.blendEquationAlpha;
+        }
+
+        keyBlendState.colorMaskRed   = blendState.colorMaskRed;
+        keyBlendState.colorMaskGreen = blendState.colorMaskGreen;
+        keyBlendState.colorMaskBlue  = blendState.colorMaskBlue;
+        keyBlendState.colorMaskAlpha = blendState.colorMaskAlpha;
+    }
     key.sampleAlphaToCoverage = sampleAlphaToCoverage ? 1 : 0;
 
+    // TODO: consider merging this loop with the previous one.
     for (size_t i = 0; i < colorbuffers.size(); i++)
     {
         const gl::FramebufferAttachment *attachment = colorbuffers[i];
 
         if (attachment)
         {
-            key.rtvMax = static_cast<uint16_t>(i) + 1;
-            key.rtvMasks[i] =
-                (gl_d3d11::GetColorMask(*attachment->getFormat().info)) & blendStateMask;
+            key.rtvMax      = static_cast<uint16_t>(i) + 1;
+            key.rtvMasks[i] = (gl_d3d11::GetColorMask(*attachment->getFormat().info)) &
+                              gl_d3d11::ConvertColorMask(blendStateArray[i].colorMaskRed,
+                                                         blendStateArray[i].colorMaskGreen,
+                                                         blendStateArray[i].colorMaskBlue,
+                                                         blendStateArray[i].colorMaskAlpha);
         }
     }
 
@@ -88,31 +114,35 @@ angle::Result RenderStateCache::getBlendState(const gl::Context *context,
 
     // Create a new blend state and insert it into the cache
     D3D11_BLEND_DESC blendDesc;
-    D3D11_RENDER_TARGET_BLEND_DESC &rtDesc0 = blendDesc.RenderTarget[0];
-    const gl::BlendState &blendState        = key.blendState;
+    const gl::BlendStateArray &blendStateArray = key.blendStateArray;
 
     blendDesc.AlphaToCoverageEnable  = key.sampleAlphaToCoverage != 0 ? TRUE : FALSE;
     blendDesc.IndependentBlendEnable = key.rtvMax > 1 ? TRUE : FALSE;
 
-    rtDesc0 = {};
+    // D3D11 API always accepts an array of blend states. Its validity depends on the hardware
+    // feature level. Given that we do not expose GL entrypoints that set per-buffer blend states on
+    // systems lower than FL10_1, this array will be always valid.
 
-    if (blendState.blend)
+    ASSERT(blendStateArray.size() >= D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT);
+    for (size_t i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++)
     {
-        rtDesc0.BlendEnable    = true;
-        rtDesc0.SrcBlend       = gl_d3d11::ConvertBlendFunc(blendState.sourceBlendRGB, false);
-        rtDesc0.DestBlend      = gl_d3d11::ConvertBlendFunc(blendState.destBlendRGB, false);
-        rtDesc0.BlendOp        = gl_d3d11::ConvertBlendOp(blendState.blendEquationRGB);
-        rtDesc0.SrcBlendAlpha  = gl_d3d11::ConvertBlendFunc(blendState.sourceBlendAlpha, true);
-        rtDesc0.DestBlendAlpha = gl_d3d11::ConvertBlendFunc(blendState.destBlendAlpha, true);
-        rtDesc0.BlendOpAlpha   = gl_d3d11::ConvertBlendOp(blendState.blendEquationAlpha);
-    }
+        D3D11_RENDER_TARGET_BLEND_DESC &rtDesc = blendDesc.RenderTarget[i];
 
-    rtDesc0.RenderTargetWriteMask = key.rtvMasks[0];
+        rtDesc = {};  // otherwise its content may be undefined
 
-    for (unsigned int i = 1; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++)
-    {
-        blendDesc.RenderTarget[i]                       = rtDesc0;
-        blendDesc.RenderTarget[i].RenderTargetWriteMask = key.rtvMasks[i];
+        const gl::BlendState &blendState = blendStateArray[i];
+        if (blendState.blend)
+        {
+            rtDesc.BlendEnable    = true;
+            rtDesc.SrcBlend       = gl_d3d11::ConvertBlendFunc(blendState.sourceBlendRGB, false);
+            rtDesc.DestBlend      = gl_d3d11::ConvertBlendFunc(blendState.destBlendRGB, false);
+            rtDesc.BlendOp        = gl_d3d11::ConvertBlendOp(blendState.blendEquationRGB);
+            rtDesc.SrcBlendAlpha  = gl_d3d11::ConvertBlendFunc(blendState.sourceBlendAlpha, true);
+            rtDesc.DestBlendAlpha = gl_d3d11::ConvertBlendFunc(blendState.destBlendAlpha, true);
+            rtDesc.BlendOpAlpha   = gl_d3d11::ConvertBlendOp(blendState.blendEquationAlpha);
+        }
+
+        rtDesc.RenderTargetWriteMask = key.rtvMasks[i];
     }
 
     d3d11::BlendState d3dBlendState;
