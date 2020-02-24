@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ac638b2_f9f2e2b6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-24T17:54:35Z",
+      "side": 0,
+      "message": "why\u0027d you remove this check? shouldn\u0027t we keep the conversion if the index buffer is not dirty?",
+      "range": {
+        "startLine": 887,
+        "startChar": 59,
+        "endLine": 888,
+        "endChar": 54
+      },
+      "revId": "39087f4a64d87f1bee1f06ad68d6797c60881c02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

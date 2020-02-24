@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95114ff2_d0343b2d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-24T17:54:35Z",
+      "side": 1,
+      "message": "nit: can you make a local alias variable for bufferVk-\u003egetBuffer()?",
+      "range": {
+        "startLine": 892,
+        "startChar": 16,
+        "endLine": 892,
+        "endChar": 37
+      },
+      "revId": "3c873ca8afb28891c5f22e397aed141320157122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7749e5eb_399ec3b0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-24T17:54:35Z",
+      "side": 1,
+      "message": "nit: you can call buffer.getDeviceMemory().map directly, storing a uint8_t.",
+      "range": {
+        "startLine": 908,
+        "startChar": 19,
+        "endLine": 908,
+        "endChar": 61
+      },
+      "revId": "3c873ca8afb28891c5f22e397aed141320157122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d2964af_dd1af098",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-24T17:54:35Z",
+      "side": 1,
+      "message": "nit: Google C++ style guide recommends using C++ style casts:\n\nhttps://google.github.io/styleguide/cppguide.html#Casting",
+      "range": {
+        "startLine": 909,
+        "startChar": 26,
+        "endLine": 909,
+        "endChar": 72
+      },
+      "revId": "3c873ca8afb28891c5f22e397aed141320157122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b65c0218_abfa9b46",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-24T17:54:35Z",
+      "side": 1,
+      "message": "nit: isHostVisible for consistency",
+      "range": {
+        "startLine": 478,
+        "startChar": 9,
+        "endLine": 478,
+        "endChar": 20
+      },
+      "revId": "3c873ca8afb28891c5f22e397aed141320157122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bf6f233_e94fadb4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-24T17:54:35Z",
+      "side": 1,
+      "message": "nit: !\u003d 0 to explicitly convert to bool",
+      "range": {
+        "startLine": 480,
+        "startChar": 15,
+        "endLine": 480,
+        "endChar": 75
+      },
+      "revId": "3c873ca8afb28891c5f22e397aed141320157122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
