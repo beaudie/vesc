@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b25ec8bc_f2e11ac2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2051,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-02-24T21:22:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d539058c_a02d7ffd",
+      "range": {
+        "startLine": 2051,
+        "startChar": 8,
+        "endLine": 2051,
+        "endChar": 18
+      },
+      "revId": "f499b0cafe6bcee7830444b37f6f19334c997b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d5f0671_3e5ad5b2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "f499b0cafe6bcee7830444b37f6f19334c997b59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "240250e8_71c0c7e6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2056,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-02-24T21:22:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d5f0671_3e5ad5b2",
+      "range": {
+        "startLine": 2056,
+        "startChar": 8,
+        "endLine": 2056,
+        "endChar": 16
+      },
+      "revId": "f499b0cafe6bcee7830444b37f6f19334c997b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
