@@ -355,6 +355,7 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
 
     // Does not actually free memory
     gl::AttachmentList colorAttachmentsForRender;
+    mColorAttachmentsForRenderMask.reset();
 
     const auto &colorAttachments = mState.getColorAttachments();
     const auto &drawBufferStates = mState.getDrawBufferStates();
@@ -371,10 +372,12 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
             ASSERT(drawBufferState == GL_BACK ||
                    drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex));
             colorAttachmentsForRender.push_back(&colorAttachment);
+            mColorAttachmentsForRenderMask.set(attachmentIndex);
         }
         else if (!features.mrtPerfWorkaround.enabled)
         {
             colorAttachmentsForRender.push_back(nullptr);
+            mColorAttachmentsForRenderMask.set(attachmentIndex);
         }
     }
 
