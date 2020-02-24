@@ -300,6 +300,9 @@ struct Extensions
     // GL_EXT_draw_buffers
     bool drawBuffers = false;
 
+    // GL_OES_draw_buffers_indexed
+    bool drawBuffersIndexed = false;
+
     // GL_EXT_texture_filter_anisotropic
     bool textureFilterAnisotropic = false;
     GLfloat maxTextureAnisotropy  = 0.0f;
