@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04498895_8a014770",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-24T21:44:11Z",
+      "side": 0,
+      "message": "I\u0027m a little bit worried that including inputs [ \".git/HEAD\" ] is incorrect without this script checking. Can you verify on Win and/or Linux that it builds ok without a .git folder? This originally was breaking tarball source-only builds.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 21
+      },
+      "revId": "a889d30fb71457bc99c7ea0cf82ffb7054d7b2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0ab9f03_7cdd2a16",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-24T21:44:11Z",
+      "side": 0,
+      "message": "i like keeping a subfolder scoping.. #include \"commit.h\" in a global namespace is a bit too potentially overlapping.",
+      "range": {
+        "startLine": 469,
+        "startChar": 45,
+        "endLine": 469,
+        "endChar": 49
+      },
+      "revId": "a889d30fb71457bc99c7ea0cf82ffb7054d7b2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
