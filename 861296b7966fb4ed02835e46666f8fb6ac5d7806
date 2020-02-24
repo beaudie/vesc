@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ff1f1c0_fbb2622e",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-24T20:44:03Z",
+      "side": 1,
+      "message": "or flushImpl",
+      "range": {
+        "startLine": 37,
+        "startChar": 70,
+        "endLine": 37,
+        "endChar": 74
+      },
+      "revId": "861296b7966fb4ed02835e46666f8fb6ac5d7806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55d52cdc_3f9b62e9",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-24T20:44:03Z",
+      "side": 1,
+      "message": "Landed already?",
+      "range": {
+        "startLine": 51,
+        "startChar": 15,
+        "endLine": 51,
+        "endChar": 20
+      },
+      "revId": "861296b7966fb4ed02835e46666f8fb6ac5d7806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0dd5030_64f82d30",
+        "filename": "src/libANGLE/renderer/vulkan/doc/FastOpenGLStateTransitions.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-24T20:44:03Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 46,
+        "startChar": 33,
+        "endLine": 46,
+        "endChar": 35
+      },
+      "revId": "861296b7966fb4ed02835e46666f8fb6ac5d7806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
