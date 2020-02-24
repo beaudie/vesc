@@ -2705,10 +2705,30 @@ const char *ValidateDrawStates(const Context *context)
         }
     }
 
-    if (!extensions.floatBlend && context->getState().isBlendEnabled() &&
-        framebuffer->hasActiveFloat32ColorAttachment())
+    if (!extensions.floatBlend)
     {
-        return kUnsupportedFloatBlending;
+        const DrawBufferMask blendEnabledActiveFloat32ColorAttachmentDrawBufferMask =
+            context->getState().getBlendEnabledDrawBufferMask() &
+            framebuffer->getActiveFloat32ColorAttachmentDrawBufferMask();
+        if (blendEnabledActiveFloat32ColorAttachmentDrawBufferMask.any())
+        {
+            return kUnsupportedFloatBlending;
+        }
+    }
+
+    if (context->getLimitations().noSimultaneousConstantColorAndAlphaBlendFunc ||
+        context->getExtensions().webglCompatibility)
+    {
+        if (state.hasSimultaneousConstantColorAndAlphaBlendFunc())
+        {
+            if (context->getExtensions().webglCompatibility)
+            {
+                return kInvalidConstantColor;
+            }
+
+            WARN() << kConstantColorAlphaLimitation;
+            return kConstantColorAlphaLimitation;
+        }
     }
 
     if (!framebuffer->isComplete(context))
