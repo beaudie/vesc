@@ -22,6 +22,30 @@
       "revId": "39087f4a64d87f1bee1f06ad68d6797c60881c02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b80161a_ccc2a856",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-02-24T20:14:13Z",
+      "side": 0,
+      "message": "I still have it, but have split it out to its own if statement in line 903. The reason is that for CPU convert I am only converting what needed, which means  if indexCount changes, I still have to reconvert again, and I do not have code tracking indexCount change. So for CPU path, I basically is falling back to non-elementBuffer code path that always does the conversion. Like I said, for the usage I am seeing this actually not bad at all. Convert 4 indices form UB to US is cheap enough to acceptable (and is some other native drivers do as well). I can do another effort try to do whole buffer conversion at once and able to use the dirty bit check as well, I will put on my todo list as lower priority once all the big perf hurdles go away.",
+      "parentUuid": "0ac638b2_f9f2e2b6",
+      "range": {
+        "startLine": 887,
+        "startChar": 59,
+        "endLine": 888,
+        "endChar": 54
+      },
+      "revId": "39087f4a64d87f1bee1f06ad68d6797c60881c02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
