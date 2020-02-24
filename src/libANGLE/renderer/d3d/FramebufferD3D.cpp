@@ -34,7 +34,7 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
     ClearParameters clearParams;
     memset(&clearParams, 0, sizeof(ClearParameters));
 
-    const auto &blendState = state.getBlendState();
+    const auto &blendStateArray = state.getBlendStateArray();
 
     for (unsigned int i = 0; i < ArraySize(clearParams.clearColor); i++)
     {
@@ -42,10 +42,6 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
     }
     clearParams.colorF           = state.getColorClearValue();
     clearParams.colorType        = GL_FLOAT;
-    clearParams.colorMaskRed     = blendState.colorMaskRed;
-    clearParams.colorMaskGreen   = blendState.colorMaskGreen;
-    clearParams.colorMaskBlue    = blendState.colorMaskBlue;
-    clearParams.colorMaskAlpha   = blendState.colorMaskAlpha;
     clearParams.clearDepth       = false;
     clearParams.depthValue       = state.getDepthClearValue();
     clearParams.clearStencil     = false;
@@ -61,7 +57,11 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
         {
             for (unsigned int i = 0; i < ArraySize(clearParams.clearColor); i++)
             {
-                clearParams.clearColor[i] = true;
+                clearParams.clearColor[i]     = true;
+                clearParams.colorMaskRed[i]   = blendStateArray[i].colorMaskRed;
+                clearParams.colorMaskGreen[i] = blendStateArray[i].colorMaskGreen;
+                clearParams.colorMaskBlue[i]  = blendStateArray[i].colorMaskBlue;
+                clearParams.colorMaskAlpha[i] = blendStateArray[i].colorMaskAlpha;
             }
         }
     }
@@ -355,6 +355,7 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
 
     // Does not actually free memory
     gl::AttachmentList colorAttachmentsForRender;
+    mColorAttachmentsForRenderMask.reset();
 
     const auto &colorAttachments = mState.getColorAttachments();
     const auto &drawBufferStates = mState.getDrawBufferStates();
@@ -371,10 +372,12 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
             ASSERT(drawBufferState == GL_BACK ||
                    drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex));
             colorAttachmentsForRender.push_back(&colorAttachment);
+            mColorAttachmentsForRenderMask.set(attachmentIndex);
         }
         else if (!features.mrtPerfWorkaround.enabled)
         {
             colorAttachmentsForRender.push_back(nullptr);
+            mColorAttachmentsForRenderMask.set(attachmentIndex);
         }
     }
 
