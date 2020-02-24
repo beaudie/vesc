@@ -107,7 +107,8 @@ class State : angle::NonCopyable
 
     // State chunk getters
     const RasterizerState &getRasterizerState() const;
-    const BlendState &getBlendState() const { return mBlend; }
+    const BlendState &getBlendState() const { return mBlendStateArray[0]; }
+    const BlendStateArray &getBlendStateArray() const { return mBlendStateArray; }
     const DepthStencilState &getDepthStencilState() const;
 
     // Clear behavior setters & state parameter block generation function
@@ -121,6 +122,7 @@ class State : angle::NonCopyable
 
     // Write mask manipulation
     void setColorMask(bool red, bool green, bool blue, bool alpha);
+    void setColorMask(bool red, bool green, bool blue, bool alpha, GLuint index);
     void setDepthMask(bool mask);
 
     // Discard toggle & query
@@ -146,11 +148,24 @@ class State : angle::NonCopyable
     float getFarPlane() const { return mFarZ; }
 
     // Blend state manipulation
-    bool isBlendEnabled() const { return mBlend.blend; }
+    bool isBlendEnabled() const { return mBlendStateArray[0].blend; }
+    bool isBlendEnabled(GLuint index) const
+    {
+        ASSERT(index < mBlendStateArray.size());
+        return mBlendStateArray[index].blend;
+    }
+    DrawBufferMask getBlendEnabledDrawBufferMask() const { return mBlendEnabledDrawBuffers; }
     void setBlend(bool enabled);
+    void setBlend(bool enabled, GLuint index);
     void setBlendFactors(GLenum sourceRGB, GLenum destRGB, GLenum sourceAlpha, GLenum destAlpha);
+    void setBlendFactors(GLenum sourceRGB,
+                         GLenum destRGB,
+                         GLenum sourceAlpha,
+                         GLenum destAlpha,
+                         GLuint index);
     void setBlendColor(float red, float green, float blue, float alpha);
     void setBlendEquation(GLenum rgbEquation, GLenum alphaEquation);
+    void setBlendEquation(GLenum rgbEquation, GLenum alphaEquation, GLuint index);
     const ColorF &getBlendColor() const { return mBlendColor; }
 
     // Stencil state maniupulation
@@ -212,7 +227,9 @@ class State : angle::NonCopyable
 
     // Generic state toggle & query
     void setEnableFeature(GLenum feature, bool enabled);
+    void setEnableFeature(GLenum feature, bool enabled, GLuint index);
     bool getEnableFeature(GLenum feature) const;
+    bool getEnableFeature(GLenum feature, GLuint index) const;
 
     // Line width state setter
     void setLineWidth(GLfloat width);
@@ -715,6 +732,17 @@ class State : angle::NonCopyable
         return *mShaderProgramManager;
     }
 
+    bool hasConstantAlphaBlendFunc() const
+    {
+        return (mBlendFuncConstantAlphaDrawBuffers & mBlendEnabledDrawBuffers).any();
+    }
+
+    bool hasSimultaneousConstantColorAndAlphaBlendFunc() const
+    {
+        return (mBlendFuncConstantColorDrawBuffers & mBlendEnabledDrawBuffers).any() &&
+               hasConstantAlphaBlendFunc();
+    }
+
   private:
     friend class Context;
 
@@ -806,7 +834,7 @@ class State : angle::NonCopyable
     bool mScissorTest;
     Rectangle mScissor;
 
-    BlendState mBlend;
+    BlendStateArray mBlendStateArray;
     ColorF mBlendColor;
     bool mSampleAlphaToCoverage;
     bool mSampleCoverage;
@@ -936,6 +964,12 @@ class State : angle::NonCopyable
 
     // The Overlay object, used by the backend to render the overlay.
     const OverlayType *mOverlay;
+
+    // OES_draw_buffers_indexed
+    DrawBufferMask mBlendEnabledDrawBuffers;
+    DrawBufferMask mBlendFuncConstantAlphaDrawBuffers;
+    DrawBufferMask mBlendFuncConstantColorDrawBuffers;
+    bool mNoSimultaneousConstantColorAndAlphaBlendFunc;
 };
 
 ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,

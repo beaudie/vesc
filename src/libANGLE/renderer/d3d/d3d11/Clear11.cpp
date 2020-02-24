@@ -287,13 +287,16 @@ angle::Result Clear11::ensureResourcesInitialized(const gl::Context *context)
     mDepthStencilStateKey.stencilBackFunc          = GL_ALWAYS;
 
     // Initialize BlendStateKey with defaults
-    mBlendStateKey.blendState.blend              = false;
-    mBlendStateKey.blendState.sourceBlendRGB     = GL_ONE;
-    mBlendStateKey.blendState.sourceBlendAlpha   = GL_ONE;
-    mBlendStateKey.blendState.destBlendRGB       = GL_ZERO;
-    mBlendStateKey.blendState.destBlendAlpha     = GL_ZERO;
-    mBlendStateKey.blendState.blendEquationRGB   = GL_FUNC_ADD;
-    mBlendStateKey.blendState.blendEquationAlpha = GL_FUNC_ADD;
+    for (gl::BlendState &blendState : mBlendStateKey.blendStateArray)
+    {
+        blendState.blend              = false;
+        blendState.sourceBlendRGB     = GL_ONE;
+        blendState.sourceBlendAlpha   = GL_ONE;
+        blendState.destBlendRGB       = GL_ZERO;
+        blendState.destBlendAlpha     = GL_ZERO;
+        blendState.blendEquationRGB   = GL_FUNC_ADD;
+        blendState.blendEquationAlpha = GL_FUNC_ADD;
+    }
 
     mResourcesInitialized = true;
     return angle::Result::Continue;
@@ -641,11 +644,15 @@ angle::Result Clear11::clearFramebuffer(const gl::Context *context,
     ASSERT(numRtvs <= static_cast<uint32_t>(mRenderer->getNativeCaps().maxDrawBuffers));
 
     // Setup BlendStateKey parameters
-    mBlendStateKey.blendState.colorMaskRed   = clearParams.colorMaskRed;
-    mBlendStateKey.blendState.colorMaskGreen = clearParams.colorMaskGreen;
-    mBlendStateKey.blendState.colorMaskBlue  = clearParams.colorMaskBlue;
-    mBlendStateKey.blendState.colorMaskAlpha = clearParams.colorMaskAlpha;
-    mBlendStateKey.rtvMax                    = static_cast<uint16_t>(numRtvs);
+    for (gl::BlendState &blendState : mBlendStateKey.blendStateArray)
+    {
+        blendState.colorMaskRed   = clearParams.colorMaskRed;
+        blendState.colorMaskGreen = clearParams.colorMaskGreen;
+        blendState.colorMaskBlue  = clearParams.colorMaskBlue;
+        blendState.colorMaskAlpha = clearParams.colorMaskAlpha;
+    }
+
+    mBlendStateKey.rtvMax = static_cast<uint16_t>(numRtvs);
     memcpy(mBlendStateKey.rtvMasks, &rtvMasks[0], sizeof(mBlendStateKey.rtvMasks));
 
     // Get BlendState
