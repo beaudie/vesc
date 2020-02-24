@@ -34,18 +34,10 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
     ClearParameters clearParams;
     memset(&clearParams, 0, sizeof(ClearParameters));
 
-    const auto &blendState = state.getBlendState();
+    const auto &blendStateArray = state.getBlendStateArray();
 
-    for (unsigned int i = 0; i < ArraySize(clearParams.clearColor); i++)
-    {
-        clearParams.clearColor[i] = false;
-    }
     clearParams.colorF           = state.getColorClearValue();
     clearParams.colorType        = GL_FLOAT;
-    clearParams.colorMaskRed     = blendState.colorMaskRed;
-    clearParams.colorMaskGreen   = blendState.colorMaskGreen;
-    clearParams.colorMaskBlue    = blendState.colorMaskBlue;
-    clearParams.colorMaskAlpha   = blendState.colorMaskAlpha;
     clearParams.clearDepth       = false;
     clearParams.depthValue       = state.getDepthClearValue();
     clearParams.clearStencil     = false;
@@ -54,16 +46,16 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
     clearParams.scissorEnabled   = state.isScissorTestEnabled();
     clearParams.scissor          = state.getScissor();
 
-    const gl::Framebuffer *framebufferObject = state.getDrawFramebuffer();
-    if (mask & GL_COLOR_BUFFER_BIT)
+    const gl::Framebuffer *framebufferObject    = state.getDrawFramebuffer();
+    const gl::DrawBufferMask enabledDrawBuffers = framebufferObject->getDrawBufferMask();
+    ASSERT(blendStateArray.size() == gl::IMPLEMENTATION_MAX_DRAW_BUFFERS);
+    for (size_t i = 0; i < blendStateArray.size(); i++)
     {
-        if (framebufferObject->hasEnabledDrawBuffer())
-        {
-            for (unsigned int i = 0; i < ArraySize(clearParams.clearColor); i++)
-            {
-                clearParams.clearColor[i] = true;
-            }
-        }
+        clearParams.clearColor[i]     = (mask & GL_COLOR_BUFFER_BIT) && enabledDrawBuffers[i];
+        clearParams.colorMaskRed[i]   = blendStateArray[i].colorMaskRed;
+        clearParams.colorMaskGreen[i] = blendStateArray[i].colorMaskGreen;
+        clearParams.colorMaskBlue[i]  = blendStateArray[i].colorMaskBlue;
+        clearParams.colorMaskAlpha[i] = blendStateArray[i].colorMaskAlpha;
     }
 
     if (mask & GL_DEPTH_BUFFER_BIT)
@@ -355,6 +347,7 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
 
     // Does not actually free memory
     gl::AttachmentList colorAttachmentsForRender;
+    mColorAttachmentsForRenderMask.reset();
 
     const auto &colorAttachments = mState.getColorAttachments();
     const auto &drawBufferStates = mState.getDrawBufferStates();
@@ -371,10 +364,12 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
             ASSERT(drawBufferState == GL_BACK ||
                    drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex));
             colorAttachmentsForRender.push_back(&colorAttachment);
+            mColorAttachmentsForRenderMask.set(attachmentIndex);
         }
         else if (!features.mrtPerfWorkaround.enabled)
         {
             colorAttachmentsForRender.push_back(nullptr);
+            mColorAttachmentsForRenderMask.set(attachmentIndex);
         }
     }
 
