@@ -4936,7 +4936,7 @@ void Context::blendEquation(GLenum mode)
 
 void Context::blendEquationi(GLuint buf, GLenum mode)
 {
-    UNIMPLEMENTED();
+    mState.setBlendEquation(mode, mode, buf);
 }
 
 void Context::blendEquationSeparate(GLenum modeRGB, GLenum modeAlpha)
@@ -4946,7 +4946,7 @@ void Context::blendEquationSeparate(GLenum modeRGB, GLenum modeAlpha)
 
 void Context::blendEquationSeparatei(GLuint buf, GLenum modeRGB, GLenum modeAlpha)
 {
-    UNIMPLEMENTED();
+    mState.setBlendEquation(modeRGB, modeAlpha, buf);
 }
 
 void Context::blendFunc(GLenum sfactor, GLenum dfactor)
@@ -4956,7 +4956,7 @@ void Context::blendFunc(GLenum sfactor, GLenum dfactor)
 
 void Context::blendFunci(GLuint buf, GLenum src, GLenum dst)
 {
-    UNIMPLEMENTED();
+    mState.setBlendFactors(src, dst, src, dst, buf);
 }
 
 void Context::blendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha)
@@ -4970,7 +4970,7 @@ void Context::blendFuncSeparatei(GLuint buf,
                                  GLenum srcAlpha,
                                  GLenum dstAlpha)
 {
-    UNIMPLEMENTED();
+    mState.setBlendFactors(srcRGB, dstRGB, srcAlpha, dstAlpha, buf);
 }
 
 void Context::clearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
@@ -4997,7 +4997,9 @@ void Context::colorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolea
 
 void Context::colorMaski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a)
 {
-    UNIMPLEMENTED();
+    mState.setColorMask(ConvertToBool(r), ConvertToBool(g), ConvertToBool(b), ConvertToBool(a),
+                        index);
+    mStateCache.onColorMaskChange(this);
 }
 
 void Context::cullFace(CullFaceMode mode)
@@ -5028,7 +5030,8 @@ void Context::disable(GLenum cap)
 
 void Context::disablei(GLenum target, GLuint index)
 {
-    UNIMPLEMENTED();
+    mState.setEnableFeature(target, false, index);
+    mStateCache.onContextCapChange(this);
 }
 
 void Context::disableVertexAttribArray(GLuint index)
@@ -5045,7 +5048,8 @@ void Context::enable(GLenum cap)
 
 void Context::enablei(GLenum target, GLuint index)
 {
-    UNIMPLEMENTED();
+    mState.setEnableFeature(target, true, index);
+    mStateCache.onContextCapChange(this);
 }
 
 void Context::enableVertexAttribArray(GLuint index)
@@ -6703,8 +6707,7 @@ GLboolean Context::isEnabled(GLenum cap) const
 
 GLboolean Context::isEnabledi(GLenum target, GLuint index) const
 {
-    UNIMPLEMENTED();
-    return false;
+    return mState.getEnableFeature(target, index);
 }
 
 GLboolean Context::isFramebuffer(FramebufferID framebuffer) const
@@ -8304,6 +8307,30 @@ bool Context::getIndexedQueryParameterInfo(GLenum target,
             *type      = GL_INT_64_ANGLEX;
             *numParams = 1;
             return true;
+        }
+    }
+
+    if (mSupportedExtensions.drawBuffersIndexed)
+    {
+        switch (target)
+        {
+            case GL_BLEND_SRC_RGB:
+            case GL_BLEND_SRC_ALPHA:
+            case GL_BLEND_DST_RGB:
+            case GL_BLEND_DST_ALPHA:
+            case GL_BLEND_EQUATION_RGB:
+            case GL_BLEND_EQUATION_ALPHA:
+            {
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
+            }
+            case GL_COLOR_WRITEMASK:
+            {
+                *type      = GL_BOOL;
+                *numParams = 4;
+                return true;
+            }
         }
     }
 
