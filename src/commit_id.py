@@ -11,8 +11,7 @@ import sys
 import os
 
 usage = """\
-Usage: commit_id.py check <angle_dir>                - check if git is present
-       commit_id.py gen <angle_dir> <file_to_write>  - generate commit.h"""
+Usage: commit_id.py gen <angle_dir> <file_to_write>  - generate commit.h"""
 
 
 def grab_output(command, cwd):
@@ -23,28 +22,26 @@ if len(sys.argv) < 3:
     sys.exit(usage)
 
 operation = sys.argv[1]
-cwd = sys.argv[2]
-
-if operation == 'check':
-    index_path = os.path.join(cwd, '.git', 'index')
-    if os.path.exists(index_path):
-        print("1")
-    else:
-        print("0")
-    sys.exit(0)
+if os.path.isdir(sys.argv[2]):
+    cwd = sys.argv[2]
+else:
+    cwd = os.path.dirname(sys.argv[2])
 
 if len(sys.argv) < 4 or operation != 'gen':
     sys.exit(usage)
 
 output_file = sys.argv[3]
 commit_id_size = 12
+commit_id = 'unknown hash'
+commit_date = 'unknown date'
 
-try:
-    commit_id = grab_output('git rev-parse --short=%d HEAD' % commit_id_size, cwd)
-    commit_date = grab_output('git show -s --format=%ci HEAD', cwd)
-except:
-    commit_id = 'invalid-hash'
-    commit_date = 'invalid-date'
+index_path = os.path.join(cwd, '.git', 'index')
+if os.path.exists(index_path):
+    try:
+        commit_id = grab_output('git rev-parse --short=%d HEAD' % commit_id_size, cwd)
+        commit_date = grab_output('git show -s --format=%ci HEAD', cwd)
+    except:
+        pass
 
 hfile = open(output_file, 'w')
 
