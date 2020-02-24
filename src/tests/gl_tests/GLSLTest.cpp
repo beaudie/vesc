@@ -1605,6 +1605,77 @@ TEST_P(GLSLTest, MaxVaryingVec2Arrays)
     VaryingTestBase(0, 0, 0, maxVec2Arrays, 0, 0, 0, 0, false, false, false, true);
 }
 
+// Verify max varying with feedback and gl_line enabled
+TEST_P(GLSLTest_ES3, MaxVaryingWithFeedbackAndGLline)
+{
+    GLint maxVaryings = 0;
+    glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
+
+    std::string vertexShaderSource;
+    std::string fragmentShaderSource;
+
+    // substract 1 here for gl_PointSize
+    const GLint vec4Count     = maxVaryings - 1;
+    unsigned int varyingCount = 0;
+    std::string varyingDeclaration;
+    for (GLint i = 0; i < vec4Count; i++)
+    {
+        varyingDeclaration += GenerateVectorVaryingDeclaration(4, 1, varyingCount);
+        varyingCount += 1;
+    }
+    // Generate the vertex shader
+    vertexShaderSource.clear();
+    vertexShaderSource.append(varyingDeclaration);
+    vertexShaderSource.append("\nvoid main()\n{\n");
+    unsigned int currentVSVarying = 0;
+    for (GLint i = 0; i < vec4Count; i++)
+    {
+        vertexShaderSource.append(GenerateVectorVaryingSettingCode(4, 1, currentVSVarying));
+        currentVSVarying += 1;
+    }
+    vertexShaderSource.append("\tgl_Position = vec4(0.1,0.2,0.3,0.4);\n");
+    vertexShaderSource.append("\tgl_PointSize = 1.0;\n");
+    vertexShaderSource.append("}\n");
+
+    // Generate the fragment shader
+    fragmentShaderSource.clear();
+    fragmentShaderSource.append("precision highp float;\n");
+    fragmentShaderSource.append(varyingDeclaration);
+    fragmentShaderSource.append("\nvoid main() \n{ \n\tvec4 retColor = vec4(0,0,0,0);\n");
+    unsigned int currentFSVarying = 0;
+    // Make use of the vec4 varyings
+    fragmentShaderSource.append("\tretColor += ");
+    for (GLint i = 0; i < vec4Count; i++)
+    {
+        fragmentShaderSource.append(GenerateVectorVaryingUseCode(1, currentFSVarying));
+        currentFSVarying += 1;
+    }
+    fragmentShaderSource.append("vec4(0.0, 0.0, 0.0, 0.0);\n");
+    fragmentShaderSource.append("\tgl_FragColor = retColor;\n");
+    fragmentShaderSource.append("}\n");
+
+    std::vector<std::string> tfVaryings = {"gl_Position", "gl_PointSize"};
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(program1, vertexShaderSource.c_str(),
+                                        fragmentShaderSource.c_str(), tfVaryings,
+                                        GL_INTERLEAVED_ATTRIBS);
+
+    GLBuffer xfbBuffer;
+    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, xfbBuffer);
+    glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, 6 * (sizeof(float[4]) + sizeof(float)), nullptr,
+                 GL_STATIC_DRAW);
+
+    GLTransformFeedback xfb;
+    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, xfb);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, xfbBuffer);
+
+    glUseProgram(program1);
+    glBeginTransformFeedback(GL_LINES);
+    glDrawArrays(GL_LINES, 0, 6);
+    glEndTransformFeedback();
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Verify shader source with a fixed length that is less than the null-terminated length will
 // compile.
 TEST_P(GLSLTest, FixedShaderLength)
