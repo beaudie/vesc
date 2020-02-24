@@ -118,6 +118,30 @@
       "revId": "39087f4a64d87f1bee1f06ad68d6797c60881c02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7eeb12a7_9ea5f766",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-24T21:48:12Z",
+      "side": 0,
+      "message": "Right right. I can see the prior patch. You can likely pass in the size of the buffer to convert instead of passing in \u0027indexCount\u0027 to fix that failing test with the prior approach.",
+      "parentUuid": "b0977d9a_9a53d136",
+      "range": {
+        "startLine": 887,
+        "startChar": 59,
+        "endLine": 888,
+        "endChar": 54
+      },
+      "revId": "39087f4a64d87f1bee1f06ad68d6797c60881c02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
