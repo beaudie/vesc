@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0d706c6_01a97ba0",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-02-25T19:45:28Z",
+      "side": 1,
+      "message": "New. Check FenceProperties that Android Syncs are fully supported by driver.",
+      "revId": "d047eeaf9408b936fb265139fe3a80f9de2de89e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "471e8f8f_9ec20c49",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-02-25T19:45:28Z",
+      "side": 1,
+      "message": "Not sure this is the best place or not for capturing FenceProperties. If only interested in Android Fence FD, then could simplify this down to just that check and set member bool var instead of full struct.",
+      "revId": "d047eeaf9408b936fb265139fe3a80f9de2de89e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
