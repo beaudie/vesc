@@ -352,6 +352,12 @@ class ProgramState final : angle::NonCopyable
         return mAttachedShadersMarkedForDetach[shaderType];
     }
 
+    bool isCompute() const
+    {
+        return (mExecutable.hasLinkedShaderStage(ShaderType::Compute) ||
+                (getAttachedShader(ShaderType::Compute)));
+    }
+
   private:
     friend class MemoryProgramCache;
     friend class Program;
