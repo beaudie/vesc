@@ -14,6 +14,8 @@
 
 #include <EGL/eglext.h>
 
+#include "sys/stat.h"
+
 #include "common/debug.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
@@ -552,6 +554,46 @@ gl::Version LimitVersionTo(const gl::Version &current, const gl::Version &lower)
 {
     return std::min(current, lower);
 }
+
+constexpr char kPreRotationEnabledVarName[] = "ANGLE_PRE_ROTATION_ENABLED";
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+
+constexpr char kAndroidPreRotationEnabled[] = "debug.angle.prerotation.enabled";
+
+constexpr int kStreamSize = 64;
+
+// Call out to 'getprop' on a shell and return a string if the value was set
+std::string AndroidGetEnvFromProp(const char *key)
+{
+    std::string command("getprop ");
+    command += key;
+
+    // Run the command and open a I/O stream to read results
+    char stream[kStreamSize] = {};
+    FILE *pipe               = popen(command.c_str(), "r");
+    if (pipe != nullptr)
+    {
+        fgets(stream, kStreamSize, pipe);
+        pclose(pipe);
+    }
+
+    // Right strip white space
+    std::string result(stream);
+    result.erase(result.find_last_not_of(" \n\r\t") + 1);
+    return result;
+}
+
+void PrimeAndroidEnvironmentVariables()
+{
+    std::string enabled = AndroidGetEnvFromProp(kAndroidPreRotationEnabled);
+    if (!enabled.empty())
+    {
+        setenv(kPreRotationEnabledVarName, enabled.c_str(), 1);
+    }
+}
+
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 }  // namespace
 
 // RendererVk implementation.
@@ -1640,6 +1682,15 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
     ANGLE_FEATURE_CONDITION(
         (&mFeatures), supportsExternalMemoryHost,
         ExtensionFound(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME, deviceExtensionNames));
+
+    // Pre-rotation support is not fully ready to be enabled, but can be run-time enabled.
+#if defined(ANGLE_PLATFORM_ANDROID)
+    // Must convert Android debug properties into environment variables
+    PrimeAndroidEnvironmentVariables();
+#endif
+    std::string preRotationEnabled = angle::GetEnvironmentVar(kPreRotationEnabledVarName);
+    ANGLE_FEATURE_CONDITION((&mFeatures), enablePreRotateSurfaces,
+                            (preRotationEnabled == "1") ? true : false);
 
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
