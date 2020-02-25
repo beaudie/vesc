@@ -13,9 +13,27 @@
 namespace gl
 {
 
-ProgramExecutable::ProgramExecutable() : mMaxActiveAttribLocation(0) {}
+ProgramExecutable::ProgramExecutable() : mMaxActiveAttribLocation(0), mActiveSamplerRefCounts{}
+{
+    mActiveSamplerTypes.fill(TextureType::InvalidEnum);
+}
 
 ProgramExecutable::~ProgramExecutable() = default;
+
+void ProgramExecutable::reset()
+{
+    mActiveAttribLocationsMask.reset();
+    mMaxActiveAttribLocation = 0;
+    mAttributesTypeMask.reset();
+    mAttributesMask.reset();
+
+    mActiveSamplersMask.reset();
+    mActiveSamplerRefCounts = {};
+    mActiveSamplerTypes.fill(TextureType::InvalidEnum);
+    mActiveSamplerFormats.fill(SamplerFormat::InvalidEnum);
+
+    mActiveImagesMask.reset();
+}
 
 int ProgramExecutable::getInfoLogLength() const
 {
@@ -49,105 +67,181 @@ AttributesMask ProgramExecutable::getAttributesMask() const
 
 bool ProgramExecutable::hasDefaultUniforms(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
-        return !program->getState().getDefaultUniformRange().empty();
+        return program->getState().hasDefaultUniforms();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasDefaultUniforms())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
 
 bool ProgramExecutable::hasTextures(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
+    Program *program = glState.getProgram();
 
     if (program)
     {
-        return !program->getState().getSamplerBindings().empty();
+        return program->getState().hasTextures();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasTextures())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
 
 bool ProgramExecutable::hasUniformBuffers(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
+    Program *program = glState.getProgram();
 
     if (program)
     {
-        return !program->getState().getUniformBlocks().empty();
+        return program->getState().hasUniformBuffers();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasUniformBuffers())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
 
 bool ProgramExecutable::hasStorageBuffers(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
+    Program *program = glState.getProgram();
 
     if (program)
     {
-        return !program->getState().getShaderStorageBlocks().empty();
+        return program->getState().hasStorageBuffers();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasStorageBuffers())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
 
 bool ProgramExecutable::hasAtomicCounterBuffers(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
+    Program *program = glState.getProgram();
 
     if (program)
     {
-        return !program->getState().getAtomicCounterBuffers().empty();
+        return program->getState().hasAtomicCounterBuffers();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasAtomicCounterBuffers())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
 
 bool ProgramExecutable::hasImages(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
+    Program *program = glState.getProgram();
 
     if (program)
     {
-        return !program->getState().getImageBindings().empty();
+        return program->getState().hasImages();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasImages())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
 
 bool ProgramExecutable::hasTransformFeedbackOutput(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
+    Program *program = glState.getProgram();
 
     if (program)
     {
-        return !program->getState().getLinkedTransformFeedbackVaryings().empty();
+        return program->getState().hasTransformFeedbackOutput();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasTransformFeedbackOutput())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
 
 size_t ProgramExecutable::getUniqueUniformBlockCount(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
+    Program *program = glState.getProgram();
 
     if (program)
     {
@@ -161,7 +255,7 @@ size_t ProgramExecutable::getUniqueUniformBlockCount(const gl::State &glState) c
 
 size_t ProgramExecutable::getUniqueStorageBlockCount(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
+    Program *program = glState.getProgram();
 
     if (program)
     {
@@ -175,7 +269,7 @@ size_t ProgramExecutable::getUniqueStorageBlockCount(const gl::State &glState) c
 
 size_t ProgramExecutable::getAtomicCounterBuffersCount(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
+    Program *program = glState.getProgram();
 
     if (program)
     {
@@ -189,7 +283,7 @@ size_t ProgramExecutable::getAtomicCounterBuffersCount(const gl::State &glState)
 
 size_t ProgramExecutable::getTransformFeedbackBufferCount(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
+    Program *program = glState.getProgram();
 
     if (program)
     {
@@ -199,6 +293,94 @@ size_t ProgramExecutable::getTransformFeedbackBufferCount(const gl::State &glSta
     // TODO(timvp): http://anglebug.com/3570: Support program pipelines
 
     return 0;
+}
+
+void ProgramExecutable::updateActiveSamplers(const std::vector<SamplerBinding> &samplerBindings)
+{
+    for (const SamplerBinding &samplerBinding : samplerBindings)
+    {
+        if (samplerBinding.unreferenced)
+            continue;
+
+        for (GLint textureUnit : samplerBinding.boundTextureUnits)
+        {
+            if (++mActiveSamplerRefCounts[textureUnit] == 1)
+            {
+                mActiveSamplerTypes[textureUnit]   = samplerBinding.textureType;
+                mActiveSamplerFormats[textureUnit] = samplerBinding.format;
+            }
+            else
+            {
+                if (mActiveSamplerTypes[textureUnit] != samplerBinding.textureType)
+                {
+                    mActiveSamplerTypes[textureUnit] = TextureType::InvalidEnum;
+                }
+                if (mActiveSamplerFormats[textureUnit] != samplerBinding.format)
+                {
+                    mActiveSamplerFormats[textureUnit] = SamplerFormat::InvalidEnum;
+                }
+            }
+            mActiveSamplersMask.set(textureUnit);
+        }
+    }
+}
+
+void ProgramExecutable::updateActiveImages(std::vector<ImageBinding> &imageBindings)
+{
+    for (ImageBinding &imageBinding : imageBindings)
+    {
+        if (imageBinding.unreferenced)
+            continue;
+
+        for (GLint imageUnit : imageBinding.boundImageUnits)
+        {
+            mActiveImagesMask.set(imageUnit);
+        }
+    }
+}
+
+void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
+    size_t textureUnitIndex,
+    std::vector<SamplerBinding> &samplerBindings)
+{
+    bool foundBinding         = false;
+    TextureType foundType     = TextureType::InvalidEnum;
+    SamplerFormat foundFormat = SamplerFormat::InvalidEnum;
+
+    for (const SamplerBinding &binding : samplerBindings)
+    {
+        if (binding.unreferenced)
+            continue;
+
+        // A conflict exists if samplers of different types are sourced by the same texture unit.
+        // We need to check all bound textures to detect this error case.
+        for (GLuint textureUnit : binding.boundTextureUnits)
+        {
+            if (textureUnit == textureUnitIndex)
+            {
+                if (!foundBinding)
+                {
+                    foundBinding = true;
+                    foundType    = binding.textureType;
+                    foundFormat  = binding.format;
+                }
+                else
+                {
+                    if (foundType != binding.textureType)
+                    {
+                        foundType = TextureType::InvalidEnum;
+                    }
+                    if (foundFormat != binding.format)
+                    {
+                        foundFormat = SamplerFormat::InvalidEnum;
+                    }
+                }
+            }
+        }
+    }
+
+    mActiveSamplerTypes[textureUnitIndex]   = foundType;
+    mActiveSamplerFormats[textureUnitIndex] = foundFormat;
 }
 
 }  // namespace gl
