@@ -34,6 +34,7 @@ class ShaderInfo final : angle::NonCopyable
     ANGLE_INLINE bool valid() const { return mIsInitialized; }
 
     const gl::ShaderMap<SpirvBlob> &getSpirvBlobs() const { return mSpirvBlobs; }
+    gl::ShaderMap<SpirvBlob> &getSpirvBlobs() { return mSpirvBlobs; }
 
     // Save and load implementation for GLES Program Binary support.
     void load(gl::BinaryInputStream *stream);
@@ -51,11 +52,15 @@ class ProgramInfo final : angle::NonCopyable
     ~ProgramInfo();
 
     angle::Result initProgram(ContextVk *contextVk,
+                              const gl::ShaderType shaderType,
                               const ShaderInfo &shaderInfo,
                               bool enableLineRasterEmulation);
     void release(ContextVk *contextVk);
 
-    ANGLE_INLINE bool valid() const { return mProgramHelper.valid(); }
+    ANGLE_INLINE bool valid(const gl::ShaderType shaderType) const
+    {
+        return mProgramHelper.valid(shaderType);
+    }
 
     vk::ShaderProgramHelper *getShaderProgram() { return &mProgramHelper; }
 
@@ -97,17 +102,34 @@ class ProgramExecutableVk
         return mVariableInfoMap;
     }
 
+    ProgramInfo &getDefaultProgramInfo() { return mDefaultProgramInfo; }
+    ProgramInfo &getProgramInfo(bool enableLineRasterEmulation)
+    {
+        return enableLineRasterEmulation ? mLineRasterProgramInfo : mDefaultProgramInfo;
+    }
+
+    angle::Result getGraphicsPipeline(ContextVk *contextVk,
+                                      gl::PrimitiveMode mode,
+                                      const vk::GraphicsPipelineDesc &desc,
+                                      const gl::AttributesMask &activeAttribLocations,
+                                      const vk::GraphicsPipelineDesc **descPtrOut,
+                                      vk::PipelineHelper **pipelineOut);
+
+    angle::Result getComputePipeline(ContextVk *contextVk, vk::PipelineAndSerial **pipelineOut);
+
     const vk::PipelineLayout &getPipelineLayout() const { return mPipelineLayout.get(); }
     angle::Result createPipelineLayout(const gl::Context *glContext,
                                        const gl::ProgramExecutable &glExecutable,
-                                       const gl::ProgramState &programState);
+                                       gl::ShaderMap<const gl::ProgramState *> &programStates);
 
-    angle::Result updateTexturesDescriptorSet(const gl::ProgramState &programState,
-                                              ContextVk *contextVk);
-    angle::Result updateShaderResourcesDescriptorSet(const gl::ProgramState &programState,
-                                                     ContextVk *contextVk,
-                                                     vk::ResourceUseList *resourceUseList,
-                                                     CommandBufferHelper *commandBufferHelper);
+    angle::Result updateTexturesDescriptorSet(
+        const gl::ShaderMap<const gl::ProgramState *> &programStates,
+        ContextVk *contextVk);
+    angle::Result updateShaderResourcesDescriptorSet(
+        const gl::ShaderMap<const gl::ProgramState *> &programStates,
+        ContextVk *contextVk,
+        vk::ResourceUseList *resourceUseList,
+        CommandBufferHelper *commandBufferHelper);
     angle::Result updateTransformFeedbackDescriptorSet(
         const gl::ProgramState &programState,
         gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
@@ -138,7 +160,7 @@ class ProgramExecutableVk
                                      vk::DescriptorSetLayoutDesc *descOut);
 
     void updateDefaultUniformsDescriptorSet(
-        const gl::ProgramState &programState,
+        const gl::ShaderType shaderType,
         gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
         ContextVk *contextVk);
     void updateTransformFeedbackDescriptorSetImpl(const gl::ProgramState &programState,

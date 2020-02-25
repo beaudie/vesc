@@ -101,13 +101,13 @@ class ProgramExecutable
         return mActiveSamplerTypes;
     }
 
-    bool hasDefaultUniforms(const gl::State &glState) const;
-    bool hasTextures(const gl::State &glState) const;
-    bool hasUniformBuffers(const gl::State &glState) const;
-    bool hasStorageBuffers(const gl::State &glState) const;
-    bool hasAtomicCounterBuffers(const gl::State &glState) const;
-    bool hasImages(const gl::State &glState) const;
-    bool hasTransformFeedbackOutput(const gl::State &glState) const;
+    bool hasDefaultUniforms() const;
+    bool hasTextures() const;
+    bool hasUniformBuffers() const;
+    bool hasStorageBuffers() const;
+    bool hasAtomicCounterBuffers() const;
+    bool hasImages() const;
+    bool hasTransformFeedbackOutput() const;
 
     // Count the number of uniform and storage buffer declarations, counting arrays as one.
     size_t getUniqueUniformBlockCount(const gl::State &glState) const;
