@@ -2618,6 +2618,10 @@ void ContextVk::invalidateProgramBindingHelper(const gl::State &glState)
         {
             // A bound program always overrides a program pipeline
             mExecutable = &mProgramPipeline->getExecutable();
+            // Only need to reset the executable for PPOs, since we could be
+            // toggling between graphics and compute in the same PPO, which
+            // monolithic programs don't support.
+            mExecutable->reset(this);
         }
     }
     else
