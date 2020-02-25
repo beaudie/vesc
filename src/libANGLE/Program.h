@@ -302,8 +302,6 @@ class ProgramState final : angle::NonCopyable
     }
 
     // Count the number of uniform and storage buffer declarations, counting arrays as one.
-    size_t getUniqueUniformBlockCount() const;
-    size_t getUniqueStorageBlockCount() const;
     size_t getTransformFeedbackBufferCount() const;
 
     GLuint getUniformIndexFromName(const std::string &name) const;
@@ -518,8 +516,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     angle::Result linkMergedVaryings(const Context *context,
                                      VaryingPacking &varyingPacking,
-                                     const ProgramMergedVaryings &mergedVaryings,
-                                     ProgramLinkedResources *resources);
+                                     const ProgramMergedVaryings &mergedVaryings);
 
     // KHR_parallel_shader_compile
     // Try to link the program asynchrously. As a result, background threads may be launched to
@@ -853,6 +850,12 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     ANGLE_INLINE bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
+    gl::ProgramLinkedResources &getResources() const
+    {
+        ASSERT(mResources);
+        return *mResources;
+    }
+
     // Writes a program's binary to the output memory buffer.
     angle::Result serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
 
@@ -860,6 +863,8 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const ProgramExecutable &getExecutable() const { return mState.getProgramExecutable(); }
     ProgramExecutable &getExecutable() { return mState.getProgramExecutable(); }
+
+    const char *validateDrawStates(const State &state, const gl::Extensions &extensions) const;
 
     static void getFilteredVaryings(const std::vector<sh::ShaderVariable> &varyings,
                                     std::vector<const sh::ShaderVariable *> *filteredVaryingsOut);
@@ -924,7 +929,6 @@ class Program final : angle::NonCopyable, public LabeledObject
                                        const ProgramMergedVaryings &linkedVaryings,
                                        ShaderType stage,
                                        const Caps &caps) const;
-    bool linkValidateGlobalNames(InfoLog &infoLog) const;
 
     void gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyings, ShaderType stage);
 
@@ -1014,6 +1018,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     Optional<bool> mCachedValidateSamplersResult;
 
     DirtyBits mDirtyBits;
+
+    std::unique_ptr<gl::ProgramLinkedResources> mResources;
 };
 }  // namespace gl
 
