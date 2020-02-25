@@ -438,6 +438,7 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
 {
     VaryingUniqueFullNames uniqueFullNames;
     mPackedVaryings.clear();
+    clearRegisterMap();
 
     for (const ProgramVaryingRef &ref : mergedVaryings)
     {
@@ -486,7 +487,8 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
             }
         }
 
-        // If the varying is not used in the input, we know it is inactive.
+        // If the varying is not used in the input, we know it is inactive, unless it's a separable
+        // program, in which case the input shader may not exist in this program.
         if (!input && !isSeparableProgram)
         {
             mInactiveVaryingMappedNames[ref.backShaderStage].push_back(output->mappedName);
