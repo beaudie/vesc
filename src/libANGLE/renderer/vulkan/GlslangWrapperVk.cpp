@@ -34,7 +34,6 @@ GlslangSourceOptions GlslangWrapperVk::CreateSourceOptions(const angle::Features
     options.shaderResourceDescriptorSetIndex  = kShaderResourceDescriptorSetIndex;
     options.currentShaderResourceBindingIndex = 0;
     options.driverUniformsDescriptorSetIndex  = kDriverUniformsDescriptorSetIndex;
-    options.xfbBindingIndexStart              = kXfbBindingIndexStart;
     options.useOldRewriteStructSamplers       = features.forceOldRewriteStructSamplers.enabled;
     options.supportsTransformFeedbackExtension =
         features.supportsTransformFeedbackExtension.enabled;
