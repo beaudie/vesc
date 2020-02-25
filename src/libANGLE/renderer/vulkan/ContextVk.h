@@ -26,6 +26,7 @@ struct FeaturesVk;
 
 namespace rx
 {
+class ProgramExecutableVk;
 class RendererVk;
 class WindowSurfaceVk;
 
@@ -368,6 +369,8 @@ class ContextVk : public ContextImpl, public vk::Context
     bool isRotatedAspectRatioForDrawFBO() const;
     bool isRotatedAspectRatioForReadFBO() const;
 
+    angle::Result dirtyProgramExecutableHelper(const gl::Context *context);
+
     // State sync with dirty bits.
     angle::Result syncState(const gl::Context *context,
                             const gl::State::DirtyBits &dirtyBits,
@@ -650,6 +653,14 @@ class ContextVk : public ContextImpl, public vk::Context
 
     void addCommandBufferDiagnostics(const std::string &commandBufferDiagnostics);
 
+    ANGLE_INLINE bool useLineRaster(const gl::PrimitiveMode mode)
+    {
+        return getFeatures().basicGLLineRasterization.enabled && gl::IsLineMode(mode);
+    }
+
+    const ProgramExecutableVk *getExecutable() const { return mExecutable; }
+    ProgramExecutableVk *getExecutable() { return mExecutable; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -809,6 +820,9 @@ class ContextVk : public ContextImpl, public vk::Context
     ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE);
+        // The draw mode may have changed, toggling whether line rasterization is
+        // enabled or not, which means we need to recreate the graphics pipeline.
+        mCurrentGraphicsPipeline = nullptr;
     }
     ANGLE_INLINE void invalidateCurrentComputePipeline()
     {
@@ -861,10 +875,7 @@ class ContextVk : public ContextImpl, public vk::Context
                                                     vk::CommandBuffer *commandBuffer);
 
     // Common parts of the common dirty bit handlers.
-    angle::Result handleDirtyTexturesImpl(const gl::Context *context,
-                                          vk::CommandBuffer *commandBuffer,
-                                          vk::Resource *recorder,
-                                          CommandBufferHelper *commandBufferHelper);
+    angle::Result handleDirtyTexturesImpl(CommandBufferHelper *commandBufferHelper);
     angle::Result handleDirtyShaderResourcesImpl(const gl::Context *context,
                                                  vk::CommandBuffer *commandBuffer,
                                                  vk::Resource *recorder,
@@ -948,6 +959,8 @@ class ContextVk : public ContextImpl, public vk::Context
     VertexArrayVk *mVertexArray;
     FramebufferVk *mDrawFramebuffer;
     ProgramVk *mProgram;
+    ProgramPipelineVk *mProgramPipeline;
+    ProgramExecutableVk *mExecutable;
 
     // Graph resource used to record dispatch commands and hold resource dependencies.
     vk::DispatchHelper mDispatcher;

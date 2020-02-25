@@ -15,6 +15,7 @@
 
 #include "common/angleutils.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/Program.h"
 #include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/RefCountObject.h"
 
@@ -40,10 +41,30 @@ class ProgramPipelineState final : angle::NonCopyable
     const ProgramExecutable &getExecutable() const { return mExecutable; }
     ProgramExecutable &getExecutable() { return mExecutable; }
 
+    void activeShaderProgram(Program *shaderProgram);
+    void useProgramStages(GLbitfield stages, Program *shaderProgram);
+
+    const char *validateDrawStates(const State &state, const gl::Extensions &extensions);
+
+    Program *getActiveShaderProgram() { return mActiveShaderProgram; }
+
+    GLboolean isValid() { return mValid; }
+
+    const Program *getShaderProgram(ShaderType shaderType) const { return mPrograms[shaderType]; }
+
   private:
+    void useProgramStage(ShaderType shaderType, Program *shaderProgram);
+
     friend class ProgramPipeline;
 
     std::string mLabel;
+
+    // The active shader program
+    Program *mActiveShaderProgram;
+    // The shader programs for each stage.
+    ShaderMap<Program *> mPrograms;
+
+    GLboolean mValid;
 
     ProgramExecutable mExecutable;
 };
@@ -66,10 +87,65 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>, public L
 
     rx::ProgramPipelineImpl *getImplementation() const;
 
+    Program *getActiveShaderProgram() { return mState.getActiveShaderProgram(); }
+    void activeShaderProgram(Program *shaderProgram);
+    Program *getLinkedActiveShaderProgram(const Context *context)
+    {
+        Program *program = mState.getActiveShaderProgram();
+        if (program)
+        {
+            program->resolveLink(context);
+        }
+        return program;
+    }
+
+    void useProgramStages(GLbitfield stages, Program *shaderProgram);
+
+    void updateExecutableAttributes();
+    void updateExecutableTextures();
+    void updateExecutable();
+
+    Program *getShaderProgram(ShaderType shaderType) const { return mState.mPrograms[shaderType]; }
+
+    ProgramMergedVaryings getMergedVaryings() const;
+    angle::Result link(const gl::Context *context);
+    bool linkVaryings(InfoLog &infoLog) const;
+    bool linkValidateGlobalNames(InfoLog &infoLog) const;
+    void validate(const Caps &caps);
+    const char *validateDrawStates(const State &state, const gl::Extensions &extensions) const;
+    bool validateSamplers(InfoLog *infoLog, const Caps &caps);
+
+    bool usesShaderProgram(ShaderProgramID program) const;
+
+    bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
+
+    GLboolean isValid() { return mState.isValid(); }
+
+    angle::Result prepareForDraw(Context *context);
+
+    // Program pipeline dirty bits.
+    enum DirtyBitType
+    {
+        DIRTY_BIT_VERTEX_SHADER_STAGE,
+        DIRTY_BIT_FRAGMENT_SHADER_STAGE,
+        DIRTY_BIT_COMPUTE_SHADER_STAGE,
+        DIRTY_BIT_SHADER_STAGE_MAX = DIRTY_BIT_COMPUTE_SHADER_STAGE,
+
+        DIRTY_BIT_COUNT = DIRTY_BIT_SHADER_STAGE_MAX,
+    };
+
+    using DirtyBits = angle::BitSet<DIRTY_BIT_COUNT>;
+
+    angle::Result syncState(const Context *context);
+
   private:
-    std::unique_ptr<rx::ProgramPipelineImpl> mProgramPipeline;
+    void updateLinkedShaderStages();
+
+    std::unique_ptr<rx::ProgramPipelineImpl> mProgramPipelineImpl;
 
     ProgramPipelineState mState;
+
+    DirtyBits mDirtyBits;
 };
 }  // namespace gl
 
