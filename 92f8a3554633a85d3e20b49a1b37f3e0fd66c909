@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96b873f7_98cc1e79",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-25T17:34:06Z",
+      "side": 1,
+      "message": "can you leave this out? it\u0027s only used by the roll_deps script right now and this would confuse it.",
+      "range": {
+        "startLine": 22,
+        "startChar": 24,
+        "endLine": 22,
+        "endChar": 64
+      },
+      "revId": "92f8a3554633a85d3e20b49a1b37f3e0fd66c909",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
