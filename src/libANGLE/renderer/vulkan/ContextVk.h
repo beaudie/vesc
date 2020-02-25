@@ -26,6 +26,7 @@ struct FeaturesVk;
 
 namespace rx
 {
+class ProgramExecutableVk;
 class RendererVk;
 class WindowSurfaceVk;
 
@@ -346,6 +347,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     bool isViewportFlipEnabledForDrawFBO() const;
     bool isViewportFlipEnabledForReadFBO() const;
 
+    angle::Result dirtyProgramExecutableHelper(const gl::Context *context);
+
     // State sync with dirty bits.
     angle::Result syncState(const gl::Context *context,
                             const gl::State::DirtyBits &dirtyBits,
@@ -628,6 +631,14 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     void addCommandBufferDiagnostics(const std::string &commandBufferDiagnostics);
 
+    ANGLE_INLINE bool useLineRaster(const gl::PrimitiveMode mode)
+    {
+        return getFeatures().basicGLLineRasterization.enabled && gl::IsLineMode(mode);
+    }
+
+    const ProgramExecutableVk *getExecutable() const { return mExecutable; }
+    ProgramExecutableVk *getExecutable() { return mExecutable; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -837,10 +848,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                                     vk::CommandBuffer *commandBuffer);
 
     // Common parts of the common dirty bit handlers.
-    angle::Result handleDirtyTexturesImpl(const gl::Context *context,
-                                          vk::CommandBuffer *commandBuffer,
-                                          vk::CommandGraphResource *recorder,
-                                          CommandBufferHelper *commandBufferHelper);
+    angle::Result handleDirtyTexturesImpl(CommandBufferHelper *commandBufferHelper);
     angle::Result handleDirtyShaderResourcesImpl(const gl::Context *context,
                                                  vk::CommandBuffer *commandBuffer,
                                                  vk::CommandGraphResource *recorder,
@@ -916,6 +924,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     VertexArrayVk *mVertexArray;
     FramebufferVk *mDrawFramebuffer;
     ProgramVk *mProgram;
+    ProgramPipelineVk *mProgramPipeline;
+    ProgramExecutableVk *mExecutable;
 
     // Graph resource used to record dispatch commands and hold resource dependencies.
     vk::DispatchHelper mDispatcher;
