@@ -148,28 +148,6 @@ struct BindingInfo
     bool valid;
 };
 
-// This small structure encapsulates binding sampler uniforms to active GL textures.
-struct SamplerBinding
-{
-    SamplerBinding(TextureType textureTypeIn,
-                   SamplerFormat formatIn,
-                   size_t elementCount,
-                   bool unreferenced);
-    SamplerBinding(const SamplerBinding &other);
-    ~SamplerBinding();
-
-    // Necessary for retrieving active textures from the GL state.
-    TextureType textureType;
-
-    SamplerFormat format;
-
-    // List of all textures bound to this sampler, of type textureType.
-    std::vector<GLuint> boundTextureUnits;
-
-    // A note if this sampler is an unreferenced uniform.
-    bool unreferenced;
-};
-
 // A varying with tranform feedback enabled. If it's an array, either the whole array or one of its
 // elements specified by 'arrayIndex' can set to be enabled.
 struct TransformFeedbackVarying : public sh::ShaderVariable
@@ -207,19 +185,6 @@ struct TransformFeedbackVarying : public sh::ShaderVariable
     }
 
     GLuint arrayIndex;
-};
-
-struct ImageBinding
-{
-    ImageBinding(size_t count);
-    ImageBinding(GLuint imageUnit, size_t count, bool unreferenced);
-    ImageBinding(const ImageBinding &other);
-    ~ImageBinding();
-
-    std::vector<GLuint> boundImageUnits;
-
-    // A note if this image unit is an unreferenced uniform.
-    bool unreferenced;
 };
 
 struct ProgramBinding
@@ -360,11 +325,6 @@ class ProgramState final : angle::NonCopyable
 
     bool hasAttachedShader() const;
 
-    const ActiveTextureMask &getActiveSamplersMask() const { return mActiveSamplersMask; }
-    SamplerFormat getSamplerFormatForTextureUnitIndex(size_t textureUnitIndex) const
-    {
-        return mActiveSamplerFormats[textureUnitIndex];
-    }
     ShaderType getFirstAttachedShaderStageType() const;
     ShaderType getLastAttachedShaderStageType() const;
 
@@ -375,6 +335,27 @@ class ProgramState final : angle::NonCopyable
 
     const ProgramExecutable &getProgramExecutable() const { return mExecutable; }
     ProgramExecutable &getProgramExecutable() { return mExecutable; }
+
+    bool hasDefaultUniforms() const { return !getDefaultUniformRange().empty(); }
+    bool hasTextures() const { return !getSamplerBindings().empty(); }
+    bool hasUniformBuffers() const { return !getUniformBlocks().empty(); }
+    bool hasStorageBuffers() const { return !getShaderStorageBlocks().empty(); }
+    bool hasAtomicCounterBuffers() const { return !getAtomicCounterBuffers().empty(); }
+    bool hasImages() const { return !getImageBindings().empty(); }
+    bool hasTransformFeedbackOutput() const
+    {
+        return !getLinkedTransformFeedbackVaryings().empty();
+    }
+
+    const uint32_t &getLocationsUsedForXfbExtension() const
+    {
+        return mLocationsUsedForXfbExtension;
+    }
+
+    bool isShaderMarkedForDetach(gl::ShaderType shaderType) const
+    {
+        return mAttachedShadersMarkedForDetach[shaderType];
+    }
 
   private:
     friend class MemoryProgramCache;
@@ -394,7 +375,9 @@ class ProgramState final : angle::NonCopyable
     sh::WorkGroupSize mComputeShaderLocalSize;
 
     ShaderMap<Shader *> mAttachedShaders;
+    ShaderMap<bool> mAttachedShadersMarkedForDetach;
 
+    uint32_t mLocationsUsedForXfbExtension = 0;
     std::vector<std::string> mTransformFeedbackVaryingNames;
     std::vector<TransformFeedbackVarying> mLinkedTransformFeedbackVaryings;
     GLenum mTransformFeedbackBufferMode;
@@ -474,15 +457,6 @@ class ProgramState final : angle::NonCopyable
     // The size of the data written to each transform feedback buffer per vertex.
     std::vector<GLsizei> mTransformFeedbackStrides;
 
-    // Cached mask of active samplers and sampler types.
-    ActiveTextureMask mActiveSamplersMask;
-    ActiveTextureArray<uint32_t> mActiveSamplerRefCounts;
-    ActiveTextureArray<TextureType> mActiveSamplerTypes;
-    ActiveTextureArray<SamplerFormat> mActiveSamplerFormats;
-
-    // Cached mask of active images.
-    ActiveTextureMask mActiveImagesMask;
-
     // Note that this has nothing to do with binding layout qualifiers that can be set for some
     // uniforms in GLES3.1+. It is used to pre-set the location of uniforms.
     ProgramAliasedBindings mUniformLocationBindings;
@@ -525,7 +499,7 @@ class Program final : angle::NonCopyable, public LabeledObject
         return mProgram;
     }
 
-    void attachShader(Shader *shader);
+    void attachShader(const Context *context, Shader *shader);
     void detachShader(const Context *context, Shader *shader);
     int getAttachedShadersCount() const;
 
@@ -542,6 +516,10 @@ class Program final : angle::NonCopyable, public LabeledObject
     // EXT_blend_func_extended
     void bindFragmentOutputLocation(GLuint index, const char *name);
     void bindFragmentOutputIndex(GLuint index, const char *name);
+
+    angle::Result linkMergedVaryings(const Context *context,
+                                     VaryingPacking &varyingPacking,
+                                     const ProgramMergedVaryings &mergedVaryings);
 
     // KHR_parallel_shader_compile
     // Try to link the program asynchrously. As a result, background threads may be launched to
@@ -850,14 +828,6 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const std::vector<GLsizei> &getTransformFeedbackStrides() const;
 
-    const ActiveTextureMask &getActiveSamplersMask() const { return mState.mActiveSamplersMask; }
-    const ActiveTextureMask &getActiveImagesMask() const { return mState.mActiveImagesMask; }
-
-    const ActiveTextureArray<TextureType> &getActiveSamplerTypes() const
-    {
-        return mState.mActiveSamplerTypes;
-    }
-
     // Program dirty bits.
     enum DirtyBitType
     {
@@ -883,6 +853,12 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     ANGLE_INLINE bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
+    gl::ProgramLinkedResources &getResources() const
+    {
+        ASSERT(mResources);
+        return *mResources;
+    }
+
     // Writes a program's binary to the output memory buffer.
     angle::Result serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
 
@@ -890,6 +866,28 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const ProgramExecutable &getExecutable() const { return mState.getProgramExecutable(); }
     ProgramExecutable &getExecutable() { return mState.getProgramExecutable(); }
+
+    const char *validateDrawStates(const State &state, const gl::Extensions &extensions) const;
+
+    static void getFilteredVaryings(const std::vector<sh::ShaderVariable> &varyings,
+                                    std::vector<const sh::ShaderVariable *> *filteredVaryingsOut);
+    static bool doShaderVariablesMatch(gl::Shader *generatingShader,
+                                       gl::Shader *consumingShader,
+                                       const sh::ShaderVariable &input,
+                                       const sh::ShaderVariable &output,
+                                       bool validateGeometryShaderInputs,
+                                       bool isSeparable,
+                                       gl::InfoLog &infoLog);
+    static bool linkValidateShaderInterfaceMatching(Shader *generatingShader,
+                                                    Shader *consumingShader,
+                                                    bool isSeparable,
+                                                    InfoLog &infoLog);
+    static bool linkValidateBuiltInVaryings(Shader *vertexShader,
+                                            Shader *fragmentShader,
+                                            InfoLog &infoLog);
+    // Check for aliased path rendering input bindings (if any).
+    // If more than one binding refer statically to the same location the link must fail.
+    bool linkValidateFragmentInputBindings(InfoLog &infoLog) const;
 
   private:
     struct LinkingState;
@@ -926,17 +924,9 @@ class Program final : angle::NonCopyable, public LabeledObject
                                                   const sh::ShaderVariable &inputVarying,
                                                   int shaderVersion,
                                                   bool validateGeometryShaderInputVarying,
+                                                  bool isSeparable,
                                                   std::string *mismatchedStructFieldName);
 
-    bool linkValidateShaderInterfaceMatching(Shader *generatingShader,
-                                             Shader *consumingShader,
-                                             InfoLog &infoLog) const;
-
-    // Check for aliased path rendering input bindings (if any).
-    // If more than one binding refer statically to the same location the link must fail.
-    bool linkValidateFragmentInputBindings(InfoLog &infoLog) const;
-
-    bool linkValidateBuiltInVaryings(InfoLog &infoLog) const;
     bool linkValidateTransformFeedback(const Version &version,
                                        InfoLog &infoLog,
                                        const ProgramMergedVaryings &linkedVaryings,
@@ -1032,6 +1022,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     Optional<bool> mCachedValidateSamplersResult;
 
     DirtyBits mDirtyBits;
+
+    std::unique_ptr<gl::ProgramLinkedResources> mResources;
 };
 }  // namespace gl
 
