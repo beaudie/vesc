@@ -425,7 +425,7 @@ bool ValidateTextureMaxAnisotropyValue(const Context *context, GLfloat paramValu
 
 bool ValidateFragmentShaderColorBufferMaskMatch(const Context *context)
 {
-    const Program *program         = context->getState().getLinkedProgram(context);
+    const Program *program         = context->getActiveLinkedProgram();
     const Framebuffer *framebuffer = context->getState().getDrawFramebuffer();
 
     auto drawBufferMask     = framebuffer->getDrawBufferMask().to_ulong();
@@ -436,7 +436,7 @@ bool ValidateFragmentShaderColorBufferMaskMatch(const Context *context)
 
 bool ValidateFragmentShaderColorBufferTypeMatch(const Context *context)
 {
-    const Program *program         = context->getState().getLinkedProgram(context);
+    const Program *program         = context->getActiveLinkedProgram();
     const Framebuffer *framebuffer = context->getState().getDrawFramebuffer();
 
     return ValidateComponentTypeMasks(program->getDrawBufferTypeMask().to_ulong(),
@@ -448,7 +448,7 @@ bool ValidateFragmentShaderColorBufferTypeMatch(const Context *context)
 bool ValidateVertexShaderAttributeTypeMatch(const Context *context)
 {
     const auto &glState    = context->getState();
-    const Program *program = context->getState().getLinkedProgram(context);
+    const Program *program = context->getActiveLinkedProgram();
     const VertexArray *vao = context->getState().getVertexArray();
 
     unsigned long stateCurrentValuesTypeBits = glState.getCurrentValuesTypeMask().to_ulong();
@@ -2268,7 +2268,7 @@ bool ValidateUniform(const Context *context,
                      GLsizei count)
 {
     const LinkedUniform *uniform = nullptr;
-    Program *programObject       = context->getState().getLinkedProgram(context);
+    Program *programObject       = context->getActiveLinkedProgram();
     return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
            ValidateUniformValue(context, valueType, uniform->type);
 }
@@ -2279,7 +2279,7 @@ bool ValidateUniform1iv(const Context *context,
                         const GLint *value)
 {
     const LinkedUniform *uniform = nullptr;
-    Program *programObject       = context->getState().getLinkedProgram(context);
+    Program *programObject       = context->getActiveLinkedProgram();
     return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
            ValidateUniform1ivValue(context, uniform->type, count, value);
 }
@@ -2297,7 +2297,7 @@ bool ValidateUniformMatrix(const Context *context,
     }
 
     const LinkedUniform *uniform = nullptr;
-    Program *programObject       = context->getState().getLinkedProgram(context);
+    Program *programObject       = context->getActiveLinkedProgram();
     return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
            ValidateUniformMatrixValue(context, valueType, uniform->type);
 }
@@ -2806,78 +2806,37 @@ const char *ValidateDrawStates(const Context *context)
     // If we are running GLES1, there is no current program.
     if (context->getClientVersion() >= Version(2, 0))
     {
-        Program *program = state.getLinkedProgram(context);
-        if (!program)
-        {
-            return kProgramNotBound;
-        }
+        Program *program                 = state.getLinkedProgram(context);
+        ProgramPipeline *programPipeline = state.getProgramPipeline();
 
-        // In OpenGL ES spec for UseProgram at section 7.3, trying to render without
-        // vertex shader stage or fragment shader stage is a undefined behaviour.
-        // But ANGLE should clearly generate an INVALID_OPERATION error instead of
-        // produce undefined result.
-        if (!program->getExecutable().hasLinkedShaderStage(ShaderType::Vertex) ||
-            !program->getExecutable().hasLinkedShaderStage(ShaderType::Fragment))
+        if (program)
         {
-            return kNoActiveGraphicsShaderStage;
-        }
-
-        if (!program->validateSamplers(nullptr, context->getCaps()))
-        {
-            return kTextureTypeConflict;
-        }
-
-        if (extensions.multiview || extensions.multiview2)
-        {
-            const int programNumViews     = program->usesMultiview() ? program->getNumViews() : 1;
-            const int framebufferNumViews = framebuffer->getNumViews();
-            if (framebufferNumViews != programNumViews)
+            if (!program->validateSamplers(nullptr, context->getCaps()))
             {
-                return kMultiviewMismatch;
+                return kTextureTypeConflict;
             }
 
-            if (state.isTransformFeedbackActiveUnpaused() && framebufferNumViews > 1)
+            const char *errorMsg = program->validateDrawStates(state, extensions);
+            if (errorMsg)
             {
-                return kMultiviewTransformFeedback;
+                return errorMsg;
+            }
+        }
+        else if (programPipeline)
+        {
+            if (!programPipeline->validateSamplers(nullptr, context->getCaps()))
+            {
+                return kTextureTypeConflict;
             }
 
-            if (extensions.disjointTimerQuery && framebufferNumViews > 1 &&
-                state.isQueryActive(QueryType::TimeElapsed))
+            const char *errorMsg = programPipeline->validateDrawStates(state, extensions);
+            if (errorMsg)
             {
-                return kMultiviewTimerQuery;
+                return errorMsg;
             }
         }
 
-        // Uniform buffer validation
-        for (unsigned int uniformBlockIndex = 0;
-             uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
-        {
-            const InterfaceBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
-            GLuint blockBinding                = program->getUniformBlockBinding(uniformBlockIndex);
-            const OffsetBindingPointer<Buffer> &uniformBuffer =
-                state.getIndexedUniformBuffer(blockBinding);
-
-            if (uniformBuffer.get() == nullptr)
-            {
-                // undefined behaviour
-                return kUniformBufferUnbound;
-            }
-
-            size_t uniformBufferSize = GetBoundBufferAvailableSize(uniformBuffer);
-            if (uniformBufferSize < uniformBlock.dataSize)
-            {
-                // undefined behaviour
-                return kUniformBufferTooSmall;
-            }
-
-            if (extensions.webglCompatibility &&
-                uniformBuffer->isBoundForTransformFeedbackAndOtherUse())
-            {
-                return kUniformBufferBoundForTransformFeedback;
-            }
-        }
-
-        // Do some additonal WebGL-specific validation
+        // Do some additional WebGL-specific validation
         if (extensions.webglCompatibility)
         {
             if (!state.validateSamplerFormats())
@@ -2976,7 +2935,7 @@ void RecordDrawModeError(const Context *context, PrimitiveMode mode)
     // If we are running GLES1, there is no current program.
     if (context->getClientVersion() >= Version(2, 0))
     {
-        Program *program = state.getLinkedProgram(context);
+        Program *program = context->getActiveLinkedProgram();
         ASSERT(program);
 
         // Do geometry shader specific validations
