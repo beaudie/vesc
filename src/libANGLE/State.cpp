@@ -1700,18 +1700,21 @@ angle::Result State::setProgram(const Context *context, Program *newProgram)
             mProgram->release(context);
         }
 
-        mProgram    = newProgram;
-        mExecutable = nullptr;
+        mProgram = newProgram;
+        if (mProgramPipeline.get())
+        {
+            mExecutable = &mProgramPipeline->getExecutable();
+        }
+        else
+        {
+            mExecutable = nullptr;
+        }
 
         if (mProgram)
         {
             mExecutable = &mProgram->getExecutable();
             newProgram->addRef();
             ANGLE_TRY(onProgramExecutableChange(context, newProgram));
-        }
-        else if (mProgramPipeline.get())
-        {
-            mExecutable = &mProgramPipeline->getExecutable();
         }
 
         // Note that rendering is undefined if glUseProgram(0) is called. But ANGLE will generate
