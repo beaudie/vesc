@@ -3569,6 +3569,10 @@ ANGLE_INLINE angle::Result Context::prepareForCopyImage()
 
 ANGLE_INLINE angle::Result Context::prepareForDispatch()
 {
+    ProgramExecutable *executable = mState.mExecutable;
+    ASSERT(executable);
+    executable->setIsCompute(this, true);
+
     ANGLE_TRY(syncDirtyObjects(mComputeDirtyObjects));
     return syncDirtyBits(mComputeDirtyBits);
 }
