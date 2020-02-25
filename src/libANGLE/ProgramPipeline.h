@@ -38,6 +38,12 @@ class ProgramPipelineState final : angle::NonCopyable
 
     const std::string &getLabel() const;
 
+    // A PPO can have both graphics and compute programs attached, so
+    // we don't know if the PPO is a 'graphics' or 'compute' PPO until the
+    // actual draw/dispatch call.
+    bool isCompute() const { return mIsCompute; }
+    void setIsCompute(bool isCompute) { mIsCompute = isCompute; }
+
     const ProgramExecutable &getProgramExecutable() const { return mExecutable; }
     ProgramExecutable &getProgramExecutable() { return mExecutable; }
 
@@ -64,6 +70,8 @@ class ProgramPipelineState final : angle::NonCopyable
     friend class ProgramPipeline;
 
     std::string mLabel;
+
+    bool mIsCompute;
 
     // The active shader program
     Program *mActiveShaderProgram;
