@@ -97,7 +97,12 @@ ANGLE_INLINE angle::Result Context::prepareForDraw(PrimitiveMode mode)
     ANGLE_TRY(syncDirtyObjects(mDrawDirtyObjects));
     ASSERT(!isRobustResourceInitEnabled() ||
            !mState.getDrawFramebuffer()->hasResourceThatNeedsInit());
-    return syncDirtyBits();
+    ANGLE_TRY(syncDirtyBits());
+    if (!mState.getProgram() && mState.getProgramPipeline())
+    {
+        return mState.getProgramPipeline()->prepareForDraw(this);
+    }
+    return angle::Result::Continue;
 }
 
 ANGLE_INLINE void Context::drawArrays(PrimitiveMode mode, GLint first, GLsizei count)
