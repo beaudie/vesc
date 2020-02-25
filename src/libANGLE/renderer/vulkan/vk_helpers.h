@@ -1171,7 +1171,7 @@ class ShaderProgramHelper : angle::NonCopyable
     ShaderProgramHelper();
     ~ShaderProgramHelper();
 
-    bool valid() const;
+    bool valid(const gl::ShaderType shaderType) const;
     void destroy(VkDevice device);
     void release(ContextVk *contextVk);
 
