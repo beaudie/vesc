@@ -20,6 +20,7 @@
 #include "common/version.h"
 #include "compiler/translator/blocklayout.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/ErrorStrings.h"
 #include "libANGLE/MemoryProgramCache.h"
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/ResourceManager.h"
@@ -760,20 +761,6 @@ void LoadInterfaceBlock(BinaryInputStream *stream, InterfaceBlock *block)
 
     LoadShaderVariableBuffer(stream, block);
 }
-
-// TODO(timvp): http://anglebug.com/3570: Remove when PPOs are supported
-size_t CountUniqueBlocks(const std::vector<InterfaceBlock> &blocks)
-{
-    size_t count = 0;
-    for (const InterfaceBlock &block : blocks)
-    {
-        if (!block.isArray || block.arrayElement == 0)
-        {
-            ++count;
-        }
-    }
-    return count;
-}
 }  // anonymous namespace
 
 // Saves the linking context for later use in resolveLink().
@@ -1119,17 +1106,6 @@ Shader *ProgramState::getAttachedShader(ShaderType shaderType) const
 {
     ASSERT(shaderType != ShaderType::InvalidEnum);
     return mAttachedShaders[shaderType];
-}
-
-// TODO(timvp): http://anglebug.com/3570: Remove when PPOs are supported
-size_t ProgramState::getUniqueUniformBlockCount() const
-{
-    return CountUniqueBlocks(mUniformBlocks);
-}
-
-size_t ProgramState::getUniqueStorageBlockCount() const
-{
-    return CountUniqueBlocks(mShaderStorageBlocks);
 }
 
 size_t ProgramState::getTransformFeedbackBufferCount() const
@@ -1485,8 +1461,7 @@ void Program::pathFragmentInputGen(GLint index,
 
 angle::Result Program::linkMergedVaryings(const Context *context,
                                           VaryingPacking &varyingPacking,
-                                          const ProgramMergedVaryings &mergedVaryings,
-                                          ProgramLinkedResources *resources)
+                                          const ProgramMergedVaryings &mergedVaryings)
 {
     ShaderType tfStage =
         mState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry : ShaderType::Vertex;
@@ -1498,7 +1473,7 @@ angle::Result Program::linkMergedVaryings(const Context *context,
         return angle::Result::Stop;
     }
 
-    if (!resources->varyingPacking.collectAndPackUserVaryings(
+    if (!mResources->varyingPacking.collectAndPackUserVaryings(
             infoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames(), isSeparable()))
     {
         return angle::Result::Stop;
@@ -1558,17 +1533,16 @@ angle::Result Program::link(const Context *context)
     bool result = linkValidateShaders(infoLog);
     ASSERT(result);
 
-    std::unique_ptr<ProgramLinkedResources> resources;
     if (mState.mAttachedShaders[ShaderType::Compute])
     {
-        resources.reset(new ProgramLinkedResources(
+        mResources.reset(new ProgramLinkedResources(
             0, PackMode::ANGLE_RELAXED, &mState.mUniformBlocks, &mState.mUniforms,
             &mState.mShaderStorageBlocks, &mState.mBufferVariables, &mState.mAtomicCounterBuffers));
 
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context->getCaps(), context->getClientVersion(), infoLog,
                           mState.mUniformLocationBindings, &combinedImageUniforms,
-                          &resources->unusedUniforms))
+                          &mResources->unusedUniforms))
         {
             return angle::Result::Continue;
         }
@@ -1597,8 +1571,8 @@ angle::Result Program::link(const Context *context)
             return angle::Result::Continue;
         }
 
-        InitUniformBlockLinker(mState, &resources->uniformBlockLinker);
-        InitShaderStorageBlockLinker(mState, &resources->shaderStorageBlockLinker);
+        InitUniformBlockLinker(mState, &mResources->uniformBlockLinker);
+        InitShaderStorageBlockLinker(mState, &mResources->shaderStorageBlockLinker);
     }
     else
     {
@@ -1615,7 +1589,7 @@ angle::Result Program::link(const Context *context)
             packMode = PackMode::WEBGL_STRICT;
         }
 
-        resources.reset(new ProgramLinkedResources(
+        mResources.reset(new ProgramLinkedResources(
             static_cast<GLuint>(data.getCaps().maxVaryingVectors), packMode, &mState.mUniformBlocks,
             &mState.mUniforms, &mState.mShaderStorageBlocks, &mState.mBufferVariables,
             &mState.mAtomicCounterBuffers));
@@ -1633,7 +1607,7 @@ angle::Result Program::link(const Context *context)
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context->getCaps(), context->getClientVersion(), infoLog,
                           mState.mUniformLocationBindings, &combinedImageUniforms,
-                          &resources->unusedUniforms))
+                          &mResources->unusedUniforms))
         {
             return angle::Result::Continue;
         }
@@ -1664,12 +1638,24 @@ angle::Result Program::link(const Context *context)
             mState.mNumViews = vertexShader->getNumViews();
         }
 
-        InitUniformBlockLinker(mState, &resources->uniformBlockLinker);
-        InitShaderStorageBlockLinker(mState, &resources->shaderStorageBlockLinker);
+        InitUniformBlockLinker(mState, &mResources->uniformBlockLinker);
+        InitShaderStorageBlockLinker(mState, &mResources->shaderStorageBlockLinker);
 
-        const ProgramMergedVaryings &mergedVaryings = getMergedVaryings();
-        ANGLE_TRY(linkMergedVaryings(context, resources->varyingPacking, mergedVaryings,
-                                     resources.get()));
+        ProgramPipeline *programPipeline = context->getState().getProgramPipeline();
+        if (programPipeline && programPipeline->usesShaderProgram(id()))
+        {
+            const ProgramMergedVaryings &mergedVaryings =
+                context->getState().getProgramPipeline()->getMergedVaryings();
+            GLuint maxVaryingVectors =
+                static_cast<GLuint>(context->getState().getCaps().maxVaryingVectors);
+            VaryingPacking varyingPacking(maxVaryingVectors, packMode);
+            ANGLE_TRY(linkMergedVaryings(context, varyingPacking, mergedVaryings));
+        }
+        else
+        {
+            const ProgramMergedVaryings &mergedVaryings = getMergedVaryings();
+            ANGLE_TRY(linkMergedVaryings(context, mResources->varyingPacking, mergedVaryings));
+        }
     }
 
     updateLinkedShaderStages();
@@ -1677,8 +1663,7 @@ angle::Result Program::link(const Context *context)
     mLinkingState.reset(new LinkingState());
     mLinkingState->linkingFromBinary = false;
     mLinkingState->programHash       = programHash;
-    mLinkingState->linkEvent         = mProgram->link(context, *resources, infoLog);
-    mLinkingState->resources         = std::move(resources);
+    mLinkingState->linkEvent         = mProgram->link(context, *mResources, infoLog);
     mLinkResolved                    = false;
 
     // Must be after mProgram->link() to avoid misleading the linker about output variables.
@@ -1690,7 +1675,8 @@ angle::Result Program::link(const Context *context)
 
 bool Program::isLinking() const
 {
-    return (mLinkingState.get() && mLinkingState->linkEvent->isLinking());
+    return (mLinkingState.get() && mLinkingState->linkEvent &&
+            mLinkingState->linkEvent->isLinking());
 }
 
 void Program::resolveLinkImpl(const Context *context)
@@ -3594,7 +3580,7 @@ bool Program::linkValidateShaderInterfaceMatching(gl::Shader *generatingShader,
     getFilteredVaryings(inputVaryings, &filteredInputVaryings);
     getFilteredVaryings(outputVaryings, &filteredOutputVaryings);
 
-    // Separable programs require the number of inputs and outputs matches
+    // Make sure the number of inputs and outputs matches
     if (isSeparable && filteredInputVaryings.size() < filteredOutputVaryings.size())
     {
         infoLog << GetShaderTypeString(consumingShader->getType())
@@ -5708,6 +5694,63 @@ void Program::postResolveLink(const gl::Context *context)
         mState.mBaseVertexLocation   = getUniformLocation("gl_BaseVertex").value;
         mState.mBaseInstanceLocation = getUniformLocation("gl_BaseInstance").value;
     }
+}
+
+const char *Program::validateDrawStates(const State &state, const Extensions &extensions) const
+{
+    if (extensions.multiview || extensions.multiview2)
+    {
+        const int programNumViews     = usesMultiview() ? getNumViews() : 1;
+        Framebuffer *framebuffer      = state.getDrawFramebuffer();
+        const int framebufferNumViews = framebuffer->getNumViews();
+
+        if (framebufferNumViews != programNumViews)
+        {
+            return gl::err::kMultiviewMismatch;
+        }
+
+        if (state.isTransformFeedbackActiveUnpaused() && framebufferNumViews > 1)
+        {
+            return gl::err::kMultiviewTransformFeedback;
+        }
+
+        if (extensions.disjointTimerQuery && framebufferNumViews > 1 &&
+            state.isQueryActive(QueryType::TimeElapsed))
+        {
+            return gl::err::kMultiviewTimerQuery;
+        }
+    }
+
+    // Uniform buffer validation
+    for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < getActiveUniformBlockCount();
+         uniformBlockIndex++)
+    {
+        const InterfaceBlock &uniformBlock = getUniformBlockByIndex(uniformBlockIndex);
+        GLuint blockBinding                = getUniformBlockBinding(uniformBlockIndex);
+        const OffsetBindingPointer<Buffer> &uniformBuffer =
+            state.getIndexedUniformBuffer(blockBinding);
+
+        if (uniformBuffer.get() == nullptr)
+        {
+            // undefined behaviour
+            return gl::err::kUniformBufferUnbound;
+        }
+
+        size_t uniformBufferSize = GetBoundBufferAvailableSize(uniformBuffer);
+        if (uniformBufferSize < uniformBlock.dataSize)
+        {
+            // undefined behaviour
+            return gl::err::kUniformBufferTooSmall;
+        }
+
+        if (extensions.webglCompatibility &&
+            uniformBuffer->isBoundForTransformFeedbackAndOtherUse())
+        {
+            return gl::err::kUniformBufferBoundForTransformFeedback;
+        }
+    }
+
+    return nullptr;
 }
 
 }  // namespace gl
