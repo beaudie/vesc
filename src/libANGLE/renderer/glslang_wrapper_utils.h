@@ -42,9 +42,6 @@ struct GlslangSourceOptions
     // ANGLE driver uniforms set index:
     uint32_t driverUniformsDescriptorSetIndex = 3;
 
-    // Binding index start for transform feedback buffers:
-    uint32_t xfbBindingIndexStart = 16;
-
     bool useOldRewriteStructSamplers        = false;
     bool supportsTransformFeedbackExtension = false;
     bool emulateTransformFeedback           = false;
@@ -91,6 +88,13 @@ bool GetImageNameWithoutIndices(std::string *name);
 // Get the mapped sampler name after the soure is transformed by GlslangGetShaderSource()
 std::string GetMappedSamplerNameOld(const std::string &originalName);
 std::string GlslangGetMappedSamplerName(const std::string &originalName);
+std::string GetXfbBufferName(const uint32_t bufferIndex);
+
+void AssignLocations(GlslangSourceOptions &options,
+                     const gl::ProgramState &programState,
+                     const gl::ProgramLinkedResources &resources,
+                     const gl::ShaderType shaderType,
+                     gl::ShaderMap<ShaderInterfaceVariableInfoMap> *variableInfoMapOut);
 
 // Transform the source to include actual binding points for various shader resources (textures,
 // buffers, xfb, etc).  For some variables, these values are instead output to the variableInfoMap
