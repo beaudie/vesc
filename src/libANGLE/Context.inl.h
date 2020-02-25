@@ -59,6 +59,9 @@ ANGLE_INLINE void MarkShaderStorageBufferUsage(const Context *context)
 }
 
 // Return true if the draw is a no-op, else return false.
+//  If there is no active program for the vertex or fragment shader stages, the results of vertex
+//  and fragment shader execution will respectively be undefined. However, this is not
+//  an error. ANGLE will treat this as a no-op.
 //  A no-op draw occurs if the count of vertices is less than the minimum required to
 //  have a valid primitive for this mode (0 for points, 0-1 for lines, 0-2 for tris).
 //  We also no-op draws that have rendering feedback loops. This is spec:
@@ -67,6 +70,14 @@ ANGLE_INLINE void MarkShaderStorageBufferUsage(const Context *context)
 //  From 3.2 spec: 9.3.1 Rendering Feedback Loops
 ANGLE_INLINE bool Context::noopDraw(PrimitiveMode mode, GLsizei count)
 {
+    const State &state                  = getState();
+    const ProgramExecutable *executable = state.getProgramExecutable();
+    if (!isGLES1() && (!executable || !executable->hasLinkedShaderStage(ShaderType::Vertex) ||
+                       !executable->hasLinkedShaderStage(ShaderType::Fragment)))
+    {
+        return true;
+    }
+
     return count < kMinimumPrimitiveCounts[mode] ||
            mState.mDrawFramebuffer->hasRenderingFeedbackLoop();
 }
@@ -102,7 +113,12 @@ ANGLE_INLINE angle::Result Context::prepareForDraw(PrimitiveMode mode)
     ANGLE_TRY(syncDirtyObjects(mDrawDirtyObjects));
     ASSERT(!isRobustResourceInitEnabled() ||
            !mState.getDrawFramebuffer()->hasResourceThatNeedsInit());
-    return syncDirtyBits();
+    ANGLE_TRY(syncDirtyBits());
+    if (!mState.getProgram() && mState.getProgramPipeline())
+    {
+        return mState.getProgramPipeline()->prepareForDraw(this);
+    }
+    return angle::Result::Continue;
 }
 
 ANGLE_INLINE void Context::drawArrays(PrimitiveMode mode, GLint first, GLsizei count)
