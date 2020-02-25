@@ -2522,6 +2522,14 @@ static bool ValidateObjectIdentifierAndName(const Context *context, GLenum ident
             }
             return true;
 
+        case GL_PROGRAM_PIPELINE:
+            if (context->getProgramPipeline({name}) == nullptr)
+            {
+                context->validationError(GL_INVALID_VALUE, kInvalidProgramPipelineName);
+                return false;
+            }
+            return true;
+
         default:
             context->validationError(GL_INVALID_ENUM, kInvalidIndentifier);
             return false;
@@ -4286,7 +4294,8 @@ bool ValidateAttachShader(const Context *context, ShaderProgramID program, Shade
         return false;
     }
 
-    if (programObject->getAttachedShader(shaderObject->getType()))
+    if (programObject->getAttachedShader(shaderObject->getType()) &&
+        !programObject->getState().isShaderMarkedForDetach(shaderObject->getType()))
     {
         context->validationError(GL_INVALID_OPERATION, kShaderAttachmentHasShader);
         return false;
