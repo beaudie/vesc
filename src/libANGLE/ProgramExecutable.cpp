@@ -73,7 +73,18 @@ bool ProgramExecutable::hasDefaultUniforms(const gl::State &glState) const
         return program->getState().hasDefaultUniforms();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasDefaultUniforms())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
@@ -86,7 +97,18 @@ bool ProgramExecutable::hasTextures(const gl::State &glState) const
         return program->getState().hasTextures();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasTextures())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
@@ -99,7 +121,18 @@ bool ProgramExecutable::hasUniformBuffers(const gl::State &glState) const
         return program->getState().hasUniformBuffers();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasUniformBuffers())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
@@ -112,7 +145,18 @@ bool ProgramExecutable::hasStorageBuffers(const gl::State &glState) const
         return program->getState().hasStorageBuffers();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasStorageBuffers())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
@@ -125,7 +169,18 @@ bool ProgramExecutable::hasAtomicCounterBuffers(const gl::State &glState) const
         return program->getState().hasAtomicCounterBuffers();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasAtomicCounterBuffers())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
@@ -138,7 +193,18 @@ bool ProgramExecutable::hasImages(const gl::State &glState) const
         return program->getState().hasImages();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasImages())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
@@ -151,7 +217,18 @@ bool ProgramExecutable::hasTransformFeedbackOutput(const gl::State &glState) con
         return program->getState().hasTransformFeedbackOutput();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
+    gl::ProgramPipeline *pipeline = glState.getProgramPipeline();
+    if (pipeline)
+    {
+        for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const Program *shaderProgram = pipeline->getShaderProgram(shaderType);
+            if (shaderProgram && shaderProgram->getState().hasTransformFeedbackOutput())
+            {
+                return true;
+            }
+        }
+    }
 
     return false;
 }
