@@ -218,6 +218,15 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
 
     // Initialize and resize the mDefaultUniformBlocks' memory
     angle::Result status = resizeUniformBlockMemory(contextVk, requiredBufferSize);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
+
+    gl::ShaderMap<const gl::ProgramState *> programStates;
+    fillProgramStateMap(&programStates);
+    const gl::ProgramExecutable &glExecutable = mState.getProgramExecutable();
+    status = mExecutable.createPipelineLayout(context, glExecutable, programStates);
     return std::make_unique<LinkEventDone>(status);
 }
 
@@ -256,6 +265,18 @@ void ProgramVk::setSeparable(bool separable)
     // Nohting to do here yet.
 }
 
+void ProgramVk::fillProgramStateMap(gl::ShaderMap<const gl::ProgramState *> *programStatesOut)
+{
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        (*programStatesOut)[shaderType] = nullptr;
+        if (mState.getProgramExecutable().hasLinkedShaderStage(shaderType))
+        {
+            (*programStatesOut)[shaderType] = &mState;
+        }
+    }
+}
+
 std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                            const gl::ProgramLinkedResources &resources,
                                            gl::InfoLog &infoLog)
@@ -282,6 +303,15 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     }
 
     status = initDefaultUniformBlocks(context);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
+
+    gl::ShaderMap<const gl::ProgramState *> programStates;
+    fillProgramStateMap(&programStates);
+    const gl::ProgramExecutable &glExecutable = mState.getProgramExecutable();
+    status = mExecutable.createPipelineLayout(context, glExecutable, programStates);
     return std::make_unique<LinkEventDone>(status);
 }
 
@@ -698,6 +728,30 @@ void ProgramVk::getUniformuiv(const gl::Context *context, GLint location, GLuint
     getUniformImpl(location, params, GL_UNSIGNED_INT);
 }
 
+angle::Result ProgramVk::updateShaderUniforms(ContextVk *contextVk,
+                                              gl::ShaderType shaderType,
+                                              uint32_t *outOffset,
+                                              bool *anyNewBufferAllocated)
+{
+    // Update buffer memory by immediate mapping. This immediate update only works once.
+    DefaultUniformBlock &uniformBlock = mDefaultUniformBlocks[shaderType];
+
+    if (mDefaultUniformBlocksDirty[shaderType])
+    {
+        bool bufferModified = false;
+        ANGLE_TRY(SyncDefaultUniformBlock(contextVk, &uniformBlock.storage,
+                                          uniformBlock.uniformData, outOffset, &bufferModified));
+        mDefaultUniformBlocksDirty.reset(shaderType);
+
+        if (bufferModified)
+        {
+            *anyNewBufferAllocated = true;
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
 {
     if (!dirtyUniforms())
@@ -714,22 +768,9 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
     // Update buffer memory by immediate mapping. This immediate update only works once.
     for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
     {
-        DefaultUniformBlock &uniformBlock = mDefaultUniformBlocks[shaderType];
-
-        if (mDefaultUniformBlocksDirty[shaderType])
-        {
-            bool bufferModified = false;
-            ANGLE_TRY(SyncDefaultUniformBlock(
-                contextVk, &uniformBlock.storage, uniformBlock.uniformData,
-                &mExecutable.mDynamicBufferOffsets[offsetIndex], &bufferModified));
-            mDefaultUniformBlocksDirty.reset(shaderType);
-
-            if (bufferModified)
-            {
-                anyNewBufferAllocated = true;
-            }
-        }
-
+        ANGLE_TRY(updateShaderUniforms(contextVk, shaderType,
+                                       &mExecutable.mDynamicBufferOffsets[offsetIndex],
+                                       &anyNewBufferAllocated));
         ++offsetIndex;
     }
 
@@ -738,48 +779,49 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
         ANGLE_TRY(mExecutable.allocateDescriptorSet(contextVk, kUniformsAndXfbDescriptorSetIndex));
-        mExecutable.updateDefaultUniformsDescriptorSet(mState, mDefaultUniformBlocks, contextVk);
-        mExecutable.updateTransformFeedbackDescriptorSetImpl(mState, contextVk);
+
+        mExecutable.mDescriptorBuffersCache.clear();
+        for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
+        {
+            mExecutable.updateDefaultUniformsDescriptorSet(shaderType, mDefaultUniformBlocks,
+                                                           contextVk);
+            mExecutable.updateTransformFeedbackDescriptorSetImpl(mState, contextVk);
+        }
     }
 
     return angle::Result::Continue;
 }
 
 angle::Result ProgramVk::initProgram(ContextVk *contextVk,
+                                     const gl::ShaderType shaderType,
                                      bool enableLineRasterEmulation,
-                                     ProgramInfo *programInfo,
-                                     vk::ShaderProgramHelper **shaderProgramOut)
+                                     ProgramInfo *programInfo)
 {
     ASSERT(mShaderInfo.valid());
 
     // Create the program pipeline.  This is done lazily and once per combination of
     // specialization constants.
-    if (!programInfo->valid())
+    if (!programInfo->valid(shaderType))
     {
-        ANGLE_TRY(programInfo->initProgram(contextVk, mShaderInfo, enableLineRasterEmulation));
+        ANGLE_TRY(programInfo->initProgram(contextVk, shaderType, mShaderInfo,
+                                           enableLineRasterEmulation));
     }
-    ASSERT(programInfo->valid());
+    ASSERT(programInfo->valid(shaderType));
 
-    *shaderProgramOut = programInfo->getShaderProgram();
     return angle::Result::Continue;
 }
 
-angle::Result ProgramVk::initGraphicsProgram(ContextVk *contextVk,
-                                             gl::PrimitiveMode mode,
-                                             vk::ShaderProgramHelper **shaderProgramOut)
+angle::Result ProgramVk::initGraphicsShaderProgram(ContextVk *contextVk,
+                                                   const gl::ShaderType shaderType,
+                                                   bool enableLineRasterEmulation,
+                                                   ProgramInfo &programInfo)
 {
-    bool enableLineRasterEmulation = UseLineRaster(contextVk, mode);
-
-    ProgramInfo &programInfo = enableLineRasterEmulation ? mExecutable.mLineRasterProgramInfo
-                                                         : mExecutable.mDefaultProgramInfo;
-
-    return initProgram(contextVk, enableLineRasterEmulation, &programInfo, shaderProgramOut);
+    return initProgram(contextVk, shaderType, enableLineRasterEmulation, &programInfo);
 }
 
-angle::Result ProgramVk::initComputeProgram(ContextVk *contextVk,
-                                            vk::ShaderProgramHelper **shaderProgramOut)
+angle::Result ProgramVk::initComputeProgram(ContextVk *contextVk, ProgramInfo &programInfo)
 {
-    return initProgram(contextVk, false, &mExecutable.mDefaultProgramInfo, shaderProgramOut);
+    return initProgram(contextVk, gl::ShaderType::Compute, false, &programInfo);
 }
 
 void ProgramVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
