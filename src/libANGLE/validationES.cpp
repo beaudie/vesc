@@ -2806,78 +2806,67 @@ const char *ValidateDrawStates(const Context *context)
     // If we are running GLES1, there is no current program.
     if (context->getClientVersion() >= Version(2, 0))
     {
-        Program *program = state.getLinkedProgram(context);
-        if (!program)
+        Program *program                 = state.getLinkedProgram(context);
+        ProgramPipeline *programPipeline = state.getProgramPipeline();
+
+        if (program)
+        {
+            // In OpenGL ES spec for UseProgram at section 7.3, trying to render without
+            // vertex shader stage or fragment shader stage is a undefined behaviour.
+            // But ANGLE should clearly generate an INVALID_OPERATION error instead of
+            // produce undefined result.
+            if (!program->getExecutable().hasLinkedShaderStage(ShaderType::Vertex) ||
+                !program->getExecutable().hasLinkedShaderStage(ShaderType::Fragment))
+            {
+                return kNoActiveGraphicsShaderStage;
+            }
+
+            if (!program->validateSamplers(nullptr, context->getCaps()))
+            {
+                return kTextureTypeConflict;
+            }
+
+            const char *errorMsg = program->validateDrawStates(state, extensions);
+            if (errorMsg)
+            {
+                return errorMsg;
+            }
+        }
+        else if (programPipeline)
+        {
+            // In OpenGL ES spec for UseProgram at section 7.3, trying to render without
+            // vertex shader stage or fragment shader stage is a undefined behaviour.
+            // But ANGLE should clearly generate an INVALID_OPERATION error instead of
+            // produce undefined result.
+            if (!programPipeline->getExecutable().hasLinkedShaderStage(ShaderType::Vertex) ||
+                !programPipeline->getExecutable().hasLinkedShaderStage(ShaderType::Fragment))
+            {
+                return kNoActiveGraphicsShaderStage;
+            }
+
+            const char *errorMsg = programPipeline->validateAttachedPrograms(nullptr);
+            if (errorMsg)
+            {
+                return errorMsg;
+            }
+
+            if (!programPipeline->validateSamplers(nullptr, context->getCaps()))
+            {
+                return kTextureTypeConflict;
+            }
+
+            errorMsg = programPipeline->validateDrawStates(state, extensions);
+            if (errorMsg)
+            {
+                return errorMsg;
+            }
+        }
+        else
         {
             return kProgramNotBound;
         }
 
-        // In OpenGL ES spec for UseProgram at section 7.3, trying to render without
-        // vertex shader stage or fragment shader stage is a undefined behaviour.
-        // But ANGLE should clearly generate an INVALID_OPERATION error instead of
-        // produce undefined result.
-        if (!program->getExecutable().hasLinkedShaderStage(ShaderType::Vertex) ||
-            !program->getExecutable().hasLinkedShaderStage(ShaderType::Fragment))
-        {
-            return kNoActiveGraphicsShaderStage;
-        }
-
-        if (!program->validateSamplers(nullptr, context->getCaps()))
-        {
-            return kTextureTypeConflict;
-        }
-
-        if (extensions.multiview || extensions.multiview2)
-        {
-            const int programNumViews     = program->usesMultiview() ? program->getNumViews() : 1;
-            const int framebufferNumViews = framebuffer->getNumViews();
-            if (framebufferNumViews != programNumViews)
-            {
-                return kMultiviewMismatch;
-            }
-
-            if (state.isTransformFeedbackActiveUnpaused() && framebufferNumViews > 1)
-            {
-                return kMultiviewTransformFeedback;
-            }
-
-            if (extensions.disjointTimerQuery && framebufferNumViews > 1 &&
-                state.isQueryActive(QueryType::TimeElapsed))
-            {
-                return kMultiviewTimerQuery;
-            }
-        }
-
-        // Uniform buffer validation
-        for (unsigned int uniformBlockIndex = 0;
-             uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
-        {
-            const InterfaceBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
-            GLuint blockBinding                = program->getUniformBlockBinding(uniformBlockIndex);
-            const OffsetBindingPointer<Buffer> &uniformBuffer =
-                state.getIndexedUniformBuffer(blockBinding);
-
-            if (uniformBuffer.get() == nullptr)
-            {
-                // undefined behaviour
-                return kUniformBufferUnbound;
-            }
-
-            size_t uniformBufferSize = GetBoundBufferAvailableSize(uniformBuffer);
-            if (uniformBufferSize < uniformBlock.dataSize)
-            {
-                // undefined behaviour
-                return kUniformBufferTooSmall;
-            }
-
-            if (extensions.webglCompatibility &&
-                uniformBuffer->isBoundForTransformFeedbackAndOtherUse())
-            {
-                return kUniformBufferBoundForTransformFeedback;
-            }
-        }
-
-        // Do some additonal WebGL-specific validation
+        // Do some additional WebGL-specific validation
         if (extensions.webglCompatibility)
         {
             if (!state.validateSamplerFormats())
