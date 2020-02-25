@@ -24,14 +24,16 @@ angle::Result HandleError(ErrorHandler *context, GlslangError)
 
 void initGlslangProgramInterfaceInfo(GlslangProgramInterfaceInfo *programInterfaceInfo)
 {
-    // We don't actually use descriptor set for now, the actual binding will be done inside
-    // ProgramMtl using spirv-cross.
-    programInterfaceInfo->uniformsAndXfbDescriptorSetIndex = kDefaultUniformsBindingIndex;
-    programInterfaceInfo->textureDescriptorSetIndex        = 0;
-    programInterfaceInfo->driverUniformsDescriptorSetIndex = kDriverUniformsBindingIndex;
+    programInterfaceInfo->uniformsAndXfbDescriptorSetIndex = kUniformsAndXfbDescriptorSetIndex;
+    programInterfaceInfo->currentUniformBindingIndex       = 0;
+    programInterfaceInfo->textureDescriptorSetIndex        = kTextureDescriptorSetIndex;
+    programInterfaceInfo->currentTextureBindingIndex       = 0;
     // NOTE(hqle): Unused for now, until we support ES 3.0
-    programInterfaceInfo->shaderResourceDescriptorSetIndex = -1;
-    programInterfaceInfo->locationsUsedForXfbExtension     = 0;
+    programInterfaceInfo->shaderResourceDescriptorSetIndex  = -1;
+    programInterfaceInfo->currentShaderResourceBindingIndex = 0;
+    programInterfaceInfo->driverUniformsDescriptorSetIndex  = kDriverUniformsDescriptorSetIndex;
+
+    programInterfaceInfo->locationsUsedForXfbExtension = 0;
 
     static_assert(kDefaultUniformsBindingIndex != 0, "kDefaultUniformsBindingIndex must not be 0");
     static_assert(kDriverUniformsBindingIndex != 0, "kDriverUniformsBindingIndex must not be 0");
