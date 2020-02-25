@@ -706,12 +706,75 @@ void Context::genFencesNV(GLsizei n, FenceNVID *fences)
 
 ProgramPipelineID Context::createProgramPipeline()
 {
-    return mState.mProgramPipelineManager->createProgramPipeline();
+    return mState.mProgramPipelineManager->createProgramPipeline(mImplementation.get());
 }
 
 GLuint Context::createShaderProgramv(ShaderType type, GLsizei count, const GLchar *const *strings)
 {
-    UNIMPLEMENTED();
+    // CreateShaderProgramv is equivalent to (assuming no errors are generated):
+    // const uint shader = CreateShader(type);
+    // if (shader) {
+    //   ShaderSource(shader, count, strings, NULL);
+    //   CompileShader(shader);
+    //   const uint program = CreateProgram();
+    //   if (program) {
+    //     int compiled = FALSE;
+    //     GetShaderiv(shader, COMPILE_STATUS, &compiled);
+    //     ProgramParameteri(program, PROGRAM_SEPARABLE, TRUE);
+    //     if (compiled) {
+    //       AttachShader(program, shader);
+    //       LinkProgram(program);
+    //       DetachShader(program, shader);
+    //     }
+    //     append-shader-info-log-to-program-info-log
+    //   }
+    //   DeleteShader(shader);
+    //   return program;
+    // } else {
+    //   return 0;
+    // }
+
+    const ShaderProgramID shaderID = FromGL<ShaderProgramID>(createShader(type));
+    if (shaderID.value)
+    {
+        Shader *shaderObject = getShader(shaderID);
+        ASSERT(shaderObject);
+        shaderObject->setSource(count, strings, nullptr);
+        shaderObject->compile(this);
+        const ShaderProgramID programID = FromGL<ShaderProgramID>(createProgram());
+        if (programID.value)
+        {
+            gl::Program *programObject = getProgramNoResolveLink(programID);
+            ASSERT(programObject);
+            programObject->setSeparable(true);
+
+            if (shaderObject->isCompiled())
+            {
+                programObject->attachShader(this, shaderObject);
+
+                if (programObject->link(this) != angle::Result::Continue)
+                {
+                    return 0u;
+                }
+                if (onProgramLink(programObject) != angle::Result::Continue)
+                {
+                    return 0u;
+                }
+
+                // Need to manually resolveLink(), since onProgramLink() doesn't think the program
+                // is in use.   For the normal glDetachShader() API call path, this is done during
+                // ValidateDetachShader() via gl::GetValidProgram().
+                programObject->resolveLink(this);
+                programObject->detachShader(this, shaderObject);
+            }
+            // append-shader-info-log-to-program-info-log()
+        }
+
+        deleteShader(shaderID);
+
+        return programID.value;
+    }
+
     return 0u;
 }
 
@@ -896,6 +959,8 @@ gl::LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) con
             return getRenderbuffer({name});
         case GL_FRAMEBUFFER:
             return getFramebuffer({name});
+        case GL_PROGRAM_PIPELINE:
+            return getProgramPipeline({name});
         default:
             UNREACHABLE();
             return nullptr;
@@ -1044,7 +1109,11 @@ void Context::useProgramStages(ProgramPipelineID pipeline,
                                GLbitfield stages,
                                ShaderProgramID program)
 {
-    UNIMPLEMENTED();
+    Program *shaderProgram           = getProgramNoResolveLink(program);
+    ProgramPipeline *programPipeline = getProgramPipeline(pipeline);
+    ASSERT(shaderProgram);
+    ASSERT(programPipeline);
+    ANGLE_CONTEXT_TRY(mState.useProgramStages(this, programPipeline, stages, shaderProgram));
 }
 
 void Context::bindTransformFeedback(GLenum target, TransformFeedbackID transformFeedbackHandle)
@@ -1059,7 +1128,7 @@ void Context::bindProgramPipeline(ProgramPipelineID pipelineHandle)
 {
     ProgramPipeline *pipeline = mState.mProgramPipelineManager->checkProgramPipelineAllocation(
         mImplementation.get(), pipelineHandle);
-    mState.setProgramPipelineBinding(this, pipeline);
+    ANGLE_CONTEXT_TRY(mState.setProgramPipelineBinding(this, pipeline));
 }
 
 void Context::beginQuery(QueryType target, QueryID query)
@@ -3495,7 +3564,12 @@ ANGLE_INLINE angle::Result Context::prepareForCopyImage()
 ANGLE_INLINE angle::Result Context::prepareForDispatch()
 {
     ANGLE_TRY(syncDirtyObjects(mComputeDirtyObjects));
-    return syncDirtyBits(mComputeDirtyBits);
+    ANGLE_TRY(syncDirtyBits(mComputeDirtyBits));
+    if (!mState.getProgram() && mState.getProgramPipeline())
+    {
+        return mState.getProgramPipeline()->prepareForDispatch(this);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result Context::syncState(const State::DirtyBits &bitMask,
@@ -4501,7 +4575,9 @@ angle::Result Context::syncStateForBlit()
 
 void Context::activeShaderProgram(ProgramPipelineID pipeline, ShaderProgramID program)
 {
-    UNIMPLEMENTED();
+    Program *shaderProgram           = getProgramNoResolveLink(program);
+    ProgramPipeline *programPipeline = getProgramPipeline(pipeline);
+    programPipeline->activeShaderProgram(shaderProgram);
 }
 
 void Context::activeTexture(GLenum texture)
@@ -6106,7 +6182,13 @@ void Context::getProgramivRobust(ShaderProgramID program,
 
 void Context::getProgramPipelineiv(ProgramPipelineID pipeline, GLenum pname, GLint *params)
 {
-    UNIMPLEMENTED();
+    ProgramPipeline *programPipeline = nullptr;
+    if (!mContextLost)
+    {
+        programPipeline = getProgramPipeline(pipeline);
+        ASSERT(programPipeline);
+    }
+    QueryProgramPipelineiv(this, programPipeline, pname, params);
 }
 
 MemoryObject *Context::getMemoryObject(MemoryObjectID handle) const
@@ -6134,7 +6216,9 @@ void Context::getProgramPipelineInfoLog(ProgramPipelineID pipeline,
                                         GLsizei *length,
                                         GLchar *infoLog)
 {
-    UNIMPLEMENTED();
+    ProgramPipeline *programPipeline = getProgramPipeline(pipeline);
+    ASSERT(programPipeline);
+    programPipeline->getExecutable().getInfoLog(bufSize, length, infoLog);
 }
 
 void Context::getShaderiv(ShaderProgramID shader, GLenum pname, GLint *params)
@@ -6445,6 +6529,14 @@ void Context::patchParameteri(GLenum pname, GLint value)
 void Context::uniform1f(UniformLocation location, GLfloat x)
 {
     Program *program = mState.getProgram();
+    if (!program)
+    {
+        ProgramPipeline *programPipelineObject = mState.getProgramPipeline();
+        if (programPipelineObject)
+        {
+            program = programPipelineObject->getLinkedActiveShaderProgram(this);
+        }
+    }
     program->setUniform1fv(location, 1, &x);
 }
 
@@ -6592,7 +6684,9 @@ void Context::validateProgram(ShaderProgramID program)
 
 void Context::validateProgramPipeline(ProgramPipelineID pipeline)
 {
-    UNIMPLEMENTED();
+    ProgramPipeline *programPipeline = getProgramPipeline(pipeline);
+    ASSERT(programPipeline);
+    programPipeline->validate(mState.mCaps);
 }
 
 void Context::getProgramBinary(ShaderProgramID program,
@@ -8336,7 +8430,7 @@ void StateCache::updateActiveAttribsMask(Context *context)
     bool isGLES1         = context->isGLES1();
     const State &glState = context->getState();
 
-    if (!isGLES1 && !glState.getProgram())
+    if (!isGLES1 && !glState.getProgramExecutable())
     {
         mCachedActiveBufferedAttribsMask = AttributesMask();
         mCachedActiveClientAttribsMask   = AttributesMask();
