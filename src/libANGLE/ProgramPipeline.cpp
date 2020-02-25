@@ -23,7 +23,11 @@ namespace gl
 {
 
 ProgramPipelineState::ProgramPipelineState()
-    : mLabel(), mActiveShaderProgram(nullptr), mValid(false), mHasBeenBound(false)
+    : mLabel(),
+      mIsCompute(false),
+      mActiveShaderProgram(nullptr),
+      mValid(false),
+      mHasBeenBound(false)
 {
     mExecutable.setProgramPipelineState(this);
 
@@ -139,7 +143,7 @@ bool ProgramPipelineState::usesShaderProgram(ShaderProgramID programId) const
 
 bool ProgramPipelineState::hasDefaultUniforms() const
 {
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasDefaultUniforms())
@@ -153,7 +157,7 @@ bool ProgramPipelineState::hasDefaultUniforms() const
 
 bool ProgramPipelineState::hasTextures() const
 {
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasTextures())
@@ -167,7 +171,7 @@ bool ProgramPipelineState::hasTextures() const
 
 bool ProgramPipelineState::hasUniformBuffers() const
 {
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasUniformBuffers())
@@ -181,7 +185,7 @@ bool ProgramPipelineState::hasUniformBuffers() const
 
 bool ProgramPipelineState::hasStorageBuffers() const
 {
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasStorageBuffers())
@@ -195,7 +199,7 @@ bool ProgramPipelineState::hasStorageBuffers() const
 
 bool ProgramPipelineState::hasAtomicCounterBuffers() const
 {
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasAtomicCounterBuffers())
@@ -209,7 +213,7 @@ bool ProgramPipelineState::hasAtomicCounterBuffers() const
 
 bool ProgramPipelineState::hasImages() const
 {
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasImages())
@@ -223,7 +227,7 @@ bool ProgramPipelineState::hasImages() const
 
 bool ProgramPipelineState::hasTransformFeedbackOutput() const
 {
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasTransformFeedbackOutput())
@@ -293,13 +297,22 @@ void ProgramPipeline::useProgramStages(const Context *context,
 
 void ProgramPipeline::updateLinkedShaderStages()
 {
-    mState.mExecutable.mLinkedShaderStages.reset();
+    mState.mExecutable.mLinkedComputeShaderStages.reset();
+    mState.mExecutable.mLinkedGraphicsShaderStages.reset();
 
     for (const ShaderType shaderType : gl::AllShaderTypes())
     {
-        if (mState.mPrograms[shaderType])
+        Program *program = mState.mPrograms[shaderType];
+        if (program)
         {
-            mState.mExecutable.mLinkedShaderStages.set(shaderType);
+            if (shaderType == ShaderType::Compute)
+            {
+                mState.mExecutable.mLinkedComputeShaderStages.set(shaderType);
+            }
+            else
+            {
+                mState.mExecutable.mLinkedGraphicsShaderStages.set(shaderType);
+            }
         }
     }
 }
@@ -322,7 +335,7 @@ void ProgramPipeline::updateExecutableAttributes()
 
 void ProgramPipeline::updateExecutableTextures()
 {
-    for (const ShaderType shaderType : gl::AllShaderTypes())
+    for (const ShaderType shaderType : mState.mExecutable.getLinkedShaderStages())
     {
         const Program *program = getShaderProgram(shaderType);
         if (program)
@@ -362,15 +375,13 @@ ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
 
     // Note that kAllGraphicsShaderTypes is sorted according to the rendering pipeline.
     ShaderType lastActiveStage = ShaderType::InvalidEnum;
-    for (ShaderType stage : kAllGraphicsShaderTypes)
+    for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
     {
-        previousActiveStage[stage] = lastActiveStage;
+        previousActiveStage[shaderType] = lastActiveStage;
 
-        const Program *program = getShaderProgram(stage);
-        if (program)
-        {
-            lastActiveStage = stage;
-        }
+        const Program *program = getShaderProgram(shaderType);
+        ASSERT(program);
+        lastActiveStage = shaderType;
     }
 
     // First, go through output varyings and create two maps (one by name, one by location) for
@@ -382,18 +393,12 @@ ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
     ProgramMergedVaryings merged;
 
     // Gather output varyings.
-    for (ShaderType shaderType : kAllGraphicsShaderTypes)
+    for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
     {
         const Program *program = getShaderProgram(shaderType);
-        if (!program)
-        {
-            continue;
-        }
+        ASSERT(program);
         Shader *shader = program->getState().getAttachedShader(shaderType);
-        if (!shader)
-        {
-            continue;
-        }
+        ASSERT(shader);
 
         for (const sh::ShaderVariable &varying : shader->getOutputVaryings())
         {
@@ -417,18 +422,12 @@ ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
     }
 
     // Gather input varyings, and match them with output varyings of the previous stage.
-    for (ShaderType shaderType : kAllGraphicsShaderTypes)
+    for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
     {
         const Program *program = getShaderProgram(shaderType);
-        if (!program)
-        {
-            continue;
-        }
+        ASSERT(program);
         Shader *shader = program->getState().getAttachedShader(shaderType);
-        if (!shader)
-        {
-            continue;
-        }
+        ASSERT(shader);
         ShaderType previousStage = previousActiveStage[shaderType];
 
         for (const sh::ShaderVariable &varying : shader->getInputVaryings())
@@ -517,14 +516,12 @@ angle::Result ProgramPipeline::link(const Context *context)
         VaryingPacking varyingPacking(maxVaryingVectors, packMode);
 
         const ProgramMergedVaryings &mergedVaryings = getMergedVaryings();
-        for (ShaderType shaderType : kAllGraphicsShaderTypes)
+        for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
         {
             Program *program = mState.mPrograms[shaderType];
-            if (program)
-            {
-                program->getResources().varyingPacking.reset();
-                ANGLE_TRY(program->linkMergedVaryings(context, mergedVaryings));
-            }
+            ASSERT(program);
+            program->getResources().varyingPacking.reset();
+            ANGLE_TRY(program->linkMergedVaryings(context, mergedVaryings));
         }
     }
 
@@ -536,13 +533,10 @@ angle::Result ProgramPipeline::link(const Context *context)
 bool ProgramPipeline::linkVaryings(InfoLog &infoLog) const
 {
     Shader *previousShader = nullptr;
-    for (ShaderType shaderType : kAllGraphicsShaderTypes)
+    for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
     {
         Program *currentProgram = mState.mPrograms[shaderType];
-        if (!currentProgram)
-        {
-            continue;
-        }
+        ASSERT(currentProgram);
 
         Shader *currentShader =
             const_cast<Shader *>(currentProgram->getState().getAttachedShader(shaderType));
@@ -583,7 +577,7 @@ void ProgramPipeline::validate(const gl::Context *context)
     InfoLog &infoLog = mState.mExecutable.getInfoLog();
     infoLog.reset();
 
-    for (const ShaderType shaderType : gl::AllShaderTypes())
+    for (const ShaderType shaderType : mState.mExecutable.getLinkedShaderStages())
     {
         Program *shaderProgram = mState.mPrograms[shaderType];
         if (shaderProgram)
@@ -611,7 +605,7 @@ void ProgramPipeline::validate(const gl::Context *context)
     {
         mState.mValid = false;
 
-        for (const ShaderType shaderType : gl::AllShaderTypes())
+        for (const ShaderType shaderType : mState.mExecutable.getLinkedShaderStages())
         {
             Program *shaderProgram = mState.mPrograms[shaderType];
             if (shaderProgram)
@@ -645,7 +639,7 @@ angle::Result ProgramPipeline::syncState(const Context *context)
 {
     if (mDirtyBits.any())
     {
-        for (const ShaderType shaderType : gl::AllShaderTypes())
+        for (const ShaderType shaderType : mState.mExecutable.getLinkedShaderStages())
         {
             Program *shaderProgram = mState.mPrograms[shaderType];
             ANGLE_TRY(shaderProgram->syncState(context));
