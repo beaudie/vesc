@@ -70,7 +70,7 @@ AttributesMask ProgramExecutable::getAttributesMask() const
     return mAttributesMask;
 }
 
-bool ProgramExecutable::hasDefaultUniforms(const gl::State &glState) const
+bool ProgramExecutable::hasDefaultUniforms() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
     if (mProgramState)
@@ -78,12 +78,10 @@ bool ProgramExecutable::hasDefaultUniforms(const gl::State &glState) const
         return mProgramState->hasDefaultUniforms();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
-
-    return false;
+    return mProgramPipelineState->hasDefaultUniforms();
 }
 
-bool ProgramExecutable::hasTextures(const gl::State &glState) const
+bool ProgramExecutable::hasTextures() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
     if (mProgramState)
@@ -91,12 +89,10 @@ bool ProgramExecutable::hasTextures(const gl::State &glState) const
         return mProgramState->hasTextures();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
-
-    return false;
+    return mProgramPipelineState->hasTextures();
 }
 
-bool ProgramExecutable::hasUniformBuffers(const gl::State &glState) const
+bool ProgramExecutable::hasUniformBuffers() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
     if (mProgramState)
@@ -104,12 +100,10 @@ bool ProgramExecutable::hasUniformBuffers(const gl::State &glState) const
         return mProgramState->hasUniformBuffers();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
-
-    return false;
+    return mProgramPipelineState->hasUniformBuffers();
 }
 
-bool ProgramExecutable::hasStorageBuffers(const gl::State &glState) const
+bool ProgramExecutable::hasStorageBuffers() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
     if (mProgramState)
@@ -117,12 +111,10 @@ bool ProgramExecutable::hasStorageBuffers(const gl::State &glState) const
         return mProgramState->hasStorageBuffers();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
-
-    return false;
+    return mProgramPipelineState->hasStorageBuffers();
 }
 
-bool ProgramExecutable::hasAtomicCounterBuffers(const gl::State &glState) const
+bool ProgramExecutable::hasAtomicCounterBuffers() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
     if (mProgramState)
@@ -130,12 +122,10 @@ bool ProgramExecutable::hasAtomicCounterBuffers(const gl::State &glState) const
         return mProgramState->hasAtomicCounterBuffers();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
-
-    return false;
+    return mProgramPipelineState->hasAtomicCounterBuffers();
 }
 
-bool ProgramExecutable::hasImages(const gl::State &glState) const
+bool ProgramExecutable::hasImages() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
     if (mProgramState)
@@ -143,12 +133,10 @@ bool ProgramExecutable::hasImages(const gl::State &glState) const
         return mProgramState->hasImages();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
-
-    return false;
+    return mProgramPipelineState->hasImages();
 }
 
-bool ProgramExecutable::hasTransformFeedbackOutput(const gl::State &glState) const
+bool ProgramExecutable::hasTransformFeedbackOutput() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
     if (mProgramState)
@@ -156,9 +144,7 @@ bool ProgramExecutable::hasTransformFeedbackOutput(const gl::State &glState) con
         return mProgramState->hasTransformFeedbackOutput();
     }
 
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
-
-    return false;
+    return mProgramPipelineState->hasTransformFeedbackOutput();
 }
 
 size_t ProgramExecutable::getUniqueUniformBlockCount(const gl::State &glState) const
