@@ -42,12 +42,10 @@
 3570 VULKAN : KHR-GLES31.core.compute_shader.sso-case2 = SKIP
 3570 VULKAN : KHR-GLES31.core.compute_shader.sso-case3 = SKIP
 // Program Pipeline Objects:
-3570 VULKAN : KHR-GLES31.core.shader_atomic_counters.advanced-usage-many-draw-calls2 = FAIL
-3570 VULKAN : KHR-GLES31.core.shader_atomic_counters.advanced-usage-many-dispatches = FAIL
-3570 VULKAN : KHR-GLES31.core.vertex_attrib_binding.basic-usage = FAIL
-3570 VULKAN : KHR-GLES31.core.shader_image_load_store.advanced-sso-simple = FAIL
+3570 VULKAN : KHR-GLES31.core.shader_atomic_counters.advanced-usage-many-dispatches = SKIP
+3570 VULKAN : KHR-GLES31.core.shader_image_load_store.advanced-sso-simple = SKIP
 // Separate shader objects:
-3570 VULKAN : KHR-GLES31.core.sepshaderobjs* = FAIL
+3570 VULKAN : KHR-GLES31.core.sepshaderobjs* = SKIP
 
 // Shader support:
 4402 : KHR-GLES31.core.shader_bitfield_operation.frexp.* = SKIP
