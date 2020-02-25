@@ -166,6 +166,30 @@
       "revId": "39087f4a64d87f1bee1f06ad68d6797c60881c02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0567b661_c8891a34",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-02-25T18:12:11Z",
+      "side": 0,
+      "message": "If you want to do whole buffer conversion, you want to keep the converted buffer with original buffer so that when you bind element buffer you wont have to reconvert. Basically your vertex conversion is the right mechanism. Otherwise, you just better do it as I did here, only convert what you need. IMHO, this is good enough for now and can look to further optimize it once all high priority works are done.",
+      "parentUuid": "c3c1cadf_5533c3e5",
+      "range": {
+        "startLine": 887,
+        "startChar": 59,
+        "endLine": 888,
+        "endChar": 54
+      },
+      "revId": "39087f4a64d87f1bee1f06ad68d6797c60881c02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
