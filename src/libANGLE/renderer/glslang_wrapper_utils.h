@@ -90,6 +90,12 @@ std::string GetMappedSamplerNameOld(const std::string &originalName);
 std::string GlslangGetMappedSamplerName(const std::string &originalName);
 std::string GetXfbBufferName(const uint32_t bufferIndex);
 
+void AssignLocations(GlslangSourceOptions &options,
+                     const gl::ProgramState &programState,
+                     const gl::ProgramLinkedResources &resources,
+                     const gl::ShaderType shaderType,
+                     gl::ShaderMap<ShaderInterfaceVariableInfoMap> *variableInfoMapOut);
+
 // Transform the source to include actual binding points for various shader resources (textures,
 // buffers, xfb, etc).  For some variables, these values are instead output to the variableInfoMap
 // to be set during a SPIR-V transformation.  This is a transitory step towards moving all variables
