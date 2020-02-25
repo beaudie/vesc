@@ -408,9 +408,12 @@ void ProgramPipelineManager::DeleteObject(const Context *context, ProgramPipelin
     pipeline->release(context);
 }
 
-ProgramPipelineID ProgramPipelineManager::createProgramPipeline()
+ProgramPipelineID ProgramPipelineManager::createProgramPipeline(rx::GLImplFactory *factory)
 {
-    return AllocateEmptyObject(&mHandleAllocator, &mObjectMap);
+    ProgramPipelineID handle  = ProgramPipelineID{mHandleAllocator.allocate()};
+    ProgramPipeline *pipeline = AllocateNewObject(factory, handle);
+    mObjectMap.assign(handle, pipeline);
+    return handle;
 }
 
 ProgramPipeline *ProgramPipelineManager::getProgramPipeline(ProgramPipelineID handle) const
