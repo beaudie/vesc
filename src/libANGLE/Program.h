@@ -352,6 +352,14 @@ class ProgramState final : angle::NonCopyable
         return mAttachedShadersMarkedForDetach[shaderType];
     }
 
+    // A Program can only either be graphics or compute, but never both, so it
+    // can answer isCompute() based on which shaders it has.
+    bool isCompute() const
+    {
+        return (mExecutable.hasLinkedShaderStage(ShaderType::Compute) ||
+                (getAttachedShader(ShaderType::Compute)));
+    }
+
   private:
     friend class MemoryProgramCache;
     friend class Program;
