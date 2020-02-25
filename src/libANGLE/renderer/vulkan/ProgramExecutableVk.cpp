@@ -31,13 +31,14 @@ ShaderInfo::ShaderInfo() {}
 ShaderInfo::~ShaderInfo() = default;
 
 angle::Result ShaderInfo::initShaders(ContextVk *contextVk,
+                                      const gl::ProgramExecutable &executable,
                                       const gl::ShaderMap<std::string> &shaderSources,
                                       const ShaderMapInterfaceVariableInfoMap &variableInfoMap)
 {
     ASSERT(!valid());
 
-    ANGLE_TRY(GlslangWrapperVk::GetShaderCode(contextVk, contextVk->getCaps(), shaderSources,
-                                              variableInfoMap, &mSpirvBlobs));
+    ANGLE_TRY(GlslangWrapperVk::GetShaderCode(contextVk, executable, contextVk->getCaps(),
+                                              shaderSources, variableInfoMap, &mSpirvBlobs));
 
     mIsInitialized = true;
     return angle::Result::Continue;
@@ -164,6 +165,7 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
 
     mDefaultProgramInfo.release(contextVk);
     mLineRasterProgramInfo.release(contextVk);
+    mComputeProgramInfo.release(contextVk);
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(gl::BinaryInputStream *stream)
@@ -539,14 +541,14 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
 {
     const gl::State &glState         = contextVk->getState();
     bool bresenhamEmulationEnabled   = contextVk->isBresenhamEmulationEnabled(mode);
-    ProgramInfo &programInfo         = getProgramInfo(bresenhamEmulationEnabled);
+    ProgramInfo &programInfo         = getGraphicsProgramInfo(bresenhamEmulationEnabled);
     RendererVk *renderer             = contextVk->getRenderer();
     vk::PipelineCache *pipelineCache = nullptr;
 
-    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
-    ASSERT(executable);
+    const gl::ProgramExecutable *glExecutable = glState.getProgramExecutable();
+    ASSERT(glExecutable && !glExecutable->isCompute());
 
-    for (const gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : glExecutable->getLinkedShaderStages())
     {
         ProgramVk *programVk = getShaderProgram(glState, shaderType);
         if (programVk)
@@ -557,7 +559,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
     }
 
     vk::ShaderProgramHelper *shaderProgram = programInfo.getShaderProgram();
-    ASSERT(shaderProgram && shaderProgram->isGraphicsProgram());
+    ASSERT(shaderProgram);
     ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
     return shaderProgram->getGraphicsPipeline(
         contextVk, &contextVk->getRenderPassCache(), *pipelineCache,
@@ -568,15 +570,17 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
 angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,
                                                       vk::PipelineAndSerial **pipelineOut)
 {
-    const gl::State &glState = contextVk->getState();
-    ProgramInfo &programInfo = getDefaultProgramInfo();
+    const gl::State &glState                  = contextVk->getState();
+    const gl::ProgramExecutable *glExecutable = glState.getProgramExecutable();
+    ASSERT(glExecutable && glExecutable->isCompute());
 
     ProgramVk *programVk = getShaderProgram(glState, gl::ShaderType::Compute);
     ASSERT(programVk);
+    ProgramInfo &programInfo = getComputeProgramInfo();
     ANGLE_TRY(programVk->initComputeProgram(contextVk, programInfo));
 
     vk::ShaderProgramHelper *shaderProgram = programInfo.getShaderProgram();
-    ASSERT(shaderProgram && !shaderProgram->isGraphicsProgram());
+    ASSERT(shaderProgram);
     return shaderProgram->getComputePipeline(contextVk, getPipelineLayout(), pipelineOut);
 }
 
