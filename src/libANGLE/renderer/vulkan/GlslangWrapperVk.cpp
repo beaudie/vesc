@@ -48,8 +48,8 @@ void GlslangWrapperVk::GetShaderSource(
     gl::ShaderMap<std::string> *shaderSourcesOut,
     gl::ShaderMap<ShaderInterfaceVariableInfoMap> *variableInfoMapOut)
 {
-    GlslangGetShaderSource(CreateSourceOptions(features), programState, resources, shaderSourcesOut,
-                           variableInfoMapOut);
+    GlslangSourceOptions options = CreateSourceOptions(features);
+    GlslangGetShaderSource(options, programState, resources, shaderSourcesOut, variableInfoMapOut);
 }
 
 // static
