@@ -37,9 +37,6 @@
 ////
 
 // Verify that compute and non-compute stages can be attached to one pipeline object:
-3570 VULKAN : KHR-GLES31.core.compute_shader.sso-compute-pipeline = SKIP
-3570 VULKAN : KHR-GLES31.core.compute_shader.sso-case2 = SKIP
-3570 VULKAN : KHR-GLES31.core.compute_shader.sso-case3 = SKIP
 // Separate shader objects:
 3570 VULKAN : KHR-GLES31.core.sepshaderobjs.StateInteraction = FAIL
 3570 VULKAN : KHR-GLES31.core.sepshaderobjs.InterfacePrecisionMatchingFloat = SKIP
