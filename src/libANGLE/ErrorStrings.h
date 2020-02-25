@@ -275,6 +275,7 @@ MSG kInvalidPrimitiveMode = "Invalid primitive mode.";
 MSG kInvalidProgramBinaryFormat = "Program binary format is not valid.";
 MSG kInvalidProgramInterface = "Invalid program interface.";
 MSG kInvalidProgramName = "Program object expected.";
+MSG kInvalidProgramPipelineName = "name is not a valid program pipeline.";
 MSG kInvalidProgramResourceIndex = "Invalid program resource index.";
 MSG kInvalidProgramResourceProperty = "Invalid program resource property.";
 MSG kInvalidProjectionMatrix = "Invalid projection matrix. Left/right, top/bottom, near/far intervals cannot be zero, and near/far cannot be less than zero.";
@@ -499,6 +500,10 @@ MSG kWebgl2NameLengthLimitExceeded = "Location lengths must not be greater than 
 MSG kWebglBindAttribLocationReservedPrefix = "Attributes that begin with 'webgl_', or '_webgl_' are not allowed.";
 MSG kWebglNameLengthLimitExceeded = "Location name lengths must not be greater than 256 characters.";
 MSG kZeroBoundToTarget = "Zero is bound to target.";
+MSG kUnrecognizedShaderStageBit = "Unrecognized shader stage bit.";
+MSG kProgramNotSeparable = "Program object was not linked with its GL_PROGRAM_SEPARABLE status set.";
+MSG kProgramPipelineDoesNotExist = "Program pipeline does not exist.";
+MSG kExpectedProgramPipelineName = "Expected a program name, but found a shader name.";
 // clang-format on
 
 #undef MSG
