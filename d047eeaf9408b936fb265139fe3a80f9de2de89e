@@ -19,6 +19,70 @@
     },
     {
       "key": {
+        "uuid": "e65c8b16_56be78bb",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-25T20:00:31Z",
+      "side": 1,
+      "message": "nit: you can include this code always by prefixing with ANGLE_MAYBE_UNUSED. This is slightly preferable as it\u0027ll be easier to maintain on other platforms.\n\nAlso can you move this up to the top into an anonymous namespace {} block?",
+      "parentUuid": "c0d706c6_01a97ba0",
+      "revId": "d047eeaf9408b936fb265139fe3a80f9de2de89e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4fe3ced_d1d5a3f2",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-25T20:00:31Z",
+      "side": 1,
+      "message": "nit: some style suggestions:\n\nsplit these into individual if statements, and compare single values with !\u003d 0. Compare the double bit value with value \u0026 kBits \u003d\u003d kBits if you need both bits. !\u003d 0 if you only need one.",
+      "range": {
+        "startLine": 179,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 58
+      },
+      "revId": "d047eeaf9408b936fb265139fe3a80f9de2de89e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3f886b6_1632ea50",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-25T20:00:31Z",
+      "side": 1,
+      "message": "nit: can you ensure the new struct is zero init using {}",
+      "range": {
+        "startLine": 558,
+        "startChar": 12,
+        "endLine": 558,
+        "endChar": 22
+      },
+      "revId": "d047eeaf9408b936fb265139fe3a80f9de2de89e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "471e8f8f_9ec20c49",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 3
@@ -33,6 +97,24 @@
       "revId": "d047eeaf9408b936fb265139fe3a80f9de2de89e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30e12760_5d065e97",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-25T20:00:31Z",
+      "side": 1,
+      "message": "Seems fine to me.",
+      "parentUuid": "471e8f8f_9ec20c49",
+      "revId": "d047eeaf9408b936fb265139fe3a80f9de2de89e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
