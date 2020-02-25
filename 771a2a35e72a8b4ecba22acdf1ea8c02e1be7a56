@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3a7bba6_aab50524",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-25T13:33:39Z",
+      "side": 1,
+      "message": "should we make this into a helper so that we can share it with the other ESSL code?",
+      "range": {
+        "startLine": 1012,
+        "startChar": 0,
+        "endLine": 1025,
+        "endChar": 5
+      },
+      "revId": "771a2a35e72a8b4ecba22acdf1ea8c02e1be7a56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
