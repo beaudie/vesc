@@ -19,7 +19,7 @@ vars = {
   'checkout_angle_internal': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '86e00b5dd2f15e46f20b7877c15c3c862336fd40',
+  'chromium_revision': '777fdc389ef33cec717a035ac8e2f90c245ec862',
 
   # Current revision of VK-GL-CTS (a.k.a dEQP).
   'vk_gl_cts_revision': 'a6b249819f7177821d4b7eefff36af07fef71825',
@@ -46,7 +46,7 @@ vars = {
   'spirv_headers_revision': 'dc77030acc9c6fe7ca21fff54c5a9d7b532d7da6',
 
   # Current revision of SPIRV-Tools for Vulkan.
-  'spirv_tools_revision': '79f8caf9154a0328a87424354bd10ab69e811185',
+  'spirv_tools_revision': '8910ea5f1c7bc38f79a8b70b265cd9d1571f4b56',
 
   # Current revision of Khronos Vulkan-Headers.
   'vulkan_headers_revision': '9bd3f561bcee3f01d22912de10bb07ce4e23d378',
@@ -182,7 +182,7 @@ deps = {
   },
 
   'third_party/SwiftShader': {
-    'url': '{swiftshader_git}/SwiftShader@214ec337a0b2745e6c41fbb3d562fa517122812f',
+    'url': '{swiftshader_git}/SwiftShader@e162b023f53956b05b26972e9ecb75985b2f2c27',
     'condition': 'not build_with_chromium',
   },
 
