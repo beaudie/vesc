@@ -544,7 +544,7 @@ void State::reset(const Context *context)
 ANGLE_INLINE void State::unsetActiveTextures(ActiveTextureMask textureMask)
 {
     // Unset any relevant bound textures.
-    for (size_t textureIndex : mProgram->getActiveSamplersMask())
+    for (size_t textureIndex : mExecutable->getActiveSamplersMask())
     {
         mActiveTexturesCache[textureIndex] = nullptr;
         mCompleteTextureBindings[textureIndex].reset();
@@ -581,8 +581,7 @@ ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
             sampler ? sampler->getSamplerState() : texture->getSamplerState();
         mTexturesIncompatibleWithSamplers[textureIndex] =
             !texture->getTextureState().compatibleWithSamplerFormat(
-                mProgram->getState().getSamplerFormatForTextureUnitIndex(textureIndex),
-                samplerState);
+                mExecutable->getSamplerFormatForTextureUnitIndex(textureIndex), samplerState);
     }
     else
     {
@@ -1189,8 +1188,8 @@ void State::setSamplerTexture(const Context *context, TextureType type, Texture 
 {
     mSamplerTextures[type][mActiveSampler].set(context, texture);
 
-    if (mProgram && mProgram->getActiveSamplersMask()[mActiveSampler] &&
-        IsTextureCompatibleWithSampler(type, mProgram->getActiveSamplerTypes()[mActiveSampler]))
+    if (mExecutable && mExecutable->getActiveSamplersMask()[mActiveSampler] &&
+        IsTextureCompatibleWithSampler(type, mExecutable->getActiveSamplerTypes()[mActiveSampler]))
     {
         updateActiveTexture(context, mActiveSampler, texture);
     }
@@ -1495,7 +1494,7 @@ angle::Result State::setProgram(const Context *context, Program *newProgram)
     {
         if (mProgram)
         {
-            unsetActiveTextures(mProgram->getActiveSamplersMask());
+            unsetActiveTextures(mExecutable->getActiveSamplersMask());
             mProgram->release(context);
         }
 
@@ -1545,9 +1544,43 @@ bool State::removeTransformFeedbackBinding(const Context *context,
     return false;
 }
 
-void State::setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline)
+angle::Result State::useProgramStages(const Context *context,
+                                      ProgramPipeline *programPipeline,
+                                      GLbitfield stages,
+                                      Program *shaderProgram)
 {
+    programPipeline->useProgramStages(stages, shaderProgram);
+    ANGLE_TRY(onProgramPipelineExecutableChange(context, programPipeline));
+
+    return angle::Result::Continue;
+}
+
+angle::Result State::setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline)
+{
+    if (mProgramPipeline.get() == pipeline)
+    {
+        return angle::Result::Continue;
+    }
+
+    if (mProgramPipeline.get())
+    {
+        unsetActiveTextures(mProgramPipeline->getExecutable().getActiveSamplersMask());
+    }
+
     mProgramPipeline.set(context, pipeline);
+
+    if (mProgramPipeline.get())
+    {
+        mProgramPipeline->addRef();
+        ANGLE_TRY(onProgramPipelineExecutableChange(context, mProgramPipeline.get()));
+    }
+
+    mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
+
+    if (mProgramPipeline.get() && mProgramPipeline->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+    }
 
     // A bound Program always overrides the ProgramPipeline, so only update the
     // current ProgramExecutable if there isn't currently a Program bound.
@@ -1555,6 +1588,8 @@ void State::setProgramPipelineBinding(const Context *context, ProgramPipeline *p
     {
         mExecutable = &mProgramPipeline->getExecutable();
     }
+
+    return angle::Result::Continue;
 }
 
 void State::detachProgramPipeline(const Context *context, ProgramPipelineID pipeline)
@@ -2711,7 +2746,7 @@ angle::Result State::syncTexturesInit(const Context *context)
     if (!mProgram)
         return angle::Result::Continue;
 
-    for (size_t textureUnitIndex : mProgram->getActiveSamplersMask())
+    for (size_t textureUnitIndex : mExecutable->getActiveSamplersMask())
     {
         Texture *texture = mActiveTexturesCache[textureUnitIndex];
         if (texture)
@@ -2726,7 +2761,7 @@ angle::Result State::syncImagesInit(const Context *context)
 {
     ASSERT(mRobustResourceInit);
     ASSERT(mProgram);
-    for (size_t imageUnitIndex : mProgram->getActiveImagesMask())
+    for (size_t imageUnitIndex : mExecutable->getActiveImagesMask())
     {
         Texture *texture = mImageUnits[imageUnitIndex].texture.get();
         if (texture)
@@ -2826,7 +2861,22 @@ angle::Result State::syncVertexArray(const Context *context)
 
 angle::Result State::syncProgram(const Context *context)
 {
-    return mProgram->syncState(context);
+    // There may not be a program if the calling application only uses program pipelines.
+    if (mProgram)
+    {
+        return mProgram->syncState(context);
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result State::syncProgramPipeline(const Context *context)
+{
+    // There may not be a program pipeline if the calling application only uses programs.
+    if (mProgramPipeline.get())
+    {
+        return mProgramPipeline->syncState(context);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result State::syncDirtyObject(const Context *context, GLenum target)
@@ -2903,8 +2953,8 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
     }
 
     // Set any bound textures.
-    const ActiveTextureTypeArray &textureTypes = program->getActiveSamplerTypes();
-    for (size_t textureIndex : program->getActiveSamplersMask())
+    const ActiveTextureTypeArray &textureTypes = mExecutable->getActiveSamplerTypes();
+    for (size_t textureIndex : mExecutable->getActiveSamplersMask())
     {
         TextureType type = textureTypes[textureIndex];
 
@@ -2916,7 +2966,52 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
         updateActiveTexture(context, textureIndex, texture);
     }
 
-    for (size_t imageUnitIndex : program->getActiveImagesMask())
+    for (size_t imageUnitIndex : mExecutable->getActiveImagesMask())
+    {
+        Texture *image = mImageUnits[imageUnitIndex].texture.get();
+        if (!image)
+            continue;
+
+        if (image->hasAnyDirtyBit())
+        {
+            ANGLE_TRY(image->syncState(context));
+        }
+
+        if (mRobustResourceInit && image->initState() == InitState::MayNeedInit)
+        {
+            mDirtyObjects.set(DIRTY_OBJECT_IMAGES_INIT);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result State::onProgramPipelineExecutableChange(const Context *context,
+                                                       ProgramPipeline *programPipeline)
+{
+    mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
+
+    if (programPipeline->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+    }
+
+    // Set any bound textures.
+    const ActiveTextureTypeArray &textureTypes =
+        programPipeline->getExecutable().getActiveSamplerTypes();
+    for (size_t textureIndex : programPipeline->getExecutable().getActiveSamplersMask())
+    {
+        TextureType type = textureTypes[textureIndex];
+
+        // This can happen if there is a conflicting texture type.
+        if (type == TextureType::InvalidEnum)
+            continue;
+
+        Texture *texture = getTextureForActiveSampler(type, textureIndex);
+        updateActiveTexture(context, textureIndex, texture);
+    }
+
+    for (size_t imageUnitIndex : programPipeline->getExecutable().getActiveImagesMask())
     {
         Texture *image = mImageUnits[imageUnitIndex].texture.get();
         if (!image)
@@ -2977,7 +3072,7 @@ void State::onActiveTextureChange(const Context *context, size_t textureUnit)
 {
     if (mProgram)
     {
-        TextureType type = mProgram->getActiveSamplerTypes()[textureUnit];
+        TextureType type = mExecutable->getActiveSamplerTypes()[textureUnit];
         if (type != TextureType::InvalidEnum)
         {
             Texture *activeTexture = getTextureForActiveSampler(type, textureUnit);
@@ -2990,7 +3085,7 @@ void State::onActiveTextureStateChange(const Context *context, size_t textureUni
 {
     if (mProgram)
     {
-        TextureType type = mProgram->getActiveSamplerTypes()[textureUnit];
+        TextureType type = mExecutable->getActiveSamplerTypes()[textureUnit];
         if (type != TextureType::InvalidEnum)
         {
             Texture *activeTexture = getTextureForActiveSampler(type, textureUnit);
