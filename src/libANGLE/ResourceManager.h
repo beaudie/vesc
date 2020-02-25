@@ -297,7 +297,8 @@ class ProgramPipelineManager : public TypedResourceManager<ProgramPipeline,
                                                            ProgramPipelineID>
 {
   public:
-    ProgramPipelineID createProgramPipeline();
+    ProgramPipelineID genProgramPipeline();
+    ProgramPipeline *createProgramPipeline(rx::GLImplFactory *factory, ProgramPipelineID handle);
     ProgramPipeline *getProgramPipeline(ProgramPipelineID handle) const;
 
     ProgramPipeline *checkProgramPipelineAllocation(rx::GLImplFactory *factory,
