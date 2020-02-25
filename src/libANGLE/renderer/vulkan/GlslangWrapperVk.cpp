@@ -44,7 +44,7 @@ void GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(
     glslangProgramInterfaceInfo->uniformsAndXfbDescriptorSetIndex =
         kUniformsAndXfbDescriptorSetIndex;
     glslangProgramInterfaceInfo->currentUniformBindingIndex = 0;
-    glslangProgramInterfaceInfo->textureDescriptorSetIndex = kTextureDescriptorSetIndex;
+    glslangProgramInterfaceInfo->textureDescriptorSetIndex  = kTextureDescriptorSetIndex;
     glslangProgramInterfaceInfo->currentTextureBindingIndex = 0;
     glslangProgramInterfaceInfo->shaderResourceDescriptorSetIndex =
         kShaderResourceDescriptorSetIndex;
