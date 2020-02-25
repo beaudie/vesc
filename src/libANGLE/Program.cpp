@@ -20,6 +20,7 @@
 #include "common/version.h"
 #include "compiler/translator/blocklayout.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/ErrorStrings.h"
 #include "libANGLE/MemoryProgramCache.h"
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/ResourceManager.h"
@@ -760,20 +761,6 @@ void LoadInterfaceBlock(BinaryInputStream *stream, InterfaceBlock *block)
 
     LoadShaderVariableBuffer(stream, block);
 }
-
-// TODO(timvp): http://anglebug.com/3570: Remove when PPOs are supported
-size_t CountUniqueBlocks(const std::vector<InterfaceBlock> &blocks)
-{
-    size_t count = 0;
-    for (const InterfaceBlock &block : blocks)
-    {
-        if (!block.isArray || block.arrayElement == 0)
-        {
-            ++count;
-        }
-    }
-    return count;
-}
 }  // anonymous namespace
 
 // Saves the linking context for later use in resolveLink().
@@ -1121,17 +1108,6 @@ Shader *ProgramState::getAttachedShader(ShaderType shaderType) const
     return mAttachedShaders[shaderType];
 }
 
-// TODO(timvp): http://anglebug.com/3570: Remove when PPOs are supported
-size_t ProgramState::getUniqueUniformBlockCount() const
-{
-    return CountUniqueBlocks(mUniformBlocks);
-}
-
-size_t ProgramState::getUniqueStorageBlockCount() const
-{
-    return CountUniqueBlocks(mShaderStorageBlocks);
-}
-
 size_t ProgramState::getTransformFeedbackBufferCount() const
 {
     return mTransformFeedbackStrides.size();
@@ -1405,8 +1381,7 @@ void Program::bindFragmentOutputIndex(GLuint index, const char *name)
 
 angle::Result Program::linkMergedVaryings(const Context *context,
                                           VaryingPacking &varyingPacking,
-                                          const ProgramMergedVaryings &mergedVaryings,
-                                          ProgramLinkedResources *resources)
+                                          const ProgramMergedVaryings &mergedVaryings)
 {
     ShaderType tfStage =
         mState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry : ShaderType::Vertex;
@@ -1418,7 +1393,7 @@ angle::Result Program::linkMergedVaryings(const Context *context,
         return angle::Result::Stop;
     }
 
-    if (!resources->varyingPacking.collectAndPackUserVaryings(
+    if (!mResources->varyingPacking.collectAndPackUserVaryings(
             infoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames(), isSeparable()))
     {
         return angle::Result::Stop;
@@ -1478,17 +1453,16 @@ angle::Result Program::link(const Context *context)
     bool result = linkValidateShaders(infoLog);
     ASSERT(result);
 
-    std::unique_ptr<ProgramLinkedResources> resources;
     if (mState.mAttachedShaders[ShaderType::Compute])
     {
-        resources.reset(new ProgramLinkedResources(
+        mResources.reset(new ProgramLinkedResources(
             0, PackMode::ANGLE_RELAXED, &mState.mUniformBlocks, &mState.mUniforms,
             &mState.mShaderStorageBlocks, &mState.mBufferVariables, &mState.mAtomicCounterBuffers));
 
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context->getCaps(), context->getClientVersion(), infoLog,
                           mState.mUniformLocationBindings, &combinedImageUniforms,
-                          &resources->unusedUniforms))
+                          &mResources->unusedUniforms))
         {
             return angle::Result::Continue;
         }
@@ -1517,8 +1491,8 @@ angle::Result Program::link(const Context *context)
             return angle::Result::Continue;
         }
 
-        InitUniformBlockLinker(mState, &resources->uniformBlockLinker);
-        InitShaderStorageBlockLinker(mState, &resources->shaderStorageBlockLinker);
+        InitUniformBlockLinker(mState, &mResources->uniformBlockLinker);
+        InitShaderStorageBlockLinker(mState, &mResources->shaderStorageBlockLinker);
     }
     else
     {
@@ -1535,7 +1509,7 @@ angle::Result Program::link(const Context *context)
             packMode = PackMode::WEBGL_STRICT;
         }
 
-        resources.reset(new ProgramLinkedResources(
+        mResources.reset(new ProgramLinkedResources(
             static_cast<GLuint>(data.getCaps().maxVaryingVectors), packMode, &mState.mUniformBlocks,
             &mState.mUniforms, &mState.mShaderStorageBlocks, &mState.mBufferVariables,
             &mState.mAtomicCounterBuffers));
@@ -1553,7 +1527,7 @@ angle::Result Program::link(const Context *context)
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context->getCaps(), context->getClientVersion(), infoLog,
                           mState.mUniformLocationBindings, &combinedImageUniforms,
-                          &resources->unusedUniforms))
+                          &mResources->unusedUniforms))
         {
             return angle::Result::Continue;
         }
@@ -1566,7 +1540,7 @@ angle::Result Program::link(const Context *context)
             return angle::Result::Continue;
         }
 
-        if (!linkValidateGlobalNames(infoLog))
+        if (!mState.mExecutable.linkValidateGlobalNames(infoLog))
         {
             return angle::Result::Continue;
         }
@@ -1584,12 +1558,24 @@ angle::Result Program::link(const Context *context)
             mState.mNumViews = vertexShader->getNumViews();
         }
 
-        InitUniformBlockLinker(mState, &resources->uniformBlockLinker);
-        InitShaderStorageBlockLinker(mState, &resources->shaderStorageBlockLinker);
+        InitUniformBlockLinker(mState, &mResources->uniformBlockLinker);
+        InitShaderStorageBlockLinker(mState, &mResources->shaderStorageBlockLinker);
 
-        const ProgramMergedVaryings &mergedVaryings = getMergedVaryings();
-        ANGLE_TRY(linkMergedVaryings(context, resources->varyingPacking, mergedVaryings,
-                                     resources.get()));
+        ProgramPipeline *programPipeline = context->getState().getProgramPipeline();
+        if (programPipeline && programPipeline->usesShaderProgram(id()))
+        {
+            const ProgramMergedVaryings &mergedVaryings =
+                context->getState().getProgramPipeline()->getMergedVaryings();
+            GLuint maxVaryingVectors =
+                static_cast<GLuint>(context->getState().getCaps().maxVaryingVectors);
+            VaryingPacking varyingPacking(maxVaryingVectors, packMode);
+            ANGLE_TRY(linkMergedVaryings(context, varyingPacking, mergedVaryings));
+        }
+        else
+        {
+            const ProgramMergedVaryings &mergedVaryings = getMergedVaryings();
+            ANGLE_TRY(linkMergedVaryings(context, mResources->varyingPacking, mergedVaryings));
+        }
     }
 
     updateLinkedShaderStages();
@@ -1597,8 +1583,7 @@ angle::Result Program::link(const Context *context)
     mLinkingState.reset(new LinkingState());
     mLinkingState->linkingFromBinary = false;
     mLinkingState->programHash       = programHash;
-    mLinkingState->linkEvent         = mProgram->link(context, *resources, infoLog);
-    mLinkingState->resources         = std::move(resources);
+    mLinkingState->linkEvent         = mProgram->link(context, *mResources, infoLog);
     mLinkResolved                    = false;
 
     // Must be after mProgram->link() to avoid misleading the linker about output variables.
@@ -1610,7 +1595,8 @@ angle::Result Program::link(const Context *context)
 
 bool Program::isLinking() const
 {
-    return (mLinkingState.get() && mLinkingState->linkEvent->isLinking());
+    return (mLinkingState.get() && mLinkingState->linkEvent &&
+            mLinkingState->linkEvent->isLinking());
 }
 
 void Program::resolveLinkImpl(const Context *context)
@@ -4267,116 +4253,6 @@ bool Program::linkValidateTransformFeedback(const Version &version,
     return true;
 }
 
-bool Program::linkValidateGlobalNames(InfoLog &infoLog) const
-{
-    std::unordered_map<std::string, const sh::ShaderVariable *> uniformMap;
-    using BlockAndFieldPair = std::pair<const sh::InterfaceBlock *, const sh::ShaderVariable *>;
-    std::unordered_map<std::string, std::vector<BlockAndFieldPair>> uniformBlockFieldMap;
-
-    for (ShaderType shaderType : kAllGraphicsShaderTypes)
-    {
-        Shader *shader = mState.mAttachedShaders[shaderType];
-        if (!shader)
-        {
-            continue;
-        }
-
-        // Build a map of Uniforms
-        const std::vector<sh::ShaderVariable> uniforms = shader->getUniforms();
-        for (const auto &uniform : uniforms)
-        {
-            uniformMap[uniform.name] = &uniform;
-        }
-
-        // Build a map of Uniform Blocks
-        // This will also detect any field name conflicts between Uniform Blocks without instance
-        // names
-        const std::vector<sh::InterfaceBlock> &uniformBlocks = shader->getUniformBlocks();
-        for (const auto &uniformBlock : uniformBlocks)
-        {
-            // Only uniform blocks without an instance name can create a conflict with their field
-            // names
-            if (!uniformBlock.instanceName.empty())
-            {
-                continue;
-            }
-
-            for (const auto &field : uniformBlock.fields)
-            {
-                if (!uniformBlockFieldMap.count(field.name))
-                {
-                    // First time we've seen this uniform block field name, so add the
-                    // (Uniform Block, Field) pair immediately since there can't be a conflict yet
-                    BlockAndFieldPair blockAndFieldPair(&uniformBlock, &field);
-                    std::vector<BlockAndFieldPair> newUniformBlockList;
-                    newUniformBlockList.push_back(blockAndFieldPair);
-                    uniformBlockFieldMap[field.name] = newUniformBlockList;
-                    continue;
-                }
-
-                // We've seen this name before.
-                // We need to check each of the uniform blocks that contain a field with this name
-                // to see if there's a conflict or not.
-                std::vector<BlockAndFieldPair> prevBlockFieldPairs =
-                    uniformBlockFieldMap[field.name];
-                for (const auto &prevBlockFieldPair : prevBlockFieldPairs)
-                {
-                    const sh::InterfaceBlock *prevUniformBlock      = prevBlockFieldPair.first;
-                    const sh::ShaderVariable *prevUniformBlockField = prevBlockFieldPair.second;
-
-                    if (uniformBlock.isSameInterfaceBlockAtLinkTime(*prevUniformBlock))
-                    {
-                        // The same uniform block should, by definition, contain the same field name
-                        continue;
-                    }
-
-                    // The uniform blocks don't match, so check if the necessary field properties
-                    // also match
-                    if ((field.name == prevUniformBlockField->name) &&
-                        (field.type == prevUniformBlockField->type) &&
-                        (field.precision == prevUniformBlockField->precision))
-                    {
-                        infoLog << "Name conflicts between uniform block field names: "
-                                << field.name;
-                        return false;
-                    }
-                }
-
-                // No conflict, so record this pair
-                BlockAndFieldPair blockAndFieldPair(&uniformBlock, &field);
-                uniformBlockFieldMap[field.name].push_back(blockAndFieldPair);
-            }
-        }
-    }
-
-    // Validate no uniform names conflict with attribute names
-    gl::Shader *vertexShader = mState.mAttachedShaders[ShaderType::Vertex];
-    if (vertexShader)
-    {
-        for (const auto &attrib : vertexShader->getActiveAttributes())
-        {
-            if (uniformMap.count(attrib.name))
-            {
-                infoLog << "Name conflicts between a uniform and an attribute: " << attrib.name;
-                return false;
-            }
-        }
-    }
-
-    // Validate no Uniform Block fields conflict with other Uniforms
-    for (const auto &uniformBlockField : uniformBlockFieldMap)
-    {
-        const std::string &fieldName = uniformBlockField.first;
-        if (uniformMap.count(fieldName))
-        {
-            infoLog << "Name conflicts between a uniform and a uniform block field: " << fieldName;
-            return false;
-        }
-    }
-
-    return true;
-}
-
 void Program::gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyings,
                                               ShaderType stage)
 {
@@ -5581,6 +5457,63 @@ void Program::postResolveLink(const gl::Context *context)
         mState.mBaseVertexLocation   = getUniformLocation("gl_BaseVertex").value;
         mState.mBaseInstanceLocation = getUniformLocation("gl_BaseInstance").value;
     }
+}
+
+const char *Program::validateDrawStates(const State &state, const Extensions &extensions) const
+{
+    if (extensions.multiview || extensions.multiview2)
+    {
+        const int programNumViews     = usesMultiview() ? getNumViews() : 1;
+        Framebuffer *framebuffer      = state.getDrawFramebuffer();
+        const int framebufferNumViews = framebuffer->getNumViews();
+
+        if (framebufferNumViews != programNumViews)
+        {
+            return gl::err::kMultiviewMismatch;
+        }
+
+        if (state.isTransformFeedbackActiveUnpaused() && framebufferNumViews > 1)
+        {
+            return gl::err::kMultiviewTransformFeedback;
+        }
+
+        if (extensions.disjointTimerQuery && framebufferNumViews > 1 &&
+            state.isQueryActive(QueryType::TimeElapsed))
+        {
+            return gl::err::kMultiviewTimerQuery;
+        }
+    }
+
+    // Uniform buffer validation
+    for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < getActiveUniformBlockCount();
+         uniformBlockIndex++)
+    {
+        const InterfaceBlock &uniformBlock = getUniformBlockByIndex(uniformBlockIndex);
+        GLuint blockBinding                = getUniformBlockBinding(uniformBlockIndex);
+        const OffsetBindingPointer<Buffer> &uniformBuffer =
+            state.getIndexedUniformBuffer(blockBinding);
+
+        if (uniformBuffer.get() == nullptr)
+        {
+            // undefined behaviour
+            return gl::err::kUniformBufferUnbound;
+        }
+
+        size_t uniformBufferSize = GetBoundBufferAvailableSize(uniformBuffer);
+        if (uniformBufferSize < uniformBlock.dataSize)
+        {
+            // undefined behaviour
+            return gl::err::kUniformBufferTooSmall;
+        }
+
+        if (extensions.webglCompatibility &&
+            uniformBuffer->isBoundForTransformFeedbackAndOtherUse())
+        {
+            return gl::err::kUniformBufferBoundForTransformFeedback;
+        }
+    }
+
+    return nullptr;
 }
 
 }  // namespace gl
