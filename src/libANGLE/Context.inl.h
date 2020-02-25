@@ -68,7 +68,8 @@ ANGLE_INLINE bool Context::noopDraw(PrimitiveMode mode, GLsizei count)
 {
     const State &state                  = getState();
     const ProgramExecutable *executable = state.getProgramExecutable();
-    if (!isGLES1() && (!executable || !executable->hasLinkedShaderStage(ShaderType::Vertex) ||
+    if (!isGLES1() && (!executable || executable->isCompute() ||
+                       !executable->hasLinkedShaderStage(ShaderType::Vertex) ||
                        !executable->hasLinkedShaderStage(ShaderType::Fragment)))
     {
         return true;
@@ -100,6 +101,14 @@ ANGLE_INLINE angle::Result Context::syncDirtyObjects(const State::DirtyObjects &
 
 ANGLE_INLINE angle::Result Context::prepareForDraw(PrimitiveMode mode)
 {
+    // Need to skip if GLES1, since there is no program or executable
+    if (!isGLES1())
+    {
+        ProgramExecutable *executable = mState.mExecutable;
+        ASSERT(executable);
+        executable->setIsCompute(this, false);
+    }
+
     if (mGLES1Renderer)
     {
         ANGLE_TRY(mGLES1Renderer->prepareForDraw(mode, this, &mState));
