@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fec9b451_ab6f15c6",
+        "filename": "src/libANGLE/renderer/vulkan/doc/FastOpenGLStateTransitions.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-26T14:26:43Z",
+      "side": 1,
+      "message": "is",
+      "range": {
+        "startLine": 6,
+        "startChar": 7,
+        "endLine": 6,
+        "endChar": 9
+      },
+      "revId": "7b9c0f649281cb930c83044cd11eff9b2725a44d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
