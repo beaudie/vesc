@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e1676eb_fedf83c9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2327,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T18:23:15Z",
+      "side": 1,
+      "message": "!\u003d identity seems easier, right?",
+      "range": {
+        "startLine": 2324,
+        "startChar": 0,
+        "endLine": 2327,
+        "endChar": 96
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e737133d_8a64b847",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2334,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T18:23:15Z",
+      "side": 1,
+      "message": "nit: duplicated code with above, can make a helper.",
+      "range": {
+        "startLine": 2331,
+        "startChar": 0,
+        "endLine": 2334,
+        "endChar": 96
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e62382d_a9207564",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2889,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T18:23:15Z",
+      "side": 1,
+      "message": "nit: duplicated code with the below, can be a helper function.",
+      "range": {
+        "startLine": 2874,
+        "startChar": 0,
+        "endLine": 2889,
+        "endChar": 22
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1acde84c_a8d18908",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2901,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T18:23:15Z",
+      "side": 1,
+      "message": "tiny nit: missing space",
+      "range": {
+        "startLine": 2901,
+        "startChar": 0,
+        "endLine": 2901,
+        "endChar": 5
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3165b8a_3436321e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T18:23:15Z",
+      "side": 1,
+      "message": "do you need the \u0027int\u0027 aspect and the explicit numbers? looks like everything should be fine without it.",
+      "range": {
+        "startLine": 34,
+        "startChar": 31,
+        "endLine": 34,
+        "endChar": 36
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c030c8ae_3b9334a2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T18:23:15Z",
+      "side": 1,
+      "message": "naming consistency nit: ForDrawFBO/ForReadFBO instead of just DrawFramebuffer (to match the above)",
+      "range": {
+        "startLine": 369,
+        "startChar": 9,
+        "endLine": 369,
+        "endChar": 44
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd933ebf_627b0435",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T18:23:15Z",
+      "side": 1,
+      "message": "This is a bit too much like \u0027debugging only\u0027 code. I\u0027d suggest not landing this as-is. A split patch to parse ANGLE_FEATURE_OVERRIDES_ENABLED/DISABLED from a prop would be warmly welcome.",
+      "range": {
+        "startLine": 562,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 5
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c9b258c_a6c6b50e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T18:23:15Z",
+      "side": 1,
+      "message": "tiny nit: so the equals signs line up nicely can you move this above your \u0027if\u0027?",
+      "range": {
+        "startLine": 1170,
+        "startChar": 4,
+        "endLine": 1170,
+        "endChar": 31
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
