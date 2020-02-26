@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "02e69a54_077ffea2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-02-26T22:34:59Z",
+      "side": 1,
+      "message": "I think i should keep this change until Brandon\u0027s work on bufferData is done. If I call getDeviceMemory().map() directly, it likely will interfere with his change",
+      "parentUuid": "7749e5eb_399ec3b0",
+      "range": {
+        "startLine": 908,
+        "startChar": 19,
+        "endLine": 908,
+        "endChar": 61
+      },
+      "revId": "3c873ca8afb28891c5f22e397aed141320157122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2d2964af_dd1af098",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
