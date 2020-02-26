@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3f64c96_e216e555",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T17:00:00Z",
+      "side": 1,
+      "message": "nit: should be Capitalized for static methods.\n\nSee https://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#naming",
+      "range": {
+        "startLine": 335,
+        "startChar": 11,
+        "endLine": 335,
+        "endChar": 26
+      },
+      "revId": "78f46b28fd694f663a8ece15866ded83c1886a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eaa6aff_e7eca499",
+        "filename": "src/tests/gl_tests/gles1/TextureParameterLargeValueTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T17:00:00Z",
+      "side": 1,
+      "message": "minor request: can you merge this test into TextureParameterTest.cpp?",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 31,
+        "endChar": 37
+      },
+      "revId": "78f46b28fd694f663a8ece15866ded83c1886a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
