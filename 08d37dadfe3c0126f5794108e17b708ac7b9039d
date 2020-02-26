@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e623a33f_3ea26ee4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-26T19:09:19Z",
+      "side": 1,
+      "message": "This is not true for GLES 3.1:\n\nhttps://www.khronos.org/registry/OpenGL/specs/es/3.1/es_spec_3.1.pdf\n\n\u003e All matched input and output variables have identical precision qualification.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 0
+      },
+      "revId": "08d37dadfe3c0126f5794108e17b708ac7b9039d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
