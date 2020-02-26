@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7c61e45d_17895312",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T17:32:08Z",
+      "side": 1,
+      "message": "Brief summary of conversation: We want to optimize Android; avoid re-compiling shaders as a device rotates; are assuming the hit of the rotation isn\u0027t much on devices that don\u0027t rotate; and don\u0027t have visibility into which desktop devices actually support rotation; and features aren\u0027t plumbed to here.  Overall, keep it simple here.",
+      "parentUuid": "ce07a7e3_8984eb2d",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "085f2a73_54b21fb5",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 14
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "83144810_95db7fcd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2446,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T17:32:08Z",
+      "side": 1,
+      "message": "It\u0027s actually a little more involved than that, but yes x \u0026 y also need to be dealt with.  My changes weren\u0027t ready to push, and so I\u0027m adding a TODO with a pointer to Issue 4431 to address it.",
+      "parentUuid": "085f2a73_54b21fb5",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43fa9dcf_bd9b45da",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 14
@@ -50,6 +86,24 @@
       "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89f174ab_1b5e1ff1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T17:32:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43fa9dcf_bd9b45da",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "39de4471_8ec25813",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T17:32:08Z",
+      "side": 1,
+      "message": "Per above, adding a TODO with a pointer to Issue 4431 to address it.",
+      "parentUuid": "7288974e_1d9c9e07",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6a8f0f3_a55eb27e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 14
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "68e1228d_e95f55dc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4034,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T17:32:08Z",
+      "side": 1,
+      "message": "TODO added here too",
+      "parentUuid": "a6a8f0f3_a55eb27e",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b8e0cb2_d83d2cff",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 14
@@ -118,6 +208,24 @@
       "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "facfe67e_609e2bf0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1645,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T17:32:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b8e0cb2_d83d2cff",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
