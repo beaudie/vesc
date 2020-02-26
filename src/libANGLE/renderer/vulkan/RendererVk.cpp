@@ -984,7 +984,7 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
     // Query line rasterization features
     if (ExtensionFound(VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME, deviceExtensionNames))
     {
-        vk::AddToPNextChain(&deviceFeatures, &mLineRasterizationFeatures);
+        // vk::AddToPNextChain(&deviceFeatures, &mLineRasterizationFeatures);
     }
 
     // Query provoking vertex features
