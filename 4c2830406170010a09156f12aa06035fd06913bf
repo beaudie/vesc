@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b0c5f3ab_eba14ac1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2327,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T22:19:39Z",
+      "side": 1,
+      "message": "Unfortunately, no.  There are 4 values that are rotated 90/270 degrees, and 4 that are rotated 0/180 degrees.\n\nI did contemplate bitmask/union approach.  Turns out there are 3 variables encoded in the 8 values:\n\n- Rotated aspect ration (90/270)\n- 0 vs. 180 (or 90 vs. 270)\n- Y-Flipped or not\n\nUsing an enum is nice for the PackedEnumMap approach you asked for with kPreRotationMatrices.  Using a bitmask is nice for tests like this.  Use a union???",
+      "parentUuid": "7e1676eb_fedf83c9",
+      "range": {
+        "startLine": 2324,
+        "startChar": 0,
+        "endLine": 2327,
+        "endChar": 96
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e737133d_8a64b847",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
@@ -45,6 +69,30 @@
       "revId": "4c2830406170010a09156f12aa06035fd06913bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a474c51e_5feb336a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2334,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T22:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e737133d_8a64b847",
+      "range": {
+        "startLine": 2331,
+        "startChar": 0,
+        "endLine": 2334,
+        "endChar": 96
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "8976535f_31622a97",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2889,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T22:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e62382d_a9207564",
+      "range": {
+        "startLine": 2874,
+        "startChar": 0,
+        "endLine": 2889,
+        "endChar": 22
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acde84c_a8d18908",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
@@ -91,6 +163,30 @@
       "revId": "4c2830406170010a09156f12aa06035fd06913bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feb3e16e_49ce799b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2901,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T22:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acde84c_a8d18908",
+      "range": {
+        "startLine": 2901,
+        "startChar": 0,
+        "endLine": 2901,
+        "endChar": 5
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "e7b91ae4_76f0ba4b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T22:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3165b8a_3436321e",
+      "range": {
+        "startLine": 34,
+        "startChar": 31,
+        "endLine": 34,
+        "endChar": 36
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c030c8ae_3b9334a2",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 15
@@ -137,6 +257,30 @@
       "revId": "4c2830406170010a09156f12aa06035fd06913bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de6fc7a7_082b6682",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T22:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c030c8ae_3b9334a2",
+      "range": {
+        "startLine": 369,
+        "startChar": 9,
+        "endLine": 369,
+        "endChar": 44
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "f743e1f3_b419f758",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T22:19:39Z",
+      "side": 1,
+      "message": "Removed.\n\nDuring \"Perf Huddle\" discussion, we decided to just keep this a compile-time change for now, and focus energy on finishing pre-rotation.  The customers of the property are fine with changing the code and re-compiling.",
+      "parentUuid": "cd933ebf_627b0435",
+      "range": {
+        "startLine": 562,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 5
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c9b258c_a6c6b50e",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 15
@@ -183,6 +351,30 @@
       "revId": "4c2830406170010a09156f12aa06035fd06913bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "222480d1_7b61db6f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-02-26T22:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c9b258c_a6c6b50e",
+      "range": {
+        "startLine": 1170,
+        "startChar": 4,
+        "endLine": 1170,
+        "endChar": 31
+      },
+      "revId": "4c2830406170010a09156f12aa06035fd06913bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
