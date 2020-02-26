@@ -512,7 +512,8 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
 
     // Read back the requested region of the source texture
     uint8_t *sourceData = nullptr;
-    ANGLE_TRY(source->copyImageDataToBufferAndGetData(contextVk, sourceLevel, 1, sourceArea,
+    gl::Box area(0, 0, 0, sourceArea.width, sourceArea.height, 1);
+    ANGLE_TRY(source->copyImageDataToBufferAndGetData(contextVk, sourceLevel, 1, area,
                                                       &sourceData));
 
     const angle::Format &sourceTextureFormat = sourceVkFormat.actualImageFormat();
@@ -986,7 +987,7 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
 angle::Result TextureVk::copyImageDataToBufferAndGetData(ContextVk *contextVk,
                                                          size_t sourceLevel,
                                                          uint32_t layerCount,
-                                                         const gl::Rectangle &sourceArea,
+                                                         const gl::Box &sourceArea,
                                                          uint8_t **outDataPtr)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "TextureVk::copyImageDataToBufferAndGetData");
@@ -994,13 +995,11 @@ angle::Result TextureVk::copyImageDataToBufferAndGetData(ContextVk *contextVk,
     // Make sure the source is initialized and it's images are flushed.
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
-    gl::Box area(0, 0, 0, sourceArea.width, sourceArea.height, 1);
-
     vk::BufferHelper *copyBuffer                   = nullptr;
     vk::StagingBufferOffsetArray sourceCopyOffsets = {0, 0};
     size_t bufferSize                              = 0;
 
-    ANGLE_TRY(mImage->copyImageDataToBuffer(contextVk, sourceLevel, layerCount, 0, area,
+    ANGLE_TRY(mImage->copyImageDataToBuffer(contextVk, sourceLevel, layerCount, 0, sourceArea,
                                             &copyBuffer, &bufferSize, &sourceCopyOffsets,
                                             outDataPtr));
 
@@ -1071,14 +1070,15 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
     uint32_t imageLayerCount          = mImage->getLayerCount();
 
     uint8_t *imageData = nullptr;
-    gl::Rectangle imageArea(0, 0, baseLevelExtents.width, baseLevelExtents.height);
+    gl::Box imageArea(0, 0, 0, baseLevelExtents.width, baseLevelExtents.height, baseLevelExtents.depth);
 
     ANGLE_TRY(copyImageDataToBufferAndGetData(contextVk, mState.getEffectiveBaseLevel(),
                                               imageLayerCount, imageArea, &imageData));
 
     const angle::Format &angleFormat = mImage->getFormat().actualImageFormat();
     GLuint sourceRowPitch            = baseLevelExtents.width * angleFormat.pixelBytes;
-    size_t baseLevelAllocationSize   = sourceRowPitch * baseLevelExtents.height;
+    GLuint sourceDepthPitch          = sourceRowPitch * baseLevelExtents.height;
+    size_t baseLevelAllocationSize   = sourceDepthPitch * baseLevelExtents.depth;
 
     // We now have the base level available to be manipulated in the imageData pointer. Generate all
     // the missing mipmaps with the slow path. For each layer, use the copied data to generate all
@@ -1089,8 +1089,8 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
 
         ANGLE_TRY(generateMipmapLevelsWithCPU(
             contextVk, angleFormat, layer, mState.getEffectiveBaseLevel() + 1,
-            mState.getMipmapMaxLevel(), baseLevelExtents.width, baseLevelExtents.height,
-            sourceRowPitch, imageData + bufferOffset));
+            mState.getMipmapMaxLevel(), baseLevelExtents.width, baseLevelExtents.height, baseLevelExtents.depth,
+            sourceRowPitch, sourceDepthPitch, imageData + bufferOffset));
     }
 
     vk::CommandBuffer *commandBuffer = nullptr;
@@ -1749,26 +1749,32 @@ angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
                                                      GLuint maxMipLevel,
                                                      const size_t sourceWidth,
                                                      const size_t sourceHeight,
+                                                     const size_t sourceDepth,
                                                      const size_t sourceRowPitch,
+                                                     const size_t sourceDepthPitch,
                                                      uint8_t *sourceData)
 {
     size_t previousLevelWidth    = sourceWidth;
     size_t previousLevelHeight   = sourceHeight;
+    size_t previousLevelDepth    = sourceDepth;
     uint8_t *previousLevelData   = sourceData;
     size_t previousLevelRowPitch = sourceRowPitch;
+    size_t previousLevelDepthPitch = sourceDepthPitch;
 
     for (GLuint currentMipLevel = firstMipLevel; currentMipLevel <= maxMipLevel; currentMipLevel++)
     {
         // Compute next level width and height.
         size_t mipWidth  = std::max<size_t>(1, previousLevelWidth >> 1);
         size_t mipHeight = std::max<size_t>(1, previousLevelHeight >> 1);
+        size_t mipDepth  = std::max<size_t>(1, previousLevelDepth >> 1);
 
         // With the width and height of the next mip, we can allocate the next buffer we need.
         uint8_t *destData   = nullptr;
         size_t destRowPitch = mipWidth * sourceFormat.pixelBytes;
+        size_t destDepthPitch = destRowPitch * mipHeight;
 
-        size_t mipAllocationSize = destRowPitch * mipHeight;
-        gl::Extents mipLevelExtents(static_cast<int>(mipWidth), static_cast<int>(mipHeight), 1);
+        size_t mipAllocationSize = destDepthPitch * mipDepth;
+        gl::Extents mipLevelExtents(static_cast<int>(mipWidth), static_cast<int>(mipHeight), static_cast<int>(mipDepth));
 
         ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(
             contextVk, mipAllocationSize,
@@ -1777,15 +1783,17 @@ angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
         onStagingBufferChange();
 
         // Generate the mipmap into that new buffer
-        sourceFormat.mipGenerationFunction(previousLevelWidth, previousLevelHeight, 1,
-                                           previousLevelData, previousLevelRowPitch, 0, destData,
-                                           destRowPitch, 0);
+        sourceFormat.mipGenerationFunction(previousLevelWidth, previousLevelHeight, previousLevelDepth,
+                                           previousLevelData, previousLevelRowPitch, previousLevelDepthPitch, destData,
+                                           destRowPitch, destDepthPitch);
 
         // Swap for the next iteration
         previousLevelWidth    = mipWidth;
         previousLevelHeight   = mipHeight;
+        previousLevelDepth    = mipDepth;
         previousLevelData     = destData;
         previousLevelRowPitch = destRowPitch;
+        previousLevelDepthPitch = destDepthPitch;
     }
 
     return angle::Result::Continue;
@@ -1839,10 +1847,17 @@ angle::Result TextureVk::getTexImage(const gl::Context *context,
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
     }
 
-    size_t layer =
-        gl::IsCubeMapFaceTarget(target) ? gl::CubeMapTextureTargetToFaceIndex(target) : 0;
-    return mImage->readPixelsForGetImage(contextVk, packState, packBuffer, level,
+    if (gl::IsTexture3DTarget(target))
+    {
+        return mImage->readPixelsForGetImage3D(contextVk, packState, packBuffer, level, format, type, pixels);
+    }
+    else
+    {
+        size_t layer =
+            gl::IsCubeMapFaceTarget(target) ? gl::CubeMapTextureTargetToFaceIndex(target) : 0;
+        return mImage->readPixelsForGetImage(contextVk, packState, packBuffer, level,
                                          static_cast<uint32_t>(layer), format, type, pixels);
+    }
 }
 
 const vk::Format &TextureVk::getBaseLevelFormat(RendererVk *renderer) const
