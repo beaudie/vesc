@@ -53,6 +53,11 @@ bool IsCubeMapFaceTarget(TextureTarget target)
     return TextureTargetToType(target) == TextureType::CubeMap;
 }
 
+bool IsTexture3DTarget(TextureTarget target)
+{
+    return TextureTargetToType(target) == TextureType::_3D;
+}
+
 TextureTarget NonCubeTextureTypeToTarget(TextureType type)
 {
     switch (type)
