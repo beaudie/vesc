@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce07a7e3_8984eb2d",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-26T00:28:39Z",
+      "side": 1,
+      "message": "Do we want to make this conditional on contextVk-\u003egetFeatures().enablePreRotateSurfaces.enabled?\nWould avoid adding work to the shader if we aren\u0027t doing rotation.",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "085f2a73_54b21fb5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2446,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-26T00:28:39Z",
+      "side": 1,
+      "message": "We probably need to rotate the scissor\u0027s x\u0026y here as well.\nSwapping doesn\u0027t work since it will be different 90 vs. 270.",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43fa9dcf_bd9b45da",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-26T00:28:39Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem necessary. The else clause already sets the rotation to Identity, do we need to distinguish pbuffer here?",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed04e450_33233811",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2932,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-26T00:28:39Z",
+      "side": 1,
+      "message": "Again, doesn\u0027t seem like you need this else if",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7288974e_1d9c9e07",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-26T00:28:39Z",
+      "side": 1,
+      "message": "Probably need to rotate glViewport.x \u0026 y here",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6a8f0f3_a55eb27e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4034,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-26T00:28:39Z",
+      "side": 1,
+      "message": "And probably rotated x\u0026y here as well.\nSaving that part to a follow-on CL would be fine.",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b8e0cb2_d83d2cff",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1645,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-26T00:28:39Z",
+      "side": 1,
+      "message": "Is there a way to enable the feature without re-compiling?\nWould be handy for testing to be able to turn it on when needed.",
+      "revId": "7f0c000f3345e2f03ca56c35d5f9db98d03faae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
