@@ -616,6 +616,13 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
         return std::make_unique<LinkEventDone>(status);
     }
 
+    vk::ShaderProgramHelper *shaderProgram;
+    status = initProgram(contextVk, true, &mLineRasterProgramInfo, &shaderProgram);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
+
     status = initDefaultUniformBlocks(context);
     if (status != angle::Result::Continue)
     {
