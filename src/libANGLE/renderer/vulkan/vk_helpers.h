@@ -454,6 +454,10 @@ class LineLoopHelper final : angle::NonCopyable
   private:
     DynamicBuffer mDynamicIndexBuffer;
     DynamicBuffer mDynamicIndirectBuffer;
+    void getConvertedVkIndexTypeAndSize(ContextVk *contextVk,
+                                        gl::DrawElementsType glIndexType,
+                                        VkIndexType *indexTypeOut,
+                                        size_t *unitSizeOut);
 };
 
 class FramebufferHelper;

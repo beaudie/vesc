@@ -297,7 +297,8 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
     mDynamicIndexData.releaseInFlightBuffers(contextVk);
 
     size_t elementSize = gl::GetDrawElementsTypeSize(indexType);
-    if (indexType == gl::DrawElementsType::UnsignedByte)
+    if (indexType == gl::DrawElementsType::UnsignedByte &&
+        !contextVk->getFeatures().supportsIndexTypeUint8.enabled)
     {
         // 8-bit indices are not supported by Vulkan, so they are promoted to
         // 16-bit indices below
@@ -310,7 +311,8 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
     ANGLE_TRY(mDynamicIndexData.allocate(contextVk, amount, &dst, nullptr,
                                          &mCurrentElementArrayBufferOffset, nullptr));
     mCurrentElementArrayBuffer = mDynamicIndexData.getCurrentBuffer();
-    if (indexType == gl::DrawElementsType::UnsignedByte)
+    if (indexType == gl::DrawElementsType::UnsignedByte &&
+        !contextVk->getFeatures().supportsIndexTypeUint8.enabled)
     {
         // Unsigned bytes don't have direct support in Vulkan so we have to expand the
         // memory to a GLushort.

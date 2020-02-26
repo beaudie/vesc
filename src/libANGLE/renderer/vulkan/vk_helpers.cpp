@@ -264,7 +264,8 @@ VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType)
     }
 }
 
-void HandlePrimitiveRestart(gl::DrawElementsType glIndexType,
+void HandlePrimitiveRestart(ContextVk *contextVk,
+                            gl::DrawElementsType glIndexType,
                             GLsizei indexCount,
                             const uint8_t *srcPtr,
                             uint8_t *outPtr)
@@ -272,7 +273,14 @@ void HandlePrimitiveRestart(gl::DrawElementsType glIndexType,
     switch (glIndexType)
     {
         case gl::DrawElementsType::UnsignedByte:
-            CopyLineLoopIndicesWithRestart<uint8_t, uint16_t>(indexCount, srcPtr, outPtr);
+            if (contextVk->getFeatures().supportsIndexTypeUint8.enabled)
+            {
+                CopyLineLoopIndicesWithRestart<uint8_t, uint8_t>(indexCount, srcPtr, outPtr);
+            }
+            else
+            {
+                CopyLineLoopIndicesWithRestart<uint8_t, uint16_t>(indexCount, srcPtr, outPtr);
+            }
             break;
         case gl::DrawElementsType::UnsignedShort:
             CopyLineLoopIndicesWithRestart<uint16_t, uint16_t>(indexCount, srcPtr, outPtr);
@@ -1236,11 +1244,10 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
 
     *indexCountOut = indexCount + 1;
 
-    VkIndexType indexType = gl_vk::kIndexTypeMap[glIndexType];
-    ASSERT(indexType == VK_INDEX_TYPE_UINT16 || indexType == VK_INDEX_TYPE_UINT32);
     uint32_t *indices = nullptr;
+    size_t unitSize   = 0;
+    getConvertedVkIndexTypeAndSize(contextVk, glIndexType, nullptr, &unitSize);
 
-    auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
     size_t allocateBytes = unitSize * (indexCount + 1) + 1;
 
     mDynamicIndexBuffer.releaseInFlightBuffers(contextVk);
@@ -1272,11 +1279,12 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
                                             VkDeviceSize *bufferOffsetOut,
                                             uint32_t *indexCountOut)
 {
-    VkIndexType indexType = gl_vk::kIndexTypeMap[glIndexType];
+    VkIndexType indexType;
+    size_t unitSize;
+    getConvertedVkIndexTypeAndSize(contextVk, glIndexType, &indexType, &unitSize);
 
     uint8_t *indices = nullptr;
 
-    auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
     uint32_t numOutIndices = indexCount + 1;
     if (contextVk->getState().isPrimitiveRestartEnabled())
     {
@@ -1291,13 +1299,14 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
 
     if (contextVk->getState().isPrimitiveRestartEnabled())
     {
-        HandlePrimitiveRestart(glIndexType, indexCount, srcPtr, indices);
+        HandlePrimitiveRestart(contextVk, glIndexType, indexCount, srcPtr, indices);
     }
     else
     {
-        if (glIndexType == gl::DrawElementsType::UnsignedByte)
+        if (glIndexType == gl::DrawElementsType::UnsignedByte &&
+            !contextVk->getFeatures().supportsIndexTypeUint8.enabled)
         {
-            // Vulkan doesn't support uint8 index types, so we need to emulate it.
+            // If vulkan doesn't support uint8 index types, we need to emulate it.
             ASSERT(indexType == VK_INDEX_TYPE_UINT16);
             uint16_t *indicesDst = reinterpret_cast<uint16_t *>(indices);
             for (int i = 0; i < indexCount; i++)
@@ -1328,9 +1337,8 @@ angle::Result LineLoopHelper::streamIndicesIndirect(ContextVk *contextVk,
                                                     BufferHelper **indirectBufferOut,
                                                     VkDeviceSize *indirectBufferOffsetOut)
 {
-    VkIndexType indexType = gl_vk::kIndexTypeMap[glIndexType];
-
-    auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
+    size_t unitSize;
+    getConvertedVkIndexTypeAndSize(contextVk, glIndexType, nullptr, &unitSize);
     size_t allocateBytes = static_cast<size_t>(indexBuffer->getSize() + unitSize);
 
     if (contextVk->getState().isPrimitiveRestartEnabled())
@@ -1367,7 +1375,7 @@ angle::Result LineLoopHelper::streamIndicesIndirect(ContextVk *contextVk,
     params.indirectBufferOffset    = static_cast<uint32_t>(indirectBufferOffset);
     params.dstIndirectBufferOffset = static_cast<uint32_t>(*indirectBufferOffsetOut);
     params.dstIndexBufferOffset    = static_cast<uint32_t>(*indexBufferOffsetOut);
-    params.is32Bit                 = unitSize == 4;
+    params.indicesBitsWidth        = static_cast<uint32_t>(unitSize * 8);
 
     ANGLE_TRY(contextVk->getUtils().convertLineLoopIndexIndirectBuffer(
         contextVk, indirectBuffer, destIndirectBuffer, destIndexBuffer, indexBuffer, params));
@@ -1432,6 +1440,46 @@ void LineLoopHelper::Draw(uint32_t count, uint32_t baseVertex, CommandBuffer *co
 {
     // Our first index is always 0 because that's how we set it up in createIndexBuffer*.
     commandBuffer->drawIndexedBaseVertex(count, baseVertex);
+}
+
+// private
+void LineLoopHelper::getConvertedVkIndexTypeAndSize(ContextVk *contextVk,
+                                                    gl::DrawElementsType glIndexType,
+                                                    VkIndexType *indexTypeOut,
+                                                    size_t *unitSizeOut)
+{
+    VkIndexType indexType = gl_vk::kIndexTypeMap[glIndexType];
+    ASSERT(indexType == VK_INDEX_TYPE_UINT16 || indexType == VK_INDEX_TYPE_UINT32);
+
+    // If VK_EXT_index_type_uint8 is supported, use uint8 index for better performance
+    if (glIndexType == gl::DrawElementsType::UnsignedByte &&
+        contextVk->getFeatures().supportsIndexTypeUint8.enabled)
+    {
+        indexType = VK_INDEX_TYPE_UINT8_EXT;
+    }
+
+    if (indexTypeOut != nullptr)
+    {
+        *indexTypeOut = indexType;
+    }
+
+    if (unitSizeOut != nullptr)
+    {
+        switch (indexType)
+        {
+            case VK_INDEX_TYPE_UINT8_EXT:
+                *unitSizeOut = sizeof(uint8_t);
+                break;
+            case VK_INDEX_TYPE_UINT16:
+                *unitSizeOut = sizeof(uint16_t);
+                break;
+            case VK_INDEX_TYPE_UINT32:
+                *unitSizeOut = sizeof(uint32_t);
+                break;
+            default:
+                UNREACHABLE();
+        }
+    }
 }
 
 // BufferHelper implementation.

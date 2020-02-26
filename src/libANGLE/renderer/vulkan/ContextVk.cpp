@@ -954,8 +954,8 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
             mLastIndexBufferOffset = indices;
             mVertexArray->updateCurrentElementArrayBufferOffset(mLastIndexBufferOffset);
         }
-
         if (indexType == gl::DrawElementsType::UnsignedByte &&
+            !getFeatures().supportsIndexTypeUint8.enabled &&
             mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
         {
             BufferVk *bufferVk             = vk::GetImpl(elementArrayBuffer);
@@ -1296,9 +1296,15 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(const gl::Context *conte
     vk::BufferHelper *elementArrayBuffer = mVertexArray->getCurrentElementArrayBuffer();
     ASSERT(elementArrayBuffer != nullptr);
 
+    VkIndexType indexType = gl_vk::kIndexTypeMap[mCurrentDrawElementsType];
+    if (mCurrentDrawElementsType == gl::DrawElementsType::UnsignedByte &&
+        getFeatures().supportsIndexTypeUint8.enabled)
+    {
+        indexType = VK_INDEX_TYPE_UINT8_EXT;
+    }
+
     commandBuffer->bindIndexBuffer(elementArrayBuffer->getBuffer(),
-                                   mVertexArray->getCurrentElementArrayBufferOffset(),
-                                   gl_vk::kIndexTypeMap[mCurrentDrawElementsType]);
+                                   mVertexArray->getCurrentElementArrayBufferOffset(), indexType);
 
     mRenderPassCommands.bufferRead(&mResourceUseList, VK_ACCESS_INDEX_READ_BIT, elementArrayBuffer);
 
@@ -2142,7 +2148,8 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    if (type == gl::DrawElementsType::UnsignedByte && mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
+    if (type == gl::DrawElementsType::UnsignedByte &&
+        !getFeatures().supportsIndexTypeUint8.enabled && mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
     {
         vk::BufferHelper *dstIndirectBuf;
         VkDeviceSize dstIndirectBufOffset;
