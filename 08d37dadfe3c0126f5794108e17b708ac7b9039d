@@ -22,6 +22,30 @@
       "revId": "08d37dadfe3c0126f5794108e17b708ac7b9039d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3cf7084_f0cab2e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-26T19:10:34Z",
+      "side": 1,
+      "message": "Oops, sent the wrong version.   Meant to give the full context:\n\n7.4.1 Shader Interface Matching\nAt an interface between program objects, the set of inputs and outputs are considered to match exactly if and only if:\n• Every declared input variable has a matching output, as described above.\n• There are no user-defined output variables declared without a matching input\nvariable declaration.\n• All matched input and output variables have identical precision qualification  \u003c\u003c----- this guy",
+      "parentUuid": "e623a33f_3ea26ee4",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 0
+      },
+      "revId": "08d37dadfe3c0126f5794108e17b708ac7b9039d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
