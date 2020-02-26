@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01fdbfa7_9e50df8b",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-26T02:45:22Z",
+      "side": 1,
+      "message": "I\u0027m guessing this is because of this?\n\n    // The max vertex output components should not include gl_Position.\n    // The gles2.0 section 2.10 states that \"gl_Position is not a varying variable and does\n    // not count against this limit.\", but the Vulkan spec has no such mention in its Built-in\n    // vars section. It is implicit that we need to actually reserve it for Vulkan in that case.\n    GLint reservedVaryingVectorCount \u003d 1;\n\nI was actually wondering about it. The comment says gl_Position doesn\u0027t count towards varyings, but does it say anything about gl_PointSize? Maybe that also shouldn\u0027t count towards varyings? Will you please take a look at the spec?",
+      "range": {
+        "startLine": 1617,
+        "startChar": 0,
+        "endLine": 1617,
+        "endChar": 40
+      },
+      "revId": "307320e1530476694f370e8ea9607bf3eaf03817",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
