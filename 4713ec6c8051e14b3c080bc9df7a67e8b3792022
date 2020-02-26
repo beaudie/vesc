@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85ccb33f_a5634b8d",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-26T19:16:00Z",
+      "side": 1,
+      "message": "I like the example.\nHow does one know whether to use endRenderPassAndGetCommandBuffer vs. flushAndBeginRenderPass vs. flushAndGetPrimaryCommandBuffer?\nI assume that just because you know that Vulkan copy buffer commands can\u0027t be in a renderpass.\nWonder if there is a way to help folks use the correct command.",
+      "revId": "4713ec6c8051e14b3c080bc9df7a67e8b3792022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
