@@ -16,6 +16,24 @@
       "revId": "4713ec6c8051e14b3c080bc9df7a67e8b3792022",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de82904e_aa08c73c",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-26T19:23:07Z",
+      "side": 1,
+      "message": "If you want a render pass, use BeginRenderPass.\nIf you don\u0027t, use GetCommandBuffer.\n\nYou shouldn\u0027t really need to use GetPrimary. It\u0027s there for commands like debug labels, queries, and barriers. Commands that need to be recorded immediately.\n\nUpdated docs.",
+      "parentUuid": "85ccb33f_a5634b8d",
+      "revId": "4713ec6c8051e14b3c080bc9df7a67e8b3792022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
