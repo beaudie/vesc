@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "40252610_9cfaf20e",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-26T02:52:32Z",
+      "side": 1,
+      "message": "Actually now that I look at this, it\u0027s not clear to me why this says \"flush\". Do you mean that it writes the current secondary CBs to the primary, before starting the RP? It could be good if the description here was more precise.\n\nI.e., it\u0027s good to know what these functions return sure, but also good to know what they do!",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 28,
+        "endChar": 9
+      },
+      "revId": "861296b7966fb4ed02835e46666f8fb6ac5d7806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ff1f1c0_fbb2622e",
         "filename": "src/libANGLE/renderer/vulkan/README.md",
         "patchSetId": 1
