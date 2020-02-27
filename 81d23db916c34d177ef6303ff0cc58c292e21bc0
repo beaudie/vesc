@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d03d406_d6c94508",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-02-27T00:33:35Z",
+      "side": 1,
+      "message": "Note: it\u0027s possible to get component build for the APK as well by doing something similar here.",
+      "range": {
+        "startLine": 1044,
+        "startChar": 64,
+        "endLine": 1044,
+        "endChar": 68
+      },
+      "revId": "81d23db916c34d177ef6303ff0cc58c292e21bc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
