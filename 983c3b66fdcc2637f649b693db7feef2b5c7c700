@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ab85623_251b4cbc",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-27T15:21:03Z",
+      "side": 1,
+      "message": "I suggest to do both this and:\n\n    vk::ShaderProgramHelper *shaderProgram2;\n    status \u003d initProgram(contextVk, false, \u0026mProgramInfo, \u0026shaderProgram2);\n\nThis way you build both shaders with and without line raster emulation.",
+      "revId": "983c3b66fdcc2637f649b693db7feef2b5c7c700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
