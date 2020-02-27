@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68426a39_5f175638",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-02-27T15:52:24Z",
+      "side": 1,
+      "message": "This extension is not yet implemented. The following dirty bits must be handled in ContextVk::syncState():\n\n    gl::State::DIRTY_BIT_MULTISAMPLING\n    gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_ONE\n\nThe latter should be easy using a Vulkan feature.\n\nFor the former, I\u0027m not sure if there\u0027s an equivalent Vulkan feature, but should be possible with some subpass magic and temporary render targets (basically the renderpass draws into a single-sampled render target (whose storeOp is DONT_CARE), then the next subpass uses an internal shader to propagate it to every sample of the actual render target we care about). But I\u0027d be very happy if we didn\u0027t need to do that.\n\nAre you willing to take a crack at it? I suggest to:\n\n1. Split the CL to implement and fix things that don\u0027t depend on this feature, so we can land that faster\n2. Either add support for EXT_multisample_compatibility properly, or somehow avoid needing it!",
+      "revId": "0f0c28e1050f2710d0ef4024a1b7768765e6f765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
