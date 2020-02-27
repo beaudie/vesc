@@ -25,6 +25,69 @@
     },
     {
       "key": {
+        "uuid": "c190c1ed_631ec3eb",
+        "filename": "src/tests/gl_tests/gles1/BootAnimationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-02-27T15:17:50Z",
+      "side": 1,
+      "message": "Great comments!",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 0
+      },
+      "revId": "78f46b28fd694f663a8ece15866ded83c1886a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aed7b0ec_31c21a98",
+        "filename": "src/tests/gl_tests/gles1/BootAnimationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-02-27T15:17:50Z",
+      "side": 1,
+      "message": "Using 0 \u0026 2 directly here is ok but could potentially set 2 constants (kBlackMask[0|1]) above when mask is defined to make relationship between mask definition and this check direct.",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 23
+      },
+      "revId": "78f46b28fd694f663a8ece15866ded83c1886a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f096e77_576f3ae6",
+        "filename": "src/tests/gl_tests/gles1/BootAnimationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-02-27T15:17:50Z",
+      "side": 1,
+      "message": "A comment here or in the initial file comment above giving exact details of image size would be helpful. Is this a 32x16 window where the 16x8 section in the middle is what\u0027s being \"lit up\" as the mask shifts? And border around that area is always cleared to cyan, yes?",
+      "revId": "78f46b28fd694f663a8ece15866ded83c1886a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2eaa6aff_e7eca499",
         "filename": "src/tests/gl_tests/gles1/TextureParameterLargeValueTest.cpp",
         "patchSetId": 3
