@@ -132,6 +132,30 @@
       "revId": "78f46b28fd694f663a8ece15866ded83c1886a0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "114744b8_1495ada6",
+        "filename": "src/tests/gl_tests/gles1/TextureParameterLargeValueTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T20:28:10Z",
+      "side": 1,
+      "message": "Oh. I didn\u0027t notice that. Is there a way you can test this as an angle_end2end_test? Usually we only use white box tests if we need to *write* in ways that aren\u0027t accessible via a GL API. It is far better to maintain tests that don\u0027t introspect into ANGLE.",
+      "parentUuid": "211c5e94_d3f9efac",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 31,
+        "endChar": 37
+      },
+      "revId": "78f46b28fd694f663a8ece15866ded83c1886a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
