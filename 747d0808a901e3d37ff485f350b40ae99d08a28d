@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53007b08_33dde7fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T22:12:43Z",
+      "side": 1,
+      "message": "This is a pretty big change. Can you please include one or two sentences with some motivation/context and high level design notes?",
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bcf2d6d_f29ee28e",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T22:12:43Z",
+      "side": 1,
+      "message": "it\u0027s a neat idea to use the same bool to source two enum values. I think for a policy we should stick to using two bools and an \"any\" helper method. See \"depthTextureAny\" in gl::Extensions. If other people feel strongly about this we could reconsider.",
+      "range": {
+        "startLine": 903,
+        "startChar": 78,
+        "endLine": 903,
+        "endChar": 96
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "551fedc6_7b01b8e8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4939,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T22:12:43Z",
+      "side": 1,
+      "message": "nit: can you try to avoid overloading? it makes the code a bit harder to read. In this case you could use a name like \u0027setBlendEquationIndexed\u0027",
+      "range": {
+        "startLine": 4939,
+        "startChar": 11,
+        "endLine": 4939,
+        "endChar": 27
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6600e64_a0b67222",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4959,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T22:12:43Z",
+      "side": 1,
+      "message": "same for the other methods.",
+      "range": {
+        "startLine": 4959,
+        "startChar": 11,
+        "endLine": 4959,
+        "endChar": 26
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "156727f1_1d6452a7",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T22:12:43Z",
+      "side": 1,
+      "message": "nit: style-wise the ? set : reset pattern is a bit inconsistent with our general code patterns. Can you split this into if statements?",
+      "range": {
+        "startLine": 760,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 0
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bbce8bc_05b8db46",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T22:12:43Z",
+      "side": 1,
+      "message": "I think I see how you\u0027re iterating the loop here. Feels like we can clean this up slightly. Can you instead iterate over the DrawBufferMask using a range-for and increment a packed write index every time you hit a valid draw buffer?",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 9
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82924aad_610bb338",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T22:12:43Z",
+      "side": 1,
+      "message": "nit: cache in temporary? same for the others. otherwise it\u0027ll re-run the ternary every iteration.",
+      "range": {
+        "startLine": 953,
+        "startChar": 39,
+        "endLine": 953,
+        "endChar": 93
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "848132e9_2183d923",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T22:12:43Z",
+      "side": 1,
+      "message": "is this getting to be a bit much to no-op calls? maybe we should just unconditionally set the bits for these. it might be turning into an anti-pattern (slower than just setting the bit).",
+      "range": {
+        "startLine": 1028,
+        "startChar": 1,
+        "endLine": 1031,
+        "endChar": 45
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c9bbc0_4bb7204e",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2728,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T22:12:43Z",
+      "side": 1,
+      "message": "is this an unrelated fix? Just wondering. If it was a missing validation and somewhat unrelated could make it a small prior fix and land quickly.",
+      "range": {
+        "startLine": 2715,
+        "startChar": 0,
+        "endLine": 2728,
+        "endChar": 5
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
