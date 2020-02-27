@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecbf9dd2_38dc8dec",
+        "filename": "src/tests/gl_tests/gles1/TextureParameterTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T23:03:31Z",
+      "side": 1,
+      "message": "nit: I believe you can just use ASSERT_EQ(crop, cropStored). For sure you can if you use std::array.",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 5
+      },
+      "revId": "09f2b99d9af9e6ea49dc295b215fc0f120f0914f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
