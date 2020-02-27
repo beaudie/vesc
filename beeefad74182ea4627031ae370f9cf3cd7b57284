@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a79cc376_c2658bf5",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T18:30:47Z",
+      "side": 1,
+      "message": "could you file an angle bug for this to track it just using http://anglebug.com/new and leave a comment here just with a link to the bug? (http://anglebug.com/####)",
+      "range": {
+        "startLine": 1611,
+        "startChar": 4,
+        "endLine": 1611,
+        "endChar": 22
+      },
+      "revId": "beeefad74182ea4627031ae370f9cf3cd7b57284",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d7f18e7_161c5a51",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T18:30:47Z",
+      "side": 1,
+      "message": "minor style suggestion: using string.append is fine - usually we use std::stringstream to build strings. moving to std:stringstream would be more consistent with our usual practice.",
+      "range": {
+        "startLine": 1616,
+        "startChar": 4,
+        "endLine": 1617,
+        "endChar": 37
+      },
+      "revId": "beeefad74182ea4627031ae370f9cf3cd7b57284",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50738510_5644fd85",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-27T18:30:47Z",
+      "side": 1,
+      "message": "It would be nice if we could also validate the pixels of the draw here. it\u0027s possible a driver (angle or a vk driver) could report a number, link and seem to process the pixels, and produce an incorrect result. you might have to update your shader.",
+      "range": {
+        "startLine": 1678,
+        "startChar": 4,
+        "endLine": 1678,
+        "endChar": 22
+      },
+      "revId": "beeefad74182ea4627031ae370f9cf3cd7b57284",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
