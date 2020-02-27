@@ -226,6 +226,13 @@ Error ValidateConfigAttribute(const Display *display, EGLAttrib attribute)
             }
             break;
 
+        case EGL_BIND_TO_TEXTURE_TARGET_ANGLE:
+            if (!display->getExtensions().iosurfaceClientBuffer)
+            {
+                return EglBadAttribute() << "EGL_ANGLE_iosurface_client_buffer is not enabled.";
+            }
+            break;
+
         default:
             return EglBadAttribute() << "Unknown attribute.";
     }
