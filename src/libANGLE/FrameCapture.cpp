@@ -2092,6 +2092,41 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         MaybeCaptureUpdateResourceIDs(setupCalls);
     }
 
+    const gl::SamplerManager &samplers = apiState.getSamplerManagerForCapture();
+    for (const auto &samplerIter : samplers)
+    {
+        if (!samplerIter.second)
+        {
+            // The object was never created
+            continue;
+        }
+
+        gl::SamplerID samplerID = samplerIter.second->id();
+
+        cap(CaptureGenSamplers(replayState, true, 1, &samplerID));
+        MaybeCaptureUpdateResourceIDs(setupCalls);
+
+        gl::Sampler *sampler = samplerIter.second;
+        cap(CaptureSamplerParameteri(replayState, true, samplerID, GL_TEXTURE_MIN_FILTER,
+                                     sampler->getMinFilter()));
+        cap(CaptureSamplerParameteri(replayState, true, samplerID, GL_TEXTURE_MAG_FILTER,
+                                     sampler->getMagFilter()));
+        cap(CaptureSamplerParameteri(replayState, true, samplerID, GL_TEXTURE_WRAP_S,
+                                     sampler->getWrapS()));
+        cap(CaptureSamplerParameteri(replayState, true, samplerID, GL_TEXTURE_WRAP_R,
+                                     sampler->getWrapR()));
+        cap(CaptureSamplerParameteri(replayState, true, samplerID, GL_TEXTURE_WRAP_T,
+                                     sampler->getWrapT()));
+        cap(CaptureSamplerParameterf(replayState, true, samplerID, GL_TEXTURE_MIN_LOD,
+                                     sampler->getMinLod()));
+        cap(CaptureSamplerParameterf(replayState, true, samplerID, GL_TEXTURE_MAX_LOD,
+                                     sampler->getMaxLod()));
+        cap(CaptureSamplerParameteri(replayState, true, samplerID, GL_TEXTURE_COMPARE_MODE,
+                                     sampler->getCompareMode()));
+        cap(CaptureSamplerParameteri(replayState, true, samplerID, GL_TEXTURE_COMPARE_FUNC,
+                                     sampler->getCompareFunc()));
+    }
+
     // Allow the replayState object to be destroyed conveniently.
     replayState.setBufferBinding(context, gl::BufferBinding::Array, nullptr);
 }
