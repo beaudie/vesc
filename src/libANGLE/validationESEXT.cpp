@@ -294,4 +294,22 @@ bool ValidateDrawRangeElementsBaseVertexOES(const Context *context,
     }
     return true;
 }
+
+bool ValidateGetInteger64vEXT(const Context *context, GLenum pname, const GLint64 *data)
+{
+    if (!context->getExtensions().disjointTimerQuery)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    GLenum nativeType      = GL_NONE;
+    unsigned int numParams = 0;
+    if (!ValidateStateQuery(context, pname, &nativeType, &numParams))
+    {
+        return false;
+    }
+
+    return true;
+}
 }  // namespace gl
