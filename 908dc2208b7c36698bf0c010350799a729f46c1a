@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d4edad2_d4ff547a",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1383035
+      },
+      "writtenOn": "2020-02-28T08:15:18Z",
+      "side": 0,
+      "message": "There is no support in ES spec mipmap need to be LINEAR filter, so the pixel value is implement dependent. just remove it.\nin es 3.2 8.14.4 Manual Mipmap generation: \"No particular filter algorithm is required, though a box filter is recommended.\"",
+      "range": {
+        "startLine": 1010,
+        "startChar": 0,
+        "endLine": 1010,
+        "endChar": 53
+      },
+      "revId": "908dc2208b7c36698bf0c010350799a729f46c1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
