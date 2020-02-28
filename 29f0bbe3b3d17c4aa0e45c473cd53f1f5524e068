@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "0f2a79fd_779784f9",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2a9aea9_7d24ea2e",
+      "range": {
+        "startLine": 66,
+        "startChar": 6,
+        "endLine": 66,
+        "endChar": 10
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f9303735_6a6016f5",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 2
@@ -82,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "e141de08_429da9ce",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "It doesn\u0027t care about headers, just include paths.",
+      "parentUuid": "f9303735_6a6016f5",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 5
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fc1447b_5a011b27",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 2
@@ -93,6 +141,30 @@
       "writtenOn": "2020-02-28T15:15:44Z",
       "side": 1,
       "message": "what happens with the headers that\u0027s bad?",
+      "range": {
+        "startLine": 108,
+        "startChar": 34,
+        "endLine": 108,
+        "endChar": 52
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c60b21ca_2dcbb148",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "They\u0027re part of the Android system already when linking vulkan. Maybe we roll more frequently though?",
+      "parentUuid": "9fc1447b_5a011b27",
       "range": {
         "startLine": 108,
         "startChar": 34,
@@ -162,6 +234,30 @@
     },
     {
       "key": {
+        "uuid": "964be647_523f699b",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6d2e722_ad26a1de",
+      "range": {
+        "startLine": 249,
+        "startChar": 6,
+        "endLine": 249,
+        "endChar": 10
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8a49545_03342944",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 2
@@ -219,6 +315,24 @@
     },
     {
       "key": {
+        "uuid": "88f74cf3_feac4ae9",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "I think it\u0027s intentional highlighting because it\u0027s .sh syntax.  Changed it to bash anyways.",
+      "parentUuid": "0d4d00db_2cced858",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7320dc5_c50785e0",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -242,6 +356,30 @@
     },
     {
       "key": {
+        "uuid": "66763404_acb9358d",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7320dc5_c50785e0",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 29
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7bfee2e6_a445bf9c",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -259,6 +397,24 @@
     },
     {
       "key": {
+        "uuid": "6fda1c25_cf1f06e8",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "I need to make sure to only delete the specific folders that we check out deps into, otherwise we will delete files in ANGLE\u0027s git repo causing them to be commited.\n\nI added --preserve-root.\n\nI\u0027m not too worried. rm won\u0027t do anything if the directory doesn\u0027t exist and these are specific paths being deleted, no wildcards.",
+      "parentUuid": "7bfee2e6_a445bf9c",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a3f0b2b_f795878b",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -270,6 +426,30 @@
       "writtenOn": "2020-02-28T15:15:44Z",
       "side": 1,
       "message": "some comments here would be welcome.\n\nAlso I would consider still making this a python script. More portable in many cases, and easier to process unexpected errors.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 4
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fe78e98_15292963",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "Added more comments.  I\u0027ll likely turn this into a python script in the future.  Right now it\u0027s just serving as a way for me to remember the roll process more than anything.",
+      "parentUuid": "2a3f0b2b_f795878b",
       "range": {
         "startLine": 24,
         "startChar": 0,
@@ -305,6 +485,30 @@
     },
     {
       "key": {
+        "uuid": "fa27f492_3bb82dea",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "Same comment as above.  I\u0027ll make this more defensive in the future.",
+      "parentUuid": "2d39eff8_a4b30680",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 31,
+        "endChar": 18
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "760997c1_899e4fad",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -328,6 +532,30 @@
     },
     {
       "key": {
+        "uuid": "3b35b871_c211e77c",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "760997c1_899e4fad",
+      "range": {
+        "startLine": 33,
+        "startChar": 62,
+        "endLine": 33,
+        "endChar": 72
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab51943a_23251669",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -345,6 +573,24 @@
     },
     {
       "key": {
+        "uuid": "b5d02841_a1152b19",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "Yep, should work.",
+      "parentUuid": "ab51943a_23251669",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3782ff6b_bb1a1724",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -356,6 +602,24 @@
       "writtenOn": "2020-02-28T17:26:19Z",
       "side": 1,
       "message": "I think this should be a conditional argument to the script.\n\nIf I\u0027m debugging something related to the Android build and these scripts, I don\u0027t want to commit the changes until I know they are good, but I\u0027d want to use this script to do the debugging.\n\nPersonally, I don\u0027t think this should do any git commands if possible.   I\u0027m not sure how this is meant to be used though and if this is meant to be automated somewhere also to keep Android.bp update-to-date.",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77df3959_f953ce6f",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-02-28T18:05:52Z",
+      "side": 1,
+      "message": "The intent is to automate this in the future but for now I need to make sure I remember the process.  I filed a bug about the automation, hopefully we can use a skia autoroller.",
+      "parentUuid": "3782ff6b_bb1a1724",
       "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
