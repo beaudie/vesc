@@ -56,7 +56,12 @@ void RendererVk::ensureCapsInitialized() const
 
     // Vulkan technically only supports the LDR profile but driver all appear to support the HDR
     // profile as well. http://anglebug.com/1185#c8
-    mNativeExtensions.textureCompressionASTCHDRKHR = mNativeExtensions.textureCompressionASTCLDRKHR;
+    // TODO: There are SwiftShader related failures related to enabling the
+    //       textureCompressionASTCHDRKHR feature without properly checking if the
+    //       VK_EXT_texture_compression_astc_hdr extension is available, so HDR support
+    //       shouldn't be enabled only based on the LDR support being enabled.
+    mNativeExtensions.textureCompressionASTCHDRKHR = false;
+    mNativeExtensions.textureCompressionASTCOES = false;
 
     // Enable this for simple buffer readback testing, but some functionality is missing.
     // TODO(jmadill): Support full mapBufferRange extension.
