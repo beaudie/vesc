@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "bef4d85b_1a56dd61",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T17:26:19Z",
+      "side": 1,
+      "message": "Should output an error message and fail here instead to make it obvious something is going wrong?",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fa734d7_014f68af",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T17:26:19Z",
+      "side": 1,
+      "message": "Intentionally falls through?",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c2a9aea9_7d24ea2e",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 2
@@ -71,6 +105,40 @@
     },
     {
       "key": {
+        "uuid": "2fc24120_117de727",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T17:26:19Z",
+      "side": 1,
+      "message": "Why?   What about stuff like optimization levels?",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6dd642c1_4c8c9d94",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T17:26:19Z",
+      "side": 1,
+      "message": "How concerned should we be using different compilers between what we\u0027re developing/testing in ANGLE vs what ships to users in Android?",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6d2e722_ad26a1de",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 2
@@ -117,6 +185,23 @@
     },
     {
       "key": {
+        "uuid": "aad2c68b_3d50c076",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T17:26:19Z",
+      "side": 1,
+      "message": "There should be some paramater validation (correct number of arguments, expected length, file type, etc.) before assuming this script is being invoked correctly.",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0d4d00db_2cced858",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -157,6 +242,23 @@
     },
     {
       "key": {
+        "uuid": "7bfee2e6_a445bf9c",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T17:26:19Z",
+      "side": 1,
+      "message": "\u0027rm -rf\u0027 is always scary since someone could add a preceding \u0027/\u0027 to the path list and we suddenly start deleting random stuff.\n\n- Presumably people have a new enough \u0027rm\u0027, but adding \u0027--preserve-root\u0027 would be good.\n- This should probably build the full path relative to the CWD to try and limit any accidental damage if a bad path is added to \u0027deps\u0027.\n\nAlternatively, as the link https://stackoverflow.com/a/992864/3904796 suggests you could skip the list entirely and do:\n\n    cd third_party \u0026\u0026 rm -rf *",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a3f0b2b_f795878b",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -174,6 +276,86 @@
         "endLine": 26,
         "endChar": 4
       },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d39eff8_a4b30680",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T17:26:19Z",
+      "side": 1,
+      "message": "To prevent overwriting a good directory, this script should check if this directory exists already and error out with a message if so.",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 31,
+        "endChar": 18
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "760997c1_899e4fad",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T17:26:19Z",
+      "side": 1,
+      "message": "Same as \u0027out/Android\u0027, this should check if \u0027Android.bp\u0027 already exists or not to prevent overwriting any local changes.\n\nAlternatively, do a \u0027git status\u0027 to make sure the working directory is clean and there are no modified files that this could overwrite.",
+      "range": {
+        "startLine": 33,
+        "startChar": 62,
+        "endLine": 33,
+        "endChar": 72
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab51943a_23251669",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T17:26:19Z",
+      "side": 1,
+      "message": "Does this work since out/ is a directory?",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3782ff6b_bb1a1724",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T17:26:19Z",
+      "side": 1,
+      "message": "I think this should be a conditional argument to the script.\n\nIf I\u0027m debugging something related to the Android build and these scripts, I don\u0027t want to commit the changes until I know they are good, but I\u0027d want to use this script to do the debugging.\n\nPersonally, I don\u0027t think this should do any git commands if possible.   I\u0027m not sure how this is meant to be used though and if this is meant to be automated somewhere also to keep Android.bp update-to-date.",
       "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
