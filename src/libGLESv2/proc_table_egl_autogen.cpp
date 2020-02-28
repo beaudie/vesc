@@ -635,6 +635,8 @@ ProcEntry g_procTable[] = {
     {"glGetInteger64i_vRobustANGLEContextANGLE", P(gl::GetInteger64i_vRobustANGLEContextANGLE)},
     {"glGetInteger64v", P(gl::GetInteger64v)},
     {"glGetInteger64vContextANGLE", P(gl::GetInteger64vContextANGLE)},
+    {"glGetInteger64vEXT", P(gl::GetInteger64vEXT)},
+    {"glGetInteger64vEXTContextANGLE", P(gl::GetInteger64vEXTContextANGLE)},
     {"glGetInteger64vRobustANGLE", P(gl::GetInteger64vRobustANGLE)},
     {"glGetInteger64vRobustANGLEContextANGLE", P(gl::GetInteger64vRobustANGLEContextANGLE)},
     {"glGetIntegeri_v", P(gl::GetIntegeri_v)},
@@ -1546,5 +1548,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1440;
+size_t g_numProcs = 1442;
 }  // namespace egl

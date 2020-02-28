@@ -4,7 +4,11 @@
   "scripts/egl_angle_ext.xml":
     "63f18dc9b7183ead4ddd3dfd1571973a",
   "scripts/generate_loader.py":
-    "48c60c668bec42a80378179aae2acc61",
+    "792c41d7ae93a4518f0c73e45626d19b",
+  "scripts/gl.xml":
+    "e74a595068cbdd6064300be1e71b7cc9",
+  "scripts/gl_angle_ext.xml":
+    "872ecabf7ca7767c7801ba835ddbd1eb",
   "scripts/registry_xml.py":
     "1b633c9481f0e8aa148e8690dfe91cda",
   "scripts/wgl.xml":
@@ -18,9 +22,9 @@
   "util/egl_loader_autogen.h":
     "55b54071e61b3e7beab28178dc20fd28",
   "util/gles_loader_autogen.cpp":
-    "5d066fcf01d897225820211035e2e748",
+    "3b1b3e7c92526a800251a624f9d0b0f9",
   "util/gles_loader_autogen.h":
-    "b8814ac581daa3a2ac3ba0e84b02571b",
+    "dd1a63ac7a0859a76ecfa2862a53024c",
   "util/windows/wgl_loader_autogen.cpp":
     "c0d9a65eaa9aac356c6fd3f88638d2be",
   "util/windows/wgl_loader_autogen.h":
