@@ -28,6 +28,7 @@ using namespace egl_platform;
 
 namespace
 {
+void FramebufferChangeCallback(void *userData, GLenum target, GLuint framebuffer);
 
 enum class TracePerfTestID
 {
@@ -99,9 +100,34 @@ class TracePerfTest : public ANGLERenderTest, public ::testing::WithParamInterfa
     void destroyBenchmark() override;
     void drawBenchmark() override;
 
+    void onFramebufferChange(GLenum target, GLuint framebuffer);
+
     uint32_t mStartFrame;
     uint32_t mEndFrame;
     std::function<void(uint32_t)> mReplayFunc;
+
+    double getHostTimeFromGLTime(GLint64 glTime);
+
+  private:
+    struct QueryInfo
+    {
+        GLuint beginTimestampQuery;
+        GLuint endTimestampQuery;
+        GLuint framebuffer;
+    };
+
+    struct TimeSample
+    {
+        GLint64 glTime;
+        double hostTime;
+    };
+
+    void sampleTime();
+
+    // For tracking RenderPass/FBO change timing.
+    QueryInfo mCurrentQuery = {};
+    std::vector<QueryInfo> mRunningQueries;
+    std::vector<TimeSample> mTimeline;
 };
 
 TracePerfTest::TracePerfTest()
@@ -123,6 +149,7 @@ void TracePerfTest::initializeBenchmark()
             mReplayFunc = trex_200_210::ReplayContext1Frame;
             trex_200_210::SetBinaryDataDir(ANGLE_TRACE_DATA_DIR_trex_200_210);
             trex_200_210::SetupContext1Replay();
+            trex_200_210::SetFramebufferChangeCallback(this, FramebufferChangeCallback);
             break;
         case TracePerfTestID::TRex800:
             mStartFrame = 800;
@@ -157,17 +184,136 @@ void TracePerfTest::initializeBenchmark()
 
 void TracePerfTest::destroyBenchmark() {}
 
+void TracePerfTest::sampleTime()
+{
+    if (mIsTimestampQueryAvailable)
+    {
+        GLint64 glTime;
+        if (glGetInteger64vEXT)
+        {
+            glGetInteger64vEXT(GL_TIMESTAMP_EXT, &glTime);
+        }
+        else
+        {
+            glGetInteger64v(GL_TIMESTAMP_EXT, &glTime);
+        }
+        mTimeline.push_back({glTime, angle::GetHostTimeSeconds()});
+    }
+}
+
 void TracePerfTest::drawBenchmark()
 {
+    // Add a time sample from GL and the host.
+    sampleTime();
+
     startGpuTimer();
 
     for (uint32_t frame = mStartFrame; frame < mEndFrame; ++frame)
     {
-        mReplayFunc(frame);
+        char frameName[32];
+        sprintf(frameName, "Frame %u", frame);
+        beginInternalTraceEvent(frameName);
+
+        mReplayFunc(mStartFrame);
         getGLWindow()->swap();
+
+        endInternalTraceEvent(frameName);
+    }
+
+    // Process any running queries once per iteration.
+    for (size_t queryIndex = 0; queryIndex < mRunningQueries.size();)
+    {
+        const QueryInfo &query = mRunningQueries[queryIndex];
+
+        GLuint endResultAvailable = 0;
+        glGetQueryObjectuivEXT(query.endTimestampQuery, GL_QUERY_RESULT_AVAILABLE,
+                               &endResultAvailable);
+
+        if (endResultAvailable == GL_TRUE)
+        {
+            char fboName[32];
+            sprintf(fboName, "FBO %u", query.framebuffer);
+
+            GLint64 beginTimestamp = 0;
+            glGetQueryObjecti64vEXT(query.beginTimestampQuery, GL_QUERY_RESULT, &beginTimestamp);
+            glDeleteQueriesEXT(1, &query.beginTimestampQuery);
+            double beginHostTime = getHostTimeFromGLTime(beginTimestamp);
+            beginGLTraceEvent(fboName, beginHostTime);
+
+            GLint64 endTimestamp = 0;
+            glGetQueryObjecti64vEXT(query.endTimestampQuery, GL_QUERY_RESULT, &endTimestamp);
+            glDeleteQueriesEXT(1, &query.endTimestampQuery);
+            double endHostTime = getHostTimeFromGLTime(endTimestamp);
+            endGLTraceEvent(fboName, endHostTime);
+
+            mRunningQueries.erase(mRunningQueries.begin() + queryIndex);
+        }
+        else
+        {
+            queryIndex++;
+        }
     }
 
     stopGpuTimer();
+}
+
+double TracePerfTest::getHostTimeFromGLTime(GLint64 glTime)
+{
+    // Find two samples to do a lerp.
+    size_t firstSampleIndex = mTimeline.size() - 1;
+    while (firstSampleIndex > 0)
+    {
+        if (mTimeline[firstSampleIndex].glTime < glTime)
+        {
+            break;
+        }
+        firstSampleIndex--;
+    }
+
+    // Add an extra sample if we're missing an ending sample.
+    if (firstSampleIndex == mTimeline.size() - 1)
+    {
+        sampleTime();
+    }
+
+    const TimeSample &start = mTimeline[firstSampleIndex];
+    const TimeSample &end   = mTimeline[firstSampleIndex + 1];
+
+    // Compute the scaling factor for the lerp.
+    double glDelta = static_cast<double>(glTime - start.glTime);
+    double glRange = static_cast<double>(end.glTime - start.glTime);
+    double t       = glDelta / glRange;
+
+    // Lerp(t1, t2, t)
+    double hostRange = end.hostTime - start.hostTime;
+    return mTimeline[firstSampleIndex].hostTime + hostRange * t;
+}
+
+// Callback from the perf tests.
+void TracePerfTest::onFramebufferChange(GLenum target, GLuint framebuffer)
+{
+    if (!mIsTimestampQueryAvailable)
+        return;
+
+    if (target != GL_FRAMEBUFFER && target != GL_DRAW_FRAMEBUFFER)
+        return;
+
+    if (mCurrentQuery.beginTimestampQuery != 0)
+    {
+        glGenQueriesEXT(1, &mCurrentQuery.endTimestampQuery);
+        glQueryCounterEXT(mCurrentQuery.endTimestampQuery, GL_TIMESTAMP_EXT);
+        mRunningQueries.push_back(mCurrentQuery);
+        mCurrentQuery = {};
+    }
+
+    glGenQueriesEXT(1, &mCurrentQuery.beginTimestampQuery);
+    glQueryCounterEXT(mCurrentQuery.beginTimestampQuery, GL_TIMESTAMP_EXT);
+    mCurrentQuery.framebuffer = framebuffer;
+}
+
+void FramebufferChangeCallback(void *userData, GLenum target, GLuint framebuffer)
+{
+    reinterpret_cast<TracePerfTest *>(userData)->onFramebufferChange(target, framebuffer);
 }
 
 TEST_P(TracePerfTest, Run)
@@ -186,7 +332,7 @@ using namespace params;
 using P = TracePerfParams;
 
 std::vector<P> gTestsWithID = CombineWithValues({P()}, AllEnums<TracePerfTestID>(), CombineTestID);
-std::vector<P> gTestsWithRenderer = CombineWithFuncs(gTestsWithID, {GL<P>, Vulkan<P>});
+std::vector<P> gTestsWithRenderer = CombineWithFuncs(gTestsWithID, {GL3<P>, Vulkan<P>});
 ANGLE_INSTANTIATE_TEST_ARRAY(TracePerfTest, gTestsWithRenderer);
 
 }  // anonymous namespace

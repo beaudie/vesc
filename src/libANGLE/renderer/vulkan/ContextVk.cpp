@@ -3820,9 +3820,9 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     timestampQueryPool.get().freeQuery(this, &timestampQuery);
 
     // Convert results to nanoseconds.
-    *timestampOut = static_cast<uint64_t>(
-        *timestampOut *
-        static_cast<double>(getRenderer()->getPhysicalDeviceProperties().limits.timestampPeriod));
+    const VkPhysicalDeviceLimits &limits = mRenderer->getPhysicalDeviceProperties().limits;
+    *timestampOut =
+        static_cast<uint64_t>(*timestampOut * static_cast<double>(limits.timestampPeriod));
 
     return mCommandQueue.releasePrimaryCommandBuffer(this, commandBatch.release());
 }
