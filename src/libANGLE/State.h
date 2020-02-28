@@ -715,6 +715,7 @@ class State : angle::NonCopyable
     {
         return *mShaderProgramManager;
     }
+    const SyncManager &getSyncManagerForCapture() const { return *mSyncManager; }
     const SamplerManager &getSamplerManagerForCapture() const { return *mSamplerManager; }
 
     const ActiveQueryMap &getActiveQueriesForCapture() const { return mActiveQueries; }
