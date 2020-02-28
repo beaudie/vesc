@@ -161,7 +161,6 @@ MSG kIntegerOverflow = "Integer overflow.";
 MSG kInternalFormatRequiresTexture2DArray = "internalformat is an ETC2/EAC format and target is not GL_TEXTURE_2D_ARRAY.";
 MSG kInternalFormatRequiresTexture2DArrayS3TC = "internalformat is an S3TC format and target is not GL_TEXTURE_2D_ARRAY.";
 MSG kInternalFormatRequiresTexture2DArrayRGTC = "internalformat is an RGTC format and target is not GL_TEXTURE_2D_ARRAY.";
-MSG kInternalFormatRequiresTexture2DArrayASTC = "internalformat is an ASTC format and target is not GL_TEXTURE_2D_ARRAY.";
 MSG kInvalidAccessBits = "Invalid access bits.";
 MSG kInvalidAccessBitsFlush = "The explicit flushing bit may only be set if the buffer is mapped for writing.";
 MSG kInvalidAccessBitsRead = "Invalid access bits when mapping buffer for reading";
