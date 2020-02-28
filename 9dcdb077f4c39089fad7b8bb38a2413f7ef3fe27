@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "52e500ec_549bd24b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2876,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-02-28T15:57:50Z",
+      "side": 1,
+      "message": "Great advice! Will update in next patch set. :)",
+      "parentUuid": "1d151ad8_9c450391",
+      "range": {
+        "startLine": 2866,
+        "startChar": 0,
+        "endLine": 2876,
+        "endChar": 1
+      },
+      "revId": "9dcdb077f4c39089fad7b8bb38a2413f7ef3fe27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c768a2e1_8daa356a",
         "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-28T15:48:37Z",
       "side": 1,
       "message": "I suspect this is not two separate bugs if it fails on both Windows/NV+Intel+AMD and Linux/NV. Any idea of what the remaining bug is?",
+      "range": {
+        "startLine": 842,
+        "startChar": 0,
+        "endLine": 845,
+        "endChar": 50
+      },
+      "revId": "9dcdb077f4c39089fad7b8bb38a2413f7ef3fe27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79064a2e_d13dd734",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-02-28T15:57:50Z",
+      "side": 1,
+      "message": "I tried with this patch and test could pass on Linux + Arm64, not sure if it would pass on other platform, so just revert back to original state, I can update this to see if it can pass on all platforms with CQ RUN.",
+      "parentUuid": "c768a2e1_8daa356a",
       "range": {
         "startLine": 842,
         "startChar": 0,
