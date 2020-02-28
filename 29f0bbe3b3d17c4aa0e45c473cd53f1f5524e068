@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2a9aea9_7d24ea2e",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T15:15:44Z",
+      "side": 1,
+      "message": "tag with issue? that\u0027s our internal policy.",
+      "range": {
+        "startLine": 66,
+        "startChar": 6,
+        "endLine": 66,
+        "endChar": 10
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9303735_6a6016f5",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T15:15:44Z",
+      "side": 1,
+      "message": "how does bp handle headers?",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 5
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fc1447b_5a011b27",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T15:15:44Z",
+      "side": 1,
+      "message": "what happens with the headers that\u0027s bad?",
+      "range": {
+        "startLine": 108,
+        "startChar": 34,
+        "endLine": 108,
+        "endChar": 52
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6d2e722_ad26a1de",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T15:15:44Z",
+      "side": 1,
+      "message": "same comment here",
+      "range": {
+        "startLine": 249,
+        "startChar": 6,
+        "endLine": 249,
+        "endChar": 10
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8a49545_03342944",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T15:15:44Z",
+      "side": 1,
+      "message": "generous amounts of comments would help future proof this script for other maintainers.",
+      "range": {
+        "startLine": 294,
+        "startChar": 0,
+        "endLine": 294,
+        "endChar": 4
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d4d00db_2cced858",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T15:15:44Z",
+      "side": 1,
+      "message": "nit: something funky with the syntax highlighting here in gerrit. maybe an extra space? or should use bash instead of sh?",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7320dc5_c50785e0",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T15:15:44Z",
+      "side": 1,
+      "message": "listed twice.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 29
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a3f0b2b_f795878b",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T15:15:44Z",
+      "side": 1,
+      "message": "some comments here would be welcome.\n\nAlso I would consider still making this a python script. More portable in many cases, and easier to process unexpected errors.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 4
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
