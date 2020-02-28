@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2900f3c2_843a3c5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T17:37:22Z",
+      "side": 1,
+      "message": "We already have anglebug.com/1280 - can you duplicate 3959 into 1280 and use that in the issue?",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 22
+      },
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81244958_a43d54ba",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T17:37:22Z",
+      "side": 1,
+      "message": "Not sure why you needed this - probably should remove it as it\u0027s not a GL extension.",
+      "range": {
+        "startLine": 434,
+        "startChar": 9,
+        "endLine": 434,
+        "endChar": 26
+      },
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cb02203_8ad16e43",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T17:37:22Z",
+      "side": 1,
+      "message": "just remove all this. it\u0027s not back-end specific.",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 383,
+        "endChar": 5
+      },
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46b21ff9_9fbe4e16",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T17:37:22Z",
+      "side": 1,
+      "message": "this looks unrelated - can this be moved to a split fix?",
+      "range": {
+        "startLine": 1145,
+        "startChar": 21,
+        "endLine": 1145,
+        "endChar": 67
+      },
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e51ba335_92ea1237",
+        "filename": "src/tests/egl_tests/EGLCreateContextNoErrorTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T17:37:22Z",
+      "side": 1,
+      "message": "We have instrumentation for setting up no error already in the test harness. You could use EGLWindow directly with a NoFixture test. Instead of making custom inits for the display/context/etc manually.",
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c295f0db_6a4ce1f5",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T17:37:22Z",
+      "side": 1,
+      "message": "yeah, should probably split this to a separate CL.",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 93
+      },
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
