@@ -277,6 +277,30 @@
     },
     {
       "key": {
+        "uuid": "42ddfa0d_8b1dd74d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T16:28:17Z",
+      "side": 1,
+      "message": "My suggestions:\n\na) default init the whole array memory at the start, or\nb) default-init the unused portion after the first loop. We did this for other pieces of code in the D3D back-end.\n\nYou could use something like std::fill:\n\nhttps://en.cppreference.com/w/cpp/algorithm/fill",
+      "parentUuid": "c67eba06_3d96f37d",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 9
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "82924aad_610bb338",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 7
