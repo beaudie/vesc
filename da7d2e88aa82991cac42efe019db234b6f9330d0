@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f45833d_ff71e352",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:06:03Z",
+      "side": 1,
+      "message": "nit: you can return a const \u0026.",
+      "range": {
+        "startLine": 592,
+        "startChar": 18,
+        "endLine": 592,
+        "endChar": 19
+      },
+      "revId": "da7d2e88aa82991cac42efe019db234b6f9330d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "428fbb90_eba93b5e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1976,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:06:03Z",
+      "side": 1,
+      "message": "technically you should gen a query here. it will be rare to find an instance where this triggers a bug.",
+      "range": {
+        "startLine": 1972,
+        "startChar": 0,
+        "endLine": 1976,
+        "endChar": 9
+      },
+      "revId": "da7d2e88aa82991cac42efe019db234b6f9330d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5f1fd37_4de5a46c",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1986,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:06:03Z",
+      "side": 1,
+      "message": "you should not end the query here unless it\u0027s missing from the active queries map.",
+      "range": {
+        "startLine": 1986,
+        "startChar": 7,
+        "endLine": 1986,
+        "endChar": 59
+      },
+      "revId": "da7d2e88aa82991cac42efe019db234b6f9330d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
