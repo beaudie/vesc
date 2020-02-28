@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "1122008d_1ae6fd8f",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-02-28T15:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bcf2d6d_f29ee28e",
+      "range": {
+        "startLine": 903,
+        "startChar": 78,
+        "endLine": 903,
+        "endChar": 96
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "551fedc6_7b01b8e8",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 7
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "3e9f2cd2_dbb898d2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4939,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-02-28T15:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "551fedc6_7b01b8e8",
+      "range": {
+        "startLine": 4939,
+        "startChar": 11,
+        "endLine": 4939,
+        "endChar": 27
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6600e64_a0b67222",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 7
@@ -85,6 +133,30 @@
       "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6615cda5_1373edf7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4959,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-02-28T15:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6600e64_a0b67222",
+      "range": {
+        "startLine": 4959,
+        "startChar": 11,
+        "endLine": 4959,
+        "endChar": 26
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +206,30 @@
     },
     {
       "key": {
+        "uuid": "f4b9097f_a5a416f7",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-02-28T15:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "156727f1_1d6452a7",
+      "range": {
+        "startLine": 760,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 0
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7bbce8bc_05b8db46",
         "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
         "patchSetId": 7
@@ -145,6 +241,30 @@
       "writtenOn": "2020-02-27T22:12:43Z",
       "side": 1,
       "message": "I think I see how you\u0027re iterating the loop here. Feels like we can clean this up slightly. Can you instead iterate over the DrawBufferMask using a range-for and increment a packed write index every time you hit a valid draw buffer?",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 9
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c67eba06_3d96f37d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-02-28T15:56:20Z",
+      "side": 1,
+      "message": "Currently, the outer loop (at line 61) iterates over all 8 resulting blend states at each step jumping to the next valid original blend state or initializing unused elements exiting at line 78.\n\nWith the outer loop iterating only over valid bits, we\u0027d need another loop afterwards to ensure that unused trailing slots are initialized.",
+      "parentUuid": "7bbce8bc_05b8db46",
       "range": {
         "startLine": 72,
         "startChar": 0,
@@ -177,6 +297,30 @@
       "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2868120_1f77d371",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-02-28T15:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82924aad_610bb338",
+      "range": {
+        "startLine": 953,
+        "startChar": 39,
+        "endLine": 953,
+        "endChar": 93
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
