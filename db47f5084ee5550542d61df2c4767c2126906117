@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9f297ec_c8cf42b1",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:21:46Z",
+      "side": 1,
+      "message": "we might need to gen it here too technically. would need to see the spec. might not matter much.",
+      "range": {
+        "startLine": 2098,
+        "startChar": 0,
+        "endLine": 2102,
+        "endChar": 9
+      },
+      "revId": "db47f5084ee5550542d61df2c4767c2126906117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a54535cf_f759f7e7",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2104,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:21:46Z",
+      "side": 1,
+      "message": "nit: use first.",
+      "range": {
+        "startLine": 2103,
+        "startChar": 0,
+        "endLine": 2104,
+        "endChar": 59
+      },
+      "revId": "db47f5084ee5550542d61df2c4767c2126906117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1257176a_486bdf38",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:21:46Z",
+      "side": 1,
+      "message": "you seem to be missing the bind calls. and capture of the binding state.",
+      "range": {
+        "startLine": 2106,
+        "startChar": 12,
+        "endLine": 2106,
+        "endChar": 30
+      },
+      "revId": "db47f5084ee5550542d61df2c4767c2126906117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
