@@ -1400,7 +1400,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     gl::PixelPackState &currentPackState = replayState.getPackState();
     if (currentPackState.alignment != 1)
     {
-        cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, 1));
+        cap(CapturePixelStorei(replayState, true, GL_PACK_ALIGNMENT, 1));
         currentPackState.alignment = 1;
     }
 
@@ -1460,6 +1460,16 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         if (textureSamplerState.getWrapT() != defaultSamplerState.getWrapT())
         {
             capTexParam(GL_TEXTURE_WRAP_T, textureSamplerState.getWrapT());
+        }
+
+        if (textureSamplerState.getCompareMode() != defaultSamplerState.getCompareMode())
+        {
+            capTexParam(GL_TEXTURE_COMPARE_MODE, textureSamplerState.getCompareMode());
+        }
+
+        if (textureSamplerState.getCompareFunc() != defaultSamplerState.getCompareFunc())
+        {
+            capTexParam(GL_TEXTURE_COMPARE_FUNC, textureSamplerState.getCompareFunc());
         }
 
         // Iterate texture levels and layers.
@@ -1997,12 +2007,72 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     }
 
     // Pixel storage states.
-    // TODO(jmadill): ES 3.x+ implementation. http://anglebug.com/3662
     if (currentPackState.alignment != apiState.getPackAlignment())
     {
-        cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT,
-                               apiState.getPackAlignment()));
+        cap(CapturePixelStorei(replayState, true, GL_PACK_ALIGNMENT, apiState.getPackAlignment()));
         currentPackState.alignment = apiState.getPackAlignment();
+    }
+
+    if (currentPackState.rowLength != apiState.getPackRowLength())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_PACK_ROW_LENGTH, apiState.getPackRowLength()));
+        currentPackState.rowLength = apiState.getPackRowLength();
+    }
+
+    if (currentPackState.skipRows != apiState.getPackSkipRows())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_PACK_SKIP_ROWS, apiState.getPackSkipRows()));
+        currentPackState.skipRows = apiState.getPackSkipRows();
+    }
+
+    if (currentPackState.skipPixels != apiState.getPackSkipPixels())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_PACK_SKIP_PIXELS,
+                               apiState.getPackSkipPixels()));
+        currentPackState.skipPixels = apiState.getPackSkipPixels();
+    }
+
+    gl::PixelUnpackState &currentUnpackState = replayState.getUnpackState();
+    if (currentUnpackState.rowLength != apiState.getUnpackRowLength())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_ROW_LENGTH,
+                               apiState.getUnpackRowLength()));
+        currentUnpackState.rowLength = apiState.getUnpackRowLength();
+    }
+
+    if (currentUnpackState.skipRows != apiState.getUnpackSkipRows())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_SKIP_ROWS,
+                               apiState.getUnpackSkipRows()));
+        currentUnpackState.skipRows = apiState.getUnpackSkipRows();
+    }
+
+    if (currentUnpackState.skipPixels != apiState.getUnpackSkipPixels())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_SKIP_PIXELS,
+                               apiState.getUnpackSkipPixels()));
+        currentUnpackState.skipPixels = apiState.getUnpackSkipPixels();
+    }
+
+    if (currentUnpackState.alignment != apiState.getUnpackAlignment())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT,
+                               apiState.getUnpackAlignment()));
+        currentUnpackState.alignment = apiState.getUnpackAlignment();
+    }
+
+    if (currentUnpackState.imageHeight != apiState.getUnpackImageHeight())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_IMAGE_HEIGHT,
+                               apiState.getUnpackImageHeight()));
+        currentUnpackState.imageHeight = apiState.getUnpackImageHeight();
+    }
+
+    if (currentUnpackState.skipImages != apiState.getUnpackSkipImages())
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_SKIP_IMAGES,
+                               apiState.getUnpackSkipImages()));
+        currentUnpackState.skipImages = apiState.getUnpackSkipImages();
     }
 
     // Clear state. Missing ES 3.x features.
@@ -2017,6 +2087,11 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     if (apiState.getDepthClearValue() != 1.0f)
     {
         cap(CaptureClearDepthf(replayState, true, apiState.getDepthClearValue()));
+    }
+
+    if (apiState.getStencilClearValue() != 0)
+    {
+        cap(CaptureClearStencil(replayState, true, apiState.getStencilClearValue()));
     }
 
     // Viewport / scissor / clipping planes.
@@ -2090,6 +2165,14 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         gl::TransformFeedbackID xfbID = xfbIter.second->id();
         cap(CaptureGenTransformFeedbacks(replayState, true, 1, &xfbID));
         MaybeCaptureUpdateResourceIDs(setupCalls);
+    }
+
+    const gl::SyncManager &syncs = apiState.getSyncManagerForCapture();
+    for (const auto &syncIter : syncs)
+    {
+        // TODO: Create existing sync objects (http://anglebug.com/3662)
+        (void)syncIter;
+        UNIMPLEMENTED();
     }
 
     const gl::SamplerManager &samplers = apiState.getSamplerManagerForCapture();
