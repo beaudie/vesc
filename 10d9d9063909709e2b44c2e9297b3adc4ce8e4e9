@@ -49,6 +49,23 @@
     },
     {
       "key": {
+        "uuid": "8f745caa_b542d79e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-02-28T19:43:54Z",
+      "side": 1,
+      "message": "Seeing this makes me wonder, do we just add the other texture state now or do we need to wait for an app that uses it. E.g. GL_TEXTURE_MIN_LOD, GL_TEXTURE_MAX_LOD, GL_TEXTURE_BASE_LEVEL, GL_TEXTURE_MAX_LEVEL, others?",
+      "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "37735ccc_11ff6db7",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
