@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99eced68_b088cc76",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:19:08Z",
+      "side": 1,
+      "message": "same nit.",
+      "range": {
+        "startLine": 594,
+        "startChar": 25,
+        "endLine": 594,
+        "endChar": 26
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41342402_5b3d17f7",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:19:08Z",
+      "side": 1,
+      "message": "nit: use * or const \u0026, not mutable \u0026.\n\nhttps://google.github.io/styleguide/cppguide.html#Reference_Arguments",
+      "range": {
+        "startLine": 1213,
+        "startChar": 28,
+        "endLine": 1213,
+        "endChar": 39
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dd1a6f6_8a27a1d9",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:19:08Z",
+      "side": 1,
+      "message": "these aren\u0027t part of the VAO. they belong the Context state. hence they don\u0027t need to be part of this function. I had it before just to re-use the same for loop. We should move it out into its own code now.",
+      "range": {
+        "startLine": 1226,
+        "startChar": 12,
+        "endLine": 1226,
+        "endChar": 25
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bee9635d_79f0223d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:19:08Z",
+      "side": 1,
+      "message": "I don\u0027t see why you need to pass these separately. just pass the vao itself to the helper.",
+      "range": {
+        "startLine": 1354,
+        "startChar": 60,
+        "endLine": 1354,
+        "endChar": 90
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4752cf1_4f57c782",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:19:08Z",
+      "side": 1,
+      "message": "nit: make local aliases for the ID and VAO pointer like I do for buffers below. use the \u0027first\u0027 for the ID.",
+      "range": {
+        "startLine": 1360,
+        "startChar": 0,
+        "endLine": 1364,
+        "endChar": 9
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dc61de0_2737c9f7",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T19:19:08Z",
+      "side": 1,
+      "message": "make sure you capture the current VAO, and do it after you initialize the other VAOs. note that the element array buffer binding is dependent on the current VAO. you\u0027ll need to be mindful of that in the below buffer binding updates.",
+      "range": {
+        "startLine": 1380,
+        "startChar": 0,
+        "endLine": 1380,
+        "endChar": 5
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
