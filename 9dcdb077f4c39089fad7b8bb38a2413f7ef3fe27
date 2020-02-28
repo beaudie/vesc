@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d151ad8_9c450391",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2876,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T15:48:37Z",
+      "side": 1,
+      "message": "nit: you could simplify this as:\n\n VkClearColorValue initValue \u003d format.hasEmulatedImageChannels() ? kEMulatedInit : kWebGL;\n stageSubresourceClear(.....);",
+      "range": {
+        "startLine": 2866,
+        "startChar": 0,
+        "endLine": 2876,
+        "endChar": 1
+      },
+      "revId": "9dcdb077f4c39089fad7b8bb38a2413f7ef3fe27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c768a2e1_8daa356a",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T15:48:37Z",
+      "side": 1,
+      "message": "I suspect this is not two separate bugs if it fails on both Windows/NV+Intel+AMD and Linux/NV. Any idea of what the remaining bug is?",
+      "range": {
+        "startLine": 842,
+        "startChar": 0,
+        "endLine": 845,
+        "endChar": 50
+      },
+      "revId": "9dcdb077f4c39089fad7b8bb38a2413f7ef3fe27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
