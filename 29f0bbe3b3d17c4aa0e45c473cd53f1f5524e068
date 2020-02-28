@@ -415,6 +415,24 @@
     },
     {
       "key": {
+        "uuid": "5622b86c_632536d5",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T21:16:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6fda1c25_cf1f06e8",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a3f0b2b_f795878b",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -509,6 +527,30 @@
     },
     {
       "key": {
+        "uuid": "537627be_0cf80df5",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T21:16:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fa27f492_3bb82dea",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 31,
+        "endChar": 18
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "760997c1_899e4fad",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -591,6 +633,24 @@
     },
     {
       "key": {
+        "uuid": "026d4496_51b4184c",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T21:16:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b5d02841_a1152b19",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3782ff6b_bb1a1724",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
@@ -620,6 +680,24 @@
       "side": 1,
       "message": "The intent is to automate this in the future but for now I need to make sure I remember the process.  I filed a bug about the automation, hopefully we can use a skia autoroller.",
       "parentUuid": "3782ff6b_bb1a1724",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a628300a_fdc21ff3",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-02-28T21:16:18Z",
+      "side": 1,
+      "message": "How does this work without an initial \u0027git commit\u0027 to amend?   Do you need to manually do a \u0027git commit\u0027 first and then you can use this script, or will it use the last commit message in HEAD to auto-roll with?",
+      "parentUuid": "77df3959_f953ce6f",
       "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
