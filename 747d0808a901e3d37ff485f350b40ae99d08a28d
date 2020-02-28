@@ -180,6 +180,30 @@
     },
     {
       "key": {
+        "uuid": "d0c0c16b_489e399e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-02-28T01:18:21Z",
+      "side": 1,
+      "message": "The bit set triggers syncBlendState that always calls GetBlendStateKey.",
+      "parentUuid": "848132e9_2183d923",
+      "range": {
+        "startLine": 1028,
+        "startChar": 1,
+        "endLine": 1031,
+        "endChar": 45
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8c9bbc0_4bb7204e",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 7
@@ -191,6 +215,30 @@
       "writtenOn": "2020-02-27T22:12:43Z",
       "side": 1,
       "message": "is this an unrelated fix? Just wondering. If it was a missing validation and somewhat unrelated could make it a small prior fix and land quickly.",
+      "range": {
+        "startLine": 2715,
+        "startChar": 0,
+        "endLine": 2728,
+        "endChar": 5
+      },
+      "revId": "747d0808a901e3d37ff485f350b40ae99d08a28d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62c80e9b_f67b45c9",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2728,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-02-28T01:18:21Z",
+      "side": 1,
+      "message": "This update ensures that CONSTANT_COLOR and CONSTANT_ALPHA are not used at the same time across all 8 independent states (e.g., CONSTANT_COLOR in buffer 0 and CONSTANT_ALPHA in buffer 1). As discussed with WebGL group, this could be validated only at draw call.",
+      "parentUuid": "a8c9bbc0_4bb7204e",
       "range": {
         "startLine": 2715,
         "startChar": 0,
