@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "781f41c0_7dc56b68",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-28T19:08:17Z",
+      "side": 1,
+      "message": "Jamie - did you have UNPACK here for a reason?  It looked suspicious.",
+      "range": {
+        "startLine": 1403,
+        "startChar": 50,
+        "endLine": 1403,
+        "endChar": 67
+      },
+      "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37735ccc_11ff6db7",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2012,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-02-28T19:08:17Z",
+      "side": 1,
+      "message": "Same here, I changed this to PACK.  Let me know if I misunderstood the intent here.",
+      "range": {
+        "startLine": 2012,
+        "startChar": 50,
+        "endLine": 2012,
+        "endChar": 67
+      },
+      "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
