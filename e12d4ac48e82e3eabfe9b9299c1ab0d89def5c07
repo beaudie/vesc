@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48e5819f_4456b016",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T12:45:45Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand why FOG_MODE doesn\u0027t require a cast?",
+      "range": {
+        "startLine": 767,
+        "startChar": 31,
+        "endLine": 767,
+        "endChar": 43
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23446c0c_fce246be",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T12:45:45Z",
+      "side": 1,
+      "message": "nit: please use c++-style casts\n\nhttps://google.github.io/styleguide/cppguide.html#Casting",
+      "range": {
+        "startLine": 767,
+        "startChar": 44,
+        "endLine": 767,
+        "endChar": 54
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e534668c_e85eb529",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T12:45:45Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 778,
+        "startChar": 22,
+        "endLine": 778,
+        "endChar": 29
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b693f692_73b6c2c3",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T12:45:45Z",
+      "side": 1,
+      "message": "can you insert ANGLE_VALIDATE_IS_GLES1(context) to all the new EPs you are validating?",
+      "range": {
+        "startLine": 1226,
+        "startChar": 4,
+        "endLine": 1226,
+        "endChar": 27
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25ee7918_300c30f9",
+        "filename": "src/tests/gl_tests/gles1/BasicDrawTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T12:45:45Z",
+      "side": 1,
+      "message": "nit: please comment before each new test",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 6
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f94e5acf_9125fd2c",
+        "filename": "src/tests/gl_tests/gles1/BasicDrawTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T12:45:45Z",
+      "side": 1,
+      "message": "is it possible to split this test up into smaller tests? It seems like it\u0027s testing multiple behaviours.",
+      "range": {
+        "startLine": 83,
+        "startChar": 22,
+        "endLine": 83,
+        "endChar": 37
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dc6a8ed_e7b291a5",
+        "filename": "src/tests/gl_tests/gles1/BasicDrawTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T12:45:45Z",
+      "side": 1,
+      "message": "if you use std::array, you can avoid the loop and go EXPECT_EQ(cropRect, params);",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 5
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16e29cdd_8a309902",
+        "filename": "src/tests/gl_tests/gles1/BasicDrawTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T12:45:45Z",
+      "side": 1,
+      "message": "can you sprinkle in some ASSERT_GL_NO_ERROR calls?",
+      "range": {
+        "startLine": 137,
+        "startChar": 4,
+        "endLine": 137,
+        "endChar": 13
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
