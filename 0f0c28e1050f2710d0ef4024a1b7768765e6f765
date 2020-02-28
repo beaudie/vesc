@@ -16,6 +16,24 @@
       "revId": "0f0c28e1050f2710d0ef4024a1b7768765e6f765",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baf01efb_15e8139b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-02-28T03:21:01Z",
+      "side": 1,
+      "message": "Thank you Shahbaz! I\u0027ll delete the code using it.",
+      "parentUuid": "68426a39_5f175638",
+      "revId": "0f0c28e1050f2710d0ef4024a1b7768765e6f765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
