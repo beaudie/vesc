@@ -22,6 +22,52 @@
       "revId": "908dc2208b7c36698bf0c010350799a729f46c1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40b5126b_81f8a077",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T14:33:40Z",
+      "side": 0,
+      "message": "can you restore some kind of pixel testing here?",
+      "range": {
+        "startLine": 1010,
+        "startChar": 4,
+        "endLine": 1010,
+        "endChar": 53
+      },
+      "revId": "908dc2208b7c36698bf0c010350799a729f46c1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27131f45_27da5b1e",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-28T14:33:40Z",
+      "side": 0,
+      "message": "can you restore some kind of pixel testing here?",
+      "range": {
+        "startLine": 1015,
+        "startChar": 4,
+        "endLine": 1015,
+        "endChar": 53
+      },
+      "revId": "908dc2208b7c36698bf0c010350799a729f46c1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
