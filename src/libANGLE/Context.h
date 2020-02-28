@@ -324,6 +324,7 @@ class StateCache final : angle::NonCopyable
         mCachedIntegerVertexAttribTypesValidation;
 };
 
+using VertexArrayMap       = ResourceMap<VertexArray, VertexArrayID>;
 using QueryMap             = ResourceMap<Query, QueryID>;
 using TransformFeedbackMap = ResourceMap<TransformFeedback, TransformFeedbackID>;
 
@@ -590,6 +591,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     angle::FrameCapture *getFrameCapture() { return mFrameCapture.get(); }
 
+    const VertexArrayMap *getVertexArraysForCapture() const { return &mVertexArrayMap; }
     const QueryMap *getQueriesForCapture() const { return &mQueryMap; }
     const TransformFeedbackMap *getTransformFeedbacksForCapture() const
     {
