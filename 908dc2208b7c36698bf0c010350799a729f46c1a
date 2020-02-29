@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "2f635e77_bb709538",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-02-29T02:10:57Z",
+      "side": 0,
+      "message": "I think we can redefine the 16x16x2 image to same color, and then call glGenerateMipmap, so we can verify miplevel 1, 2, 3, 4.",
+      "parentUuid": "40b5126b_81f8a077",
+      "range": {
+        "startLine": 1010,
+        "startChar": 4,
+        "endLine": 1010,
+        "endChar": 53
+      },
+      "revId": "908dc2208b7c36698bf0c010350799a729f46c1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "27131f45_27da5b1e",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 8
