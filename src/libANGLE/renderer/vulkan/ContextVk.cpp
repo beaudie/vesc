@@ -601,9 +601,12 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mEmulateSeamfulCubeMapSampling(false),
       mUseOldRewriteStructSamplers(false),
       mPoolAllocator(kDefaultPoolAllocatorPageSize, 1),
+      mHasPrimaryCommands(false),
       mGpuEventsEnabled(false),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
+      mPrimaryBufferCounter(0),
+      mRenderPassCounter(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state)))
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
@@ -801,16 +804,6 @@ angle::Result ContextVk::initialize()
     mGpuEventsEnabled = gpuEventsEnabled && *gpuEventsEnabled;
 #endif
 
-    if (mGpuEventsEnabled)
-    {
-        // GPU events should only be available if timestamp queries are available.
-        ASSERT(mRenderer->getQueueFamilyProperties().timestampValidBits > 0);
-        // Calculate the difference between CPU and GPU clocks for GPU event reporting.
-        ANGLE_TRY(mGpuEventQueryPool.init(this, VK_QUERY_TYPE_TIMESTAMP,
-                                          vk::kDefaultTimestampQueryPoolSize));
-        ANGLE_TRY(synchronizeCpuGpuTime());
-    }
-
     mEmulateSeamfulCubeMapSampling = shouldEmulateSeamfulCubeMapSampling();
 
     mUseOldRewriteStructSamplers = shouldUseOldRewriteStructSamplers();
@@ -820,6 +813,22 @@ angle::Result ContextVk::initialize()
     mOutsideRenderPassCommands.getCommandBuffer().initialize(&mPoolAllocator);
     mRenderPassCommands.initialize(&mPoolAllocator);
     ANGLE_TRY(startPrimaryCommandBuffer());
+
+    if (mGpuEventsEnabled)
+    {
+        // GPU events should only be available if timestamp queries are available.
+        ASSERT(mRenderer->getQueueFamilyProperties().timestampValidBits > 0);
+        // Calculate the difference between CPU and GPU clocks for GPU event reporting.
+        ANGLE_TRY(mGpuEventQueryPool.init(this, VK_QUERY_TYPE_TIMESTAMP,
+                                          vk::kDefaultTimestampQueryPoolSize));
+        ANGLE_TRY(synchronizeCpuGpuTime());
+
+        mPrimaryBufferCounter++;
+
+        char buf[32];
+        sprintf(buf, "Primary %u", mPrimaryBufferCounter);
+        ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_BEGIN, buf));
+    }
 
     return angle::Result::Continue;
 }
@@ -833,6 +842,8 @@ angle::Result ContextVk::startPrimaryCommandBuffer()
     beginInfo.flags                    = 0;
     beginInfo.pInheritanceInfo         = nullptr;
     ANGLE_VK_TRY(this, mPrimaryCommands.begin(beginInfo));
+
+    mHasPrimaryCommands = false;
     return angle::Result::Continue;
 }
 
@@ -1108,7 +1119,7 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context,
     // |setupDispatch| and |setupDraw| are special in that they flush dirty bits. Therefore they
     // don't use the same APIs to record commands as the functions outside ContextVk.
     // The following ensures prior commands are flushed before we start processing dirty bits.
-    mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
+    flushOutsideRenderPassCommands();
     ANGLE_TRY(endRenderPass());
     *commandBufferOut = &mOutsideRenderPassCommands.getCommandBuffer();
 
@@ -1679,8 +1690,10 @@ angle::Result ContextVk::traceGpuEventImpl(vk::PrimaryCommandBuffer *commandBuff
 {
     ASSERT(mGpuEventsEnabled);
 
+    ASSERT(strlen(name) < kMaxGpuEventNameLen);
+
     GpuEventQuery gpuEvent;
-    gpuEvent.name  = name;
+    strcpy(gpuEvent.name.data(), name);
     gpuEvent.phase = phase;
     ANGLE_TRY(mGpuEventQueryPool.allocateQuery(this, &gpuEvent.queryHelper));
 
@@ -1739,7 +1752,7 @@ angle::Result ContextVk::checkCompletedGpuEvents()
 
 void ContextVk::flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuTimestampS)
 {
-    if (mGpuEvents.size() == 0)
+    if (mGpuEvents.empty())
     {
         return;
     }
@@ -1764,10 +1777,10 @@ void ContextVk::flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuT
     gpuSyncDriftSlope =
         (nextGpuSyncDiffS - lastGpuSyncDiffS) / (nextGpuSyncTimeS - lastGpuSyncTimeS);
 
-    for (const GpuEvent &event : mGpuEvents)
+    for (const GpuEvent &gpuEvent : mGpuEvents)
     {
         double gpuTimestampS =
-            (event.gpuTimestampCycles - mGpuEventTimestampOrigin) *
+            (gpuEvent.gpuTimestampCycles - mGpuEventTimestampOrigin) *
             static_cast<double>(
                 getRenderer()->getPhysicalDeviceProperties().limits.timestampPeriod) *
             1e-9;
@@ -1780,8 +1793,9 @@ void ContextVk::flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuT
         static long long eventId = 1;
         static const unsigned char *categoryEnabled =
             TRACE_EVENT_API_GET_CATEGORY_ENABLED(platform, "gpu.angle.gpu");
-        platform->addTraceEvent(platform, event.phase, categoryEnabled, event.name, eventId++,
-                                gpuTimestampS, 0, nullptr, nullptr, nullptr, TRACE_EVENT_FLAG_NONE);
+        platform->addTraceEvent(platform, gpuEvent.phase, categoryEnabled, gpuEvent.name.data(),
+                                eventId++, gpuTimestampS, 0, nullptr, nullptr, nullptr,
+                                TRACE_EVENT_FLAG_NONE);
     }
 
     mGpuEvents.clear();
@@ -2189,7 +2203,7 @@ angle::Result ContextVk::clearWithRenderPassOp(
     }
     else
     {
-        mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
+        flushOutsideRenderPassCommands();
     }
 
     size_t attachmentIndexVk = 0;
@@ -3593,20 +3607,20 @@ bool ContextVk::shouldFlush()
 bool ContextVk::hasRecordedCommands()
 {
     return !mOutsideRenderPassCommands.empty() || !mRenderPassCommands.empty() ||
-           !mPrimaryCommands.empty();
+           mHasPrimaryCommands;
 }
 
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 {
     bool hasPendingSemaphore = signalSemaphore || !mWaitSemaphores.empty();
-    if (!hasRecordedCommands() && !hasPendingSemaphore)
+    if (!hasRecordedCommands() && !hasPendingSemaphore && !mGpuEventsEnabled)
     {
         return angle::Result::Continue;
     }
 
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flush");
 
-    mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
+    flushOutsideRenderPassCommands();
     ANGLE_TRY(endRenderPass());
 
     if (mIsAnyHostVisibleBufferWritten)
@@ -3622,6 +3636,13 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         mPrimaryCommands.memoryBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                        VK_PIPELINE_STAGE_HOST_BIT, &memoryBarrier);
         mIsAnyHostVisibleBufferWritten = false;
+    }
+
+    if (mGpuEventsEnabled)
+    {
+        char buf[32];
+        sprintf(buf, "Primary %u", mPrimaryBufferCounter);
+        ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_END, buf));
     }
 
     ANGLE_VK_TRY(this, mPrimaryCommands.end());
@@ -3645,7 +3666,17 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 
     ANGLE_TRY(startPrimaryCommandBuffer());
 
+    mRenderPassCounter = 0;
     mWaitSemaphores.clear();
+
+    mPrimaryBufferCounter++;
+
+    if (mGpuEventsEnabled)
+    {
+        char buf[32];
+        sprintf(buf, "Primary %u", mPrimaryBufferCounter);
+        ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_BEGIN, buf));
+    }
 
     return angle::Result::Continue;
 }
@@ -3916,7 +3947,7 @@ angle::Result ContextVk::onBufferRead(VkAccessFlags readAccessType, vk::BufferHe
 
     if (!buffer->canAccumulateRead(this, readAccessType))
     {
-        mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
+        flushOutsideRenderPassCommands();
     }
 
     mOutsideRenderPassCommands.bufferRead(&mResourceUseList, readAccessType, buffer);
@@ -3930,7 +3961,7 @@ angle::Result ContextVk::onBufferWrite(VkAccessFlags writeAccessType, vk::Buffer
 
     if (!buffer->canAccumulateWrite(this, writeAccessType))
     {
-        mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
+        flushOutsideRenderPassCommands();
     }
 
     mOutsideRenderPassCommands.bufferWrite(&mResourceUseList, writeAccessType, buffer);
@@ -4000,7 +4031,30 @@ angle::Result ContextVk::flushAndBeginRenderPass(
 angle::Result ContextVk::endRenderPass()
 {
     onRenderPassFinished();
-    return mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
+    if (mRenderPassCommands.empty())
+    {
+        return angle::Result::Continue;
+    }
+
+    if (mGpuEventsEnabled)
+    {
+        mRenderPassCounter++;
+
+        char buf[16];
+        sprintf(buf, "RP %u", mRenderPassCounter);
+        ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_BEGIN, buf));
+    }
+
+    ANGLE_TRY(mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
+
+    if (mGpuEventsEnabled)
+    {
+        char buf[16];
+        sprintf(buf, "RP %u", mRenderPassCounter);
+        ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_END, buf));
+    }
+
+    return angle::Result::Continue;
 }
 
 void ContextVk::onRenderPassImageWrite(VkImageAspectFlags aspectFlags,
@@ -4086,6 +4140,15 @@ bool ContextVk::shouldConvertUint8VkIndexType(gl::DrawElementsType glIndexType) 
 {
     return (glIndexType == gl::DrawElementsType::UnsignedByte &&
             !mRenderer->getFeatures().supportsIndexTypeUint8.enabled);
+}
+
+void ContextVk::flushOutsideRenderPassCommands()
+{
+    if (!mOutsideRenderPassCommands.empty())
+    {
+        mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
+        mHasPrimaryCommands = true;
+    }
 }
 
 CommandBufferHelper::CommandBufferHelper()
