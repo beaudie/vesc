@@ -149,6 +149,7 @@ void TracePerfTest::initializeBenchmark()
             mReplayFunc = trex_200_210::ReplayContext1Frame;
             trex_200_210::SetBinaryDataDir(ANGLE_TRACE_DATA_DIR_trex_200_210);
             trex_200_210::SetupContext1Replay();
+            // trex_200_210::SetFramebufferChangeCallback(this, FramebufferChangeCallback);
             break;
         case TracePerfTestID::TRex800:
             mStartFrame = 800;
@@ -203,9 +204,9 @@ void TracePerfTest::sampleTime()
 void TracePerfTest::drawBenchmark()
 {
     // Add a time sample from GL and the host.
-    sampleTime();
+    // sampleTime();
 
-    startGpuTimer();
+    // startGpuTimer();
 
     for (uint32_t frame = mStartFrame; frame < mEndFrame; ++frame)
     {
@@ -253,7 +254,7 @@ void TracePerfTest::drawBenchmark()
         }
     }
 
-    stopGpuTimer();
+    // stopGpuTimer();
 }
 
 double TracePerfTest::getHostTimeFromGLTime(GLint64 glTime)
@@ -310,7 +311,7 @@ void TracePerfTest::onFramebufferChange(GLenum target, GLuint framebuffer)
     mCurrentQuery.framebuffer = framebuffer;
 }
 
-void FramebufferChangeCallback(void *userData, GLenum target, GLuint framebuffer)
+ANGLE_MAYBE_UNUSED void FramebufferChangeCallback(void *userData, GLenum target, GLuint framebuffer)
 {
     reinterpret_cast<TracePerfTest *>(userData)->onFramebufferChange(target, framebuffer);
 }
@@ -331,7 +332,7 @@ using namespace params;
 using P = TracePerfParams;
 
 std::vector<P> gTestsWithID = CombineWithValues({P()}, AllEnums<TracePerfTestID>(), CombineTestID);
-std::vector<P> gTestsWithRenderer = CombineWithFuncs(gTestsWithID, {GL<P>, Vulkan<P>});
+std::vector<P> gTestsWithRenderer = CombineWithFuncs(gTestsWithID, {GL3<P>, Vulkan<P>, WGL<P>});
 ANGLE_INSTANTIATE_TEST_ARRAY(TracePerfTest, gTestsWithRenderer);
 
 }  // anonymous namespace

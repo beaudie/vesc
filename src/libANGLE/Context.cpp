@@ -6977,8 +6977,8 @@ void Context::uniformMatrix4fv(UniformLocation location,
                                GLboolean transpose,
                                const GLfloat *value)
 {
-    Program *program = mState.getProgram();
-    program->setUniformMatrix4fv(location, count, transpose, value);
+    // Program *program = mState.getProgram();
+    // program->setUniformMatrix4fv(location, count, transpose, value);
 }
 
 void Context::validateProgram(ShaderProgramID program)

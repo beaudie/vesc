@@ -42,6 +42,8 @@
 
 #include <iostream>
 
+// #define ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS 1
+
 namespace rx
 {
 
@@ -1739,6 +1741,9 @@ angle::Result ContextVk::checkCompletedGpuEvents()
         gpuEvent.name               = eventQuery.name;
         gpuEvent.phase              = eventQuery.phase;
 
+        printf("Recorded event: %s - %c - %08llX\n", gpuEvent.name.data(), gpuEvent.phase,
+               gpuTimestampCycles - mGpuEventTimestampOrigin);
+
         mGpuEvents.emplace_back(gpuEvent);
 
         ++finishedCount;
@@ -1767,6 +1772,9 @@ void ContextVk::flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuT
 
     double nextGpuSyncTimeS = nextSyncGpuTimestampS;
     double nextGpuSyncDiffS = nextSyncCpuTimestampS - nextSyncGpuTimestampS;
+
+    // ASSERT(nextGpuSyncTimeS > lastGpuSyncTimeS);
+    // ASSERT(nextGpuSyncDiffS > lastGpuSyncDiffS);
 
     // No gpu trace events should have been generated before the clock sync, so if there is no
     // "previous" clock sync, there should be no gpu events (i.e. the function early-outs
@@ -3383,9 +3391,9 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(
     VkPipelineBindPoint bindPoint,
     const DriverUniformsDescriptorSet &driverUniforms)
 {
-    commandBuffer->bindDescriptorSets(
-        mProgram->getPipelineLayout(), bindPoint, kDriverUniformsDescriptorSetIndex, 1,
-        &driverUniforms.descriptorSet, 1, &driverUniforms.dynamicOffset);
+    // commandBuffer->bindDescriptorSets(
+    //    mProgram->getPipelineLayout(), bindPoint, kDriverUniformsDescriptorSetIndex, 1,
+    //    &driverUniforms.descriptorSet, 1, &driverUniforms.dynamicOffset);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(const gl::Context *context,
