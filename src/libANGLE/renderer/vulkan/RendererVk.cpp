@@ -886,6 +886,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                               kPercentMaxMemoryAllocationCount);
 
     vkGetPhysicalDeviceFeatures(mPhysicalDevice, &mPhysicalDeviceFeatures);
+    mPhysicalDeviceFeatures.robustBufferAccess = false;
 
     // Ensure we can find a graphics queue family.
     uint32_t queueCount = 0;
@@ -1193,36 +1194,36 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     VkPhysicalDeviceFeatures2KHR enabledFeatures = {};
     enabledFeatures.sType                        = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
     // Used to support framebuffers with multiple attachments:
-    enabledFeatures.features.independentBlend = mPhysicalDeviceFeatures.independentBlend;
-    // Used to support robust buffer access:
-    enabledFeatures.features.robustBufferAccess = mPhysicalDeviceFeatures.robustBufferAccess;
-    // Used to support Anisotropic filtering:
-    enabledFeatures.features.samplerAnisotropy = mPhysicalDeviceFeatures.samplerAnisotropy;
-    // Used to emulate transform feedback:
-    enabledFeatures.features.vertexPipelineStoresAndAtomics =
-        mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics;
-    // Used to implement storage buffers and images in the fragment shader:
-    enabledFeatures.features.fragmentStoresAndAtomics =
-        mPhysicalDeviceFeatures.fragmentStoresAndAtomics;
-    // Used to support geometry shaders:
-    enabledFeatures.features.geometryShader = mPhysicalDeviceFeatures.geometryShader;
-    // Used to support EXT_gpu_shader5:
-    enabledFeatures.features.shaderImageGatherExtended =
-        mPhysicalDeviceFeatures.shaderImageGatherExtended;
-    // Used to support EXT_gpu_shader5:
-    enabledFeatures.features.shaderUniformBufferArrayDynamicIndexing =
-        mPhysicalDeviceFeatures.shaderUniformBufferArrayDynamicIndexing;
-    // Used to support EXT_gpu_shader5 and sampler array of array emulation:
-    enabledFeatures.features.shaderSampledImageArrayDynamicIndexing =
-        mPhysicalDeviceFeatures.shaderSampledImageArrayDynamicIndexing;
-    // Used to support atomic counter emulation:
-    enabledFeatures.features.shaderStorageBufferArrayDynamicIndexing =
-        mPhysicalDeviceFeatures.shaderStorageBufferArrayDynamicIndexing;
+    // enabledFeatures.features.independentBlend = mPhysicalDeviceFeatures.independentBlend;
+    //// Used to support robust buffer access:
+    // enabledFeatures.features.robustBufferAccess = mPhysicalDeviceFeatures.robustBufferAccess;
+    //// Used to support Anisotropic filtering:
+    // enabledFeatures.features.samplerAnisotropy = mPhysicalDeviceFeatures.samplerAnisotropy;
+    //// Used to emulate transform feedback:
+    // enabledFeatures.features.vertexPipelineStoresAndAtomics =
+    //    mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics;
+    //// Used to implement storage buffers and images in the fragment shader:
+    // enabledFeatures.features.fragmentStoresAndAtomics =
+    //    mPhysicalDeviceFeatures.fragmentStoresAndAtomics;
+    //// Used to support geometry shaders:
+    // enabledFeatures.features.geometryShader = mPhysicalDeviceFeatures.geometryShader;
+    //// Used to support EXT_gpu_shader5:
+    // enabledFeatures.features.shaderImageGatherExtended =
+    //    mPhysicalDeviceFeatures.shaderImageGatherExtended;
+    //// Used to support EXT_gpu_shader5:
+    // enabledFeatures.features.shaderUniformBufferArrayDynamicIndexing =
+    //    mPhysicalDeviceFeatures.shaderUniformBufferArrayDynamicIndexing;
+    //// Used to support EXT_gpu_shader5 and sampler array of array emulation:
+    // enabledFeatures.features.shaderSampledImageArrayDynamicIndexing =
+    //    mPhysicalDeviceFeatures.shaderSampledImageArrayDynamicIndexing;
+    //// Used to support atomic counter emulation:
+    // enabledFeatures.features.shaderStorageBufferArrayDynamicIndexing =
+    //    mPhysicalDeviceFeatures.shaderStorageBufferArrayDynamicIndexing;
 
-    if (!vk::CommandBuffer::ExecutesInline())
-    {
-        enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
-    }
+    // if (!vk::CommandBuffer::ExecutesInline())
+    //{
+    //    enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
+    //}
 
     // Setup device initialization struct
     VkDeviceCreateInfo createInfo = {};

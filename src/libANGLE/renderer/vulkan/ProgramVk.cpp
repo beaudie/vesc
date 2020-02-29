@@ -1767,69 +1767,70 @@ angle::Result ProgramVk::updateDescriptorSets(ContextVk *contextVk,
 {
     // Can probably use better dirty bits here.
 
-    if (mDescriptorSets.empty())
-        return angle::Result::Continue;
+    // if (mDescriptorSets.empty())
+    //    return angle::Result::Continue;
 
-    // Find the maximum non-null descriptor set.  This is used in conjunction with a driver
-    // workaround to bind empty descriptor sets only for gaps in between 0 and max and avoid
-    // binding unnecessary empty descriptor sets for the sets beyond max.
-    const size_t descriptorSetStart = kUniformsAndXfbDescriptorSetIndex;
-    size_t descriptorSetRange       = 0;
-    for (size_t descriptorSetIndex = descriptorSetStart;
-         descriptorSetIndex < mDescriptorSets.size(); ++descriptorSetIndex)
-    {
-        if (mDescriptorSets[descriptorSetIndex] != VK_NULL_HANDLE)
-        {
-            descriptorSetRange = descriptorSetIndex + 1;
-        }
-    }
+    //// Find the maximum non-null descriptor set.  This is used in conjunction with a driver
+    //// workaround to bind empty descriptor sets only for gaps in between 0 and max and avoid
+    //// binding unnecessary empty descriptor sets for the sets beyond max.
+    // const size_t descriptorSetStart = kUniformsAndXfbDescriptorSetIndex;
+    // size_t descriptorSetRange       = 0;
+    // for (size_t descriptorSetIndex = descriptorSetStart;
+    //     descriptorSetIndex < mDescriptorSets.size(); ++descriptorSetIndex)
+    //{
+    //    if (mDescriptorSets[descriptorSetIndex] != VK_NULL_HANDLE)
+    //    {
+    //        descriptorSetRange = descriptorSetIndex + 1;
+    //    }
+    //}
 
-    const VkPipelineBindPoint pipelineBindPoint =
-        mState.isCompute() ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS;
+    // const VkPipelineBindPoint pipelineBindPoint =
+    //    mState.isCompute() ? VK_PIPELINE_BIND_POINT_COMPUTE : VK_PIPELINE_BIND_POINT_GRAPHICS;
 
-    for (uint32_t descriptorSetIndex = descriptorSetStart; descriptorSetIndex < descriptorSetRange;
-         ++descriptorSetIndex)
-    {
-        VkDescriptorSet descSet = mDescriptorSets[descriptorSetIndex];
-        if (descSet == VK_NULL_HANDLE)
-        {
-            if (!contextVk->getRenderer()->getFeatures().bindEmptyForUnusedDescriptorSets.enabled)
-            {
-                continue;
-            }
+    // for (uint32_t descriptorSetIndex = descriptorSetStart; descriptorSetIndex <
+    // descriptorSetRange;
+    //     ++descriptorSetIndex)
+    //{
+    //    VkDescriptorSet descSet = mDescriptorSets[descriptorSetIndex];
+    //    if (descSet == VK_NULL_HANDLE)
+    //    {
+    //        if (!contextVk->getRenderer()->getFeatures().bindEmptyForUnusedDescriptorSets.enabled)
+    //        {
+    //            continue;
+    //        }
 
-            // Workaround a driver bug where missing (though unused) descriptor sets indices cause
-            // later sets to misbehave.
-            if (mEmptyDescriptorSets[descriptorSetIndex] == VK_NULL_HANDLE)
-            {
-                const vk::DescriptorSetLayout &descriptorSetLayout =
-                    mDescriptorSetLayouts[descriptorSetIndex].get();
+    //        // Workaround a driver bug where missing (though unused) descriptor sets indices cause
+    //        // later sets to misbehave.
+    //        if (mEmptyDescriptorSets[descriptorSetIndex] == VK_NULL_HANDLE)
+    //        {
+    //            const vk::DescriptorSetLayout &descriptorSetLayout =
+    //                mDescriptorSetLayouts[descriptorSetIndex].get();
 
-                ANGLE_TRY(mDynamicDescriptorPools[descriptorSetIndex].allocateSets(
-                    contextVk, descriptorSetLayout.ptr(), 1,
-                    &mDescriptorPoolBindings[descriptorSetIndex],
-                    &mEmptyDescriptorSets[descriptorSetIndex]));
-            }
-            descSet = mEmptyDescriptorSets[descriptorSetIndex];
-        }
+    //            ANGLE_TRY(mDynamicDescriptorPools[descriptorSetIndex].allocateSets(
+    //                contextVk, descriptorSetLayout.ptr(), 1,
+    //                &mDescriptorPoolBindings[descriptorSetIndex],
+    //                &mEmptyDescriptorSets[descriptorSetIndex]));
+    //        }
+    //        descSet = mEmptyDescriptorSets[descriptorSetIndex];
+    //    }
 
-        // Default uniforms are encompassed in a block per shader stage, and they are assigned
-        // through dynamic uniform buffers (requiring dynamic offsets).  No other descriptor
-        // requires a dynamic offset.
-        const uint32_t uniformBlockOffsetCount =
-            descriptorSetIndex == kUniformsAndXfbDescriptorSetIndex
-                ? static_cast<uint32_t>(mDynamicBufferOffsets.size())
-                : 0;
+    //    // Default uniforms are encompassed in a block per shader stage, and they are assigned
+    //    // through dynamic uniform buffers (requiring dynamic offsets).  No other descriptor
+    //    // requires a dynamic offset.
+    //    const uint32_t uniformBlockOffsetCount =
+    //        descriptorSetIndex == kUniformsAndXfbDescriptorSetIndex
+    //            ? static_cast<uint32_t>(mDynamicBufferOffsets.size())
+    //            : 0;
 
-        commandBuffer->bindDescriptorSets(mPipelineLayout.get(), pipelineBindPoint,
-                                          descriptorSetIndex, 1, &descSet, uniformBlockOffsetCount,
-                                          mDynamicBufferOffsets.data());
-    }
+    //    commandBuffer->bindDescriptorSets(mPipelineLayout.get(), pipelineBindPoint,
+    //                                      descriptorSetIndex, 1, &descSet,
+    //                                      uniformBlockOffsetCount, mDynamicBufferOffsets.data());
+    //}
 
-    for (vk::BufferHelper *buffer : mDescriptorBuffersCache)
-    {
-        buffer->retain(&contextVk->getResourceUseList());
-    }
+    // for (vk::BufferHelper *buffer : mDescriptorBuffersCache)
+    //{
+    //    buffer->retain(&contextVk->getResourceUseList());
+    //}
 
     return angle::Result::Continue;
 }

@@ -637,9 +637,12 @@ class ContextVk : public ContextImpl, public vk::Context
 
     angle::Result flushAndGetPrimaryCommandBuffer(vk::PrimaryCommandBuffer **primaryCommands)
     {
-        mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
+        flushOutsideRenderPassCommands();
         ANGLE_TRY(endRenderPass());
         *primaryCommands = &mPrimaryCommands;
+
+        // We assume any calling code is going to record primary commands.
+        mHasPrimaryCommands = true;
         return angle::Result::Continue;
     }
 
@@ -707,9 +710,11 @@ class ContextVk : public ContextImpl, public vk::Context
     //   https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU
     // - serial is the serial of the batch the query was submitted on.  Until the batch is
     //   submitted, the query is not checked to avoid incuring a flush.
+    static constexpr uint32_t kMaxGpuEventNameLen = 32;
+
     struct GpuEventQuery final
     {
-        const char *name;
+        std::array<char, kMaxGpuEventNameLen> name;
         char phase;
         vk::QueryHelper queryHelper;
     };
@@ -720,7 +725,7 @@ class ContextVk : public ContextImpl, public vk::Context
     struct GpuEvent final
     {
         uint64_t gpuTimestampCycles;
-        const char *name;
+        std::array<char, kMaxGpuEventNameLen> name;
         char phase;
     };
 
@@ -902,6 +907,7 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result startPrimaryCommandBuffer();
     bool hasRecordedCommands();
     void dumpCommandStreamDiagnostics();
+    void flushOutsideRenderPassCommands();
 
     ANGLE_INLINE void onRenderPassFinished() { mRenderPassCommandBuffer = nullptr; }
 
@@ -1021,6 +1027,7 @@ class ContextVk : public ContextImpl, public vk::Context
     OutsideRenderPassCommandBuffer mOutsideRenderPassCommands;
     RenderPassCommandBuffer mRenderPassCommands;
     vk::PrimaryCommandBuffer mPrimaryCommands;
+    bool mHasPrimaryCommands;
 
     // Internal shader library.
     vk::ShaderLibrary mShaderLibrary;
@@ -1045,6 +1052,10 @@ class ContextVk : public ContextImpl, public vk::Context
     // have a value close to zero, to avoid losing 12 bits when converting these 64 bit values to
     // double.
     uint64_t mGpuEventTimestampOrigin;
+
+    // Used to count events for tracing.
+    uint32_t mPrimaryBufferCounter;
+    uint32_t mRenderPassCounter;
 
     // Generators for texture & framebuffer serials.
     SerialFactory mTextureSerialFactory;

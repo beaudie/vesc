@@ -263,6 +263,8 @@ if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
       data_deps += [ "${angle_root}/third_party/glmark2:glmark2_glx" ]
     }
 
+    cflags_cc = [ "-Wno-unused-const-variable" ]
+
     if (build_angle_trace_perf_tests) {
       import("perf_tests/restricted_traces/angle_trace_perf_tests.gni")
       sources += angle_trace_perf_sources
