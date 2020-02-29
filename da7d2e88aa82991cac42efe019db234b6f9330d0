@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "3796cd25_d5a2b371",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1976,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-02-29T02:17:44Z",
+      "side": 1,
+      "message": "You have the queryID. It\u0027s in \"first\". That\u0027s what you should use to call CaptureGenQueries.",
+      "parentUuid": "d1f94819_ed23b6eb",
+      "range": {
+        "startLine": 1972,
+        "startChar": 0,
+        "endLine": 1976,
+        "endChar": 9
+      },
+      "revId": "da7d2e88aa82991cac42efe019db234b6f9330d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a5f1fd37_4de5a46c",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
