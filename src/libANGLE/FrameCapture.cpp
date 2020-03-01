@@ -1736,6 +1736,28 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             cap(CaptureDeleteShader(replayState, true, tempShaderID));
         }
 
+        // Gather XFB varyings
+        std::vector<std::string> xfbVaryings;
+        for (const gl::TransformFeedbackVarying &xfbVarying :
+             program->getState().getLinkedTransformFeedbackVaryings())
+        {
+            xfbVaryings.push_back(xfbVarying.nameWithArrayIndex());
+        }
+
+        if (!xfbVaryings.empty())
+        {
+            std::vector<const char *> varyingsStrings;
+            for (const auto &varyingString : xfbVaryings)
+            {
+                varyingsStrings.push_back(varyingString.data());
+            }
+
+            GLenum xfbMode = program->getState().getTransformFeedbackBufferMode();
+            cap(CaptureTransformFeedbackVaryings(replayState, true, id,
+                                                 static_cast<GLint>(xfbVaryings.size()),
+                                                 varyingsStrings.data(), xfbMode));
+        }
+
         cap(CaptureLinkProgram(replayState, true, id));
         CaptureUpdateUniformLocations(program, setupCalls);
     }
@@ -1808,6 +1830,23 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                 cap(CaptureEndQuery(replayState, true, queryType));
             }
         }
+    }
+
+    // Transform Feedback
+    const gl::TransformFeedbackMap &xfbMap = context->getTransformFeedbacksForCapture();
+    for (const auto &xfbIter : xfbMap)
+    {
+        gl::TransformFeedbackID xfbID = {xfbIter.first};
+        cap(CaptureGenTransformFeedbacks(replayState, true, 1, &xfbID));
+        MaybeCaptureUpdateResourceIDs(setupCalls);
+    }
+
+    // If XFB was bound, rebind it now
+    const gl::Buffer *currentXFB = apiState.getTargetBuffer(gl::BufferBinding::TransformFeedback);
+    if (currentXFB)
+    {
+        cap(CaptureBindBuffer(replayState, true, gl::BufferBinding::TransformFeedback,
+                              currentXFB->id()));
     }
 
     // Capture GL Context states.
