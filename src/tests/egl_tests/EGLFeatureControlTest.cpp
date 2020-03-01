@@ -185,6 +185,9 @@ TEST_P(EGLFeatureControlTest, OverrideFeatures)
     }
 }
 
+// Included here to fix a compile error due to white box tests using angle_end2end_tests_main.
+void RegisterContextCompatibilityTests() {}
+
 ANGLE_INSTANTIATE_TEST(EGLFeatureControlTest,
                        WithNoFixture(ES2_D3D9()),
                        WithNoFixture(ES2_D3D11()),
