@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f05364c_d02ad3bf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-01T16:06:21Z",
+      "side": 1,
+      "message": "instead of using a constexpr table, use a dynamic table that gets initialized according to the presence of the extnesion. e.g.:\n\n- kIndexTypeMap becomes mIndexTypeMap in ContextVk.\n- initialize it in ContextVk::initialize by checking the extension\n- the code here can stay the same except for looking at the new variable type",
+      "range": {
+        "startLine": 1298,
+        "startChar": 0,
+        "endLine": 1304,
+        "endChar": 5
+      },
+      "revId": "1176905054dad299b4f3d10ab76208fcf01432f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9a4f8b4_09163c15",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-01T16:06:21Z",
+      "side": 1,
+      "message": "this code is duplicated with line loop helper. Maybe can use a ContextVk helper function.",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 5
+      },
+      "revId": "1176905054dad299b4f3d10ab76208fcf01432f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ffbfc10_c7bf564c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndexIndirectLineLoop.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-01T16:06:21Z",
+      "side": 1,
+      "message": "nit: you can omit this \u0027return\u0027 statement.",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 11
+      },
+      "revId": "1176905054dad299b4f3d10ab76208fcf01432f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfc02c40_2ae12c01",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-01T16:06:21Z",
+      "side": 1,
+      "message": "you can get the indexType from the contextVk table. maybe use a helper function?",
+      "range": {
+        "startLine": 1282,
+        "startChar": 4,
+        "endLine": 1282,
+        "endChar": 26
+      },
+      "revId": "1176905054dad299b4f3d10ab76208fcf01432f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bf529fc_97c56b14",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-01T16:06:21Z",
+      "side": 1,
+      "message": "the size is duplicated with VertexArrayVk. maybe can use a contextVk helper function.",
+      "range": {
+        "startLine": 1283,
+        "startChar": 4,
+        "endLine": 1283,
+        "endChar": 20
+      },
+      "revId": "1176905054dad299b4f3d10ab76208fcf01432f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
