@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bce4b88a_aab1343c",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-01T23:35:26Z",
+      "side": 1,
+      "message": "Okay, left it UNPACK.  Should we be calling getUnpackState above?  A comment would help, yes.",
+      "parentUuid": "86716fbb_d849f140",
+      "range": {
+        "startLine": 1403,
+        "startChar": 50,
+        "endLine": 1403,
+        "endChar": 67
+      },
+      "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f745caa_b542d79e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -63,6 +87,24 @@
       "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf5bc50e_1e235eb8",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-01T23:35:26Z",
+      "side": 1,
+      "message": "I added min and max LOD from sampler parameters.  Added a section below for base level, max level and other texture parameters.  I wasn\u0027t able to turn them all on yet though.  Changing base level or immutability caused some problems with replay.  I think we\u0027ll need to wait until we have a strategy for handling TexStorage, which is used by the app, but not by replay.\n\nGenerally it is difficult to know where to draw the line on what to capture for MEC, or whether we are capturing them correctly.  It would be a lot easier if we were capturing unit tests.",
+      "parentUuid": "8f745caa_b542d79e",
+      "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -101,6 +143,30 @@
       "side": 1,
       "message": "same.\n\nalthough we should handle all the unpack and pack states here.",
       "parentUuid": "37735ccc_11ff6db7",
+      "range": {
+        "startLine": 2012,
+        "startChar": 50,
+        "endLine": 2012,
+        "endChar": 67
+      },
+      "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7cdfff4_16877def",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2012,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-01T23:35:26Z",
+      "side": 1,
+      "message": "Maybe I\u0027m missing something, but it seems this was setting an UNPACK alignment with the value from PACK alignment.  Should other PixelStore statuses be inverted as well?  I\u0027m just setting them 1:1 below.",
+      "parentUuid": "ab757049_6d63e68c",
       "range": {
         "startLine": 2012,
         "startChar": 50,
