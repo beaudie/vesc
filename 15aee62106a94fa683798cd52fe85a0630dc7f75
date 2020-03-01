@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a67e1dc2_75531b5b",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-01T23:34:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99eced68_b088cc76",
+      "range": {
+        "startLine": 594,
+        "startChar": 25,
+        "endLine": 594,
+        "endChar": 26
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41342402_5b3d17f7",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b53eb1bc_26c4bd75",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-01T23:34:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41342402_5b3d17f7",
+      "range": {
+        "startLine": 1213,
+        "startChar": 28,
+        "endLine": 1213,
+        "endChar": 39
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f5d96b6b_b1ecef28",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-01T23:34:58Z",
+      "side": 1,
+      "message": "Okay, I split it out.",
+      "parentUuid": "8dd1a6f6_8a27a1d9",
+      "range": {
+        "startLine": 1226,
+        "startChar": 12,
+        "endLine": 1226,
+        "endChar": 25
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bee9635d_79f0223d",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df61c374_785aff50",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-01T23:34:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bee9635d_79f0223d",
+      "range": {
+        "startLine": 1354,
+        "startChar": 60,
+        "endLine": 1354,
+        "endChar": 90
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "c6931a05_1ab0cb23",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-01T23:34:58Z",
+      "side": 1,
+      "message": "Made a pass at this, let me know if you want it tighter.",
+      "parentUuid": "b4752cf1_4f57c782",
+      "range": {
+        "startLine": 1360,
+        "startChar": 0,
+        "endLine": 1364,
+        "endChar": 9
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8dc61de0_2737c9f7",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -128,6 +248,30 @@
       "writtenOn": "2020-02-28T19:19:08Z",
       "side": 1,
       "message": "make sure you capture the current VAO, and do it after you initialize the other VAOs. note that the element array buffer binding is dependent on the current VAO. you\u0027ll need to be mindful of that in the below buffer binding updates.",
+      "range": {
+        "startLine": 1380,
+        "startChar": 0,
+        "endLine": 1380,
+        "endChar": 5
+      },
+      "revId": "15aee62106a94fa683798cd52fe85a0630dc7f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f55eebde_b12a7cf9",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-01T23:34:58Z",
+      "side": 1,
+      "message": "Alright, I think I\u0027ve captured what you\u0027ve described.",
+      "parentUuid": "8dc61de0_2737c9f7",
       "range": {
         "startLine": 1380,
         "startChar": 0,
