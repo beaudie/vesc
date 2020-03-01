@@ -1256,6 +1256,54 @@ void CaptureFramebufferAttachment(std::vector<CallCapture> *setupCalls,
     }
 }
 
+void CaptureVertexArrayData(std::vector<CallCapture> *setupCalls,
+                            const gl::Context *context,
+                            const gl::VertexArray *vertexArray,
+                            gl::State &replayState)
+{
+    const std::vector<gl::VertexAttribute> &vertexAttribs = vertexArray->getVertexAttributes();
+    const std::vector<gl::VertexBinding> &vertexBindings  = vertexArray->getVertexBindings();
+
+    for (GLuint attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
+    {
+        const gl::VertexAttribute defaultAttrib(attribIndex);
+        const gl::VertexBinding defaultBinding;
+
+        const gl::VertexAttribute &attrib = vertexAttribs[attribIndex];
+        const gl::VertexBinding &binding  = vertexBindings[attrib.bindingIndex];
+
+        if (attrib.enabled != defaultAttrib.enabled)
+        {
+            Capture(setupCalls, CaptureEnableVertexAttribArray(replayState, false, attribIndex));
+        }
+
+        if (attrib.format != defaultAttrib.format || attrib.pointer != defaultAttrib.pointer ||
+            binding.getStride() != defaultBinding.getStride() ||
+            binding.getBuffer().get() != nullptr)
+        {
+            gl::Buffer *buffer = binding.getBuffer().get();
+
+            if (buffer != replayState.getArrayBuffer())
+            {
+                replayState.setBufferBinding(context, gl::BufferBinding::Array, buffer);
+                Capture(setupCalls, CaptureBindBuffer(replayState, true, gl::BufferBinding::Array,
+                                                      buffer->id()));
+            }
+
+            Capture(setupCalls, CaptureVertexAttribPointer(
+                                    replayState, true, attribIndex, attrib.format->channelCount,
+                                    attrib.format->vertexAttribType, attrib.format->isNorm(),
+                                    binding.getStride(), attrib.pointer));
+        }
+
+        if (binding.getDivisor() != 0)
+        {
+            Capture(setupCalls, CaptureVertexAttribDivisor(replayState, true, attribIndex,
+                                                           binding.getDivisor()));
+        }
+    }
+}
+
 void CaptureMidExecutionSetup(const gl::Context *context,
                               std::vector<CallCapture> *setupCalls,
                               const ShaderSourceMap &cachedShaderSources,
@@ -1319,56 +1367,42 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     // Vertex input states. Only handles GLES 2.0 states right now.
     // Must happen after buffer data initialization.
     // TODO(http://anglebug.com/3662): Complete state capture.
+
+    // Capture default vertex attribs
     const std::vector<gl::VertexAttribCurrentValueData> &currentValues =
         apiState.getVertexAttribCurrentValues();
-    const std::vector<gl::VertexAttribute> &vertexAttribs =
-        apiState.getVertexArray()->getVertexAttributes();
-    const std::vector<gl::VertexBinding> &vertexBindings =
-        apiState.getVertexArray()->getVertexBindings();
 
     for (GLuint attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
     {
-        const gl::VertexAttribCurrentValueData &currentValue = currentValues[attribIndex];
-        if (!IsDefaultCurrentValue(currentValue))
+        const gl::VertexAttribCurrentValueData &defaultValue = currentValues[attribIndex];
+        if (!IsDefaultCurrentValue(defaultValue))
         {
-            cap(CaptureVertexAttrib4fv(replayState, true, attribIndex,
-                                       currentValue.Values.FloatValues));
-        }
-
-        const gl::VertexAttribute &attrib = vertexAttribs[attribIndex];
-        const gl::VertexBinding &binding  = vertexBindings[attrib.bindingIndex];
-
-        const gl::VertexAttribute defaultAttrib(attribIndex);
-        const gl::VertexBinding defaultBinding;
-
-        if (attrib.enabled != defaultAttrib.enabled)
-        {
-            cap(CaptureEnableVertexAttribArray(replayState, false, attribIndex));
-        }
-
-        if (attrib.format != defaultAttrib.format || attrib.pointer != defaultAttrib.pointer ||
-            binding.getStride() != defaultBinding.getStride() ||
-            binding.getBuffer().get() != nullptr)
-        {
-            gl::Buffer *buffer = binding.getBuffer().get();
-
-            if (buffer != replayState.getArrayBuffer())
-            {
-                replayState.setBufferBinding(context, gl::BufferBinding::Array, buffer);
-                cap(CaptureBindBuffer(replayState, true, gl::BufferBinding::Array, buffer->id()));
-            }
-
-            cap(CaptureVertexAttribPointer(replayState, true, attribIndex,
-                                           attrib.format->channelCount,
-                                           attrib.format->vertexAttribType, attrib.format->isNorm(),
-                                           binding.getStride(), attrib.pointer));
-        }
-
-        if (binding.getDivisor() != 0)
-        {
-            cap(CaptureVertexAttribDivisor(replayState, true, attribIndex, binding.getDivisor()));
+            Capture(setupCalls, CaptureVertexAttrib4fv(replayState, true, attribIndex,
+                                                       defaultValue.Values.FloatValues));
         }
     }
+
+    // Capture vertex array objects
+    const gl::VertexArrayMap &vertexArrayMap = context->getVertexArraysForCapture();
+    for (const auto &vertexArrayIter : vertexArrayMap)
+    {
+        gl::VertexArrayID vertexArrayID = {vertexArrayIter.first};
+        cap(CaptureGenVertexArrays(replayState, true, 1, &vertexArrayID));
+        MaybeCaptureUpdateResourceIDs(setupCalls);
+
+        if (vertexArrayIter.second)
+        {
+            const gl::VertexArray *vertexArray = vertexArrayIter.second;
+
+            // Bind the vertexArray and populate it
+            cap(CaptureBindVertexArray(replayState, true, vertexArrayID));
+            CaptureVertexArrayData(setupCalls, context, vertexArray, replayState);
+        }
+    }
+
+    // Bind the current vertex array
+    const gl::VertexArray *currentVertexArray = apiState.getVertexArray();
+    cap(CaptureBindVertexArray(replayState, true, currentVertexArray->id()));
 
     // Capture Buffer bindings.
     for (gl::BufferBinding binding : angle::AllEnums<gl::BufferBinding>())
