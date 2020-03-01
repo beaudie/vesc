@@ -1646,9 +1646,6 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
         (&mFeatures), supportsExternalMemoryHost,
         ExtensionFound(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME, deviceExtensionNames));
 
-    // Pre-rotation support is not fully ready to be enabled.
-    ANGLE_FEATURE_CONDITION((&mFeatures), enablePreRotateSurfaces, false);
-
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
