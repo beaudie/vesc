@@ -58,11 +58,10 @@ AttributesMask ProgramExecutable::getAttributesMask() const
 
 bool ProgramExecutable::hasDefaultUniforms(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
-        return !program->getState().getDefaultUniformRange().empty();
+        return program->getState().hasDefaultUniforms();
     }
 
     // TODO(timvp): http://anglebug.com/3570: Support program pipelines
@@ -72,11 +71,10 @@ bool ProgramExecutable::hasDefaultUniforms(const gl::State &glState) const
 
 bool ProgramExecutable::hasTextures(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
-        return !program->getState().getSamplerBindings().empty();
+        return program->getState().hasTextures();
     }
 
     // TODO(timvp): http://anglebug.com/3570: Support program pipelines
@@ -86,11 +84,10 @@ bool ProgramExecutable::hasTextures(const gl::State &glState) const
 
 bool ProgramExecutable::hasUniformBuffers(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
-        return !program->getState().getUniformBlocks().empty();
+        return program->getState().hasUniformBuffers();
     }
 
     // TODO(timvp): http://anglebug.com/3570: Support program pipelines
@@ -100,11 +97,10 @@ bool ProgramExecutable::hasUniformBuffers(const gl::State &glState) const
 
 bool ProgramExecutable::hasStorageBuffers(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
-        return !program->getState().getShaderStorageBlocks().empty();
+        return program->getState().hasStorageBuffers();
     }
 
     // TODO(timvp): http://anglebug.com/3570: Support program pipelines
@@ -114,11 +110,10 @@ bool ProgramExecutable::hasStorageBuffers(const gl::State &glState) const
 
 bool ProgramExecutable::hasAtomicCounterBuffers(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
-        return !program->getState().getAtomicCounterBuffers().empty();
+        return program->getState().hasAtomicCounterBuffers();
     }
 
     // TODO(timvp): http://anglebug.com/3570: Support program pipelines
@@ -128,11 +123,10 @@ bool ProgramExecutable::hasAtomicCounterBuffers(const gl::State &glState) const
 
 bool ProgramExecutable::hasImages(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
-        return !program->getState().getImageBindings().empty();
+        return program->getState().hasImages();
     }
 
     // TODO(timvp): http://anglebug.com/3570: Support program pipelines
@@ -142,11 +136,10 @@ bool ProgramExecutable::hasImages(const gl::State &glState) const
 
 bool ProgramExecutable::hasTransformFeedbackOutput(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
-        return !program->getState().getLinkedTransformFeedbackVaryings().empty();
+        return program->getState().hasTransformFeedbackOutput();
     }
 
     // TODO(timvp): http://anglebug.com/3570: Support program pipelines
@@ -156,8 +149,7 @@ bool ProgramExecutable::hasTransformFeedbackOutput(const gl::State &glState) con
 
 size_t ProgramExecutable::getUniqueUniformBlockCount(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
         return program->getState().getUniqueUniformBlockCount();
@@ -170,8 +162,7 @@ size_t ProgramExecutable::getUniqueUniformBlockCount(const gl::State &glState) c
 
 size_t ProgramExecutable::getUniqueStorageBlockCount(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
         return program->getState().getUniqueStorageBlockCount();
@@ -184,8 +175,7 @@ size_t ProgramExecutable::getUniqueStorageBlockCount(const gl::State &glState) c
 
 size_t ProgramExecutable::getAtomicCounterBuffersCount(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
         return program->getState().getAtomicCounterBuffersCount();
@@ -198,8 +188,7 @@ size_t ProgramExecutable::getAtomicCounterBuffersCount(const gl::State &glState)
 
 size_t ProgramExecutable::getTransformFeedbackBufferCount(const gl::State &glState) const
 {
-    gl::Program *program = glState.getProgram();
-
+    Program *program = glState.getProgram();
     if (program)
     {
         return program->getState().getTransformFeedbackBufferCount();
