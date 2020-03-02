@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5eb622b_c3ec320c",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-02T19:40:34Z",
+      "side": 0,
+      "message": "I suspect this was here for a reason, like maybe there is some code which loops for pairs, so we get access to invalid memory under ASAN or something.\nLet me see if ASAN bot complains about this.",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 46
+      },
+      "revId": "daf6e47111c3fa7223d512de695874c8f1c6a77e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96d33f57_e64d36cf",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-02T19:40:34Z",
+      "side": 0,
+      "message": "should we close all these bugs, then?",
+      "range": {
+        "startLine": 555,
+        "startChar": 0,
+        "endLine": 566,
+        "endChar": 0
+      },
+      "revId": "daf6e47111c3fa7223d512de695874c8f1c6a77e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

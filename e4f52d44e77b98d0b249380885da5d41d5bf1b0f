@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ead12a4d_6d3f20d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-02T19:40:34Z",
+      "side": 1,
+      "message": "c",
+      "range": {
+        "startLine": 13,
+        "startChar": 25,
+        "endLine": 13,
+        "endChar": 26
+      },
+      "revId": "e4f52d44e77b98d0b249380885da5d41d5bf1b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "667c8bca_930440c3",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-02T19:40:34Z",
+      "side": 1,
+      "message": "Should we have a bug to re-enable it?\nIf not, maybe we could just delete it?",
+      "range": {
+        "startLine": 555,
+        "startChar": 0,
+        "endLine": 558,
+        "endChar": 0
+      },
+      "revId": "e4f52d44e77b98d0b249380885da5d41d5bf1b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
