@@ -1214,7 +1214,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     CommandBufferHelper *commandBufferHelper)
 {
     const gl::ProgramExecutable *executable     = mState.getExecutable();
-    const gl::ActiveTextureMask &activeTextures = mProgram->getState().getActiveSamplersMask();
+    const gl::ActiveTextureMask &activeTextures = executable->getActiveSamplersMask();
     ASSERT(executable);
 
     for (size_t textureUnit : activeTextures)
@@ -3526,19 +3526,17 @@ void ContextVk::handleError(VkResult errorCode,
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 {
-    const gl::State &glState                       = mState;
-    const gl::ProgramExecutable *programExecutable = glState.getExecutable();
-    const gl::Program *program                     = glState.getProgram();
-    ASSERT(programExecutable);
-    ASSERT(program);
+    const gl::State &glState                = mState;
+    const gl::ProgramExecutable *executable = glState.getExecutable();
+    ASSERT(executable);
 
     uint32_t prevMaxIndex = mActiveTexturesDesc.getMaxIndex();
     memset(mActiveTextures.data(), 0, sizeof(mActiveTextures[0]) * prevMaxIndex);
     mActiveTexturesDesc.reset();
 
     const gl::ActiveTexturePointerArray &textures  = glState.getActiveTexturesCache();
-    const gl::ActiveTextureMask &activeTextures    = program->getActiveSamplersMask();
-    const gl::ActiveTextureTypeArray &textureTypes = program->getActiveSamplerTypes();
+    const gl::ActiveTextureMask &activeTextures    = executable->getActiveSamplersMask();
+    const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
 
     for (size_t textureUnit : activeTextures)
     {
@@ -3581,15 +3579,13 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
                                             vk::Resource *recorder,
                                             CommandBufferHelper *commandBufferHelper)
 {
-    const gl::State &glState                       = mState;
-    const gl::ProgramExecutable *programExecutable = glState.getExecutable();
-    const gl::Program *program                     = glState.getProgram();
-    ASSERT(programExecutable);
-    ASSERT(program);
+    const gl::State &glState                = mState;
+    const gl::ProgramExecutable *executable = glState.getExecutable();
+    ASSERT(executable);
 
     mActiveImages.fill(nullptr);
 
-    const gl::ActiveTextureMask &activeImages = program->getActiveImagesMask();
+    const gl::ActiveTextureMask &activeImages = executable->getActiveImagesMask();
 
     // Note: currently, the image layout is transitioned entirely even if only one level or layer is
     // used.  This is an issue if one subresource of the image is used as framebuffer attachment and
@@ -3624,7 +3620,7 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
         // layers. Therefore we can't verify it has no staged updates right here.
 
         vk::ImageLayout imageLayout = vk::ImageLayout::AllGraphicsShadersWrite;
-        if (programExecutable->isCompute())
+        if (executable->isCompute())
         {
             imageLayout = vk::ImageLayout::ComputeShaderWrite;
         }
