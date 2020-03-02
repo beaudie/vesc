@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90cf2cb7_b146d3cc",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-02T14:59:48Z",
+      "side": 1,
+      "message": "nit: you can qualify these simple types instead of using auto. makes it easier to read.",
+      "range": {
+        "startLine": 1750,
+        "startChar": 23,
+        "endLine": 1750,
+        "endChar": 28
+      },
+      "revId": "faefb02a4434ca7b9f73998bca88994e9fec6769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e57988e_40b0ea52",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1850,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-02T14:59:48Z",
+      "side": 1,
+      "message": "you still need to capture the XFB buffers for each XFB object. each has its own set of buffer bindings. after that you need to capture binding the active XFB itself.",
+      "range": {
+        "startLine": 1843,
+        "startChar": 0,
+        "endLine": 1850,
+        "endChar": 5
+      },
+      "revId": "faefb02a4434ca7b9f73998bca88994e9fec6769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
