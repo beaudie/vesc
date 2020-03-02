@@ -701,6 +701,24 @@
       "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5c4bba8_3bd8a2f6",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T15:24:02Z",
+      "side": 1,
+      "message": "The merge itself is a commit so it generates one commit that is a merge and adds the Android.bp and deps.",
+      "parentUuid": "a628300a_fdc21ff3",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
