@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad297d83_37da4974",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1946,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-02T15:09:46Z",
+      "side": 1,
+      "message": "nit: maybe use\n\n gl::Sampler *sampler \u003d samplerIter.second;\n if (!sampler)\n   continue;\n\nto save on some whitespace.",
+      "range": {
+        "startLine": 1945,
+        "startChar": 8,
+        "endLine": 1946,
+        "endChar": 9
+      },
+      "revId": "1bc432cd74ddd5fd79d8b232ff6a563305c4d9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3baace0e_2d937c74",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-02T15:09:46Z",
+      "side": 1,
+      "message": "tiny nit: you could skip each of these if they\u0027re the default values. you can potentially init a default sampler state and compare with it.",
+      "range": {
+        "startLine": 1948,
+        "startChar": 12,
+        "endLine": 1965,
+        "endChar": 69
+      },
+      "revId": "1bc432cd74ddd5fd79d8b232ff6a563305c4d9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d300e6ee_6ac69d3d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1982,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-02T15:09:46Z",
+      "side": 1,
+      "message": "I think I would do this slightly differently. The spec for BindSampler:\n\n\"... unit set to the texture unit to which to bind the sampler and sampler set to the\nname of a sampler object returned from a previous call to GenSamplers.\"\n\nBecause the sampler ids should be automatically translated with the resource map you should be able to just walk the sampler state after the gen loop here and init the sampler bindings normally. Unless I\u0027m missing something. Maybe the replay state could get out of whack? Maybe that\u0027s okay.",
+      "range": {
+        "startLine": 1966,
+        "startChar": 0,
+        "endLine": 1982,
+        "endChar": 17
+      },
+      "revId": "1bc432cd74ddd5fd79d8b232ff6a563305c4d9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
