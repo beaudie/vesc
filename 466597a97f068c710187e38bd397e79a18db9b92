@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42b619f2_b8107c45",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-03-02T15:44:04Z",
+      "side": 1,
+      "message": "This comment isn\u0027t up to date: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.h?type\u003dcs\u0026q\u003dQueryHelper\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d284\n\nIs it possible to use a QueryHelper here so you can refactor these calls as well?",
+      "revId": "466597a97f068c710187e38bd397e79a18db9b92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
