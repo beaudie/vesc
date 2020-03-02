@@ -16,6 +16,24 @@
       "revId": "466597a97f068c710187e38bd397e79a18db9b92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ab5333b_8eb07130",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-02T16:23:49Z",
+      "side": 1,
+      "message": "Fixed both in the next CL.",
+      "parentUuid": "42b619f2_b8107c45",
+      "revId": "466597a97f068c710187e38bd397e79a18db9b92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
