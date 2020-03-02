@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b118e6ff_071942b7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-02T22:55:20Z",
+      "side": 1,
+      "message": "Could this be: infoLog.resetInfoLog();",
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e89a05e_f2fcdd77",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-02T22:55:20Z",
+      "side": 1,
+      "message": "This is a little weird, reaching into mExecutable to reset it.\nCould this be mState.mExecutable.reset();  (or maybe initialize()?)",
+      "range": {
+        "startLine": 1914,
+        "startChar": 0,
+        "endLine": 1917,
+        "endChar": 52
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1459a04a_b8ec165d",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-02T22:55:20Z",
+      "side": 1,
+      "message": "Some places use *executable and others use const gl::ProgramExecutable \u0026executable \u003d program-\u003egetExecutable();\nIs there a preference for one or the other?",
+      "range": {
+        "startLine": 252,
+        "startChar": 10,
+        "endLine": 252,
+        "endChar": 43
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68b76e09_c3c6b3f4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 2785,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-02T22:55:20Z",
+      "side": 1,
+      "message": "programExecutable?",
+      "range": {
+        "startLine": 2785,
+        "startChar": 25,
+        "endLine": 2785,
+        "endChar": 60
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18951bb5_91f8f9c0",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-02T22:55:20Z",
+      "side": 1,
+      "message": "glExecutable()?",
+      "range": {
+        "startLine": 652,
+        "startChar": 8,
+        "endLine": 652,
+        "endChar": 37
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eea6bd9_a183cd27",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-02T22:55:20Z",
+      "side": 1,
+      "message": "glExecutable()?",
+      "range": {
+        "startLine": 688,
+        "startChar": 46,
+        "endLine": 688,
+        "endChar": 75
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "450808db_599b0d3c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-02T22:55:20Z",
+      "side": 1,
+      "message": "Why not: const gl::ProgramExecutable \u0026glExecutable \u003d mState.getProgramExecutable();\nlike ProgramVk::setUniformMatrixfv?",
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
