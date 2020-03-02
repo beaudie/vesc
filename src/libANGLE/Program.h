@@ -148,28 +148,6 @@ struct BindingInfo
     bool valid;
 };
 
-// This small structure encapsulates binding sampler uniforms to active GL textures.
-struct SamplerBinding
-{
-    SamplerBinding(TextureType textureTypeIn,
-                   SamplerFormat formatIn,
-                   size_t elementCount,
-                   bool unreferenced);
-    SamplerBinding(const SamplerBinding &other);
-    ~SamplerBinding();
-
-    // Necessary for retrieving active textures from the GL state.
-    TextureType textureType;
-
-    SamplerFormat format;
-
-    // List of all textures bound to this sampler, of type textureType.
-    std::vector<GLuint> boundTextureUnits;
-
-    // A note if this sampler is an unreferenced uniform.
-    bool unreferenced;
-};
-
 // A varying with tranform feedback enabled. If it's an array, either the whole array or one of its
 // elements specified by 'arrayIndex' can set to be enabled.
 struct TransformFeedbackVarying : public sh::ShaderVariable
@@ -207,19 +185,6 @@ struct TransformFeedbackVarying : public sh::ShaderVariable
     }
 
     GLuint arrayIndex;
-};
-
-struct ImageBinding
-{
-    ImageBinding(size_t count);
-    ImageBinding(GLuint imageUnit, size_t count, bool unreferenced);
-    ImageBinding(const ImageBinding &other);
-    ~ImageBinding();
-
-    std::vector<GLuint> boundImageUnits;
-
-    // A note if this image unit is an unreferenced uniform.
-    bool unreferenced;
 };
 
 struct ProgramBinding
@@ -360,11 +325,6 @@ class ProgramState final : angle::NonCopyable
 
     bool hasAttachedShader() const;
 
-    const ActiveTextureMask &getActiveSamplersMask() const { return mActiveSamplersMask; }
-    SamplerFormat getSamplerFormatForTextureUnitIndex(size_t textureUnitIndex) const
-    {
-        return mActiveSamplerFormats[textureUnitIndex];
-    }
     ShaderType getFirstAttachedShaderStageType() const;
     ShaderType getLastAttachedShaderStageType() const;
 
@@ -490,15 +450,6 @@ class ProgramState final : angle::NonCopyable
 
     // The size of the data written to each transform feedback buffer per vertex.
     std::vector<GLsizei> mTransformFeedbackStrides;
-
-    // Cached mask of active samplers and sampler types.
-    ActiveTextureMask mActiveSamplersMask;
-    ActiveTextureArray<uint32_t> mActiveSamplerRefCounts;
-    ActiveTextureArray<TextureType> mActiveSamplerTypes;
-    ActiveTextureArray<SamplerFormat> mActiveSamplerFormats;
-
-    // Cached mask of active images.
-    ActiveTextureMask mActiveImagesMask;
 
     // Note that this has nothing to do with binding layout qualifiers that can be set for some
     // uniforms in GLES3.1+. It is used to pre-set the location of uniforms.
@@ -866,14 +817,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     ComponentTypeMask getDrawBufferTypeMask() const;
 
     const std::vector<GLsizei> &getTransformFeedbackStrides() const;
-
-    const ActiveTextureMask &getActiveSamplersMask() const { return mState.mActiveSamplersMask; }
-    const ActiveTextureMask &getActiveImagesMask() const { return mState.mActiveImagesMask; }
-
-    const ActiveTextureArray<TextureType> &getActiveSamplerTypes() const
-    {
-        return mState.mActiveSamplerTypes;
-    }
 
     // Program dirty bits.
     enum DirtyBitType

@@ -2012,8 +2012,8 @@ FramebufferAttachment *Framebuffer::getAttachmentFromSubjectIndex(angle::Subject
 
 bool Framebuffer::formsRenderingFeedbackLoopWith(const Context *context) const
 {
-    const State &state     = context->getState();
-    const Program *program = state.getProgram();
+    const State &state                  = context->getState();
+    const ProgramExecutable *executable = state.getProgramExecutable();
 
     // TODO(jmadill): Default framebuffer feedback loops.
     if (mState.isDefault())
@@ -2029,7 +2029,7 @@ bool Framebuffer::formsRenderingFeedbackLoopWith(const Context *context) const
     const bool checkStencil =
         (stencil && stencil->type() == GL_TEXTURE) && (!depth || *stencil != *depth);
 
-    const gl::ActiveTextureMask &activeTextures   = program->getActiveSamplersMask();
+    const gl::ActiveTextureMask &activeTextures   = executable->getActiveSamplersMask();
     const gl::ActiveTexturePointerArray &textures = state.getActiveTexturesCache();
 
     for (size_t textureUnit : activeTextures)
