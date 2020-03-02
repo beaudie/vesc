@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "52a3a61a_5440efab",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-02T15:24:20Z",
+      "side": 1,
+      "message": "This is setting the replayed code to have a linear tightly packed unpack so that the subsequent TexImage calls correctly unpack the saved data which has no padding.\n\nAfter the objects are initialized we should make sure the replay\u0027s unpack state matches the captured state.",
+      "parentUuid": "bce4b88a_aab1343c",
+      "range": {
+        "startLine": 1403,
+        "startChar": 50,
+        "endLine": 1403,
+        "endChar": 67
+      },
+      "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f745caa_b542d79e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -102,6 +126,24 @@
       "side": 1,
       "message": "I added min and max LOD from sampler parameters.  Added a section below for base level, max level and other texture parameters.  I wasn\u0027t able to turn them all on yet though.  Changing base level or immutability caused some problems with replay.  I think we\u0027ll need to wait until we have a strategy for handling TexStorage, which is used by the app, but not by replay.\n\nGenerally it is difficult to know where to draw the line on what to capture for MEC, or whether we are capturing them correctly.  It would be a lot easier if we were capturing unit tests.",
       "parentUuid": "8f745caa_b542d79e",
+      "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ace9c4f_0900a89c",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-02T15:24:20Z",
+      "side": 1,
+      "message": "If mutable is true we should use TexStorage instead of TexImage. Can leave that for a follow-up CL of course. You shouldn\u0027t be able to modify mutability via TexParam. It just means the app used TexStorage instead of TexImage.",
+      "parentUuid": "bf5bc50e_1e235eb8",
       "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -167,6 +209,30 @@
       "side": 1,
       "message": "Maybe I\u0027m missing something, but it seems this was setting an UNPACK alignment with the value from PACK alignment.  Should other PixelStore statuses be inverted as well?  I\u0027m just setting them 1:1 below.",
       "parentUuid": "ab757049_6d63e68c",
+      "range": {
+        "startLine": 2012,
+        "startChar": 50,
+        "endLine": 2012,
+        "endChar": 67
+      },
+      "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64b777d6_328637b5",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2012,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-02T15:24:20Z",
+      "side": 1,
+      "message": "You\u0027re right, the code was likely bugged out. You should set the unpack and pack states here to the replay state. Note that we override the unpack alignment above to 1 so you should diff that for filtering out the call instead of using the value in the default state.",
+      "parentUuid": "e7cdfff4_16877def",
       "range": {
         "startLine": 2012,
         "startChar": 50,
