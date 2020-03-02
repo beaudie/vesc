@@ -376,6 +376,17 @@ class ProgramState final : angle::NonCopyable
     const ProgramExecutable &getProgramExecutable() const { return mExecutable; }
     ProgramExecutable &getProgramExecutable() { return mExecutable; }
 
+    bool hasDefaultUniforms() const { return !getDefaultUniformRange().empty(); }
+    bool hasTextures() const { return !getSamplerBindings().empty(); }
+    bool hasUniformBuffers() const { return !getUniformBlocks().empty(); }
+    bool hasStorageBuffers() const { return !getShaderStorageBlocks().empty(); }
+    bool hasAtomicCounterBuffers() const { return !getAtomicCounterBuffers().empty(); }
+    bool hasImages() const { return !getImageBindings().empty(); }
+    bool hasTransformFeedbackOutput() const
+    {
+        return !getLinkedTransformFeedbackVaryings().empty();
+    }
+
     const uint32_t &getLocationsUsedForXfbExtension() const
     {
         return mLocationsUsedForXfbExtension;
