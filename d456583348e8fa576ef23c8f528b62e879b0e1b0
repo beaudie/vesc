@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16dd2dd1_3ed87a0c",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2692,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T15:07:13Z",
+      "side": 1,
+      "message": "Also check that the extensions are present here.",
+      "range": {
+        "startLine": 2688,
+        "startChar": 13,
+        "endLine": 2692,
+        "endChar": 13
+      },
+      "revId": "d456583348e8fa576ef23c8f528b62e879b0e1b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1475c70_1003db45",
+        "filename": "src/libANGLE/validationES32.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T15:07:13Z",
+      "side": 1,
+      "message": "I would like explicit validation that the extensions are enabled first. Can you add Caps::drawBuffersIndexedAny() function (same as Caps::instancedArraysAny) and check that in these functions?",
+      "revId": "d456583348e8fa576ef23c8f528b62e879b0e1b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

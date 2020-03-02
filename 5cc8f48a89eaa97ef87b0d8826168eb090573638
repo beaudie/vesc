@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3bbd1b94_1d5849a2",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T15:07:13Z",
+      "side": 1,
+      "message": "This and the other check below are re-used a couple times without comment, it would be great to have them in a helper function at the top of this file.",
+      "range": {
+        "startLine": 760,
+        "startChar": 12,
+        "endLine": 761,
+        "endChar": 83
+      },
+      "revId": "5cc8f48a89eaa97ef87b0d8826168eb090573638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b2c322b_bcdfc3ba",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T15:07:13Z",
+      "side": 1,
+      "message": "nit: const method",
+      "range": {
+        "startLine": 105,
+        "startChar": 66,
+        "endLine": 105,
+        "endChar": 67
+      },
+      "revId": "5cc8f48a89eaa97ef87b0d8826168eb090573638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9243b936_34c64413",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1585,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T15:07:13Z",
+      "side": 1,
+      "message": "Nit: assign this from extensions-\u003edrawBuffersIndexedEXT instead of duplicating the check",
+      "range": {
+        "startLine": 1584,
+        "startChar": 4,
+        "endLine": 1585,
+        "endChar": 70
+      },
+      "revId": "5cc8f48a89eaa97ef87b0d8826168eb090573638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
