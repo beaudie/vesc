@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5613bfec_738ed083",
+        "filename": "src/tests/angle_end2end_tests_main.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-03-02T15:58:24Z",
+      "side": 1,
+      "message": "nit: Can you add a comment since this is an exceptional case of picking up tests to run?\n\nI was trying to think of a way to make this more generic but I think you did a good job and it\u0027s really the only exception case, oh well",
+      "revId": "cf5ea2985f6ea443a192bf3a10436156ea82d6f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "084d4c50_cbbfc224",
+        "filename": "src/tests/egl_tests/EGLContextCompatibilityTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-03-02T15:58:24Z",
+      "side": 1,
+      "message": "nit: remove this or uncomment it?",
+      "revId": "cf5ea2985f6ea443a192bf3a10436156ea82d6f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "542d322b_26a3705a",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-03-02T15:58:24Z",
+      "side": 1,
+      "message": "nit: I find this a bit confusing for a function name. Maybe GetRendererName or RendererNameFromRenderer? Up to you",
+      "revId": "cf5ea2985f6ea443a192bf3a10436156ea82d6f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
