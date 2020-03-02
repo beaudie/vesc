@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "69e2bfb3_e5ae6b95",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2692,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T20:19:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fbb061a9_00d25571",
+      "range": {
+        "startLine": 2688,
+        "startChar": 13,
+        "endLine": 2692,
+        "endChar": 13
+      },
+      "revId": "d456583348e8fa576ef23c8f528b62e879b0e1b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1475c70_1003db45",
         "filename": "src/libANGLE/validationES32.cpp",
         "patchSetId": 13
@@ -81,6 +105,24 @@
       "revId": "d456583348e8fa576ef23c8f528b62e879b0e1b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f45de35b_258b4fad",
+        "filename": "src/libANGLE/validationES32.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T20:19:14Z",
+      "side": 1,
+      "message": "Ah, yes, thanks for pointing that out from the previous CL.",
+      "parentUuid": "3e5757d7_968c63a3",
+      "revId": "d456583348e8fa576ef23c8f528b62e879b0e1b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
