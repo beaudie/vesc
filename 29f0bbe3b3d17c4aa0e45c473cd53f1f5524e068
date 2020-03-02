@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a397506_b7426284",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T19:05:41Z",
+      "side": 1,
+      "message": "Done, this check wasn\u0027t necessary.",
+      "parentUuid": "bef4d85b_1a56dd61",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fa734d7_014f68af",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "644ca753_a054839f",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T19:05:41Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "4fa734d7_014f68af",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -194,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "03e17ff5_05432a9d",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T19:05:41Z",
+      "side": 1,
+      "message": "From my reading of other blueprints, they don\u0027t specify them.  I would guess they are inherited from other things.",
+      "parentUuid": "2fc24120_117de727",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6dd642c1_4c8c9d94",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 2
@@ -208,6 +262,24 @@
       "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cba321e9_d1f469ab",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T19:05:41Z",
+      "side": 1,
+      "message": "An autoroller will at least verify that we compile on Android before landing things.  Issues due to compiler bugs on different platforms happen occasionally and we will just have to debug them.",
+      "parentUuid": "6dd642c1_4c8c9d94",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -281,6 +353,30 @@
     },
     {
       "key": {
+        "uuid": "278b87e6_25ecbfdf",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T19:05:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8a49545_03342944",
+      "range": {
+        "startLine": 294,
+        "startChar": 0,
+        "endLine": 294,
+        "endChar": 4
+      },
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aad2c68b_3d50c076",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 2
@@ -295,6 +391,24 @@
       "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ae1f3b0_dead6cbf",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-02T19:05:41Z",
+      "side": 1,
+      "message": "Now using the python argparse to validate the arguments.",
+      "parentUuid": "aad2c68b_3d50c076",
+      "revId": "29f0bbe3b3d17c4aa0e45c473cd53f1f5524e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
