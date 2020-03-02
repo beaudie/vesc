@@ -16,6 +16,24 @@
       "revId": "19f30a70487a8b5e0f29faccae90c6c0de102d5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "488e3742_dee9c5a1",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-02T16:23:16Z",
+      "side": 1,
+      "message": "Generally GL isn\u0027t supposed to validate pointers. In one or two cases we do a special out-of-spec check for common error cases. In general we can\u0027t validate pointers so it\u0027s best to assume the app is handing you something ok to write to.",
+      "parentUuid": "64623564_8cec5a05",
+      "revId": "19f30a70487a8b5e0f29faccae90c6c0de102d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
