@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c612547c_98b3a78a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 22
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-03T17:44:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d854e81_47532e87",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 8
+      },
+      "revId": "a48f6b6fbdef336441aad43b18486ccfdc08fb83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db524c36_0e38e002",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 22
@@ -36,6 +60,24 @@
       "writtenOn": "2020-03-02T23:23:11Z",
       "side": 1,
       "message": "Do we need to save mVariableInfoMap here? That was a temporary variable before.\nIs this part of preserving state so as to not duplicate work?",
+      "revId": "a48f6b6fbdef336441aad43b18486ccfdc08fb83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2611674c_7b499d21",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-03T17:44:38Z",
+      "side": 1,
+      "message": "We don\u0027t need it in this CL, but it does become necessary once we start only calculating the variable set/binding values once (a few CLs later):\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2067101\n\nThen, we need this information in a few places:\n1.) GLSL-\u003eSPIR-V (here)\n2.) Creating the pipeline layout\n3.) Updating descriptor sets",
+      "parentUuid": "db524c36_0e38e002",
       "revId": "a48f6b6fbdef336441aad43b18486ccfdc08fb83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
