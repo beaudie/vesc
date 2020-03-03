@@ -664,10 +664,6 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_DITHER_ENABLED:
                 break;
-            case gl::State::DIRTY_BIT_GENERATE_MIPMAP_HINT:
-                break;
-            case gl::State::DIRTY_BIT_SHADER_DERIVATIVE_HINT:
-                break;
             case gl::State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING:
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
@@ -729,12 +725,37 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
             }
             case gl::State::DIRTY_BIT_PROVOKING_VERTEX:
                 break;
+            case gl::State::DIRTY_BIT_EXTENDED:
+                ANGLE_TRY(syncExtendedState(context));
+                break;
             default:
                 UNREACHABLE();
                 break;
         }
     }
 
+    return angle::Result::Continue;
+}
+
+angle::Result ContextMtl::syncExtendedState(const gl::Context *context)
+{
+    const gl::State &glState = context->getState();
+
+    for (size_t dirtyBit : glState.getExtendedDirtyBits())
+    {
+        switch (dirtyBit)
+        {
+            case gl::State::DIRTY_BIT_EXT_CLIP_DISTANCE_ENABLED:
+                invalidateDriverUniforms();
+                break;
+            case gl::State::DIRTY_BIT_EXT_GENERATE_MIPMAP_HINT:
+                break;
+            case gl::State::DIRTY_BIT_EXT_SHADER_DERIVATIVE_HINT:
+                break;
+            default:
+                UNREACHABLE();
+        }
+    }
     return angle::Result::Continue;
 }
 
@@ -1601,6 +1622,8 @@ angle::Result ContextMtl::handleDirtyDriverUniforms(const gl::Context *context)
         static_cast<float>(mDrawFramebuffer->getState().getDimensions().height) * 0.5f;
     mDriverUniforms.viewportYScale    = mDrawFramebuffer->flipY() ? -1.0f : 1.0f;
     mDriverUniforms.negViewportYScale = -mDriverUniforms.viewportYScale;
+
+    mDriverUniforms.enabledClipDistances = mState.getEnabledClipDistances().bits();
 
     mDriverUniforms.depthRange[0] = depthRangeNear;
     mDriverUniforms.depthRange[1] = depthRangeFar;
