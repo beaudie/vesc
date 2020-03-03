@@ -996,7 +996,7 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     vk::ResourceUseList *resourceUseList,
     CommandBufferHelper *commandBufferHelper)
 {
-    const gl::ProgramExecutable *executable = contextVk->getState().getExecutable();
+    const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
     ASSERT(executable);
 
     ANGLE_TRY(allocateDescriptorSet(contextVk, kShaderResourceDescriptorSetIndex));

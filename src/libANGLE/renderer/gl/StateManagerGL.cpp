@@ -821,7 +821,7 @@ angle::Result StateManagerGL::onMakeCurrent(const gl::Context *context)
 void StateManagerGL::updateProgramTextureBindings(const gl::Context *context)
 {
     const gl::State &glState                = context->getState();
-    const gl::ProgramExecutable *executable = glState.getExecutable();
+    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
 
     // It is possible there is no active program during a path operation.
     if (!executable)
@@ -953,7 +953,7 @@ void StateManagerGL::updateProgramAtomicCounterBufferBindings(const gl::Context 
 void StateManagerGL::updateProgramImageBindings(const gl::Context *context)
 {
     const gl::State &glState                = context->getState();
-    const gl::ProgramExecutable *executable = glState.getExecutable();
+    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
     const gl::Program *program              = glState.getProgram();
 
     // It is possible there is no active program during a path operation.
@@ -1783,7 +1783,7 @@ void StateManagerGL::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
                 const gl::Program *program              = state.getProgram();
-                const gl::ProgramExecutable *executable = state.getExecutable();
+                const gl::ProgramExecutable *executable = state.getProgramExecutable();
 
                 if (program && executable)
                 {

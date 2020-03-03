@@ -2013,7 +2013,7 @@ FramebufferAttachment *Framebuffer::getAttachmentFromSubjectIndex(angle::Subject
 bool Framebuffer::formsRenderingFeedbackLoopWith(const Context *context) const
 {
     const State &state                  = context->getState();
-    const ProgramExecutable *executable = state.getExecutable();
+    const ProgramExecutable *executable = state.getProgramExecutable();
 
     // TODO(jmadill): Default framebuffer feedback loops.
     if (mState.isDefault())
