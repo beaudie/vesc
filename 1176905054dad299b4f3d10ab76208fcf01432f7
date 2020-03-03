@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "51240c61_1629a494",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-03-03T08:15:40Z",
+      "side": 1,
+      "message": "Thanks for the spot! fixed in patch 3.",
+      "parentUuid": "bb6a0744_b05ffd3f",
+      "range": {
+        "startLine": 158,
+        "startChar": 60,
+        "endLine": 158,
+        "endChar": 64
+      },
+      "revId": "1176905054dad299b4f3d10ab76208fcf01432f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f05364c_d02ad3bf",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -91,6 +115,30 @@
       "revId": "1176905054dad299b4f3d10ab76208fcf01432f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62f309d8_20d22094",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndexIndirectLineLoop.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1382541
+      },
+      "writtenOn": "2020-03-03T08:15:40Z",
+      "side": 1,
+      "message": "Removed in patch 3.",
+      "parentUuid": "8ffbfc10_c7bf564c",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 11
+      },
+      "revId": "1176905054dad299b4f3d10ab76208fcf01432f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
