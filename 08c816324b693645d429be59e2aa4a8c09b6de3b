@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1e96317_629b6424",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-03T12:57:32Z",
+      "side": 1,
+      "message": "nit: you can probably omit this. empty() just returns false and the enum should always be in range.",
+      "range": {
+        "startLine": 4102,
+        "startChar": 4,
+        "endLine": 4102,
+        "endChar": 96
+      },
+      "revId": "08c816324b693645d429be59e2aa4a8c09b6de3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
