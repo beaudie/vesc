@@ -222,6 +222,7 @@ angle_translator_sources = [
   "src/compiler/translator/tree_util/Visit.h",
   "src/compiler/translator/util.cpp",
   "src/compiler/translator/util.h",
+  "src/libANGLE/Constants.h",
   "src/third_party/compiler/ArrayBoundsClamper.cpp",
   "src/third_party/compiler/ArrayBoundsClamper.h",
 ]
