@@ -50,14 +50,17 @@
 #if defined(ANGLE_ENABLE_OPENGL)
 #    if defined(ANGLE_PLATFORM_WINDOWS)
 #        include "libANGLE/renderer/gl/wgl/DisplayWGL.h"
-#    elif defined(ANGLE_USE_X11)
-#        include "libANGLE/renderer/gl/glx/DisplayGLX.h"
 #    elif defined(ANGLE_PLATFORM_MACOS) || defined(ANGLE_PLATFORM_MACCATALYST)
 #        include "libANGLE/renderer/gl/cgl/DisplayCGL.h"
 #    elif defined(ANGLE_PLATFORM_IOS)
 #        include "libANGLE/renderer/gl/eagl/DisplayEAGL.h"
 #    elif defined(ANGLE_USE_OZONE)
 #        include "libANGLE/renderer/gl/egl/ozone/DisplayOzone.h"
+#    elif defined(ANGLE_PLATFORM_LINUX)
+#        include "libANGLE/renderer/gl/egl/DisplayEGL.h"
+#        if defined(ANGLE_USE_X11)
+#            include "libANGLE/renderer/gl/glx/DisplayGLX.h"
+#        endif
 #    elif defined(ANGLE_PLATFORM_ANDROID)
 #        include "libANGLE/renderer/gl/egl/android/DisplayAndroid.h"
 #    else
@@ -216,7 +219,9 @@ EGLAttrib GetDeviceTypeFromEnvironment()
     return EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE;
 }
 
-rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType, const DisplayState &state)
+rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
+                                          EGLAttrib deviceType,
+                                          const DisplayState &state)
 {
     ASSERT(displayType != EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
     rx::DisplayImpl *impl = nullptr;
@@ -241,8 +246,6 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType, const DisplaySt
 #if defined(ANGLE_ENABLE_OPENGL)
 #    if defined(ANGLE_PLATFORM_WINDOWS)
             impl = new rx::DisplayWGL(state);
-#    elif defined(ANGLE_USE_X11)
-            impl = new rx::DisplayGLX(state);
 #    elif defined(ANGLE_PLATFORM_MACOS) || defined(ANGLE_PLATFORM_MACCATALYST)
             impl = new rx::DisplayCGL(state);
 #    elif defined(ANGLE_PLATFORM_IOS)
@@ -250,6 +253,17 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType, const DisplaySt
 #    elif defined(ANGLE_USE_OZONE)
             // This might work but has never been tried, so disallow for now.
             impl = nullptr;
+#    elif defined(ANGLE_PLATFORM_LINUX)
+            if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
+            {
+                impl = new rx::DisplayEGL(state);
+#        if defined(ANGLE_USE_X11)
+            }
+            else
+            {
+                impl = new rx::DisplayGLX(state);
+#        endif
+            }
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             // No GL support on this platform, fail display creation.
             impl = nullptr;
@@ -266,10 +280,19 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType, const DisplaySt
 #if defined(ANGLE_ENABLE_OPENGL)
 #    if defined(ANGLE_PLATFORM_WINDOWS)
             impl = new rx::DisplayWGL(state);
-#    elif defined(ANGLE_USE_X11)
-            impl = new rx::DisplayGLX(state);
 #    elif defined(ANGLE_USE_OZONE)
             impl = new rx::DisplayOzone(state);
+#    elif defined(ANGLE_PLATFORM_LINUX)
+            if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
+            {
+                impl = new rx::DisplayEGL(state);
+#        if defined(ANGLE_USE_X11)
+            }
+            else
+            {
+                impl = new rx::DisplayGLX(state);
+#        endif
+            }
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             impl = new rx::DisplayAndroid(state);
 #    else
@@ -431,7 +454,9 @@ Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay
         display->updateAttribsFromEnvironment(attribMap);
 
         EGLAttrib displayType = display->mAttributeMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
-        rx::DisplayImpl *impl = CreateDisplayFromAttribs(displayType, display->getState());
+        EGLAttrib deviceType  = display->mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
+        rx::DisplayImpl *impl =
+            CreateDisplayFromAttribs(displayType, deviceType, display->getState());
         if (impl == nullptr)
         {
             // No valid display implementation for these attributes
@@ -1354,6 +1379,10 @@ static ClientExtensions GenerateClientExtensions()
 
 #if defined(ANGLE_USE_X11)
     extensions.x11Visual = true;
+#endif
+
+#if defined(ANGLE_PLATFORM_LINUX)
+    extensions.platformANGLEDeviceTypeEGLANGLE = true;
 #endif
 
     extensions.clientGetAllProcAddresses = true;
