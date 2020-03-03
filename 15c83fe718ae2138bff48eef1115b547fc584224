@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "18e51cee_351a9e7b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-03T17:40:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b118e6ff_071942b7",
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e89a05e_f2fcdd77",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 36
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "3e854d6a_0b2ecdd7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-03T17:40:13Z",
+      "side": 1,
+      "message": "Yeah, I came to the same conclusion eventually also (CL #10):\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2083843/4/src/libANGLE/ProgramExecutable.cpp\n\nI\u0027ll go ahead and introduce it here though.",
+      "parentUuid": "8e89a05e_f2fcdd77",
+      "range": {
+        "startLine": 1914,
+        "startChar": 0,
+        "endLine": 1917,
+        "endChar": 52
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1459a04a_b8ec165d",
         "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
         "patchSetId": 36
@@ -53,6 +95,30 @@
       "writtenOn": "2020-03-02T22:55:20Z",
       "side": 1,
       "message": "Some places use *executable and others use const gl::ProgramExecutable \u0026executable \u003d program-\u003egetExecutable();\nIs there a preference for one or the other?",
+      "range": {
+        "startLine": 252,
+        "startChar": 10,
+        "endLine": 252,
+        "endChar": 43
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a57e5d68_9660af1a",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-03T17:40:13Z",
+      "side": 1,
+      "message": "The difference comes down to who/how it\u0027s being accessed.\n\nThe gl::Program (and eventually gl::ProgramPipeline) are what actually instantiate the gl::ProgramExecutable, so there is guaranteed to always be one present.   So, getExecutable() can return a reference in those cases because they always have something to return and in those cases they want to work with exactly the ProgramExecutable that corresponds to that particular Program/ProgramPipeline.\n\nOutside of gl::Program/ProgramPipeline, everyone will be requesting the gl::ProgramExecutable from the gl::State without really caring who it really belongs to under the covers.   To handle this, the State needs to keep a pointer to the current ProgramExecutable since it can change - or may not even exist at all.   Whenever a glUseProgram() or glBindProgramPipeline() is issued, the current ProgramExecutable may need to be updated to reflect that.   Additionally, if none of those have ever been issued, there is no ProgramExecutable yet and so the caller may get back a nullptr.\n\nSo there isn\u0027t really a preference for one over the other beyond gl::Program/ProgramPipeline/State using a reference (since they care exactly which they are accessing) while those outside would likely use a pointer.   As always, I\u0027m sure there are some exceptions here and there or even just some places I didn\u0027t have a good answer for and just guessed.",
+      "parentUuid": "1459a04a_b8ec165d",
       "range": {
         "startLine": 252,
         "startChar": 10,
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "305e7fe9_106e46ce",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 2785,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-03T17:40:13Z",
+      "side": 1,
+      "message": "Ah, yeah, Jamie asked for that earlier too and forgot to rename it.   Done.",
+      "parentUuid": "68b76e09_c3c6b3f4",
+      "range": {
+        "startLine": 2785,
+        "startChar": 25,
+        "endLine": 2785,
+        "endChar": 60
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18951bb5_91f8f9c0",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 36
@@ -108,6 +198,30 @@
       "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d481acd_5ea585ae",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-03T17:40:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18951bb5_91f8f9c0",
+      "range": {
+        "startLine": 652,
+        "startChar": 8,
+        "endLine": 652,
+        "endChar": 37
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "bc3c7624_afbf5065",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-03T17:40:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9eea6bd9_a183cd27",
+      "range": {
+        "startLine": 688,
+        "startChar": 46,
+        "endLine": 688,
+        "endChar": 75
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "450808db_599b0d3c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 36
@@ -148,6 +286,24 @@
       "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4ea587b_3adc09c9",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-03T17:40:13Z",
+      "side": 1,
+      "message": "Good point.   This ProgramVk wants to deal with the ProgramExecutable that corresponds to the Program in the front end, so it\u0027s good to be explicit about that here.",
+      "parentUuid": "450808db_599b0d3c",
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
