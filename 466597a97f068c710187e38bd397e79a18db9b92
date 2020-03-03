@@ -57,6 +57,30 @@
       "revId": "466597a97f068c710187e38bd397e79a18db9b92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "975a932f_6417028e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-03T02:11:16Z",
+      "side": 1,
+      "message": "Seems like query results can be 32-bit and 64-bit. The naming is to make it clear to the reader that this getter is specifically for 64-bit results.\n\nhttps://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkGetQueryPoolResults.html\n\n(takes void *)",
+      "parentUuid": "b0cedf46_a5116bf7",
+      "range": {
+        "startLine": 329,
+        "startChar": 21,
+        "endLine": 329,
+        "endChar": 27
+      },
+      "revId": "466597a97f068c710187e38bd397e79a18db9b92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
