@@ -3091,6 +3091,14 @@ bool GetQueryParameterInfo(const State &glState,
             *type      = GL_INT;
             *numParams = 1;
             return true;
+        case GL_MAX_CLIP_DISTANCES_EXT:
+            if (!extensions.clipDistanceAPPLE)
+            {
+                return false;
+            }
+            *type      = GL_INT;
+            *numParams = 1;
+            return true;
     }
 
     if (glState.getClientType() == EGL_OPENGL_API)
