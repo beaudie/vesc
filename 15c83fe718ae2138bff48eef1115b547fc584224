@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "5a384b76_e2ad1709",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-03T19:01:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a57e5d68_9660af1a",
+      "range": {
+        "startLine": 252,
+        "startChar": 10,
+        "endLine": 252,
+        "endChar": 43
+      },
+      "revId": "15c83fe718ae2138bff48eef1115b547fc584224",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68b76e09_c3c6b3f4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 36
