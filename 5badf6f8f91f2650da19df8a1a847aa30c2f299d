@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79042189_3988ea57",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_egl.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-03-03T16:37:44Z",
+      "side": 1,
+      "message": "nit: space",
+      "range": {
+        "startLine": 39,
+        "startChar": 46,
+        "endLine": 39,
+        "endChar": 47
+      },
+      "revId": "5badf6f8f91f2650da19df8a1a847aa30c2f299d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3409b50_50c1b1f2",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_egl.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-03-03T16:37:44Z",
+      "side": 1,
+      "message": "Sorry, our process for choosing enums isn\u0027t documented very well. Can you use 0x348E? I allocated it in our tracking spreadsheet here: https://docs.google.com/document/d/1PooqydYeXbn9wQptF29B-J4rkod2oMgKLw2FuXaAHzo",
+      "range": {
+        "startLine": 55,
+        "startChar": 53,
+        "endLine": 55,
+        "endChar": 59
+      },
+      "revId": "5badf6f8f91f2650da19df8a1a847aa30c2f299d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b186a4e9_f784e9fc",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-03-03T16:37:44Z",
+      "side": 1,
+      "message": "Is there any other validation needed to check if EGL is supported? If there isn\u0027t, this is fine as-is, I just want to make sure.\n\nIf there\u0027s some sort of method needed to check libraries you can do it in GenerateClientExtensions",
+      "revId": "5badf6f8f91f2650da19df8a1a847aa30c2f299d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
