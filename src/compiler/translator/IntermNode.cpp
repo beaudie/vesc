@@ -38,6 +38,11 @@ TPrecision GetHigherPrecision(TPrecision left, TPrecision right)
     return left > right ? left : right;
 }
 
+TPrecision GetLowerPrecision(TPrecision left, TPrecision right)
+{
+    return left > right ? right : left;
+}
+
 TConstantUnion *Vectorize(const TConstantUnion &constant, size_t size)
 {
     TConstantUnion *constUnion = new TConstantUnion[size];
@@ -1601,8 +1606,11 @@ void TIntermBinary::promote()
     ASSERT(mLeft->isArray() == mRight->isArray());
 
     // The result gets promoted to the highest precision.
-    TPrecision higherPrecision = GetHigherPrecision(mLeft->getPrecision(), mRight->getPrecision());
-    getTypePointer()->setPrecision(higherPrecision);
+    // TPrecision higherPrecision = GetHigherPrecision(mLeft->getPrecision(),
+    // mRight->getPrecision()); getTypePointer()->setPrecision(higherPrecision);
+    TPrecision lowerPrecision = GetLowerPrecision(mLeft->getPrecision(), mRight->getPrecision());
+    getTypePointer()->setPrecision(lowerPrecision);
+    // TPrecision higherPrecision = lowerPrecision;
 
     const int nominalSize = std::max(mLeft->getNominalSize(), mRight->getNominalSize());
 
@@ -1652,26 +1660,26 @@ void TIntermBinary::promote()
         case EOpMatrixTimesScalar:
             if (mRight->isMatrix())
             {
-                setType(TType(basicType, higherPrecision, resultQualifier,
+                setType(TType(basicType, lowerPrecision, resultQualifier,
                               static_cast<unsigned char>(mRight->getCols()),
                               static_cast<unsigned char>(mRight->getRows())));
             }
             break;
         case EOpMatrixTimesVector:
-            setType(TType(basicType, higherPrecision, resultQualifier,
+            setType(TType(basicType, lowerPrecision, resultQualifier,
                           static_cast<unsigned char>(mLeft->getRows()), 1));
             break;
         case EOpMatrixTimesMatrix:
-            setType(TType(basicType, higherPrecision, resultQualifier,
+            setType(TType(basicType, lowerPrecision, resultQualifier,
                           static_cast<unsigned char>(mRight->getCols()),
                           static_cast<unsigned char>(mLeft->getRows())));
             break;
         case EOpVectorTimesScalar:
-            setType(TType(basicType, higherPrecision, resultQualifier,
+            setType(TType(basicType, lowerPrecision, resultQualifier,
                           static_cast<unsigned char>(nominalSize), 1));
             break;
         case EOpVectorTimesMatrix:
-            setType(TType(basicType, higherPrecision, resultQualifier,
+            setType(TType(basicType, lowerPrecision, resultQualifier,
                           static_cast<unsigned char>(mRight->getCols()), 1));
             break;
         case EOpMulAssign:
@@ -1707,7 +1715,7 @@ void TIntermBinary::promote()
         {
             const int secondarySize =
                 std::max(mLeft->getSecondarySize(), mRight->getSecondarySize());
-            setType(TType(basicType, higherPrecision, resultQualifier,
+            setType(TType(basicType, lowerPrecision, resultQualifier,
                           static_cast<unsigned char>(nominalSize),
                           static_cast<unsigned char>(secondarySize)));
             ASSERT(!mLeft->isArray() && !mRight->isArray());

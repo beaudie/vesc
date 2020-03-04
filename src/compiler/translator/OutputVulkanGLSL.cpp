@@ -42,9 +42,7 @@ TOutputVulkanGLSL::TOutputVulkanGLSL(TInfoSinkBase &objSink,
       mNextUnusedInputLocation(0),
       mNextUnusedOutputLocation(0),
       mForceHighp(forceHighp)
-{
-    mIgnorePrecision = (shaderVersion >= 300) ? true : false;
-}
+{}
 
 void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
 {
@@ -174,7 +172,7 @@ void TOutputVulkanGLSL::writeStructType(const TStructure *structure)
 
 bool TOutputVulkanGLSL::writeVariablePrecision(TPrecision precision)
 {
-    if ((precision == EbpUndefined) || mIgnorePrecision)
+    if (precision == EbpUndefined)
         return false;
 
     TInfoSinkBase &out = objSink();

@@ -62,7 +62,6 @@ class TOutputVulkanGLSL : public TOutputGLSL
 
   private:
     bool mForceHighp;
-    bool mIgnorePrecision;
 };
 
 }  // namespace sh
