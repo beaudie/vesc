@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bd63901_ea8f4af8",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1889,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T12:59:34Z",
+      "side": 1,
+      "message": "nit: I would use the explicit type here. When reading this example I wasn\u0027t entirely clear that this was an offset binding and not just a buffer. I ended up having to look it up in the code.",
+      "range": {
+        "startLine": 1889,
+        "startChar": 18,
+        "endLine": 1889,
+        "endChar": 22
+      },
+      "revId": "4b5de0a8da6612dc26939696c96fa6df45cef127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a591c0e7_c5944747",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1893,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T12:59:34Z",
+      "side": 1,
+      "message": "one last state missing: use BindBufferRange and replay the bound offset and size. You can capture this from the xfbBuffer offset binding above.",
+      "range": {
+        "startLine": 1893,
+        "startChar": 16,
+        "endLine": 1893,
+        "endChar": 37
+      },
+      "revId": "4b5de0a8da6612dc26939696c96fa6df45cef127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d16aab11_9ef7acde",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1899,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T12:59:34Z",
+      "side": 1,
+      "message": "nit: this comment isn\u0027t quite accurate. should say XFB.",
+      "range": {
+        "startLine": 1899,
+        "startChar": 12,
+        "endLine": 1899,
+        "endChar": 57
+      },
+      "revId": "4b5de0a8da6612dc26939696c96fa6df45cef127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
