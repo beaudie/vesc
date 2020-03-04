@@ -46,6 +46,23 @@
       "revId": "96fe59c5720bb03fad7f461aa92d411c216758c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3a2b7a9_1d76ed66",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-04T20:53:17Z",
+      "side": 1,
+      "message": "Why does mIgnorePrecision overrule mForceHighp?   Do we still need both?",
+      "revId": "96fe59c5720bb03fad7f461aa92d411c216758c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
