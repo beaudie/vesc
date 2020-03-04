@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "9a95e1e4_44f2eb55",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-04T17:29:35Z",
+      "side": 1,
+      "message": "My takeaway here is you want the replayState\u0027s UNPACK to be 1, so we should be checking its current getUnpackState.  I updated the code and comments, let me know if I\u0027m following correctly.",
+      "parentUuid": "52a3a61a_5440efab",
+      "range": {
+        "startLine": 1403,
+        "startChar": 50,
+        "endLine": 1403,
+        "endChar": 67
+      },
+      "revId": "10d9d9063909709e2b44c2e9297b3adc4ce8e4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f745caa_b542d79e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
