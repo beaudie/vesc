@@ -923,6 +923,8 @@ bool TCompiler::compile(const char *const shaderStrings[],
                         size_t numStrings,
                         ShCompileOptions compileOptionsIn)
 {
+    bool dumpShaders     = true;
+    static int fileIndex = 0;
 #if defined(ANGLE_ENABLE_FUZZER_CORPUS_OUTPUT)
     DumpFuzzerCase(shaderStrings, numStrings, mShaderType, mShaderSpec, mOutputType,
                    compileOptionsIn);
@@ -956,6 +958,29 @@ bool TCompiler::compile(const char *const shaderStrings[],
             if (!translate(root, compileOptions, &perfDiagnostics))
             {
                 return false;
+            }
+            else if (dumpShaders)
+            {
+                // Print out shaders
+                // First print input shader
+                std::ostringstream o = sh::InitializeStream<std::ostringstream>();
+                o << "shader_" << fileIndex++ << ".glsl";
+                std::string s = o.str();
+
+                // Must match the input format of the fuzzer
+                FILE *f = fopen(s.c_str(), "w");
+
+                for (size_t i = 0; i < numStrings; i++)
+                {
+                    fwrite(shaderStrings[i], sizeof(char), strlen(shaderStrings[i]), f);
+                }
+                char zero[128 - 20] = {0};
+                fwrite(&zero, 1, 1, f);
+
+                // TODO: Now print translated shader
+                TInfoSinkBase &sink = getInfoSink().obj;
+                fwrite(sink.c_str(), sink.size(), 1, f);
+                fclose(f);
             }
         }
 
