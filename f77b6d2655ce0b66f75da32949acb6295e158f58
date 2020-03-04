@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a159275a_26ff06da",
+        "filename": "src/tests/gl_tests/CopyCompressedTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T03:06:47Z",
+      "side": 1,
+      "message": "can you try removing this?",
+      "range": {
+        "startLine": 322,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 71
+      },
+      "revId": "f77b6d2655ce0b66f75da32949acb6295e158f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
