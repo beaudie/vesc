@@ -653,7 +653,7 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
         !mState.getLinkedTransformFeedbackVaryings().empty())
     {
         TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(transformFeedback);
-        transformFeedbackVk->updateDescriptorSetLayout(contextVk, mState, &uniformsAndXfbSetDesc);
+        transformFeedbackVk->updateDescriptorSetLayout(contextVk, &uniformsAndXfbSetDesc);
     }
 
     ANGLE_TRY(renderer->getDescriptorSetLayout(

@@ -30,6 +30,7 @@
 #include "libANGLE/Error.h"
 #include "libANGLE/InfoLog.h"
 #include "libANGLE/ProgramExecutable.h"
+#include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/angletypes.h"
@@ -147,28 +148,6 @@ struct BindingInfo
     bool valid;
 };
 
-// This small structure encapsulates binding sampler uniforms to active GL textures.
-struct SamplerBinding
-{
-    SamplerBinding(TextureType textureTypeIn,
-                   SamplerFormat formatIn,
-                   size_t elementCount,
-                   bool unreferenced);
-    SamplerBinding(const SamplerBinding &other);
-    ~SamplerBinding();
-
-    // Necessary for retrieving active textures from the GL state.
-    TextureType textureType;
-
-    SamplerFormat format;
-
-    // List of all textures bound to this sampler, of type textureType.
-    std::vector<GLuint> boundTextureUnits;
-
-    // A note if this sampler is an unreferenced uniform.
-    bool unreferenced;
-};
-
 // A varying with tranform feedback enabled. If it's an array, either the whole array or one of its
 // elements specified by 'arrayIndex' can set to be enabled.
 struct TransformFeedbackVarying : public sh::ShaderVariable
@@ -206,19 +185,6 @@ struct TransformFeedbackVarying : public sh::ShaderVariable
     }
 
     GLuint arrayIndex;
-};
-
-struct ImageBinding
-{
-    ImageBinding(size_t count);
-    ImageBinding(GLuint imageUnit, size_t count, bool unreferenced);
-    ImageBinding(const ImageBinding &other);
-    ~ImageBinding();
-
-    std::vector<GLuint> boundImageUnits;
-
-    // A note if this image unit is an unreferenced uniform.
-    bool unreferenced;
 };
 
 struct ProgramBinding
@@ -330,7 +296,6 @@ class ProgramState final : angle::NonCopyable
     {
         return mTransformFeedbackStrides;
     }
-    size_t getTransformFeedbackBufferCount() const { return mTransformFeedbackStrides.size(); }
     const std::vector<AtomicCounterBuffer> &getAtomicCounterBuffers() const
     {
         return mAtomicCounterBuffers;
@@ -339,6 +304,8 @@ class ProgramState final : angle::NonCopyable
     // Count the number of uniform and storage buffer declarations, counting arrays as one.
     size_t getUniqueUniformBlockCount() const;
     size_t getUniqueStorageBlockCount() const;
+    size_t getAtomicCounterBuffersCount() const;
+    size_t getTransformFeedbackBufferCount() const;
 
     GLuint getUniformIndexFromName(const std::string &name) const;
     GLuint getUniformIndexFromLocation(UniformLocation location) const;
@@ -374,6 +341,22 @@ class ProgramState final : angle::NonCopyable
     const ProgramExecutable &getProgramExecutable() const { return mExecutable; }
     ProgramExecutable &getProgramExecutable() { return mExecutable; }
 
+    bool hasDefaultUniforms() const { return !getDefaultUniformRange().empty(); }
+    bool hasTextures() const { return !getSamplerBindings().empty(); }
+    bool hasUniformBuffers() const { return !getUniformBlocks().empty(); }
+    bool hasStorageBuffers() const { return !getShaderStorageBlocks().empty(); }
+    bool hasAtomicCounterBuffers() const { return !getAtomicCounterBuffers().empty(); }
+    bool hasImages() const { return !getImageBindings().empty(); }
+    bool hasTransformFeedbackOutput() const
+    {
+        return !getLinkedTransformFeedbackVaryings().empty();
+    }
+
+    const uint32_t &getLocationsUsedForXfbExtension() const
+    {
+        return mLocationsUsedForXfbExtension;
+    }
+
   private:
     friend class MemoryProgramCache;
     friend class Program;
@@ -393,6 +376,7 @@ class ProgramState final : angle::NonCopyable
 
     ShaderMap<Shader *> mAttachedShaders;
 
+    uint32_t mLocationsUsedForXfbExtension;
     std::vector<std::string> mTransformFeedbackVaryingNames;
     std::vector<TransformFeedbackVarying> mLinkedTransformFeedbackVaryings;
     GLenum mTransformFeedbackBufferMode;
