@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bcebc482_98750c92",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-04T16:06:03Z",
+      "side": 1,
+      "message": "Oops, thanks.",
+      "parentUuid": "256a3db9_4e31d393",
+      "range": {
+        "startLine": 689,
+        "startChar": 4,
+        "endLine": 689,
+        "endChar": 44
+      },
+      "revId": "7e050017fd3dd7a51b3c72007b5c084ae791f51d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9d30d58_a7cf190d",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-02T15:03:07Z",
       "side": 1,
       "message": "I think maybe I confused you. The \"attribPointer\" stuff is part of the default VAO (#0). The only part that isn\u0027t are the \"default\" vertex attribute values aka \"current value\" data. The ones that GL pulls from when attributes aren\u0027t enabled. You should be able to reuse code here for the attrib pointer. Just not for the \"CaptureVertexAttrib4f\" above.",
+      "range": {
+        "startLine": 1272,
+        "startChar": 32,
+        "endLine": 1272,
+        "endChar": 58
+      },
+      "revId": "7e050017fd3dd7a51b3c72007b5c084ae791f51d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b67c78ee_03f6d162",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-04T16:06:03Z",
+      "side": 1,
+      "message": "Yes, I thought you were asking for them all to be split out.  I think I\u0027ve captured what\u0027s needed here.  Note that I\u0027m comparing against defaults for all VAOs updates now.",
+      "parentUuid": "c9d30d58_a7cf190d",
       "range": {
         "startLine": 1272,
         "startChar": 32,
@@ -68,6 +116,30 @@
       "revId": "7e050017fd3dd7a51b3c72007b5c084ae791f51d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a58f2fd_0d9161d8",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-04T16:06:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70969693_843d7a0c",
+      "range": {
+        "startLine": 1407,
+        "startChar": 4,
+        "endLine": 1407,
+        "endChar": 74
+      },
+      "revId": "7e050017fd3dd7a51b3c72007b5c084ae791f51d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
