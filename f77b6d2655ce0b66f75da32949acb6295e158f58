@@ -22,6 +22,30 @@
       "revId": "f77b6d2655ce0b66f75da32949acb6295e158f58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f8a1b4f_f4b58ec8",
+        "filename": "src/tests/gl_tests/CopyCompressedTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1383035
+      },
+      "writtenOn": "2020-03-04T04:12:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a159275a_26ff06da",
+      "range": {
+        "startLine": 322,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 71
+      },
+      "revId": "f77b6d2655ce0b66f75da32949acb6295e158f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
