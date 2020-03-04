@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9abe1452_7eee5d83",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1889,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T14:28:50Z",
+      "side": 1,
+      "message": "The style guide says this:\n\n\"Use type deduction only if it makes the code clearer to readers who aren\u0027t familiar with the project, or if it makes the code safer. Do not use it merely to avoid the inconvenience of writing an explicit type.\"\n\nhttps://google.github.io/styleguide/cppguide.html#Type_deduction\n\nI like it for iterations and other types that are too complicated to explicitly list. For templates with only one parameter I tend to prefer explicit types.",
+      "parentUuid": "a5fbb57c_bad36796",
+      "range": {
+        "startLine": 1889,
+        "startChar": 18,
+        "endLine": 1889,
+        "endChar": 22
+      },
+      "revId": "4b5de0a8da6612dc26939696c96fa6df45cef127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a591c0e7_c5944747",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 6
