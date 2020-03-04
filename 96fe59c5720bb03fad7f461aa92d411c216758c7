@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b333cc58_1e4f714f",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T16:07:53Z",
+      "side": 1,
+      "message": "This isn\u0027t the most satisfying workaround. It would be nice if we could override this somehow in a FeatureVk or something like that. Are you sure your measurements were correct when you fixed the precision upgrading?",
+      "range": {
+        "startLine": 46,
+        "startChar": 3,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "96fe59c5720bb03fad7f461aa92d411c216758c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
