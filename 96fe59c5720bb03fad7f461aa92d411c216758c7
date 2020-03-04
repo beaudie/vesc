@@ -22,6 +22,30 @@
       "revId": "96fe59c5720bb03fad7f461aa92d411c216758c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "539fad53_07992123",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-04T16:11:35Z",
+      "side": 1,
+      "message": "Good ?, I\u0027m going to rerun w/ the promote fix to verify results. Running more yesterday I found that the 3.1 tests have a fair amount of variance so previous results may have been misleading.",
+      "parentUuid": "b333cc58_1e4f714f",
+      "range": {
+        "startLine": 46,
+        "startChar": 3,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "96fe59c5720bb03fad7f461aa92d411c216758c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
