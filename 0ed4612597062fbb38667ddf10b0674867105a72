@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70245cf1_7f9e42b0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T20:49:17Z",
+      "side": 1,
+      "message": "nit: you can filter out the default bindings to prevent spamming GLES 2.0 contexts.",
+      "range": {
+        "startLine": 2016,
+        "startChar": 0,
+        "endLine": 2017,
+        "endChar": 68
+      },
+      "revId": "0ed4612597062fbb38667ddf10b0674867105a72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
