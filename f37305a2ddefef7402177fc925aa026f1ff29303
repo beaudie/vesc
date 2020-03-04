@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8989dc31_535fb052",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T19:35:32Z",
+      "side": 1,
+      "message": "you should put this outside the loop. and iterate the BindingVector instead.",
+      "range": {
+        "startLine": 2025,
+        "startChar": 0,
+        "endLine": 2037,
+        "endChar": 9
+      },
+      "revId": "f37305a2ddefef7402177fc925aa026f1ff29303",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
