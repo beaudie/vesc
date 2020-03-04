@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b32c8672_5327e8c2",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-04T17:37:11Z",
+      "side": 1,
+      "message": "Note: I couldn\u0027t put this above eglMakeCurrent().  If I did, IsVulkan() dereferences a nullptr.",
+      "revId": "1b9e180e3fe8901676350506be6070f2ab6bd327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
