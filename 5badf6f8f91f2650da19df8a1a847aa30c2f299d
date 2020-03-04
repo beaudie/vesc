@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8feaef4e_8b94ad75",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_egl.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-03-04T05:42:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79042189_3988ea57",
+      "range": {
+        "startLine": 39,
+        "startChar": 46,
+        "endLine": 39,
+        "endChar": 47
+      },
+      "revId": "5badf6f8f91f2650da19df8a1a847aa30c2f299d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3409b50_50c1b1f2",
         "filename": "extensions/EGL_ANGLE_platform_angle_device_type_egl.txt",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b20b5753_d41fe8ef",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_egl.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-03-04T05:42:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3409b50_50c1b1f2",
+      "range": {
+        "startLine": 55,
+        "startChar": 53,
+        "endLine": 55,
+        "endChar": 59
+      },
+      "revId": "5badf6f8f91f2650da19df8a1a847aa30c2f299d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b186a4e9_f784e9fc",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 7
@@ -59,6 +107,24 @@
       "writtenOn": "2020-03-03T16:37:44Z",
       "side": 1,
       "message": "Is there any other validation needed to check if EGL is supported? If there isn\u0027t, this is fine as-is, I just want to make sure.\n\nIf there\u0027s some sort of method needed to check libraries you can do it in GenerateClientExtensions",
+      "revId": "5badf6f8f91f2650da19df8a1a847aa30c2f299d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec5c1a65_50971976",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-03-04T05:42:18Z",
+      "side": 1,
+      "message": "Thx for asking. I can call dlopen(\"libEGL.so.1\", RTLD_LAZY) and check if return value is NULL but sounds duplicated with DisplayEGL::initialize, unless this would useful to check that ahead ?\nI.e. from Chromium point of view, if that lib was not there, it would fail in eglGetPlatformDisplay() instead of later in eglInitialize() ?\n\nAlso maybe we could call angle::GetSystemInfo and do some check if there are know issues with some gpu devices.\n\nOr let\u0027s keep it like this and refine later ?",
+      "parentUuid": "b186a4e9_f784e9fc",
       "revId": "5badf6f8f91f2650da19df8a1a847aa30c2f299d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
