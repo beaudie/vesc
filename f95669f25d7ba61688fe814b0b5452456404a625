@@ -16,6 +16,24 @@
       "revId": "f95669f25d7ba61688fe814b0b5452456404a625",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed9119ff_4f54bf9b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T14:35:47Z",
+      "side": 1,
+      "message": "How about IsGoogle?",
+      "parentUuid": "560bd01e_d9ed11ad",
+      "revId": "f95669f25d7ba61688fe814b0b5452456404a625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
