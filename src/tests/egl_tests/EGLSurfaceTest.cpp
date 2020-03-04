@@ -415,6 +415,9 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     eglSwapBuffers(mDisplay, mWindowSurface);
     ASSERT_EGL_SUCCESS();
 
+    // http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsLinux() && IsIntel());
+
     EGLint height;
     eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
     ASSERT_EGL_SUCCESS();
@@ -463,6 +466,9 @@ TEST_P(EGLSurfaceTest, ResizeWindowWithDraw)
     eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
     eglSwapBuffers(mDisplay, mWindowSurface);
     ASSERT_EGL_SUCCESS();
+
+    // http://anglebug.com/4453
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsLinux() && IsIntel());
 
     // Clear to red
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
