@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdc7ce53_7c746881",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T16:13:48Z",
+      "side": 1,
+      "message": "nit: don\u0027t pass non-const \u0026. See Google style guide.",
+      "range": {
+        "startLine": 1262,
+        "startChar": 28,
+        "endLine": 1262,
+        "endChar": 39
+      },
+      "revId": "e44050a21110f75f74b6519f3914af29e095bccf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04b0b494_fe0b7e84",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T16:13:48Z",
+      "side": 1,
+      "message": "tiny nit: you can probably omit this for VAO 0.",
+      "range": {
+        "startLine": 1398,
+        "startChar": 11,
+        "endLine": 1398,
+        "endChar": 74
+      },
+      "revId": "e44050a21110f75f74b6519f3914af29e095bccf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86a8e5ad_e6bd999a",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T16:13:48Z",
+      "side": 1,
+      "message": "nit: you can omit this if the last bound VAO is the same as the current. This will be important for replaying on a GLES 2.0 context.",
+      "range": {
+        "startLine": 1404,
+        "startChar": 4,
+        "endLine": 1405,
+        "endChar": 77
+      },
+      "revId": "e44050a21110f75f74b6519f3914af29e095bccf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
