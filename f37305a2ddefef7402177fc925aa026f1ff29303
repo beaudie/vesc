@@ -22,6 +22,30 @@
       "revId": "f37305a2ddefef7402177fc925aa026f1ff29303",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ae06531_4d177d07",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-04T20:46:46Z",
+      "side": 1,
+      "message": "Got it, and I believe that negates a couple of the checks I was making.",
+      "parentUuid": "8989dc31_535fb052",
+      "range": {
+        "startLine": 2025,
+        "startChar": 0,
+        "endLine": 2037,
+        "endChar": 9
+      },
+      "revId": "f37305a2ddefef7402177fc925aa026f1ff29303",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
