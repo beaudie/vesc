@@ -700,7 +700,7 @@ class State : angle::NonCopyable
 
     ANGLE_INLINE bool validateSamplerFormats() const
     {
-        return (mTexturesIncompatibleWithSamplers & mProgram->getActiveSamplersMask()).none();
+        return (mTexturesIncompatibleWithSamplers & mExecutable->getActiveSamplersMask()).none();
     }
 
     ProvokingVertexConvention getProvokingVertex() const { return mProvokingVertex; }
