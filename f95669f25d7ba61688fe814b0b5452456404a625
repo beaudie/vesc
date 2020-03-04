@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "560bd01e_d9ed11ad",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-04T00:30:37Z",
+      "side": 1,
+      "message": "Jamie, I considered adding an IsSwiftShader() to \"driver_utils.h\", but wasn\u0027t sure that was best given that kSwiftShaderDeviceID was added to this file.  I\u0027m happy to add to \"driver_utils.h\" if you want.",
+      "revId": "f95669f25d7ba61688fe814b0b5452456404a625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
