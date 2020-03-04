@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb4bcc0c_6f0bcfe5",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T14:25:47Z",
+      "side": 1,
+      "message": "nit: allActiveDrawBufferChannelsMasked?",
+      "range": {
+        "startLine": 681,
+        "startChar": 12,
+        "endLine": 681,
+        "endChar": 46
+      },
+      "revId": "158efe7e5840b09a7730a74940391f563569d1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8335c9d_e93b4ca9",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T14:25:47Z",
+      "side": 1,
+      "message": "nit: anyActiveDrawBufferChannelMasked?",
+      "range": {
+        "startLine": 695,
+        "startChar": 12,
+        "endLine": 695,
+        "endChar": 47
+      },
+      "revId": "158efe7e5840b09a7730a74940391f563569d1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3872466_d09dd651",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T14:25:47Z",
+      "side": 1,
+      "message": "you can use DrawBuffersArray for this and the color masks.",
+      "range": {
+        "startLine": 38,
+        "startChar": 9,
+        "endLine": 38,
+        "endChar": 19
+      },
+      "revId": "158efe7e5840b09a7730a74940391f563569d1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
