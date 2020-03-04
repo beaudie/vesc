@@ -923,6 +923,8 @@ bool TCompiler::compile(const char *const shaderStrings[],
                         size_t numStrings,
                         ShCompileOptions compileOptionsIn)
 {
+    bool dumpShaders     = true;
+    static int fileIndex = 0;
 #if defined(ANGLE_ENABLE_FUZZER_CORPUS_OUTPUT)
     DumpFuzzerCase(shaderStrings, numStrings, mShaderType, mShaderSpec, mOutputType,
                    compileOptionsIn);
@@ -956,6 +958,46 @@ bool TCompiler::compile(const char *const shaderStrings[],
             if (!translate(root, compileOptions, &perfDiagnostics))
             {
                 return false;
+            }
+            else if (dumpShaders)
+            {
+                // Print out shaders
+                // Only considering vs/fs for now
+                std::string shaderType = (mShaderType == GL_VERTEX_SHADER) ? "vs" : "fs";
+                // First print input shader
+                std::ostringstream o = sh::InitializeStream<std::ostringstream>();
+                o << "shader_" << fileIndex++ << "." << shaderType;
+                std::string s = o.str();
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+                __android_log_print(ANDROID_LOG_INFO, "ANGLE", "Printing Shader %s", s.c_str());
+#else
+                FILE *f = fopen(s.c_str(), "w");
+#endif
+
+                for (size_t i = 0; i < numStrings; i++)
+                {
+#if defined(ANGLE_PLATFORM_ANDROID)
+                    __android_log_print(ANDROID_LOG_INFO, "ANGLE", "%s", shaderStrings[i]);
+#else
+                    fwrite(shaderStrings[i], sizeof(char), strlen(shaderStrings[i]), f);
+#endif
+                }
+                std::string translateHeaderString = "\n\nANGLE Translated Shader:\n";
+#if defined(ANGLE_PLATFORM_ANDROID)
+                __android_log_print(ANDROID_LOG_INFO, "ANGLE", "%s", translateHeaderString.c_str());
+#else
+                fwrite(translateHeaderString.c_str(), translateHeaderString.size(), 1, f);
+#endif
+
+                // TODO: Now print translated shader
+                TInfoSinkBase &sink = getInfoSink().obj;
+#if defined(ANGLE_PLATFORM_ANDROID)
+                __android_log_print(ANDROID_LOG_INFO, "ANGLE", "%s", sink.c_str());
+#else
+                fwrite(sink.c_str(), sink.size(), 1, f);
+                fclose(f);
+#endif
             }
         }
 
