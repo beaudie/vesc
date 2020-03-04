@@ -1207,9 +1207,9 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     vk::Resource *recorder,
     CommandBufferHelper *commandBufferHelper)
 {
-    const gl::State &glState                       = mState;
-    const gl::ProgramExecutable *programExecutable = glState.getProgramExecutable();
-    const gl::ActiveTextureMask &activeTextures    = mProgram->getState().getActiveSamplersMask();
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+    const gl::ActiveTextureMask &activeTextures = executable->getActiveSamplersMask();
 
     for (size_t textureUnit : activeTextures)
     {
@@ -1226,13 +1226,13 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         vk::ImageLayout textureLayout;
         if (textureVk->isBoundAsImageTexture())
         {
-            textureLayout = programExecutable->isCompute()
+            textureLayout = executable->isCompute()
                                 ? vk::ImageLayout::ComputeShaderWrite
                                 : vk::ImageLayout::AllGraphicsShadersWrite;
         }
         else
         {
-            textureLayout = programExecutable->isCompute()
+            textureLayout = executable->isCompute()
                                 ? vk::ImageLayout::ComputeShaderReadOnly
                                 : vk::ImageLayout::AllGraphicsShadersReadOnly;
         }
@@ -1251,7 +1251,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         }
     }
 
-    if (mProgram->hasTextures())
+    if (executable->hasTextures(mState))
     {
         ANGLE_TRY(mProgram->updateTexturesDescriptorSet(this));
     }
@@ -1323,13 +1323,16 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
     vk::Resource *recorder,
     CommandBufferHelper *commandBufferHelper)
 {
-    if (mProgram->hasImages())
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasImages(mState))
     {
         ANGLE_TRY(updateActiveImages(context, recorder, commandBufferHelper));
     }
 
-    if (mProgram->hasUniformBuffers() || mProgram->hasStorageBuffers() ||
-        mProgram->hasAtomicCounterBuffers() || mProgram->hasImages())
+    if (executable->hasUniformBuffers(mState) || executable->hasStorageBuffers(mState) ||
+        executable->hasAtomicCounterBuffers(mState) || executable->hasImages(mState))
     {
         ANGLE_TRY(mProgram->updateShaderResourcesDescriptorSet(this, &mResourceUseList,
                                                                commandBufferHelper, recorder));
@@ -1355,9 +1358,12 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     const gl::Context *context,
     vk::CommandBuffer *commandBuffer)
 {
-    if (mProgram->hasTransformFeedbackOutput() && mState.isTransformFeedbackActive())
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasTransformFeedbackOutput(mState) && mState.isTransformFeedbackActive())
     {
-        size_t bufferCount = mProgram->getState().getTransformFeedbackBufferCount();
+        size_t bufferCount = executable->getTransformFeedbackBufferCount(mState);
         const std::vector<gl::OffsetBindingPointer<gl::Buffer>> &xfbBuffers =
             mState.getCurrentTransformFeedback()->getIndexedBuffers();
 
@@ -1383,13 +1389,16 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     const gl::Context *context,
     vk::CommandBuffer *commandBuffer)
 {
-    if (!mProgram->hasTransformFeedbackOutput() || !mState.isTransformFeedbackActive())
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (!executable->hasTransformFeedbackOutput(mState) || !mState.isTransformFeedbackActive())
         return angle::Result::Continue;
 
     size_t bufferIndex                       = 0;
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
 
-    size_t bufferCount = mProgram->getState().getTransformFeedbackBufferCount();
+    size_t bufferCount = executable->getTransformFeedbackBufferCount(mState);
     gl::TransformFeedbackBuffersArray<VkBuffer> bufferHandles;
 
     const std::vector<gl::OffsetBindingPointer<gl::Buffer>> &xfbBuffers =
@@ -1422,13 +1431,17 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Context *context,
                                                                    vk::CommandBuffer *commandBuffer)
 {
-    if (!mProgram->hasTransformFeedbackOutput() || !mState.isTransformFeedbackActiveUnpaused())
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (!executable->hasTransformFeedbackOutput(mState) ||
+        !mState.isTransformFeedbackActiveUnpaused())
         return angle::Result::Continue;
 
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
 
     // We should have same number of counter buffers as xfb buffers have
-    size_t bufferCount = mProgram->getState().getTransformFeedbackBufferCount();
+    size_t bufferCount = executable->getTransformFeedbackBufferCount(mState);
     const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBufferHandles =
         transformFeedbackVk->getCounterBufferHandles();
 
@@ -3054,8 +3067,10 @@ OverlayImpl *ContextVk::createOverlay(const gl::OverlayState &state)
 
 void ContextVk::invalidateCurrentDefaultUniforms()
 {
-    ASSERT(mProgram);
-    if (mProgram->hasDefaultUniforms())
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasDefaultUniforms(mState))
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
         mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -3064,8 +3079,10 @@ void ContextVk::invalidateCurrentDefaultUniforms()
 
 angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context)
 {
-    ASSERT(mProgram);
-    if (mProgram->hasTextures())
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasTextures(mState))
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_TEXTURES);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -3080,9 +3097,11 @@ angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context)
 
 void ContextVk::invalidateCurrentShaderResources()
 {
-    ASSERT(mProgram);
-    if (mProgram->hasUniformBuffers() || mProgram->hasStorageBuffers() ||
-        mProgram->hasAtomicCounterBuffers() || mProgram->hasImages())
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasUniformBuffers(mState) || executable->hasStorageBuffers(mState) ||
+        executable->hasAtomicCounterBuffers(mState) || executable->hasImages(mState))
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
@@ -3364,7 +3383,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
     {
         TransformFeedbackVk *transformFeedbackVk =
             vk::GetImpl(mState.getCurrentTransformFeedback());
-        transformFeedbackVk->getBufferOffsets(this, mState.getProgram()->getState(), mXfbBaseVertex,
+        transformFeedbackVk->getBufferOffsets(this, mXfbBaseVertex,
                                               driverUniforms->xfbBufferOffsets.data(),
                                               driverUniforms->xfbBufferOffsets.size());
     }
@@ -3508,19 +3527,17 @@ void ContextVk::handleError(VkResult errorCode,
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 {
-    const gl::State &glState                       = mState;
-    const gl::ProgramExecutable *programExecutable = glState.getProgramExecutable();
-    const gl::Program *program                     = glState.getProgram();
-    ASSERT(programExecutable);
-    ASSERT(program);
+    const gl::State &glState                = mState;
+    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
+    ASSERT(executable);
 
     uint32_t prevMaxIndex = mActiveTexturesDesc.getMaxIndex();
     memset(mActiveTextures.data(), 0, sizeof(mActiveTextures[0]) * prevMaxIndex);
     mActiveTexturesDesc.reset();
 
     const gl::ActiveTexturePointerArray &textures  = glState.getActiveTexturesCache();
-    const gl::ActiveTextureMask &activeTextures    = program->getActiveSamplersMask();
-    const gl::ActiveTextureTypeArray &textureTypes = program->getActiveSamplerTypes();
+    const gl::ActiveTextureMask &activeTextures    = executable->getActiveSamplersMask();
+    const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
 
     for (size_t textureUnit : activeTextures)
     {
@@ -3563,15 +3580,13 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
                                             vk::Resource *recorder,
                                             CommandBufferHelper *commandBufferHelper)
 {
-    const gl::State &glState                       = mState;
-    const gl::ProgramExecutable *programExecutable = glState.getProgramExecutable();
-    const gl::Program *program                     = glState.getProgram();
-    ASSERT(programExecutable);
-    ASSERT(program);
+    const gl::State &glState                = mState;
+    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
+    ASSERT(executable);
 
     mActiveImages.fill(nullptr);
 
-    const gl::ActiveTextureMask &activeImages = program->getActiveImagesMask();
+    const gl::ActiveTextureMask &activeImages = executable->getActiveImagesMask();
 
     // Note: currently, the image layout is transitioned entirely even if only one level or layer is
     // used.  This is an issue if one subresource of the image is used as framebuffer attachment and
@@ -3606,7 +3621,7 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
         // layers. Therefore we can't verify it has no staged updates right here.
 
         vk::ImageLayout imageLayout = vk::ImageLayout::AllGraphicsShadersWrite;
-        if (programExecutable->isCompute())
+        if (executable->isCompute())
         {
             imageLayout = vk::ImageLayout::ComputeShaderWrite;
         }
