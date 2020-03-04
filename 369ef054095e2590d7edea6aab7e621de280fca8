@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b70ecf7_93d6cd6c",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1891,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T14:40:50Z",
+      "side": 1,
+      "message": "BTW: I don\u0027t quite follow this comment.",
+      "range": {
+        "startLine": 1891,
+        "startChar": 12,
+        "endLine": 1891,
+        "endChar": 82
+      },
+      "revId": "369ef054095e2590d7edea6aab7e621de280fca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
