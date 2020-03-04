@@ -22,6 +22,30 @@
       "revId": "369ef054095e2590d7edea6aab7e621de280fca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a5b1b0d_40de106b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1891,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-04T14:44:20Z",
+      "side": 1,
+      "message": "It was an attempt to paraphrase the spec:\n\"Each target represents an indexed array of buffer object binding points, as well as a single general binding point that can be used by other buffer object manipulation functions such as BindBuffer or MapBufferRange.\"",
+      "parentUuid": "7b70ecf7_93d6cd6c",
+      "range": {
+        "startLine": 1891,
+        "startChar": 12,
+        "endLine": 1891,
+        "endChar": 82
+      },
+      "revId": "369ef054095e2590d7edea6aab7e621de280fca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
