@@ -161,6 +161,8 @@ class ProgramVk : public ProgramImpl
         return &mDynamicDescriptorPools[poolIndex];
     }
 
+    void resetGlslangProgramInterfaceInfo();
+
   private:
     template <int cols, int rows>
     void setUniformMatrixfv(GLint location,
@@ -352,6 +354,8 @@ class ProgramVk : public ProgramImpl
     // cache management. It can also allow fewer descriptors for shaders which use fewer
     // textures/buffers.
     vk::DescriptorSetLayoutArray<vk::DynamicDescriptorPool> mDynamicDescriptorPools;
+
+    GlslangProgramInterfaceInfo mGlslangProgramInterfaceInfo;
 };
 
 }  // namespace rx

@@ -28,6 +28,7 @@ class GlslangWrapperVk
     static void GetShaderSource(const angle::FeaturesVk &features,
                                 const gl::ProgramState &programState,
                                 const gl::ProgramLinkedResources &resources,
+                                GlslangProgramInterfaceInfo *programInterfaceInfo,
                                 gl::ShaderMap<std::string> *shaderSourcesOut,
                                 ShaderInterfaceVariableInfoMap *variableInfoMapOut);
 
