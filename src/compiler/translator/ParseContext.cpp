@@ -1043,6 +1043,9 @@ bool TParseContext::checkIsValidQualifierForArray(const TSourceLoc &line,
 {
     if ((elementQualifier.qualifier == EvqAttribute) ||
         (elementQualifier.qualifier == EvqVertexIn) ||
+        (elementQualifier.qualifier == EvqVertexOut) ||
+        (elementQualifier.qualifier == EvqFragmentIn) ||
+        (elementQualifier.qualifier == EvqFragmentOut) ||
         (elementQualifier.qualifier == EvqConst && mShaderVersion < 300))
     {
         error(line, "cannot declare arrays of this qualifier",
