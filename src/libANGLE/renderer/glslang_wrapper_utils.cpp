@@ -444,7 +444,6 @@ bool IsFirstRegisterOfVarying(const gl::PackedVaryingRegister &varyingReg)
 void GenerateTransformFeedbackExtensionOutputs(const gl::ProgramState &programState,
                                                const gl::ProgramLinkedResources &resources,
                                                std::string *vertexShader,
-                                               ShaderInterfaceVariableInfoMap *variableInfoMapOut,
                                                uint32_t *locationsUsedForXfbExtensionOut)
 {
     const std::vector<gl::TransformFeedbackVarying> &tfVaryings =
@@ -543,10 +542,9 @@ void AssignOutputLocations(const gl::ProgramState &programState,
 void AssignVaryingLocations(const GlslangSourceOptions &options,
                             const gl::ProgramState &programState,
                             const gl::ProgramLinkedResources &resources,
-                            uint32_t locationsUsedForXfbExtension,
                             ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    uint32_t locationsUsedForEmulation        = locationsUsedForXfbExtension;
+    uint32_t locationsUsedForEmulation        = programState.getLocationsUsedForXfbExtension();
     const gl::ProgramExecutable &glExecutable = programState.getProgramExecutable();
 
     // Substitute layout and qualifier strings for the position varying added for line raster
@@ -1790,8 +1788,6 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
 {
     variableInfoMapOut->clear();
 
-    uint32_t locationsUsedForXfbExtension = 0;
-
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         gl::Shader *glShader            = programState.getAttachedShader(shaderType);
@@ -1813,9 +1809,9 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
         {
             if (options.supportsTransformFeedbackExtension)
             {
-                GenerateTransformFeedbackExtensionOutputs(programState, resources, vertexSource,
-                                                          variableInfoMapOut,
-                                                          &locationsUsedForXfbExtension);
+                GenerateTransformFeedbackExtensionOutputs(
+                    programState, resources, vertexSource,
+                    &(const_cast<uint32_t &>(programState.getLocationsUsedForXfbExtension())));
             }
             else if (options.emulateTransformFeedback)
             {
@@ -1840,14 +1836,14 @@ void GlslangGetShaderSource(const GlslangSourceOptions &options,
     if (computeSource.empty())
     {
         // Assign varying locations.
-        AssignVaryingLocations(options, programState, resources, locationsUsedForXfbExtension,
-                               variableInfoMapOut);
+        AssignVaryingLocations(options, programState, resources, variableInfoMapOut);
 
         if (!programState.getLinkedTransformFeedbackVaryings().empty() &&
             options.supportsTransformFeedbackExtension)
         {
             AssignTransformFeedbackExtensionQualifiers(
-                programState, resources, locationsUsedForXfbExtension, variableInfoMapOut);
+                programState, resources, programState.getLocationsUsedForXfbExtension(),
+                variableInfoMapOut);
         }
     }
 
