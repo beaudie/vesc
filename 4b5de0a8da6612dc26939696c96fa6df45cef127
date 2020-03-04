@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a5fbb57c_bad36796",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1889,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-04T14:15:00Z",
+      "side": 1,
+      "message": "Done.  FWIW, I almost never use auto, only picked it up following the patterns in the function.  I\u0027ll move away from it.",
+      "parentUuid": "0bd63901_ea8f4af8",
+      "range": {
+        "startLine": 1889,
+        "startChar": 18,
+        "endLine": 1889,
+        "endChar": 22
+      },
+      "revId": "4b5de0a8da6612dc26939696c96fa6df45cef127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a591c0e7_c5944747",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "2d0f8631_f96f26d4",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1893,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-04T14:15:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a591c0e7_c5944747",
+      "range": {
+        "startLine": 1893,
+        "startChar": 16,
+        "endLine": 1893,
+        "endChar": 37
+      },
+      "revId": "4b5de0a8da6612dc26939696c96fa6df45cef127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d16aab11_9ef7acde",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 6
@@ -68,6 +116,30 @@
       "revId": "4b5de0a8da6612dc26939696c96fa6df45cef127",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78c7841a_a92a3882",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1899,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-04T14:15:00Z",
+      "side": 1,
+      "message": "Whoops, copy paste from above.  Fixed.",
+      "parentUuid": "d16aab11_9ef7acde",
+      "range": {
+        "startLine": 1899,
+        "startChar": 12,
+        "endLine": 1899,
+        "endChar": 57
+      },
+      "revId": "4b5de0a8da6612dc26939696c96fa6df45cef127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
