@@ -16,6 +16,24 @@
       "revId": "1b9e180e3fe8901676350506be6070f2ab6bd327",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "68d573bc_ae302011",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-04T17:40:44Z",
+      "side": 1,
+      "message": "What about calling isVulkanRenderer instead of IsVulkan and putting these at the top? for consistency with the other tests.",
+      "parentUuid": "b32c8672_5327e8c2",
+      "revId": "1b9e180e3fe8901676350506be6070f2ab6bd327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
