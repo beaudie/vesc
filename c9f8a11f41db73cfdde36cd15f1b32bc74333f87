@@ -178,6 +178,30 @@
     },
     {
       "key": {
+        "uuid": "4dfe402b_aa46d4d4",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T19:10:40Z",
+      "side": 1,
+      "message": "Yeah, you\u0027re right, by keeping queryIndex unchanged you\u0027ll catch the end. Interesting pattern.",
+      "parentUuid": "57a35f31_f48ebd2c",
+      "range": {
+        "startLine": 248,
+        "startChar": 34,
+        "endLine": 248,
+        "endChar": 57
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0d209c6_9665e97c",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 6
@@ -198,6 +222,30 @@
       "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96516e6b_e8715b56",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T19:10:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0d209c6_9665e97c",
+      "range": {
+        "startLine": 259,
+        "startChar": 22,
+        "endLine": 259,
+        "endChar": 43
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -233,6 +281,24 @@
       "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bc198f0_b97d0c63",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T19:10:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a961f364_74c8200d",
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
