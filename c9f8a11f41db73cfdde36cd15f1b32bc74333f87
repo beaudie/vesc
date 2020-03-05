@@ -1,0 +1,216 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "522c5d69_ba66099b",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T16:20:58Z",
+      "side": 1,
+      "message": "Motivation for checking for extension vs core here, but not with any other entrypoints?",
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ae11d45_51165919",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T16:20:58Z",
+      "side": 1,
+      "message": "GL_TIMESTAMP?",
+      "range": {
+        "startLine": 197,
+        "startChar": 28,
+        "endLine": 197,
+        "endChar": 44
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86a50c43_52b96b38",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T16:20:58Z",
+      "side": 1,
+      "message": "This is playing the first frame repeatedly.",
+      "range": {
+        "startLine": 216,
+        "startChar": 20,
+        "endLine": 216,
+        "endChar": 31
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bee329da_c3f9c1d7",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T16:20:58Z",
+      "side": 1,
+      "message": "You\u0027re changing the size of this vector while walking through it, which means you could miss some queries at the end (queryIndex could be larger than the remaining vector).  Is that by design, and if so, can you explain why that\u0027s okay?",
+      "range": {
+        "startLine": 248,
+        "startChar": 34,
+        "endLine": 248,
+        "endChar": 57
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0d209c6_9665e97c",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T16:20:58Z",
+      "side": 1,
+      "message": "Can you add a general comment for what this is doing and why it is necessary?",
+      "range": {
+        "startLine": 259,
+        "startChar": 22,
+        "endLine": 259,
+        "endChar": 43
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "705c303a_b3132a8d",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T16:20:58Z",
+      "side": 1,
+      "message": "Might be worth a sanity assert here that end \u003e start, in case this code is mucked with in the future.",
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a572e74_593fc66b",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T16:20:58Z",
+      "side": 1,
+      "message": "I personally like one line statements like this, but doesn\u0027t the ANGLE coding standard require braces?",
+      "range": {
+        "startLine": 295,
+        "startChar": 8,
+        "endLine": 295,
+        "endChar": 14
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a6da91c_bb78d081",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T16:20:58Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 298,
+        "startChar": 8,
+        "endLine": 298,
+        "endChar": 14
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cbbc2ec_ed9f4c01",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T16:20:58Z",
+      "side": 1,
+      "message": "This is worth a comment, saying if we already generated a timestamp below, we need to end it, and a new one will be generated.  From looking at the code, I don\u0027t think you could ever accidentally have two queries in flight.",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 300,
+        "endChar": 47
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6466977f_4f08b023",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T16:20:58Z",
+      "side": 1,
+      "message": "ASSERT(mCurrentQuery.beginTimestampQuery \u003d\u003d 0);",
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
