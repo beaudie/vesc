@@ -96,6 +96,98 @@
       "revId": "6440f9bba77af9a6805338f442b24fd9228ec636",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53041e81_41b5bc63",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3644,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T22:33:32Z",
+      "side": 1,
+      "message": "another instance for snprintf",
+      "range": {
+        "startLine": 3644,
+        "startChar": 8,
+        "endLine": 3644,
+        "endChar": 15
+      },
+      "revId": "6440f9bba77af9a6805338f442b24fd9228ec636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4fd37e6_541e366d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3677,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T22:33:32Z",
+      "side": 1,
+      "message": "snprintf",
+      "range": {
+        "startLine": 3677,
+        "startChar": 8,
+        "endLine": 3677,
+        "endChar": 15
+      },
+      "revId": "6440f9bba77af9a6805338f442b24fd9228ec636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45e16e47_aa3af83c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4044,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T22:33:32Z",
+      "side": 1,
+      "message": "snprintf",
+      "range": {
+        "startLine": 4044,
+        "startChar": 8,
+        "endLine": 4044,
+        "endChar": 15
+      },
+      "revId": "6440f9bba77af9a6805338f442b24fd9228ec636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4eaac8b_bd4a7803",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4053,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-05T22:33:32Z",
+      "side": 1,
+      "message": "snprintf",
+      "range": {
+        "startLine": 4053,
+        "startChar": 8,
+        "endLine": 4053,
+        "endChar": 15
+      },
+      "revId": "6440f9bba77af9a6805338f442b24fd9228ec636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
