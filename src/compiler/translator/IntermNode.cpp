@@ -1600,10 +1600,6 @@ void TIntermBinary::promote()
 
     ASSERT(mLeft->isArray() == mRight->isArray());
 
-    // The result gets promoted to the highest precision.
-    TPrecision higherPrecision = GetHigherPrecision(mLeft->getPrecision(), mRight->getPrecision());
-    getTypePointer()->setPrecision(higherPrecision);
-
     const int nominalSize = std::max(mLeft->getNominalSize(), mRight->getNominalSize());
 
     //
@@ -1644,6 +1640,8 @@ void TIntermBinary::promote()
     // If we reach here, at least one of the operands is vector or matrix.
     // The other operand could be a scalar, vector, or matrix.
     TBasicType basicType = mLeft->getBasicType();
+    // The result of arithmetic ops gets promoted to the highest precision.
+    TPrecision higherPrecision = GetHigherPrecision(mLeft->getPrecision(), mRight->getPrecision());
 
     switch (mOp)
     {
