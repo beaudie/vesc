@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1305a39b_241d40e5",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T18:07:51Z",
+      "side": 1,
+      "message": "Yeah this wasn\u0027t obvious. It\u0027s to work around an outdated ext implementation on NVIDIA. I left a comment here to demystify this.",
+      "parentUuid": "522c5d69_ba66099b",
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ae11d45_51165919",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 6
@@ -39,6 +57,30 @@
       "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75728871_bd80bfe7",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T18:07:51Z",
+      "side": 1,
+      "message": "GL_TIMESTAMP doesn\u0027t seem to ever be part of core. Unlike GetInteger64v.",
+      "parentUuid": "2ae11d45_51165919",
+      "range": {
+        "startLine": 197,
+        "startChar": 28,
+        "endLine": 197,
+        "endChar": 44
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "24bf995f_51ee4a24",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T18:07:51Z",
+      "side": 1,
+      "message": "Thanks for catching this. Was for debugging and didn\u0027t revert it.",
+      "parentUuid": "86a50c43_52b96b38",
+      "range": {
+        "startLine": 216,
+        "startChar": 20,
+        "endLine": 216,
+        "endChar": 31
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bee329da_c3f9c1d7",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 6
@@ -85,6 +151,30 @@
       "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57a35f31_f48ebd2c",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T18:07:51Z",
+      "side": 1,
+      "message": "I only increment the iteration index when we don\u0027t delete a query. If we delete a query, I don\u0027t increment the index, so we handle the next query which now has the same index. The size of the vector is re-checked every iteration.\n\nSo I am pretty sure the code is correct.",
+      "parentUuid": "bee329da_c3f9c1d7",
+      "range": {
+        "startLine": 248,
+        "startChar": 34,
+        "endLine": 248,
+        "endChar": 57
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +218,24 @@
     },
     {
       "key": {
+        "uuid": "a961f364_74c8200d",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T18:07:51Z",
+      "side": 1,
+      "message": "I left a comment. Currently timestamps are unpredictable and this warrants further investigation.",
+      "parentUuid": "705c303a_b3132a8d",
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a572e74_593fc66b",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 6
@@ -148,6 +256,30 @@
       "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27b958af_760fb139",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T18:07:51Z",
+      "side": 1,
+      "message": "I don\u0027t see anything in https://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md . Some reviewers may prefer it. I don\u0027t think we have a hard and fast rule.",
+      "parentUuid": "3a572e74_593fc66b",
+      "range": {
+        "startLine": 295,
+        "startChar": 8,
+        "endLine": 295,
+        "endChar": 14
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +306,30 @@
     },
     {
       "key": {
+        "uuid": "9131ca8c_1d133ab9",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T18:07:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8a6da91c_bb78d081",
+      "range": {
+        "startLine": 298,
+        "startChar": 8,
+        "endLine": 298,
+        "endChar": 14
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3cbbc2ec_ed9f4c01",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 6
@@ -197,6 +353,30 @@
     },
     {
       "key": {
+        "uuid": "f6564048_ec0adb55",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T18:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cbbc2ec_ed9f4c01",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 300,
+        "endChar": 47
+      },
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6466977f_4f08b023",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 6
@@ -211,6 +391,24 @@
       "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "324a6892_ef308326",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T18:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6466977f_4f08b023",
+      "revId": "c9f8a11f41db73cfdde36cd15f1b32bc74333f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
