@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3f77b48_291ef4ad",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-05T15:22:49Z",
+      "side": 1,
+      "message": "I hope in the future we can remove the special cases for all the GLfixed data and use our existing conversion functions.  We make a lot of assumptions about the parameter count (4 in this case) and which values need different types of casts.\n\nMy thoughts are that we make a new type, something like:\n\n    namespace gl\n    {\n        struct Fixed\n        {\n            GLfixed value;\n        };\n        static_assert(sizeof(Fixed) \u003d\u003d sizeof(GLFixed), \"Unexpected gl::Fixed struct size\");\n    }\n\nWe can add new CastFromStateValue for gl::Fixed and then just call\n\n    QueryTexParameterBase\u003cfalse\u003e(context, texture, pname, reinterpret_cast\u003cgl::Fixed*\u003e(params));\n\nIf you\u0027re interested in doing this, we would really appreciate it.",
+      "range": {
+        "startLine": 1423,
+        "startChar": 0,
+        "endLine": 1437,
+        "endChar": 5
+      },
+      "revId": "6c69df177fe43a532b8963c01635ee3cba0e32f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
