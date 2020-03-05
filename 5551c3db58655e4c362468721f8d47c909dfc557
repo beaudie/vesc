@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a03ca51d_5dcf11a3",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-03-05T19:07:57Z",
+      "side": 1,
+      "message": "These are taken from https://cs.chromium.org/chromium/src/build/config/mac/BUILD.gn?type\u003dcs\u0026g\u003d0\u0026l\u003d78\n\nNormally these rpath entries are only added for component builds. But here I had to re-add them in ANGLE for non-component builds.\n\nOnly first line is actually necessary. I guess this means libvulkan.dylib isn\u0027t bundled properly..",
+      "revId": "5551c3db58655e4c362468721f8d47c909dfc557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
