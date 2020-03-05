@@ -12,6 +12,8 @@
 
 #include "common/bitset_utils.h"
 #include "common/debug.h"
+#include "common/system_utils.h"
+#include "common/vulkan/vulkan_icd.h"
 
 namespace angle
 {
@@ -138,8 +140,12 @@ VulkanExternalHelper::~VulkanExternalHelper()
     }
 }
 
-void VulkanExternalHelper::initialize()
+void VulkanExternalHelper::initialize(bool useSwiftshader)
 {
+    vk::ICD icd = useSwiftshader ? vk::ICD::SwiftShader : vk::ICD::Default;
+
+    vk::ScopedVkLoaderEnvironment scopedEnvironment(true /* enableValidationLayers */, icd);
+
     ASSERT(mInstance == VK_NULL_HANDLE);
     VkResult result = volkInitialize();
     ASSERT(result == VK_SUCCESS);
@@ -191,9 +197,11 @@ void VulkanExternalHelper::initialize()
     volkLoadInstance(mInstance);
 
     std::vector<VkPhysicalDevice> physicalDevices = EnumeratePhysicalDevices(mInstance);
+
     ASSERT(physicalDevices.size() > 0);
 
-    mPhysicalDevice = physicalDevices[0];
+    VkPhysicalDeviceProperties physicalDeviceProperties;
+    ChoosePhysicalDevice(physicalDevices, icd, &mPhysicalDevice, &physicalDeviceProperties);
 
     vkGetPhysicalDeviceMemoryProperties(mPhysicalDevice, &mMemoryProperties);
 
