@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9177da32_86747d9d",
+        "filename": "src/compiler/translator/HashNames.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-05T20:01:32Z",
+      "side": 1,
+      "message": "This feels wrong. How are other builtins that can be redeclared handled such that they don\u0027t need this?",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 9
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0203226e_255e670b",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-05T20:01:32Z",
+      "side": 1,
+      "message": "Not sure if it\u0027s worth including libANGLE/Constants.h in this file and the gni file just to have this assertion.\n\nIs ShBuiltInResources::MaxClipDistance something that can be passed to this transformation?",
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5151ec32_d65000ea",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-05T20:01:32Z",
+      "side": 1,
+      "message": "You can remove the \", 1\" like the other cases.",
+      "range": {
+        "startLine": 555,
+        "startChar": 25,
+        "endLine": 555,
+        "endChar": 28
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c708ffa3_1166515a",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-05T20:01:32Z",
+      "side": 1,
+      "message": "Please move this function and the associated transformation into a file in tree_ops/ to keep this file from getting any more complicated.",
+      "range": {
+        "startLine": 868,
+        "startChar": 22,
+        "endLine": 868,
+        "endChar": 54
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cdf0966_d2ea3278",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-05T20:01:32Z",
+      "side": 1,
+      "message": "Remove _",
+      "range": {
+        "startLine": 925,
+        "startChar": 77,
+        "endLine": 925,
+        "endChar": 78
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e2c2484_8af09206",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-05T20:01:32Z",
+      "side": 1,
+      "message": "Change to AngleInternal",
+      "range": {
+        "startLine": 926,
+        "startChar": 77,
+        "endLine": 926,
+        "endChar": 88
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6101ebf0_85f4d13b",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-05T20:01:32Z",
+      "side": 1,
+      "message": "Can you make the unrelated changes here a separate CL? I would be interested to know also if this is slightly optimizing these functions for GLES2+ (i.e. everything we really care about), if you can figure that out (like by looking at the generated assembly)",
+      "range": {
+        "startLine": 1019,
+        "startChar": 0,
+        "endLine": 1024,
+        "endChar": 5
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "371839b7_a89b97bc",
+        "filename": "src/libANGLE/renderer/metal/doc/APPLE_clip_distance.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-05T20:01:32Z",
+      "side": 1,
+      "message": "This is the same for the Vulkan backend as well, isn\u0027t it? Would you mind placing the doc under vulkan/ instead of metal/ as that\u0027s where most of the attention currently is? We should eventually think of a way to make sure the docs are both visible from and reference both Vulkan and Metal.",
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
