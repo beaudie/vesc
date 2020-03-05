@@ -755,6 +755,13 @@ config("shared_library_public_config") {
     # Executable targets that depend on the shared libraries below need to have
     # the rpath setup in non-component build configurations.
     ldflags = [
+      # Path for loading shared libraries for unbundled binaries.
+      "-Wl,-rpath,@loader_path/.",
+
+      # Path for loading shared libraries for bundled binaries. Get back from
+      # Binary.app/Contents/MacOS.
+      "-Wl,-rpath,@loader_path/../../..",
+
       "-rpath",
       "@executable_path/",
     ]
