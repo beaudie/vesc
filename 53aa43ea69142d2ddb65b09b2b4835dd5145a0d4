@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef11b521_2aa025a7",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-05T18:58:06Z",
+      "side": 1,
+      "message": "I added this note based on my observation.",
+      "revId": "53aa43ea69142d2ddb65b09b2b4835dd5145a0d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
