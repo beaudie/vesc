@@ -16,6 +16,24 @@
       "revId": "5551c3db58655e4c362468721f8d47c909dfc557",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d726aac0_03d56733",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-03-05T21:01:50Z",
+      "side": 1,
+      "message": "Looks like this is a good solution until ANGLE links statically to libvulkan",
+      "parentUuid": "a03ca51d_5dcf11a3",
+      "revId": "5551c3db58655e4c362468721f8d47c909dfc557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
