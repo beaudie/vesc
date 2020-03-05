@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d764a3e_0e14cf36",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-05T22:08:17Z",
+      "side": 1,
+      "message": "Can you add a quick description of how this is done (or point to where it\u0027s described)?",
+      "range": {
+        "startLine": 10,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 25
+      },
+      "revId": "6440f9bba77af9a6805338f442b24fd9228ec636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "955fba25_b788fc08",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-05T22:08:17Z",
+      "side": 1,
+      "message": "kMaxGpuEventNameLen or just a coincidence?",
+      "range": {
+        "startLine": 828,
+        "startChar": 17,
+        "endLine": 828,
+        "endChar": 19
+      },
+      "revId": "6440f9bba77af9a6805338f442b24fd9228ec636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e22b8ee_e2acffbf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-05T22:08:17Z",
+      "side": 1,
+      "message": "Since you\u0027re using char arrays, this should use snprintf() to avoid overflowing the buffer:\n\nsnprintf(buf, sizeof(buf), \"Primary %u\", mPrimaryBufferCounter);",
+      "revId": "6440f9bba77af9a6805338f442b24fd9228ec636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5cf1a5b_ea557503",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1693,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-05T22:08:17Z",
+      "side": 1,
+      "message": "I think this assert should check the actual buffer size, rather than the definition we are assuming was used to initialize it:\n\n    GpuEventQuery gpuEvent;\n    ASSERT(strlen(name) \u003c gpuEvent.name.size());\n\nThat\u0027ll be a little more defensive in case gpuEvent.name changes type (like it is in this CL), uses a different definition, etc.",
+      "revId": "6440f9bba77af9a6805338f442b24fd9228ec636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a2c4eb8_f0c798cb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1696,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-05T22:08:17Z",
+      "side": 1,
+      "message": "Even with the ASSERT() above, I think this should still use a strncpy() here to avoid overflowing:\n\n    strncpy(gpuEvent.name.data(), name, gpuEvent.name.size());\n\n\nTo be extra careful:\n    gpuEvent.name[gpuEvent.name.size() - 1] \u003d \u0027\\0\u0027;",
+      "revId": "6440f9bba77af9a6805338f442b24fd9228ec636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
