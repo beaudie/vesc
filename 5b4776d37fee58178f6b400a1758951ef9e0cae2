@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "904b5c3f_735117ae",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-05T18:17:42Z",
+      "side": 1,
+      "message": "nit: capitalize the suffix (we\u0027re in the process of doing this everywhere).",
+      "range": {
+        "startLine": 1121,
+        "startChar": 35,
+        "endLine": 1121,
+        "endChar": 40
+      },
+      "revId": "5b4776d37fee58178f6b400a1758951ef9e0cae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac8391a9_1b5c661d",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-05T18:17:42Z",
+      "side": 1,
+      "message": "I guess this should be ANGLE_PLATFORM_LINUX now and make a sub-case for ANGLE_USE_X11",
+      "range": {
+        "startLine": 53,
+        "startChar": 18,
+        "endLine": 53,
+        "endChar": 31
+      },
+      "revId": "5b4776d37fee58178f6b400a1758951ef9e0cae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "772c6f07_314943e4",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-05T18:17:42Z",
+      "side": 1,
+      "message": "nit: use braces for single-line if-statements please, its particularly risky with the macros mixed in.",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 49
+      },
+      "revId": "5b4776d37fee58178f6b400a1758951ef9e0cae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d532809_748242fd",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-05T18:17:42Z",
+      "side": 1,
+      "message": "Same comment.",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 282,
+        "endChar": 49
+      },
+      "revId": "5b4776d37fee58178f6b400a1758951ef9e0cae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
