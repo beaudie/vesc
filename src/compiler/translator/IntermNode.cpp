@@ -38,6 +38,11 @@ TPrecision GetHigherPrecision(TPrecision left, TPrecision right)
     return left > right ? left : right;
 }
 
+TPrecision GetLowerPrecision(TPrecision left, TPrecision right)
+{
+    return left > right ? right : left;
+}
+
 TConstantUnion *Vectorize(const TConstantUnion &constant, size_t size)
 {
     TConstantUnion *constUnion = new TConstantUnion[size];
@@ -1600,10 +1605,6 @@ void TIntermBinary::promote()
 
     ASSERT(mLeft->isArray() == mRight->isArray());
 
-    // The result gets promoted to the highest precision.
-    TPrecision higherPrecision = GetHigherPrecision(mLeft->getPrecision(), mRight->getPrecision());
-    getTypePointer()->setPrecision(higherPrecision);
-
     const int nominalSize = std::max(mLeft->getNominalSize(), mRight->getNominalSize());
 
     //
@@ -1644,6 +1645,12 @@ void TIntermBinary::promote()
     // If we reach here, at least one of the operands is vector or matrix.
     // The other operand could be a scalar, vector, or matrix.
     TBasicType basicType = mLeft->getBasicType();
+    // The result of arithmetic ops gets promoted to the highest precision.
+    TPrecision higherPrecision = GetHigherPrecision(mLeft->getPrecision(), mRight->getPrecision());
+    TPrecision lowerPrecision  = GetLowerPrecision(mLeft->getPrecision(), mRight->getPrecision());
+    // For floats apply lowest precision to output
+    TPrecision resultPrecision = (basicType == EbtFloat) ? lowerPrecision : higherPrecision;
+    getTypePointer()->setPrecision(resultPrecision);
 
     switch (mOp)
     {
