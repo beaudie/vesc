@@ -117,6 +117,24 @@
       "revId": "a48f6b6fbdef336441aad43b18486ccfdc08fb83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ebe39c5_5c7311e5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-05T21:27:32Z",
+      "side": 1,
+      "message": "I haven\u0027t seen any issues so far, but there\u0027s still plenty of time for something to go wrong.\n\nWith regards to varying information, that\u0027s still only being used during the SPIR-V transformation; it\u0027s just the descriptor set/binding values that are being used everywhere now, which are being pulled based on the variable name (which was a bit tricky to get the same name used everywhere).   Luckily this seems to be something that fails very obviously when things do go wrong, so we should have plenty of warning when things break.",
+      "parentUuid": "f1e715bf_0492d339",
+      "revId": "a48f6b6fbdef336441aad43b18486ccfdc08fb83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
