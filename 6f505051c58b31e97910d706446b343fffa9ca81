@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3035c7bd_435eab2f",
+        "filename": "src/tests/gl_tests/VulkanExternalImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T13:51:11Z",
+      "side": 1,
+      "message": "can you use a named type instead of a nameless struct?",
+      "range": {
+        "startLine": 44,
+        "startChar": 1,
+        "endLine": 49,
+        "endChar": 22
+      },
+      "revId": "6f505051c58b31e97910d706446b343fffa9ca81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85aa8a58_3bb66c7f",
+        "filename": "src/tests/gl_tests/VulkanExternalImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T13:51:11Z",
+      "side": 1,
+      "message": "can you leave a note here that this should be either RGBA8 or a new RGBX enum?",
+      "range": {
+        "startLine": 57,
+        "startChar": 31,
+        "endLine": 57,
+        "endChar": 42
+      },
+      "revId": "6f505051c58b31e97910d706446b343fffa9ca81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25eeff05_e957cd0e",
+        "filename": "src/tests/gl_tests/VulkanExternalImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T13:51:11Z",
+      "side": 1,
+      "message": "can you leave a comment before each new test?",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 6
+      },
+      "revId": "6f505051c58b31e97910d706446b343fffa9ca81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64705b0f_cad076e5",
+        "filename": "src/tests/gl_tests/VulkanExternalImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-05T13:51:11Z",
+      "side": 1,
+      "message": "can you use the named type in place of auto here and below?",
+      "range": {
+        "startLine": 262,
+        "startChar": 15,
+        "endLine": 262,
+        "endChar": 20
+      },
+      "revId": "6f505051c58b31e97910d706446b343fffa9ca81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
