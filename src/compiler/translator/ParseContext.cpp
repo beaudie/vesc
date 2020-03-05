@@ -1067,6 +1067,35 @@ bool TParseContext::checkArrayElementIsNotArray(const TSourceLoc &line,
     return true;
 }
 
+// Check for array-of-arrays being used as non-allowed shader inputs/outputs.
+bool TParseContext::checkGLES31ArrayOfArraysInOut(const TSourceLoc &line,
+                                                  const TPublicType &elementType,
+                                                  const TType &arrayType)
+{
+    if (mShaderVersion >= 310 && arrayType.isArrayOfArrays())
+    {
+        if (elementType.qualifier == EvqVertexOut)
+        {
+            error(line, "vertex shader output cannot be an array of arrays",
+                  TType(elementType).getQualifierString());
+            return false;
+        }
+        if (elementType.qualifier == EvqFragmentIn)
+        {
+            error(line, "fragment shader input cannot be an array of arrays",
+                  TType(elementType).getQualifierString());
+            return false;
+        }
+        if (elementType.qualifier == EvqFragmentOut)
+        {
+            error(line, "fragment shader output cannot be an array of arrays",
+                  TType(elementType).getQualifierString());
+            return false;
+        }
+    }
+    return true;
+}
+
 // Check if this qualified element type can be formed into an array. This is only called when array
 // brackets are associated with an identifier in a declaration, like this:
 //   float a[2];
@@ -2570,10 +2599,15 @@ TIntermDeclaration *TParseContext::parseSingleArrayDeclaration(
 
     nonEmptyDeclarationErrorCheck(elementType, identifierLocation);
 
+    // TODO(ianelliott): The following calls checkArrayElementIsNotArray() (to check for pre-3.1
+    // arrays of arrays), but elementType.arraySizes is nullptr (i.e. does not contain any
+    // array-size info from arraySizes).
     checkIsValidTypeAndQualifierForArray(indexLocation, elementType);
 
     TType *arrayType = new TType(elementType);
     arrayType->makeArrays(arraySizes);
+
+    checkGLES31ArrayOfArraysInOut(indexLocation, elementType, *arrayType);
 
     checkGeometryShaderInputAndSetArraySize(indexLocation, identifier, arrayType);
 
