@@ -16,6 +16,24 @@
       "revId": "ba1bdee7305df80b33ff2d5014ca3d2bb8bd9708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f1b615d_72b18a46",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-06T21:03:43Z",
+      "side": 1,
+      "message": "Drafting a follow-up CL to generate_android_bp.py to handle generating arch-specific defines.",
+      "parentUuid": "c9d7038d_e75001ba",
+      "revId": "ba1bdee7305df80b33ff2d5014ca3d2bb8bd9708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
