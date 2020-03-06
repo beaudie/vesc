@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "3efa68fd_1ac4c946",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-06T18:21:26Z",
+      "side": 1,
+      "message": "FYI - found another gn arg we should set: angle_enable_gl\u003dfalse\nThat will disable the GL back-end, reduce the size of the library, improve code coverage, etc.",
+      "parentUuid": "76ef1f13_0cf7291a",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "fb09676b0c4906c52f33363bf5143be3219faeb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5196b75_7c6c7162",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 2
