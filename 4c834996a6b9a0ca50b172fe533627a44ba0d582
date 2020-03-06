@@ -69,6 +69,30 @@
       "revId": "4c834996a6b9a0ca50b172fe533627a44ba0d582",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c85a68b9_76620233",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-06T15:56:19Z",
+      "side": 1,
+      "message": "Ok, my mistake, I thought your commit message also mentioned vertex inputs, but it didn\u0027t. This is fine as-is for me.",
+      "parentUuid": "87818a29_096a87f4",
+      "range": {
+        "startLine": 1071,
+        "startChar": 20,
+        "endLine": 1071,
+        "endChar": 43
+      },
+      "revId": "4c834996a6b9a0ca50b172fe533627a44ba0d582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
