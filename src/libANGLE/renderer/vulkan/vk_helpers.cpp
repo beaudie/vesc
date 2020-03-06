@@ -2262,9 +2262,9 @@ gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
                        std::max(1u, mExtents.height >> mipLevel), mExtents.depth);
 }
 
-Serial ImageHelper::getAssignSerial(ContextVk *contextVk)
+Serial ImageHelper::getAssignSerial(ContextVk *contextVk, bool forceUpdate)
 {
-    if (mSerial.getValue() == 0)
+    if ((mSerial.getValue() == 0) || forceUpdate)
     {
         mSerial = contextVk->generateAttachmentImageSerial();
     }

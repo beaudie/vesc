@@ -1064,9 +1064,18 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
             case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
                 ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
                 break;
+            case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
+                // Force update of serial for enabled draw buffers
+                for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+                {
+                    mCurrentFramebufferDesc.update(
+                        static_cast<uint32_t>(colorIndexGL),
+                        mRenderTargetCache.getColors()[colorIndexGL]->getAssignSerial(contextVk,
+                                                                                      true));
+                }
+                break;
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_HEIGHT:
-            case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_SAMPLES:
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS:
                 // Invalidate the cache. If we have performance critical code hitting this path we

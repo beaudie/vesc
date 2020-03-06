@@ -740,7 +740,7 @@ class ImageHelper final : public Resource
     gl::Extents getSize(const gl::ImageIndex &index) const;
 
     // Return unique Serial for underlying image, first assigning it if it hasn't been set yet
-    Serial getAssignSerial(ContextVk *contextVk);
+    Serial getAssignSerial(ContextVk *contextVk, bool forceUpdate);
     void resetSerial() { mSerial = rx::kZeroSerial; }
 
     static void Copy(ImageHelper *srcImage,

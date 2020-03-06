@@ -54,13 +54,13 @@ void RenderTargetVk::reset()
     mLayerIndex = 0;
 }
 
-vk::AttachmentSerial RenderTargetVk::getAssignSerial(ContextVk *contextVk)
+vk::AttachmentSerial RenderTargetVk::getAssignSerial(ContextVk *contextVk, bool forceUpdate)
 {
     ASSERT(mImage && mImage->valid());
     vk::AttachmentSerial attachmentSerial;
     ASSERT(mLayerIndex < std::numeric_limits<uint16_t>::max());
     ASSERT(mLevelIndex < std::numeric_limits<uint16_t>::max());
-    Serial imageSerial = mImage->getAssignSerial(contextVk);
+    Serial imageSerial = mImage->getAssignSerial(contextVk, forceUpdate);
     ASSERT(imageSerial.getValue() < std::numeric_limits<uint32_t>::max());
     SetBitField(attachmentSerial.layer, mLayerIndex);
     SetBitField(attachmentSerial.level, mLevelIndex);
