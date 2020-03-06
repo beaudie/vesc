@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8cb35ecd_ac5f42ab",
+        "filename": "src/compiler/translator/HashNames.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-03-06T10:34:54Z",
+      "side": 1,
+      "message": "I am honestly not sure. Without this special if condition, I noticed that the translator would create a variable named \"_ugl_ClipDistance\" instead of \"gl_ClipDistance\" if the latter is redeclared. So basically, it lost the special meaning from the name, and it also lost its built-in property and became a generic varying.\nI also noticed in ParseContext that currently only gl_FragData (excluding this new gl_ClipDistance) can be redeclared. gl_FragData is fine to have different name, since in the end it will be bound to output locations anyway.\nThis is what I did that worked. It\u0027s possible that there is a cleaner way. I\u0027m stilling looking through the code. If you know more about this area, a suggestion would be helpful for me.",
+      "parentUuid": "9177da32_86747d9d",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 9
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0203226e_255e670b",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
