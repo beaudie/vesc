@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9d7038d_e75001ba",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-06T19:46:14Z",
+      "side": 1,
+      "message": "We need x86 and x86_64 build for Cuttlefish to collect code coverage numbers.   I\u0027m also not certain we can exclude 32b devices yet.\n\nWe need GN args to generate libraries for:\n- arm64\n- x86\n- x86_64",
+      "revId": "ba1bdee7305df80b33ff2d5014ca3d2bb8bd9708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
