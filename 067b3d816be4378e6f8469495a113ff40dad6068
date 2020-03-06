@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f15dab4b_743320e1",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-06T13:18:24Z",
+      "side": 1,
+      "message": "I believe you can just make this StateChangeTestES3.",
+      "range": {
+        "startLine": 254,
+        "startChar": 7,
+        "endLine": 254,
+        "endChar": 22
+      },
+      "revId": "067b3d816be4378e6f8469495a113ff40dad6068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
