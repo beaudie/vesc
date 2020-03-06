@@ -6,11 +6,7 @@
 #
 # Generates a roll CL within the ANGLE repository of AOSP.
 
-git checkout -b tmp aosp/upstream-mirror
-git merge -s ours master --allow-unrelated-histories -m "Merge remote-tracking branch 'aosp/upstream-mirror' into aosp-master"
-git checkout master
-git merge tmp
-git branch -D tmp
+git merge -X theirs aosp/upstream-mirror
 
 deps=(
     "third_party/spirv-tools/src"
