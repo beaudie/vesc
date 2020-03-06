@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "97daa9f8_fff51e11",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-06T16:51:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14fbdfb1_453fdd80",
+      "range": {
+        "startLine": 9,
+        "startChar": 41,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "4c834996a6b9a0ca50b172fe533627a44ba0d582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cef79020_aaa8e21f",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 3
