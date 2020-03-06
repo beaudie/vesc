@@ -45,6 +45,30 @@
       "revId": "4c834996a6b9a0ca50b172fe533627a44ba0d582",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87818a29_096a87f4",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-06T03:25:19Z",
+      "side": 1,
+      "message": "The current error (from checkIsValidQualifierForArray) just happens to make the test happy (that the compile failed).  I\u0027m not sure the ramifications of trying to remove the current error (is it used for other purposes?), but we can definitely add code here that will have a useful error message.  The spec doesn\u0027t call out array-of-arrays being an error for a vertex shader input, but the test expects it (why I left it as-is).  From a cleanliness perspective, it makes sense to add it here (i.e. better error).\n\nWhat would you like me to do?",
+      "parentUuid": "cef79020_aaa8e21f",
+      "range": {
+        "startLine": 1071,
+        "startChar": 20,
+        "endLine": 1071,
+        "endChar": 43
+      },
+      "revId": "4c834996a6b9a0ca50b172fe533627a44ba0d582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
