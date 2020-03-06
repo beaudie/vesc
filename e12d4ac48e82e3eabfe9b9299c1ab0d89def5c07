@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "d1edaf0f_32c2e88a",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-06T06:46:10Z",
+      "side": 1,
+      "message": "In gles1.1 spec：\n“If pname is FOG MODE, then param must be, or params must point to an integer that is one of the symbolic constants EXP, EXP2, or LINEAR”\n\nAnd the following code is how the gles1.1 cts uses the API:\nglFogx(GL_FOG_MODE, GL_EXP);\n#define GL_EXP  0x0800\n\nIf we want to identify the fog mode correctly in ANGLE, param needs to be cast, not converted when pname is FOG MODE.",
+      "parentUuid": "48e5819f_4456b016",
+      "range": {
+        "startLine": 767,
+        "startChar": 31,
+        "endLine": 767,
+        "endChar": 43
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16af0592_27d23b6a",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-06T06:46:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23446c0c_fce246be",
+      "range": {
+        "startLine": 767,
+        "startChar": 44,
+        "endLine": 767,
+        "endChar": 54
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e534668c_e85eb529",
         "filename": "src/libANGLE/validationES1.cpp",
         "patchSetId": 3
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "88fd1751_6234e0ab",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-06T06:46:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e534668c_e85eb529",
+      "range": {
+        "startLine": 778,
+        "startChar": 22,
+        "endLine": 778,
+        "endChar": 29
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b693f692_73b6c2c3",
         "filename": "src/libANGLE/validationES1.cpp",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6bc50f9_dba91961",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-06T06:46:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b693f692_73b6c2c3",
+      "range": {
+        "startLine": 1226,
+        "startChar": 4,
+        "endLine": 1226,
+        "endChar": 27
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +236,54 @@
     },
     {
       "key": {
+        "uuid": "70da2bd5_941fb8df",
+        "filename": "src/tests/gl_tests/gles1/BasicDrawTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-06T06:46:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f94e5acf_9125fd2c",
+      "range": {
+        "startLine": 83,
+        "startChar": 22,
+        "endLine": 83,
+        "endChar": 37
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "635bf8a6_a82a5973",
+        "filename": "src/tests/gl_tests/gles1/BasicDrawTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-06T06:46:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25ee7918_300c30f9",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 6
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5dc6a8ed_e7b291a5",
         "filename": "src/tests/gl_tests/gles1/BasicDrawTest.cpp",
         "patchSetId": 3
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "59c05286_968eacf4",
+        "filename": "src/tests/gl_tests/gles1/BasicDrawTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-06T06:46:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5dc6a8ed_e7b291a5",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 5
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16e29cdd_8a309902",
         "filename": "src/tests/gl_tests/gles1/BasicDrawTest.cpp",
         "patchSetId": 3
@@ -183,6 +351,30 @@
       "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dbc9800_2ea4dc06",
+        "filename": "src/tests/gl_tests/gles1/BasicDrawTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-06T06:46:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16e29cdd_8a309902",
+      "range": {
+        "startLine": 137,
+        "startChar": 4,
+        "endLine": 137,
+        "endChar": 13
+      },
+      "revId": "e12d4ac48e82e3eabfe9b9299c1ab0d89def5c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
