@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c38e581_4640f15d",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-06T17:29:08Z",
+      "side": 0,
+      "message": "Why get rid of this?\nIf the feature is enabled, don\u0027t we want to validate the attribute?",
+      "revId": "20c69733c14723e68b6ce4cd5b2230a06f15234d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0376f99_1f318e10",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-06T17:29:08Z",
+      "side": 1,
+      "message": "Don\u0027t we need:\ndisplayAttributes.push_back(EGL_PLATFORM_ANGLE_CONTEXT_VIRTUALIZATION_ANGLE);\ndisplayAttributes.push_back(params.contextVirtualization);",
+      "revId": "f0b52af6d5de841733626fdfda168898014dc716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
