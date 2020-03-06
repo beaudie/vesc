@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "6c961fb3_17606e8e",
+        "filename": "src/compiler/translator/HashNames.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-06T16:05:44Z",
+      "side": 1,
+      "message": "There are different symbol types in the translator, SymbolType::AngleInternal and SymbolType::UserDefined are two of them. The former is output as is, the latter is prefixed with _u.\n\nThis is more than about just outputting the name though, we do check for symbols being builtin (AngleInternal) or user defined in some places, so they could all get tripped up (they don\u0027t now, because this didn\u0027t exist before).\n\nCan you try a diff like this in ParseContext.cpp instead?\n\n bool TParseContext::declareVariable(const TSourceLoc \u0026line,\n                                     const ImmutableString \u0026identifier,\n                                     const TType *type,\n                                     TVariable **variable)\n {\n     ASSERT((*variable) \u003d\u003d nullptr);\n\n+    SymbolType symbolType \u003d identifier \u003d\u003d \"gl_ClipDistance\" ? SymbolType::AngleInternal : SymbolType::UserDefined;\n-    (*variable) \u003d new TVariable(\u0026symbolTable, identifier, type, SymbolType::UserDefined);\n+    (*variable) \u003d new TVariable(\u0026symbolTable, identifier, type, symbolType);\n\nIf that\u0027s sufficient, we can *probably* extend it to do this for all variables prefixed with gl_.",
+      "parentUuid": "8cb35ecd_ac5f42ab",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 9
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0203226e_255e670b",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
