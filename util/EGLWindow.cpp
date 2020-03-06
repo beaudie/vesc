@@ -156,12 +156,6 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
         displayAttributes.push_back(params.debugLayersEnabled);
     }
 
-    if (params.contextVirtualization != EGL_DONT_CARE)
-    {
-        displayAttributes.push_back(EGL_PLATFORM_ANGLE_CONTEXT_VIRTUALIZATION_ANGLE);
-        displayAttributes.push_back(params.contextVirtualization);
-    }
-
     if (params.platformMethods)
     {
         static_assert(sizeof(EGLAttrib) == sizeof(params.platformMethods),
@@ -186,6 +180,15 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
     else if (params.allocateNonZeroMemoryFeature == EGL_FALSE)
     {
         disabledFeatureOverrides.push_back("allocate_non_zero_memory");
+    }
+
+    if (params.contextVirtualization == EGL_TRUE)
+    {
+        enabledFeatureOverrides.push_back("context_virtualization");
+    }
+    else if (params.contextVirtualization == EGL_FALSE)
+    {
+        enabledFeatureOverrides.push_back("context_virtualization");
     }
 
     if (!disabledFeatureOverrides.empty())

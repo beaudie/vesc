@@ -39,11 +39,9 @@ const char *GetEGLPath()
 namespace rx
 {
 
-static constexpr bool kDefaultEGLVirtualizedContexts = true;
-
 DisplayAndroid::DisplayAndroid(const egl::DisplayState &state)
     : DisplayEGL(state),
-      mVirtualizedContexts(kDefaultEGLVirtualizedContexts),
+      mVirtualizedContexts(false),
       mSupportsSurfaceless(false),
       mDummyPbuffer(EGL_NO_SURFACE)
 {}
@@ -53,8 +51,6 @@ DisplayAndroid::~DisplayAndroid() {}
 egl::Error DisplayAndroid::initialize(egl::Display *display)
 {
     mDisplayAttributes = display->getAttributeMap();
-    mVirtualizedContexts =
-        ShouldUseVirtualizedContexts(mDisplayAttributes, kDefaultEGLVirtualizedContexts);
 
     FunctionsEGLDL *egl = new FunctionsEGLDL();
     mEGL                = egl;
@@ -153,6 +149,7 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
     }
 
     ANGLE_TRY(createRenderer(EGL_NO_CONTEXT, true, &mRenderer));
+    mVirtualizedContexts = mRenderer->getFeatures().contextVirtualization.enabled;
 
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))

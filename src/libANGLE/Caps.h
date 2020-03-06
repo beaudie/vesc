@@ -1087,9 +1087,6 @@ struct ClientExtensions
     // EGL_ANGLE_platform_angle_metal
     bool platformANGLEMetal = false;
 
-    // EGL_ANGLE_platform_angle_context_virtualization
-    bool platformANGLEContextVirtualization = false;
-
     // EGL_ANGLE_device_creation
     bool deviceCreation = false;
 

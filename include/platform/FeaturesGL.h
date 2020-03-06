@@ -424,6 +424,10 @@ struct FeaturesGL : FeatureSetBase
     Feature disableSemaphoreFd = {"disable_semaphore_fd", FeatureCategory::OpenGLWorkarounds,
                                   "Disable GL_EXT_semaphore_fd extension", &members,
                                   "https://crbug.com/1046462"};
+
+    // Control whether context virtualization is used
+    Feature contextVirtualization = {"context_virtualization", FeatureCategory::OpenGLWorkarounds,
+                                     "Virtualize OpenGL contexts", &members};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

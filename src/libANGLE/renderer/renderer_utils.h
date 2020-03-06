@@ -133,7 +133,6 @@ struct LoadImageFunctionInfo
 using LoadFunctionMap = LoadImageFunctionInfo (*)(GLenum);
 
 bool ShouldUseDebugLayers(const egl::AttributeMap &attribs);
-bool ShouldUseVirtualizedContexts(const egl::AttributeMap &attribs, bool defaultValue);
 
 void CopyImageCHROMIUM(const uint8_t *sourceData,
                        size_t sourceRowPitch,
