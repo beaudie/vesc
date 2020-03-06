@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a1aa697c_eaad85b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-03-06T00:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2900f3c2_843a3c5b",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 22
+      },
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81244958_a43d54ba",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-28T17:37:22Z",
       "side": 1,
       "message": "Not sure why you needed this - probably should remove it as it\u0027s not a GL extension.",
+      "range": {
+        "startLine": 434,
+        "startChar": 9,
+        "endLine": 434,
+        "endChar": 26
+      },
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "884b50bd_2511003e",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-03-06T00:39:29Z",
+      "side": 1,
+      "message": "We are creating this separation on which backends can support this extension. This is because there is functional code being run in the validation step in angle. For example, following these function calls below will fill in the mCacheStatus of Framebuffer.\n\nValidateDrawArrays\u003eValidateDrawArraysCommon\u003eValidateDrawBase\u003eStateCache::getBasicDrawStatesError\u003eStateCache::getBaseDrawStatesErrorImpl\u003eValidateDawStates\u003eFramebuffer::isComplete\u003eFramebuffer::checkStatus\u003eFramebuffer::checkStatusImpl\n\nhttps://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/Framebuffer.cpp?type\u003dcs\u0026q\u003d%22mCachedStatus+%3D+checkStatusWithGLFrontEnd(context);%22\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d1065\n\nWhen D3D11 runs certain tests, it will assert that the mCacheStatus is invalid because it was supposed to be filled in (and it was during the validation). But since validation is disabled with this no_error extension, we assert.\n\nhttps://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp?type\u003dcs\u0026q\u003d%22fbo-%3EgetCachedSamples(context,+gl::AttachmentSampleType::Emulated)%22\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d1558",
+      "parentUuid": "81244958_a43d54ba",
       "range": {
         "startLine": 434,
         "startChar": 9,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "5e21098e_84d6184b",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-03-06T00:39:29Z",
+      "side": 1,
+      "message": "Done. Moved it to https://chromium-review.googlesource.com/c/angle/angle/+/2090783",
+      "parentUuid": "46b21ff9_9fbe4e16",
+      "range": {
+        "startLine": 1145,
+        "startChar": 21,
+        "endLine": 1145,
+        "endChar": 67
+      },
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e51ba335_92ea1237",
         "filename": "src/tests/egl_tests/EGLCreateContextNoErrorTest.cpp",
         "patchSetId": 3
@@ -108,6 +180,24 @@
       "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3ede991_9b5a8ddc",
+        "filename": "src/tests/egl_tests/EGLCreateContextNoErrorTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-03-06T00:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e51ba335_92ea1237",
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -131,6 +221,30 @@
       "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "677eef02_f69b5828",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-03-06T00:39:29Z",
+      "side": 1,
+      "message": "Done. Moved it to https://chromium-review.googlesource.com/c/angle/angle/+/2090783",
+      "parentUuid": "c295f0db_6a4ce1f5",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 93
+      },
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
