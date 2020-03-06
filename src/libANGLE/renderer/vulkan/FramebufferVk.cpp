@@ -1064,9 +1064,12 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
             case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
                 ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
                 break;
+            case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
+                // printf("Hit dirty draw buffers in FramebufferVk\n");
+                // clearCache(contextVk);
+                break;
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_HEIGHT:
-            case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_SAMPLES:
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS:
                 // Invalidate the cache. If we have performance critical code hitting this path we
