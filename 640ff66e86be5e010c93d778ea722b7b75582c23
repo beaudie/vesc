@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "a600d078_b1d98012",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-06T13:23:07Z",
+      "side": 1,
+      "message": "I see I see. Thanks for the link.\n\nCan you change that FBO call in D3D11 to \"getSamples\"? Same for any other that are bothering you. I had to change \"getSamples\" to const anyway to work with prior patches. It would lead towards a simpler front-end implementation that would be easier to maintain long term.",
+      "parentUuid": "884b50bd_2511003e",
+      "range": {
+        "startLine": 434,
+        "startChar": 9,
+        "endLine": 434,
+        "endChar": 26
+      },
+      "revId": "640ff66e86be5e010c93d778ea722b7b75582c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4cb02203_8ad16e43",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 3
