@@ -94,18 +94,9 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mViewport(0, 0, 0, 0),
       mNear(0.0f),
       mFar(1.0f),
-      mBlendEnabled(false),
       mBlendColor(0, 0, 0, 0),
-      mSourceBlendRGB(GL_ONE),
-      mDestBlendRGB(GL_ZERO),
-      mSourceBlendAlpha(GL_ONE),
-      mDestBlendAlpha(GL_ZERO),
-      mBlendEquationRGB(GL_FUNC_ADD),
-      mBlendEquationAlpha(GL_FUNC_ADD),
-      mColorMaskRed(true),
-      mColorMaskGreen(true),
-      mColorMaskBlue(true),
-      mColorMaskAlpha(true),
+      mBlendStateExt(rendererCaps.maxDrawBuffers),
+      mIndependentBlendStates(extensions.drawBuffersIndexedAny()),
       mSampleAlphaToCoverageEnabled(false),
       mSampleCoverageEnabled(false),
       mSampleCoverageValue(1.0f),
@@ -1053,20 +1044,76 @@ void StateManagerGL::setDepthRange(float near, float far)
 
 void StateManagerGL::setBlendEnabled(bool enabled)
 {
-    if (mBlendEnabled != enabled)
+    const gl::DrawBufferMask mask =
+        enabled ? mBlendStateExt.maxBlendEnabedMask : gl::DrawBufferMask();
+    if (mBlendStateExt.blendEnabledMask == mask)
     {
-        mBlendEnabled = enabled;
-        if (mBlendEnabled)
+        return;
+    }
+
+    if (enabled)
+    {
+        mFunctions->enable(GL_BLEND);
+    }
+    else
+    {
+        mFunctions->disable(GL_BLEND);
+    }
+
+    mBlendStateExt.setBlend(enabled);
+    mLocalDirtyBits.set(gl::State::DIRTY_BIT_BLEND_ENABLED);
+}
+
+void StateManagerGL::setBlendEnabledIndexed(const gl::DrawBufferMask blendEnabledMask)
+{
+    if (mBlendStateExt.blendEnabledMask == blendEnabledMask)
+    {
+        return;
+    }
+
+    // Get DrawBufferMask of buffers with different blend enable state
+    gl::DrawBufferMask diffMask = mBlendStateExt.blendEnabledMask ^ blendEnabledMask;
+    const size_t diffCount      = diffMask.count();
+
+    // Check if enabling or disabling blending for all buffers reduces the number of subsequent
+    // indexed commands. Implicitly handles the case when the new blend enable state is the same for
+    // all buffers.
+    if (diffCount > 1)
+    {
+        // The number of indexed blend enable commands in case a mass disable is used.
+        const size_t enabledCount = blendEnabledMask.count();
+
+        // The mask and the number of indexed blend disable commands in case a mass enable is used.
+        const gl::DrawBufferMask blendDisabledMask =
+            blendEnabledMask ^ mBlendStateExt.maxBlendEnabedMask;
+        const size_t disabledCount = blendDisabledMask.count();
+
+        if (enabledCount < diffCount && enabledCount <= disabledCount)
         {
+            diffMask = blendEnabledMask;
+            mFunctions->disable(GL_BLEND);
+        }
+        else if (disabledCount < diffCount && disabledCount <= enabledCount)
+        {
+            diffMask = blendDisabledMask;
             mFunctions->enable(GL_BLEND);
+        }
+    }
+
+    for (size_t drawBufferIndex : diffMask)
+    {
+        if (blendEnabledMask.test(drawBufferIndex))
+        {
+            mFunctions->enablei(GL_BLEND, static_cast<GLuint>(drawBufferIndex));
         }
         else
         {
-            mFunctions->disable(GL_BLEND);
+            mFunctions->disablei(GL_BLEND, static_cast<GLuint>(drawBufferIndex));
         }
-
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_BLEND_ENABLED);
     }
+
+    mBlendStateExt.blendEnabledMask = blendEnabledMask;
+    mLocalDirtyBits.set(gl::State::DIRTY_BIT_BLEND_ENABLED);
 }
 
 void StateManagerGL::setBlendColor(const gl::ColorF &blendColor)
@@ -1081,50 +1128,186 @@ void StateManagerGL::setBlendColor(const gl::ColorF &blendColor)
     }
 }
 
-void StateManagerGL::setBlendFuncs(GLenum sourceBlendRGB,
-                                   GLenum destBlendRGB,
-                                   GLenum sourceBlendAlpha,
-                                   GLenum destBlendAlpha)
+void StateManagerGL::setBlendFuncs(const gl::BlendStateExt &blendStateExt)
 {
-    if (mSourceBlendRGB != sourceBlendRGB || mDestBlendRGB != destBlendRGB ||
-        mSourceBlendAlpha != sourceBlendAlpha || mDestBlendAlpha != destBlendAlpha)
+    if (mBlendStateExt.blendFactorSrcColor == blendStateExt.blendFactorSrcColor &&
+        mBlendStateExt.blendFactorDstColor == blendStateExt.blendFactorDstColor &&
+        mBlendStateExt.blendFactorSrcAlpha == blendStateExt.blendFactorSrcAlpha &&
+        mBlendStateExt.blendFactorDstAlpha == blendStateExt.blendFactorDstAlpha)
     {
-        mSourceBlendRGB   = sourceBlendRGB;
-        mDestBlendRGB     = destBlendRGB;
-        mSourceBlendAlpha = sourceBlendAlpha;
-        mDestBlendAlpha   = destBlendAlpha;
-
-        mFunctions->blendFuncSeparate(mSourceBlendRGB, mDestBlendRGB, mSourceBlendAlpha,
-                                      mDestBlendAlpha);
-
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_BLEND_FUNCS);
+        return;
     }
+
+    if (!mIndependentBlendStates)
+    {
+        mFunctions->blendFuncSeparate(blendStateExt.getBlendFactorSrcColorIndexed(0),
+                                      blendStateExt.getBlendFactorDstColorIndexed(0),
+                                      blendStateExt.getBlendFactorSrcAlphaIndexed(0),
+                                      blendStateExt.getBlendFactorDstAlphaIndexed(0));
+    }
+    else
+    {
+        // Get DrawBufferMask of buffers with different blend factors
+        gl::DrawBufferMask diffMask = mBlendStateExt.compareBlendFactors(
+            blendStateExt.blendFactorSrcColor, blendStateExt.blendFactorDstColor,
+            blendStateExt.blendFactorSrcAlpha, blendStateExt.blendFactorDstAlpha);
+        size_t diffCount = diffMask.count();
+
+        // Check if setting all buffers to the same value reduces the number of subsequent indexed
+        // commands. Implicitly handles the case when the new blend function state is the same for
+        // all buffers.
+        if (diffCount > 1)
+        {
+            bool found                                                            = false;
+            gl::BlendStateExt::BlendFactorStorage::Type commonBlendFactorSrcColor = 0;
+            gl::BlendStateExt::BlendFactorStorage::Type commonBlendFactorDstColor = 0;
+            gl::BlendStateExt::BlendFactorStorage::Type commonBlendFactorSrcAlpha = 0;
+            gl::BlendStateExt::BlendFactorStorage::Type commonBlendFactorDstAlpha = 0;
+            for (size_t i = 0; i < mBlendStateExt.maxDrawBuffers - 1; i++)
+            {
+                const gl::BlendStateExt::BlendFactorStorage::Type tempCommonBlendFactorSrcColor =
+                    blendStateExt.expandBlendFactorSrcColorIndexed(i);
+                const gl::BlendStateExt::BlendFactorStorage::Type tempCommonBlendFactorDstColor =
+                    blendStateExt.expandBlendFactorDstColorIndexed(i);
+                const gl::BlendStateExt::BlendFactorStorage::Type tempCommonBlendFactorSrcAlpha =
+                    blendStateExt.expandBlendFactorSrcAlphaIndexed(i);
+                const gl::BlendStateExt::BlendFactorStorage::Type tempCommonBlendFactorDstAlpha =
+                    blendStateExt.expandBlendFactorDstAlphaIndexed(i);
+
+                const gl::DrawBufferMask tempDiffMask = blendStateExt.compareBlendFactors(
+                    tempCommonBlendFactorSrcColor, tempCommonBlendFactorDstColor,
+                    tempCommonBlendFactorSrcAlpha, tempCommonBlendFactorDstAlpha);
+
+                const size_t tempDiffCount = tempDiffMask.count();
+                if (tempDiffCount < diffCount)
+                {
+                    found                     = true;
+                    diffMask                  = tempDiffMask;
+                    diffCount                 = tempDiffCount;
+                    commonBlendFactorSrcColor = tempCommonBlendFactorSrcColor;
+                    commonBlendFactorDstColor = tempCommonBlendFactorDstColor;
+                    commonBlendFactorSrcAlpha = tempCommonBlendFactorSrcAlpha;
+                    commonBlendFactorDstAlpha = tempCommonBlendFactorDstAlpha;
+                    if (tempDiffCount == 0)
+                    {
+                        break;  // the blend factors are the same for all buffers
+                    }
+                }
+            }
+            if (found)
+            {
+                mFunctions->blendFuncSeparate(
+                    ToGLenum(gl::BlendStateExt::BlendFactorStorage::GetValueIndexed(
+                        commonBlendFactorSrcColor, 0)),
+                    ToGLenum(gl::BlendStateExt::BlendFactorStorage::GetValueIndexed(
+                        commonBlendFactorDstColor, 0)),
+                    ToGLenum(gl::BlendStateExt::BlendFactorStorage::GetValueIndexed(
+                        commonBlendFactorSrcAlpha, 0)),
+                    ToGLenum(gl::BlendStateExt::BlendFactorStorage::GetValueIndexed(
+                        commonBlendFactorDstAlpha, 0)));
+            }
+        }
+
+        for (size_t drawBufferIndex : diffMask)
+        {
+            mFunctions->blendFuncSeparatei(
+                static_cast<GLuint>(drawBufferIndex),
+                blendStateExt.getBlendFactorSrcColorIndexed(drawBufferIndex),
+                blendStateExt.getBlendFactorDstColorIndexed(drawBufferIndex),
+                blendStateExt.getBlendFactorSrcAlphaIndexed(drawBufferIndex),
+                blendStateExt.getBlendFactorDstAlphaIndexed(drawBufferIndex));
+        }
+    }
+    mBlendStateExt.blendFactorSrcColor = blendStateExt.blendFactorSrcColor;
+    mBlendStateExt.blendFactorDstColor = blendStateExt.blendFactorDstColor;
+    mBlendStateExt.blendFactorSrcAlpha = blendStateExt.blendFactorSrcAlpha;
+    mBlendStateExt.blendFactorDstAlpha = blendStateExt.blendFactorDstAlpha;
+    mLocalDirtyBits.set(gl::State::DIRTY_BIT_BLEND_FUNCS);
 }
 
-void StateManagerGL::setBlendEquations(GLenum blendEquationRGB, GLenum blendEquationAlpha)
+void StateManagerGL::setBlendEquations(const gl::BlendStateExt &blendStateExt)
 {
-    if (mBlendEquationRGB != blendEquationRGB || mBlendEquationAlpha != blendEquationAlpha)
+    if (mBlendStateExt.blendEquationColor == blendStateExt.blendEquationColor &&
+        mBlendStateExt.blendEquationAlpha == blendStateExt.blendEquationAlpha)
     {
-        mBlendEquationRGB   = blendEquationRGB;
-        mBlendEquationAlpha = blendEquationAlpha;
-
-        mFunctions->blendEquationSeparate(mBlendEquationRGB, mBlendEquationAlpha);
-
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_BLEND_EQUATIONS);
+        return;
     }
+
+    if (!mIndependentBlendStates)
+    {
+        mFunctions->blendEquationSeparate(blendStateExt.getBlendEquationColorIndexed(0),
+                                          blendStateExt.getBlendEquationAlphaIndexed(0));
+    }
+    else
+    {
+        // Get DrawBufferMask of buffers with different blend equations
+        gl::DrawBufferMask diffMask = mBlendStateExt.compareBlendEquations(
+            blendStateExt.blendEquationColor, blendStateExt.blendEquationAlpha);
+        size_t diffCount = diffMask.count();
+
+        // Check if setting all buffers to the same value reduces the number of subsequent indexed
+        // commands. Implicitly handles the case when the new blend equation state is the same for
+        // all buffers.
+        if (diffCount > 1)
+        {
+            bool found                                                             = false;
+            gl::BlendStateExt::BlendEquationStorage::Type commonBlendEquationColor = 0;
+            gl::BlendStateExt::BlendEquationStorage::Type commonBlendEquationAlpha = 0;
+            for (size_t i = 0; i < mBlendStateExt.maxDrawBuffers - 1; i++)
+            {
+                const gl::BlendStateExt::BlendEquationStorage::Type tempCommonBlendEquationColor =
+                    blendStateExt.expandBlendEquationColorIndexed(i);
+                const gl::BlendStateExt::BlendEquationStorage::Type tempCommonBlendEquationAlpha =
+                    blendStateExt.expandBlendEquationAlphaIndexed(i);
+
+                const gl::DrawBufferMask tempDiffMask = blendStateExt.compareBlendEquations(
+                    tempCommonBlendEquationColor, tempCommonBlendEquationAlpha);
+
+                const size_t tempDiffCount = tempDiffMask.count();
+                if (tempDiffCount < diffCount)
+                {
+                    found                    = true;
+                    diffMask                 = tempDiffMask;
+                    diffCount                = tempDiffCount;
+                    commonBlendEquationColor = tempCommonBlendEquationColor;
+                    commonBlendEquationAlpha = tempCommonBlendEquationAlpha;
+                    if (tempDiffCount == 0)
+                    {
+                        break;  // the new blend equations are the same for all buffers
+                    }
+                }
+            }
+            if (found)
+            {
+                mFunctions->blendEquationSeparate(
+                    ToGLenum(gl::BlendStateExt::BlendEquationStorage::GetValueIndexed(
+                        commonBlendEquationColor, 0)),
+                    ToGLenum(gl::BlendStateExt::BlendEquationStorage::GetValueIndexed(
+                        commonBlendEquationAlpha, 0)));
+            }
+        }
+
+        for (size_t drawBufferIndex : diffMask)
+        {
+            mFunctions->blendEquationSeparatei(
+                static_cast<GLuint>(drawBufferIndex),
+                blendStateExt.getBlendEquationColorIndexed(drawBufferIndex),
+                blendStateExt.getBlendEquationAlphaIndexed(drawBufferIndex));
+        }
+    }
+    mBlendStateExt.blendEquationColor = blendStateExt.blendEquationColor;
+    mBlendStateExt.blendEquationAlpha = blendStateExt.blendEquationAlpha;
+    mLocalDirtyBits.set(gl::State::DIRTY_BIT_COLOR_MASK);
 }
 
 void StateManagerGL::setColorMask(bool red, bool green, bool blue, bool alpha)
 {
-    if (mColorMaskRed != red || mColorMaskGreen != green || mColorMaskBlue != blue ||
-        mColorMaskAlpha != alpha)
+    const gl::BlendStateExt::ColorMaskStorage::Type mask =
+        mBlendStateExt.expandColorMaskValue(red, green, blue, alpha);
+    if (mBlendStateExt.colorMask != mask)
     {
-        mColorMaskRed   = red;
-        mColorMaskGreen = green;
-        mColorMaskBlue  = blue;
-        mColorMaskAlpha = alpha;
-        mFunctions->colorMask(mColorMaskRed, mColorMaskGreen, mColorMaskBlue, mColorMaskAlpha);
-
+        mFunctions->colorMask(red, green, blue, alpha);
+        mBlendStateExt.colorMask = mask;
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_COLOR_MASK);
     }
 }
@@ -1551,33 +1734,36 @@ void StateManagerGL::syncState(const gl::Context *context,
                 setDepthRange(state.getNearPlane(), state.getFarPlane());
                 break;
             case gl::State::DIRTY_BIT_BLEND_ENABLED:
-                setBlendEnabled(state.isBlendEnabled());
+                if (mIndependentBlendStates)
+                {
+                    setBlendEnabledIndexed(state.getBlendEnabledDrawBufferMask());
+                }
+                else
+                {
+                    setBlendEnabled(state.isBlendEnabled());
+                }
                 break;
             case gl::State::DIRTY_BIT_BLEND_COLOR:
                 setBlendColor(state.getBlendColor());
                 break;
             case gl::State::DIRTY_BIT_BLEND_FUNCS:
             {
-                const auto &blendState = state.getBlendState();
-                setBlendFuncs(blendState.sourceBlendRGB, blendState.destBlendRGB,
-                              blendState.sourceBlendAlpha, blendState.destBlendAlpha);
+                setBlendFuncs(state.getBlendStateExt());
                 break;
             }
             case gl::State::DIRTY_BIT_BLEND_EQUATIONS:
             {
-                const auto &blendState = state.getBlendState();
-                setBlendEquations(blendState.blendEquationRGB, blendState.blendEquationAlpha);
+                setBlendEquations(state.getBlendStateExt());
                 break;
             }
             case gl::State::DIRTY_BIT_COLOR_MASK:
             {
-                gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
-                FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
+                const gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
+                const FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
+                const bool disableAlphaWrite =
+                    framebufferGL->hasEmulatedAlphaChannelTextureAttachment();
 
-                const auto &blendState = state.getBlendState();
-                setColorMaskForFramebuffer(blendState.colorMaskRed, blendState.colorMaskGreen,
-                                           blendState.colorMaskBlue, blendState.colorMaskAlpha,
-                                           framebufferGL);
+                setColorMaskForFramebuffer(state.getBlendStateExt(), disableAlphaWrite);
                 break;
             }
             case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
@@ -1919,18 +2105,75 @@ void StateManagerGL::setFramebufferSRGBEnabledForFramebuffer(const gl::Context *
     }
 }
 
-void StateManagerGL::setColorMaskForFramebuffer(bool red,
-                                                bool green,
-                                                bool blue,
-                                                bool alpha,
-                                                const FramebufferGL *framebuffer)
+void StateManagerGL::setColorMaskForFramebuffer(const gl::BlendStateExt &blendStateExt,
+                                                const bool disableAlpha)
 {
-    bool modifiedAlphaMask = alpha;
-    if (framebuffer->hasEmulatedAlphaChannelTextureAttachment())
+    bool r, g, b, a;
+
+    // Given that disableAlpha can be true only on macOS backbuffers and color mask is re-synced on
+    // bound draw framebuffer change, switch all draw buffers color masks to avoid special case
+    // later.
+    if (!mIndependentBlendStates || disableAlpha)
     {
-        modifiedAlphaMask = false;
+        blendStateExt.getColorMaskIndexed(r, g, b, a, 0);
+        setColorMask(r, g, b, disableAlpha ? false : a);
+        return;
     }
-    setColorMask(red, green, blue, modifiedAlphaMask);
+
+    // Check if the current mask already matches the new state
+    if (mBlendStateExt.colorMask == blendStateExt.colorMask)
+    {
+        return;
+    }
+
+    // Get DrawBufferMask of buffers with different color masks
+    gl::DrawBufferMask diffMask = mBlendStateExt.compareColorMask(blendStateExt.colorMask);
+    size_t diffCount            = diffMask.count();
+
+    // Check if setting all buffers to the same value reduces the number of subsequent indexed
+    // commands. Implicitly handles the case when the new mask is the same for all buffers.
+    // For instance, let's say that previously synced mask is ccccff00 and the new state is
+    // ffeeeeee. Instead of calling colorMaski 8 times, ANGLE can set all buffers to `e` and then
+    // use colorMaski only twice. On the other hand, if the new state is cceeee00, a non-indexed
+    // call will increase the total number of GL commands.
+    if (diffCount > 1)
+    {
+        bool found                                                = false;
+        gl::BlendStateExt::ColorMaskStorage::Type commonColorMask = 0;
+        for (size_t i = 0; i < mBlendStateExt.maxDrawBuffers - 1; i++)
+        {
+            const gl::BlendStateExt::ColorMaskStorage::Type tempCommonColorMask =
+                blendStateExt.expandColorMaskIndexed(i);
+            const gl::DrawBufferMask tempDiffMask =
+                blendStateExt.compareColorMask(tempCommonColorMask);
+            const size_t tempDiffCount = tempDiffMask.count();
+            if (tempDiffCount < diffCount)
+            {
+                found           = true;
+                diffMask        = tempDiffMask;
+                diffCount       = tempDiffCount;
+                commonColorMask = tempCommonColorMask;
+                if (tempDiffCount == 0)
+                {
+                    break;  // the new mask is the same for all buffers
+                }
+            }
+        }
+        if (found)
+        {
+            gl::BlendStateExt::UnpackColorMask(commonColorMask, r, g, b, a);
+            mFunctions->colorMask(r, g, b, a);
+        }
+    }
+
+    for (size_t drawBufferIndex : diffMask)
+    {
+        blendStateExt.getColorMaskIndexed(r, g, b, a, drawBufferIndex);
+        mFunctions->colorMaski(static_cast<GLuint>(drawBufferIndex), r, g, b, a);
+    }
+
+    mBlendStateExt.colorMask = blendStateExt.colorMask;
+    mLocalDirtyBits.set(gl::State::DIRTY_BIT_COLOR_MASK);
 }
 
 void StateManagerGL::setDitherEnabled(bool enabled)
