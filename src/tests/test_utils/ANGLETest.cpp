@@ -374,7 +374,7 @@ ANGLETestBase::ANGLETestBase(const PlatformParameters &params)
       m3DTexturedQuadProgram(0),
       mDeferContextInit(false),
       mAlwaysForceNewDisplay(ShouldAlwaysForceNewDisplay()),
-      mForceNewDisplay(mAlwaysForceNewDisplay),
+      mForceNewDisplay(false),
       mSetUpCalled(false),
       mTearDownCalled(false),
       mCurrentParams(nullptr),
@@ -420,6 +420,8 @@ void ANGLETestBase::initOSWindow()
     windowNameStream << "ANGLE Tests - " << *mCurrentParams;
     std::string windowName = windowNameStream.str();
 
+    // Even if mAlwaysForceNewDisplay is true globally, it is ignored for SwiftShader renderer
+    // It is still fine to use a single OS window despite reusing the same SwiftShader Display
     if (mAlwaysForceNewDisplay)
     {
         mFixture->osWindow = mOSWindowSingleton;
@@ -547,7 +549,13 @@ void ANGLETestBase::ANGLETestSetUp()
     }
     else
     {
-        if (mForceNewDisplay || !mFixture->eglWindow->isDisplayInitialized())
+        // Ignore mAlwaysForceNewDisplay on SwiftShader, since:
+        // 1. Re-initializing SwiftShader incurs significant overhead and causes anglebug.com/4396
+        // 2. We can fix SwiftShader if there are issues re-using the Display
+        bool isSwiftShader =
+            mCurrentParams->getDeviceType() == EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE;
+        if (mForceNewDisplay || (mAlwaysForceNewDisplay && !isSwiftShader) ||
+            !mFixture->eglWindow->isDisplayInitialized())
         {
             mFixture->eglWindow->destroyGL();
             if (!mFixture->eglWindow->initializeDisplay(mFixture->osWindow,
@@ -612,7 +620,13 @@ void ANGLETestBase::ANGLETestTearDown()
         checkD3D11SDKLayersMessages();
     }
 
-    if (mFixture->reuseCounter++ >= kWindowReuseLimit || mForceNewDisplay)
+    // Ignore mAlwaysForceNewDisplay and kWindowReuseLimit on SwiftShader, since:
+    // 1. Re-initializing SwiftShader incurs significant overhead and can cause anglebug.com/4396
+    // 2. We can fix SwiftShader if there are issues re-using the Display
+    bool isSwiftShader =
+        mCurrentParams->getDeviceType() == EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE;
+    if (mForceNewDisplay || (!isSwiftShader && (mFixture->reuseCounter++ >= kWindowReuseLimit ||
+                                                mAlwaysForceNewDisplay)))
     {
         mFixture->reuseCounter = 0;
         getGLWindow()->destroyGL();
