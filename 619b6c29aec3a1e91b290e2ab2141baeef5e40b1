@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55d49933_2e28382d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-07T04:13:11Z",
+      "side": 1,
+      "message": "you might have to update all of them , including the disabled ones. e.g. going from enabled -\u003e disabled should reset the value to 0. \n\ne.g. before this line you could simply reset the entire serial cache to zero.\n\nalso the force update thing is not what you want. that\u0027s going to effectively clear the cache every time anyway. was that necessary to fix bugs?",
+      "range": {
+        "startLine": 1068,
+        "startChar": 0,
+        "endLine": 1076,
+        "endChar": 22
+      },
+      "revId": "619b6c29aec3a1e91b290e2ab2141baeef5e40b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
