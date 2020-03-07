@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6f0c1549_74aca64c",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-07T03:09:09Z",
+      "side": 1,
+      "message": "That was more carryover from the old docs.  I agree, out is a constant, what follows varies.  Updated.",
+      "parentUuid": "22728dfe_fdb638d4",
+      "range": {
+        "startLine": 8,
+        "startChar": 142,
+        "endLine": 8,
+        "endChar": 145
+      },
+      "revId": "feffcc27d12044ddaa2572ec72f0a1ffd4d729cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a298c32d_bb929613",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "feffcc27d12044ddaa2572ec72f0a1ffd4d729cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6b091cb_efb5934b",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-07T03:09:09Z",
+      "side": 1,
+      "message": "I pulled it from my common debug args, but I\u0027m okay leaving it off.",
+      "parentUuid": "a298c32d_bb929613",
+      "revId": "feffcc27d12044ddaa2572ec72f0a1ffd4d729cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
