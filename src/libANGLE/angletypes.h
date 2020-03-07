@@ -386,6 +386,194 @@ using UniformBlockBindingMask = angle::BitSet<IMPLEMENTATION_MAX_COMBINED_SHADER
 // Used in Framebuffer / Program
 using DrawBufferMask = angle::BitSet<IMPLEMENTATION_MAX_DRAW_BUFFERS>;
 
+class BlendStateExt final
+{
+    static_assert(IMPLEMENTATION_MAX_DRAW_BUFFERS == 8, "Only up to 8 draw buffers supported.");
+
+    template <typename ElementType>
+    struct StorageType final
+    {
+
+#if defined(ANGLE_IS_64_BIT_CPU)
+        // Always use uint64_t on 64-bit systems
+        static constexpr size_t Bits = 8;
+#else
+        // Only BlendFactorType does not fit into 32 bits
+        static constexpr size_t Bits = std::is_same<ElementType, BlendFactorType>::value ? 8 : 4;
+#endif
+
+        using Type = typename std::conditional<Bits == 8, uint64_t, uint32_t>::type;
+
+        static constexpr Type MaxValueMask = (Bits == 8) ? 0xFF : 0xF;
+
+        static constexpr Type Mask(const size_t n)
+        {
+            ASSERT(n <= IMPLEMENTATION_MAX_DRAW_BUFFERS);
+            return static_cast<Type>(0xFFFFFFFFFFFFFFFFull >> (64 - n * Bits));
+        }
+
+        // A multiplier that is used to replicate 4- or 8-bit value 8 times.
+        static constexpr Type Replicator = (Bits == 8) ? 0x0101010101010101ull : 0x11111111;
+
+        static ElementType GetValueIndexed(const Type value, const size_t index)
+        {
+            ASSERT(index < IMPLEMENTATION_MAX_DRAW_BUFFERS);
+            return static_cast<ElementType>((value >> (index * Bits)) & MaxValueMask);
+        }
+
+        static Type GetReplicatedValue(const ElementType value, const Type mask)
+        {
+            ASSERT(static_cast<size_t>(value) <= MaxValueMask);
+            return (static_cast<size_t>(value) * Replicator) & mask;
+        }
+
+        static void SetValueIndexed(Type &target, const ElementType value, const size_t index)
+        {
+            ASSERT(static_cast<size_t>(value) <= MaxValueMask);
+            ASSERT(index < IMPLEMENTATION_MAX_DRAW_BUFFERS);
+            const Type selector   = MaxValueMask << (index * Bits);
+            const Type builtValue = static_cast<Type>(value) << (index * Bits);
+            // https://graphics.stanford.edu/~seander/bithacks.html#MaskedMerge
+            target = target ^ ((target ^ builtValue) & selector);
+        }
+
+        static constexpr DrawBufferMask GetDiffMask(uint32_t mask1, uint32_t mask2)
+        {
+            uint32_t diff = mask1 ^ mask2;
+
+            // For each group of bits that is different between inputs, set the msb to 1 and other
+            // bits to 0. Then, compress everything to 8 bits.
+            diff = (diff | ((diff & 0x77777777) + 0x77777777)) & 0x88888888;
+
+            // split multiplication to avoid overlaps
+            diff = ((((diff & 0xFFFF0000) * 0x249) >> 24) & 0xF0) | (((diff * 0x249) >> 12) & 0xF);
+
+            return DrawBufferMask(diff);
+        }
+
+        static constexpr DrawBufferMask GetDiffMask(uint64_t mask1, uint64_t mask2)
+        {
+            uint64_t diff = mask1 ^ mask2;
+
+            diff = (diff | ((diff & 0x7F7F7F7F7F7F7F7F) + 0x7F7F7F7F7F7F7F7F)) & 0x8080808080808080;
+            diff = 0x0002040810204081 * diff >> 56;
+
+            return DrawBufferMask(static_cast<uint32_t>(diff));
+        }
+    };
+
+  public:
+    using BlendFactorStorage = StorageType<BlendFactorType>;
+    const BlendFactorStorage::Type maxBlendFactorMask;
+    BlendFactorStorage::Type blendFactorSrcColor;
+    BlendFactorStorage::Type blendFactorDstColor;
+    BlendFactorStorage::Type blendFactorSrcAlpha;
+    BlendFactorStorage::Type blendFactorDstAlpha;
+
+    using BlendEquationStorage = StorageType<BlendEquationType>;
+    const BlendEquationStorage::Type maxBlendEquationMask;
+    BlendEquationStorage::Type blendEquationColor;
+    BlendEquationStorage::Type blendEquationAlpha;
+
+    using ColorMaskStorage = StorageType<uint8_t>;
+    const ColorMaskStorage::Type maxColorMask;
+    ColorMaskStorage::Type colorMask;
+
+    const DrawBufferMask maxBlendEnabedMask;
+    DrawBufferMask blendEnabledMask;
+
+    // avoid undefined padding bytes
+#if defined(ANGLE_IS_64_BIT_CPU)
+    const uint64_t maxDrawBuffers;
+#else
+    const uint32_t maxDrawBuffers;
+#endif
+
+    BlendStateExt(const size_t drawBuffers = 1);
+
+    BlendStateExt &operator=(const BlendStateExt &other);
+
+    ///////// Blending Toggle /////////
+
+    void setBlend(const bool enabled);
+    void setBlendIndexed(const bool enabled, const size_t index);
+
+    ///////// Color Write Mask /////////
+
+    static constexpr size_t PackColorMask(const bool red,
+                                          const bool green,
+                                          const bool blue,
+                                          const bool alpha)
+    {
+        return (red ? 1 : 0) | (green ? 2 : 0) | (blue ? 4 : 0) | (alpha ? 8 : 0);
+    }
+
+    static constexpr void UnpackColorMask(const size_t value,
+                                          bool &red,
+                                          bool &green,
+                                          bool &blue,
+                                          bool &alpha)
+    {
+        red   = static_cast<bool>(value & 1);
+        green = static_cast<bool>(value & 2);
+        blue  = static_cast<bool>(value & 4);
+        alpha = static_cast<bool>(value & 8);
+    }
+
+    ColorMaskStorage::Type expandColorMaskValue(const bool red,
+                                                const bool green,
+                                                const bool blue,
+                                                const bool alpha) const;
+    ColorMaskStorage::Type expandColorMaskIndexed(const size_t index) const;
+    void setColorMask(const bool red, const bool green, const bool blue, const bool alpha);
+    void setColorMaskIndexed(const bool red,
+                             const bool green,
+                             const bool blue,
+                             const bool alpha,
+                             const size_t index);
+    void getColorMaskIndexed(bool &red, bool &green, bool &blue, bool &alpha, size_t index) const;
+    DrawBufferMask compareColorMask(ColorMaskStorage::Type other) const;
+
+    ///////// Blend Equation /////////
+
+    BlendEquationStorage::Type expandBlendEquationValue(const GLenum mode) const;
+    BlendEquationStorage::Type expandBlendEquationColorIndexed(const size_t index) const;
+    BlendEquationStorage::Type expandBlendEquationAlphaIndexed(const size_t index) const;
+    void setBlendEquation(const GLenum modeColor, const GLenum modeAlpha);
+    void setBlendEquationIndexed(const GLenum modeColor,
+                                 const GLenum modeAlpha,
+                                 const size_t index);
+    GLenum getBlendEquationColorIndexed(size_t index) const;
+    GLenum getBlendEquationAlphaIndexed(size_t index) const;
+    DrawBufferMask compareBlendEquations(const BlendEquationStorage::Type color,
+                                         const BlendEquationStorage::Type alpha) const;
+
+    ///////// Blend Factors /////////
+
+    BlendFactorStorage::Type expandBlendFactorValue(const GLenum func) const;
+    BlendFactorStorage::Type expandBlendFactorSrcColorIndexed(const size_t index) const;
+    BlendFactorStorage::Type expandBlendFactorDstColorIndexed(const size_t index) const;
+    BlendFactorStorage::Type expandBlendFactorSrcAlphaIndexed(const size_t index) const;
+    BlendFactorStorage::Type expandBlendFactorDstAlphaIndexed(const size_t index) const;
+    void setBlendFactors(const GLenum srcColor,
+                         const GLenum dstColor,
+                         const GLenum srcAlpha,
+                         const GLenum dstAlpha);
+    void setBlendFactorsIndexed(const GLenum srcColor,
+                                const GLenum dstColor,
+                                const GLenum srcAlpha,
+                                const GLenum dstAlpha,
+                                const size_t index);
+    GLenum getBlendFactorSrcColorIndexed(size_t index) const;
+    GLenum getBlendFactorDstColorIndexed(size_t index) const;
+    GLenum getBlendFactorSrcAlphaIndexed(size_t index) const;
+    GLenum getBlendFactorDstAlphaIndexed(size_t index) const;
+    DrawBufferMask compareBlendFactors(const BlendFactorStorage::Type srcColor,
+                                       const BlendFactorStorage::Type dstColor,
+                                       const BlendFactorStorage::Type srcAlpha,
+                                       const BlendFactorStorage::Type dstAlpha) const;
+};
+
 // Used in StateCache
 using StorageBuffersMask = angle::BitSet<IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS>;
 
