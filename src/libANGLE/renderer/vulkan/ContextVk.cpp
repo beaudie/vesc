@@ -2204,9 +2204,6 @@ angle::Result ContextVk::clearWithRenderPassOp(
     const VkClearColorValue &clearColorValue,
     const VkClearDepthStencilValue &clearDepthStencilValue)
 {
-    // Validate cache variable is in sync.
-    ASSERT(mDrawFramebuffer == vk::GetImpl(mState.getDrawFramebuffer()));
-
     ASSERT(!commandGraphEnabled());
     // Start a new render pass if:
     //
@@ -2216,11 +2213,12 @@ angle::Result ContextVk::clearWithRenderPassOp(
     // - the current render area doesn't match the clear area.  We need the render area to be
     // exactly as specified by the scissor for the loadOp to clear only that area.  See
     // ContextVk::updateScissor for more information.
-    if (!mRenderPassCommands.started() ||
-        (mRenderPassCommands.started() && !mRenderPassCommands.empty()) ||
-        mRenderPassCommands.getRenderArea() != clearArea)
+    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+    if (!framebuffer->valid() || !framebuffer->renderPassStartedButEmpty() ||
+        framebuffer->getRenderPassRenderArea() != clearArea)
     {
         mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
+
         ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, clearArea, &mRenderPassCommandBuffer));
     }
     else
@@ -2271,14 +2269,14 @@ angle::Result ContextVk::clearWithRenderPassOp(
     {
         if (clearDepth)
         {
-            mRenderPassCommands.clearRenderPassDepthAttachment(attachmentIndexVk,
-                                                               clearDepthStencilValue.depth);
+            getRenderPassCommandBuffer().clearRenderPassDepthAttachment(
+                attachmentIndexVk, clearDepthStencilValue.depth);
         }
 
         if (clearStencil)
         {
-            mRenderPassCommands.clearRenderPassStencilAttachment(attachmentIndexVk,
-                                                                 clearDepthStencilValue.stencil);
+            getRenderPassCommandBuffer().clearRenderPassStencilAttachment(
+                attachmentIndexVk, clearDepthStencilValue.stencil);
         }
     }
 
@@ -4074,20 +4072,22 @@ angle::Result ContextVk::onImageWrite(VkImageAspectFlags aspectFlags,
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::beginRenderPass(const vk::Framebuffer &framebuffer,
-                                         const gl::Rectangle &renderArea,
-                                         const vk::RenderPassDesc &renderPassDesc,
-                                         const vk::AttachmentOpsArray &renderPassAttachmentOps,
-                                         const std::vector<VkClearValue> &clearValues,
-                                         vk::CommandBuffer **commandBufferOut)
+void ContextVk::beginRenderPass(const vk::Framebuffer &framebuffer,
+                                const gl::Rectangle &renderArea,
+                                const vk::RenderPassDesc &renderPassDesc,
+                                const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                                const std::vector<VkClearValue> &clearValues,
+                                vk::CommandBuffer **commandBufferOut)
 {
     ASSERT(!commandGraphEnabled());
 
-    vk::PrimaryCommandBuffer *primary;
-    ANGLE_TRY(getPrimaryCommandBuffer(&primary));
+    if (!mOutsideRenderPassCommands.empty())
+    {
+        mOutsideRenderPassCommands.flushToPrimary(&mPrimaryCommands);
+    }
+
     mRenderPassCommands.beginRenderPass(framebuffer, renderArea, renderPassDesc,
                                         renderPassAttachmentOps, clearValues, commandBufferOut);
-    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::endRenderPass()

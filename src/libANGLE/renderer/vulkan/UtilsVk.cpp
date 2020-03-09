@@ -1261,9 +1261,8 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     }
     else
     {
-        ANGLE_TRY(contextVk->beginRenderPass(framebuffer, renderArea, renderPassDesc,
-                                             renderPassAttachmentOps, clearValues,
-                                             commandBufferOut));
+        contextVk->beginRenderPass(framebuffer, renderArea, renderPassDesc, renderPassAttachmentOps,
+                                   clearValues, commandBufferOut);
     }
 
     contextVk->addGarbage(&framebuffer);
