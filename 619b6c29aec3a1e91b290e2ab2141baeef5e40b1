@@ -22,6 +22,30 @@
       "revId": "619b6c29aec3a1e91b290e2ab2141baeef5e40b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6149179b_27fa40d6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-09T17:37:28Z",
+      "side": 1,
+      "message": "Yes, when I just attempted to update Serials, I got validation errors about incompatible FB in the renderPass. I\u0027ve made another attempt at this where I just clear out the single cache entry for the FB w/ dirty Draw Buffer(s).",
+      "parentUuid": "55d49933_2e28382d",
+      "range": {
+        "startLine": 1068,
+        "startChar": 0,
+        "endLine": 1076,
+        "endChar": 22
+      },
+      "revId": "619b6c29aec3a1e91b290e2ab2141baeef5e40b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
