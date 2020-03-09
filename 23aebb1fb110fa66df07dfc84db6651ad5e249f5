@@ -22,6 +22,30 @@
       "revId": "23aebb1fb110fa66df07dfc84db6651ad5e249f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "775924d9_b25cd8c3",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-09T18:22:32Z",
+      "side": 1,
+      "message": "I agree that this looks a bit goofy.\n\nThe problem is that the ProgramExecutable doesn\u0027t know what it\u0027s inside of (Program or ProgramPipeline) so it has to do some extra checking to handle both.   In this case the ContextVk doesn\u0027t know/care whether it\u0027s dealing with a Program or PPO, it just needs to know from the GL frontend if there are default uniforms:\n\nvoid ContextVk::invalidateCurrentDefaultUniforms()\n{\n...\n    if (executable-\u003ehasDefaultUniforms(mState))\n    {\n...\n    }\n}\n\nThis ends up taking the following path:\n\nContextVk -\u003e gl::ProgramExecutable -\u003e gl::State -\u003e Program/ProgramPipeline -\u003e ProgramState(s):\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2072652/37/src/libANGLE/ProgramExecutable.cpp\n\nThis is complicated by a couple things:\n- The relevant information resides in the ProgramState.\n- gl::Program and gl::ProgramPipeline require different approaches to answer the same query.\n  - PPOs have to check each of the Programs in the PPO.\n\nOne approach would be to have a shadow boolean that\u0027s updated whenever necessary to indicate the current state.   For example:\n\nbool hasDefaultUniforms() const { return !getDefaultUniformRange().empty(); }\n\nWhenever mDefaultUniformRange is no longer empty, we could update a new ProgramExecutable::mHasDefaultUniforms boolean to the correct value.   This gets a little tricker for PPOs, since the Program will need to update each of the PPOs its in, but not too big of a deal.   I\u0027m not a big fan of this approach though, since it\u0027s possible for these to get out of sync whenever mDefaultUniformRange is used in new places (or modified/removed from existing ones).   \n\nAnother approach is for the ProgramExecutable to have a pointer back to the corresponding ProgramState or ProgramPipelineState that it\u0027s associated with.   This would allow it to respond to these types of queries without necessarily caring which it\u0027s in, it just calls the method on the first non-null pointer it finds.   For example:\n\nclass ProgramExecutable\n{\n...\n  private:\n    ProgramState         *mProgramState;\n    ProgramPipelineState *mProgramPipelineState;\n}\n\nbool ProgramExecutable::hasDefaultUniforms(const gl::State \u0026glState) const\n{\n    ASSERT(mProgramState || mProgramPipelineState);\n    if (mProgramState)\n    {\n        return mProgramState-\u003ehasDefaultUniforms();\n    }\n\n    [[[ ProgramPipelineState would contain the PPO-specific looping ]]]\n    return mProgramPipelineState-\u003ehasDefaultUniforms();\n}\n\nThis is my preference, but I\u0027m not sure how ugly it is to have the ProgramState instantiate the ProgramExecutable which then points back to the ProgramState (and same for PPOs).",
+      "parentUuid": "191d0d95_19e1884e",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 72,
+        "endChar": 16
+      },
+      "revId": "23aebb1fb110fa66df07dfc84db6651ad5e249f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
