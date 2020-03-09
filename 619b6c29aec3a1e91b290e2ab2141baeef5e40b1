@@ -70,6 +70,30 @@
       "revId": "619b6c29aec3a1e91b290e2ab2141baeef5e40b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "248218e9_2981da2d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-09T17:44:59Z",
+      "side": 1,
+      "message": "A bit more detail:\n\nIt\u0027s probably the problem I mentioned above. Buffers not getting zeroed out.\n\nYour change here doesn\u0027t address the underlying issue of the desc being incorrect when the user toggles draw buffers on/off.",
+      "parentUuid": "d4d62035_38c08c57",
+      "range": {
+        "startLine": 1068,
+        "startChar": 0,
+        "endLine": 1076,
+        "endChar": 22
+      },
+      "revId": "619b6c29aec3a1e91b290e2ab2141baeef5e40b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
