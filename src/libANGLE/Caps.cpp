@@ -608,7 +608,7 @@ static bool DetermineDepthTextureANGLESupport(const TextureCapsMap &textureCaps)
         GL_DEPTH24_STENCIL8_OES,
     };
 
-    return GetFormatSupport(textureCaps, requiredFormats, true, true, true, true, false);
+    return GetFormatSupport(textureCaps, requiredFormats, true, true, true, false, false);
 }
 
 // Check for GL_OES_depth_texture support
@@ -635,6 +635,7 @@ static bool DetermineDepth24OESSupport(const TextureCapsMap &textureCaps)
 // Check for GL_OES_depth32 support
 static bool DetermineDepth32Support(const TextureCapsMap &textureCaps)
 {
+    return false;
     constexpr GLenum requiredFormats[] = {
         GL_DEPTH_COMPONENT32_OES,
     };
