@@ -70,6 +70,30 @@
       "revId": "23aebb1fb110fa66df07dfc84db6651ad5e249f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9f71ea9_df7ea399",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-09T19:06:03Z",
+      "side": 1,
+      "message": "So far they just need to be able to see the ProgramState or ProgramPipelineState, but that can move up a level to Program/ProgramPipeline if necessary (since those give access to the corresponding States).\n\nTake a look at the latest patchset to see what you think while I apply this to the PPO implementation.   I think it will make things a lot cleaner this way.   The only iffy part is having both pointers in ProgramExecutable, when only one will ever be non-null:\n\n    ProgramState *mProgramState;\n    ProgramPipelineState *mProgramPipelineState;\n\nI think we\u0027re stuck with that without some kind of subclassing or RTTI that Cody mentioned to me (unless you can come up with something of course).",
+      "parentUuid": "1b8e68b2_68da252f",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 72,
+        "endChar": 16
+      },
+      "revId": "23aebb1fb110fa66df07dfc84db6651ad5e249f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
