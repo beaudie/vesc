@@ -46,6 +46,30 @@
       "revId": "6c69df177fe43a532b8963c01635ee3cba0e32f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77e3d447_ae4dce39",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-09T14:40:18Z",
+      "side": 1,
+      "message": "What I\u0027m hoping is that the existing conversion functions will cover the special cases that exist.  For example: if you look at QueryTexParameterBase, we use different functions like CastFromGLintStateValue, or CastFromStateValue (which passes the pname too) to signal that the input is of some type or pname.  I hope we can move any special case in there, we may need more functions like CastFromGLFloatStateValue.\n\nGetting it fixed here would be a good start, we can see if there is an elegant solution to apply to the other places too.",
+      "parentUuid": "d2f2f922_5027859c",
+      "range": {
+        "startLine": 1423,
+        "startChar": 0,
+        "endLine": 1437,
+        "endChar": 5
+      },
+      "revId": "6c69df177fe43a532b8963c01635ee3cba0e32f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
