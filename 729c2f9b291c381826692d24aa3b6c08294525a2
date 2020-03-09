@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ac25a7d_77d45c09",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-09T19:29:53Z",
+      "side": 1,
+      "message": "I\u0027ve noticed that on the SwiftShader tracker they use tags like this:\n\n\"Bug: b/151095080\"\n\nI\u0027d love it if we could do something like that. Especially because BugDroid picks up that format and updates the buganizer issue. Can you play with it a bit at least to ensure BugDroid works?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 15
+      },
+      "revId": "729c2f9b291c381826692d24aa3b6c08294525a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
