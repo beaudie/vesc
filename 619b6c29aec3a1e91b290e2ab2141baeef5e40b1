@@ -46,6 +46,30 @@
       "revId": "619b6c29aec3a1e91b290e2ab2141baeef5e40b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4d62035_38c08c57",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-09T17:44:02Z",
+      "side": 1,
+      "message": "Can you share repro steps? I\u0027d like to debug.",
+      "parentUuid": "6149179b_27fa40d6",
+      "range": {
+        "startLine": 1068,
+        "startChar": 0,
+        "endLine": 1076,
+        "endChar": 22
+      },
+      "revId": "619b6c29aec3a1e91b290e2ab2141baeef5e40b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
