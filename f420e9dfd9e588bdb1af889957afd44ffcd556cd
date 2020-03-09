@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0010dd06_3ddd4a23",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1683,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-09T19:38:18Z",
+      "side": 1,
+      "message": "The spec has some discussion of this. The ESSL 1.00 spec says \"The precisions of operations are \u003c...\u003e implementation-dependent.\" \n\nIt also says \"where the precision is not defined, the evaluation is\nperformed at or above the highest supported precision of the target (either mediump or highp)\"\n\nHowever usually the default precision is defined. (e.g. precision mediump float;).\n\nThe ESSL 3.20 spec defines rules about how operations should be rounded and more detailed precision guarantees. It also says \"Within the above specification, an implementation is allowed to vary the representation of numeric values, both within a shader and between different shaders.\"\n\nSo there\u0027s some fairly wishy washy language around the whole thing. It might require some study to know how this regulates translation. As a baseline I think ANGLE is favoring high quality rendering more than a native GL driver.",
+      "parentUuid": "d53ae8aa_8fbdff78",
+      "revId": "f420e9dfd9e588bdb1af889957afd44ffcd556cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b29ac903_c3a48eb1",
         "filename": "src/compiler/translator/IntermNode.cpp",
         "patchSetId": 5
