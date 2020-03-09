@@ -2233,6 +2233,21 @@ angle::Result ContextVk::clearWithRenderPassOp(
     RenderTargetVk *depthStencilRenderTarget = mDrawFramebuffer->getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
+        const vk::Format &format = depthStencilRenderTarget->getImageFormat();
+        if (format.hasEmulatedImageChannels())
+        {
+            if (format.intendedFormat().stencilBits == 0)
+            {
+                mRenderPassCommands.invalidateRenderPassStencilAttachment(attachmentIndexVk);
+                clearStencil = true;
+            }
+            if (format.intendedFormat().depthBits == 0)
+            {
+                mRenderPassCommands.invalidateRenderPassDepthAttachment(attachmentIndexVk);
+                clearDepth = true;
+            }
+        }
+
         if (clearDepth)
         {
             mRenderPassCommands.clearRenderPassDepthAttachment(attachmentIndexVk,
