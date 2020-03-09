@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dad924a1_36c1b603",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-09T22:10:12Z",
+      "side": 1,
+      "message": "ASSERT(mAtomicCounterBuffers.size() \u003c 2) ?",
+      "revId": "69b797ae436bf48fcdd1905e21482dfd6d3d9dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5ef934c_6d26d118",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-09T22:10:12Z",
+      "side": 1,
+      "message": "Do we need to initialize mActiveImageMask \u0026 mActiveSamplersMask, etc.?\nOr will code call reset prior to use?",
+      "revId": "69b797ae436bf48fcdd1905e21482dfd6d3d9dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e6cc138_f5a53926",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-09T22:10:12Z",
+      "side": 1,
+      "message": "Move ASSERT up one line, otherwise will segfault at 1211 before hitting assert.",
+      "revId": "69b797ae436bf48fcdd1905e21482dfd6d3d9dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
