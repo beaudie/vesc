@@ -22,6 +22,30 @@
       "revId": "6c69df177fe43a532b8963c01635ee3cba0e32f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2f2f922_5027859c",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-09T06:17:07Z",
+      "side": 1,
+      "message": "Thanks Geoff!\nI also think the conversion is clumsy between fixed-point and float when I\u0027m coding. I hope  to improve it separately in a new patch, because the ConvertFloatToFixed has been called by several different functions.\nWhat\u0027s more. Do you want me to fix the conversion just here in QueryTexParameterxv or all the related API? And, the special cases also exist in the conversion from fixedPoint to float, do you have suggestion about that?",
+      "parentUuid": "a3f77b48_291ef4ad",
+      "range": {
+        "startLine": 1423,
+        "startChar": 0,
+        "endLine": 1437,
+        "endChar": 5
+      },
+      "revId": "6c69df177fe43a532b8963c01635ee3cba0e32f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
