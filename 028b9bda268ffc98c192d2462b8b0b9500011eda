@@ -22,6 +22,30 @@
       "revId": "028b9bda268ffc98c192d2462b8b0b9500011eda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c16f240_b1b0b4d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-09T15:03:27Z",
+      "side": 1,
+      "message": "Yes, you\u0027re right, thanks, Shabi. The issue is that \"x\u003dy\" in your example was promoting the result to highp. Modified fix to account for assignment without changing all of the arithmetic ops.",
+      "parentUuid": "990a3ac3_1b950fcc",
+      "range": {
+        "startLine": 10,
+        "startChar": 22,
+        "endLine": 10,
+        "endChar": 52
+      },
+      "revId": "028b9bda268ffc98c192d2462b8b0b9500011eda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
