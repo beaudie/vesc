@@ -46,6 +46,30 @@
       "revId": "23aebb1fb110fa66df07dfc84db6651ad5e249f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b8e68b2_68da252f",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-09T18:39:25Z",
+      "side": 1,
+      "message": "Ok I see. I haven\u0027t given it much thought, but I personally prefer the ProgramExecutable having a pointer to Program/ProgramPipeline than letting it try to infer it from the context. Either that, or use virtual functions and have them inherit ProgramExecutable.",
+      "parentUuid": "775924d9_b25cd8c3",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 72,
+        "endChar": 16
+      },
+      "revId": "23aebb1fb110fa66df07dfc84db6651ad5e249f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
