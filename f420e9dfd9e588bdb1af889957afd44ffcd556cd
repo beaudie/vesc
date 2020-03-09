@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d53ae8aa_8fbdff78",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1683,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-09T18:49:38Z",
+      "side": 1,
+      "message": "It\u0027s not very clear to me what the rules really are. For example, what happens in this situation?\n\n    highp float x \u003d 10.0;\n    float y \u003d x;\n\nShould y be highp or the default (let\u0027s assume the default is mediump)? You also have:\n\n    lowp float z \u003d x;\n\nWhich means just looking at EOpInitialize shouldn\u0027t be enough to tell if promotion should happen or not. You probably need to have a way to know if the variable\u0027s precision was specifically specified or if it\u0027s left to default, then promote or not based on that.\n\nThe now-deleted setPrecision(higherPrecision) call used to promote the precision in case of EOpInitialize, but that doesn\u0027t happen now.\n\n---\n\nI\u0027m also not sure if assignment should follow the same rules. Like, what\u0027s the precision of y here?\n\n    highp float x \u003d 10.0;\n    float y \u003d 1;\n    y +\u003d x;\n\nShould y get promoted to highp or remain default?",
+      "revId": "f420e9dfd9e588bdb1af889957afd44ffcd556cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b29ac903_c3a48eb1",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-09T18:49:38Z",
+      "side": 1,
+      "message": "These are still using higherPrecision.",
+      "range": {
+        "startLine": 1696,
+        "startChar": 0,
+        "endLine": 1704,
+        "endChar": 32
+      },
+      "revId": "f420e9dfd9e588bdb1af889957afd44ffcd556cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
