@@ -16,6 +16,24 @@
       "revId": "ea43d5e423cd55e5c5bcee24cf00bbfa40e5cef9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74ed67fa_f2c598f5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-09T20:47:45Z",
+      "side": 1,
+      "message": "You can split it if you want. I\u0027m fine with leaving it.",
+      "parentUuid": "84215e13_982d9138",
+      "revId": "ea43d5e423cd55e5c5bcee24cf00bbfa40e5cef9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
