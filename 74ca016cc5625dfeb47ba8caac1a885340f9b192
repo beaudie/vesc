@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23798222_3208597b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-09T21:49:38Z",
+      "side": 1,
+      "message": "Let\u0027s organize this and the other places like this:\n\n#    elif defined(ANGLE_PLATFORM_LINUX)\n#        if defined(ANGLE_USE_OZONE)\n#            include \"libANGLE/renderer/gl/egl/ozone/DisplayOzone.h\"\n#        else\n#            include \"libANGLE/renderer/gl/egl/DisplayEGL.h\"\n#            if defined(ANGLE_USE_X11)\n#                include \"libANGLE/renderer/gl/glx/DisplayGLX.h\"\n#            endif\n#        endif",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 0
+      },
+      "revId": "74ca016cc5625dfeb47ba8caac1a885340f9b192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
