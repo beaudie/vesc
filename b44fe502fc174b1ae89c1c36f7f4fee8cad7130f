@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74d28e90_7e810de4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-10T18:39:40Z",
+      "side": 1,
+      "message": "Great! I had started debugging the fail but looks like you already fixed it. Thanks, good work!",
+      "revId": "b44fe502fc174b1ae89c1c36f7f4fee8cad7130f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
