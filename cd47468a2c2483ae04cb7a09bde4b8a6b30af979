@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "811b73cc_20c64d40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-10T22:20:50Z",
+      "side": 1,
+      "message": "Thought that our presubmit won\u0027t allow this, but looks like it\u0027s OK.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 5
+      },
+      "revId": "cd47468a2c2483ae04cb7a09bde4b8a6b30af979",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
