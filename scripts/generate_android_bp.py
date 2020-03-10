@@ -294,7 +294,7 @@ def library_target_to_blueprint(target, build_info):
     bp['name'] = gn_target_to_blueprint_target(target, target_info)
 
     if target in root_targets:
-        bp['visibility'] = ["//visibility:public"]
+        bp['visibility'] = ['//visibility:public']
 
     if 'sources' in target_info:
         bp['srcs'] = gn_sources_to_blueprint_sources(target_info['sources'])
@@ -433,10 +433,10 @@ def main():
 
     # Add APKs with all of the root libraries
     blueprint_targets.append((
-        'android_app',
+        'java_defaults',
         {
             'name':
-                'ANGLE',
+                'ANGLE_defaults',
             'sdk_version':
                 'system_current',
             'min_sdk_version':
@@ -445,14 +445,10 @@ def main():
                 'both',
             'use_embedded_native_libs':
                 True,
+            'visibility': ['//visibility:public'],
             'resource_dirs': ['src/android_system_settings/res',],
             'asset_dirs': ['src/android_system_settings/assets',],
-            'srcs': [
-                'src/android_system_settings/src/com/android/angle/common/*.java',
-                'src/android_system_settings/src/com/android/angle/*.java',
-            ],
-            'manifest':
-                'src/android_system_settings/src/com/android/angle/AndroidManifest.xml',
+            'srcs': ['src/android_system_settings/src/**/*.java',],
             'aaptflags': [
                 # Don't compress *.json files
                 '-0 .json',
@@ -469,6 +465,14 @@ def main():
             'owner':
                 'google',
         }))
+
+    blueprint_targets.append(('android_app', {
+        'name': 'ANGLE',
+        'defaults': ['ANGLE_defaults'],
+        'visibility': ['//visibility:public'],
+        'manifest': 'src/android_system_settings/src/com/android/angle/AndroidManifest.xml',
+        'required': ['privapp_whitelist_com.android.angle'],
+    }))
 
     output = [
         """// GENERATED FILE - DO NOT EDIT.
