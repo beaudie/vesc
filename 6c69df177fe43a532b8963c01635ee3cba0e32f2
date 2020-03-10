@@ -70,6 +70,30 @@
       "revId": "6c69df177fe43a532b8963c01635ee3cba0e32f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7acc097f_85fabe5b",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-10T08:59:51Z",
+      "side": 1,
+      "message": "Thanks Geoff! I add a new function named CastFromSpeicalValue to handle the conversion of special cases. If the pname\u0027s parameter need special conversion about fixed_point data, it can just call the new function.It will cast the value to float before calling ConvertFloatToFixed function.I\u0027ve tried other solutions, but they failed.1)add new type data gl::fixed, the static_cast\u003cgl::fixed\u003eint error occurs. 2) add GLfixed to the template of CastFromGLintStateValue/CastFromStateValue, but the template can\u0027t separate GLfixed form GLint.\nAnyway, adding the new function works. What do you think?",
+      "parentUuid": "77e3d447_ae4dce39",
+      "range": {
+        "startLine": 1423,
+        "startChar": 0,
+        "endLine": 1437,
+        "endChar": 5
+      },
+      "revId": "6c69df177fe43a532b8963c01635ee3cba0e32f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
