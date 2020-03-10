@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efe70d27_e95518b7",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-10T20:35:47Z",
+      "side": 1,
+      "message": "nit: formatting looks off, did you run \"git cl format\"?",
+      "range": {
+        "startLine": 264,
+        "startChar": 12,
+        "endLine": 264,
+        "endChar": 13
+      },
+      "revId": "48c0aa5c036d73caa519264444c345cad9fd9f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
