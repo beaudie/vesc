@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2e0fede0_487bb973",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2020-03-10T19:51:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e46bc3d7_774da6dc",
+      "range": {
+        "startLine": 68,
+        "startChar": 10,
+        "endLine": 68,
+        "endChar": 14
+      },
+      "revId": "79653fe066af58dea69668e7e276364eb13396af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba622d33_3daabf50",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "79653fe066af58dea69668e7e276364eb13396af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2aee853_9188fca5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2020-03-10T19:51:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ba622d33_3daabf50",
+      "range": {
+        "startLine": 696,
+        "startChar": 57,
+        "endLine": 696,
+        "endChar": 95
+      },
+      "revId": "79653fe066af58dea69668e7e276364eb13396af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +131,30 @@
       "side": 1,
       "message": "@Shabaz, the reason we can\u0027t use the vendorid/deviceid is they are not guaranteed to be unique on the system. Users can have two adapters with the same vendorid/deviceid but with different monitors plugged in, and even different drivers. \n\nOn Windows, AR/VR runtimes return LUIDs to the application so we need to rationalize the adapters using those.",
       "parentUuid": "4b565e68_0f338946",
+      "range": {
+        "startLine": 710,
+        "startChar": 16,
+        "endLine": 710,
+        "endChar": 89
+      },
+      "revId": "79653fe066af58dea69668e7e276364eb13396af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9f2e798_0d54733c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2020-03-10T19:51:25Z",
+      "side": 1,
+      "message": "The LUID is also obtained either directly from D3D (IDXGIAdapter::GetDesc) or directly from the VR runtime, independent of the vendorid/deviceid.\n\nFor example, the OpenXR runtime for VR has an API that returns the LUID of the adapter that the VR headset is attached to (https://www.khronos.org/registry/OpenXR/specs/1.0/html/xrspec.html#XrGraphicsRequirementsD3D11KHR)",
+      "parentUuid": "b06d6869_41d109f8",
       "range": {
         "startLine": 710,
         "startChar": 16,
