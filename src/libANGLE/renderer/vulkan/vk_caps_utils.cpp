@@ -70,7 +70,22 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.copyTexture            = true;
     mNativeExtensions.copyCompressedTexture  = true;
     mNativeExtensions.debugMarker            = true;
-    mNativeExtensions.robustness             = true;
+#if defined(ANGLE_PLATFORM_ANDROID)
+    constexpr uint32_t kVendorID_GOOGLE      = 0x1AE0;
+    constexpr uint32_t kDeviceID_Swiftshader = 0xC0DE;
+
+    if (mPhysicalDeviceProperties == kVendorID_GOOGLE &&
+        mPhysicalDeviceProperties == kSwiftShaderDeviceID)
+    {
+        mNativeExtensions.robustness = false;
+    }
+    else
+    {
+        mNativeExtensions.robustness = true;
+    }
+#else
+    mNativeExtensions.robustness = true;
+#endif
     mNativeExtensions.textureBorderClampOES  = false;  // not implemented yet
     mNativeExtensions.translatedShaderSource = true;
     mNativeExtensions.discardFramebuffer     = true;

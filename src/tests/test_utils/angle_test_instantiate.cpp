@@ -447,6 +447,12 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
             default:
                 return false;
         }
+
+        if (param.getDeviceType() == EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE &&
+            param.eglParameters.robustness)
+        {
+            return false;
+        }
     }
 
     // Unknown platform.
