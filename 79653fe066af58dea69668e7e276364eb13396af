@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "ba622d33_3daabf50",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-10T16:34:08Z",
+      "side": 1,
+      "message": "we should add EGL validations for these in validationEGL and tests as well in angle_end2end_tests.",
+      "range": {
+        "startLine": 696,
+        "startChar": 57,
+        "endLine": 696,
+        "endChar": 95
+      },
+      "revId": "79653fe066af58dea69668e7e276364eb13396af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b565e68_0f338946",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 3
