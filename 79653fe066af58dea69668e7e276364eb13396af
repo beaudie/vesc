@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b565e68_0f338946",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-10T15:09:31Z",
+      "side": 1,
+      "message": "Why not use vendorId and deviceId? Then the extension could translate to other backends as well. I looked up LUID and it says:\n\n\u003e The uniqueness of an LUID is guaranteed only until the system is restarted.\n\nso presumably LUIDs are regenerated on every boot? I\u0027m guessing the user of ANGLE is using some algorithm to discover the right LUID based on some other information (like vendorId and deviceId), maybe it\u0027s better to actually get that information instead.",
+      "range": {
+        "startLine": 710,
+        "startChar": 16,
+        "endLine": 710,
+        "endChar": 89
+      },
+      "revId": "79653fe066af58dea69668e7e276364eb13396af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
