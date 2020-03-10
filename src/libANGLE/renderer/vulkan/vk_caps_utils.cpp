@@ -70,7 +70,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.copyTexture            = true;
     mNativeExtensions.copyCompressedTexture  = true;
     mNativeExtensions.debugMarker            = true;
-    mNativeExtensions.robustness             = true;
+    mNativeExtensions.robustness             = false;
     mNativeExtensions.textureBorderClampOES  = false;  // not implemented yet
     mNativeExtensions.translatedShaderSource = true;
     mNativeExtensions.discardFramebuffer     = true;
