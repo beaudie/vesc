@@ -433,6 +433,15 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
             }
         }
 
+        DeviceID deviceID =
+            systemInfo.gpus.empty() ? 0 : systemInfo.gpus[systemInfo.activeGPUIndex].deviceId;
+        if ((param.getDeviceType() == EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE ||
+             (vendorID == kVendorID_GOOGLE && deviceID == kDeviceID_Swiftshader)) &&
+            param.eglParameters.robustness)
+        {
+            return false;
+        }
+
         // Currently we support the GLES and Vulkan back-ends on Android.
         switch (param.getRenderer())
         {
