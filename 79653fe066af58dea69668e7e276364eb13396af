@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e46bc3d7_774da6dc",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-10T16:33:20Z",
+      "side": 1,
+      "message": "can we prototype this before landing? the spec can go in our extensions/ folder. We can allocate enums for you from the ones reserved for ANGLE.",
+      "range": {
+        "startLine": 68,
+        "startChar": 10,
+        "endLine": 68,
+        "endChar": 14
+      },
+      "revId": "79653fe066af58dea69668e7e276364eb13396af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b565e68_0f338946",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 3
