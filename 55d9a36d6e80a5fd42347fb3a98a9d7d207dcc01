@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "126a1419_9e17ed02",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3027,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-10T17:07:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dccded4d_a93b32ba",
+      "range": {
+        "startLine": 3027,
+        "startChar": 4,
+        "endLine": 3027,
+        "endChar": 23
+      },
+      "revId": "55d9a36d6e80a5fd42347fb3a98a9d7d207dcc01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3babfd7d_a3500f3b",
         "filename": "src/libANGLE/Program.h",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-09T20:33:37Z",
       "side": 1,
       "message": "nit: doesn\u0027t need to be const ref",
+      "range": {
+        "startLine": 350,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 20
+      },
+      "revId": "55d9a36d6e80a5fd42347fb3a98a9d7d207dcc01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f8f8370_10f9ee4a",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-10T17:07:25Z",
+      "side": 1,
+      "message": "For the full context on how this is used:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2072652/40/src/libANGLE/renderer/glslang_wrapper_utils.cpp#1878\n\nUnfortunately, GenerateTransformFeedbackExtensionOutputs() needs to be able to update this value so it can be used later during AssignLocations(), both during GlslangGetShaderSource() and later in ProgramPipelineVk::link().\n\nThe alternative is to have:\n\n    uint32_t getLocationsUsedForXfbExtension() const\n    {\n        return mLocationsUsedForXfbExtension;\n    }\n    void setLocationsUsedForXfbExtension(uint32_t locationsUsedForXfbExtension)\n    {\n        mLocationsUsedForXfbExtension \u003d locationsUsedForXfbExtension;\n    }\n\nHowever, that would mean removing the \u0027const\u0027 qualifier on the ProgramState that\u0027s passed through the full GlslangGetShaderSource() call chain so setLocationsUsedForXfbExtension() could be called.   That felt a little worse than cheating with a const_cast\u003c\u003e in a single place, since the ProgramState really is const otherwise:\n\nvoid GlslangGetShaderSource(GlslangSourceOptions \u0026options,\n                            const gl::ProgramState \u0026programState,\n                            const gl::ProgramLinkedResources \u0026resources,\n                            gl::ShaderMap\u003cstd::string\u003e *shaderSourcesOut,\n                            gl::ShaderMap\u003cShaderInterfaceVariableInfoMap\u003e *variableInfoMapOut)\n{\n...\n            if (options.supportsTransformFeedbackExtension)\n            {\n                GenerateTransformFeedbackExtensionOutputs(\n                    programState, resources, vertexSource,\n                    \u0026(*variableInfoMapOut)[gl::ShaderType::Vertex],\n                    \u0026(const_cast\u003cuint32_t \u0026\u003e(programState.getLocationsUsedForXfbExtension())));\n            }\n\nThe other option is to find somewhere else for that value to live that will survive until ProgramPipelineVk::link() (draw time) for each program, though most everything is already marked \u0027const\u0027.",
+      "parentUuid": "3babfd7d_a3500f3b",
       "range": {
         "startLine": 350,
         "startChar": 4,

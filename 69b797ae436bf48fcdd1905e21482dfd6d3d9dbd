@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "598a6ebb_6007a8e7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-10T17:07:25Z",
+      "side": 1,
+      "message": "This particular piece of logic was taken from ProgramVk::updateBindingOffsets():\n\n[[[ ProgramVk.cpp ]]]\nvoid ProgramVk::updateBindingOffsets()\n{\n    mStorageBlockBindingsOffset \u003d static_cast\u003cuint32_t\u003e(mState.getUniqueUniformBlockCount());\n\n    mAtomicCounterBufferBindingsOffset \u003d\n        static_cast\u003cuint32_t\u003e(mStorageBlockBindingsOffset + mState.getUniqueStorageBlockCount());\n\n[[[ taken from here ]]]\n    uint32_t atomicCounterBindingCount \u003d mState.getAtomicCounterBuffers().empty() ? 0 : 1;\n    mImageBindingsOffset \u003d mAtomicCounterBufferBindingsOffset + atomicCounterBindingCount;\n}\n\nHowever, looking closer it doesn\u0027t seem this is actually used anywhere (now or later), so the correct answer is to just remove it entirely.",
+      "parentUuid": "dad924a1_36c1b603",
+      "revId": "69b797ae436bf48fcdd1905e21482dfd6d3d9dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5ef934c_6d26d118",
         "filename": "src/libANGLE/ProgramExecutable.cpp",
         "patchSetId": 11
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "0c562905_e7f67360",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-10T17:07:25Z",
+      "side": 1,
+      "message": "We don\u0027t currently do that with ProgramState but I went ahead and added them here.",
+      "parentUuid": "e5ef934c_6d26d118",
+      "revId": "69b797ae436bf48fcdd1905e21482dfd6d3d9dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e6cc138_f5a53926",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -50,6 +86,24 @@
       "revId": "69b797ae436bf48fcdd1905e21482dfd6d3d9dbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1eb0de5_1b6e8285",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-10T17:07:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e6cc138_f5a53926",
+      "revId": "69b797ae436bf48fcdd1905e21482dfd6d3d9dbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
