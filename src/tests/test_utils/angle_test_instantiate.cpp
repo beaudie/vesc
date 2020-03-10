@@ -433,6 +433,22 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
             }
         }
 
+        // TODO: https://bugs.chromium.org/p/swiftshader/issues/detail?id=145
+        // Swiftshader does not currently have all the robustness features
+        // we need for ANGLE. In particular, it is unable to detect and recover
+        // from infinitely looping shaders. That bug is the tracker for fixing
+        // that and when resolved we can remove the following code.
+        // This test will disable tests marked with the config WithRobustness
+        // when run with the swiftshader Vulkan driver and on Android.
+        DeviceID deviceID =
+            systemInfo.gpus.empty() ? 0 : systemInfo.gpus[systemInfo.activeGPUIndex].deviceId;
+        if ((param.getDeviceType() == EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE ||
+             (vendorID == kVendorID_GOOGLE && deviceID == kDeviceID_Swiftshader)) &&
+            param.eglParameters.robustness)
+        {
+            return false;
+        }
+
         // Currently we support the GLES and Vulkan back-ends on Android.
         switch (param.getRenderer())
         {
