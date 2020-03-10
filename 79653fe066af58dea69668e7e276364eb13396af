@@ -22,6 +22,30 @@
       "revId": "79653fe066af58dea69668e7e276364eb13396af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b06d6869_41d109f8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-03-10T15:19:07Z",
+      "side": 1,
+      "message": "@Shabaz, the reason we can\u0027t use the vendorid/deviceid is they are not guaranteed to be unique on the system. Users can have two adapters with the same vendorid/deviceid but with different monitors plugged in, and even different drivers. \n\nOn Windows, AR/VR runtimes return LUIDs to the application so we need to rationalize the adapters using those.",
+      "parentUuid": "4b565e68_0f338946",
+      "range": {
+        "startLine": 710,
+        "startChar": 16,
+        "endLine": 710,
+        "endChar": 89
+      },
+      "revId": "79653fe066af58dea69668e7e276364eb13396af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
