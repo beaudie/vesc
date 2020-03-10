@@ -1957,7 +1957,9 @@ Error ValidateMakeCurrent(Display *display, Surface *draw, Surface *read, gl::Co
         ANGLE_TRY(ValidateContext(display, context));
     }
 
-    if (display->isInitialized() && display->isDeviceLost())
+    if (display->isInitialized() &&
+        (display->isDeviceLost() &&
+         (context != EGL_NO_CONTEXT || draw != EGL_NO_SURFACE || read != EGL_NO_SURFACE)))
     {
         return EglContextLost();
     }

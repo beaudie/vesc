@@ -95,6 +95,8 @@ GLenum DefaultGLErrorCode(VkResult result)
         case VK_ERROR_OUT_OF_DEVICE_MEMORY:
         case VK_ERROR_TOO_MANY_OBJECTS:
             return GL_OUT_OF_MEMORY;
+        case VK_ERROR_DEVICE_LOST:
+            return GL_CONTEXT_LOST;
         default:
             return GL_INVALID_OPERATION;
     }
@@ -458,7 +460,7 @@ void CommandQueue::handleDeviceLost(RendererVk *renderer)
         // On device loss we need to wait for fence to be signaled before destroying it
         VkResult status = batch.fence.get().wait(device, renderer->getMaxFenceWaitTimeNs());
         // If the wait times out, it is probably not possible to recover from lost device
-        ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
+        ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST || status == VK_TIMEOUT);
 
         // On device lost, here simply destroy the CommandBuffer, it will fully cleared later
         // by CommandPool::destroy
@@ -507,6 +509,12 @@ angle::Result CommandQueue::finishToSerial(vk::Context *context, Serial serial, 
     // Wait for it finish
     VkDevice device = context->getDevice();
     VkResult status = batch.fence.get().wait(device, timeout);
+    if (status == VK_TIMEOUT)
+    {
+		// We are going to consider a timeout at finish time to
+		// be equivalent to a device lost.
+        status = VK_ERROR_DEVICE_LOST;
+	}
 
     ANGLE_VK_TRY(context, status);
 
