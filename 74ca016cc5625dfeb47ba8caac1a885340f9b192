@@ -22,6 +22,47 @@
       "revId": "74ca016cc5625dfeb47ba8caac1a885340f9b192",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad2a06d7_c31a044f",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-03-10T04:22:24Z",
+      "side": 1,
+      "message": "Good idea, done, thx.",
+      "parentUuid": "23798222_3208597b",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 0
+      },
+      "revId": "74ca016cc5625dfeb47ba8caac1a885340f9b192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f270959_75993698",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1230115
+      },
+      "writtenOn": "2020-03-10T04:22:24Z",
+      "side": 1,
+      "message": "I also added \u0026\u0026 !defined(ANGLE_USE_OZONE) so we do not advertise it on Ozone.",
+      "revId": "74ca016cc5625dfeb47ba8caac1a885340f9b192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
