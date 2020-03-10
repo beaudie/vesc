@@ -94,6 +94,30 @@
       "revId": "6c69df177fe43a532b8963c01635ee3cba0e32f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d06a809_57121603",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-10T20:06:45Z",
+      "side": 1,
+      "message": "Yes, that looks good! Thank you",
+      "parentUuid": "7acc097f_85fabe5b",
+      "range": {
+        "startLine": 1423,
+        "startChar": 0,
+        "endLine": 1437,
+        "endChar": 5
+      },
+      "revId": "6c69df177fe43a532b8963c01635ee3cba0e32f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
