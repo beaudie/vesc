@@ -511,10 +511,10 @@ angle::Result CommandQueue::finishToSerial(vk::Context *context, Serial serial, 
     VkResult status = batch.fence.get().wait(device, timeout);
     if (status == VK_TIMEOUT)
     {
-		// We are going to consider a timeout at finish time to
-		// be equivalent to a device lost.
+        // We are going to consider a timeout at finish time to
+        // be equivalent to a device lost.
         status = VK_ERROR_DEVICE_LOST;
-	}
+    }
 
     ANGLE_VK_TRY(context, status);
 

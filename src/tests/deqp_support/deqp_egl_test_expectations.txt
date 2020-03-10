@@ -77,7 +77,7 @@
 1662 WIN : dEQP-EGL.functional.native_color_mapping.native_window.other_render = SKIP
 
 // Intentionally causes TDRs that eventually blacklist the application
-2319 : dEQP-EGL.functional.robustness.reset_context.shaders.infinite_loop.* = SKIP
+// 2319 : dEQP-EGL.functional.robustness.reset_context.shaders.infinite_loop.* = SKIP
 
 ////////////////////////////////////////////////////////////////////////////////
 //
