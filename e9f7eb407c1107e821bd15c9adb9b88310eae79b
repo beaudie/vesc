@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "120017d7_418a985f",
+        "filename": "src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-10T19:22:06Z",
+      "side": 1,
+      "message": "You can ASSERT this if you want, you have already instantiated the traverser like this: TIntermTraverser(true, false, false)",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 9
+      },
+      "revId": "e9f7eb407c1107e821bd15c9adb9b88310eae79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "101425b4_0bac2e9e",
+        "filename": "src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-10T19:22:06Z",
+      "side": 1,
+      "message": "I\u0027d remove `mFoundAtomicCounterDeclaration` and do this instead:\n\n    bool IsAtomicCounterDecl(const TIntermDeclaration *node)\n    {\n        const TIntermSequence \u0026sequence \u003d *(node-\u003egetSequence());\n        TIntermTyped *variable          \u003d sequence.front()-\u003egetAsTyped();\n        const TType \u0026type               \u003d variable-\u003egetType();\n\n        return type.getQualifier() \u003d\u003d EvqUniform \u0026\u0026 type.isAtomicCounter();\n    }\n\nand then here do:\n\n    ASSERT(!IsAtomicCounterDecl(node));\n\nWhen asserts are disabled, the function shouldn\u0027t be called.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 85
+      },
+      "revId": "e9f7eb407c1107e821bd15c9adb9b88310eae79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e461225_9151055f",
+        "filename": "src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-10T19:22:06Z",
+      "side": 1,
+      "message": "Just ASSERT this is not true. If an atomicCounter*() function is used, it must necessarily be used with an atomic counter, but we ASSERT above that there are no atomic counter declarations.\n\nIn other words, if you see these functions, you shouldn\u0027t have called the traverser.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 59
+      },
+      "revId": "e9f7eb407c1107e821bd15c9adb9b88310eae79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fd76175_fbc586de",
+        "filename": "src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-10T19:22:06Z",
+      "side": 1,
+      "message": "updateTree() already calls validateAST(), so you can just:\n\n    return traverser.updateTree(compiler, root);\n\nI\u0027m guessing you copied this from `RewriteAtomicCounters.cpp`, but note that there is a tree modification there after updateTree(). ;)",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 39
+      },
+      "revId": "e9f7eb407c1107e821bd15c9adb9b88310eae79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
