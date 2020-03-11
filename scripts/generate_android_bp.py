@@ -293,9 +293,6 @@ def library_target_to_blueprint(target, build_info):
     bp = {}
     bp['name'] = gn_target_to_blueprint_target(target, target_info)
 
-    if target in root_targets:
-        bp['visibility'] = ["//visibility:public"]
-
     if 'sources' in target_info:
         bp['srcs'] = gn_sources_to_blueprint_sources(target_info['sources'])
 
@@ -425,50 +422,60 @@ def main():
 
     blueprint_targets = []
 
-    # Set the default visibility to private
-    blueprint_targets.append(('package', {'default_visibility': ['//visibility:private']}))
-
     for target in targets_to_write:
         blueprint_targets.append(gn_target_to_blueprint(target, build_info))
 
     # Add APKs with all of the root libraries
+    blueprint_targets.append(('java_defaults', {
+        'name':
+            'ANGLE_defaults',
+        'sdk_version':
+            'system_current',
+        'min_sdk_version':
+            sdk_version,
+        'compile_multilib':
+            'both',
+        'use_embedded_native_libs':
+            True,
+        'jni_libs': [
+            gn_target_to_blueprint_target(target, build_info[target]) for target in root_targets
+        ],
+        'privileged':
+            True,
+        'owner':
+            'google',
+    }))
+
     blueprint_targets.append((
-        'android_app',
+        'android_library',
         {
             'name':
-                'ANGLE',
+                'ANGLE_library',
             'sdk_version':
                 'system_current',
             'min_sdk_version':
                 sdk_version,
-            'compile_multilib':
-                'both',
-            'use_embedded_native_libs':
-                True,
             'resource_dirs': ['src/android_system_settings/res',],
             'asset_dirs': ['src/android_system_settings/assets',],
-            'srcs': [
-                'src/android_system_settings/src/com/android/angle/common/*.java',
-                'src/android_system_settings/src/com/android/angle/*.java',
-            ],
-            'manifest':
-                'src/android_system_settings/src/com/android/angle/AndroidManifest.xml',
+            'srcs': ['src/android_system_settings/src/**/*.java',],
             'aaptflags': [
                 # Don't compress *.json files
                 '-0 .json',
                 # Give com.android.angle.common Java files access to the R class
                 '--extra-packages com.android.angle.common',
             ],
+            'manifest':
+                'src/android_system_settings/src/com/android/angle/AndroidManifest.xml',
             'static_libs': ['androidx.preference_preference',],
-            'jni_libs': [
-                gn_target_to_blueprint_target(target, build_info[target])
-                for target in root_targets
-            ],
-            'privileged':
-                True,
-            'owner':
-                'google',
         }))
+
+    blueprint_targets.append(('android_app', {
+        'name': 'ANGLE',
+        'defaults': ['ANGLE_defaults'],
+        'static_libs': ['ANGLE_library'],
+        'manifest': 'src/android_system_settings/src/com/android/angle/AndroidManifest.xml',
+        'required': ['privapp_whitelist_com.android.angle'],
+    }))
 
     output = [
         """// GENERATED FILE - DO NOT EDIT.
