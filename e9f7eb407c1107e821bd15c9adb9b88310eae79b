@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ac7c480f_b7c7a2ca",
+        "filename": "src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-11T21:51:11Z",
+      "side": 1,
+      "message": "Sounds good.",
+      "parentUuid": "120017d7_418a985f",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 9
+      },
+      "revId": "e9f7eb407c1107e821bd15c9adb9b88310eae79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "101425b4_0bac2e9e",
         "filename": "src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "e9f7eb407c1107e821bd15c9adb9b88310eae79b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30a951f9_1cdfbd36",
+        "filename": "src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-11T21:51:11Z",
+      "side": 1,
+      "message": "Ah, yes, wrapping the function in an assert is what I was looking for, thanks.",
+      "parentUuid": "101425b4_0bac2e9e",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 85
+      },
+      "revId": "e9f7eb407c1107e821bd15c9adb9b88310eae79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e1396f7d_af1affd6",
+        "filename": "src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-11T21:51:11Z",
+      "side": 1,
+      "message": "Sounds good.",
+      "parentUuid": "2e461225_9151055f",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 59
+      },
+      "revId": "e9f7eb407c1107e821bd15c9adb9b88310eae79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fd76175_fbc586de",
         "filename": "src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "e9f7eb407c1107e821bd15c9adb9b88310eae79b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cf12491_83c50459",
+        "filename": "src/compiler/translator/tree_ops/RemoveAtomicCounterBuiltins.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-11T21:51:11Z",
+      "side": 1,
+      "message": "I used about 10 traversals for code/patterns/inspiration. :)  But yeah, didn\u0027t notice that updateTree already called validateAST, thanks!",
+      "parentUuid": "4fd76175_fbc586de",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 39
+      },
+      "revId": "e9f7eb407c1107e821bd15c9adb9b88310eae79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
