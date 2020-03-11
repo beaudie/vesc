@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9f2cc29_c03712cc",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-11T19:32:05Z",
+      "side": 1,
+      "message": "I know this is unchanged from it\u0027s original location but I\u0027m wondering, are mActiveSamplerTypes and mActiveSamplerFormats really separate things?\nIn the if above we set both at the same time, could we set both to InvalidEnum here?",
+      "revId": "07b427809b9e7d851b62b2496875c3688ee33eef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
