@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25950b16_0a6611a3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6505,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-11T19:40:04Z",
+      "side": 1,
+      "message": "I think we can land this to try but it it seems unlikely it will change the behaviour here.  The !isContextLost() check is for a very specific use case of context loss with the KHR_no_error extension being used so validation is disabled, something Chrome does not use.",
+      "range": {
+        "startLine": 6501,
+        "startChar": 0,
+        "endLine": 6505,
+        "endChar": 5
+      },
+      "revId": "3e2abe40c9cd314de6e950785519a022b493adda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
