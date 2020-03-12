@@ -444,7 +444,7 @@ void main()
     glGetIntegerv(GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT, &bufferAlignOffset);
 
     constexpr int kBufferSize = kElementCount * kArrayStride;
-    const int kBufferOffset   = kBufferSize + (kBufferSize % bufferAlignOffset);
+    const int kBufferOffset   = (kBufferSize + bufferAlignOffset - 1) & ~(bufferAlignOffset - 1);
 
     glBufferData(GL_SHADER_STORAGE_BUFFER, kBufferOffset + kBufferSize, nullptr, GL_STATIC_DRAW);
 
