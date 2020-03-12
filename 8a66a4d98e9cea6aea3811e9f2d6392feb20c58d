@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "67fad942_33529f91",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-12T22:58:51Z",
+      "side": 1,
+      "message": "We\u0027ve made this independent of the shader type, but will this ever be called with anything other than gl::ShaderType::Fragment?",
+      "revId": "8a66a4d98e9cea6aea3811e9f2d6392feb20c58d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3029ac8d_8f35d21a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-12T22:58:51Z",
+      "side": 1,
+      "message": "Is it possible we could be incrementing this more than we want?\nE.g. previously we called AddResourceInfoToAllStages with a constant currentShaderResourceBindingIndex, but now we are calling AddResourceInfo for each stage and incrementing the binding index in between.",
+      "revId": "8a66a4d98e9cea6aea3811e9f2d6392feb20c58d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "80599813_427de80c",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 38
