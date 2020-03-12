@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00bfc8fa_c4b933ec",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T16:38:18Z",
+      "side": 1,
+      "message": "I believe a texture knows when it\u0027s bound as an image. See TextureState::mBoundAsImageTexture. This iteration over all images is going to be a potential cause of CPU overhead.",
+      "range": {
+        "startLine": 3461,
+        "startChar": 29,
+        "endLine": 3461,
+        "endChar": 61
+      },
+      "revId": "18f30992abbb3df7c93b7196b6d673f30904efad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
