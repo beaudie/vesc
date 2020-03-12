@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1cc44e3f_9af82932",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-12T20:09:27Z",
+      "side": 1,
+      "message": "Can you remove the extra parentheses around this statement?",
+      "range": {
+        "startLine": 1227,
+        "startChar": 28,
+        "endLine": 1227,
+        "endChar": 62
+      },
+      "revId": "badd2cfa2204ca7930c33e561e7743c9a3617b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02e5202d_08a30a2d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-12T20:09:27Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 1233,
+        "startChar": 28,
+        "endLine": 1233,
+        "endChar": 62
+      },
+      "revId": "badd2cfa2204ca7930c33e561e7743c9a3617b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
