@@ -89,6 +89,10 @@ ANGLE_INLINE angle::Result Context::syncDirtyObjects(const State::DirtyObjects &
 
 ANGLE_INLINE angle::Result Context::prepareForDraw(PrimitiveMode mode)
 {
+    ProgramExecutable *executable = mState.mExecutable;
+    ASSERT(executable);
+    executable->setIsCompute(this, false);
+
     if (mGLES1Renderer)
     {
         ANGLE_TRY(mGLES1Renderer->prepareForDraw(mode, this, &mState));

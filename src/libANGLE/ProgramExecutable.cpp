@@ -64,6 +64,30 @@ const ProgramState *ProgramExecutable::getProgramState(ShaderType shaderType) co
     return nullptr;
 }
 
+bool ProgramExecutable::isCompute() const
+{
+    ASSERT(mProgramState || mProgramPipelineState);
+
+    if (mProgramState)
+    {
+        return mProgramState->isCompute();
+    }
+
+    return mProgramPipelineState->isCompute();
+}
+
+void ProgramExecutable::setIsCompute(Context *context, bool isComputeIn)
+{
+    if (mProgramPipelineState)
+    {
+        if (isCompute() != isComputeIn)
+        {
+            context->setProgramBindingDirty();
+        }
+        mProgramPipelineState->setIsCompute(isComputeIn);
+    }
+}
+
 int ProgramExecutable::getInfoLogLength() const
 {
     return static_cast<int>(mInfoLog.getLength());
