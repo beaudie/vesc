@@ -385,7 +385,7 @@ angle::Result CommandQueue::checkCompletedCommands(vk::Context *context)
         {
             for (vk::GarbageObject &garbage : garbageList.get())
             {
-                garbage.destroy(device);
+                garbage.destroy(device, renderer);
             }
         }
         else
@@ -428,13 +428,13 @@ angle::Result CommandQueue::releaseToCommandBatch(vk::Context *context,
     return angle::Result::Continue;
 }
 
-void CommandQueue::clearAllGarbage(VkDevice device)
+void CommandQueue::clearAllGarbage(VkDevice device, RendererVk *renderer)
 {
     for (vk::GarbageAndSerial &garbageList : mGarbageQueue)
     {
         for (vk::GarbageObject &garbage : garbageList.get())
         {
-            garbage.destroy(device);
+            garbage.destroy(device, renderer);
         }
     }
     mGarbageQueue.clear();
@@ -1811,10 +1811,10 @@ void ContextVk::clearAllGarbage()
     VkDevice device = getDevice();
     for (vk::GarbageObject &garbage : mCurrentGarbage)
     {
-        garbage.destroy(device);
+        garbage.destroy(device, mRenderer);
     }
     mCurrentGarbage.clear();
-    mCommandQueue.clearAllGarbage(device);
+    mCommandQueue.clearAllGarbage(device, mRenderer);
 }
 
 void ContextVk::handleDeviceLost()
@@ -2075,16 +2075,16 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
         // We have instanced vertex attributes that need to be emulated for Vulkan.
         // invalidate any cache and map the buffer so that we can read the indirect data.
         // Mapping the buffer will cause a flush.
-        ANGLE_TRY(currentIndirectBuf->invalidate(this, 0, sizeof(VkDrawIndirectCommand)));
+        ANGLE_TRY(currentIndirectBuf->invalidate(0, sizeof(VkDrawIndirectCommand)));
         uint8_t *buffPtr;
-        ANGLE_TRY(currentIndirectBuf->map(this, &buffPtr));
+        ANGLE_TRY(currentIndirectBuf->map(&buffPtr));
         const VkDrawIndirectCommand *indirectData =
             reinterpret_cast<VkDrawIndirectCommand *>(buffPtr + currentIndirectBufOffset);
 
         ANGLE_TRY(drawArraysInstanced(context, mode, indirectData->firstVertex,
                                       indirectData->vertexCount, indirectData->instanceCount));
 
-        currentIndirectBuf->unmap(getDevice());
+        currentIndirectBuf->unmap();
         return angle::Result::Continue;
     }
 
@@ -2129,16 +2129,16 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
         // We have instanced vertex attributes that need to be emulated for Vulkan.
         // invalidate any cache and map the buffer so that we can read the indirect data.
         // Mapping the buffer will cause a flush.
-        ANGLE_TRY(currentIndirectBuf->invalidate(this, 0, sizeof(VkDrawIndexedIndirectCommand)));
+        ANGLE_TRY(currentIndirectBuf->invalidate(0, sizeof(VkDrawIndexedIndirectCommand)));
         uint8_t *buffPtr;
-        ANGLE_TRY(currentIndirectBuf->map(this, &buffPtr));
+        ANGLE_TRY(currentIndirectBuf->map(&buffPtr));
         const VkDrawIndexedIndirectCommand *indirectData =
             reinterpret_cast<VkDrawIndexedIndirectCommand *>(buffPtr + currentIndirectBufOffset);
 
         ANGLE_TRY(drawElementsInstanced(context, mode, indirectData->indexCount, type, nullptr,
                                         indirectData->instanceCount));
 
-        currentIndirectBuf->unmap(getDevice());
+        currentIndirectBuf->unmap();
         return angle::Result::Continue;
     }
 

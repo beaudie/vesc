@@ -28,6 +28,7 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"
+#include "libANGLE/renderer/vulkan/vk_mem_alloc.h"
 
 namespace egl
 {
@@ -73,7 +74,7 @@ class RendererVk : angle::NonCopyable
                              const char *wsiLayer);
     // Reload volk vk* function ptrs if needed for an already initialized RendererVk
     void reloadVolkIfNeeded() const;
-    void onDestroy(vk::Context *context);
+    void onDestroy();
 
     void notifyDeviceLost();
     bool isDeviceLost() const;
@@ -99,6 +100,8 @@ class RendererVk : angle::NonCopyable
         return mPhysicalDeviceFeatures;
     }
     VkDevice getDevice() const { return mDevice; }
+
+    const VmaAllocator &getVmaAllocator() const { return mVmaAllocator; }
 
     angle::Result selectPresentQueueForSurface(DisplayVk *displayVk,
                                                VkSurfaceKHR surface,
@@ -255,6 +258,8 @@ class RendererVk : angle::NonCopyable
                                     vk::PipelineCache *pipelineCache,
                                     bool *success);
 
+    angle::Result initVmaAllocator(DisplayVk *display);
+
     template <VkFormatFeatureFlags VkFormatProperties::*features>
     VkFormatFeatureFlags getFormatFeatureBits(VkFormat format,
                                               const VkFormatFeatureFlags featureBits);
@@ -262,7 +267,7 @@ class RendererVk : angle::NonCopyable
     template <VkFormatFeatureFlags VkFormatProperties::*features>
     bool hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
 
-    angle::Result cleanupGarbage(vk::Context *context, bool block);
+    angle::Result cleanupGarbage(bool block);
 
     egl::Display *mDisplay;
 
@@ -356,6 +361,8 @@ class RendererVk : angle::NonCopyable
 
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;
+
+    VmaAllocator mVmaAllocator;
 };
 
 }  // namespace rx

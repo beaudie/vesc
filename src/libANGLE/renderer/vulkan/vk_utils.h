@@ -250,7 +250,7 @@ class GarbageObject
     GarbageObject &operator=(GarbageObject &&rhs);
 
     bool valid() const { return mHandle != VK_NULL_HANDLE; }
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, RendererVk *renderer);
 
     template <typename DerivedT, typename HandleT>
     static GarbageObject Get(WrappedObject<DerivedT, HandleT> *object)
@@ -315,20 +315,26 @@ class StagingBuffer final : angle::NonCopyable
 
     Buffer &getBuffer() { return mBuffer; }
     const Buffer &getBuffer() const { return mBuffer; }
-    DeviceMemory &getDeviceMemory() { return mDeviceMemory; }
-    const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
     size_t getSize() const { return mSize; }
 
   private:
     Buffer mBuffer;
-    DeviceMemory mDeviceMemory;
+    const VmaAllocator *mVmaAllocator;
+    VmaMemory mVmaMemory;
     size_t mSize;
 };
+
+angle::Result InitMappableVmaMemory(VmaAllocator allocator,
+                                    VmaMemory *vmaMemory,
+                                    VkDeviceSize size,
+                                    int value,
+                                    bool flush);
 
 angle::Result InitMappableDeviceMemory(vk::Context *context,
                                        vk::DeviceMemory *deviceMemory,
                                        VkDeviceSize size,
-                                       int value);
+                                       int value,
+                                       bool flush);
 
 angle::Result AllocateBufferMemory(Context *context,
                                    VkMemoryPropertyFlags requestedMemoryPropertyFlags,

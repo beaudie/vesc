@@ -80,7 +80,7 @@ class CommandQueue final : angle::NonCopyable
     angle::Result releasePrimaryCommandBuffer(vk::Context *context,
                                               vk::PrimaryCommandBuffer &&commandBuffer);
 
-    void clearAllGarbage(VkDevice device);
+    void clearAllGarbage(VkDevice device, RendererVk *renderer);
 
     angle::Result finishToSerial(vk::Context *context, Serial serial, uint64_t timeout);
 

@@ -72,6 +72,8 @@ ANGLE_INLINE VkMemoryPropertyFlags GetPreferredMemoryType(gl::BufferBinding targ
     constexpr VkMemoryPropertyFlags kHostCachedFlags =
         (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
          VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+    constexpr VkMemoryPropertyFlags kHostUncachedFlags =
+        (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
     if (target == gl::BufferBinding::PixelUnpack)
     {
@@ -85,8 +87,19 @@ ANGLE_INLINE VkMemoryPropertyFlags GetPreferredMemoryType(gl::BufferBinding targ
         case gl::BufferUsage::StaticRead:
             // For static usage, request a device local memory
             return kDeviceLocalFlags;
+        case gl::BufferUsage::DynamicDraw:
+        case gl::BufferUsage::StreamDraw:
+            // For non-static usage where the CPU performs a write-only access, request
+            // a host uncached memory
+            return kHostUncachedFlags;
+        case gl::BufferUsage::DynamicCopy:
+        case gl::BufferUsage::DynamicRead:
+        case gl::BufferUsage::StreamCopy:
+        case gl::BufferUsage::StreamRead:
+            // For all other types of usage, request a host cached memory
+            return kHostCachedFlags;
         default:
-            // For non-static usage, request a host cached memory
+            UNREACHABLE();
             return kHostCachedFlags;
     }
 }
@@ -306,8 +319,8 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         ASSERT(!mBuffer.isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()));
     }
 
-    ANGLE_VK_TRY(contextVk, mBuffer.getDeviceMemory().map(contextVk->getDevice(), offset, length, 0,
-                                                          reinterpret_cast<uint8_t **>(mapPtr)));
+    ANGLE_TRY(mBuffer.map(reinterpret_cast<uint8_t **>(mapPtr), static_cast<size_t>(offset)));
+
     return angle::Result::Continue;
 }
 
@@ -326,7 +339,7 @@ void BufferVk::unmapImpl(ContextVk *contextVk)
 {
     ASSERT(mBuffer.valid());
 
-    mBuffer.getDeviceMemory().unmap(contextVk->getDevice());
+    mBuffer.unmap();
     mBuffer.onExternalWrite(VK_ACCESS_HOST_WRITE_BIT);
 
     markConversionBuffersDirty();
@@ -358,15 +371,12 @@ angle::Result BufferVk::getIndexRange(const gl::Context *context,
     // TODO(jmadill): Consider keeping a shadow system memory copy in some cases.
     ASSERT(mBuffer.valid());
 
-    const GLuint &typeBytes = gl::GetDrawElementsTypeSize(type);
-
     uint8_t *mapPointer = nullptr;
-    ANGLE_VK_TRY(contextVk, mBuffer.getDeviceMemory().map(contextVk->getDevice(), offset,
-                                                          typeBytes * count, 0, &mapPointer));
+    ANGLE_TRY(mBuffer.map(&mapPointer, offset));
 
     *outRange = gl::ComputeIndexRange(type, mapPointer, count, primitiveRestartEnabled);
 
-    mBuffer.getDeviceMemory().unmap(contextVk->getDevice());
+    mBuffer.unmap();
     return angle::Result::Continue;
 }
 
@@ -375,8 +385,6 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
                                     size_t size,
                                     size_t offset)
 {
-    VkDevice device = contextVk->getDevice();
-
     // Use map when available.
     if (mBuffer.isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
     {
@@ -405,13 +413,12 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
     else
     {
         uint8_t *mapPointer = nullptr;
-        ANGLE_VK_TRY(contextVk,
-                     mBuffer.getDeviceMemory().map(device, offset, size, 0, &mapPointer));
+        ANGLE_TRY(mBuffer.map(&mapPointer, offset));
         ASSERT(mapPointer);
 
         memcpy(mapPointer, data, size);
 
-        mBuffer.getDeviceMemory().unmap(device);
+        mBuffer.unmap();
         mBuffer.onExternalWrite(VK_ACCESS_HOST_WRITE_BIT);
     }
 

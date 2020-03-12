@@ -31,6 +31,8 @@
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#define VMA_IMPLEMENTATION
+#include "libANGLE/renderer/vulkan/vk_mem_alloc.h"
 #include "libANGLE/trace.h"
 #include "platform/Platform.h"
 
@@ -592,7 +594,7 @@ RendererVk::~RendererVk()
     ASSERT(mSharedGarbage.empty());
 }
 
-void RendererVk::onDestroy(vk::Context *context)
+void RendererVk::onDestroy()
 {
     // Force all commands to finish by flushing all queues.
     for (VkQueue queue : mQueues)
@@ -605,7 +607,7 @@ void RendererVk::onDestroy(vk::Context *context)
 
     // Then assign an infinite "last completed" serial to force garbage to delete.
     mLastCompletedQueueSerial = Serial::Infinite();
-    (void)cleanupGarbage(context, true);
+    (void)cleanupGarbage(true);
     ASSERT(mSharedGarbage.empty());
 
     for (PendingOneOffCommands &pending : mPendingOneOffCommands)
@@ -621,6 +623,8 @@ void RendererVk::onDestroy(vk::Context *context)
     mDescriptorSetLayoutCache.destroy(mDevice);
 
     mPipelineCache.destroy(mDevice);
+
+    vmaDestroyAllocator(mVmaAllocator);
 
     if (mGlslangInitialized)
     {
@@ -923,6 +927,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         ANGLE_TRY(initializeDevice(displayVk, firstGraphicsQueueFamily));
     }
+
+    // Create VMA allocator
+    ANGLE_TRY(initVmaAllocator(displayVk));
 
     // Store the physical device memory properties so we can find the right memory pools.
     mMemoryProperties.init(mPhysicalDevice);
@@ -1328,6 +1335,39 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // Initialize the vulkan pipeline cache.
     bool success = false;
     ANGLE_TRY(initPipelineCache(displayVk, &mPipelineCache, &success));
+
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::initVmaAllocator(DisplayVk *display)
+{
+    const VmaVulkanFunctions funcs{
+        .vkGetPhysicalDeviceProperties       = vkGetPhysicalDeviceProperties,
+        .vkGetPhysicalDeviceMemoryProperties = vkGetPhysicalDeviceMemoryProperties,
+        .vkAllocateMemory                    = vkAllocateMemory,
+        .vkFreeMemory                        = vkFreeMemory,
+        .vkMapMemory                         = vkMapMemory,
+        .vkUnmapMemory                       = vkUnmapMemory,
+        .vkFlushMappedMemoryRanges           = vkFlushMappedMemoryRanges,
+        .vkInvalidateMappedMemoryRanges      = vkInvalidateMappedMemoryRanges,
+        .vkBindBufferMemory                  = vkBindBufferMemory,
+        .vkBindImageMemory                   = vkBindImageMemory,
+        .vkGetBufferMemoryRequirements       = vkGetBufferMemoryRequirements,
+        .vkGetImageMemoryRequirements        = vkGetImageMemoryRequirements,
+        .vkCreateBuffer                      = vkCreateBuffer,
+        .vkDestroyBuffer                     = vkDestroyBuffer,
+        .vkCreateImage                       = vkCreateImage,
+        .vkDestroyImage                      = vkDestroyImage,
+        .vkCmdCopyBuffer                     = vkCmdCopyBuffer,
+        .vkGetBufferMemoryRequirements2KHR   = vkGetBufferMemoryRequirements2KHR,
+        .vkGetImageMemoryRequirements2KHR    = vkGetImageMemoryRequirements2KHR};
+
+    VmaAllocatorCreateInfo allocatorInfo = {};
+    allocatorInfo.physicalDevice         = mPhysicalDevice;
+    allocatorInfo.device                 = mDevice;
+    allocatorInfo.pVulkanFunctions       = &funcs;
+
+    ANGLE_VK_TRY(display, vmaCreateAllocator(&allocatorInfo, &mVmaAllocator));
 
     return angle::Result::Continue;
 }
@@ -1912,7 +1952,7 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
         ANGLE_VK_TRY(context, vkQueueSubmit(mQueues[priority], 1, &submitInfo, handle));
     }
 
-    ANGLE_TRY(cleanupGarbage(context, false));
+    ANGLE_TRY(cleanupGarbage(false));
 
     *serialOut                = mCurrentQueueSerial;
     mLastSubmittedQueueSerial = mCurrentQueueSerial;
@@ -1945,7 +1985,7 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriori
         ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueues[priority]));
     }
 
-    ANGLE_TRY(cleanupGarbage(context, false));
+    ANGLE_TRY(cleanupGarbage(false));
 
     return angle::Result::Continue;
 }
@@ -1957,7 +1997,7 @@ angle::Result RendererVk::deviceWaitIdle(vk::Context *context)
         ANGLE_VK_TRY(context, vkDeviceWaitIdle(mDevice));
     }
 
-    ANGLE_TRY(cleanupGarbage(context, false));
+    ANGLE_TRY(cleanupGarbage(false));
 
     return angle::Result::Continue;
 }
@@ -2031,7 +2071,7 @@ bool RendererVk::hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlag
     return IsMaskFlagSet(getFormatFeatureBits<features>(format, featureBits), featureBits);
 }
 
-angle::Result RendererVk::cleanupGarbage(vk::Context *context, bool block)
+angle::Result RendererVk::cleanupGarbage(bool block)
 {
     std::lock_guard<decltype(mGarbageMutex)> lock(mGarbageMutex);
 
@@ -2039,7 +2079,7 @@ angle::Result RendererVk::cleanupGarbage(vk::Context *context, bool block)
     {
         // Possibly 'counter' should be always zero when we add the object to garbage.
         vk::SharedGarbage &garbage = *garbageIter;
-        if (garbage.destroyIfComplete(mDevice, mLastCompletedQueueSerial))
+        if (garbage.destroyIfComplete(mDevice, this, mLastCompletedQueueSerial))
         {
             garbageIter = mSharedGarbage.erase(garbageIter);
         }

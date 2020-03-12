@@ -122,7 +122,7 @@ class SharedGarbage
     ~SharedGarbage();
     SharedGarbage &operator=(SharedGarbage &&rhs);
 
-    bool destroyIfComplete(VkDevice device, Serial completedSerial);
+    bool destroyIfComplete(VkDevice device, RendererVk *renderer, Serial completedSerial);
 
   private:
     SharedResourceUse mLifetime;
