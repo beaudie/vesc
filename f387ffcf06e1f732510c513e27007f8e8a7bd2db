@@ -25,6 +25,40 @@
     },
     {
       "key": {
+        "uuid": "f0132e63_f1b98246",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-12T18:11:21Z",
+      "side": 1,
+      "message": "Nit: Please look in \"src/libANGLE/renderer/driver_utils.h\".  There\u0027s a VENDOR_ID_GOOGLE, and I recently added IsGoogle().",
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9427bef5_6ca1dc7f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-12T18:11:21Z",
+      "side": 1,
+      "message": "Nit: Somebody added this same type of constant to \"RendererVk.cpp\" a while back.  Perhaps we should consolidate them to \"src/libANGLE/renderer/driver_utils.h\"?",
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86f96deb_0c393233",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 6
@@ -42,6 +76,40 @@
         "endLine": 77,
         "endChar": 62
       },
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c479fe8_85ecbea4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-12T18:11:21Z",
+      "side": 1,
+      "message": "Is this just a SwiftShader issue on Android?  For example, does it occur on Windows too?",
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0eb0ed3f_5ea10a92",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-12T18:11:21Z",
+      "side": 1,
+      "message": "I\u0027m sure I\u0027m missing something ...  This seems to be enabling robustness always, rather than looking at anything platform-specific.",
       "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
