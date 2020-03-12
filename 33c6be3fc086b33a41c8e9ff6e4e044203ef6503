@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "67d9cf8b_e5523f64",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T21:25:45Z",
+      "side": 1,
+      "message": "OK, I spoke too soon. We have the descriptor set caching protecting us from most of the overhead.\n\nCan we use static buffer to build strings instead of using the heap allocation? We should try to avoid calling the system allocator as much as possible.",
+      "parentUuid": "c88ec4c1_03965c8b",
+      "range": {
+        "startLine": 683,
+        "startChar": 0,
+        "endLine": 684,
+        "endChar": 74
+      },
+      "revId": "33c6be3fc086b33a41c8e9ff6e4e044203ef6503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7990b41d_e90ff3e5",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 39
