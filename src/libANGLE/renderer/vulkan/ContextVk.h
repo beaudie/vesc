@@ -884,6 +884,10 @@ class ContextVk : public ContextImpl, public vk::Context
                                                     size_t driverUniformsSize,
                                                     DriverUniformsDescriptorSet *driverUniforms);
 
+    bool isDirtyTextureAlsoShaderResource(const gl::Context *context,
+                                          vk::ImageHelper *dirtyTextureImage,
+                                          vk::ImageLayout *imageLayoutToUse);
+
     void writeAtomicCounterBufferDriverUniformOffsets(uint32_t *offsetsOut, size_t offsetsSize);
 
     angle::Result submitFrame(const VkSubmitInfo &submitInfo,

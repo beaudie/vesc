@@ -1225,7 +1225,14 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             textureLayout = vk::ImageLayout::ComputeShaderReadOnly;
         }
 
-        // Ensure the image is in read-only layout
+        // Ensure the image is in read-only layout unless the image is also a shader resource, in
+        // which case use the layout required for a shader resource.
+        vk::ImageLayout shaderResourceImageLayout = vk::ImageLayout::Undefined;
+        if ((mGraphicsDirtyBits.bits() & DIRTY_BIT_SHADER_RESOURCES) &&
+            isDirtyTextureAlsoShaderResource(context, &image, &shaderResourceImageLayout))
+        {
+            textureLayout = shaderResourceImageLayout;
+        }
         commandBufferHelper->imageRead(&mResourceUseList, image.getAspectFlags(), textureLayout,
                                        &image);
 
@@ -3449,6 +3456,51 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     vkUpdateDescriptorSets(getDevice(), 1, &writeInfo, 0, nullptr);
 
     return angle::Result::Continue;
+}
+
+ANGLE_INLINE bool ContextVk::isDirtyTextureAlsoShaderResource(const gl::Context *context,
+                                                              vk::ImageHelper *dirtyTextureImage,
+                                                              vk::ImageLayout *imageLayoutToUse)
+{
+    // This method contains part of ContextVk::handleDirtyShaderResourcesImpl() and part of
+    // ContextVk::updateActiveImages() in order to allow ContextVk::handleDirtyTexturesImpl() to
+    // determine if a dirty texture image is also a shader resource; and if so, which
+    // vk::ImageLayout should be used for the dirty texture.
+    if (!mProgram->hasImages())
+    {
+        return false;
+    }
+
+    // Look through all of the activeImages to see if they match dirtyTextureImage.
+    const gl::State &glState                  = mState;
+    const gl::Program *program                = glState.getProgram();
+    const gl::ActiveTextureMask &activeImages = program->getActiveImagesMask();
+
+    for (size_t imageUnitIndex : activeImages)
+    {
+        const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+        const gl::Texture *texture     = imageUnit.texture.get();
+        if (texture == nullptr)
+        {
+            continue;
+        }
+
+        TextureVk *textureVk   = vk::GetImpl(texture);
+        vk::ImageHelper *image = &textureVk->getImage();
+        if (image != dirtyTextureImage)
+        {
+            continue;
+        }
+
+        // If we make it to here, dirtyTextureImage is also a shader resource.  Look-up the
+        // vk::ImageLayout that should be used in ContextVk::handleDirtyTexturesImpl()
+        *imageLayoutToUse = (program->isCompute()) ? vk::ImageLayout::ComputeShaderWrite
+                                                   : vk::ImageLayout::AllGraphicsShadersWrite;
+
+        return true;
+    }
+
+    return false;
 }
 
 void ContextVk::handleError(VkResult errorCode,
