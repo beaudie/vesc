@@ -16,6 +16,29 @@
       "revId": "07b427809b9e7d851b62b2496875c3688ee33eef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba789a6e_3086dcea",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T21:32:41Z",
+      "side": 1,
+      "message": "I don\u0027t see where this gets called for program pipelines. Do we forego this validation for pipelines? It would be nice if we could make a small angle_end2end_test for this if there\u0027s a gap in dEQP coverage and leave it with a tracked issue and TODO. From the spec:\n\nIt is not allowed to have variables of different sampler types pointing to\nthe same texture image unit within a program object. This situation can only\nbe detected at the next rendering command issued which triggers shader invocations, and an INVALID_OPERATION error will then be generated",
+      "range": {
+        "startLine": 226,
+        "startChar": 24,
+        "endLine": 226,
+        "endChar": 61
+      },
+      "revId": "07b427809b9e7d851b62b2496875c3688ee33eef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
