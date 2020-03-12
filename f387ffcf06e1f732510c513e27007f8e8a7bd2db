@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b98acbee_ffaea545",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-12T21:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d52cbea_9631868a",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 35
+      },
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0132e63_f1b98246",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 6
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "06e4eeb7_845352c2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-12T21:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0132e63_f1b98246",
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9427bef5_6ca1dc7f",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 6
@@ -56,6 +98,24 @@
       "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95c54998_28b996c7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-12T21:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9427bef5_6ca1dc7f",
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "40c16cdc_e257dd6c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-12T21:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86f96deb_0c393233",
+      "range": {
+        "startLine": 77,
+        "startChar": 8,
+        "endLine": 77,
+        "endChar": 62
+      },
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c479fe8_85ecbea4",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 6
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "ff88633c_fd33e062",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-12T21:15:31Z",
+      "side": 1,
+      "message": "It also occurs on Windows, but we don\u0027t run conformance on Windows so I thought I\u0027d limit this to Android, but appears Jamie would prefer to generalize this.",
+      "parentUuid": "3c479fe8_85ecbea4",
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0eb0ed3f_5ea10a92",
         "filename": "src/tests/test_utils/angle_test_configs.h",
         "patchSetId": 6
@@ -113,6 +215,24 @@
       "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91211d8f_abba4004",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-12T21:15:31Z",
+      "side": 1,
+      "message": "This is a config wrapper, any test wrapped by this config needs robustness support.\nIn the test runner we will check at the eglParameter conditions are met prior to starting the test. That code (angle_test_instantiate.cpp) will check for the necessary conditions and disallow the test if the platform doesn\u0027t support robustness.",
+      "parentUuid": "0eb0ed3f_5ea10a92",
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -136,6 +256,30 @@
       "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3accff1d_1f400c08",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-12T21:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f6d6952_570c48ef",
+      "range": {
+        "startLine": 437,
+        "startChar": 9,
+        "endLine": 440,
+        "endChar": 43
+      },
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
