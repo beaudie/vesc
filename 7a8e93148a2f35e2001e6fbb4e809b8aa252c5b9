@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed944a07_666d1100",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T13:55:24Z",
+      "side": 1,
+      "message": "is this test fixed now? does it pass on SwiftShader?",
+      "range": {
+        "startLine": 416,
+        "startChar": 4,
+        "endLine": 417,
+        "endChar": 40
+      },
+      "revId": "7a8e93148a2f35e2001e6fbb4e809b8aa252c5b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5d4c3f2_334f06a4",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T13:55:24Z",
+      "side": 1,
+      "message": "I don\u0027t understand what it\u0027s doing. Can you leave a short comment?",
+      "revId": "7a8e93148a2f35e2001e6fbb4e809b8aa252c5b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
