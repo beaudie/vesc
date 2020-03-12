@@ -1200,20 +1200,13 @@ bool ProgramState::hasAttachedShader() const
 
 ShaderType ProgramState::getFirstAttachedShaderStageType() const
 {
-    for (const gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)
+    if (mExecutable.getLinkedShaderStages().count() == 0)
     {
-        if (mExecutable.hasLinkedShaderStage(shaderType))
-        {
-            return shaderType;
-        }
+        return ShaderType::InvalidEnum;
     }
 
-    if (mExecutable.hasLinkedShaderStage(ShaderType::Compute))
-    {
-        return ShaderType::Compute;
-    }
-
-    return ShaderType::InvalidEnum;
+    ShaderBitSet::Iterator iterator = mExecutable.getLinkedShaderStages().begin();
+    return *iterator;
 }
 
 ShaderType ProgramState::getLastAttachedShaderStageType() const
