@@ -1701,8 +1701,15 @@ angle::Result State::setProgram(const Context *context, Program *newProgram)
             mProgram->release(context);
         }
 
-        mProgram    = newProgram;
-        mExecutable = nullptr;
+        mProgram = newProgram;
+        if (mProgramPipeline.get())
+        {
+            mExecutable = &mProgramPipeline->getExecutable();
+        }
+        else
+        {
+            mExecutable = nullptr;
+        }
 
         if (mProgram)
         {
