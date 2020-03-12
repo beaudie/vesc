@@ -56,13 +56,14 @@ void GlslangWrapperVk::GetShaderSource(const angle::FeaturesVk &features,
 // static
 angle::Result GlslangWrapperVk::GetShaderCode(
     vk::Context *context,
+    const gl::ProgramExecutable &executable,
     const gl::Caps &glCaps,
     const gl::ShaderMap<std::string> &shaderSources,
     const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
     gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
 {
     return GlslangGetShaderSpirvCode(
-        [context](GlslangError error) { return ErrorHandler(context, error); }, glCaps,
+        [context](GlslangError error) { return ErrorHandler(context, error); }, executable, glCaps,
         shaderSources, variableInfoMap, shaderCodeOut);
 }
 
