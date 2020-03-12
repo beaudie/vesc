@@ -35,6 +35,7 @@ class GlslangWrapperVk
 
     static angle::Result GetShaderCode(
         vk::Context *context,
+        const gl::ProgramExecutable &executable,
         const gl::Caps &glCaps,
         const gl::ShaderMap<std::string> &shaderSources,
         const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap,
