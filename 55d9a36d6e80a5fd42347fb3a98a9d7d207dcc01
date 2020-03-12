@@ -117,6 +117,30 @@
       "revId": "55d9a36d6e80a5fd42347fb3a98a9d7d207dcc01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c97c762_555e8800",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-12T23:16:05Z",
+      "side": 1,
+      "message": "Yeah, it can live in ProgramExecutable.\n\nIt wouldn\u0027t really change much here:\n- we can pass in a non-const ProgramExecutable* throughout here also so I can call the get/set\nOR\n- update it to const_cast\u003c\u003e the programState.mExecutable",
+      "parentUuid": "2a16e94e_89e55cc6",
+      "range": {
+        "startLine": 350,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 20
+      },
+      "revId": "55d9a36d6e80a5fd42347fb3a98a9d7d207dcc01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
