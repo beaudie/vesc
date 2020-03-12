@@ -1912,6 +1912,7 @@ angle::Result TransformSpirvCode(const GlslangErrorCallback &callback,
 }
 
 angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
+                                        const gl::ProgramExecutable &executable,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
                                         const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
@@ -1920,7 +1921,7 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
     gl::ShaderMap<SpirvBlob> initialSpirvBlobs;
     ANGLE_TRY(GetShaderSpirvCode(callback, glCaps, shaderSources, &initialSpirvBlobs));
 
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : executable.getLinkedShaderStages())
     {
         angle::Result status =
             TransformSpirvCode(callback, shaderType, variableInfoMap[shaderType],
