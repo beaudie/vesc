@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b200415e_ed8237ef",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T21:22:18Z",
+      "side": 1,
+      "message": "nit: mNativeExtensions.robustess \u003d !IsSwiftShader",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 5
+      },
+      "revId": "5d43535036dc3541ab3dfbd43ee11b01c0b59b23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88cb7bfd_20887bee",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T21:22:18Z",
+      "side": 1,
+      "message": "tiny nit: http://crbug.com/swiftshader/145",
+      "range": {
+        "startLine": 436,
+        "startChar": 17,
+        "endLine": 436,
+        "endChar": 77
+      },
+      "revId": "5d43535036dc3541ab3dfbd43ee11b01c0b59b23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "993eb9cb_53c7ec9a",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T21:22:18Z",
+      "side": 1,
+      "message": "can you make ANGLETestBase::isSwiftshader call a shared helper func?",
+      "range": {
+        "startLine": 445,
+        "startChar": 7,
+        "endLine": 445,
+        "endChar": 86
+      },
+      "revId": "5d43535036dc3541ab3dfbd43ee11b01c0b59b23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ae727e4_16fc82aa",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T21:22:18Z",
+      "side": 1,
+      "message": "nit: can you add an IsGoogle for this in SystemInfo.h?",
+      "range": {
+        "startLine": 446,
+        "startChar": 13,
+        "endLine": 446,
+        "endChar": 42
+      },
+      "revId": "5d43535036dc3541ab3dfbd43ee11b01c0b59b23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
