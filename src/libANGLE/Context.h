@@ -520,6 +520,11 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const Limitations &getLimitations() const { return mState.getLimitations(); }
     bool isGLES1() const;
 
+    ANGLE_INLINE void setProgramBindingDirty()
+    {
+        mState.mDirtyBits.set(State::DirtyBitType::DIRTY_BIT_PROGRAM_BINDING);
+    }
+
     bool skipValidation() const
     {
         // Ensure we don't skip validation when context becomes lost, since implementations
