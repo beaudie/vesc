@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d52cbea_9631868a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T18:07:41Z",
+      "side": 1,
+      "message": "you can remove this.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 35
+      },
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86f96deb_0c393233",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T18:07:41Z",
+      "side": 1,
+      "message": "IsGoogle",
+      "range": {
+        "startLine": 77,
+        "startChar": 8,
+        "endLine": 77,
+        "endChar": 62
+      },
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f6d6952_570c48ef",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T18:07:41Z",
+      "side": 1,
+      "message": "need some comment/todo love here.",
+      "range": {
+        "startLine": 437,
+        "startChar": 9,
+        "endLine": 440,
+        "endChar": 43
+      },
+      "revId": "f387ffcf06e1f732510c513e27007f8e8a7bd2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
