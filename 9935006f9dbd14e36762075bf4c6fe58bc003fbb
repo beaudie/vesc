@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2844f02d_eb800517",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T18:11:48Z",
+      "side": 1,
+      "message": "can you comment here that some gfxbench captures have \"expected\" errors?",
+      "range": {
+        "startLine": 652,
+        "startChar": 13,
+        "endLine": 652,
+        "endChar": 26
+      },
+      "revId": "9935006f9dbd14e36762075bf4c6fe58bc003fbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "578f83f9_0ab8ddf7",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T18:11:48Z",
+      "side": 1,
+      "message": "nitty: would be nice if we could get rid of the _20 / _760 suffix. We can assume we likely won\u0027t have multiple tests that start with the same frame. So the end frame is unnecessary. Anyway can defer that to a later cleanup.",
+      "range": {
+        "startLine": 169,
+        "startChar": 26,
+        "endLine": 169,
+        "endChar": 41
+      },
+      "revId": "9935006f9dbd14e36762075bf4c6fe58bc003fbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
