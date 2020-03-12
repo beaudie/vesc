@@ -11,6 +11,7 @@
 
 #include "common/debug.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -70,6 +71,22 @@ angle::Result SamplerVk::syncState(const gl::Context *context, const bool dirty)
         samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
         samplerInfo.minLod     = 0.0f;
         samplerInfo.maxLod     = 0.25f;
+    }
+
+    ASSERT(context->getDisplay());
+    if (context->getDisplay()->getExtensions().textureFilteringCHROMIUM)
+    {
+        int chromiumTexturingHint = GL_DONT_CARE;
+        glGetIntegerv(TEXTURE_FILTERING_HINT_CHROMIUM, &chromiumTexturingHint);
+        if (chromiumTexturingHint == GL_NICEST)
+        {
+            VkSamplerFilteringPrecisionGOOGLE filteringInfo = {};
+            filteringInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_FILTERING_PRECISION_GOOGLE;
+            filteringInfo.pNext = samplerInfo.pNext;
+            filteringInfo.samplerFilteringPrecisionMode =
+                VK_SAMPLER_FILTERING_PRECISION_MODE_HIGH_GOOGLE;
+            samplerInfo.pNext = reinterpret_cast<VkBaseInStructure *>(&filteringInfo);
+        }
     }
 
     ANGLE_VK_TRY(contextVk, mSampler.get().init(contextVk->getDevice(), samplerInfo));

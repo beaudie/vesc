@@ -10,6 +10,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_SAMPLERVK_H_
 #define LIBANGLE_RENDERER_VULKAN_SAMPLERVK_H_
 
+#include "vk_google_filtering_precision.h"
+
 #include "libANGLE/renderer/SamplerImpl.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"

@@ -1030,6 +1030,9 @@ struct DisplayExtensions
 
     // EGL_ANDROID_framebuffer_target
     bool framebufferTargetANDROID = false;
+
+    // GL_CHROMIUM_texture_filtering
+    bool textureFilteringCHROMIUM = false;
 };
 
 struct DeviceExtensions

@@ -1355,6 +1355,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_KHR_no_config_context",                           noConfigContext,                    &extensionStrings);
     InsertExtensionString("EGL_IMG_context_priority",                            contextPriority,                    &extensionStrings);
     InsertExtensionString("EGL_KHR_create_context_no_error",                     createContextNoError,               &extensionStrings);
+    InsertExtensionString("GL_CHROMIUM_texture_filtering_hint",                      textureFilteringCHROMIUM,           &extensionStrings);
     // clang-format on
 
     return extensionStrings;
