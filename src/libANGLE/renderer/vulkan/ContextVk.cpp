@@ -1236,15 +1236,13 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         vk::ImageLayout textureLayout;
         if (textureVk->isBoundAsImageTexture())
         {
-            textureLayout = executable->isCompute()
-                                ? vk::ImageLayout::ComputeShaderWrite
-                                : vk::ImageLayout::AllGraphicsShadersWrite;
+            textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderWrite
+                                                    : vk::ImageLayout::AllGraphicsShadersWrite;
         }
         else
         {
-            textureLayout = executable->isCompute()
-                                ? vk::ImageLayout::ComputeShaderReadOnly
-                                : vk::ImageLayout::AllGraphicsShadersReadOnly;
+            textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderReadOnly
+                                                    : vk::ImageLayout::AllGraphicsShadersReadOnly;
         }
         commandBufferHelper->imageRead(&mResourceUseList, image.getAspectFlags(), textureLayout,
                                        &image);
@@ -2831,6 +2829,10 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     {
                         // A bound program always overrides a program pipeline
                         mExecutable = &mProgramPipeline->getExecutable();
+                        // Only need to reset the executable for PPOs, since we could be
+                        // toggling between graphics and compute in the same PPO, which monolithic
+                        // programs don't support.
+                        mExecutable->reset(this);
                     }
 
                     // TODO(timvp): http://anglebug.com/3570: Necessary?

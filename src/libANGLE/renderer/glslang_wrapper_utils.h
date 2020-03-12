@@ -114,6 +114,7 @@ angle::Result TransformSpirvCode(const GlslangErrorCallback &callback,
 
 angle::Result GlslangGetShaderSpirvCode(
     const GlslangErrorCallback &callback,
+    const gl::ProgramExecutable &executable,
     const gl::Caps &glCaps,
     const gl::ShaderMap<std::string> &shaderSources,
     const gl::ShaderMap<ShaderInterfaceVariableInfoMap> &variableInfoMap,
