@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "956bcf07_c0919c38",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T18:52:11Z",
+      "side": 1,
+      "message": "Can\u0027t we only serialize monolithic Programs? I don\u0027t expect there\u0027s a ProgramPipelineBinary. Might still make sense to put it in here for encapsulation. Just want to make sure we\u0027re in agreement about that.",
+      "range": {
+        "startLine": 62,
+        "startChar": 52,
+        "endLine": 62,
+        "endChar": 56
+      },
+      "revId": "33c6be3fc086b33a41c8e9ff6e4e044203ef6503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c88ec4c1_03965c8b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T18:52:11Z",
+      "side": 1,
+      "message": "this kind of thing will be too slow for production code. We\u0027ll need to use numeric based indexing, not string hashing. Especially if this pattern triggers on uniform updates.",
+      "range": {
+        "startLine": 683,
+        "startChar": 0,
+        "endLine": 684,
+        "endChar": 74
+      },
+      "revId": "33c6be3fc086b33a41c8e9ff6e4e044203ef6503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7990b41d_e90ff3e5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T18:52:11Z",
+      "side": 1,
+      "message": "nit: ANGLE naming rules\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#variable-names",
+      "range": {
+        "startLine": 79,
+        "startChar": 9,
+        "endLine": 79,
+        "endChar": 43
+      },
+      "revId": "33c6be3fc086b33a41c8e9ff6e4e044203ef6503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
