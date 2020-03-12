@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce272c68_ef458f5f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-12T18:43:17Z",
+      "side": 1,
+      "message": "non-const \u0026 reminder. please see the style guide. though this looks like you can just make it const.",
+      "range": {
+        "startLine": 106,
+        "startChar": 55,
+        "endLine": 106,
+        "endChar": 56
+      },
+      "revId": "4727cd54236a4a3ee1a6465b7626df262b1d00f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
