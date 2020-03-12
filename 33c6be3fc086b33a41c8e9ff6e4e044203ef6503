@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c0a6e940_4cfa4853",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-12T23:46:58Z",
+      "side": 1,
+      "message": "Yes, the only path into here is from ProgramVk::load().\n\nAs you noted, this is here since the ProgramExecutableVk owns this information.",
+      "parentUuid": "956bcf07_c0919c38",
+      "range": {
+        "startLine": 62,
+        "startChar": 52,
+        "endLine": 62,
+        "endChar": 56
+      },
+      "revId": "33c6be3fc086b33a41c8e9ff6e4e044203ef6503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c88ec4c1_03965c8b",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 39
@@ -92,6 +116,30 @@
       "revId": "33c6be3fc086b33a41c8e9ff6e4e044203ef6503",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53d044cb_05ed73bf",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-12T23:46:58Z",
+      "side": 1,
+      "message": "Ah, yup, not static anymore.",
+      "parentUuid": "7990b41d_e90ff3e5",
+      "range": {
+        "startLine": 79,
+        "startChar": 9,
+        "endLine": 79,
+        "endChar": 43
+      },
+      "revId": "33c6be3fc086b33a41c8e9ff6e4e044203ef6503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
