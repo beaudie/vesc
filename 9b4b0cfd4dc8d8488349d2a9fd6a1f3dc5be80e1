@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a70b2d3a_e64b86c3",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-12T21:55:29Z",
+      "side": 1,
+      "message": "That\u0027s not necessarily correct. We also support a AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM\nThat is, a native 24bit per pixel format.\nThere are Android devices that implement (or at least advertise GLES support for R8G8B8).\nWe had a problem with chrome making the assumption that R8G8B8 is always implemented as R8G8B8X8 so for now we\u0027ve disallowed the use of the 24bit format. So, right now, this is correct. But what happens if we do support native 24bit formats?\nHow will this function know to return the 24bit vs. 32bit AHARDWARBUFFER_FORMAT?\n\nRelated to: angleproject:4282",
+      "range": {
+        "startLine": 276,
+        "startChar": 19,
+        "endLine": 276,
+        "endChar": 56
+      },
+      "revId": "9b4b0cfd4dc8d8488349d2a9fd6a1f3dc5be80e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
