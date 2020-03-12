@@ -38,13 +38,14 @@ class ProgramPipelineState final : angle::NonCopyable
 
     const std::string &getLabel() const;
 
+    bool isCompute() const { return mIsCompute; }
+    void setIsCompute(bool isCompute) { mIsCompute = isCompute; }
+
     const ProgramExecutable &getProgramExecutable() const { return mExecutable; }
     ProgramExecutable &getProgramExecutable() { return mExecutable; }
 
     void activeShaderProgram(Program *shaderProgram);
     void useProgramStages(GLbitfield stages, Program *shaderProgram);
-
-    const char *validateDrawStates(const State &state, const gl::Extensions &extensions);
 
     Program *getActiveShaderProgram() { return mActiveShaderProgram; }
 
@@ -66,6 +67,8 @@ class ProgramPipelineState final : angle::NonCopyable
     friend class ProgramPipeline;
 
     std::string mLabel;
+
+    bool mIsCompute;
 
     // The active shader program
     Program *mActiveShaderProgram;
