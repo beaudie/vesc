@@ -81,6 +81,30 @@
       "revId": "07b427809b9e7d851b62b2496875c3688ee33eef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7a26e48_c18bd043",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-13T15:53:13Z",
+      "side": 1,
+      "message": "Test:\n\ntwo programs, one pipeline, one texture\n\nvertex shader from program 1 uses the texture as a 2d texture\nfragment shader from program 2 uses texture as a cube map\ndraw with a pipeline using vs 1 and fs 2\n\n-\u003e should be invalid_operation\n\nthen optionally update the texture uniform to make it valid, test, then invalid again, test, something like that",
+      "parentUuid": "98bdbe71_11ea0670",
+      "range": {
+        "startLine": 226,
+        "startChar": 24,
+        "endLine": 226,
+        "endChar": 61
+      },
+      "revId": "07b427809b9e7d851b62b2496875c3688ee33eef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
