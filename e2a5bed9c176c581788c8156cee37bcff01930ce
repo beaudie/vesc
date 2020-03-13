@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a414593e_289eca05",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-13T22:21:37Z",
+      "side": 1,
+      "message": "nit: comments can wrap to 100 characters.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 23
+      },
+      "revId": "e2a5bed9c176c581788c8156cee37bcff01930ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "271d9a76_364675c7",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-13T22:21:37Z",
+      "side": 1,
+      "message": "nit: you can just return this type.",
+      "range": {
+        "startLine": 69,
+        "startChar": 35,
+        "endLine": 69,
+        "endChar": 57
+      },
+      "revId": "e2a5bed9c176c581788c8156cee37bcff01930ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5af0316b_6acdb1bf",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-13T22:21:37Z",
+      "side": 1,
+      "message": "nit: can you refactor this a bit so that you just return the default (your first line) if target !\u003d unpack?\n\nAlso you are adding HOST_CACHED here. Can you comment as to why you do that?\n\nAlso I forget what happens if a certain memory flag combination isn\u0027t available. Does the selection method fail or fall back in a certain pattern? If it fails unexpectedly you could cache if certain memory types are available.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 96
+      },
+      "revId": "e2a5bed9c176c581788c8156cee37bcff01930ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
