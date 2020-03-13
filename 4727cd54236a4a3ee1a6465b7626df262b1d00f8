@@ -22,6 +22,30 @@
       "revId": "4727cd54236a4a3ee1a6465b7626df262b1d00f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48449d02_ff4b6049",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-13T16:28:52Z",
+      "side": 1,
+      "message": "Yup, just missed a const.",
+      "parentUuid": "ce272c68_ef458f5f",
+      "range": {
+        "startLine": 106,
+        "startChar": 55,
+        "endLine": 106,
+        "endChar": 56
+      },
+      "revId": "4727cd54236a4a3ee1a6465b7626df262b1d00f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
