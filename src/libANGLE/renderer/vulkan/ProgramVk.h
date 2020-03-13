@@ -168,6 +168,8 @@ class ProgramVk : public ProgramImpl
         return &mDynamicDescriptorPools[poolIndex];
     }
 
+    void updateActiveTextureShaderBits(gl::ActiveTextureArray<gl::ShaderBitSet> &shaderBits);
+
   private:
     template <int cols, int rows>
     void setUniformMatrixfv(GLint location,
