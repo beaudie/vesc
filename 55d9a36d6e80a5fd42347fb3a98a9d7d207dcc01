@@ -165,6 +165,30 @@
       "revId": "55d9a36d6e80a5fd42347fb3a98a9d7d207dcc01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "026bbd25_28cda665",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-13T15:33:31Z",
+      "side": 1,
+      "message": "Sounds good.\n\nTo clarify, the only requirement is that the uint32_t value is updatable and stored somewhere.   Whichever object holds it (ProgramState, ProgramExecutable, etc.) needs to be modifiable by either:\n- being non-const from the beginning (feels heavy-handed since we only update 1 value)\nOR\n- const_cast\u003c\u003e\u0027ed (feels like cheating)",
+      "parentUuid": "cfc097d6_976b43e2",
+      "range": {
+        "startLine": 350,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 20
+      },
+      "revId": "55d9a36d6e80a5fd42347fb3a98a9d7d207dcc01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
