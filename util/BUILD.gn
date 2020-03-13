@@ -24,6 +24,7 @@ _util_sources = [
   "shader_utils.cpp",
   "shader_utils.h",
   "util_export.h",
+  "util_gl.cpp",
   "util_gl.h",
 ]
 
@@ -31,6 +32,8 @@ if (is_win) {
   _util_sources += [ "windows/WGLWindow.h" ]
   if (!angle_is_winuwp) {
     _util_sources += [
+      "windows/WGLWindow.cpp",
+      "windows/wgl_loader_autogen.cpp",
       "windows/win32/Win32Pixmap.cpp",
       "windows/win32/Win32Pixmap.h",
       "windows/win32/Win32Window.cpp",
@@ -113,10 +116,6 @@ angle_source_set("angle_util_loader") {
     "egl_loader_autogen.cpp",
     "gles_loader_autogen.cpp",
   ]
-
-  if (is_win && !angle_is_winuwp) {
-    sources += [ "windows/wgl_loader_autogen.cpp" ]
-  }
 
   deps = [ ":angle_util_loader_headers" ]
 
@@ -212,12 +211,6 @@ foreach(is_shared_library,
           "-install_name",
           "@rpath/libangle_util.dylib",
         ]
-      }
-
-      # Currently excluded from the static build because of build issues.
-      # Would be nice if could be included.
-      if (is_win && !angle_is_winuwp) {
-        sources += [ "windows/WGLWindow.cpp" ]
       }
     } else {
       public_configs += [

@@ -13,11 +13,7 @@
 #if defined(ANGLE_USE_UTIL_LOADER)
 #    include "util/egl_loader_autogen.h"
 #    include "util/gles_loader_autogen.h"
-#    if defined(ANGLE_PLATFORM_WINDOWS) && !defined(ANGLE_ENABLE_WINDOWS_UWP)
-#        include "util/windows/wgl_loader_autogen.h"
-#    endif  // defined(ANGLE_PLATFORM_WINDOWS) && !defined(ANGLE_ENABLE_WINDOWS_UWP)
 #else
-
 #    if !defined(GL_GLES_PROTOTYPES)
 #        error Config error. Should either be using the ANGLE GL loader or header prototypes.
 #    endif  // !defined(GL_GLES_PROTOTYPES)
@@ -26,5 +22,14 @@
 #    include <EGL/eglext.h>
 #    include "angle_gl.h"
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
+
+#if defined(ANGLE_PLATFORM_WINDOWS) && !defined(ANGLE_ENABLE_WINDOWS_UWP)
+#    include "util/windows/wgl_loader_autogen.h"
+#endif  // defined(ANGLE_PLATFORM_WINDOWS) && !defined(ANGLE_ENABLE_WINDOWS_UWP)
+
+namespace angle
+{
+ANGLE_UTIL_EXPORT void InitDebugMessageCallback(const void *userParam);
+}  // namespace angle
 
 #endif  // UTIL_GL_H_

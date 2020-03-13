@@ -115,7 +115,6 @@ Process *LaunchProcess(const std::vector<const char *> &args,
                        bool captureStderr);
 
 int NumberOfProcessors();
-
 }  // namespace angle
 
 #endif  // UTIL_TEST_UTILS_H_

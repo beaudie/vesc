@@ -175,8 +175,15 @@ bool WGLWindow::initializeGL(OSWindow *osWindow,
     mPlatform     = platformParams;
     mConfigParams = configParams;
 
-    angle::LoadGLES(GetProcAddressWithFallback);
+    loadGLES();
     return true;
+}
+
+void WGLWindow::loadGLES()
+{
+#if defined(ANGLE_USE_UTIL_LOADER)
+    angle::LoadGLES(GetProcAddressWithFallback);
+#endif  // defined(ANGLE_UTIL_LOADER)
 }
 
 void WGLWindow::destroyGL()

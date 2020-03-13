@@ -39,6 +39,7 @@ class ANGLE_UTIL_EXPORT WGLWindow : public GLWindowBase
     void swap() override;
     bool hasError() const override;
     bool setSwapInterval(EGLint swapInterval) override;
+    void loadGLES();
 
   private:
     WGLWindow(int glesMajorVersion, int glesMinorVersion);

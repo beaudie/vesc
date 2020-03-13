@@ -17,6 +17,7 @@
 
 #if defined(ANGLE_PLATFORM_WINDOWS)
 #    include <VersionHelpers.h>
+#    include "util/windows/WGLWindow.h"
 #endif  // defined(ANGLE_PLATFORM_WINDOWS)
 
 namespace angle
@@ -456,8 +457,12 @@ void ANGLETestBase::initOSWindow()
 
         case GLESDriverType::SystemWGL:
         {
-            // WGL tests are currently disabled.
+#if defined(ANGLE_PLATFORM_WINDOWS)
+            mFixture->wglWindow =
+                WGLWindow::New(mCurrentParams->majorVersion, mCurrentParams->minorVersion);
+#else
             std::cerr << "Unsupported driver." << std::endl;
+#endif
             break;
         }
     }
@@ -543,7 +548,27 @@ void ANGLETestBase::ANGLETestSetUp()
     // WGL tests are currently disabled.
     if (mFixture->wglWindow)
     {
+#if defined(ANGLE_PLATFORM_WINDOWS)
+        if (mForceNewDisplay || !mFixture->wglWindow->isGLInitialized())
+        {
+            mFixture->wglWindow->destroyGL();
+            if (!mFixture->wglWindow->initializeGL(
+                    mFixture->osWindow, ANGLETestEnvironment::GetWGLLibrary(),
+                    mCurrentParams->eglParameters, mFixture->configParams))
+            {
+                FAIL() << "WGL Display init failed.";
+            }
+
+            InitDebugMessageCallback(this);
+        }
+        else
+        {
+            mFixture->wglWindow->makeCurrent();
+            mFixture->wglWindow->loadGLES();
+        }
+#else
         FAIL() << "Unsupported driver.";
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
     }
     else
     {
@@ -607,7 +632,7 @@ void ANGLETestBase::ANGLETestTearDown()
     swapBuffers();
     mFixture->osWindow->messageLoop();
 
-    if (mFixture->eglWindow)
+    if (isD3D11Renderer())
     {
         checkD3D11SDKLayersMessages();
     }
@@ -617,7 +642,7 @@ void ANGLETestBase::ANGLETestTearDown()
         mFixture->reuseCounter = 0;
         getGLWindow()->destroyGL();
     }
-    else
+    else if (mFixture->eglWindow)
     {
         mFixture->eglWindow->destroyContext();
         mFixture->eglWindow->destroySurface();
@@ -1086,9 +1111,16 @@ void ANGLETestBase::setWindowHeight(int height)
 
 GLWindowBase *ANGLETestBase::getGLWindow() const
 {
-    // WGL tests are currently disabled.
-    assert(!mFixture->wglWindow);
-    return mFixture->eglWindow;
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    if (mFixture->wglWindow)
+    {
+        return mFixture->wglWindow;
+    }
+    else
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
+    {
+        return mFixture->eglWindow;
+    }
 }
 
 void ANGLETestBase::setConfigRedBits(int bits)
