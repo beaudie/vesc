@@ -924,10 +924,12 @@ VariableLocation::VariableLocation(unsigned int arrayIndex, unsigned int index)
 // SamplerBindings implementation.
 SamplerBinding::SamplerBinding(TextureType textureTypeIn,
                                SamplerFormat formatIn,
+                               ShaderBitSet shaderBitIn,
                                size_t elementCount,
                                bool unreferenced)
     : textureType(textureTypeIn),
       format(formatIn),
+      shaderBit(shaderBitIn),
       boundTextureUnits(elementCount, 0),
       unreferenced(unreferenced)
 {}
@@ -1061,9 +1063,16 @@ ProgramAliasedBindings::const_iterator ProgramAliasedBindings::end() const
 }
 
 // ImageBinding implementation.
-ImageBinding::ImageBinding(size_t count) : boundImageUnits(count, 0), unreferenced(false) {}
-ImageBinding::ImageBinding(GLuint imageUnit, size_t count, bool unreferenced)
-    : unreferenced(unreferenced)
+ImageBinding::ImageBinding(size_t count) : boundImageUnits(count, 0), unreferenced(false)
+{
+    shaderBit.set(ShaderType::InvalidEnum);
+}
+
+ImageBinding::ImageBinding(GLuint imageUnit,
+                           size_t count,
+                           ShaderBitSet shaderBitIn,
+                           bool unreferenced)
+    : shaderBit(shaderBitIn), unreferenced(unreferenced)
 {
     for (size_t index = 0; index < count; ++index)
     {
@@ -1773,6 +1782,7 @@ void ProgramState::updateActiveSamplers()
 
 void ProgramState::updateActiveImages()
 {
+    const bool compute = isCompute() ? true : false;
     for (ImageBinding &imageBinding : mImageBindings)
     {
         if (imageBinding.unreferenced)
@@ -1781,6 +1791,10 @@ void ProgramState::updateActiveImages()
         for (GLint imageUnit : imageBinding.boundImageUnits)
         {
             mActiveImagesMask.set(imageUnit);
+            if (compute)
+                mActiveImageShaderBits[imageUnit].set(gl::ShaderType::Compute);
+            else
+                mActiveImageShaderBits[imageUnit] = imageBinding.shaderBit;
         }
     }
 }
@@ -3740,8 +3754,9 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
         }
         else
         {
-            mState.mImageBindings.emplace_back(
-                ImageBinding(imageUniform.binding, imageUniform.getBasicTypeElementCount(), false));
+            ShaderBitSet shaderBit = imageUniform.activeShaders();
+            mState.mImageBindings.emplace_back(ImageBinding(
+                imageUniform.binding, imageUniform.getBasicTypeElementCount(), shaderBit, false));
         }
 
         GLuint arraySize = imageUniform.isArray() ? imageUniform.arraySizes[0] : 1u;
@@ -3765,7 +3780,8 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
         TextureType textureType    = SamplerTypeToTextureType(samplerUniform.type);
         unsigned int elementCount  = samplerUniform.getBasicTypeElementCount();
         SamplerFormat format       = samplerUniform.typeInfo->samplerFormat;
-        mState.mSamplerBindings.emplace_back(textureType, format, elementCount, false);
+        ShaderBitSet shaderBit     = samplerUniform.activeShaders();
+        mState.mSamplerBindings.emplace_back(textureType, format, shaderBit, elementCount, false);
     }
 
     // Whatever is left constitutes the default uniforms.
@@ -5666,7 +5682,9 @@ angle::Result Program::deserialize(const Context *context,
         SamplerFormat format    = stream.readEnum<SamplerFormat>();
         size_t bindingCount     = stream.readInt<size_t>();
         bool unreferenced       = stream.readBool();
-        mState.mSamplerBindings.emplace_back(textureType, format, bindingCount, unreferenced);
+        ShaderBitSet shaderBit  = mState.mUniforms[samplerRangeLow + samplerIndex].activeShaders();
+        mState.mSamplerBindings.emplace_back(textureType, format, shaderBit, bindingCount,
+                                             unreferenced);
     }
 
     unsigned int imageRangeLow     = stream.readInt<unsigned int>();
@@ -5677,6 +5695,7 @@ angle::Result Program::deserialize(const Context *context,
     {
         unsigned int elementCount = stream.readInt<unsigned int>();
         ImageBinding imageBinding(elementCount);
+        imageBinding.shaderBit = mState.mUniforms[imageRangeLow + imageIndex].activeShaders();
         for (unsigned int i = 0; i < elementCount; ++i)
         {
             imageBinding.boundImageUnits[i] = stream.readInt<unsigned int>();
