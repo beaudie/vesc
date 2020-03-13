@@ -189,6 +189,30 @@
       "revId": "55d9a36d6e80a5fd42347fb3a98a9d7d207dcc01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc0f611d_ab752ecd",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-13T15:39:02Z",
+      "side": 1,
+      "message": "const_cast is usually cheating. You need to modify this value in GlslangGetShaderSource? Maybe it can be part of the ProgramInterfaceVariableMap thing.",
+      "parentUuid": "026bbd25_28cda665",
+      "range": {
+        "startLine": 350,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 20
+      },
+      "revId": "55d9a36d6e80a5fd42347fb3a98a9d7d207dcc01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
