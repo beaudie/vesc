@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "979e61f1_5f2887dd",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-13T16:24:27Z",
+      "side": 1,
+      "message": "\u003e will this ever be called with anything other than gl::ShaderType::Fragment?\n\nDoesn\u0027t look like it.\n\nHowever, I kept it here to keep both shader selections next to each other to ease maintainability:\n\n    // Assign outputs to the fragment shader, if any.\n    if (programState.getAttachedShader(gl::ShaderType::Fragment) ||\n        executable.hasLinkedShaderStage(gl::ShaderType::Fragment))\n    {\n        AssignOutputLocations(programState, gl::ShaderType::Fragment,\n                              \u0026(*variableInfoMapOut)[gl::ShaderType::Fragment]);\n    }\n\nI didn\u0027t want to pass AssignOutputLocations() the full variableInfoMapOut, since it only cares about a single shader at a time, but I also didn\u0027t want to split the shaderType selection about it being a FS into two places either.   For example:\n\nvoid GlslangGetShaderSource(GlslangSourceOptions \u0026options,\n                            const gl::ProgramState \u0026programState,\n                            const gl::ProgramLinkedResources \u0026resources,\n                            gl::ShaderMap\u003cstd::string\u003e *shaderSourcesOut,\n                            ShaderMapInterfaceVariableInfoMap *variableInfoMapOut)\n{\n...\n    // Assign outputs to the fragment shader, if any.\n    if (programState.getAttachedShader(gl::ShaderType::Fragment) ||\n        executable.hasLinkedShaderStage(gl::ShaderType::Fragment))\n    {\n        AssignOutputLocations(programState,\n                              \u0026(*variableInfoMapOut)[gl::ShaderType::Fragment]);\n    }\n\n\nvoid AssignOutputLocations(const gl::ProgramState \u0026programState,\n                           ShaderInterfaceVariableInfoMap *variableInfoMapOut)\n{\n...\n    shaderType \u003d gl::ShaderType::Fragment;\n\n\nDoing something like that makes it easy for the shaderType values to get out of sync if/when things change in the future.   Keeping all of it together makes it much easier to catch when things go wrong just by looking at it.",
+      "parentUuid": "67fad942_33529f91",
+      "revId": "8a66a4d98e9cea6aea3811e9f2d6392feb20c58d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3029ac8d_8f35d21a",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 38
@@ -30,6 +48,24 @@
       "writtenOn": "2020-03-12T22:58:51Z",
       "side": 1,
       "message": "Is it possible we could be incrementing this more than we want?\nE.g. previously we called AddResourceInfoToAllStages with a constant currentShaderResourceBindingIndex, but now we are calling AddResourceInfo for each stage and incrementing the binding index in between.",
+      "revId": "8a66a4d98e9cea6aea3811e9f2d6392feb20c58d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71d21483_42e01f1d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 38
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-13T16:24:27Z",
+      "side": 1,
+      "message": "The counts are correct (the validation layers and vulkan driver would complain loudly otherwise).\n\nWith the previous implementation where AddResourceInfoToAllStages() was called, the descriptor set layout would contain:\n\n    {\n        binding \u003d 0\n        stageFlags \u003d VK_SHADER_STAGE_ALL_GRAPHICS\n    }\n\nHowever, with this version where the binding value is incrementing each time, we are also only giving access to each specific shader stage:\n\nNEW:\n    {\n        binding \u003d 0\n        stageFlags \u003d VK_SHADER_STAGE_VERTEX_BIT\n    }\n    {\n        binding \u003d 1\n        stageFlags \u003d VK_SHADER_STAGE_FRAGMENT_BIT\n    }\n\nThis allows us to build the descriptor set layouts for each shader stage independently without any fear that any one stage could influence the layouts for any others.   If the binding values overlap, the FS will overwrite the VS shader\u0027s and the VS won\u0027t have access to the resources it needs (which the VVLs catch).\n\nThe obvious downside is that we aren\u0027t combining descriptor set layouts like we used to, but that\u0027s something we can work towards improving with follow-on CLs.",
+      "parentUuid": "3029ac8d_8f35d21a",
       "revId": "8a66a4d98e9cea6aea3811e9f2d6392feb20c58d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -56,6 +92,30 @@
       "revId": "8a66a4d98e9cea6aea3811e9f2d6392feb20c58d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde20ad4_42e00c31",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 38
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-13T16:24:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80599813_427de80c",
+      "range": {
+        "startLine": 107,
+        "startChar": 10,
+        "endLine": 107,
+        "endChar": 55
+      },
+      "revId": "8a66a4d98e9cea6aea3811e9f2d6392feb20c58d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
