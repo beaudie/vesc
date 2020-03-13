@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "912dcd05_08911a0d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-13T21:05:25Z",
+      "side": 1,
+      "message": "\u003e If all you are interested is if there are any active shaders, it\u0027s better to use (indirectly) the bitset\u0027s any() instead of count().\n\nDone.\n\n\u003e Are we able to ASSERT instead that this is always true?\n\nI know I was hitting cases where we were adding bindings for resources that were not actually active, which meant we consumed binding values that were never actually used.   This leads to errors later when we are determining how many bindings to allocate/update based on what\u0027s active vs what we are actually using and overflowing our lists.   \n\nUnfortunately, I can\u0027t remember any specifics, so I\u0027ll add the ASSERT and see if CQ flushes anything out.   This may have been a \u0027fix\u0027 that turned out (or will turn out) not to be necessary once the real problem is fixed somewhere else.",
+      "parentUuid": "6268c2b9_9df2a756",
+      "range": {
+        "startLine": 733,
+        "startChar": 22,
+        "endLine": 733,
+        "endChar": 39
+      },
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "576e2480_7cc67f62",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 42
@@ -36,6 +60,24 @@
       "writtenOn": "2020-03-13T18:52:53Z",
       "side": 1,
       "message": "Change of semantic here. The binding was previously incremented regardless of whether the `if` was true or not. Is this change intentional?\n\nThe change may actually be good if I\u0027m not mistaken, so just checking to make sure it\u0027s intended. You could make a separate CL with it to land before the change. You can also write a test with two image arrays, and make sure that they are given bindings 0 and 1, instead of 0 and FirstArraySize.",
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b1a6e86_66b1be9e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-13T21:05:25Z",
+      "side": 1,
+      "message": "My understanding is that the binding value is per variable, not per variable array entry (which is why this works), but I\u0027m far from an expert.   Admittedly, I haven\u0027t checked any specs to verify that.\n\nSimilar to above, I can try a CQ run with the old version and see how things look.",
+      "parentUuid": "576e2480_7cc67f62",
       "revId": "b4385330b2101553569563c376690562c9a37056",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -82,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "f85a6073_68554530",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-13T21:05:25Z",
+      "side": 1,
+      "message": "After chatting with Jamie about the \u0027mLocationsUsedForXfbExtension\u0027 issue also, we\u0027ve decided to make a new \"program interface info struct\" that will hold all of this mutable information and be passed in so the \u0027GlslangSourceOptions\u0027 and \u0027ProgramState\u0027 can stay const throughout.\n\nI\u0027ll leave this open until that\u0027s done.",
+      "parentUuid": "abf87599_2e3f293d",
+      "range": {
+        "startLine": 35,
+        "startChar": 13,
+        "endLine": 35,
+        "endChar": 20
+      },
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "16f61903_90f88598",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 42
@@ -99,6 +165,24 @@
     },
     {
       "key": {
+        "uuid": "b1af7130_fe01f58c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-13T21:05:25Z",
+      "side": 1,
+      "message": "A few lines above here (#329), ProgramVk::load() needs to call mExecutable.createPipelineLayout(), which requires the variable map to give each descriptor set layout the correct binding values.   For example, the uniforms:\n\nangle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glContext,\n                                                        const gl::ProgramExecutable \u0026glExecutable,\n                                                        const gl::ProgramState \u0026programState)\n{\n...\n    // Default uniforms and transform feedback:\n    vk::DescriptorSetLayoutDesc uniformsAndXfbSetDesc;\n    for (const gl::ShaderType shaderType : linkedShaderStages)\n    {\n        const std::string uniformBlockName \u003d kDefaultUniformNames[shaderType];\n        ShaderInterfaceVariableInfo \u0026info  \u003d mVariableInfoMap[uniformBlockName];\n        if (!info.activeStages[shaderType])\n        {\n            continue;\n        }\n\n        uniformsAndXfbSetDesc.update(info.binding, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1,\n                                     gl_vk::kShaderStageMap[shaderType]);\n        mNumDefaultUniformDescriptors++;\n    }",
+      "parentUuid": "16f61903_90f88598",
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1fee7290_5b1ba24c",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 42
@@ -110,6 +194,24 @@
       "writtenOn": "2020-03-13T18:52:53Z",
       "side": 1,
       "message": "Did this fail before? Can you make a split change with a new bug? The comment sounds like we are not populating some GL limit correctly, but I\u0027m surprised to hear that.",
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaf5d6a8_1f7b8cde",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 4005,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-13T21:05:25Z",
+      "side": 1,
+      "message": "\u003e Did this fail before?\n\nNo, this was broken by this change.\n\nMy initial thought was that this was due to assigning 1 binding per stage, rather than combining them like we used to.   However, this is still failing ever after splitting those changes apart (I just re-verified it fails with this CL), so I\u0027m not entirely sure what the cause is yet.\n\n\u003e Can you make a split change with a new bug?\n\nI don\u0027t understand what you\u0027re asking for here.   I can open a new bug to chase this failing test, but I\u0027d prefer to keep it with 3570 since that\u0027s the one that\u0027s breaking it with a change required for PPOs.\n\nIt\u0027s certainly possible there\u0027s a GL limit that\u0027s missing.   I can try and take another look at this from that perspective.",
+      "parentUuid": "1fee7290_5b1ba24c",
       "revId": "b4385330b2101553569563c376690562c9a37056",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
