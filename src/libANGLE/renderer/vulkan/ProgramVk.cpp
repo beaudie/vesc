@@ -1833,4 +1833,23 @@ angle::Result ProgramVk::updateDescriptorSets(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
+
+void ProgramVk::updateActiveTextureShaderStageFlags(
+    gl::ActiveTextureArray<VkShaderStageFlags> &activeTextureShaderStageFlags)
+{
+    const std::vector<gl::SamplerBinding> &samplerBindings = getState().getSamplerBindings();
+    for (uint32_t samplerBindingIndex = 0; samplerBindingIndex < samplerBindings.size();
+         ++samplerBindingIndex)
+    {
+        const gl::SamplerBinding &samplerBinding = samplerBindings[samplerBindingIndex];
+        for (GLint textureUnit : samplerBinding.boundTextureUnits)
+        {
+            if (mState.isCompute())
+                activeTextureShaderStageFlags[textureUnit] = VK_SHADER_STAGE_COMPUTE_BIT;
+            else
+                activeTextureShaderStageFlags[textureUnit] =
+                    gl_vk::GetShaderStageFlags(samplerBinding.shaderBit);
+        }
+    }
+}
 }  // namespace rx

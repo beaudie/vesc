@@ -224,6 +224,7 @@ struct SamplerBinding
 {
     SamplerBinding(TextureType textureTypeIn,
                    SamplerFormat formatIn,
+                   ShaderBitSet shaderBitIn,
                    size_t elementCount,
                    bool unreferenced);
     SamplerBinding(const SamplerBinding &other);
@@ -233,6 +234,9 @@ struct SamplerBinding
     TextureType textureType;
 
     SamplerFormat format;
+
+    // Which shader uses it
+    ShaderBitSet shaderBit;
 
     // List of all textures bound to this sampler, of type textureType.
     std::vector<GLuint> boundTextureUnits;

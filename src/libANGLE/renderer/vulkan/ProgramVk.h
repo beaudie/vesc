@@ -168,6 +168,9 @@ class ProgramVk : public ProgramImpl
         return &mDynamicDescriptorPools[poolIndex];
     }
 
+    void updateActiveTextureShaderStageFlags(
+        gl::ActiveTextureArray<VkShaderStageFlags> &activeTextureShaderStageFlags);
+
   private:
     template <int cols, int rows>
     void setUniformMatrixfv(GLint location,

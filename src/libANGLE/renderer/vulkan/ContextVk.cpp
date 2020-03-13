@@ -1219,11 +1219,16 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         // lingering staged updates in its staging buffer for unused texture mip levels or
         // layers. Therefore we can't verify it has no staged updates right here.
 
-        vk::ImageLayout textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
-        if (mProgram->getState().isCompute())
-        {
+        vk::ImageLayout textureLayout;
+        VkShaderStageFlags shaderStageFlags = mActiveTextureShaderStageFlags[textureUnit];
+        if (shaderStageFlags & VK_SHADER_STAGE_VERTEX_BIT)
+            textureLayout = vk::ImageLayout::VertexShaderReadOnly;
+        else if (shaderStageFlags & VK_SHADER_STAGE_FRAGMENT_BIT)
+            textureLayout = vk::ImageLayout::FragmentShaderReadOnly;
+        else if (shaderStageFlags & VK_SHADER_STAGE_COMPUTE_BIT)
             textureLayout = vk::ImageLayout::ComputeShaderReadOnly;
-        }
+        else
+            textureLayout = vk::ImageLayout::Undefined;
 
         // Ensure the image is in read-only layout
         commandBufferHelper->imageRead(&mResourceUseList, image.getAspectFlags(), textureLayout,
@@ -3537,6 +3542,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         ASSERT(textureVk != nullptr);
         mActiveTexturesDesc.update(textureUnit, textureVk->getSerial(), samplerSerial);
     }
+
+    mProgram->updateActiveTextureShaderStageFlags(mActiveTextureShaderStageFlags);
 
     return angle::Result::Continue;
 }
