@@ -824,8 +824,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
     {
         vk::CommandBuffer *commandBuffer = nullptr;
         ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
-        mImage->changeLayoutAndQueue(VK_IMAGE_ASPECT_COLOR_BIT,
-                                     vk::ImageLayout::AllGraphicsShadersReadOnly,
+        mImage->changeLayoutAndQueue(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Undefined,
                                      rendererQueueFamilyIndex, commandBuffer);
     }
 
