@@ -392,6 +392,67 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::yellow);
 }
 
+// Test modifying a shader after it has been detached from a pipeline
+TEST_P(ProgramPipelineTest31, DetachAndModifyShader)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    const GLchar *vertString = essl31_shaders::vs::Simple();
+    const GLchar *fragString = essl31_shaders::fs::Green();
+
+    GLShader vertShader(GL_VERTEX_SHADER);
+    GLShader fragShader(GL_FRAGMENT_SHADER);
+    mVertProg = glCreateProgram();
+    mFragProg = glCreateProgram();
+
+    // Compile and link a separable vertex shader
+    glShaderSource(vertShader, 1, &vertString, nullptr);
+    glCompileShader(vertShader);
+    glProgramParameteri(mVertProg, GL_PROGRAM_SEPARABLE, GL_TRUE);
+    glAttachShader(mVertProg, vertShader);
+    glLinkProgram(mVertProg);
+    EXPECT_GL_NO_ERROR();
+
+    // Compile and link a separable fragment shader
+    glShaderSource(fragShader, 1, &fragString, nullptr);
+    glCompileShader(fragShader);
+    glProgramParameteri(mFragProg, GL_PROGRAM_SEPARABLE, GL_TRUE);
+    glAttachShader(mFragProg, fragShader);
+    glLinkProgram(mFragProg);
+    EXPECT_GL_NO_ERROR();
+
+    // Generate a program pipeline and attach the programs
+    glGenProgramPipelines(1, &mPipeline);
+    glUseProgramStages(mPipeline, GL_VERTEX_SHADER_BIT, mVertProg);
+    glUseProgramStages(mPipeline, GL_FRAGMENT_SHADER_BIT, mFragProg);
+    glBindProgramPipeline(mPipeline);
+    EXPECT_GL_NO_ERROR();
+
+    // Draw once to ensure this worked fine
+    ProgramPipelineTest31::drawQuad("a_position", 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Detach the fragment shader and modify it such that it no longer fits with this pipline
+    glDetachShader(mFragProg, fragShader);
+
+    // Add an input to the fragment shader, which will make it incompatible
+    const GLchar *fragString2 = R"(#version 310 es
+precision highp float;
+in vec4 color;
+out vec4 my_FragColor;
+void main()
+{
+    my_FragColor = color;
+})";
+    glShaderSource(fragShader, 1, &fragString2, nullptr);
+    glCompileShader(fragShader);
+
+    // This should fail with the current implementation!
+    ProgramPipelineTest31::drawQuad("a_position", 0.5f, 1.0f);
+    ASSERT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
 ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(ProgramPipelineTest);
 ANGLE_INSTANTIATE_TEST_ES31(ProgramPipelineTest31);
 
