@@ -37,8 +37,15 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
     funcs.vkCreateImage                       = vkCreateImage;
     funcs.vkDestroyImage                      = vkDestroyImage;
     funcs.vkCmdCopyBuffer                     = vkCmdCopyBuffer;
-    funcs.vkGetBufferMemoryRequirements2KHR   = vkGetBufferMemoryRequirements2KHR;
-    funcs.vkGetImageMemoryRequirements2KHR    = vkGetImageMemoryRequirements2KHR;
+    {
+        // When the vulkan-loader is statically linked, we need to use the extension
+        // functions defined in ANGLE's rx namespace. When it's dynamically linked
+        // with volk, this will default to the function definitions with no namespace
+        using rx::vkGetBufferMemoryRequirements2KHR;
+        using rx::vkGetImageMemoryRequirements2KHR;
+        funcs.vkGetBufferMemoryRequirements2KHR = vkGetBufferMemoryRequirements2KHR;
+        funcs.vkGetImageMemoryRequirements2KHR  = vkGetImageMemoryRequirements2KHR;
+    }
 
     VmaAllocatorCreateInfo allocatorInfo = {};
     allocatorInfo.physicalDevice         = physicalDevice;

@@ -638,14 +638,12 @@ void RendererVk::onDestroy()
 
     if (mDebugUtilsMessenger)
     {
-        ASSERT(mInstance && vkDestroyDebugUtilsMessengerEXT);
         vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugUtilsMessenger, nullptr);
 
         ASSERT(mDebugReportCallback == VK_NULL_HANDLE);
     }
     else if (mDebugReportCallback)
     {
-        ASSERT(mInstance && vkDestroyDebugReportCallbackEXT);
         vkDestroyDebugReportCallbackEXT(mInstance, mDebugReportCallback, nullptr);
     }
 
@@ -677,7 +675,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      const char *wsiLayer)
 {
     // Set all vk* function ptrs
-    ANGLE_VK_TRY(displayVk, volkInitialize());
+    ANGLE_TRY(initializeVolkIfNeeded(displayVk));
+
     mDisplay                         = display;
     const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
     ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseValidationLayers(attribs),
@@ -825,11 +824,14 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     instanceInfo.enabledLayerCount   = static_cast<uint32_t>(enabledInstanceLayerNames.size());
     instanceInfo.ppEnabledLayerNames = enabledInstanceLayerNames.data();
     ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
-    volkLoadInstance(mInstance);
+    // Load volk if we are linking dynamically
+    loadVolkInstanceIfNeeded();
 
     if (mEnableDebugUtils)
     {
         // Use the newer EXT_debug_utils if it exists.
+        InitDebugUtilsEXTFunctions(mInstance);
+
         // Create the messenger callback.
         VkDebugUtilsMessengerCreateInfoEXT messengerInfo = {};
 
@@ -854,6 +856,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     else if (enableDebugReport)
     {
         // Fallback to EXT_debug_report.
+        InitDebugReportEXTFunctions(mInstance);
+
         VkDebugReportCallbackCreateInfoEXT debugReportInfo = {};
 
         debugReportInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
@@ -869,6 +873,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                   VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) !=
         enabledInstanceExtensions.end())
     {
+        InitGetPhysicalDeviceProperties2KHRFunctions(mInstance);
         ASSERT(vkGetPhysicalDeviceProperties2KHR);
     }
 
@@ -1158,6 +1163,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledDeviceExtensions.push_back(VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME);
         enabledDeviceExtensions.push_back(
             VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME);
+        InitExternalMemoryHardwareBufferANDROIDFunctions(mInstance);
     }
 #else
     ASSERT(!getFeatures().supportsAndroidHardwareBuffer.enabled);
@@ -1184,6 +1190,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         getFeatures().supportsExternalSemaphoreFuchsia.enabled)
     {
         enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
+        InitExternalSemaphoreFdFunctions(mInstance);
     }
 
     if (getFeatures().supportsExternalSemaphoreFd.enabled)
@@ -1285,6 +1292,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledDeviceExtensions.push_back(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME);
         mMinImportedHostPointerAlignment =
             mPhysicalDeviceExternalMemoryHostProperties.minImportedHostPointerAlignment;
+        InitExternalMemoryHostFunctions(mInstance);
     }
 
     createInfo.sType                 = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -1301,7 +1309,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     createInfo.pEnabledFeatures = &enabledFeatures.features;
 
     ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
-    volkLoadDevice(mDevice);
+    // Load volk if we are loading dynamically
+    loadVolkDeviceIfNeeded();
 
     mCurrentQueueFamilyIndex = queueFamilyIndex;
 
@@ -1328,6 +1337,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexMedium,
                          &mQueues[egl::ContextPriority::Medium]);
         mPriorities[egl::ContextPriority::Low] = egl::ContextPriority::Low;
+    }
+
+    if (getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        InitTransformFeedbackEXTFunctions(mDevice);
     }
 
     // Initialize the vulkan pipeline cache.
@@ -2088,8 +2102,33 @@ void RendererVk::onCompletedSerial(Serial serial)
     }
 }
 
+angle::Result RendererVk::initializeVolkIfNeeded(DisplayVk *displayVk) const
+{
+#if defined(ANGLE_SHARED_LIBVULKAN)
+    ANGLE_VK_TRY(displayVk, volkInitialize());
+#else
+    ANGLE_UNUSED_VARIABLE(displayVk);
+    return angle::Result::Continue;
+#endif
+}
+
+void RendererVk::loadVolkInstanceIfNeeded() const
+{
+#if defined(ANGLE_SHARED_LIBVULKAN)
+    volkLoadInstance(mInstance);
+#endif  // defined(ANGLE_SHARED_LIBVULKAN)
+}
+
+void RendererVk::loadVolkDeviceIfNeeded() const
+{
+#if defined(ANGLE_SHARED_LIBVULKAN)
+    volkLoadDevice(mDevice);
+#endif  // defined(ANGLE_SHARED_LIBVULKAN)
+}
+
 void RendererVk::reloadVolkIfNeeded() const
 {
+#if defined(ANGLE_SHARED_LIBVULKAN)
     if ((mInstance != VK_NULL_HANDLE) && (volkGetLoadedInstance() != mInstance))
     {
         volkLoadInstance(mInstance);
@@ -2099,6 +2138,7 @@ void RendererVk::reloadVolkIfNeeded() const
     {
         volkLoadDevice(mDevice);
     }
+#endif  // defined(ANGLE_SHARED_LIBVULKAN)
 }
 
 angle::Result RendererVk::getCommandBufferOneOff(vk::Context *context,
