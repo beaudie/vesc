@@ -1225,7 +1225,6 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     CommandBufferHelper *commandBufferHelper)
 {
     const gl::ActiveTextureMask &activeTextures = mProgram->getState().getActiveSamplersMask();
-
     for (size_t textureUnit : activeTextures)
     {
         const vk::TextureUnit &unit = mActiveTextures[textureUnit];
@@ -1247,10 +1246,19 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         }
         else
         {
-            textureLayout = mProgram->getState().isCompute()
-                                ? vk::ImageLayout::ComputeShaderReadOnly
-                                : vk::ImageLayout::AllGraphicsShadersReadOnly;
+            gl::ShaderBitSet shaderBits = mActiveTextureShaderBits[textureUnit];
+            if (shaderBits[gl::ShaderType::Vertex])
+                textureLayout = vk::ImageLayout::VertexShaderReadOnly;
+            else if (shaderBits[gl::ShaderType::Geometry])
+                textureLayout = vk::ImageLayout::GeometryShaderReadOnly;
+            else if (shaderBits[gl::ShaderType::Fragment])
+                textureLayout = vk::ImageLayout::FragmentShaderReadOnly;
+            else if (shaderBits[gl::ShaderType::Compute])
+                textureLayout = vk::ImageLayout::ComputeShaderReadOnly;
+            else
+                textureLayout = vk::ImageLayout::Undefined;
         }
+        // Ensure the image is in read-only layout
         commandBufferHelper->imageRead(&mResourceUseList, image.getAspectFlags(), textureLayout,
                                        &image);
 
@@ -3564,6 +3572,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         mActiveTexturesDesc.update(textureUnit, textureVk->getSerial(), samplerSerial);
     }
 
+    mProgram->updateActiveTextureShaderBits(mActiveTextureShaderBits);
+
     return angle::Result::Continue;
 }
 
@@ -3577,6 +3587,8 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
     mActiveImages.fill(nullptr);
 
     const gl::ActiveTextureMask &activeImages = program->getActiveImagesMask();
+    const gl::ActiveTextureArray<gl::ShaderBitSet> &activeImageShaderBits =
+        program->getActiveImageShaderBits();
 
     // Note: currently, the image layout is transitioned entirely even if only one level or layer is
     // used.  This is an issue if one subresource of the image is used as framebuffer attachment and
@@ -3609,13 +3621,18 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
         // The image should be flushed and ready to use at this point. There may still be
         // lingering staged updates in its staging buffer for unused texture mip levels or
         // layers. Therefore we can't verify it has no staged updates right here.
-
-        vk::ImageLayout imageLayout = vk::ImageLayout::AllGraphicsShadersWrite;
-        if (program->isCompute())
-        {
+        vk::ImageLayout imageLayout;
+        gl::ShaderBitSet shaderBits = activeImageShaderBits[imageUnitIndex];
+        if (shaderBits[gl::ShaderType::Compute])
             imageLayout = vk::ImageLayout::ComputeShaderWrite;
-        }
-
+        else if (shaderBits[gl::ShaderType::Vertex])
+            imageLayout = vk::ImageLayout::VertexShaderWrite;
+        else if (shaderBits[gl::ShaderType::Geometry])
+            imageLayout = vk::ImageLayout::GeometryShaderWrite;
+        else if (shaderBits[gl::ShaderType::Fragment])
+            imageLayout = vk::ImageLayout::FragmentShaderWrite;
+        else
+            imageLayout = vk::ImageLayout::Undefined;
         VkImageAspectFlags aspectFlags = image->getAspectFlags();
 
         commandBufferHelper->imageWrite(&mResourceUseList, aspectFlags, imageLayout, image);
