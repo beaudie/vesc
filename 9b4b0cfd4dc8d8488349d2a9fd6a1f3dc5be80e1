@@ -46,6 +46,30 @@
       "revId": "9b4b0cfd4dc8d8488349d2a9fd6a1f3dc5be80e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e6bf4d0_073a62f5",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-13T22:08:02Z",
+      "side": 1,
+      "message": "Sounds good.",
+      "parentUuid": "575e1728_b0a5b9be",
+      "range": {
+        "startLine": 276,
+        "startChar": 19,
+        "endLine": 276,
+        "endChar": 56
+      },
+      "revId": "9b4b0cfd4dc8d8488349d2a9fd6a1f3dc5be80e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
