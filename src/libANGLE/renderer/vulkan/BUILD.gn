@@ -89,6 +89,7 @@ _vulkan_backend_sources = [
   "vk_helpers.h",
   "vk_internal_shaders_autogen.cpp",
   "vk_internal_shaders_autogen.h",
+  "vk_loader.h",
   "vk_mandatory_format_support_table_autogen.cpp",
   "vk_utils.cpp",
   "vk_utils.h",
@@ -161,10 +162,10 @@ config("angle_vulkan_lib_android") {
 
 group("angle_vulkan_entry_points") {
   public_configs = [ ":angle_vulkan_lib_android" ]
-  public_deps = [
-    "$angle_root/src/third_party/volk:volk",
-    "$angle_root/third_party/vulkan-headers/src:vulkan_headers",
-  ]
+  public_deps = [ "$angle_root/third_party/vulkan-headers/src:vulkan_headers" ]
+  if (angle_shared_libvulkan) {
+    public_deps += [ "$angle_root/src/third_party/volk:volk" ]
+  }
   if (is_fuchsia) {
     public_deps += [
       "$angle_root/src/common/fuchsia_egl",
@@ -184,9 +185,11 @@ config("angle_vulkan_backend_config") {
   if (angle_enable_custom_vulkan_cmd_buffers) {
     defines += [ "ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS=1" ]
   }
-
   if (angle_enable_vulkan_gpu_trace_events) {
     defines += [ "ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS=1" ]
+  }
+  if (angle_shared_libvulkan) {
+    defines += [ "ANGLE_SHARED_LIBVULKAN=1" ]
   }
 }
 
