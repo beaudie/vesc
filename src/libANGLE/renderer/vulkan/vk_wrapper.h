@@ -11,9 +11,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_VK_WRAPPER_H_
 #define LIBANGLE_RENDERER_VULKAN_VK_WRAPPER_H_
 
-#include "volk.h"
-
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLE/renderer/vulkan/vk_loader.h"
 
 namespace rx
 {
