@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6268c2b9_9df2a756",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-13T18:52:53Z",
+      "side": 1,
+      "message": "If all you are interested is if there are any active shaders, it\u0027s better to use (indirectly) the bitset\u0027s any() instead of count(). `any()` is a simple test against 0, `count()` relies on intrinsics which aren\u0027t universally available (or fallback to multiple instructions for example when counting uint64_t bits on a 32-bit system).\n\nAlso, the loops here go over \"linked\" resources, so they are all necessarily active in some stage. Is this not valid for PPOs? Shouldn\u0027t PPOs call these functions after they prune inactive resources?\n\nAre we able to ASSERT instead that this is always true?",
+      "range": {
+        "startLine": 733,
+        "startChar": 22,
+        "endLine": 733,
+        "endChar": 39
+      },
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "576e2480_7cc67f62",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-13T18:52:53Z",
+      "side": 1,
+      "message": "Change of semantic here. The binding was previously incremented regardless of whether the `if` was true or not. Is this change intentional?\n\nThe change may actually be good if I\u0027m not mistaken, so just checking to make sure it\u0027s intended. You could make a separate CL with it to land before the change. You can also write a test with two image arrays, and make sure that they are given bindings 0 and 1, instead of 0 and FirstArraySize.",
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "827a885c_b6b15e38",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-13T18:52:53Z",
+      "side": 1,
+      "message": "Similar semantic change here. If this is intentional, please separate the change out into the same CL that does this for images.",
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abf87599_2e3f293d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-13T18:52:53Z",
+      "side": 1,
+      "message": "Doesn\u0027t sound like an \"Option\"! Perhaps they belong to another \"State\" struct? Then GlslangSourceOptions can remain const.",
+      "range": {
+        "startLine": 35,
+        "startChar": 13,
+        "endLine": 35,
+        "endChar": 20
+      },
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16f61903_90f88598",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-13T18:52:53Z",
+      "side": 1,
+      "message": "Why do we need to store the variable info map now?",
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fee7290_5b1ba24c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 4005,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-13T18:52:53Z",
+      "side": 1,
+      "message": "Did this fail before? Can you make a split change with a new bug? The comment sounds like we are not populating some GL limit correctly, but I\u0027m surprised to hear that.",
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
