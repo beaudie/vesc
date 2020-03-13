@@ -450,6 +450,10 @@ class ProgramState final : angle::NonCopyable
     {
         return mActiveSamplerFormats[textureUnitIndex];
     }
+    ShaderBitSet getSamplerShaderBitsForTextureUnitIndex(size_t textureUnitIndex) const
+    {
+        return mActiveSamplerShaderBits[textureUnitIndex];
+    }
     ShaderType getFirstAttachedShaderStageType() const;
     ShaderType getLastAttachedShaderStageType() const;
 
@@ -567,9 +571,11 @@ class ProgramState final : angle::NonCopyable
     ActiveTextureArray<uint32_t> mActiveSamplerRefCounts;
     ActiveTextureArray<TextureType> mActiveSamplerTypes;
     ActiveTextureArray<SamplerFormat> mActiveSamplerFormats;
+    ActiveTextureArray<ShaderBitSet> mActiveSamplerShaderBits;
 
     // Cached mask of active images.
     ActiveTextureMask mActiveImagesMask;
+    ActiveTextureArray<ShaderBitSet> mActiveImageShaderBits;
 
     // Note that this has nothing to do with binding layout qualifiers that can be set for some
     // uniforms in GLES3.1+. It is used to pre-set the location of uniforms.
@@ -955,7 +961,15 @@ class Program final : angle::NonCopyable, public LabeledObject
     const std::vector<GLsizei> &getTransformFeedbackStrides() const;
 
     const ActiveTextureMask &getActiveSamplersMask() const { return mState.mActiveSamplersMask; }
+    const ActiveTextureArray<ShaderBitSet> &getActiveSamplerShaderBits() const
+    {
+        return mState.mActiveSamplerShaderBits;
+    }
     const ActiveTextureMask &getActiveImagesMask() const { return mState.mActiveImagesMask; }
+    const ActiveTextureArray<ShaderBitSet> &getActiveImageShaderBits() const
+    {
+        return mState.mActiveImageShaderBits;
+    }
 
     const ActiveTextureArray<TextureType> &getActiveSamplerTypes() const
     {
