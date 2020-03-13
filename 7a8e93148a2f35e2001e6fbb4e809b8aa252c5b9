@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "61bca8d9_3aca7676",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-13T03:44:51Z",
+      "side": 1,
+      "message": "It still can\u0027t pass on Swiftshader.",
+      "parentUuid": "ed944a07_666d1100",
+      "range": {
+        "startLine": 416,
+        "startChar": 4,
+        "endLine": 417,
+        "endChar": 40
+      },
+      "revId": "7a8e93148a2f35e2001e6fbb4e809b8aa252c5b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d5d4c3f2_334f06a4",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2020-03-12T13:55:24Z",
       "side": 1,
       "message": "I don\u0027t understand what it\u0027s doing. Can you leave a short comment?",
+      "revId": "7a8e93148a2f35e2001e6fbb4e809b8aa252c5b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84a050d9_4f358d3d",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-03-13T03:44:51Z",
+      "side": 1,
+      "message": "There is a offset rule，”\"Offset must be multiple of value of SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT“. But the old alignment way \"kBufferOffset \u003d kBufferSize + (kBufferSize % bufferAlignoffset)\" is wrong. The test can pass on AMD　and NV platform because their bufferAlignoffset is 4 or 16 and kBufferSize here is 32. It fails on ARM　platform because ARM\u0027s bufferAlignoffset is bigger than 32. So I use a right way to handle the alignment.",
+      "parentUuid": "d5d4c3f2_334f06a4",
       "revId": "7a8e93148a2f35e2001e6fbb4e809b8aa252c5b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
