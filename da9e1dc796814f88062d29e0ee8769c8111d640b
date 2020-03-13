@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f649d13_6383c7b1",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-13T18:18:31Z",
+      "side": 1,
+      "message": "These were unique among all stages as I expected the same resource name (such as sampler, image, buffer etc) to have the same set/binding across all stages.\n\nDo separable programs somehow end up with different values for these, perhaps because these store a pre-PPO-link value at some point?\n\nIt\u0027s not very clear to me why this change was necessary.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 38
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63dcd185_f9fde6f2",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-13T18:18:31Z",
+      "side": 1,
+      "message": "Should be a bool now",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 20
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
