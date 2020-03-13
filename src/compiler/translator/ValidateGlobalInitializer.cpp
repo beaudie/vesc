@@ -19,7 +19,9 @@ const int kMaxAllowedTraversalDepth = 256;
 class ValidateGlobalInitializerTraverser : public TIntermTraverser
 {
   public:
-    ValidateGlobalInitializerTraverser(int shaderVersion, bool isWebGL);
+    ValidateGlobalInitializerTraverser(int shaderVersion,
+                                       bool isWebGL,
+                                       bool hasExtNonConstGlobalInitializers);
 
     void visitSymbol(TIntermSymbol *node) override;
     void visitConstantUnion(TIntermConstantUnion *node) override;
@@ -33,6 +35,7 @@ class ValidateGlobalInitializerTraverser : public TIntermTraverser
   private:
     int mShaderVersion;
     bool mIsWebGL;
+    bool mExtNonConstGlobalInitializers;
     bool mIsValid;
     bool mIssueWarning;
 };
@@ -51,7 +54,7 @@ void ValidateGlobalInitializerTraverser::visitSymbol(TIntermSymbol *node)
             // We allow these cases to be compatible with legacy ESSL 1.00 content.
             // Implement stricter rules for ESSL 3.00 since there's no legacy content to deal
             // with.
-            if ((mShaderVersion >= 300) || !mIsWebGL)
+            if (!mExtNonConstGlobalInitializers && ((mShaderVersion >= 300) || !mIsWebGL))
             {
                 mIsValid = false;
             }
@@ -74,7 +77,7 @@ void ValidateGlobalInitializerTraverser::visitConstantUnion(TIntermConstantUnion
         case EvqConst:
             break;
         case EvqTemporary:
-            if ((mShaderVersion >= 300) || !mIsWebGL)
+            if (!mExtNonConstGlobalInitializers && ((mShaderVersion >= 300) || !mIsWebGL))
             {
                 mIsValid = false;
             }
@@ -96,7 +99,14 @@ bool ValidateGlobalInitializerTraverser::visitAggregate(Visit visit, TIntermAggr
     // the function call ops.
     if (node->isFunctionCall())
     {
-        mIsValid = false;
+        if (!mExtNonConstGlobalInitializers)
+        {
+            mIsValid = false;
+        }
+        else
+        {
+            mIssueWarning = true;
+        }
     }
     return true;
 }
@@ -105,7 +115,14 @@ bool ValidateGlobalInitializerTraverser::visitBinary(Visit visit, TIntermBinary 
 {
     if (node->isAssignment())
     {
-        mIsValid = false;
+        if (!mExtNonConstGlobalInitializers)
+        {
+            mIsValid = false;
+        }
+        else
+        {
+            mIssueWarning = true;
+        }
     }
     return true;
 }
@@ -114,16 +131,26 @@ bool ValidateGlobalInitializerTraverser::visitUnary(Visit visit, TIntermUnary *n
 {
     if (node->isAssignment())
     {
-        mIsValid = false;
+        if (!mExtNonConstGlobalInitializers)
+        {
+            mIsValid = false;
+        }
+        else
+        {
+            mIssueWarning = true;
+        }
     }
     return true;
 }
 
-ValidateGlobalInitializerTraverser::ValidateGlobalInitializerTraverser(int shaderVersion,
-                                                                       bool isWebGL)
+ValidateGlobalInitializerTraverser::ValidateGlobalInitializerTraverser(
+    int shaderVersion,
+    bool isWebGL,
+    bool hasExtNonConstGlobalInitializers)
     : TIntermTraverser(true, false, false, nullptr),
       mShaderVersion(shaderVersion),
       mIsWebGL(isWebGL),
+      mExtNonConstGlobalInitializers(hasExtNonConstGlobalInitializers),
       mIsValid(true),
       mIssueWarning(false)
 {
@@ -135,9 +162,11 @@ ValidateGlobalInitializerTraverser::ValidateGlobalInitializerTraverser(int shade
 bool ValidateGlobalInitializer(TIntermTyped *initializer,
                                int shaderVersion,
                                bool isWebGL,
+                               bool hasExtNonConstGlobalInitializers,
                                bool *warning)
 {
-    ValidateGlobalInitializerTraverser validate(shaderVersion, isWebGL);
+    ValidateGlobalInitializerTraverser validate(shaderVersion, isWebGL,
+                                                hasExtNonConstGlobalInitializers);
     initializer->traverse(&validate);
     ASSERT(warning != nullptr);
     *warning = validate.issueWarning();

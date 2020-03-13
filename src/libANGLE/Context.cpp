@@ -3487,12 +3487,13 @@ Extensions Context::generateSupportedExtensions() const
     }
 
     // Some extensions are always available because they are implemented in the GL layer.
-    supportedExtensions.bindUniformLocation   = true;
-    supportedExtensions.vertexArrayObjectOES  = true;
-    supportedExtensions.bindGeneratesResource = true;
-    supportedExtensions.clientArrays          = true;
-    supportedExtensions.requestExtension      = true;
-    supportedExtensions.multiDraw             = true;
+    supportedExtensions.bindUniformLocation              = true;
+    supportedExtensions.vertexArrayObjectOES             = true;
+    supportedExtensions.bindGeneratesResource            = true;
+    supportedExtensions.clientArrays                     = true;
+    supportedExtensions.requestExtension                 = true;
+    supportedExtensions.multiDraw                        = true;
+    supportedExtensions.shaderNonConstGlobalInitializers = true;
 
     // Enable the no error extension if the context was created with the flag.
     supportedExtensions.noError = mSkipValidation;
