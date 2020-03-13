@@ -37,8 +37,12 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
     funcs.vkCreateImage                       = vkCreateImage;
     funcs.vkDestroyImage                      = vkDestroyImage;
     funcs.vkCmdCopyBuffer                     = vkCmdCopyBuffer;
-    funcs.vkGetBufferMemoryRequirements2KHR   = vkGetBufferMemoryRequirements2KHR;
-    funcs.vkGetImageMemoryRequirements2KHR    = vkGetImageMemoryRequirements2KHR;
+    {
+        using rx::vkGetBufferMemoryRequirements2KHR;
+        using rx::vkGetImageMemoryRequirements2KHR;
+        funcs.vkGetBufferMemoryRequirements2KHR = vkGetBufferMemoryRequirements2KHR;
+        funcs.vkGetImageMemoryRequirements2KHR  = vkGetImageMemoryRequirements2KHR;
+    }
 
     VmaAllocatorCreateInfo allocatorInfo = {};
     allocatorInfo.physicalDevice         = physicalDevice;

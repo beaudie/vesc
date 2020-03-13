@@ -638,14 +638,12 @@ void RendererVk::onDestroy()
 
     if (mDebugUtilsMessenger)
     {
-        ASSERT(mInstance && vkDestroyDebugUtilsMessengerEXT);
         vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugUtilsMessenger, nullptr);
 
         ASSERT(mDebugReportCallback == VK_NULL_HANDLE);
     }
     else if (mDebugReportCallback)
     {
-        ASSERT(mInstance && vkDestroyDebugReportCallbackEXT);
         vkDestroyDebugReportCallbackEXT(mInstance, mDebugReportCallback, nullptr);
     }
 
@@ -676,8 +674,11 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      const char *wsiExtension,
                                      const char *wsiLayer)
 {
+#if defined(ANGLE_SHARED_LIBVULKAN)
     // Set all vk* function ptrs
     ANGLE_VK_TRY(displayVk, volkInitialize());
+#endif  // ANGLE_SHARED_LIBVULKAN
+
     mDisplay                         = display;
     const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
     ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseValidationLayers(attribs),
@@ -825,11 +826,19 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     instanceInfo.enabledLayerCount   = static_cast<uint32_t>(enabledInstanceLayerNames.size());
     instanceInfo.ppEnabledLayerNames = enabledInstanceLayerNames.data();
     ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
+#if defined(ANGLE_SHARED_LIBVULKAN)
     volkLoadInstance(mInstance);
+#endif  // ANGLE_SHARED_LIBVULKAN
 
     if (mEnableDebugUtils)
     {
         // Use the newer EXT_debug_utils if it exists.
+        InitDebugUtilsEXTFunctions(mInstance);
+
+#if !defined(ANGLE_SHARED_LIBVULKAN)
+        // InitDebugUtilsEXTFunctions(mInstance);
+#endif  // !defined(ANGLE_SHARED_LIBVULKAN)
+
         // Create the messenger callback.
         VkDebugUtilsMessengerCreateInfoEXT messengerInfo = {};
 
@@ -854,6 +863,11 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     else if (enableDebugReport)
     {
         // Fallback to EXT_debug_report.
+
+#if !defined(ANGLE_SHARED_LIBVULKAN)
+        InitDebugReportEXTFunctions(mInstance);
+#endif  // !ANGLE_SHARED_LIBVULKAN
+
         VkDebugReportCallbackCreateInfoEXT debugReportInfo = {};
 
         debugReportInfo.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT;
@@ -869,6 +883,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                   VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) !=
         enabledInstanceExtensions.end())
     {
+#if !defined(ANGLE_SHARED_LIBVULKAN)
+        InitGetPhysicalDeviceProperties2KHRFunctions(mInstance);
+#endif  // !ANGLE_SHARED_LIBVULKAN
         ASSERT(vkGetPhysicalDeviceProperties2KHR);
     }
 
@@ -1158,6 +1175,9 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledDeviceExtensions.push_back(VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME);
         enabledDeviceExtensions.push_back(
             VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME);
+#    if !ANGLE_SHARED_LIBVULKAN
+        InitExternalMemoryHardwareBufferANDROIDFunctions(mInstance);
+#    endif  // !ANGLE_SHARED_LIBVULKAN
     }
 #else
     ASSERT(!getFeatures().supportsAndroidHardwareBuffer.enabled);
@@ -1184,6 +1204,10 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         getFeatures().supportsExternalSemaphoreFuchsia.enabled)
     {
         enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
+#if !ANGLE_SHARED_LIBVULKAN
+        InitExternalSemaphoreFdFunctions(mInstance);
+
+#endif  // !ANGLE_SHARED_LIBVULKAN
     }
 
     if (getFeatures().supportsExternalSemaphoreFd.enabled)
@@ -1285,6 +1309,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledDeviceExtensions.push_back(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME);
         mMinImportedHostPointerAlignment =
             mPhysicalDeviceExternalMemoryHostProperties.minImportedHostPointerAlignment;
+        InitExternalMemoryHostFunctions(mInstance);
     }
 
     createInfo.sType                 = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -1301,11 +1326,14 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     createInfo.pEnabledFeatures = &enabledFeatures.features;
 
     ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
+#if ANGLE_SHARED_LIBVULKAN
     volkLoadDevice(mDevice);
+#endif  // ANGLE_SHARED_LIBVULKAN
 
     mCurrentQueueFamilyIndex = queueFamilyIndex;
 
     // When only 1 Queue, use same for all, Low index. Identify as Medium, since it's default.
+
     VkQueue queue;
     vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, kQueueIndexLow, &queue);
     mQueues[egl::ContextPriority::Low]        = queue;
@@ -1329,6 +1357,13 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
                          &mQueues[egl::ContextPriority::Medium]);
         mPriorities[egl::ContextPriority::Low] = egl::ContextPriority::Low;
     }
+
+#if !ANGLE_SHARED_LIBVULKAN
+    if (getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        InitTransformFeedbackEXTFunctions(mDevice);
+    }
+#endif  // !ANGLE_SHARED_LIBVULKAN
 
     // Initialize the vulkan pipeline cache.
     bool success = false;
@@ -2090,6 +2125,7 @@ void RendererVk::onCompletedSerial(Serial serial)
 
 void RendererVk::reloadVolkIfNeeded() const
 {
+#if ANGLE_SHARED_LIBVULKAN
     if ((mInstance != VK_NULL_HANDLE) && (volkGetLoadedInstance() != mInstance))
     {
         volkLoadInstance(mInstance);
@@ -2099,6 +2135,7 @@ void RendererVk::reloadVolkIfNeeded() const
     {
         volkLoadDevice(mDevice);
     }
+#endif  // ANGLE_SHARED_LIBVULKAN
 }
 
 angle::Result RendererVk::getCommandBufferOneOff(vk::Context *context,

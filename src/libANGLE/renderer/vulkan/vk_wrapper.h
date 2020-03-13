@@ -11,9 +11,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_VK_WRAPPER_H_
 #define LIBANGLE_RENDERER_VULKAN_VK_WRAPPER_H_
 
-#include "volk.h"
-
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLE/renderer/vulkan/vk_loader.h"
 #include "libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h"
 
 namespace rx
@@ -1154,8 +1153,8 @@ ANGLE_INLINE void CommandBuffer::bindTransformFeedbackBuffersEXT(uint32_t firstB
 ANGLE_INLINE void CommandBuffer::beginDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo)
 {
     ASSERT(valid());
-    ASSERT(vkCmdBeginDebugUtilsLabelEXT);
-    vkCmdBeginDebugUtilsLabelEXT(mHandle, &labelInfo);
+    ASSERT(rx::vkCmdBeginDebugUtilsLabelEXT);
+    rx::vkCmdBeginDebugUtilsLabelEXT(mHandle, &labelInfo);
 }
 
 ANGLE_INLINE void CommandBuffer::endDebugUtilsLabelEXT()

@@ -8,7 +8,7 @@ config("volk_config") {
 
 source_set("volk") {
   sources = [
-    "volk.c",
+    # "volk.c",
     "volk.h",
   ]
   public_configs = [ ":volk_config" ]

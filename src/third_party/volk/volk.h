@@ -10,6 +10,10 @@
 #ifndef VOLK_H_
 #define VOLK_H_
 
+//#if !defined(ANGLE_SHARED_LIBVULKAN)
+#error Do not directly include volk.h. You should include vk_loader.h
+//#endif
+
 #if defined(VULKAN_H_) && !defined(VK_NO_PROTOTYPES)
 #	error To use volk, you need to define VK_NO_PROTOTYPES before including vulkan.h
 #endif
@@ -1081,8 +1085,8 @@ extern PFN_vkAcquireNextImage2KHR vkAcquireNextImage2KHR;
 #undef VOLK_IMPLEMENTATION
 // Prevent tools like dependency checkers that don't evaluate
 // macros from detecting a cyclic dependency.
-#define VOLK_SOURCE "volk.c"
-#include VOLK_SOURCE
+//#define VOLK_SOURCE "volk.c"
+//#include VOLK_SOURCE
 #endif
 
 /**
