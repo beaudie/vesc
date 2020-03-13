@@ -224,6 +224,7 @@ struct SamplerBinding
 {
     SamplerBinding(TextureType textureTypeIn,
                    SamplerFormat formatIn,
+                   ShaderBitSet shaderBitIn,
                    size_t elementCount,
                    bool unreferenced);
     SamplerBinding(const SamplerBinding &other);
@@ -233,6 +234,9 @@ struct SamplerBinding
     TextureType textureType;
 
     SamplerFormat format;
+
+    // Which shader uses it
+    ShaderBitSet shaderBit;
 
     // List of all textures bound to this sampler, of type textureType.
     std::vector<GLuint> boundTextureUnits;
@@ -283,11 +287,14 @@ struct TransformFeedbackVarying : public sh::ShaderVariable
 struct ImageBinding
 {
     ImageBinding(size_t count);
-    ImageBinding(GLuint imageUnit, size_t count, bool unreferenced);
+    ImageBinding(GLuint imageUnit, size_t count, ShaderBitSet shaderBitIn, bool unreferenced);
     ImageBinding(const ImageBinding &other);
     ~ImageBinding();
 
     std::vector<GLuint> boundImageUnits;
+
+    // Which shader uses it
+    ShaderBitSet shaderBit;
 
     // A note if this image unit is an unreferenced uniform.
     bool unreferenced;
@@ -570,6 +577,7 @@ class ProgramState final : angle::NonCopyable
 
     // Cached mask of active images.
     ActiveTextureMask mActiveImagesMask;
+    ActiveTextureArray<ShaderBitSet> mActiveImageShaderBits;
 
     // Note that this has nothing to do with binding layout qualifiers that can be set for some
     // uniforms in GLES3.1+. It is used to pre-set the location of uniforms.
@@ -956,6 +964,10 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const ActiveTextureMask &getActiveSamplersMask() const { return mState.mActiveSamplersMask; }
     const ActiveTextureMask &getActiveImagesMask() const { return mState.mActiveImagesMask; }
+    const ActiveTextureArray<ShaderBitSet> &getActiveImageShaderBits() const
+    {
+        return mState.mActiveImageShaderBits;
+    }
 
     const ActiveTextureArray<TextureType> &getActiveSamplerTypes() const
     {
