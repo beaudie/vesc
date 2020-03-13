@@ -924,10 +924,12 @@ VariableLocation::VariableLocation(unsigned int arrayIndex, unsigned int index)
 // SamplerBindings implementation.
 SamplerBinding::SamplerBinding(TextureType textureTypeIn,
                                SamplerFormat formatIn,
+                               ShaderBitSet shaderBitIn,
                                size_t elementCount,
                                bool unreferenced)
     : textureType(textureTypeIn),
       format(formatIn),
+      shaderBit(shaderBitIn),
       boundTextureUnits(elementCount, 0),
       unreferenced(unreferenced)
 {}
@@ -3765,7 +3767,8 @@ void Program::linkSamplerAndImageBindings(GLuint *combinedImageUniforms)
         TextureType textureType    = SamplerTypeToTextureType(samplerUniform.type);
         unsigned int elementCount  = samplerUniform.getBasicTypeElementCount();
         SamplerFormat format       = samplerUniform.typeInfo->samplerFormat;
-        mState.mSamplerBindings.emplace_back(textureType, format, elementCount, false);
+        ShaderBitSet shaderBit     = samplerUniform.activeShaders();
+        mState.mSamplerBindings.emplace_back(textureType, format, shaderBit, elementCount, false);
     }
 
     // Whatever is left constitutes the default uniforms.
@@ -5416,6 +5419,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
     {
         stream.writeEnum(samplerBinding.textureType);
         stream.writeEnum(samplerBinding.format);
+        stream.writeInt(samplerBinding.shaderBit.bits());
         stream.writeInt(samplerBinding.boundTextureUnits.size());
         stream.writeInt(samplerBinding.unreferenced);
     }
@@ -5664,9 +5668,11 @@ angle::Result Program::deserialize(const Context *context,
     {
         TextureType textureType = stream.readEnum<TextureType>();
         SamplerFormat format    = stream.readEnum<SamplerFormat>();
+        ShaderBitSet shaderBit  = stream.readInt<ShaderBitSet>();
         size_t bindingCount     = stream.readInt<size_t>();
         bool unreferenced       = stream.readBool();
-        mState.mSamplerBindings.emplace_back(textureType, format, bindingCount, unreferenced);
+        mState.mSamplerBindings.emplace_back(textureType, format, shaderBit, bindingCount,
+                                             unreferenced);
     }
 
     unsigned int imageRangeLow     = stream.readInt<unsigned int>();

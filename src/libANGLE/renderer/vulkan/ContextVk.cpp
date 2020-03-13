@@ -1247,10 +1247,17 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         }
         else
         {
-            textureLayout = mProgram->getState().isCompute()
-                                ? vk::ImageLayout::ComputeShaderReadOnly
-                                : vk::ImageLayout::AllGraphicsShadersReadOnly;
+            VkShaderStageFlags shaderStageFlags = mActiveTextureShaderStageFlags[textureUnit];
+            if (shaderStageFlags & VK_SHADER_STAGE_VERTEX_BIT)
+                textureLayout = vk::ImageLayout::VertexShaderReadOnly;
+            else if (shaderStageFlags & VK_SHADER_STAGE_FRAGMENT_BIT)
+                textureLayout = vk::ImageLayout::FragmentShaderReadOnly;
+            else if (shaderStageFlags & VK_SHADER_STAGE_COMPUTE_BIT)
+                textureLayout = vk::ImageLayout::ComputeShaderReadOnly;
+            else
+                textureLayout = vk::ImageLayout::Undefined;
         }
+        // Ensure the image is in read-only layout
         commandBufferHelper->imageRead(&mResourceUseList, image.getAspectFlags(), textureLayout,
                                        &image);
 
@@ -3563,6 +3570,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         ASSERT(textureVk != nullptr);
         mActiveTexturesDesc.update(textureUnit, textureVk->getSerial(), samplerSerial);
     }
+
+    mProgram->updateActiveTextureShaderStageFlags(mActiveTextureShaderStageFlags);
 
     return angle::Result::Continue;
 }
