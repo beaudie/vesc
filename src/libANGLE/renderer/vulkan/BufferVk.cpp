@@ -58,6 +58,34 @@ size_t CalculateStagingBufferSize(gl::BufferBinding target, size_t size, size_t 
             return kStagingBufferBaseSize;
     }
 }
+
+// Buffers that have a static usage pattern will be allocated in
+// device local memory to speed up access to and from the GPU.
+// Buffers that have dynamic usage patterns or that are frequently
+// mapped will now request host cached memory to speed up
+// access from the CPU.
+inline void GetPreferredMemoryType(gl::BufferBinding target,
+                                   gl::BufferUsage usage,
+                                   VkMemoryPropertyFlags *memoryPropertyFlags)
+{
+    *memoryPropertyFlags =
+        (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
+         VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+    if (target != gl::BufferBinding::PixelUnpack)
+    {
+        switch (usage)
+        {
+            case gl::BufferUsage::StaticCopy:
+            case gl::BufferUsage::StaticDraw:
+            case gl::BufferUsage::StaticRead:
+                *memoryPropertyFlags =
+                    (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+                return;
+            default:
+                return;
+        }
+    }
+}
 }  // namespace
 
 // ConversionBuffer implementation.
@@ -164,8 +192,8 @@ angle::Result BufferVk::setData(const gl::Context *context,
         createInfo.pQueueFamilyIndices   = nullptr;
 
         // Assume host visible/coherent memory available.
-        const VkMemoryPropertyFlags memoryPropertyFlags =
-            (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+        VkMemoryPropertyFlags memoryPropertyFlags = 0;
+        GetPreferredMemoryType(target, usage, &memoryPropertyFlags);
 
         ANGLE_TRY(mBuffer.init(contextVk, createInfo, memoryPropertyFlags));
 
