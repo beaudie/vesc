@@ -74,7 +74,7 @@ declare_args() {
   }
 
   # TODO(tobine): Remove this after roll. http://anglebug.com/4162
-  angle_shared_libvulkan = true
+  angle_shared_libvulkan = !is_mac
 
   # There's no "is_winuwp" helper in BUILDCONFIG.gn, so we define one ourselves
   angle_is_winuwp = is_win && current_os == "winuwp"
