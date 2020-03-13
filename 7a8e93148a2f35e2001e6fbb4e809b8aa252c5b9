@@ -81,6 +81,24 @@
       "revId": "7a8e93148a2f35e2001e6fbb4e809b8aa252c5b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c973fd0d_6eeb5d1c",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-13T19:05:29Z",
+      "side": 1,
+      "message": "The change here is assuming the alignment is a power of 2, but I\u0027m guessing there\u0027s no such requirement in the spec.\n\nYou could make it clearer (and correct) with something like this:\n\n    const int unalignedBytes \u003d kBufferSize % bufferAlignOffset;\n    const int alignCorrection \u003d unalignedBytes \u003d\u003d 0 ? 0 : bufferAlignOffset - unalignedBytes;\n    const int kBufferOffset \u003d kBufferSize + alignCorrection;",
+      "parentUuid": "84a050d9_4f358d3d",
+      "revId": "7a8e93148a2f35e2001e6fbb4e809b8aa252c5b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
