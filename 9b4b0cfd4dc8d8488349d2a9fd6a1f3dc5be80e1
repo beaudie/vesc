@@ -22,6 +22,30 @@
       "revId": "9b4b0cfd4dc8d8488349d2a9fd6a1f3dc5be80e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "575e1728_b0a5b9be",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-13T21:53:21Z",
+      "side": 1,
+      "message": "\u003e But what happens if we do support native 24bit formats?\n\nwe can extend this method to take in a \"bool exactMatch\", which will be true or false depending on whether the ICD can support RGB8 or not, which will help us choose between RGBX8888 and RGB888. Does that sound reasonable?",
+      "parentUuid": "a70b2d3a_e64b86c3",
+      "range": {
+        "startLine": 276,
+        "startChar": 19,
+        "endLine": 276,
+        "endChar": 56
+      },
+      "revId": "9b4b0cfd4dc8d8488349d2a9fd6a1f3dc5be80e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
