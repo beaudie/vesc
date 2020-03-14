@@ -97,6 +97,99 @@
     },
     {
       "key": {
+        "uuid": "380301f4_609f86ae",
+        "filename": "src/compiler/translator/HashNames.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-14T15:43:38Z",
+      "side": 1,
+      "message": "It\u0027s too bad this doesn\u0027t fit into the current paradigms very well. I\u0027m fine with pretty much any proposed solution. The special casing you have here is a bit hacky so if you end up with that solution please leave a comment justifying why we chose it (the other solutions end up more complicated, etc).",
+      "parentUuid": "7cb6b4a5_2a90ebfe",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 9
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9aa2e668_75eace9c",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-14T15:43:38Z",
+      "side": 1,
+      "message": "do you want beginsWith or just straight up equals?",
+      "range": {
+        "startLine": 1195,
+        "startChar": 43,
+        "endLine": 1195,
+        "endChar": 53
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f296e75_3dcee22c",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-14T15:43:38Z",
+      "side": 1,
+      "message": "can you move this code into a new traverser util that only exposes ReplaceGLClipDistanceAssignment?",
+      "range": {
+        "startLine": 165,
+        "startChar": 6,
+        "endLine": 165,
+        "endChar": 39
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f884ab78_19a3a1eb",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-14T15:43:38Z",
+      "side": 1,
+      "message": "nit: is the upper bound on a count index limited to the implementation max clip distances? e.g. 32? you can use an angle::BitSet. unordered_set is a bit heavy.",
+      "range": {
+        "startLine": 171,
+        "startChar": 42,
+        "endLine": 171,
+        "endChar": 55
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0203226e_255e670b",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
@@ -229,6 +322,53 @@
     },
     {
       "key": {
+        "uuid": "0751b7dc_649e15ea",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-14T15:43:38Z",
+      "side": 1,
+      "message": "+1 to split change.",
+      "parentUuid": "6101ebf0_85f4d13b",
+      "range": {
+        "startLine": 1019,
+        "startChar": 0,
+        "endLine": 1024,
+        "endChar": 5
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32700e1f_6e166e0b",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-14T15:43:38Z",
+      "side": 1,
+      "message": "suggestion: These hierarchical bits add some overhead in the clearing code. Instead how about we just sync all these extended states at once in the extended bit and do away with this nested type?",
+      "range": {
+        "startLine": 608,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 6
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "371839b7_a89b97bc",
         "filename": "src/libANGLE/renderer/metal/doc/APPLE_clip_distance.md",
         "patchSetId": 13
@@ -240,6 +380,70 @@
       "writtenOn": "2020-03-05T20:01:32Z",
       "side": 1,
       "message": "This is the same for the Vulkan backend as well, isn\u0027t it? Would you mind placing the doc under vulkan/ instead of metal/ as that\u0027s where most of the attention currently is? We should eventually think of a way to make sure the docs are both visible from and reference both Vulkan and Metal.",
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08461ac1_2ea7f7df",
+        "filename": "src/libANGLE/renderer/metal/doc/APPLE_clip_distance.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-14T15:43:38Z",
+      "side": 1,
+      "message": "Yeah, seems reasonable to me to ask for this to be in the Vulkan doc folder. You can link to it from the main Vulkan README.\n\nAlso, thanks for writing this up!",
+      "parentUuid": "371839b7_a89b97bc",
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b18c5175_df7dbf39",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-14T15:43:38Z",
+      "side": 1,
+      "message": "nit: we don\u0027t typically use this init syntax. also this class doesn\u0027t have a constructor currently so better to stick to the initial style and omit this.",
+      "range": {
+        "startLine": 64,
+        "startChar": 30,
+        "endLine": 64,
+        "endChar": 33
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a7c33f7_0c2e5d14",
+        "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-14T15:43:38Z",
+      "side": 1,
+      "message": "nit: file level comment would be appreciated.",
+      "range": {
+        "startLine": 4,
+        "startChar": 3,
+        "endLine": 4,
+        "endChar": 8
+      },
       "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
