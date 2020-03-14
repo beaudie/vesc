@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "7cb6b4a5_2a90ebfe",
+        "filename": "src/compiler/translator/HashNames.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-03-14T10:41:15Z",
+      "side": 1,
+      "message": "Unfortunately, this doesn\u0027t work. And it requires far more hacks than UserDefined type in order to work. I don\u0027t think gl_ClipDistance is ANGLEInternal, it is GLSL built-in. ANGLE internal means it isn\u0027t exposed to users. If user redeclares built-in variable, it makes sense to classify it as \"user defined\".\n\nIf I changed the redeclared gl_ClipDistance to ANGLEInternal, it wouldn\u0027t be collected into output varying list because inside CollectVariablesTraverser::visitSymbol(): ANGLEInternal symbols are skipped from being collected. That leads to more issues later when compiler needs to examine the list of output varying to see if \"gl_ClipDistance\" is being used.\nIt is possible to check if gl_ClipDistance is being used by traverse the tree again, but it would be redundant.\n\nYes, it would be made workable, but will require more hacks (such as inserting if name \u003d\u003d gl_ClipDistance into more places). Also it doesn\u0027t make sense to me that gl_ClipDistance is ANGLEInternal. We could add a new symbol type such as RedeclaredBuiltIn, or use UserDefined. Is there any issue with UserDefined? Also, I\u0027m wondering if I add RedeclaredBuiltIn type, what would be a side effect?",
+      "parentUuid": "6c961fb3_17606e8e",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 9
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0203226e_255e670b",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
