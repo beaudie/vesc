@@ -981,54 +981,70 @@ inline uint32_t BitfieldReverse(uint32_t value)
 }
 
 // Count the 1 bits.
-#if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
-#    define ANGLE_HAS_BITCOUNT_32
+#if defined(_MSC_VER)
+#    if (defined(_M_IX86) || defined(_M_X64))
+namespace
+{
+static const bool hasPopcnt = [] {
+    int info[4];
+    __cpuid(&info[0], 1);
+    return static_cast<bool>(info[2] & 0x800000);
+}();
+}  // namespace
+#    endif
+
 inline int BitCount(uint32_t bits)
 {
-    return static_cast<int>(__popcnt(bits));
+#    if (defined(_M_X64) || defined(_M_IX86))
+    if (hasPopcnt)
+    {
+        return static_cast<int>(__popcnt(bits));
+    }
+#    endif  // (defined(_M_X64) || defined(_M_IX86))
+
+    // Use polyfill on platforms without popcnt. This includes MSVC ARM.
+    // https://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
+    bits = bits - ((bits >> 1) & 0x55555555);
+    bits = (bits & 0x33333333) + ((bits >> 2) & 0x33333333);
+    bits = ((bits + (bits >> 4) & 0x0F0F0F0F) * 0x01010101) >> 24;
+    return static_cast<int>(bits);
 }
-#    if defined(_M_X64)
-#        define ANGLE_HAS_BITCOUNT_64
+
 inline int BitCount(uint64_t bits)
 {
-    return static_cast<int>(__popcnt64(bits));
+#    if (defined(_M_X64) || defined(_M_IX86))
+    if (hasPopcnt)
+    {
+#        if defined(_M_X64)
+        return static_cast<int>(__popcnt64(bits));
+#        else   // x86
+        return static_cast<int>(__popcnt(static_cast<uint32_t>(bits >> 32)) +
+                                __popcnt(static_cast<uint32_t>(bits)));
+#        endif  // defined(_M_X64)
+    }
+#    endif  // (defined(_M_X64) || defined(_M_IX86))
+    bits = bits - ((bits >> 1) & 0x5555555555555555ull);
+    bits = (bits & 0x3333333333333333ull) + ((bits >> 2) & 0x3333333333333333ull);
+    bits = ((bits + (bits >> 4) & 0x0F0F0F0F0F0F0F0Full) * 0x0101010101010101ull) >> 56;
+    return static_cast<int>(bits);
 }
-#    endif  // defined(_M_X64)
-#endif      // defined(_M_IX86) || defined(_M_X64)
+#endif  // defined(_MSC_VER)
 
-#if defined(ANGLE_PLATFORM_POSIX)
-#    define ANGLE_HAS_BITCOUNT_32
+#if defined(ANGLE_PLATFORM_POSIX) || defined(__clang__)
 inline int BitCount(uint32_t bits)
 {
     return __builtin_popcount(bits);
 }
 
-#    if defined(ANGLE_IS_64_BIT_CPU)
-#        define ANGLE_HAS_BITCOUNT_64
 inline int BitCount(uint64_t bits)
 {
+#    if defined(ANGLE_IS_64_BIT_CPU)
     return __builtin_popcountll(bits);
-}
-#    endif  // defined(ANGLE_IS_64_BIT_CPU)
-#endif      // defined(ANGLE_PLATFORM_POSIX)
-
-int BitCountPolyfill(uint32_t bits);
-
-#if !defined(ANGLE_HAS_BITCOUNT_32)
-inline int BitCount(const uint32_t bits)
-{
-    return BitCountPolyfill(bits);
-}
-#endif  // !defined(ANGLE_HAS_BITCOUNT_32)
-
-#if !defined(ANGLE_HAS_BITCOUNT_64)
-inline int BitCount(const uint64_t bits)
-{
+#    else
     return BitCount(static_cast<uint32_t>(bits >> 32)) + BitCount(static_cast<uint32_t>(bits));
+#    endif  // defined(ANGLE_IS_64_BIT_CPU)
 }
-#endif  // !defined(ANGLE_HAS_BITCOUNT_64)
-#undef ANGLE_HAS_BITCOUNT_32
-#undef ANGLE_HAS_BITCOUNT_64
+#endif  // defined(ANGLE_PLATFORM_POSIX) || defined(__clang__)
 
 inline int BitCount(uint8_t bits)
 {
