@@ -92,6 +92,30 @@
       "revId": "e2a5bed9c176c581788c8156cee37bcff01930ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c49ffcfe_b18ed270",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-14T00:31:54Z",
+      "side": 1,
+      "message": "\u003e Also you are adding HOST_CACHED here. Can you comment as to why you do that?\n\nhost cached should provides us faster CPU access, refer \"MEMORY TYPES CHEAT SHEET\" here -\u003e https://www.khronos.org/assets/uploads/developers/library/2018-vulkanised/03-Steven-Tovey-VulkanMemoryManagement_Vulkanised2018.pdf",
+      "parentUuid": "0242776d_2bbc2f17",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 96
+      },
+      "revId": "e2a5bed9c176c581788c8156cee37bcff01930ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
