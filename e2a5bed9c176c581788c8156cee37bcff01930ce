@@ -68,6 +68,30 @@
       "revId": "e2a5bed9c176c581788c8156cee37bcff01930ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0242776d_2bbc2f17",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-14T00:25:43Z",
+      "side": 1,
+      "message": "\u003e Does the selection method fail or fall back in a certain pattern?\n\nmy bad, missed this one. it looks like allocation is checking for equality and it\nreturns \"VK_ERROR_INCOMPATIBLE_DRIVER\" on failures, which explains the bot failures.\n\n\u003e if ((mMemoryProperties.memoryTypes[memoryIndex].propertyFlags \u0026\n\u003e              requestedMemoryPropertyFlags) \u003d\u003d requestedMemoryPropertyFlags)\n\nHow about we expand the allocation methods to take in a new \"VkMemoryPropertyFlags\" parameter along with the ones it is already taking (requestedMemoryPropertyFlags and memoryPropertyFlagsOut)? This new one would be the \"fallbackMemoryPropertyFlags\" that is guaranteed by spec and something that is acceptable, may be with a perf hit, to fallback on\n\nfrom spec -\n\u003e There must be at least one memory type with both the VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT and VK_MEMORY_PROPERTY_HOST_COHERENT_BIT bits set in its propertyFlags.\n\n\u003e There must be at least one memory type with the VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT bit set in its propertyFlags",
+      "parentUuid": "5af0316b_6acdb1bf",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 96
+      },
+      "revId": "e2a5bed9c176c581788c8156cee37bcff01930ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
