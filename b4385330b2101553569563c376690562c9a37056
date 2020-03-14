@@ -225,6 +225,24 @@
     },
     {
       "key": {
+        "uuid": "1b8e71f5_d1bf791d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-14T03:22:45Z",
+      "side": 1,
+      "message": "Oh I see, previously createPipelineLayout was recalculating the bindings, but now it reuses the values calculated at link time (correct me if I\u0027m wrong).",
+      "parentUuid": "b1af7130_fe01f58c",
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fee7290_5b1ba24c",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 42
@@ -257,6 +275,24 @@
       "revId": "b4385330b2101553569563c376690562c9a37056",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "966100d5_8326928c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 4005,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-14T03:22:45Z",
+      "side": 1,
+      "message": "\u003e \u003e Can you make a split change with a new bug?\n\n\u003e I don\u0027t understand what you\u0027re asking for here.\n\nNevermind! That was assuming the change was previously failing too (but was undetected due to lack of CQ or something).",
+      "parentUuid": "eaf5d6a8_1f7b8cde",
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
