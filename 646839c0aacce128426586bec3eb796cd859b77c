@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37ff5b7e_a6cc62c6",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-14T03:27:05Z",
+      "side": 1,
+      "message": "Add EXT suffix",
+      "range": {
+        "startLine": 396,
+        "startChar": 34,
+        "endLine": 396,
+        "endChar": 35
+      },
+      "revId": "646839c0aacce128426586bec3eb796cd859b77c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
