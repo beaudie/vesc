@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "46688f9e_9660b457",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-14T02:50:09Z",
+      "side": 1,
+      "message": "Excuse my ignorance, you know better than me at this point, so I\u0027m just trying to make sure I understand it well.\n\nSay you have program1 with VS, which has samplers \"s1\" and \"s2\". Then you have program2 with FS, which has samplers \"s2\" and \"s3\".\n\nHow many bindings will the combined PPO consume, 3 or 4?\n\n\u003e not attempting to combine the uniform/texture/sampler/etc. lists from multiple ProgramStates and then assigning binding values.\n\nI remember uniform values where a property of Program, is that true for samplers too? Like does the application do:\n\n    glUseProgram(program1);\n    // bind t1 to s1\n    // bind t2 to s2\n    glUseProgram(program2);\n    // bind t3 to s2\n    // bind t4 to s3\n\nAnd then the PPO will have 4 samplers even though s2 has the same name between them?\n\nOr is the PPO expected to \"link\" the two s2 samplers and somehow pick either t2 or t3 to bind to it? Or do you have to do something like this?\n\n    // Create PPO\n    // pick VS from program1\n    // pick FS from program2\n    // bind t1 to s1\n    // bind t2 to s2\n    // bind t3 to s3\n\nWhat do resource limits say?",
+      "parentUuid": "cf1a179a_52ac5239",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 38
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63dcd185_f9fde6f2",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 42
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "We are still able to use this as a bit map for \"ANGLEUniformBlock\", since that\u0027s the one uniform that\u0027s guaranteed to be the same for every shader in the PPO.\n\nIf we\u0027re willing to special-case that uniform (meaning we check for that name every time we deal with ShaderInterfaceVariableInfo for uniforms), I\u0027m fine changing this to a bool.   That feels a little more hackey than the extra bit checking to me though, especially since string comparisons are worse than bit-wise shifts+ANDs.",
       "parentUuid": "63dcd185_f9fde6f2",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 20
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6074c0ff_3303583b",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-14T02:50:09Z",
+      "side": 1,
+      "message": "So, for every resource other than the driver uniforms, we have\n\n    map[stage][name].activeStages \u003d\u003d 1 \u003c\u003c stage\n\nbut for driver uniforms we have:\n\n    map[stage][ANGLEUniformBlock].activeStages \u003d\u003d 0xF\n\nis that right?\n\nWhy does ANGLEUniformBlock have to be special? Could you point out the code that relies on this?\n\n---\n\nOh, is it related to the \"not attempting to combine the uniform/texture/sampler/etc. lists from multiple ProgramStates and then assigning binding values\" statement in the other comment? As in, ANGLEUniformBlock consumes a single binding for all stages, while every other resource has a different binding per stage?\n\nIn that case, it\u0027s fine (though still a bit weird).",
+      "parentUuid": "3b66e6aa_ffb7d043",
       "range": {
         "startLine": 74,
         "startChar": 4,
