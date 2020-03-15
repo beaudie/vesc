@@ -57,6 +57,47 @@ angle_static_library("angle_test_expectations") {
   }
 }
 
+config("angle_common_test_utils_config") {
+  include_dirs = [ "." ]
+}
+
+template("angle_test_utils") {
+  assert(defined(invoker.angle_util))
+  angle_source_set(target_name) {
+    testonly = true
+    public_configs = [
+      ":angle_common_test_utils_config",
+      "$angle_root:library_name_config",
+    ]
+    public_deps = [
+      "$angle_root:angle_common",
+      "$angle_root:angle_gpu_info_util",
+      "$angle_root/util:${invoker.angle_util}",
+      "//testing/gmock",
+      "//testing/gtest",
+      "//third_party/googletest:gmock",
+      "//third_party/googletest:gtest",
+    ]
+    sources = [
+      "test_utils/angle_test_configs.cpp",
+      "test_utils/angle_test_configs.h",
+      "test_utils/angle_test_instantiate.cpp",
+      "test_utils/angle_test_instantiate.h",
+      "test_utils/angle_test_platform.cpp",
+      "test_utils/angle_test_platform.h",
+      "test_utils/gl_raii.h",
+    ]
+  }
+}
+
+angle_test_utils("angle_shared_test_utils") {
+  angle_util = "angle_util"
+}
+
+angle_test_utils("angle_static_test_utils") {
+  angle_util = "angle_util_static"
+}
+
 angle_test("angle_unittests") {
   sources = angle_unittests_sources
   main = "angle_unittest_main"
@@ -113,11 +154,9 @@ if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
     ]
 
     deps = [
+      ":angle_shared_test_utils",
       ":angle_test_expectations",
-      "$angle_root:angle_gpu_info_util",
       "$angle_root:angle_image_util",
-      "$angle_root/util:angle_util",
-      "$angle_root/util:angle_util_loader_headers",
     ]
 
     data_deps = [
@@ -165,12 +204,12 @@ if (is_win || is_linux || is_mac || is_android) {
     ]
 
     deps = [
+      ":angle_static_test_utils",
       "$angle_root:libANGLE",
       "$angle_root:libEGL_static",
       "$angle_root:libGLESv2_static",
       "$angle_root:preprocessor",
       "$angle_root:translator",
-      "$angle_root/util:angle_util_static",
     ]
 
     deps += [ "${angle_root}:angle_gl_enum_utils" ]
@@ -194,11 +233,11 @@ if (is_win || is_linux || is_android || is_mac) {
     main = "angle_perftests_main"
 
     deps = [
+      ":angle_static_test_utils",
       "$angle_jsoncpp_dir:jsoncpp",
       "$angle_root:libANGLE",
       "$angle_root:libEGL_static",
       "$angle_root:libGLESv2_static",
-      "$angle_root/util:angle_util_static",
     ]
 
     if (is_win) {
@@ -233,12 +272,10 @@ if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
     main = "angle_perftests_main"
 
     deps = [
+      ":angle_shared_test_utils",
       "$angle_jsoncpp_dir:jsoncpp",
       "$angle_root:angle_common",
-      "$angle_root:angle_gpu_info_util",
       "$angle_root:angle_system_utils",
-      "$angle_root/util:angle_util",
-      "$angle_root/util:angle_util_loader_headers",
       "$angle_spirv_tools_dir:spvtools_val",
     ]
 
@@ -274,8 +311,7 @@ if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
       defines += angle_trace_perf_defines
       data += angle_trace_perf_data
 
-      # Temporarily disable optimization in the test runner.
-      # TODO(jmadill): Only apply no-optimize to trace perf tests themselves.
+      # Ddisable optimization in the trace perf tests to avoid optimizing huge files.
       if (!is_debug) {
         suppressed_configs += [ "//build/config/compiler:default_optimization" ]
         configs += [ "//build/config/compiler:no_optimize" ]
