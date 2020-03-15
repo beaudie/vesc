@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32e14aa9_405d26dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-15T00:07:12Z",
+      "side": 1,
+      "message": "This is surprising. Usually intrinsics are just helpers for calling assembly instructions. Do you have links to supporting docs? I can ask around for advice on this too if required.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 98
+      },
+      "revId": "d900edc3a86d06ea9559391f3b3fc3836722176a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
