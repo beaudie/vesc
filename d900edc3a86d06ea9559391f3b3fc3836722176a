@@ -22,6 +22,30 @@
       "revId": "d900edc3a86d06ea9559391f3b3fc3836722176a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d1c0455_5b72c74c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-03-15T02:51:46Z",
+      "side": 1,
+      "message": "On x86/x64, MSDN suggests checking POPCNT support at runtime:\nhttps://docs.microsoft.com/en-us/cpp/intrinsics/popcnt16-popcnt-popcnt64\nThe linked issue shows a CPU that does not have it.\n\nOn ARM/ARM64, the instruction is different (_CountOneBits): \nhttps://docs.microsoft.com/en-us/cpp/intrinsics/arm-intrinsics\n\nI\u0027ll update the commit message and the implementation.",
+      "parentUuid": "32e14aa9_405d26dd",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 98
+      },
+      "revId": "d900edc3a86d06ea9559391f3b3fc3836722176a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
