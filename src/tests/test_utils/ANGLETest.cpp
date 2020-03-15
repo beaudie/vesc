@@ -1305,11 +1305,14 @@ void ANGLEProcessTestArgs(int *argc, char *argv[])
 {
     testing::AddGlobalTestEnvironment(new ANGLETestEnvironment());
 
+    bool selectedConfig = false;
+
     for (int argIndex = 1; argIndex < *argc; argIndex++)
     {
         if (strncmp(argv[argIndex], kUseConfig, strlen(kUseConfig)) == 0)
         {
-            gSelectedConfig = std::string(argv[argIndex] + strlen(kUseConfig));
+            SetSelectedConfig(argv[argIndex] + strlen(kUseConfig));
+            selectedConfig = true;
         }
         if (strncmp(argv[argIndex], kSeparateProcessPerConfig, strlen(kSeparateProcessPerConfig)) ==
             0)
@@ -1320,7 +1323,7 @@ void ANGLEProcessTestArgs(int *argc, char *argv[])
 
     if (gSeparateProcessPerConfig)
     {
-        if (!gSelectedConfig.empty())
+        if (selectedConfig)
         {
             std::cout << "Cannot use both a single test config and separate processes.\n";
             exit(1);
