@@ -1224,8 +1224,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     vk::CommandBuffer *commandBuffer,
     CommandBufferHelper *commandBufferHelper)
 {
-    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
-    ASSERT(executable);
+    const gl::ProgramExecutable *executable     = mState.getProgramExecutable();
     const gl::ActiveTextureMask &activeTextures = executable->getActiveSamplersMask();
 
     for (size_t textureUnit : activeTextures)
@@ -1244,13 +1243,38 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         if (textureVk->isBoundAsImageTexture())
         {
             textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderWrite
-                                                    : vk::ImageLayout::AllGraphicsShadersWrite;
+                                                    : vk::ImageLayout::AllGraphicsShadersReadWrite;
         }
         else
         {
-            textureLayout = executable->isCompute() ? vk::ImageLayout::ComputeShaderReadOnly
-                                                    : vk::ImageLayout::AllGraphicsShadersReadOnly;
+            gl::ShaderBitSet shaderBits =
+                executable->getSamplerShaderBitsForTextureUnitIndex(textureUnit);
+            if (shaderBits.any())
+            {
+                gl::ShaderType shader =
+                    static_cast<gl::ShaderType>(gl::ScanForward(shaderBits.bits()));
+                shaderBits.reset(shader);
+                // If we have multiple shader accessing it, we barrier against all shader stage read
+                // given that we only support vertex/frag shaders
+                if (shaderBits.any())
+                {
+                    textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
+                }
+                else
+                {
+                    const vk::ImageLayout layouts[] = {vk::ImageLayout::VertexShaderReadOnly,
+                                                       vk::ImageLayout::FragmentShaderReadOnly,
+                                                       vk::ImageLayout::GeometryShaderReadOnly,
+                                                       vk::ImageLayout::ComputeShaderReadOnly};
+                    textureLayout                   = layouts[static_cast<uint8_t>(shader)];
+                }
+            }
+            else
+            {
+                textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
+            }
         }
+        // Ensure the image is in read-only layout
         commandBufferHelper->imageRead(&mResourceUseList, image.getAspectFlags(), textureLayout,
                                        &image);
 
@@ -3592,6 +3616,8 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
     mActiveImages.fill(nullptr);
 
     const gl::ActiveTextureMask &activeImages = executable->getActiveImagesMask();
+    const gl::ActiveTextureArray<gl::ShaderBitSet> &activeImageShaderBits =
+        executable->getActiveImageShaderBits();
 
     // Note: currently, the image layout is transitioned entirely even if only one level or layer is
     // used.  This is an issue if one subresource of the image is used as framebuffer attachment and
@@ -3624,13 +3650,29 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
         // The image should be flushed and ready to use at this point. There may still be
         // lingering staged updates in its staging buffer for unused texture mip levels or
         // layers. Therefore we can't verify it has no staged updates right here.
-
-        vk::ImageLayout imageLayout = vk::ImageLayout::AllGraphicsShadersWrite;
-        if (executable->isCompute())
+        vk::ImageLayout imageLayout;
+        gl::ShaderBitSet shaderBits = activeImageShaderBits[imageUnitIndex];
+        if (shaderBits.any())
         {
-            imageLayout = vk::ImageLayout::ComputeShaderWrite;
+            gl::ShaderType shader = static_cast<gl::ShaderType>(gl::ScanForward(shaderBits.bits()));
+            shaderBits.reset(shader);
+            // This is accessed by multiple shaders
+            if (shaderBits.any())
+            {
+                imageLayout = vk::ImageLayout::AllGraphicsShadersReadWrite;
+            }
+            else
+            {
+                const vk::ImageLayout layouts[] = {
+                    vk::ImageLayout::VertexShaderWrite, vk::ImageLayout::FragmentShaderWrite,
+                    vk::ImageLayout::GeometryShaderWrite, vk::ImageLayout::ComputeShaderWrite};
+                imageLayout = layouts[static_cast<uint8_t>(shader)];
+            }
         }
-
+        else
+        {
+            imageLayout = vk::ImageLayout::AllGraphicsShadersReadWrite;
+        }
         VkImageAspectFlags aspectFlags = image->getAspectFlags();
 
         commandBufferHelper->imageWrite(&mResourceUseList, aspectFlags, imageLayout, image);
