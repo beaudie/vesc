@@ -234,7 +234,7 @@ SystemInfo *GetTestSystemInfo();
 std::vector<std::string> GetAvailableTestPlatformNames();
 
 // Active config (e.g. ES2_Vulkan).
-extern std::string gSelectedConfig;
+void SetSelectedConfig(const char *selectedConfig);
 
 // Use a separate isolated process per test config. This works around
 // driver flakiness when using multiple APIs/windows/etc in the same
