@@ -1743,17 +1743,22 @@ void ProgramState::updateActiveSamplers()
 {
     mActiveSamplerRefCounts.fill(0);
 
-    for (SamplerBinding &samplerBinding : mSamplerBindings)
+    for (uint32_t samplerIndex = 0; samplerIndex < mSamplerBindings.size(); ++samplerIndex)
     {
+        const SamplerBinding &samplerBinding = mSamplerBindings[samplerIndex];
         if (samplerBinding.unreferenced)
             continue;
+
+        uint32_t uniformIndex                   = getUniformIndexFromSamplerIndex(samplerIndex);
+        const gl::LinkedUniform &samplerUniform = mUniforms[uniformIndex];
 
         for (GLint textureUnit : samplerBinding.boundTextureUnits)
         {
             if (++mActiveSamplerRefCounts[textureUnit] == 1)
             {
-                mActiveSamplerTypes[textureUnit]   = samplerBinding.textureType;
-                mActiveSamplerFormats[textureUnit] = samplerBinding.format;
+                mActiveSamplerTypes[textureUnit]      = samplerBinding.textureType;
+                mActiveSamplerFormats[textureUnit]    = samplerBinding.format;
+                mActiveSamplerShaderBits[textureUnit] = samplerUniform.activeShaders();
             }
             else
             {
@@ -1773,14 +1778,23 @@ void ProgramState::updateActiveSamplers()
 
 void ProgramState::updateActiveImages()
 {
-    for (ImageBinding &imageBinding : mImageBindings)
+    const bool compute = isCompute() ? true : false;
+    for (uint32_t imageIndex = 0; imageIndex < mImageBindings.size(); ++imageIndex)
     {
+        const gl::ImageBinding &imageBinding = mImageBindings[imageIndex];
         if (imageBinding.unreferenced)
             continue;
 
+        uint32_t uniformIndex                 = getUniformIndexFromImageIndex(imageIndex);
+        const gl::LinkedUniform &imageUniform = mUniforms[uniformIndex];
+        const ShaderBitSet shaderBits         = imageUniform.activeShaders();
         for (GLint imageUnit : imageBinding.boundImageUnits)
         {
             mActiveImagesMask.set(imageUnit);
+            if (compute)
+                mActiveImageShaderBits[imageUnit].set(gl::ShaderType::Compute);
+            else
+                mActiveImageShaderBits[imageUnit] = shaderBits;
         }
     }
 }
@@ -5057,6 +5071,9 @@ void Program::updateSamplerUniform(Context *context,
             newSamplerType   = samplerBinding.textureType;
             newSamplerFormat = samplerBinding.format;
             mState.mActiveSamplersMask.set(newTextureUnit);
+            mState.mActiveSamplersMask.set(newTextureUnit);
+            mState.mActiveImageShaderBits[newTextureUnit] =
+                mState.mUniforms[locationInfo.index].activeShaders();
         }
         else
         {
