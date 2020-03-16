@@ -22,6 +22,23 @@
       "revId": "68ddaf80bf7eb559fa59b1330b22626db966e0a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a360b307_925bacc0",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-16T16:18:57Z",
+      "side": 1,
+      "message": "nit: Don\u0027t need the else if returning in the if.",
+      "revId": "68ddaf80bf7eb559fa59b1330b22626db966e0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
