@@ -746,6 +746,7 @@ angle_source_set("angle_gl_enum_utils") {
 
 angle_source_set("libANGLE_with_capture") {
   public_deps = [ ":libANGLE_base" ]
+  deps = [ "//third_party/zlib" ]
   public_configs = [ ":angle_frame_capture_enabled" ]
   sources = libangle_capture_sources
 }
