@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ace1ea22_eb34a1e2",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-16T15:25:47Z",
+      "side": 1,
+      "message": "You can likely used sizedInternalFormat here and remove the GL_RGBA from the switch in ColorspaceFormatOverride.",
+      "range": {
+        "startLine": 401,
+        "startChar": 53,
+        "endLine": 401,
+        "endChar": 67
+      },
+      "revId": "68ddaf80bf7eb559fa59b1330b22626db966e0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
