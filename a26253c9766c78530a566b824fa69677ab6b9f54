@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7afdc696_e631f71f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-16T21:06:05Z",
+      "side": 1,
+      "message": "Out of curiosity, why a pointer vs. an object reference?\nStyle guide wasn\u0027t very clear for the recommendation here.\n{DEV} all parameters passed by reference, except for STL containers (e.g. std::vector, std::list), must be labeled const. For return parameters other than STL containers, use a pointer.",
+      "revId": "a26253c9766c78530a566b824fa69677ab6b9f54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
