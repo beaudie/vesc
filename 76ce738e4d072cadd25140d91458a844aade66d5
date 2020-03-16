@@ -69,6 +69,30 @@
       "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8236790_6fc9cd79",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-16T19:25:19Z",
+      "side": 1,
+      "message": "thought this will be straight forward but it requires a surprisingly large amount of plumbing to get the memproperties, memrequirements and so on. Want to keep this change simple, looking for suggestions along those lines",
+      "parentUuid": "75223944_dfb7e948",
+      "range": {
+        "startLine": 66,
+        "startChar": 29,
+        "endLine": 66,
+        "endChar": 51
+      },
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
