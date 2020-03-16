@@ -52,6 +52,29 @@
       "revId": "a26253c9766c78530a566b824fa69677ab6b9f54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93465551_04546cd4",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-16T22:26:02Z",
+      "side": 1,
+      "message": "Hmmm... as you noted in the commit message, this saves up all the binary data until the end of the capture.  This might not work well for large captures.  For instance, I\u0027m currently able to capture the entirety of TRex and Manhattan.  Would it be worth having this as a mode?  Maybe we can revisit if this becomes a problem.  We shouldn\u0027t *have* to record full apps if MEC is solid.",
+      "range": {
+        "startLine": 2999,
+        "startChar": 16,
+        "endLine": 2999,
+        "endChar": 30
+      },
+      "revId": "a26253c9766c78530a566b824fa69677ab6b9f54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
