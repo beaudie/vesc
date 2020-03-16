@@ -27,12 +27,46 @@
 #include <functional>
 #include <sstream>
 
+#include <zlib.h>
+
 using namespace angle;
 using namespace egl_platform;
 
 namespace
 {
 void FramebufferChangeCallback(void *userData, GLenum target, GLuint framebuffer);
+
+ANGLE_MAYBE_UNUSED uint8_t *DecompressBinaryData(FILE *fp, long fileSize)
+{
+    uint32_t decompressedSize = 0;
+    fread(&decompressedSize, sizeof(uint32_t), 1, fp);
+
+    size_t compressedDataSize = fileSize - sizeof(uint32_t);
+    std::vector<uint8_t> compressedData(compressedDataSize, 0);
+    fread(compressedData.data(), 1, compressedDataSize, fp);
+
+    uint8_t *decompressedData = new uint8_t[decompressedSize];
+    uLong destLen             = decompressedSize;
+    int zResult               = uncompress(decompressedData, &destLen, compressedData.data(),
+                             static_cast<uLong>(compressedDataSize));
+
+    if (zResult != Z_OK)
+    {
+        std::cerr << "Failure to decompressed binary data: " << zResult << "\n";
+        delete[] decompressedData;
+        return nullptr;
+    }
+
+    if (destLen != decompressedSize)
+    {
+        std::cerr << "Unexpected decompressed data size (" << destLen << " vs expected "
+                  << decompressedSize << "\n";
+        delete[] decompressedData;
+        return nullptr;
+    }
+
+    return decompressedData;
+}
 
 enum class TracePerfTestID
 {
@@ -154,6 +188,7 @@ TracePerfTest::TracePerfTest()
     : ANGLERenderTest("TracePerf", GetParam()), mStartFrame(0), mEndFrame(0)
 {}
 
+// TODO(jmadill/cnorthrop): Use decompression path. http://anglebug.com/3630
 #define TRACE_TEST_CASE(NAME)                            \
     mStartFrame = NAME::kReplayFrameStart;               \
     mEndFrame   = NAME::kReplayFrameEnd;                 \
