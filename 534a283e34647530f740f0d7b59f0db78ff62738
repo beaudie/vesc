@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ac195a1f_5396b474",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-16T23:15:43Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "5387382e_1922a753",
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2dc9e842_6355e847",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "e6757401_29509ecf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-16T23:15:43Z",
+      "side": 1,
+      "message": "If multiple bits are set, it will barrier on the earliest bit.",
+      "parentUuid": "2dc9e842_6355e847",
+      "range": {
+        "startLine": 1250,
+        "startChar": 16,
+        "endLine": 1250,
+        "endChar": 50
+      },
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6345580a_028f8b6b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -53,6 +95,24 @@
       "writtenOn": "2020-03-16T22:48:01Z",
       "side": 1,
       "message": "If this is not an expected path, probably want UNREACHABLE();?\nIf is valid path, should this be vk::ImageLayout::AllGraphicsShadersReadOnly?",
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "342055ec_0d30a4ac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-16T23:15:43Z",
+      "side": 1,
+      "message": "I thought it is unreachable, but the compute test was hitting the else path in the updateActiveImages(). I am fine with either way.",
+      "parentUuid": "6345580a_028f8b6b",
       "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
