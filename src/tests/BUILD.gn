@@ -290,7 +290,10 @@ if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
       sources = angle_trace_perf_sources
       defines = angle_trace_perf_defines
       data = angle_trace_perf_data
-      deps = [ ":angle_perftests_shared" ]
+      deps = [
+        ":angle_perftests_shared",
+        "//third_party/zlib",
+      ]
       suppressed_configs +=
           [ "$angle_root:constructor_and_destructor_warnings" ]
 
