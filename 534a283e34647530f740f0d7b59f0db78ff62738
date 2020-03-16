@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "441ac5d8_739b108a",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-16T23:56:15Z",
+      "side": 1,
+      "message": "I was thinking, outside the loop:\nShaderBitSet shaderBits(imageBinding.shaderBit);\nif (isCompute())\n   shaderBits \u003d ShaderBitSet.set(gl::ShaderType::Compute);\n\ninside the loop just have:\n...\n   mActiveImageDhaderBits[imageUnit] \u003d shaderBits;",
+      "parentUuid": "e5d7a544_efbe68df",
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dc9e842_6355e847",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
