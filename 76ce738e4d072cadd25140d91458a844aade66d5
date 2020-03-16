@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85767d54_32a30a14",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-16T18:30:06Z",
+      "side": 1,
+      "message": "small nit: can omit inline. It\u0027s only necessary for header files. this function likely doesn\u0027t need to be inlined. If it did you could use ANGLE_INLINE to force inlining.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 7
+      },
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf57d77f_40462db6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-16T18:30:06Z",
+      "side": 1,
+      "message": "Can you scan the memory here and return a set of supported flags? That way you don\u0027t need the hack you put in vk_utils.",
+      "range": {
+        "startLine": 66,
+        "startChar": 29,
+        "endLine": 66,
+        "endChar": 51
+      },
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
