@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dff03b95_26226ea6",
+        "filename": "infra/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-16T19:27:50Z",
+      "side": 1,
+      "message": "Nexus 5X as well.",
+      "range": {
+        "startLine": 22,
+        "startChar": 3,
+        "endLine": 22,
+        "endChar": 10
+      },
+      "revId": "5a6aa2b11f8d68188ea25c9a888862895fc27871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
