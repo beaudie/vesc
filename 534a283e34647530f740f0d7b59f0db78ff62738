@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "e5d7a544_efbe68df",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-16T23:32:57Z",
+      "side": 1,
+      "message": "This actually only called from program link time, so perf not that important. Instead of duplicate these lines, I just cached isCompute() to local const variable.",
+      "parentUuid": "ac195a1f_5396b474",
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dc9e842_6355e847",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -84,6 +102,30 @@
     },
     {
       "key": {
+        "uuid": "bf732566_c98b3e45",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-16T23:32:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6757401_29509ecf",
+      "range": {
+        "startLine": 1250,
+        "startChar": 16,
+        "endLine": 1250,
+        "endChar": 50
+      },
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6345580a_028f8b6b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -116,6 +158,24 @@
       "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e3817b5_b7b90042",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-16T23:32:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "342055ec_0d30a4ac",
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
