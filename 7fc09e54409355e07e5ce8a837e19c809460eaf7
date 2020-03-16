@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ed4ea0f8_ccf1afcc",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-16T20:31:46Z",
+      "side": 0,
+      "message": "Nope, was redundant.",
+      "parentUuid": "3e4d4461_bc4e03e7",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 39
+      },
+      "revId": "7fc09e54409355e07e5ce8a837e19c809460eaf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a1c1c149_fe7da79f",
         "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-16T19:08:15Z",
       "side": 0,
       "message": "Optional was nice.\nMuch clearer than -1.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 8
+      },
+      "revId": "7fc09e54409355e07e5ce8a837e19c809460eaf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e152a459_a76980e0",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-16T20:31:46Z",
+      "side": 0,
+      "message": "I do agree. It was hard to make Optional work without a global constructor / exit-time destructor. That ok?",
+      "parentUuid": "a1c1c149_fe7da79f",
       "range": {
         "startLine": 17,
         "startChar": 0,

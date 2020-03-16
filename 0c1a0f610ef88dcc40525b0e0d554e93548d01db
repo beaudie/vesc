@@ -22,6 +22,30 @@
       "revId": "0c1a0f610ef88dcc40525b0e0d554e93548d01db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d95ce9ef_aae75486",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-16T20:31:46Z",
+      "side": 1,
+      "message": "They\u0027re needed by both angle_perftests proper and the angle_trace_perf_tests helper I\u0027m adding. \n\nAlso seems fairly harmless to include in white box tests. That ok?",
+      "parentUuid": "cf6976eb_5587dbd0",
+      "range": {
+        "startLine": 233,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 40
+      },
+      "revId": "0c1a0f610ef88dcc40525b0e0d554e93548d01db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
