@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea3dbd01_0ec4b18f",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-16T19:36:34Z",
+      "side": 1,
+      "message": "Could you add a comment or link to documentation?",
+      "range": {
+        "startLine": 988,
+        "startChar": 0,
+        "endLine": 992,
+        "endChar": 4
+      },
+      "revId": "06e587b25101bf8c66476ca91882151275364afd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4720b752_78a0b701",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-16T19:36:34Z",
+      "side": 1,
+      "message": "Could this and the 64-bit version below be moved to inlined helper functions?  If this function could just be simple checks and function calls it would be more readable.",
+      "range": {
+        "startLine": 1003,
+        "startChar": 0,
+        "endLine": 1008,
+        "endChar": 34
+      },
+      "revId": "06e587b25101bf8c66476ca91882151275364afd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
