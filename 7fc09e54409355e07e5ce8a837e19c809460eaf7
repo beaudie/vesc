@@ -34,6 +34,52 @@
       "revId": "7fc09e54409355e07e5ce8a837e19c809460eaf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "00d26cdb_577fad15",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1326,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-16T18:49:55Z",
+      "side": 1,
+      "message": "I\u0027d just make IsConfigSelected() public.",
+      "range": {
+        "startLine": 1326,
+        "startChar": 12,
+        "endLine": 1326,
+        "endChar": 26
+      },
+      "revId": "7fc09e54409355e07e5ce8a837e19c809460eaf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "889d7f3e_3bf44764",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-16T18:49:55Z",
+      "side": 1,
+      "message": "I\u0027m not fond of this.\nI prefer things to be hermetic.",
+      "range": {
+        "startLine": 132,
+        "startChar": 20,
+        "endLine": 132,
+        "endChar": 22
+      },
+      "revId": "7fc09e54409355e07e5ce8a837e19c809460eaf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

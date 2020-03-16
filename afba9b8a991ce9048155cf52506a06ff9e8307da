@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bada033f_3d7ece1e",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-16T18:49:55Z",
+      "side": 0,
+      "message": "not needed anymore?",
+      "range": {
+        "startLine": 120,
+        "startChar": 8,
+        "endLine": 120,
+        "endChar": 49
+      },
+      "revId": "afba9b8a991ce9048155cf52506a06ff9e8307da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de7d2b9a_890ee58d",
+        "filename": "src/tests/angle_end2end_tests.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-16T18:49:55Z",
+      "side": 0,
+      "message": "Makes sense that all \"test_utils\" files would be in the new \"angle_test_utils\" target.\nMaybe there is a better place for these 4 files?",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 31
+      },
+      "revId": "afba9b8a991ce9048155cf52506a06ff9e8307da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
