@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "530204c2_323b6020",
+        "filename": "src/tests/gl_tests/ProgramInterfaceTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-16T13:06:20Z",
+      "side": 1,
+      "message": "nit: you can probably leave off the bug tag and replace it with a comment. I think we\u0027ll be able to close the issue when fixed.",
+      "range": {
+        "startLine": 602,
+        "startChar": 7,
+        "endLine": 602,
+        "endChar": 31
+      },
+      "revId": "ececd1a7a75dbf07e00d6616d4e5c67e8da53c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea0f55ca_e24ba1cf",
+        "filename": "src/tests/gl_tests/ProgramInterfaceTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-16T13:06:20Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 956,
+        "startChar": 0,
+        "endLine": 957,
+        "endChar": 31
+      },
+      "revId": "ececd1a7a75dbf07e00d6616d4e5c67e8da53c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
