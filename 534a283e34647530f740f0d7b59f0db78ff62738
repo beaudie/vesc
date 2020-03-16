@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5387382e_1922a753",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-16T22:48:01Z",
+      "side": 1,
+      "message": "nit: Could put this test outside the if.",
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dc9e842_6355e847",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-16T22:48:01Z",
+      "side": 1,
+      "message": "It\u0027s not obvious to me what shaderBits[gl::ShaderType::Vertex] returns.\nWhat happens if the Vertex and Fragment bits are set? Will this be true here?\nIs that the right answer?",
+      "range": {
+        "startLine": 1250,
+        "startChar": 16,
+        "endLine": 1250,
+        "endChar": 50
+      },
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6345580a_028f8b6b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-16T22:48:01Z",
+      "side": 1,
+      "message": "If this is not an expected path, probably want UNREACHABLE();?\nIf is valid path, should this be vk::ImageLayout::AllGraphicsShadersReadOnly?",
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
