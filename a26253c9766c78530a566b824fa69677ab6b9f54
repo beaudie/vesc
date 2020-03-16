@@ -16,6 +16,24 @@
       "revId": "a26253c9766c78530a566b824fa69677ab6b9f54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c65e0c5d_024f6f4b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-16T21:17:22Z",
+      "side": 1,
+      "message": "I don\u0027t remember why we excepted STL containers. We should probably remove that exception. The real recommendation is pretty much always follow the style guide unless you\u0027re using stream ops like logger classes.",
+      "parentUuid": "7afdc696_e631f71f",
+      "revId": "a26253c9766c78530a566b824fa69677ab6b9f54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
