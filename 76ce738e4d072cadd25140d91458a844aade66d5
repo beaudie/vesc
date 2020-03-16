@@ -45,6 +45,30 @@
       "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75223944_dfb7e948",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-16T18:39:58Z",
+      "side": 1,
+      "message": "so callers in possibly multiple places will do their own memory scanning logic?\n\nhow about i add a method to vk_utils \"GetSupportedMemoryType(...)\" that takes in desired memory type flags and returns the best possible flag combination for that usecase and underlying GPU. incase the desired flag cant be supported we return the spec guaranteed \"host_visible + host_coherent\" flag\n\nthen the caller can do whatever it wants with that info",
+      "parentUuid": "cf57d77f_40462db6",
+      "range": {
+        "startLine": 66,
+        "startChar": 29,
+        "endLine": 66,
+        "endChar": 51
+      },
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
