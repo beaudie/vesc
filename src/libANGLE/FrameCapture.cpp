@@ -29,6 +29,8 @@
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/queryutils.h"
 
+#include <zlib.h>
+
 #if !ANGLE_CAPTURE_ENABLED
 #    error Frame capture must be enbled to include this file.
 #endif  // !ANGLE_CAPTURE_ENABLED
@@ -43,6 +45,7 @@ constexpr char kOutDirectoryVarName[] = "ANGLE_CAPTURE_OUT_DIR";
 constexpr char kFrameStartVarName[]   = "ANGLE_CAPTURE_FRAME_START";
 constexpr char kFrameEndVarName[]     = "ANGLE_CAPTURE_FRAME_END";
 constexpr char kCaptureLabel[]        = "ANGLE_CAPTURE_LABEL";
+constexpr char kCompression[]         = "ANGLE_CAPTURE_COMPRESSION";
 
 #if defined(ANGLE_PLATFORM_ANDROID)
 
@@ -51,6 +54,7 @@ constexpr char kAndroidOutDir[]         = "debug.angle.capture.out_dir";
 constexpr char kAndroidFrameStart[]     = "debug.angle.capture.frame_start";
 constexpr char kAndroidFrameEnd[]       = "debug.angle.capture.frame_end";
 constexpr char kAndroidCaptureLabel[]   = "debug.angle.capture.label";
+constexpr char kAndroidCompression[]    = "debug.angle.capture.compression";
 
 constexpr int kStreamSize = 64;
 
@@ -110,8 +114,15 @@ void PrimeAndroidEnvironmentVariables()
     std::string captureLabel = AndroidGetEnvFromProp(kAndroidCaptureLabel);
     if (!captureLabel.empty())
     {
-        INFO() << "Capture label read " << captureLabel << " from " << kAndroidCaptureLabel;
+        INFO() << "Frame capture read " << captureLabel << " from " << kAndroidCaptureLabel;
         setenv(kCaptureLabel, captureLabel.c_str(), 1);
+    }
+
+    std::string compression = AndroidGetEnvFromProp(kAndroidCompression);
+    if (!compression.empty())
+    {
+        INFO() << "Frame capture read " << compression << " from " << kAndroidCompression;
+        setenv(kCompression, compression.c_str(), 1);
     }
 }
 #endif
@@ -604,32 +615,70 @@ struct SaveFileHelper
     std::string filePath;
 };
 
-std::string GetBinaryDataFilePath(int contextId, const std::string &captureLabel)
+std::string GetBinaryDataFilePath(bool compression, int contextId, const std::string &captureLabel)
 {
     std::stringstream fnameStream;
     fnameStream << FmtCapturePrefix(contextId, captureLabel) << ".angledata";
+    if (compression)
+    {
+        fnameStream << ".z";
+    }
     return fnameStream.str();
 }
 
-void SaveBinaryData(const std::string &outDir,
+void SaveBinaryData(bool compression,
+                    const std::string &outDir,
                     int contextId,
                     const std::string &captureLabel,
                     const std::vector<uint8_t> &binaryData)
 {
-    std::string binaryDataFileName = GetBinaryDataFilePath(contextId, captureLabel);
+    std::string binaryDataFileName = GetBinaryDataFilePath(compression, contextId, captureLabel);
     std::string dataFilepath       = outDir + binaryDataFileName;
 
     SaveFileHelper saveData(dataFilepath, std::ios::binary);
-    saveData.ofs.write(reinterpret_cast<const char *>(binaryData.data()), binaryData.size());
+
+    if (compression)
+    {
+        // Save compressed data. Make a buffer 2x the size which should be ample.
+        std::vector<uint8_t> compressedData(binaryData.size() * 2, 0);
+        uLong destLen;
+        int zResult = compress(compressedData.data(), &destLen, binaryData.data(),
+                               static_cast<uLong>(binaryData.size()));
+
+        if (zResult != Z_OK)
+        {
+            FATAL() << "Error compressing binary data: " << zResult;
+        }
+
+        // Save one integer as a version identifier.
+        uint32_t version = 1;
+        saveData.ofs.write(reinterpret_cast<const char *>(&version), sizeof(uint32_t));
+
+        // Save the uncompressed size as the first bytes in the compressed data. This will allow
+        // us to allocate a buffer of the correct size when decompressing.
+        ASSERT(binaryData.size() < std::numeric_limits<uint32_t>::max());
+
+        uint32_t uncompressedSize = static_cast<uint32_t>(binaryData.size());
+        saveData.ofs.write(reinterpret_cast<const char *>(&uncompressedSize), sizeof(uint32_t));
+        saveData.ofs.write(reinterpret_cast<const char *>(compressedData.data()), destLen);
+    }
+    else
+    {
+        saveData.ofs.write(reinterpret_cast<const char *>(binaryData.data()), binaryData.size());
+    }
 }
 
-void WriteLoadBinaryDataCall(std::ostream &out, int contextId, const std::string &captureLabel)
+void WriteLoadBinaryDataCall(bool compression,
+                             std::ostream &out,
+                             int contextId,
+                             const std::string &captureLabel)
 {
-    std::string binaryDataFileName = GetBinaryDataFilePath(contextId, captureLabel);
+    std::string binaryDataFileName = GetBinaryDataFilePath(compression, contextId, captureLabel);
     out << "    LoadBinaryData(\"" << binaryDataFileName << "\");\n";
 }
 
-void WriteCppReplay(const std::string &outDir,
+void WriteCppReplay(bool compression,
+                    const std::string &outDir,
                     int contextId,
                     const std::string &captureLabel,
                     uint32_t frameIndex,
@@ -661,7 +710,7 @@ void WriteCppReplay(const std::string &outDir,
 
         std::stringstream setupCallStream;
 
-        WriteLoadBinaryDataCall(setupCallStream, contextId, captureLabel);
+        WriteLoadBinaryDataCall(compression, setupCallStream, contextId, captureLabel);
 
         for (const CallCapture &call : setupCalls)
         {
@@ -710,7 +759,8 @@ void WriteCppReplay(const std::string &outDir,
     }
 }
 
-void WriteCppReplayIndexFiles(const std::string &outDir,
+void WriteCppReplayIndexFiles(bool compression,
+                              const std::string &outDir,
                               int contextId,
                               const std::string &captureLabel,
                               uint32_t frameStart,
@@ -772,6 +822,11 @@ void WriteCppReplayIndexFiles(const std::string &outDir,
         header << "void " << FmtReplayFunction(contextId, frameIndex) << ";\n";
     }
     header << "\n";
+    header << "constexpr bool kIsBinaryDataCompressed = " << (compression ? "true" : "false")
+           << ";\n";
+    header << "\n";
+    header << "using DecompressCallback = uint8_t *(*)(FILE *fp, long fileSize);\n";
+    header << "void SetBinaryDataDecompressCallback(DecompressCallback callback);\n";
     header << "void SetBinaryDataDir(const char *dataDir);\n";
     header << "void LoadBinaryData(const char *fileName);\n";
     header << "\n";
@@ -801,6 +856,7 @@ void WriteCppReplayIndexFiles(const std::string &outDir,
     source << "    (*resourceMap)[id] = returnedID;\n";
     source << "}\n";
     source << "\n";
+    source << "DecompressCallback gDecompressCallback;\n";
     source << "const char *gBinaryDataDir = \".\";\n";
     source << "FramebufferChangeCallback gFramebufferChangeCallback;\n";
     source << "void *gFramebufferChangeCallbackUserData;\n";
@@ -879,6 +935,11 @@ void WriteCppReplayIndexFiles(const std::string &outDir,
     source << "    }\n";
     source << "}\n";
     source << "\n";
+    source << "void SetBinaryDataDecompressCallback(DecompressCallback callback)\n";
+    source << "{\n";
+    source << "    gDecompressCallback = callback;\n";
+    source << "}\n";
+    source << "\n";
     source << "void SetBinaryDataDir(const char *dataDir)\n";
     source << "{\n";
     source << "    gBinaryDataDir = dataDir;\n";
@@ -901,8 +962,15 @@ void WriteCppReplayIndexFiles(const std::string &outDir,
     source << "    fseek(fp, 0, SEEK_END);\n";
     source << "    long size = ftell(fp);\n";
     source << "    fseek(fp, 0, SEEK_SET);\n";
-    source << "    gBinaryData = new uint8_t[size];\n";
-    source << "    (void)fread(gBinaryData, 1, size, fp);\n";
+    source << "    if (gDecompressCallback)\n";
+    source << "    {\n";
+    source << "        gBinaryData = gDecompressCallback(fp, size);\n";
+    source << "    }\n";
+    source << "    else\n";
+    source << "    {\n";
+    source << "        gBinaryData = new uint8_t[size];\n";
+    source << "        (void)fread(gBinaryData, 1, size, fp);\n";
+    source << "    }\n";
     source << "    fclose(fp);\n";
     source << "}\n";
 
@@ -2487,6 +2555,7 @@ ReplayContext::~ReplayContext() {}
 
 FrameCapture::FrameCapture()
     : mEnabled(true),
+      mCompression(true),
       mClientVertexArrayMap{},
       mFrameIndex(0),
       mFrameStart(0),
@@ -2540,6 +2609,12 @@ FrameCapture::FrameCapture()
     {
         // Optional label to provide unique file names and namespaces
         mCaptureLabel = labelFromEnv;
+    }
+
+    std::string compressionFromEnv = angle::GetEnvironmentVar(kCompression);
+    if (compressionFromEnv == "0")
+    {
+        mCompression = false;
     }
 }
 
@@ -2984,19 +3059,20 @@ void FrameCapture::onEndFrame(const gl::Context *context)
     // Note that we currently capture before the start frame to collect shader and program sources.
     if (!mFrameCalls.empty() && mFrameIndex >= mFrameStart)
     {
-        WriteCppReplay(mOutDirectory, context->id(), mCaptureLabel, mFrameIndex, mFrameCalls,
-                       mSetupCalls, &mBinaryData);
+        WriteCppReplay(mCompression, mOutDirectory, context->id(), mCaptureLabel, mFrameIndex,
+                       mFrameCalls, mSetupCalls, &mBinaryData);
 
         // Save the index files after the last frame.
         if (mFrameIndex == mFrameEnd)
         {
-            WriteCppReplayIndexFiles(mOutDirectory, context->id(), mCaptureLabel, mFrameStart,
-                                     mFrameEnd, mReadBufferSize, mClientArraySizes,
+            WriteCppReplayIndexFiles(mCompression, mOutDirectory, context->id(), mCaptureLabel,
+                                     mFrameStart, mFrameEnd, mReadBufferSize, mClientArraySizes,
                                      mHasResourceType);
 
             if (!mBinaryData.empty())
             {
-                SaveBinaryData(mOutDirectory, context->id(), mCaptureLabel, mBinaryData);
+                SaveBinaryData(mCompression, mOutDirectory, context->id(), mCaptureLabel,
+                               mBinaryData);
                 mBinaryData.clear();
             }
         }
