@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c23dcecd_0c1fc138",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-17T14:16:16Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be the compression? Or is the existence of debug.angle.capture.compression sufficient to enable compression?\nE.g. if debug.angle.capture.compression is 0, want ANGLE_CAPTURE_COMPRESSION environment variable to be 0, likewise for 1.",
+      "range": {
+        "startLine": 125,
+        "startChar": 50,
+        "endLine": 125,
+        "endChar": 51
+      },
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15b8c735_434f9294",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-17T14:16:16Z",
+      "side": 1,
+      "message": "Does 2X guarantee that compress cannot overrun the buffer?",
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bb05708_03e0b4bd",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-17T14:16:16Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we store a compress flag as well, that way reader knows to decompress or not?",
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2e2586c_00584921",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-17T14:16:16Z",
+      "side": 1,
+      "message": "Where does SetBinaryDataDecompressCallback get called?",
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
