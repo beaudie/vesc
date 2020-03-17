@@ -146,7 +146,7 @@ rx::ContextImpl *DisplayVk::createContext(const gl::State &state,
                                           const gl::Context *shareContext,
                                           const egl::AttributeMap &attribs)
 {
-    return new ContextVk(state, errorSet, mRenderer);
+    return new ContextVk(state, errorSet, mRenderer, shareContext == nullptr);
 }
 
 StreamProducerImpl *DisplayVk::createStreamProducerD3DTexture(

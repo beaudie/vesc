@@ -294,7 +294,7 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         // If there are pending commands for the buffer, flush them.
         if (mBuffer.usedInRecordedCommands())
         {
-            ANGLE_TRY(contextVk->flushImpl(nullptr));
+            ANGLE_TRY(contextVk->flushThread(nullptr));
         }
 
         // Make sure the driver is done with the buffer.

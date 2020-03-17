@@ -10,14 +10,14 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_CONTEXTVK_H_
 #define LIBANGLE_RENDERER_VULKAN_CONTEXTVK_H_
 
-#include "volk.h"
-
+#include <thread>
 #include "common/PackedEnums.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/vulkan/OverlayVk.h"
 #include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
+#include "volk.h"
 
 namespace angle
 {
@@ -255,7 +255,7 @@ using EventName                               = std::array<char, kMaxGpuEventNam
 class ContextVk : public ContextImpl, public vk::Context
 {
   public:
-    ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer);
+    ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer, bool shared);
     ~ContextVk() override;
 
     angle::Result initialize() override;
@@ -520,6 +520,7 @@ class ContextVk : public ContextImpl, public vk::Context
     void insertWaitSemaphore(const vk::Semaphore *waitSemaphore);
 
     bool shouldFlush();
+    angle::Result flushThread(const vk::Semaphore *semaphore);
     angle::Result flushImpl(const vk::Semaphore *semaphore);
     angle::Result finishImpl();
 
@@ -1070,6 +1071,9 @@ class ContextVk : public ContextImpl, public vk::Context
     egl::ContextPriority mContextPriority;
 
     std::vector<std::string> mCommandBufferDiagnostics;
+    // Thread for submitting commands
+    std::thread mFlushThread;
+    bool mShared;
 };
 }  // namespace rx
 
