@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c92d904_0e7282b9",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T17:11:35Z",
+      "side": 1,
+      "message": "Please update the outer for loop to use an integer index (e.g. imageIndex). Then you can get this information from \n\n mUniforms[getUniformIndexFromImageIndex(imageIndex)].activeShaders().\n\nYou won\u0027t need to store it in the image bindings.",
+      "range": {
+        "startLine": 1794,
+        "startChar": 12,
+        "endLine": 1797,
+        "endChar": 75
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db967ad0_9b6ff423",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3757,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T17:11:35Z",
+      "side": 1,
+      "message": "same as below",
+      "range": {
+        "startLine": 3757,
+        "startChar": 12,
+        "endLine": 3757,
+        "endChar": 25
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1087ae1_b7d26c63",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3783,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T17:11:35Z",
+      "side": 1,
+      "message": "you should be able to omit these changes with the above fix",
+      "range": {
+        "startLine": 3783,
+        "startChar": 8,
+        "endLine": 3783,
+        "endChar": 68
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b8a8145_9b6c02e2",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5685,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T17:11:35Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 5685,
+        "startChar": 8,
+        "endLine": 5685,
+        "endChar": 21
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afb552be_5de1be24",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T17:11:35Z",
+      "side": 1,
+      "message": "You can use\n\n angle::ScanForward(mActiveTextureShaderBits[textureUnit].to_ulong())\n\nto get the same result more quickly. alternately you can use\n\n (*mActiveTextureShaderBits[textureUnit].begin())\n\nI believe the last else case is unreachable. That would mean it\u0027s not used in any shader. You can add an ASSERT to verify that.\n\nBy the way, what happens if the Texture is bound to more than one stage? Can you leave a comment that this is ok if it works?",
+      "range": {
+        "startLine": 1249,
+        "startChar": 0,
+        "endLine": 1259,
+        "endChar": 76
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a881726_69819184",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3635,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T17:11:35Z",
+      "side": 1,
+      "message": "same comment here.",
+      "range": {
+        "startLine": 3625,
+        "startChar": 0,
+        "endLine": 3635,
+        "endChar": 67
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ea26519_30abfa21",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T17:11:35Z",
+      "side": 1,
+      "message": "I\u0027d like to move this logic into Program.cpp like you did for GL Storage Images.\n\nYou\u0027ll need to change \"updateActiveSamplers\" like the suggestion for images. You can use getUniformIndexFromSamplerIndex to grab the uniform location.\n\nYou\u0027ll also need to change \"updateSamplerUniform\" to grab the uniform location and update the shader mask.\n\nPlease let me know if you need any help doing this. I\u0027d like to make that change to attempt to lower CPU overhead of changing the texture uniform state.",
+      "range": {
+        "startLine": 1837,
+        "startChar": 16,
+        "endLine": 1837,
+        "endChar": 45
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b259169e_805c2a94",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T17:11:35Z",
+      "side": 1,
+      "message": "this is an odd pattern. Can you leave a comment as to why this is correct? I wasn\u0027t even aware Vulkan allowed you to transition to undefined.",
+      "range": {
+        "startLine": 827,
+        "startChar": 81,
+        "endLine": 827,
+        "endChar": 90
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
