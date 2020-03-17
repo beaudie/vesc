@@ -168,6 +168,54 @@
     },
     {
       "key": {
+        "uuid": "3c76b7b5_51a9d16a",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-17T17:59:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a1bb8e43_44a6da7b",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 7
+      },
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e365cfd5_e2175f83",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-17T17:59:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "96a6443b_911a1205",
+      "range": {
+        "startLine": 66,
+        "startChar": 29,
+        "endLine": 66,
+        "endChar": 51
+      },
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56a7bc47_aef53c3e",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 3
@@ -179,6 +227,30 @@
       "writtenOn": "2020-03-17T17:26:22Z",
       "side": 1,
       "message": "nit: can organize this a bit better:\n\n{\n  constexpr kLocalFlags \u003d visible | coherent | local;\n  constexpr kCachedFlags \u003d visible | coherent | cached;\n\n  if (!\u003d Unpack)\n  {\n     return kCachedFlags;\n  }\n\n  switch (usage)\n  {\n     case static copy / draw/ read:\n       return kLocalFlags;\n     default:\n       return kCachedFlags;\n  }\n}",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 49
+      },
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6bec78f_ecb2db07",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-17T17:59:20Z",
+      "side": 1,
+      "message": "i assume you meant -\n\nif (\u003d\u003d Unpack)\n  {\n     return kCachedFlags;\n  }",
+      "parentUuid": "56a7bc47_aef53c3e",
       "range": {
         "startLine": 68,
         "startChar": 0,
