@@ -235,6 +235,23 @@
       "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a7271a0d_366495ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-17T17:45:29Z",
+      "side": 1,
+      "message": "This test seems to require that the target memory type has ONLY the HOST_COHERENT and HOST_VISIBLE bits set, is that guaranteed?\nFrom the comment it sounded it\u0027s wasn\u0027t clear that there couldn\u0027t be other bits set as well as those two.\nLooking at the current flags, it would appear that other bits cannot be set.\nE.g. VK_MEMORY_PROPERTY_HOST_CACHED_BIT would not be set if HOST_COHERENT is set, similarly  VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT cannot be set if HOST_VISIBLE is set and likewise for VK_MEMORY_PROPERTY_PROTECTED_BIT.\nDo we worry about potential future extensions that could set additional bits that break this test? Or should we mask this check to only consider the bits we care about right now?",
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
