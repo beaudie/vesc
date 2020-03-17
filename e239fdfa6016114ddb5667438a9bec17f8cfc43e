@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6efc11e6_22aa1275",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1797,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-17T22:51:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c92d904_0e7282b9",
+      "range": {
+        "startLine": 1794,
+        "startChar": 12,
+        "endLine": 1797,
+        "endChar": 75
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db967ad0_9b6ff423",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "454f3071_bdacbad7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3757,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-17T22:51:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db967ad0_9b6ff423",
+      "range": {
+        "startLine": 3757,
+        "startChar": 12,
+        "endLine": 3757,
+        "endChar": 25
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "dc9be7d0_cf97c061",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3783,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-17T22:51:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1087ae1_b7d26c63",
+      "range": {
+        "startLine": 3783,
+        "startChar": 8,
+        "endLine": 3783,
+        "endChar": 68
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b8a8145_9b6c02e2",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18e7fc60_08937745",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5685,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-17T22:51:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b8a8145_9b6c02e2",
+      "range": {
+        "startLine": 5685,
+        "startChar": 8,
+        "endLine": 5685,
+        "endChar": 21
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -187,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "babf9862_c18bfe3f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-17T22:51:17Z",
+      "side": 1,
+      "message": "BTW, do it in updateActiveSamplers() was exactly what I initially proposed in the chat last Friday though.",
+      "parentUuid": "2ea26519_30abfa21",
+      "range": {
+        "startLine": 1837,
+        "startChar": 16,
+        "endLine": 1837,
+        "endChar": 45
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b259169e_805c2a94",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 7
@@ -246,6 +366,30 @@
       "side": 1,
       "message": "You can\u0027t transition into Undefined. Maybe keep it as it is until it\u0027s known to be a performance bottleneck.",
       "parentUuid": "efc9d46c_a9ed5a75",
+      "range": {
+        "startLine": 827,
+        "startChar": 81,
+        "endLine": 827,
+        "endChar": 90
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebcd852a_b9b35ef7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-17T22:51:17Z",
+      "side": 1,
+      "message": "I have comment it out to give it a try.",
+      "parentUuid": "aa32a4ca_209bfdb0",
       "range": {
         "startLine": 827,
         "startChar": 81,
