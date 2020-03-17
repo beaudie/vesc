@@ -426,6 +426,24 @@
       "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6e46c4e_116343b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-17T18:29:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f013141e_9eba605b",
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
