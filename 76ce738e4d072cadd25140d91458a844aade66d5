@@ -390,6 +390,24 @@
       "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac6974c9_5b36a67c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-17T18:14:27Z",
+      "side": 1,
+      "message": "My concern is what if other bits are set besides just HOST_COHERENT and HOST_VISIBLE?\nThe spec comment doesn\u0027t preclude other bits from being set, does it?\nIf there are any other bits set, then this test will then fail to find a suitable fallback.",
+      "parentUuid": "cf33e39a_bcbf0d5f",
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
