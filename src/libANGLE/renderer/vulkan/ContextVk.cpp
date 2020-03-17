@@ -855,7 +855,10 @@ angle::Result ContextVk::startPrimaryCommandBuffer()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
-    return flushImpl(nullptr);
+    mSubmitThread = std::thread(&ContextVk::flushImpl, this, nullptr);
+    // return flushImpl(nullptr);
+    // mSubmitThread.join();
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
@@ -2197,7 +2200,8 @@ angle::Result ContextVk::clearWithRenderPassOp(
 {
     // Validate cache variable is in sync.
     ASSERT(mDrawFramebuffer == vk::GetImpl(mState.getDrawFramebuffer()));
-
+    if (mSubmitThread.joinable())
+        mSubmitThread.join();
     // Start a new render pass if:
     //
     // - no render pass has started,
