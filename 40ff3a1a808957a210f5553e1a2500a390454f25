@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8d177778_b8a73151",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-17T14:40:52Z",
+      "side": 1,
+      "message": "The last parameter is \"overwrite\", so I think we want \"1\" for each setenv.",
+      "parentUuid": "c23dcecd_0c1fc138",
+      "range": {
+        "startLine": 125,
+        "startChar": 50,
+        "endLine": 125,
+        "endChar": 51
+      },
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15b8c735_434f9294",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 10
@@ -36,6 +60,29 @@
       "writtenOn": "2020-03-17T14:16:16Z",
       "side": 1,
       "message": "Does 2X guarantee that compress cannot overrun the buffer?",
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1baf7449_d7486823",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-17T14:40:52Z",
+      "side": 1,
+      "message": "Can you add a note describing why we\u0027re writing the uncompressed size with the compressed data.  It is a bit of a handshake.  Tempting to also track if this ever exceeds 32-bits.",
+      "range": {
+        "startLine": 654,
+        "startChar": 59,
+        "endLine": 654,
+        "endChar": 75
+      },
       "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +117,52 @@
       "writtenOn": "2020-03-17T14:16:16Z",
       "side": 1,
       "message": "Where does SetBinaryDataDecompressCallback get called?",
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "121819da_d09cb12c",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-17T14:40:52Z",
+      "side": 1,
+      "message": "Probably worth tying this back to a constant shared by capture, in case someone decides to expand it to 64-bit size.  Or at least leave a note and print out some info during capture if data exceeds the trackable size.",
+      "range": {
+        "startLine": 42,
+        "startChar": 36,
+        "endLine": 42,
+        "endChar": 44
+      },
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a73eda81_05ffd39a",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-17T14:40:52Z",
+      "side": 1,
+      "message": "std::vector instead?",
+      "range": {
+        "startLine": 48,
+        "startChar": 32,
+        "endLine": 48,
+        "endChar": 43
+      },
       "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
