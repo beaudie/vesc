@@ -1479,7 +1479,7 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
     // more and (possibly) exceeding the device's limits.
     if (contextVk->shouldFlush())
     {
-        ANGLE_TRY(contextVk->flushImpl(nullptr));
+        ANGLE_TRY(contextVk->flushThread(false, nullptr));
     }
 
     mSize = requestedCreateInfo.size;

@@ -207,7 +207,7 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
         ANGLE_TRY(contextVk->syncExternalMemory());
     }
 
-    return contextVk->flushImpl(&mSemaphore);
+    return contextVk->flushThread(context->isShared(), &mSemaphore);
 }
 
 angle::Result SemaphoreVk::importOpaqueFd(ContextVk *contextVk, GLint fd)

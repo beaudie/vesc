@@ -667,7 +667,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         if (anyVertexBufferConvertedOnGpu &&
             renderer->getFeatures().flushAfterVertexConversion.enabled)
         {
-            ANGLE_TRY(contextVk->flushImpl(nullptr));
+            ANGLE_TRY(contextVk->flushThread(false, nullptr));
         }
     }
     else

@@ -86,7 +86,7 @@ angle::Result SyncHelper::clientWait(Context *context,
 
     if (flushCommands && contextVk)
     {
-        ANGLE_TRY(contextVk->flushImpl(nullptr));
+        ANGLE_TRY(contextVk->flushThread(false, nullptr));
     }
 
     // Wait on the fence that's expected to be signaled on the first vkQueueSubmit after
