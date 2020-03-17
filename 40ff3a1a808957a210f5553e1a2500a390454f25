@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "2dbe4042_fd2f15ad",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T23:00:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8d177778_b8a73151",
+      "range": {
+        "startLine": 125,
+        "startChar": 50,
+        "endLine": 125,
+        "endChar": 51
+      },
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "15b8c735_434f9294",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 10
@@ -63,6 +87,24 @@
       "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e3f7018_7aebf863",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T23:00:41Z",
+      "side": 1,
+      "message": "Yeah. The example used 1.1. So I went for the easiest integer math. Left a comment.",
+      "parentUuid": "15b8c735_434f9294",
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -89,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "0f3b5dab_de05d6fd",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T23:00:41Z",
+      "side": 1,
+      "message": "Done. Note that 64-bit is a bit complicated to support. So I added a version identifier.",
+      "parentUuid": "1baf7449_d7486823",
+      "range": {
+        "startLine": 654,
+        "startChar": 59,
+        "endLine": 654,
+        "endChar": 75
+      },
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5bb05708_03e0b4bd",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 10
@@ -106,6 +172,24 @@
     },
     {
       "key": {
+        "uuid": "e6ef2599_05f1136e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T23:00:41Z",
+      "side": 1,
+      "message": "Good thought. I made this into a variable in the replay header.",
+      "parentUuid": "5bb05708_03e0b4bd",
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2e2586c_00584921",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 10
@@ -120,6 +204,24 @@
       "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a318f8d3_4fdf5ef5",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T23:00:41Z",
+      "side": 1,
+      "message": "Inside the test harness. So we don\u0027t have to embed zlib into the replay cpp. We\u0027ll need to regenerate the traces first.",
+      "parentUuid": "e2e2586c_00584921",
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -146,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "a52fff83_57c9effe",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T23:00:41Z",
+      "side": 1,
+      "message": "It\u0027s kind of seriously annoying to figure out 64-bit file I/O cross platform so I left this for a future person\u0027s problem. For now the version qualifier should guard against any shenanigans.\n\nAlso I do agree having a proper API and a header for this binary data is a good long term thing. Best to do at a later step I think.",
+      "parentUuid": "121819da_d09cb12c",
+      "range": {
+        "startLine": 42,
+        "startChar": 36,
+        "endLine": 42,
+        "endChar": 44
+      },
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a73eda81_05ffd39a",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 10
@@ -166,6 +292,30 @@
       "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "337ddba6_0a299143",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T23:00:41Z",
+      "side": 1,
+      "message": "Can\u0027t be vector because we need to release the pointer. Switched to unique_ptr.",
+      "parentUuid": "a73eda81_05ffd39a",
+      "range": {
+        "startLine": 48,
+        "startChar": 32,
+        "endLine": 48,
+        "endChar": 43
+      },
+      "revId": "40ff3a1a808957a210f5553e1a2500a390454f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
