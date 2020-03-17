@@ -592,6 +592,9 @@ struct Extensions
         return (drawElementsBaseVertexOES || drawElementsBaseVertexEXT);
     }
 
+    // GL_EXT_shader_non_constant_global_initializers
+    bool shaderNonConstGlobalInitializers = false;
+
     // GL_EXT_gpu_shader5
     bool gpuShader5EXT = false;
     // WEBGL_video_texture
