@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "16276000_f84e2eb7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-17T00:29:03Z",
+      "side": 1,
+      "message": "Thanks Courtney. Most usage case the inner for loop will be just loop once since single element uniform is far popular than array. If I do what you said, in single element case, it will be two assignment instead of one, which will be more expensive. But either way, I think this is minor thing here. Unless you have strong preference, I will leave this one as is.",
+      "parentUuid": "441ac5d8_739b108a",
+      "revId": "534a283e34647530f740f0d7b59f0db78ff62738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dc9e842_6355e847",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
