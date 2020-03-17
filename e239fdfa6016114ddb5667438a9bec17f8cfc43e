@@ -117,6 +117,30 @@
     },
     {
       "key": {
+        "uuid": "3786a2c1_2de7494b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-17T18:23:33Z",
+      "side": 1,
+      "message": "@Jamie, I don\u0027t recall exactly, but I think it\u0027s implied that if the dst stage is X, it implicitly includes prior stages.\n\nThe bug here is that when transitioning out of this layout, the src stage cannot be just X, but should be the last stage that uses this texture.",
+      "parentUuid": "afb552be_5de1be24",
+      "range": {
+        "startLine": 1249,
+        "startChar": 0,
+        "endLine": 1259,
+        "endChar": 76
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0a881726_69819184",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
