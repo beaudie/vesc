@@ -75,6 +75,30 @@
       "revId": "a26253c9766c78530a566b824fa69677ab6b9f54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d90aad69_193b3589",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T00:18:07Z",
+      "side": 1,
+      "message": "I\u0027d be surprised if this still didn\u0027t work. From my observation the bulk of the capture data in Manhattan is the first frame. In any case it should still be possible to write even very large files.",
+      "parentUuid": "93465551_04546cd4",
+      "range": {
+        "startLine": 2999,
+        "startChar": 16,
+        "endLine": 2999,
+        "endChar": 30
+      },
+      "revId": "a26253c9766c78530a566b824fa69677ab6b9f54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
