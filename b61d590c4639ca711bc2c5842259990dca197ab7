@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "98b6e04d_46c5f4d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-03-17T21:06:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54f5fb91_e9041db3",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 133
+      },
+      "revId": "b61d590c4639ca711bc2c5842259990dca197ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1830af0_f88206b1",
         "filename": "/COMMIT_MSG",
         "patchSetId": 6
@@ -36,6 +60,24 @@
       "writtenOn": "2020-03-17T20:14:25Z",
       "side": 1,
       "message": "any comment on how much this speeds up any tests on which platforms?",
+      "revId": "b61d590c4639ca711bc2c5842259990dca197ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eb6fa3a_0ebe32b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-03-17T21:06:02Z",
+      "side": 1,
+      "message": "Arguably, the immediate benefit of this CL is fixing \"invalid instruction\" runtime failure on older CPUs when compiling with MSVC (as reported in the linked issue).\n\nIt\u0027s hard to comment about speed without thorough benchmarks, my reasons were:\n- Clang: use builtins on all platforms, provide exact intent to the compiler;\n- MSVC/ARM: use dedicated intrinsics;\n- x86/x64 fallback is now branchless and works in constant time.\n\nThe upcoming OES_draw_buffers_indexed support for GL renderer relies on BitCount in a few potentially hot places.",
+      "parentUuid": "d1830af0_f88206b1",
       "revId": "b61d590c4639ca711bc2c5842259990dca197ab7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "8d82bfc9_e661facc",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-03-17T21:06:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8bea8fb_35264618",
+      "range": {
+        "startLine": 986,
+        "startChar": 0,
+        "endLine": 986,
+        "endChar": 9
+      },
+      "revId": "b61d590c4639ca711bc2c5842259990dca197ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e4e1b9d_d09afe6d",
         "filename": "src/common/mathutil.h",
         "patchSetId": 6
@@ -85,6 +151,30 @@
       "revId": "b61d590c4639ca711bc2c5842259990dca197ab7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07021271_42bcbcbd",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-03-17T21:06:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e4e1b9d_d09afe6d",
+      "range": {
+        "startLine": 990,
+        "startChar": 18,
+        "endLine": 990,
+        "endChar": 28
+      },
+      "revId": "b61d590c4639ca711bc2c5842259990dca197ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
