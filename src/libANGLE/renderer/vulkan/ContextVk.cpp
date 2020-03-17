@@ -585,7 +585,10 @@ egl::ContextPriority GetContextPriority(const gl::State &state)
 }
 
 // ContextVk implementation.
-ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer)
+ContextVk::ContextVk(const gl::State &state,
+                     gl::ErrorSet *errorSet,
+                     RendererVk *renderer,
+                     const gl::Context *shareContext)
     : ContextImpl(state, errorSet),
       vk::Context(renderer),
       mRenderPassCommandBuffer(nullptr),
@@ -614,7 +617,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuEventTimestampOrigin(0),
       mPrimaryBufferCounter(0),
       mRenderPassCounter(0),
-      mContextPriority(renderer->getDriverPriority(GetContextPriority(state)))
+      mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
+      mShared(shareContext != nullptr)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -694,12 +698,20 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mPipelineDirtyBitsMask.set();
     mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
+    if (shareContext != nullptr)
+    {
+        ContextVk *contextVk = vk::GetImpl(shareContext);
+        contextVk->setShared();
+        contextVk->joinFlushThread();
+    }
 }
 
 ContextVk::~ContextVk() = default;
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    this->joinFlushThread();
+
     // This will not destroy any resources. It will release them to be collected after finish.
     mIncompleteTextures.onDestroy(context);
 
@@ -853,9 +865,34 @@ angle::Result ContextVk::startPrimaryCommandBuffer()
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::flushImmediate(const vk::Semaphore *semaphore)
+{
+    this->joinFlushThread();
+
+    return flushImpl(semaphore);
+}
+
+angle::Result ContextVk::flushThread(const vk::Semaphore *semaphore)
+{
+    if (!mShared)
+    {
+        // Only allow one outstanding flush thread
+        this->joinFlushThread();
+
+        mFlushThread = std::thread(&ContextVk::flushImpl, this, semaphore);
+        return angle::Result::Continue;
+    }
+    else
+    {
+        // Don't thread flushes for shared context to avoid resource contention
+        //  as shared context can't join outstanding flush thread from separate context.
+        return flushImmediate(semaphore);
+    }
+}  // namespace rx
+
 angle::Result ContextVk::flush(const gl::Context *context)
 {
-    return flushImpl(nullptr);
+    return flushThread(nullptr);
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
@@ -2193,6 +2230,7 @@ angle::Result ContextVk::clearWithRenderPassOp(
 {
     // Validate cache variable is in sync.
     ASSERT(mDrawFramebuffer == vk::GetImpl(mState.getDrawFramebuffer()));
+    this->joinFlushThread();
 
     // Start a new render pass if:
     //
@@ -2918,7 +2956,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 
 angle::Result ContextVk::onUnMakeCurrent(const gl::Context *context)
 {
-    ANGLE_TRY(flushImpl(nullptr));
+    ANGLE_TRY(flushImmediate(nullptr));
     mCurrentWindowSurface = nullptr;
     return angle::Result::Continue;
 }
@@ -3712,7 +3750,7 @@ angle::Result ContextVk::finishImpl()
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::finish");
 
-    ANGLE_TRY(flushImpl(nullptr));
+    ANGLE_TRY(flushImmediate(nullptr));
 
     ANGLE_TRY(finishToSerial(getLastSubmittedQueueSerial()));
     ASSERT(!mCommandQueue.hasInFlightCommands());
@@ -3974,6 +4012,9 @@ angle::Result ContextVk::onBufferRead(VkAccessFlags readAccessType, vk::BufferHe
 
     if (!buffer->canAccumulateRead(this, readAccessType))
     {
+        // Join any outstanding flush thread
+        this->joinFlushThread();
+
         flushOutsideRenderPassCommands();
     }
 
@@ -4038,6 +4079,9 @@ angle::Result ContextVk::flushAndBeginRenderPass(
     const std::vector<VkClearValue> &clearValues,
     vk::CommandBuffer **commandBufferOut)
 {
+    // Join any outstanding flush thread
+    this->joinFlushThread();
+
     vk::PrimaryCommandBuffer *primary;
     ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
 
@@ -4070,6 +4114,10 @@ angle::Result ContextVk::endRenderPass()
         EventName eventName = GetTraceEventName("RP", mRenderPassCounter);
         ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_BEGIN, eventName));
     }
+
+    // If a separate flush thread is active, join it prior to touching mPrimaryCommands
+    if ((mFlushThread.get_id() != std::this_thread::get_id()) && mFlushThread.joinable())
+        mFlushThread.join();
 
     ANGLE_TRY(mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
 
