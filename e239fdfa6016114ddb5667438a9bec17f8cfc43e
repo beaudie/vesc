@@ -183,6 +183,30 @@
       "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efc9d46c_a9ed5a75",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-17T17:55:46Z",
+      "side": 1,
+      "message": "I think this entire changeLayoutAndQueue is not needed. That should be handled when the texture object gets referenced. But I was a bit hesitated to remove it since I am not sure about the reason that it was added.",
+      "parentUuid": "b259169e_805c2a94",
+      "range": {
+        "startLine": 827,
+        "startChar": 81,
+        "endLine": 827,
+        "endChar": 90
+      },
+      "revId": "e239fdfa6016114ddb5667438a9bec17f8cfc43e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
