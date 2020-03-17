@@ -117,6 +117,30 @@
       "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96a6443b_911a1205",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T17:13:26Z",
+      "side": 1,
+      "message": "Oh okay, I didn\u0027t realize that host coherent and host visible is required by the spec. Changing the API to fall back to that in case the preferred flags aren\u0027t supported sounds reasonable.",
+      "parentUuid": "4475e849_072a113e",
+      "range": {
+        "startLine": 66,
+        "startChar": 29,
+        "endLine": 66,
+        "endChar": 51
+      },
+      "revId": "76ce738e4d072cadd25140d91458a844aade66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
