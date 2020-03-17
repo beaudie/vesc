@@ -1167,7 +1167,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     image.currentPresentHistoryIndex =
         (image.currentPresentHistoryIndex + 1) % image.presentHistory.size();
 
-    ANGLE_TRY(contextVk->flushImpl(presentSemaphore));
+    ANGLE_TRY(contextVk->flushImmediate(presentSemaphore));
 
     VkPresentInfoKHR presentInfo   = {};
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -1219,6 +1219,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     mCurrentSwapHistoryIndex =
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
+    contextVk->joinFlushThread();
     VkResult result = contextVk->getRenderer()->queuePresent(contextVk->getPriority(), presentInfo);
 
     // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
