@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54f5fb91_e9041db3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T20:14:25Z",
+      "side": 1,
+      "message": "tiny nit: can you wrap this to 70 chars?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 133
+      },
+      "revId": "b61d590c4639ca711bc2c5842259990dca197ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1830af0_f88206b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T20:14:25Z",
+      "side": 1,
+      "message": "any comment on how much this speeds up any tests on which platforms?",
+      "revId": "b61d590c4639ca711bc2c5842259990dca197ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8bea8fb_35264618",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T20:14:25Z",
+      "side": 1,
+      "message": "nit: anonymous namespace in a header might not have the effect you want as the symbol \"hasPopcnt\" is still exposed. The style guide recommends a private namespace like \"namespace priv\". We do this in a few places. So I\u0027d suggest that to indicate this symbol should not be used directly.",
+      "range": {
+        "startLine": 986,
+        "startChar": 0,
+        "endLine": 986,
+        "endChar": 9
+      },
+      "revId": "b61d590c4639ca711bc2c5842259990dca197ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e4e1b9d_d09afe6d",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-17T20:14:25Z",
+      "side": 1,
+      "message": "naming nit: kHasPopcnt.",
+      "range": {
+        "startLine": 990,
+        "startChar": 18,
+        "endLine": 990,
+        "endChar": 28
+      },
+      "revId": "b61d590c4639ca711bc2c5842259990dca197ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
