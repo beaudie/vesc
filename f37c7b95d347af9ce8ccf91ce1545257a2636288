@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05472947_212c8302",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-18T19:18:49Z",
+      "side": 1,
+      "message": "I prefer if you defined the BitCount pair once inside the `#if defined(_M_IX86) || defined(_M_X64)` above, and once in an else for ARM. This way, you wouldn\u0027t have so many `#if` cases inside the function (and it would be easier to read).",
+      "range": {
+        "startLine": 1016,
+        "startChar": 0,
+        "endLine": 1045,
+        "endChar": 1
+      },
+      "revId": "f37c7b95d347af9ce8ccf91ce1545257a2636288",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
