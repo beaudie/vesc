@@ -34,6 +34,24 @@
       "revId": "efe89b177ece6d9c3bb0a23fbc515d4637b999d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c5b678da_72763c78",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-18T15:20:18Z",
+      "side": 1,
+      "message": "Actually I was thinking more: ASSERT(pixelWidth \u0026 3 \u003d\u003d 0)\nE.g. what happens if the offset or width/height isn\u0027t a multiple of 4.",
+      "parentUuid": "53b90b30_b7b566b4",
+      "revId": "efe89b177ece6d9c3bb0a23fbc515d4637b999d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
