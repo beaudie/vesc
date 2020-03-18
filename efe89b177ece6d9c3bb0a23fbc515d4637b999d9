@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1908ea95_169593d1",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-18T14:15:29Z",
+      "side": 1,
+      "message": "Do we have to worry about odd values here?\nI suspect not, otherwise probably an app bug as I doubt odd values would work for subimage calls with compressed textures.",
+      "revId": "efe89b177ece6d9c3bb0a23fbc515d4637b999d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
