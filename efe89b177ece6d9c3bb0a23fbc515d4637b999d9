@@ -16,6 +16,24 @@
       "revId": "efe89b177ece6d9c3bb0a23fbc515d4637b999d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53b90b30_b7b566b4",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2791,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-18T15:15:07Z",
+      "side": 1,
+      "message": "I asserted this above. Moved the assertions down here to clarify.",
+      "parentUuid": "1908ea95_169593d1",
+      "revId": "efe89b177ece6d9c3bb0a23fbc515d4637b999d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
