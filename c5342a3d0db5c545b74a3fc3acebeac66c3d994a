@@ -16,6 +16,23 @@
       "revId": "c5342a3d0db5c545b74a3fc3acebeac66c3d994a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14af4af0_d963e986",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1145695
+      },
+      "writtenOn": "2020-03-18T02:03:26Z",
+      "side": 1,
+      "message": "If you use GZIP as a wrapper format for a DEFLATE stream, the expected decompressed size is also available:\nhttps://cs.chromium.org/chromium/src/third_party/zlib/google/compression_utils_portable.cc?l\u003d37",
+      "revId": "c5342a3d0db5c545b74a3fc3acebeac66c3d994a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
