@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bda00cd0_7ac28503",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1145695
+      },
+      "writtenOn": "2020-03-18T01:35:53Z",
+      "side": 1,
+      "message": "The code should work fine as it is, but there is a better way to estimate the size of a compressed output buffer:\nhttps://cs.chromium.org/chromium/src/third_party/zlib/google/compression_utils_portable.cc?l\u003d31\n\nIf you wanna to rely only on pure zlib, simply add the header size for the wrapper format with the result of compressBound():\nhttps://cs.chromium.org/chromium/src/third_party/zlib/zlib.h?gsn\u003dcompressBound\u0026g\u003d0\u0026l\u003d1260",
+      "revId": "c5342a3d0db5c545b74a3fc3acebeac66c3d994a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
