@@ -33,6 +33,24 @@
       "revId": "c5342a3d0db5c545b74a3fc3acebeac66c3d994a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9601c95b_de32574f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1145695
+      },
+      "writtenOn": "2020-03-18T02:08:11Z",
+      "side": 1,
+      "message": "Another advantage of using a wrapper (either GZIP or ZLIB format), is that we calculate in zlib a data integrity check on the decompressed data (i.e. crc32 on gzip, adler-32 on zlib format).",
+      "parentUuid": "14af4af0_d963e986",
+      "revId": "c5342a3d0db5c545b74a3fc3acebeac66c3d994a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
