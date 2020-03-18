@@ -426,12 +426,24 @@ class Texture final : public RefCountObject<TextureID>,
         mState.mImageBindingCount--;
     }
 
-    ANGLE_INLINE void onBindAsSamplerTexture() { mState.mSamplerBindingCount++; }
+    ANGLE_INLINE void onBindAsSamplerTexture()
+    {
+        if (!mState.isBoundAsSamplerTexture())
+        {
+            onStateChange(angle::SubjectMessage::BindingChanged);
+        }
+        mState.mSamplerBindingCount++;
+    }
 
     ANGLE_INLINE void onUnbindAsSamplerTexture()
     {
         ASSERT(mState.isBoundAsSamplerTexture());
         mState.mSamplerBindingCount--;
+
+        if (!mState.isBoundAsSamplerTexture())
+        {
+            onStateChange(angle::SubjectMessage::BindingChanged);
+        }
     }
 
     egl::Surface *getBoundSurface() const;
