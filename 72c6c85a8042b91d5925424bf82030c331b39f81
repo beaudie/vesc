@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "4bcc4c4c_54ef11dd",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T12:27:21Z",
+      "side": 1,
+      "message": "nit: increment.",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53b66258_66490a98",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T12:27:21Z",
+      "side": 1,
+      "message": "use ES3_extension to parse correctly when the extension isn\u0027t available. Probably could regression test this.",
+      "range": {
+        "startLine": 238,
+        "startChar": 32,
+        "endLine": 238,
+        "endChar": 45
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5390f536_353b9178",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 2
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T12:27:21Z",
+      "side": 1,
+      "message": "do we need to add checkCanUseExtension?",
+      "range": {
+        "startLine": 780,
+        "startChar": 6,
+        "endLine": 780,
+        "endChar": 20
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01ab592a_5793d26d",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 2
