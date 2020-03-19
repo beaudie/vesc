@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "3eaa59e2_2a8688c6",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T17:57:05Z",
+      "side": 1,
+      "message": "\u003e Say you have program1 with VS, which has samplers \"s1\" and \"s2\". Then you have program2 with FS, which has samplers \"s2\" and \"s3\".\n\n\u003e How many bindings will the combined PPO consume, 3 or 4?\n\nThe PPO will consume 4 bindings, since there isn\u0027t any logic yet to determine that \"s2\" is the same sampler in both shaders.   That\u0027s certainly something we should look into adding once this stuff has landed, but doesn\u0027t appear necessary yet.",
+      "parentUuid": "46688f9e_9660b457",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 38
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63dcd185_f9fde6f2",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 42
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "So, for every resource other than the driver uniforms, we have\n\n    map[stage][name].activeStages \u003d\u003d 1 \u003c\u003c stage\n\nbut for driver uniforms we have:\n\n    map[stage][ANGLEUniformBlock].activeStages \u003d\u003d 0xF\n\nis that right?\n\nWhy does ANGLEUniformBlock have to be special? Could you point out the code that relies on this?\n\n---\n\nOh, is it related to the \"not attempting to combine the uniform/texture/sampler/etc. lists from multiple ProgramStates and then assigning binding values\" statement in the other comment? As in, ANGLEUniformBlock consumes a single binding for all stages, while every other resource has a different binding per stage?\n\nIn that case, it\u0027s fine (though still a bit weird).",
       "parentUuid": "3b66e6aa_ffb7d043",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 20
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78a071cb_eabf2a7e",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T17:57:05Z",
+      "side": 1,
+      "message": "\u003e As in, ANGLEUniformBlock consumes a single binding for all stages, while every other resource has a different binding per stage?\n\nCorrect.\n\nI don\u0027t think ANGLEUniformBlock has to be special, it just can be since that\u0027s the only uniform that\u0027s guaranteed to be present and available for all shaders.\n\nIt should be possible to treat it like every other uniform and assign it one binding per shader (and make each binding specific to that shader) if that\u0027s what you\u0027d prefer.",
+      "parentUuid": "6074c0ff_3303583b",
       "range": {
         "startLine": 74,
         "startChar": 4,
