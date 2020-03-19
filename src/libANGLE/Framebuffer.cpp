@@ -682,18 +682,27 @@ bool FramebufferState::updateAttachmentFeedbackLoop(size_t dirtyBit)
     switch (dirtyBit)
     {
         case Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT:
+        {
+            bool previous            = mDepthBufferFeedbackLoop;
             mDepthBufferFeedbackLoop = mDepthAttachment.isBoundAsSamplerOrImage();
-            return mDepthBufferFeedbackLoop;
+            return mDepthBufferFeedbackLoop != previous;
+        }
 
         case Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
+        {
+            bool previous              = mDepthBufferFeedbackLoop;
             mStencilBufferFeedbackLoop = mStencilAttachment.isBoundAsSamplerOrImage();
-            return mStencilBufferFeedbackLoop;
+            return mStencilBufferFeedbackLoop != previous;
+        }
 
         default:
+        {
+            bool previous = mDrawBufferFeedbackLoops.test(dirtyBit);
             ASSERT(dirtyBit <= Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX);
             mDrawBufferFeedbackLoops[dirtyBit] =
                 mColorAttachments[dirtyBit].isBoundAsSamplerOrImage();
-            return mDrawBufferFeedbackLoops.test(dirtyBit);
+            return mDrawBufferFeedbackLoops.test(dirtyBit) != previous;
+        }
     }
 }
 
