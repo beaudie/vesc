@@ -681,29 +681,35 @@ bool FramebufferState::isDefault() const
 
 bool FramebufferState::updateAttachmentFeedbackLoop(size_t dirtyBit)
 {
+    bool previous;
     bool loop;
 
     switch (dirtyBit)
     {
         case Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT:
+            previous                 = mDepthBufferFeedbackLoop;
             loop                     = mDepthAttachment.isBoundAsSamplerOrImage();
             mDepthBufferFeedbackLoop = loop;
             break;
 
         case Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
+            previous                   = mStencilBufferFeedbackLoop;
             loop                       = mStencilAttachment.isBoundAsSamplerOrImage();
             mStencilBufferFeedbackLoop = loop;
             break;
 
         default:
+        {
             ASSERT(dirtyBit <= Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX);
-            loop = mColorAttachments[dirtyBit].isBoundAsSamplerOrImage();
+            previous = mDrawBufferFeedbackLoops.test(dirtyBit);
+            loop     = mColorAttachments[dirtyBit].isBoundAsSamplerOrImage();
             mDrawBufferFeedbackLoops[dirtyBit] = loop;
             break;
+        }
     }
 
     updateHasRenderingFeedbackLoop();
-    return loop;
+    return previous != loop;
 }
 
 void FramebufferState::updateHasRenderingFeedbackLoop()
