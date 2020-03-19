@@ -19,8 +19,10 @@ _tests = [
 ]
 
 angle_trace_perf_sources = [ "perf_tests/TracePerfTest.cpp" ]
-angle_trace_perf_data =
-    [ "${angle_root}/src/tests/perf_tests/restricted_traces" ]
+
+# TODO: anglebug.com/4496
+# Temporarily limit the data uploaded to a single trace to get the bots going
+angle_trace_perf_data = [ "${angle_root}/src/tests/perf_tests/restricted_traces/trex_200/trex_200_capture_context1.angledata.gz" ]
 angle_trace_perf_defines = []
 
 foreach(_test, _tests) {

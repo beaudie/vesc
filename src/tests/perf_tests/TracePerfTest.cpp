@@ -57,16 +57,11 @@ ANGLE_MAYBE_UNUSED uint8_t *DecompressBinaryData(const std::vector<uint8_t> &com
     return uncompressedData.release();
 }
 
+// TODO (anglebug.com/4496)
+// Temporarily limit the tests to a single trace to get the bots going
 enum class TracePerfTestID
 {
-    Manhattan10,
-    Manhattan750,
-    Manhattan1100,
-    Manhattan1440,
     TRex200,
-    TRex800,
-    TRex900,
-    TRex1300,
     InvalidEnum,
 };
 
@@ -93,29 +88,8 @@ struct TracePerfParams final : public RenderTestParams
 
         switch (testID)
         {
-            case TracePerfTestID::Manhattan10:
-                strstr << "_manhattan_10";
-                break;
-            case TracePerfTestID::Manhattan750:
-                strstr << "_manhattan_750";
-                break;
-            case TracePerfTestID::Manhattan1100:
-                strstr << "_manhattan_1100";
-                break;
-            case TracePerfTestID::Manhattan1440:
-                strstr << "_manhattan_1440";
-                break;
             case TracePerfTestID::TRex200:
                 strstr << "_trex_200";
-                break;
-            case TracePerfTestID::TRex800:
-                strstr << "_trex_800";
-                break;
-            case TracePerfTestID::TRex900:
-                strstr << "_trex_900";
-                break;
-            case TracePerfTestID::TRex1300:
-                strstr << "_trex_1300";
                 break;
             default:
                 assert(0);
@@ -198,34 +172,9 @@ void TracePerfTest::initializeBenchmark()
 
     switch (params.testID)
     {
-        // For each case, bootstrap the trace
-        case TracePerfTestID::Manhattan10:
-            TRACE_TEST_CASE(manhattan_10_20);
-            break;
-        case TracePerfTestID::Manhattan750:
-            TRACE_TEST_CASE(manhattan_750_760);
-            break;
-        case TracePerfTestID::Manhattan1100:
-            TRACE_TEST_CASE(manhattan_1100_1110);
-            break;
-        case TracePerfTestID::Manhattan1440:
-            TRACE_TEST_CASE(manhattan_1440_1450);
-            break;
         case TracePerfTestID::TRex200:
             trex_200::SetBinaryDataDecompressCallback(DecompressBinaryData);
             TRACE_TEST_CASE(trex_200);
-            break;
-        case TracePerfTestID::TRex800:
-            trex_800::SetBinaryDataDecompressCallback(DecompressBinaryData);
-            TRACE_TEST_CASE(trex_800);
-            break;
-        case TracePerfTestID::TRex900:
-            trex_900::SetBinaryDataDecompressCallback(DecompressBinaryData);
-            TRACE_TEST_CASE(trex_900);
-            break;
-        case TracePerfTestID::TRex1300:
-            trex_1300::SetBinaryDataDecompressCallback(DecompressBinaryData);
-            TRACE_TEST_CASE(trex_1300);
             break;
         default:
             assert(0);
