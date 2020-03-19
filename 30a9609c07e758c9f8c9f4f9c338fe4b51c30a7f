@@ -22,6 +22,29 @@
       "revId": "30a9609c07e758c9f8c9f4f9c338fe4b51c30a7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "58e74c1d_d3295c22",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2113,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-19T18:36:50Z",
+      "side": 1,
+      "message": "For the case that Shabi mentioned, if we are transition form VertexShaderRead to FragmentShader read, we are sending down extra barrier. I can easily add a check here that if src and dst are both shader read, you don\u0027t need barrier. But I am wondering if that actually is correct thing to do. Depends on hardware, driver might actually want to know this transition as well in case they need to invalidate some cache. If there is nothing need to do, driver should able to skip this barrier in their code. I left it this way (send down barrier and let driver handle it) just for safety since even this kind of transition is not a common usage. But if anyone has strong preference, I can add the check to bail out for read to read transition.",
+      "range": {
+        "startLine": 2113,
+        "startChar": 8,
+        "endLine": 2113,
+        "endChar": 26
+      },
+      "revId": "30a9609c07e758c9f8c9f4f9c338fe4b51c30a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
