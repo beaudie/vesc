@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "f4283986_0020b6ad",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T22:53:54Z",
+      "side": 1,
+      "message": "Cleaning it up post-land sounds fine to me. Our goal is a PoC conformance submission. We don\u0027t want to ship this way so we can investigate merging descriptor sets as part of performance improvement.\n\nWe could check if Manhattan/T-Rex are affected.",
+      "parentUuid": "140773bd_9e9e4f02",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 38
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63dcd185_f9fde6f2",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 42
