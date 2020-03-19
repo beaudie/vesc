@@ -12,10 +12,10 @@ _tests = [
   "manhattan_750_760",
   "manhattan_1100_1110",
   "manhattan_1440_1450",
-  "trex_200_210",
-  "trex_800_810",
-  "trex_900_910",
-  "trex_1300_1310",
+  "trex_200",
+  "trex_800",
+  "trex_900",
+  "trex_1300",
 ]
 
 angle_trace_perf_sources = [ "perf_tests/TracePerfTest.cpp" ]
