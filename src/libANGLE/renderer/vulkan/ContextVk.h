@@ -122,16 +122,6 @@ struct CommandBufferHelper : angle::NonCopyable
                      VkAccessFlags writeAccessType,
                      vk::BufferHelper *buffer);
 
-    void imageRead(vk::ResourceUseList *resourceUseList,
-                   VkImageAspectFlags aspectFlags,
-                   vk::ImageLayout imageLayout,
-                   vk::ImageHelper *image);
-
-    void imageWrite(vk::ResourceUseList *resourceUseList,
-                    VkImageAspectFlags aspectFlags,
-                    vk::ImageLayout imageLayout,
-                    vk::ImageHelper *image);
-
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags dstStageMask,
                       const VkImageMemoryBarrier &imageMemoryBarrier);

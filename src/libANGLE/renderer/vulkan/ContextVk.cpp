@@ -1251,8 +1251,10 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
                                 ? vk::ImageLayout::ComputeShaderReadOnly
                                 : vk::ImageLayout::AllGraphicsShadersReadOnly;
         }
-        commandBufferHelper->imageRead(&mResourceUseList, image.getAspectFlags(), textureLayout,
-                                       &image);
+        const vk::ImageMemoryBarrierData *barrierData =
+            vk::ImageMemoryBarrierData::getPrebuildBarrierData(textureLayout);
+        image.imageRead(&mResourceUseList, image.getAspectFlags(), barrierData,
+                        commandBufferHelper);
 
         textureVk->retainImageViews(&mResourceUseList);
 
@@ -3615,10 +3617,11 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
         {
             imageLayout = vk::ImageLayout::ComputeShaderWrite;
         }
+        const vk::ImageMemoryBarrierData *barrierData =
+            vk::ImageMemoryBarrierData::getPrebuildBarrierData(imageLayout);
 
         VkImageAspectFlags aspectFlags = image->getAspectFlags();
-
-        commandBufferHelper->imageWrite(&mResourceUseList, aspectFlags, imageLayout, image);
+        image->imageWrite(&mResourceUseList, aspectFlags, barrierData, commandBufferHelper);
     }
 
     return angle::Result::Continue;
@@ -4088,7 +4091,9 @@ void ContextVk::onRenderPassImageWrite(VkImageAspectFlags aspectFlags,
                                        vk::ImageLayout imageLayout,
                                        vk::ImageHelper *image)
 {
-    mRenderPassCommands.imageWrite(&mResourceUseList, aspectFlags, imageLayout, image);
+    const vk::ImageMemoryBarrierData *barrierData =
+        vk::ImageMemoryBarrierData::getPrebuildBarrierData(imageLayout);
+    image->imageWrite(&mResourceUseList, aspectFlags, barrierData, &mRenderPassCommands);
 }
 
 angle::Result ContextVk::syncExternalMemory()
@@ -4216,27 +4221,6 @@ void CommandBufferHelper::imageBarrier(VkPipelineStageFlags srcStageMask,
     mImageBarrierSrcStageMask |= srcStageMask;
     mImageBarrierDstStageMask |= dstStageMask;
     mImageMemoryBarriers.push_back(imageMemoryBarrier);
-}
-
-void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
-                                    VkImageAspectFlags aspectFlags,
-                                    vk::ImageLayout imageLayout,
-                                    vk::ImageHelper *image)
-{
-    image->retain(resourceUseList);
-    if (image->isLayoutChangeNecessary(imageLayout))
-    {
-        image->changeLayout(aspectFlags, imageLayout, this);
-    }
-}
-
-void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
-                                     VkImageAspectFlags aspectFlags,
-                                     vk::ImageLayout imageLayout,
-                                     vk::ImageHelper *image)
-{
-    image->retain(resourceUseList);
-    image->changeLayout(aspectFlags, imageLayout, this);
 }
 
 void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
