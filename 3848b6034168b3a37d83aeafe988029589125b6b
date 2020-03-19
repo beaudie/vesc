@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92863ffc_be05bc94",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5074,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-19T15:43:22Z",
+      "side": 1,
+      "message": "You duplicated the same line here.",
+      "revId": "3848b6034168b3a37d83aeafe988029589125b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc2251b9_6b9fa210",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-19T15:43:22Z",
+      "side": 1,
+      "message": "Should kill this code or comment why it\u0027s still here.",
+      "revId": "3848b6034168b3a37d83aeafe988029589125b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
