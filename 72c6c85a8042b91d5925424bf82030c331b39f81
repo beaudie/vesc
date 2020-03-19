@@ -72,6 +72,53 @@
     },
     {
       "key": {
+        "uuid": "a350d647_4f8ed6c4",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T16:26:42Z",
+      "side": 1,
+      "message": "I understand. We still want it to be reserved when the extension isn\u0027t available. ES3_extension wasn\u0027t correct - we need ES3_reserved_ES3_extension. See below example.\n\nA compile test could likely unit test this.",
+      "parentUuid": "fa4d3f96_bb6391bc",
+      "range": {
+        "startLine": 238,
+        "startChar": 32,
+        "endLine": 238,
+        "endChar": 45
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2591e041_10904b95",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 2
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T16:26:42Z",
+      "side": 1,
+      "message": "example template... you\u0027ll just want ES3_reserved_ES3_extension",
+      "range": {
+        "startLine": 603,
+        "startChar": 4,
+        "endLine": 603,
+        "endChar": 42
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5390f536_353b9178",
         "filename": "src/compiler/translator/glslang.y",
         "patchSetId": 2
