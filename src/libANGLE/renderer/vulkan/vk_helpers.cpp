@@ -47,208 +47,6 @@ constexpr int kLineLoopDynamicIndirectBufferInitialSize = sizeof(VkDrawIndirectC
 // This is an arbitrary max. We can change this later if necessary.
 constexpr uint32_t kDefaultDescriptorPoolMaxSets = 128;
 
-struct ImageMemoryBarrierData
-{
-    // The Vk layout corresponding to the ImageLayout key.
-    VkImageLayout layout;
-    // The stage in which the image is used (or Bottom/Top if not using any specific stage).  Unless
-    // Bottom/Top (Bottom used for transition to and Top used for transition from), the two values
-    // should match.
-    VkPipelineStageFlags dstStageMask;
-    VkPipelineStageFlags srcStageMask;
-    // Access mask when transitioning into this layout.
-    VkAccessFlags dstAccessMask;
-    // Access mask when transitioning out from this layout.  Note that source access mask never
-    // needs a READ bit, as WAR hazards don't need memory barriers (just execution barriers).
-    VkAccessFlags srcAccessMask;
-
-    // If access is read-only, the memory barrier can be skipped altogether if retransitioning to
-    // the same layout.  This is because read-after-read does not need an execution or memory
-    // barrier.
-    //
-    // Otherwise, some same-layout transitions require a memory barrier.
-    bool sameLayoutTransitionRequiresBarrier;
-};
-
-// clang-format off
-constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemoryBarrierData = {
-    {
-        ImageLayout::Undefined,
-        {
-            VK_IMAGE_LAYOUT_UNDEFINED,
-            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-            // Transition to: we don't expect to transition into Undefined.
-            0,
-            // Transition from: there's no data in the image to care about.
-            0,
-            false,
-        },
-    },
-    {
-        ImageLayout::ExternalPreInitialized,
-        {
-            VK_IMAGE_LAYOUT_PREINITIALIZED,
-            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-            VK_PIPELINE_STAGE_HOST_BIT | VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-            // Transition to: we don't expect to transition into PreInitialized.
-            0,
-            // Transition from: all writes must finish before barrier.
-            VK_ACCESS_MEMORY_WRITE_BIT,
-            false,
-        },
-    },
-    {
-        ImageLayout::ExternalShadersReadOnly,
-        {
-            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-            // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT,
-            // Transition from: RAR and WAR don't need memory barrier.
-            0,
-            false,
-        },
-    },
-    {
-        ImageLayout::ExternalShadersWrite,
-        {
-            VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-            // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
-            // Transition from: all writes must finish before barrier.
-            VK_ACCESS_SHADER_WRITE_BIT,
-            true,
-        },
-    },
-    {
-        ImageLayout::TransferSrc,
-        {
-            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
-            // Transition to: all reads must happen after barrier.
-            VK_ACCESS_TRANSFER_READ_BIT,
-            // Transition from: RAR and WAR don't need memory barrier.
-            0,
-            false,
-        },
-    },
-    {
-        ImageLayout::TransferDst,
-        {
-            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
-            // Transition to: all writes must happen after barrier.
-            VK_ACCESS_TRANSFER_WRITE_BIT,
-            // Transition from: all writes must finish before barrier.
-            VK_ACCESS_TRANSFER_WRITE_BIT,
-            true,
-        },
-    },
-    {
-        ImageLayout::ComputeShaderReadOnly,
-        {
-            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT,
-            // Transition from: RAR and WAR don't need memory barrier.
-            0,
-            false,
-        },
-    },
-    {
-        ImageLayout::ComputeShaderWrite,
-        {
-            VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
-            // Transition from: all writes must finish before barrier.
-            VK_ACCESS_SHADER_WRITE_BIT,
-            true,
-        },
-    },
-    {
-        ImageLayout::AllGraphicsShadersReadOnly,
-        {
-            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
-            VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
-            // Transition to: all reads must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT,
-            // Transition from: RAR and WAR don't need memory barrier.
-            0,
-            false,
-        },
-    },
-    {
-        ImageLayout::AllGraphicsShadersWrite,
-        {
-            VK_IMAGE_LAYOUT_GENERAL,
-            VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
-            VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
-            // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
-            // Transition from: all writes must finish before barrier.
-            VK_ACCESS_SHADER_WRITE_BIT,
-            true,
-        },
-    },
-    {
-        ImageLayout::ColorAttachment,
-        {
-            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            // Transition from: all writes must finish before barrier.
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            true,
-        },
-    },
-    {
-        ImageLayout::DepthStencilAttachment,
-        {
-            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-            VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
-            VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-            // Transition to: all reads and writes must happen after barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-            // Transition from: all writes must finish before barrier.
-            VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-            true,
-        },
-    },
-    {
-        ImageLayout::Present,
-        {
-            VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-            // transition to: vkQueuePresentKHR automatically performs the appropriate memory barriers:
-            //
-            // > Any writes to memory backing the images referenced by the pImageIndices and
-            // > pSwapchains members of pPresentInfo, that are available before vkQueuePresentKHR
-            // > is executed, are automatically made visible to the read access performed by the
-            // > presentation engine.
-            0,
-            // Transition from: RAR and WAR don't need memory barrier.
-            0,
-            false,
-        },
-    },
-};
-// clang-format on
-
 VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType)
 {
     switch (textureType)
@@ -354,6 +152,203 @@ const angle::Format &GetDepthStencilImageToBufferFormat(const angle::Format &ima
     }
 }
 }  // anonymous namespace
+
+ImageMemoryBarrierData::ImageMemoryBarrierData(ImageLayout imageLayout,
+                                               VkImageLayout vklayout,
+                                               VkPipelineStageFlags dstStageMask,
+                                               VkPipelineStageFlags srcStageMask,
+                                               VkAccessFlags dstAccessMask,
+                                               VkAccessFlags srcAccessMask,
+                                               bool sameLayoutTransitionRequiresBarrier)
+    : mImageLayout(imageLayout),
+      mVkLayout(vklayout),
+      mDstStageMask(dstStageMask),
+      mSrcStageMask(srcStageMask),
+      mDstAccessMask(dstAccessMask),
+      mSrcAccessMask(srcAccessMask),
+      mSameLayoutTransitionRequiresBarrier(sameLayoutTransitionRequiresBarrier)
+{}
+
+// clang-format off
+const ImageMemoryBarrierData* ImageMemoryBarrierData::createBarrierData(ImageLayout imageLayout)
+{
+  const static ImageMemoryBarrierData kImageMemoryBarrierData[] =
+  {
+      ImageMemoryBarrierData(ImageLayout::Undefined,
+          VK_IMAGE_LAYOUT_UNDEFINED,
+          VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+          VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+          // Transition to: we don't expect to transition into Undefined.
+          0,
+          // Transition from: there's no data in the image to care about.
+          0,
+          false),
+
+      ImageMemoryBarrierData(ImageLayout::ExternalPreInitialized,
+          VK_IMAGE_LAYOUT_PREINITIALIZED,
+          VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+          VK_PIPELINE_STAGE_HOST_BIT | VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+          // Transition to: we don't expect to transition into PreInitialized.
+          0,
+          // Transition from: all writes must finish before barrier.
+          VK_ACCESS_MEMORY_WRITE_BIT,
+          false),
+
+      ImageMemoryBarrierData(ImageLayout::ExternalShadersReadOnly,
+            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            // Transition to: all reads must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT,
+            // Transition from: RAR and WAR don't need memory barrier.
+            0,
+            false),
+
+      ImageMemoryBarrierData(ImageLayout::ExternalShadersWrite,
+            VK_IMAGE_LAYOUT_GENERAL,
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+            // Transition to: all reads and writes must happen after barrier.
+            VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+            // Transition from: all writes must finish before barrier.
+            VK_ACCESS_SHADER_WRITE_BIT,
+            true),
+
+      ImageMemoryBarrierData(ImageLayout::TransferSrc,
+          VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+          VK_PIPELINE_STAGE_TRANSFER_BIT,
+          VK_PIPELINE_STAGE_TRANSFER_BIT,
+          // Transition to: all reads must happen after barrier.
+          VK_ACCESS_TRANSFER_READ_BIT,
+          // Transition from: RAR and WAR don't need memory barrier.
+          0,
+          false),
+
+      ImageMemoryBarrierData(ImageLayout::TransferDst,
+          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+          VK_PIPELINE_STAGE_TRANSFER_BIT,
+          VK_PIPELINE_STAGE_TRANSFER_BIT,
+          // Transition to: all writes must happen after barrier.
+          VK_ACCESS_TRANSFER_WRITE_BIT,
+          // Transition from: all writes must finish before barrier.
+          VK_ACCESS_TRANSFER_WRITE_BIT,
+          true),
+
+      ImageMemoryBarrierData(ImageLayout::ComputeShaderReadOnly,
+          VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+          VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+          VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+          // Transition to: all reads must happen after barrier.
+          VK_ACCESS_SHADER_READ_BIT,
+          // Transition from: RAR and WAR don't need memory barrier.
+          0,
+          false),
+
+      ImageMemoryBarrierData(ImageLayout::ComputeShaderWrite,
+          VK_IMAGE_LAYOUT_GENERAL,
+          VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+          VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+          // Transition to: all reads and writes must happen after barrier.
+          VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+          // Transition from: all writes must finish before barrier.
+          VK_ACCESS_SHADER_WRITE_BIT,
+          true),
+
+      ImageMemoryBarrierData(ImageLayout::AllGraphicsShadersReadOnly,
+          VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+          VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
+          VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
+          // Transition to: all reads must happen after barrier.
+          VK_ACCESS_SHADER_READ_BIT,
+          // Transition from: RAR and WAR don't need memory barrier.
+          0,
+          false),
+
+      ImageMemoryBarrierData(ImageLayout::AllGraphicsShadersWrite,
+          VK_IMAGE_LAYOUT_GENERAL,
+          VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
+          VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT,
+          // Transition to: all reads and writes must happen after barrier.
+          VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+          // Transition from: all writes must finish before barrier.
+          VK_ACCESS_SHADER_WRITE_BIT,
+          true),
+
+      ImageMemoryBarrierData(ImageLayout::ColorAttachment,
+          VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+          VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+          VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+          // Transition to: all reads and writes must happen after barrier.
+          VK_ACCESS_COLOR_ATTACHMENT_READ_BIT
+              | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+          // Transition from: all writes must finish before barrier.
+          VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+          true),
+
+      ImageMemoryBarrierData(ImageLayout::DepthStencilAttachment,
+          VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+          VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+          VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+          // Transition to: all reads and writes must happen after barrier.
+          VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT
+              | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+          // Transition from: all writes must finish before barrier.
+          VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+          true),
+
+      ImageMemoryBarrierData(ImageLayout::Present,
+          VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+          VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+          VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+          // transition to: vkQueuePresentKHR automatically performs the appropriate memory barriers:
+          //
+          // > Any writes to memory backing the images referenced by the pImageIndices and
+          // > pSwapchains members of pPresentInfo, that are available before vkQueuePresentKHR
+          // > is executed, are automatically made visible to the read access performed by the
+          // > presentation engine.
+          0,
+          // Transition from: RAR and WAR don't need memory barrier.
+          0,
+          false),
+
+      ImageMemoryBarrierData(ImageLayout::MultiShadersAccess,
+          VK_IMAGE_LAYOUT_UNDEFINED,
+          VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+          VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+          // Transition to: we don't expect to transition into Undefined.
+          0,
+          // Transition from: there's no data in the image to care about.
+          0,
+          false)
+  };
+
+  const ImageMemoryBarrierData *data;
+  if(imageLayout == ImageLayout::MultiShadersAccess)
+  {
+    data = new ImageMemoryBarrierData(ImageLayout::MultiShadersAccess,
+          VK_IMAGE_LAYOUT_UNDEFINED,
+          VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+          VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+          // Transition to: we don't expect to transition into Undefined.
+          0,
+          // Transition from: there's no data in the image to care about.
+          0,
+          false);
+  }
+  else
+  {
+    data = &kImageMemoryBarrierData[static_cast<int>(imageLayout)];
+  }
+
+  return data;
+}
+
+void ImageMemoryBarrierData::destroyBarrierData(const ImageMemoryBarrierData* data)
+{
+  if(data->imageLayout() == ImageLayout::MultiShadersAccess)
+    delete data;
+}
+// clang-format on
 
 // DynamicBuffer implementation.
 DynamicBuffer::DynamicBuffer()
@@ -1745,7 +1740,9 @@ ImageHelper::ImageHelper()
       mMaxLevel(0),
       mLayerCount(0),
       mLevelCount(0)
-{}
+{
+    mBarrierData = ImageMemoryBarrierData::createBarrierData(mCurrentLayout);
+}
 
 ImageHelper::ImageHelper(ImageHelper &&other)
     : mImage(std::move(other.mImage)),
@@ -1770,6 +1767,9 @@ ImageHelper::ImageHelper(ImageHelper &&other)
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
     other.mSerial        = rx::kZeroSerial;
+
+    mBarrierData = ImageMemoryBarrierData::createBarrierData(mCurrentLayout);
+    other.updateBarrierData();
 }
 
 ImageHelper::~ImageHelper()
@@ -1818,13 +1818,15 @@ angle::Result ImageHelper::initExternal(Context *context,
 {
     ASSERT(!valid());
 
-    mExtents    = extents;
-    mFormat     = &format;
-    mSamples    = samples;
-    mBaseLevel  = baseLevel;
-    mMaxLevel   = maxLevel;
-    mLevelCount = mipLevels;
-    mLayerCount = layerCount;
+    mExtents       = extents;
+    mFormat        = &format;
+    mSamples       = samples;
+    mBaseLevel     = baseLevel;
+    mMaxLevel      = maxLevel;
+    mLevelCount    = mipLevels;
+    mLayerCount    = layerCount;
+    mCurrentLayout = initialLayout;
+    updateBarrierData();
 
     // Validate that mLayerCount is compatible with the texture type
     ASSERT(textureType != gl::TextureType::_3D || mLayerCount == 1);
@@ -1845,12 +1847,11 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.samples               = gl_vk::GetSamples(samples);
     imageInfo.tiling                = VK_IMAGE_TILING_OPTIMAL;
     imageInfo.usage                 = usage;
+    imageInfo.usage                 = usage;
     imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
     imageInfo.queueFamilyIndexCount = 0;
     imageInfo.pQueueFamilyIndices   = nullptr;
-    imageInfo.initialLayout         = kImageMemoryBarrierData[initialLayout].layout;
-
-    mCurrentLayout = initialLayout;
+    imageInfo.initialLayout         = mBarrierData->layout();
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
@@ -2021,6 +2022,16 @@ void ImageHelper::destroy(VkDevice device)
     mLayerCount    = 0;
     mLevelCount    = 0;
     mSerial        = rx::kZeroSerial;
+    updateBarrierData();
+}
+
+void ImageHelper::updateBarrierData()
+{
+    if (mBarrierData->imageLayout() != mCurrentLayout)
+    {
+        ImageMemoryBarrierData::destroyBarrierData(mBarrierData);
+        mBarrierData = ImageMemoryBarrierData::createBarrierData(mCurrentLayout);
+    }
 }
 
 void ImageHelper::init2DWeakReference(VkImage handle,
@@ -2037,6 +2048,7 @@ void ImageHelper::init2DWeakReference(VkImage handle,
     mLayerCount    = 1;
     mLevelCount    = 1;
 
+    updateBarrierData();
     mImage.setHandle(handle);
 }
 
@@ -2050,12 +2062,12 @@ angle::Result ImageHelper::init2DStaging(Context *context,
     ASSERT(!valid());
 
     gl_vk::GetExtent(glExtents, &mExtents);
-    mFormat     = &format;
-    mSamples    = 1;
-    mLayerCount = layerCount;
-    mLevelCount = 1;
-
+    mFormat        = &format;
+    mSamples       = 1;
+    mLayerCount    = layerCount;
+    mLevelCount    = 1;
     mCurrentLayout = ImageLayout::Undefined;
+    updateBarrierData();
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -2095,7 +2107,8 @@ bool ImageHelper::isCombinedDepthStencilFormat() const
 
 VkImageLayout ImageHelper::getCurrentLayout() const
 {
-    return kImageMemoryBarrierData[mCurrentLayout].layout;
+    ASSERT(mCurrentLayout == mBarrierData->imageLayout());
+    return mBarrierData->layout();
 }
 
 gl::Extents ImageHelper::getLevelExtents2D(uint32_t level) const
@@ -2106,15 +2119,134 @@ gl::Extents ImageHelper::getLevelExtents2D(uint32_t level) const
     return gl::Extents(width, height, 1);
 }
 
-bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout) const
+template <typename CommandBufferT>
+void ImageHelper::imageRead(ResourceUseList *resourceUseList,
+                            VkImageAspectFlags aspectFlags,
+                            const ImageMemoryBarrierData *newBarrierData,
+                            CommandBufferT *command)
 {
-    const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
+    retain(resourceUseList);
 
     // If transitioning to the same layout, we don't need a barrier if the layout is read-only as
     // RAR (read-after-read) doesn't need a barrier.  WAW (write-after-write) does require a memory
     // barrier though.
+    bool needBarrier = false;
+    if (mBarrierData != newBarrierData)
+    {
+        needBarrier = true;
+    }
+    else
+    {
+        needBarrier = mBarrierData->sameLayoutTransitionRequiresBarrier();
+    }
+
+    if (needBarrier)
+    {
+        VkImageMemoryBarrier imageMemoryBarrier = {};
+        imageMemoryBarrier.sType                = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        imageMemoryBarrier.srcAccessMask        = mBarrierData->srcAccessMask();
+        imageMemoryBarrier.dstAccessMask        = newBarrierData->dstAccessMask();
+        imageMemoryBarrier.oldLayout            = mBarrierData->layout();
+        imageMemoryBarrier.newLayout            = newBarrierData->layout();
+        imageMemoryBarrier.srcQueueFamilyIndex  = mCurrentQueueFamilyIndex;
+        imageMemoryBarrier.dstQueueFamilyIndex  = mCurrentQueueFamilyIndex;
+        imageMemoryBarrier.image                = mImage.getHandle();
+
+        // Transition the whole resource.
+        imageMemoryBarrier.subresourceRange.aspectMask     = aspectFlags;
+        imageMemoryBarrier.subresourceRange.baseMipLevel   = 0;
+        imageMemoryBarrier.subresourceRange.levelCount     = mLevelCount;
+        imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
+        imageMemoryBarrier.subresourceRange.layerCount     = mLayerCount;
+
+        command->imageBarrier(mBarrierData->srcStageMask(), newBarrierData->dstStageMask(),
+                              imageMemoryBarrier);
+    }
+
+    if (mBarrierData != newBarrierData)
+    {
+        if (mBarrierData)
+            ImageMemoryBarrierData::destroyBarrierData(mBarrierData);
+        mCurrentLayout = newBarrierData->imageLayout();
+        mBarrierData   = newBarrierData;
+    }
+}
+// Explicitly instantiate imageRead with CommandBufferHelper.
+template void ImageHelper::imageRead(ResourceUseList *resourceUseList,
+                                     VkImageAspectFlags aspectFlags,
+                                     const ImageMemoryBarrierData *newBarrierData,
+                                     rx::CommandBufferHelper *command);
+
+template <typename CommandBufferT>
+void ImageHelper::imageWrite(ResourceUseList *resourceUseList,
+                             VkImageAspectFlags aspectFlags,
+                             const ImageMemoryBarrierData *newBarrierData,
+                             CommandBufferT *command)
+{
+    retain(resourceUseList);
+
+    // If transitioning to the same layout, we don't need a barrier if the layout is read-only as
+    // RAR (read-after-read) doesn't need a barrier.  WAW (write-after-write) does require a memory
+    // barrier though.
+    bool needBarrier = false;
+    if (mBarrierData != newBarrierData)
+    {
+        needBarrier = true;
+    }
+    else
+    {
+        needBarrier = mBarrierData->sameLayoutTransitionRequiresBarrier();
+    }
+
+    if (needBarrier)
+    {
+        VkImageMemoryBarrier imageMemoryBarrier = {};
+        imageMemoryBarrier.sType                = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        imageMemoryBarrier.srcAccessMask        = mBarrierData->srcAccessMask();
+        imageMemoryBarrier.dstAccessMask        = newBarrierData->dstAccessMask();
+        imageMemoryBarrier.oldLayout            = mBarrierData->layout();
+        imageMemoryBarrier.newLayout            = newBarrierData->layout();
+        imageMemoryBarrier.srcQueueFamilyIndex  = mCurrentQueueFamilyIndex;
+        imageMemoryBarrier.dstQueueFamilyIndex  = mCurrentQueueFamilyIndex;
+        imageMemoryBarrier.image                = mImage.getHandle();
+
+        // Transition the whole resource.
+        imageMemoryBarrier.subresourceRange.aspectMask     = aspectFlags;
+        imageMemoryBarrier.subresourceRange.baseMipLevel   = 0;
+        imageMemoryBarrier.subresourceRange.levelCount     = mLevelCount;
+        imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
+        imageMemoryBarrier.subresourceRange.layerCount     = mLayerCount;
+
+        command->imageBarrier(mBarrierData->srcStageMask(), newBarrierData->dstStageMask(),
+                              imageMemoryBarrier);
+    }
+
+    if (mBarrierData != newBarrierData)
+    {
+        if (mBarrierData)
+            ImageMemoryBarrierData::destroyBarrierData(mBarrierData);
+
+        mCurrentLayout = newBarrierData->imageLayout();
+        mBarrierData   = newBarrierData;
+    }
+}
+// Explicitly instantiate imageRead with CommandBufferHelper.
+template void ImageHelper::imageWrite(ResourceUseList *resourceUseList,
+                                      VkImageAspectFlags aspectFlags,
+                                      const ImageMemoryBarrierData *newBarrierData,
+                                      rx::CommandBufferHelper *command);
+template void ImageHelper::imageWrite(ResourceUseList *resourceUseList,
+                                      VkImageAspectFlags aspectFlags,
+                                      const ImageMemoryBarrierData *newBarrierData,
+                                      rx::RenderPassCommandBuffer *command);
+
+bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout) const
+{
+    // If transitioning to the same layout, we don't need a barrier if the layout is read-only as
+    // RAR (read-after-read) doesn't need a barrier.  WAW (write-after-write) does require a memory
+    // barrier though.
     bool sameLayoutAndNoNeedForBarrier =
-        mCurrentLayout == newLayout && !layoutData.sameLayoutTransitionRequiresBarrier;
+        mCurrentLayout == newLayout && !mBarrierData->sameLayoutTransitionRequiresBarrier();
 
     return !sameLayoutAndNoNeedForBarrier;
 }
@@ -2131,6 +2263,7 @@ void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
 void ImageHelper::onExternalLayoutChange(ImageLayout newLayout)
 {
     mCurrentLayout = newLayout;
+    updateBarrierData();
 
     // The image must have already been owned by EXTERNAL.  If this is not the case, it's an
     // application bug, so ASSERT might eventually need to change to a warning.
@@ -2155,15 +2288,15 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                             uint32_t newQueueFamilyIndex,
                                             CommandBufferT *commandBuffer)
 {
-    const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[mCurrentLayout];
-    const ImageMemoryBarrierData &transitionTo   = kImageMemoryBarrierData[newLayout];
+    const ImageMemoryBarrierData *transitionTo =
+        ImageMemoryBarrierData::createBarrierData(newLayout);
 
     VkImageMemoryBarrier imageMemoryBarrier = {};
     imageMemoryBarrier.sType                = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-    imageMemoryBarrier.srcAccessMask        = transitionFrom.srcAccessMask;
-    imageMemoryBarrier.dstAccessMask        = transitionTo.dstAccessMask;
-    imageMemoryBarrier.oldLayout            = transitionFrom.layout;
-    imageMemoryBarrier.newLayout            = transitionTo.layout;
+    imageMemoryBarrier.srcAccessMask        = mBarrierData->srcAccessMask();
+    imageMemoryBarrier.dstAccessMask        = transitionTo->dstAccessMask();
+    imageMemoryBarrier.oldLayout            = mBarrierData->layout();
+    imageMemoryBarrier.newLayout            = transitionTo->layout();
     imageMemoryBarrier.srcQueueFamilyIndex  = mCurrentQueueFamilyIndex;
     imageMemoryBarrier.dstQueueFamilyIndex  = newQueueFamilyIndex;
     imageMemoryBarrier.image                = mImage.getHandle();
@@ -2175,9 +2308,12 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
     imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
     imageMemoryBarrier.subresourceRange.layerCount     = mLayerCount;
 
-    commandBuffer->imageBarrier(transitionFrom.srcStageMask, transitionTo.dstStageMask,
+    commandBuffer->imageBarrier(mBarrierData->srcStageMask(), transitionTo->dstStageMask(),
                                 imageMemoryBarrier);
-    mCurrentLayout           = newLayout;
+    mCurrentLayout = newLayout;
+    if (mBarrierData)
+        ImageMemoryBarrierData::destroyBarrierData(mBarrierData);
+    mBarrierData             = transitionTo;
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
 
@@ -2381,6 +2517,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
     // This is just changing the internal state of the image helper so that the next call
     // to changeLayout will use this layout as the "oldLayout" argument.
     mCurrentLayout = ImageLayout::TransferSrc;
+    updateBarrierData();
 
     return angle::Result::Continue;
 }
