@@ -1,0 +1,260 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0270de16_3760c18d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "This work should be done inside of imageRead()/imageWrite(), since it\u0027s required by them an the \u0027barrierData\u0027 doesn\u0027t need to be referenced outside of there.",
+      "range": {
+        "startLine": 1254,
+        "startChar": 0,
+        "endLine": 1255,
+        "endChar": 78
+      },
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c247b6c_002ab3c9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "nit: getPrebuiltBarrierData (change Prebuild to Prebuilt)",
+      "range": {
+        "startLine": 173,
+        "startChar": 54,
+        "endLine": 173,
+        "endChar": 76
+      },
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "245ba71e_21d5d23b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "Can you add a comment here that describes why MultiShadersAccess is being treated special?",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fafdebc_3e620318",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "nit: surround with braces",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc7f3d44_8725aa38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "It looks like every time mCurrentLayout is modified, updateBarrierData() needs to be called also.   It feels like we have a setCurrentLayout() that does both of these so mCurrentLayout is only updated in a single place.",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee806f31_aba916ec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2125,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "This was checked already and \u0027needBarrier \u003d true\u0027, so this work can be merged into the previous block.",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e801bcc8_82f99f62",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2127,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "How would mBarrierData ever be NULL?   Should this be an ASSERT() to enforce it\u0027s non-null at the beginning of the function?",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0868d027_7d6bc9dd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "nit: surround with braces.",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8606df03_ed4a8ce7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2134,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "Why are these explicit versions necessary and why are they empty?\n\nAlso, why aren\u0027t they using the template specialization syntax?",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eb0652b_780806f2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2165,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "Same as above, merge into the previous block.",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7016cb80_657e162a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2175,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "Remove: duplicate",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e867ad37_d9f7f3b6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2246,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "Same as above, why are these necessary?",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fb913d6_30a54326",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "What is this value for?",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8be6e0c8_d5ac1392",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:17:44Z",
+      "side": 1,
+      "message": "Same as above: this work should be done inside forceChangeLayoutAndQueue().",
+      "range": {
+        "startLine": 932,
+        "startChar": 0,
+        "endLine": 933,
+        "endChar": 70
+      },
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
