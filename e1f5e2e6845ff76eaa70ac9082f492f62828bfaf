@@ -82,6 +82,40 @@
     },
     {
       "key": {
+        "uuid": "f1e74967_2d8ea07b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1825,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-19T22:43:21Z",
+      "side": 1,
+      "message": "duplicate line",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3239d366_dedaec2b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-19T22:43:21Z",
+      "side": 1,
+      "message": "nit: I think it would feel more purposeful to have updateBarrierData set mCurrentLayout.\nAre there times when you would update mCurrentLayout and not want to do this check?\nIf so, then separate is probably okay.\nOtherwise, I think it would read easier if this was \nvoid ImageHelper::updateCurrentLayout(ImageLayout layout)\n{\n    if (mBarrierData-\u003eimageLayout() !\u003d layout)\n...\n    mCurrentLayout \u003d layout;\n}\nThen replace where you assign mCurrentLayout to be updateCurrentLayout(...).\nOtherwise, to me at least, updateBarrierData() is some magic thing that\u0027s not obvious.",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc7f3d44_8725aa38",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -99,6 +133,23 @@
     },
     {
       "key": {
+        "uuid": "4121a8bc_b499314b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-19T22:43:21Z",
+      "side": 1,
+      "message": "Why is this mBarrierData-\u003elayout() but the assert is checking imageLayout?",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ee806f31_aba916ec",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -110,6 +161,23 @@
       "writtenOn": "2020-03-19T22:17:44Z",
       "side": 1,
       "message": "This was checked already and \u0027needBarrier \u003d true\u0027, so this work can be merged into the previous block.",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3991858_dc94501e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-19T22:43:21Z",
+      "side": 1,
+      "message": "This could become a call to my proposed ImageHelper::updateCurrentLayout(ImageLayout layout) function above.",
       "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -229,6 +297,29 @@
       "writtenOn": "2020-03-19T22:17:44Z",
       "side": 1,
       "message": "What is this value for?",
+      "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55678e21_fe002e81",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-19T22:43:21Z",
+      "side": 1,
+      "message": "14? or is it duplicate for a reason?",
+      "range": {
+        "startLine": 626,
+        "startChar": 33,
+        "endLine": 626,
+        "endChar": 35
+      },
       "revId": "e1f5e2e6845ff76eaa70ac9082f492f62828bfaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
