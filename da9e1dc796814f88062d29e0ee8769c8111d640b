@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "6cb1b2fe_71458aa5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-19T18:32:45Z",
+      "side": 1,
+      "message": "Ok, I understand it will consume 4 bindings with this implementation. I was asking to know if/what the spec mandates.\n\nIf the spec mandates anything, it should be deducible from any per-stage and combined limits it would require.",
+      "parentUuid": "3eaa59e2_2a8688c6",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 38
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63dcd185_f9fde6f2",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 42
@@ -189,6 +213,30 @@
       "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32b77ffc_f21de78d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-19T18:32:45Z",
+      "side": 1,
+      "message": "No that\u0027s fine. I guess when/if linkage of resources is implemented this can be properly generalized.",
+      "parentUuid": "78a071cb_eabf2a7e",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 20
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
