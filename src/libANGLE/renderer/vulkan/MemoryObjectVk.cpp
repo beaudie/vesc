@@ -185,7 +185,7 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
     gl_vk::GetExtentsAndLayerCount(type, size, &vkExtents, &layerCount);
 
     ANGLE_TRY(image->initExternal(
-        contextVk, type, vkExtents, vkFormat, 1, imageUsageFlags,
+        contextVk, type, vkExtents, vkFormat, 1, imageUsageFlags, vk::kVkImageCreateFlagsNone,
         vk::ImageLayout::ExternalPreInitialized, &externalMemoryImageCreateInfo, 0,
         static_cast<uint32_t>(levels) - 1, static_cast<uint32_t>(levels), layerCount));
 

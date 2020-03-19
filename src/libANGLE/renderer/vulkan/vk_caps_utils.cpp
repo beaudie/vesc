@@ -178,6 +178,9 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeExtensions.gpuShader5EXT = vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures);
 
+    // Vulkan natively supports format reinterpretation
+    mNativeExtensions.textureSRGBOverride = mNativeExtensions.sRGB;
+
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
     mNativeCaps.maxElementIndex  = std::numeric_limits<GLuint>::max() - 1;
     mNativeCaps.max3DTextureSize = LimitToInt(limitsVk.maxImageDimension3D);

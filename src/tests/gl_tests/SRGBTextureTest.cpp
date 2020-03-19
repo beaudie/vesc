@@ -269,6 +269,70 @@ TEST_P(SRGBTextureTest, SRGBDecodeTextureParameter)
     EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
 }
 
+// Test basic functionality of SRGB override using the texture parameter
+TEST_P(SRGBTextureTest, SRGBOverrideTextureParameter)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_sRGB_override"));
+
+    GLColor linearColor(64, 127, 191, 255);
+    GLColor srgbColor(13, 54, 133, 255);
+
+    GLenum internalFormat = getClientMajorVersion() >= 3 ? GL_RGBA8 : GL_RGBA;
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 &linearColor);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_NONE);
+    ASSERT_GL_NO_ERROR();
+
+    glUseProgram(mProgram);
+    glUniform1i(mTextureLocation, 0);
+
+    glDisable(GL_DEPTH_TEST);
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, linearColor, 1.0);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_SRGB);
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+}
+
+// Test that SRGB override is a noop when used on a nonlinear texture format
+// EXT_texture_format_sRGB_override spec says:
+// "If the internal format is not one of the above formats, then
+// the value of TEXTURE_FORMAT_SRGB_OVERRIDE_EXT is ignored."
+TEST_P(SRGBTextureTest, SRGBOverrideTextureParameterNoop)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_sRGB_override"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_sRGB ") || getClientMajorVersion() < 3);
+
+    GLColor linearColor(64, 127, 191, 255);
+    GLColor srgbColor(13, 54, 133, 255);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, getSRGBA8TextureInternalFormat(), 1, 1, 0,
+                 getSRGBA8TextureFormat(), GL_UNSIGNED_BYTE, &linearColor);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_NONE);
+    ASSERT_GL_NO_ERROR();
+
+    glUseProgram(mProgram);
+    glUniform1i(mTextureLocation, 0);
+
+    glDisable(GL_DEPTH_TEST);
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_FORMAT_SRGB_OVERRIDE_EXT, GL_SRGB);
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, srgbColor, 1.0);
+}
+
 // Test basic functionality of SRGB decode using the sampler parameter
 TEST_P(SRGBTextureTest, SRGBDecodeSamplerParameter)
 {
