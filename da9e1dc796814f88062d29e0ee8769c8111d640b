@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "140773bd_9e9e4f02",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-19T22:38:04Z",
+      "side": 1,
+      "message": "The only driver I\u0027ve hit any resource limit problems on so far is SwS:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2067101/44/src/tests/gl_tests/TextureTest.cpp\n\nAs that points out, this isn\u0027t just a PPO problem since monolithic programs assign bindings for each shader stage the same way.\n\nI\u0027m not sure what the right answer is.   So far, it seems like this will work for conformance and then we can clean it up further with follow-on CLs since that should be far enough of an edge-case (and \u0027real\u0027 driver limits are high enough) that this hopefully won\u0027t affect real apps.",
+      "parentUuid": "6cb1b2fe_71458aa5",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 38
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63dcd185_f9fde6f2",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 42
