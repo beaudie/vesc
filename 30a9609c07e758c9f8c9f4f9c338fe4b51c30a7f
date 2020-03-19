@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4388ad00_64f95a76",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-19T18:27:57Z",
+      "side": 1,
+      "message": "This is the place where if I detect there is more than one bits in shaderStage, I will create a new barrierData object instead of getting a prebuilt one. That way, I can pass the accurate shader access information down to VK layer. If only single shader is used, there really isn\u0027t extra cost here other than retrieving the prebuilt barrier data pointer from the array. But you  are doling that already in isLayoutChangeNecessary() to check if sameLayout needs barrier or not.",
+      "range": {
+        "startLine": 1254,
+        "startChar": 8,
+        "endLine": 1255,
+        "endChar": 78
+      },
+      "revId": "30a9609c07e758c9f8c9f4f9c338fe4b51c30a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
