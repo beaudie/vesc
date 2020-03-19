@@ -87,17 +87,6 @@ export ANGLE_CAPTURE_FRAME_START=$START
 export ANGLE_CAPTURE_FRAME_END=$END
 export ANGLE_CAPTURE_OUT_DIR=../../../../../angle/src/tests/perf_tests/restricted_traces/${LABEL}_${START}
 ../bin/testfw_app -b $TFW_PACKAGE_DIR --gfx egl -w 1920 -h 1080 -t gl_trex --ei -frame_step_time=40
-
-# Manhattan
-export START=10
-export END=20
-export LABEL=manhattan
-mkdir -p ../../../../../angle/src/tests/perf_tests/restricted_traces/${LABEL}_${START}_${END}
-export ANGLE_CAPTURE_LABEL=${LABEL}_${START}_${END}
-export ANGLE_CAPTURE_FRAME_START=$START
-export ANGLE_CAPTURE_FRAME_END=$END
-export ANGLE_CAPTURE_OUT_DIR=../../../../../angle/src/tests/perf_tests/restricted_traces/${LABEL}_${START}_${END}
-../bin/testfw_app -b $TFW_PACKAGE_DIR --gfx egl -w 1920 -h 1080 -t gl_manhattan --ei -frame_step_time=40
 ```
 
 ## Upload to the cloud
@@ -105,13 +94,6 @@ export ANGLE_CAPTURE_OUT_DIR=../../../../../angle/src/tests/perf_tests/restricte
 ```
 cd ~/chromium/src/third_party/angle/src/tests/perf_tests/restricted_traces
 upload_to_google_storage.py --bucket chrome-angle-capture-binaries --archive trex_200
-upload_to_google_storage.py --bucket chrome-angle-capture-binaries --archive trex_800
-upload_to_google_storage.py --bucket chrome-angle-capture-binaries --archive trex_900
-upload_to_google_storage.py --bucket chrome-angle-capture-binaries --archive trex_1300
-upload_to_google_storage.py --bucket chrome-angle-capture-binaries --archive manhattan_10_20
-upload_to_google_storage.py --bucket chrome-angle-capture-binaries --archive manhattan_750_760
-upload_to_google_storage.py --bucket chrome-angle-capture-binaries --archive manhattan_1100_1110
-upload_to_google_storage.py --bucket chrome-angle-capture-binaries --archive manhattan_1440_1450
 ```
 
 ## Adding new tests
