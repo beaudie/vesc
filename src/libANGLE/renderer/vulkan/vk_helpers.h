@@ -622,9 +622,57 @@ enum class ImageLayout
     ColorAttachment            = 10,
     DepthStencilAttachment     = 11,
     Present                    = 12,
+    PrebuildLayoutCount        = 13,
+    MultiShadersAccess         = 13,
 
-    InvalidEnum = 13,
-    EnumCount   = 13,
+    InvalidEnum = 14,
+    EnumCount   = 14,
+};
+
+class ImageMemoryBarrierData
+{
+    ImageLayout mImageLayout;
+    // The Vk layout corresponding to the ImageLayout key.
+    VkImageLayout mVkLayout;
+    // The stage in which the image is used (or Bottom/Top if not using any specific stage).  Unless
+    // Bottom/Top (Bottom used for transition to and Top used for transition from), the two values
+    // should match.
+    VkPipelineStageFlags mDstStageMask;
+    VkPipelineStageFlags mSrcStageMask;
+    // Access mask when transitioning into this layout.
+    VkAccessFlags mDstAccessMask;
+    // Access mask when transitioning out from this layout.  Note that source access mask never
+    // needs a READ bit, as WAR hazards don't need memory barriers (just execution barriers).
+    VkAccessFlags mSrcAccessMask;
+    // If access is read-only, the memory barrier can be skipped altogether if retransitioning to
+    // the same layout.  This is because read-after-read does not need an execution or memory
+    // barrier.
+    //
+    // Otherwise, some same-layout transitions require a memory barrier.
+    bool mSameLayoutTransitionRequiresBarrier;
+
+  public:
+    ImageMemoryBarrierData(ImageLayout imageLayout,
+                           VkImageLayout vklayout,
+                           VkPipelineStageFlags dstStageMask,
+                           VkPipelineStageFlags srcStageMask,
+                           VkAccessFlags dstAccessMask,
+                           VkAccessFlags srcAccessMask,
+                           bool sameLayoutTransitionRequiresBarrier);
+
+    static const ImageMemoryBarrierData *getPrebuildBarrierData(ImageLayout imageLayout);
+    static void destroyBarrierData(const ImageMemoryBarrierData *data);
+
+    ImageLayout imageLayout() const { return mImageLayout; }
+    VkImageLayout layout() const { return mVkLayout; }
+    VkPipelineStageFlags dstStageMask() const { return mDstStageMask; }
+    VkPipelineStageFlags srcStageMask() const { return mSrcStageMask; }
+    VkAccessFlags dstAccessMask() const { return mDstAccessMask; }
+    VkAccessFlags srcAccessMask() const { return mSrcAccessMask; }
+    bool sameLayoutTransitionRequiresBarrier() const
+    {
+        return mSameLayoutTransitionRequiresBarrier;
+    }
 };
 
 class ImageHelper final : public Resource
@@ -707,6 +755,7 @@ class ImageHelper final : public Resource
     // True if image contains both depth & stencil aspects
     bool isCombinedDepthStencilFormat() const;
     void destroy(VkDevice device);
+    void updateBarrierData();
 
     void init2DWeakReference(VkImage handle,
                              const gl::Extents &glExtents,
@@ -725,6 +774,18 @@ class ImageHelper final : public Resource
 
     ImageLayout getCurrentImageLayout() const { return mCurrentLayout; }
     VkImageLayout getCurrentLayout() const;
+
+    template <typename CommandBufferT>
+    void imageRead(ResourceUseList *resourceUseList,
+                   VkImageAspectFlags aspectFlags,
+                   const ImageMemoryBarrierData *barrierData,
+                   CommandBufferT *command);
+
+    template <typename CommandBufferT>
+    void imageWrite(ResourceUseList *resourceUseList,
+                    VkImageAspectFlags aspectFlags,
+                    const ImageMemoryBarrierData *newBarrierData,
+                    CommandBufferT *command);
 
     // Helper function to calculate the extents of a render target created for a certain mip of the
     // image.
@@ -868,7 +929,10 @@ class ImageHelper final : public Resource
             return;
         }
 
-        forceChangeLayoutAndQueue(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
+        const ImageMemoryBarrierData *transitionTo =
+            ImageMemoryBarrierData::getPrebuildBarrierData(newLayout);
+        forceChangeLayoutAndQueue(aspectMask, transitionTo, mCurrentQueueFamilyIndex,
+                                  commandBuffer);
     }
 
     bool isQueueChangeNeccesary(uint32_t newQueueFamilyIndex) const
@@ -940,9 +1004,14 @@ class ImageHelper final : public Resource
     // Generalized to accept both "primary" and "secondary" command buffers.
     template <typename CommandBufferT>
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
-                                   ImageLayout newLayout,
+                                   const ImageMemoryBarrierData *transitionTo,
                                    uint32_t newQueueFamilyIndex,
                                    CommandBufferT *commandBuffer);
+    template <typename CommandBufferT>
+    void insertBarrier(VkImageAspectFlags aspectMask,
+                       const ImageMemoryBarrierData *transitionTo,
+                       uint32_t newQueueFamilyIndex,
+                       CommandBufferT *commandBuffer);
 
     void stageSubresourceClear(const gl::ImageIndex &index,
                                const angle::Format &format,
@@ -1030,6 +1099,7 @@ class ImageHelper final : public Resource
 
     // Current state.
     ImageLayout mCurrentLayout;
+    const ImageMemoryBarrierData *mBarrierData;
     uint32_t mCurrentQueueFamilyIndex;
 
     // Cached properties.
