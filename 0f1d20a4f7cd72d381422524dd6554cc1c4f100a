@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "151d23e2_f5382ca8",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T12:39:48Z",
+      "side": 1,
+      "message": "nit: increment",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bacb602_801956d7",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T12:39:48Z",
+      "side": 1,
+      "message": "just wondering why you had to move this up?",
+      "range": {
+        "startLine": 560,
+        "startChar": 4,
+        "endLine": 560,
+        "endChar": 85
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6b88e19_7ed6507a",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T12:39:48Z",
+      "side": 1,
+      "message": "Generating a warning if the extension is supported is odd. Is this a consequence of the existing code being hard to work with? Or is this something we should do in any case?",
+      "range": {
+        "startLine": 561,
+        "startChar": 4,
+        "endLine": 561,
+        "endChar": 95
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d782223_7a28970f",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T12:39:48Z",
+      "side": 1,
+      "message": "I don\u0027t quite get why you\u0027re calling DeferGlobalInitializers if the extension is supported. Are we emulating it on configs where the driver doesn\u0027t expose this feature? Is there support for the extension in glslang and SPIR-V?",
+      "range": {
+        "startLine": 570,
+        "startChar": 9,
+        "endLine": 570,
+        "endChar": 32
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aa5a4bc_7bb33b3c",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T12:39:48Z",
+      "side": 1,
+      "message": "nit: EXT suffix",
+      "range": {
+        "startLine": 596,
+        "startChar": 9,
+        "endLine": 596,
+        "endChar": 42
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7560fe5_63730659",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T12:39:48Z",
+      "side": 1,
+      "message": "I get that we\u0027re emulating it now. Can you investigate if there\u0027s native support for this in SPIR-V / glslang and how to detect that?",
+      "range": {
+        "startLine": 157,
+        "startChar": 26,
+        "endLine": 157,
+        "endChar": 36
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09eaff78_80f18f2e",
+        "filename": "src/tests/gl_tests/ShaderNonConstGlobalInitializerTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-19T12:39:48Z",
+      "side": 1,
+      "message": "nit: file level comment.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 2
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
