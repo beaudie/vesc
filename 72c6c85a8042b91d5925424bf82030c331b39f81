@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01ab592a_5793d26d",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-19T04:21:34Z",
+      "side": 1,
+      "message": "Add NV suffix",
+      "range": {
+        "startLine": 426,
+        "startChar": 35,
+        "endLine": 426,
+        "endChar": 36
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
