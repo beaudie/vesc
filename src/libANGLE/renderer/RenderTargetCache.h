@@ -51,6 +51,7 @@ class RenderTargetCache final : angle::NonCopyable
   private:
     angle::Result updateCachedRenderTarget(const gl::Context *context,
                                            const gl::FramebufferAttachment *attachment,
+                                           bool feedbackLoop,
                                            RenderTargetT **cachedRenderTarget);
 
     RenderTargetT *mReadRenderTarget;
@@ -124,7 +125,7 @@ angle::Result RenderTargetCache<RenderTargetT>::updateReadColorRenderTarget(
     const gl::Context *context,
     const gl::FramebufferState &state)
 {
-    return updateCachedRenderTarget(context, state.getReadAttachment(), &mReadRenderTarget);
+    return updateCachedRenderTarget(context, state.getReadAttachment(), false, &mReadRenderTarget);
 }
 
 template <typename RenderTargetT>
@@ -140,7 +141,7 @@ angle::Result RenderTargetCache<RenderTargetT>::updateColorRenderTarget(
         ANGLE_TRY(updateReadColorRenderTarget(context, state));
     }
 
-    return updateCachedRenderTarget(context, state.getColorAttachment(colorIndex),
+    return updateCachedRenderTarget(context, state.getColorAttachment(colorIndex), false,
                                     &mColorRenderTargets[colorIndex]);
 }
 
@@ -150,6 +151,7 @@ angle::Result RenderTargetCache<RenderTargetT>::updateDepthStencilRenderTarget(
     const gl::FramebufferState &state)
 {
     return updateCachedRenderTarget(context, state.getDepthOrStencilAttachment(),
+                                    state.hasDepthStencilFeedbackLoop(),
                                     &mDepthStencilRenderTarget);
 }
 
@@ -157,10 +159,11 @@ template <typename RenderTargetT>
 angle::Result RenderTargetCache<RenderTargetT>::updateCachedRenderTarget(
     const gl::Context *context,
     const gl::FramebufferAttachment *attachment,
+    bool feedbackLoop,
     RenderTargetT **cachedRenderTarget)
 {
     RenderTargetT *newRenderTarget = nullptr;
-    if (attachment)
+    if (attachment && !feedbackLoop)
     {
         ASSERT(attachment->isAttached());
         ANGLE_TRY(attachment->getRenderTarget(context, attachment->getRenderToTextureSamples(),
