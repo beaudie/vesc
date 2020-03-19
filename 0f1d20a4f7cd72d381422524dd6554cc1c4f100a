@@ -94,6 +94,23 @@
     },
     {
       "key": {
+        "uuid": "c888e361_735245b0",
+        "filename": "src/compiler/translator/ValidateGlobalInitializer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-19T18:07:06Z",
+      "side": 1,
+      "message": "Did you inherit the warning on mExtNonConstGlobalInitializers here? Could pass in separate bools and in mExtNonConstGlobalInitializers case skip the warning.",
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0aa5a4bc_7bb33b3c",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 2
@@ -157,6 +174,23 @@
         "endLine": 5,
         "endChar": 2
       },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0071cf6e_d96eeae4",
+        "filename": "src/tests/gl_tests/ShaderNonConstGlobalInitializerTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-19T18:07:06Z",
+      "side": 1,
+      "message": "Can we potentially run this even if the extension is not supported?\nDoes the compile fail in either case?",
       "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
