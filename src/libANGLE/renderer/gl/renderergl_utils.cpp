@@ -1237,6 +1237,7 @@ void GenerateCaps(const FunctionsGL *functions,
                               functions->hasGLESExtension("GL_EXT_debug_marker");
     extensions->eglImageOES         = functions->hasGLESExtension("GL_OES_EGL_image");
     extensions->eglImageExternalOES = functions->hasGLESExtension("GL_OES_EGL_image_external");
+    extensions->eglImageExternalWrapModesEXT = true;
     extensions->eglImageExternalEssl3OES =
         functions->hasGLESExtension("GL_OES_EGL_image_external_essl3");
 
