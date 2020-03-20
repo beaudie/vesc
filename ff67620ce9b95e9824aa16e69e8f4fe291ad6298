@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc3a8972_dc439ac3",
+        "filename": "src/tests/perf_tests/restricted_traces/angle_trace_perf_tests.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-20T16:49:29Z",
+      "side": 1,
+      "message": "if you want to fix this, set this line to\n\nangle_trace_perf_data \u003d []",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 130
+      },
+      "revId": "ff67620ce9b95e9824aa16e69e8f4fe291ad6298",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70e34593_a9d886e2",
+        "filename": "src/tests/perf_tests/restricted_traces/angle_trace_perf_tests.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-20T16:49:29Z",
+      "side": 1,
+      "message": "then here add angle_trace_perf_data +\u003d [ \"${_test_dir}/${_test}_capture_context1.angledata.gz\" ]",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 1
+      },
+      "revId": "ff67620ce9b95e9824aa16e69e8f4fe291ad6298",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
