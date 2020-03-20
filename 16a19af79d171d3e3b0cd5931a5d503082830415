@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5f12f11_7a86e354",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-03-20T18:09:39Z",
+      "side": 1,
+      "message": "For completeness, ANGLE can safely expose sliced_3d extension string when the GL device supports HDR profile.",
+      "range": {
+        "startLine": 1134,
+        "startChar": 4,
+        "endLine": 1136,
+        "endChar": 77
+      },
+      "revId": "16a19af79d171d3e3b0cd5931a5d503082830415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4b1f260_93a5e79d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-03-20T18:09:39Z",
+      "side": 1,
+      "message": "Isn\u0027t this comment a bit misleading? \"3D ASTC textures\" is ambiguous because it could mean 3D blocks (required only by OES) or sliced 3D. \n\nIt would be better to comment each feature independently, like\n\n// Vulkan doesn\u0027t support ASTC 3D block textures, which are required by GL_OES_texture_compression_astc.\nmNativeExtensions.textureCompressionASTCOES \u003d false;\n\n// Vulkan doesn\u0027t guarantee HDR blocks decoding without VK_EXT_texture_compression_astc_hdr.\nmNativeExtensions.textureCompressionASTCHDRKHR \u003d false;\n\n// Vulkan supports sliced 3D ASTC texture uploads when ASTC is supported.\nmNativeExtensions.textureCompressionSliced3dASTCKHR \u003d mNativeExtensions.textureCompressionASTCLDRKHR;",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 78
+      },
+      "revId": "16a19af79d171d3e3b0cd5931a5d503082830415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
