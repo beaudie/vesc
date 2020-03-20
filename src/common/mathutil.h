@@ -21,6 +21,10 @@
 #include "common/debug.h"
 #include "common/platform.h"
 
+#if defined(_MSC_VER)
+#include <intrin.h>
+#endif  // defined(_MSC_VER)
+
 namespace angle
 {
 using base::CheckedNumeric;
