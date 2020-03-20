@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdeacfc0_d300085d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-20T16:48:52Z",
+      "side": 1,
+      "message": "Not the same as pseudo code above.\nIf we return here we leave behind a shader object and program object.",
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb048c26_8f640bc5",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-20T16:48:52Z",
+      "side": 1,
+      "message": "Same as above, needs some cleanup.",
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c048da14_27408c28",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 6947,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-20T16:48:52Z",
+      "side": 1,
+      "message": "nit: Why check? If we don\u0027t get a good object we\u0027re going to segfault at 6952 anyway.\nMaybe an ASSERT instead?",
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a12e656_85079f55",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-20T16:48:52Z",
+      "side": 1,
+      "message": "Is this because we are out of dirty bits?\nSeems odd that this isn\u0027t handled in syncDirtyBits.",
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a73d38f_8e2f443a",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-20T16:48:52Z",
+      "side": 1,
+      "message": "I don\u0027t understand what all is going on here, but it seems like we are losing varyingPacking.\nIn code below the varyingPacking is part of mResources, here it goes away when we lose scope.\nThat may be fine, but it looks weird.",
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30398ee2_cde1b2b9",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-20T16:48:52Z",
+      "side": 1,
+      "message": "the",
+      "range": {
+        "startLine": 47,
+        "startChar": 78,
+        "endLine": 47,
+        "endChar": 80
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74fac2a0_7bc1dbdb",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-20T16:48:52Z",
+      "side": 1,
+      "message": "the",
+      "range": {
+        "startLine": 55,
+        "startChar": 93,
+        "endLine": 55,
+        "endChar": 94
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce186eb0_1efbd761",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-20T16:48:52Z",
+      "side": 1,
+      "message": "stage",
+      "range": {
+        "startLine": 57,
+        "startChar": 14,
+        "endLine": 57,
+        "endChar": 20
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
