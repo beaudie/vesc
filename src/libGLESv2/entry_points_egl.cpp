@@ -8,6 +8,7 @@
 
 #include "libGLESv2/entry_points_egl.h"
 
+#include "anglebase/no_destructor.h"
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "common/version.h"
@@ -22,6 +23,8 @@
 #include "libANGLE/validationEGL.h"
 #include "libGLESv2/global_state.h"
 #include "libGLESv2/proc_table_egl.h"
+
+#include <vector>
 
 using namespace egl;
 

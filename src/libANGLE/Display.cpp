@@ -39,6 +39,7 @@
 #include "libANGLE/renderer/DeviceImpl.h"
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/ImageImpl.h"
+#include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/trace.h"
 
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
@@ -419,6 +420,97 @@ void ANGLESetDefaultDisplayPlatform(angle::EGLDisplayType display)
 
 static constexpr uint32_t kScratchBufferLifetime = 64u;
 
+#if !defined(ANGLE_PLATFORM_ANDROID)
+class DataBlob
+{
+    std::vector<uint8_t> mData;
+
+  public:
+    DataBlob(const uint8_t *data, size_t size) : mData(data, data + size) {}
+    DataBlob(const DataBlob &blob) : mData(blob.mData) {}
+    const uint8_t *getData() const { return mData.data(); }
+    EGLsizeiANDROID getSize() const { return mData.size(); }
+    bool operator<(const DataBlob &dataBlob) const
+    {
+        int cmp = memcmp(dataBlob.mData.data(), this->mData.data(),
+                         std::min(dataBlob.getSize(), this->getSize()));
+        if (cmp < 0)
+        {
+            return true;
+        }
+        else if (cmp == 0 && dataBlob.getSize() < this->getSize())
+        {
+            return true;
+        }
+        return false;
+    }
+};
+
+class AngleBlob
+{
+  public:
+    AngleBlob() {}
+    ~AngleBlob()
+    {
+        // Delete all the shader DataBlobs
+        for (const auto &it : cache)
+        {
+            delete (it.second);
+        }
+        cache.clear();
+    }
+
+    static void setBlob(const void *key,
+                        EGLsizeiANDROID keySize,
+                        const void *value,
+                        EGLsizeiANDROID valueSize);
+
+    static EGLsizeiANDROID getBlob(const void *key,
+                                   EGLsizeiANDROID keySize,
+                                   void *value,
+                                   EGLsizeiANDROID valueSize);
+
+  private:
+    std::map<DataBlob, DataBlob *> cache;
+};
+
+static AngleBlob *GetAngleBlobCache()
+{
+    static angle::base::NoDestructor<AngleBlob> blob;
+    return blob.get();
+}
+
+void AngleBlob::setBlob(const void *key,
+                        EGLsizeiANDROID keySize,
+                        const void *value,
+                        EGLsizeiANDROID valueSize)
+{
+    DataBlob keyBlob(reinterpret_cast<const uint8_t *>(key), keySize);
+    DataBlob *dataBlob = new DataBlob(reinterpret_cast<const uint8_t *>(value), valueSize);
+
+    GetAngleBlobCache()->cache[keyBlob] = dataBlob;
+}
+
+EGLsizeiANDROID AngleBlob::getBlob(const void *key,
+                                   EGLsizeiANDROID keySize,
+                                   void *value,
+                                   EGLsizeiANDROID valueSize)
+{
+    DataBlob keyBlob(reinterpret_cast<const uint8_t *>(key), keySize);
+    std::map<DataBlob, DataBlob *>::iterator it = GetAngleBlobCache()->cache.find(keyBlob);
+    if (it != GetAngleBlobCache()->cache.end())
+    {
+        DataBlob *data = it->second;
+        if (data->getSize() <= valueSize)
+        {
+            memcpy(value, data->getData(), data->getSize());
+        }
+        return data->getSize();
+    }
+    return 0;
+}
+#endif  // ANGLE_ANDROID_PLATFORM
+
 }  // anonymous namespace
 
 DisplayState::DisplayState(EGLNativeDisplayType nativeDisplayId)
@@ -655,6 +747,13 @@ Error Display::initialize()
     ASSERT(mImplementation != nullptr);
     mImplementation->setBlobCache(&mBlobCache);
 
+#if !defined(ANGLE_PLATFORM_ANDROID)
+    if (rx::ShouldUseDebugLayers(mAttributeMap))
+    {
+        setBlobCacheFuncs(AngleBlob::setBlob, AngleBlob::getBlob);
+    }
+#endif
+
     gl::InitializeDebugAnnotations(&mAnnotator);
 
     gl::InitializeDebugMutexIfNeeded();
@@ -811,8 +910,8 @@ std::vector<const Config *> Display::chooseConfig(const egl::AttributeMap &attri
 {
     egl::AttributeMap attribsWithDefaults = AttributeMap();
 
-    // Insert default values for attributes that have either an Exact or Mask selection criteria,
-    // and a default value that matters (e.g. isn't EGL_DONT_CARE):
+    // Insert default values for attributes that have either an Exact or Mask selection
+    // criteria, and a default value that matters (e.g. isn't EGL_DONT_CARE):
     attribsWithDefaults.insert(EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER);
     attribsWithDefaults.insert(EGL_LEVEL, 0);
     attribsWithDefaults.insert(EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT);
@@ -1005,7 +1104,8 @@ Error Display::createContext(const Config *configuration,
         ANGLE_TRY(restoreLostDevice());
     }
 
-    // This display texture sharing will allow the first context to create the texture share group.
+    // This display texture sharing will allow the first context to create the texture share
+    // group.
     bool usingDisplayTextureShareGroup =
         attribs.get(EGL_DISPLAY_TEXTURE_SHARE_GROUP_ANGLE, EGL_FALSE) == EGL_TRUE;
     gl::TextureManager *shareTextures = nullptr;
@@ -1106,8 +1206,8 @@ Error Display::makeCurrent(const Thread *thread,
         ANGLE_TRY(context->makeCurrent(this, drawSurface, readSurface));
     }
 
-    // Tick all the scratch buffers to make sure they get cleaned up eventually if they stop being
-    // used.
+    // Tick all the scratch buffers to make sure they get cleaned up eventually if they stop
+    // being used.
     {
         std::lock_guard<std::mutex> lock(mScratchBufferMutex);
 
