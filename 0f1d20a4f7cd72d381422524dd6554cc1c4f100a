@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b52e256b_818daa28",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-20T00:35:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "151d23e2_f5382ca8",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bacb602_801956d7",
         "filename": "src/compiler/translator/Compiler.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-19T12:39:48Z",
       "side": 1,
       "message": "just wondering why you had to move this up?",
+      "range": {
+        "startLine": 560,
+        "startChar": 4,
+        "endLine": 560,
+        "endChar": 85
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fa02063_6bc7d227",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-20T00:35:56Z",
+      "side": 1,
+      "message": "If we don\u0027t do this, we may generate a global initializer that calls a function that has already been pruned out of the AST. If we generate globals first, we guarantee that all dependencies of that initializer are referenced and will not be pruned.",
+      "parentUuid": "4bacb602_801956d7",
       "range": {
         "startLine": 560,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "28fce190_25609258",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-20T00:35:56Z",
+      "side": 1,
+      "message": "Previously, we exposed limited support for non-constant initializers for compatibility purposes with webgl. For those legacy cases, we emit a warning, even though (in that environment), it\u0027s perfectly valid code.\nThe intent was to discourage this legacy behavior, so the warning-generation behavior for this extension was preserved.",
+      "parentUuid": "a6b88e19_7ed6507a",
+      "range": {
+        "startLine": 561,
+        "startChar": 4,
+        "endLine": 561,
+        "endChar": 95
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0d782223_7a28970f",
         "filename": "src/compiler/translator/Compiler.cpp",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2020-03-19T12:39:48Z",
       "side": 1,
       "message": "I don\u0027t quite get why you\u0027re calling DeferGlobalInitializers if the extension is supported. Are we emulating it on configs where the driver doesn\u0027t expose this feature? Is there support for the extension in glslang and SPIR-V?",
+      "range": {
+        "startLine": 570,
+        "startChar": 9,
+        "endLine": 570,
+        "endChar": 32
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6062e35a_bfe831f5",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-20T00:35:56Z",
+      "side": 1,
+      "message": "We emulate this feature in all cases- the extension being enabled tells us if we should bother emulating or not.",
+      "parentUuid": "0d782223_7a28970f",
       "range": {
         "startLine": 570,
         "startChar": 9,
@@ -111,6 +207,24 @@
     },
     {
       "key": {
+        "uuid": "5ba88e90_2814e5d3",
+        "filename": "src/compiler/translator/ValidateGlobalInitializer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-20T00:35:56Z",
+      "side": 1,
+      "message": "suppressed the warning if the extension is enabled",
+      "parentUuid": "c888e361_735245b0",
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0aa5a4bc_7bb33b3c",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 2
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "809b3297_a354a1b9",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-20T00:35:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0aa5a4bc_7bb33b3c",
+      "range": {
+        "startLine": 596,
+        "startChar": 9,
+        "endLine": 596,
+        "endChar": 42
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7560fe5_63730659",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 2
@@ -145,6 +283,30 @@
       "writtenOn": "2020-03-19T12:39:48Z",
       "side": 1,
       "message": "I get that we\u0027re emulating it now. Can you investigate if there\u0027s native support for this in SPIR-V / glslang and how to detect that?",
+      "range": {
+        "startLine": 157,
+        "startChar": 26,
+        "endLine": 157,
+        "endChar": 36
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a895935b_5fed9d71",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-20T00:35:56Z",
+      "side": 1,
+      "message": "\u003e Can you investigate if there\u0027s native support for this in SPIR-V / glslang and how to detect that?\n\nwas not really looking into that. Will take some time, can it be a follow up change?",
+      "parentUuid": "e7560fe5_63730659",
       "range": {
         "startLine": 157,
         "startChar": 26,
@@ -180,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "b8897f96_9883043f",
+        "filename": "src/tests/gl_tests/ShaderNonConstGlobalInitializerTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-20T00:35:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09eaff78_80f18f2e",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 2
+      },
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0071cf6e_d96eeae4",
         "filename": "src/tests/gl_tests/ShaderNonConstGlobalInitializerTest.cpp",
         "patchSetId": 2
@@ -191,6 +377,24 @@
       "writtenOn": "2020-03-19T18:07:06Z",
       "side": 1,
       "message": "Can we potentially run this even if the extension is not supported?\nDoes the compile fail in either case?",
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "724c3dd1_e4c3cc18",
+        "filename": "src/tests/gl_tests/ShaderNonConstGlobalInitializerTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-20T00:35:56Z",
+      "side": 1,
+      "message": "We can run this test without the extension, but it\u0027s not a very interesting test. enabled it anyway",
+      "parentUuid": "0071cf6e_d96eeae4",
       "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
