@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8dd17632_1121543e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-20T00:32:13Z",
+      "side": 1,
+      "message": "Interesting, I remember noting that DS was not updated here but thought it should be fine since we were just handling dirty draw buffers. I should have voiced the thought, I guess.",
+      "revId": "e70a5497a6a142424690d79d8e6eb2012d1e6470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "197e099b_9a35fde5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-20T00:32:13Z",
+      "side": 1,
+      "message": "Yeah, I like it better this way.",
+      "revId": "e70a5497a6a142424690d79d8e6eb2012d1e6470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "573a284a_5195fb95",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-20T00:32:13Z",
+      "side": 1,
+      "message": "\"This will trigger the crash\" with the fix is this now actually \"This previously triggered a crash.\"?",
+      "revId": "e70a5497a6a142424690d79d8e6eb2012d1e6470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
