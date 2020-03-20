@@ -21,6 +21,12 @@
 #include "common/debug.h"
 #include "common/platform.h"
 
+#if defined(_MSC_VER) && !defined(__clang__)
+#    if defined(_M_ARM) || defined(_M_ARM64)
+#        include <Cmnintrin.h>
+#    endif  // defined(_M_ARM) || defined(_M_ARM64)
+#endif
+
 namespace angle
 {
 using base::CheckedNumeric;
