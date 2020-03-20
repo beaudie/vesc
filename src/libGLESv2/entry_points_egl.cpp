@@ -23,6 +23,8 @@
 #include "libGLESv2/global_state.h"
 #include "libGLESv2/proc_table_egl.h"
 
+#include <vector>
+
 using namespace egl;
 
 namespace
@@ -72,6 +74,67 @@ EGLDisplay EGLAPIENTRY EGL_GetDisplay(EGLNativeDisplayType display_id)
     return egl::Display::GetDisplayFromNativeDisplay(display_id, AttributeMap());
 }
 
+class DataBlob
+{
+    std::vector<uint8_t> mData;
+
+  public:
+    DataBlob(const uint8_t *data, size_t size) : mData(data, data + size) {}
+    const uint8_t *getData() const { return mData.data(); }
+    EGLsizeiANDROID getSize() const { return mData.size(); }
+    bool operator<(const DataBlob &dataBlob) const
+    {
+        int cmp = memcmp(dataBlob.mData.data(), this->mData.data(),
+                         std::min(dataBlob.getSize(), this->getSize()));
+        if (cmp < 0)
+        {
+            return true;
+        }
+        else if (cmp == 0 && dataBlob.getSize() < this->getSize())
+        {
+            return true;
+        }
+        return false;
+    }
+};
+
+class AngleBlob
+{
+    AngleBlob() {}
+    ~AngleBlob() { cache.clear(); }
+
+  public:
+    std::map<DataBlob, DataBlob> cache;
+};
+
+static AngleBlob angleBlobCache;
+
+void setBlob(const void *key, EGLsizeiANDROID keySize, const void *value, EGLsizeiANDROID valueSize)
+{
+    DataBlob keyBlob(reinterpret_cast<const uint8_t *>(key), keySize);
+    DataBlob dataBlob(reinterpret_cast<const uint8_t *>(value), valueSize);
+
+    angleBlobCache.cache.insert(keyBlob, dataBlob);
+}
+
+EGLsizeiANDROID getBlob(const void *key,
+                        EGLsizeiANDROID keySize,
+                        void *value,
+                        EGLsizeiANDROID valueSize)
+{
+    DataBlob keyBlob(reinterpret_cast<const uint8_t *>(key), keySize);
+    std::map<DataBlob, DataBlob>::iterator it = angleBlobCache.cache.find(keyBlob);
+    if (it != angleBlobCache.cache.end())
+    {
+        if (it->second.getSize() <= valueSize)
+        {
+            memcpy(value, it->second.getData(), it->second.getSize());
+        }
+        return it->second.getSize();
+    }
+    return 0;
+}
+
 EGLBoolean EGLAPIENTRY EGL_Initialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
@@ -91,6 +154,8 @@ EGLBoolean EGLAPIENTRY EGL_Initialize(EGLDisplay dpy, EGLint *major, EGLint *min
         *major = 1;
     if (minor)
         *minor = 4;
+
+    display->setBlobCacheFuncs(setBlob, getBlob);
 
     thread->setSuccess();
     return EGL_TRUE;
