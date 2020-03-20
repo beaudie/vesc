@@ -297,6 +297,24 @@
     },
     {
       "key": {
+        "uuid": "4a0505f9_71ffa295",
+        "filename": "src/compiler/translator/ValidateGlobalInitializer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-20T20:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ba88e90_2814e5d3",
+      "revId": "0f1d20a4f7cd72d381422524dd6554cc1c4f100a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0aa5a4bc_7bb33b3c",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 2
