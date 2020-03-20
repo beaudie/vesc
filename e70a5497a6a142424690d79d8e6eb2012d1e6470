@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "9764df77_f79b2bd8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-20T15:15:12Z",
+      "side": 1,
+      "message": "Is there any downside to merging them?  Seems okay, I don\u0027t know the serial code well enough to know why they were separate to begin with.  Looking above (getDepthStencil()-\u003egetAssignSerial()), were they already merged?",
+      "parentUuid": "197e099b_9a35fde5",
+      "revId": "e70a5497a6a142424690d79d8e6eb2012d1e6470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "573a284a_5195fb95",
         "filename": "src/tests/gl_tests/FramebufferTest.cpp",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2020-03-20T00:32:13Z",
       "side": 1,
       "message": "\"This will trigger the crash\" with the fix is this now actually \"This previously triggered a crash.\"?",
+      "revId": "e70a5497a6a142424690d79d8e6eb2012d1e6470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cf258c0_37355f6f",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-20T15:15:12Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "573a284a_5195fb95",
       "revId": "e70a5497a6a142424690d79d8e6eb2012d1e6470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
