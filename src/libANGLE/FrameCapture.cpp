@@ -3392,14 +3392,6 @@ void WriteParamValueReplay<ParamType::TMemoryObjectID>(std::ostream &os,
 }
 
 template <>
-void WriteParamValueReplay<ParamType::TPathID>(std::ostream &os,
-                                               const CallCapture &call,
-                                               gl::PathID value)
-{
-    os << "gPathMap[" << value.value << "]";
-}
-
-template <>
 void WriteParamValueReplay<ParamType::TProgramPipelineID>(std::ostream &os,
                                                           const CallCapture &call,
                                                           gl::ProgramPipelineID value)
