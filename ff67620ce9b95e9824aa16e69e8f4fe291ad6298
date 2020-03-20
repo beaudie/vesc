@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "abcb4d4b_af3b9eb5",
+        "filename": "src/tests/perf_tests/restricted_traces/angle_trace_perf_tests.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-20T17:05:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc3a8972_dc439ac3",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 130
+      },
+      "revId": "ff67620ce9b95e9824aa16e69e8f4fe291ad6298",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70e34593_a9d886e2",
         "filename": "src/tests/perf_tests/restricted_traces/angle_trace_perf_tests.gni",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "ff67620ce9b95e9824aa16e69e8f4fe291ad6298",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35e5cebe_70521f2d",
+        "filename": "src/tests/perf_tests/restricted_traces/angle_trace_perf_tests.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-20T17:05:06Z",
+      "side": 1,
+      "message": "Done, modified the path over chat, tested locally.",
+      "parentUuid": "70e34593_a9d886e2",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 1
+      },
+      "revId": "ff67620ce9b95e9824aa16e69e8f4fe291ad6298",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
