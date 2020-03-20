@@ -8,6 +8,7 @@
 
 #include "libGLESv2/entry_points_egl.h"
 
+#include "anglebase/no_destructor.h"
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "common/version.h"
@@ -22,6 +23,8 @@
 #include "libANGLE/validationEGL.h"
 #include "libGLESv2/global_state.h"
 #include "libGLESv2/proc_table_egl.h"
+
+#include <vector>
 
 using namespace egl;
 
@@ -72,6 +75,72 @@ EGLDisplay EGLAPIENTRY EGL_GetDisplay(EGLNativeDisplayType display_id)
     return egl::Display::GetDisplayFromNativeDisplay(display_id, AttributeMap());
 }
 
+class DataBlob
+{
+    std::vector<uint8_t> mData;
+
+  public:
+    DataBlob(const uint8_t *data, size_t size) : mData(data, data + size) {}
+    DataBlob(const DataBlob &blob) : mData(blob.mData) {}
+    const uint8_t *getData() const { return mData.data(); }
+    EGLsizeiANDROID getSize() const { return mData.size(); }
+    bool operator<(const DataBlob &dataBlob) const
+    {
+        int cmp = memcmp(dataBlob.mData.data(), this->mData.data(),
+                         std::min(dataBlob.getSize(), this->getSize()));
+        if (cmp < 0)
+        {
+            return true;
+        }
+        else if (cmp == 0 && dataBlob.getSize() < this->getSize())
+        {
+            return true;
+        }
+        return false;
+    }
+};
+
+class AngleBlob
+{
+  public:
+    AngleBlob() {}
+    ~AngleBlob() { cache.clear(); }
+
+    std::map<DataBlob, DataBlob> cache;
+};
+
+static AngleBlob *GetAngleBlob()
+{
+    static angle::base::NoDestructor<AngleBlob> blob;
+    return blob.get();
+}
+
+void setBlob(const void *key, EGLsizeiANDROID keySize, const void *value, EGLsizeiANDROID valueSize)
+{
+    DataBlob keyBlob(reinterpret_cast<const uint8_t *>(key), keySize);
+    DataBlob dataBlob(reinterpret_cast<const uint8_t *>(value), valueSize);
+
+    GetAngleBlob()->cache[keyBlob] = dataBlob;
+}
+
+EGLsizeiANDROID getBlob(const void *key,
+                        EGLsizeiANDROID keySize,
+                        void *value,
+                        EGLsizeiANDROID valueSize)
+{
+    DataBlob keyBlob(reinterpret_cast<const uint8_t *>(key), keySize);
+    std::map<DataBlob, DataBlob>::iterator it = GetAngleBlob()->cache.find(keyBlob);
+    if (it != GetAngleBlob()->cache.end())
+    {
+        if (it->second.getSize() <= valueSize)
+        {
+            memcpy(value, it->second.getData(), it->second.getSize());
+        }
+        return it->second.getSize();
+    }
+    return 0;
+}
+
 EGLBoolean EGLAPIENTRY EGL_Initialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 {
     ANGLE_SCOPED_GLOBAL_LOCK();
@@ -91,6 +160,8 @@ EGLBoolean EGLAPIENTRY EGL_Initialize(EGLDisplay dpy, EGLint *major, EGLint *min
         *major = 1;
     if (minor)
         *minor = 4;
+
+    display->setBlobCacheFuncs(setBlob, getBlob);
 
     thread->setSuccess();
     return EGL_TRUE;
