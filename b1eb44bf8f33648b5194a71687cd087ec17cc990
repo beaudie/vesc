@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f25cbf20_606f95ed",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-20T15:00:05Z",
+      "side": 0,
+      "message": "Do we care about overlap anymore?",
+      "range": {
+        "startLine": 2031,
+        "startChar": 34,
+        "endLine": 2031,
+        "endChar": 64
+      },
+      "revId": "b1eb44bf8f33648b5194a71687cd087ec17cc990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
