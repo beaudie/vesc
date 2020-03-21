@@ -153,6 +153,52 @@
       "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "848b0eea_c7db4656",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-21T03:38:31Z",
+      "side": 1,
+      "message": "This probably relates to the question I asked: If program1 has \"sampler2D someName\" and program2 has \"atomic_uint someName\", is that supposed to generate an error? If program1 has \"sampler2D someName\" and program2 also has \"sampler2D someName\", is it sufficient to bind the sampler to either program (and not both)?\n\nIn other words, do the programs in a program pipeline have different namespaces?",
+      "range": {
+        "startLine": 446,
+        "startChar": 32,
+        "endLine": 446,
+        "endChar": 55
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "050f836d_7d7bb92f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-21T03:38:31Z",
+      "side": 1,
+      "message": "Avoid the copy by directly passing this to TransformSpirV?",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 66
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
