@@ -1114,8 +1114,18 @@ ANGLE_INLINE void CommandBuffer::endTransformFeedbackEXT(uint32_t firstCounterBu
 {
     ASSERT(valid());
     ASSERT(vkCmdEndTransformFeedbackEXT);
+
+    const VkDeviceSize *offsets               = counterBufferOffsets;
+    VkDeviceSize dummyCounterBufferOffsets[4] = {0};
+
+    if (offsets == nullptr)
+    {
+        ASSERT(counterBufferCount <= 4);
+        offsets = dummyCounterBufferOffsets;
+    }
+
     vkCmdEndTransformFeedbackEXT(mHandle, firstCounterBuffer, counterBufferCount, counterBuffers,
-                                 counterBufferOffsets);
+                                 offsets);
 }
 
 ANGLE_INLINE void CommandBuffer::bindTransformFeedbackBuffersEXT(uint32_t firstBinding,
