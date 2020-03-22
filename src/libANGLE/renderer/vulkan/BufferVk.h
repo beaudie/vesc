@@ -103,10 +103,10 @@ class BufferVk : public BufferImpl
     void unmapImpl(ContextVk *contextVk);
 
     // Calls copyBuffer internally.
-    angle::Result copyToBuffer(ContextVk *contextVk,
-                               vk::BufferHelper *destBuffer,
-                               uint32_t copyCount,
-                               const VkBufferCopy *copies);
+    angle::Result copyToBufferHelper(ContextVk *contextVk,
+                                     vk::BufferHelper *destBuffer,
+                                     uint32_t copyCount,
+                                     const VkBufferCopy *copies);
 
     ConversionBuffer *getVertexConversionBuffer(RendererVk *renderer,
                                                 angle::FormatID formatID,
@@ -116,6 +116,23 @@ class BufferVk : public BufferImpl
 
   private:
     void initializeStagingBuffer(ContextVk *contextVk, gl::BufferBinding target, size_t size);
+    void initializeCpuOnlyBuffer(ContextVk *contextVk, gl::BufferBinding target, size_t size);
+    angle::Result waitForIdle(ContextVk *contextVk);
+
+    ANGLE_INLINE const uint8_t *getCpuOnlyBuffer(size_t offset)
+    {
+        return (mCpuOnlyBuffer.getCurrentBuffer() + offset);
+    }
+
+    void updateCpuOnlyBuffer(const uint8_t *data, size_t size, size_t offset);
+    angle::Result directUpdate(ContextVk *contextVk,
+                               const uint8_t *data,
+                               size_t size,
+                               size_t offset);
+    angle::Result stagedUpdate(ContextVk *contextVk,
+                               const uint8_t *data,
+                               size_t size,
+                               size_t offset);
     angle::Result setDataImpl(ContextVk *contextVk,
                               const uint8_t *data,
                               size_t size,
@@ -144,6 +161,12 @@ class BufferVk : public BufferImpl
 
     // All staging buffer support is provided by a DynamicBuffer.
     vk::DynamicBuffer mStagingBuffer;
+
+    // For GPU-read only buffers MapRange latency is reduced by maintaining a copy
+    // of the buffer which is writeable only by the CPU. The contents are updated on all
+    // glData/glSubData calls. With this any glMap* call becomes an O(1) operation
+    // We use DynamicCpuOnlyBuffer.class to encapsulate all the bookeeping logic
+    vk::DynamicCpuOnlyBuffer mCpuOnlyBuffer;
 
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;

@@ -666,6 +666,148 @@ void DynamicBuffer::reset()
     mLastFlushOrInvalidateOffset = 0;
 }
 
+// DynamicCpuOnlyBuffer implementation.
+DynamicCpuOnlyBuffer::DynamicCpuOnlyBuffer()
+    : mEnabled(false),
+      mUnsynchronizedMapPerformed(false),
+      mWriteOperation(false),
+      mLastWrittenoffset(0),
+      mLastWrittenSize(0),
+      mInitialSize(0),
+      mSize(0),
+      mBuffer(nullptr)
+{}
+
+DynamicCpuOnlyBuffer::DynamicCpuOnlyBuffer(DynamicCpuOnlyBuffer &&other)
+    : mEnabled(other.mEnabled),
+      mUnsynchronizedMapPerformed(other.mUnsynchronizedMapPerformed),
+      mWriteOperation(other.mWriteOperation),
+      mLastWrittenoffset(other.mLastWrittenoffset),
+      mLastWrittenSize(other.mLastWrittenSize),
+      mInitialSize(other.mInitialSize),
+      mSize(other.mSize),
+      mBuffer(other.mBuffer),
+      mInFlightBuffers(std::move(other.mInFlightBuffers))
+{
+    other.mBuffer = nullptr;
+}
+
+void DynamicCpuOnlyBuffer::init(size_t initialSize)
+{
+    mInitialSize = initialSize;
+}
+
+DynamicCpuOnlyBuffer::~DynamicCpuOnlyBuffer()
+{
+    ASSERT(mBuffer == nullptr);
+}
+
+angle::Result DynamicCpuOnlyBuffer::allocate(size_t sizeInBytes, bool *newBufferAllocatedOut)
+{
+    if (mBuffer)
+    {
+        mInFlightBuffers.push_back(mBuffer);
+        mBuffer = nullptr;
+    }
+
+    if (sizeInBytes > mSize)
+    {
+        mSize = std::max(mInitialSize, sizeInBytes);
+
+        // Clear the free list since the free buffers are now too small.
+        for (uint8_t *toFree : mBufferFreeList)
+        {
+            delete[](toFree);
+        }
+        mBufferFreeList.clear();
+    }
+
+    // The front of the free list should be the oldest. Thus if it is in use the rest of the
+    // free list should be in use as well.
+    if (mBufferFreeList.empty())
+    {
+        mBuffer = new uint8_t[mSize];
+
+        if (newBufferAllocatedOut != nullptr)
+        {
+            *newBufferAllocatedOut = true;
+        }
+    }
+    else
+    {
+        mBuffer = mBufferFreeList.front();
+        mBufferFreeList.erase(mBufferFreeList.begin());
+        if (newBufferAllocatedOut != nullptr)
+        {
+            *newBufferAllocatedOut = false;
+        }
+    }
+
+    if (mBuffer != nullptr)
+    {
+        mEnabled = true;
+    }
+
+    return angle::Result::Continue;
+}
+
+void DynamicCpuOnlyBuffer::destroyBufferList(std::vector<uint8_t *> *buffers)
+{
+    for (uint8_t *toFree : *buffers)
+    {
+        delete[] toFree;
+        toFree = nullptr;
+    }
+
+    buffers->clear();
+}
+
+void DynamicCpuOnlyBuffer::release()
+{
+    reset();
+
+    destroyBufferList(&mInFlightBuffers);
+    destroyBufferList(&mBufferFreeList);
+
+    if (mBuffer)
+    {
+        delete[] mBuffer;
+        mBuffer = nullptr;
+    }
+}
+
+void DynamicCpuOnlyBuffer::releaseInFlightBuffers()
+{
+    for (uint8_t *toRelease : mInFlightBuffers)
+    {
+        // If the dynamic buffer was resized we cannot reuse the retained buffer.
+        if (sizeof(toRelease) < mSize)
+        {
+            delete[] toRelease;
+        }
+        else
+        {
+            mBufferFreeList.push_back(toRelease);
+        }
+    }
+
+    mInFlightBuffers.clear();
+}
+
+void DynamicCpuOnlyBuffer::destroy(VkDevice device)
+{
+    release();
+}
+
+void DynamicCpuOnlyBuffer::reset()
+{
+    mEnabled           = false;
+    mWriteOperation    = false;
+    mLastWrittenoffset = 0;
+    mLastWrittenSize   = 0;
+    mSize              = 0;
+}
+
 // DescriptorPoolHelper implementation.
 DescriptorPoolHelper::DescriptorPoolHelper() : mFreeDescriptorSets(0) {}
 
@@ -1281,7 +1423,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
     if (contextVk->getRenderer()->getFeatures().extraCopyBufferRegion.enabled)
         copies.push_back({sourceOffset, *bufferOffsetOut + (unitCount + 1) * unitSize, 1});
 
-    ANGLE_TRY(elementArrayBufferVk->copyToBuffer(
+    ANGLE_TRY(elementArrayBufferVk->copyToBufferHelper(
         contextVk, *bufferOut, static_cast<uint32_t>(copies.size()), copies.data()));
     ANGLE_TRY(mDynamicIndexBuffer.flush(contextVk));
     return angle::Result::Continue;
