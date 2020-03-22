@@ -666,6 +666,96 @@ void DynamicBuffer::reset()
     mLastFlushOrInvalidateOffset = 0;
 }
 
+// DynamicCpuOnlyBuffer implementation.
+DynamicCpuOnlyBuffer::DynamicCpuOnlyBuffer()
+    : mEnabled(false),
+      mUnsynchronizedMapPerformed(false),
+      mWriteOperation(false),
+      mLastWrittenoffset(0),
+      mLastWrittenSize(0),
+      mInitialSize(0),
+      mSize(0),
+      mBuffer(nullptr)
+{}
+
+DynamicCpuOnlyBuffer::DynamicCpuOnlyBuffer(DynamicCpuOnlyBuffer &&other)
+    : mEnabled(other.mEnabled),
+      mUnsynchronizedMapPerformed(other.mUnsynchronizedMapPerformed),
+      mWriteOperation(other.mWriteOperation),
+      mLastWrittenoffset(other.mLastWrittenoffset),
+      mLastWrittenSize(other.mLastWrittenSize),
+      mInitialSize(other.mInitialSize),
+      mSize(other.mSize),
+      mBuffer(other.mBuffer)
+{
+    other.mBuffer = nullptr;
+}
+
+void DynamicCpuOnlyBuffer::init(size_t initialSize)
+{
+    mInitialSize = initialSize;
+}
+
+DynamicCpuOnlyBuffer::~DynamicCpuOnlyBuffer()
+{
+    ASSERT(mBuffer == nullptr);
+}
+
+angle::Result DynamicCpuOnlyBuffer::allocate(size_t sizeInBytes)
+{
+    // Delete the current buffer, if any
+    if (mBuffer)
+    {
+        delete[] mBuffer;
+        mBuffer = nullptr;
+    }
+
+    // Cache the new size
+    mSize = std::max(mInitialSize, sizeInBytes);
+
+    // Allocate the buffer
+    mBuffer = new uint8_t[mSize];
+
+    mEnabled = (mBuffer != nullptr) ? true : false;
+
+    return angle::Result::Continue;
+}
+
+void DynamicCpuOnlyBuffer::destroyBufferList(std::vector<uint8_t *> *buffers)
+{
+    for (uint8_t *toFree : *buffers)
+    {
+        delete[] toFree;
+    }
+
+    buffers->clear();
+}
+
+void DynamicCpuOnlyBuffer::release()
+{
+    reset();
+
+    if (mBuffer)
+    {
+        delete[] mBuffer;
+        mBuffer = nullptr;
+    }
+}
+
+void DynamicCpuOnlyBuffer::destroy(VkDevice device)
+{
+    release();
+}
+
+void DynamicCpuOnlyBuffer::reset()
+{
+    mEnabled           = false;
+    mWriteOperation    = false;
+    mLastWrittenoffset = 0;
+    mLastWrittenSize   = 0;
+    mSize              = 0;
+}
+
 // DescriptorPoolHelper implementation.
 DescriptorPoolHelper::DescriptorPoolHelper() : mFreeDescriptorSets(0) {}
 
@@ -1281,7 +1371,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
     if (contextVk->getRenderer()->getFeatures().extraCopyBufferRegion.enabled)
         copies.push_back({sourceOffset, *bufferOffsetOut + (unitCount + 1) * unitSize, 1});
 
-    ANGLE_TRY(elementArrayBufferVk->copyToBuffer(
+    ANGLE_TRY(elementArrayBufferVk->copyToBufferHelper(
         contextVk, *bufferOut, static_cast<uint32_t>(copies.size()), copies.data()));
     ANGLE_TRY(mDynamicIndexBuffer.flush(contextVk));
     return angle::Result::Continue;
