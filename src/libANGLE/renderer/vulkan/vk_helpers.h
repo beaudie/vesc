@@ -121,6 +121,90 @@ class DynamicBuffer : angle::NonCopyable
     std::vector<BufferHelper *> mBufferFreeList;
 };
 
+// Based off of the DynamicBuffer class, DynamicCpuOnlyBuffer provides
+// a similar conceptually infinitely long buffer that will only be written
+// to and read by the CPU. This can be used to provide CPU cached copies of
+// GPU-read only buffers. The value add here is that when an app requests
+// CPU access to a buffer we can fullfil such a request in O(1) time since
+// we don't need to wait for GPU to be done with in-flight commands.
+//
+// The hidden cost here is that any operation that updates a buffer, either
+// through a buffer sub data update or a buffer-to-buffer copy will have an
+// additional overhead of having to update its CPU only buffer
+class DynamicCpuOnlyBuffer : public angle::NonCopyable
+{
+  public:
+    DynamicCpuOnlyBuffer();
+    DynamicCpuOnlyBuffer(DynamicCpuOnlyBuffer &&other);
+    ~DynamicCpuOnlyBuffer();
+
+    // Initialize the DynamicCpuOnlyBuffer.
+    void init(size_t initialSize);
+
+    // Returns whether this DynamicCpuOnlyBuffer is active
+    ANGLE_INLINE bool isEnabled() { return mEnabled; }
+
+    // This call will actually allocate a new CPU only memory from the heap.
+    // The size can be different than the one specficied during `int`.
+    angle::Result allocate(size_t sizeInBytes);
+
+    ANGLE_INLINE void updateData(const uint8_t *data, size_t size, size_t offset)
+    {
+        ASSERT(mBuffer);
+        // Memcopy data into the buffer
+        memcpy((mBuffer + offset), data, size);
+    }
+
+    // Record the states needed when the CPU only buffer is mapped
+    ANGLE_INLINE void onMapBuffer(bool writeOperation, size_t offset, size_t size)
+    {
+        mWriteOperation    = writeOperation;
+        mLastWrittenoffset = offset;
+        mLastWrittenSize   = size;
+    }
+
+    // Retrieve all the states needed when the CPU only buffer is unmapped
+    ANGLE_INLINE void onUnmapBuffer(bool *writeOperation, size_t *offset, size_t *size)
+    {
+        ASSERT(writeOperation);
+        ASSERT(offset);
+        ASSERT(size);
+
+        *writeOperation = mWriteOperation;
+        *offset         = mLastWrittenoffset;
+        *size           = mLastWrittenSize;
+
+        // Reset recorded data
+        mWriteOperation    = false;
+        mLastWrittenoffset = 0;
+        mLastWrittenSize   = 0;
+    }
+
+    // This releases resources when they might currently be in use.
+    void release();
+
+    // This frees resources immediately.
+    void destroy(VkDevice device);
+
+    ANGLE_INLINE uint8_t *getCurrentBuffer()
+    {
+        ASSERT(mBuffer);
+        return mBuffer;
+    }
+
+  private:
+    void reset();
+    void destroyBufferList(std::vector<uint8_t *> *buffers);
+
+    bool mEnabled;
+    bool mWriteOperation;
+    size_t mLastWrittenoffset;
+    size_t mLastWrittenSize;
+    size_t mInitialSize;
+    size_t mSize;
+    uint8_t *mBuffer;
+};
+
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
 // allocate new pools internally as needed. RendererVk takes care of the lifetime of the discarded
 // pools. Note that we used a fixed layout for descriptor pools in ANGLE. Uniform buffers must
