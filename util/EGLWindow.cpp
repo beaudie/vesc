@@ -92,10 +92,11 @@ EGLContext EGLWindow::getContext() const
 
 bool EGLWindow::initializeGL(OSWindow *osWindow,
                              angle::Library *glWindowingLibrary,
+                             angle::GLESDriverType driverType,
                              const EGLPlatformParameters &platformParams,
                              const ConfigParameters &configParams)
 {
-    if (!initializeDisplay(osWindow, glWindowingLibrary, platformParams))
+    if (!initializeDisplay(osWindow, glWindowingLibrary, driverType, platformParams))
         return false;
     if (!initializeSurface(osWindow, glWindowingLibrary, configParams))
         return false;
@@ -106,6 +107,7 @@ bool EGLWindow::initializeGL(OSWindow *osWindow,
 
 bool EGLWindow::initializeDisplay(OSWindow *osWindow,
                                   angle::Library *glWindowingLibrary,
+                                  angle::GLESDriverType driverType,
                                   const EGLPlatformParameters &params)
 {
 #if defined(ANGLE_USE_UTIL_LOADER)
@@ -113,6 +115,7 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
     glWindowingLibrary->getAs("eglGetProcAddress", &getProcAddress);
     if (!getProcAddress)
     {
+        printf("Cannot load eglGetProcAddress\n");
         return false;
     }
 
@@ -220,17 +223,31 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
 
     displayAttributes.push_back(EGL_NONE);
 
-    mDisplay = eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE,
-                                     reinterpret_cast<void *>(osWindow->getNativeDisplay()),
-                                     &displayAttributes[0]);
+    if (driverType == angle::GLESDriverType::SystemWGL)
+        return false;
+
+    if (driverType == angle::GLESDriverType::AngleEGL &&
+        strstr(extensionString, "EGL_ANGLE_platform_angle"))
+    {
+        mDisplay = eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE,
+                                         reinterpret_cast<void *>(osWindow->getNativeDisplay()),
+                                         &displayAttributes[0]);
+    }
+    else
+    {
+        mDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    }
+
     if (mDisplay == EGL_NO_DISPLAY)
     {
+        printf("Failed to get display: 0x%X\n", eglGetError());
         destroyGL();
         return false;
     }
 
     if (eglInitialize(mDisplay, &mEGLMajorVersion, &mEGLMinorVersion) == EGL_FALSE)
     {
+        printf("eglInitialize failed: 0x%X\n", eglGetError());
         destroyGL();
         return false;
     }
@@ -320,6 +337,7 @@ bool EGLWindow::initializeSurface(OSWindow *osWindow,
                                       &surfaceAttributes[0]);
     if (eglGetError() != EGL_SUCCESS || (mSurface == EGL_NO_SURFACE))
     {
+        printf("eglCreateWindowSurface failed: 0x%X\n", eglGetError());
         destroyGL();
         return false;
     }
@@ -345,7 +363,9 @@ EGLContext EGLWindow::createContext(EGLContext share) const
     }
 
     // EGL_CONTEXT_OPENGL_DEBUG is only valid as of EGL 1.5.
-    bool hasDebug = mEGLMinorVersion >= 5;
+    // Note that the Android loader currently doesn't handle this flag despite reporting 1.5.
+    // Work around this by only using the debug bit when we request a debug context.
+    bool hasDebug = mEGLMinorVersion >= 5 && mConfigParams.debug;
     if (mConfigParams.debug && !hasDebug)
     {
         std::cerr << "EGL 1.5 is required for EGL_CONTEXT_OPENGL_DEBUG.\n";
@@ -501,9 +521,9 @@ EGLContext EGLWindow::createContext(EGLContext share) const
     contextAttributes.push_back(EGL_NONE);
 
     EGLContext context = eglCreateContext(mDisplay, mConfig, share, &contextAttributes[0]);
-    if (eglGetError() != EGL_SUCCESS)
+    if (context == EGL_NO_CONTEXT)
     {
-        std::cerr << "Error on eglCreateContext.\n";
+        printf("eglCreateContext failed: 0x%X\n", eglGetError());
         return EGL_NO_CONTEXT;
     }
 
