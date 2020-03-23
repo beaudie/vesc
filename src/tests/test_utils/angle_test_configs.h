@@ -193,6 +193,9 @@ PlatformParameters ES3_METAL();
 PlatformParameters ES2_WGL();
 PlatformParameters ES3_WGL();
 
+PlatformParameters ES2_EGL();
+PlatformParameters ES3_EGL();
+
 inline PlatformParameters WithNoVirtualContexts(const PlatformParameters &params)
 {
     PlatformParameters withNoVirtualContexts                  = params;

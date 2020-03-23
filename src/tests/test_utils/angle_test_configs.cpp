@@ -113,7 +113,7 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
             stream << "WGL";
             break;
         case GLESDriverType::SystemEGL:
-            stream << "GLES";
+            stream << "EGL";
             break;
         default:
             stream << "Error";
@@ -760,5 +760,15 @@ PlatformParameters ES2_WGL()
 PlatformParameters ES3_WGL()
 {
     return PlatformParameters(3, 0, GLESDriverType::SystemWGL);
+}
+
+PlatformParameters ES2_EGL()
+{
+    return PlatformParameters(2, 0, GLESDriverType::SystemEGL);
+}
+
+PlatformParameters ES3_EGL()
+{
+    return PlatformParameters(3, 0, GLESDriverType::SystemEGL);
 }
 }  // namespace angle

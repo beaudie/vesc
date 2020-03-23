@@ -113,6 +113,7 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
     glWindowingLibrary->getAs("eglGetProcAddress", &getProcAddress);
     if (!getProcAddress)
     {
+        printf("Cannot load eglGetProcAddress\n");
         return false;
     }
 
@@ -220,17 +221,27 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
 
     displayAttributes.push_back(EGL_NONE);
 
-    mDisplay = eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE,
-                                     reinterpret_cast<void *>(osWindow->getNativeDisplay()),
-                                     &displayAttributes[0]);
+    if (strstr(extensionString, "EGL_ANGLE_platform_angle"))
+    {
+        mDisplay = eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE,
+                                         reinterpret_cast<void *>(osWindow->getNativeDisplay()),
+                                         &displayAttributes[0]);
+    }
+    else
+    {
+        mDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    }
+
     if (mDisplay == EGL_NO_DISPLAY)
     {
+        printf("Failed to get display: 0x%X\n", eglGetError());
         destroyGL();
         return false;
     }
 
     if (eglInitialize(mDisplay, &mEGLMajorVersion, &mEGLMinorVersion) == EGL_FALSE)
     {
+        printf("eglInitialize failed: 0x%X\n", eglGetError());
         destroyGL();
         return false;
     }
@@ -320,6 +331,7 @@ bool EGLWindow::initializeSurface(OSWindow *osWindow,
                                       &surfaceAttributes[0]);
     if (eglGetError() != EGL_SUCCESS || (mSurface == EGL_NO_SURFACE))
     {
+        printf("eglCreateWindowSurface failed: 0x%X\n", eglGetError());
         destroyGL();
         return false;
     }
@@ -394,14 +406,6 @@ EGLContext EGLWindow::createContext(EGLContext share) const
         return EGL_NO_CONTEXT;
     }
 
-    bool hasBackwardsCompatibleContextExtension =
-        strstr(displayExtensions, "EGL_ANGLE_create_context_backwards_compatible") != nullptr;
-    if (!hasProgramCacheControlExtension)
-    {
-        std::cerr << "EGL_ANGLE_create_context_backwards_compatible missing.\n";
-        return EGL_NO_CONTEXT;
-    }
-
     eglBindAPI(EGL_OPENGL_ES_API);
     if (eglGetError() != EGL_SUCCESS)
     {
@@ -470,6 +474,8 @@ EGLContext EGLWindow::createContext(EGLContext share) const
                 mConfigParams.contextProgramCacheEnabled.value() ? EGL_TRUE : EGL_FALSE);
         }
 
+        bool hasBackwardsCompatibleContextExtension =
+            strstr(displayExtensions, "EGL_ANGLE_create_context_backwards_compatible") != nullptr;
         if (hasBackwardsCompatibleContextExtension)
         {
             // Always request the exact context version that the config wants
@@ -494,6 +500,8 @@ EGLContext EGLWindow::createContext(EGLContext share) const
         std::cerr << "Error on eglCreateContext.\n";
         return EGL_NO_CONTEXT;
     }
+
+    printf("Context init succeeded.\n");
 
     return context;
 }

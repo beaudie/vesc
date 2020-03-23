@@ -34,25 +34,27 @@ namespace angle
 {
 namespace
 {
-bool IsANGLEConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
+bool IsAngleEGLConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
 {
-    std::unique_ptr<angle::Library> eglLibrary;
+    //     std::unique_ptr<angle::Library> eglLibrary;
 
-#if defined(ANGLE_USE_UTIL_LOADER)
-    eglLibrary.reset(
-        angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ApplicationDir));
-#endif
+    // #if defined(ANGLE_USE_UTIL_LOADER)
+    //     eglLibrary.reset(
+    //         angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ApplicationDir));
+    // #endif
 
-    EGLWindow *eglWindow = EGLWindow::New(param.majorVersion, param.minorVersion);
-    ConfigParameters configParams;
-    bool result =
-        eglWindow->initializeGL(osWindow, eglLibrary.get(), param.eglParameters, configParams);
-    eglWindow->destroyGL();
-    EGLWindow::Delete(&eglWindow);
-    return result;
+    //     EGLWindow *eglWindow = EGLWindow::New(param.majorVersion, param.minorVersion);
+    //     ConfigParameters configParams;
+    //     bool result =
+    //         eglWindow->initializeGL(osWindow, eglLibrary.get(), param.eglParameters,
+    //         configParams);
+    //     eglWindow->destroyGL();
+    //     EGLWindow::Delete(&eglWindow);
+    //     return result;
+    return false;
 }
 
-bool IsWGLConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
+bool IsSystemWGLConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
 {
 #if defined(ANGLE_PLATFORM_WINDOWS) && defined(ANGLE_USE_UTIL_LOADER)
     std::unique_ptr<angle::Library> openglLibrary(
@@ -70,10 +72,24 @@ bool IsWGLConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
 #endif  // defined(ANGLE_PLATFORM_WINDOWS) && defined(ANGLE_USE_UTIL_LOADER)
 }
 
-bool IsNativeConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
+bool IsSystemEGLConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
 {
-    // Not yet implemented.
+#if defined(ANGLE_USE_UTIL_LOADER)
+    printf("testy test\n");
+    std::unique_ptr<angle::Library> eglLibrary;
+
+    eglLibrary.reset(angle::OpenSharedLibrary("libEGL", angle::SearchType::SystemDir));
+
+    EGLWindow *eglWindow = EGLWindow::New(param.majorVersion, param.minorVersion);
+    ConfigParameters configParams;
+    bool result =
+        eglWindow->initializeGL(osWindow, eglLibrary.get(), param.eglParameters, configParams);
+    eglWindow->destroyGL();
+    EGLWindow::Delete(&eglWindow);
+    return result;
+#else
     return false;
+#endif
 }
 
 std::map<PlatformParameters, bool> gParamAvailabilityCache;
@@ -398,10 +414,15 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
 
     if (IsLinux())
     {
-        // We do not support non-ANGLE bindings on Linux.
-        if (param.driver != GLESDriverType::AngleEGL)
+        // We do not support WGL bindings on Linux.
+        switch (param.driver)
         {
-            return false;
+            case GLESDriverType::SystemEGL:
+                return param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
+            case GLESDriverType::SystemWGL:
+                return false;
+            default:
+                break;
         }
 
         // Currently we support the OpenGL and Vulkan back-ends on Linux.
@@ -462,13 +483,13 @@ bool IsConfigSupported(const PlatformParameters &param)
         switch (param.driver)
         {
             case GLESDriverType::AngleEGL:
-                result = IsANGLEConfigSupported(param, osWindow);
+                result = IsAngleEGLConfigSupported(param, osWindow);
                 break;
             case GLESDriverType::SystemEGL:
-                result = IsNativeConfigSupported(param, osWindow);
+                result = IsSystemEGLConfigSupported(param, osWindow);
                 break;
             case GLESDriverType::SystemWGL:
-                result = IsWGLConfigSupported(param, osWindow);
+                result = IsSystemWGLConfigSupported(param, osWindow);
                 break;
         }
 

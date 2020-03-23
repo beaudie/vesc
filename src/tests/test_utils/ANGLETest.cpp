@@ -430,15 +430,10 @@ void ANGLETestBase::initOSWindow()
     switch (mCurrentParams->driver)
     {
         case GLESDriverType::AngleEGL:
+        case GLESDriverType::SystemEGL:
         {
             mFixture->eglWindow =
                 EGLWindow::New(mCurrentParams->majorVersion, mCurrentParams->minorVersion);
-            break;
-        }
-
-        case GLESDriverType::SystemEGL:
-        {
-            std::cerr << "Unsupported driver." << std::endl;
             break;
         }
 
@@ -1279,7 +1274,7 @@ Library *ANGLETestEnvironment::GetEGLLibrary()
 #if defined(ANGLE_USE_UTIL_LOADER)
     if (!gEGLLibrary)
     {
-        gEGLLibrary.reset(OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, SearchType::ApplicationDir));
+        gEGLLibrary.reset(OpenSharedLibraryWithExtension("libEGL.so.1"));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
     return gEGLLibrary.get();
