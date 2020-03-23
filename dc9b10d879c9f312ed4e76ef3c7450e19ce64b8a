@@ -16,6 +16,24 @@
       "revId": "dc9b10d879c9f312ed4e76ef3c7450e19ce64b8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66cf0e9d_6c8cd7e3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-23T17:37:58Z",
+      "side": 1,
+      "message": "Yes I am pretty sure it\u0027s good.\n\nIf the FB changes any attachment, the desc will be different. Otherwise the FB will have the same size.\n\nIf the scissor itself changes, the ContextVk will update the required render area.\n\nI don\u0027t think there\u0027s other cases that could trigger.",
+      "parentUuid": "dbeee1f2_e55b2d72",
+      "revId": "dc9b10d879c9f312ed4e76ef3c7450e19ce64b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
