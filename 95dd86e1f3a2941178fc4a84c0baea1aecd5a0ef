@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "daeacd86_274a97aa",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-23T14:50:40Z",
+      "side": 1,
+      "message": "Move this up before clear*WithRenderPassLoadOp is calculated",
+      "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "283db2cc_7a1a1d0b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-23T14:50:40Z",
+      "side": 1,
+      "message": "Add:\n\n    if (!clearColor)\n        return;",
+      "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44ac987b_8a58f48c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-23T14:50:40Z",
+      "side": 1,
+      "message": "If you look at the history of this function (in UtilsVk), it used to clear depth buffer too. You could restore that, and use the draw call to clear depth/stencil, which means that you will both support non-full-screen clears, and you don\u0027t have to close the renderpass. See https://chromium-review.googlesource.com/c/angle/angle/+/1555313\n\nThen you don\u0027t need a Feature either.",
+      "range": {
+        "startLine": 323,
+        "startChar": 11,
+        "endLine": 323,
+        "endChar": 24
+      },
+      "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdcf6245_3a0d879d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-23T14:50:40Z",
+      "side": 1,
+      "message": "The logic is sound, but I\u0027m a little concerned we may get hard-to-debug bugs we can\u0027t reproduce because we will likely run with validation.\n\nSince ANGLE is not crashing, and feedback loop is UB per spec (so we aren\u0027t doing anything wrong), do we really have to support this feature?",
+      "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
