@@ -22,6 +22,30 @@
       "revId": "301b7f83504cb505b2a478fcdf1fc0466820d273",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97872b29_1933e5c8",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-03-23T13:33:36Z",
+      "side": 1,
+      "message": "Already available. On MSVC, include chain goes like:\n\n  common/platform.h (included below)\n    \u003cintrin.h\u003e (provided by MSVC)\n      \u003carm_neon.h\u003e OR\n      \u003carm64_neon.h\u003e",
+      "parentUuid": "c74ac814_1ef4eb15",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 17
+      },
+      "revId": "301b7f83504cb505b2a478fcdf1fc0466820d273",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
