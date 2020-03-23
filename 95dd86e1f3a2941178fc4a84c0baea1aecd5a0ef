@@ -59,6 +59,30 @@
     },
     {
       "key": {
+        "uuid": "ef546e2f_4f898bcb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-23T15:18:48Z",
+      "side": 1,
+      "message": "This sounds promising.",
+      "parentUuid": "44ac987b_8a58f48c",
+      "range": {
+        "startLine": 323,
+        "startChar": 11,
+        "endLine": 323,
+        "endChar": 24
+      },
+      "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fdcf6245_3a0d879d",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 8
@@ -70,6 +94,24 @@
       "writtenOn": "2020-03-23T14:50:40Z",
       "side": 1,
       "message": "The logic is sound, but I\u0027m a little concerned we may get hard-to-debug bugs we can\u0027t reproduce because we will likely run with validation.\n\nSince ANGLE is not crashing, and feedback loop is UB per spec (so we aren\u0027t doing anything wrong), do we really have to support this feature?",
+      "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "244d31ae_e14f684b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-23T15:18:48Z",
+      "side": 1,
+      "message": "Changing behavior based on whether we\u0027re validating calls doesn\u0027t sound right.  Validation can also be enabled outside of ANGLE.",
+      "parentUuid": "fdcf6245_3a0d879d",
       "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
