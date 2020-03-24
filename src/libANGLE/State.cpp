@@ -253,6 +253,38 @@ const angle::PackedEnumMap<BufferBinding, State::BufferBindingSetter> State::kBu
     GetBufferBindingSetter<BufferBinding::Uniform>(),
 }};
 
+ActiveTexturesCache::ActiveTexturesCache() : mTextures{} {}
+
+ActiveTexturesCache::~ActiveTexturesCache()
+{
+    for (size_t textureIndex = 0; textureIndex < mTextures.size(); ++textureIndex)
+    {
+        reset(textureIndex);
+    }
+}
+
+ANGLE_INLINE void ActiveTexturesCache::reset(size_t textureIndex)
+{
+    if (mTextures[textureIndex])
+    {
+        mTextures[textureIndex]->onUnbindAsSamplerTexture();
+        mTextures[textureIndex] = nullptr;
+    }
+}
+
+ANGLE_INLINE void ActiveTexturesCache::set(size_t textureIndex, Texture *texture)
+{
+    // We don't call reset() here to avoid setting nullptr before rebind.
+    if (mTextures[textureIndex])
+    {
+        mTextures[textureIndex]->onUnbindAsSamplerTexture();
+    }
+
+    ASSERT(texture);
+    texture->onBindAsSamplerTexture();
+    mTextures[textureIndex] = texture;
+}
+
 State::State(ContextID contextIn,
              const State *shareContextState,
              TextureManager *shareTextures,
@@ -313,7 +345,6 @@ State::State(ContextID contextIn,
       mProvokingVertex(gl::ProvokingVertexConvention::LastVertexConvention),
       mVertexArray(nullptr),
       mActiveSampler(0),
-      mActiveTexturesCache{},
       mTexturesIncompatibleWithSamplers(0),
       mPrimitiveRestart(false),
       mDebug(debug),
@@ -531,34 +562,14 @@ void State::reset(const Context *context)
     setAllDirtyBits();
 }
 
-ANGLE_INLINE void State::unsetActiveTexture(size_t textureIndex)
-{
-    if (mActiveTexturesCache[textureIndex])
-    {
-        mActiveTexturesCache[textureIndex]->onUnbindAsSamplerTexture();
-        mActiveTexturesCache[textureIndex] = nullptr;
-    }
-}
-
 ANGLE_INLINE void State::unsetActiveTextures(ActiveTextureMask textureMask)
 {
     // Unset any relevant bound textures.
     for (size_t textureIndex : mProgram->getActiveSamplersMask())
     {
-        unsetActiveTexture(textureIndex);
+        mActiveTexturesCache.reset(textureIndex);
         mCompleteTextureBindings[textureIndex].reset();
     }
-}
-
-ANGLE_INLINE void State::setActiveTexture(size_t textureIndex, Texture *texture)
-{
-    if (mActiveTexturesCache[textureIndex])
-    {
-        mActiveTexturesCache[textureIndex]->onUnbindAsSamplerTexture();
-    }
-
-    texture->onBindAsSamplerTexture();
-    mActiveTexturesCache[textureIndex] = texture;
 }
 
 ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
@@ -568,11 +579,11 @@ ANGLE_INLINE void State::updateActiveTextureState(const Context *context,
 {
     if (!texture->isSamplerComplete(context, sampler))
     {
-        unsetActiveTexture(textureIndex);
+        mActiveTexturesCache.reset(textureIndex);
     }
     else
     {
-        setActiveTexture(textureIndex, texture);
+        mActiveTexturesCache.set(textureIndex, texture);
 
         if (texture->hasAnyDirtyBit())
         {
@@ -612,7 +623,7 @@ ANGLE_INLINE void State::updateActiveTexture(const Context *context,
 
     if (!texture)
     {
-        unsetActiveTexture(textureIndex);
+        mActiveTexturesCache.reset(textureIndex);
         mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
         return;
     }
