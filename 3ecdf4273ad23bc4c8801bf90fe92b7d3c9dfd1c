@@ -117,6 +117,30 @@
       "revId": "3ecdf4273ad23bc4c8801bf90fe92b7d3c9dfd1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ceb1a6de_f3454912",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T19:32:08Z",
+      "side": 1,
+      "message": "In my experience compilers do a lot less than most people think. I\u0027ll defer doing an analysis on this code unless requested.",
+      "parentUuid": "011a59cb_9a40a6da",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 0
+      },
+      "revId": "3ecdf4273ad23bc4c8801bf90fe92b7d3c9dfd1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
