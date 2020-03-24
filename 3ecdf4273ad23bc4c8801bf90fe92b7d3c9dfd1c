@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9733acf7_f71ee714",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-24T18:09:41Z",
+      "side": 1,
+      "message": "Why is it Image here and Sampler in other places?\nIf it should be Sampler, maybe better to call reset() here to avoid bugs?",
+      "range": {
+        "startLine": 264,
+        "startChar": 21,
+        "endLine": 264,
+        "endChar": 43
+      },
+      "revId": "3ecdf4273ad23bc4c8801bf90fe92b7d3c9dfd1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f4b9631_6e43be13",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-24T18:09:41Z",
+      "side": 1,
+      "message": "Maybe call reset() here?",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 0
+      },
+      "revId": "3ecdf4273ad23bc4c8801bf90fe92b7d3c9dfd1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
