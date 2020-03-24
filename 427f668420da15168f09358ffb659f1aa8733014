@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ff3f312_3e4f7901",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T21:13:37Z",
+      "side": 1,
+      "message": "tiny nit: \u003d\u003d 0 for explicit cast",
+      "range": {
+        "startLine": 390,
+        "startChar": 23,
+        "endLine": 390,
+        "endChar": 41
+      },
+      "revId": "427f668420da15168f09358ffb659f1aa8733014",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "360b4294_86110110",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T21:13:37Z",
+      "side": 1,
+      "message": "nit: you could add ASSERT_NE(location, -1) after calls to ensure each uni has a valid location.",
+      "range": {
+        "startLine": 443,
+        "startChar": 8,
+        "endLine": 443,
+        "endChar": 17
+      },
+      "revId": "427f668420da15168f09358ffb659f1aa8733014",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
