@@ -16,6 +16,29 @@
       "revId": "f3dab3bcb844af9bcb5f0c2ba68ded8e2c423f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fe56ae3_4a785732",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-24T21:23:39Z",
+      "side": 1,
+      "message": "nit: Can be moved up to line 709 with the other FramebufferState functions.",
+      "range": {
+        "startLine": 2015,
+        "startChar": 5,
+        "endLine": 2015,
+        "endChar": 21
+      },
+      "revId": "f3dab3bcb844af9bcb5f0c2ba68ded8e2c423f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
