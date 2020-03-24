@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5746c8d_71b78b7e",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T19:37:45Z",
+      "side": 1,
+      "message": "probably need to init destBox if !robustResourceInit",
+      "range": {
+        "startLine": 1202,
+        "startChar": 8,
+        "endLine": 1202,
+        "endChar": 15
+      },
+      "revId": "1649e2c4b01b25c8836f2b92998eb113ce28dd89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
