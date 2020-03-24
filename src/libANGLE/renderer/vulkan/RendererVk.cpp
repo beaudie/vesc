@@ -215,9 +215,7 @@ const char *GetVkObjectTypeName(VkObjectType type)
             return "Display Mode";
         case VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT:
             return "Debug Report Callback";
-        case VK_OBJECT_TYPE_OBJECT_TABLE_NVX:
-            return "Object Table";
-        case VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX:
+        case VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NV:
             return "Indirect Commands Layout";
         case VK_OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT:
             return "Debug Utils Messenger";
