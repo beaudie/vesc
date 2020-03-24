@@ -961,12 +961,14 @@ void WriteCppReplayIndexFiles(bool compression,
     source << "    fseek(fp, 0, SEEK_SET);\n";
     source << "    if (gDecompressCallback)\n";
     source << "    {\n";
+    source << "        assert((filename.find_last_of(\".\") + 1) == \"gz\");\n";
     source << "        std::vector<uint8_t> compressedData(size);\n";
     source << "        (void)fread(compressedData.data(), 1, size, fp);\n";
     source << "        gBinaryData = gDecompressCallback(compressedData);\n";
     source << "    }\n";
     source << "    else\n";
     source << "    {\n";
+    source << "        assert((filename.find_last_of(\".\") + 1) == \"angledata\");\n";
     source << "        gBinaryData = new uint8_t[size];\n";
     source << "        (void)fread(gBinaryData, 1, size, fp);\n";
     source << "    }\n";
