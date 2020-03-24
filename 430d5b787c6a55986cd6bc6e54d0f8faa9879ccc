@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78f2a082_109bbc20",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T13:13:11Z",
+      "side": 1,
+      "message": "small nit: ANGLE wraps to 100 chars, so you can probably save a few lines here and the below comment you added.",
+      "range": {
+        "startLine": 1195,
+        "startChar": 0,
+        "endLine": 1202,
+        "endChar": 54
+      },
+      "revId": "430d5b787c6a55986cd6bc6e54d0f8faa9879ccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aae5b6e_9875bf1a",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T13:13:11Z",
+      "side": 1,
+      "message": "you should bracket this around if robust resource init is enabled. context-\u003egetState().isRobustResourceInitEnabled()",
+      "range": {
+        "startLine": 1206,
+        "startChar": 8,
+        "endLine": 1206,
+        "endChar": 21
+      },
+      "revId": "430d5b787c6a55986cd6bc6e54d0f8faa9879ccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d503549a_e601c220",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T13:13:11Z",
+      "side": 1,
+      "message": "nit: you can write ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER) for shorthand.",
+      "range": {
+        "startLine": 1557,
+        "startChar": 4,
+        "endLine": 1557,
+        "endChar": 20
+      },
+      "revId": "430d5b787c6a55986cd6bc6e54d0f8faa9879ccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e381c18_16798317",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1563,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T13:13:11Z",
+      "side": 1,
+      "message": "nit: should also probably check for error after this call",
+      "range": {
+        "startLine": 1563,
+        "startChar": 4,
+        "endLine": 1563,
+        "endChar": 23
+      },
+      "revId": "430d5b787c6a55986cd6bc6e54d0f8faa9879ccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c4fc3d1_68b72e8f",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T13:13:11Z",
+      "side": 1,
+      "message": "nit: can you please add a one line comment before each new test?",
+      "range": {
+        "startLine": 1573,
+        "startChar": 0,
+        "endLine": 1573,
+        "endChar": 6
+      },
+      "revId": "430d5b787c6a55986cd6bc6e54d0f8faa9879ccc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
