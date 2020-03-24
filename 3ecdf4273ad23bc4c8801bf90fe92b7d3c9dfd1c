@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f8d2c45e_6f69ee55",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T18:23:31Z",
+      "side": 1,
+      "message": "Thanks, good catch. Done.",
+      "parentUuid": "9733acf7_f71ee714",
+      "range": {
+        "startLine": 264,
+        "startChar": 21,
+        "endLine": 264,
+        "endChar": 43
+      },
+      "revId": "3ecdf4273ad23bc4c8801bf90fe92b7d3c9dfd1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f4b9631_6e43be13",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "3ecdf4273ad23bc4c8801bf90fe92b7d3c9dfd1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e1a4504_62133045",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-24T18:23:31Z",
+      "side": 1,
+      "message": "This is intentional to micro-optimize a bit and avoid setting to nullptr. Made a comment.",
+      "parentUuid": "5f4b9631_6e43be13",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 0
+      },
+      "revId": "3ecdf4273ad23bc4c8801bf90fe92b7d3c9dfd1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
