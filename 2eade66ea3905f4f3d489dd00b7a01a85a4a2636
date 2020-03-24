@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab14121a_0caa2370",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-24T21:59:29Z",
+      "side": 1,
+      "message": "I think the easier (and cleaner) way to do here is still keep mBuffer as is, but add another variable:\n  std::vector\u003cvk:BufferHelper\u003e mOrphanedBufferPool. \n\nmOrphanedBufferPool will track the buffers that no longer been used (maybe inflight, or ready to released/reused). mBuffer is what the current buffer you are using. That way, you will not need to touch all the code that refers to mBuffer.getCurrentBuffer(), they will still behave the same, using mBuffer. All you need is before inside setData(), you decide if you want to pick a new buffer from the pool or allocate a new one and put back the old one in the mOrphanedBufferPool. setDataImpl and other functions will exact the same since all they need to know is mBuffer, which you already picked in setData() call.\n\nYou can still make a class to wrap this orphaned buffers, if you prefer (just don\u0027t call it FrontBuffer). My main point is that what you need here is where mBuffer comes from and that logic is pretty local inside setData(). You logic could be very local there too. Right now it always allocate a new one. In your CL, it will first try to retrieve one from pool and if that failed, then allocate a new one. The old one will put back into pool. And do a pool clean up there as well if it exceeds certain amount of memory.",
+      "range": {
+        "startLine": 143,
+        "startChar": 20,
+        "endLine": 143,
+        "endChar": 26
+      },
+      "revId": "2eade66ea3905f4f3d489dd00b7a01a85a4a2636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e45c607e_85307902",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-24T21:59:29Z",
+      "side": 1,
+      "message": "FrontBuffer name has specific meaning in OpenGL, usually refers to swap chain\u0027s front buffer. We should use different name here. Maybe BufferPool?\nAlso, do you think a new class is really needed here, or a std::vector\u003cBufferVk\u003e is enough?",
+      "range": {
+        "startLine": 588,
+        "startChar": 6,
+        "endLine": 588,
+        "endChar": 17
+      },
+      "revId": "2eade66ea3905f4f3d489dd00b7a01a85a4a2636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
