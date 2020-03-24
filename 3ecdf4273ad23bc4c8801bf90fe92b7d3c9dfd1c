@@ -93,6 +93,30 @@
       "revId": "3ecdf4273ad23bc4c8801bf90fe92b7d3c9dfd1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "011a59cb_9a40a6da",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-03-24T19:10:23Z",
+      "side": 1,
+      "message": "nit: I think compilers/CPUs are smart enough to not do extra work in this case.\nI\u0027m in favor of optimizations only if there is a benchmark that proves this indeed improves speed.\nFrom what I know about CPUs, they can actually insert null assignments into the pipeline, if they think that they need CPU to do something while it waits for memory.",
+      "parentUuid": "4e1a4504_62133045",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 0
+      },
+      "revId": "3ecdf4273ad23bc4c8801bf90fe92b7d3c9dfd1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
