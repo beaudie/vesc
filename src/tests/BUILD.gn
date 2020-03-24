@@ -368,7 +368,10 @@ if (build_angle_gles1_conform_tests) {
     defines = [
       "COMMON",
       "CONFORM_ALTERNATE_MAIN",
-      "NULLWS",
+
+      # NULLWS defines is only used in covegl/native.h, remove here.
+      # if needed please add it in angle_test("angle_gles1_covegl_no_gtest") defines.
+      #"NULLWS",
     ]
 
     # This is used by the tests to typedef uint32_t. For some reason only needed on mac.
@@ -397,6 +400,29 @@ if (build_angle_gles1_conform_tests) {
   }
 
   # This source set is a bit special so we don't use angle_source_set.
+  angle_gles1_conform_common_sources = [
+    "$gles1_conform_root/ctk/ctk.h",
+    "$gles1_conform_root/ctk/ctkn.c",
+    "$gles1_conform_root/ctk/glext.c",
+    "$gles1_conform_root/fixed/fixed.c",
+    "$gles1_conform_root/fixed/float64.c",
+    "$gles1_conform_root/fixed/int32.c",
+    "$gles1_conform_root/fixed/int64.c",
+    "$gles1_conform_root/platform/gl_fixed_point.h",
+    "$gles1_conform_root/platform/gl_single_precision.h",
+    "$gles1_conform_root/platform/math_fixed.h",
+    "$gles1_conform_root/platform/math_float.h",
+    "$gles1_conform_root/platform/platform.h",
+    "$gles1_conform_root/platform/platform_gl.h",
+    "$gles1_conform_root/platform/platform_random.h",
+    "$gles1_conform_root/platform/platform_stdlib.h",
+    "$gles1_conform_root/platform/platform_types.h",
+    "$gles1_conform_root/platform/printf_fixed.h",
+    "$gles1_conform_root/platform/printf_float.h",
+    "$gles1_conform_root/platform/random.c",
+    "$gles1_conform_root/platform/stdlib_ansi.h",
+  ]
+
   source_set("angle_gles1_conformance_no_gtest") {
     configs += [
       ":angle_gles1_conform_support",
@@ -524,27 +550,8 @@ if (build_angle_gles1_conform_tests) {
       "$gles1_conform_root/conform/conformshell/utils.h",
       "$gles1_conform_root/conform/conformshell/utilt.c",
       "$gles1_conform_root/conform/conformshell/utilt.h",
-      "$gles1_conform_root/ctk/ctk.h",
-      "$gles1_conform_root/ctk/ctkn.c",
-      "$gles1_conform_root/ctk/glext.c",
-      "$gles1_conform_root/fixed/fixed.c",
-      "$gles1_conform_root/fixed/float64.c",
-      "$gles1_conform_root/fixed/int32.c",
-      "$gles1_conform_root/fixed/int64.c",
-      "$gles1_conform_root/platform/gl_fixed_point.h",
-      "$gles1_conform_root/platform/gl_single_precision.h",
-      "$gles1_conform_root/platform/math_fixed.h",
-      "$gles1_conform_root/platform/math_float.h",
-      "$gles1_conform_root/platform/platform.h",
-      "$gles1_conform_root/platform/platform_gl.h",
-      "$gles1_conform_root/platform/platform_random.h",
-      "$gles1_conform_root/platform/platform_stdlib.h",
-      "$gles1_conform_root/platform/platform_types.h",
-      "$gles1_conform_root/platform/printf_fixed.h",
-      "$gles1_conform_root/platform/printf_float.h",
-      "$gles1_conform_root/platform/random.c",
-      "$gles1_conform_root/platform/stdlib_ansi.h",
     ]
+    sources += angle_gles1_conform_common_sources
   }
 
   angle_test("angle_gles1_conformance_tests") {
@@ -566,6 +573,60 @@ if (build_angle_gles1_conform_tests) {
       "${angle_root}:libANGLE_config",
       "${angle_root}:angle_backend_config",
     ]
+  }
+
+  source_set("angle_gles1_covegl_no_gtest_source") {
+    configs += [
+      ":angle_gles1_conform_support",
+      "$angle_root:internal_config",
+    ]
+
+    public_configs = [
+      "$angle_root/util:angle_util_config",
+      "$angle_root:angle_static",
+      "$angle_root:gl_prototypes",
+    ]
+
+    testonly = true
+
+    public_deps = [
+      "$angle_root:angle_common",
+      "$angle_root:libEGL_static",
+      "$angle_root:libGLESv1_CM_static",
+      "$angle_root:libGLESv2_static",
+      "$angle_root:preprocessor",
+      "$angle_root:translator",
+      "$angle_root/util:angle_util_static",
+    ]
+
+    sources = [
+      "$gles1_conform_root/conform/covegl/enum.c",
+      "$gles1_conform_root/conform/covegl/native.h",
+      "$gles1_conform_root/conform/covegl/test.c",
+    ]
+
+    sources += angle_gles1_conform_common_sources
+  }
+
+  angle_test("angle_gles1_covegl_no_gtest") {
+    deps = [ ":angle_gles1_covegl_no_gtest_source" ]
+
+    include_dirs = [ "$gles1_conform_root" ]
+
+    sources = [ "$gles1_conform_root/conform/covegl/shell.c" ]
+
+    if (is_win) {
+      sources += [ "$gles1_conform_root/conform/covegl/native_w32.c" ]
+    } else {
+      sources += [ "$gles1_conform_root/conform/covegl/native.c" ]
+    }
+
+    configs += [
+      "${angle_root}:libANGLE_config",
+      "${angle_root}:angle_backend_config",
+    ]
+
+    defines += [ "COMMON" ]
   }
 }
 
