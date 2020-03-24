@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "46d8b8cf_521ac130",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-24T21:22:56Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "e8cf4936_06849d83",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf2131a0_26dfbc3c",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "0c200159_9238dcbf",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-24T21:22:56Z",
+      "side": 1,
+      "message": "\u003e so optimizing it is low priority\n\nyes, deferred until it shows up as a hotspot or i have a lot of bandwidth.\n\n\u003e so just a test to make sure it\u0027s working correctly is enough.\n\nwill do",
+      "parentUuid": "cf2131a0_26dfbc3c",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "feb09ead_0b3d2880",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2020-03-24T19:17:29Z",
       "side": 1,
       "message": "Move before the `if` and use the same variable in both branches. nit: Also parentheses in `x \u003d (y);` are unnecessary.",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "962128be_40572529",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-24T21:22:56Z",
+      "side": 1,
+      "message": "\u003e Move before the `if` and use the same variable in both branches\n\nbut \"unsynchronizedMap\" is an argument for the onMapBuffer(...) as well\n\n\u003e Also parentheses in `x \u003d (y);` are unnecessary.\n\n\"bool unsynchronizedMap \u003d (access \u0026 GL_MAP_UNSYNCHRONIZED_BIT) !\u003d 0;\" looks a little naked",
+      "parentUuid": "feb09ead_0b3d2880",
       "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "72db2355_39762260",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-24T21:22:56Z",
+      "side": 1,
+      "message": "same as above, i can change if you really want it",
+      "parentUuid": "3a1af285_01dc0751",
+      "range": {
+        "startLine": 370,
+        "startChar": 54,
+        "endLine": 370,
+        "endChar": 88
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8fd72790_aa9f9a11",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
@@ -87,6 +165,41 @@
       "writtenOn": "2020-03-24T19:17:29Z",
       "side": 1,
       "message": "Add test: Map the buffer once with UNSYNCHRONIZED, modify it, and then map again without it, and ensure the latest contents are available.",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7678b8ff_94546378",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-24T21:22:56Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "8fd72790_aa9f9a11",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c34a0c1_abc6607e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-24T21:22:56Z",
+      "side": 1,
+      "message": "will remove this todo. i am assuming this CPU only buffer is what jamie had in mind.\notherwise please let me know jamie",
       "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -116,6 +229,30 @@
     },
     {
       "key": {
+        "uuid": "36460962_20ce77d9",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-24T21:22:56Z",
+      "side": 1,
+      "message": "number of in-flight commands and however long we need to wait for all of them to complete",
+      "parentUuid": "1de8cfe7_4b82c278",
+      "range": {
+        "startLine": 167,
+        "startChar": 68,
+        "endLine": 167,
+        "endChar": 72
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "94a53e9b_a1e413fa",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -127,6 +264,30 @@
       "writtenOn": "2020-03-24T19:17:29Z",
       "side": 1,
       "message": "C++ memory management (new/delete) already implement free lists or whatever other algorithm they may find to be efficient. There\u0027s no point in implementing here. You should be able to just new[] and delete[] and let the standard library deal with it.",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 43
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b949b83_5a439a5c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-24T21:22:56Z",
+      "side": 1,
+      "message": "the reason i kept that is for a future scenario where we can potentially call \"allocate\" again and get a fresh new CPU only buffer with the same size in case a map was called with invalidate access bit.",
+      "parentUuid": "94a53e9b_a1e413fa",
       "range": {
         "startLine": 222,
         "startChar": 0,
