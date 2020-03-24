@@ -5310,6 +5310,8 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
         stream.writeInt(uniform.bufferIndex);
         WriteBlockMemberInfo(&stream, uniform.blockInfo);
 
+        stream.writeIntVector(uniform.outerArraySizes);
+
         // Active shader info
         for (ShaderType shaderType : gl::AllShaderTypes())
         {
@@ -5514,6 +5516,8 @@ angle::Result Program::deserialize(const Context *context,
 
         uniform.bufferIndex = stream.readInt<int>();
         LoadBlockMemberInfo(&stream, &uniform.blockInfo);
+
+        stream.readIntVector<unsigned int>(&uniform.outerArraySizes);
 
         uniform.typeInfo = &GetUniformTypeInfo(uniform.type);
 
