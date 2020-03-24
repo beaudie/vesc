@@ -125,7 +125,8 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-VkDeviceCreateInfo-pNext-pNext",
     "VUID-VkPipelineRasterizationStateCreateInfo-pNext-pNext", "VUID_Undefined",
     // http://anglebug.com/3078
-    "UNASSIGNED-CoreValidation-Shader-InterfaceTypeMismatch"};
+    "UNASSIGNED-CoreValidation-Shader-InterfaceTypeMismatch",
+    "VUID-vkQueuePresentKHR-pWaitSemaphores-03268"};
 
 // Suppress validation errors that are known
 //  return "true" if given code/prefix/message is known, else return "false"
