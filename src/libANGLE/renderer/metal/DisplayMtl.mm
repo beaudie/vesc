@@ -15,6 +15,7 @@
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/metal/ContextMtl.h"
 #include "libANGLE/renderer/metal/SurfaceMtl.h"
+#include "libANGLE/renderer/metal/SyncMtl.h"
 #include "libANGLE/renderer/metal/mtl_common.h"
 #include "libANGLE/renderer/metal/shaders/compiled/mtl_default_shaders_autogen.inc"
 #include "platform/Platform.h"
@@ -99,8 +100,11 @@ void DisplayMtl::terminate()
 {
     mUtils.onDestroy();
     mCmdQueue.reset();
-    mDefaultShaders  = nil;
-    mMetalDevice     = nil;
+    mDefaultShaders = nil;
+    mMetalDevice    = nil;
+#if defined(__IPHONE_12_0) || defined(__MAC_10_14)
+    mSharedEventListener = nil;
+#endif
     mCapsInitialized = false;
 
     mMetalDeviceVendorId = 0;
@@ -158,7 +162,7 @@ egl::Error DisplayMtl::waitClient(const gl::Context *context)
 egl::Error DisplayMtl::waitNative(const gl::Context *context, EGLint engine)
 {
     UNIMPLEMENTED();
-    return egl::EglBadAccess();
+    return egl::NoError();
 }
 
 SurfaceImpl *DisplayMtl::createWindowSurface(const egl::SurfaceState &state,
@@ -241,8 +245,7 @@ gl::Version DisplayMtl::getMaxConformantESVersion() const
 
 EGLSyncImpl *DisplayMtl::createSync(const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return nullptr;
+    return new EGLSyncMtl(attribs);
 }
 
 egl::Error DisplayMtl::makeCurrent(egl::Surface *drawSurface,
@@ -264,6 +267,13 @@ void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->surfacelessContext           = true;
     outExtensions->displayTextureShareGroup     = true;
     outExtensions->displaySemaphoreShareGroup   = true;
+
+    if (ANGLE_APPLE_AVAILABLE_XCI(10.14, 13.0, 12.0))
+    {
+        // MTLSharedEvent is only available since Metal 2.1
+        outExtensions->fenceSync = true;
+        outExtensions->waitSync  = true;
+    }
 
     // Note that robust resource initialization is not yet implemented. We only expose
     // this extension so that ANGLE can be initialized in Chrome. WebGL will fail to use
@@ -650,6 +660,17 @@ void DisplayMtl::initializeExtensions() const
 
     // GL_NV_pixel_buffer_object
     mNativeExtensions.pixelBufferObjectNV = true;
+
+    if (ANGLE_APPLE_AVAILABLE_XCI(10.14, 13.0, 12.0))
+    {
+        // MTLSharedEvent is only available since Metal 2.1
+
+        // GL_NV_fence
+        mNativeExtensions.fenceNV = true;
+
+        // GL_OES_EGL_sync
+        mNativeExtensions.eglSyncOES = true;
+    }
 }
 
 void DisplayMtl::initializeTextureCaps() const
@@ -930,5 +951,19 @@ bool DisplayMtl::isNVIDIA() const
 {
     return angle::IsNVIDIA(mMetalDeviceVendorId);
 }
+
+#if defined(__IPHONE_12_0) || defined(__MAC_10_14)
+mtl::AutoObjCObj<MTLSharedEventListener> DisplayMtl::getOrCreateSharedEventListener()
+{
+    if (!mSharedEventListener)
+    {
+        ANGLE_MTL_OBJC_SCOPE
+        {
+            mSharedEventListener = [[[MTLSharedEventListener alloc] init] ANGLE_MTL_AUTORELEASE];
+        }
+    }
+    return mSharedEventListener;
+}
+#endif
 
 }  // namespace rx
