@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8cf4936_06849d83",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-24T19:17:29Z",
+      "side": 1,
+      "message": "I\u0027d add a comment about how this is \"initially\" done for PixelUnpack, but may be used in other use-cases in the future.",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf2131a0_26dfbc3c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-24T19:17:29Z",
+      "side": 1,
+      "message": "Can you write a test for this scenario? There are better solutions for this, like copy to a temp buffer and read back and apply that buffer on next map (if waiting is actually necessary), in hopes of avoiding the wait.\n\nBut I\u0027m guessing this code doesn\u0027t have any users (so optimizing it is low priority), so just a test to make sure it\u0027s working correctly is enough.",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feb09ead_0b3d2880",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-24T19:17:29Z",
+      "side": 1,
+      "message": "Move before the `if` and use the same variable in both branches. nit: Also parentheses in `x \u003d (y);` are unnecessary.",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a1af285_01dc0751",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-24T19:17:29Z",
+      "side": 1,
+      "message": "same nit for `f(a, (b), c);`",
+      "range": {
+        "startLine": 370,
+        "startChar": 54,
+        "endLine": 370,
+        "endChar": 88
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fd72790_aa9f9a11",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-24T19:17:29Z",
+      "side": 1,
+      "message": "Add test: Map the buffer once with UNSYNCHRONIZED, modify it, and then map again without it, and ensure the latest contents are available.",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1de8cfe7_4b82c278",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-24T19:17:29Z",
+      "side": 1,
+      "message": "What\u0027s `n`?",
+      "range": {
+        "startLine": 167,
+        "startChar": 68,
+        "endLine": 167,
+        "endChar": 72
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94a53e9b_a1e413fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-24T19:17:29Z",
+      "side": 1,
+      "message": "C++ memory management (new/delete) already implement free lists or whatever other algorithm they may find to be efficient. There\u0027s no point in implementing here. You should be able to just new[] and delete[] and let the standard library deal with it.",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 43
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
