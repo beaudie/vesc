@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "02461437_e290a3c6",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-25T14:07:06Z",
+      "side": 1,
+      "message": "Yes, I tried that as well, it also fails:\n\nGenerating files...\nERROR at //samples/BUILD.gn:194:5: Undefined identifier.\n    deps +\u003d [ \"$angle_root:angle_compression\" ]",
+      "parentUuid": "4cf9f1a2_e01b611c",
+      "range": {
+        "startLine": 179,
+        "startChar": 2,
+        "endLine": 179,
+        "endChar": 14
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea020be3_88d6d4a1",
         "filename": "samples/capture_replay/CaptureReplay.cpp",
         "patchSetId": 1
