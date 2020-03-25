@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "beb3934a_9b1a6d48",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-25T15:05:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bc6bb68_90e07377",
+      "range": {
+        "startLine": 60,
+        "startChar": 30,
+        "endLine": 60,
+        "endChar": 37
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "560d321b_9135f603",
         "filename": "samples/BUILD.gn",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18833a2b_b47eff6a",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-25T15:05:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "560d321b_9135f603",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 0
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -167,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "36f2dd73_a278f1cd",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-25T15:05:40Z",
+      "side": 1,
+      "message": "Sorted this out over chat.",
+      "parentUuid": "618b74a2_c132e745",
+      "range": {
+        "startLine": 179,
+        "startChar": 2,
+        "endLine": 179,
+        "endChar": 14
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea020be3_88d6d4a1",
         "filename": "samples/capture_replay/CaptureReplay.cpp",
         "patchSetId": 1
@@ -214,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "c9f21d37_0fc0bd31",
+        "filename": "samples/capture_replay/CaptureReplay.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-25T15:05:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "662253b2_c24a7cc5",
+      "range": {
+        "startLine": 44,
+        "startChar": 8,
+        "endLine": 44,
+        "endChar": 69
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a96439f_9b86b8ba",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -258,6 +354,30 @@
       "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d156b6f1_1101df53",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-25T15:05:40Z",
+      "side": 1,
+      "message": "Apparently assert is nulled out in Debug as well.  Fixed with strstr.\n\nI don\u0027t really like adding any more printf style alerts to this code since they don\u0027t work on Android.  But this would have worked in my scenario (replaying an Android capture on desktop), and short of adding cross platform logging here, this is good enough for now.",
+      "parentUuid": "2f32a564_30762a7a",
+      "range": {
+        "startLine": 964,
+        "startChar": 22,
+        "endLine": 964,
+        "endChar": 80
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -417,6 +537,30 @@
       "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95e1465f_cff9a210",
+        "filename": "util/frame_capture_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-25T15:05:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b7c97e0_734a3493",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
