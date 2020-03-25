@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "104882bb_7374c95b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T16:55:35Z",
+      "side": 1,
+      "message": "nit: can you put the exit(1) on a new line to match the existing code?",
+      "range": {
+        "startLine": 966,
+        "startChar": 35,
+        "endLine": 966,
+        "endChar": 41
+      },
+      "revId": "0f8c73705e15a4f01d22810bb8caab4f9a1cfb66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f4562ee_21244b64",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T16:55:35Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 976,
+        "startChar": 85,
+        "endLine": 976,
+        "endChar": 89
+      },
+      "revId": "0f8c73705e15a4f01d22810bb8caab4f9a1cfb66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3132024a_efcc885a",
+        "filename": "util/frame_capture_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T16:55:35Z",
+      "side": 1,
+      "message": "small nit: all our headers end their defines in underscore. see Context.h for example.",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "0f8c73705e15a4f01d22810bb8caab4f9a1cfb66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
