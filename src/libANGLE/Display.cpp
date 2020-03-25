@@ -655,6 +655,13 @@ Error Display::initialize()
     ASSERT(mImplementation != nullptr);
     mImplementation->setBlobCache(&mBlobCache);
 
+#if !defined(ANGLE_PLATFORM_ANDROID)
+    if (rx::ShouldUseDebugLayers(mAttributeMap))
+    {
+        mBlobCache.resize(1024 * 1024);
+    }
+#endif
+
     gl::InitializeDebugAnnotations(&mAnnotator);
 
     gl::InitializeDebugMutexIfNeeded();
