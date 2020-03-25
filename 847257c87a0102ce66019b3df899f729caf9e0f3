@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "1c864574_b8e89da3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-25T03:51:27Z",
+      "side": 1,
+      "message": "\u003e but \"unsynchronizedMap\" is an argument for the onMapBuffer(...) as well\n\nHence why I said use it in both branches. The same logic (that is `(access \u0026 GL_MAP_UNSYNCHRONIZED_BIT) !\u003d 0`) is calculated in both branches. Also make it const, why not.\n\n\u003e \"bool unsynchronizedMap \u003d (access \u0026 GL_MAP_UNSYNCHRONIZED_BIT) !\u003d 0;\" looks a little naked\n\nI guess that really depends on how used to the precedence rules you are. Like you wouldn\u0027t parenthesize a*b+c*d, because then the parentheses become clutter. Anyway, it was just a nit, either way is fine.",
+      "parentUuid": "962128be_40572529",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a1af285_01dc0751",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
@@ -189,6 +207,24 @@
     },
     {
       "key": {
+        "uuid": "1120f9e3_d4776150",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-25T03:51:27Z",
+      "side": 1,
+      "message": "Also, why not always take the path of mapping the CPU buffer? unmap needs to synchronize the two anyway, so what\u0027s the difference? CPU access to CPU buffer is more (or equally) efficient to access to GPU buffer, so performance-wise it would be better to map the CPU buffer, don\u0027t you agree?",
+      "parentUuid": "7678b8ff_94546378",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1c34a0c1_abc6607e",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
@@ -253,6 +289,30 @@
     },
     {
       "key": {
+        "uuid": "a034229d_c37a9ef8",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-25T03:51:27Z",
+      "side": 1,
+      "message": "I\u0027d just call it non-blocking, i.e. \"glMap* call becomes a non-blocking operation\", or if it\u0027s not obvious, explain that there won\u0027t be a wait on GPU.",
+      "parentUuid": "36460962_20ce77d9",
+      "range": {
+        "startLine": 167,
+        "startChar": 68,
+        "endLine": 167,
+        "endChar": 72
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "94a53e9b_a1e413fa",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -288,6 +348,30 @@
       "side": 1,
       "message": "the reason i kept that is for a future scenario where we can potentially call \"allocate\" again and get a fresh new CPU only buffer with the same size in case a map was called with invalidate access bit.",
       "parentUuid": "94a53e9b_a1e413fa",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 43
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6ff2fdd_4bfe654e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-25T03:51:27Z",
+      "side": 1,
+      "message": "I understand. new/delete also consider such scenarios (and they have had many years of development and optimization gone in them). Unless anybody else has a strong feeling about this, my suggestion would be to leave allocation to new/delete until we have a reason not to (like some particular pattern happens frequently that we want to specifically optimize for or something).",
+      "parentUuid": "5b949b83_5a439a5c",
       "range": {
         "startLine": 222,
         "startChar": 0,
