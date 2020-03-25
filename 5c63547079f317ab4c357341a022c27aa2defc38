@@ -16,6 +16,24 @@
       "revId": "5c63547079f317ab4c357341a022c27aa2defc38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3684affb_3d305389",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-25T22:32:29Z",
+      "side": 1,
+      "message": "Yup, that\u0027s all it takes.\nI had run accross the BlobCache class but I didn\u0027t realize that it included an implementation, I had just seen the set \u0026 get functions and that when I make the EGL calls they land here. But it also included a default implementation that will activate if you set the cache size to something \u003e 0.",
+      "parentUuid": "bc45761a_3b03afc1",
+      "revId": "5c63547079f317ab4c357341a022c27aa2defc38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
