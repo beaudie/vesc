@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc45761a_3b03afc1",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-25T22:27:09Z",
+      "side": 1,
+      "message": "To make sure I\u0027m understanding ... the idea now is that Android\u0027s EGL loader will turn on the blob cache for Android, and this code turns it on for desktop (but only when using debug layers)?  Is that correct?  Is that really all there is too it?  Cool!",
+      "revId": "5c63547079f317ab4c357341a022c27aa2defc38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
