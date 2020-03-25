@@ -13,4 +13,14 @@ namespace rx
 
 void QueryImpl::onDestroy(const gl::Context *context) {}
 
+bool QueryImpl::isAnySamplesQuery() const
+{
+    return getType() == gl::QueryType::AnySamples;
+}
+
+bool QueryImpl::isAnySamplesConservativeQuery() const
+{
+    return getType() == gl::QueryType::AnySamplesConservative;
+}
+
 }  // namespace rx
