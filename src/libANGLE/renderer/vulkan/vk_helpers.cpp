@@ -1028,6 +1028,23 @@ angle::Result QueryHelper::endQuery(ContextVk *contextVk)
     return angle::Result::Continue;
 }
 
+void QueryHelper::beginOcclusionQuery(ContextVk *contextVk,
+                                      PrimaryCommandBuffer *primaryCommands,
+                                      CommandBuffer *renderPassCommandBuffer)
+{
+    const QueryPool &queryPool = getQueryPool();
+    // reset has to be encoded in primary command buffer per spec
+    primaryCommands->resetQueryPool(queryPool, mQuery, 1);
+    renderPassCommandBuffer->beginQuery(queryPool.getHandle(), mQuery, 0);
+    mMostRecentSerial = contextVk->getCurrentQueueSerial();
+}
+
+void QueryHelper::endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer)
+{
+    renderPassCommandBuffer->endQuery(getQueryPool().getHandle(), mQuery);
+    mMostRecentSerial = contextVk->getCurrentQueueSerial();
+}
+
 angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)
 {
     vk::PrimaryCommandBuffer *primary;
