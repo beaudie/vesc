@@ -598,6 +598,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mVertexArray(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
+      mActiveQuery(nullptr),
       mLastIndexBufferOffset(0),
       mCurrentDrawElementsType(gl::DrawElementsType::InvalidEnum),
       mXfbBaseVertex(0),
@@ -903,6 +904,11 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getScissoredRenderArea(this);
         ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, scissoredRenderArea,
                                                        &mRenderPassCommandBuffer));
+        if (mActiveQuery)
+        {
+            mActiveQuery->getQueryHelper()->beginOcclusionQuery(this, &mPrimaryCommands,
+                                                                mRenderPassCommandBuffer);
+        }
     }
 
     // We keep a local copy of the command buffer. It's possible that some state changes could
@@ -2205,6 +2211,11 @@ angle::Result ContextVk::clearWithRenderPassOp(
     {
         mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
         ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, clearArea, &mRenderPassCommandBuffer));
+        if (mActiveQuery)
+        {
+            mActiveQuery->getQueryHelper()->beginOcclusionQuery(this, &mPrimaryCommands,
+                                                                mRenderPassCommandBuffer);
+        }
     }
     else
     {
@@ -4044,11 +4055,19 @@ angle::Result ContextVk::flushAndBeginRenderPass(
 
 angle::Result ContextVk::endRenderPass()
 {
-    onRenderPassFinished();
     if (mRenderPassCommands.empty())
     {
+        onRenderPassFinished();
         return angle::Result::Continue;
     }
+
+    if (mActiveQuery)
+    {
+        mActiveQuery->getQueryHelper()->endOcclusionQuery(this, mRenderPassCommandBuffer);
+        ANGLE_TRY(mActiveQuery->stashQueryHelper(this));
+    }
+
+    onRenderPassFinished();
 
     if (mGpuEventsEnabled)
     {
@@ -4161,6 +4180,35 @@ void ContextVk::flushOutsideRenderPassCommands()
         mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
         mHasPrimaryCommands = true;
     }
+}
+
+void ContextVk::beginOcclusionQuery(QueryVk *queryVk)
+{
+    ASSERT(queryVk->getType() == gl::QueryType::AnySamples ||
+           queryVk->getType() == gl::QueryType::AnySamplesConservative);
+    ASSERT(mActiveQuery == nullptr);
+
+    // To avoid complexity, we always start and end occlusion query inside renderpass. if renderpass
+    // not yet started, we just remember it and defer the start call.
+    if (mRenderPassCommands.started())
+    {
+        queryVk->getQueryHelper()->beginOcclusionQuery(this, &mPrimaryCommands,
+                                                       mRenderPassCommandBuffer);
+    }
+    mActiveQuery = queryVk;
+}
+
+void ContextVk::endOcclusionQuery(QueryVk *queryVk)
+{
+    ASSERT(queryVk->getType() == gl::QueryType::AnySamples ||
+           queryVk->getType() == gl::QueryType::AnySamplesConservative);
+    ASSERT(mActiveQuery == queryVk);
+
+    if (mRenderPassCommands.started())
+    {
+        queryVk->getQueryHelper()->endOcclusionQuery(this, mRenderPassCommandBuffer);
+    }
+    mActiveQuery = nullptr;
 }
 
 CommandBufferHelper::CommandBufferHelper()

@@ -657,6 +657,12 @@ class ContextVk : public ContextImpl, public vk::Context
     size_t getVkIndexTypeSize(gl::DrawElementsType glIndexType) const;
     bool shouldConvertUint8VkIndexType(gl::DrawElementsType glIndexType) const;
 
+    // occlusion query
+    void beginOcclusionQuery(QueryVk *queryVk);
+    void endOcclusionQuery(QueryVk *queryVk);
+    vk::PrimaryCommandBuffer *getPrimaryCommandBuffer() { return &mPrimaryCommands; }
+    vk::CommandBuffer *getRenderCommandBuffer() { return mRenderPassCommandBuffer; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -950,6 +956,9 @@ class ContextVk : public ContextImpl, public vk::Context
     VertexArrayVk *mVertexArray;
     FramebufferVk *mDrawFramebuffer;
     ProgramVk *mProgram;
+
+    // occlusion query
+    QueryVk *mActiveQuery;
 
     // Graph resource used to record dispatch commands and hold resource dependencies.
     vk::DispatchHelper mDispatcher;
