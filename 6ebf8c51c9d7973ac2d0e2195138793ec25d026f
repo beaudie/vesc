@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4bc6bb68_90e07377",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T14:12:07Z",
+      "side": 1,
+      "message": "right, you need to include \"deps\" here as well.",
+      "range": {
+        "startLine": 60,
+        "startChar": 30,
+        "endLine": 60,
+        "endChar": 37
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "560d321b_9135f603",
         "filename": "samples/BUILD.gn",
         "patchSetId": 1
@@ -108,6 +131,30 @@
       "side": 1,
       "message": "Yes, I tried that as well, it also fails:\n\nGenerating files...\nERROR at //samples/BUILD.gn:194:5: Undefined identifier.\n    deps +\u003d [ \"$angle_root:angle_compression\" ]",
       "parentUuid": "4cf9f1a2_e01b611c",
+      "range": {
+        "startLine": 179,
+        "startChar": 2,
+        "endLine": 179,
+        "endChar": 14
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "618b74a2_c132e745",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T14:12:07Z",
+      "side": 1,
+      "message": "see my comment above. missed that.",
+      "parentUuid": "02461437_e290a3c6",
       "range": {
         "startLine": 179,
         "startChar": 2,
@@ -284,6 +331,24 @@
     },
     {
       "key": {
+        "uuid": "0dbeb242_a86c37c0",
+        "filename": "util/frame_capture_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T14:12:07Z",
+      "side": 1,
+      "message": "Ack . sorry missed it.",
+      "parentUuid": "eadc965f_77b398da",
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d29fa1d2_fbf8b1cb",
         "filename": "util/frame_capture_utils.h",
         "patchSetId": 1
@@ -319,6 +384,30 @@
       "side": 1,
       "message": "Will do.",
       "parentUuid": "d29fa1d2_fbf8b1cb",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b7c97e0_734a3493",
+        "filename": "util/frame_capture_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T14:12:07Z",
+      "side": 1,
+      "message": "Also, add \u0027inline\u0027 in case this header gets included twice in two object files.",
+      "parentUuid": "e51f1d2c_30bd0570",
       "range": {
         "startLine": 25,
         "startChar": 0,
