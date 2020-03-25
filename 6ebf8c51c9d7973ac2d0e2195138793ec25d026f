@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "560d321b_9135f603",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T13:04:13Z",
+      "side": 1,
+      "message": "nit: you should make this part of the sample itself, below.",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 0
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70184eb6_2104bd69",
+        "filename": "samples/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T13:04:13Z",
+      "side": 1,
+      "message": "in here",
+      "range": {
+        "startLine": 179,
+        "startChar": 2,
+        "endLine": 179,
+        "endChar": 14
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea020be3_88d6d4a1",
+        "filename": "samples/capture_replay/CaptureReplay.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T13:04:13Z",
+      "side": 1,
+      "message": "nit: you can actually check if compression is enabled: kIsBinaryDataCompressed",
+      "range": {
+        "startLine": 44,
+        "startChar": 8,
+        "endLine": 44,
+        "endChar": 69
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a96439f_9b86b8ba",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T13:04:13Z",
+      "side": 1,
+      "message": "I don\u0027t see a symbol \u0027filename\u0027 and \u0027fileName\u0027 is a c string. try getting the string length and checking it\u0027s \u003e\u003d 4 and the last 3 characters are \u0027.\u0027, \u0027g\u0027 and \u0027z\u0027. Or use strrstr.\n\nYou could also consider fprintf(stderr, ..), exit(1). assert won\u0027t do much in release.",
+      "range": {
+        "startLine": 964,
+        "startChar": 22,
+        "endLine": 964,
+        "endChar": 80
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d264a2e_ff15c6ce",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -16,6 +108,64 @@
       "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ffe9302_ac2279c0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T13:04:13Z",
+      "side": 1,
+      "message": "Yeah originally I went with this design for consistency. Many chunks have to have bits of string inserted. So we\u0027d end up with a hodgepodge of different string styles.",
+      "parentUuid": "9d264a2e_ff15c6ce",
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "748e6908_7a4f2e89",
+        "filename": "util/frame_capture_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T13:04:13Z",
+      "side": 1,
+      "message": "this file is missing from GN. Better add it in a place where it\u0027s accessible.",
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d29fa1d2_fbf8b1cb",
+        "filename": "util/frame_capture_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T13:04:13Z",
+      "side": 1,
+      "message": "you can remove this if it\u0027s a public header function. It\u0027s only necessary for static private functions.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "6ebf8c51c9d7973ac2d0e2195138793ec25d026f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
