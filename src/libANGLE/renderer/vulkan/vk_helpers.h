@@ -315,6 +315,10 @@ class QueryHelper final
     angle::Result beginQuery(ContextVk *contextVk);
     angle::Result endQuery(ContextVk *contextVk);
 
+    // for occlusion query
+    angle::Result beginQuery(const ContextVk *contextVk, CommandBuffer *commandBuffer);
+    angle::Result endQuery(const ContextVk *contextVk, CommandBuffer *commandBuffer);
+
     angle::Result flushAndWriteTimestamp(ContextVk *contextVk);
     void writeTimestamp(vk::PrimaryCommandBuffer *primary);
 

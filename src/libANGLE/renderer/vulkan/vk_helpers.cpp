@@ -1028,6 +1028,20 @@ angle::Result QueryHelper::endQuery(ContextVk *contextVk)
     return angle::Result::Continue;
 }
 
+angle::Result QueryHelper::beginQuery(const ContextVk *contextVk, CommandBuffer *commandBuffer)
+{
+    commandBuffer->beginQuery(getQueryPool().getHandle(), mQuery, 0);
+    mMostRecentSerial = contextVk->getCurrentQueueSerial();
+    return angle::Result::Continue;
+}
+
+angle::Result QueryHelper::endQuery(const ContextVk *contextVk, CommandBuffer *commandBuffer)
+{
+    commandBuffer->endQuery(getQueryPool().getHandle(), mQuery);
+    mMostRecentSerial = contextVk->getCurrentQueueSerial();
+    return angle::Result::Continue;
+}
+
 angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)
 {
     vk::PrimaryCommandBuffer *primary;

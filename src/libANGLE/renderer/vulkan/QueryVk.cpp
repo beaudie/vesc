@@ -39,6 +39,16 @@ void QueryVk::onDestroy(const gl::Context *context)
     }
 }
 
+angle::Result QueryVk::stashQueryHelper(ContextVk *contextVk)
+{
+    ASSERT(getType() == gl::QueryType::AnySamples ||
+           getType() == gl::QueryType::AnySamplesConservative);
+    mStashedQueryHelpers.emplace_back(mQueryHelper);
+    mQueryHelper.deinit();
+    ANGLE_TRY(contextVk->getQueryPool(getType())->allocateQuery(contextVk, &mQueryHelper));
+    return angle::Result::Continue;
+}
+
 angle::Result QueryVk::begin(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
@@ -58,9 +68,14 @@ angle::Result QueryVk::begin(const gl::Context *context)
         ANGLE_TRY(contextVk->getQueryPool(getType())->allocateQuery(contextVk, &mQueryHelper));
     }
 
-    // Note: TimeElapsed is implemented by using two Timestamp queries and taking the diff.
-    if (getType() == gl::QueryType::TimeElapsed)
+    if (getType() == gl::QueryType::AnySamples ||
+        getType() == gl::QueryType::AnySamplesConservative)
     {
+        ANGLE_TRY(contextVk->beginOcclusionQuery(this));
+    }
+    else if (getType() == gl::QueryType::TimeElapsed)
+    {
+        // Note: TimeElapsed is implemented by using two Timestamp queries and taking the diff.
         if (!mQueryHelperTimeElapsedBegin.valid())
         {
             ANGLE_TRY(contextVk->getQueryPool(getType())->allocateQuery(
@@ -96,6 +111,11 @@ angle::Result QueryVk::end(const gl::Context *context)
         mCachedResultValid = true;
         // We could consider using VK_QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT.
     }
+    else if (getType() == gl::QueryType::AnySamples ||
+             getType() == gl::QueryType::AnySamplesConservative)
+    {
+        ANGLE_TRY(contextVk->endOcclusionQuery(this));
+    }
     else if (getType() == gl::QueryType::TimeElapsed)
     {
         ANGLE_TRY(mQueryHelper.flushAndWriteTimestamp(contextVk));
@@ -110,6 +130,7 @@ angle::Result QueryVk::end(const gl::Context *context)
 
 angle::Result QueryVk::queryCounter(const gl::Context *context)
 {
+    ASSERT(getType() == gl::QueryType::Timestamp);
     ContextVk *contextVk = vk::GetImpl(context);
 
     mCachedResultValid = false;
@@ -118,8 +139,6 @@ angle::Result QueryVk::queryCounter(const gl::Context *context)
     {
         ANGLE_TRY(contextVk->getQueryPool(getType())->allocateQuery(contextVk, &mQueryHelper));
     }
-
-    ASSERT(getType() == gl::QueryType::Timestamp);
 
     return mQueryHelper.flushAndWriteTimestamp(contextVk);
 }
@@ -162,6 +181,13 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
     if (wait)
     {
         ANGLE_TRY(mQueryHelper.getUint64Result(contextVk, &mCachedResult));
+        uint64_t v;
+        for (auto q = mStashedQueryHelpers.begin(); q != mStashedQueryHelpers.end();)
+        {
+            ANGLE_TRY(q->getUint64Result(contextVk, &v));
+            mCachedResult += v;
+            q = mStashedQueryHelpers.erase(q);
+        }
     }
     else
     {
@@ -172,6 +198,22 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
             // If the results are not ready, do nothing.  mCachedResultValid remains false.
             return angle::Result::Continue;
         }
+
+        uint64_t v;
+        for (auto q = mStashedQueryHelpers.rbegin(); q != mStashedQueryHelpers.rend(); q++)
+        {
+            available = false;
+            // we need to check results availability here as well in case renderpasses execute out
+            // of order
+            ANGLE_TRY(q->getUint64ResultNonBlocking(contextVk, &v, &available));
+            if (!available)
+            {
+                return angle::Result::Continue;
+            }
+            mCachedResult += v;
+        }
+        // everything is finished
+        mStashedQueryHelpers.clear();
     }
 
     double timestampPeriod = renderer->getPhysicalDeviceProperties().limits.timestampPeriod;
