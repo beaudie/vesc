@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "f148c238_86c71f99",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-25T22:24:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c864574_b8e89da3",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a1af285_01dc0751",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
@@ -169,6 +187,30 @@
       "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d09f949_f6b88e74",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-25T22:24:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72db2355_39762260",
+      "range": {
+        "startLine": 370,
+        "startChar": 54,
+        "endLine": 370,
+        "endChar": 88
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -225,6 +267,24 @@
     },
     {
       "key": {
+        "uuid": "3b8806ed_b672476e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-25T22:24:08Z",
+      "side": 1,
+      "message": "CPU buffer will always reflect the most recent data, including data in not-yet-submitted GPU commands. When an unsynchronized map is requested it is specifically saying ignore the \"not-yet-submitted\" data and give me the buffer as-is. We need to return the GPU buffer to be functionally correct.",
+      "parentUuid": "1120f9e3_d4776150",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1c34a0c1_abc6607e",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
@@ -239,6 +299,24 @@
       "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06e1bc7b_ef8c6718",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-25T22:24:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c34a0c1_abc6607e",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -313,6 +391,30 @@
     },
     {
       "key": {
+        "uuid": "0ea8cfca_165d8438",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-25T22:24:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a034229d_c37a9ef8",
+      "range": {
+        "startLine": 167,
+        "startChar": 68,
+        "endLine": 167,
+        "endChar": 72
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94a53e9b_a1e413fa",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -381,6 +483,30 @@
       "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "587ef04a_4ce72800",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-25T22:24:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6ff2fdd_4bfe654e",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 43
+      },
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
