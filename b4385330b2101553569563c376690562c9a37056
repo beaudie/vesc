@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5cc2c7e7_405f46e0",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-25T21:30:48Z",
+      "side": 1,
+      "message": "I was finally able to play with this again and find a test that fails when changing this to an assert.\n\n[ RUN      ] dEQP.GLES31/functional_ssbo_layout_random_all_shared_buffer_42\ndEQP-GLES31.functional.ssbo.layout.random.all_shared_buffer.42\n../../src/tests/deqp_support/angle_deqp_gtest.cpp:45: Failure\nFailed\nAssignInterfaceBlockBindings(738): \t! Assert failed in AssignInterfaceBlockBindings (../../src/libANGLE/renderer/glslang_wrapper_utils.cpp:738): block.activeShaders().any()\nFATAL: AssignInterfaceBlockBindings(738): \t! Assert failed in AssignInterfaceBlockBindings (../../src/libANGLE/renderer/glslang_wrapper_utils.cpp:738): block.activeShaders().any()\n\nHere is the compute shader:\n\n\t#version 310 es\n\tlayout(local_size_x \u003d 1) in;\n\n\tlayout(std140, binding \u003d 0) buffer BlockB\n\t{\n\t\thighp vec4 a;\n\t} blockB;\n\n\tlayout(binding \u003d 0) uniform atomic_uint ac_numPassed;\n\n\tbool compare_float    (highp float a, highp float b)  { return abs(a - b) \u003c 0.05; }\n\tbool compare_vec4     (highp vec4 a, highp vec4 b)    { return compare_float(a.x, b.x)\u0026\u0026compare_float(a.y, b.y)\u0026\u0026compare_float(a.z, b.z)\u0026\u0026compare_float(a.w, b.w); }\n\n\tvoid main (void)\n\t{\n\t\tbool allOk \u003d true;\n\t\tif (allOk)\n\t\t\tatomicCounterIncrement(ac_numPassed);\n\n\t}\n\nLooking at the block that\u0027s hitting the assert:\n\n\tblock \u003d {const gl::InterfaceBlock \u0026} \n\t arrayElement \u003d {unsigned int} 0\n\t firstFieldArraySize \u003d {unsigned int} 1\n\t gl::ShaderVariableBuffer \u003d {gl::ShaderVariableBuffer} \n\t  binding \u003d {int} 0\n\t  dataSize \u003d {unsigned int} 16\n\t  gl::ActiveVariable \u003d {gl::ActiveVariable} \n\t   mActiveUseBits \u003d {gl::ShaderBitSet} \n\t\tmBits \u003d {unsigned char} 0 \u0027\\000\u0027  \u003c\u003c--- not active for any shaders\n\t  memberIndexes \u003d {std::__debug::vector\u003cunsigned int, std::allocator\u003e} \n\t isArray \u003d {bool} false\n\t mappedName \u003d {std::__cxx11::string} \"_uBlockB\"\n\t name \u003d {std::__cxx11::string} \"BlockB\"\n\nSo we can see that \"blockB\" is not active, but it\u0027s still listed in the list of interface blocks so we can\u0027t assert that they are all active.",
+      "parentUuid": "82718318_49c6ab72",
+      "range": {
+        "startLine": 733,
+        "startChar": 22,
+        "endLine": 733,
+        "endChar": 39
+      },
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "576e2480_7cc67f62",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 42
