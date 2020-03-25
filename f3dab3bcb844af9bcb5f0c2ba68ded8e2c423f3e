@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7518ac24_0a39d4ca",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T13:18:22Z",
+      "side": 1,
+      "message": "Done\n\nTotally correct for us to drop draws if there is a rendering feedback loop. I don\u0027t know if other drivers do this. Pretty sure most desktop drivers support them. QC seems to behave differently from my small test.",
+      "parentUuid": "082aa5f0_3e96cc79",
+      "revId": "f3dab3bcb844af9bcb5f0c2ba68ded8e2c423f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fe56ae3_4a785732",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 3
@@ -39,6 +57,30 @@
       "revId": "f3dab3bcb844af9bcb5f0c2ba68ded8e2c423f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b991bbff_9962515b",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-25T13:18:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fe56ae3_4a785732",
+      "range": {
+        "startLine": 2015,
+        "startChar": 5,
+        "endLine": 2015,
+        "endChar": 21
+      },
+      "revId": "f3dab3bcb844af9bcb5f0c2ba68ded8e2c423f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
