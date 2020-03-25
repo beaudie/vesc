@@ -315,6 +315,12 @@ class QueryHelper final
     angle::Result beginQuery(ContextVk *contextVk);
     angle::Result endQuery(ContextVk *contextVk);
 
+    // for occlusion query
+    void beginOcclusionQuery(ContextVk *contextVk,
+                             PrimaryCommandBuffer *primaryCommands,
+                             CommandBuffer *renderPassCommandBuffer);
+    void endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
+
     angle::Result flushAndWriteTimestamp(ContextVk *contextVk);
     void writeTimestamp(vk::PrimaryCommandBuffer *primary);
 
@@ -325,6 +331,8 @@ class QueryHelper final
                                              uint64_t *resultOut,
                                              bool *availableOut);
     angle::Result getUint64Result(ContextVk *contextVk, uint64_t *resultOut);
+
+    void updateSerial(const ContextVk *contextVk);
 
   private:
     friend class DynamicQueryPool;
@@ -338,6 +346,7 @@ class QueryHelper final
     size_t mQueryPoolIndex;
     uint32_t mQuery;
     Serial mMostRecentSerial;
+    bool mHasValidMostRecentSerial;
 };
 
 // DynamicSemaphorePool allocates semaphores as needed.  It uses a std::vector
