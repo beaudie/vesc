@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e45d07fe_a1ae9005",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-25T16:11:25Z",
+      "side": 1,
+      "message": "Instead of adding a new target, could you add angle_gles1_covgl_no_gtest to the existing angle_gles1_conformance_tests? That way we can run all the tests together and not have to update the bot config.\n\nIt will also let you run CQ dry runs against the new tests in this CL.",
+      "range": {
+        "startLine": 644,
+        "startChar": 2,
+        "endLine": 644,
+        "endChar": 41
+      },
+      "revId": "18ac893d6c35c5cd3d61ab74bb489422e24a8636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
