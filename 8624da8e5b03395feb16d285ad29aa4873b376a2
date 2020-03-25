@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b50cf44_8fb8eb93",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-25T18:50:10Z",
+      "side": 1,
+      "message": "Since the functionality was moved to another file, is this still needed?",
+      "revId": "8624da8e5b03395feb16d285ad29aa4873b376a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e0d8c26_44d70556",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-03-25T18:50:10Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "8624da8e5b03395feb16d285ad29aa4873b376a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
