@@ -655,6 +655,11 @@ Error Display::initialize()
     ASSERT(mImplementation != nullptr);
     mImplementation->setBlobCache(&mBlobCache);
 
+    if (rx::ShouldUseDebugLayers(mAttributeMap))
+    {
+        mBlobCache.resize(1024 * 1024);
+    }
+
     gl::InitializeDebugAnnotations(&mAnnotator);
 
     gl::InitializeDebugMutexIfNeeded();
