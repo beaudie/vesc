@@ -169,6 +169,30 @@
     },
     {
       "key": {
+        "uuid": "fcd7579c_e805251a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T00:53:11Z",
+      "side": 1,
+      "message": "I\u0027ve opened anglebug.com/4512 to chase this.",
+      "parentUuid": "f4283986_0020b6ad",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 38
+      },
+      "revId": "da9e1dc796814f88062d29e0ee8769c8111d640b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63dcd185_f9fde6f2",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
         "patchSetId": 42
