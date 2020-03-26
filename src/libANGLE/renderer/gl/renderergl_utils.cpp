@@ -1304,6 +1304,9 @@ void GenerateCaps(const FunctionsGL *functions,
     extensions->textureSRGBDecode = functions->hasGLExtension("GL_EXT_texture_sRGB_decode") ||
                                     functions->hasGLESExtension("GL_EXT_texture_sRGB_decode");
 
+    extensions->compressedETC1RGB8SubTexture =
+        functions->hasGLESExtension("GL_OES_compressed_ETC1_RGB8_texture");
+
 #if defined(ANGLE_PLATFORM_MACOS) || defined(ANGLE_PLATFORM_MACCATALYST)
     VendorID vendor = GetVendorID(functions);
     if ((IsAMD(vendor) || IsIntel(vendor)) && *maxSupportedESVersion >= gl::Version(3, 0))
