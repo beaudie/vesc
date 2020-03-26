@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b010b70a_c9a761ef",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-26T18:10:46Z",
+      "side": 1,
+      "message": "I don\u0027t think so. app has called beginQuery, all previous result will be invalidated.",
+      "parentUuid": "146b48ad_285fcc34",
+      "revId": "717bc8edd92ea87be6a45efaf28d47ebc2d955fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c2c65a8_201c23bb",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 3
@@ -59,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "7f822e3f_9fff294f",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-26T18:10:46Z",
+      "side": 1,
+      "message": "The getUint64Result() call will always wait.",
+      "parentUuid": "84c9b2bc_c27c365a",
+      "revId": "717bc8edd92ea87be6a45efaf28d47ebc2d955fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1c25f035_69abf0b9",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 3
@@ -70,6 +106,30 @@
       "writtenOn": "2020-03-26T17:31:41Z",
       "side": 1,
       "message": "execute",
+      "range": {
+        "startLine": 218,
+        "startChar": 67,
+        "endLine": 218,
+        "endChar": 73
+      },
+      "revId": "717bc8edd92ea87be6a45efaf28d47ebc2d955fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df77f05b_1bfcde9f",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-26T18:10:46Z",
+      "side": 1,
+      "message": "Thanks. will fix.",
+      "parentUuid": "1c25f035_69abf0b9",
       "range": {
         "startLine": 218,
         "startChar": 67,
