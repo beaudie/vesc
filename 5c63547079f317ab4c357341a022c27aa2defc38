@@ -34,6 +34,29 @@
       "revId": "5c63547079f317ab4c357341a022c27aa2defc38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9461fae1_7549edd5",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-26T19:57:19Z",
+      "side": 1,
+      "message": "Commenting on why this is non-android only would be useful.\n\nThe blob cache is \"smart\" in that it only stores things locally if the operating system has not set the callbacks.  Maybe we can always set an initial size of the cache but make it lazily init its local storage (if it doesn\u0027t already).",
+      "range": {
+        "startLine": 658,
+        "startChar": 0,
+        "endLine": 658,
+        "endChar": 36
+      },
+      "revId": "5c63547079f317ab4c357341a022c27aa2defc38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
