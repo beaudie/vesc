@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c2c65a8_201c23bb",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-26T17:06:28Z",
+      "side": 1,
+      "message": "I think the existing code has the same bug as well. If somebody called beginQuery/endQuery and without flush and called beginQuery/endQuery again, because we were using the same mQueryHelper object, now you will have two active queries in the command stream writing to the same query slot. If you flush and try to get the query result, depends on timing, you may get the result of the first pair or the second pair. You are supposed to return the result of the last beginQ/endQ call",
+      "range": {
+        "startLine": 83,
+        "startChar": 22,
+        "endLine": 83,
+        "endChar": 96
+      },
+      "revId": "717bc8edd92ea87be6a45efaf28d47ebc2d955fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
