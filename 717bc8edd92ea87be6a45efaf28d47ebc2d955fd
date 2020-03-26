@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "146b48ad_285fcc34",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-26T17:31:41Z",
+      "side": 1,
+      "message": "Do we need to update mCachedResult before the clear?",
+      "revId": "717bc8edd92ea87be6a45efaf28d47ebc2d955fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c2c65a8_201c23bb",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 3
@@ -18,6 +35,46 @@
         "startChar": 22,
         "endLine": 83,
         "endChar": 96
+      },
+      "revId": "717bc8edd92ea87be6a45efaf28d47ebc2d955fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84c9b2bc_c27c365a",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-26T17:31:41Z",
+      "side": 1,
+      "message": "Seems like this will clear the query helper stash regardless if the queries are done or not, is that okay?",
+      "revId": "717bc8edd92ea87be6a45efaf28d47ebc2d955fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c25f035_69abf0b9",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-26T17:31:41Z",
+      "side": 1,
+      "message": "execute",
+      "range": {
+        "startLine": 218,
+        "startChar": 67,
+        "endLine": 218,
+        "endChar": 73
       },
       "revId": "717bc8edd92ea87be6a45efaf28d47ebc2d955fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
