@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "937c67f2_c0273586",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-26T21:52:44Z",
+      "side": 1,
+      "message": "Done, moved code from next patch into here to make this better.",
+      "parentUuid": "06b2f5c2_97d9d393",
+      "revId": "c6de4ec49c828c4d8af5e106f743c172a8d14db8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "529a2743_5cfe35ae",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
@@ -39,6 +57,30 @@
       "revId": "c6de4ec49c828c4d8af5e106f743c172a8d14db8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19c7cec4_97fc5bfb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-26T21:52:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "529a2743_5cfe35ae",
+      "range": {
+        "startLine": 1025,
+        "startChar": 16,
+        "endLine": 1025,
+        "endChar": 22
+      },
+      "revId": "c6de4ec49c828c4d8af5e106f743c172a8d14db8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
