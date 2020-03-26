@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "be1aa3ca_95ef51e4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-26T21:53:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "daeacd86_274a97aa",
+      "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "283db2cc_7a1a1d0b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bd7d312_854bd1f7",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-26T21:53:35Z",
+      "side": 1,
+      "message": "Done by proxy.",
+      "parentUuid": "283db2cc_7a1a1d0b",
+      "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3be1f787_1eedee50",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-26T21:53:35Z",
+      "side": 1,
+      "message": "Unfortuantely not. When we support feedback loops we cut the D/S buffer from the RenderPass + VkFramebuffer entirely. So we can\u0027t draw to depth.\n\nThe VkFramebuffer changes so there\u0027s no way to keep the RP intact.",
+      "parentUuid": "44ac987b_8a58f48c",
+      "range": {
+        "startLine": 323,
+        "startChar": 11,
+        "endLine": 323,
+        "endChar": 24
+      },
+      "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fdcf6245_3a0d879d",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 8
@@ -111,6 +171,24 @@
       "writtenOn": "2020-03-23T15:18:48Z",
       "side": 1,
       "message": "Changing behavior based on whether we\u0027re validating calls doesn\u0027t sound right.  Validation can also be enabled outside of ANGLE.",
+      "parentUuid": "fdcf6245_3a0d879d",
+      "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ccd272f_2e0a49bb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-26T21:53:35Z",
+      "side": 1,
+      "message": "I make this unconditionally true. We\u0027ll regress Manhattan perf by about 5% of native (62-\u003e57% in Tobin\u0027s testing) while I research a correct and performant solution.",
       "parentUuid": "fdcf6245_3a0d879d",
       "revId": "95dd86e1f3a2941178fc4a84c0baea1aecd5a0ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
