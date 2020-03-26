@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d3c64b2a_d8d72094",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-26T20:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46d8b8cf_521ac130",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf2131a0_26dfbc3c",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
@@ -69,6 +87,24 @@
       "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aff8e596_7fb6da6b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-26T20:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c200159_9238dcbf",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -282,6 +318,24 @@
       "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94ddbc84_4a1244fb",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-26T20:27:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b8806ed_b672476e",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
