@@ -150,6 +150,24 @@
     },
     {
       "key": {
+        "uuid": "e8c65e49_0c7f3814",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T00:53:23Z",
+      "side": 1,
+      "message": "I\u0027m going to keep this change in this CL unless there\u0027s a particular reason it needs to be split out.   This change can\u0027t be reverted without breaking the PPO work, so I\u0027m not seeing a benefit to the extra overhead of an extra CL.",
+      "parentUuid": "e36a5ed0_7825a1b8",
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "827a885c_b6b15e38",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 42
