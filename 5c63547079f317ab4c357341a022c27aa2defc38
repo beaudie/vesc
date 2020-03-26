@@ -57,6 +57,30 @@
       "revId": "5c63547079f317ab4c357341a022c27aa2defc38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8ad827c_a4d0bdd4",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-26T19:59:44Z",
+      "side": 1,
+      "message": "As said in another patch set, non-Android isn\u0027t going to cover the cases we care about. Chromium uses the blob cache as do some tests. I recommend you resize the default cache back to zero if the app sets a non-default cache and only turn this on if the debug layers are enabled via the ANGLE extension.",
+      "parentUuid": "9461fae1_7549edd5",
+      "range": {
+        "startLine": 658,
+        "startChar": 0,
+        "endLine": 658,
+        "endChar": 36
+      },
+      "revId": "5c63547079f317ab4c357341a022c27aa2defc38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
