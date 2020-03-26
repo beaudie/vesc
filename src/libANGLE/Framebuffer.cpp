@@ -699,11 +699,13 @@ bool FramebufferState::updateAttachmentFeedbackLoop(size_t dirtyBit)
             break;
 
         default:
+        {
             ASSERT(dirtyBit <= Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX);
             previous = mDrawBufferFeedbackLoops.test(dirtyBit);
             loop     = mColorAttachments[dirtyBit].isBoundAsSamplerOrImage();
             mDrawBufferFeedbackLoops[dirtyBit] = loop;
             break;
+        }
     }
 
     updateHasRenderingFeedbackLoop();
