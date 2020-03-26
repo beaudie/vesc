@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ed1eee3f_f403a731",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T02:20:07Z",
+      "side": 1,
+      "message": "Ah, good catch.   I\u0027ve added the cleanup code here.",
+      "parentUuid": "cdeacfc0_d300085d",
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb048c26_8f640bc5",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 55
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "74dd3444_24176889",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T02:20:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb048c26_8f640bc5",
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c048da14_27408c28",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 55
@@ -47,6 +83,24 @@
       "writtenOn": "2020-03-20T16:48:52Z",
       "side": 1,
       "message": "nit: Why check? If we don\u0027t get a good object we\u0027re going to segfault at 6952 anyway.\nMaybe an ASSERT instead?",
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b31833f_fc4a4f79",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 6947,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T02:20:07Z",
+      "side": 1,
+      "message": "Hm, that\u0027s an interesting point.   We didn\u0027t care about segfaulting before, so you\u0027re probably right that it\u0027s ok to just assume there is a PPO and just crash immediately if not, rather than waiting.   At least if there isn\u0027t a PPO, we have a better idea why we are crashing.",
+      "parentUuid": "c048da14_27408c28",
       "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "3dca9ad5_69aa3c23",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T02:20:07Z",
+      "side": 1,
+      "message": "Jamie brought this up also, since this should only be necessary when the programs in the PPO change.\n\nIt should be relatively straightforward, since PPOs already have their own dirty bits internally.   I\u0027ll leave this comment open for now while I take a look at seeing if it fits in here or needs its own CL.",
+      "parentUuid": "0a12e656_85079f55",
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2a73d38f_8e2f443a",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 55
@@ -84,6 +156,24 @@
       "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f01b02c_3e76a506",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T02:20:07Z",
+      "side": 1,
+      "message": "Looking closer, it seems the \u0027varyingPacking\u0027 parameter for Program::linkMergedVaryings() isn\u0027t even used anyway:\n\n\tangle::Result Program::linkMergedVaryings(const Context *context,\n\t\t\t\t\t\t\t\t\t\t\t  VaryingPacking \u0026varyingPacking,\n\t\t\t\t\t\t\t\t\t\t\t  const ProgramMergedVaryings \u0026mergedVaryings)\n\t{\n\t\tShaderType tfStage \u003d\n\t\t\tmState.mAttachedShaders[ShaderType::Geometry] ? ShaderType::Geometry : ShaderType::Vertex;\n\t\tInfoLog \u0026infoLog \u003d getExecutable().getInfoLog();\n\n\t\tif (!linkValidateTransformFeedback(context-\u003egetClientVersion(), infoLog, mergedVaryings,\n\t\t\t\t\t\t\t\t\t\t   tfStage, context-\u003egetCaps()))\n\t\t{\n\t\t\treturn angle::Result::Stop;\n\t\t}\n\n[[[ We use \u0027mResources-\u003evaryingPacking\u0027 here also ]]]\n\t\tif (!mResources-\u003evaryingPacking.collectAndPackUserVaryings(\n\t\t\t\tinfoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames(), isSeparable()))\n\t\t{\n\t\t\treturn angle::Result::Stop;\n\t\t}\n\n\t\tgatherTransformFeedbackVaryings(mergedVaryings, tfStage);\n\t\tmState.updateTransformFeedbackStrides();\n\n\t\treturn angle::Result::Continue;\n\t}\n\n\nI\u0027ll just go ahead and remove it from here and the problem should solve itself.",
+      "parentUuid": "2a73d38f_8e2f443a",
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +200,30 @@
     },
     {
       "key": {
+        "uuid": "f457eb7e_48763588",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T02:20:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30398ee2_cde1b2b9",
+      "range": {
+        "startLine": 47,
+        "startChar": 78,
+        "endLine": 47,
+        "endChar": 80
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74fac2a0_7bc1dbdb",
         "filename": "src/libANGLE/ProgramPipeline.cpp",
         "patchSetId": 55
@@ -130,6 +244,30 @@
       "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ca28ea4_b80952b0",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T02:20:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74fac2a0_7bc1dbdb",
+      "range": {
+        "startLine": 55,
+        "startChar": 93,
+        "endLine": 55,
+        "endChar": 94
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -156,6 +294,30 @@
     },
     {
       "key": {
+        "uuid": "99290cfb_3d3cc4be",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T02:20:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce186eb0_1efbd761",
+      "range": {
+        "startLine": 57,
+        "startChar": 14,
+        "endLine": 57,
+        "endChar": 20
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "848b0eea_c7db4656",
         "filename": "src/libANGLE/ProgramPipeline.cpp",
         "patchSetId": 55
@@ -179,6 +341,30 @@
     },
     {
       "key": {
+        "uuid": "d8bab508_dafd0464",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T02:20:07Z",
+      "side": 1,
+      "message": "\u003e In other words, do the programs in a program pipeline have different namespaces?\n\nThat\u0027s how I\u0027ve been treating them and things appear to be working out that way so far.   From what I can tell, the intent is that the programs themselves seem to have no idea the any other programs exist and to just assume the best when it comes to things like varyings.   The PPOs are meant to be very thin containers for the Programs, and not necessarily a merging of all of the Programs into a full \"Program\".\n\nIt\u0027s possible we\u0027ll find some test/app that proves this wrong, but I\u0027d like to keep this approach for as long as possible since it really simplifies things.",
+      "parentUuid": "848b0eea_c7db4656",
+      "range": {
+        "startLine": 446,
+        "startChar": 32,
+        "endLine": 446,
+        "endChar": 55
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "050f836d_7d7bb92f",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 55
@@ -190,6 +376,30 @@
       "writtenOn": "2020-03-21T03:38:31Z",
       "side": 1,
       "message": "Avoid the copy by directly passing this to TransformSpirV?",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 66
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a453923_7771f622",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-26T02:20:07Z",
+      "side": 1,
+      "message": "What you\u0027re proposing is:\n\n            ANGLE_TRY(GlslangWrapperVk::TransformSpirV(\n                contextVk, shaderType, variableInfoMap,\n                programVk-\u003egetShaderInfo().getSpirvBlobs()[shaderType],\n                programVk-\u003egetShaderInfo().getSpirvBlobs()[shaderType]));\n\nUnfortunately, SpirvTransformer is not setup to handle mSpirvBlobIn and mSpirvBlobOut pointing to the same place, since it would be overwriting the original with the transformed and things would go bad from there.\n\nInstead, we need to make a copy at some point, either the original SPIR-V or the transformed.   It sounds like this relates to anglebug.com/4513 (Vulkan: Update ProgramVk to store original SPIR-V) since we could pass the original SPIR-V and the translated SPIR-V and separate pointers, and avoid the extra copy.  I\u0027ve added a TODO here to indicate this.",
+      "parentUuid": "050f836d_7d7bb92f",
       "range": {
         "startLine": 101,
         "startChar": 12,
