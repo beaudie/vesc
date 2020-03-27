@@ -125,6 +125,30 @@
     },
     {
       "key": {
+        "uuid": "56fec7d0_fa5ce084",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4186,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-27T20:03:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99d70fa9_1698fb0c",
+      "range": {
+        "startLine": 4186,
+        "startChar": 0,
+        "endLine": 4186,
+        "endChar": 13
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0617f370_97326183",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
@@ -193,6 +217,30 @@
       "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca5564a3_9bdeba83",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4189,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-27T20:03:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5564b10e_f248525f",
+      "range": {
+        "startLine": 4188,
+        "startChar": 0,
+        "endLine": 4189,
+        "endChar": 72
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -502,6 +550,30 @@
     },
     {
       "key": {
+        "uuid": "71d82ba8_b64b0735",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-27T20:03:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cbe180e_0eb1d42f",
+      "range": {
+        "startLine": 81,
+        "startChar": 10,
+        "endLine": 81,
+        "endChar": 41
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be28d899_353a3993",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 4
@@ -561,6 +633,30 @@
       "side": 1,
       "message": "It\u0027s used above as well. I\u0027ll leave a reference.",
       "parentUuid": "b31bc0df_f83d2818",
+      "range": {
+        "startLine": 82,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 99
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36bf6139_747a0299",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-27T20:03:09Z",
+      "side": 1,
+      "message": "reinit doesn\u0027t sound like a right name, since this is really a reinit and allocQuery. I can not come out with a good name here to make it actually worth it. This is more explicit and easy to understand exactly what it is doing.",
+      "parentUuid": "da9264c3_ffc643f2",
       "range": {
         "startLine": 82,
         "startChar": 12,
