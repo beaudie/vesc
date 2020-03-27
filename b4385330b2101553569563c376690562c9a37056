@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "8a059be0_0e9031f8",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-27T10:10:19Z",
+      "side": 1,
+      "message": "A bug in CollectVariables? If the block is not active, it shouldn\u0027t be collected in the first place (I think).\n\nBy the way, I expect the translated source doesn\u0027t have blockB (otherwise that\u0027s a different bug).\n\n---\n\nAgain, I\u0027m not blocking this change on it, but if you get a chance to figure out why blockB is being collected by the translator and what\u0027s worse, why is it appearing in the list of linked interface blocks, it would be nice.",
+      "parentUuid": "5cc2c7e7_405f46e0",
+      "range": {
+        "startLine": 733,
+        "startChar": 22,
+        "endLine": 733,
+        "endChar": 39
+      },
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "576e2480_7cc67f62",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 42
