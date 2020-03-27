@@ -1170,13 +1170,20 @@ void State::setActiveSampler(unsigned int active)
 
 void State::setSamplerTexture(const Context *context, TextureType type, Texture *texture)
 {
+<<<<<<< HEAD   (e514b0 Share scratch buffers between contexts.)
     mSamplerTextures[type][mActiveSampler].set(context, texture);
 
     if (mProgram && mProgram->getActiveSamplersMask()[mActiveSampler] &&
         IsTextureCompatibleWithSampler(type, mProgram->getActiveSamplerTypes()[mActiveSampler]))
+=======
+    if (mExecutable && mExecutable->getActiveSamplersMask()[mActiveSampler] &&
+        IsTextureCompatibleWithSampler(type, mExecutable->getActiveSamplerTypes()[mActiveSampler]))
+>>>>>>> CHANGE (1288aa Update the active texture cache before changing the texture )
     {
         updateActiveTexture(context, mActiveSampler, texture);
     }
+
+    mSamplerTextures[type][mActiveSampler].set(context, texture);
 
     mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
 }
