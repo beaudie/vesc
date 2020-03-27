@@ -16,6 +16,24 @@
       "revId": "1041c3b23eefb2b3e193f7b4eaa64268d10a6a9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ca35d20_c035052e",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T15:55:34Z",
+      "side": 1,
+      "message": "Done\n\nIt returns true if there was a change in the feedback-loop-ness.",
+      "parentUuid": "17d0dc01_bedeb7f3",
+      "revId": "1041c3b23eefb2b3e193f7b4eaa64268d10a6a9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
