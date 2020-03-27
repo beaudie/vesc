@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9b78b410_3da41a5d",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T19:40:29Z",
+      "side": 1,
+      "message": "He\u0027s removed from the OWNERS in the root dir in this CL.\n\nI don\u0027t think the Gerrit UI is smart enough to apply gerrit refs. This\u0027ll have to land first before the UI updates AFIAK.",
+      "parentUuid": "e55d3658_c639fadb",
+      "range": {
+        "startLine": 182,
+        "startChar": 50,
+        "endLine": 182,
+        "endChar": 61
+      },
+      "revId": "5779119e67253c2348e51927a7e71cc9b1f21a1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3cd3e758_375453f0",
         "filename": "doc/ContributingCode.md",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a1514471_efffcaf8",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T19:40:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cd3e758_375453f0",
+      "range": {
+        "startLine": 193,
+        "startChar": 65,
+        "endLine": 193,
+        "endChar": 67
+      },
+      "revId": "5779119e67253c2348e51927a7e71cc9b1f21a1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b28aa2f_71ea35d1",
         "filename": "doc/ContributingCode.md",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "5779119e67253c2348e51927a7e71cc9b1f21a1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "855317a0_bf385a8d",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T19:40:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b28aa2f_71ea35d1",
+      "range": {
+        "startLine": 194,
+        "startChar": 100,
+        "endLine": 194,
+        "endChar": 115
+      },
+      "revId": "5779119e67253c2348e51927a7e71cc9b1f21a1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
