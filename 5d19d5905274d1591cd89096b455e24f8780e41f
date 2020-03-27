@@ -2,6 +2,63 @@
   "comments": [
     {
       "key": {
+        "uuid": "e9e0440c_2e0265d8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-27T19:03:28Z",
+      "side": 1,
+      "message": "The ! doesn\u0027t make sense to me. AllowDepthStencilFeedbackLoops and supportDepthStencilRenderingFeedbackLoops seem like they are equivalent yet we are inverting support to get allow?",
+      "range": {
+        "startLine": 119,
+        "startChar": 10,
+        "endLine": 119,
+        "endChar": 11
+      },
+      "revId": "5d19d5905274d1591cd89096b455e24f8780e41f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b7907ba_b853f4c1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-27T19:03:28Z",
+      "side": 1,
+      "message": "Should this go after the noop check below?",
+      "revId": "5d19d5905274d1591cd89096b455e24f8780e41f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac52d3c6_6d61948e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-27T19:03:28Z",
+      "side": 1,
+      "message": "I\u0027m not understanding this.\nI thought that a feedback loop was bad, why would we only allow a clear IF there is a feedback loop?\nMaybe reword comment?\n// We only support clearing depth/stencil when there is a D/S feedback loop when clearing the full render area.",
+      "revId": "5d19d5905274d1591cd89096b455e24f8780e41f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "214b7d38_c817ef98",
         "filename": "src/tests/gl_tests/FramebufferTest.cpp",
         "patchSetId": 14
@@ -42,6 +99,29 @@
         "startChar": 0,
         "endLine": 1262,
         "endChar": 94
+      },
+      "revId": "5d19d5905274d1591cd89096b455e24f8780e41f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "164ae771_b8919cab",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-27T19:03:28Z",
+      "side": 1,
+      "message": "loop",
+      "range": {
+        "startLine": 1311,
+        "startChar": 74,
+        "endLine": 1311,
+        "endChar": 78
       },
       "revId": "5d19d5905274d1591cd89096b455e24f8780e41f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
