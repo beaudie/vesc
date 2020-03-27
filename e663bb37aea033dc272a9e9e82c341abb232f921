@@ -1,0 +1,297 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "514d0263_ddfddfbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "can you include some more details in the issue description? It\u0027s a cool change and would be good to inform other consumers of the code in the future.\n\nAlso it would be nice to include your micro-benchmark in angle_perftests. Maybe add a new test in src/tests/perf_tests/QueryPerfTest.cpp?",
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5faa6a7b_31455575",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "nit: can you make this into a helper function to reduce code duplication?",
+      "range": {
+        "startLine": 2212,
+        "startChar": 0,
+        "endLine": 2218,
+        "endChar": 9
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99d70fa9_1698fb0c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "nit: this function can return void since it isn\u0027t possible to generate an unexpected termination.",
+      "range": {
+        "startLine": 4186,
+        "startChar": 0,
+        "endLine": 4186,
+        "endChar": 13
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0617f370_97326183",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "nit: can you make this into a helper function in QueryImpl to save on code duplication?",
+      "range": {
+        "startLine": 4188,
+        "startChar": 0,
+        "endLine": 4189,
+        "endChar": 72
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9108d5e3_aff903f9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "Instead of adding accessors for the primary CB and RenderPassCommands, please pass them to the QueryHelper functions. This allows us to keep direct access to these buffers private.",
+      "range": {
+        "startLine": 4197,
+        "startChar": 8,
+        "endLine": 4197,
+        "endChar": 41
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee91b25f_cce6922c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4203,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "nit: similarly this function can return void.",
+      "range": {
+        "startLine": 4203,
+        "startChar": 0,
+        "endLine": 4203,
+        "endChar": 14
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43bbeb1e_56a11232",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4212,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "similarly with the arguments here.",
+      "range": {
+        "startLine": 4212,
+        "startChar": 15,
+        "endLine": 4212,
+        "endChar": 32
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b9566b6_15b2a60f",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "can you make sure the active query gets reset to nullptr properly when we destroy the query? i.e. by calling ContextVk::beginOcclusionQuery(nullptr) or similar.",
+      "range": {
+        "startLine": 31,
+        "startChar": 14,
+        "endLine": 31,
+        "endChar": 23
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f5fa18d_4848d7fb",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "are you assuming that the RenderPass is empty in this situation? It\u0027s not clear to me why you can reset the stashed query helpers here. What if they have non-zero counts?",
+      "range": {
+        "startLine": 81,
+        "startChar": 10,
+        "endLine": 81,
+        "endChar": 41
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be28d899_353a3993",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "nit: maybe make a reinit helper function?",
+      "range": {
+        "startLine": 82,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 99
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c8a8a35_187a6ca9",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "very nitty - it looks funny to me to put this in an outer scope. It would look a bit more consistent with ANGLE code to put it inside. Also I don\u0027t think it would change the generated assembly. We can double-check if you\u0027re hesitant.",
+      "range": {
+        "startLine": 195,
+        "startChar": 8,
+        "endLine": 195,
+        "endChar": 19
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67889293_9a834b95",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "nit: you can use a range-for loop here:\n\nfor (vk::QueryHelper \u0026stashedQuery : mStashedQueryHelpers)\n{\n}\n\nalso prefer not using auto for simple types. For a full discussion of when to use auto see:\n\nhttps://google.github.io/styleguide/cppguide.html#Type_deduction",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 21
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62604bc9_f667d18d",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T17:31:02Z",
+      "side": 1,
+      "message": "same comments",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 21
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
