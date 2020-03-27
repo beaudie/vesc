@@ -339,6 +339,24 @@
     },
     {
       "key": {
+        "uuid": "e08d2844_1755c964",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-27T10:02:10Z",
+      "side": 1,
+      "message": "The spec says (for MAP_UNSYNCHRONIZED_BIT):\n\n\u003e No GL error is generated if pending operations which source or modify the buffer overlap the mapped region, but the result of such previous and any subsequent operations is undefined\n\nWhich means both returning the most up-to-date data or the old data are correct.\n\nThe intent of GL_MAP_UNSYNCHRONIZED_BIT is for the application to the tell the driver it has already taken care of any necessary synchronization (at which point both the CPU and GPU buffers must necessarily be the same for the mapped region), otherwise the application gets undefined behavior.\n\nMy suggestion is to keep it simple and always return the CPU buffer.",
+      "parentUuid": "94ddbc84_4a1244fb",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c34a0c1_abc6607e",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
