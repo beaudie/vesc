@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "011a6bba_8098f6a7",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-27T15:07:24Z",
+      "side": 1,
+      "message": "This can be enableableExtension so it\u0027s not exposed by default to WebGL.",
+      "range": {
+        "startLine": 880,
+        "startChar": 57,
+        "endLine": 880,
+        "endChar": 72
+      },
+      "revId": "fa77dca28b8ffc46d5467a690436587ff07c467f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
