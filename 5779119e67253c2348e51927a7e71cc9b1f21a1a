@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e55d3658_c639fadb",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-27T19:13:35Z",
+      "side": 1,
+      "message": "Tried it on this CL, and Corentin is listed as an owner. Could be good to make sure he doesn\u0027t show up to avoid bugging him.",
+      "range": {
+        "startLine": 182,
+        "startChar": 50,
+        "endLine": 182,
+        "endChar": 61
+      },
+      "revId": "5779119e67253c2348e51927a7e71cc9b1f21a1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cd3e758_375453f0",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-27T19:13:35Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 193,
+        "startChar": 65,
+        "endLine": 193,
+        "endChar": 67
+      },
+      "revId": "5779119e67253c2348e51927a7e71cc9b1f21a1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b28aa2f_71ea35d1",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-27T19:13:35Z",
+      "side": 1,
+      "message": "100-char wrapping",
+      "range": {
+        "startLine": 194,
+        "startChar": 100,
+        "endLine": 194,
+        "endChar": 115
+      },
+      "revId": "5779119e67253c2348e51927a7e71cc9b1f21a1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
