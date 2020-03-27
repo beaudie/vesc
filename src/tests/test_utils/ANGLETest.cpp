@@ -420,10 +420,9 @@ void ANGLETestBase::initOSWindow()
     windowNameStream << "ANGLE Tests - " << *mCurrentParams;
     std::string windowName = windowNameStream.str();
 
-    if (mAlwaysForceNewDisplay)
-    {
-        mFixture->osWindow = mOSWindowSingleton;
-    }
+#if defined(ANGLE_PLATFORM_ANDROID)
+    mFixture->osWindow = mOSWindowSingleton;
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 
     if (!mFixture->osWindow)
     {
@@ -433,11 +432,14 @@ void ANGLETestBase::initOSWindow()
             std::cerr << "Failed to initialize OS Window.";
         }
 
+#if defined(ANGLE_PLATFORM_ANDROID)
         mOSWindowSingleton = mFixture->osWindow;
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
     }
 
     // On Linux we must keep the test windows visible. On Windows it doesn't seem to need it.
-    mFixture->osWindow->setVisible(!IsWindows());
+    // Hide SwS window on all platforms, to prevent a race with Xvfb causing hangs on test bots.
+    mFixture->osWindow->setVisible(!IsWindows() && !mCurrentParams->isSwiftshader());
 
     switch (mCurrentParams->driver)
     {
@@ -1265,7 +1267,9 @@ ANGLETestBase::ScopedIgnorePlatformMessages::~ScopedIgnorePlatformMessages()
     gPlatformContext.ignoreMessages = false;
 }
 
+#if defined(ANGLE_PLATFORM_ANDROID)
 OSWindow *ANGLETestBase::mOSWindowSingleton = nullptr;
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 std::map<angle::PlatformParameters, ANGLETestBase::TestFixture> ANGLETestBase::gFixtures;
 Optional<EGLint> ANGLETestBase::mLastRendererType;
 
