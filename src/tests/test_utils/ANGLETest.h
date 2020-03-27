@@ -526,11 +526,6 @@ class ANGLETestBase
     bool mSetUpCalled;
     bool mTearDownCalled;
 
-    // On most systems we force a new display on every test instance. For these configs we can
-    // share a single OSWindow instance. With display reuse we need a separate OSWindow for each
-    // different config. This OSWindow sharing seemed to lead to driver bugs on some platforms.
-    static OSWindow *mOSWindowSingleton;
-
     static std::map<angle::PlatformParameters, TestFixture> gFixtures;
     const angle::PlatformParameters *mCurrentParams;
     TestFixture *mFixture;
