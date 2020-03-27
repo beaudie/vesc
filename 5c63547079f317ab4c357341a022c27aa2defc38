@@ -81,6 +81,30 @@
       "revId": "5c63547079f317ab4c357341a022c27aa2defc38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e9f7e7b_9ba61858",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-27T13:24:40Z",
+      "side": 1,
+      "message": "I\u0027ve removed the ifdef. Now, on any platform if debug layers are enabled we\u0027ll set the default size of this cache to 1MB.\nThe BlobCache class uses SizedMRUCache and, IIUC, SizedMRUCache will lazily allocate the space.\nIf the user/system sets it\u0027s own set/get functions then the built in SizedMRUCache will be unused.",
+      "parentUuid": "b8ad827c_a4d0bdd4",
+      "range": {
+        "startLine": 658,
+        "startChar": 0,
+        "endLine": 658,
+        "endChar": 36
+      },
+      "revId": "5c63547079f317ab4c357341a022c27aa2defc38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
