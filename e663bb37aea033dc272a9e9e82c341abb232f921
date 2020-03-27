@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fd6807ad_269ed99a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T18:59:38Z",
+      "side": 1,
+      "message": "If it improves performance it would be nice to have a microbenchmark that can verify the improvement. Not a blocking requirement, just nice-to-have.",
+      "parentUuid": "9a68da7e_99918ad9",
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5faa6a7b_31455575",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
@@ -151,6 +169,30 @@
       "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5564b10e_f248525f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T18:59:38Z",
+      "side": 1,
+      "message": "We have a misunderstanding. Let me clarify:\n\nPlease make a helper function \"isOcclusionQuery\" in QueryImpl to reduce duplication.",
+      "parentUuid": "213aafae_a5459597",
+      "range": {
+        "startLine": 4188,
+        "startChar": 0,
+        "endLine": 4189,
+        "endChar": 72
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -342,6 +384,53 @@
     },
     {
       "key": {
+        "uuid": "a84d8f06_6597664f",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T18:59:38Z",
+      "side": 1,
+      "message": "I looked and I didn\u0027t see where endQuery gets called if a Query is deleted before the application ends it. The spec makes it clear it\u0027s a valid call sequence. There could be a bug here.\n\n(See the spec under DeleteQueries)",
+      "parentUuid": "88f8feea_d8d639fc",
+      "range": {
+        "startLine": 31,
+        "startChar": 14,
+        "endLine": 31,
+        "endChar": 23
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "376fddb6_696e71b4",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T18:59:38Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 91
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f5fa18d_4848d7fb",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 4
@@ -389,6 +478,30 @@
     },
     {
       "key": {
+        "uuid": "5cbe180e_0eb1d42f",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T18:59:38Z",
+      "side": 1,
+      "message": "Ah, can you maybe try to clear that up in the comment? I get it now.",
+      "parentUuid": "b0f1dad3_7b0f68fb",
+      "range": {
+        "startLine": 81,
+        "startChar": 10,
+        "endLine": 81,
+        "endChar": 41
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be28d899_353a3993",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 4
@@ -433,6 +546,30 @@
       "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9264c3_ffc643f2",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T18:59:38Z",
+      "side": 1,
+      "message": "It\u0027s used above as well. I\u0027ll leave a reference.",
+      "parentUuid": "b31bc0df_f83d2818",
+      "range": {
+        "startLine": 82,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 99
+      },
+      "revId": "e663bb37aea033dc272a9e9e82c341abb232f921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {

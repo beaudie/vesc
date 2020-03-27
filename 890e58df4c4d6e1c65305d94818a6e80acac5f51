@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4ef1d4c_3105cb01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T18:59:38Z",
+      "side": 1,
+      "message": "grammar nit: renderpasses",
+      "range": {
+        "startLine": 9,
+        "startChar": 50,
+        "endLine": 9,
+        "endChar": 60
+      },
+      "revId": "890e58df4c4d6e1c65305d94818a6e80acac5f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6263ae8d_86ca2729",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T18:59:38Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 9,
+        "startChar": 13,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "890e58df4c4d6e1c65305d94818a6e80acac5f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f837f557_a92321d5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T18:59:38Z",
+      "side": 1,
+      "message": "Please move these 6 lines of code into a small helper to reduce duplication. The code will look better as a result. You can pass in the render area (clearArea here, scissoredRenderArea above).",
+      "range": {
+        "startLine": 2212,
+        "startChar": 0,
+        "endLine": 2218,
+        "endChar": 9
+      },
+      "revId": "890e58df4c4d6e1c65305d94818a6e80acac5f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
