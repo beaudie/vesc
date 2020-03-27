@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "539d1c3c_56c1bc2a",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T19:46:19Z",
+      "side": 1,
+      "message": "To be clear this test is testing undefined behaviour and expecting a certain result. The TODO should probably \"revert this test\". I\u0027ll do that in a follow-up so your suggestion is taken.",
+      "parentUuid": "ae2fa84e_2fa24940",
+      "range": {
+        "startLine": 1262,
+        "startChar": 0,
+        "endLine": 1262,
+        "endChar": 94
+      },
+      "revId": "5d19d5905274d1591cd89096b455e24f8780e41f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "164ae771_b8919cab",
         "filename": "src/tests/gl_tests/FramebufferTest.cpp",
         "patchSetId": 14
