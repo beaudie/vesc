@@ -179,14 +179,23 @@
 
 ### Selecting reviewers
 
-When your CL is ready to review, add any of the following reviewers. They will be able to route your
-CL to additional reviewers as neccessary and answer any questions you may have about the process. All
-non-trival CLs should be reviewed by two reviewers.
+When your CL is ready to review, you can use the "Find Owners" button in
+Gerrit to select appropriate code reviewers. They will be able to route your
+CL to additional reviewers as neccessary and answer any questions you may have
+about the process.
 
-* `geofflang at chromium dot org`
-* `jmadill at chromium dot org`
-* `syoussefi at chromium dot org`
-* `ynovikov at chromium dot org`
+### Rules for submission
+
+ * At least one **Owner** must give approval.
+ * The owner must be from the **most specific** directory.
+ * At least two **Comitters** must give approval for non-trival CLs.
+ * For trivial CLs, a single Owner approval is sufficient.
+ * Only **Committers** may submit CLs. If you aren't a committer please ask for help submitting.
+ * Committers may submit high-priority small CLs immediately using **TBR**.
+   See [this document][TBR] for more info.
+ * There are exceptional cases to these rules. Use your best judgement.
+
+[TBR]: https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md#tbr-to-be-reviewed
 
 ### Committer status
 
@@ -194,7 +203,13 @@ Similar to [Chromium's committer status][Committer-status], long-term contributo
 project may request to join the `angle-committers` group.  This allows you to give `+2` on code
 reviews and land patches without assistance.  After about 6 months of regular contributions, you may
 request committer status from a core ANGLE team member via email or code review.  Chromium
-committers may ask at any time.
+committers and Googlers may ask at any time.
+
+### OWNERS files and becoming an Owner
+
+See these Chromium docs for some good guidelines: [link][Owners].
+
+### More info
 
 See also:
 
@@ -207,3 +222,4 @@ See also:
 [Contributing-code]: http://www.chromium.org/developers/contributing-code/
 [depot-tools-tutorial]: http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html
 [Perftest-README]: ../src/tests/perf_tests/README.md
+[Owners]: https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md#expectations-of-owners
