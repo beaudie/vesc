@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1faf9fb3_86f9c15c",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T15:02:55Z",
+      "side": 1,
+      "message": "can we put in some TODOs to clean this up with tracking bugs?",
+      "range": {
+        "startLine": 118,
+        "startChar": 8,
+        "endLine": 118,
+        "endChar": 22
+      },
+      "revId": "c7b18a931cca861685a1deb06871195e2e530945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89817dc7_2acf6075",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T15:02:55Z",
+      "side": 1,
+      "message": "can we put in some TODOs to clean this up with tracking bugs?",
+      "range": {
+        "startLine": 123,
+        "startChar": 8,
+        "endLine": 123,
+        "endChar": 30
+      },
+      "revId": "c7b18a931cca861685a1deb06871195e2e530945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bcea14e_4c8aa13a",
+        "filename": "src/libANGLE/renderer/metal/mtl_glslang_utils.mm",
+        "patchSetId": 29
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T15:02:55Z",
+      "side": 1,
+      "message": "nit: follow ANGLE\u0027s capsing scheme for static functions.",
+      "range": {
+        "startLine": 25,
+        "startChar": 5,
+        "endLine": 25,
+        "endChar": 36
+      },
+      "revId": "c7b18a931cca861685a1deb06871195e2e530945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5397b61_9c5d7fb9",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T15:02:55Z",
+      "side": 1,
+      "message": "this seems like it should be a method in GlslangWrapperVk to be consistent with the Metal methods.",
+      "range": {
+        "startLine": 1762,
+        "startChar": 0,
+        "endLine": 1775,
+        "endChar": 0
+      },
+      "revId": "c7b18a931cca861685a1deb06871195e2e530945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
