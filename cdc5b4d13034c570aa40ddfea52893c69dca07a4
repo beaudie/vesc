@@ -22,6 +22,30 @@
       "revId": "cdc5b4d13034c570aa40ddfea52893c69dca07a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22b06c41_5abab3de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-03-27T16:49:37Z",
+      "side": 1,
+      "message": "Boy, that was ugly. Done.",
+      "parentUuid": "aae80048_d7cfc3d3",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "cdc5b4d13034c570aa40ddfea52893c69dca07a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
