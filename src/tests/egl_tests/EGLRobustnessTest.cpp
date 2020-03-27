@@ -23,7 +23,7 @@ class EGLRobustnessTest : public ANGLETest
     {
         mOSWindow = OSWindow::New();
         mOSWindow->initialize("EGLRobustnessTest", 500, 500);
-        mOSWindow->setVisible(true);
+        mOSWindow->setVisible(!isSwiftshader());
 
         const auto &platform = GetParam().eglParameters;
 

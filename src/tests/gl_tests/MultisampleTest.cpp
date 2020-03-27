@@ -53,7 +53,7 @@ class MultisampleTest : public ANGLETest
         // Create a window, context and surface if multisampling is possible.
         mOSWindow = OSWindow::New();
         mOSWindow->initialize("MultisampleTest", kWindowSize, kWindowSize);
-        mOSWindow->setVisible(true);
+        mOSWindow->setVisible(!isSwiftshader());
 
         EGLint contextAttributes[] = {
             EGL_CONTEXT_MAJOR_VERSION_KHR,

@@ -403,7 +403,7 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
 
     // Necessary for a window resizing test if there is no per-frame window size query
-    mOSWindow->setVisible(true);
+    mOSWindow->setVisible(!isSwiftshader());
 
     GLenum platform               = GetParam().getRenderer();
     bool platformSupportsZeroSize = platform == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE ||
@@ -458,7 +458,7 @@ TEST_P(EGLSurfaceTest, ResizeWindowWithDraw)
     ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
 
     // Necessary for a window resizing test if there is no per-frame window size query
-    mOSWindow->setVisible(true);
+    mOSWindow->setVisible(!isSwiftshader());
 
     initializeDisplay();
     initializeSurfaceWithDefaultConfig();
@@ -541,7 +541,7 @@ TEST_P(EGLSurfaceTest, ResizeWindowWithDraw)
 // Test that the window can be reset repeatedly before surface creation.
 TEST_P(EGLSurfaceTest, ResetNativeWindow)
 {
-    mOSWindow->setVisible(true);
+    mOSWindow->setVisible(!isSwiftshader());
 
     initializeDisplay();
 
