@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e586533b_867f5421",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T15:25:44Z",
+      "side": 1,
+      "message": "here for instance. doing map lookups and string allocations is terrible for micro-optimization so we should come back to these points and fix them in a follow-up.",
+      "range": {
+        "startLine": 308,
+        "startChar": 0,
+        "endLine": 309,
+        "endChar": 68
+      },
+      "revId": "4793b75fc5ee33a23da769082137da975c787792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

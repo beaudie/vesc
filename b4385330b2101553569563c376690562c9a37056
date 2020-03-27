@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "24b4752c_01927b41",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-27T15:25:44Z",
+      "side": 1,
+      "message": "Seems like a bug. Can you file something and leave a TODO with the bug link to fix it?\n\nReference: look in the 3.1 spec for \"std140\"\n\n\u003e All members of a named uniform block declared with a shared or std140\n\u003e layout qualifier are considered active\"\n\n-\u003e this block should be active.\n\nPlease also leave some TODO\u0027s with bug links where we would need to change the code to unify the descriptor sets between programs.",
+      "parentUuid": "8a059be0_0e9031f8",
+      "range": {
+        "startLine": 733,
+        "startChar": 22,
+        "endLine": 733,
+        "endChar": 39
+      },
+      "revId": "b4385330b2101553569563c376690562c9a37056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "576e2480_7cc67f62",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 42
