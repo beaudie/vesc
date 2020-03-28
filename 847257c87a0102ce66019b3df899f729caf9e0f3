@@ -357,6 +357,24 @@
     },
     {
       "key": {
+        "uuid": "bb288bb7_6c9a37ef",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-28T01:01:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e08d2844_1755c964",
+      "revId": "847257c87a0102ce66019b3df899f729caf9e0f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c34a0c1_abc6607e",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 2
