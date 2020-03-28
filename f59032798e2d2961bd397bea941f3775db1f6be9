@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "599fd899_e109b8c9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4021,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-28T17:38:05Z",
+      "side": 1,
+      "message": "we pull out the join from \"flushOutsideRenderPassCommands\" to onBufferRead?\ngiven Manhattan does a lot of buffer reads/writes wont this join threads too aggressively?",
+      "revId": "f59032798e2d2961bd397bea941f3775db1f6be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
