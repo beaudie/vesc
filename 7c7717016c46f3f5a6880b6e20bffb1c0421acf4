@@ -365,6 +365,30 @@
     },
     {
       "key": {
+        "uuid": "6cdde4d0_e4c5e30d",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-28T18:54:39Z",
+      "side": 1,
+      "message": "Ok, doesn\u0027t that mean that we **shouldn\u0027t** `linkValidateGlobalNames`? Admittedly I haven\u0027t looked at what that function does, but it sounds like it makes sure the global names link correctly. If the PPO allows one program to use a name in one way and another program to use the same name in a different way, then according to your explanation it shouldn\u0027t cause a link error.",
+      "parentUuid": "d8bab508_dafd0464",
+      "range": {
+        "startLine": 446,
+        "startChar": 32,
+        "endLine": 446,
+        "endChar": 55
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "050f836d_7d7bb92f",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 55
@@ -400,6 +424,30 @@
       "side": 1,
       "message": "What you\u0027re proposing is:\n\n            ANGLE_TRY(GlslangWrapperVk::TransformSpirV(\n                contextVk, shaderType, variableInfoMap,\n                programVk-\u003egetShaderInfo().getSpirvBlobs()[shaderType],\n                programVk-\u003egetShaderInfo().getSpirvBlobs()[shaderType]));\n\nUnfortunately, SpirvTransformer is not setup to handle mSpirvBlobIn and mSpirvBlobOut pointing to the same place, since it would be overwriting the original with the transformed and things would go bad from there.\n\nInstead, we need to make a copy at some point, either the original SPIR-V or the transformed.   It sounds like this relates to anglebug.com/4513 (Vulkan: Update ProgramVk to store original SPIR-V) since we could pass the original SPIR-V and the translated SPIR-V and separate pointers, and avoid the extra copy.  I\u0027ve added a TODO here to indicate this.",
       "parentUuid": "050f836d_7d7bb92f",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 66
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6d1bbf4_7ffe3e1d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-28T18:54:39Z",
+      "side": 1,
+      "message": "Ok, actually the problem is that you shouldn\u0027t be storing `transformedSpirvBlob` in the \"program\". The program has its own blob, and the PPO has a different blob (and it shouldn\u0027t modify the original program\u0027s blob).\n\nMy suggestion is to transform the blobs into a temporary vector, which is then passed to `createPipelineLayout` and subsequently discarded.",
+      "parentUuid": "0a453923_7771f622",
       "range": {
         "startLine": 101,
         "startChar": 12,
