@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eeec1c3c_1393d8e6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-29T03:20:41Z",
+      "side": 1,
+      "message": "Needs update",
+      "range": {
+        "startLine": 413,
+        "startChar": 57,
+        "endLine": 414,
+        "endChar": 33
+      },
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07aeda9a_74a07a65",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-29T03:20:41Z",
+      "side": 1,
+      "message": "Make `unmapImpl` return angle::Result instead!",
+      "range": {
+        "startLine": 420,
+        "startChar": 12,
+        "endLine": 420,
+        "endChar": 18
+      },
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43027241_0f501429",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-29T03:20:41Z",
+      "side": 1,
+      "message": "Why do the tests fail on other backends? In the very least, I expect the test to pass on the GL backend (otherwise the test may be incorrect, though I don\u0027t see any errors)",
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b56b218a_ab88585d",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-29T03:20:41Z",
+      "side": 1,
+      "message": "Again, the test should be per spec, so it should at least run fine on the GL backend.",
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "206b1648_ac762bd2",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-29T03:20:41Z",
+      "side": 1,
+      "message": "Add a glFinish() call before this line. Otherwise mapping the buffer unsynchronized while there\u0027s a copy operation pending is undefined behavior.",
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d0e243d_bd676867",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-29T03:20:41Z",
+      "side": 1,
+      "message": "Remove this glFinish(). The next map is synchronized, so it should do the proper synchronization on its own (as I understand it). This was in fact what I asked to test.",
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
