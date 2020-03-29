@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d6a57bcf_983997db",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-29T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eeec1c3c_1393d8e6",
+      "range": {
+        "startLine": 413,
+        "startChar": 57,
+        "endLine": 414,
+        "endChar": 33
+      },
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "07aeda9a_74a07a65",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e605aa76_6eede388",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-29T16:55:49Z",
+      "side": 1,
+      "message": "Done\n\nbut i want to point out that the reason i did not do that before is because an error in unmap needs to be treated as a non-fatal error. map failing is fatal, unmap not so much",
+      "parentUuid": "07aeda9a_74a07a65",
+      "range": {
+        "startLine": 420,
+        "startChar": 12,
+        "endLine": 420,
+        "endChar": 18
+      },
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43027241_0f501429",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 6
@@ -62,6 +110,24 @@
       "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77b03635_5332fa4a",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-29T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43027241_0f501429",
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "c3ef6493_088c0ca1",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-29T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b56b218a_ab88585d",
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "206b1648_ac762bd2",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 6
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "e9354cb0_15d12e94",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-29T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "206b1648_ac762bd2",
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d0e243d_bd676867",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 6
@@ -110,6 +212,41 @@
       "writtenOn": "2020-03-29T03:20:41Z",
       "side": 1,
       "message": "Remove this glFinish(). The next map is synchronized, so it should do the proper synchronization on its own (as I understand it). This was in fact what I asked to test.",
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "490e42b2_72a842ec",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-29T16:55:49Z",
+      "side": 1,
+      "message": "there wont be any synchronization needed since we will be returning the CPU only buffer but i get your point.\n\nDone",
+      "parentUuid": "9d0e243d_bd676867",
+      "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26e9c5a9_cbd29d2d",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-29T16:55:49Z",
+      "side": 1,
+      "message": "slightly different but i guess this is the reason there was a \"(!IsVulkan())\" in the new tests",
       "revId": "346fbb5f6e74f8b1a0bb0be503977ea43d7e5e05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
