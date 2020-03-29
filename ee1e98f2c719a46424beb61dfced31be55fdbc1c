@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "221980e3_059a2c4f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-29T03:40:21Z",
+      "side": 1,
+      "message": "Shouldn\u0027t there be two of these? One for gl::QueryType::AnySamples and another for gl::QueryType::AnySamplesConservative?",
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59bcac9c_06fa11a0",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-29T03:40:21Z",
+      "side": 1,
+      "message": "Not a big deal, since this is not a common scenario, but wouldn\u0027t closing the render pass have sufficed?",
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d5c0c0_91fd7d63",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-03-29T03:40:21Z",
+      "side": 1,
+      "message": "You could add a `bool valid()` method to the `Serial` class instead. Serials default initialize to 0 (a.k.a Serial::kInvalid). You can add an explicit `mMostRecentSerial \u003d Serial()` to `init()` if reinitialization is a concern.",
+      "range": {
+        "startLine": 349,
+        "startChar": 4,
+        "endLine": 349,
+        "endChar": 35
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
