@@ -2879,6 +2879,24 @@ void FrameCapture::maybeCaptureClientData(const gl::Context *context, const Call
             break;
         }
 
+        case gl::EntryPoint::DeleteBuffers:
+        {
+            GLsizei count = call.params.getParam("n", ParamType::TGLsizei, 0).value.GLsizeiVal;
+            const gl::BufferID *bufferIDs =
+                call.params.getParam("buffersPacked", ParamType::TBufferIDConstPointer, 1)
+                    .value.BufferIDConstPointerVal;
+            for (GLsizei i = 0; i < count; i++)
+            {
+                // For each buffer being deleted, check our backup of data and remove it
+                const auto &bufferDataInfo = mBufferDataMap.find(bufferIDs[i]);
+                if (bufferDataInfo != mBufferDataMap.end())
+                {
+                    mBufferDataMap.erase(bufferDataInfo);
+                }
+            }
+            break;
+        }
+
         case gl::EntryPoint::DrawArrays:
         {
             if (context->getStateCache().hasAnyActiveClientAttrib())
@@ -3025,7 +3043,8 @@ void FrameCapture::maybeCaptureClientData(const gl::Context *context, const Call
                 GLsizeiptr length =
                     call.params.getParam("length", ParamType::TGLsizeiptr, 2).value.GLsizeiptrVal;
 
-                mBufferDataMap[target] = std::make_pair(offset, length);
+                gl::Buffer *buffer           = context->getState().getTargetBuffer(target);
+                mBufferDataMap[buffer->id()] = std::make_pair(offset, length);
             }
             break;
         }
@@ -3036,6 +3055,7 @@ void FrameCapture::maybeCaptureClientData(const gl::Context *context, const Call
             captureMappedBufferSnapshot(context, call);
             break;
         }
+
         default:
             break;
     }
@@ -3158,7 +3178,8 @@ void FrameCapture::captureMappedBufferSnapshot(const gl::Context *context, const
     gl::BufferBinding target =
         call.params.getParam("targetPacked", ParamType::TBufferBinding, 0).value.BufferBindingVal;
 
-    const auto &bufferDataInfo = mBufferDataMap.find(target);
+    gl::Buffer *buffer         = context->getState().getTargetBuffer(target);
+    const auto &bufferDataInfo = mBufferDataMap.find(buffer->id());
     if (bufferDataInfo == mBufferDataMap.end())
     {
         // This buffer was not marked writable, so we did not back it up
@@ -3169,9 +3190,12 @@ void FrameCapture::captureMappedBufferSnapshot(const gl::Context *context, const
     GLsizeiptr length = bufferDataInfo->second.second;
 
     // Map the buffer so we can copy its contents out
-    gl::Buffer *buffer = context->getState().getTargetBuffer(target);
     ASSERT(!buffer->isMapped());
-    (void)buffer->mapRange(context, offset, length, GL_MAP_READ_BIT);
+    angle::Result result = buffer->mapRange(context, offset, length, GL_MAP_READ_BIT);
+    if (result != angle::Result::Continue)
+    {
+        ERR() << "Failed to mapRange of buffer" << std::endl;
+    }
     const uint8_t *data = reinterpret_cast<const uint8_t *>(buffer->getMapPointer());
 
     // Create the parameters to our helper for use during replay
