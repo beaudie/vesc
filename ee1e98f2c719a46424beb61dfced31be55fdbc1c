@@ -205,6 +205,30 @@
     },
     {
       "key": {
+        "uuid": "5ed415e5_6d682480",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-30T18:59:54Z",
+      "side": 1,
+      "message": "I think existing code has similar bug that if you never called begin/end query and just try to getResult, you will have similar issue.",
+      "parentUuid": "acdb9246_818d0eff",
+      "range": {
+        "startLine": 1117,
+        "startChar": 0,
+        "endLine": 1118,
+        "endChar": 5
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6d5c0c0_91fd7d63",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 13
