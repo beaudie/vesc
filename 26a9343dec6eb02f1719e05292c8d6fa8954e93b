@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b26b9cdc_c1e3b28f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T19:47:55Z",
+      "side": 1,
+      "message": "nit: resource",
+      "range": {
+        "startLine": 13,
+        "startChar": 23,
+        "endLine": 13,
+        "endChar": 31
+      },
+      "revId": "26a9343dec6eb02f1719e05292c8d6fa8954e93b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc6fbd9e_302bdf63",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3198,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T19:47:55Z",
+      "side": 1,
+      "message": "we should make a try macro that processes errors for this file at some point. maybe as a follow-up.",
+      "range": {
+        "startLine": 3195,
+        "startChar": 0,
+        "endLine": 3198,
+        "endChar": 5
+      },
+      "revId": "26a9343dec6eb02f1719e05292c8d6fa8954e93b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
