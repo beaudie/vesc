@@ -491,8 +491,11 @@ void WriteCppReplayForCall(const CallCapture &call,
 
         if (access & GL_MAP_WRITE_BIT)
         {
-            // Track the returned pointer so we update its data
-            callOut << "gMappedBufferData = ";
+            // Track the returned pointer so we update its data when unmapped
+            gl::BufferID bufferID = call.params.getMappedBufferID();
+            callOut << "gMappedBufferData[";
+            WriteParamValueReplay<ParamType::TBufferID>(callOut, call, bufferID);
+            callOut << "] = ";
         }
     }
 
@@ -859,7 +862,6 @@ void WriteCppReplayIndexFiles(bool compression,
     header << "// Global state\n";
     header << "\n";
     header << "extern uint8_t *gBinaryData;\n";
-    header << "extern void *gMappedBufferData;\n";
 
     source << "#include \"" << FmtCapturePrefix(contextId, captureLabel) << ".h\"\n";
     source << "\n";
@@ -906,7 +908,6 @@ void WriteCppReplayIndexFiles(bool compression,
     source << "\n";
 
     source << "uint8_t *gBinaryData = nullptr;\n";
-    source << "void* gMappedBufferData = nullptr;\n";
 
     if (readBufferSize > 0)
     {
@@ -1025,12 +1026,16 @@ void WriteCppReplayIndexFiles(bool compression,
         source << "}\n";
     }
 
-    header << "void UpdateClientBufferData(const void *source, GLsizei size);\n";
+    // Data types and functions for tracking contents of mapped buffers
+    header << "using BufferHandleMap = std::unordered_map<GLuint, void*>;\n";
+    header << "extern BufferHandleMap gMappedBufferData;\n";
+    header << "void UpdateClientBufferData(GLuint buffer, const void *source, GLsizei size);\n";
+    source << "BufferHandleMap gMappedBufferData;\n";
     source << "\n";
-    source << "void UpdateClientBufferData(const void *source, GLsizei size)";
+    source << "void UpdateClientBufferData(GLuint buffer, const void *source, GLsizei size)";
     source << "\n";
     source << "{\n";
-    source << "    memcpy(gMappedBufferData, source, size);\n";
+    source << "    memcpy(gMappedBufferData[buffer], source, size);\n";
     source << "}\n";
 
     for (ResourceIDType resourceType : AllEnums<ResourceIDType>())
@@ -2479,6 +2484,7 @@ ParamBuffer &ParamBuffer::operator=(ParamBuffer &&other)
     std::swap(mClientArrayDataParam, other.mClientArrayDataParam);
     std::swap(mReadBufferSize, other.mReadBufferSize);
     std::swap(mReturnValueCapture, other.mReturnValueCapture);
+    std::swap(mMappedBufferID, other.mMappedBufferID);
     return *this;
 }
 
@@ -2859,7 +2865,7 @@ void FrameCapture::captureCompressedTextureData(const gl::Context *context, cons
     }
 }
 
-void FrameCapture::maybeCaptureClientData(const gl::Context *context, const CallCapture &call)
+void FrameCapture::maybeCaptureClientData(const gl::Context *context, CallCapture &call)
 {
     switch (call.entryPoint)
     {
@@ -2875,6 +2881,24 @@ void FrameCapture::maybeCaptureClientData(const gl::Context *context, const Call
             else
             {
                 mClientVertexArrayMap[index] = -1;
+            }
+            break;
+        }
+
+        case gl::EntryPoint::DeleteBuffers:
+        {
+            GLsizei count = call.params.getParam("n", ParamType::TGLsizei, 0).value.GLsizeiVal;
+            const gl::BufferID *bufferIDs =
+                call.params.getParam("buffersPacked", ParamType::TBufferIDConstPointer, 1)
+                    .value.BufferIDConstPointerVal;
+            for (GLsizei i = 0; i < count; i++)
+            {
+                // For each buffer being deleted, check our backup of data and remove it
+                const auto &bufferDataInfo = mBufferDataMap.find(bufferIDs[i]);
+                if (bufferDataInfo != mBufferDataMap.end())
+                {
+                    mBufferDataMap.erase(bufferDataInfo);
+                }
             }
             break;
         }
@@ -3025,7 +3049,11 @@ void FrameCapture::maybeCaptureClientData(const gl::Context *context, const Call
                 GLsizeiptr length =
                     call.params.getParam("length", ParamType::TGLsizeiptr, 2).value.GLsizeiptrVal;
 
-                mBufferDataMap[target] = std::make_pair(offset, length);
+                gl::Buffer *buffer           = context->getState().getTargetBuffer(target);
+                mBufferDataMap[buffer->id()] = std::make_pair(offset, length);
+
+                // Track the bufferID that was just mapped
+                call.params.setMappedBufferID(buffer->id());
             }
             break;
         }
@@ -3036,6 +3064,7 @@ void FrameCapture::maybeCaptureClientData(const gl::Context *context, const Call
             captureMappedBufferSnapshot(context, call);
             break;
         }
+
         default:
             break;
     }
@@ -3148,9 +3177,10 @@ void FrameCapture::captureMappedBufferSnapshot(const gl::Context *context, const
     // into what the client did to the buffer while mapped
     // This sequence will result in replay calls like this:
     //   ...
-    //   gMappedBufferData = glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, 65536, GL_MAP_WRITE_BIT);
+    //   gMappedBufferData[gBufferMap[42]] = glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, 65536,
+    //                                                        GL_MAP_WRITE_BIT);
     //   ...
-    //   UpdateClientBufferData(&gBinaryData[164631024], 65536);
+    //   UpdateClientBufferData(42, &gBinaryData[164631024], 65536);
     //   glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
     //   ...
 
@@ -3158,7 +3188,8 @@ void FrameCapture::captureMappedBufferSnapshot(const gl::Context *context, const
     gl::BufferBinding target =
         call.params.getParam("targetPacked", ParamType::TBufferBinding, 0).value.BufferBindingVal;
 
-    const auto &bufferDataInfo = mBufferDataMap.find(target);
+    gl::Buffer *buffer         = context->getState().getTargetBuffer(target);
+    const auto &bufferDataInfo = mBufferDataMap.find(buffer->id());
     if (bufferDataInfo == mBufferDataMap.end())
     {
         // This buffer was not marked writable, so we did not back it up
@@ -3169,13 +3200,19 @@ void FrameCapture::captureMappedBufferSnapshot(const gl::Context *context, const
     GLsizeiptr length = bufferDataInfo->second.second;
 
     // Map the buffer so we can copy its contents out
-    gl::Buffer *buffer = context->getState().getTargetBuffer(target);
     ASSERT(!buffer->isMapped());
-    (void)buffer->mapRange(context, offset, length, GL_MAP_READ_BIT);
+    angle::Result result = buffer->mapRange(context, offset, length, GL_MAP_READ_BIT);
+    if (result != angle::Result::Continue)
+    {
+        ERR() << "Failed to mapRange of buffer" << std::endl;
+    }
     const uint8_t *data = reinterpret_cast<const uint8_t *>(buffer->getMapPointer());
 
     // Create the parameters to our helper for use during replay
     ParamBuffer dataParamBuffer;
+
+    // Pass in the target buffer ID
+    dataParamBuffer.addValueParam("dest", ParamType::TGLuint, buffer->id().value);
 
     // Capture the current buffer data with a binary param
     ParamCapture captureData("source", ParamType::TvoidConstPointer);
