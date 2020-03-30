@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0270db0_0cb28041",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3317,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T16:08:26Z",
+      "side": 1,
+      "message": "nit: can you use the explicit type (VkImageAspectFlags) here? makes it easier to read.",
+      "range": {
+        "startLine": 3317,
+        "startChar": 4,
+        "endLine": 3317,
+        "endChar": 9
+      },
+      "revId": "d380a37143fbe03a46ecd70791e0bfa837e7c9de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56a16920_ab7a8b04",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3321,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T16:08:26Z",
+      "side": 1,
+      "message": "shouldn\u0027t need a static_cast here",
+      "range": {
+        "startLine": 3321,
+        "startChar": 34,
+        "endLine": 3321,
+        "endChar": 45
+      },
+      "revId": "d380a37143fbe03a46ecd70791e0bfa837e7c9de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

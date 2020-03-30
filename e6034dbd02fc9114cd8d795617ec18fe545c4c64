@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a19662b_595177c3",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T16:08:26Z",
+      "side": 1,
+      "message": "nit: you could isolate this into a anonymous helper fn as it got a bit complicated.",
+      "range": {
+        "startLine": 655,
+        "startChar": 0,
+        "endLine": 656,
+        "endChar": 94
+      },
+      "revId": "e6034dbd02fc9114cd8d795617ec18fe545c4c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fe3dcc0_c125b2e2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T16:08:26Z",
+      "side": 1,
+      "message": "nit: getReadPixelsRenderTarget",
+      "range": {
+        "startLine": 467,
+        "startChar": 31,
+        "endLine": 467,
+        "endChar": 46
+      },
+      "revId": "e6034dbd02fc9114cd8d795617ec18fe545c4c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ffe0bb7_cf902d72",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T16:08:26Z",
+      "side": 1,
+      "message": "nit: getReadPixelsAspectFlags",
+      "range": {
+        "startLine": 479,
+        "startChar": 37,
+        "endLine": 479,
+        "endChar": 54
+      },
+      "revId": "e6034dbd02fc9114cd8d795617ec18fe545c4c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6501336_9febd5a8",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T16:08:26Z",
+      "side": 1,
+      "message": "nit: can you please split this up into separate statements to make it more legible?",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 51
+      },
+      "revId": "e6034dbd02fc9114cd8d795617ec18fe545c4c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ba6bd22_a1e3cedf",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T16:08:26Z",
+      "side": 1,
+      "message": "is this the same as in the CHECK statement before? Maybe this could be a shared helper fn.",
+      "range": {
+        "startLine": 208,
+        "startChar": 19,
+        "endLine": 210,
+        "endChar": 87
+      },
+      "revId": "e6034dbd02fc9114cd8d795617ec18fe545c4c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
