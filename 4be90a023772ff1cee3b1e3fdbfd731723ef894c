@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b665fc0e_9d201d55",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-03-30T13:41:43Z",
+      "side": 1,
+      "message": "\"And only when the format parameter is DEPTH_COMPONENT (or stencil, etc) do we read from the depth or stencil attachments.\"\nIsn\u0027t that what the code is doing?\n\n\"You can probably get that via a switch like you do for getting the RT.\"\nIsn\u0027t it better to have a single centralized switch than to have to add the switch for ever platform specialization of Framebuffer\u003cplatform\u003e.cpp? It also seems like it would be more readable if that switch for the RT was split off in a separate function.",
+      "parentUuid": "7dd7499e_dfd2f5bd",
+      "range": {
+        "startLine": 72,
+        "startChar": 51,
+        "endLine": 72,
+        "endChar": 64
+      },
+      "revId": "4be90a023772ff1cee3b1e3fdbfd731723ef894c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b527819_5a485093",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 8
