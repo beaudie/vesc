@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "91d1bde7_2eae223f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-30T16:48:50Z",
+      "side": 1,
+      "message": "Noted. This implementation is currently \"once shared, never threaded flush.\"",
+      "parentUuid": "bd9769ea_7c90c4f0",
+      "range": {
+        "startLine": 701,
+        "startChar": 0,
+        "endLine": 705,
+        "endChar": 5
+      },
+      "revId": "f59032798e2d2961bd397bea941f3775db1f6be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "599fd899_e109b8c9",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 20
@@ -54,6 +78,24 @@
       "side": 1,
       "message": "This does seem like a workaround and not the best place to join. What manifests if we don\u0027t join?",
       "parentUuid": "599fd899_e109b8c9",
+      "revId": "f59032798e2d2961bd397bea941f3775db1f6be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "982d6b8e_e527a92a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4021,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-03-30T16:48:50Z",
+      "side": 1,
+      "message": "Every join or flushImmediate() that\u0027s currently present was required to fix CI fails. In this case I at least recall a batch of KHR 3.1 dEQP tests that were failing down this path without the join. I believe due to \"object used across two threads\" validation errors.",
+      "parentUuid": "9044bcb5_98419c5f",
       "revId": "f59032798e2d2961bd397bea941f3775db1f6be9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
