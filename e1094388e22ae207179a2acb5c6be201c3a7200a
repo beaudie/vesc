@@ -22,6 +22,30 @@
       "revId": "e1094388e22ae207179a2acb5c6be201c3a7200a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce06bb23_f97e205d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-03-30T12:28:56Z",
+      "side": 1,
+      "message": "Thanks, I\u0027ll try to clean up this cl a little.",
+      "parentUuid": "97d1fac5_0e4abc81",
+      "range": {
+        "startLine": 287,
+        "startChar": 59,
+        "endLine": 287,
+        "endChar": 95
+      },
+      "revId": "e1094388e22ae207179a2acb5c6be201c3a7200a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
