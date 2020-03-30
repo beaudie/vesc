@@ -174,7 +174,7 @@ class DataCounters final : angle::NonCopyable
 using HasResourceTypeMap = angle::PackedEnumBitSet<ResourceIDType>;
 
 // Map of buffing bindings to offset and size used when mapped
-using BufferDataMap = std::map<gl::BufferBinding, std::pair<GLintptr, GLsizeiptr>>;
+using BufferDataMap = std::map<gl::BufferID, std::pair<GLintptr, GLsizeiptr>>;
 
 // A dictionary of sources indexed by shader type.
 using ProgramSources = gl::ShaderMap<std::string>;
