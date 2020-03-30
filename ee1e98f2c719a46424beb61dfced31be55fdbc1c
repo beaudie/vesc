@@ -273,6 +273,30 @@
       "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19b170e8_83847f7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T17:40:39Z",
+      "side": 1,
+      "message": "The cases where your serial is zero are the same where you set this flag to true, right? Zero serials are invalid. We even have kInvalid \u003d\u003d 0. So valid() in Serial makes sense. Does that sound ok to you? See serial_utils.h.",
+      "parentUuid": "005c2bd5_23e7531b",
+      "range": {
+        "startLine": 349,
+        "startChar": 4,
+        "endLine": 349,
+        "endChar": 35
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
