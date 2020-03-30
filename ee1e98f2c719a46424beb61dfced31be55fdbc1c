@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "eb9da4c5_f80d188a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-30T17:08:00Z",
+      "side": 1,
+      "message": "Good catch!. Will fix.",
+      "parentUuid": "ce15468a_a439e30f",
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59bcac9c_06fa11a0",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 13
@@ -71,6 +89,24 @@
       "writtenOn": "2020-03-29T03:40:21Z",
       "side": 1,
       "message": "Not a big deal, since this is not a common scenario, but wouldn\u0027t closing the render pass have sufficed?",
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "139036cf_62a3cf7f",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-30T17:08:00Z",
+      "side": 1,
+      "message": "I think so. exact same argument for calling flushImpl as well. Its just pathological usage case, not really expecting anyone to use it this way except some unit test case to get it behave correctly.",
+      "parentUuid": "59bcac9c_06fa11a0",
       "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -204,6 +240,30 @@
       "side": 1,
       "message": "Adding valid to serial definitely makes more sense.",
       "parentUuid": "e6d5c0c0_91fd7d63",
+      "range": {
+        "startLine": 349,
+        "startChar": 4,
+        "endLine": 349,
+        "endChar": 35
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "005c2bd5_23e7531b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-30T17:08:00Z",
+      "side": 1,
+      "message": "A serial is just a number, there really isn\u0027t a valid or invalid. A stale serial number is still valid, just has a different meaning (meaning the past event). I notice that serial is 64 bit number, so wrap around is unlikely. But in theory if it can ever wrap around, you will have to initialize it to mCompletedSerial instead of 0. My point is that move \"valid\" to Serial class might run into counter argument like this. \n\nWhat I try to differentiate here is if any query commands has ever been placed in the command buffer or not. Maybe I should just rename it to mReferencedInCommandBuffer to make it crystal clear.",
+      "parentUuid": "5d51a6a7_90c5a070",
       "range": {
         "startLine": 349,
         "startChar": 4,
