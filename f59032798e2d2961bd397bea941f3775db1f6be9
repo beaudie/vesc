@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bd9769ea_7c90c4f0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T16:15:05Z",
+      "side": 1,
+      "message": "note: it\u0027s possible Contexts can become un-shared.",
+      "range": {
+        "startLine": 701,
+        "startChar": 0,
+        "endLine": 705,
+        "endChar": 5
+      },
+      "revId": "f59032798e2d2961bd397bea941f3775db1f6be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "599fd899_e109b8c9",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 20
@@ -13,6 +36,24 @@
       "writtenOn": "2020-03-28T17:38:05Z",
       "side": 1,
       "message": "we pull out the join from \"flushOutsideRenderPassCommands\" to onBufferRead?\ngiven Manhattan does a lot of buffer reads/writes wont this join threads too aggressively?",
+      "revId": "f59032798e2d2961bd397bea941f3775db1f6be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9044bcb5_98419c5f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4021,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T16:15:05Z",
+      "side": 1,
+      "message": "This does seem like a workaround and not the best place to join. What manifests if we don\u0027t join?",
+      "parentUuid": "599fd899_e109b8c9",
       "revId": "f59032798e2d2961bd397bea941f3775db1f6be9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
