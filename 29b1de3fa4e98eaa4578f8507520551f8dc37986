@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a877d483_4f927887",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "Please handle the result and pipe it down. Any unexpected error should be given the same handling process even if ANGLE could theoretically continue. If memory allocation fails we need to alert the user their system is somehow compromised.",
+      "range": {
+        "startLine": 178,
+        "startChar": 8,
+        "endLine": 178,
+        "endChar": 14
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5fe61d5_744f8ae2",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "I\u0027d be fine with making this a helper function in vk::Resource.",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 276,
+        "endChar": 1
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5f5baf6_11cae0f4",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "Is copySubData used in Manhattan with unpack buffers? How about we just disable the shadow/cpu buffer at this point, reallocate it is a VkBuffer, and continue?",
+      "range": {
+        "startLine": 290,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 5
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d29f0f5f_7cbe91a8",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "nit: let map return a pointer via an out variable.",
+      "range": {
+        "startLine": 370,
+        "startChar": 23,
+        "endLine": 370,
+        "endChar": 34
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d999892f_9d788390",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "nit: \"!\"",
+      "range": {
+        "startLine": 400,
+        "startChar": 34,
+        "endLine": 400,
+        "endChar": 43
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "868e325b_de040b70",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "you don\u0027t need to store the write operation. It\u0027s accessible here in mState.getAccessFlags(). You don\u0027t need to store the offset or size either now that I look at it. They\u0027re also available in mState. If your dynamic buffer stores multiple shadow copies you can simply use one offset.",
+      "range": {
+        "startLine": 407,
+        "startChar": 7,
+        "endLine": 407,
+        "endChar": 36
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f3f2d88_dadb3194",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "nit: onUnmap/onMap is a bit unusual. Just call them \u0027map\u0027/\u0027unmap\u0027 like DynamicBuffer.",
+      "range": {
+        "startLine": 411,
+        "startChar": 23,
+        "endLine": 411,
+        "endChar": 36
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62d838bd_0c5b3482",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "nit: everywhere you use \"CpuOnly\" can we call it \"Shadow\"? So \"DynamicShadowBuffer\", etc? This would increase consistency for the terminology in other back-ends where we refer to \"shadow\" memory.",
+      "range": {
+        "startLine": 134,
+        "startChar": 6,
+        "endLine": 134,
+        "endChar": 27
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afb2395e_7d5f9c0a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "nit: for consistency we use valid() to determine if an object is in a non-default state. So valid() could return mSize !\u003d 0 instead of calling isEnabled().",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 54
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2da2acee_4ab0939b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "nit: can be const.",
+      "range": {
+        "startLine": 189,
+        "startChar": 26,
+        "endLine": 189,
+        "endChar": 42
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5a66eaf_99650afa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "nit: mLastWrittenOffset",
+      "range": {
+        "startLine": 201,
+        "startChar": 11,
+        "endLine": 201,
+        "endChar": 29
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e514bb9_99d4f9e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "nit: use angle::MemoryBuffer for static storage or std::vector for dynamically growing storage.",
+      "range": {
+        "startLine": 205,
+        "startChar": 4,
+        "endLine": 205,
+        "endChar": 21
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a08a508_3029f051",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T18:11:42Z",
+      "side": 1,
+      "message": "thanks for adding a correctness test.",
+      "range": {
+        "startLine": 415,
+        "startChar": 0,
+        "endLine": 415,
+        "endChar": 6
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
