@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e4c9a52d_869e8203",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4082,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:34:57Z",
+      "side": 1,
+      "message": "nit: can you place this above setupDraw and add ANGLE_INLINE to the method? this will ensure it\u0027s inlined.",
+      "range": {
+        "startLine": 4072,
+        "startChar": 0,
+        "endLine": 4082,
+        "endChar": 1
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "221980e3_059a2c4f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 13
@@ -13,6 +36,24 @@
       "writtenOn": "2020-03-29T03:40:21Z",
       "side": 1,
       "message": "Shouldn\u0027t there be two of these? One for gl::QueryType::AnySamples and another for gl::QueryType::AnySamplesConservative?",
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce15468a_a439e30f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:34:57Z",
+      "side": 1,
+      "message": "Good catch, you\u0027re right. Both can be active at the same time. I think you could reproduce this failure in a small unit test.",
+      "parentUuid": "221980e3_059a2c4f",
       "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -36,6 +77,98 @@
     },
     {
       "key": {
+        "uuid": "3d6294cf_f25b8525",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:34:57Z",
+      "side": 1,
+      "message": "nit: can you make a helper function for this? like unstashQueriesAndGetResult?",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 37
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e360207_5fc28297",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:34:57Z",
+      "side": 1,
+      "message": "can be reused here.",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 225,
+        "endChar": 37
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a6f7104_a6ef80f8",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:34:57Z",
+      "side": 1,
+      "message": "nit: can you place this in QueryImpl.h? no reason to restrict it to Vk.",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 34
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acdb9246_818d0eff",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:34:57Z",
+      "side": 1,
+      "message": "Shabi, would all of these checks been avoided somehow by calling endRenderPass in QueryVk? I\u0027m finding the code a bit hard to follow. I don\u0027t know why they weren\u0027t necessary with your prior design.",
+      "range": {
+        "startLine": 1117,
+        "startChar": 0,
+        "endLine": 1118,
+        "endChar": 5
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6d5c0c0_91fd7d63",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 13
@@ -47,6 +180,30 @@
       "writtenOn": "2020-03-29T03:40:21Z",
       "side": 1,
       "message": "You could add a `bool valid()` method to the `Serial` class instead. Serials default initialize to 0 (a.k.a Serial::kInvalid). You can add an explicit `mMostRecentSerial \u003d Serial()` to `init()` if reinitialization is a concern.",
+      "range": {
+        "startLine": 349,
+        "startChar": 4,
+        "endLine": 349,
+        "endChar": 35
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d51a6a7_90c5a070",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:34:57Z",
+      "side": 1,
+      "message": "Adding valid to serial definitely makes more sense.",
+      "parentUuid": "e6d5c0c0_91fd7d63",
       "range": {
         "startLine": 349,
         "startChar": 4,
