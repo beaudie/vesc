@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6aada7ce_0601db52",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "Can you please separate out the flag change to a split CL? To keep this CL a bit simpler and easier to land.",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 26
+      },
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bdc927d_64021067",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need to pass the device if you pass the RendererVk. Use renderer-\u003egetDevice.\n\nCan you put this change into a small refactoring CL that we can land quickly?",
+      "range": {
+        "startLine": 83,
+        "startChar": 25,
+        "endLine": 83,
+        "endChar": 62
+      },
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81a424bc_1e724d3a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "ideally this could be confined to a wrapper utility. See other comment.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 50
+      },
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4175e3dd_63eb6a84",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "this is what\u0027s causing you compile failures on MSVC. I recommend using simple initialization like\n\nfuncs.vkAllocateMemory \u003d vkAllocateMemory;\nfuncs.vkFreeMemory \u003d vkFreeMemory;\n\netc.",
+      "range": {
+        "startLine": 1344,
+        "startChar": 4,
+        "endLine": 1344,
+        "endChar": 35
+      },
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4356e42d_7a1b1b95",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1642,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "Use ANGLE_VK_TRY to process the VkResult that is returned from this function.\n\nIdeally we could do this in the VMA wrapper class.",
+      "range": {
+        "startLine": 1642,
+        "startChar": 4,
+        "endLine": 1642,
+        "endChar": 51
+      },
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ad07a2d_9602933c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "you\u0027ll need to pass RendererVk to these methods instead of VkDevice. can you also put that in your split change to update the garbage methods?",
+      "range": {
+        "startLine": 1647,
+        "startChar": 19,
+        "endLine": 1647,
+        "endChar": 24
+      },
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4ab8d03_b3326e4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "Can you place this file in a vulkan/third_party/VulkanMemoryAllocator folder with a README.chromium and LICENSE file? See other third_party folders for examples.\n\nIt would be good to make a wrapper file like we did with glslang to prevent this larger header from being propagated throughout ANGLE. See glslang_wrapper_utils for examples.\n\nYou should be able to put VK_DEFINE_HANDLE(VmaAllocator) and VK_DEFINE_HANDLE(VmaAllocation) in the header file for the wrapper class and not expose any other Vma types or methods from the header in that class. I can help with this if you are unsure of how to proceed.",
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aa081ef_acf3e122",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "does this change need to be in this CL? can we split it out to keep the changes separate?",
+      "range": {
+        "startLine": 88,
+        "startChar": 12,
+        "endLine": 88,
+        "endChar": 95
+      },
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7906d25_2dfdff00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "nit: with rename, InitMappableAllocation",
+      "range": {
+        "startLine": 438,
+        "startChar": 14,
+        "endLine": 438,
+        "endChar": 35
+      },
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fef01b1_992ee3ae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "You don\u0027t need to store the allocator. You can retrieve it at any point from the RendererVk that gets passed around.",
+      "range": {
+        "startLine": 322,
+        "startChar": 4,
+        "endLine": 322,
+        "endChar": 38
+      },
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7afc16d_f066c0c1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-30T14:18:54Z",
+      "side": 1,
+      "message": "naming suggestion: call this vk::Allocation.",
+      "range": {
+        "startLine": 459,
+        "startChar": 6,
+        "endLine": 459,
+        "endChar": 16
+      },
+      "revId": "28c70a267b44eab0e1d45924d38aba2dbcde24ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
