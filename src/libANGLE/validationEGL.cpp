@@ -2149,6 +2149,84 @@ Error ValidateCreateImage(const Display *display,
                 }
                 break;
 
+            case EGL_WIDTH:
+            case EGL_HEIGHT:
+            case EGL_LINUX_DRM_FOURCC_EXT:
+            case EGL_DMA_BUF_PLANE0_FD_EXT:
+            case EGL_DMA_BUF_PLANE0_OFFSET_EXT:
+            case EGL_DMA_BUF_PLANE0_PITCH_EXT:
+            case EGL_DMA_BUF_PLANE1_FD_EXT:
+            case EGL_DMA_BUF_PLANE1_OFFSET_EXT:
+            case EGL_DMA_BUF_PLANE1_PITCH_EXT:
+            case EGL_DMA_BUF_PLANE2_FD_EXT:
+            case EGL_DMA_BUF_PLANE2_OFFSET_EXT:
+            case EGL_DMA_BUF_PLANE2_PITCH_EXT:
+                if (!displayExtensions.imageDmaBufImportEXT)
+                {
+                    return EglBadParameter() << "Parameter cannot be used without "
+                                                "EGL_EXT_image_dma_buf_import support.";
+                }
+                break;
+
+            case EGL_YUV_COLOR_SPACE_HINT_EXT:
+                if (!displayExtensions.imageDmaBufImportEXT)
+                {
+                    return EglBadParameter() << "Parameter cannot be used without "
+                                                "EGL_EXT_image_dma_buf_import support.";
+                }
+
+                switch (value)
+                {
+                    case EGL_ITU_REC601_EXT:
+                    case EGL_ITU_REC709_EXT:
+                    case EGL_ITU_REC2020_EXT:
+                        break;
+
+                    default:
+                        return EglBadParameter()
+                               << "Invalid value for EGL_YUV_COLOR_SPACE_HINT_EXT.";
+                }
+                break;
+
+            case EGL_SAMPLE_RANGE_HINT_EXT:
+                if (!displayExtensions.imageDmaBufImportEXT)
+                {
+                    return EglBadParameter() << "Parameter cannot be used without "
+                                                "EGL_EXT_image_dma_buf_import support.";
+                }
+
+                switch (value)
+                {
+                    case EGL_YUV_FULL_RANGE_EXT:
+                    case EGL_YUV_NARROW_RANGE_EXT:
+                        break;
+
+                    default:
+                        return EglBadParameter() << "Invalid value for EGL_SAMPLE_RANGE_HINT_EXT.";
+                }
+                break;
+
+            case EGL_YUV_CHROMA_HORIZONTAL_SITING_HINT_EXT:
+            case EGL_YUV_CHROMA_VERTICAL_SITING_HINT_EXT:
+                if (!displayExtensions.imageDmaBufImportEXT)
+                {
+                    return EglBadParameter() << "Parameter cannot be used without "
+                                                "EGL_EXT_image_dma_buf_import support.";
+                }
+
+                switch (value)
+                {
+                    case EGL_YUV_CHROMA_SITING_0_EXT:
+                    case EGL_YUV_CHROMA_SITING_0_5_EXT:
+                        break;
+
+                    default:
+                        return EglBadParameter()
+                               << "Invalid value for EGL_YUV_CHROMA_HORIZONTAL_SITING_HINT_EXT or "
+                                  "EGL_YUV_CHROMA_VERTICAL_SITING_HINT_EXT.";
+                }
+                break;
+
             default:
                 return EglBadParameter()
                        << "invalid attribute: 0x" << std::hex << std::uppercase << attribute;
@@ -2355,6 +2433,41 @@ Error ValidateCreateImage(const Display *display,
             }
 
             ANGLE_TRY(display->validateImageClientBuffer(context, target, buffer, attributes));
+            break;
+
+        case EGL_LINUX_DMA_BUF_EXT:
+            if (!displayExtensions.imageDmaBufImportEXT)
+            {
+                return EglBadParameter() << "EGL_EXT_image_dma_buf_import not supported.";
+            }
+
+            if (context != nullptr)
+            {
+                return EglBadContext() << "ctx must be EGL_NO_CONTEXT.";
+            }
+
+            if (buffer != nullptr)
+            {
+                return EglBadParameter() << "buffer must be NULL.";
+            }
+
+            {
+                EGLenum kRequiredParameters[] = {EGL_WIDTH,
+                                                 EGL_HEIGHT,
+                                                 EGL_LINUX_DRM_FOURCC_EXT,
+                                                 EGL_DMA_BUF_PLANE0_FD_EXT,
+                                                 EGL_DMA_BUF_PLANE0_OFFSET_EXT,
+                                                 EGL_DMA_BUF_PLANE0_PITCH_EXT};
+                for (EGLenum requiredParameter : kRequiredParameters)
+                {
+                    if (!attributes.contains(requiredParameter))
+                    {
+                        return EglBadParameter()
+                               << "Missing required parameter " << gl::FmtHex(requiredParameter)
+                               << " for image target EGL_LINUX_DMA_BUF_EXT.";
+                    }
+                }
+            }
             break;
 
         default:

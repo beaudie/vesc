@@ -1039,6 +1039,9 @@ struct DisplayExtensions
 
     // EGL_ANDROID_framebuffer_target
     bool framebufferTargetANDROID = false;
+
+    // EGL_EXT_image_dma_buf_import
+    bool imageDmaBufImportEXT = false;
 };
 
 struct DeviceExtensions
