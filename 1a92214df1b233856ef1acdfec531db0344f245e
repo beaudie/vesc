@@ -188,6 +188,30 @@
       "revId": "1a92214df1b233856ef1acdfec531db0344f245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "233bb60e_ea1d0597",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-31T21:28:02Z",
+      "side": 1,
+      "message": "I think doing mCachedResult modification locally here is easier to read and safer as well. The helper function that implicitly modifies some value makes code reading harder, you have to look into the function to ensure that it is doing properly (that it is adding to mCachedResult not overwriting it, since getUint64Result is overwriting it). That just my 2 cents.",
+      "parentUuid": "b91de100_78c65b32",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 27
+      },
+      "revId": "1a92214df1b233856ef1acdfec531db0344f245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
