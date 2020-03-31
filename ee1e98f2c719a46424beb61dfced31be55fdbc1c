@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "46012060_82b6c83e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4082,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-31T19:39:59Z",
+      "side": 1,
+      "message": "Ack, thanks for checking! TIL more about inlining.",
+      "parentUuid": "ab4fd699_22f648b6",
+      "range": {
+        "startLine": 4072,
+        "startChar": 0,
+        "endLine": 4082,
+        "endChar": 1
+      },
+      "revId": "ee1e98f2c719a46424beb61dfced31be55fdbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "221980e3_059a2c4f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 13
