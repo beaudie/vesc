@@ -140,6 +140,30 @@
       "revId": "1a92214df1b233856ef1acdfec531db0344f245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bae6b2d0_2a7375d7",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-31T18:56:56Z",
+      "side": 1,
+      "message": "You don\u0027t have to pass in mCachedResult. It\u0027s already a member variable. You can make the helper function processStashedQueryResults() or something like that. You don\u0027t need to return anything from the method except an angle::Result.",
+      "parentUuid": "456038c5_0e0e607e",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 27
+      },
+      "revId": "1a92214df1b233856ef1acdfec531db0344f245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
