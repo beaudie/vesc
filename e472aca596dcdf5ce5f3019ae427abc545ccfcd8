@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b9c1baf4_c15659cd",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T22:05:03Z",
+      "side": 1,
+      "message": "Done\n\nwill need an overload here as well for use in indexrange method",
+      "parentUuid": "a383df8a_80d76d8c",
+      "range": {
+        "startLine": 123,
+        "startChar": 32,
+        "endLine": 123,
+        "endChar": 47
+      },
+      "revId": "e472aca596dcdf5ce5f3019ae427abc545ccfcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c5469dc_2ac81a47",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 8
@@ -139,6 +163,30 @@
       "revId": "e472aca596dcdf5ce5f3019ae427abc545ccfcd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b62cb327_208eb979",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T22:05:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c5469dc_2ac81a47",
+      "range": {
+        "startLine": 176,
+        "startChar": 26,
+        "endLine": 176,
+        "endChar": 42
+      },
+      "revId": "e472aca596dcdf5ce5f3019ae427abc545ccfcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
