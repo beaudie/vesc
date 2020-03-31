@@ -720,7 +720,8 @@ class ImageHelper final : public Resource, public angle::Subject
     bool isCombinedDepthStencilFormat() const;
     void destroy(VkDevice device);
 
-    void init2DWeakReference(VkImage handle,
+    void init2DWeakReference(Context *context,
+                             VkImage handle,
                              const gl::Extents &glExtents,
                              const Format &format,
                              GLint samples);
@@ -827,16 +828,9 @@ class ImageHelper final : public Resource, public angle::Subject
                                          const gl::Extents &glExtents,
                                          const VkImageType imageType);
 
-    // Stage a clear operation to a clear value based on WebGL requirements.
-    void stageSubresourceRobustClear(const gl::ImageIndex &index, const Format &format);
-
-    // Stage a clear operation to a clear value that initializes emulated channels to the desired
-    // values.
-    void stageSubresourceEmulatedClear(const gl::ImageIndex &index, const angle::Format &format);
-
-    // If the image has emulated channels, we clear them once so as not to leave garbage on those
-    // channels.
-    void stageClearIfEmulatedFormat(const gl::ImageIndex &index, const Format &format);
+    // Stage a color or ds clear based on robust resource init and emulated format requirements.
+    void stageSubresourceClear(const gl::ImageIndex &index);
+    void stageSubresourceClearWithFormat(const gl::ImageIndex &index, const vk::Format &format);
 
     // This will use the underlying dynamic buffer to allocate some memory to be used as a src or
     // dst.
@@ -862,7 +856,6 @@ class ImageHelper final : public Resource, public angle::Subject
     angle::Result flushAllStagedUpdates(ContextVk *contextVk);
 
     bool isUpdateStaged(uint32_t level, uint32_t layer);
-
     bool hasStagedUpdates() const { return !mSubresourceUpdates.empty(); }
 
     // changeLayout automatically skips the layout change if it's unnecessary.  This function can be
@@ -1007,10 +1000,9 @@ class ImageHelper final : public Resource, public angle::Subject
                                    uint32_t newQueueFamilyIndex,
                                    CommandBufferT *commandBuffer);
 
-    void stageSubresourceClear(const gl::ImageIndex &index,
-                               const angle::Format &format,
-                               const VkClearColorValue &colorValue,
-                               const VkClearDepthStencilValue &depthStencilValue);
+    // If the image has emulated channels, we clear them once so as not to leave garbage on those
+    // channels.
+    void stageClearIfEmulatedFormat(Context *context);
 
     void clearColor(const VkClearColorValue &color,
                     uint32_t baseMipLevel,
@@ -1031,6 +1023,7 @@ class ImageHelper final : public Resource, public angle::Subject
     angle::Result initializeNonZeroMemory(Context *context, VkDeviceSize size);
 
     void appendSubresourceUpdate(SubresourceUpdate &&update);
+    void prependSubresourceUpdate(SubresourceUpdate &&update);
 
     // Vulkan objects.
     Image mImage;
