@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6448db27_ba8f0435",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a877d483_4f927887",
+      "range": {
+        "startLine": 178,
+        "startChar": 8,
+        "endLine": 178,
+        "endChar": 14
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5fe61d5_744f8ae2",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "cf7ac445_59879bb7",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5fe61d5_744f8ae2",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 276,
+        "endChar": 1
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5f5baf6_11cae0f4",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 7
@@ -59,6 +107,30 @@
       "writtenOn": "2020-03-30T18:11:42Z",
       "side": 1,
       "message": "Is copySubData used in Manhattan with unpack buffers? How about we just disable the shadow/cpu buffer at this point, reallocate it is a VkBuffer, and continue?",
+      "range": {
+        "startLine": 290,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 5
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b02526c4_2e150354",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "1. AFAIK, not used in manhattan\n2. why reallocate entire buffer if we are only performing a sub data update?",
+      "parentUuid": "e5f5baf6_11cae0f4",
       "range": {
         "startLine": 290,
         "startChar": 0,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "bc71ef99_dffe8560",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d29f0f5f_7cbe91a8",
+      "range": {
+        "startLine": 370,
+        "startChar": 23,
+        "endLine": 370,
+        "endChar": 34
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d999892f_9d788390",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 7
@@ -114,6 +210,30 @@
       "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ac168e6_adcf5b96",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d999892f_9d788390",
+      "range": {
+        "startLine": 400,
+        "startChar": 34,
+        "endLine": 400,
+        "endChar": 43
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "6c2c2170_ad6c34f4",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "Done, will retrieve data from \"mState\"\n\nfor now im going to have 1 buffer at any given time",
+      "parentUuid": "868e325b_de040b70",
+      "range": {
+        "startLine": 407,
+        "startChar": 7,
+        "endLine": 407,
+        "endChar": 36
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f3f2d88_dadb3194",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 7
@@ -160,6 +304,30 @@
       "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c351aef5_d7635696",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "Done\n\nonce i move to retrieving data from \"mState\" unmap becomes a NOOP",
+      "parentUuid": "1f3f2d88_dadb3194",
+      "range": {
+        "startLine": 411,
+        "startChar": 23,
+        "endLine": 411,
+        "endChar": 36
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "ec416edd_4f66de24",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62d838bd_0c5b3482",
+      "range": {
+        "startLine": 134,
+        "startChar": 6,
+        "endLine": 134,
+        "endChar": 27
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afb2395e_7d5f9c0a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
@@ -206,6 +398,30 @@
       "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbbe21a6_55946555",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afb2395e_7d5f9c0a",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 54
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -255,6 +471,30 @@
     },
     {
       "key": {
+        "uuid": "b9bc738c_33217a33",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "Done\n\nmoving to retrieving data from \"mState\" makes this member var unnecessary",
+      "parentUuid": "a5a66eaf_99650afa",
+      "range": {
+        "startLine": 201,
+        "startChar": 11,
+        "endLine": 201,
+        "endChar": 29
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e514bb9_99d4f9e9",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 7
@@ -275,6 +515,30 @@
       "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "987645ec_b0b42f06",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-03-31T19:01:25Z",
+      "side": 1,
+      "message": "Done\n\nstatic storage for now",
+      "parentUuid": "9e514bb9_99d4f9e9",
+      "range": {
+        "startLine": 205,
+        "startChar": 4,
+        "endLine": 205,
+        "endChar": 21
+      },
+      "revId": "29b1de3fa4e98eaa4578f8507520551f8dc37986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
