@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4e8586d_5463c4b2",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-03-31T15:55:14Z",
+      "side": 1,
+      "message": "Is this necessary? Can it just be IsApple?",
+      "range": {
+        "startLine": 1621,
+        "startChar": 57,
+        "endLine": 1621,
+        "endChar": 87
+      },
+      "revId": "38d2b87a06a6aec495d139d8ae7ca3f039d68b8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
