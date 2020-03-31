@@ -44,7 +44,7 @@ InitState DetermineInitState(const Context *context, const uint8_t *pixels)
         return InitState::Initialized;
 
     const auto &glState = context->getState();
-    return (pixels == nullptr && glState.getTargetBuffer(gl::BufferBinding::PixelUnpack) == nullptr)
+    return (pixels == nullptr && glState.getTargetBuffer(BufferBinding::PixelUnpack) == nullptr)
                ? InitState::MayNeedInit
                : InitState::Initialized;
 }
@@ -223,12 +223,12 @@ const ImageDesc &TextureState::getBaseLevelDesc() const
     return getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
 }
 
-void TextureState::setCrop(const gl::Rectangle &rect)
+void TextureState::setCrop(const Rectangle &rect)
 {
     mCropRect = rect;
 }
 
-const gl::Rectangle &TextureState::getCrop() const
+const Rectangle &TextureState::getCrop() const
 {
     return mCropRect;
 }
@@ -527,7 +527,7 @@ GLuint TextureState::getEnabledLevelCount() const
 }
 
 ImageDesc::ImageDesc()
-    : ImageDesc(Extents(0, 0, 0), Format::Invalid(), 0, GL_TRUE, InitState::Initialized)
+    : ImageDesc(Extents(0, 0, 0), Format::Invalid(), 0, GL_TRUE, InitState::MayNeedInit)
 {}
 
 ImageDesc::ImageDesc(const Extents &size, const Format &format, const InitState initState)
@@ -936,7 +936,7 @@ const TextureState &Texture::getTextureState() const
     return mState;
 }
 
-const gl::Extents &Texture::getExtents(TextureTarget target, size_t level) const
+const Extents &Texture::getExtents(TextureTarget target, size_t level) const
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
     return mState.getImageDesc(target, level).size;
@@ -1084,9 +1084,8 @@ angle::Result Texture::setSubImage(Context *context,
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
-    ANGLE_TRY(ensureSubImageInitialized(context, target, level, area));
-
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, area.depth);
+    ANGLE_TRY(ensureSubImageInitialized(context, index, area));
 
     ANGLE_TRY(mTexture->setSubImage(context, index, area, format, type, unpackState, unpackBuffer,
                                     pixels));
@@ -1136,9 +1135,8 @@ angle::Result Texture::setCompressedSubImage(const Context *context,
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
-    ANGLE_TRY(ensureSubImageInitialized(context, target, level, area));
-
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, area.depth);
+    ANGLE_TRY(ensureSubImageInitialized(context, index, area));
 
     ANGLE_TRY(mTexture->setCompressedSubImage(context, index, area, format, unpackState, imageSize,
                                               pixels));
@@ -1161,20 +1159,45 @@ angle::Result Texture::copyImage(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
     ANGLE_TRY(orphanImages(context));
 
-    // Use the source FBO size as the init image area.
-    Box destBox(0, 0, 0, sourceArea.width, sourceArea.height, 1);
-    ANGLE_TRY(ensureSubImageInitialized(context, target, level, destBox));
-
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, 1);
-
-    ANGLE_TRY(mTexture->copyImage(context, index, sourceArea, internalFormat, source));
-
     const InternalFormat &internalFormatInfo =
         GetInternalFormatInfo(internalFormat, GL_UNSIGNED_BYTE);
 
-    mState.setImageDesc(target, level,
-                        ImageDesc(Extents(sourceArea.width, sourceArea.height, 1),
-                                  Format(internalFormatInfo), InitState::Initialized));
+    // Work around a missing init for reading outside the image.
+    Extents size(sourceArea.width, sourceArea.height, 1);
+
+    // Use the source FBO size as the init image area.
+    Box destBox;
+    if (context->isRobustResourceInitEnabled())
+    {
+        Extents fbSize = source->getReadColorAttachment()->getSize();
+        Rectangle clippedArea;
+        if (ClipRectangle(sourceArea, Rectangle(0, 0, fbSize.width, fbSize.height), &clippedArea))
+        {
+            const Offset clippedOffset(clippedArea.x - sourceArea.x, clippedArea.y - sourceArea.y,
+                                       0);
+            destBox = Box(clippedOffset.x, clippedOffset.y, clippedOffset.z, clippedArea.width,
+                          clippedArea.height, 1);
+        }
+    }
+
+    // Work around issues with initialization order and partially initialized textures.
+    // If we need to initialize the destination texture we split the call into an create call,
+    // an initializeContents call, and then a copySubImage call. This ensures the destination
+    // texture exists before we try to clear it.
+    if (doesSubImageNeedInit(context, index, destBox))
+    {
+        ANGLE_TRY(setImage(context, PixelUnpackState(), target, level, internalFormat, size,
+                           internalFormatInfo.format, internalFormatInfo.type, nullptr));
+        ANGLE_TRY(ensureSubImageInitialized(context, index, destBox));
+        ANGLE_TRY(mTexture->copySubImage(context, index, Offset(), sourceArea, source));
+    }
+    else
+    {
+        ANGLE_TRY(mTexture->copyImage(context, index, sourceArea, internalFormat, source));
+        mState.setImageDesc(target, level,
+                            ImageDesc(size, Format(internalFormatInfo), InitState::MayNeedInit));
+    }
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
@@ -1213,8 +1236,7 @@ angle::Result Texture::copySubImage(Context *context,
         }
     }
 
-    ANGLE_TRY(
-        ensureSubImageInitialized(context, index.getTarget(), index.getLevelIndex(), destBox));
+    ANGLE_TRY(ensureSubImageInitialized(context, index, destBox));
 
     ANGLE_TRY(mTexture->copySubImage(context, index, destOffset, sourceArea, source));
     ANGLE_TRY(handleMipmapGenerationHint(context, index.getLevelIndex()));
@@ -1281,9 +1303,8 @@ angle::Result Texture::copySubTexture(const Context *context,
 
     Box destBox(destOffset.x, destOffset.y, destOffset.z, sourceBox.width, sourceBox.height,
                 sourceBox.depth);
-    ANGLE_TRY(ensureSubImageInitialized(context, target, level, destBox));
-
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, sourceBox.depth);
+    ANGLE_TRY(ensureSubImageInitialized(context, index, destBox));
 
     ANGLE_TRY(mTexture->copySubTexture(context, index, destOffset, sourceLevel, sourceBox,
                                        unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha,
@@ -1702,12 +1723,12 @@ const ColorGeneric &Texture::getBorderColor() const
     return mState.mSamplerState.getBorderColor();
 }
 
-void Texture::setCrop(const gl::Rectangle &rect)
+void Texture::setCrop(const Rectangle &rect)
 {
     mState.setCrop(rect);
 }
 
-const gl::Rectangle &Texture::getCrop() const
+const Rectangle &Texture::getCrop() const
 {
     return mState.getCrop();
 }
@@ -1799,7 +1820,7 @@ angle::Result Texture::ensureInitialized(const Context *context)
         const ImageIndex index = it.next();
         ImageDesc &desc =
             mState.mImageDescs[GetImageDescIndex(index.getTarget(), index.getLevelIndex())];
-        if (desc.initState == InitState::MayNeedInit)
+        if (desc.initState == InitState::MayNeedInit && !desc.size.empty())
         {
             ASSERT(mState.mInitState == InitState::MayNeedInit);
             ANGLE_TRY(initializeContents(context, index));
@@ -1856,36 +1877,40 @@ void Texture::setInitState(const ImageIndex &imageIndex, InitState initState)
     }
 }
 
-angle::Result Texture::ensureSubImageInitialized(const Context *context,
-                                                 TextureTarget target,
-                                                 size_t level,
-                                                 const gl::Box &area)
+bool Texture::doesSubImageNeedInit(const Context *context,
+                                   const ImageIndex &imageIndex,
+                                   const Box &area) const
 {
     if (!context->isRobustResourceInitEnabled() || mState.mInitState == InitState::Initialized)
     {
-        return angle::Result::Continue;
+        return false;
     }
 
     // Pre-initialize the texture contents if necessary.
-    // TODO(jmadill): Check if area overlaps the entire texture.
-    ImageIndex imageIndex =
-        ImageIndex::MakeFromTarget(target, static_cast<GLint>(level), area.depth);
-    const auto &desc = mState.getImageDesc(imageIndex);
-    if (desc.initState == InitState::MayNeedInit)
+    const ImageDesc &desc = mState.getImageDesc(imageIndex);
+    if (desc.initState != InitState::MayNeedInit)
     {
-        ASSERT(mState.mInitState == InitState::MayNeedInit);
-        bool coversWholeImage = area.x == 0 && area.y == 0 && area.z == 0 &&
-                                area.width == desc.size.width && area.height == desc.size.height &&
-                                area.depth == desc.size.depth;
-        if (!coversWholeImage)
-        {
-            // NOTE: do not optimize this to only initialize the passed area of the texture, or the
-            // initialization logic in copySubImage will be incorrect.
-            ANGLE_TRY(initializeContents(context, imageIndex));
-        }
-        setInitState(imageIndex, InitState::Initialized);
+        return false;
     }
 
+    ASSERT(mState.mInitState == InitState::MayNeedInit);
+    bool coversWholeImage = area.x == 0 && area.y == 0 && area.z == 0 &&
+                            area.width == desc.size.width && area.height == desc.size.height &&
+                            area.depth == desc.size.depth;
+    return !coversWholeImage;
+}
+
+angle::Result Texture::ensureSubImageInitialized(const Context *context,
+                                                 const ImageIndex &imageIndex,
+                                                 const Box &area)
+{
+    if (doesSubImageNeedInit(context, imageIndex, area))
+    {
+        // NOTE: do not optimize this to only initialize the passed area of the texture, or the
+        // initialization logic in copySubImage will be incorrect.
+        ANGLE_TRY(initializeContents(context, imageIndex));
+    }
+    setInitState(imageIndex, InitState::Initialized);
     return angle::Result::Continue;
 }
 
@@ -1904,15 +1929,7 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
 {
     switch (message)
     {
-        case angle::SubjectMessage::ContentsChanged:
-            // ContentsChange is originates from TextureStorage11::resolveAndReleaseTexture
-            // which resolves the underlying multisampled texture if it exists and so
-            // Texture will signal dirty storage to invalidate its own cache and the
-            // attached framebuffer's cache.
-            signalDirtyStorage(InitState::Initialized);
-            return;
-        case angle::SubjectMessage::SubjectChanged:
-            mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
+        case angle::SubjectMessage::DirtyBitsFlagged:
             signalDirtyState(DIRTY_BIT_IMPLEMENTATION);
 
             // Notify siblings that we are dirty.
@@ -1920,9 +1937,23 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
             {
                 notifySiblings(message);
             }
-            return;
+            break;
+
+        case angle::SubjectMessage::SubjectChanged:
+            mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
+            mState.mInitState = InitState::MayNeedInit;
+            signalDirtyState(DIRTY_BIT_IMPLEMENTATION);
+            onStateChange(angle::SubjectMessage::ContentsChanged);
+
+            // Notify siblings that we are dirty.
+            if (index == rx::kTextureImageImplObserverMessageIndex)
+            {
+                notifySiblings(message);
+            }
+            break;
         default:
-            return;
+            UNREACHABLE();
+            break;
     }
 }
 
