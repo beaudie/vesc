@@ -597,9 +597,11 @@ class Texture final : public RefCountObject<TextureID>,
     void invalidateCompletenessCache() const;
     angle::Result releaseTexImageInternal(Context *context);
 
+    bool doesSubImageNeedInit(const Context *context,
+                              const ImageIndex &imageIndex,
+                              const Box &area) const;
     angle::Result ensureSubImageInitialized(const Context *context,
-                                            TextureTarget target,
-                                            size_t level,
+                                            const ImageIndex &imageIndex,
                                             const gl::Box &area);
 
     angle::Result handleMipmapGenerationHint(Context *context, int level);
