@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "323c8ead_d084e980",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-31T13:30:00Z",
+      "side": 1,
+      "message": "here can we use !IsAndroid() to avoid the #ifdefs?",
+      "range": {
+        "startLine": 423,
+        "startChar": 0,
+        "endLine": 423,
+        "endChar": 35
+      },
+      "revId": "aea2b186057532887d843d7458b7ca52f80a66a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2515f83f_b0f96c4f",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-31T13:30:00Z",
+      "side": 1,
+      "message": "It would be better to avoid using #ifdefs as much as possible. You can leave this variable in even if we don\u0027t use it.",
+      "range": {
+        "startLine": 529,
+        "startChar": 0,
+        "endLine": 529,
+        "endChar": 35
+      },
+      "revId": "aea2b186057532887d843d7458b7ca52f80a66a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
