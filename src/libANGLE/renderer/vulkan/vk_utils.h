@@ -315,15 +315,20 @@ class StagingBuffer final : angle::NonCopyable
 
     Buffer &getBuffer() { return mBuffer; }
     const Buffer &getBuffer() const { return mBuffer; }
-    DeviceMemory &getDeviceMemory() { return mDeviceMemory; }
-    const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
     size_t getSize() const { return mSize; }
 
   private:
     Buffer mBuffer;
-    DeviceMemory mDeviceMemory;
+    const VmaAllocator *mVmaAllocator;
+    VmaMemory mVmaMemory;
     size_t mSize;
 };
+
+angle::Result InitMappableVmaMemory(VmaAllocator allocator,
+                                    VmaMemory *vmaMemory,
+                                    VkDeviceSize size,
+                                    int value,
+                                    bool flush);
 
 angle::Result InitMappableDeviceMemory(vk::Context *context,
                                        vk::DeviceMemory *deviceMemory,

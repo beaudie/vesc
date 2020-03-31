@@ -14,6 +14,7 @@
 #include "volk.h"
 
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLE/renderer/vulkan/vk_mem_alloc.h"
 
 namespace rx
 {
@@ -46,7 +47,8 @@ namespace vk
     FUNC(RenderPass)               \
     FUNC(Sampler)                  \
     FUNC(Semaphore)                \
-    FUNC(ShaderModule)
+    FUNC(ShaderModule)             \
+    FUNC(VmaMemory)
 
 #define ANGLE_COMMA_SEP_FUNC(TYPE) TYPE,
 
@@ -93,6 +95,7 @@ class WrappedObject : angle::NonCopyable
 {
   public:
     HandleT getHandle() const { return mHandle; }
+    void setHandle(HandleT handle) { mHandle = handle; }
     bool valid() const { return (mHandle != VK_NULL_HANDLE); }
 
     const HandleT *ptr() const { return &mHandle; }
@@ -451,6 +454,23 @@ class DeviceMemory final : public WrappedObject<DeviceMemory, VkDeviceMemory>
                  VkMemoryMapFlags flags,
                  uint8_t **mapPointer) const;
     void unmap(VkDevice device) const;
+};
+
+class VmaMemory final : public WrappedObject<VmaMemory, VmaAllocation>
+{
+  public:
+    VmaMemory() = default;
+    void destroy(VmaAllocator allocator);
+
+    VkResult createBufferAndMemory(VmaAllocator allocator,
+                                   const VkBufferCreateInfo *pBufferCreateInfo,
+                                   const VmaAllocationCreateInfo *pAllocationCreateInfo,
+                                   Buffer *buffer,
+                                   VkMemoryPropertyFlags &memPropertyOut);
+    VkResult map(VmaAllocator allocator, uint8_t **mapPointer) const;
+    void unmap(VmaAllocator allocator) const;
+    void flush(VmaAllocator allocator, VkDeviceSize offset, VkDeviceSize size);
+    void invalidate(VmaAllocator allocator, VkDeviceSize offset, VkDeviceSize size);
 };
 
 class RenderPass final : public WrappedObject<RenderPass, VkRenderPass>
@@ -1292,6 +1312,62 @@ ANGLE_INLINE void DeviceMemory::unmap(VkDevice device) const
 {
     ASSERT(valid());
     vkUnmapMemory(device, mHandle);
+}
+
+// VmaMemory implementation.
+ANGLE_INLINE void VmaMemory::destroy(VmaAllocator allocator)
+{
+    if (valid())
+    {
+        vmaFreeMemory(allocator, mHandle);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+ANGLE_INLINE VkResult
+VmaMemory::createBufferAndMemory(VmaAllocator allocator,
+                                 const VkBufferCreateInfo *pBufferCreateInfo,
+                                 const VmaAllocationCreateInfo *pAllocationCreateInfo,
+                                 Buffer *buffer,
+                                 VkMemoryPropertyFlags &memPropertyOut)
+{
+    ASSERT(!valid());
+    VkResult result;
+    VkBuffer bufferHandle;
+    VmaAllocationInfo allocInfo;
+    result = vmaCreateBuffer(allocator, pBufferCreateInfo, pAllocationCreateInfo, &bufferHandle,
+                             &mHandle, &allocInfo);
+    buffer->setHandle(bufferHandle);
+
+    vmaGetMemoryTypeProperties(allocator, allocInfo.memoryType, &memPropertyOut);
+
+    return result;
+}
+
+ANGLE_INLINE VkResult VmaMemory::map(VmaAllocator allocator, uint8_t **mapPointer) const
+{
+    ASSERT(valid());
+    return vmaMapMemory(allocator, mHandle, (void **)mapPointer);
+}
+
+ANGLE_INLINE void VmaMemory::unmap(VmaAllocator allocator) const
+{
+    ASSERT(valid());
+    vmaUnmapMemory(allocator, mHandle);
+}
+
+ANGLE_INLINE void VmaMemory::flush(VmaAllocator allocator, VkDeviceSize offset, VkDeviceSize size)
+{
+    ASSERT(valid());
+    vmaFlushAllocation(allocator, mHandle, offset, size);
+}
+
+ANGLE_INLINE void VmaMemory::invalidate(VmaAllocator allocator,
+                                        VkDeviceSize offset,
+                                        VkDeviceSize size)
+{
+    ASSERT(valid());
+    vmaInvalidateAllocation(allocator, mHandle, offset, size);
 }
 
 // RenderPass implementation.
