@@ -164,6 +164,30 @@
       "revId": "1a92214df1b233856ef1acdfec531db0344f245e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b91de100_78c65b32",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-31T21:18:20Z",
+      "side": 1,
+      "message": "Just a reminder that this nit is still open. Not sure if you were waiting for another review.",
+      "parentUuid": "bae6b2d0_2a7375d7",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 27
+      },
+      "revId": "1a92214df1b233856ef1acdfec531db0344f245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
