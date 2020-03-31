@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adcf462c_5455befc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-31T13:19:04Z",
+      "side": 1,
+      "message": "no functional change, just a refactor match the style guide.",
+      "range": {
+        "startLine": 993,
+        "startChar": 9,
+        "endLine": 993,
+        "endChar": 34
+      },
+      "revId": "87d842ab69b8affaec1dbb1b0d8c0f2e2b517a3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
