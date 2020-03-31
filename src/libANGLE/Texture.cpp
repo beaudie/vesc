@@ -1904,25 +1904,19 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
 {
     switch (message)
     {
-        case angle::SubjectMessage::ContentsChanged:
-            // ContentsChange is originates from TextureStorage11::resolveAndReleaseTexture
-            // which resolves the underlying multisampled texture if it exists and so
-            // Texture will signal dirty storage to invalidate its own cache and the
-            // attached framebuffer's cache.
-            signalDirtyStorage(InitState::Initialized);
-            return;
         case angle::SubjectMessage::SubjectChanged:
             mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
-            signalDirtyState(DIRTY_BIT_IMPLEMENTATION);
+            signalDirtyStorage(InitState::MayNeedInit);
 
             // Notify siblings that we are dirty.
             if (index == rx::kTextureImageImplObserverMessageIndex)
             {
                 notifySiblings(message);
             }
-            return;
+            break;
         default:
-            return;
+            UNREACHABLE();
+            break;
     }
 }
 

@@ -1548,7 +1548,7 @@ angle::Result TextureVk::initializeContents(const gl::Context *context,
     const vk::Format &format =
         vk::GetImpl(context)->getRenderer()->getFormat(desc.format.info->sizedInternalFormat);
 
-    mImage->stageSubresourceRobustClear(imageIndex, format);
+    mImage->stageSubresourceClearWithFormat(imageIndex, format);
 
     // Note that we cannot ensure the image is initialized because we might be calling subImage
     // on a non-complete cube map.
@@ -1642,20 +1642,6 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     ANGLE_TRY(mImage->initMemory(contextVk, renderer->getMemoryProperties(), flags));
 
     ANGLE_TRY(initImageViews(contextVk, format, sized, levelCount, layerCount));
-
-    // If the image has an emulated channel or robust resource init is enabled, always clear it.
-    // These channels will be masked out in future writes, and shouldn't contain uninitialized
-    // values.
-    if (contextVk->getState().isRobustResourceInitEnabled() || format.hasEmulatedImageChannels())
-    {
-        uint32_t levelCount = mImage->getLevelCount();
-
-        for (uint32_t level = 0; level < levelCount; ++level)
-        {
-            gl::ImageIndex index = gl::ImageIndex::Make2DArrayRange(level, 0, layerCount);
-            mImage->stageSubresourceRobustClear(index, format);
-        }
-    }
 
     mSerial = contextVk->generateTextureSerial();
 
