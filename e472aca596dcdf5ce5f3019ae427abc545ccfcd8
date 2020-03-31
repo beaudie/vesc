@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57b663e0_8dac559d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-31T21:17:15Z",
+      "side": 1,
+      "message": "nit: I think you have a helper function for this.",
+      "range": {
+        "startLine": 447,
+        "startChar": 19,
+        "endLine": 447,
+        "endChar": 65
+      },
+      "revId": "e472aca596dcdf5ce5f3019ae427abc545ccfcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c39bb29b_207e7047",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-31T21:17:15Z",
+      "side": 1,
+      "message": "nit: for consistency can call this copyToBufferImpl - matches our usual pattern.",
+      "range": {
+        "startLine": 529,
+        "startChar": 24,
+        "endLine": 529,
+        "endChar": 42
+      },
+      "revId": "e472aca596dcdf5ce5f3019ae427abc545ccfcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
