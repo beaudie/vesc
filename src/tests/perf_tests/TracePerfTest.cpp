@@ -140,6 +140,10 @@ void TracePerfTest::initializeBenchmark()
 {
     const auto &params = GetParam();
 
+    // TODO(anglebug.com/4533) This fails after the upgrade to the 26.20.100.7870 driver.
+    ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsVulkan() &&
+                       params.testID == TracePerfTestID::Manhattan10);
+
     mStartingDirectory = angle::GetCWD().value();
 
     // To load the trace data path correctly we set the CWD to the executable dir.
