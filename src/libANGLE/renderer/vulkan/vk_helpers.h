@@ -481,7 +481,6 @@ class BufferHelper final : public Resource
 
     bool valid() const { return mBuffer.valid(); }
     const Buffer &getBuffer() const { return mBuffer; }
-    const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
     VkDeviceSize getSize() const { return mSize; }
     bool isHostVisible() const
     {
@@ -514,22 +513,31 @@ class BufferHelper final : public Resource
         return *mViewFormat;
     }
 
-    angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
+    angle::Result map(uint8_t **ptrOut)
     {
         if (!mMappedMemory)
         {
-            ANGLE_TRY(mapImpl(contextVk));
+            ANGLE_TRY(mapImpl());
         }
         *ptrOut = mMappedMemory;
         return angle::Result::Continue;
     }
-    void unmap(VkDevice device);
+
+    angle::Result map(uint8_t **ptrOut, size_t offset)
+    {
+        uint8_t *mapBufPointer;
+        ANGLE_TRY(map(&mapBufPointer));
+        *ptrOut = mapBufPointer + offset;
+        return angle::Result::Continue;
+    }
+
+    void unmap();
 
     // After a sequence of writes, call flush to ensure the data is visible to the device.
-    angle::Result flush(ContextVk *contextVk, VkDeviceSize offset, VkDeviceSize size);
+    angle::Result flush(VkDeviceSize offset, VkDeviceSize size);
 
     // After a sequence of writes, call invalidate to ensure the data is visible to the host.
-    angle::Result invalidate(ContextVk *contextVk, VkDeviceSize offset, VkDeviceSize size);
+    angle::Result invalidate(VkDeviceSize offset, VkDeviceSize size);
 
     void changeQueue(uint32_t newQueueFamilyIndex, CommandBuffer *commandBuffer);
 
@@ -546,7 +554,7 @@ class BufferHelper final : public Resource
                             VkAccessFlags *barrierDstOut);
 
   private:
-    angle::Result mapImpl(ContextVk *contextVk);
+    angle::Result mapImpl();
     bool needsOnReadBarrier(VkAccessFlags readAccessType,
                             VkAccessFlags *barrierSrcOut,
                             VkAccessFlags *barrierDstOut)
@@ -569,7 +577,7 @@ class BufferHelper final : public Resource
     // Vulkan objects.
     Buffer mBuffer;
     BufferView mBufferView;
-    DeviceMemory mDeviceMemory;
+    VmaMemory mVmaMemory;
 
     // Cached properties.
     VkMemoryPropertyFlags mMemoryPropertyFlags;
@@ -577,6 +585,7 @@ class BufferHelper final : public Resource
     uint8_t *mMappedMemory;
     const Format *mViewFormat;
     uint32_t mCurrentQueueFamilyIndex;
+    const VmaAllocator *mVmaAllocator;
 
     // For memory barriers.
     VkFlags mCurrentWriteAccess;

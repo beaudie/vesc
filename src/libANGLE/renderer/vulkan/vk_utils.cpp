@@ -382,12 +382,12 @@ angle::Result MemoryProperties::findCompatibleMemoryIndex(
 }
 
 // StagingBuffer implementation.
-StagingBuffer::StagingBuffer() : mSize(0) {}
+StagingBuffer::StagingBuffer() : mVmaAllocator(nullptr), mSize(0) {}
 
 void StagingBuffer::destroy(VkDevice device)
 {
     mBuffer.destroy(device);
-    mDeviceMemory.destroy(device);
+    mVmaMemory.destroy(*mVmaAllocator);
     mSize = 0;
 }
 
@@ -402,14 +402,17 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
 
-    VkMemoryPropertyFlags flags =
-        (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    VmaAllocationCreateInfo allocCreateInfo = {};
+    allocCreateInfo.requiredFlags =
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 
-    ANGLE_VK_TRY(context, mBuffer.init(context->getDevice(), createInfo));
-    VkMemoryPropertyFlags flagsOut = 0;
-    VkDeviceSize sizeIgnored;
-    ANGLE_TRY(AllocateBufferMemory(context, flags, &flagsOut, nullptr, &mBuffer, &mDeviceMemory,
-                                   &sizeIgnored));
+    VkMemoryPropertyFlags memoryPropertyOutFlags;
+
+    mVmaAllocator = &context->getRenderer()->getVmaAllocator();
+
+    mVmaMemory.createBufferAndMemory(*mVmaAllocator, &createInfo, &allocCreateInfo, &mBuffer,
+                                     memoryPropertyOutFlags);
+
     mSize = static_cast<size_t>(size);
     return angle::Result::Continue;
 }
@@ -417,19 +420,38 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
 void StagingBuffer::release(ContextVk *contextVk)
 {
     contextVk->addGarbage(&mBuffer);
-    contextVk->addGarbage(&mDeviceMemory);
+    contextVk->addGarbage(&mVmaMemory);
 }
 
 void StagingBuffer::collectGarbage(RendererVk *renderer, Serial serial)
 {
     vk::GarbageList garbageList;
     garbageList.emplace_back(vk::GetGarbage(&mBuffer));
-    garbageList.emplace_back(vk::GetGarbage(&mDeviceMemory));
+    garbageList.emplace_back(vk::GetGarbage(&mVmaMemory));
 
     vk::SharedResourceUse sharedUse;
     sharedUse.init();
     sharedUse.updateSerialOneOff(serial);
     renderer->collectGarbage(std::move(sharedUse), std::move(garbageList));
+}
+
+angle::Result InitMappableVmaMemory(VmaAllocator allocator,
+                                    VmaMemory *vmaMemory,
+                                    VkDeviceSize size,
+                                    int value,
+                                    bool flush)
+{
+    uint8_t *mapPointer;
+    vmaMemory->map(allocator, &mapPointer);
+    memset(mapPointer, value, static_cast<size_t>(size));
+    vmaMemory->unmap(allocator);
+
+    if (flush)
+    {
+        vmaMemory->flush(allocator, 0, size);
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result InitMappableDeviceMemory(Context *context,
@@ -622,6 +644,12 @@ void GarbageObject::destroy(RendererVk *renderer)
         case HandleType::QueryPool:
             vkDestroyQueryPool(device, (VkQueryPool)mHandle, nullptr);
             break;
+        case HandleType::VmaMemory:
+        {
+            VmaAllocator allocator = renderer->getVmaAllocator();
+            vmaFreeMemory(allocator, (VmaAllocation)mHandle);
+            break;
+        }
         default:
             UNREACHABLE();
             break;

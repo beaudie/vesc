@@ -31,6 +31,8 @@
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#define VMA_IMPLEMENTATION
+#include "libANGLE/renderer/vulkan/vk_mem_alloc.h"
 #include "libANGLE/trace.h"
 #include "platform/Platform.h"
 
@@ -622,6 +624,8 @@ void RendererVk::onDestroy()
 
     mPipelineCache.destroy(mDevice);
 
+    vmaDestroyAllocator(mVmaAllocator);
+
     if (mGlslangInitialized)
     {
         GlslangRelease();
@@ -923,6 +927,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         ANGLE_TRY(initializeDevice(displayVk, firstGraphicsQueueFamily));
     }
+
+    // Create VMA allocator
+    ANGLE_TRY(initVmaAllocator(displayVk));
 
     // Store the physical device memory properties so we can find the right memory pools.
     mMemoryProperties.init(mPhysicalDevice);
@@ -1328,6 +1335,39 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // Initialize the vulkan pipeline cache.
     bool success = false;
     ANGLE_TRY(initPipelineCache(displayVk, &mPipelineCache, &success));
+
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::initVmaAllocator(DisplayVk *display)
+{
+    const VmaVulkanFunctions funcs{
+        .vkGetPhysicalDeviceProperties       = vkGetPhysicalDeviceProperties,
+        .vkGetPhysicalDeviceMemoryProperties = vkGetPhysicalDeviceMemoryProperties,
+        .vkAllocateMemory                    = vkAllocateMemory,
+        .vkFreeMemory                        = vkFreeMemory,
+        .vkMapMemory                         = vkMapMemory,
+        .vkUnmapMemory                       = vkUnmapMemory,
+        .vkFlushMappedMemoryRanges           = vkFlushMappedMemoryRanges,
+        .vkInvalidateMappedMemoryRanges      = vkInvalidateMappedMemoryRanges,
+        .vkBindBufferMemory                  = vkBindBufferMemory,
+        .vkBindImageMemory                   = vkBindImageMemory,
+        .vkGetBufferMemoryRequirements       = vkGetBufferMemoryRequirements,
+        .vkGetImageMemoryRequirements        = vkGetImageMemoryRequirements,
+        .vkCreateBuffer                      = vkCreateBuffer,
+        .vkDestroyBuffer                     = vkDestroyBuffer,
+        .vkCreateImage                       = vkCreateImage,
+        .vkDestroyImage                      = vkDestroyImage,
+        .vkCmdCopyBuffer                     = vkCmdCopyBuffer,
+        .vkGetBufferMemoryRequirements2KHR   = vkGetBufferMemoryRequirements2KHR,
+        .vkGetImageMemoryRequirements2KHR    = vkGetImageMemoryRequirements2KHR};
+
+    VmaAllocatorCreateInfo allocatorInfo = {};
+    allocatorInfo.physicalDevice         = mPhysicalDevice;
+    allocatorInfo.device                 = mDevice;
+    allocatorInfo.pVulkanFunctions       = &funcs;
+
+    ANGLE_VK_TRY(display, vmaCreateAllocator(&allocatorInfo, &mVmaAllocator));
 
     return angle::Result::Continue;
 }
