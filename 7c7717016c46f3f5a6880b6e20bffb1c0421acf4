@@ -389,6 +389,30 @@
     },
     {
       "key": {
+        "uuid": "4d4c64f6_e8527862",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-31T00:52:10Z",
+      "side": 1,
+      "message": "That function is using \u0027global\u0027 to mean within each particular shader program, not across all shader stages.   For example:\n\n    // Validate no uniform names conflict with attribute names\n    const ProgramState *programState \u003d getProgramState(ShaderType::Vertex);\n    if (programState)\n    {\n        Shader *vertexShader \u003d programState-\u003egetAttachedShader(ShaderType::Vertex);\n        if (vertexShader)\n        {\n            for (const auto \u0026attrib : vertexShader-\u003egetActiveAttributes())\n            {\n                if (uniformMap.count(attrib.name))\n                {\n                    infoLog \u003c\u003c \"Name conflicts between a uniform and an attribute: \" \u003c\u003c attrib.name;\n                    return false;\n                }\n            }\n        }\n    }",
+      "parentUuid": "6cdde4d0_e4c5e30d",
+      "range": {
+        "startLine": 446,
+        "startChar": 32,
+        "endLine": 446,
+        "endChar": 55
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "050f836d_7d7bb92f",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 55
@@ -448,6 +472,30 @@
       "side": 1,
       "message": "Ok, actually the problem is that you shouldn\u0027t be storing `transformedSpirvBlob` in the \"program\". The program has its own blob, and the PPO has a different blob (and it shouldn\u0027t modify the original program\u0027s blob).\n\nMy suggestion is to transform the blobs into a temporary vector, which is then passed to `createPipelineLayout` and subsequently discarded.",
       "parentUuid": "0a453923_7771f622",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 66
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3b5a4a8_f200ff89",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-03-31T00:52:10Z",
+      "side": 1,
+      "message": "The complication comes from the fact that the transformed SPIR-V is needed in a different code path from where it\u0027s generated.   The SPIR-V is transformed here during ProgramPipelineVk::link() which occurs as part of Context::prepareForDraw(), while the transformed SPIR-V isn\u0027t actually used until ProgramInfo::initProgram() during ContextVk::handleDirtyGraphicsPipeline().   \n\nThis means that the data needs to be stored somewhere so it can survive until then in a way that\u0027s usable for both monolithic programs and PPOs, since the ContextVk::handleDirtyGraphicsPipeline() path is the same for both.\n\nThis is an optimization that will touch enough places to justify a separate CL once this has landed.",
+      "parentUuid": "c6d1bbf4_7ffe3e1d",
       "range": {
         "startLine": 101,
         "startChar": 12,
