@@ -889,7 +889,7 @@ angle::Result TextureStorage11::releaseMultisampledTexStorageForLevel(size_t lev
     if (mMSTexInfo && mMSTexInfo->indexSS.getLevelIndex() == static_cast<int>(level))
     {
         mMSTexInfo->msTex.reset();
-        onStateChange(angle::SubjectMessage::ContentsChanged);
+        onStateChange(angle::SubjectMessage::SubjectChanged);
     }
     return angle::Result::Continue;
 }
@@ -1550,7 +1550,7 @@ angle::Result TextureStorage11_2D::resolveTexture(const gl::Context *context)
     if (mMSTexInfo && mMSTexInfo->msTex && mMSTexInfo->msTextureNeedsResolve)
     {
         ANGLE_TRY(resolveTextureHelper(context, mTexture));
-        onStateChange(angle::SubjectMessage::ContentsChanged);
+        onStateChange(angle::SubjectMessage::SubjectChanged);
     }
     return angle::Result::Continue;
 }
@@ -2657,7 +2657,7 @@ angle::Result TextureStorage11_Cube::resolveTexture(const gl::Context *context)
     if (mMSTexInfo && mMSTexInfo->msTex && mMSTexInfo->msTextureNeedsResolve)
     {
         ANGLE_TRY(resolveTextureHelper(context, mTexture));
-        onStateChange(angle::SubjectMessage::ContentsChanged);
+        onStateChange(angle::SubjectMessage::SubjectChanged);
     }
     return angle::Result::Continue;
 }
