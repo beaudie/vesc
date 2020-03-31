@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "97a1543d_af545d93",
+        "filename": "src/libANGLE/renderer/QueryImpl.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-31T18:34:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "519ebf4e_2345e45c",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 0
+      },
+      "revId": "1a92214df1b233856ef1acdfec531db0344f245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff882d63_d9929ad5",
         "filename": "src/libANGLE/renderer/serial_utils.h",
         "patchSetId": 14
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c1294b12_9e9afbf0",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-31T18:34:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff882d63_d9929ad5",
+      "range": {
+        "startLine": 72,
+        "startChar": 19,
+        "endLine": 72,
+        "endChar": 26
+      },
+      "revId": "1a92214df1b233856ef1acdfec531db0344f245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d5e01b7_8c5f4bbb",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 14
@@ -59,6 +107,30 @@
       "writtenOn": "2020-03-31T13:26:12Z",
       "side": 1,
       "message": "nit: you can make the adding the mCachedResult part of your helper function.",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 27
+      },
+      "revId": "1a92214df1b233856ef1acdfec531db0344f245e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "456038c5_0e0e607e",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-03-31T18:34:23Z",
+      "side": 1,
+      "message": "If I pass in mCachedResult, then I have to add result into mCachedResult, which is counter intuitive. I prefer the modification to mCachedResult is explicit here to make code easier to understand.\n\nAlternative option is to have retrieveStashedQueryResult return uint64_t, which will compact the three lines into one. But then I have to discard return value of getUint64Result(), which you may not like as well.",
+      "parentUuid": "1d5e01b7_8c5f4bbb",
       "range": {
         "startLine": 207,
         "startChar": 0,
