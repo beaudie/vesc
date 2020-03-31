@@ -93,6 +93,52 @@
       "revId": "e472aca596dcdf5ce5f3019ae427abc545ccfcd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a383df8a_80d76d8c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-31T21:49:48Z",
+      "side": 1,
+      "message": "this can be const given other comment..",
+      "range": {
+        "startLine": 123,
+        "startChar": 32,
+        "endLine": 123,
+        "endChar": 47
+      },
+      "revId": "e472aca596dcdf5ce5f3019ae427abc545ccfcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c5469dc_2ac81a47",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-03-31T21:49:48Z",
+      "side": 1,
+      "message": "you can add a const overload here that returns a const uint8_t *.",
+      "range": {
+        "startLine": 176,
+        "startChar": 26,
+        "endLine": 176,
+        "endChar": 42
+      },
+      "revId": "e472aca596dcdf5ce5f3019ae427abc545ccfcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
