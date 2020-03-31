@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e7fbfc6_36ff6e92",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-03-31T15:47:18Z",
+      "side": 0,
+      "message": "Just to be certain, this goes away because stageSubresourceUpdateImpl calls ImageHelper::appendSubresourceUpdate which does the equivalent, right?",
+      "revId": "50a47bd992294216b0fe08db02bdd78746b56d8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
