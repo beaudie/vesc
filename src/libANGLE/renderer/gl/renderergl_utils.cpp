@@ -1126,6 +1126,16 @@ void GenerateCaps(const FunctionsGL *functions,
         LimitVersion(maxSupportedESVersion, gl::Version(2, 0));
     }
 
+    if (!functions->isAtLeastGL(gl::Version(4, 0)) &&
+        !functions->hasGLExtension("GL_OES_texture_cube_map_array") &&
+        !functions->hasGLExtension("GL_EXT_texture_cube_map_array") &&
+        !functions->hasGLExtension("GL_ARB_texture_cube_map_array") &&
+        !functions->isAtLeastGLES(gl::Version(3, 2)))
+    {
+        // Can't support ES3.2 without cube map array textures
+        LimitVersion(maxSupportedESVersion, gl::Version(3, 1));
+    }
+
     // Extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);
     extensions->textureCompressionASTCHDRKHR =
@@ -1523,6 +1533,15 @@ void GenerateCaps(const FunctionsGL *functions,
     {
         caps->maxClipDistances = 0;
     }
+
+    // GL_OES_texture_cube_map_array
+    extensions->textureCubeMapArrayOES =
+        functions->isAtLeastGL(gl::Version(4, 0)) ||
+        functions->hasGLExtension("GL_OES_texture_cube_map_array") ||
+        functions->hasGLExtension("GL_EXT_texture_cube_map_array") ||
+        functions->hasGLExtension("GL_ARB_texture_cube_map_array") ||
+        functions->isAtLeastGLES(gl::Version(3, 2));
+    extensions->textureCubeMapArrayEXT = extensions->textureCubeMapArrayOES;
 }
 
 void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *features)
@@ -1816,7 +1835,8 @@ bool UseTexImage2D(gl::TextureType textureType)
 bool UseTexImage3D(gl::TextureType textureType)
 {
     return textureType == gl::TextureType::_2DArray || textureType == gl::TextureType::_3D ||
-           textureType == gl::TextureType::_2DMultisampleArray;
+           textureType == gl::TextureType::_2DMultisampleArray ||
+           textureType == gl::TextureType::CubeMapArray;
 }
 
 GLenum GetTextureBindingQuery(gl::TextureType textureType)
@@ -1839,6 +1859,8 @@ GLenum GetTextureBindingQuery(gl::TextureType textureType)
             return GL_TEXTURE_BINDING_RECTANGLE;
         case gl::TextureType::CubeMap:
             return GL_TEXTURE_BINDING_CUBE_MAP;
+        case gl::TextureType::CubeMapArray:
+            return GL_TEXTURE_BINDING_CUBE_MAP_ARRAY_OES;
         default:
             UNREACHABLE();
             return 0;
