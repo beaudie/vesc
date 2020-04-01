@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb918282_acb9628c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-01T20:11:13Z",
+      "side": 1,
+      "message": "since this CL was +2\u0027ed, -1 until this is fixed, unless it\u0027s intentional.",
+      "range": {
+        "startLine": 183,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 48
+      },
+      "revId": "fa0139eb6fc79c8f70036ae2b7489066bbb0029e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
