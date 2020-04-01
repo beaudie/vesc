@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6ff8f838_b71c8c53",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-01T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2940b831_11d3118b",
+      "revId": "36a3017086acbf15206ec4f3bfb8fae17287d1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bcf6e43e_ccfba434",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 13
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "b2483790_44ce4010",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-01T23:31:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bcf6e43e_ccfba434",
+      "revId": "36a3017086acbf15206ec4f3bfb8fae17287d1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2dd65725_b7c4b4b2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 13
@@ -50,6 +86,24 @@
       "revId": "36a3017086acbf15206ec4f3bfb8fae17287d1f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92126cd1_90a9db3e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-01T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dd65725_b7c4b4b2",
+      "revId": "36a3017086acbf15206ec4f3bfb8fae17287d1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
