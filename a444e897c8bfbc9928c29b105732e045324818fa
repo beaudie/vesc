@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "82b067e3_d34a9a0a",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-01T19:52:24Z",
+      "side": 1,
+      "message": "Compute shader does no have activeShaders set. That\u0027s why the you see the explicit check if(isCompute()) in various places.",
+      "parentUuid": "9212c949_ffeed773",
+      "range": {
+        "startLine": 232,
+        "startChar": 12,
+        "endLine": 235,
+        "endChar": 63
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d632d985_b29f30b4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "236a5253_744aa84a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-01T19:52:24Z",
+      "side": 1,
+      "message": "I don\u0027t think BitCount will be cheaper than any() check though, given that you still have to have a comparison after get the bit count.",
+      "parentUuid": "d632d985_b29f30b4",
+      "range": {
+        "startLine": 1252,
+        "startChar": 16,
+        "endLine": 1252,
+        "endChar": 32
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3bfc99ec_c119ed96",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -92,6 +140,30 @@
       "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deee25c7_8fb5213e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-01T19:52:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bfc99ec_c119ed96",
+      "range": {
+        "startLine": 1265,
+        "startChar": 20,
+        "endLine": 1268,
+        "endChar": 95
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -118,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "a85e6e90_74a75dfd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3655,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-01T19:52:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e6d232cd_24e84d65",
+      "range": {
+        "startLine": 3655,
+        "startChar": 12,
+        "endLine": 3655,
+        "endChar": 28
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4236c0b8_e25ecea2",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -138,6 +234,30 @@
       "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee43c09a_d02dd1a5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3668,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-01T19:52:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4236c0b8_e25ecea2",
+      "range": {
+        "startLine": 3666,
+        "startChar": 0,
+        "endLine": 3668,
+        "endChar": 95
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

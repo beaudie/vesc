@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ae03abd7_8a6edfa1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-01T19:52:24Z",
+      "side": 0,
+      "message": "I might accidentally left this assertion out. But I do agree with you that this seems impossible to reach here. If we do get here, you don\u0027t need assertion. It will crash in next line anyway.",
+      "parentUuid": "41279007_a32fd775",
+      "range": {
+        "startLine": 1228,
+        "startChar": 4,
+        "endLine": 1228,
+        "endChar": 23
+      },
+      "revId": "06f4f3e13c49e0c879d6479f940d0f26b5faa190",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "10eb32d8_472d9963",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 11
@@ -45,6 +69,30 @@
       "revId": "06f4f3e13c49e0c879d6479f940d0f26b5faa190",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45042bc7_0c480933",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-01T19:52:24Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "10eb32d8_472d9963",
+      "range": {
+        "startLine": 824,
+        "startChar": 0,
+        "endLine": 826,
+        "endChar": 78
+      },
+      "revId": "06f4f3e13c49e0c879d6479f940d0f26b5faa190",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
