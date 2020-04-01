@@ -22,6 +22,30 @@
       "revId": "550128e674f7c1b10875d42bee0a5d3895a78df1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35cbbb2b_5fc5535e",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-01T16:16:40Z",
+      "side": 1,
+      "message": "srgb formats in \"InternalFormatInfoMap\" requires ES3, followed that pattern. when we force enabled it by saying ES3 OR (ES2 \u0026 EXT_sRGB), tests fail on ES2 for some other reasons but pass on ES3. Can we have the task of loosening the restriction as a follow up change?",
+      "parentUuid": "8f9aab70_a38ae8bb",
+      "range": {
+        "startLine": 961,
+        "startChar": 37,
+        "endLine": 961,
+        "endChar": 65
+      },
+      "revId": "550128e674f7c1b10875d42bee0a5d3895a78df1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
