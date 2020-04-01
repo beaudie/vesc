@@ -37,16 +37,17 @@ size_t GetImageDescIndex(TextureTarget target, size_t level)
                                        : level;
 }
 
-InitState DetermineInitState(const Context *context, const uint8_t *pixels)
+InitState DetermineInitState(const Context *context,
+                             gl::Buffer *unpackBuffer,
+                             const uint8_t *pixels)
 {
     // Can happen in tests.
     if (!context || !context->isRobustResourceInitEnabled())
+    {
         return InitState::Initialized;
+    }
 
-    const auto &glState = context->getState();
-    return (pixels == nullptr && glState.getTargetBuffer(gl::BufferBinding::PixelUnpack) == nullptr)
-               ? InitState::MayNeedInit
-               : InitState::Initialized;
+    return (!pixels && !unpackBuffer) ? InitState::MayNeedInit : InitState::Initialized;
 }
 }  // namespace
 
@@ -1041,6 +1042,7 @@ void Texture::signalDirtyState(size_t dirtyBit)
 
 angle::Result Texture::setImage(Context *context,
                                 const PixelUnpackState &unpackState,
+                                Buffer *unpackBuffer,
                                 TextureTarget target,
                                 GLint level,
                                 GLenum internalFormat,
@@ -1058,9 +1060,9 @@ angle::Result Texture::setImage(Context *context,
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
 
     ANGLE_TRY(mTexture->setImage(context, index, internalFormat, size, format, type, unpackState,
-                                 pixels));
+                                 unpackBuffer, pixels));
 
-    InitState initState = DetermineInitState(context, pixels);
+    InitState initState = DetermineInitState(context, unpackBuffer, pixels);
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
@@ -1116,7 +1118,9 @@ angle::Result Texture::setCompressedImage(Context *context,
     ANGLE_TRY(mTexture->setCompressedImage(context, index, internalFormat, size, unpackState,
                                            imageSize, pixels));
 
-    InitState initState = DetermineInitState(context, pixels);
+    gl::Buffer *unpackBuffer = context->getState().getTargetBuffer(gl::BufferBinding::PixelUnpack);
+
+    InitState initState = DetermineInitState(context, unpackBuffer, pixels);
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat), initState));
     signalDirtyStorage(initState);
 
