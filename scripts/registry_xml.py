@@ -61,6 +61,7 @@ gles_extensions = [
     "GL_ANGLE_semaphore_fuchsia",
     "GL_ANGLE_texture_multisample",
     "GL_ANGLE_translated_shader_source",
+    #"GL_ARB_texture_cube_map_array",
     "GL_EXT_blend_func_extended",
     "GL_EXT_debug_marker",
     "GL_EXT_discard_framebuffer",
@@ -85,6 +86,7 @@ gles_extensions = [
     "GL_EXT_texture_compression_rgtc",
     "GL_EXT_texture_compression_s3tc",
     "GL_EXT_texture_compression_s3tc_srgb",
+    "GL_EXT_texture_cube_map_array",
     "GL_EXT_texture_filter_anisotropic",
     "GL_EXT_texture_format_BGRA8888",
     "GL_EXT_texture_storage",
@@ -102,6 +104,7 @@ gles_extensions = [
     "GL_OES_mapbuffer",
     "GL_OES_texture_3D",
     "GL_OES_texture_border_clamp",
+    "GL_OES_texture_cube_map_array",
     "GL_OES_texture_half_float",
     "GL_OES_texture_storage_multisample_2d_array",
     "GL_OES_vertex_array_object",
@@ -158,7 +161,7 @@ supported_egl_extensions = [
 ]
 
 # Strip these suffixes from Context entry point names. NV is excluded (for now).
-strip_suffixes = ["ANGLE", "EXT", "KHR", "OES", "CHROMIUM"]
+strip_suffixes = ["ANGLE", "ARB", "EXT", "KHR", "OES", "CHROMIUM"]
 
 # The EGL_ANGLE_explicit_context extension is generated differently from other extensions.
 # Toggle generation here.

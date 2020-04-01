@@ -637,7 +637,13 @@ class GroupedList:
             if ('essl_ext_symbol' in self.objs[name_hash] and
                     self.objs[name_hash]['essl_ext_symbol'] != symbol):
                 # Adding a variable that is part of two ESSL extensions
-                if essl_extension != 'UNDEFINED':
+                if ('essl_ext_symbol2' in self.objs[name_hash] and
+                        self.objs[name_hash]['essl_ext_symbol2'] != symbol):
+                    self.objs[name_hash]['essl_extension3'] = essl_extension
+                    self.objs[name_hash]['essl_ext_level3'] = essl_level
+                    self.objs[name_hash]['essl_ext_symbol3'] = symbol
+                    self.objs[name_hash]['essl_ext_shader_type3'] = shader_type
+                else:
                     self.objs[name_hash]['essl_extension2'] = essl_extension
                     self.objs[name_hash]['essl_ext_level2'] = essl_level
                     self.objs[name_hash]['essl_ext_symbol2'] = symbol
@@ -691,7 +697,6 @@ class GroupedList:
         for hash_val in range(0, self.num_names):
             if hash_val in self.objs:
                 data = self.objs[hash_val]
-
                 rules = []
 
                 if "symbol" in data and "essl_level" in data:
@@ -713,6 +718,10 @@ class GroupedList:
                 if "essl_ext_symbol2" in data:
                     add_rule(rules, "ESSL", data["essl_ext_level2"], data["essl_ext_shader_type2"],
                              data["essl_extension2"], data["essl_ext_symbol2"])
+
+                if "essl_ext_symbol3" in data:
+                    add_rule(rules, "ESSL", data["essl_ext_level3"], data["essl_ext_shader_type3"],
+                             data["essl_extension3"], data["essl_ext_symbol3"])
 
                 name = data['name']
                 name_underscore = name.replace("(", "_")
