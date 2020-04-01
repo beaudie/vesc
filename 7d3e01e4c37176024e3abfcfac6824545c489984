@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec0fbca7_191221a2",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-01T19:35:53Z",
+      "side": 1,
+      "message": "Is this the same as bufferID above?\nIf so, would be good to use same name for consistency.",
+      "range": {
+        "startLine": 1032,
+        "startChar": 50,
+        "endLine": 1032,
+        "endChar": 56
+      },
+      "revId": "7d3e01e4c37176024e3abfcfac6824545c489984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea1fb9b0_82cfc4ff",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-01T19:35:53Z",
+      "side": 1,
+      "message": "bufferID",
+      "range": {
+        "startLine": 1035,
+        "startChar": 50,
+        "endLine": 1035,
+        "endChar": 56
+      },
+      "revId": "7d3e01e4c37176024e3abfcfac6824545c489984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49a73b50_3efda52a",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-01T19:35:53Z",
+      "side": 1,
+      "message": "bufferID",
+      "range": {
+        "startLine": 1038,
+        "startChar": 44,
+        "endLine": 1038,
+        "endChar": 50
+      },
+      "revId": "7d3e01e4c37176024e3abfcfac6824545c489984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
