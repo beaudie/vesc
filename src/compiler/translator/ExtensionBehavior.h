@@ -42,6 +42,7 @@ enum class TExtension
     ANGLE_multi_draw,
     ANGLE_base_vertex_base_instance,
     WEBGL_video_texture,
+    OES_texture_cube_map_array,
 };
 
 enum TBehavior

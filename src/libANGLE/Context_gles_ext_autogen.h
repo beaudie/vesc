@@ -14,6 +14,7 @@
                                                                                                    \
     /* GLES1 Extensions */                                                                         \
                                                                                                    \
+    /* GL_EXT_texture_cube_map_array */                                                            \
     /* GL_OES_draw_texture */                                                                      \
     void drawTexf(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height);                 \
     void drawTexfv(const GLfloat *coords);                                                         \
@@ -43,6 +44,7 @@
     void texGeniv(GLenum coord, GLenum pname, const GLint *params);                                \
     void texGenx(GLenum coord, GLenum pname, GLfixed param);                                       \
     void texGenxv(GLenum coord, GLenum pname, const GLfixed *params);                              \
+    /* GL_OES_texture_cube_map_array */                                                            \
                                                                                                    \
     /* ANGLE Extensions */                                                                         \
                                                                                                    \

@@ -345,6 +345,13 @@ void Context::initialize()
     Texture *zeroTextureCube = new Texture(mImplementation.get(), {0}, TextureType::CubeMap);
     mZeroTextures[TextureType::CubeMap].set(this, zeroTextureCube);
 
+    if (getClientVersion() >= Version(3, 2) || mSupportedExtensions.textureCubeMapArrayOES)
+    {
+        Texture *zeroTextureCubeMapArray =
+            new Texture(mImplementation.get(), {0}, TextureType::CubeMapArray);
+        mZeroTextures[TextureType::CubeMapArray].set(this, zeroTextureCubeMapArray);
+    }
+
     if (getClientVersion() >= Version(3, 0) || mSupportedExtensions.texture3DOES)
     {
         Texture *zeroTexture3D = new Texture(mImplementation.get(), {0}, TextureType::_3D);
@@ -8625,6 +8632,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
         {TextureType::External, exts.eglImageExternalOES || exts.eglStreamConsumerExternalNV},
         {TextureType::Rectangle, exts.textureRectangle},
         {TextureType::CubeMap, true},
+        {TextureType::CubeMapArray, exts.textureCubeMapArrayOES},
         {TextureType::VideoImage, exts.webglVideoTexture},
     }};
 }
