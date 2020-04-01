@@ -117,6 +117,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     {
         extBehavior[TExtension::APPLE_clip_distance] = EBhUndefined;
     }
+    if (resources.OES_texture_cube_map_array)
+    {
+        extBehavior[TExtension::OES_texture_cube_map_array] = EBhUndefined;
+    }
 }
 
 void ResetExtensionBehavior(const ShBuiltInResources &resources,
@@ -137,8 +141,8 @@ void ResetExtensionBehavior(const ShBuiltInResources &resources,
         else
         {
             // Restore ARB_texture_rectangle in case it was removed during an earlier reset.  As
-            // noted above, it doesn't follow the standard for extension directives and is enabled
-            // by default.
+            // noted above, it doesn't follow the standard for extension directives and is
+            // enabled by default.
             extBehavior[TExtension::ARB_texture_rectangle] = EBhEnable;
         }
     }
