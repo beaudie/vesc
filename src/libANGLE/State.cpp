@@ -443,6 +443,10 @@ void State::initialize(Context *context)
 
     mSamplerTextures[TextureType::_2D].resize(caps.maxCombinedTextureImageUnits);
     mSamplerTextures[TextureType::CubeMap].resize(caps.maxCombinedTextureImageUnits);
+    if (clientVersion >= Version(3, 2) || extensions.textureCubeMapArrayOES)
+    {
+        mSamplerTextures[TextureType::CubeMapArray].resize(caps.maxCombinedTextureImageUnits);
+    }
     if (clientVersion >= Version(3, 0) || nativeExtensions.texture3DOES)
     {
         mSamplerTextures[TextureType::_3D].resize(caps.maxCombinedTextureImageUnits);

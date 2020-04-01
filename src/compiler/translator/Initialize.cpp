@@ -116,32 +116,35 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     if (resources.APPLE_clip_distance)
     {
         extBehavior[TExtension::APPLE_clip_distance] = EBhUndefined;
+        if (resources.OES_texture_cube_map_array)
+        {
+            extBehavior[TExtension::OES_texture_cube_map_array] = EBhUndefined;
+        }
     }
-}
 
-void ResetExtensionBehavior(const ShBuiltInResources &resources,
-                            TExtensionBehavior &extBehavior,
-                            const ShCompileOptions compileOptions)
-{
-    for (auto &ext : extBehavior)
+    void ResetExtensionBehavior(const ShBuiltInResources &resources,
+                                TExtensionBehavior &extBehavior,
+                                const ShCompileOptions compileOptions)
     {
-        ext.second = EBhUndefined;
-    }
-    if (resources.ARB_texture_rectangle)
-    {
-        if (compileOptions & SH_DISABLE_ARB_TEXTURE_RECTANGLE)
+        for (auto &ext : extBehavior)
         {
-            // Remove ARB_texture_rectangle so it can't be enabled by extension directives.
-            extBehavior.erase(TExtension::ARB_texture_rectangle);
+            ext.second = EBhUndefined;
         }
-        else
+        if (resources.ARB_texture_rectangle)
         {
-            // Restore ARB_texture_rectangle in case it was removed during an earlier reset.  As
-            // noted above, it doesn't follow the standard for extension directives and is enabled
-            // by default.
-            extBehavior[TExtension::ARB_texture_rectangle] = EBhEnable;
+            if (compileOptions & SH_DISABLE_ARB_TEXTURE_RECTANGLE)
+            {
+                // Remove ARB_texture_rectangle so it can't be enabled by extension directives.
+                extBehavior.erase(TExtension::ARB_texture_rectangle);
+            }
+            else
+            {
+                // Restore ARB_texture_rectangle in case it was removed during an earlier reset.  As
+                // noted above, it doesn't follow the standard for extension directives and is
+                // enabled by default.
+                extBehavior[TExtension::ARB_texture_rectangle] = EBhEnable;
+            }
         }
     }
-}
 
 }  // namespace sh
