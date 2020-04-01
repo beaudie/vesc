@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9212c949_ffeed773",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-01T18:29:41Z",
+      "side": 1,
+      "message": "is this necessary? seems like you can use the shaderBits unconditionally.",
+      "range": {
+        "startLine": 232,
+        "startChar": 12,
+        "endLine": 235,
+        "endChar": 63
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d632d985_b29f30b4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-01T18:29:41Z",
+      "side": 1,
+      "message": "you can optimize this and clean up the syntax using gl::BitCount(shaderBits.to_ulong()) \u003e 1 (or \u003d\u003d 1). Could also make count() a member of angle::BitSet.",
+      "range": {
+        "startLine": 1252,
+        "startChar": 16,
+        "endLine": 1252,
+        "endChar": 32
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bfc99ec_c119ed96",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-01T18:29:41Z",
+      "side": 1,
+      "message": "nit: can you make this a constexpr gl::ShaderMap in the anonymous namespace at the top of the file please? that will be both more efficient (no stack allocation) and a nicer syntax (no need for the static_cast). see Context.cpp\u0027s kValidBasicDrawModes for an example.",
+      "range": {
+        "startLine": 1265,
+        "startChar": 20,
+        "endLine": 1268,
+        "endChar": 95
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d232cd_24e84d65",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3655,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-01T18:29:41Z",
+      "side": 1,
+      "message": "same comment as above.",
+      "range": {
+        "startLine": 3655,
+        "startChar": 12,
+        "endLine": 3655,
+        "endChar": 28
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4236c0b8_e25ecea2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3668,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-01T18:29:41Z",
+      "side": 1,
+      "message": "same comment as above.",
+      "range": {
+        "startLine": 3666,
+        "startChar": 0,
+        "endLine": 3668,
+        "endChar": 95
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

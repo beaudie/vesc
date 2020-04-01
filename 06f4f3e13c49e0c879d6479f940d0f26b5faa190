@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41279007_a32fd775",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-01T18:29:41Z",
+      "side": 0,
+      "message": "in what cases we enter this code without a valid program executable? seems like we should have one if we\u0027re about to render something.",
+      "range": {
+        "startLine": 1228,
+        "startChar": 4,
+        "endLine": 1228,
+        "endChar": 23
+      },
+      "revId": "06f4f3e13c49e0c879d6479f940d0f26b5faa190",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10eb32d8_472d9963",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-01T18:29:41Z",
+      "side": 0,
+      "message": "can you leave this here for now? If you feel strongly we need to make this change, please make it a split change. It is unrelated to the rest of the CL.",
+      "range": {
+        "startLine": 824,
+        "startChar": 0,
+        "endLine": 826,
+        "endChar": 78
+      },
+      "revId": "06f4f3e13c49e0c879d6479f940d0f26b5faa190",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
