@@ -125,7 +125,14 @@ class TracePerfTest : public ANGLERenderTest, public ::testing::WithParamInterfa
 
 TracePerfTest::TracePerfTest()
     : ANGLERenderTest("TracePerf", GetParam()), mStartFrame(0), mEndFrame(0)
-{}
+{
+    // Flaky on Windows Intel OpenGL. http://crbug.com/974083
+    // TODO(anglebug.com/4533) This fails after the upgrade to the 26.20.100.7870 driver.
+    if (IsWindows() && IsIntel() && IsVulkan() && GetParam().testID == TracePerfTestID::Manhattan10)
+    {
+        mSkipTest = true;
+    }
+}
 
 // TODO(jmadill/cnorthrop): Use decompression path. http://anglebug.com/3630
 #define TRACE_TEST_CASE(NAME)                                    \
@@ -300,8 +307,8 @@ void TracePerfTest::onFramebufferChange(GLenum target, GLuint framebuffer)
     if (target != GL_FRAMEBUFFER && target != GL_DRAW_FRAMEBUFFER)
         return;
 
-    // We have at most one active timestamp query at a time. This code will end the current query
-    // and immediately start a new one.
+    // We have at most one active timestamp query at a time. This code will end the current
+    // query and immediately start a new one.
     if (mCurrentQuery.beginTimestampQuery != 0)
     {
         glGenQueriesEXT(1, &mCurrentQuery.endTimestampQuery);
