@@ -44,6 +44,7 @@ enum class TExtension
     ANGLE_base_vertex_base_instance,
     WEBGL_video_texture,
     APPLE_clip_distance,
+    OES_texture_cube_map_array,
 };
 
 enum TBehavior
