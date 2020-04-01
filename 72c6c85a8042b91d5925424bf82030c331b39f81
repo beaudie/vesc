@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6e3e0db5_47ad2e56",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-01T17:38:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bcc4c4c_54ef11dd",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53b66258_66490a98",
         "filename": "src/compiler/translator/glslang.l",
         "patchSetId": 2
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "258c8144_8c97fcdb",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-01T17:38:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a350d647_4f8ed6c4",
+      "range": {
+        "startLine": 238,
+        "startChar": 32,
+        "endLine": 238,
+        "endChar": 45
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2591e041_10904b95",
         "filename": "src/compiler/translator/glslang.l",
         "patchSetId": 2
@@ -116,6 +164,30 @@
       "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64027157_138f9240",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 2
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-01T17:38:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2591e041_10904b95",
+      "range": {
+        "startLine": 603,
+        "startChar": 4,
+        "endLine": 603,
+        "endChar": 42
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -142,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "aac7dec6_1e1cc48a",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 2
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-01T17:38:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5390f536_353b9178",
+      "range": {
+        "startLine": 780,
+        "startChar": 6,
+        "endLine": 780,
+        "endChar": 20
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01ab592a_5793d26d",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 2
@@ -162,6 +258,30 @@
       "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30992d0c_39fc0d57",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-01T17:38:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01ab592a_5793d26d",
+      "range": {
+        "startLine": 426,
+        "startChar": 35,
+        "endLine": 426,
+        "endChar": 36
+      },
+      "revId": "72c6c85a8042b91d5925424bf82030c331b39f81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
