@@ -41,12 +41,14 @@ angle_extensions = [
 
 gles1_extensions = [
     # ES1 (Possibly the min set of extensions needed by Android)
+    "GL_EXT_texture_cube_map_array",
     "GL_OES_draw_texture",
     "GL_OES_framebuffer_object",
     "GL_OES_matrix_palette",
     "GL_OES_point_size_array",
     "GL_OES_query_matrix",
     "GL_OES_texture_cube_map",
+    "GL_OES_texture_cube_map_array",
 ]
 
 gles_extensions = [
