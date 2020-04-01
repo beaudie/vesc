@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "a798a915_4de6739d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-01T19:23:57Z",
+      "side": 1,
+      "message": "Shabi suggests the opposite:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2067101/42/src/libANGLE/renderer/glslang_wrapper_utils.cpp#733\n\nShahbaz Youssefi\nMar 13\nIf all you are interested is if there are any active shaders, it\u0027s better to use (indirectly) the bitset\u0027s any() instead of count(). `any()` is a simple test against 0, `count()` relies on intrinsics which aren\u0027t universally available (or fallback to multiple instructions for example when counting uint64_t bits on a 32-bit system).",
+      "parentUuid": "d632d985_b29f30b4",
+      "range": {
+        "startLine": 1252,
+        "startChar": 16,
+        "endLine": 1252,
+        "endChar": 32
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3bfc99ec_c119ed96",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -110,6 +134,29 @@
         "startChar": 0,
         "endLine": 3668,
         "endChar": 95
+      },
+      "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff5e8cfc_7483e168",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-01T19:23:57Z",
+      "side": 1,
+      "message": "Should be Geometry.",
+      "range": {
+        "startLine": 183,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 48
       },
       "revId": "a444e897c8bfbc9928c29b105732e045324818fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
