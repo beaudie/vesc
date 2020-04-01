@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9722d48f_b1e49bdc",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-01T13:16:16Z",
+      "side": 1,
+      "message": "why aren\u0027t you building these on Windows?",
+      "range": {
+        "startLine": 1179,
+        "startChar": 9,
+        "endLine": 1179,
+        "endChar": 16
+      },
+      "revId": "7ccf4707bbc2b2c507c5b433f7c0c7bf9c029605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
