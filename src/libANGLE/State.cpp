@@ -443,6 +443,10 @@ void State::initialize(Context *context)
 
     mSamplerTextures[TextureType::_2D].resize(caps.maxCombinedTextureImageUnits);
     mSamplerTextures[TextureType::CubeMap].resize(caps.maxCombinedTextureImageUnits);
+    if (clientVersion >= Version(3, 2) || extensions.textureCubeMapArrayAny())
+    {
+        mSamplerTextures[TextureType::CubeMapArray].resize(caps.maxCombinedTextureImageUnits);
+    }
     if (clientVersion >= Version(3, 0) || nativeExtensions.texture3DOES)
     {
         mSamplerTextures[TextureType::_3D].resize(caps.maxCombinedTextureImageUnits);
@@ -2693,6 +2697,12 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
             ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
             *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
                                           TextureType::_2DMultisampleArray)
+                          .value;
+            break;
+        case GL_TEXTURE_BINDING_CUBE_MAP_ARRAY:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
+                                          TextureType::CubeMapArray)
                           .value;
             break;
         case GL_TEXTURE_BINDING_EXTERNAL_OES:
