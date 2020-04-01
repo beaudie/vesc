@@ -3595,6 +3595,17 @@ bool GetQueryParameterInfo(const State &glState,
         }
     }
 
+    if (extensions.textureCubeMapArrayAny())
+    {
+        switch (pname)
+        {
+            case GL_TEXTURE_BINDING_CUBE_MAP_ARRAY:
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
+        }
+    }
+
     if (glState.getClientVersion() < Version(3, 1))
     {
         return false;
