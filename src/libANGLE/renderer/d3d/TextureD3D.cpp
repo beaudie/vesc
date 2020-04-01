@@ -889,6 +889,7 @@ angle::Result TextureD3D_2D::setImage(const gl::Context *context,
                                       GLenum format,
                                       GLenum type,
                                       const gl::PixelUnpackState &unpack,
+                                      gl::Buffer *unpackBuffer,
                                       const uint8_t *pixels)
 {
     ASSERT((index.getTarget() == gl::TextureTarget::_2D ||
@@ -903,7 +904,6 @@ angle::Result TextureD3D_2D::setImage(const gl::Context *context,
                             size, false));
 
     // Attempt a fast gpu copy of the pixel data to the surface
-    gl::Buffer *unpackBuffer = context->getState().getTargetBuffer(gl::BufferBinding::PixelUnpack);
     if (mTexStorage)
     {
         ANGLE_TRY(mTexStorage->releaseMultisampledTexStorageForLevel(index.getLevelIndex()));
@@ -1692,6 +1692,7 @@ angle::Result TextureD3D_Cube::setImage(const gl::Context *context,
                                         GLenum format,
                                         GLenum type,
                                         const gl::PixelUnpackState &unpack,
+                                        gl::Buffer *unpackBuffer,
                                         const uint8_t *pixels)
 {
     ASSERT(size.depth == 1);
@@ -2425,6 +2426,7 @@ angle::Result TextureD3D_3D::setImage(const gl::Context *context,
                                       GLenum format,
                                       GLenum type,
                                       const gl::PixelUnpackState &unpack,
+                                      gl::Buffer *unpackBuffer,
                                       const uint8_t *pixels)
 {
     ASSERT(index.getTarget() == gl::TextureTarget::_3D);
@@ -2436,7 +2438,6 @@ angle::Result TextureD3D_3D::setImage(const gl::Context *context,
     bool fastUnpacked = false;
 
     // Attempt a fast gpu copy of the pixel data to the surface if the app bound an unpack buffer
-    gl::Buffer *unpackBuffer = context->getState().getTargetBuffer(gl::BufferBinding::PixelUnpack);
     if (isFastUnpackable(unpackBuffer, internalFormatInfo.sizedInternalFormat) && !size.empty() &&
         isLevelComplete(index.getLevelIndex()))
     {
@@ -3090,6 +3091,7 @@ angle::Result TextureD3D_2DArray::setImage(const gl::Context *context,
                                            GLenum format,
                                            GLenum type,
                                            const gl::PixelUnpackState &unpack,
+                                           gl::Buffer *unpackBuffer,
                                            const uint8_t *pixels)
 {
     ASSERT(index.getTarget() == gl::TextureTarget::_2DArray);
@@ -3806,6 +3808,7 @@ angle::Result TextureD3DImmutableBase::setImage(const gl::Context *context,
                                                 GLenum format,
                                                 GLenum type,
                                                 const gl::PixelUnpackState &unpack,
+                                                gl::Buffer *unpackBuffer,
                                                 const uint8_t *pixels)
 {
     ANGLE_HR_UNREACHABLE(GetImplAs<ContextD3D>(context));

@@ -227,6 +227,7 @@ class TextureD3D_2D : public TextureD3D
                            GLenum format,
                            GLenum type,
                            const gl::PixelUnpackState &unpack,
+                           gl::Buffer *unpackBuffer,
                            const uint8_t *pixels) override;
     angle::Result setSubImage(const gl::Context *context,
                               const gl::ImageIndex &index,
@@ -358,6 +359,7 @@ class TextureD3D_Cube : public TextureD3D
                            GLenum format,
                            GLenum type,
                            const gl::PixelUnpackState &unpack,
+                           gl::Buffer *unpackBuffer,
                            const uint8_t *pixels) override;
     angle::Result setSubImage(const gl::Context *context,
                               const gl::ImageIndex &index,
@@ -490,6 +492,7 @@ class TextureD3D_3D : public TextureD3D
                            GLenum format,
                            GLenum type,
                            const gl::PixelUnpackState &unpack,
+                           gl::Buffer *unpackBuffer,
                            const uint8_t *pixels) override;
     angle::Result setSubImage(const gl::Context *context,
                               const gl::ImageIndex &index,
@@ -619,6 +622,7 @@ class TextureD3D_2DArray : public TextureD3D
                            GLenum format,
                            GLenum type,
                            const gl::PixelUnpackState &unpack,
+                           gl::Buffer *unpackBuffer,
                            const uint8_t *pixels) override;
     angle::Result setSubImage(const gl::Context *context,
                               const gl::ImageIndex &index,
@@ -746,6 +750,7 @@ class TextureD3DImmutableBase : public TextureD3D
                            GLenum format,
                            GLenum type,
                            const gl::PixelUnpackState &unpack,
+                           gl::Buffer *unpackBuffer,
                            const uint8_t *pixels) override;
     angle::Result setSubImage(const gl::Context *context,
                               const gl::ImageIndex &index,
