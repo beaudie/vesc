@@ -284,6 +284,14 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions 
                 sink << "#extension GL_ARB_geometry_shader4 : " << GetBehaviorString(iter.second)
                      << "\n";
             }
+
+            if (getShaderVersion() >= 310 &&
+                (iter.first == TExtension::OES_texture_cube_map_array ||
+                 iter.first == TExtension::EXT_texture_cube_map_array))
+            {
+                sink << "#extension GL_ARB_texture_cube_map_array : "
+                     << GetBehaviorString(iter.second) << "\n";
+            }
         }
 
         const bool isMultiview =
