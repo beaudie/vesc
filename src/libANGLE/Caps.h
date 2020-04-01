@@ -605,6 +605,18 @@ struct Extensions
     bool gpuShader5EXT = false;
     // WEBGL_video_texture
     bool webglVideoTexture = false;
+
+    // GL_OES_texture_cube_map_array
+    bool textureCubeMapArrayOES = false;
+    // GL_EXT_texture_cube_map_array
+    bool textureCubeMapArrayEXT = false;
+    // GL_ARB_texture_cube_map_array
+    bool textureCubeMapArrayARB = false;
+    // Any version of the texture cube map array extension
+    bool textureCubeMapArrayAny() const
+    {
+        return (textureCubeMapArrayOES || textureCubeMapArrayEXT || textureCubeMapArrayARB);
+    }
 };
 
 // Pointer to a boolean memeber of the Extensions struct

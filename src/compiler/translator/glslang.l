@@ -229,6 +229,10 @@ O           [0-7]
 "sampler2DMSArray"     { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_storage_multisample_2d_array, SAMPLER2DMSARRAY); }
 "isampler2DMSArray"    { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_storage_multisample_2d_array, ISAMPLER2DMSARRAY); }
 "usampler2DMSArray"    { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_storage_multisample_2d_array, USAMPLER2DMSARRAY); }
+"samplerCubeArray"     { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_cube_map_array, SAMPLERCUBEMAPARRAYOES); }
+"samplerCubeArrayShadow"    { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_cube_map_array, SAMPLERCUBEMAPARRAYSHADOWOES); }
+"isamplerCubeArray"    { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_cube_map_array, ISAMPLERCUBEMAPARRAYOES); }
+"usamplerCubeArray"    { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_cube_map_array, USAMPLERCUBEMAPARRAYOES); }
 "samplerVideoWEBGL"    { return WEBGL_video_texture_extension(context, SAMPLERVIDEOWEBGL); }
 "struct"       { return STRUCT; }
 
@@ -251,6 +255,9 @@ O           [0-7]
 "iimageCube" { return ES3_reserved_ES3_1_keyword(context, IIMAGECUBE); }
 "uimageCube" { return ES3_reserved_ES3_1_keyword(context, UIMAGECUBE); }
 "imageCube" { return ES3_reserved_ES3_1_keyword(context, IMAGECUBE); }
+"imageCubeArray"    { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_cube_map_array, IMAGECUBEMAPARRAYOES); }
+"iimageCubeArray"    { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_cube_map_array, IIMAGECUBEMAPARRAYOES); }
+"uimageCubeArray"    { return ES3_reserved_ES3_1_extension_ES3_2_keyword(context, TExtension::OES_texture_cube_map_array, UIMAGECUBEMAPARRAYOES); }
 "readonly" { return ES3_reserved_ES3_1_keyword(context, READONLY); }
 "writeonly" { return ES3_reserved_ES3_1_keyword(context, WRITEONLY); }
 "coherent" { return ES3_reserved_ES3_1_keyword(context, COHERENT); }

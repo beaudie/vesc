@@ -552,6 +552,10 @@ bool ValidTextureTarget(const Context *context, TextureType type)
         case TextureType::_2DMultisampleArray:
             return context->getExtensions().textureStorageMultisample2DArrayOES;
 
+        case TextureType::CubeMapArray:
+            return (context->getClientVersion() >= Version(3, 2) ||
+                    context->getExtensions().textureCubeMapArrayOES);
+
         case TextureType::VideoImage:
             return context->getExtensions().webglVideoTexture;
 
@@ -583,6 +587,10 @@ bool ValidTexture3DTarget(const Context *context, TextureType target)
         case TextureType::_3D:
         case TextureType::_2DArray:
             return (context->getClientMajorVersion() >= 3);
+
+        case TextureType::CubeMapArray:
+            return (context->getClientVersion() >= Version(3, 2) ||
+                    context->getExtensions().textureCubeMapArrayOES);
 
         default:
             return false;

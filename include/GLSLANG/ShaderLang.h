@@ -394,6 +394,7 @@ struct ShBuiltInResources
     int ANGLE_multi_draw;
     int ANGLE_base_vertex_base_instance;
     int WEBGL_video_texture;
+    int OES_texture_cube_map_array;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate

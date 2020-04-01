@@ -1005,11 +1005,15 @@ GROUP BEGIN Image {"queryFunction": true}
         void imageStore(writeonly IMAGE_PARAMS, gvec4);
     GROUP END Store
     GROUP BEGIN Load {"queryFunction": true}
+      DEFAULT METADATA {"essl_level": "ESSL3_BUILTINS", "op": "CallBuiltInFunction", "essl_extension": "OES_texture_cube_map_array"}
+          gvec4 imageLoad(gimageCubeMapArrayOES, ivec3);
       DEFAULT METADATA {"essl_level": "ESSL3_1_BUILTINS", "op": "CallBuiltInFunction"}
         gvec4 imageLoad(gimage2D, ivec2);
         gvec4 imageLoad(gimage3D, ivec3);
         gvec4 imageLoad(gimage2DArray, ivec3);
         gvec4 imageLoad(gimageCube, ivec3);
+      DEFAULT METADATA {"essl_level": "ESSL3_2_BUILTINS", "op": "CallBuiltInFunction"}
+        gvec4 imageLoad(gimageCubeMapArrayOES, ivec3);
       DEFAULT METADATA {"glsl_level": "GLSL4_2_BUILTINS", "op": "CallBuiltInFunction"}
         gvec4 imageLoad(readonly IMAGE_PARAMS);
     GROUP END Load

@@ -72,22 +72,26 @@ enum TBasicType
     EbtSampler2DRect,            // Only valid if GL_ARB_texture_rectangle exists.
     EbtSampler2DMS,
     EbtSampler2DMSArray,
+    EbtSamplerCubeMapArrayOES,  // Only valid if GL_OES_texture_cube_map_array exists.
     EbtISampler2D,
     EbtISampler3D,
     EbtISamplerCube,
     EbtISampler2DArray,
     EbtISampler2DMS,
     EbtISampler2DMSArray,
+    EbtISamplerCubeMapArrayOES,  // Only valid if GL_OES_texture_cube_map_array exists.
     EbtUSampler2D,
     EbtUSampler3D,
     EbtUSamplerCube,
     EbtUSampler2DArray,
     EbtUSampler2DMS,
     EbtUSampler2DMSArray,
+    EbtUSamplerCubeMapArrayOES,  // Only valid if GL_OES_texture_cube_map_array exists.
     EbtSampler2DShadow,
     EbtSamplerCubeShadow,
     EbtSampler2DArrayShadow,
-    EbtSampler1D,  // Desktop GLSL sampler types
+    EbtSamplerCubeMapArrayShadowOES,  // Only valid if GL_OES_texture_cube_map_array exists.
+    EbtSampler1D,                     // Desktop GLSL sampler types
     EbtSampler1DArray,
     EbtSampler1DArrayShadow,
     EbtSamplerBuffer,
@@ -140,6 +144,9 @@ enum TBasicType
     EbtImageCubeArray,
     EbtIImageCubeArray,
     EbtUImageCubeArray,
+    EbtImageCubeMapArrayOES,
+    EbtIImageCubeMapArrayOES,
+    EbtUImageCubeMapArrayOES,
     EbtImageRect,
     EbtIImageRect,
     EbtUImageRect,
@@ -236,12 +243,14 @@ inline bool IsIntegerSampler(TBasicType type)
         case EbtISampler2DArray:
         case EbtISampler2DMS:
         case EbtISampler2DMSArray:
+        case EbtISamplerCubeMapArrayOES:
         case EbtUSampler2D:
         case EbtUSampler3D:
         case EbtUSamplerCube:
         case EbtUSampler2DArray:
         case EbtUSampler2DMS:
         case EbtUSampler2DMSArray:
+        case EbtUSamplerCubeMapArrayOES:
         case EbtISampler1D:
         case EbtISampler1DArray:
         case EbtISampler2DRect:
@@ -265,12 +274,14 @@ inline bool IsIntegerSampler(TBasicType type)
         case EbtSampler2DArrayShadow:
         case EbtSampler2DMS:
         case EbtSampler2DMSArray:
+        case EbtSamplerCubeMapArrayOES:
         case EbtSampler1D:
         case EbtSampler1DArray:
         case EbtSampler1DArrayShadow:
         case EbtSamplerBuffer:
         case EbtSamplerCubeArray:
         case EbtSamplerCubeArrayShadow:
+        case EbtSamplerCubeMapArrayShadowOES:
         case EbtSampler1DShadow:
         case EbtSampler2DRectShadow:
         case EbtSamplerVideoWEBGL:
@@ -292,6 +303,7 @@ inline bool IsIntegerSamplerUnsigned(TBasicType type)
         case EbtISampler2DArray:
         case EbtISampler2DMS:
         case EbtISampler2DMSArray:
+        case EbtISamplerCubeMapArrayOES:
         case EbtISampler1D:
         case EbtISampler1DArray:
         case EbtISampler2DRect:
@@ -304,6 +316,7 @@ inline bool IsIntegerSamplerUnsigned(TBasicType type)
         case EbtUSampler2DArray:
         case EbtUSampler2DMS:
         case EbtUSampler2DMSArray:
+        case EbtUSamplerCubeMapArrayOES:
         case EbtUSampler1D:
         case EbtUSampler1DArray:
         case EbtUSampler2DRect:
@@ -357,6 +370,7 @@ inline bool IsFloatImage(TBasicType type)
         case EbtImage2DMSArray:
         case EbtImage2DRect:
         case EbtImageCubeArray:
+        case EbtImageCubeMapArrayOES:
         case EbtImageRect:
         case EbtImageBuffer:
             return true;
@@ -382,6 +396,7 @@ inline bool IsIntegerImage(TBasicType type)
         case EbtIImage2DMSArray:
         case EbtIImage2DRect:
         case EbtIImageCubeArray:
+        case EbtIImageCubeMapArrayOES:
         case EbtIImageRect:
         case EbtIImageBuffer:
             return true;
@@ -407,6 +422,7 @@ inline bool IsUnsignedImage(TBasicType type)
         case EbtUImage2DMSArray:
         case EbtUImage2DRect:
         case EbtUImageCubeArray:
+        case EbtUImageCubeMapArrayOES:
         case EbtUImageRect:
         case EbtUImageBuffer:
             return true;
@@ -445,6 +461,10 @@ inline bool IsSampler2D(TBasicType type)
         case EbtISampler2DMSArray:
         case EbtUSampler2DMSArray:
         case EbtSampler2DArrayShadow:
+        case EbtSamplerCubeMapArrayOES:
+        case EbtISamplerCubeMapArrayOES:
+        case EbtUSamplerCubeMapArrayOES:
+        case EbtSamplerCubeMapArrayShadowOES:
         case EbtSampler3D:
         case EbtISampler3D:
         case EbtUSampler3D:
@@ -734,6 +754,9 @@ inline bool IsImage2D(TBasicType type)
         case EbtImageCubeArray:
         case EbtIImageCubeArray:
         case EbtUImageCubeArray:
+        case EbtImageCubeMapArrayOES:
+        case EbtIImageCubeMapArrayOES:
+        case EbtUImageCubeMapArrayOES:
         case EbtImageRect:
         case EbtIImageRect:
         case EbtUImageRect:
@@ -783,6 +806,9 @@ inline bool IsImage3D(TBasicType type)
         case EbtImageCubeArray:
         case EbtIImageCubeArray:
         case EbtUImageCubeArray:
+        case EbtImageCubeMapArrayOES:
+        case EbtIImageCubeMapArrayOES:
+        case EbtUImageCubeMapArrayOES:
         case EbtImageRect:
         case EbtIImageRect:
         case EbtUImageRect:
@@ -832,6 +858,9 @@ inline bool IsImage2DArray(TBasicType type)
         case EbtImageCubeArray:
         case EbtIImageCubeArray:
         case EbtUImageCubeArray:
+        case EbtImageCubeMapArrayOES:
+        case EbtIImageCubeMapArrayOES:
+        case EbtUImageCubeMapArrayOES:
         case EbtImageRect:
         case EbtIImageRect:
         case EbtUImageRect:
@@ -881,6 +910,9 @@ inline bool IsImageCube(TBasicType type)
         case EbtImageCubeArray:
         case EbtIImageCubeArray:
         case EbtUImageCubeArray:
+        case EbtImageCubeMapArrayOES:
+        case EbtIImageCubeMapArrayOES:
+        case EbtUImageCubeMapArrayOES:
         case EbtImageRect:
         case EbtIImageRect:
         case EbtUImageRect:

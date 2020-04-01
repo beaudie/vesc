@@ -163,6 +163,9 @@ GLenum VariableComponentType(GLenum type)
         case GL_IMAGE_CUBE:
         case GL_INT_IMAGE_CUBE:
         case GL_UNSIGNED_INT_IMAGE_CUBE:
+        case GL_IMAGE_CUBE_MAP_ARRAY_OES:
+        case GL_INT_IMAGE_CUBE_MAP_ARRAY_OES:
+        case GL_UNSIGNED_INT_IMAGE_CUBE_MAP_ARRAY_OES:
         case GL_UNSIGNED_INT_ATOMIC_COUNTER:
         case GL_SAMPLER_VIDEO_IMAGE_WEBGL:
             return GL_INT;

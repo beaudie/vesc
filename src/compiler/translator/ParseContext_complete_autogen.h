@@ -71,17 +71,17 @@ bool isAtomicMemory(const TFunction *func)
 bool isImageLoad(const TFunction *func)
 {
     int id = func->uniqueId().get();
-    return id >= 2122 && id <= 2154;
+    return id >= 2122 && id <= 2160;
 }
 bool isImageStore(const TFunction *func)
 {
     int id = func->uniqueId().get();
-    return id >= 2155 && id <= 2187;
+    return id >= 2161 && id <= 2193;
 }
 bool isImage(const TFunction *func)
 {
     int id = func->uniqueId().get();
-    return id >= 1486 && id <= 2187;
+    return id >= 1486 && id <= 2193;
 }
 
 }  // namespace BuiltInGroup

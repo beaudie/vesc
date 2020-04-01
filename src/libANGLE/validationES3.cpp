@@ -492,6 +492,28 @@ bool ValidateES3TexImageParametersBase(const Context *context,
             }
             break;
 
+        case TextureType::CubeMapArray:
+            if (!isSubImage && width != height)
+            {
+                context->validationError(GL_INVALID_VALUE, kCubemapFacesEqualDimensions);
+                return false;
+            }
+
+            if (width > (caps.maxCubeMapTextureSize >> level))
+            {
+                context->validationError(GL_INVALID_VALUE, kResourceMaxTextureSize);
+                return false;
+            }
+
+            if (width > (caps.max3DTextureSize >> level) ||
+                height > (caps.max3DTextureSize >> level) ||
+                depth > (caps.max3DTextureSize >> level))
+            {
+                context->validationError(GL_INVALID_VALUE, kResourceMaxTextureSize);
+                return false;
+            }
+            break;
+
         default:
             context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
             return false;
@@ -1200,6 +1222,29 @@ bool ValidateES3TexStorageParametersBase(const Context *context,
         {
             if (width > caps.max2DTextureSize || height > caps.max2DTextureSize ||
                 depth > caps.maxArrayTextureLayers)
+            {
+                context->validationError(GL_INVALID_VALUE, kResourceMaxTextureSize);
+                return false;
+            }
+        }
+        break;
+
+        case TextureType::CubeMapArray:
+        {
+            if (width != height)
+            {
+                context->validationError(GL_INVALID_VALUE, kCubemapFacesEqualDimensions);
+                return false;
+            }
+
+            if (width > caps.maxCubeMapTextureSize)
+            {
+                context->validationError(GL_INVALID_VALUE, kResourceMaxTextureSize);
+                return false;
+            }
+
+            if (width > caps.max3DTextureSize || height > caps.max3DTextureSize ||
+                depth > caps.max3DTextureSize)
             {
                 context->validationError(GL_INVALID_VALUE, kResourceMaxTextureSize);
                 return false;

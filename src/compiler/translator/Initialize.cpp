@@ -109,6 +109,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     {
         extBehavior[TExtension::WEBGL_video_texture] = EBhUndefined;
     }
+    if (resources.OES_texture_cube_map_array)
+    {
+        extBehavior[TExtension::OES_texture_cube_map_array] = EBhUndefined;
+    }
 }
 
 void ResetExtensionBehavior(const ShBuiltInResources &resources,
