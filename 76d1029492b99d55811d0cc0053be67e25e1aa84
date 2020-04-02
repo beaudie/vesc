@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a190e3d_e6d6ec87",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1695,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-02T13:48:12Z",
+      "side": 1,
+      "message": "This unpackBuffer isn\u0027t used, are we missing something in the function?\nE.g. do we need to add unpackBuffer to setImageImpl?",
+      "revId": "76d1029492b99d55811d0cc0053be67e25e1aa84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b71590b4_c60c20dc",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3094,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-02T13:48:12Z",
+      "side": 1,
+      "message": "unpackBuffer isn\u0027t used, is that okay?",
+      "revId": "76d1029492b99d55811d0cc0053be67e25e1aa84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
