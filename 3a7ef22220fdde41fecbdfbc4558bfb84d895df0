@@ -219,6 +219,24 @@
     },
     {
       "key": {
+        "uuid": "c47146ed_0922259c",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-02T15:25:41Z",
+      "side": 1,
+      "message": "OK. I was trying to follow the practice of a Impl interface. I\u0027ll see if I can combine into one implementation.",
+      "parentUuid": "a55cdccb_7534da28",
+      "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb35c7ab_50505227",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 5
