@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a9ac0bd0_477ee531",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1695,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-02T18:28:35Z",
+      "side": 1,
+      "message": "Good call. I piped the unpack buffer down as much as I could. I think it fixed a potentially really obscure real bug.",
+      "parentUuid": "7a190e3d_e6d6ec87",
+      "revId": "76d1029492b99d55811d0cc0053be67e25e1aa84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b71590b4_c60c20dc",
         "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "76d1029492b99d55811d0cc0053be67e25e1aa84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a3ed8d1_f87a7d32",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3094,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-02T18:28:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b71590b4_c60c20dc",
+      "revId": "76d1029492b99d55811d0cc0053be67e25e1aa84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
