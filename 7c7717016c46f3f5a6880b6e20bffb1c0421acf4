@@ -505,6 +505,30 @@
       "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6773a294_29dbdc32",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-02T14:40:31Z",
+      "side": 1,
+      "message": "A quick hack to work around the issue of the program getting relinked after the PPO link causing trouble is to store the SPIR-V in ProgramExecutableVk, so you read it from the Program\u0027s executable, and store it in the PPO\u0027s executable.\n\nThough I would still prefer to see the SPIR-V not stored anywhere at all.\n\nDefinitely fine in a follow up, of course.",
+      "parentUuid": "f3b5a4a8_f200ff89",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 66
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
