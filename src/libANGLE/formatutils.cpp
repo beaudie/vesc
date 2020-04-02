@@ -518,6 +518,20 @@ bool InternalFormat::isInt() const
     return componentType == GL_INT || componentType == GL_UNSIGNED_INT;
 }
 
+bool InternalFormat::isInteger() const
+{
+    switch (format)
+    {
+        case GL_RGBA_INTEGER:
+        case GL_RGB_INTEGER:
+        case GL_RG_INTEGER:
+        case GL_RED_INTEGER:
+            return true;
+    }
+
+    return false;
+}
+
 bool InternalFormat::isDepthOrStencil() const
 {
     return depthBits != 0 || stencilBits != 0;
