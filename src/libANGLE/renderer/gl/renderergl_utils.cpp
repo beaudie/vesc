@@ -1226,6 +1226,9 @@ void GenerateCaps(const FunctionsGL *functions,
     extensions->unpackSubimage     = functions->standard == STANDARD_GL_DESKTOP ||
                                  functions->isAtLeastGLES(gl::Version(3, 0)) ||
                                  functions->hasGLESExtension("GL_EXT_unpack_subimage");
+    extensions->noperspectiveInterpolationNV =
+        functions->isAtLeastGL(gl::Version(3, 0)) ||
+        functions->hasGLESExtension("GL_NV_shader_noperspective_interpolation");
     extensions->packSubimage = functions->standard == STANDARD_GL_DESKTOP ||
                                functions->isAtLeastGLES(gl::Version(3, 0)) ||
                                functions->hasGLESExtension("GL_NV_pack_subimage");
