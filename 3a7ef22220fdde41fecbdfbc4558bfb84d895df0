@@ -2,6 +2,86 @@
   "comments": [
     {
       "key": {
+        "uuid": "96c66337_36f557ff",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-02T03:19:05Z",
+      "side": 1,
+      "message": "No need to set pNext. `\u003d {}` already sets it to nullptr, and we omit that everywhere else for (slight) brevity, since it\u0027s something you often don\u0027t need to deal with.",
+      "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a453766_01182f0b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-02T03:19:05Z",
+      "side": 1,
+      "message": "Please move these to queryDeviceExtensionFeatures",
+      "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab407e7a_dcb9b436",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-02T03:19:05Z",
+      "side": 1,
+      "message": "With the features calling *PropertiesCompatibleWithAndroid themselves, this would just be the \u0026\u0026 of the two features.\n\nBetter yet, merge the two features in one, and have that conditioned to the \u0026\u0026 of the two *PropertiesCompatibleWithAndroid calls. Then remove mSupportsAndroidNativeFences. The feature system is there exactly to avoid having these kinds of variables around.",
+      "range": {
+        "startLine": 1408,
+        "startChar": 0,
+        "endLine": 1412,
+        "endChar": 83
+      },
+      "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea8fbe5d_97a4eb0f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1715,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-02T03:19:05Z",
+      "side": 1,
+      "message": "It\u0027s probably not enough to see the extension existing. FencePropertiesCompatibleWithAndroid should be used here instead. Same with supportsExternalSemaphoreFd (which is missing?)",
+      "range": {
+        "startLine": 1715,
+        "startChar": 23,
+        "endLine": 1715,
+        "endChar": 62
+      },
+      "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92240cc4_29621f66",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -19,6 +99,23 @@
     },
     {
       "key": {
+        "uuid": "ae6216db_2216b278",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2091,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-02T03:19:05Z",
+      "side": 1,
+      "message": "You can add `|| mSupportsAndroidNativeFences` here, and before the `fence.init` call, do:\n\n    VkExportFenceCreateInfo fenceExportInfo ...\n    if (mSupportsAndroidNativeFences)\n    {\n        ...\n        fenceCreateInfo.pNext \u003d \u0026fenceExportInfo;\n    }\n\nto avoid duplicate VkFenceCreateInfo initialization and init call.",
+      "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6197d8f9_28e50e7e",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 5
@@ -30,6 +127,23 @@
       "writtenOn": "2020-03-30T23:57:35Z",
       "side": 1,
       "message": "SyncHelperFence same as SyncHelper was before.",
+      "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abe7dd67_fc118d87",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-02T03:19:05Z",
+      "side": 1,
+      "message": "I think you should make the renderer collect this garbage somehow. This is an EGL object, so it can be destroyed after this context is already destroyed. This also means that you cannot store the context pointer.\n\n@Jamie who probably knows better how to handle this.",
       "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +201,24 @@
     },
     {
       "key": {
+        "uuid": "a55cdccb_7534da28",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-02T03:19:05Z",
+      "side": 1,
+      "message": "There is too much duplication to justify this in my opinion.\n\nI\u0027d just add a flag to `SyncHelper::initialize` to tell whether it should use an imported semaphore instead of (or in addition to?) event and add an `if` in the relevant functions.",
+      "parentUuid": "6f62c768_8138bc44",
+      "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb35c7ab_50505227",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 5
@@ -132,6 +264,47 @@
       "writtenOn": "2020-03-30T23:57:35Z",
       "side": 1,
       "message": "Simulate passing FDs across processes by passing across contexts.",
+      "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3943c0d_2e9fd332",
+        "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-02T03:19:05Z",
+      "side": 1,
+      "message": "That\u0027s a good comment to add here in the code (instead of gerrit)",
+      "parentUuid": "75d0015b_26173917",
+      "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3391755_5d30e6bf",
+        "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-02T03:19:05Z",
+      "side": 1,
+      "message": "1ms may be too small and could make the test flaky.",
+      "range": {
+        "startLine": 316,
+        "startChar": 74,
+        "endLine": 316,
+        "endChar": 81
+      },
       "revId": "3a7ef22220fdde41fecbdfbc4558bfb84d895df0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
