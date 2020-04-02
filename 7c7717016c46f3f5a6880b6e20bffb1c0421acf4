@@ -529,6 +529,30 @@
       "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ca6187a_aa8e6612",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-02T16:16:30Z",
+      "side": 1,
+      "message": "That\u0027s close to the path I\u0027m leaning towards.   Instead, I think I\u0027d like to just store the SPIR-V in the ProgramExecutableVk for both Programs and PPOs, so it can be referenced the same way for both later in ProgramInfo::initProgram().   The ProgramExecutableVk is specific to each ProgramVk/ProgramPipelineVk, so a particular Program can generate different SPIR-V for each PPO it\u0027s in without requiring a retranslation during each draw call.   This should let Programs behave essentially the same as today too.\n\nThe only other difficulty is when to clear out the stale PPO SPIR-V and knowing we need to regenerate it:\n- when a new program is attached to the PPO\n- when an already attached program is successfully re-linked\n\nI\u0027ve just started digging into this a bit recently, so things may still change as I work towards something that passes the test.   It\u0027ll be in another CL though, since this one is already complicated enough.\n\n\u003e Though I would still prefer to see the SPIR-V not stored anywhere at all.\n\nI don\u0027t know if we\u0027ll ever get there, at least for separable programs.   The PPOs will always need the original SPIR-V from each Program so it can be translated at draw time at least once (when all of the programs are finally present).",
+      "parentUuid": "6773a294_29dbdc32",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 66
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
