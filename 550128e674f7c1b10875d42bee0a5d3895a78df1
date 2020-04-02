@@ -46,6 +46,30 @@
       "revId": "550128e674f7c1b10875d42bee0a5d3895a78df1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90d91458_a63b2b29",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-02T19:53:20Z",
+      "side": 1,
+      "message": "Sure, can you make sure a bug is filed about this?",
+      "parentUuid": "35cbbb2b_5fc5535e",
+      "range": {
+        "startLine": 961,
+        "startChar": 37,
+        "endLine": 961,
+        "endChar": 65
+      },
+      "revId": "550128e674f7c1b10875d42bee0a5d3895a78df1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
