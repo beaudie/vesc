@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa283fe0_04236a79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T13:13:00Z",
+      "side": 1,
+      "message": "nit: wrap to 70 chars",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 77
+      },
+      "revId": "443ea1f1af099dc0bfbc00dae4d790b21f01f853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14f7b6d6_bf51c861",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T13:13:00Z",
+      "side": 1,
+      "message": "is this not the same thing? we should clear up what distinguishes your new test from this test before landing.",
+      "range": {
+        "startLine": 516,
+        "startChar": 21,
+        "endLine": 516,
+        "endChar": 26
+      },
+      "revId": "443ea1f1af099dc0bfbc00dae4d790b21f01f853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
