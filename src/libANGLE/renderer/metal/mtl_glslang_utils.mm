@@ -68,7 +68,7 @@ angle::Result GlslangGetShaderSpirvCode(ErrorHandler *context,
 {
     return rx::GlslangGetShaderSpirvCode(
         [context](GlslangError error) { return HandleError(context, error); }, glCaps,
-        shaderSources, variableInfoMap, shaderCodeOut);
+        shaderSources, nullptr, variableInfoMap, shaderCodeOut);
 }
 }  // namespace mtl
 }  // namespace rx

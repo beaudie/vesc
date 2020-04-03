@@ -2595,13 +2595,21 @@ angle::Result ContextVk::syncState(const gl::Context *context,
     const gl::State &glState                       = context->getState();
     const gl::ProgramExecutable *programExecutable = glState.getProgramExecutable();
 
-    if ((dirtyBits & mPipelineDirtyBitsMask).any() &&
+    // adjust dirty bits for collateral dirty bits.
+    gl::State::DirtyBits localDirtyBits = dirtyBits;
+    if (dirtyBits[gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED])
+    {
+        localDirtyBits.set(gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE);
+    }
+
+    if ((localDirtyBits & mPipelineDirtyBitsMask).any() &&
         (programExecutable == nullptr || !programExecutable->isCompute()))
     {
         invalidateCurrentGraphicsPipeline();
     }
 
-    for (auto iter = dirtyBits.begin(), endIter = dirtyBits.end(); iter != endIter; ++iter)
+    for (auto iter = localDirtyBits.begin(), endIter = localDirtyBits.end(); iter != endIter;
+         ++iter)
     {
         size_t dirtyBit = *iter;
         switch (dirtyBit)

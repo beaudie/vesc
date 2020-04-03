@@ -348,6 +348,7 @@ class ProgramState final : angle::NonCopyable
     {
         return !getLinkedTransformFeedbackVaryings().empty();
     }
+    bool hasEarlyFragmentTestsOptimization() const { return mEarlyFramentTestsOptimization; }
 
     bool isShaderMarkedForDetach(gl::ShaderType shaderType) const
     {
@@ -430,6 +431,7 @@ class ProgramState final : angle::NonCopyable
 
     bool mBinaryRetrieveableHint;
     bool mSeparable;
+    bool mEarlyFramentTestsOptimization;
 
     // ANGLE_multiview.
     int mNumViews;

@@ -28,6 +28,7 @@ class ShaderInfo final : angle::NonCopyable
 
     angle::Result initShaders(ContextVk *contextVk,
                               const gl::ShaderMap<std::string> &shaderSources,
+                              const GlslangProgramInterfaceInfo *programInterfaceInfo,
                               const ShaderMapInterfaceVariableInfoMap &variableInfoMap);
     void release(ContextVk *contextVk);
 
@@ -195,6 +196,7 @@ class ProgramExecutableVk
 
     ProgramInfo mDefaultProgramInfo;
     ProgramInfo mLineRasterProgramInfo;
+    ProgramInfo mDefaultProgramInfoEarlyFragmentTestsRemoved;
 };
 
 }  // namespace rx
