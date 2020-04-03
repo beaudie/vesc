@@ -122,6 +122,9 @@ void MemoryProgramCache::ComputeHash(const Context *context,
                << program->getState().getOutputLocations()
                << program->getState().getSecondaryOutputLocations();
 
+    hashStream << (program->getState().hasEarlyFragmentTestsOptimization() &&
+                   context->getState().isEarlyFragmentTestsOptimizationAllowed());
+
     // Call the secure SHA hashing function.
     const std::string &programKey = hashStream.str();
     angle::base::SHA1HashBytes(reinterpret_cast<const unsigned char *>(programKey.c_str()),

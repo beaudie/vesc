@@ -111,6 +111,7 @@ void GlslangGetShaderSource(GlslangSourceOptions &options,
 
 angle::Result TransformSpirvCode(const GlslangErrorCallback &callback,
                                  const gl::ShaderType shaderType,
+                                 bool removeEarlyFragmentTestsOptimization,
                                  const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                  const std::vector<uint32_t> &initialSpirvBlob,
                                  SpirvBlob *spirvBlobOut);

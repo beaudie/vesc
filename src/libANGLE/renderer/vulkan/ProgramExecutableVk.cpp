@@ -85,7 +85,8 @@ ProgramInfo::~ProgramInfo() = default;
 
 angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
                                        const ShaderInfo &shaderInfo,
-                                       bool enableLineRasterEmulation)
+                                       const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
+                                       TransformOptionBits option_bits)
 {
     const gl::ShaderMap<SpirvBlob> &spirvBlobs = shaderInfo.getSpirvBlobs();
 
@@ -95,15 +96,32 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
 
         if (!spirvBlob.empty())
         {
-            ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
-                                              spirvBlob.data(),
-                                              spirvBlob.size() * sizeof(uint32_t)));
-
+            if (shaderType == gl::ShaderType::Fragment &&
+                option_bits[TransformOption::RemoveEarlyFragmentTestsOptimization])
+            {
+                SpirvBlob spirvBlobTransformed;
+                angle::Result status = TransformSpirvCode(
+                    [](GlslangError) { return angle::Result::Stop; }, shaderType, true,
+                    variableInfoMap[shaderType], spirvBlob, &spirvBlobTransformed);
+                if (status != angle::Result::Continue)
+                {
+                    return status;
+                }
+                ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
+                                                  spirvBlobTransformed.data(),
+                                                  spirvBlobTransformed.size() * sizeof(uint32_t)));
+            }
+            else
+            {
+                ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
+                                                  spirvBlob.data(),
+                                                  spirvBlob.size() * sizeof(uint32_t)));
+            }
             mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
         }
     }
 
-    if (enableLineRasterEmulation)
+    if (option_bits[TransformOption::EnableLineRasterEmulation])
     {
         mProgramHelper.enableSpecializationConstant(
             sh::vk::SpecializationConstantId::LineRasterEmulation);
@@ -157,8 +175,10 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
     mTextureDescriptorsCache.clear();
     mDescriptorBuffersCache.clear();
 
-    mDefaultProgramInfo.release(contextVk);
-    mLineRasterProgramInfo.release(contextVk);
+    for (auto &programInfo : mProgramInfos)
+    {
+        programInfo.release(contextVk);
+    }
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(gl::BinaryInputStream *stream)

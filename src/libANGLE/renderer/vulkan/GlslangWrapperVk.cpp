@@ -90,7 +90,7 @@ angle::Result GlslangWrapperVk::TransformSpirV(
     std::vector<uint32_t> *shaderCodeOut)
 {
     return TransformSpirvCode(
-        [context](GlslangError error) { return ErrorHandler(context, error); }, shaderType,
+        [context](GlslangError error) { return ErrorHandler(context, error); }, shaderType, false,
         variableInfoMap, initialSpirvBlob, shaderCodeOut);
 }
 }  // namespace rx
