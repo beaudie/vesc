@@ -553,6 +553,30 @@
       "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35860b77_6ad6e0f9",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-03T18:09:09Z",
+      "side": 1,
+      "message": "\u003e I think I\u0027d like to just store the SPIR-V in the ProgramExecutableVk for both Programs and PPOs\n\nYeap, that\u0027s exactly what I meant by: \"so you read it from the Program\u0027s executable, and store it in the PPO\u0027s executable\"\n\n\u003e \u003e Though I would still prefer to see the SPIR-V not stored anywhere at all.\n\n\u003e I don\u0027t know if we\u0027ll ever get there, at least for separable programs.   The PPOs will always need the original SPIR-V from each Program so it can be translated at draw time at least once (when all of the programs are finally present).\n\nTo clarify, of course the program\u0027s SPIR-V should be stored for future PPO use. It\u0027s the PPO\u0027s SPIR-V that doesn\u0027t really need storage. Imagine after the SPIR-V for PPO is generated, the VkShaderModule is created and the SPIR-V is thrown away. This is just an optimization, so no rush, but it should be a simple one.\n\nIn fact now that you say it, you\u0027re right, the same applies for non-separable programs and the memory win from not storing the SPIR-V after link is probably not negligible. I\u0027m going to create a bug for it to track this work.",
+      "parentUuid": "2ca6187a_aa8e6612",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 66
+      },
+      "revId": "7c7717016c46f3f5a6880b6e20bffb1c0421acf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
