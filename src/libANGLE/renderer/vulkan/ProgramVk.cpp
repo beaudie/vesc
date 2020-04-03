@@ -286,9 +286,22 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                       &mGlslangProgramInterfaceInfo, &shaderSources,
                                       &mExecutable.mVariableInfoMap);
 
+    // If shader has injected early fragment optimization but context state disagrees with it,
+    // we must inform the spriv transform code to remove the optimization from shader blob
+    bool removeEarlyFragmentTests = mState.hasEarlyFragmentTestsOptimization() &&
+                                    context->getState().isEarlyFragmentTestsOptimizationAllowed();
+    if (mGlslangProgramInterfaceInfo.removeEarlyFragmentTests != removeEarlyFragmentTests)
+    {
+        // The default shaders has two versions, one for with optimization and one without. But the
+        // mLineRasterProgramInfo only have one version. If we toggle the optimization, we must
+        // rebuild the mLineRasterProgramInfo.
+        mExecutable.mLineRasterProgramInfo.release(contextVk);
+    }
+    mGlslangProgramInterfaceInfo.removeEarlyFragmentTests = removeEarlyFragmentTests;
+
     // Compile the shaders.
-    angle::Result status =
-        mShaderInfo.initShaders(contextVk, shaderSources, mExecutable.mVariableInfoMap);
+    angle::Result status = mShaderInfo.initShaders(
+        contextVk, shaderSources, &mGlslangProgramInterfaceInfo, mExecutable.mVariableInfoMap);
     if (status != angle::Result::Continue)
     {
         return std::make_unique<LinkEventDone>(status);

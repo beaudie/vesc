@@ -43,6 +43,9 @@ struct GlslangProgramInterfaceInfo
     uint32_t driverUniformsDescriptorSetIndex;
 
     uint32_t locationsUsedForXfbExtension;
+
+    // remove early fragment tests optimization from fragment shader
+    bool removeEarlyFragmentTests;
 };
 
 struct GlslangSourceOptions
@@ -111,6 +114,7 @@ void GlslangGetShaderSource(GlslangSourceOptions &options,
 
 angle::Result TransformSpirvCode(const GlslangErrorCallback &callback,
                                  const gl::ShaderType shaderType,
+                                 const GlslangProgramInterfaceInfo *programInterfaceInfo,
                                  const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                  const std::vector<uint32_t> &initialSpirvBlob,
                                  SpirvBlob *spirvBlobOut);
@@ -118,6 +122,7 @@ angle::Result TransformSpirvCode(const GlslangErrorCallback &callback,
 angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
+                                        const GlslangProgramInterfaceInfo *programInterfaceInfo,
                                         const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
                                         gl::ShaderMap<SpirvBlob> *spirvBlobsOut);
 
