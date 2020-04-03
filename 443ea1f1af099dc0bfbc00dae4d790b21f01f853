@@ -45,6 +45,30 @@
       "revId": "443ea1f1af099dc0bfbc00dae4d790b21f01f853",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95b1218f_29b88f2f",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-03T13:19:23Z",
+      "side": 1,
+      "message": "The existing helper checks \"type\" (sint32/uint32), not \"format\". Maybe rename it to \"isInt32\"?",
+      "parentUuid": "14f7b6d6_bf51c861",
+      "range": {
+        "startLine": 516,
+        "startChar": 21,
+        "endLine": 516,
+        "endChar": 26
+      },
+      "revId": "443ea1f1af099dc0bfbc00dae4d790b21f01f853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
