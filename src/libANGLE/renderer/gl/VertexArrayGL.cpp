@@ -119,15 +119,15 @@ void VertexArrayGL::destroy(const gl::Context *context)
 {
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
-    stateManager->deleteVertexArray(mVertexArrayID);
+    (void)stateManager->deleteVertexArray(context, mVertexArrayID);
     mVertexArrayID   = 0;
     mAppliedNumViews = 1;
 
-    stateManager->deleteBuffer(mStreamingElementArrayBuffer);
+    (void)stateManager->deleteBuffer(context, mStreamingElementArrayBuffer);
     mStreamingElementArrayBufferSize = 0;
     mStreamingElementArrayBuffer     = 0;
 
-    stateManager->deleteBuffer(mStreamingArrayBuffer);
+    (void)stateManager->deleteBuffer(context, mStreamingArrayBuffer);
     mStreamingArrayBufferSize = 0;
     mStreamingArrayBuffer     = 0;
 
@@ -156,7 +156,8 @@ angle::Result VertexArrayGL::updateElementArrayBufferBinding(const gl::Context *
         StateManagerGL *stateManager = GetStateManagerGL(context);
 
         const BufferGL *bufferGL = GetImplAs<BufferGL>(elementArrayBuffer);
-        stateManager->bindBuffer(gl::BufferBinding::ElementArray, bufferGL->getBufferID());
+        ANGLE_TRY(stateManager->bindBuffer(context, gl::BufferBinding::ElementArray,
+                                           bufferGL->getBufferID()));
         mAppliedElementArrayBuffer.set(context, elementArrayBuffer);
     }
 
@@ -252,9 +253,11 @@ angle::Result VertexArrayGL::syncIndexData(const gl::Context *context,
             mStreamingElementArrayBufferSize = 0;
         }
 
-        stateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
+        ANGLE_TRY(stateManager->bindVertexArray(context, mVertexArrayID,
+                                                getAppliedElementArrayBufferID()));
 
-        stateManager->bindBuffer(gl::BufferBinding::ElementArray, mStreamingElementArrayBuffer);
+        ANGLE_TRY(stateManager->bindBuffer(context, gl::BufferBinding::ElementArray,
+                                           mStreamingElementArrayBuffer));
         mAppliedElementArrayBuffer.set(context, nullptr);
 
         // Make sure the element array buffer is large enough
@@ -346,7 +349,7 @@ angle::Result VertexArrayGL::streamAttributes(const gl::Context *context,
     const size_t bufferEmptySpace   = maxAttributeDataSize * indexRange.start;
     const size_t requiredBufferSize = streamingDataSize + bufferEmptySpace;
 
-    stateManager->bindBuffer(gl::BufferBinding::Array, mStreamingArrayBuffer);
+    ANGLE_TRY(stateManager->bindBuffer(context, gl::BufferBinding::Array, mStreamingArrayBuffer));
     if (requiredBufferSize > mStreamingArrayBufferSize)
     {
         ANGLE_GL_TRY(context, functions->bufferData(GL_ARRAY_BUFFER, requiredBufferSize, nullptr,
@@ -354,7 +357,8 @@ angle::Result VertexArrayGL::streamAttributes(const gl::Context *context,
         mStreamingArrayBufferSize = requiredBufferSize;
     }
 
-    stateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
+    ANGLE_TRY(
+        stateManager->bindVertexArray(context, mVertexArrayID, getAppliedElementArrayBufferID()));
 
     // Unmapping a buffer can return GL_FALSE to indicate that the system has corrupted the data
     // somehow (such as by a screen change), retry writing the data a few times and return
@@ -521,7 +525,8 @@ angle::Result VertexArrayGL::updateAttribPointer(const gl::Context *context, siz
     // is not NULL.
 
     const BufferGL *arrayBufferGL = GetImplAs<BufferGL>(arrayBuffer);
-    stateManager->bindBuffer(gl::BufferBinding::Array, arrayBufferGL->getBufferID());
+    ANGLE_TRY(
+        stateManager->bindBuffer(context, gl::BufferBinding::Array, arrayBufferGL->getBufferID()));
     ANGLE_TRY(callVertexAttribPointer(context, static_cast<GLuint>(attribIndex), attrib,
                                       binding.getStride(), binding.getOffset()));
 
@@ -775,7 +780,8 @@ angle::Result VertexArrayGL::syncState(const gl::Context *context,
                                        gl::VertexArray::DirtyBindingBitsArray *bindingBits)
 {
     StateManagerGL *stateManager = GetStateManagerGL(context);
-    stateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
+    ANGLE_TRY(
+        stateManager->bindVertexArray(context, mVertexArrayID, getAppliedElementArrayBufferID()));
 
     for (size_t dirtyBit : dirtyBits)
     {
@@ -807,7 +813,8 @@ angle::Result VertexArrayGL::applyNumViewsToDivisor(const gl::Context *context, 
     {
         StateManagerGL *stateManager = GetStateManagerGL(context);
 
-        stateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
+        ANGLE_TRY(stateManager->bindVertexArray(context, mVertexArrayID,
+                                                getAppliedElementArrayBufferID()));
         mAppliedNumViews = numViews;
         for (size_t index = 0u; index < mAppliedBindings.size(); ++index)
         {

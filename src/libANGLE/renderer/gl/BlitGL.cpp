@@ -95,7 +95,7 @@ class ScopedGLState : angle::NonCopyable
         stateManager->setPolygonOffsetFillEnabled(false);
         stateManager->setRasterizerDiscardEnabled(false);
 
-        stateManager->pauseTransformFeedback();
+        ANGLE_TRY(stateManager->pauseTransformFeedback(context));
         return stateManager->pauseAllQueries(context);
     }
 
@@ -110,14 +110,16 @@ class ScopedGLState : angle::NonCopyable
         return stateManager->resumeAllQueries(context);
     }
 
-    void willUseTextureUnit(const gl::Context *context, int unit)
+    angle::Result willUseTextureUnit(const gl::Context *context, int unit)
     {
         ContextGL *contextGL = GetImplAs<ContextGL>(context);
 
         if (contextGL->getFunctions()->bindSampler)
         {
-            contextGL->getStateManager()->bindSampler(unit, 0);
+            ANGLE_TRY(contextGL->getStateManager()->bindSampler(context, unit, 0));
         }
+
+        return angle::Result::Continue;
     }
 
   private:
@@ -237,7 +239,7 @@ BlitGL::~BlitGL()
 {
     for (const auto &blitProgram : mBlitPrograms)
     {
-        mStateManager->deleteProgram(blitProgram.second.program);
+        (void)mStateManager->deleteProgram(nullptr, blitProgram.second.program);
     }
     mBlitPrograms.clear();
 
@@ -245,20 +247,20 @@ BlitGL::~BlitGL()
     {
         if (mScratchTextures[i] != 0)
         {
-            mStateManager->deleteTexture(mScratchTextures[i]);
+            (void)mStateManager->deleteTexture(nullptr, mScratchTextures[i]);
             mScratchTextures[i] = 0;
         }
     }
 
     if (mScratchFBO != 0)
     {
-        mStateManager->deleteFramebuffer(mScratchFBO);
+        (void)mStateManager->deleteFramebuffer(nullptr, mScratchFBO);
         mScratchFBO = 0;
     }
 
     if (mVAO != 0)
     {
-        mStateManager->deleteVertexArray(mVAO);
+        (void)mStateManager->deleteVertexArray(nullptr, mVAO);
         mVAO = 0;
     }
 }
@@ -273,7 +275,7 @@ angle::Result BlitGL::copyImageToLUMAWorkaroundTexture(const gl::Context *contex
                                                        GLenum internalFormat,
                                                        gl::Framebuffer *source)
 {
-    mStateManager->bindTexture(textureType, texture);
+    ANGLE_TRY(mStateManager->bindTexture(context, textureType, texture));
 
     // Allocate the texture memory
     GLenum format = gl::GetUnsizedFormat(internalFormat);
@@ -311,7 +313,8 @@ angle::Result BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *con
 
     // Blit the framebuffer to the first scratch texture
     const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(source);
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, sourceFramebufferGL->getFramebufferID());
+    ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_FRAMEBUFFER,
+                                             sourceFramebufferGL->getFramebufferID()));
 
     GLenum readFormat = GL_NONE;
     ANGLE_TRY(source->getImplementationColorReadFormat(context, &readFormat));
@@ -322,7 +325,7 @@ angle::Result BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *con
     nativegl::CopyTexImageImageFormat copyTexImageFormat =
         nativegl::GetCopyTexImageImageFormat(mFunctions, mFeatures, readFormat, readType);
 
-    mStateManager->bindTexture(gl::TextureType::_2D, mScratchTextures[0]);
+    ANGLE_TRY(mStateManager->bindTexture(context, gl::TextureType::_2D, mScratchTextures[0]));
     ANGLE_GL_TRY_ALWAYS_CHECK(
         context, mFunctions->copyTexImage2D(GL_TEXTURE_2D, 0, copyTexImageFormat.internalFormat,
                                             sourceArea.x, sourceArea.y, sourceArea.width,
@@ -341,40 +344,40 @@ angle::Result BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *con
 
     // Make a temporary framebuffer using the second scratch texture to render the swizzled result
     // to.
-    mStateManager->bindTexture(gl::TextureType::_2D, mScratchTextures[1]);
+    ANGLE_TRY(mStateManager->bindTexture(context, gl::TextureType::_2D, mScratchTextures[1]));
     ANGLE_GL_TRY_ALWAYS_CHECK(
         context, mFunctions->texImage2D(GL_TEXTURE_2D, 0, copyTexImageFormat.internalFormat,
                                         sourceArea.width, sourceArea.height, 0,
                                         gl::GetUnsizedFormat(copyTexImageFormat.internalFormat),
                                         readType, nullptr));
 
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+    ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mScratchFBO));
     ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                                                            GL_TEXTURE_2D, mScratchTextures[1], 0));
 
     // Render to the destination texture, sampling from the scratch texture
     ScopedGLState scopedState;
     ANGLE_TRY(scopedState.enter(context, gl::Rectangle(0, 0, sourceArea.width, sourceArea.height)));
-    scopedState.willUseTextureUnit(context, 0);
+    ANGLE_TRY(scopedState.willUseTextureUnit(context, 0));
 
     ANGLE_TRY(setScratchTextureParameter(context, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
     ANGLE_TRY(setScratchTextureParameter(context, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
 
-    mStateManager->activeTexture(0);
-    mStateManager->bindTexture(gl::TextureType::_2D, mScratchTextures[0]);
+    ANGLE_TRY(mStateManager->activeTexture(context, 0));
+    ANGLE_TRY(mStateManager->bindTexture(context, gl::TextureType::_2D, mScratchTextures[0]));
 
-    mStateManager->useProgram(blitProgram->program);
+    ANGLE_TRY(mStateManager->useProgram(context, blitProgram->program));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->sourceTextureLocation, 0));
     ANGLE_GL_TRY(context, mFunctions->uniform2f(blitProgram->scaleLocation, 1.0, 1.0));
     ANGLE_GL_TRY(context, mFunctions->uniform2f(blitProgram->offsetLocation, 0.0, 0.0));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->multiplyAlphaLocation, 0));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0));
 
-    mStateManager->bindVertexArray(mVAO, 0);
+    ANGLE_TRY(mStateManager->bindVertexArray(context, mVAO, 0));
     ANGLE_GL_TRY(context, mFunctions->drawArrays(GL_TRIANGLES, 0, 3));
 
     // Copy the swizzled texture to the destination texture
-    mStateManager->bindTexture(textureType, texture);
+    ANGLE_TRY(mStateManager->bindTexture(context, textureType, texture));
 
     if (nativegl::UseTexImage3D(textureType))
     {
@@ -446,8 +449,9 @@ angle::Result BlitGL::blitColorBufferWithShader(const gl::Context *context,
 
         GLenum format                 = readAttachment->getFormat().info->internalFormat;
         const FramebufferGL *sourceGL = GetImplAs<FramebufferGL>(source);
-        mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceGL->getFramebufferID());
-        mStateManager->bindTexture(gl::TextureType::_2D, textureId);
+        ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_READ_FRAMEBUFFER,
+                                                 sourceGL->getFramebufferID()));
+        ANGLE_TRY(mStateManager->bindTexture(context, gl::TextureType::_2D, textureId));
 
         ANGLE_GL_TRY_ALWAYS_CHECK(
             context,
@@ -489,13 +493,13 @@ angle::Result BlitGL::blitColorBufferWithShader(const gl::Context *context,
     // rectangle
     ScopedGLState scopedState;
     ANGLE_TRY(scopedState.enter(context, destArea, ScopedGLState::KEEP_SCISSOR));
-    scopedState.willUseTextureUnit(context, 0);
+    ANGLE_TRY(scopedState.willUseTextureUnit(context, 0));
 
     // Set uniforms
-    mStateManager->activeTexture(0);
-    mStateManager->bindTexture(gl::TextureType::_2D, textureId);
+    ANGLE_TRY(mStateManager->activeTexture(context, 0));
+    ANGLE_TRY(mStateManager->bindTexture(context, gl::TextureType::_2D, textureId));
 
-    mStateManager->useProgram(blitProgram->program);
+    ANGLE_TRY(mStateManager->useProgram(context, blitProgram->program));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->sourceTextureLocation, 0));
     ANGLE_GL_TRY(context, mFunctions->uniform2f(blitProgram->scaleLocation, texCoordScale.x(),
                                                 texCoordScale.y()));
@@ -505,9 +509,10 @@ angle::Result BlitGL::blitColorBufferWithShader(const gl::Context *context,
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0));
 
     const FramebufferGL *destGL = GetImplAs<FramebufferGL>(dest);
-    mStateManager->bindFramebuffer(GL_DRAW_FRAMEBUFFER, destGL->getFramebufferID());
+    ANGLE_TRY(
+        mStateManager->bindFramebuffer(context, GL_DRAW_FRAMEBUFFER, destGL->getFramebufferID()));
 
-    mStateManager->bindVertexArray(mVAO, 0);
+    ANGLE_TRY(mStateManager->bindVertexArray(context, mVAO, 0));
     ANGLE_GL_TRY(context, mFunctions->drawArrays(GL_TRIANGLES, 0, 3));
 
     ANGLE_TRY(scopedState.exit(context));
@@ -539,7 +544,7 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
 
     // Make sure the destination texture can be rendered to before setting anything else up.  Some
     // cube maps may not be renderable until all faces have been filled.
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+    ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mScratchFBO));
     ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                                                            ToGLenum(destTarget), destID,
                                                            static_cast<GLint>(destLevel)));
@@ -584,10 +589,10 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
     ScopedGLState scopedState;
     ANGLE_TRY(scopedState.enter(
         context, gl::Rectangle(destOffset.x, destOffset.y, sourceArea.width, sourceArea.height)));
-    scopedState.willUseTextureUnit(context, 0);
+    ANGLE_TRY(scopedState.willUseTextureUnit(context, 0));
 
-    mStateManager->activeTexture(0);
-    mStateManager->bindTexture(source->getType(), source->getTextureID());
+    ANGLE_TRY(mStateManager->activeTexture(context, 0));
+    ANGLE_TRY(mStateManager->bindTexture(context, source->getType(), source->getTextureID()));
 
     Vector2 scale(sourceArea.width, sourceArea.height);
     Vector2 offset(sourceArea.x, sourceArea.y);
@@ -604,7 +609,7 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
         scale.y() = -scale.y();
     }
 
-    mStateManager->useProgram(blitProgram->program);
+    ANGLE_TRY(mStateManager->useProgram(context, blitProgram->program));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->sourceTextureLocation, 0));
     ANGLE_GL_TRY(context, mFunctions->uniform2f(blitProgram->scaleLocation, scale.x(), scale.y()));
     ANGLE_GL_TRY(context,
@@ -622,7 +627,7 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
                                                     unpackUnmultiplyAlpha));
     }
 
-    mStateManager->bindVertexArray(mVAO, 0);
+    ANGLE_TRY(mStateManager->bindVertexArray(context, mVAO, 0));
     ANGLE_GL_TRY(context, mFunctions->drawArrays(GL_TRIANGLES, 0, 3));
 
     *copySucceededOut = true;
@@ -661,7 +666,7 @@ angle::Result BlitGL::copySubTextureCPUReadback(const gl::Context *context,
 
     gl::Rectangle readPixelsArea = sourceArea;
 
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+    ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mScratchFBO));
     ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(
                               GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ToGLenum(source->getType()),
                               source->getTextureID(), static_cast<GLint>(sourceLevel)));
@@ -675,7 +680,7 @@ angle::Result BlitGL::copySubTextureCPUReadback(const gl::Context *context,
             sourceInternalFormatInfo.format, sourceInternalFormatInfo.type);
 
         gl::TextureType scratchTextureType = gl::TextureType::_2D;
-        mStateManager->bindTexture(scratchTextureType, mScratchTextures[0]);
+        ANGLE_TRY(mStateManager->bindTexture(context, scratchTextureType, mScratchTextures[0]));
         ANGLE_GL_TRY_ALWAYS_CHECK(
             context,
             mFunctions->texImage2D(ToGLenum(scratchTextureType), 0, texImageFormat.internalFormat,
@@ -695,7 +700,7 @@ angle::Result BlitGL::copySubTextureCPUReadback(const gl::Context *context,
         }
 
         // Bind the scratch texture as the readback texture
-        mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+        ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mScratchFBO));
         ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                                                                ToGLenum(scratchTextureType),
                                                                mScratchTextures[0], 0));
@@ -762,7 +767,7 @@ angle::Result BlitGL::copySubTextureCPUReadback(const gl::Context *context,
     nativegl::TexSubImageFormat texSubImageFormat =
         nativegl::GetTexSubImageFormat(mFunctions, mFeatures, destFormat, destType);
 
-    mStateManager->bindTexture(dest->getType(), dest->getTextureID());
+    ANGLE_TRY(mStateManager->bindTexture(context, dest->getType(), dest->getTextureID()));
     ANGLE_GL_TRY(context, mFunctions->texSubImage2D(
                               ToGLenum(destTarget), static_cast<GLint>(destLevel), destOffset.x,
                               destOffset.y, readPixelsArea.width, readPixelsArea.height,
@@ -784,7 +789,7 @@ angle::Result BlitGL::copyTexSubImage(const gl::Context *context,
     ANGLE_TRY(initializeResources(context));
 
     // Make sure the source texture can create a complete framebuffer before continuing.
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+    ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mScratchFBO));
     ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(
                               GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, ToGLenum(source->getType()),
                               source->getTextureID(), static_cast<GLint>(sourceLevel)));
@@ -795,7 +800,7 @@ angle::Result BlitGL::copyTexSubImage(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    mStateManager->bindTexture(dest->getType(), dest->getTextureID());
+    ANGLE_TRY(mStateManager->bindTexture(context, dest->getType(), dest->getTextureID()));
 
     ANGLE_GL_TRY(context,
                  mFunctions->copyTexSubImage2D(ToGLenum(destTarget), static_cast<GLint>(destLevel),
@@ -821,7 +826,7 @@ angle::Result BlitGL::clearRenderableTexture(const gl::Context *context,
     ANGLE_TRY(PrepareForClear(mStateManager, sizedInternalFormat, &bindTargets, &unbindTargets,
                               &clearMask));
 
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+    ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mScratchFBO));
     ANGLE_TRY(UnbindAttachments(context, mFunctions, GL_FRAMEBUFFER, unbindTargets));
 
     if (nativegl::UseTexImage2D(source->getType()))
@@ -925,7 +930,7 @@ angle::Result BlitGL::clearRenderbuffer(const gl::Context *context,
     ANGLE_TRY(PrepareForClear(mStateManager, sizedInternalFormat, &bindTargets, &unbindTargets,
                               &clearMask));
 
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+    ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mScratchFBO));
     ANGLE_TRY(UnbindAttachments(context, mFunctions, GL_FRAMEBUFFER, unbindTargets));
 
     for (GLenum bindTarget : bindTargets)
@@ -954,7 +959,7 @@ angle::Result BlitGL::clearFramebuffer(const gl::Context *context, FramebufferGL
     GLbitfield clearMask = 0;
     ANGLE_TRY(SetClearState(mStateManager, true, true, true, &clearMask));
 
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, source->getFramebufferID());
+    ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_FRAMEBUFFER, source->getFramebufferID()));
     ANGLE_GL_TRY(context, mFunctions->clear(clearMask));
 
     return angle::Result::Continue;
@@ -974,7 +979,7 @@ angle::Result BlitGL::clearRenderableTextureAlphaToOne(const gl::Context *contex
     mStateManager->setColorMask(false, false, false, true);
     mStateManager->setScissorTestEnabled(false);
 
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+    ANGLE_TRY(mStateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mScratchFBO));
     ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                                                            ToGLenum(target), texture,
                                                            static_cast<GLint>(level)));
@@ -1005,7 +1010,7 @@ angle::Result BlitGL::initializeResources(const gl::Context *context)
     if (mVertexBuffer == 0)
     {
         ANGLE_GL_TRY(context, mFunctions->genBuffers(1, &mVertexBuffer));
-        mStateManager->bindBuffer(gl::BufferBinding::Array, mVertexBuffer);
+        ANGLE_TRY(mStateManager->bindBuffer(context, gl::BufferBinding::Array, mVertexBuffer));
 
         // Use a single, large triangle, to avoid arithmetic precision issues where fragments
         // with the same Y coordinate don't get exactly the same interpolated texcoord Y.
@@ -1021,8 +1026,8 @@ angle::Result BlitGL::initializeResources(const gl::Context *context)
     {
         ANGLE_GL_TRY(context, mFunctions->genVertexArrays(1, &mVAO));
 
-        mStateManager->bindVertexArray(mVAO, 0);
-        mStateManager->bindBuffer(gl::BufferBinding::Array, mVertexBuffer);
+        ANGLE_TRY(mStateManager->bindVertexArray(context, mVAO, 0));
+        ANGLE_TRY(mStateManager->bindBuffer(context, gl::BufferBinding::Array, mVertexBuffer));
 
         // Enable all attributes with the same buffer so that it doesn't matter what location the
         // texcoord attribute is assigned
@@ -1044,7 +1049,7 @@ angle::Result BlitGL::orphanScratchTextures(const gl::Context *context)
 {
     for (auto texture : mScratchTextures)
     {
-        mStateManager->bindTexture(gl::TextureType::_2D, texture);
+        ANGLE_TRY(mStateManager->bindTexture(context, gl::TextureType::_2D, texture));
         gl::PixelUnpackState unpack;
         ANGLE_TRY(mStateManager->setPixelUnpackState(context, unpack));
         ANGLE_TRY(mStateManager->setPixelUnpackBuffer(context, nullptr));
@@ -1063,7 +1068,7 @@ angle::Result BlitGL::setScratchTextureParameter(const gl::Context *context,
 {
     for (auto texture : mScratchTextures)
     {
-        mStateManager->bindTexture(gl::TextureType::_2D, texture);
+        ANGLE_TRY(mStateManager->bindTexture(context, gl::TextureType::_2D, texture));
         ANGLE_GL_TRY(context, mFunctions->texParameteri(GL_TEXTURE_2D, param, value));
         ANGLE_GL_TRY(context, mFunctions->texParameteri(GL_TEXTURE_2D, param, value));
     }

@@ -67,17 +67,22 @@ StandardQueryGL::StandardQueryGL(gl::QueryType type,
 
 StandardQueryGL::~StandardQueryGL()
 {
+    ASSERT(mPendingQueries.empty());
+}
+
+void StandardQueryGL::onDestroy(const gl::Context *context)
+{
     if (mActiveQuery != 0)
     {
-        mStateManager->endQuery(mType, this, mActiveQuery);
-        mFunctions->deleteQueries(1, &mActiveQuery);
+        (void)mStateManager->endQuery(context, mType, this, mActiveQuery);
+        ANGLE_GL_CALL(context, mFunctions->deleteQueries(1, &mActiveQuery));
         mActiveQuery = 0;
     }
 
     while (!mPendingQueries.empty())
     {
         GLuint id = mPendingQueries.front();
-        mFunctions->deleteQueries(1, &id);
+        ANGLE_GL_CALL(context, mFunctions->deleteQueries(1, &id));
         mPendingQueries.pop_front();
     }
 }
@@ -152,7 +157,7 @@ angle::Result StandardQueryGL::pause(const gl::Context *context)
 {
     if (mActiveQuery != 0)
     {
-        mStateManager->endQuery(mType, this, mActiveQuery);
+        ANGLE_TRY(mStateManager->endQuery(context, mType, this, mActiveQuery));
 
         mPendingQueries.push_back(mActiveQuery);
         mActiveQuery = 0;
@@ -169,7 +174,7 @@ angle::Result StandardQueryGL::resume(const gl::Context *context)
         // Flush to make sure the pending queries don't add up too much.
         ANGLE_TRY(flush(context, false));
         mFunctions->genQueries(1, &mActiveQuery);
-        mStateManager->beginQuery(mType, this, mActiveQuery);
+        ANGLE_TRY(mStateManager->beginQuery(context, mType, this, mActiveQuery));
     }
 
     return angle::Result::Continue;

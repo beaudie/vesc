@@ -43,42 +43,57 @@ class StateManagerGL final : angle::NonCopyable
                    const angle::FeaturesGL &features);
     ~StateManagerGL();
 
-    void deleteProgram(GLuint program);
-    void deleteVertexArray(GLuint vao);
-    void deleteTexture(GLuint texture);
-    void deleteSampler(GLuint sampler);
-    void deleteBuffer(GLuint buffer);
-    void deleteFramebuffer(GLuint fbo);
-    void deleteRenderbuffer(GLuint rbo);
-    void deleteTransformFeedback(GLuint transformFeedback);
+    angle::Result deleteProgram(const gl::Context *context, GLuint program);
+    angle::Result deleteVertexArray(const gl::Context *context, GLuint vao);
+    angle::Result deleteTexture(const gl::Context *context, GLuint texture);
+    angle::Result deleteSampler(const gl::Context *context, GLuint sampler);
+    angle::Result deleteBuffer(const gl::Context *context, GLuint buffer);
+    angle::Result deleteFramebuffer(const gl::Context *context, GLuint fbo);
+    angle::Result deleteRenderbuffer(const gl::Context *context, GLuint rbo);
+    angle::Result deleteTransformFeedback(const gl::Context *context, GLuint transformFeedback);
 
-    void useProgram(GLuint program);
-    void forceUseProgram(GLuint program);
-    void bindVertexArray(GLuint vao, GLuint elementArrayBuffer);
-    void bindBuffer(gl::BufferBinding target, GLuint buffer);
-    void bindBufferBase(gl::BufferBinding target, size_t index, GLuint buffer);
-    void bindBufferRange(gl::BufferBinding target,
-                         size_t index,
-                         GLuint buffer,
-                         size_t offset,
-                         size_t size);
-    void activeTexture(size_t unit);
-    void bindTexture(gl::TextureType type, GLuint texture);
-    void invalidateTexture(gl::TextureType type);
-    void bindSampler(size_t unit, GLuint sampler);
-    void bindImageTexture(size_t unit,
-                          GLuint texture,
-                          GLint level,
-                          GLboolean layered,
-                          GLint layer,
-                          GLenum access,
-                          GLenum format);
-    void bindFramebuffer(GLenum type, GLuint framebuffer);
-    void bindRenderbuffer(GLenum type, GLuint renderbuffer);
-    void bindTransformFeedback(GLenum type, GLuint transformFeedback);
+    angle::Result useProgram(const gl::Context *context, GLuint program);
+    angle::Result forceUseProgram(const gl::Context *context, GLuint program);
+    angle::Result bindVertexArray(const gl::Context *context,
+                                  GLuint vao,
+                                  GLuint elementArrayBuffer);
+    angle::Result bindBuffer(const gl::Context *context, gl::BufferBinding target, GLuint buffer);
+    angle::Result bindBufferBase(const gl::Context *context,
+                                 gl::BufferBinding target,
+                                 size_t index,
+                                 GLuint buffer);
+    angle::Result bindBufferRange(const gl::Context *context,
+                                  gl::BufferBinding target,
+                                  size_t index,
+                                  GLuint buffer,
+                                  size_t offset,
+                                  size_t size);
+    angle::Result activeTexture(const gl::Context *context, size_t unit);
+    angle::Result bindTexture(const gl::Context *context, gl::TextureType type, GLuint texture);
+    angle::Result invalidateTexture(const gl::Context *context, gl::TextureType type);
+    angle::Result bindSampler(const gl::Context *context, size_t unit, GLuint sampler);
+    angle::Result bindImageTexture(const gl::Context *context,
+                                   size_t unit,
+                                   GLuint texture,
+                                   GLint level,
+                                   GLboolean layered,
+                                   GLint layer,
+                                   GLenum access,
+                                   GLenum format);
+    angle::Result bindFramebuffer(const gl::Context *context, GLenum type, GLuint framebuffer);
+    angle::Result bindRenderbuffer(const gl::Context *context, GLenum type, GLuint renderbuffer);
+    angle::Result bindTransformFeedback(const gl::Context *context,
+                                        GLenum type,
+                                        GLuint transformFeedback);
     void onTransformFeedbackStateChange();
-    void beginQuery(gl::QueryType type, QueryGL *queryObject, GLuint queryId);
-    void endQuery(gl::QueryType type, QueryGL *queryObject, GLuint queryId);
+    angle::Result beginQuery(const gl::Context *context,
+                             gl::QueryType type,
+                             QueryGL *queryObject,
+                             GLuint queryId);
+    angle::Result endQuery(const gl::Context *context,
+                           gl::QueryType type,
+                           QueryGL *queryObject,
+                           GLuint queryId);
 
     void setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData &data);
 
@@ -153,7 +168,7 @@ class StateManagerGL final : angle::NonCopyable
 
     void setProvokingVertex(GLenum mode);
 
-    void pauseTransformFeedback();
+    angle::Result pauseTransformFeedback(const gl::Context *context);
     angle::Result pauseAllQueries(const gl::Context *context);
     angle::Result pauseQuery(const gl::Context *context, gl::QueryType type);
     angle::Result resumeAllQueries(const gl::Context *context);
@@ -189,17 +204,17 @@ class StateManagerGL final : angle::NonCopyable
 
     angle::Result propagateProgramToVAO(const gl::Context *context);
 
-    void updateProgramTextureBindings(const gl::Context *context);
-    void updateProgramStorageBufferBindings(const gl::Context *context);
-    void updateProgramUniformBufferBindings(const gl::Context *context);
-    void updateProgramAtomicCounterBufferBindings(const gl::Context *context);
-    void updateProgramImageBindings(const gl::Context *context);
+    angle::Result updateProgramTextureBindings(const gl::Context *context);
+    angle::Result updateProgramStorageBufferBindings(const gl::Context *context);
+    angle::Result updateProgramUniformBufferBindings(const gl::Context *context);
+    angle::Result updateProgramAtomicCounterBufferBindings(const gl::Context *context);
+    angle::Result updateProgramImageBindings(const gl::Context *context);
 
-    void updateDispatchIndirectBufferBinding(const gl::Context *context);
-    void updateDrawIndirectBufferBinding(const gl::Context *context);
+    angle::Result updateDispatchIndirectBufferBinding(const gl::Context *context);
+    angle::Result updateDrawIndirectBufferBinding(const gl::Context *context);
 
-    void syncSamplersState(const gl::Context *context);
-    void syncTransformFeedbackState(const gl::Context *context);
+    angle::Result syncSamplersState(const gl::Context *context);
+    angle::Result syncTransformFeedbackState(const gl::Context *context);
 
     void updateMultiviewBaseViewLayerIndexUniformImpl(
         const gl::Program *program,

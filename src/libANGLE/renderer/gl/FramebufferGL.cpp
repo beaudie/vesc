@@ -401,7 +401,7 @@ FramebufferGL::~FramebufferGL()
 void FramebufferGL::destroy(const gl::Context *context)
 {
     StateManagerGL *stateManager = GetStateManagerGL(context);
-    stateManager->deleteFramebuffer(mFramebufferID);
+    (void)stateManager->deleteFramebuffer(context, mFramebufferID);
     mFramebufferID = 0;
 }
 
@@ -431,13 +431,13 @@ angle::Result FramebufferGL::invalidate(const gl::Context *context,
     // Since this function is just a hint, only call a native function if it exists.
     if (functions->invalidateFramebuffer)
     {
-        stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+        ANGLE_TRY(stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID));
         functions->invalidateFramebuffer(GL_FRAMEBUFFER, static_cast<GLsizei>(count),
                                          finalAttachmentsPtr);
     }
     else if (functions->discardFramebufferEXT)
     {
-        stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+        ANGLE_TRY(stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID));
         functions->discardFramebufferEXT(GL_FRAMEBUFFER, static_cast<GLsizei>(count),
                                          finalAttachmentsPtr);
     }
@@ -466,7 +466,7 @@ angle::Result FramebufferGL::invalidateSub(const gl::Context *context,
     // available.
     if (functions->invalidateSubFramebuffer)
     {
-        stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+        ANGLE_TRY(stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID));
         functions->invalidateSubFramebuffer(GL_FRAMEBUFFER, static_cast<GLsizei>(count),
                                             finalAttachmentsPtr, area.x, area.y, area.width,
                                             area.height);
@@ -481,18 +481,18 @@ angle::Result FramebufferGL::clear(const gl::Context *context, GLbitfield mask)
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     syncClearState(context, mask);
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+    ANGLE_TRY(stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID));
 
     if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
     {
-        functions->clear(mask);
+        ANGLE_GL_TRY(context, functions->clear(mask));
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
-                                            ClearMultiviewGL::ClearCommandType::Clear, mask,
-                                            GL_NONE, 0, nullptr, 0.0f, 0);
+        ANGLE_TRY(multiviewClearer->clearMultiviewFBO(
+            context, mState, context->getState().getScissor(),
+            ClearMultiviewGL::ClearCommandType::Clear, mask, GL_NONE, 0, nullptr, 0.0f, 0));
     }
 
     return angle::Result::Continue;
@@ -507,19 +507,19 @@ angle::Result FramebufferGL::clearBufferfv(const gl::Context *context,
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     syncClearBufferState(context, buffer, drawbuffer);
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+    ANGLE_TRY(stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID));
 
     if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
     {
-        functions->clearBufferfv(buffer, drawbuffer, values);
+        ANGLE_GL_TRY(context, functions->clearBufferfv(buffer, drawbuffer, values));
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
-                                            ClearMultiviewGL::ClearCommandType::ClearBufferfv,
-                                            static_cast<GLbitfield>(0u), buffer, drawbuffer,
-                                            reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
+        ANGLE_TRY(multiviewClearer->clearMultiviewFBO(
+            context, mState, context->getState().getScissor(),
+            ClearMultiviewGL::ClearCommandType::ClearBufferfv, static_cast<GLbitfield>(0u), buffer,
+            drawbuffer, reinterpret_cast<const uint8_t *>(values), 0.0f, 0));
     }
 
     return angle::Result::Continue;
@@ -534,19 +534,19 @@ angle::Result FramebufferGL::clearBufferuiv(const gl::Context *context,
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     syncClearBufferState(context, buffer, drawbuffer);
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+    ANGLE_TRY(stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID));
 
     if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
     {
-        functions->clearBufferuiv(buffer, drawbuffer, values);
+        ANGLE_GL_TRY(context, functions->clearBufferuiv(buffer, drawbuffer, values));
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
-                                            ClearMultiviewGL::ClearCommandType::ClearBufferuiv,
-                                            static_cast<GLbitfield>(0u), buffer, drawbuffer,
-                                            reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
+        ANGLE_TRY(multiviewClearer->clearMultiviewFBO(
+            context, mState, context->getState().getScissor(),
+            ClearMultiviewGL::ClearCommandType::ClearBufferuiv, static_cast<GLbitfield>(0u), buffer,
+            drawbuffer, reinterpret_cast<const uint8_t *>(values), 0.0f, 0));
     }
 
     return angle::Result::Continue;
@@ -561,19 +561,19 @@ angle::Result FramebufferGL::clearBufferiv(const gl::Context *context,
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     syncClearBufferState(context, buffer, drawbuffer);
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+    ANGLE_TRY(stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID));
 
     if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
     {
-        functions->clearBufferiv(buffer, drawbuffer, values);
+        ANGLE_GL_TRY(context, functions->clearBufferiv(buffer, drawbuffer, values));
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
-                                            ClearMultiviewGL::ClearCommandType::ClearBufferiv,
-                                            static_cast<GLbitfield>(0u), buffer, drawbuffer,
-                                            reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
+        ANGLE_TRY(multiviewClearer->clearMultiviewFBO(
+            context, mState, context->getState().getScissor(),
+            ClearMultiviewGL::ClearCommandType::ClearBufferiv, static_cast<GLbitfield>(0u), buffer,
+            drawbuffer, reinterpret_cast<const uint8_t *>(values), 0.0f, 0));
     }
 
     return angle::Result::Continue;
@@ -589,19 +589,19 @@ angle::Result FramebufferGL::clearBufferfi(const gl::Context *context,
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     syncClearBufferState(context, buffer, drawbuffer);
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+    ANGLE_TRY(stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID));
 
     if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
     {
-        functions->clearBufferfi(buffer, drawbuffer, depth, stencil);
+        ANGLE_GL_TRY(context, functions->clearBufferfi(buffer, drawbuffer, depth, stencil));
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
-                                            ClearMultiviewGL::ClearCommandType::ClearBufferfi,
-                                            static_cast<GLbitfield>(0u), buffer, drawbuffer,
-                                            nullptr, depth, stencil);
+        ANGLE_TRY(multiviewClearer->clearMultiviewFBO(
+            context, mState, context->getState().getScissor(),
+            ClearMultiviewGL::ClearCommandType::ClearBufferfi, static_cast<GLbitfield>(0u), buffer,
+            drawbuffer, nullptr, depth, stencil));
     }
 
     return angle::Result::Continue;
@@ -662,7 +662,7 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
                     GL_INVALID_OPERATION);
     }
 
-    stateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, mFramebufferID);
+    ANGLE_TRY(stateManager->bindFramebuffer(context, GL_READ_FRAMEBUFFER, mFramebufferID));
 
     bool useOverlappingRowsWorkaround = features.packOverlappingRowsSeparatelyPackBuffer.enabled &&
                                         packBuffer && packState.rowLength != 0 &&
@@ -799,8 +799,9 @@ angle::Result FramebufferGL::blit(const gl::Context *context,
     }
 
     const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(sourceFramebuffer);
-    stateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceFramebufferGL->getFramebufferID());
-    stateManager->bindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebufferID);
+    ANGLE_TRY(stateManager->bindFramebuffer(context, GL_READ_FRAMEBUFFER,
+                                            sourceFramebufferGL->getFramebufferID()));
+    ANGLE_TRY(stateManager->bindFramebuffer(context, GL_DRAW_FRAMEBUFFER, mFramebufferID));
 
     gl::Rectangle finalSourceArea(sourceArea);
     gl::Rectangle finalDestArea(destArea);
@@ -1174,7 +1175,7 @@ angle::Result FramebufferGL::getSamplePosition(const gl::Context *context,
     const FunctionsGL *functions = GetFunctionsGL(context);
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+    ANGLE_TRY(stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID));
     functions->getMultisamplefv(GL_SAMPLE_POSITION, static_cast<GLuint>(index), xy);
     return angle::Result::Continue;
 }
@@ -1189,7 +1190,7 @@ bool FramebufferGL::checkStatus(const gl::Context *context) const
     const FunctionsGL *functions = GetFunctionsGL(context);
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+    (void)stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID);
     GLenum status = functions->checkFramebufferStatus(GL_FRAMEBUFFER);
     if (status != GL_FRAMEBUFFER_COMPLETE)
     {
@@ -1210,7 +1211,7 @@ angle::Result FramebufferGL::syncState(const gl::Context *context,
     const FunctionsGL *functions = GetFunctionsGL(context);
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+    ANGLE_TRY(stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, mFramebufferID));
 
     // A pointer to one of the attachments for which the texture or the render buffer is not zero.
     const FramebufferAttachment *attachment = nullptr;

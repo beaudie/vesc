@@ -61,7 +61,7 @@ egl::Error DisplayGL::makeCurrent(egl::Surface *drawSurface,
 
     // Pause transform feedback before making a new surface current, to workaround anglebug.com/1426
     ContextGL *glContext = GetImplAs<ContextGL>(context);
-    glContext->getStateManager()->pauseTransformFeedback();
+    ANGLE_TRY(ResultToEGL(glContext->getStateManager()->pauseTransformFeedback(context)));
 
     if (drawSurface == nullptr)
     {
