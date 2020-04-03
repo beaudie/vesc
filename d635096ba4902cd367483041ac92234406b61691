@@ -1,0 +1,481 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c5a3f5f_8a02cd34",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 88
+      },
+      "lineNbr": 6563,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "I suggest making a split refactor-only change with the local changes to Context.cpp to call getActiveLinkedProgram instead of mState.getProgram. You can omit the pipline-related code and keep that in this CL. This would simplify this large pipeline CL.",
+      "range": {
+        "startLine": 6563,
+        "startChar": 18,
+        "endLine": 6563,
+        "endChar": 40
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "276e8914_47a95d9f",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "This is going to incur significant draw overhead. Do you know what tests trigger this situation? Also this should be in a split change.\n\nThis is important enough we should try to fix before landing. Other clients of ANGLE like Chrome depend on having low draw call overhead. We can potentially use a cache variable like we do for validation. Note that this condition doesn\u0027t depend on any draw call parameters (mode/count).",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 5
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbe19858_cd829e18",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "In what cases do we need to call pipeline-\u003eprepareForDraw? Let\u0027s try to make this a dirty object. Again trying to shave off redundant ifs from each and every draw call.",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 5
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48c76b03_13e37766",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: you can omit \"GL_\" from validation messages.",
+      "range": {
+        "startLine": 486,
+        "startChar": 67,
+        "endLine": 486,
+        "endChar": 70
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75a4207d_e6f6dee6",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: please leave a TODO here to remove this once we support full linking with the Executable.",
+      "range": {
+        "startLine": 1007,
+        "startChar": 24,
+        "endLine": 1007,
+        "endChar": 46
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a8d2f17_9fc88a8a",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 88
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: you can cache this in a temporary to make the following code easier to read. same below.",
+      "range": {
+        "startLine": 383,
+        "startChar": 23,
+        "endLine": 383,
+        "endChar": 67
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b273247_a0ac3ebe",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: can you check if various accessors in this class can be const and mark them if so?",
+      "range": {
+        "startLine": 51,
+        "startChar": 14,
+        "endLine": 51,
+        "endChar": 21
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9bde1b9_034f98d5",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: looks like all these accessors can be const.",
+      "range": {
+        "startLine": 55,
+        "startChar": 9,
+        "endLine": 55,
+        "endChar": 27
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "525f7cea_4520f615",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 88
+      },
+      "lineNbr": 3100,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "right, so you added a program pipeline handler here. We should try to get the pseudo-linking state into notifications that trigger syncState.",
+      "range": {
+        "startLine": 3092,
+        "startChar": 0,
+        "endLine": 3100,
+        "endChar": 1
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5da37528_b67748e1",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: can\u0027t you just iterate the map directly?",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 9
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30d01031_ff50d3c4",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: please place in the cpp. no need to be inlined.",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 0
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a088bb68_4614992b",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: can go in cpp as well. also I think you can call std::fill().",
+      "range": {
+        "startLine": 255,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 5
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16a1db36_d559bd87",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 88
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "will trust Shabi\u0027s review for this file. I just skimmed it.",
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e1895ab_c9721f58",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: GlslangAssignLocations to ensure this function is appropriately scoped to Glslang.",
+      "range": {
+        "startLine": 101,
+        "startChar": 5,
+        "endLine": 101,
+        "endChar": 20
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63067403_9907c2e4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 88
+      },
+      "lineNbr": 2599,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "naming nit: invalidate to match the other functions.",
+      "range": {
+        "startLine": 2599,
+        "startChar": 25,
+        "endLine": 2599,
+        "endChar": 53
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bddc87f_90440d8f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 88
+      },
+      "lineNbr": 2880,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "it should only need to be called when the executable changes.",
+      "range": {
+        "startLine": 2880,
+        "startChar": 20,
+        "endLine": 2880,
+        "endChar": 72
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d10d26c_42e4895c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 88
+      },
+      "lineNbr": 2890,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: maybe make this a helper. it\u0027s getting pretty big.\n\nalso the TODO/invalidate calls shouldn\u0027t be necessary. only when the executable changes.",
+      "range": {
+        "startLine": 2858,
+        "startChar": 0,
+        "endLine": 2890,
+        "endChar": 51
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4f03764_9993553c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 88
+      },
+      "lineNbr": 4688,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: again a TODO here to use the executable.",
+      "range": {
+        "startLine": 4688,
+        "startChar": 22,
+        "endLine": 4688,
+        "endChar": 38
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4b47a06_fe76f3e7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "naming nit: how about isBresenhamEmulationEnabled ?",
+      "range": {
+        "startLine": 664,
+        "startChar": 22,
+        "endLine": 664,
+        "endChar": 35
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a22c5928_f5751701",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 88
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: again slap a TODO somewhere on this program state map to use the executable for linking.",
+      "range": {
+        "startLine": 39,
+        "startChar": 28,
+        "endLine": 39,
+        "endChar": 41
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fc15681_a094c52d",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 88
+      },
+      "lineNbr": 2842,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T19:59:35Z",
+      "side": 1,
+      "message": "nit: it would be more consistent to localize the validation code out of the classes and into helper functions that use public data accessors in validationES.cpp.\n\nAlso there may be state change notifications related to program pipelines that aren\u0027t propagated to StateCache. Without the notifications this code might not get called and ANGLE might return incorrect validation.\n\nYou could even do a partial refactor-only CL that makes the helper functions in here to split that out.",
+      "range": {
+        "startLine": 2811,
+        "startChar": 0,
+        "endLine": 2842,
+        "endChar": 13
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
