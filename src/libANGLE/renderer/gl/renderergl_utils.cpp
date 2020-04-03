@@ -2486,6 +2486,11 @@ void ClearErrors(const gl::Context *context,
                  const char *function,
                  unsigned int line)
 {
+    if (!context)
+    {
+        return;
+    }
+
     const FunctionsGL *functions = GetFunctionsGL(context);
     ClearErrors(functions, file, function, line);
 }
@@ -2496,6 +2501,11 @@ angle::Result CheckError(const gl::Context *context,
                          const char *function,
                          unsigned int line)
 {
+    if (!context)
+    {
+        return angle::Result::Continue;
+    }
+
     const FunctionsGL *functions = GetFunctionsGL(context);
 
     GLenum error = functions->getError();
