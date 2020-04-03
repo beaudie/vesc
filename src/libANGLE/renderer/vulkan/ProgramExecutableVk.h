@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_PROGRAMEXECUTABLEVK_H_
 #define LIBANGLE_RENDERER_VULKAN_PROGRAMEXECUTABLEVK_H_
 
+#include "common/bitset_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/InfoLog.h"
@@ -44,6 +45,15 @@ class ShaderInfo final : angle::NonCopyable
     bool mIsInitialized = false;
 };
 
+enum class ProgramTransformOption : uint8_t
+{
+    EnableLineRasterEmulation            = 0,
+    RemoveEarlyFragmentTestsOptimization = 1,
+    EnumCount                            = 2,
+    PermutationCount                     = 4,
+};
+using ProgramTransformOptionBits = angle::PackedEnumBitSet<ProgramTransformOption, uint8_t>;
+
 class ProgramInfo final : angle::NonCopyable
 {
   public:
@@ -52,7 +62,8 @@ class ProgramInfo final : angle::NonCopyable
 
     angle::Result initProgram(ContextVk *contextVk,
                               const ShaderInfo &shaderInfo,
-                              bool enableLineRasterEmulation);
+                              const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
+                              ProgramTransformOptionBits optionBits);
     void release(ContextVk *contextVk);
 
     ANGLE_INLINE bool valid() const { return mProgramHelper.valid(); }
@@ -193,8 +204,7 @@ class ProgramExecutableVk
     // since that's slow to calculate.
     ShaderMapInterfaceVariableInfoMap mVariableInfoMap;
 
-    ProgramInfo mDefaultProgramInfo;
-    ProgramInfo mLineRasterProgramInfo;
+    ProgramInfo mProgramInfos[static_cast<int>(ProgramTransformOption::PermutationCount)];
 };
 
 }  // namespace rx
