@@ -66,13 +66,13 @@ DXGISwapChainWindowSurfaceWGL::~DXGISwapChainWindowSurfaceWGL()
 
     if (mColorRenderbufferID != 0)
     {
-        mStateManager->deleteRenderbuffer(mColorRenderbufferID);
+        (void)mStateManager->deleteRenderbuffer(nullptr, mColorRenderbufferID);
         mColorRenderbufferID = 0;
     }
 
     if (mDepthRenderbufferID != 0)
     {
-        mStateManager->deleteRenderbuffer(mDepthRenderbufferID);
+        (void)mStateManager->deleteRenderbuffer(nullptr, mDepthRenderbufferID);
         mDepthRenderbufferID = 0;
     }
 
@@ -104,10 +104,10 @@ egl::Error DXGISwapChainWindowSurfaceWGL::initialize(const egl::Display *display
     mDepthBufferFormat = GL_DEPTH24_STENCIL8;
 
     mFunctionsGL->genRenderbuffers(1, &mColorRenderbufferID);
-    mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mColorRenderbufferID);
+    (void)mStateManager->bindRenderbuffer(nullptr, GL_RENDERBUFFER, mColorRenderbufferID);
 
     mFunctionsGL->genRenderbuffers(1, &mDepthRenderbufferID);
-    mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mDepthRenderbufferID);
+    (void)mStateManager->bindRenderbuffer(nullptr, GL_RENDERBUFFER, mDepthRenderbufferID);
 
     return createSwapChain();
 }
@@ -276,7 +276,7 @@ FramebufferImpl *DXGISwapChainWindowSurfaceWGL::createDefaultFramebuffer(
 
     GLuint framebufferID = 0;
     functions->genFramebuffers(1, &framebufferID);
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, framebufferID);
+    (void)stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, framebufferID);
     functions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
                                        mColorRenderbufferID);
 
@@ -497,7 +497,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::createSwapChain()
                                   << gl::FmtHR(result);
     }
 
-    mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mColorRenderbufferID);
+    (void)mStateManager->bindRenderbuffer(nullptr, GL_RENDERBUFFER, mColorRenderbufferID);
     mRenderbufferBufferHandle =
         mFunctionsWGL->dxRegisterObjectNV(mDeviceHandle, colorBuffer, mColorRenderbufferID,
                                           GL_RENDERBUFFER, WGL_ACCESS_READ_WRITE_NV);
@@ -529,7 +529,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::createSwapChain()
     if (mDepthBufferFormat != GL_NONE)
     {
         ASSERT(mDepthRenderbufferID != 0);
-        mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mDepthRenderbufferID);
+        (void)mStateManager->bindRenderbuffer(nullptr, GL_RENDERBUFFER, mDepthRenderbufferID);
         mFunctionsGL->renderbufferStorage(GL_RENDERBUFFER, mDepthBufferFormat,
                                           static_cast<GLsizei>(mWidth),
                                           static_cast<GLsizei>(mHeight));
