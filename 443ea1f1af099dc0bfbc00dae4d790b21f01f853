@@ -69,6 +69,30 @@
       "revId": "443ea1f1af099dc0bfbc00dae4d790b21f01f853",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c692cdb_c27871ef",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T13:31:29Z",
+      "side": 1,
+      "message": "I\u0027m confused. componentType should only be GL_SIGNED_NORMALIZED/GL_UNSIGNED_NORMALIZED/GL_FLOAT/GL_UNSIGNED_INT/GL_INT. Is your new helper basically isInt || isNormInt?",
+      "parentUuid": "95b1218f_29b88f2f",
+      "range": {
+        "startLine": 516,
+        "startChar": 21,
+        "endLine": 516,
+        "endChar": 26
+      },
+      "revId": "443ea1f1af099dc0bfbc00dae4d790b21f01f853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
