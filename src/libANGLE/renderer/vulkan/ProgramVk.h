@@ -176,7 +176,7 @@ class ProgramVk : public ProgramImpl
     void linkResources(const gl::ProgramLinkedResources &resources);
 
     ANGLE_INLINE angle::Result initProgram(ContextVk *contextVk,
-                                           bool enableLineRasterEmulation,
+                                           ProgramTransformOptionBits option_bits,
                                            ProgramInfo *programInfo,
                                            vk::ShaderProgramHelper **shaderProgramOut)
     {
@@ -186,7 +186,8 @@ class ProgramVk : public ProgramImpl
         // specialization constants.
         if (!programInfo->valid())
         {
-            ANGLE_TRY(programInfo->initProgram(contextVk, mShaderInfo, enableLineRasterEmulation));
+            ANGLE_TRY(programInfo->initProgram(contextVk, mShaderInfo, mExecutable.mVariableInfoMap,
+                                               option_bits));
         }
         ASSERT(programInfo->valid());
 
@@ -198,18 +199,23 @@ class ProgramVk : public ProgramImpl
                                                    gl::PrimitiveMode mode,
                                                    vk::ShaderProgramHelper **shaderProgramOut)
     {
-        bool enableLineRasterEmulation = UseLineRaster(contextVk, mode);
+        ProgramTransformOptionBits optionBits;
+        optionBits[ProgramTransformOption::EnableLineRasterEmulation] =
+            UseLineRaster(contextVk, mode);
+        optionBits[ProgramTransformOption::RemoveEarlyFragmentTestsOptimization] =
+            mState.hasEarlyFragmentTestsOptimization() &&
+            !contextVk->getState().isEarlyFragmentTestsOptimizationAllowed();
 
-        ProgramInfo &programInfo = enableLineRasterEmulation ? mExecutable.mLineRasterProgramInfo
-                                                             : mExecutable.mDefaultProgramInfo;
+        ProgramInfo *programInfo = &mExecutable.mProgramInfos[optionBits.to_ulong()];
 
-        return initProgram(contextVk, enableLineRasterEmulation, &programInfo, shaderProgramOut);
+        return initProgram(contextVk, optionBits, programInfo, shaderProgramOut);
     }
 
     ANGLE_INLINE angle::Result initComputeProgram(ContextVk *contextVk,
                                                   vk::ShaderProgramHelper **shaderProgramOut)
     {
-        return initProgram(contextVk, false, &mExecutable.mDefaultProgramInfo, shaderProgramOut);
+        ProgramTransformOptionBits optionBits;
+        return initProgram(contextVk, optionBits, &mExecutable.mProgramInfos[0], shaderProgramOut);
     }
 
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
