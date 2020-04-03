@@ -765,6 +765,8 @@ class State : angle::NonCopyable
         return mNoSimultaneousConstantColorAndAlphaBlendFunc;
     }
 
+    bool isEarlyFragmentTestsOptimizationAllowed() const { return isSampleCoverageEnabled(); }
+
   private:
     friend class Context;
 

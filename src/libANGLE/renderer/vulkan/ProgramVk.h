@@ -200,10 +200,25 @@ class ProgramVk : public ProgramImpl
     {
         bool enableLineRasterEmulation = UseLineRaster(contextVk, mode);
 
-        ProgramInfo &programInfo = enableLineRasterEmulation ? mExecutable.mLineRasterProgramInfo
-                                                             : mExecutable.mDefaultProgramInfo;
+        ProgramInfo *programInfo;
+        if (enableLineRasterEmulation)
+        {
+            programInfo = &mExecutable.mLineRasterProgramInfo;
+        }
+        else
+        {
+            if (mState.hasEarlyFragmentTestsOptimization() &&
+                !contextVk->getState().isEarlyFragmentTestsOptimizationAllowed())
+            {
+                programInfo = &mExecutable.mDefaultProgramInfoEarlyFragmentTestsRemoved;
+            }
+            else
+            {
+                programInfo = &mExecutable.mDefaultProgramInfo;
+            }
+        }
 
-        return initProgram(contextVk, enableLineRasterEmulation, &programInfo, shaderProgramOut);
+        return initProgram(contextVk, enableLineRasterEmulation, programInfo, shaderProgramOut);
     }
 
     ANGLE_INLINE angle::Result initComputeProgram(ContextVk *contextVk,

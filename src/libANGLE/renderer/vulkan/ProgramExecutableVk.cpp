@@ -30,12 +30,13 @@ ShaderInfo::~ShaderInfo() = default;
 
 angle::Result ShaderInfo::initShaders(ContextVk *contextVk,
                                       const gl::ShaderMap<std::string> &shaderSources,
+                                      const GlslangProgramInterfaceInfo *programInterfaceInfo,
                                       const ShaderMapInterfaceVariableInfoMap &variableInfoMap)
 {
     ASSERT(!valid());
 
     ANGLE_TRY(GlslangWrapperVk::GetShaderCode(contextVk, contextVk->getCaps(), shaderSources,
-                                              variableInfoMap, &mSpirvBlobs));
+                                              programInterfaceInfo, variableInfoMap, &mSpirvBlobs));
 
     mIsInitialized = true;
     return angle::Result::Continue;
@@ -159,6 +160,7 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
 
     mDefaultProgramInfo.release(contextVk);
     mLineRasterProgramInfo.release(contextVk);
+    mDefaultProgramInfoEarlyFragmentTestsRemoved.release(contextVk);
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(gl::BinaryInputStream *stream)

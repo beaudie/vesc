@@ -994,6 +994,7 @@ class SpirvTransformer final : angle::NonCopyable
 {
   public:
     SpirvTransformer(const std::vector<uint32_t> &spirvBlobIn,
+                     const GlslangProgramInterfaceInfo *programInterfaceInfo,
                      const ShaderInterfaceVariableInfoMap &variableInfoMap,
                      gl::ShaderType shaderType,
                      SpirvBlob *spirvBlobOut)
@@ -1005,7 +1006,7 @@ class SpirvTransformer final : angle::NonCopyable
     {
         gl::ShaderBitSet allStages;
         allStages.set();
-
+        mProgramInterfaceInfo             = programInterfaceInfo;
         mBuiltinVariableInfo.activeStages = allStages;
     }
 
@@ -1044,6 +1045,7 @@ class SpirvTransformer final : angle::NonCopyable
     bool transformDecorate(const uint32_t *instruction, size_t wordCount);
     bool transformTypePointer(const uint32_t *instruction, size_t wordCount);
     bool transformVariable(const uint32_t *instruction, size_t wordCount);
+    bool transformExecutionMode(const uint32_t *instruction, size_t wordCount);
 
     // Any other instructions:
     size_t copyInstruction(const uint32_t *instruction, size_t wordCount);
@@ -1053,6 +1055,8 @@ class SpirvTransformer final : angle::NonCopyable
     const std::vector<uint32_t> &mSpirvBlobIn;
     const gl::ShaderType mShaderType;
     bool mHasTransformFeedbackOutput;
+
+    const GlslangProgramInterfaceInfo *mProgramInterfaceInfo;
 
     // Input shader variable info map:
     const ShaderInterfaceVariableInfoMap &mVariableInfoMap;
@@ -1252,6 +1256,9 @@ void SpirvTransformer::transformInstruction()
                 break;
             case spv::OpVariable:
                 transformed = transformVariable(instruction, wordCount);
+                break;
+            case spv::OpExecutionMode:
+                transformed = transformExecutionMode(instruction, wordCount);
                 break;
             default:
                 break;
@@ -1730,6 +1737,25 @@ bool SpirvTransformer::transformAccessChain(const uint32_t *instruction, size_t 
     return true;
 }
 
+bool SpirvTransformer::transformExecutionMode(const uint32_t *instruction, size_t wordCount)
+{
+    // SPIR-V 1.0 Section 3.32 Instructions, OpAccessChain, OpInBoundsAccessChain, OpPtrAccessChain,
+    // OpInBoundsPtrAccessChain
+    constexpr size_t kModeIndex  = 2;
+    const uint32_t executionMode = instruction[kModeIndex];
+
+    if (executionMode == spv::ExecutionModeEarlyFragmentTests &&
+        mProgramInterfaceInfo->removeEarlyFragmentTests)
+    {
+        // skip the copy
+        return true;
+    }
+    // Copy to output.
+    copyInstruction(instruction, wordCount);
+
+    return true;
+}
+
 size_t SpirvTransformer::copyInstruction(const uint32_t *instruction, size_t wordCount)
 {
     size_t instructionOffset = mSpirvBlobOut->size();
@@ -1917,6 +1943,7 @@ void GlslangGetShaderSource(GlslangSourceOptions &options,
 
 angle::Result TransformSpirvCode(const GlslangErrorCallback &callback,
                                  const gl::ShaderType shaderType,
+                                 const GlslangProgramInterfaceInfo *programInterfaceInfo,
                                  const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                  const SpirvBlob &initialSpirvBlob,
                                  SpirvBlob *spirvBlobOut)
@@ -1927,7 +1954,8 @@ angle::Result TransformSpirvCode(const GlslangErrorCallback &callback,
     }
 
     // Transform the SPIR-V code by assigning location/set/binding values.
-    SpirvTransformer transformer(initialSpirvBlob, variableInfoMap, shaderType, spirvBlobOut);
+    SpirvTransformer transformer(initialSpirvBlob, programInterfaceInfo, variableInfoMap,
+                                 shaderType, spirvBlobOut);
     ANGLE_GLSLANG_CHECK(callback, transformer.transform(), GlslangError::InvalidSpirv);
 
     ASSERT(ValidateSpirv(*spirvBlobOut));
@@ -1938,6 +1966,7 @@ angle::Result TransformSpirvCode(const GlslangErrorCallback &callback,
 angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
+                                        const GlslangProgramInterfaceInfo *programInterfaceInfo,
                                         const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
                                         gl::ShaderMap<SpirvBlob> *spirvBlobsOut)
 {
@@ -1946,9 +1975,9 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        angle::Result status =
-            TransformSpirvCode(callback, shaderType, variableInfoMap[shaderType],
-                               initialSpirvBlobs[shaderType], &(*spirvBlobsOut)[shaderType]);
+        angle::Result status = TransformSpirvCode(
+            callback, shaderType, programInterfaceInfo, variableInfoMap[shaderType],
+            initialSpirvBlobs[shaderType], &(*spirvBlobsOut)[shaderType]);
         if (status != angle::Result::Continue)
         {
             return status;

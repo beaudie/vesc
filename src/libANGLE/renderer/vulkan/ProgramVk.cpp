@@ -286,9 +286,15 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                       &mGlslangProgramInterfaceInfo, &shaderSources,
                                       &mExecutable.mVariableInfoMap);
 
+    // If shader has injected early fragment optimization but context state disagrees with it,
+    // we must inform the spriv transform code to remove the optimization from shader blob
+    mGlslangProgramInterfaceInfo.removeEarlyFragmentTests =
+        mState.hasEarlyFragmentTestsOptimization() &&
+        context->getState().isEarlyFragmentTestsOptimizationAllowed();
+
     // Compile the shaders.
-    angle::Result status =
-        mShaderInfo.initShaders(contextVk, shaderSources, mExecutable.mVariableInfoMap);
+    angle::Result status = mShaderInfo.initShaders(
+        contextVk, shaderSources, &mGlslangProgramInterfaceInfo, mExecutable.mVariableInfoMap);
     if (status != angle::Result::Continue)
     {
         return std::make_unique<LinkEventDone>(status);

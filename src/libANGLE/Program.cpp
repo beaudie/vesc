@@ -1595,6 +1595,13 @@ angle::Result Program::link(const Context *context)
             mState.mNumViews = vertexShader->getNumViews();
         }
 
+        gl::Shader *fragmentShader = mState.mAttachedShaders[ShaderType::Fragment];
+        if (fragmentShader)
+        {
+            mState.mEarlyFramentTestsOptimization =
+                fragmentShader->hasEarlyFragmentTestsOptimization();
+        }
+
         InitUniformBlockLinker(mState, &resources->uniformBlockLinker);
         InitShaderStorageBlockLinker(mState, &resources->shaderStorageBlockLinker);
 
@@ -1840,6 +1847,7 @@ void Program::unlink()
     mState.mBaseInstanceLocation              = -1;
     mState.mCachedBaseVertex                  = 0;
     mState.mCachedBaseInstance                = 0;
+    mState.mEarlyFramentTestsOptimization     = false;
 
     mValidated = false;
 
