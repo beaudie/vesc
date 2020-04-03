@@ -93,6 +93,30 @@
       "revId": "443ea1f1af099dc0bfbc00dae4d790b21f01f853",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "349ee1a2_26e4aaa0",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-03T13:42:54Z",
+      "side": 1,
+      "message": "Oops, I didn\u0027t realize that componentType is not the same as type. The new helper is not needed.",
+      "parentUuid": "3c692cdb_c27871ef",
+      "range": {
+        "startLine": 516,
+        "startChar": 21,
+        "endLine": 516,
+        "endChar": 26
+      },
+      "revId": "443ea1f1af099dc0bfbc00dae4d790b21f01f853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
