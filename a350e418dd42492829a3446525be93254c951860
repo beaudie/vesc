@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "be3650d5_2b9e4872",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T18:21:43Z",
+      "side": 1,
+      "message": "Spoke with Ken offline, couple notes:\n\n - this set should be small, most sharing scenarios don\u0027t pass around the same texture to sample from.\n - will probably redo this with the mipmap level support issue\n - flat_map is probably only faster for very large sets.\n\nWe can move forward with the current solution and iterate on it. We don\u0027t have a perf test that covers this case with sharing. If we add one we should tune it specifically to Chromium\u0027s use case.",
+      "parentUuid": "8bcae388_56900bd2",
+      "range": {
+        "startLine": 199,
+        "startChar": 13,
+        "endLine": 199,
+        "endChar": 32
+      },
+      "revId": "a350e418dd42492829a3446525be93254c951860",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "88d0ff10_888bf90b",
         "filename": "src/libANGLE/Texture.h",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d18b2b05_b3e1a5ee",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T18:21:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "88d0ff10_888bf90b",
+      "range": {
+        "startLine": 224,
+        "startChar": 9,
+        "endLine": 224,
+        "endChar": 15
+      },
+      "revId": "a350e418dd42492829a3446525be93254c951860",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e09d4e58_bfd061f9",
         "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "a350e418dd42492829a3446525be93254c951860",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76f8ac9a_2a27ff84",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2374,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-03T18:21:43Z",
+      "side": 1,
+      "message": "Done, thanks for adding the additional test.\n\nFYI, the no-op draw method is out and I replaced it with a method that masks out inactive RTs. Let me or Geoff know of any other concerns that pop up.",
+      "parentUuid": "e09d4e58_bfd061f9",
+      "range": {
+        "startLine": 2374,
+        "startChar": 31,
+        "endLine": 2374,
+        "endChar": 67
+      },
+      "revId": "a350e418dd42492829a3446525be93254c951860",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
