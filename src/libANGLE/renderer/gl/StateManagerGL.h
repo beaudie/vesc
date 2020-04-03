@@ -128,10 +128,11 @@ class StateManagerGL final : angle::NonCopyable
     void setClearDepth(float clearDepth);
     void setClearStencil(GLint clearStencil);
 
-    void setPixelUnpackState(const gl::PixelUnpackState &unpack);
-    void setPixelUnpackBuffer(const gl::Buffer *pixelBuffer);
-    void setPixelPackState(const gl::PixelPackState &pack);
-    void setPixelPackBuffer(const gl::Buffer *pixelBuffer);
+    angle::Result setPixelUnpackState(const gl::Context *context,
+                                      const gl::PixelUnpackState &unpack);
+    angle::Result setPixelUnpackBuffer(const gl::Context *context, const gl::Buffer *pixelBuffer);
+    angle::Result setPixelPackState(const gl::Context *context, const gl::PixelPackState &pack);
+    angle::Result setPixelPackBuffer(const gl::Context *context, const gl::Buffer *pixelBuffer);
 
     void setFramebufferSRGBEnabled(const gl::Context *context, bool enabled);
     void setFramebufferSRGBEnabledForFramebuffer(const gl::Context *context,
@@ -159,9 +160,9 @@ class StateManagerGL final : angle::NonCopyable
     angle::Result resumeQuery(const gl::Context *context, gl::QueryType type);
     angle::Result onMakeCurrent(const gl::Context *context);
 
-    void syncState(const gl::Context *context,
-                   const gl::State::DirtyBits &glDirtyBits,
-                   const gl::State::DirtyBits &bitMask);
+    angle::Result syncState(const gl::Context *context,
+                            const gl::State::DirtyBits &glDirtyBits,
+                            const gl::State::DirtyBits &bitMask);
 
     ANGLE_INLINE void updateMultiviewBaseViewLayerIndexUniform(
         const gl::Program *program,
