@@ -1042,6 +1042,9 @@ struct DisplayExtensions
 
     // EGL_ANDROID_framebuffer_target
     bool framebufferTargetANDROID = false;
+
+    // EGL_EXT_image_gl_colorspace
+    bool imageGlColorspace = false;
 };
 
 struct DeviceExtensions
