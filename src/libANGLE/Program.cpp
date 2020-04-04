@@ -1666,6 +1666,8 @@ void Program::updateLinkedShaderStages()
             mState.mExecutable.setLinkedShaderStages(shader->getType());
         }
     }
+
+    mState.mExecutable.updateCanDrawWith();
 }
 
 void ProgramState::updateTransformFeedbackStrides()
