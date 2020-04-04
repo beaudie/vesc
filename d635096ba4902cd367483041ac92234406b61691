@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "785ad022_6d933865",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-04T02:56:20Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s about what popped into my head also.   It should be easy enough to update something like that in ProgramExecutable during linkProgram() and useProgramStages().\n\nHowever, as you point out, the executable *can* be null if it\u0027s GLES1, since there is no Program (or PPO) to instantiate a ProgramExecutable (and thus, nothing to point State::mExecutable at.   That would mean there\u0027s no way to get the cached value for GLES1.\n\nSo, the Context/State may instead need to have its own flag that\u0027s updated in useProgram()/bindProgramPipeline() that does this checking.   That\u0027s still outside of the draw path so it solves the problem here, but not as nice as encapsulating it within the ProgramExecutable.",
+      "parentUuid": "e16327ae_c3034d73",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 5
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cbe19858_cd829e18",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 88
