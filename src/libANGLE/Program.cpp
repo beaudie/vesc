@@ -1445,6 +1445,9 @@ angle::Result Program::link(const Context *context)
             double delta = platform->currentTime(platform) - startTime;
             int us       = static_cast<int>(delta * 1000000.0);
             ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ProgramCache.ProgramCacheHitTimeUS", us);
+
+            updateLinkedShaderStages();
+
             return angle::Result::Continue;
         }
     }
@@ -1666,6 +1669,8 @@ void Program::updateLinkedShaderStages()
             mState.mExecutable.setLinkedShaderStages(shader->getType());
         }
     }
+
+    mState.mExecutable.updateCanDrawWith();
 }
 
 void ProgramState::updateTransformFeedbackStrides()
@@ -5456,6 +5461,7 @@ angle::Result Program::deserialize(const Context *context,
     mState.mExecutable.load(&stream);
 
     postResolveLink(context);
+    mState.mExecutable.updateCanDrawWith();
 
     return angle::Result::Continue;
 }

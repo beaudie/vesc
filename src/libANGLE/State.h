@@ -777,6 +777,9 @@ class State : angle::NonCopyable
 
     bool isEarlyFragmentTestsOptimizationAllowed() const { return isSampleCoverageEnabled(); }
 
+    void updateCanDraw();
+    bool canDraw() const { return mCanDraw; }
+
   private:
     friend class Context;
 
@@ -1000,6 +1003,8 @@ class State : angle::NonCopyable
     DrawBufferMask mBlendFuncConstantAlphaDrawBuffers;
     DrawBufferMask mBlendFuncConstantColorDrawBuffers;
     bool mNoSimultaneousConstantColorAndAlphaBlendFunc;
+
+    bool mCanDraw;
 };
 
 ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,
