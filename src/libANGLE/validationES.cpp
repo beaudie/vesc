@@ -2811,16 +2811,6 @@ const char *ValidateDrawStates(const Context *context)
 
         if (program)
         {
-            // In OpenGL ES spec for UseProgram at section 7.3, trying to render without
-            // vertex shader stage or fragment shader stage is a undefined behaviour.
-            // But ANGLE should clearly generate an INVALID_OPERATION error instead of
-            // produce undefined result.
-            if (!program->getExecutable().hasLinkedShaderStage(ShaderType::Vertex) ||
-                !program->getExecutable().hasLinkedShaderStage(ShaderType::Fragment))
-            {
-                return kNoActiveGraphicsShaderStage;
-            }
-
             if (!program->validateSamplers(nullptr, context->getCaps()))
             {
                 return kTextureTypeConflict;
@@ -2834,16 +2824,6 @@ const char *ValidateDrawStates(const Context *context)
         }
         else if (programPipeline)
         {
-            // In OpenGL ES spec for UseProgram at section 7.3, trying to render without
-            // vertex shader stage or fragment shader stage is a undefined behaviour.
-            // But ANGLE should clearly generate an INVALID_OPERATION error instead of
-            // produce undefined result.
-            if (!programPipeline->getExecutable().hasLinkedShaderStage(ShaderType::Vertex) ||
-                !programPipeline->getExecutable().hasLinkedShaderStage(ShaderType::Fragment))
-            {
-                return kNoActiveGraphicsShaderStage;
-            }
-
             const char *errorMsg = programPipeline->validateAttachedPrograms(nullptr);
             if (errorMsg)
             {
