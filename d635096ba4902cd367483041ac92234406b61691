@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "e16327ae_c3034d73",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 88
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-04T02:45:09Z",
+      "side": 1,
+      "message": "Based on Jamie\u0027s comment, you should be able to simplify this at least to:\n\n    if (executable-\u003emCanDrawWith)\n\nwhere mCanDrawWith (of course retrieved through a getter) is a cached value that gets set when the program is linked:\n\n    mCanDrawWith \u003d context-\u003eisGLES1() || (hasLinkedShaderStage(VS) \u0026\u0026 hasLinkedShaderStage(FS));\n\nCan executable be nullptr? Sounds like that\u0027s something the validation layer would have taken care of (since there is no check for it being nullptr elsewhere, so at least it must be validated for monolithic programs).",
+      "parentUuid": "fb37273e_74307fbe",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 5
+      },
+      "revId": "d635096ba4902cd367483041ac92234406b61691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cbe19858_cd829e18",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 88
