@@ -73,6 +73,69 @@
       "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd65ff3b_d024c111",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3092,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-04T03:16:43Z",
+      "side": 1,
+      "message": "I don\u0027t remember exactly the details, but was the comment that indicated `prepend` is necessary wrong?\n\nI think the ASSERT+append here and the prepend in Emulated clear below are swapped. The comment message, saying \"We prepend clears because image initialization happens after data upload.\" backs this up.",
+      "range": {
+        "startLine": 3092,
+        "startChar": 4,
+        "endLine": 3092,
+        "endChar": 26
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81e9ccdc_e97ad0a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-04T03:16:43Z",
+      "side": 1,
+      "message": "stageClearIfEmulatedFormat is called right after image creation, so shouldn\u0027t it be possible to ASSERT that !isUpdateStaged and use appendSubresourceUpdate?",
+      "range": {
+        "startLine": 3118,
+        "startChar": 8,
+        "endLine": 3118,
+        "endChar": 32
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cdaaf39_3dfda88a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-04T03:16:43Z",
+      "side": 1,
+      "message": "You can avoid the virtual call by storing the bool in vk::Context instead.",
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
