@@ -1666,6 +1666,8 @@ void Program::updateLinkedShaderStages()
             mState.mExecutable.setLinkedShaderStages(shader->getType());
         }
     }
+
+    mState.mExecutable.updateCanDrawWith();
 }
 
 void ProgramState::updateTransformFeedbackStrides()
@@ -5461,6 +5463,7 @@ angle::Result Program::deserialize(const Context *context,
     mState.mExecutable.load(&stream);
 
     postResolveLink(context);
+    mState.mExecutable.updateCanDrawWith();
 
     return angle::Result::Continue;
 }

@@ -432,6 +432,7 @@ void Context::initialize()
     if (getClientVersion() < Version(2, 0))
     {
         mGLES1Renderer.reset(new GLES1Renderer());
+        mStateCache.updateCanDraw(this);
     }
 
     // Initialize dirty bit masks
@@ -1124,6 +1125,7 @@ void Context::bindProgramPipeline(ProgramPipelineID pipelineHandle)
     ProgramPipeline *pipeline = mState.mProgramPipelineManager->checkProgramPipelineAllocation(
         mImplementation.get(), pipelineHandle);
     ANGLE_CONTEXT_TRY(mState.setProgramPipelineBinding(this, pipeline));
+    mStateCache.onProgramExecutableChange(this);
 }
 
 void Context::beginQuery(QueryType target, QueryID query)
@@ -8491,7 +8493,8 @@ StateCache::StateCache()
       mCachedInstancedVertexElementLimit(0),
       mCachedBasicDrawStatesError(kInvalidPointer),
       mCachedBasicDrawElementsError(kInvalidPointer),
-      mCachedTransformFeedbackActiveUnpaused(false)
+      mCachedTransformFeedbackActiveUnpaused(false),
+      mCanDraw(false)
 {}
 
 StateCache::~StateCache() = default;
@@ -8623,6 +8626,7 @@ void StateCache::onProgramExecutableChange(Context *context)
     updateBasicDrawStatesError();
     updateValidDrawModes(context);
     updateActiveShaderStorageBufferIndices(context);
+    updateCanDraw(context);
 }
 
 void StateCache::onVertexArrayFormatChange(Context *context)
@@ -8883,5 +8887,11 @@ void StateCache::updateActiveShaderStorageBufferIndices(Context *context)
             mCachedActiveShaderStorageBufferIndices.set(block.binding);
         }
     }
+}
+
+void StateCache::updateCanDraw(Context *context)
+{
+    mCanDraw = (context->isGLES1() || (context->getState().getProgramExecutable() &&
+                                       context->getState().getProgramExecutable()->canDrawWith()));
 }
 }  // namespace gl

@@ -277,6 +277,9 @@ class StateCache final : angle::NonCopyable
     void onBufferBindingChange(Context *context);
     void onBlendFuncIndexedChange(Context *context);
 
+    void updateCanDraw(Context *context);
+    bool canDraw() const { return mCanDraw; }
+
   private:
     // Cache update functions.
     void updateActiveAttribsMask(Context *context);
@@ -324,6 +327,8 @@ class StateCache final : angle::NonCopyable
                          VertexAttribTypeCase,
                          angle::EnumSize<VertexAttribType>() + 1>
         mCachedIntegerVertexAttribTypesValidation;
+
+    bool mCanDraw;
 };
 
 using VertexArrayMap       = ResourceMap<VertexArray, VertexArrayID>;
