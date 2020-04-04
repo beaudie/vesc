@@ -6486,6 +6486,7 @@ void Context::linkProgram(ShaderProgramID program)
     ASSERT(programObject);
     ANGLE_CONTEXT_TRY(programObject->link(this));
     ANGLE_CONTEXT_TRY(onProgramLink(programObject));
+    mState.updateCanDraw();
 }
 
 void Context::releaseShaderCompiler()
