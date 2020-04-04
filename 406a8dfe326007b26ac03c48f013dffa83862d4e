@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43bee49a_5a46c3df",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-04T02:34:11Z",
+      "side": 1,
+      "message": "Is there (or should there be) a bug opened for these issues that are being worked around?   It would be good to at least document what you\u0027ve learned needs to be worked around (and why) while it\u0027s still fresh in your head.",
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b9e9d12_4f3cc710",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-04T02:34:11Z",
+      "side": 1,
+      "message": "nit: \"a\"",
+      "range": {
+        "startLine": 1186,
+        "startChar": 79,
+        "endLine": 1186,
+        "endChar": 81
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae84bead_4f26f39f",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-04T02:34:11Z",
+      "side": 1,
+      "message": "For my own understanding, why do we need a copySubImage() rather than a copyImage() here?",
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfdccfe1_7dbd318b",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-04T02:34:11Z",
+      "side": 1,
+      "message": "It looks like this is redundant with the signalDirtyState(DIRTY_BIT_IMPLEMENTATION) call below:\n\n    void Texture::signalDirtyState(size_t dirtyBit)\n    {\n        mDirtyBits.set(dirtyBit);  \u003c\u003c--- does the same\n        invalidateCompletenessCache();\n        mState.mCachedSamplerFormatValid \u003d false;\n        onStateChange(angle::SubjectMessage::DirtyBitsFlagged);\n    }",
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
