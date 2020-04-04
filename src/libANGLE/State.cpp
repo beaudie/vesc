@@ -375,7 +375,8 @@ State::State(const State *shareContextState,
       mTextureRectangleEnabled(true),
       mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max()),
       mOverlay(overlay),
-      mNoSimultaneousConstantColorAndAlphaBlendFunc(false)
+      mNoSimultaneousConstantColorAndAlphaBlendFunc(false),
+      mCanDraw(false)
 {}
 
 State::~State() {}
@@ -1720,6 +1721,8 @@ angle::Result State::setProgram(const Context *context, Program *newProgram)
         mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
     }
 
+    updateCanDraw(context);
+
     return angle::Result::Continue;
 }
 
@@ -1757,6 +1760,8 @@ angle::Result State::useProgramStages(const Context *context,
 {
     programPipeline->useProgramStages(context, stages, shaderProgram);
     ANGLE_TRY(onProgramPipelineExecutableChange(context, programPipeline));
+
+    updateCanDraw(context);
 
     return angle::Result::Continue;
 }
@@ -1800,6 +1805,8 @@ angle::Result State::setProgramPipelineBinding(const Context *context, ProgramPi
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
         }
     }
+
+    updateCanDraw(context);
 
     return angle::Result::Continue;
 }
@@ -3357,5 +3364,10 @@ AttributesMask State::getAndResetDirtyCurrentValues() const
 }
 
 constexpr State::DirtyObjectHandler State::kDirtyObjectHandlers[DIRTY_OBJECT_MAX];
+
+void State::updateCanDraw(const Context *context)
+{
+    mCanDraw = (context->isGLES1() || (mExecutable && mExecutable->canDrawWith()));
+}
 
 }  // namespace gl
