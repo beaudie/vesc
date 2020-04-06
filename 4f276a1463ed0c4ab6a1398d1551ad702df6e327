@@ -46,6 +46,30 @@
       "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad1972d0_e2cd0097",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T21:17:47Z",
+      "side": 1,
+      "message": "Actually I don\u0027t know how the code works now that it uses specialization constants. Can this be behind the same constant? I\u0027ll think about it and look at the code tomorrow.",
+      "parentUuid": "18aeeeee_6c326d35",
+      "range": {
+        "startLine": 221,
+        "startChar": 15,
+        "endLine": 221,
+        "endChar": 26
+      },
+      "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
