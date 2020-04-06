@@ -22,6 +22,30 @@
       "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18aeeeee_6c326d35",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T21:16:10Z",
+      "side": 1,
+      "message": "You should be able to put the optimization in an #ifndef block I would think.",
+      "parentUuid": "7e9f0700_b4c7e11d",
+      "range": {
+        "startLine": 221,
+        "startChar": 15,
+        "endLine": 221,
+        "endChar": 26
+      },
+      "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
