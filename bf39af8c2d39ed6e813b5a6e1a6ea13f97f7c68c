@@ -22,6 +22,30 @@
       "revId": "bf39af8c2d39ed6e813b5a6e1a6ea13f97f7c68c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d895c546_9ed4cb31",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1915,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T20:18:41Z",
+      "side": 0,
+      "message": "Yeah, it\u0027s redundant. See reference.",
+      "parentUuid": "5f88ea9e_cef4bda0",
+      "range": {
+        "startLine": 1915,
+        "startChar": 12,
+        "endLine": 1915,
+        "endChar": 53
+      },
+      "revId": "bf39af8c2d39ed6e813b5a6e1a6ea13f97f7c68c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

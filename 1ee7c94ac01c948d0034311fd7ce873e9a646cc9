@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e94c1b33_a272c7ec",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T20:18:41Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 1035,
+        "startChar": 4,
+        "endLine": 1035,
+        "endChar": 29
+      },
+      "revId": "1ee7c94ac01c948d0034311fd7ce873e9a646cc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
