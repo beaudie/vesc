@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17c07678_2b35fd90",
+        "filename": "src/tests/gl_tests/BlendIntegerTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T17:35:58Z",
+      "side": 1,
+      "message": "nit: to make this test a bit more consistent with our \"new style\" tests, use RAII from gl_raii.h. Use GLFramebuffer/GLRenderbuffer/ANGLE_GL_PROGRAM in the local scope instead of storing member variables.",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 16
+      },
+      "revId": "43bff5a952db186b0cdac7d2fecd80a2c4964c44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a176db8_a117bdd5",
+        "filename": "src/tests/gl_tests/BlendIntegerTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T17:35:58Z",
+      "side": 1,
+      "message": "nit: please add a one line comment before each new test.",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 6
+      },
+      "revId": "43bff5a952db186b0cdac7d2fecd80a2c4964c44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
