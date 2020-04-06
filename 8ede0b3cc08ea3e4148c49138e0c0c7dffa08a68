@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef6dcd2d_a3089031",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T16:03:16Z",
+      "side": 1,
+      "message": "Instead of exposing the header to all of ANGLE, you can use VK_DEFINE_HANDLE to declare VmAllocator and VmaAllocation in ANGLE headers.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 50
+      },
+      "revId": "8ede0b3cc08ea3e4148c49138e0c0c7dffa08a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ff3b699_5393ff2d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T16:03:16Z",
+      "side": 1,
+      "message": "You can retrieve the VmaAllocator from the ContextVk *contextVk pointer. Instead of caching it as a member.",
+      "range": {
+        "startLine": 1680,
+        "startChar": 20,
+        "endLine": 1680,
+        "endChar": 33
+      },
+      "revId": "8ede0b3cc08ea3e4148c49138e0c0c7dffa08a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
