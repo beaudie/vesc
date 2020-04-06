@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e9f0700_b4c7e11d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-06T20:26:34Z",
+      "side": 1,
+      "message": "How is the early fragment tests optimization removal interact with lineRasterEmulation? I think I have a bug here. Possible solutions:\n\nA) I move the optimization removal code from SpirvTransformer to initProgram so that it is removed from lineRasterEmulation program as well as default program.\nB) I can invalidate lineRasterEmulation whenever the optimization changes since the chance that combination of both  should be rare.\n\nB) seems easier and good enough. Opinion?",
+      "range": {
+        "startLine": 221,
+        "startChar": 15,
+        "endLine": 221,
+        "endChar": 26
+      },
+      "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
