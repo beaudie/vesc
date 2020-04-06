@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2f59dc02_a9887fff",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-06T22:02:05Z",
+      "side": 1,
+      "message": "Sure, I am fine with either way. I just not sure if people have other things in mind that might find pass the whole structure to be useful. The cost is the same, it kind depends on what is the purpose of GlslangProgramInterfaceInfo.",
+      "parentUuid": "ba281c22_a0e508b7",
+      "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60d0c673_7b96f626",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 3
@@ -30,6 +48,30 @@
       "writtenOn": "2020-04-06T21:44:19Z",
       "side": 1,
       "message": "What does SAMPLE_ALPHA_TO_COVERAGE_ENABLED have to do with early depth?\nA comment here would be nice.",
+      "range": {
+        "startLine": 2600,
+        "startChar": 29,
+        "endLine": 2600,
+        "endChar": 71
+      },
+      "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d93b443_03bd802a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2600,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-06T22:02:05Z",
+      "side": 1,
+      "message": "I will add comment here.\n\nThe reason is that if SAMPLE_ALPHA_TO_COVERAGE_ENABLED is enabled, if fragment shader modifies alpha, it will affect coverage value which will work incorrectly if we move depth test forward. See https://developer.arm.com/docs/100140/latest/advanced-graphics-techniques/using-early-z",
+      "parentUuid": "60d0c673_7b96f626",
       "range": {
         "startLine": 2600,
         "startChar": 29,
@@ -101,6 +143,30 @@
       "side": 1,
       "message": "Actually I don\u0027t know how the code works now that it uses specialization constants. Can this be behind the same constant? I\u0027ll think about it and look at the code tomorrow.",
       "parentUuid": "18aeeeee_6c326d35",
+      "range": {
+        "startLine": 221,
+        "startChar": 15,
+        "endLine": 221,
+        "endChar": 26
+      },
+      "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfa71f8e_db4c748c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-06T22:02:05Z",
+      "side": 1,
+      "message": "I added B) solution in patchset4 so you can see how it works. Let me know if I can explain more. Thanks.",
+      "parentUuid": "ad1972d0_e2cd0097",
       "range": {
         "startLine": 221,
         "startChar": 15,
