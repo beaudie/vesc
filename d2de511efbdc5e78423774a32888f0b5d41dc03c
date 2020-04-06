@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e7f769f_8925adf6",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-06T19:57:32Z",
+      "side": 0,
+      "message": "Did you mean to miss the new implementation in the GL backend?",
+      "revId": "d2de511efbdc5e78423774a32888f0b5d41dc03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e324eb86_2883e665",
+        "filename": "src/libANGLE/renderer/null/FramebufferNULL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-06T19:57:32Z",
+      "side": 0,
+      "message": "Same for NULL backend",
+      "revId": "d2de511efbdc5e78423774a32888f0b5d41dc03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
