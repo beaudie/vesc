@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d1d3f27e_6a5c8447",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T20:16:46Z",
+      "side": 0,
+      "message": "It\u0027s now provided by the default implementation. See reference.",
+      "parentUuid": "2e7f769f_8925adf6",
+      "revId": "d2de511efbdc5e78423774a32888f0b5d41dc03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e324eb86_2883e665",
         "filename": "src/libANGLE/renderer/null/FramebufferNULL.cpp",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "d2de511efbdc5e78423774a32888f0b5d41dc03c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "415864d6_5c59a3d8",
+        "filename": "src/libANGLE/renderer/null/FramebufferNULL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T20:16:46Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "e324eb86_2883e665",
+      "revId": "d2de511efbdc5e78423774a32888f0b5d41dc03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
