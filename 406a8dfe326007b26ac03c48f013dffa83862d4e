@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2b24038d_bc21908e",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T18:59:14Z",
+      "side": 1,
+      "message": "Changed the comment to indicate that this is a permanent solution.",
+      "parentUuid": "1cb264d1_aa089833",
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bda4b2aa_556a64b3",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 13
@@ -57,6 +75,30 @@
       "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc2daa7a_eaaf0ae7",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T18:59:14Z",
+      "side": 1,
+      "message": "Cleaned up the comment.",
+      "parentUuid": "bda4b2aa_556a64b3",
+      "range": {
+        "startLine": 1185,
+        "startChar": 7,
+        "endLine": 1185,
+        "endChar": 18
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +125,30 @@
     },
     {
       "key": {
+        "uuid": "a7ce8964_0391477a",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T18:59:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b9e9d12_4f3cc710",
+      "range": {
+        "startLine": 1186,
+        "startChar": 79,
+        "endLine": 1186,
+        "endChar": 81
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c28bd8dd_750d83bd",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 13
@@ -106,6 +172,30 @@
     },
     {
       "key": {
+        "uuid": "a6bea25f_2e2f9685",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T18:59:14Z",
+      "side": 1,
+      "message": "Yes. doesSubImageNeedInit returns false if robust resource init is off. See below.",
+      "parentUuid": "c28bd8dd_750d83bd",
+      "range": {
+        "startLine": 1189,
+        "startChar": 45,
+        "endLine": 1189,
+        "endChar": 52
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae84bead_4f26f39f",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 13
@@ -120,6 +210,47 @@
       "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95114289_8f5a77a1",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T18:59:14Z",
+      "side": 1,
+      "message": "copyImage redefines the image. subImage does not. It is probably fine to call either. sub is more precise and may in some edge cases be more efficient.",
+      "parentUuid": "ae84bead_4f26f39f",
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e83be54_30af3552",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1888,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T18:59:14Z",
+      "side": 1,
+      "message": "Cody, ref.",
+      "range": {
+        "startLine": 1885,
+        "startChar": 0,
+        "endLine": 1888,
+        "endChar": 5
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -158,6 +289,24 @@
     },
     {
       "key": {
+        "uuid": "bb6196c3_40a7dc7e",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T18:59:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81fc9b91_41fc3630",
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd65ff3b_d024c111",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -181,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "58166b47_cabec85a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3092,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T18:59:14Z",
+      "side": 1,
+      "message": "I cleaned this up a bit. For robust init, we *always* get an initializeContents call before we upload any data at all to it. We still need the prepend for emulated alpha channels. Updated the comment here and renamed the function to clarify this usage. Also \"normal\" staged clears no longer enforce empty data. Only robust clears.",
+      "parentUuid": "dd65ff3b_d024c111",
+      "range": {
+        "startLine": 3092,
+        "startChar": 4,
+        "endLine": 3092,
+        "endChar": 26
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81e9ccdc_e97ad0a0",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -201,6 +374,30 @@
       "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ddf1026_869e1ead",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-06T18:59:14Z",
+      "side": 1,
+      "message": "Image creation can happen after image update. So there may be clears happening after the staging buffer is filled.\n\nBTW this part of the code is pretty tricky. I got pretty worried about your comments so I added a few new tests. One of which actually caught a bug where we were improperly marking a Cube Map Texture as initialized when we init the first level. That\u0027s fixed now.",
+      "parentUuid": "81e9ccdc_e97ad0a0",
+      "range": {
+        "startLine": 3118,
+        "startChar": 8,
+        "endLine": 3118,
+        "endChar": 32
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
