@@ -19,6 +19,47 @@
     },
     {
       "key": {
+        "uuid": "1cb264d1_aa089833",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-06T16:56:24Z",
+      "side": 1,
+      "message": "Agreed, it isn\u0027t clear here if this is a permanent workaround, or something that should be fixed elsewhere.",
+      "parentUuid": "43bee49a_5a46c3df",
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bda4b2aa_556a64b3",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-06T16:56:24Z",
+      "side": 1,
+      "message": "This is a separate workaround from the one above?  If so, let\u0027s track it, or clearly delineate from the surrounding code.  This is a decent amount of complexity being added.",
+      "range": {
+        "startLine": 1185,
+        "startChar": 7,
+        "endLine": 1185,
+        "endChar": 18
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8b9e9d12_4f3cc710",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 13
@@ -35,6 +76,29 @@
         "startChar": 79,
         "endLine": 1186,
         "endChar": 81
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c28bd8dd_750d83bd",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-06T16:56:24Z",
+      "side": 1,
+      "message": "This was zero initialized, which wasn\u0027t immediately clear to me.  So it will only have non-zero entries if isRobustResourceInitEnabled is true.  Is that the intent of this design?",
+      "range": {
+        "startLine": 1189,
+        "startChar": 45,
+        "endLine": 1189,
+        "endChar": 52
       },
       "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -70,6 +134,24 @@
       "writtenOn": "2020-04-04T02:34:11Z",
       "side": 1,
       "message": "It looks like this is redundant with the signalDirtyState(DIRTY_BIT_IMPLEMENTATION) call below:\n\n    void Texture::signalDirtyState(size_t dirtyBit)\n    {\n        mDirtyBits.set(dirtyBit);  \u003c\u003c--- does the same\n        invalidateCompletenessCache();\n        mState.mCachedSamplerFormatValid \u003d false;\n        onStateChange(angle::SubjectMessage::DirtyBitsFlagged);\n    }",
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81fc9b91_41fc3630",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-06T16:56:24Z",
+      "side": 1,
+      "message": "+1, redundant",
+      "parentUuid": "cfdccfe1_7dbd318b",
       "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
