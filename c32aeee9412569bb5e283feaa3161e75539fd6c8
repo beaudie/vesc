@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1143a4c8_e740288b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-07T04:17:00Z",
+      "side": 1,
+      "message": "s/\\t/    /",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 2
+      },
+      "revId": "c32aeee9412569bb5e283feaa3161e75539fd6c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78398017_b700f8b5",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-07T04:17:00Z",
+      "side": 1,
+      "message": "Add a bug tag to the commit message for this bug too (you can have multiple Bug: tags)",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 4
+      },
+      "revId": "c32aeee9412569bb5e283feaa3161e75539fd6c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
