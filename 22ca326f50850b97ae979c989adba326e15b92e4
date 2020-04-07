@@ -153,6 +153,29 @@
     },
     {
       "key": {
+        "uuid": "9fa31ce9_87af485e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-07T04:41:12Z",
+      "side": 1,
+      "message": "Line raster emulation and early-fragment-tests removed are orthogonal features. At some point something scalable can be created, but for now something like:\n\n    ProgramInfo mProgramInfo[2][2];  // with proper names and enums\n\nshould work. Early-fragment-tests could be removed, and then specialization constant used to emulate lines, there\u0027s no reason why that wouldn\u0027t work.",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 61
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b17f61f6_54b1a17e",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 4
@@ -242,6 +265,47 @@
         "endLine": 298,
         "endChar": 62
       },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70dcd179_789aa092",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-07T04:41:12Z",
+      "side": 1,
+      "message": "I fell in this pitfall too, but NOP is only allowed inside function bodies.\n\nAlso, you shouldn\u0027t really need to do this if you allow all combination of options (line raster vs early-fragment-tests) to work.",
+      "parentUuid": "f4614760_ee3b4723",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 62
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d49eee2_b13db2ee",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-07T04:41:12Z",
+      "side": 1,
+      "message": "Why not on WebGL?",
       "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
