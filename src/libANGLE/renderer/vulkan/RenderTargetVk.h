@@ -69,11 +69,14 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     uint32_t getLevelIndex() const { return mLevelIndex; }
     uint32_t getLayerIndex() const { return mLayerIndex; }
 
+    gl::ImageIndex getImageIndex() const;
+
     // Special mutator for Surface RenderTargets. Allows the Framebuffer to keep a single
     // RenderTargetVk pointer.
     void updateSwapchainImage(vk::ImageHelper *image, vk::ImageViewHelper *imageViews);
 
-    angle::Result flushStagedUpdates(ContextVk *contextVk);
+    angle::Result flushStagedUpdates(ContextVk *contextVk,
+                                     vk::ClearValueReference *deferredClear) const;
 
     void retainImageViews(ContextVk *contextVk) const;
 
@@ -93,6 +96,11 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
 // A vector of rendertargets
 using RenderTargetVector = std::vector<RenderTargetVk>;
+
+void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
+                                       const gl::ImageIndex &index,
+                                       GLuint *layerCount,
+                                       GLuint *layerIndex);
 
 }  // namespace rx
 
