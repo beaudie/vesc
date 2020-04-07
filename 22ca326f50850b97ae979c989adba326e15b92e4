@@ -113,6 +113,30 @@
       "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50333a2a_64d93153",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-07T02:04:48Z",
+      "side": 1,
+      "message": "Oops, looks like you guys were already chatting about this and I missed those other comments.",
+      "parentUuid": "b17f61f6_54b1a17e",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 62
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
