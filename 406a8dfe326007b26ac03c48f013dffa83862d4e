@@ -354,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "e8ba33f6_6fccfeb8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3092,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-07T04:05:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "58166b47_cabec85a",
+      "range": {
+        "startLine": 3092,
+        "startChar": 4,
+        "endLine": 3092,
+        "endChar": 26
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81e9ccdc_e97ad0a0",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -389,6 +413,30 @@
       "side": 1,
       "message": "Image creation can happen after image update. So there may be clears happening after the staging buffer is filled.\n\nBTW this part of the code is pretty tricky. I got pretty worried about your comments so I added a few new tests. One of which actually caught a bug where we were improperly marking a Cube Map Texture as initialized when we init the first level. That\u0027s fixed now.",
       "parentUuid": "81e9ccdc_e97ad0a0",
+      "range": {
+        "startLine": 3118,
+        "startChar": 8,
+        "endLine": 3118,
+        "endChar": 32
+      },
+      "revId": "406a8dfe326007b26ac03c48f013dffa83862d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2ebd009_4d16d48c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-07T04:05:05Z",
+      "side": 1,
+      "message": "Hurray!",
+      "parentUuid": "6ddf1026_869e1ead",
       "range": {
         "startLine": 3118,
         "startChar": 8,
