@@ -673,6 +673,32 @@ void MakeDebugUtilsLabel(GLenum source, const char *marker, VkDebugUtilsLabelEXT
     label->pLabelName = marker;
     kLabelColors[colorIndex].writeData(label->color);
 }
+
+// ClearValuesArray implementation.
+ClearValuesArray::ClearValuesArray() : mValues{}, mEnabled{} {}
+
+ClearValuesArray::~ClearValuesArray() = default;
+
+ClearValuesArray::ClearValuesArray(const ClearValuesArray &other) = default;
+
+ClearValuesArray &ClearValuesArray::operator=(const ClearValuesArray &rhs) = default;
+
+void ClearValuesArray::store(uint32_t index, VkClearValue clearValue)
+{
+    mValues[index] = clearValue;
+    mEnabled.set(index);
+}
+
+// ClearValueReference implementation.
+ClearValueReference::ClearValueReference(ClearValuesArray *array, uint32_t index)
+    : mArray(array), mIndex(index), mWasSet(false)
+{}
+
+void ClearValueReference::set(const VkClearValue &clearValue)
+{
+    mArray->store(mIndex, clearValue);
+    mWasSet = true;
+}
 }  // namespace vk
 
 namespace gl_vk

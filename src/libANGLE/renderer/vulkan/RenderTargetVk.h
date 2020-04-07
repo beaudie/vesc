@@ -69,11 +69,17 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     uint32_t getLevelIndex() const { return mLevelIndex; }
     uint32_t getLayerIndex() const { return mLayerIndex; }
 
+    // Note that this returns an incorrect texture type. The type currently isn't needed.
+    gl::ImageIndex getImageIndex() const
+    {
+        return gl::ImageIndex::MakeFromType(gl::TextureType::_2D, mLevelIndex, mLayerIndex);
+    }
+
     // Special mutator for Surface RenderTargets. Allows the Framebuffer to keep a single
     // RenderTargetVk pointer.
     void updateSwapchainImage(vk::ImageHelper *image, vk::ImageViewHelper *imageViews);
 
-    angle::Result flushStagedUpdates(ContextVk *contextVk);
+    angle::Result flushStagedUpdates(ContextVk *contextVk, vk::ClearValueReference *deferredClear);
 
     void retainImageViews(ContextVk *contextVk) const;
 
