@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1b82fbb8_ed6f2c1a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1383035
+      },
+      "writtenOn": "2020-04-07T14:06:34Z",
+      "side": 1,
+      "message": "I see a lot egl api checked in test, I think if put them to separate case is too heavy, may just skip them is good choice, or put whole test in one test case.",
+      "parentUuid": "a2701689_0f28e147",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 33
+      },
+      "revId": "90af17b609ae62a264db2a800359f369a1dfec13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d83643f3_a4ca0f1b",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2020-04-07T13:28:36Z",
       "side": 1,
       "message": "I tried running this on Windows and just got \u0027Segmentation fault\u0027. Can you investigate?",
+      "range": {
+        "startLine": 693,
+        "startChar": 14,
+        "endLine": 693,
+        "endChar": 41
+      },
+      "revId": "90af17b609ae62a264db2a800359f369a1dfec13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6e5623e_c269f5be",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1383035
+      },
+      "writtenOn": "2020-04-07T14:06:34Z",
+      "side": 1,
+      "message": "I don\u0027t have windows environment yet, in previous CQ run, I see some build warn in win-x64:\n   warning C4133: \u0027function\u0027: incompatible types - from \u0027const char *\u0027 to \u0027LPCWSTR\u0027 (I just skip this warning, seems not a good choice)\n\nI recheck the code, in nativeCreateWindow, it trans char* to wchar_t when defined _WIN32_WCE. I guess this segmentation fault happens here on windows x64. could you help check it?",
+      "parentUuid": "d83643f3_a4ca0f1b",
       "range": {
         "startLine": 693,
         "startChar": 14,
