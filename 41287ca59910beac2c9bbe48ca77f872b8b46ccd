@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6043af5b_615edc04",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-07T14:06:43Z",
+      "side": 1,
+      "message": "Could you provide more context here?\nI don\u0027t see GL_EXT_texture_sRGB_decode mentioned in the EGL_EXT_image_gl_colorspace extension text.",
+      "range": {
+        "startLine": 960,
+        "startChar": 59,
+        "endLine": 960,
+        "endChar": 85
+      },
+      "revId": "41287ca59910beac2c9bbe48ca77f872b8b46ccd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
