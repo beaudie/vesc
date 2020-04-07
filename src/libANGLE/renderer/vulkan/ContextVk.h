@@ -226,6 +226,9 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
     bool started() const { return mRenderPassStarted; }
     void reset();
 
+    void resumeTransformFeedback(void);
+    angle::Result pauseTransformFeedback(ContextVk *contextVk);
+
     uint32_t getAndResetCounter()
     {
         uint32_t count = mCounter;
@@ -683,6 +686,7 @@ class ContextVk : public ContextImpl, public vk::Context
         DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
         DIRTY_BIT_TRANSFORM_FEEDBACK_STATE,
         DIRTY_BIT_DESCRIPTOR_SETS,
+        DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME,
         DIRTY_BIT_MAX,
     };
 
@@ -822,6 +826,7 @@ class ContextVk : public ContextImpl, public vk::Context
     ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE);
+        mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME);
     }
     ANGLE_INLINE void invalidateCurrentComputePipeline()
     {
@@ -860,6 +865,8 @@ class ContextVk : public ContextImpl, public vk::Context
         vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsTransformFeedbackState(const gl::Context *context,
                                                             vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyGraphicsTransformFeedbackResume(const gl::Context *context,
+                                                             vk::CommandBuffer *commandBuffer);
 
     // Handlers for compute pipeline dirty bits.
     angle::Result handleDirtyComputePipeline(const gl::Context *context,
