@@ -459,6 +459,30 @@
     },
     {
       "key": {
+        "uuid": "08ad351d_a58c04a8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2603,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-07T17:32:33Z",
+      "side": 1,
+      "message": "Just want to confirm this with Chris. If so we can probably clean up the dirty bits code.",
+      "parentUuid": "89b690ed_e8eb0b31",
+      "range": {
+        "startLine": 2598,
+        "startChar": 0,
+        "endLine": 2603,
+        "endChar": 5
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fa31ce9_87af485e",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 4
