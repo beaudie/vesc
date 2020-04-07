@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ad9fd11_407d8fcc",
+        "filename": "src/compiler/translator/tree_ops/EarlyFragmentTestsOptimization.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-07T01:39:23Z",
+      "side": 1,
+      "message": "nit: The format is typically:\n\n    // TODO(ldap)\nor\n    // TODO(http://anglebug.com/####): description\n\nSo something like:\n\n    // TODO(cclao): add 3.1 support if needed",
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "709b60b1_99a9a64f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-07T01:39:23Z",
+      "side": 1,
+      "message": "It looks like this can be a const reference since it\u0027s not being modified anywhere.",
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09f246ab_a03f23ca",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-07T01:39:23Z",
+      "side": 1,
+      "message": "This should be added to GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(), so it\u0027s initialized to a known value.\n\nThis likely breaks your new check in ProgramVk::link() though, since ResetGlslangProgramInterfaceInfo() is called by ProgramVk::rest() during ProgramVk::link().   That check is broken a couple different ways already though:\n1.) ProgramVk::link() is checking mGlslangProgramInterfaceInfo.removeEarlyFragmentTests for a value that\u0027s currently random (since it\u0027s never initialized to anything).\n2.) The caller doesn\u0027t need to follow every glEnable() with glLinkProgram(), so this won\u0027t re-link the shaders if they do 2 line mode draws with a toggle of GL_SAMPLE_ALPHA_TO_COVERAGE in between.\n- I don\u0027t have a good answer for this that invovles a single mExecutable.mLineRasterProgramInfo.   I fear we need a mExecutable.mLineRasterProgramInfoEarlyFragmentTestsRemoved to handle that.",
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca3a89ba_dec4f181",
+        "filename": "src/libANGLE/renderer/metal/mtl_glslang_utils.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-07T01:39:23Z",
+      "side": 1,
+      "message": "Oh, this is why it\u0027s a pointer.\n\nSince we are optimizing for vulkan\u0027s performance and metal is lower on the priority list, I\u0027d prefer we pay the price here and instantiate a GlslangProgramInterfaceInfo to pass into GlslangGetShaderSpirvCode() rather than having to do the extra pointer check in SpirvTransformer::transformExecutionMode() which affects vulkan.",
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ab3eb20_3f7586fd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2603,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-07T01:39:23Z",
+      "side": 1,
+      "message": "Can you do something like DIRTY_BIT_PROGRAM_EXECUTABLE does with DIRTY_BIT_TEXTURE_BINDINGS below?\n\n                ASSERT(gl::State::DIRTY_BIT_TEXTURE_BINDINGS \u003e\n                       gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE);\n                iter.setLaterBit(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);\n\nIt shouldn\u0027t require any re-ordering of the enum since DIRTY_BIT_PROGRAM_EXECUTABLE is already after DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED.   The handler for DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED would look like:\n\n            case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:\n                mGraphicsPipelineDesc-\u003eupdateAlphaToCoverageEnable(\n                    \u0026mGraphicsPipelineTransition, glState.isSampleAlphaToCoverageEnabled());\n                ASSERT(gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE \u003e\n                       gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED);\n                iter.setLaterBit(gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE);\n                break;",
+      "range": {
+        "startLine": 2598,
+        "startChar": 0,
+        "endLine": 2603,
+        "endChar": 5
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b17f61f6_54b1a17e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-07T01:39:23Z",
+      "side": 1,
+      "message": "How does this handle the case where they toggle GL_SAMPLE_ALPHA_TO_COVERAGE between 2 line mode draws?   It doesn\u0027t look like the caller needs to glLinkProgram() whenever toggling GL_SAMPLE_ALPHA_TO_COVERAGE with glEnable().\n\nCan you write an end2end test that does that without a linkProgram() following the glEnable() that toggles GL_SAMPLE_ALPHA_TO_COVERAGE?",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 62
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
