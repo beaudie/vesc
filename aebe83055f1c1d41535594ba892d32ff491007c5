@@ -16,6 +16,24 @@
       "revId": "aebe83055f1c1d41535594ba892d32ff491007c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9badcb5_9a1f4542",
+        "filename": "src/libANGLE/renderer/vulkan/OverlayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-07T16:27:27Z",
+      "side": 1,
+      "message": "Probably they all should take renderer at some point. I didn\u0027t do it in this CL to save time.",
+      "parentUuid": "f35d251c_81965200",
+      "revId": "aebe83055f1c1d41535594ba892d32ff491007c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
