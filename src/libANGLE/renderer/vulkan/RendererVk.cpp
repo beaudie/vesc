@@ -34,6 +34,8 @@
 #include "libANGLE/trace.h"
 #include "platform/Platform.h"
 
+#include <vk_mem_alloc.h>
+
 // Consts
 namespace
 {

@@ -89,6 +89,10 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
+  'third_party/VulkanMemoryAllocator': {
+    'url': '{chromium_git}/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator@4a6bf088e37e1f9f5db69f0d92bf4866997a0571',
+  },
+
   'third_party/VK-GL-CTS/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/VK-GL-CTS@{vk_gl_cts_revision}',
   },
