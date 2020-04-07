@@ -295,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "36e5dbb8_59e1e729",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-07T05:13:53Z",
+      "side": 1,
+      "message": "About doing it in initProgram(), yes that\u0027s the right approach. You just need to call TransformSpirvCode to redo the transformation (given the \"default\" program\u0027s SPIR-V) and use that.\n\nI recommend doing the full transformation (instead of a very simple one that just removes that single instruction), to avoid conflict with anglebug.com/4513.",
+      "parentUuid": "70dcd179_789aa092",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 62
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0d49eee2_b13db2ee",
         "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
         "patchSetId": 4
