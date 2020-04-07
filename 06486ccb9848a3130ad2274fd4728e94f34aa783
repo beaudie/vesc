@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7de983f8_022dd052",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-07T16:29:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16bf8d8c_fa8334dd",
+      "revId": "06486ccb9848a3130ad2274fd4728e94f34aa783",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8514776_44e7703b",
         "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "06486ccb9848a3130ad2274fd4728e94f34aa783",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56c21c68_04879aac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-07T16:29:38Z",
+      "side": 1,
+      "message": "I\u0027m mirroring the functions that I saw used in Hyunchang\u0027s CL. So I think this is best for now. If I missed anything let me know.",
+      "parentUuid": "f8514776_44e7703b",
+      "revId": "06486ccb9848a3130ad2274fd4728e94f34aa783",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
