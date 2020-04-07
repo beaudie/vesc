@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2701689_0f28e147",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-07T13:28:36Z",
+      "side": 1,
+      "message": "why is this exactly?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 33
+      },
+      "revId": "90af17b609ae62a264db2a800359f369a1dfec13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d83643f3_a4ca0f1b",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-07T13:28:36Z",
+      "side": 1,
+      "message": "I tried running this on Windows and just got \u0027Segmentation fault\u0027. Can you investigate?",
+      "range": {
+        "startLine": 693,
+        "startChar": 14,
+        "endLine": 693,
+        "endChar": 41
+      },
+      "revId": "90af17b609ae62a264db2a800359f369a1dfec13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
