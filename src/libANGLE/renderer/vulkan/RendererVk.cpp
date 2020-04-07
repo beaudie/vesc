@@ -34,6 +34,8 @@
 #include "libANGLE/trace.h"
 #include "platform/Platform.h"
 
+#include "libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h"
+
 // Consts
 namespace
 {
