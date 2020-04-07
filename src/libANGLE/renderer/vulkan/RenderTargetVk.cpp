@@ -138,16 +138,17 @@ vk::ImageHelper *RenderTargetVk::getImageForWrite(ContextVk *contextVk) const
     return mImage;
 }
 
-angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk)
+angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
+                                                 vk::ClearValueReference *deferredClear)
 {
     ASSERT(mImage->valid());
-    if (!mImage->hasStagedUpdates())
+    if (!mImage->isUpdateStaged(mLevelIndex, mLayerIndex))
         return angle::Result::Continue;
 
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
-    return mImage->flushStagedUpdates(contextVk, mLevelIndex, mLevelIndex + 1, mLayerIndex,
-                                      mLayerIndex + 1, commandBuffer);
+    return mImage->flushSingleSubresourceStagedUpdates(contextVk, mLevelIndex, mLayerIndex,
+                                                       commandBuffer, deferredClear);
 }
 
 void RenderTargetVk::retainImageViews(ContextVk *contextVk) const

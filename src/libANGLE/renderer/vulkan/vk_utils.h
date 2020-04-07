@@ -630,6 +630,43 @@ template <typename T>
 using SpecializationConstantMap = angle::PackedEnumMap<sh::vk::SpecializationConstantId, T>;
 
 void MakeDebugUtilsLabel(GLenum source, const char *marker, VkDebugUtilsLabelEXT *label);
+
+class ClearValuesArray final
+{
+  public:
+    ClearValuesArray();
+    ~ClearValuesArray();
+
+    ClearValuesArray(const ClearValuesArray &other);
+    ClearValuesArray &operator=(const ClearValuesArray &rhs);
+
+    void store(uint32_t index, VkClearValue clearValue);
+    void reset();
+
+    bool test(size_t index) const { return mEnabled.test(index); }
+    const VkClearValue &operator[](size_t index) const { return mValues[index]; }
+
+    const VkClearValue *data() const { return mValues.data(); }
+
+  private:
+    gl::AttachmentArray<VkClearValue> mValues;
+    gl::AttachmentsMask mEnabled;
+};
+
+class ClearValueReference final : angle::NonCopyable
+{
+  public:
+    ClearValueReference(ClearValuesArray *array, uint32_t index);
+
+    void set(const VkClearValue &clearValue);
+
+    bool wasSet() const { return mWasSet; }
+
+  private:
+    ClearValuesArray *mArray;
+    uint32_t mIndex;
+    bool mWasSet;
+};
 }  // namespace vk
 
 namespace gl_vk
