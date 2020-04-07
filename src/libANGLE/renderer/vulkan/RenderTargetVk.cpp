@@ -138,20 +138,79 @@ vk::ImageHelper *RenderTargetVk::getImageForWrite(ContextVk *contextVk) const
     return mImage;
 }
 
-angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk)
+angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
+                                                 vk::ClearValueReference *deferredClear) const
 {
+    uint32_t layerIndex = mLayerIndex;
+    if (mImage->getType() == VK_IMAGE_TYPE_3D)
+    {
+        layerIndex = 0;
+    }
+
     ASSERT(mImage->valid());
-    if (!mImage->hasStagedUpdates())
+    if (!mImage->isUpdateStaged(mLevelIndex, layerIndex))
         return angle::Result::Continue;
 
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
-    return mImage->flushStagedUpdates(contextVk, mLevelIndex, mLevelIndex + 1, mLayerIndex,
-                                      mLayerIndex + 1, commandBuffer);
+    return mImage->flushSingleSubresourceStagedUpdates(contextVk, mLevelIndex, layerIndex,
+                                                       commandBuffer, deferredClear);
 }
 
 void RenderTargetVk::retainImageViews(ContextVk *contextVk) const
 {
     mImageViews->retain(&contextVk->getResourceUseList());
+}
+
+gl::ImageIndex RenderTargetVk::getImageIndex() const
+{
+    // Determine the GL type from the Vk Image properties.
+    if (mImage->getType() == VK_IMAGE_TYPE_3D)
+    {
+        return gl::ImageIndex::Make3D(mLevelIndex, mLayerIndex);
+    }
+
+    // We don't need to distinguish 2D array and cube.
+    if (mImage->getLayerCount() > 1)
+    {
+        return gl::ImageIndex::Make2DArray(mLevelIndex, mLayerIndex);
+    }
+
+    ASSERT(mLayerIndex == 0);
+    return gl::ImageIndex::Make2D(mLevelIndex);
+}
+
+void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
+                                       const gl::ImageIndex &index,
+                                       GLuint *layerCount,
+                                       GLuint *layerIndex)
+{
+    switch (index.getType())
+    {
+        case gl::TextureType::_2D:
+        case gl::TextureType::_2DMultisample:
+            *layerIndex = 0;
+            *layerCount = 1;
+            return;
+
+        case gl::TextureType::CubeMap:
+            *layerIndex = index.cubeMapFaceIndex();
+            *layerCount = gl::kCubeFaceCount;
+            return;
+
+        case gl::TextureType::_3D:
+            *layerIndex = index.hasLayer() ? index.getLayerIndex() : 0;
+            *layerCount = image->getExtents().depth;
+            return;
+
+        case gl::TextureType::_2DArray:
+        case gl::TextureType::_2DMultisampleArray:
+            *layerIndex = index.hasLayer() ? index.getLayerIndex() : 0;
+            *layerCount = image->getLayerCount();
+            return;
+
+        default:
+            UNREACHABLE();
+    }
 }
 }  // namespace rx
