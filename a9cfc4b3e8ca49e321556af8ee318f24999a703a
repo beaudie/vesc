@@ -16,6 +16,24 @@
       "revId": "a9cfc4b3e8ca49e321556af8ee318f24999a703a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b44a10df_f72b5c51",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-07T16:02:03Z",
+      "side": 1,
+      "message": "Good catch. This function should not be taking a VmaAllocationInfo as an argument. The header had a mismatch that wasn\u0027t caught because I didn\u0027t add any calls to this function in ANGLE. Fixed.",
+      "parentUuid": "bb85f869_4c5b7bc2",
+      "revId": "a9cfc4b3e8ca49e321556af8ee318f24999a703a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
