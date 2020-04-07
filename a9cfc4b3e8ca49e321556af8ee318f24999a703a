@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb85f869_4c5b7bc2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-07T15:17:35Z",
+      "side": 1,
+      "message": "Should this be pAllocationInfo?",
+      "revId": "a9cfc4b3e8ca49e321556af8ee318f24999a703a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
