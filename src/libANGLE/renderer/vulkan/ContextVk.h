@@ -178,30 +178,12 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
                          const gl::Rectangle &renderArea,
                          const vk::RenderPassDesc &renderPassDesc,
                          const vk::AttachmentOpsArray &renderPassAttachmentOps,
-                         const std::vector<VkClearValue> &clearValues,
+                         const vk::ClearValuesArray &clearValues,
                          vk::CommandBuffer **commandBufferOut);
 
     void beginTransformFeedback(size_t validBufferCount,
                                 const VkBuffer *counterBuffers,
                                 bool rebindBuffer);
-
-    void clearRenderPassColorAttachment(size_t attachmentIndex, const VkClearColorValue &clearValue)
-    {
-        mAttachmentOps[attachmentIndex].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        mClearValues[attachmentIndex].color    = clearValue;
-    }
-
-    void clearRenderPassDepthAttachment(size_t attachmentIndex, float depth)
-    {
-        mAttachmentOps[attachmentIndex].loadOp           = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        mClearValues[attachmentIndex].depthStencil.depth = depth;
-    }
-
-    void clearRenderPassStencilAttachment(size_t attachmentIndex, uint32_t stencil)
-    {
-        mAttachmentOps[attachmentIndex].stencilLoadOp      = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        mClearValues[attachmentIndex].depthStencil.stencil = stencil;
-    }
 
     void invalidateRenderPassColorAttachment(size_t attachmentIndex)
     {
@@ -241,7 +223,7 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
     vk::AttachmentOpsArray mAttachmentOps;
     vk::Framebuffer mFramebuffer;
     gl::Rectangle mRenderArea;
-    gl::AttachmentArray<VkClearValue> mClearValues;
+    vk::ClearValuesArray mClearValues;
     bool mRenderPassStarted;
 
     // Transform feedback state
@@ -338,12 +320,6 @@ class ContextVk : public ContextImpl, public vk::Context
                                        gl::PrimitiveMode mode,
                                        gl::DrawElementsType type,
                                        const void *indirect) override;
-    angle::Result clearWithRenderPassOp(const gl::Rectangle &clearArea,
-                                        gl::DrawBufferMask clearColorBuffers,
-                                        bool clearDepth,
-                                        bool clearStencil,
-                                        const VkClearColorValue &clearColorValue,
-                                        const VkClearDepthStencilValue &clearDepthStencilValue);
 
     // Device loss
     gl::GraphicsResetStatus getResetStatus() override;
@@ -625,7 +601,7 @@ class ContextVk : public ContextImpl, public vk::Context
                                           const gl::Rectangle &renderArea,
                                           const vk::RenderPassDesc &renderPassDesc,
                                           const vk::AttachmentOpsArray &renderPassAttachmentOps,
-                                          const std::vector<VkClearValue> &clearValues,
+                                          const vk::ClearValuesArray &clearValues,
                                           vk::CommandBuffer **commandBufferOut);
 
     bool hasStartedRenderPass() const { return !mRenderPassCommands.empty(); }
