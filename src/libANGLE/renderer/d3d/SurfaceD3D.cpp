@@ -442,12 +442,13 @@ const angle::Format *SurfaceD3D::getD3DTextureColorFormat() const
 }
 
 angle::Result SurfaceD3D::getAttachmentRenderTarget(const gl::Context *context,
-                                                    GLenum binding,
+                                                    GLenum framebufferBinding,
+                                                    GLenum attachmentBinding,
                                                     const gl::ImageIndex &imageIndex,
                                                     GLsizei samples,
                                                     FramebufferAttachmentRenderTarget **rtOut)
 {
-    if (binding == GL_BACK)
+    if (attachmentBinding == GL_BACK)
     {
         *rtOut = mSwapChain->getColorRenderTarget();
     }

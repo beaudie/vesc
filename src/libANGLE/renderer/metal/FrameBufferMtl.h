@@ -127,10 +127,13 @@ class FramebufferMtl : public FramebufferImpl
                             MTLClearColor clearColor,
                             MTLClearColor *colorOut);
 
-    angle::Result updateColorRenderTarget(const gl::Context *context, size_t colorIndexGL);
-    angle::Result updateDepthRenderTarget(const gl::Context *context);
-    angle::Result updateStencilRenderTarget(const gl::Context *context);
+    angle::Result updateColorRenderTarget(const gl::Context *context,
+                                          GLenum framebufferBinding,
+                                          size_t colorIndexGL);
+    angle::Result updateDepthRenderTarget(const gl::Context *context, GLenum framebufferBinding);
+    angle::Result updateStencilRenderTarget(const gl::Context *context, GLenum framebufferBinding);
     angle::Result updateCachedRenderTarget(const gl::Context *context,
+                                           GLenum framebufferBinding,
                                            const gl::FramebufferAttachment *attachment,
                                            RenderTargetMtl **cachedRenderTarget);
 

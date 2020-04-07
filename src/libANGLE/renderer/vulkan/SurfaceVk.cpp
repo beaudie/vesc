@@ -115,21 +115,23 @@ SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfac
 SurfaceVk::~SurfaceVk() = default;
 
 angle::Result SurfaceVk::getAttachmentRenderTarget(const gl::Context *context,
-                                                   GLenum binding,
+                                                   GLenum framebufferBinding,
+                                                   GLenum attachmentBinding,
                                                    const gl::ImageIndex &imageIndex,
                                                    GLsizei samples,
                                                    FramebufferAttachmentRenderTarget **rtOut)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    if (binding == GL_BACK)
+    if (attachmentBinding == GL_BACK)
     {
         ANGLE_TRY(mColorRenderTarget.flushStagedUpdates(contextVk));
         *rtOut = &mColorRenderTarget;
     }
     else
     {
-        ASSERT(binding == GL_DEPTH || binding == GL_STENCIL || binding == GL_DEPTH_STENCIL);
+        ASSERT(attachmentBinding == GL_DEPTH || attachmentBinding == GL_STENCIL ||
+               attachmentBinding == GL_DEPTH_STENCIL);
         ANGLE_TRY(mDepthStencilRenderTarget.flushStagedUpdates(contextVk));
         *rtOut = &mDepthStencilRenderTarget;
     }

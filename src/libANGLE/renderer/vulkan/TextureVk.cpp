@@ -1355,7 +1355,8 @@ angle::Result TextureVk::releaseTexImage(const gl::Context *context)
 }
 
 angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
-                                                   GLenum binding,
+                                                   GLenum framebufferBinding,
+                                                   GLenum attachmentBinding,
                                                    const gl::ImageIndex &imageIndex,
                                                    GLsizei samples,
                                                    FramebufferAttachmentRenderTarget **rtOut)

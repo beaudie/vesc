@@ -235,10 +235,10 @@ angle::Result FramebufferMtl::syncState(const gl::Context *context,
         switch (dirtyBit)
         {
             case gl::Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT:
-                ANGLE_TRY(updateDepthRenderTarget(context));
+                ANGLE_TRY(updateDepthRenderTarget(context, binding));
                 break;
             case gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
-                ANGLE_TRY(updateStencilRenderTarget(context));
+                ANGLE_TRY(updateStencilRenderTarget(context, binding));
                 break;
             case gl::Framebuffer::DIRTY_BIT_DEPTH_BUFFER_CONTENTS:
             case gl::Framebuffer::DIRTY_BIT_STENCIL_BUFFER_CONTENTS:
@@ -258,7 +258,7 @@ angle::Result FramebufferMtl::syncState(const gl::Context *context,
                 {
                     size_t colorIndexGL = static_cast<size_t>(
                         dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0);
-                    ANGLE_TRY(updateColorRenderTarget(context, colorIndexGL));
+                    ANGLE_TRY(updateColorRenderTarget(context, binding, colorIndexGL));
                 }
                 else
                 {
@@ -355,30 +355,37 @@ void FramebufferMtl::onStartedDrawingToFrameBuffer(const gl::Context *context)
 }
 
 angle::Result FramebufferMtl::updateColorRenderTarget(const gl::Context *context,
+                                                      GLenum framebufferBinding,
                                                       size_t colorIndexGL)
 {
     ASSERT(colorIndexGL < mtl::kMaxRenderTargets);
     // Reset load store action
     mRenderPassDesc.colorAttachments[colorIndexGL].reset();
-    return updateCachedRenderTarget(context, mState.getColorAttachment(colorIndexGL),
+    return updateCachedRenderTarget(context, framebufferBinding,
+                                    mState.getColorAttachment(colorIndexGL),
                                     &mColorRenderTargets[colorIndexGL]);
 }
 
-angle::Result FramebufferMtl::updateDepthRenderTarget(const gl::Context *context)
+angle::Result FramebufferMtl::updateDepthRenderTarget(const gl::Context *context,
+                                                      GLenum framebufferBinding)
 {
     // Reset load store action
     mRenderPassDesc.depthAttachment.reset();
-    return updateCachedRenderTarget(context, mState.getDepthAttachment(), &mDepthRenderTarget);
+    return updateCachedRenderTarget(context, framebufferBinding, mState.getDepthAttachment(),
+                                    &mDepthRenderTarget);
 }
 
-angle::Result FramebufferMtl::updateStencilRenderTarget(const gl::Context *context)
+angle::Result FramebufferMtl::updateStencilRenderTarget(const gl::Context *context,
+                                                        GLenum framebufferBinding)
 {
     // Reset load store action
     mRenderPassDesc.stencilAttachment.reset();
-    return updateCachedRenderTarget(context, mState.getStencilAttachment(), &mStencilRenderTarget);
+    return updateCachedRenderTarget(context, framebufferBinding, mState.getStencilAttachment(),
+                                    &mStencilRenderTarget);
 }
 
 angle::Result FramebufferMtl::updateCachedRenderTarget(const gl::Context *context,
+                                                       GLenum framebufferBinding,
                                                        const gl::FramebufferAttachment *attachment,
                                                        RenderTargetMtl **cachedRenderTarget)
 {
@@ -386,7 +393,8 @@ angle::Result FramebufferMtl::updateCachedRenderTarget(const gl::Context *contex
     if (attachment)
     {
         ASSERT(attachment->isAttached());
-        ANGLE_TRY(attachment->getRenderTarget(context, attachment->getRenderToTextureSamples(),
+        ANGLE_TRY(attachment->getRenderTarget(context, framebufferBinding,
+                                              attachment->getRenderToTextureSamples(),
                                               &newRenderTarget));
     }
     *cachedRenderTarget = newRenderTarget;

@@ -97,7 +97,8 @@ angle::Result RenderbufferMtl::setStorageEGLImageTarget(const gl::Context *conte
 }
 
 angle::Result RenderbufferMtl::getAttachmentRenderTarget(const gl::Context *context,
-                                                         GLenum binding,
+                                                         GLenum framebufferBinding,
+                                                         GLenum attachmentBinding,
                                                          const gl::ImageIndex &imageIndex,
                                                          GLsizei samples,
                                                          FramebufferAttachmentRenderTarget **rtOut)

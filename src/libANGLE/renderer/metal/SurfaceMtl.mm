@@ -404,7 +404,8 @@ EGLint SurfaceMtl::getSwapBehavior() const
 }
 
 angle::Result SurfaceMtl::getAttachmentRenderTarget(const gl::Context *context,
-                                                    GLenum binding,
+                                                    GLenum framebufferBinding,
+                                                    GLenum attachmentBinding,
                                                     const gl::ImageIndex &imageIndex,
                                                     GLsizei samples,
                                                     FramebufferAttachmentRenderTarget **rtOut)
@@ -412,7 +413,7 @@ angle::Result SurfaceMtl::getAttachmentRenderTarget(const gl::Context *context,
     // NOTE(hqle): Support MSAA.
     ANGLE_TRY(ensureRenderTargetsCreated(context));
 
-    switch (binding)
+    switch (attachmentBinding)
     {
         case GL_BACK:
             *rtOut = &mColorRenderTarget;

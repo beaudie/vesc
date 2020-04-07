@@ -784,7 +784,8 @@ angle::Result TextureMtl::releaseTexImage(const gl::Context *context)
 }
 
 angle::Result TextureMtl::getAttachmentRenderTarget(const gl::Context *context,
-                                                    GLenum binding,
+                                                    GLenum framebufferBinding,
+                                                    GLenum attachmentBinding,
                                                     const gl::ImageIndex &imageIndex,
                                                     GLsizei samples,
                                                     FramebufferAttachmentRenderTarget **rtOut)

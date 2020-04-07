@@ -30,7 +30,8 @@ class FramebufferAttachmentObjectImpl : angle::NonCopyable
     virtual ~FramebufferAttachmentObjectImpl() {}
 
     virtual angle::Result getAttachmentRenderTarget(const gl::Context *context,
-                                                    GLenum binding,
+                                                    GLenum framebufferBinding,
+                                                    GLenum attachmentBinding,
                                                     const gl::ImageIndex &imageIndex,
                                                     GLsizei samples,
                                                     FramebufferAttachmentRenderTarget **rtOut);
@@ -41,7 +42,8 @@ class FramebufferAttachmentObjectImpl : angle::NonCopyable
 
 inline angle::Result FramebufferAttachmentObjectImpl::getAttachmentRenderTarget(
     const gl::Context *context,
-    GLenum binding,
+    GLenum framebufferBinding,
+    GLenum attachmentBinding,
     const gl::ImageIndex &imageIndex,
     GLsizei samples,
     FramebufferAttachmentRenderTarget **rtOut)

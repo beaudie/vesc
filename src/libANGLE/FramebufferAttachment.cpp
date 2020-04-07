@@ -301,13 +301,14 @@ FramebufferAttachmentObject::~FramebufferAttachmentObject() {}
 
 angle::Result FramebufferAttachmentObject::getAttachmentRenderTarget(
     const Context *context,
-    GLenum binding,
+    GLenum framebufferBinding,
+    GLenum attachmentBinding,
     const ImageIndex &imageIndex,
     GLsizei samples,
     rx::FramebufferAttachmentRenderTarget **rtOut) const
 {
-    return getAttachmentImpl()->getAttachmentRenderTarget(context, binding, imageIndex, samples,
-                                                          rtOut);
+    return getAttachmentImpl()->getAttachmentRenderTarget(
+        context, framebufferBinding, attachmentBinding, imageIndex, samples, rtOut);
 }
 
 angle::Result FramebufferAttachmentObject::initializeContents(const Context *context,

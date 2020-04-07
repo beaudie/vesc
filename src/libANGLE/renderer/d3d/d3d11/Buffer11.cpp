@@ -1751,7 +1751,7 @@ angle::Result Buffer11::PackStorage::packPixels(const gl::Context *context,
     ANGLE_TRY(flushQueuedPackCommand(context));
 
     RenderTarget11 *renderTarget = nullptr;
-    ANGLE_TRY(readAttachment.getRenderTarget(context, 0, &renderTarget));
+    ANGLE_TRY(readAttachment.getRenderTarget(context, GL_FRAMEBUFFER, 0, &renderTarget));
 
     const TextureHelper11 &srcTexture = renderTarget->getTexture();
     ASSERT(srcTexture.valid());

@@ -784,7 +784,7 @@ angle::Result Image9::copyFromFramebuffer(const gl::Context *context,
     ASSERT(srcAttachment);
 
     RenderTargetD3D *renderTarget = nullptr;
-    ANGLE_TRY(srcAttachment->getRenderTarget(context, 0, &renderTarget));
+    ANGLE_TRY(srcAttachment->getRenderTarget(context, GL_FRAMEBUFFER, 0, &renderTarget));
     ASSERT(renderTarget);
     return copyFromRTInternal(GetImplAs<Context9>(context), destOffset, sourceArea, renderTarget);
 }

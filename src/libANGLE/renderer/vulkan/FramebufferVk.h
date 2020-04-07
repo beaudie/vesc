@@ -161,7 +161,9 @@ class FramebufferVk : public FramebufferImpl
                                 uint8_t clearStencilValue);
     void updateActiveColorMasks(size_t colorIndex, bool r, bool g, bool b, bool a);
     void updateRenderPassDesc();
-    angle::Result updateColorAttachment(const gl::Context *context, size_t colorIndex);
+    angle::Result updateColorAttachment(const gl::Context *context,
+                                        GLenum framebufferBinding,
+                                        size_t colorIndex);
     angle::Result invalidateImpl(ContextVk *contextVk, size_t count, const GLenum *attachments);
     // Release all FramebufferVk objects in the cache and clear cache
     void clearCache(ContextVk *contextVk);
