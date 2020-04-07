@@ -1186,8 +1186,8 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     ANGLE_VK_TRY(contextVk, framebuffer.init(contextVk->getDevice(), framebufferInfo));
 
     vk::AttachmentOpsArray renderPassAttachmentOps;
-    std::vector<VkClearValue> clearValues = {{}};
-    ASSERT(clearValues.size() == 1);
+    vk::ClearValuesArray clearValues;
+    clearValues.store(0, {});
 
     renderPassAttachmentOps.initWithLoadStore(0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
                                               VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
