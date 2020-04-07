@@ -45,6 +45,30 @@
       "revId": "c32aeee9412569bb5e283feaa3161e75539fd6c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18609553_a45297dc",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-07T12:56:13Z",
+      "side": 1,
+      "message": "Also, will you have a chance to follow up to fix this test?",
+      "parentUuid": "78398017_b700f8b5",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 4
+      },
+      "revId": "c32aeee9412569bb5e283feaa3161e75539fd6c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
