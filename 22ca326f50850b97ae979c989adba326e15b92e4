@@ -221,6 +221,30 @@
       "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4614760_ee3b4723",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-07T04:05:03Z",
+      "side": 1,
+      "message": "Thought about this a bit more. I think you are right. Otherwise the link will not triggered and shaderInfo still have stale information. The correct way to remove the optimization is in initProgram() call. I make a local copy of spirvBlob and replace the opcode with NOP and then call vk::InitShaderAndSerial(). That way I don\u0027t need to touch SpirvTransformer code at all, implementation might be simpler as well.",
+      "parentUuid": "9a275619_5bfc4c09",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 62
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
