@@ -2878,7 +2878,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     }
 
                     // TODO(timvp): http://anglebug.com/3570: Necessary?
+#if 0  // TIMTIM
                     ANGLE_TRY(invalidateProgramExecutableHelper(context));
+#endif
                 }
                 else
                 {
