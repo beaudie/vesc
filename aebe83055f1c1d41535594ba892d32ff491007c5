@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f35d251c_81965200",
+        "filename": "src/libANGLE/renderer/vulkan/OverlayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-07T16:14:57Z",
+      "side": 1,
+      "message": "Looks weird for some destroy\u0027s to take a renderer and others a device.\nShould the mCulledWidgesView.destroy be changed to renderer as well?",
+      "revId": "aebe83055f1c1d41535594ba892d32ff491007c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
