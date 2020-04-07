@@ -2287,15 +2287,26 @@ gl::Extents ImageHelper::getLevelExtents2D(uint32_t level) const
 
 bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout) const
 {
-    const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
+    bool layoutChangeNeeded;
 
-    // If transitioning to the same layout, we don't need a barrier if the layout is read-only as
-    // RAR (read-after-read) doesn't need a barrier.  WAW (write-after-write) does require a memory
-    // barrier though.
-    bool sameLayoutAndNoNeedForBarrier =
-        mCurrentLayout == newLayout && !layoutData.sameLayoutTransitionRequiresBarrier;
-
-    return !sameLayoutAndNoNeedForBarrier;
+    if (mCurrentLayout == newLayout)
+    {
+        layoutChangeNeeded = false;
+    }
+    else
+    {
+        const ImageMemoryBarrierData &newLayoutData = kImageMemoryBarrierData[newLayout];
+        const ImageMemoryBarrierData &curLayoutData = kImageMemoryBarrierData[mCurrentLayout];
+        if (curLayoutData.layout == newLayoutData.layout)
+        {
+            layoutChangeNeeded = false;
+        }
+        else
+        {
+            layoutChangeNeeded = true;
+        }
+    }
+    return layoutChangeNeeded;
 }
 
 void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
@@ -2305,6 +2316,27 @@ void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
 {
     ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
     forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
+}
+
+bool ImageHelper::isBarrierNecessary(ImageLayout newLayout) const
+{
+    bool barrierNeeded;
+    if (mCurrentLayout == newLayout)
+    {
+        const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
+        // If transitioning to the same layout, we don't need a barrier if the layout is read-only
+        // as RAR (read-after-read) doesn't need a barrier.  WAW (write-after-write) does require a
+        // memory barrier though.
+        barrierNeeded = layoutData.sameLayoutTransitionRequiresBarrier;
+    }
+    else
+    {
+        // switch from one layout to another always insert barrier. Driver will consolidate barriers
+        // to the ones that their hardware actually required.
+        barrierNeeded = true;
+    }
+
+    return barrierNeeded;
 }
 
 void ImageHelper::onExternalLayoutChange(ImageLayout newLayout)
@@ -3214,7 +3246,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         if (updateLayerCount >= kMaxParallelSubresourceUpload)
         {
             // If there are more subresources than bits we can track, always insert a barrier.
-            changeLayout(aspectFlags, ImageLayout::TransferDst, commandBuffer);
+            insertBarrier(aspectFlags, ImageLayout::TransferDst, commandBuffer);
             subresourceUploadsInProgress = std::numeric_limits<uint64_t>::max();
         }
         else
@@ -3228,7 +3260,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             if ((subresourceUploadsInProgress & subresourceHash) != 0)
             {
                 // If there's overlap in subresource upload, issue a barrier.
-                changeLayout(aspectFlags, ImageLayout::TransferDst, commandBuffer);
+                insertBarrier(aspectFlags, ImageLayout::TransferDst, commandBuffer);
                 subresourceUploadsInProgress = 0;
             }
             subresourceUploadsInProgress |= subresourceHash;

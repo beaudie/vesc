@@ -4062,14 +4062,27 @@ angle::Result ContextVk::onImageRead(VkImageAspectFlags aspectFlags,
                                      vk::ImageLayout imageLayout,
                                      vk::ImageHelper *image)
 {
-    ANGLE_TRY(endRenderPass());
+    vk::CommandBuffer *commandBuffer;
 
     if (image->isLayoutChangeNecessary(imageLayout))
     {
-        vk::CommandBuffer *commandBuffer;
         ANGLE_TRY(endRenderPassAndGetCommandBuffer(&commandBuffer));
         image->changeLayout(aspectFlags, imageLayout, commandBuffer);
     }
+    else if (image->isBarrierNecessary(imageLayout))
+    {
+        // No need to end renderpass
+        if (mRenderPassCommandBuffer)
+        {
+            image->insertBarrier(aspectFlags, imageLayout, mRenderPassCommandBuffer);
+        }
+        else
+        {
+            commandBuffer = &mOutsideRenderPassCommands.getCommandBuffer();
+            image->insertBarrier(aspectFlags, imageLayout, commandBuffer);
+        }
+    }
+
     image->retain(&mResourceUseList);
     return angle::Result::Continue;
 }
@@ -4078,15 +4091,32 @@ angle::Result ContextVk::onImageWrite(VkImageAspectFlags aspectFlags,
                                       vk::ImageLayout imageLayout,
                                       vk::ImageHelper *image)
 {
-    ANGLE_TRY(endRenderPass());
-
-    // Barriers are always required for image writes.
-    ASSERT(image->isLayoutChangeNecessary(imageLayout));
-
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(endRenderPassAndGetCommandBuffer(&commandBuffer));
 
-    image->changeLayout(aspectFlags, imageLayout, commandBuffer);
+    if (image->isLayoutChangeNecessary(imageLayout))
+    {
+        ANGLE_TRY(endRenderPassAndGetCommandBuffer(&commandBuffer));
+        image->changeLayout(aspectFlags, imageLayout, commandBuffer);
+    }
+    else if (image->isBarrierNecessary(imageLayout))
+    {
+        // No need to end renderpass
+        if (mRenderPassCommandBuffer)
+        {
+            image->insertBarrier(aspectFlags, imageLayout, mRenderPassCommandBuffer);
+        }
+        else
+        {
+            commandBuffer = &mOutsideRenderPassCommands.getCommandBuffer();
+            image->insertBarrier(aspectFlags, imageLayout, commandBuffer);
+        }
+    }
+    else
+    {
+        // Barriers are always required for image writes.
+        UNREACHABLE();
+    }
+
     image->retain(&mResourceUseList);
 
     return angle::Result::Continue;
@@ -4365,6 +4395,10 @@ void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
     if (image->isLayoutChangeNecessary(imageLayout))
     {
         image->changeLayout(aspectFlags, imageLayout, this);
+    }
+    else if (image->isBarrierNecessary(imageLayout))
+    {
+        image->insertBarrier(aspectFlags, imageLayout, this);
     }
 }
 

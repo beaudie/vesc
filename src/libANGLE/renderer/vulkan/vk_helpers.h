@@ -947,11 +947,15 @@ class ImageHelper final : public Resource, public angle::Subject
                       ImageLayout newLayout,
                       CommandBufferT *commandBuffer)
     {
-        if (!isLayoutChangeNecessary(newLayout))
-        {
-            return;
-        }
+        forceChangeLayoutAndQueue(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
+    }
 
+    bool isBarrierNecessary(ImageLayout newLayout) const;
+    template <typename CommandBufferT>
+    void insertBarrier(VkImageAspectFlags aspectMask,
+                       ImageLayout newLayout,
+                       CommandBufferT *commandBuffer)
+    {
         forceChangeLayoutAndQueue(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
     }
 
