@@ -143,12 +143,16 @@ class FramebufferAttachment final
 
     // "T" must be static_castable from FramebufferAttachmentRenderTarget
     template <typename T>
-    angle::Result getRenderTarget(const Context *context, GLsizei samples, T **rtOut) const
+    angle::Result getRenderTarget(const Context *context,
+                                  GLenum framebufferBinding,
+                                  GLsizei samples,
+                                  T **rtOut) const
     {
         static_assert(std::is_base_of<rx::FramebufferAttachmentRenderTarget, T>(),
                       "Invalid RenderTarget class.");
         return getRenderTargetImpl(
-            context, samples, reinterpret_cast<rx::FramebufferAttachmentRenderTarget **>(rtOut));
+            context, framebufferBinding, samples,
+            reinterpret_cast<rx::FramebufferAttachmentRenderTarget **>(rtOut));
     }
 
     bool operator==(const FramebufferAttachment &other) const;
@@ -160,6 +164,7 @@ class FramebufferAttachment final
 
   private:
     angle::Result getRenderTargetImpl(const Context *context,
+                                      GLenum framebufferBinding,
                                       GLsizei samples,
                                       rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
@@ -217,7 +222,8 @@ class FramebufferAttachmentObject : public angle::Subject
     virtual void setInitState(const ImageIndex &imageIndex, InitState initState) = 0;
 
     angle::Result getAttachmentRenderTarget(const Context *context,
-                                            GLenum binding,
+                                            GLenum framebufferBinding,
+                                            GLenum attachmentBinding,
                                             const ImageIndex &imageIndex,
                                             GLsizei samples,
                                             rx::FramebufferAttachmentRenderTarget **rtOut) const;
@@ -260,12 +266,13 @@ inline GLsizei FramebufferAttachment::getResourceSamples() const
 
 inline angle::Result FramebufferAttachment::getRenderTargetImpl(
     const Context *context,
+    GLenum framebufferBinding,
     GLsizei samples,
     rx::FramebufferAttachmentRenderTarget **rtOut) const
 {
     ASSERT(mResource);
-    return mResource->getAttachmentRenderTarget(context, mTarget.binding(), mTarget.textureIndex(),
-                                                samples, rtOut);
+    return mResource->getAttachmentRenderTarget(context, framebufferBinding, mTarget.binding(),
+                                                mTarget.textureIndex(), samples, rtOut);
 }
 
 inline bool FramebufferAttachment::isRenderable(const Context *context) const

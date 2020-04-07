@@ -64,7 +64,8 @@ class SurfaceD3D : public SurfaceImpl
     egl::Error checkForOutOfDateSwapChain(DisplayD3D *displayD3D);
 
     angle::Result getAttachmentRenderTarget(const gl::Context *context,
-                                            GLenum binding,
+                                            GLenum framebufferBinding,
+                                            GLenum attachmentBinding,
                                             const gl::ImageIndex &imageIndex,
                                             GLsizei samples,
                                             FramebufferAttachmentRenderTarget **rtOut) override;

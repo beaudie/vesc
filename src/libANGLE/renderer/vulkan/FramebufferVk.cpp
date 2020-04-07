@@ -913,11 +913,14 @@ bool FramebufferVk::checkStatus(const gl::Context *context) const
     return true;
 }
 
-angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context, size_t colorIndexGL)
+angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
+                                                   GLenum framebufferBinding,
+                                                   size_t colorIndexGL)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    ANGLE_TRY(mRenderTargetCache.updateColorRenderTarget(context, mState, colorIndexGL));
+    ANGLE_TRY(mRenderTargetCache.updateColorRenderTarget(context, framebufferBinding, mState,
+                                                         colorIndexGL));
 
     // Update cached masks for masked clears.
     RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
@@ -1056,11 +1059,13 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         switch (dirtyBit)
         {
             case gl::Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT:
-                ANGLE_TRY(mRenderTargetCache.updateDepthStencilRenderTarget(context, mState));
+                ANGLE_TRY(
+                    mRenderTargetCache.updateDepthStencilRenderTarget(context, binding, mState));
                 updateDepthStencilAttachmentSerial(contextVk);
                 break;
             case gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
-                ANGLE_TRY(mRenderTargetCache.updateDepthStencilRenderTarget(context, mState));
+                ANGLE_TRY(
+                    mRenderTargetCache.updateDepthStencilRenderTarget(context, binding, mState));
                 updateDepthStencilAttachmentSerial(contextVk);
                 break;
             case gl::Framebuffer::DIRTY_BIT_DEPTH_BUFFER_CONTENTS:
@@ -1068,7 +1073,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 updateDepthStencilAttachmentSerial(contextVk);
                 break;
             case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
-                ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
+                ANGLE_TRY(mRenderTargetCache.update(context, binding, mState, dirtyBits));
                 break;
             case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
                 // Force update of serial for enabled draw buffers
@@ -1097,7 +1102,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 {
                     colorIndexGL = static_cast<uint32_t>(
                         dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0);
-                    ANGLE_TRY(updateColorAttachment(context, colorIndexGL));
+                    ANGLE_TRY(updateColorAttachment(context, binding, colorIndexGL));
                 }
                 else
                 {

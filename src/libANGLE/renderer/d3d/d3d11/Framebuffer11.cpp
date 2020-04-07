@@ -235,7 +235,7 @@ angle::Result Framebuffer11::invalidateAttachment(const gl::Context *context,
     ASSERT(attachment && attachment->isAttached());
 
     RenderTarget11 *renderTarget = nullptr;
-    ANGLE_TRY(attachment->getRenderTarget(context, 0, &renderTarget));
+    ANGLE_TRY(attachment->getRenderTarget(context, GL_FRAMEBUFFER, 0, &renderTarget));
     const auto &rtv = renderTarget->getRenderTargetView();
 
     if (rtv.valid())
@@ -289,7 +289,7 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
         ASSERT(readBuffer);
 
         RenderTargetD3D *readRenderTarget = nullptr;
-        ANGLE_TRY(readBuffer->getRenderTarget(context, 0, &readRenderTarget));
+        ANGLE_TRY(readBuffer->getRenderTarget(context, GL_FRAMEBUFFER, 0, &readRenderTarget));
         ASSERT(readRenderTarget);
 
         const auto &colorAttachments = mState.getColorAttachments();
@@ -303,8 +303,9 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
             if (drawBuffer.isAttached() && drawBufferStates[colorAttachment] != GL_NONE)
             {
                 RenderTargetD3D *drawRenderTarget = nullptr;
-                ANGLE_TRY(drawBuffer.getRenderTarget(
-                    context, drawBuffer.getRenderToTextureSamples(), &drawRenderTarget));
+                ANGLE_TRY(drawBuffer.getRenderTarget(context, GL_FRAMEBUFFER,
+                                                     drawBuffer.getRenderToTextureSamples(),
+                                                     &drawRenderTarget));
                 ASSERT(drawRenderTarget);
 
                 const bool invertColorSource   = UsePresentPathFast(mRenderer, readBuffer);
@@ -338,7 +339,7 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
             sourceFramebuffer->getDepthOrStencilAttachment();
         ASSERT(readBuffer);
         RenderTargetD3D *readRenderTarget = nullptr;
-        ANGLE_TRY(readBuffer->getRenderTarget(context, 0, &readRenderTarget));
+        ANGLE_TRY(readBuffer->getRenderTarget(context, GL_FRAMEBUFFER, 0, &readRenderTarget));
         ASSERT(readRenderTarget);
 
         const bool invertSource        = UsePresentPathFast(mRenderer, readBuffer);
@@ -353,8 +354,8 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
         const gl::FramebufferAttachment *drawBuffer = mState.getDepthOrStencilAttachment();
         ASSERT(drawBuffer);
         RenderTargetD3D *drawRenderTarget = nullptr;
-        ANGLE_TRY(drawBuffer->getRenderTarget(context, drawBuffer->getRenderToTextureSamples(),
-                                              &drawRenderTarget));
+        ANGLE_TRY(drawBuffer->getRenderTarget(
+            context, GL_FRAMEBUFFER, drawBuffer->getRenderToTextureSamples(), &drawRenderTarget));
         ASSERT(drawRenderTarget);
 
         bool invertDest              = UsePresentPathFast(mRenderer, drawBuffer);
@@ -389,7 +390,7 @@ angle::Result Framebuffer11::syncState(const gl::Context *context,
                                        GLenum binding,
                                        const gl::Framebuffer::DirtyBits &dirtyBits)
 {
-    ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
+    ANGLE_TRY(mRenderTargetCache.update(context, GL_FRAMEBUFFER, mState, dirtyBits));
     ANGLE_TRY(FramebufferD3D::syncState(context, binding, dirtyBits));
 
     // Call this last to allow the state manager to take advantage of the cached render targets.

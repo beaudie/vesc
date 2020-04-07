@@ -1099,8 +1099,8 @@ angle::Result Renderer9::updateState(const gl::Context *context, gl::PrimitiveMo
     {
         ASSERT(firstColorAttachment->isAttached());
         RenderTarget9 *renderTarget = nullptr;
-        ANGLE_TRY(firstColorAttachment->getRenderTarget(context, firstColorAttachment->getSamples(),
-                                                        &renderTarget));
+        ANGLE_TRY(firstColorAttachment->getRenderTarget(
+            context, GL_FRAMEBUFFER, firstColorAttachment->getSamples(), &renderTarget));
         samples = renderTarget->getSamples();
     }
     gl::RasterizerState rasterizer = glState.getRasterizerState();
@@ -1135,8 +1135,8 @@ angle::Result Renderer9::setBlendDepthRasterStates(const gl::Context *context,
     {
         ASSERT(firstColorAttachment->isAttached());
         RenderTarget9 *renderTarget = nullptr;
-        ANGLE_TRY(firstColorAttachment->getRenderTarget(context, firstColorAttachment->getSamples(),
-                                                        &renderTarget));
+        ANGLE_TRY(firstColorAttachment->getRenderTarget(
+            context, GL_FRAMEBUFFER, firstColorAttachment->getSamples(), &renderTarget));
         samples = renderTarget->getSamples();
     }
     gl::RasterizerState rasterizer = glState.getRasterizerState();
