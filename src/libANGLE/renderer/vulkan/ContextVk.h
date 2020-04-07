@@ -226,6 +226,9 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
     bool started() const { return mRenderPassStarted; }
     void reset();
 
+    void resumeTransformFeedback(void);
+    angle::Result pauseTransformFeedback(ContextVk *contextVk);
+
     uint32_t getAndResetCounter()
     {
         uint32_t count = mCounter;

@@ -1889,13 +1889,17 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
         uint32_t numIndices;
         ANGLE_TRY(setupLineLoopDraw(context, mode, first, count, gl::DrawElementsType::InvalidEnum,
                                     nullptr, &commandBuffer, &numIndices));
+        mRenderPassCommands.resumeTransformFeedback();
         vk::LineLoopHelper::Draw(numIndices, 0, commandBuffer);
+        ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     }
     else
     {
         ANGLE_TRY(setupDraw(context, mode, first, count, 1, gl::DrawElementsType::InvalidEnum,
                             nullptr, mNonIndexedDirtyBitsMask, &commandBuffer));
+        mRenderPassCommands.resumeTransformFeedback();
         commandBuffer->draw(clampedVertexCount, first);
+        ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     }
 
     return angle::Result::Continue;
@@ -1916,13 +1920,17 @@ angle::Result ContextVk::drawArraysInstanced(const gl::Context *context,
         ANGLE_TRY(setupLineLoopDraw(context, mode, first, clampedVertexCount,
                                     gl::DrawElementsType::InvalidEnum, nullptr, &commandBuffer,
                                     &numIndices));
+        mRenderPassCommands.resumeTransformFeedback();
         commandBuffer->drawIndexedInstanced(numIndices, instances);
+        ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
         return angle::Result::Continue;
     }
 
     ANGLE_TRY(setupDraw(context, mode, first, count, instances, gl::DrawElementsType::InvalidEnum,
                         nullptr, mNonIndexedDirtyBitsMask, &commandBuffer));
+    mRenderPassCommands.resumeTransformFeedback();
     commandBuffer->drawInstanced(gl::GetClampedVertexCount<uint32_t>(count), instances, first);
+    ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     return angle::Result::Continue;
 }
 
@@ -1942,15 +1950,19 @@ angle::Result ContextVk::drawArraysInstancedBaseInstance(const gl::Context *cont
         ANGLE_TRY(setupLineLoopDraw(context, mode, first, clampedVertexCount,
                                     gl::DrawElementsType::InvalidEnum, nullptr, &commandBuffer,
                                     &numIndices));
+        mRenderPassCommands.resumeTransformFeedback();
         commandBuffer->drawIndexedInstancedBaseVertexBaseInstance(numIndices, instances, 0, 0,
                                                                   baseInstance);
+        ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
         return angle::Result::Continue;
     }
 
     ANGLE_TRY(setupDraw(context, mode, first, count, instances, gl::DrawElementsType::InvalidEnum,
                         nullptr, mNonIndexedDirtyBitsMask, &commandBuffer));
+    mRenderPassCommands.resumeTransformFeedback();
     commandBuffer->drawInstancedBaseInstance(gl::GetClampedVertexCount<uint32_t>(count), instances,
                                              first, baseInstance);
+    ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     return angle::Result::Continue;
 }
 
@@ -1966,12 +1978,16 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
         uint32_t indexCount;
         ANGLE_TRY(
             setupLineLoopDraw(context, mode, 0, count, type, indices, &commandBuffer, &indexCount));
+        mRenderPassCommands.resumeTransformFeedback();
         vk::LineLoopHelper::Draw(indexCount, 0, commandBuffer);
+        ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     }
     else
     {
         ANGLE_TRY(setupIndexedDraw(context, mode, count, 1, type, indices, &commandBuffer));
+        mRenderPassCommands.resumeTransformFeedback();
         commandBuffer->drawIndexed(count);
+        ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     }
 
     return angle::Result::Continue;
@@ -1990,12 +2006,16 @@ angle::Result ContextVk::drawElementsBaseVertex(const gl::Context *context,
         uint32_t indexCount;
         ANGLE_TRY(
             setupLineLoopDraw(context, mode, 0, count, type, indices, &commandBuffer, &indexCount));
+        mRenderPassCommands.resumeTransformFeedback();
         vk::LineLoopHelper::Draw(indexCount, baseVertex, commandBuffer);
+        ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     }
     else
     {
         ANGLE_TRY(setupIndexedDraw(context, mode, count, 1, type, indices, &commandBuffer));
+        mRenderPassCommands.resumeTransformFeedback();
         commandBuffer->drawIndexedBaseVertex(count, baseVertex);
+        ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     }
 
     return angle::Result::Continue;
@@ -2022,7 +2042,9 @@ angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
         ANGLE_TRY(setupIndexedDraw(context, mode, count, instances, type, indices, &commandBuffer));
     }
 
+    mRenderPassCommands.resumeTransformFeedback();
     commandBuffer->drawIndexedInstanced(count, instances);
+    ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     return angle::Result::Continue;
 }
 
@@ -2048,7 +2070,9 @@ angle::Result ContextVk::drawElementsInstancedBaseVertex(const gl::Context *cont
         ANGLE_TRY(setupIndexedDraw(context, mode, count, instances, type, indices, &commandBuffer));
     }
 
+    mRenderPassCommands.resumeTransformFeedback();
     commandBuffer->drawIndexedInstancedBaseVertex(count, instances, baseVertex);
+    ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     return angle::Result::Continue;
 }
 
@@ -2068,14 +2092,18 @@ angle::Result ContextVk::drawElementsInstancedBaseVertexBaseInstance(const gl::C
         uint32_t indexCount;
         ANGLE_TRY(
             setupLineLoopDraw(context, mode, 0, count, type, indices, &commandBuffer, &indexCount));
+        mRenderPassCommands.resumeTransformFeedback();
         commandBuffer->drawIndexedInstancedBaseVertexBaseInstance(indexCount, instances, 0,
                                                                   baseVertex, baseInstance);
+        ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
         return angle::Result::Continue;
     }
 
     ANGLE_TRY(setupIndexedDraw(context, mode, count, instances, type, indices, &commandBuffer));
+    mRenderPassCommands.resumeTransformFeedback();
     commandBuffer->drawIndexedInstancedBaseVertexBaseInstance(count, instances, 0, baseVertex,
                                                               baseInstance);
+    ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     return angle::Result::Continue;
 }
 
@@ -2148,14 +2176,18 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
                                             currentIndirectBufOffset, &commandBuffer,
                                             &dstIndirectBuf, &dstIndirectBufOffset));
 
+        mRenderPassCommands.resumeTransformFeedback();
         commandBuffer->drawIndexedIndirect(dstIndirectBuf->getBuffer(), dstIndirectBufOffset, 1, 0);
+        ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
         return angle::Result::Continue;
     }
 
     ANGLE_TRY(setupIndirectDraw(context, mode, mNonIndexedDirtyBitsMask, currentIndirectBuf,
                                 currentIndirectBufOffset, &commandBuffer));
 
+    mRenderPassCommands.resumeTransformFeedback();
     commandBuffer->drawIndirect(currentIndirectBuf->getBuffer(), currentIndirectBufOffset, 1, 0);
+    ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     return angle::Result::Continue;
 }
 
@@ -2223,8 +2255,10 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
                                            currentIndirectBufOffset, &commandBuffer));
     }
 
+    mRenderPassCommands.resumeTransformFeedback();
     commandBuffer->drawIndexedIndirect(currentIndirectBuf->getBuffer(), currentIndirectBufOffset, 1,
                                        0);
+    ANGLE_TRY(mRenderPassCommands.pauseTransformFeedback(this));
     return angle::Result::Continue;
 }
 
@@ -4545,15 +4579,7 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
     }
     else
     {
-        uint32_t numCounterBuffers =
-            (mRebindTransformFeedbackBuffers) ? 0 : mValidTransformFeedbackBufferCount;
-
-        primary->beginTransformFeedbackEXT(0, numCounterBuffers,
-                                           mTransformFeedbackCounterBuffers.data(), nullptr);
         mCommandBuffer.executeCommands(primary->getHandle());
-        primary->endTransformFeedbackEXT(0, mValidTransformFeedbackBufferCount,
-                                         mTransformFeedbackCounterBuffers.data(), nullptr);
-
         primary->endRenderPass();
 
         // Would be better to accumulate this barrier using the command APIs.
@@ -4638,5 +4664,31 @@ void RenderPassCommandBuffer::reset()
     mRenderPassStarted                 = false;
     mValidTransformFeedbackBufferCount = 0;
     mRebindTransformFeedbackBuffers    = false;
+}
+
+void RenderPassCommandBuffer::resumeTransformFeedback(void)
+{
+    if (mValidTransformFeedbackBufferCount > 0)
+    {
+        uint32_t numCounterBuffers =
+            (mRebindTransformFeedbackBuffers) ? 0 : mValidTransformFeedbackBufferCount;
+
+        mRebindTransformFeedbackBuffers = false;
+
+        mCommandBuffer.beginTransformFeedback(numCounterBuffers,
+                                              mTransformFeedbackCounterBuffers.data());
+    }
+}
+
+angle::Result RenderPassCommandBuffer::pauseTransformFeedback(ContextVk *contextVk)
+{
+    if (mValidTransformFeedbackBufferCount > 0)
+    {
+        mCommandBuffer.endTransformFeedback(mValidTransformFeedbackBufferCount,
+                                            mTransformFeedbackCounterBuffers.data());
+        ANGLE_TRY(contextVk->endRenderPass());
+    }
+
+    return angle::Result::Continue;
 }
 }  // namespace rx
