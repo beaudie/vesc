@@ -22,6 +22,30 @@
       "revId": "41287ca59910beac2c9bbe48ca77f872b8b46ccd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f3b0e3c_9261cfaa",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-07T23:52:18Z",
+      "side": 1,
+      "message": "for context \u003c 3.0 we can assume decode \u003d\u003d\u003e _srgb support\n\nwill upload new patchset with more fine grained condition",
+      "parentUuid": "6043af5b_615edc04",
+      "range": {
+        "startLine": 960,
+        "startChar": 59,
+        "endLine": 960,
+        "endChar": 85
+      },
+      "revId": "41287ca59910beac2c9bbe48ca77f872b8b46ccd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
