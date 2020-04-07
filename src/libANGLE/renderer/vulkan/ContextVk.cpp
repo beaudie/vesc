@@ -2876,18 +2876,11 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                         // A bound program always overrides a program pipeline
                         mExecutable = &mProgramPipeline->getExecutable();
                     }
-
-                    // TODO(timvp): http://anglebug.com/3570: Necessary?
-                    ANGLE_TRY(invalidateProgramExecutableHelper(context));
                 }
                 else
                 {
                     mProgramPipeline = nullptr;
                 }
-
-                // TODO(timvp): http://anglebug.com/3570: Necessary?
-                invalidateCurrentGraphicsPipeline();
-                invalidateCurrentComputePipeline();
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
