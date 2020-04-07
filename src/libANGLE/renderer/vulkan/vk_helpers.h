@@ -855,7 +855,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void resolve(ImageHelper *dest, const VkImageResolve &region, CommandBuffer *commandBuffer);
 
     // Data staging
-    void removeStagedUpdates(ContextVk *contextVk, const gl::ImageIndex &index);
+    void removeStagedUpdates(ContextVk *contextVk, uint32_t levelIndex, uint32_t layerIndex);
 
     angle::Result stageSubresourceUpdateImpl(ContextVk *contextVk,
                                              const gl::ImageIndex &index,
@@ -911,9 +911,14 @@ class ImageHelper final : public Resource, public angle::Subject
                                          const gl::Extents &glExtents,
                                          const VkImageType imageType);
 
+    // Stage a clear to an arbitrary value.
+    void stageClear(const gl::ImageIndex &index,
+                    VkImageAspectFlags aspectFlags,
+                    const VkClearValue &clearValue);
+
     // Stage a clear based on robust resource init.
-    void stageRobustResourceClear(const gl::ImageIndex &index, const vk::Format &format);
-    void stageSubresourceClear(const gl::ImageIndex &index);
+    void stageRobustResourceClearWithFormat(const gl::ImageIndex &index, const vk::Format &format);
+    void stageRobustResourceClear(const gl::ImageIndex &index);
 
     // This will use the underlying dynamic buffer to allocate some memory to be used as a src or
     // dst.
@@ -924,6 +929,14 @@ class ImageHelper final : public Resource, public angle::Subject
                                         StagingBufferOffsetArray *offsetOut,
                                         bool *newBufferAllocatedOut);
 
+    // Flush staged updates for a single subresource. Can optionally take a parameter to defer
+    // clears to a subsequent RenderPass load op.
+    angle::Result flushSingleSubresourceStagedUpdates(ContextVk *contextVk,
+                                                      uint32_t level,
+                                                      uint32_t layer,
+                                                      CommandBuffer *commandBuffer,
+                                                      ClearValueReference *clearValueRef);
+
     // Flushes staged updates to a range of levels and layers from start to (but not including) end.
     // Due to the nature of updates (done wholly to a VkImageSubresourceLayers), some unsolicited
     // layers may also be updated.
@@ -933,6 +946,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                      uint32_t layerStart,
                                      uint32_t layerEnd,
                                      CommandBuffer *commandBuffer);
+
     // Creates a command buffer and flushes all staged updates.  This is used for one-time
     // initialization of resources that we don't expect to accumulate further staged updates, such
     // as with renderbuffers or surface images.
