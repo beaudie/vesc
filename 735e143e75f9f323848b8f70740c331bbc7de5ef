@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "525d9240_c94cd0c9",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 97
+      },
+      "lineNbr": 7625,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-08T22:23:59Z",
+      "side": 1,
+      "message": "Oh, interesting.  I\u0027ll take a look at that approach then.",
+      "parentUuid": "c4938073_d047abea",
+      "range": {
+        "startLine": 7625,
+        "startChar": 44,
+        "endLine": 7625,
+        "endChar": 56
+      },
+      "revId": "735e143e75f9f323848b8f70740c331bbc7de5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "374b14ef_efb3b1f6",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 97
@@ -155,6 +179,30 @@
       "writtenOn": "2020-04-07T20:57:05Z",
       "side": 1,
       "message": "I\u0027m still hoping we can do this particular change pre-patch. Can work it together offline tomorrow.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 5
+      },
+      "revId": "735e143e75f9f323848b8f70740c331bbc7de5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80c40337_497a1b15",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 97
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-08T22:23:59Z",
+      "side": 1,
+      "message": "Done\n\nPTAL at the changes, since I don\u0027t quite understand the difference between Context::mDrawDirtyObjects, mComputeDirtyObjects and State::mDirtyObjects since the same State::DIRTY_OBJECT_PROGRAM_PIPELINE needs to be set in both in order for ProgramPipeline::syncState() to be called:\n\n\n    [[[ this takes mDrawDirtyObjects or mComputeDirtyObjects  ]]]\n    ANGLE_INLINE angle::Result Context::syncDirtyObjects(const State::DirtyObjects \u0026objectMask)\n    {\n        return mState.syncDirtyObjects(this, objectMask);\n    }\n\n\n    ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,\n                                                       const DirtyObjects \u0026bitset)\n    {\n        [[[ only handle bits in both mDrawDirtyObjects/mComputeDirtyObjects AND mDirtyObjects ]]]\n        const DirtyObjects \u0026dirtyObjects \u003d mDirtyObjects \u0026 bitset;\n\n        for (size_t dirtyObject : dirtyObjects)\n        {\n            ANGLE_TRY((this-\u003e*kDirtyObjectHandlers[dirtyObject])(context));\n        }\n\n        mDirtyObjects \u0026\u003d ~dirtyObjects;\n        return angle::Result::Continue;\n    }",
+      "parentUuid": "374b14ef_efb3b1f6",
       "range": {
         "startLine": 104,
         "startChar": 0,
