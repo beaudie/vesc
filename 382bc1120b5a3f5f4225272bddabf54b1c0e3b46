@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "620247bb_fdc53070",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-08T18:11:43Z",
+      "side": 1,
+      "message": "changed this to not be a reference as well",
+      "revId": "382bc1120b5a3f5f4225272bddabf54b1c0e3b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
