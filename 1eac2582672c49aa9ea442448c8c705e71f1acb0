@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "38711136_0011bc85",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:23:34Z",
+      "side": 1,
+      "message": "nit: remove please for reasons stated earlier. If you can make a regression test that this line fixes than it would be fine to keep.",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 0
+      },
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d0efefe_f82a000c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:23:34Z",
+      "side": 1,
+      "message": "please make a helper in GlslangWrapperVk that properly uses ErrorHandler for this. I think the way it\u0027s structured now it\u0027ll just drop the error. Then you\u0027ll be able to use ANGLE_TRY.",
+      "range": {
+        "startLine": 104,
+        "startChar": 19,
+        "endLine": 104,
+        "endChar": 68
+      },
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "866f5c5b_be4f136a",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 5
@@ -13,6 +59,75 @@
       "writtenOn": "2020-04-08T04:37:50Z",
       "side": 1,
       "message": "We are starting to get many duplicate shader modules (line raster emulation shader modules are entirely useless duplicates). Could you please create a bug to track the work of optimizing this? For all the four combination of programs with N stages, we really only need N+1 shader modules. That saves SPIR-V to native translation as well as memory.",
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f12219c5_d587b70d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:23:34Z",
+      "side": 1,
+      "message": "nit: prefer explicit types unless it makes the code easier to read for unfamiliar developers. see\n\nhttps://google.github.io/styleguide/cppguide.html#Type_deduction",
+      "range": {
+        "startLine": 178,
+        "startChar": 9,
+        "endLine": 178,
+        "endChar": 14
+      },
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fa3c42f_7c009138",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:23:34Z",
+      "side": 1,
+      "message": "nit: can you please pull this out of the class? in-class types are a bit harder to deal with. Can call it ProgramTransformOption if you like the scoping.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 6
+      },
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3721384c_33521aed",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:23:34Z",
+      "side": 1,
+      "message": "nit: casing",
+      "range": {
+        "startLine": 66,
+        "startChar": 50,
+        "endLine": 66,
+        "endChar": 61
+      },
       "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
