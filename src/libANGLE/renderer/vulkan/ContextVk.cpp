@@ -1209,6 +1209,8 @@ angle::Result ContextVk::handleDirtyGraphicsPipeline(const gl::Context *context,
 
         mGraphicsPipelineTransition.reset();
     }
+    // Pause transform feedback on binding graphics pipeline
+    //
     commandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
