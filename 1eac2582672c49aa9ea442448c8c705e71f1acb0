@@ -65,6 +65,24 @@
     },
     {
       "key": {
+        "uuid": "a3926141_16cfdab6",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T17:08:27Z",
+      "side": 1,
+      "message": "I thought the whole point you made for separate modules are that these are very rare cases and for majority use case you will never create these modules since creation are deferred. Using N+1 shader stage will hurt the performance of rare usage case, right? Assume that is true for the following discussion. I was in the camp of the other side, but after thinking a bit more, I think creating the extra modules is right thing to do. Even though it is rare usage, does not mean perf not important. For the person end up using this, perf is as important as everyone else. The alternative solution for memory waste problem is to keep some usage heuristic and add this into garbage collection facility so that if a module not been used for a while just clean it. This essentially is a cache of some kind, and we have many other similar usage in other places.",
+      "parentUuid": "866f5c5b_be4f136a",
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f12219c5_d587b70d",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 5
@@ -88,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "00fe3cf1_cf1c1223",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T17:08:27Z",
+      "side": 1,
+      "message": "See other usage in line 153 above. I am not a fan of auto but wondering you guys might prefer using auto for the simplicity. Again, any written guideline that I can keep handy?",
+      "parentUuid": "f12219c5_d587b70d",
+      "range": {
+        "startLine": 178,
+        "startChar": 9,
+        "endLine": 178,
+        "endChar": 14
+      },
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7fa3c42f_7c009138",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 5
@@ -99,6 +141,30 @@
       "writtenOn": "2020-04-08T16:23:34Z",
       "side": 1,
       "message": "nit: can you please pull this out of the class? in-class types are a bit harder to deal with. Can call it ProgramTransformOption if you like the scoping.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 6
+      },
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d1156f9_a51d7e8c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T17:08:27Z",
+      "side": 1,
+      "message": "Actually not because I like it but because I saw the prior example and thought that is what you guys would like to see, because the usage are very local. See following examples:\n    enum class PipelineType\n    enum class ParseState\n    enum class ConsumerType\n    enum class UpdateSource\n    enum class Function\n    enum class SwapControl\n    enum class ClearCommandType\n    enum class CacheSource\n\nFor now I will move it out, but we should be consistent and have some kind written guideline.",
+      "parentUuid": "7fa3c42f_7c009138",
       "range": {
         "startLine": 54,
         "startChar": 0,
@@ -145,6 +211,30 @@
       "writtenOn": "2020-04-08T04:37:50Z",
       "side": 1,
       "message": "As much as I love snake_case, this is a camelCase code base.",
+      "range": {
+        "startLine": 179,
+        "startChar": 76,
+        "endLine": 179,
+        "endChar": 87
+      },
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63415f59_685008a6",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T17:08:27Z",
+      "side": 1,
+      "message": "Will fix. Clion actually suggest this to me for some reason.",
+      "parentUuid": "6436db65_cb6ac469",
       "range": {
         "startLine": 179,
         "startChar": 76,
