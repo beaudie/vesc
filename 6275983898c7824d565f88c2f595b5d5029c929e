@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3529334b_57337fd0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:04:17Z",
+      "side": 1,
+      "message": "nit: you can remove this now that it\u0027s in the header.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 58
+      },
+      "revId": "6275983898c7824d565f88c2f595b5d5029c929e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "713b213f_9d3d4230",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:04:17Z",
+      "side": 1,
+      "message": "nit: try to avoid overloading as it makes the code harder to understand. can call this mapWithOffset.",
+      "range": {
+        "startLine": 598,
+        "startChar": 18,
+        "endLine": 598,
+        "endChar": 21
+      },
+      "revId": "6275983898c7824d565f88c2f595b5d5029c929e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b53055a_6690b27c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:04:17Z",
+      "side": 1,
+      "message": "nit: please call the exposed methods instead of making it an implicit call in CreateBuffer. Ideally this wrapper mirrors the vma API as much as possible.",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 30
+      },
+      "revId": "6275983898c7824d565f88c2f595b5d5029c929e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06ada5aa_e4e76f66",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:04:17Z",
+      "side": 1,
+      "message": "nit: style guide forbids non-const \u0026\n\nhttps://google.github.io/styleguide/cppguide.html#Reference_Arguments",
+      "range": {
+        "startLine": 23,
+        "startChar": 23,
+        "endLine": 23,
+        "endChar": 46
+      },
+      "revId": "6275983898c7824d565f88c2f595b5d5029c929e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
