@@ -244,7 +244,7 @@ ANGLE_INLINE angle::Result ContextGL::setDrawElementsState(const gl::Context *co
         StateManagerGL *stateManager = getStateManager();
 
         GLuint primitiveRestartIndex = gl::GetPrimitiveRestartIndex(type);
-        stateManager->setPrimitiveRestartIndex(primitiveRestartIndex);
+        ANGLE_TRY(stateManager->setPrimitiveRestartIndex(context, primitiveRestartIndex));
     }
 
 #if defined(ANGLE_STATE_VALIDATION_ENABLED)
@@ -694,8 +694,7 @@ angle::Result ContextGL::syncState(const gl::Context *context,
                                    const gl::State::DirtyBits &dirtyBits,
                                    const gl::State::DirtyBits &bitMask)
 {
-    mRenderer->getStateManager()->syncState(context, dirtyBits, bitMask);
-    return angle::Result::Continue;
+    return mRenderer->getStateManager()->syncState(context, dirtyBits, bitMask);
 }
 
 GLint ContextGL::getGPUDisjoint()
