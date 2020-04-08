@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16c7afce_7deeb25d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4654,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:35:07Z",
+      "side": 1,
+      "message": "nit: resumeTransformFeedbackIfStarted",
+      "range": {
+        "startLine": 4654,
+        "startChar": 30,
+        "endLine": 4654,
+        "endChar": 53
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aa14da7_72594333",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4657,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:35:07Z",
+      "side": 1,
+      "message": "very minor nit: you can flatten these ifs by inverting the tests.\n\nif (mValidCount \u003d\u003d 0)\n return;\n\n...",
+      "range": {
+        "startLine": 4657,
+        "startChar": 0,
+        "endLine": 4657,
+        "endChar": 5
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "211f7dd9_6bd82ce1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4668,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:35:07Z",
+      "side": 1,
+      "message": "nit: pauseTransformFeedbackIfStarted",
+      "range": {
+        "startLine": 4668,
+        "startChar": 39,
+        "endLine": 4668,
+        "endChar": 61
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c31d4e3b_933b6475",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4671,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:35:07Z",
+      "side": 1,
+      "message": "very minor nit: you can flatten these ifs by inverting the tests.\n\nif (mValidCount \u003d\u003d 0)\n return;\n\n...",
+      "range": {
+        "startLine": 4670,
+        "startChar": 0,
+        "endLine": 4671,
+        "endChar": 5
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc2c8628_736d017b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4672,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:35:07Z",
+      "side": 1,
+      "message": "contextVk should never be null here.",
+      "range": {
+        "startLine": 4672,
+        "startChar": 12,
+        "endLine": 4672,
+        "endChar": 21
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98724a46_11f1a900",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4674,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:35:07Z",
+      "side": 1,
+      "message": "It not safe to call endRenderPass here as we could be in the middle of the dirty bits loop. I see that you\u0027re trying to avoid some kind of infinite recursion or something. Best to split this into two functions. Also I don\u0027t know why you need to call endRP. Can you clarify?",
+      "range": {
+        "startLine": 4674,
+        "startChar": 12,
+        "endLine": 4674,
+        "endChar": 50
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
