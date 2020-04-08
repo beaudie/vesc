@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "c4938073_d047abea",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 97
+      },
+      "lineNbr": 7625,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T16:41:59Z",
+      "side": 1,
+      "message": "Aha, but look at the spec under UseProgramStages:\n\n\u003e If pipeline is a name that has been generated (without subsequent deletion) by\n\u003e GenProgramPipelines, but refers to a program pipeline object that has not been\n\u003e previously bound, the GL first creates a new state vector in the same manner as\n\u003e when BindProgramPipeline creates a new program pipeline object.",
+      "parentUuid": "edefa53c_0883cf5f",
+      "range": {
+        "startLine": 7625,
+        "startChar": 44,
+        "endLine": 7625,
+        "endChar": 56
+      },
+      "revId": "735e143e75f9f323848b8f70740c331bbc7de5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "374b14ef_efb3b1f6",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 97
