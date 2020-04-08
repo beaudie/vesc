@@ -83,8 +83,8 @@ class RendererGL : angle::NonCopyable
                DisplayGL *display);
     virtual ~RendererGL();
 
-    angle::Result flush();
-    angle::Result finish();
+    angle::Result flush(const gl::Context *context);
+    angle::Result finish(const gl::Context *context);
 
     gl::GraphicsResetStatus getResetStatus();
 
@@ -136,7 +136,7 @@ class RendererGL : angle::NonCopyable
     static unsigned int getMaxWorkerContexts();
 
     void setNeedsFlushBeforeDeleteTextures();
-    void flushIfNecessaryBeforeDeleteTextures();
+    angle::Result flushIfNecessaryBeforeDeleteTextures(const gl::Context *context);
 
   protected:
     virtual WorkerContext *createWorkerContext(std::string *infoLog) = 0;

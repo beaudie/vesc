@@ -50,11 +50,13 @@ PbufferSurfaceCGL::~PbufferSurfaceCGL()
 egl::Error PbufferSurfaceCGL::initialize(const egl::Display *display)
 {
     mFunctions->genRenderbuffers(1, &mColorRenderbuffer);
-    mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mColorRenderbuffer);
+    ANGLE_TRY(angle::ResultToEGL(
+        mStateManager->bindRenderbuffer(nullptr, GL_RENDERBUFFER, mColorRenderbuffer)));
     mFunctions->renderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, mWidth, mHeight);
 
     mFunctions->genRenderbuffers(1, &mDSRenderbuffer);
-    mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mDSRenderbuffer);
+    ANGLE_TRY(angle::ResultToEGL(
+        mStateManager->bindRenderbuffer(nullptr, GL_RENDERBUFFER, mDSRenderbuffer)));
     mFunctions->renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mWidth, mHeight);
 
     return egl::NoError();
@@ -129,12 +131,13 @@ FramebufferImpl *PbufferSurfaceCGL::createDefaultFramebuffer(const gl::Context *
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     GLuint framebuffer = 0;
-    functions->genFramebuffers(1, &framebuffer);
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    functions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
-                                       mColorRenderbuffer);
-    functions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
-                                       mDSRenderbuffer);
+    ANGLE_GL_CALL(context, functions->genFramebuffers(1, &framebuffer));
+    (void)stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, framebuffer);
+    ANGLE_GL_CALL(context, functions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                              GL_RENDERBUFFER, mColorRenderbuffer));
+    ANGLE_GL_CALL(context,
+                  functions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                                                     GL_RENDERBUFFER, mDSRenderbuffer));
 
     return new FramebufferGL(state, framebuffer, true, false);
 }

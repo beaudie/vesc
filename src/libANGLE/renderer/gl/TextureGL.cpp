@@ -151,9 +151,12 @@ TextureGL::~TextureGL()
 
 void TextureGL::onDestroy(const gl::Context *context)
 {
-    GetImplAs<ContextGL>(context)->flushIfNecessaryBeforeDeleteTextures();
+    ContextGL *contextGL         = GetImplAs<ContextGL>(context);
     StateManagerGL *stateManager = GetStateManagerGL(context);
+
+    (void)contextGL->flushIfNecessaryBeforeDeleteTextures(context);
     (void)stateManager->deleteTexture(context, mTextureID);
+
     mTextureID = 0;
 }
 

@@ -1988,6 +1988,8 @@ angle::Result CheckError(const gl::Context *context,
             nextError = functions->getError();
         }
 
+        ASSERT(false);
+
         return angle::Result::Stop;
     }
 

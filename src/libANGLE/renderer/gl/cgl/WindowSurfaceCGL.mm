@@ -197,7 +197,8 @@ egl::Error WindowSurfaceCGL::initialize(const egl::Display *display)
     for (size_t i = 0; i < ArraySize(mSwapState.textures); ++i)
     {
         mFunctions->genTextures(1, &mSwapState.textures[i].texture);
-        mStateManager->bindTexture(gl::TextureType::_2D, mSwapState.textures[i].texture);
+        ANGLE_TRY(angle::ResultToEGL(mStateManager->bindTexture(nullptr, gl::TextureType::_2D,
+                                                                mSwapState.textures[i].texture)));
         mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
                                GL_UNSIGNED_BYTE, nullptr);
         mSwapState.textures[i].width  = width;
@@ -214,7 +215,8 @@ egl::Error WindowSurfaceCGL::initialize(const egl::Display *display)
     [mLayer addSublayer:mSwapLayer];
 
     mFunctions->genRenderbuffers(1, &mDSRenderbuffer);
-    mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mDSRenderbuffer);
+    ANGLE_TRY(angle::ResultToEGL(
+        mStateManager->bindRenderbuffer(nullptr, GL_RENDERBUFFER, mDSRenderbuffer)));
     mFunctions->renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 
     return egl::Error(EGL_SUCCESS);
@@ -245,21 +247,26 @@ egl::Error WindowSurfaceCGL::swap(const gl::Context *context)
 
     if (texture.width != width || texture.height != height)
     {
-        stateManager->bindTexture(gl::TextureType::_2D, texture.texture);
-        functions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                              GL_UNSIGNED_BYTE, nullptr);
+        ANGLE_TRY(angle::ResultToEGL(
+            stateManager->bindTexture(context, gl::TextureType::_2D, texture.texture)));
+        ANGLE_GL_CALL(context, functions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
+                                                     GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
 
-        stateManager->bindRenderbuffer(GL_RENDERBUFFER, mDSRenderbuffer);
-        functions->renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+        ANGLE_TRY(angle::ResultToEGL(
+            stateManager->bindRenderbuffer(context, GL_RENDERBUFFER, mDSRenderbuffer)));
+        ANGLE_GL_CALL(context, functions->renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
+                                                              width, height));
 
         texture.width  = width;
         texture.height = height;
     }
 
     FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(context->getFramebuffer({0}));
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, framebufferGL->getFramebufferID());
-    functions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                                    mSwapState.beingRendered->texture, 0);
+    ANGLE_TRY(angle::ResultToEGL(
+        stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, framebufferGL->getFramebufferID())));
+    ANGLE_GL_CALL(context, functions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                           GL_TEXTURE_2D,
+                                                           mSwapState.beingRendered->texture, 0));
 
     return egl::Error(EGL_SUCCESS);
 }
@@ -327,12 +334,14 @@ FramebufferImpl *WindowSurfaceCGL::createDefaultFramebuffer(const gl::Context *c
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     GLuint framebuffer = 0;
-    functions->genFramebuffers(1, &framebuffer);
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    functions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                                    mSwapState.beingRendered->texture, 0);
-    functions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
-                                       mDSRenderbuffer);
+    ANGLE_GL_CALL(context, functions->genFramebuffers(1, &framebuffer));
+    (void)stateManager->bindFramebuffer(context, GL_FRAMEBUFFER, framebuffer);
+    ANGLE_GL_CALL(context, functions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                           GL_TEXTURE_2D,
+                                                           mSwapState.beingRendered->texture, 0));
+    ANGLE_GL_CALL(context,
+                  functions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                                                     GL_RENDERBUFFER, mDSRenderbuffer));
 
     return new FramebufferGL(state, framebuffer, true, false);
 }

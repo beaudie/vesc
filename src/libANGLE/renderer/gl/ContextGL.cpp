@@ -193,12 +193,12 @@ OverlayImpl *ContextGL::createOverlay(const gl::OverlayState &state)
 
 angle::Result ContextGL::flush(const gl::Context *context)
 {
-    return mRenderer->flush();
+    return mRenderer->flush(context);
 }
 
 angle::Result ContextGL::finish(const gl::Context *context)
 {
-    return mRenderer->finish();
+    return mRenderer->finish(context);
 }
 
 ANGLE_INLINE angle::Result ContextGL::setDrawArraysState(const gl::Context *context,
@@ -278,7 +278,14 @@ angle::Result ContextGL::drawArrays(const gl::Context *context,
     validateState();
 #endif
 
+    std::cerr << "ContextGL::drawArrays";
+    ANGLE_TRY(flush(context));
+
     ANGLE_TRY(setDrawArraysState(context, first, count, instanceCount));
+
+    std::cerr << "ContextGL::drawArrays post setDrawArraysState";
+    ANGLE_TRY(flush(context));
+
     if (!usesMultiview)
     {
         ANGLE_GL_TRY(context, getFunctions()->drawArrays(ToGLenum(mode), first, count));
@@ -832,9 +839,9 @@ void ContextGL::setNeedsFlushBeforeDeleteTextures()
     mRenderer->setNeedsFlushBeforeDeleteTextures();
 }
 
-void ContextGL::flushIfNecessaryBeforeDeleteTextures()
+angle::Result ContextGL::flushIfNecessaryBeforeDeleteTextures(const gl::Context *context)
 {
-    mRenderer->flushIfNecessaryBeforeDeleteTextures();
+    return mRenderer->flushIfNecessaryBeforeDeleteTextures(context);
 }
 
 }  // namespace rx

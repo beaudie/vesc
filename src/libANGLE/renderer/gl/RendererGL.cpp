@@ -196,26 +196,27 @@ RendererGL::~RendererGL()
     mWorkerContextPool.clear();
 }
 
-angle::Result RendererGL::flush()
+angle::Result RendererGL::flush(const gl::Context *context)
 {
-    mFunctions->flush();
+    std::cerr << "RendererGL::flush\n";
+    ANGLE_GL_TRY(context, mFunctions->flush());
     mNeedsFlushBeforeDeleteTextures = false;
     return angle::Result::Continue;
 }
 
-angle::Result RendererGL::finish()
+angle::Result RendererGL::finish(const gl::Context *context)
 {
     if (mFeatures.finishDoesNotCauseQueriesToBeAvailable.enabled && mUseDebugOutput)
     {
-        mFunctions->enable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        ANGLE_GL_TRY(context, mFunctions->enable(GL_DEBUG_OUTPUT_SYNCHRONOUS));
     }
 
-    mFunctions->finish();
+    ANGLE_GL_TRY(context, mFunctions->finish());
     mNeedsFlushBeforeDeleteTextures = false;
 
     if (mFeatures.finishDoesNotCauseQueriesToBeAvailable.enabled && mUseDebugOutput)
     {
-        mFunctions->disable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        ANGLE_GL_TRY(context, mFunctions->disable(GL_DEBUG_OUTPUT_SYNCHRONOUS));
     }
 
     return angle::Result::Continue;
@@ -445,12 +446,13 @@ void RendererGL::setNeedsFlushBeforeDeleteTextures()
     mNeedsFlushBeforeDeleteTextures = true;
 }
 
-void RendererGL::flushIfNecessaryBeforeDeleteTextures()
+angle::Result RendererGL::flushIfNecessaryBeforeDeleteTextures(const gl::Context *context)
 {
     if (mNeedsFlushBeforeDeleteTextures)
     {
-        (void)flush();
+        ANGLE_TRY(flush(context));
     }
+    return angle::Result::Continue;
 }
 
 ScopedWorkerContextGL::ScopedWorkerContextGL(RendererGL *renderer, std::string *infoLog)

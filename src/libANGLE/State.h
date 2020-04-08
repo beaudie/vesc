@@ -30,6 +30,8 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/angletypes.h"
 
+#include <iostream>
+
 namespace gl
 {
 class BufferManager;
@@ -987,20 +989,6 @@ class State : angle::NonCopyable
     DrawBufferMask mBlendFuncConstantColorDrawBuffers;
     bool mNoSimultaneousConstantColorAndAlphaBlendFunc;
 };
-
-ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,
-                                                   const DirtyObjects &bitset)
-{
-    const DirtyObjects &dirtyObjects = mDirtyObjects & bitset;
-
-    for (size_t dirtyObject : dirtyObjects)
-    {
-        ANGLE_TRY((this->*kDirtyObjectHandlers[dirtyObject])(context));
-    }
-
-    mDirtyObjects &= ~dirtyObjects;
-    return angle::Result::Continue;
-}
 
 }  // namespace gl
 

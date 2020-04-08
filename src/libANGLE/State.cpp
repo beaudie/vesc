@@ -2992,6 +2992,22 @@ angle::Result State::syncImages(const Context *context)
     return angle::Result::Continue;
 }
 
+angle::Result State::syncDirtyObjects(const Context *context, const DirtyObjects &bitset)
+{
+    const DirtyObjects &dirtyObjects = mDirtyObjects & bitset;
+
+    for (size_t dirtyObject : dirtyObjects)
+    {
+        ((Context *)context)->flush();
+        std::cerr << "State::syncDirtyObjects " << dirtyObject << std::endl;
+        ANGLE_TRY((this->*kDirtyObjectHandlers[dirtyObject])(context));
+        ((Context *)context)->flush();
+    }
+
+    mDirtyObjects &= ~dirtyObjects;
+    return angle::Result::Continue;
+}
+
 angle::Result State::syncSamplers(const Context *context)
 {
     if (mDirtySamplers.none())

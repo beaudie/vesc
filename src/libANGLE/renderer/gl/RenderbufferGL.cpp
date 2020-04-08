@@ -21,6 +21,8 @@
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 #include "platform/FeaturesGL.h"
 
+#include <iostream>
+
 namespace rx
 {
 RenderbufferGL::RenderbufferGL(const gl::RenderbufferState &state, GLuint id)
@@ -52,6 +54,13 @@ angle::Result RenderbufferGL::setStorage(const gl::Context *context,
 
     nativegl::RenderbufferFormat renderbufferFormat =
         nativegl::GetRenderbufferFormat(functions, features, internalformat);
+
+    std::cerr << "renderbufferFormat.internalFormat: " << renderbufferFormat.internalFormat
+              << std::endl;
+    std::cerr << "width: " << width << std::endl;
+    std::cerr << "height: " << height << std::endl;
+    std::cerr << "mRenderbufferID: " << mRenderbufferID << std::endl;
+
     ANGLE_GL_TRY_ALWAYS_CHECK(
         context,
         functions->renderbufferStorage(GL_RENDERBUFFER, renderbufferFormat.internalFormat,

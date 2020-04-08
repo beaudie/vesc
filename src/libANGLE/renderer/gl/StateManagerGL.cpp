@@ -702,7 +702,7 @@ angle::Result StateManagerGL::bindRenderbuffer(const gl::Context *context,
     ASSERT(type == GL_RENDERBUFFER);
     if (mRenderbuffer != renderbuffer)
     {
-        ANGLE_GL_TRY(context, mFunctions->bindRenderbuffer(type, mRenderbuffer));
+        ANGLE_GL_TRY(context, mFunctions->bindRenderbuffer(type, renderbuffer));
         mRenderbuffer = renderbuffer;
     }
 
@@ -1652,6 +1652,9 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
     for (auto iter = glAndLocalDirtyBits.begin(), endIter = glAndLocalDirtyBits.end();
          iter != endIter; ++iter)
     {
+        std::cerr << "StateManagerGL::syncState pre " << *iter << std::endl;
+        ANGLE_GL_TRY(context, mFunctions->flush());
+
         switch (*iter)
         {
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
@@ -1997,6 +2000,8 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 UNREACHABLE();
                 break;
         }
+        std::cerr << "StateManagerGL::syncState post " << *iter << std::endl;
+        ANGLE_GL_TRY(context, mFunctions->flush());
     }
 
     mLocalDirtyBits &= ~(bitMask);

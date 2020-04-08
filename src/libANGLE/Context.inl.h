@@ -11,9 +11,9 @@
 #ifndef LIBANGLE_CONTEXT_INL_H_
 #define LIBANGLE_CONTEXT_INL_H_
 
+#include <iostream>
 #include "libANGLE/GLES1Renderer.h"
 #include "libANGLE/renderer/ContextImpl.h"
-
 #define ANGLE_HANDLE_ERR(X) \
     (void)(X);              \
     return;
@@ -94,7 +94,14 @@ ANGLE_INLINE angle::Result Context::prepareForDraw(PrimitiveMode mode)
         ANGLE_TRY(mGLES1Renderer->prepareForDraw(mode, this, &mState));
     }
 
+    std::cerr << "Context::prepareForDraw A\n";
+    flush();
+
     ANGLE_TRY(syncDirtyObjects(mDrawDirtyObjects));
+
+    std::cerr << "Context::prepareForDraw B\n";
+    flush();
+
     ASSERT(!isRobustResourceInitEnabled() ||
            !mState.getDrawFramebuffer()->hasResourceThatNeedsInit());
     return syncDirtyBits();
@@ -109,6 +116,8 @@ ANGLE_INLINE void Context::drawArrays(PrimitiveMode mode, GLint first, GLsizei c
     }
 
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
+    std::cerr << "Context::drawArrays post prepareForDraw\n";
+    flush();
     ANGLE_CONTEXT_TRY(mImplementation->drawArrays(this, mode, first, count));
     MarkTransformFeedbackBufferUsage(this, count, 1);
 }
