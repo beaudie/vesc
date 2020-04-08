@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5b250dbd_1753e6ba",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 97
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-08T01:16:40Z",
+      "side": 1,
+      "message": "Good idea.   It does require some extra complexity when adding programs to the pipeline, since a user could do something like:\n\n    glUseProgramStages(pipeline, GL_ALL_SHADER_BITS, prog1); // prog1 ref +1\n    glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, prog2); // prog1 -1, prog2 +1\n    glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT , prog2); // nothing\n...\n    glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, prog3); // prog3 +1\n    glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT , prog4); // prog4 +1, prog2 -1\n...\n    glUseProgramStages(pipeline, GL_ALL_SHADER_BITS, prog5); // prog3 -1, prog4 -1, prog5 +1\n\nSo there\u0027s some new looping in ProgramPipelineState::useProgramStages() to handle this, along with ProgramPipeline::onDestroy() releasing any remaining ref counts.",
+      "parentUuid": "a54cbd67_d2aa6862",
+      "range": {
+        "startLine": 816,
+        "startChar": 5,
+        "endLine": 816,
+        "endChar": 56
+      },
+      "revId": "735e143e75f9f323848b8f70740c331bbc7de5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdbac63d_807c4031",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 97
@@ -36,6 +60,30 @@
       "writtenOn": "2020-04-07T20:57:05Z",
       "side": 1,
       "message": "this is inconsistent with how we manage ids for other types. Correct me if I\u0027m wrong: these queries return FALSE if the object is \"genned\" and not yet bound. For situations like that we reserve nullptr entries in the handle map allocator. We only make valid pointers for objects that have been bound using \"checkBlahAllocation\". Please fill me in if I\u0027m off base.",
+      "range": {
+        "startLine": 7625,
+        "startChar": 44,
+        "endLine": 7625,
+        "endChar": 56
+      },
+      "revId": "735e143e75f9f323848b8f70740c331bbc7de5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edefa53c_0883cf5f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 97
+      },
+      "lineNbr": 7625,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-08T01:16:40Z",
+      "side": 1,
+      "message": "You are correct about how the query works.\n\nUnfortunately, the approach you described doesn\u0027t work for PPOs, since a user can do the following:\n\n    glGenProgramPipelines();\n    glUseProgramStages();  // need a real PPO for this call\n    glBindProgramPipeline();\n\nWe need a real PPO to be constructed by glGenProgramPipelines() so it can hold the Programs that are added to it; lazily constructing them during glBindProgramPipeline() is too late.",
+      "parentUuid": "cdbac63d_807c4031",
       "range": {
         "startLine": 7625,
         "startChar": 44,
@@ -91,6 +139,30 @@
       "revId": "735e143e75f9f323848b8f70740c331bbc7de5ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf5d40d1_412d71dd",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 97
+      },
+      "lineNbr": 2746,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-08T01:16:40Z",
+      "side": 1,
+      "message": "These were in Program until you requested that they get moved:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2072652/88/src/libANGLE/validationES.cpp#2842\n\nDone.",
+      "parentUuid": "24963564_cbde1785",
+      "range": {
+        "startLine": 2699,
+        "startChar": 0,
+        "endLine": 2746,
+        "endChar": 0
+      },
+      "revId": "735e143e75f9f323848b8f70740c331bbc7de5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
