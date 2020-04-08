@@ -506,6 +506,30 @@
     },
     {
       "key": {
+        "uuid": "facdc326_ccd2df16",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:07:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ac22ff28_98b15dd8",
+      "range": {
+        "startLine": 494,
+        "startChar": 19,
+        "endLine": 494,
+        "endChar": 51
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "156087e7_497b965e",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 4
@@ -1149,6 +1173,24 @@
       "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe194bfc_e6debd07",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:07:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c134beae_34976500",
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
