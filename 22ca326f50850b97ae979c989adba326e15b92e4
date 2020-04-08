@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "b7006714_ce773eb2",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76c784e9_167a9988",
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7dfae1f4_405a8998",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 4
@@ -156,6 +174,30 @@
     },
     {
       "key": {
+        "uuid": "d70904ec_eb98f2bd",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d6f01cbe_84eecb3f",
+      "range": {
+        "startLine": 340,
+        "startChar": 23,
+        "endLine": 340,
+        "endChar": 60
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e6ef333_668f3ca5",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 4
@@ -200,6 +242,30 @@
       "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89952466_9636134a",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4f8cd5a0_b3f53712",
+      "range": {
+        "startLine": 672,
+        "startChar": 5,
+        "endLine": 672,
+        "endChar": 38
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -253,6 +319,24 @@
       "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "785672de_3d755ee4",
+        "filename": "src/compiler/translator/tree_ops/EarlyFragmentTestsOptimization.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bbe7cf04_ff8b3ce4",
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -375,6 +459,30 @@
     },
     {
       "key": {
+        "uuid": "133cc570_50131c9c",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "I kept it for now. Otherwise I worry that chromium waterfall testing or all of us doing angle developement will get confusion results regarding this CL and not able to find regression or find wrong regression. I agree that we should have a proper fix for the general bug. I will file a bug if there isn\u0027t one yet, and this can be removed when we fix it real way.\n\n(For the real fix, I am thinking we should bake in random buildID (which changes for every rebuild, or use the build timestamp), that way as long as you rebuild, you get empty cache. This does not affect user since the build doesn\u0027t change for them. But it avoids any accident from developer side.)",
+      "parentUuid": "6cc4a74c_dde10249",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 82
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ac22ff28_98b15dd8",
         "filename": "src/libANGLE/Shader.cpp",
         "patchSetId": 4
@@ -421,6 +529,30 @@
     },
     {
       "key": {
+        "uuid": "de6451b6_18592ab6",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "156087e7_497b965e",
+      "range": {
+        "startLine": 768,
+        "startChar": 3,
+        "endLine": 768,
+        "endChar": 94
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "709b60b1_99a9a64f",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 4
@@ -435,6 +567,24 @@
       "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71c47c7d_1c93738d",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "709b60b1_99a9a64f",
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -473,6 +623,24 @@
     },
     {
       "key": {
+        "uuid": "74123516_704dd607",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab58aaca_d399a99d",
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca3a89ba_dec4f181",
         "filename": "src/libANGLE/renderer/metal/mtl_glslang_utils.mm",
         "patchSetId": 4
@@ -505,6 +673,24 @@
       "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11ca9e14_b6d64b92",
+        "filename": "src/libANGLE/renderer/metal/mtl_glslang_utils.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb8c51c5_4abbe63e",
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -651,6 +837,30 @@
     },
     {
       "key": {
+        "uuid": "e4d4a4b9_be69c457",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2603,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "898f53ed_09128e13",
+      "range": {
+        "startLine": 2598,
+        "startChar": 0,
+        "endLine": 2603,
+        "endChar": 5
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fa31ce9_87af485e",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 4
@@ -671,6 +881,30 @@
       "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af68494f_3d55198b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fa31ce9_87af485e",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 61
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -838,6 +1072,30 @@
       "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "145f928f_dec26947",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c316c538_71ba51ec",
+      "range": {
+        "startLine": 295,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 62
+      },
+      "revId": "22ca326f50850b97ae979c989adba326e15b92e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

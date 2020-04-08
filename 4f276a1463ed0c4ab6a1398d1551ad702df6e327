@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "28663062_96d91325",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f59dc02_a9887fff",
+      "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60d0c673_7b96f626",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 3
@@ -81,6 +99,30 @@
       "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c987eb9_1cc4f08e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2600,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8d93b443_03bd802a",
+      "range": {
+        "startLine": 2600,
+        "startChar": 29,
+        "endLine": 2600,
+        "endChar": 71
+      },
+      "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -176,6 +218,30 @@
       "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5da78e7f_a1390dd5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-08T00:05:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfa71f8e_db4c748c",
+      "range": {
+        "startLine": 221,
+        "startChar": 15,
+        "endLine": 221,
+        "endChar": 26
+      },
+      "revId": "4f276a1463ed0c4ab6a1398d1551ad702df6e327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
