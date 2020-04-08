@@ -244,7 +244,7 @@ ANGLE_INLINE angle::Result ContextGL::setDrawElementsState(const gl::Context *co
         StateManagerGL *stateManager = getStateManager();
 
         GLuint primitiveRestartIndex = gl::GetPrimitiveRestartIndex(type);
-        stateManager->setPrimitiveRestartIndex(primitiveRestartIndex);
+        ANGLE_TRY(stateManager->setPrimitiveRestartIndex(context, primitiveRestartIndex));
     }
 
 #if defined(ANGLE_STATE_VALIDATION_ENABLED)
