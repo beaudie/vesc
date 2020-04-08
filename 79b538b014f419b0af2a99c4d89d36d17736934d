@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b15433d_d1ab8b22",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T18:06:56Z",
+      "side": 1,
+      "message": "nit: you can use ANGLE_TRY now.",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 17
+      },
+      "revId": "79b538b014f419b0af2a99c4d89d36d17736934d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be0db3e6_1c54308d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T18:06:56Z",
+      "side": 1,
+      "message": "casing nit here.",
+      "range": {
+        "startLine": 179,
+        "startChar": 70,
+        "endLine": 179,
+        "endChar": 81
+      },
+      "revId": "79b538b014f419b0af2a99c4d89d36d17736934d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
