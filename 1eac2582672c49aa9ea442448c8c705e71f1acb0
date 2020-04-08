@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "866f5c5b_be4f136a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-08T04:37:50Z",
+      "side": 1,
+      "message": "We are starting to get many duplicate shader modules (line raster emulation shader modules are entirely useless duplicates). Could you please create a bug to track the work of optimizing this? For all the four combination of programs with N stages, we really only need N+1 shader modules. That saves SPIR-V to native translation as well as memory.",
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6436db65_cb6ac469",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-08T04:37:50Z",
+      "side": 1,
+      "message": "As much as I love snake_case, this is a camelCase code base.",
+      "range": {
+        "startLine": 179,
+        "startChar": 76,
+        "endLine": 179,
+        "endChar": 87
+      },
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
