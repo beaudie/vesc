@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e022837_a582664a",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-08T16:42:55Z",
+      "side": 1,
+      "message": "Left off \u0026\u0026 !IsGLExtensionEnabled(\"GL_EXT_sRGB\")\nI assume that\u0027s deliberate, don\u0027t need that extension for this test?\nA comment here might help.",
+      "revId": "2c9c0f540397e5783f9db7ca3973004d7d2268b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c88955c1_ffbba067",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-08T16:42:55Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we pass false here?\nSource3DTargetRenderbuffer_helper(false);",
+      "revId": "2c9c0f540397e5783f9db7ca3973004d7d2268b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0608eea_c89b1bfa",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1579,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-08T16:42:55Z",
+      "side": 1,
+      "message": "Source3DTargetExternal_helper(false) ?",
+      "revId": "2c9c0f540397e5783f9db7ca3973004d7d2268b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
