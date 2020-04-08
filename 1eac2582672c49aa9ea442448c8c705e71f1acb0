@@ -130,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "2f6c9b4f_b5e2a0df",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T17:12:44Z",
+      "side": 1,
+      "message": "See the link above in my comment. It would be nice to catch these with a linter.",
+      "parentUuid": "00fe3cf1_cf1c1223",
+      "range": {
+        "startLine": 178,
+        "startChar": 9,
+        "endLine": 178,
+        "endChar": 14
+      },
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7fa3c42f_7c009138",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 5
@@ -165,6 +189,30 @@
       "side": 1,
       "message": "Actually not because I like it but because I saw the prior example and thought that is what you guys would like to see, because the usage are very local. See following examples:\n    enum class PipelineType\n    enum class ParseState\n    enum class ConsumerType\n    enum class UpdateSource\n    enum class Function\n    enum class SwapControl\n    enum class ClearCommandType\n    enum class CacheSource\n\nFor now I will move it out, but we should be consistent and have some kind written guideline.",
       "parentUuid": "7fa3c42f_7c009138",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 6
+      },
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "770bac6d_c9e5a947",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-08T17:12:44Z",
+      "side": 1,
+      "message": "Yeah we can add this into the coding style suggestions.",
+      "parentUuid": "2d1156f9_a51d7e8c",
       "range": {
         "startLine": 54,
         "startChar": 0,
