@@ -1537,39 +1537,41 @@ void StateManagerGL::setLineWidth(float width)
     }
 }
 
-void StateManagerGL::setPrimitiveRestartEnabled(bool enabled)
+angle::Result StateManagerGL::setPrimitiveRestartEnabled(const gl::Context *context, bool enabled)
 {
     if (mPrimitiveRestartEnabled != enabled)
     {
-        mPrimitiveRestartEnabled = enabled;
-
         GLenum cap = mFeatures.emulatePrimitiveRestartFixedIndex.enabled
                          ? GL_PRIMITIVE_RESTART
                          : GL_PRIMITIVE_RESTART_FIXED_INDEX;
 
-        if (mPrimitiveRestartEnabled)
+        if (enabled)
         {
-            mFunctions->enable(cap);
+            ANGLE_GL_TRY(context, mFunctions->enable(cap));
         }
         else
         {
-            mFunctions->disable(cap);
+            ANGLE_GL_TRY(context, mFunctions->disable(cap));
         }
+        mPrimitiveRestartEnabled = enabled;
 
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_PRIMITIVE_RESTART_ENABLED);
     }
+
+    return angle::Result::Continue;
 }
 
-void StateManagerGL::setPrimitiveRestartIndex(GLuint index)
+angle::Result StateManagerGL::setPrimitiveRestartIndex(const gl::Context *context, GLuint index)
 {
     if (mPrimitiveRestartIndex != index)
     {
+        ANGLE_GL_TRY(context, mFunctions->primitiveRestartIndex(index));
         mPrimitiveRestartIndex = index;
-
-        mFunctions->primitiveRestartIndex(index);
 
         // No dirty bit for this state, it is not exposed to the frontend.
     }
+
+    return angle::Result::Continue;
 }
 
 void StateManagerGL::setClearDepth(float clearDepth)
@@ -1783,7 +1785,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 setLineWidth(state.getLineWidth());
                 break;
             case gl::State::DIRTY_BIT_PRIMITIVE_RESTART_ENABLED:
-                setPrimitiveRestartEnabled(state.isPrimitiveRestartEnabled());
+                ANGLE_TRY(setPrimitiveRestartEnabled(context, state.isPrimitiveRestartEnabled()));
                 break;
             case gl::State::DIRTY_BIT_CLEAR_COLOR:
                 setClearColor(state.getColorClearValue());

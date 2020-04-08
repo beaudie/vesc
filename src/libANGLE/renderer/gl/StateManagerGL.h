@@ -136,8 +136,8 @@ class StateManagerGL final : angle::NonCopyable
     void setRasterizerDiscardEnabled(bool enabled);
     void setLineWidth(float width);
 
-    void setPrimitiveRestartEnabled(bool enabled);
-    void setPrimitiveRestartIndex(GLuint index);
+    angle::Result setPrimitiveRestartEnabled(const gl::Context *context, bool enabled);
+    angle::Result setPrimitiveRestartIndex(const gl::Context *context, GLuint index);
 
     void setClearColor(const gl::ColorF &clearColor);
     void setClearDepth(float clearDepth);
