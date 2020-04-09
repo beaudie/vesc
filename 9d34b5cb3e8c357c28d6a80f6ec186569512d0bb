@@ -22,6 +22,145 @@
       "revId": "9d34b5cb3e8c357c28d6a80f6ec186569512d0bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ef7c16a_83791e3c",
+        "filename": "src/tests/gles1_conformance_tests/PrimtestTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-09T18:20:04Z",
+      "side": 1,
+      "message": "Function can return void and handle all failures internally.",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 7
+      },
+      "revId": "9d34b5cb3e8c357c28d6a80f6ec186569512d0bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c64b62d_080eb444",
+        "filename": "src/tests/gles1_conformance_tests/PrimtestTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-09T18:20:04Z",
+      "side": 1,
+      "message": "I\u0027d like to refactor this function a little.  I gave some suggestions.",
+      "parentUuid": "78ec1162_7465554b",
+      "range": {
+        "startLine": 47,
+        "startChar": 8,
+        "endLine": 47,
+        "endChar": 16
+      },
+      "revId": "9d34b5cb3e8c357c28d6a80f6ec186569512d0bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e5993a85_132bf014",
+        "filename": "src/tests/gles1_conformance_tests/PrimtestTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-09T18:20:04Z",
+      "side": 1,
+      "message": "Can be removed",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 20
+      },
+      "revId": "9d34b5cb3e8c357c28d6a80f6ec186569512d0bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1cde653_496a1a5a",
+        "filename": "src/tests/gles1_conformance_tests/PrimtestTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-09T18:20:04Z",
+      "side": 1,
+      "message": "Turns into ASSERT_NE(TEST_NULL, driver[i].test)",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 9
+      },
+      "revId": "9d34b5cb3e8c357c28d6a80f6ec186569512d0bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eb58ce1_3fa3a8fd",
+        "filename": "src/tests/gles1_conformance_tests/PrimtestTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-09T18:20:04Z",
+      "side": 1,
+      "message": "This can be a member of the GLES1PrimtestTest  class.  You can call free in a new GLES1PrimtestTest::testTearDown function. The gotos can then be removed.",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 19
+      },
+      "revId": "9d34b5cb3e8c357c28d6a80f6ec186569512d0bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0e028f1_022cc3d4",
+        "filename": "src/tests/gles1_conformance_tests/PrimtestTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-09T18:20:04Z",
+      "side": 1,
+      "message": "With no gotos to worry about.  This (and below) can become ASSERT_GL_NO_ERROR()",
+      "range": {
+        "startLine": 71,
+        "startChar": 12,
+        "endLine": 74,
+        "endChar": 13
+      },
+      "revId": "9d34b5cb3e8c357c28d6a80f6ec186569512d0bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
