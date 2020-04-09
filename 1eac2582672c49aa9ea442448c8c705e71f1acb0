@@ -173,6 +173,24 @@
     },
     {
       "key": {
+        "uuid": "a79e5ce3_6e9ccff5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-09T17:18:51Z",
+      "side": 1,
+      "message": "I think I understand this now. Its the shader modules are duplicated across these programInfo objects. filed http://b/153654302 to track it.",
+      "parentUuid": "a54c79ec_49335f8b",
+      "revId": "1eac2582672c49aa9ea442448c8c705e71f1acb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f12219c5_d587b70d",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 5
