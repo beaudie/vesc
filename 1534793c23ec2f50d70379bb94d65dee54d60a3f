@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b22968a_78f5da22",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-04-09T01:00:36Z",
+      "side": 1,
+      "message": "It seems that this case can\u0027t reflect once copying avoided. Can you add a comment to explain it?",
+      "revId": "1534793c23ec2f50d70379bb94d65dee54d60a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
