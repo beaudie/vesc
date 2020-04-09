@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "91c4e6fc_3dc2b033",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-09T14:53:20Z",
+      "side": 1,
+      "message": "Done\n\n1. colorspace tests where source is texture and target is renderbuffer, needs ES3.0 (as per format\u0027s Texture attachment support)\n\n2. all other tests condition is ES3+ or (ES3- \u0026 GL_EXT_sRGB)",
+      "parentUuid": "5e022837_a582664a",
+      "revId": "2c9c0f540397e5783f9db7ca3973004d7d2268b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c88955c1_ffbba067",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 10
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "6d3c1bd2_954e9863",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-09T14:53:20Z",
+      "side": 1,
+      "message": "Done\n\nwas the default value but made it explicit now",
+      "parentUuid": "c88955c1_ffbba067",
+      "revId": "2c9c0f540397e5783f9db7ca3973004d7d2268b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0608eea_c89b1bfa",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 10
@@ -50,6 +86,24 @@
       "revId": "2c9c0f540397e5783f9db7ca3973004d7d2268b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4b3b106_aea87b9e",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1579,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-09T14:53:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0608eea_c89b1bfa",
+      "revId": "2c9c0f540397e5783f9db7ca3973004d7d2268b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
