@@ -27,6 +27,8 @@ namespace rx
 
 namespace
 {
+angle::SubjectIndex kAnySurfaceImageSubjectIndex = 0;
+
 GLint GetSampleCount(const egl::Config *config)
 {
     GLint samples = 1;
@@ -137,7 +139,17 @@ angle::Result SurfaceVk::getAttachmentRenderTarget(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-OffscreenSurfaceVk::AttachmentImage::AttachmentImage() {}
+void SurfaceVk::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
+{
+    // Forward the notification to parent class that the staging buffer changed.
+    onStateChange(angle::SubjectMessage::SubjectChanged);
+}
+
+OffscreenSurfaceVk::AttachmentImage::AttachmentImage(SurfaceVk *surfaceVk)
+    : imageObserverBinding(surfaceVk, kAnySurfaceImageSubjectIndex)
+{
+    imageObserverBinding.bind(&image);
+}
 
 OffscreenSurfaceVk::AttachmentImage::~AttachmentImage() = default;
 
@@ -217,7 +229,9 @@ void OffscreenSurfaceVk::AttachmentImage::destroy(const egl::Display *display)
 OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState)
     : SurfaceVk(surfaceState),
       mWidth(mState.attributes.getAsInt(EGL_WIDTH, 0)),
-      mHeight(mState.attributes.getAsInt(EGL_HEIGHT, 0))
+      mHeight(mState.attributes.getAsInt(EGL_HEIGHT, 0)),
+      mColorAttachment(this),
+      mDepthStencilAttachment(this)
 {
     mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, 0, 0);
     mDepthStencilRenderTarget.init(&mDepthStencilAttachment.image,
@@ -781,7 +795,22 @@ static VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace)
 
 angle::Result WindowSurfaceVk::resizeSwapchainImages(vk::Context *context, uint32_t imageCount)
 {
-    mSwapchainImages.resize(imageCount);
+    if (static_cast<size_t>(imageCount) != mSwapchainImages.size())
+    {
+        mSwapchainImageBindings.clear();
+        mSwapchainImages.resize(imageCount);
+
+        for (uint32_t index = 0; index < imageCount; ++index)
+        {
+            mSwapchainImageBindings.push_back(
+                angle::ObserverBinding(this, kAnySurfaceImageSubjectIndex));
+        }
+
+        for (uint32_t index = 0; index < imageCount; ++index)
+        {
+            mSwapchainImageBindings[index].bind(&mSwapchainImages[index].image);
+        }
+    }
 
     // At this point, if there was a previous swapchain, the previous present semaphores have all
     // been moved to mOldSwapchains to be scheduled for destruction, so all semaphore handles in
@@ -995,6 +1024,8 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
         mColorImageMSViews.release(renderer);
         contextVk->addGarbage(&mFramebufferMS);
     }
+
+    mSwapchainImageBindings.clear();
 
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
