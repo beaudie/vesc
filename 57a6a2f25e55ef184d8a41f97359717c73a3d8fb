@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "f04e1a68_5d7b13c6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-09T18:06:35Z",
+      "side": 1,
+      "message": "This moved, does that mean there is a significance to the order these releases are done?\nIf so, may want a comment or something to let future developer know.",
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c93adf6_82f54e9d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-09T18:06:35Z",
+      "side": 1,
+      "message": "Can probably kill this comment now.\nInclude in design doc?",
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "940b1d30_0944396a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-09T18:06:35Z",
+      "side": 1,
+      "message": "Missing the work to append shader-info-log?",
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "795bda09_e83cd07a",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 107
