@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "795bda09_e83cd07a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-09T16:52:34Z",
+      "side": 1,
+      "message": "I think you can just replace this pattern with just checkProgramPipelineAllocation (no getProgramPipeline, if !pipeline)",
+      "range": {
+        "startLine": 1123,
+        "startChar": 39,
+        "endLine": 1129,
+        "endChar": 5
+      },
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bef590f_493788c2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 4611,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-09T16:52:34Z",
+      "side": 1,
+      "message": "I think you can just replace this pattern with just checkProgramPipelineAllocation (no getProgramPipeline, if !pipeline)",
+      "range": {
+        "startLine": 4606,
+        "startChar": 39,
+        "endLine": 4611,
+        "endChar": 5
+      },
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13d9091c_455f8495",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 6740,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-09T16:52:34Z",
+      "side": 1,
+      "message": "I think you can just replace this pattern with just checkProgramPipelineAllocation (no getProgramPipeline, if !pipeline)",
+      "range": {
+        "startLine": 6734,
+        "startChar": 38,
+        "endLine": 6740,
+        "endChar": 5
+      },
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4868073_6cbb374c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 8297,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-09T16:52:34Z",
+      "side": 1,
+      "message": "a good use for the Subject/Observer pattern. Take a look at Observer.h. Can leave this for a follow-up, can leave a TODO.",
+      "range": {
+        "startLine": 8290,
+        "startChar": 0,
+        "endLine": 8297,
+        "endChar": 5
+      },
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
