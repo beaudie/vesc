@@ -239,6 +239,30 @@
     },
     {
       "key": {
+        "uuid": "7a09762f_8960cebf",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 97
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-09T13:46:47Z",
+      "side": 1,
+      "message": "Context::mDrawDirtyObjects, mComputeDirtyObjects: these are \"masks\" that draw and compute operations check when syncing dirty objects. They exclude flags that aren\u0027t needed to check for draw or compute. i.e. the read framebuffer is excluded from draw. Texture samplers are excluded from compute. They\u0027re set up in Context::initialize mostly. We could probably rename these to be mDrawDirtyObjectMask, etc if the naming causes confusion.\n\nmDirtyObjects -\u003e set this when your state changes and needs to be synced.",
+      "parentUuid": "80c40337_497a1b15",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 5
+      },
+      "revId": "735e143e75f9f323848b8f70740c331bbc7de5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "24963564_cbde1785",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 97

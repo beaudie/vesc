@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84b1829e_84fb20f4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 105
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-09T13:46:47Z",
+      "side": 1,
+      "message": "nit: use checkProgramPipelineAllocation here. it should do what you want (create the object if it does not exist).",
+      "range": {
+        "startLine": 1122,
+        "startChar": 0,
+        "endLine": 1128,
+        "endChar": 0
+      },
+      "revId": "103a29ff0144e18493a75c9a7a277fa6dcaafb16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
