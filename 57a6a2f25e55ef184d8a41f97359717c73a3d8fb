@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bd4f1721_3ce5aa10",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-09T18:32:56Z",
+      "side": 1,
+      "message": "Good question.   Yes, the order is significant here, since the PPOs need to release any references to the Programs that they may have included within them before the Programs themselves are released (by mShaderProgramManager in the next line).\n\nI\u0027ve added a comment.",
+      "parentUuid": "f04e1a68_5d7b13c6",
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c93adf6_82f54e9d",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 107
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "2991f253_0b83eab3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-09T18:32:56Z",
+      "side": 1,
+      "message": "Done.\n\nThis is taken from the spec description of glCreateShaderProgramv(), so I don\u0027t think it needs to be included in the design doc.",
+      "parentUuid": "2c93adf6_82f54e9d",
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "940b1d30_0944396a",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 107
@@ -50,6 +86,24 @@
       "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbea38d5_430e8899",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-09T18:32:56Z",
+      "side": 1,
+      "message": "Good catch.\n\nDone.",
+      "parentUuid": "940b1d30_0944396a",
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "80d7cd45_757851a2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-09T18:32:56Z",
+      "side": 1,
+      "message": "Oh, I see.   Done.",
+      "parentUuid": "795bda09_e83cd07a",
+      "range": {
+        "startLine": 1123,
+        "startChar": 39,
+        "endLine": 1129,
+        "endChar": 5
+      },
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5bef590f_493788c2",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 107
@@ -96,6 +174,30 @@
       "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ff53f8b_a8799636",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 4611,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-09T18:32:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bef590f_493788c2",
+      "range": {
+        "startLine": 4606,
+        "startChar": 39,
+        "endLine": 4611,
+        "endChar": 5
+      },
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "16cf04f5_ceb84a3c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 6740,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-09T18:32:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13d9091c_455f8495",
+      "range": {
+        "startLine": 6734,
+        "startChar": 38,
+        "endLine": 6740,
+        "endChar": 5
+      },
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4868073_6cbb374c",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 107
@@ -142,6 +268,30 @@
       "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de69db31_017b3b23",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 107
+      },
+      "lineNbr": 8297,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-09T18:32:56Z",
+      "side": 1,
+      "message": "Done\n\nI\u0027ve opened anglebug.com/4559 and tagged it here.",
+      "parentUuid": "c4868073_6cbb374c",
+      "range": {
+        "startLine": 8290,
+        "startChar": 0,
+        "endLine": 8297,
+        "endChar": 5
+      },
+      "revId": "57a6a2f25e55ef184d8a41f97359717c73a3d8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
