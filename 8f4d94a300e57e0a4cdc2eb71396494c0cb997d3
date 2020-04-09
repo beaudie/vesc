@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba8b239f_e8249f9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-09T16:17:06Z",
+      "side": 1,
+      "message": "write directly to a new VkBuffer that will be used for\nsubsequent gpu operations.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 25
+      },
+      "revId": "8f4d94a300e57e0a4cdc2eb71396494c0cb997d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d61daf0d_719934d8",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 5
@@ -36,6 +59,23 @@
       "writtenOn": "2020-04-09T16:12:46Z",
       "side": 1,
       "message": "you can then remove this comment",
+      "revId": "8f4d94a300e57e0a4cdc2eb71396494c0cb997d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d56d232_8eed2717",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-09T16:17:06Z",
+      "side": 1,
+      "message": "we can have a follow up change that has a \"maxBufferHelperCount\" that caps the number\nof buffers that can be in the pool taking into account the size requested",
       "revId": "8f4d94a300e57e0a4cdc2eb71396494c0cb997d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
