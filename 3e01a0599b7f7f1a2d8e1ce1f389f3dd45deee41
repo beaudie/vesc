@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0e2c2769_03c8ce06",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4654,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-09T03:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16c7afce_7deeb25d",
+      "range": {
+        "startLine": 4654,
+        "startChar": 30,
+        "endLine": 4654,
+        "endChar": 53
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4aa14da7_72594333",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e20fc70_80f8465b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4657,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-09T03:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4aa14da7_72594333",
+      "range": {
+        "startLine": 4657,
+        "startChar": 0,
+        "endLine": 4657,
+        "endChar": 5
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "cb7a6376_245129ad",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4668,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-09T03:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "211f7dd9_6bd82ce1",
+      "range": {
+        "startLine": 4668,
+        "startChar": 39,
+        "endLine": 4668,
+        "endChar": 61
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c31d4e3b_933b6475",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79a20097_aa13a7c1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4671,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-09T03:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c31d4e3b_933b6475",
+      "range": {
+        "startLine": 4670,
+        "startChar": 0,
+        "endLine": 4671,
+        "endChar": 5
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "916d630a_2340f205",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4672,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-09T03:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc2c8628_736d017b",
+      "range": {
+        "startLine": 4672,
+        "startChar": 12,
+        "endLine": 4672,
+        "endChar": 21
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98724a46_11f1a900",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -137,6 +257,30 @@
       "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98acb09f_77ae5da5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4674,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-09T03:18:17Z",
+      "side": 1,
+      "message": "Done. It\u0027s nothing but to make sure there\u0027s only one pair of begin/end XFB command in a single render pass. But I noticed this was not requirement from Vulkan spec, so remove it.",
+      "parentUuid": "98724a46_11f1a900",
+      "range": {
+        "startLine": 4674,
+        "startChar": 12,
+        "endLine": 4674,
+        "endChar": 50
+      },
+      "revId": "3e01a0599b7f7f1a2d8e1ce1f389f3dd45deee41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
