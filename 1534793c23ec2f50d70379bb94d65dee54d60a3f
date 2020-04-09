@@ -16,6 +16,24 @@
       "revId": "1534793c23ec2f50d70379bb94d65dee54d60a3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a18fa769_8f4fe904",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-04-09T08:47:26Z",
+      "side": 1,
+      "message": "UniformBufferTest.UniformBlockWithOneLargeStructArray / UniformBufferTest.UniformBlockWithOneLargeMixStructArray / UniformBufferTest.UniformBlocksInSameProgramShareUniformBuffer / UniformBufferTest.UniformBlocksInDiffProgramShareUniformBuffer Cases could reflect to avoid GPU-GPU copy. This case is supplement case, used to verifies that update\nbuffer data correctly for cbuffer and StructuredBuffer simultaneously.",
+      "parentUuid": "4b22968a_78f5da22",
+      "revId": "1534793c23ec2f50d70379bb94d65dee54d60a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
