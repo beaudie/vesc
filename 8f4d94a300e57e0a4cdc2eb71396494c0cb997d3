@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "bf3c80fa_12478603",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-10T16:18:10Z",
+      "side": 1,
+      "message": "stagedUpdate is used when size \u003c mBuffer\u0027s size, which implies we are not respecifying the entire buffer but just updating a subsection of the buffer",
+      "parentUuid": "3912dc52_b2c03cf0",
+      "range": {
+        "startLine": 523,
+        "startChar": 4,
+        "endLine": 523,
+        "endChar": 97
+      },
+      "revId": "8f4d94a300e57e0a4cdc2eb71396494c0cb997d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e96b55ba_d55e162f",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 5
@@ -100,6 +124,30 @@
       "writtenOn": "2020-04-10T15:42:00Z",
       "side": 1,
       "message": "Couldn\u0027t DynamicBuffer be used directly? Maybe the functionality of this class could have just been part of the BufferVk class itself. Do you envision other possible users of this?",
+      "range": {
+        "startLine": 199,
+        "startChar": 3,
+        "endLine": 199,
+        "endChar": 34
+      },
+      "revId": "8f4d94a300e57e0a4cdc2eb71396494c0cb997d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da8a666c_ecce8159",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-10T16:18:10Z",
+      "side": 1,
+      "message": "1. allocate is different since no offsets or chunks are invloved\n2. conditions that \"release\" buffer is different\n3. we may want to later introduce a limit/cap on how many buffers we can acquire from the pool, having a dedicated class provides nice encapsultation\n\nif it is really needed we could roll this all in into the dynamicbuffer class itself but i felt that would conflate 2 different purposes unnecessarily",
+      "parentUuid": "e10bb2dd_1864c22f",
       "range": {
         "startLine": 199,
         "startChar": 3,
