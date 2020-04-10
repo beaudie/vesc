@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b45dccc_aa6b56d5",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-10T19:32:14Z",
+      "side": 1,
+      "message": "Not entirely related, but this fixes python3.",
+      "revId": "55d3fb6d28b3306291da25f084c0c421fc5f443f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
