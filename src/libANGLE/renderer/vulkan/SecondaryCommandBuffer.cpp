@@ -117,8 +117,7 @@ const char *GetCommandString(CommandID id)
 
 ANGLE_INLINE const CommandHeader *NextCommand(const CommandHeader *command)
 {
-    return reinterpret_cast<const CommandHeader *>(reinterpret_cast<const uint8_t *>(command) +
-                                                   command->size);
+    return reinterpret_cast<const CommandHeader *>(command->nextCommand);
 }
 
 // Parse the cmds in this cmd buffer into given primary cmd buffer

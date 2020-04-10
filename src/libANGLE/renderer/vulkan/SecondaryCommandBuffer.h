@@ -405,10 +405,9 @@ VERIFY_4_BYTE_ALIGNMENT(WriteTimestampParams)
 struct CommandHeader
 {
     CommandID id;
-    uint16_t size;
+    CommandHeader *nextCommand;
 };
-
-static_assert(sizeof(CommandHeader) == 4, "Check CommandHeader size");
+VERIFY_4_BYTE_ALIGNMENT(CommandHeader)
 
 template <typename DestT, typename T>
 ANGLE_INLINE DestT *Offset(T *ptr, size_t bytes)
@@ -658,7 +657,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
 
         CommandHeader *header = reinterpret_cast<CommandHeader *>(mCurrentWritePointer);
         header->id            = cmdID;
-        header->size          = static_cast<uint16_t>(allocationSize);
+        header->nextCommand =
+            reinterpret_cast<CommandHeader *>(mCurrentWritePointer + allocationSize);
         ASSERT(allocationSize <= std::numeric_limits<uint16_t>::max());
 
         mCurrentWritePointer += allocationSize;
@@ -722,7 +722,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         memcpy(writePointer, paramData, sizeInBytes);
         return writePointer + sizeInBytes;
     }
-
+    // Pointer into first command for each allocated page
     std::vector<CommandHeader *> mCommands;
 
     // Allocator used by this class. If non-null then the class is valid.
