@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "3912dc52_b2c03cf0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-10T15:42:00Z",
+      "side": 1,
+      "message": "allocate says:\n\n    // Is the buffer being respecified\n    if (sizeInBytes !\u003d mSize)\n    {\n        ...\n\nSo it looks like the buffer pool is capable of handling the resize. stagedUpdate shouldn\u0027t be necessary then, isn\u0027t that right?",
+      "parentUuid": "d61daf0d_719934d8",
+      "range": {
+        "startLine": 523,
+        "startChar": 4,
+        "endLine": 523,
+        "endChar": 97
+      },
+      "revId": "8f4d94a300e57e0a4cdc2eb71396494c0cb997d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e96b55ba_d55e162f",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 5
@@ -59,6 +83,29 @@
       "writtenOn": "2020-04-09T16:12:46Z",
       "side": 1,
       "message": "you can then remove this comment",
+      "revId": "8f4d94a300e57e0a4cdc2eb71396494c0cb997d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e10bb2dd_1864c22f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-10T15:42:00Z",
+      "side": 1,
+      "message": "Couldn\u0027t DynamicBuffer be used directly? Maybe the functionality of this class could have just been part of the BufferVk class itself. Do you envision other possible users of this?",
+      "range": {
+        "startLine": 199,
+        "startChar": 3,
+        "endLine": 199,
+        "endChar": 34
+      },
       "revId": "8f4d94a300e57e0a4cdc2eb71396494c0cb997d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
