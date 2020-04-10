@@ -484,6 +484,12 @@ void WriteCppReplayForCall(const CallCapture &call,
         callOut << "gShaderProgramMap[" << id << "] = ";
     }
 
+    if (call.entryPoint == gl::EntryPoint::FenceSync)
+    {
+        GLuint id = call.params.getReturnValue().value.GLuintVal;
+        callOut << "gSyncMap[" << id << "] = ";
+    }
+
     if (call.entryPoint == gl::EntryPoint::MapBufferRange ||
         call.entryPoint == gl::EntryPoint::MapBufferRangeEXT)
     {
@@ -531,6 +537,21 @@ void WriteCppReplayForCall(const CallCapture &call,
             else if (param.type == ParamType::TGLfloat)
             {
                 WriteGLFloatValue(callOut, param.value.GLfloatVal);
+            }
+            else if (param.type == ParamType::TGLsync)
+            {
+                callOut << "gSyncMap[" << param.value.GLintVal << "]";
+            }
+            else if (param.type == ParamType::TGLuint64 && param.name == "timeout")
+            {
+                if (param.value.GLuint64Val == GL_TIMEOUT_IGNORED)
+                {
+                    callOut << "GL_TIMEOUT_IGNORED";
+                }
+                else
+                {
+                    WriteParamCaptureReplay(callOut, call, param);
+                }
             }
             else
             {
@@ -582,6 +603,10 @@ void WriteCppReplayForCall(const CallCapture &call,
                 case ParamType::TSemaphoreIDConstPointer:
                     WriteResourceIDPointerParamReplay<gl::SemaphoreID>(counters, callOut, out, call,
                                                                        param);
+                    break;
+                case ParamType::TGLsync:
+                    WriteResourceIDPointerParamReplay<gl::SyncID>(counters, callOut, out, call,
+                                                                  param);
                     break;
                 case ParamType::TTextureIDConstPointer:
                     WriteResourceIDPointerParamReplay<gl::TextureID>(counters, callOut, out, call,
@@ -3538,6 +3563,14 @@ void WriteParamValueReplay<ParamType::TShaderProgramID>(std::ostream &os,
                                                         gl::ShaderProgramID value)
 {
     os << "gShaderProgramMap[" << value.value << "]";
+}
+
+template <>
+void WriteParamValueReplay<ParamType::TGLsync>(std::ostream &os,
+                                               const CallCapture &call,
+                                               gl::SyncID value)
+{
+    os << "gSyncMap[" << value.value << "]";
 }
 
 template <>

@@ -421,6 +421,7 @@ struct IsResourceIDType;
     X(Renderbuffer)          \
     X(Sampler)               \
     X(Semaphore)             \
+    X(Sync)                  \
     X(Texture)               \
     X(TransformFeedback)     \
     X(VertexArray)
