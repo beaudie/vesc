@@ -88,7 +88,8 @@ ProgramInfo::~ProgramInfo() = default;
 angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
                                        const gl::ShaderType shaderType,
                                        const ShaderInfo &shaderInfo,
-                                       bool enableLineRasterEmulation)
+                                       const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
+                                       ProgramTransformOptionBits optionBits)
 {
     const gl::ShaderMap<SpirvBlob> &spirvBlobs = shaderInfo.getSpirvBlobs();
 
@@ -96,13 +97,28 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
 
     if (!spirvBlob.empty())
     {
-        ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(), spirvBlob.data(),
-                                          spirvBlob.size() * sizeof(uint32_t)));
+        if (shaderType == gl::ShaderType::Fragment &&
+            optionBits[ProgramTransformOption::RemoveEarlyFragmentTestsOptimization])
+        {
+            SpirvBlob spirvBlobTransformed;
+            ANGLE_TRY(GlslangWrapperVk::TransformSpirV(contextVk, shaderType, true,
+                                                       variableInfoMap[shaderType], spirvBlob,
+                                                       &spirvBlobTransformed));
+            ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
+                                              spirvBlobTransformed.data(),
+                                              spirvBlobTransformed.size() * sizeof(uint32_t)));
+        }
+        else
+        {
+            ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
+                                              spirvBlob.data(),
+                                              spirvBlob.size() * sizeof(uint32_t)));
+        }
 
         mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
     }
 
-    if (enableLineRasterEmulation)
+    if (optionBits[ProgramTransformOption::EnableLineRasterEmulation])
     {
         mProgramHelper.enableSpecializationConstant(
             sh::vk::SpecializationConstantId::LineRasterEmulation);
@@ -162,8 +178,10 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
     mTextureDescriptorsCache.clear();
     mDescriptorBuffersCache.clear();
 
-    mDefaultProgramInfo.release(contextVk);
-    mLineRasterProgramInfo.release(contextVk);
+    for (ProgramInfo &programInfo : mProgramInfos)
+    {
+        programInfo.release(contextVk);
+    }
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(gl::BinaryInputStream *stream)
@@ -537,9 +555,19 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)
 {
-    const gl::State &glState         = contextVk->getState();
-    bool bresenhamEmulationEnabled   = contextVk->isBresenhamEmulationEnabled(mode);
-    ProgramInfo &programInfo         = getProgramInfo(bresenhamEmulationEnabled);
+    const gl::State &glState = contextVk->getState();
+    ProgramTransformOptionBits optionBits;
+    optionBits[ProgramTransformOption::EnableLineRasterEmulation] =
+        contextVk->isBresenhamEmulationEnabled(mode);
+    if (!glState.isEarlyFragmentTestsOptimizationAllowed())
+    {
+        ProgramVk *programVk = getShaderProgram(glState, gl::ShaderType::Fragment);
+        if (programVk && programVk->getState().hasEarlyFragmentTestsOptimization())
+        {
+            optionBits[ProgramTransformOption::RemoveEarlyFragmentTestsOptimization] = true;
+        }
+    }
+    ProgramInfo &programInfo         = getProgramInfo(optionBits);
     RendererVk *renderer             = contextVk->getRenderer();
     vk::PipelineCache *pipelineCache = nullptr;
 
@@ -551,8 +579,8 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(
         ProgramVk *programVk = getShaderProgram(glState, shaderType);
         if (programVk)
         {
-            ANGLE_TRY(programVk->initGraphicsShaderProgram(contextVk, shaderType,
-                                                           bresenhamEmulationEnabled, programInfo));
+            ANGLE_TRY(programVk->initGraphicsShaderProgram(contextVk, shaderType, optionBits,
+                                                           programInfo));
         }
     }
 
