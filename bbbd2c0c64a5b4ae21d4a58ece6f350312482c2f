@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "769e6bc4_88a49776",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4700,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-10T15:55:14Z",
+      "side": 1,
+      "message": "style: We enclose single lines blocks by {}.",
+      "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "005af1ee_3c9ed056",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4703,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-10T15:55:14Z",
+      "side": 1,
+      "message": "nit: unnecessary parentheses are unnecessary\n\nAlso, is this inverted? Shouldn\u0027t the buffers be respecified if rebinding (in which case numbCounterBuffers should be non-zero, if I\u0027m not mistaken)",
+      "range": {
+        "startLine": 4703,
+        "startChar": 8,
+        "endLine": 4703,
+        "endChar": 41
+      },
+      "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5ff8c95_0a2f134e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4714,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-10T15:55:14Z",
+      "side": 1,
+      "message": "Same comment",
+      "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89276a79_cf35ee84",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-10T15:55:14Z",
+      "side": 1,
+      "message": "Nit: Can move a little up to be next to the other XFB dirty bits. Or rather move those two down.",
+      "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfe7cd20_7e1e70fc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-10T15:55:14Z",
+      "side": 1,
+      "message": "A tiny microoptimization could be to add a member variable similar to mNewGraphicsCommandBufferDirtyBits for example:\n\n    DirtyBits mNewGraphicsPipelineDirtyBits;\n\nthat is initialized with either `DIRTY_BIT_PIPELINE` or `DIRTY_BIT_PIPELINE | DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME`. Then you can avoid the `if` and the double setting of the dirty bits.",
+      "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
