@@ -594,7 +594,8 @@ void CaptureInvalidateFramebuffer_attachments(const State &glState,
                                               const GLenum *attachments,
                                               ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(attachments, sizeof(GLenum) * numAttachments, paramCapture);
+    paramCapture->value.voidConstPointerVal = paramCapture->data[0].data();
 }
 
 void CaptureInvalidateSubFramebuffer_attachments(const State &glState,
