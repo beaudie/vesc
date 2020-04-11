@@ -1,0 +1,308 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae39808_8b5acd2d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "nit: git commit messages should wrap at 80 (I think this wraps at 100).",
+      "range": {
+        "startLine": 16,
+        "startChar": 75,
+        "endLine": 17,
+        "endChar": 7
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c33cea73_4e870c56",
+        "filename": "src/libANGLE/EGLSync.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "What\u0027s the logic here? Why does `getCondition` *change* the condition?",
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "669e6a45_a13cb473",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "Redundant",
+      "range": {
+        "startLine": 1085,
+        "startChar": 8,
+        "endLine": 1085,
+        "endChar": 48
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b7d5e5b_ab933c04",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "Redundant",
+      "range": {
+        "startLine": 1099,
+        "startChar": 8,
+        "endLine": 1099,
+        "endChar": 52
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e362c8f_2b61499c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "Remove ()",
+      "range": {
+        "startLine": 1713,
+        "startChar": 8,
+        "endLine": 1713,
+        "endChar": 20
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83323065_624367cb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1717,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "Remove ()",
+      "range": {
+        "startLine": 1717,
+        "startChar": 8,
+        "endLine": 1717,
+        "endChar": 20
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d05a0604_15ab658d",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "it\u0027s.\n\nAlso, you can wrap comments to 100 chars.",
+      "range": {
+        "startLine": 125,
+        "startChar": 40,
+        "endLine": 125,
+        "endChar": 43
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b1cbd4e_c4044962",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "@Jamie, can you verify this? I don\u0027t remember what this will do anymore.",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 50
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91f26732_4ca4ca2f",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "fence. There\u0027s no event with this class.",
+      "range": {
+        "startLine": 207,
+        "startChar": 14,
+        "endLine": 207,
+        "endChar": 19
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eebe0b4f_e8a907d5",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "You can invert many of these `if`s to return `angle::Result::Stop` early and avoid the many levels of nesting.",
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2acf5199_1bf5eb58",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "@Jamie, and this",
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21fe8ae5_0b3c0570",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "No need to test return value of `new` against nullptr. `new` throws an exception per C++ spec if out of memory.",
+      "range": {
+        "startLine": 406,
+        "startChar": 26,
+        "endLine": 410,
+        "endChar": 13
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "295ef510_d38788dc",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "Directly assign to mSyncHelper",
+      "range": {
+        "startLine": 418,
+        "startChar": 39,
+        "endLine": 418,
+        "endChar": 49
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c432131f_3abfab87",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-11T14:19:13Z",
+      "side": 1,
+      "message": "Same here, no need for this check.",
+      "range": {
+        "startLine": 420,
+        "startChar": 12,
+        "endLine": 423,
+        "endChar": 13
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
