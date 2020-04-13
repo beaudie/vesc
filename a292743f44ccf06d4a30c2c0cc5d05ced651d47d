@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "2891f4a4_42f51a8b",
+        "filename": "src/libANGLE/EGLSync.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-13T19:14:24Z",
+      "side": 1,
+      "message": "\" If the EGL_SYNC_NATIVE_FENCE_FD_ANDROID attribute is not\n    EGL_NO_NATIVE_FENCE_FD_ANDROID then the EGL_SYNC_CONDITION_KHR attribute is\n    set to EGL_SYNC_NATIVE_FENCE_SIGNALED_ANDROID and the EGL_SYNC_STATUS_KHR\n    attribute is set to reflect the signal status of the native fence object. \"",
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c33cea73_4e870c56",
         "filename": "src/libANGLE/EGLSync.cpp",
         "patchSetId": 6
@@ -36,6 +53,24 @@
       "writtenOn": "2020-04-11T14:19:13Z",
       "side": 1,
       "message": "What\u0027s the logic here? Why does `getCondition` *change* the condition?",
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d54ca5e3_8076ffea",
+        "filename": "src/libANGLE/EGLSync.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-13T19:14:24Z",
+      "side": 1,
+      "message": "\" The EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR condition is satisfied by completion\n    of the fence command corresponding to the sync object and all preceding\n    commands in the associated client API context\u0027s command stream. \"\n\nI interpreted this as the condition changes from whatever/ EGL_SYNC_NATIVE_FENCE_SIGNALED_ANDROID to EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR when status changes to signaled. Its not clear if this is specific to FD \u003d -1 or Valid.",
+      "parentUuid": "c33cea73_4e870c56",
       "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -65,6 +100,30 @@
     },
     {
       "key": {
+        "uuid": "2d72a878_0ebd3bdd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-13T19:14:24Z",
+      "side": 1,
+      "message": "Oops, thought I had removed all these.",
+      "parentUuid": "669e6a45_a13cb473",
+      "range": {
+        "startLine": 1085,
+        "startChar": 8,
+        "endLine": 1085,
+        "endChar": 48
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b7d5e5b_ab933c04",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 6
@@ -85,6 +144,30 @@
       "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc917d7a_96f75d94",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-13T19:14:24Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "2b7d5e5b_ab933c04",
+      "range": {
+        "startLine": 1099,
+        "startChar": 8,
+        "endLine": 1099,
+        "endChar": 52
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +194,30 @@
     },
     {
       "key": {
+        "uuid": "33b54424_603d48cb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-13T19:14:24Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "7e362c8f_2b61499c",
+      "range": {
+        "startLine": 1713,
+        "startChar": 8,
+        "endLine": 1713,
+        "endChar": 20
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83323065_624367cb",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 6
@@ -131,6 +238,30 @@
       "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61d88477_8fc82308",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1717,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-13T19:14:24Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "83323065_624367cb",
+      "range": {
+        "startLine": 1717,
+        "startChar": 8,
+        "endLine": 1717,
+        "endChar": 20
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +288,30 @@
     },
     {
       "key": {
+        "uuid": "c2819a81_7e46d230",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-13T19:14:24Z",
+      "side": 1,
+      "message": "Updated",
+      "parentUuid": "d05a0604_15ab658d",
+      "range": {
+        "startLine": 125,
+        "startChar": 40,
+        "endLine": 125,
+        "endChar": 43
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b1cbd4e_c4044962",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 6
@@ -168,6 +323,30 @@
       "writtenOn": "2020-04-11T14:19:13Z",
       "side": 1,
       "message": "@Jamie, can you verify this? I don\u0027t remember what this will do anymore.",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 50
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "230f6d83_1fd27bef",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-13T19:14:24Z",
+      "side": 1,
+      "message": "I am assuming that \nrenderer-\u003ecollectGarbageAndReinit(\u0026mUse, \u0026mFenceWithFd);\nabove\nSays its OK to destroy Fence when this Use is in the past? Part cleanup of mSharedGarbage?",
+      "parentUuid": "3b1cbd4e_c4044962",
       "range": {
         "startLine": 157,
         "startChar": 8,
@@ -220,6 +399,24 @@
     },
     {
       "key": {
+        "uuid": "760ae863_9ff4ca68",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-13T19:14:24Z",
+      "side": 1,
+      "message": "Tends to be my old-school style. There was decades ago a rule not to return early - something to do with compiled optimization. I\u0027m sure its not so valid any more.",
+      "parentUuid": "eebe0b4f_e8a907d5",
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2acf5199_1bf5eb58",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 6
@@ -257,6 +454,30 @@
       "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa52db2e_dd60d715",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-13T19:14:24Z",
+      "side": 1,
+      "message": "I thought exceptions were turned off.?",
+      "parentUuid": "21fe8ae5_0b3c0570",
+      "range": {
+        "startLine": 406,
+        "startChar": 26,
+        "endLine": 410,
+        "endChar": 13
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
