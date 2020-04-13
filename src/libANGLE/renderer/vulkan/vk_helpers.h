@@ -949,6 +949,8 @@ class ImageHelper final : public Resource, public angle::Subject
         forceChangeLayoutAndQueue(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
     }
 
+    void setCurrentLayout(ImageLayout newLayout) { mCurrentLayout = newLayout; }
+
     bool isQueueChangeNeccesary(uint32_t newQueueFamilyIndex) const
     {
         return mCurrentQueueFamilyIndex != newQueueFamilyIndex;
