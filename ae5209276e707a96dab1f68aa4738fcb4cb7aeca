@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "766dfa4a_25a5ca41",
+        "filename": "src/compiler/translator/HashNames.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "380301f4_609f86ae",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 9
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa2e668_75eace9c",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 13
@@ -141,6 +165,30 @@
       "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e634587_81b6baec",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Should be \u003d\u003d",
+      "parentUuid": "9aa2e668_75eace9c",
+      "range": {
+        "startLine": 1195,
+        "startChar": 43,
+        "endLine": 1195,
+        "endChar": 53
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -167,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "fff9aa9c_bbb1a38b",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f296e75_3dcee22c",
+      "range": {
+        "startLine": 165,
+        "startChar": 6,
+        "endLine": 165,
+        "endChar": 39
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f884ab78_19a3a1eb",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
@@ -190,6 +262,30 @@
     },
     {
       "key": {
+        "uuid": "ea3d77d4_960988f7",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done. Please check tree_util/ReplaceClipDistanceVariable.cpp",
+      "parentUuid": "f884ab78_19a3a1eb",
+      "range": {
+        "startLine": 171,
+        "startChar": 42,
+        "endLine": 171,
+        "endChar": 55
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0203226e_255e670b",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
@@ -204,6 +300,24 @@
       "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "346c7f1f_0e3416ec",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done. Please check tree_util/ReplaceClipDistanceVariable.cpp. I use all bits of 32 bit integer instead of gl::IMPLEMENTATION_MAX_CLIP_DISTANCES.",
+      "parentUuid": "0203226e_255e670b",
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -230,6 +344,30 @@
     },
     {
       "key": {
+        "uuid": "8c6457e8_25147002",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5151ec32_d65000ea",
+      "range": {
+        "startLine": 555,
+        "startChar": 25,
+        "endLine": 555,
+        "endChar": 28
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c708ffa3_1166515a",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
@@ -250,6 +388,30 @@
       "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d9cdb2b_8717f7a6",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Moved to tree_util/ReplaceClipDistanceVariable.cpp",
+      "parentUuid": "c708ffa3_1166515a",
+      "range": {
+        "startLine": 868,
+        "startChar": 22,
+        "endLine": 868,
+        "endChar": 54
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -276,6 +438,30 @@
     },
     {
       "key": {
+        "uuid": "8bc6841c_0400c78b",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done in tree_util/ReplaceClipDistanceVariable.cpp",
+      "parentUuid": "9cdf0966_d2ea3278",
+      "range": {
+        "startLine": 925,
+        "startChar": 77,
+        "endLine": 925,
+        "endChar": 78
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e2c2484_8af09206",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 13
@@ -296,6 +482,30 @@
       "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5d1546b_ae6f6d88",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done in tree_util/ReplaceClipDistanceVariable.cpp",
+      "parentUuid": "0e2c2484_8af09206",
+      "range": {
+        "startLine": 926,
+        "startChar": 77,
+        "endLine": 926,
+        "endChar": 88
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -346,6 +556,30 @@
     },
     {
       "key": {
+        "uuid": "bce729da_2f7287fc",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done. Separate CL in https://chromium-review.googlesource.com/c/angle/angle/+/2145284.",
+      "parentUuid": "0751b7dc_649e15ea",
+      "range": {
+        "startLine": 1019,
+        "startChar": 0,
+        "endLine": 1024,
+        "endChar": 5
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "32700e1f_6e166e0b",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 13
@@ -366,6 +600,30 @@
       "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8255b913_e244de21",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32700e1f_6e166e0b",
+      "range": {
+        "startLine": 608,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 6
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -404,6 +662,24 @@
     },
     {
       "key": {
+        "uuid": "2b8c7c62_bfde2afb",
+        "filename": "src/libANGLE/renderer/metal/doc/APPLE_clip_distance.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done. I made a duplicated doc in src/libANGLE/renderer/vulkan/doc for now.",
+      "parentUuid": "08461ac1_2ea7f7df",
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b18c5175_df7dbf39",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 13
@@ -427,6 +703,30 @@
     },
     {
       "key": {
+        "uuid": "4ad91ce7_8180d1c6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b18c5175_df7dbf39",
+      "range": {
+        "startLine": 64,
+        "startChar": 30,
+        "endLine": 64,
+        "endChar": 33
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a7c33f7_0c2e5d14",
         "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
         "patchSetId": 13
@@ -447,6 +747,30 @@
       "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14924c8e_3ae94e74",
+        "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-13T11:52:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a7c33f7_0c2e5d14",
+      "range": {
+        "startLine": 4,
+        "startChar": 3,
+        "endLine": 4,
+        "endChar": 8
+      },
+      "revId": "ae5209276e707a96dab1f68aa4738fcb4cb7aeca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
