@@ -77,11 +77,19 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     void retainImageViews(ContextVk *contextVk) const;
 
+    bool hasDefinedContent() const { return mContentDefined; }
+    // mark content as undefined so that certain optimizations are possible
+    void invalidateContent() { mContentDefined = false; }
+
+  private:
+    void initWithDefault();
+
   private:
     vk::ImageHelper *mImage;
     vk::ImageViewHelper *mImageViews;
     uint32_t mLevelIndex;
     uint32_t mLayerIndex;
+    bool mContentDefined;
 };
 
 // A vector of rendertargets

@@ -1366,11 +1366,24 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
+        if (depthStencilRenderTarget->hasDefinedContent())
+        {
+            renderPassAttachmentOps.initWithLoadStore(attachmentClearValues.size(),
+                                                      vk::ImageLayout::DepthStencilAttachment,
+                                                      vk::ImageLayout::DepthStencilAttachment);
+        }
+        else
+        {
+            renderPassAttachmentOps.initWithNoLoad(attachmentClearValues.size(),
+                                                   vk::ImageLayout::DepthStencilAttachment,
+                                                   vk::ImageLayout::DepthStencilAttachment);
+        }
+        // This must be called after hasDefinedContent() since it will set content to valid. We are
+        // tracking content valid very loosely here that as long as it is attached, it assumes will
+        // have valid content. The only time it has undefined content is between swap and
+        // startNewRenderPass
         ANGLE_TRY(depthStencilRenderTarget->onDepthStencilDraw(contextVk));
 
-        renderPassAttachmentOps.initWithLoadStore(attachmentClearValues.size(),
-                                                  vk::ImageLayout::DepthStencilAttachment,
-                                                  vk::ImageLayout::DepthStencilAttachment);
         attachmentClearValues.emplace_back(kUninitializedClearValue);
     }
 
