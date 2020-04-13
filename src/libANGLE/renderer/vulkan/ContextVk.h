@@ -218,6 +218,20 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
         mAttachmentOps[attachmentIndex].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     }
 
+    void updateRenderPassAttachmentFinalLayout(size_t attachmentIndex, VkImageLayout finalLayout)
+    {
+        if (finalLayout == VK_IMAGE_LAYOUT_PRESENT_SRC_KHR)
+        {
+            // Use our own enum to pack it into 5 bits
+            mAttachmentOps[attachmentIndex].finalLayout = VK_IMAGE_LAYOUT_PRESENT_ANGLE;
+        }
+        else
+        {
+            mAttachmentOps[attachmentIndex].finalLayout = finalLayout;
+            ASSERT(finalLayout == mAttachmentOps[attachmentIndex].finalLayout);
+        }
+    }
+
     const gl::Rectangle &getRenderArea() const { return mRenderArea; }
 
     angle::Result flushToPrimary(ContextVk *contextVk, vk::PrimaryCommandBuffer *primary);
@@ -232,6 +246,8 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
         mCounter       = 0;
         return count;
     }
+
+    VkFramebuffer getFramebufferHandle() const { return mFramebuffer.getHandle(); }
 
   private:
     void addRenderPassCommandDiagnostics(ContextVk *contextVk);
@@ -493,6 +509,9 @@ class ContextVk : public ContextImpl, public vk::Context
     // for the next application draw/dispatch call.
     void invalidateGraphicsDescriptorSet(uint32_t usedDescriptorSet);
     void invalidateComputeDescriptorSet(uint32_t usedDescriptorSet);
+
+    // Return true if actually switch to present layout
+    bool optimizeRenderPassForPresent(VkFramebuffer framebufferHandle);
 
     vk::DynamicQueryPool *getQueryPool(gl::QueryType queryType);
 

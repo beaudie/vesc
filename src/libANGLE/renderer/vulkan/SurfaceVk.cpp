@@ -1093,7 +1093,14 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         }
     }
 
-    SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
+    SwapchainImage &image               = mSwapchainImages[mCurrentSwapchainImageIndex];
+    bool overlayHasWidget               = updateOverlay(contextVk);
+    vk::Framebuffer &currentFramebuffer = mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
+
+    if (!mColorImageMS.valid() && !overlayHasWidget && currentFramebuffer.valid())
+    {
+        contextVk->optimizeRenderPassForPresent(currentFramebuffer.getHandle());
+    }
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
@@ -1120,9 +1127,17 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         mColorImageMS.resolve(&image.image, resolveRegion, commandBuffer);
     }
 
-    ANGLE_TRY(updateAndDrawOverlay(contextVk, &image));
+    if (overlayHasWidget)
+    {
+        ANGLE_TRY(drawOverlay(contextVk, &image));
+    }
 
-    image.image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present, commandBuffer);
+    // optimizeRenderPassForPresent may have changed layout to present already
+    if (image.image.getCurrentImageLayout() != vk::ImageLayout::Present)
+    {
+        image.image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present,
+                                 commandBuffer);
+    }
 
     // Knowing that the kSwapHistorySize'th submission ago has finished, we can know that the
     // (kSwapHistorySize+1)'th present ago of this image is definitely finished and so its wait
@@ -1494,8 +1509,7 @@ angle::Result WindowSurfaceVk::initializeContents(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result WindowSurfaceVk::updateAndDrawOverlay(ContextVk *contextVk,
-                                                    SwapchainImage *image) const
+bool WindowSurfaceVk::updateOverlay(ContextVk *contextVk) const
 {
     const gl::OverlayType *overlay = contextVk->getOverlay();
     OverlayVk *overlayVk           = vk::GetImpl(overlay);
@@ -1503,7 +1517,7 @@ angle::Result WindowSurfaceVk::updateAndDrawOverlay(ContextVk *contextVk,
     // If overlay is disabled, nothing to do.
     if (overlayVk == nullptr)
     {
-        return angle::Result::Continue;
+        return false;
     }
 
     RendererVk *rendererVk = contextVk->getRenderer();
@@ -1518,6 +1532,14 @@ angle::Result WindowSurfaceVk::updateAndDrawOverlay(ContextVk *contextVk,
         overlay->getCountWidget(gl::WidgetId::VulkanValidationMessageCount)
             ->add(validationMessageCount);
     }
+
+    return overlayVk->getEnabledWidgetCount() ? true : false;
+}
+
+angle::Result WindowSurfaceVk::drawOverlay(ContextVk *contextVk, SwapchainImage *image) const
+{
+    const gl::OverlayType *overlay = contextVk->getOverlay();
+    OverlayVk *overlayVk           = vk::GetImpl(overlay);
 
     // Draw overlay
     const vk::ImageView *imageView = nullptr;

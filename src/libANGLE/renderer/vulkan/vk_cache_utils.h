@@ -137,6 +137,10 @@ struct PackedAttachmentOpsDesc final
     uint16_t initialLayout : 5;
     uint16_t finalLayout : 5;
 };
+// The only extension layout we are using is VK_IMAGE_LAYOUT_PRESENT_SRC_KHR. In order to fit it
+// into 5 bit field, we are inventing our own enum here which will expand to
+// VK_IMAGE_LAYOUT_PRESENT_SRC_KHR before send to Vulkan.
+#define VK_IMAGE_LAYOUT_PRESENT_ANGLE 31
 
 static_assert(sizeof(PackedAttachmentOpsDesc) == 2, "Size check failed");
 
@@ -153,8 +157,12 @@ class AttachmentOpsArray final
 
     // Initializes an attachment op with whatever values. Used for compatible RenderPass checks.
     void initDummyOp(size_t index, VkImageLayout initialLayout, VkImageLayout finalLayout);
+    // Initialize an attachment op with loadOp_DontCare and store operations.
+    void initWithNoLoad(size_t index, VkImageLayout initialLayout, VkImageLayout finalLayout);
     // Initialize an attachment op with all load and store operations.
     void initWithLoadStore(size_t index, VkImageLayout initialLayout, VkImageLayout finalLayout);
+
+    void updateFinalLayout(size_t index, VkImageLayout finalLayout);
 
     size_t hash() const;
 
