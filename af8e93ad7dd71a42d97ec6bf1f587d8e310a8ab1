@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b24086e_c0cb08f1",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1979,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T22:57:00Z",
+      "side": 1,
+      "message": "Wrap to 100 chars.\n\nAlso, s/is supported/is correct.",
+      "range": {
+        "startLine": 1977,
+        "startChar": 0,
+        "endLine": 1979,
+        "endChar": 25
+      },
+      "revId": "af8e93ad7dd71a42d97ec6bf1f587d8e310a8ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35864170_fe101ff7",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1983,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T22:57:00Z",
+      "side": 1,
+      "message": "I think we have Nvidia with GLES too on the bots. You can add `IsAndroid() \u0026\u0026` to this condition.",
+      "range": {
+        "startLine": 1983,
+        "startChar": 36,
+        "endLine": 1983,
+        "endChar": 46
+      },
+      "revId": "af8e93ad7dd71a42d97ec6bf1f587d8e310a8ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
