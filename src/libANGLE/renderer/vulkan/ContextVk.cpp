@@ -4584,25 +4584,24 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
     beginInfo.pClearValues             = mClearValues.data();
 
     // Run commands inside the RenderPass.
-    primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+    mCommandBuffer.beginRenderPass(&beginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
     if (mValidTransformFeedbackBufferCount == 0)
     {
+        mCommandBuffer.endRenderPass();
         mCommandBuffer.executeCommands(primary->getHandle());
-        primary->endRenderPass();
     }
     else
     {
         uint32_t numCounterBuffers =
             (mRebindTransformFeedbackBuffers) ? 0 : mValidTransformFeedbackBufferCount;
 
-        primary->beginTransformFeedbackEXT(0, numCounterBuffers,
-                                           mTransformFeedbackCounterBuffers.data(), nullptr);
+        mCommandBuffer.beginTransformFeedback(0, numCounterBuffers,
+                                              mTransformFeedbackCounterBuffers.data(), nullptr);
+        mCommandBuffer.endTransformFeedback(0, mValidTransformFeedbackBufferCount,
+                                            mTransformFeedbackCounterBuffers.data(), nullptr);
+        mCommandBuffer.endRenderPass();
         mCommandBuffer.executeCommands(primary->getHandle());
-        primary->endTransformFeedbackEXT(0, mValidTransformFeedbackBufferCount,
-                                         mTransformFeedbackCounterBuffers.data(), nullptr);
-
-        primary->endRenderPass();
 
         // Would be better to accumulate this barrier using the command APIs.
         // TODO: Clean thus up before we close http://anglebug.com/3206
