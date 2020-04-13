@@ -119,6 +119,8 @@ class FramebufferVk : public FramebufferImpl
     const vk::RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
     const vk::FramebufferDesc &getFramebufferDesc() const { return mCurrentFramebufferDesc; }
 
+    bool isPresentableSurface() const { return mBackbuffer ? true : false; }
+
   private:
     FramebufferVk(RendererVk *renderer,
                   const gl::FramebufferState &state,

@@ -156,7 +156,15 @@ void UnpackAttachmentDesc(VkAttachmentDescription *desc,
     desc->stencilLoadOp  = static_cast<VkAttachmentLoadOp>(ops.stencilLoadOp);
     desc->stencilStoreOp = static_cast<VkAttachmentStoreOp>(ops.stencilStoreOp);
     desc->initialLayout  = static_cast<VkImageLayout>(ops.initialLayout);
-    desc->finalLayout    = static_cast<VkImageLayout>(ops.finalLayout);
+    if (ops.finalLayout == VK_IMAGE_LAYOUT_PRESENT_ANGLE)
+    {
+        // Expand our own enum to vulkan enum
+        desc->finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    }
+    else
+    {
+        desc->finalLayout = static_cast<VkImageLayout>(ops.finalLayout);
+    }
 }
 
 void UnpackStencilState(const vk::PackedStencilOpState &packedState,
@@ -1452,6 +1460,26 @@ void AttachmentOpsArray::initDummyOp(size_t index,
     SetBitField(ops.stencilLoadOp, VK_ATTACHMENT_LOAD_OP_DONT_CARE);
     SetBitField(ops.storeOp, VK_ATTACHMENT_STORE_OP_STORE);
     SetBitField(ops.stencilStoreOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
+    // ensure we are not losing bits
+    ASSERT(ops.initialLayout == initialLayout);
+    ASSERT(ops.finalLayout == finalLayout);
+}
+
+void AttachmentOpsArray::initWithNoLoad(size_t index,
+                                        VkImageLayout initialLayout,
+                                        VkImageLayout finalLayout)
+{
+    PackedAttachmentOpsDesc &ops = mOps[index];
+
+    SetBitField(ops.initialLayout, initialLayout);
+    SetBitField(ops.finalLayout, finalLayout);
+    SetBitField(ops.loadOp, VK_ATTACHMENT_LOAD_OP_DONT_CARE);
+    SetBitField(ops.stencilLoadOp, VK_ATTACHMENT_LOAD_OP_DONT_CARE);
+    SetBitField(ops.storeOp, VK_ATTACHMENT_STORE_OP_STORE);
+    SetBitField(ops.stencilStoreOp, VK_ATTACHMENT_STORE_OP_STORE);
+    // ensure we are not losing bits
+    ASSERT(ops.initialLayout == initialLayout);
+    ASSERT(ops.finalLayout == finalLayout);
 }
 
 void AttachmentOpsArray::initWithLoadStore(size_t index,
@@ -1466,6 +1494,12 @@ void AttachmentOpsArray::initWithLoadStore(size_t index,
     SetBitField(ops.stencilLoadOp, VK_ATTACHMENT_LOAD_OP_LOAD);
     SetBitField(ops.storeOp, VK_ATTACHMENT_STORE_OP_STORE);
     SetBitField(ops.stencilStoreOp, VK_ATTACHMENT_STORE_OP_STORE);
+}
+
+void AttachmentOpsArray::updateFinalLayout(size_t index, VkImageLayout finalLayout)
+{
+    PackedAttachmentOpsDesc &ops = mOps[index];
+    SetBitField(ops.finalLayout, finalLayout);
 }
 
 size_t AttachmentOpsArray::hash() const
