@@ -136,6 +136,33 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                     vkCmdBeginQuery(cmdBuffer, params->queryPool, params->query, params->flags);
                     break;
                 }
+                case CommandID::BeginRenderPass:
+                {
+                    const BeginRenderPassParams *params =
+                        getParamPtr<BeginRenderPassParams>(currentCommand);
+                    const VkClearValue *pClearValues =
+                        Offset<VkClearValue>(params, sizeof(BeginRenderPassParams));
+                    const VkRenderPassBeginInfo beginInfo = {
+                        VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                        nullptr,
+                        params->renderPass,
+                        params->framebuffer,
+                        params->renderArea,
+                        params->clearValueCount,
+                        pClearValues};
+                    vkCmdBeginRenderPass(cmdBuffer, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+                    break;
+                }
+                case CommandID::BeginTransformFeedback:
+                {
+                    const TransformFeedbackParams *params =
+                        getParamPtr<TransformFeedbackParams>(currentCommand);
+                    const VkBuffer *pCounterBuffers =
+                        Offset<VkBuffer>(params, sizeof(TransformFeedbackParams));
+                    vkCmdBeginTransformFeedbackEXT(cmdBuffer, 0, params->counterBufferCount,
+                                                   pCounterBuffers, nullptr);
+                    break;
+                }
                 case CommandID::BindComputePipeline:
                 {
                     const BindPipelineParams *params =
@@ -365,6 +392,21 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 {
                     const EndQueryParams *params = getParamPtr<EndQueryParams>(currentCommand);
                     vkCmdEndQuery(cmdBuffer, params->queryPool, params->query);
+                    break;
+                }
+                case CommandID::EndRenderPass:
+                {
+                    vkCmdEndRenderPass(cmdBuffer);
+                    break;
+                }
+                case CommandID::EndTransformFeedback:
+                {
+                    const TransformFeedbackParams *params =
+                        getParamPtr<TransformFeedbackParams>(currentCommand);
+                    const VkBuffer *pCounterBuffers =
+                        Offset<VkBuffer>(params, sizeof(TransformFeedbackParams));
+                    vkCmdEndTransformFeedbackEXT(cmdBuffer, 0, params->counterBufferCount,
+                                                 pCounterBuffers, nullptr);
                     break;
                 }
                 case CommandID::ExecutionBarrier:
