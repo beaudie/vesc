@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d59cbff_2e8677d2",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T21:51:28Z",
+      "side": 1,
+      "message": "You can just define the VS and FS in this function as `constexpr char[]`",
+      "range": {
+        "startLine": 180,
+        "startChar": 27,
+        "endLine": 180,
+        "endChar": 55
+      },
+      "revId": "38d1e7d49ee6d9dcb9408c727bcc6f5a6ed454d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdc7d7bf_e2efda63",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T21:51:28Z",
+      "side": 1,
+      "message": "You can use ANGLE_INSTANTIATE_TEST_COMBINE_{N} (add one for N\u003d1)",
+      "revId": "38d1e7d49ee6d9dcb9408c727bcc6f5a6ed454d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
