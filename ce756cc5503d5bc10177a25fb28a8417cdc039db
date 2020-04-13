@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95de525e_127bbedc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-13T22:05:15Z",
+      "side": 1,
+      "message": "nit: updateEarlyFragmentTestsOptimiza[t]ion",
+      "range": {
+        "startLine": 1192,
+        "startChar": 17,
+        "endLine": 1192,
+        "endChar": 52
+      },
+      "revId": "ce756cc5503d5bc10177a25fb28a8417cdc039db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19e8952c_08c08ee3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-13T22:05:15Z",
+      "side": 1,
+      "message": "I would just call this updateTransformOptionBits() and have it update everything by moving:\n\n    transformOptionBits[ProgramTransformOption::EnableLineRasterEmulation] \u003d\n        contextVk-\u003eisBresenhamEmulationEnabled(mode);\n\nThis way new bits can be added here rather than having them spread out.",
+      "revId": "ce756cc5503d5bc10177a25fb28a8417cdc039db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "790b285a_14e27023",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-13T22:05:15Z",
+      "side": 1,
+      "message": "nit: mTransformOptionBits",
+      "revId": "ce756cc5503d5bc10177a25fb28a8417cdc039db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
