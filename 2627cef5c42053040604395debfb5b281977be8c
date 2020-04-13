@@ -16,6 +16,24 @@
       "revId": "2627cef5c42053040604395debfb5b281977be8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2120dee_bc7a418f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-13T16:26:52Z",
+      "side": 1,
+      "message": "It should trigger default constructor, which set all bits to zero. Let me know if this is not the case or not fitting coding style, I can certainly switch to explicit initializer.",
+      "parentUuid": "b2078e78_e553755e",
+      "revId": "2627cef5c42053040604395debfb5b281977be8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
