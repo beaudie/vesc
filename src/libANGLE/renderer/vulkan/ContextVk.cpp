@@ -2343,6 +2343,42 @@ angle::Result ContextVk::clearWithRenderPassOp(
     return angle::Result::Continue;
 }
 
+bool ContextVk::optimizeRenderPassForPresent()
+{
+    if (!mRenderPassCommands.started())
+    {
+        return false;
+    }
+    if (!mDrawFramebuffer->isPresentableSurface())
+    {
+        return false;
+    }
+
+    // EGL1.5 spec: The contents of ancillary buffers are always undefined after calling
+    // eglSwapBuffers
+    RenderTargetVk *depthStencilRenderTarget = mDrawFramebuffer->getDepthStencilRenderTarget();
+    if (depthStencilRenderTarget)
+    {
+        size_t depthStencilAttachmentIndexVk =
+            mDrawFramebuffer->getState().getEnabledDrawBuffers().count();
+        // Change depthstencil attachment storeOp to DONT_CARE
+        mRenderPassCommands.invalidateRenderPassStencilAttachment(depthStencilAttachmentIndexVk);
+        mRenderPassCommands.invalidateRenderPassDepthAttachment(depthStencilAttachmentIndexVk);
+        // Mark content as invalid so that we will not load them in next renderpass
+        depthStencilRenderTarget->invalidateContent();
+    }
+
+    RenderTargetVk *color0RenderTarget = mDrawFramebuffer->getColorDrawRenderTarget(0);
+    if (color0RenderTarget)
+    {
+        // Use finalLayout instead of extra barrier for layout change to present
+        vk::ImageHelper &image = color0RenderTarget->getImage();
+        image.setCurrentLayout(vk::ImageLayout::Present);
+        mRenderPassCommands.updateRenderPassAttachmentFinalLayout(0, image.getCurrentLayout());
+    }
+    return true;
+}
+
 gl::GraphicsResetStatus ContextVk::getResetStatus()
 {
     if (mRenderer->isDeviceLost())

@@ -18,7 +18,7 @@
 namespace rx
 {
 RenderTargetVk::RenderTargetVk()
-    : mImage(nullptr), mImageViews(nullptr), mLevelIndex(0), mLayerIndex(0)
+    : mImage(nullptr), mImageViews(nullptr), mLevelIndex(0), mLayerIndex(0), mContentDefined(false)
 {}
 
 RenderTargetVk::~RenderTargetVk() {}
@@ -27,12 +27,14 @@ RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
     : mImage(other.mImage),
       mImageViews(other.mImageViews),
       mLevelIndex(other.mLevelIndex),
-      mLayerIndex(other.mLayerIndex)
+      mLayerIndex(other.mLayerIndex),
+      mContentDefined(other.mContentDefined)
 {
-    other.mImage      = nullptr;
-    other.mImageViews = nullptr;
-    other.mLevelIndex = 0;
-    other.mLayerIndex = 0;
+    other.mImage          = nullptr;
+    other.mImageViews     = nullptr;
+    other.mLevelIndex     = 0;
+    other.mLayerIndex     = 0;
+    other.mContentDefined = false;
 }
 
 void RenderTargetVk::init(vk::ImageHelper *image,
@@ -44,6 +46,9 @@ void RenderTargetVk::init(vk::ImageHelper *image,
     mImageViews = imageViews;
     mLevelIndex = levelIndex;
     mLayerIndex = layerIndex;
+    // We are being conservative here since our targeted optimization is to skip surfaceVK's depth
+    // buffer load after swap call.
+    mContentDefined = true;
 }
 
 void RenderTargetVk::reset()
@@ -74,6 +79,7 @@ angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk)
 
     contextVk->onRenderPassImageWrite(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment,
                                       mImage);
+    mContentDefined = true;
     retainImageViews(contextVk);
 
     return angle::Result::Continue;
@@ -87,6 +93,7 @@ angle::Result RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk)
     VkImageAspectFlags aspectFlags = vk::GetDepthStencilAspectFlags(format);
 
     contextVk->onRenderPassImageWrite(aspectFlags, vk::ImageLayout::DepthStencilAttachment, mImage);
+    mContentDefined = true;
     retainImageViews(contextVk);
 
     return angle::Result::Continue;
