@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2078e78_e553755e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-13T15:41:26Z",
+      "side": 1,
+      "message": "Is his guaranteed to initialize to 0?",
+      "revId": "2627cef5c42053040604395debfb5b281977be8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
