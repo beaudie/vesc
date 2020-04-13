@@ -77,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "d3d3da71_6665fc07",
+        "filename": "src/libANGLE/EGLSync.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T22:35:58Z",
+      "side": 1,
+      "message": "My understanding is that \"condition\" is an attribute of the sync object, and different sync objects have different conditions. Then the spec is saying:\n\n- Condition X (for whatever sync object has this condition) is satisfied like this\n- Condition Y (for whatever sync object has this condition) is satisfied like that\n\nI don\u0027t think the spec is saying the \"condition\" of the sync object changes when its status changes!\n\n---\n\nWould be great to add a test for this, to make sure we are in agreement with native drivers.",
+      "parentUuid": "d54ca5e3_8076ffea",
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "669e6a45_a13cb473",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 6
@@ -469,6 +487,30 @@
       "side": 1,
       "message": "I thought exceptions were turned off.?",
       "parentUuid": "21fe8ae5_0b3c0570",
+      "range": {
+        "startLine": 406,
+        "startChar": 26,
+        "endLine": 410,
+        "endChar": 13
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4dcb04d6_0d26caeb",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T22:35:58Z",
+      "side": 1,
+      "message": "Not really sure, but if `new` fails by returning nullptr (instead of exception), there are way too many places that aren\u0027t handling it. Prime example would be std::vector.",
+      "parentUuid": "fa52db2e_dd60d715",
       "range": {
         "startLine": 406,
         "startChar": 26,
