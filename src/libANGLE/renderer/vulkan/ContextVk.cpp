@@ -2342,6 +2342,21 @@ angle::Result ContextVk::clearWithRenderPassOp(
     return angle::Result::Continue;
 }
 
+void ContextVk::invalidateDepthStencilBuffer()
+{
+    if (!mRenderPassCommands.started())
+        return;
+
+    RenderTargetVk *depthStencilRenderTarget = mDrawFramebuffer->getDepthStencilRenderTarget();
+    if (!depthStencilRenderTarget)
+        return;
+
+    size_t depthStencilAttachmentIndexVk =
+        mDrawFramebuffer->getState().getEnabledDrawBuffers().count();
+    mRenderPassCommands.invalidateRenderPassStencilAttachment(depthStencilAttachmentIndexVk);
+    mRenderPassCommands.invalidateRenderPassDepthAttachment(depthStencilAttachmentIndexVk);
+}
+
 gl::GraphicsResetStatus ContextVk::getResetStatus()
 {
     if (mRenderer->isDeviceLost())

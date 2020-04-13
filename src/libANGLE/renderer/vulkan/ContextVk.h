@@ -494,6 +494,8 @@ class ContextVk : public ContextImpl, public vk::Context
     void invalidateGraphicsDescriptorSet(uint32_t usedDescriptorSet);
     void invalidateComputeDescriptorSet(uint32_t usedDescriptorSet);
 
+    void invalidateDepthStencilBuffer();
+
     vk::DynamicQueryPool *getQueryPool(gl::QueryType queryType);
 
     const VkClearValue &getClearColorValue() const;
