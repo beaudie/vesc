@@ -30,6 +30,8 @@ enum class CommandID : uint16_t
     // Invalid cmd used to mark end of sequence of commands
     Invalid = 0,
     BeginQuery,
+    BeginRenderPass,
+    BeginTransformFeedback,
     BindComputePipeline,
     BindDescriptorSets,
     BindGraphicsPipeline,
@@ -58,6 +60,8 @@ enum class CommandID : uint16_t
     DrawIndirect,
     DrawIndexedIndirect,
     EndQuery,
+    EndRenderPass,
+    EndTransformFeedback,
     ExecutionBarrier,
     FillBuffer,
     ImageBarrier,
@@ -70,8 +74,6 @@ enum class CommandID : uint16_t
     SetEvent,
     WaitEvents,
     WriteTimestamp,
-    BeginTransformFeedback,
-    EndTransformFeedback,
 };
 
 #define VERIFY_4_BYTE_ALIGNMENT(StructName) \
@@ -81,6 +83,21 @@ enum class CommandID : uint16_t
 // This makes it easy to know the size of params & to copy params
 // TODO: Could optimize the size of some of these structs through bit-packing
 //  and customizing sizing based on limited parameter sets used by ANGLE
+struct BeginRenderPassParams
+{
+    VkRenderPass renderPass;
+    VkFramebuffer framebuffer;
+    VkRect2D renderArea;
+    uint32_t clearValueCount;
+};
+VERIFY_4_BYTE_ALIGNMENT(BeginRenderPassParams)
+
+struct BeginTransformFeedbackParams
+{
+    uint32_t bufferCount;
+};
+VERIFY_4_BYTE_ALIGNMENT(BeginTransformFeedbackParams)
+
 struct BindPipelineParams
 {
     VkPipeline pipeline;
@@ -289,6 +306,8 @@ struct DispatchIndirectParams
 };
 VERIFY_4_BYTE_ALIGNMENT(DispatchIndirectParams)
 
+using EndTransformFeedbackParams = BeginTransformFeedbackParams;
+
 struct FillBufferParams
 {
     VkBuffer dstBuffer;
@@ -403,18 +422,6 @@ struct WriteTimestampParams
 };
 VERIFY_4_BYTE_ALIGNMENT(WriteTimestampParams)
 
-struct BeginTransformFeedbackParams
-{
-    uint32_t bufferCount;
-};
-VERIFY_4_BYTE_ALIGNMENT(BeginTransformFeedbackParams)
-
-struct EndTransformFeedbackParams
-{
-    uint32_t bufferCount;
-};
-VERIFY_4_BYTE_ALIGNMENT(EndTransformFeedbackParams)
-
 // Header for every cmd in custom cmd buffer
 struct CommandHeader
 {
@@ -449,6 +456,10 @@ class SecondaryCommandBuffer final : angle::NonCopyable
 
     // Add commands
     void beginQuery(VkQueryPool queryPool, uint32_t query, VkQueryControlFlags flags);
+
+    void beginRenderPass(const VkRenderPassBeginInfo *pRenderPassBegin, VkSubpassContents contents);
+
+    void beginTransformFeedback(uint32_t counterBufferCount, const VkBuffer *pCounterBuffers);
 
     void bindComputePipeline(const Pipeline &pipeline);
 
@@ -563,6 +574,10 @@ class SecondaryCommandBuffer final : angle::NonCopyable
 
     void endQuery(VkQueryPool queryPool, uint32_t query);
 
+    void endRenderPass();
+
+    void endTransformFeedback(uint32_t counterBufferCount, const VkBuffer *pCounterBuffers);
+
     void executionBarrier(VkPipelineStageFlags stageMask);
 
     void fillBuffer(const Buffer &dstBuffer,
@@ -622,10 +637,6 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                         VkQueryPool queryPool,
                         uint32_t query);
 
-    void beginTransformFeedback(uint32_t counterBufferCount, const VkBuffer *pCounterBuffers);
-
-    void endTransformFeedback(uint32_t counterBufferCount, const VkBuffer *pCounterBuffers);
-
     // No-op for compatibility
     VkResult end() { return VK_SUCCESS; }
 
@@ -652,10 +663,12 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         allocateNewBlock();
         // Set first command to Invalid to start
         reinterpret_cast<CommandHeader *>(mCurrentWritePointer)->id = CommandID::Invalid;
+        mPreviousCommandPointer                                     = mCurrentWritePointer;
     }
 
     void reset()
     {
+        mPreviousCommandPointer = nullptr;
         mCommands.clear();
         initialize(mAllocator);
     }
@@ -669,15 +682,30 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     bool empty() const { return mCommands.size() == 0 || mCommands[0]->id == CommandID::Invalid; }
 
   private:
-    template <class StructType>
+    template <class StructType, bool prepend>
     ANGLE_INLINE StructType *commonInit(CommandID cmdID, size_t allocationSize)
     {
         mCurrentBytesRemaining -= allocationSize;
 
         CommandHeader *header = reinterpret_cast<CommandHeader *>(mCurrentWritePointer);
         header->id            = cmdID;
-        header->nextCommand =
-            reinterpret_cast<CommandHeader *>(mCurrentWritePointer + allocationSize);
+        if (prepend)
+        {
+            // Point next command for this command to the first overall command
+            header->nextCommand = mCommands[0];
+            // Point first command for this batch to the current command
+            mCommands[0] = reinterpret_cast<CommandHeader *>(mCurrentWritePointer);
+            // Point next command for previous command to the command after this one
+            reinterpret_cast<CommandHeader *>(mPreviousCommandPointer)->nextCommand =
+                reinterpret_cast<CommandHeader *>(mCurrentWritePointer + allocationSize);
+        }
+        else
+        {
+            header->nextCommand =
+                reinterpret_cast<CommandHeader *>(mCurrentWritePointer + allocationSize);
+            // Only update previous command when not prepending a Begin
+            mPreviousCommandPointer = mCurrentWritePointer;
+        }
         ASSERT(allocationSize <= std::numeric_limits<uint16_t>::max());
 
         mCurrentWritePointer += allocationSize;
@@ -691,12 +719,17 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         mCurrentWritePointer   = mAllocator->fastAllocate(kBlockSize);
         mCurrentBytesRemaining = kBlockSize;
         mCommands.push_back(reinterpret_cast<CommandHeader *>(mCurrentWritePointer));
+        if (mPreviousCommandPointer != nullptr)
+        {
+            reinterpret_cast<CommandHeader *>(mPreviousCommandPointer)->nextCommand =
+                reinterpret_cast<CommandHeader *>(mCurrentWritePointer);
+        }
     }
 
     // Allocate and initialize memory for given commandID & variable param size, setting
     // variableDataPtr to the byte following fixed cmd data where variable-sized ptr data will
     // be written and returning a pointer to the start of the command's parameter data
-    template <class StructType>
+    template <class StructType, bool prepend = false>
     ANGLE_INLINE StructType *initCommand(CommandID cmdID,
                                          size_t variableSize,
                                          uint8_t **variableDataPtr)
@@ -709,11 +742,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
             allocateNewBlock();
         }
         *variableDataPtr = Offset<uint8_t>(mCurrentWritePointer, fixedAllocationSize);
-        return commonInit<StructType>(cmdID, allocationSize);
+        return commonInit<StructType, prepend>(cmdID, allocationSize);
     }
 
     // Initialize a command that doesn't have variable-sized ptr data
-    template <class StructType>
+    template <class StructType, bool prepend = false>
     ANGLE_INLINE StructType *initCommand(CommandID cmdID)
     {
         constexpr size_t allocationSize = sizeof(StructType) + sizeof(CommandHeader);
@@ -722,7 +755,31 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         {
             allocateNewBlock();
         }
-        return commonInit<StructType>(cmdID, allocationSize);
+        return commonInit<StructType, prepend>(cmdID, allocationSize);
+    }
+
+    // Initialize a command that doesn't have any params
+    ANGLE_INLINE void initEmptyCommand(CommandID cmdID)
+    {
+        constexpr size_t allocationSize = sizeof(CommandHeader);
+        // Make sure we have enough room to mark follow-on header "Invalid"
+        if (mCurrentBytesRemaining <= (allocationSize + sizeof(CommandHeader)))
+        {
+            allocateNewBlock();
+        }
+        mCurrentBytesRemaining -= allocationSize;
+
+        CommandHeader *header = reinterpret_cast<CommandHeader *>(mCurrentWritePointer);
+        header->id            = cmdID;
+        header->nextCommand =
+            reinterpret_cast<CommandHeader *>(mCurrentWritePointer + allocationSize);
+
+        ASSERT(allocationSize <= std::numeric_limits<uint16_t>::max());
+
+        mPreviousCommandPointer = mCurrentWritePointer;
+        mCurrentWritePointer += allocationSize;
+        // Set next cmd header to Invalid (0) so cmd sequence will be terminated
+        reinterpret_cast<CommandHeader *>(mCurrentWritePointer)->id = CommandID::Invalid;
     }
 
     // Return a ptr to the parameter type
@@ -748,11 +805,17 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     angle::PoolAllocator *mAllocator;
 
     uint8_t *mCurrentWritePointer;
+    // Track previous command so that command order chain can be maintained when begin commands are
+    // prepended
+    uint8_t *mPreviousCommandPointer;
     size_t mCurrentBytesRemaining;
 };
 
 ANGLE_INLINE SecondaryCommandBuffer::SecondaryCommandBuffer()
-    : mAllocator(nullptr), mCurrentWritePointer(nullptr), mCurrentBytesRemaining(0)
+    : mAllocator(nullptr),
+      mCurrentWritePointer(nullptr),
+      mPreviousCommandPointer(nullptr),
+      mCurrentBytesRemaining(0)
 {}
 ANGLE_INLINE SecondaryCommandBuffer::~SecondaryCommandBuffer() {}
 
@@ -764,6 +827,35 @@ ANGLE_INLINE void SecondaryCommandBuffer::beginQuery(VkQueryPool queryPool,
     paramStruct->queryPool        = queryPool;
     paramStruct->query            = query;
     paramStruct->flags            = flags;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::beginRenderPass(
+    const VkRenderPassBeginInfo *pRenderPassBegin,
+    VkSubpassContents contents)
+{
+    ASSERT(contents == VK_SUBPASS_CONTENTS_INLINE);
+    size_t clearValuesSize = pRenderPassBegin->clearValueCount * sizeof(VkClearValue);
+    uint8_t *writePtr;
+    BeginRenderPassParams *paramStruct = initCommand<BeginRenderPassParams, true>(
+        CommandID::BeginRenderPass, clearValuesSize, &writePtr);
+    // Copy params into memory
+    paramStruct->renderPass      = pRenderPassBegin->renderPass;
+    paramStruct->framebuffer     = pRenderPassBegin->framebuffer;
+    paramStruct->renderArea      = pRenderPassBegin->renderArea;
+    paramStruct->clearValueCount = pRenderPassBegin->clearValueCount;
+    // Copy variable sized data
+    storePointerParameter(writePtr, pRenderPassBegin->pClearValues, clearValuesSize);
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::beginTransformFeedback(uint32_t bufferCount,
+                                                                 const VkBuffer *counterBuffers)
+{
+    uint8_t *writePtr;
+    size_t bufferSize                         = bufferCount * sizeof(VkBuffer);
+    BeginTransformFeedbackParams *paramStruct = initCommand<BeginTransformFeedbackParams>(
+        CommandID::BeginTransformFeedback, bufferSize, &writePtr);
+    paramStruct->bufferCount = bufferCount;
+    storePointerParameter(writePtr, counterBuffers, bufferSize);
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::bindComputePipeline(const Pipeline &pipeline)
@@ -1126,6 +1218,22 @@ ANGLE_INLINE void SecondaryCommandBuffer::endQuery(VkQueryPool queryPool, uint32
     paramStruct->query          = query;
 }
 
+ANGLE_INLINE void SecondaryCommandBuffer::endRenderPass()
+{
+    initEmptyCommand(CommandID::EndRenderPass);
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::endTransformFeedback(uint32_t bufferCount,
+                                                               const VkBuffer *counterBuffers)
+{
+    uint8_t *writePtr;
+    size_t bufferSize                       = bufferCount * sizeof(VkBuffer);
+    EndTransformFeedbackParams *paramStruct = initCommand<EndTransformFeedbackParams>(
+        CommandID::EndTransformFeedback, bufferSize, &writePtr);
+    paramStruct->bufferCount = bufferCount;
+    storePointerParameter(writePtr, counterBuffers, bufferSize);
+}
+
 ANGLE_INLINE void SecondaryCommandBuffer::executionBarrier(VkPipelineStageFlags stageMask)
 {
     ExecutionBarrierParams *paramStruct =
@@ -1300,27 +1408,6 @@ ANGLE_INLINE void SecondaryCommandBuffer::writeTimestamp(VkPipelineStageFlagBits
     paramStruct->query         = query;
 }
 
-ANGLE_INLINE void SecondaryCommandBuffer::beginTransformFeedback(uint32_t bufferCount,
-                                                                 const VkBuffer *counterBuffers)
-{
-    uint8_t *writePtr;
-    size_t bufferSize                         = bufferCount * sizeof(VkBuffer);
-    BeginTransformFeedbackParams *paramStruct = initCommand<BeginTransformFeedbackParams>(
-        CommandID::BeginTransformFeedback, bufferSize, &writePtr);
-    paramStruct->bufferCount = bufferCount;
-    storePointerParameter(writePtr, counterBuffers, bufferSize);
-}
-
-ANGLE_INLINE void SecondaryCommandBuffer::endTransformFeedback(uint32_t bufferCount,
-                                                               const VkBuffer *counterBuffers)
-{
-    uint8_t *writePtr;
-    size_t bufferSize                       = bufferCount * sizeof(VkBuffer);
-    EndTransformFeedbackParams *paramStruct = initCommand<EndTransformFeedbackParams>(
-        CommandID::EndTransformFeedback, bufferSize, &writePtr);
-    paramStruct->bufferCount = bufferCount;
-    storePointerParameter(writePtr, counterBuffers, bufferSize);
-}
 }  // namespace priv
 }  // namespace vk
 }  // namespace rx
