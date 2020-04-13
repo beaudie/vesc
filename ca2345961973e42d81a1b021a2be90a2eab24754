@@ -1,0 +1,296 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f70f2e7_065e6690",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "Can you please split this optimization into a followup CL? Then we can more easily bisect any possibly bugs, should any surface. So one Cl does the dumb implementation, the second reduces the state update calls.\n\nAlso, you can test if AMD/windows passes the tests without these optimizations. If so, then the workaround could be to avoid them on this configuration, instead of not exposing the extension altogether.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 47
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7846cf93_81c37f7e",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "Change to BlendEquationType, to you only need to case `scaled`.",
+      "range": {
+        "startLine": 343,
+        "startChar": 10,
+        "endLine": 343,
+        "endChar": 16
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbce381b_52bad13e",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "copy paste error?",
+      "range": {
+        "startLine": 345,
+        "startChar": 52,
+        "endLine": 345,
+        "endChar": 68
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8863ea26_2059e8ba",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "from \u003c\u003d 1, faster and more readable :)",
+      "range": {
+        "startLine": 403,
+        "startChar": 8,
+        "endLine": 403,
+        "endChar": 26
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9f7e2eb_c97ac889",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 419,
+        "startChar": 8,
+        "endLine": 419,
+        "endChar": 28
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef77aae7_18b39c95",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "Please add unit tests for this struct to ensure correctness of the math.",
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db06f2c8_8ea93f0f",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "Looks hacky, can you find a better way? Something like `std::if_it_doesn\u0027t_fit_in\u003cElementType, uint32_t\u003e`, with whatever primitive is available.",
+      "range": {
+        "startLine": 402,
+        "startChar": 39,
+        "endLine": 402,
+        "endChar": 81
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce4e8be6_fc4230ef",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "Links rot. It would be good to have some basic explanation of the math in the comment.",
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b55687a_28d0e29c",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "Explanantion of the math in the comments",
+      "range": {
+        "startLine": 449,
+        "startChar": 42,
+        "endLine": 449,
+        "endChar": 49
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c728bb38_32d8c8f0",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56c94834_ff7377bd",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "Why not `size_t maxDrawBuffers`? That variable seems to be typed with size_t everywhere else.",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 490,
+        "endChar": 6
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9c7e3ce_23ce92df",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "This block could use detailed comments. For example, this variable is called `disableDiffMask`, but it has the mask of buffers to be enabled? Should it be `\u003d mBlendStateExt.blendEnabledMask \u0026 ~blendEnabledMask` (which has 1 on each index that\u0027s going to need disabling)?\n\n---\n\nLooking a bit deeper, maybe it\u0027s just the naming that\u0027s confusing. It looks like what you mean is \"the mask used in case a mass disable is used, so these indices would be re-enabled\". Then I would just called it `enabledMask`. Similarly:\n\n     s/disableDiffCount/enabledCount\n     s/enabledDiffMask/disabledMask\n     s/enabledDiffCount/disabledCount",
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3e40733_bd082f75",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "Unnecessary comment",
+      "range": {
+        "startLine": 1254,
+        "startChar": 12,
+        "endLine": 1254,
+        "endChar": 48
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "946e062f_249754b8",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2143,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-13T20:12:25Z",
+      "side": 1,
+      "message": "Same",
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
