@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "837023d3_d7a9453a",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-04-13T22:34:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d59cbff_2e8677d2",
+      "range": {
+        "startLine": 180,
+        "startChar": 27,
+        "endLine": 180,
+        "endChar": 55
+      },
+      "revId": "38d1e7d49ee6d9dcb9408c727bcc6f5a6ed454d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bdc7d7bf_e2efda63",
         "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "38d1e7d49ee6d9dcb9408c727bcc6f5a6ed454d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e4b2358_cd3caba4",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-04-13T22:34:52Z",
+      "side": 1,
+      "message": "Done. Looking at this closely shows I don\u0027t actually need a custom combine parameters here. Falls back to ANGLE_INSTANTIATE_TEST_ES3.",
+      "parentUuid": "bdc7d7bf_e2efda63",
+      "revId": "38d1e7d49ee6d9dcb9408c727bcc6f5a6ed454d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
