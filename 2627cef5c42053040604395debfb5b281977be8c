@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "3ac3adb0_7a8b80a2",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-13T18:52:39Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 1252,
+        "startChar": 0,
+        "endLine": 1256,
+        "endChar": 5
+      },
+      "revId": "2627cef5c42053040604395debfb5b281977be8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84819f57_6bef935c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1740,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-13T18:52:39Z",
+      "side": 1,
+      "message": "This should just return false and then SpirvTransformer::transformInstruction() can handle the copyInstruction() work.\n\nSee the ref above.",
+      "range": {
+        "startLine": 1737,
+        "startChar": 0,
+        "endLine": 1740,
+        "endChar": 16
+      },
+      "revId": "2627cef5c42053040604395debfb5b281977be8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ced1d2b3_4b250b43",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1982,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-13T18:52:39Z",
+      "side": 1,
+      "message": "Passing in \u0027false\u0027 here will mean that monolithic programs will never remove the optimization, since only PPOs will transform the SPIR-V a second time before drawing.\n\nWe should know if it needs to be removed before getting this far though, since all of the GLSL has been translated already.",
+      "range": {
+        "startLine": 1982,
+        "startChar": 60,
+        "endLine": 1982,
+        "endChar": 65
+      },
+      "revId": "2627cef5c42053040604395debfb5b281977be8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "094a0251_1b5ed125",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-13T18:52:39Z",
+      "side": 1,
+      "message": "I see, you added another transformation step.\n\nThis shouldn\u0027t be necessary, since we should already know whether we need to remove the optimization before the initial SPIR-V transformation.",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 79
+      },
+      "revId": "2627cef5c42053040604395debfb5b281977be8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2078e78_e553755e",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 11
@@ -31,6 +123,75 @@
       "side": 1,
       "message": "It should trigger default constructor, which set all bits to zero. Let me know if this is not the case or not fitting coding style, I can certainly switch to explicit initializer.",
       "parentUuid": "b2078e78_e553755e",
+      "revId": "2627cef5c42053040604395debfb5b281977be8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2edfbb9_245c8ef7",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-13T18:52:39Z",
+      "side": 1,
+      "message": "Based on how far into the draw we are, we should always have a FS program by this point.",
+      "range": {
+        "startLine": 565,
+        "startChar": 12,
+        "endLine": 565,
+        "endChar": 22
+      },
+      "revId": "2627cef5c42053040604395debfb5b281977be8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84bff91e_75372a3f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-13T18:52:39Z",
+      "side": 1,
+      "message": "Instead of optionBits being a local variable here, it would probably make more sense for it to be a member variable within ProgramExecutableVk.   That way we can avoid doing this work here and instead record the value at shader link (compilation?) time.\n\nFor PPOs, it can be updated during ProgramPipelineVk::link(), since that\u0027s got a dirty bit to only run when the bound Programs change.   We may also want to add a ProgramPipelineVk::updateExecutable() to run just before the actual link work to make it a little more explicit.",
+      "range": {
+        "startLine": 562,
+        "startChar": 0,
+        "endLine": 569,
+        "endChar": 5
+      },
+      "revId": "2627cef5c42053040604395debfb5b281977be8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc4017bf_5530683b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-13T18:52:39Z",
+      "side": 1,
+      "message": "Why is this always false?   Is the expectation that we\u0027ve already removed the optimization during the Program\u0027s initial link() before it was bound to the PPO?",
+      "range": {
+        "startLine": 110,
+        "startChar": 39,
+        "endLine": 110,
+        "endChar": 44
+      },
       "revId": "2627cef5c42053040604395debfb5b281977be8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
