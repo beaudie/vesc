@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "09230891_27f9c003",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-04-13T18:43:58Z",
+      "side": 1,
+      "message": "Made a class BufferHelperPool to track the buffers",
+      "parentUuid": "ab14121a_0caa2370",
+      "range": {
+        "startLine": 143,
+        "startChar": 20,
+        "endLine": 143,
+        "endChar": 26
+      },
+      "revId": "2eade66ea3905f4f3d489dd00b7a01a85a4a2636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e45c607e_85307902",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "2eade66ea3905f4f3d489dd00b7a01a85a4a2636",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "350255a5_1ff1da1f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-04-13T18:43:58Z",
+      "side": 1,
+      "message": "Changed it to BufferHelperPool. Made a class to leverage DynamicBuffer\u0027s buffer tracking logic.",
+      "parentUuid": "e45c607e_85307902",
+      "range": {
+        "startLine": 588,
+        "startChar": 6,
+        "endLine": 588,
+        "endChar": 17
+      },
+      "revId": "2eade66ea3905f4f3d489dd00b7a01a85a4a2636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
