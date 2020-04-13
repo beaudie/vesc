@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "50c8f341_d626c078",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4700,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-13T06:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "769e6bc4_88a49776",
+      "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "005af1ee_3c9ed056",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 9
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "28e984af_023a1597",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4703,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-13T06:57:33Z",
+      "side": 1,
+      "message": "Done. Comments on TransformFeedbackVk.h:95 can better explain the logic here, quote:\n 95 // This member variable is set when glBindTransformFeedbackBuffers/glBeginTransformFeedback\n 96 // is called and unset in dirty bit handler for transform feedback state change. If this\n 97 // value is true, vertex shader will record transform feedback varyings from the beginning\n 98 // of the buffer.\n 99 bool mRebindTransformFeedbackBuffer;",
+      "parentUuid": "005af1ee_3c9ed056",
+      "range": {
+        "startLine": 4703,
+        "startChar": 8,
+        "endLine": 4703,
+        "endChar": 41
+      },
+      "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5ff8c95_0a2f134e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 9
@@ -56,6 +98,24 @@
       "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5c23aed_4cc66b4e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4714,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-13T06:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5ff8c95_0a2f134e",
+      "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "06e47311_3fe7bc2a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-13T06:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89276a79_cf35ee84",
+      "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cfe7cd20_7e1e70fc",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 9
@@ -90,6 +168,24 @@
       "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2a493b0_e53d00f7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1382540
+      },
+      "writtenOn": "2020-04-13T06:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfe7cd20_7e1e70fc",
+      "revId": "bbbd2c0c64a5b4ae21d4a58ece6f350312482c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
