@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76632d4e_92daf798",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2467,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-14T15:47:24Z",
+      "side": 1,
+      "message": "nit: blacklisted.",
+      "range": {
+        "startLine": 2467,
+        "startChar": 49,
+        "endLine": 2467,
+        "endChar": 61
+      },
+      "revId": "810424abdbd9616be97a72d68093cf16518faa60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
