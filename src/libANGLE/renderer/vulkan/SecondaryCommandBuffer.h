@@ -593,6 +593,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                        VkPipelineStageFlags dstStageMask,
                        const VkMemoryBarrier *memoryBarrier);
 
+    template <bool prepend = false>
     void pipelineBarrier(VkPipelineStageFlags srcStageMask,
                          VkPipelineStageFlags dstStageMask,
                          VkDependencyFlags dependencyFlags,
@@ -682,14 +683,14 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     bool empty() const { return mCommands.size() == 0 || mCommands[0]->id == CommandID::Invalid; }
 
   private:
-    template <class StructType, bool prependBegin>
+    template <class StructType, bool prepend>
     ANGLE_INLINE StructType *commonInit(CommandID cmdID, size_t allocationSize)
     {
         mCurrentBytesRemaining -= allocationSize;
 
         CommandHeader *header = reinterpret_cast<CommandHeader *>(mCurrentWritePointer);
         header->id            = cmdID;
-        if (prependBegin)
+        if (prepend)
         {
             // Point next command for this command to the first overall command
             header->nextCommand = mCommands[0];
@@ -729,7 +730,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     // Allocate and initialize memory for given commandID & variable param size, setting
     // variableDataPtr to the byte following fixed cmd data where variable-sized ptr data will
     // be written and returning a pointer to the start of the command's parameter data
-    template <class StructType, bool prependBegin = false>
+    template <class StructType, bool prepend = false>
     ANGLE_INLINE StructType *initCommand(CommandID cmdID,
                                          size_t variableSize,
                                          uint8_t **variableDataPtr)
@@ -742,11 +743,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
             allocateNewBlock();
         }
         *variableDataPtr = Offset<uint8_t>(mCurrentWritePointer, fixedAllocationSize);
-        return commonInit<StructType, prependBegin>(cmdID, allocationSize);
+        return commonInit<StructType, prepend>(cmdID, allocationSize);
     }
 
     // Initialize a command that doesn't have variable-sized ptr data
-    template <class StructType, bool prependBegin = false>
+    template <class StructType, bool prepend = false>
     ANGLE_INLINE StructType *initCommand(CommandID cmdID)
     {
         constexpr size_t allocationSize = sizeof(StructType) + sizeof(CommandHeader);
@@ -755,7 +756,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         {
             allocateNewBlock();
         }
-        return commonInit<StructType, prependBegin>(cmdID, allocationSize);
+        return commonInit<StructType, prepend>(cmdID, allocationSize);
     }
 
     // Initialize a command that doesn't have any params
@@ -1275,6 +1276,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::memoryBarrier(VkPipelineStageFlags src
     paramStruct->memoryBarrier       = *memoryBarrier;
 }
 
+template <bool prepend>
 ANGLE_INLINE void SecondaryCommandBuffer::pipelineBarrier(
     VkPipelineStageFlags srcStageMask,
     VkPipelineStageFlags dstStageMask,
@@ -1290,7 +1292,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::pipelineBarrier(
     size_t memBarrierSize              = memoryBarrierCount * sizeof(VkMemoryBarrier);
     size_t buffBarrierSize             = bufferMemoryBarrierCount * sizeof(VkBufferMemoryBarrier);
     size_t imgBarrierSize              = imageMemoryBarrierCount * sizeof(VkImageMemoryBarrier);
-    PipelineBarrierParams *paramStruct = initCommand<PipelineBarrierParams>(
+    PipelineBarrierParams *paramStruct = initCommand<PipelineBarrierParams, prepend>(
         CommandID::PipelineBarrier, memBarrierSize + buffBarrierSize + imgBarrierSize, &writePtr);
     paramStruct->srcStageMask             = srcStageMask;
     paramStruct->dstStageMask             = dstStageMask;
