@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "61d50bbc_a1e1c0ad",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-04-14T18:30:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5345a742_7b7ff2b9",
+      "range": {
+        "startLine": 46,
+        "startChar": 48,
+        "endLine": 46,
+        "endChar": 63
+      },
+      "revId": "6c95c063cf66e6771280f9804e19a58d83443438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38181691_50fe3c52",
         "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2020-04-14T16:44:08Z",
       "side": 1,
       "message": "we\u0027re not supposed to use non-const ref arguments according to the Google C++ guide. However it\u0027s just a test so I don\u0027t mind if you leave these.",
+      "range": {
+        "startLine": 166,
+        "startChar": 29,
+        "endLine": 166,
+        "endChar": 38
+      },
+      "revId": "6c95c063cf66e6771280f9804e19a58d83443438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40e75c99_d1384d5f",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-04-14T18:30:57Z",
+      "side": 1,
+      "message": "Left unchanged. Wonder how to do RAII without having too much duplicate code here?",
+      "parentUuid": "38181691_50fe3c52",
       "range": {
         "startLine": 166,
         "startChar": 29,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "71796201_0ec0c60e",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-04-14T18:30:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b0a0965_0b78c494",
+      "range": {
+        "startLine": 270,
+        "startChar": 9,
+        "endLine": 270,
+        "endChar": 51
+      },
+      "revId": "6c95c063cf66e6771280f9804e19a58d83443438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f2136f1_16edbac9",
         "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
         "patchSetId": 4
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e380433a_ff10d7ec",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-04-14T18:30:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f2136f1_16edbac9",
+      "range": {
+        "startLine": 285,
+        "startChar": 9,
+        "endLine": 285,
+        "endChar": 34
+      },
+      "revId": "6c95c063cf66e6771280f9804e19a58d83443438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28ff0137_ac014763",
         "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
         "patchSetId": 4
@@ -114,6 +210,30 @@
       "revId": "6c95c063cf66e6771280f9804e19a58d83443438",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78f41f09_9cd11b25",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-04-14T18:30:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28ff0137_ac014763",
+      "range": {
+        "startLine": 322,
+        "startChar": 16,
+        "endLine": 322,
+        "endChar": 38
+      },
+      "revId": "6c95c063cf66e6771280f9804e19a58d83443438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
