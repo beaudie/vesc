@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fde91b44_f5d3e38c",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-14T19:23:42Z",
+      "side": 1,
+      "message": "The second comparison should be done on unsigned type to properly cover all invalid values.\nPlease review https://chromium-review.googlesource.com/c/angle/angle/+/2149645",
+      "parentUuid": "7846cf93_81c37f7e",
+      "range": {
+        "startLine": 343,
+        "startChar": 10,
+        "endLine": 343,
+        "endChar": 16
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bbce381b_52bad13e",
         "filename": "src/common/PackedEnums.h",
         "patchSetId": 2
@@ -92,6 +116,30 @@
       "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1754885b_168a5d74",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-14T19:23:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbce381b_52bad13e",
+      "range": {
+        "startLine": 345,
+        "startChar": 52,
+        "endLine": 345,
+        "endChar": 68
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -118,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "68a0ed75_d0fd9163",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-14T19:23:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8863ea26_2059e8ba",
+      "range": {
+        "startLine": 403,
+        "startChar": 8,
+        "endLine": 403,
+        "endChar": 26
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9f7e2eb_c97ac889",
         "filename": "src/common/PackedEnums.h",
         "patchSetId": 2
@@ -138,6 +210,30 @@
       "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca065f51_3c95a869",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-14T19:23:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9f7e2eb_c97ac889",
+      "range": {
+        "startLine": 419,
+        "startChar": 8,
+        "endLine": 419,
+        "endChar": 28
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
