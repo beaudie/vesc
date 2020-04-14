@@ -400,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "7b016506_139509c6",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-14T22:37:03Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "91f26732_4ca4ca2f",
+      "range": {
+        "startLine": 207,
+        "startChar": 14,
+        "endLine": 207,
+        "endChar": 19
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eebe0b4f_e8a907d5",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 6
@@ -429,6 +453,24 @@
       "side": 1,
       "message": "Tends to be my old-school style. There was decades ago a rule not to return early - something to do with compiled optimization. I\u0027m sure its not so valid any more.",
       "parentUuid": "eebe0b4f_e8a907d5",
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b992b941_eed245bc",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-14T22:37:03Z",
+      "side": 1,
+      "message": "Reformatted.",
+      "parentUuid": "760ae863_9ff4ca68",
       "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -523,6 +565,30 @@
     },
     {
       "key": {
+        "uuid": "b98b4b52_3b96e42d",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-14T22:37:03Z",
+      "side": 1,
+      "message": "Random search of \"new\" indicates a check for nulllptr is NOT done.",
+      "parentUuid": "4dcb04d6_0d26caeb",
+      "range": {
+        "startLine": 406,
+        "startChar": 26,
+        "endLine": 410,
+        "endChar": 13
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "295ef510_d38788dc",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 6
@@ -534,6 +600,30 @@
       "writtenOn": "2020-04-11T14:19:13Z",
       "side": 1,
       "message": "Directly assign to mSyncHelper",
+      "range": {
+        "startLine": 418,
+        "startChar": 39,
+        "endLine": 418,
+        "endChar": 49
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bfc7417_833ce322",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-14T22:37:03Z",
+      "side": 1,
+      "message": "Used below, so I don\u0027t have to cast.",
+      "parentUuid": "295ef510_d38788dc",
       "range": {
         "startLine": 418,
         "startChar": 39,
