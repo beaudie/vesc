@@ -593,6 +593,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                        VkPipelineStageFlags dstStageMask,
                        const VkMemoryBarrier *memoryBarrier);
 
+    template <bool prepend = false>
     void pipelineBarrier(VkPipelineStageFlags srcStageMask,
                          VkPipelineStageFlags dstStageMask,
                          VkDependencyFlags dependencyFlags,
@@ -1275,6 +1276,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::memoryBarrier(VkPipelineStageFlags src
     paramStruct->memoryBarrier       = *memoryBarrier;
 }
 
+template <bool prepend>
 ANGLE_INLINE void SecondaryCommandBuffer::pipelineBarrier(
     VkPipelineStageFlags srcStageMask,
     VkPipelineStageFlags dstStageMask,
@@ -1290,7 +1292,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::pipelineBarrier(
     size_t memBarrierSize              = memoryBarrierCount * sizeof(VkMemoryBarrier);
     size_t buffBarrierSize             = bufferMemoryBarrierCount * sizeof(VkBufferMemoryBarrier);
     size_t imgBarrierSize              = imageMemoryBarrierCount * sizeof(VkImageMemoryBarrier);
-    PipelineBarrierParams *paramStruct = initCommand<PipelineBarrierParams>(
+    PipelineBarrierParams *paramStruct = initCommand<PipelineBarrierParams, prepend>(
         CommandID::PipelineBarrier, memBarrierSize + buffBarrierSize + imgBarrierSize, &writePtr);
     paramStruct->srcStageMask             = srcStageMask;
     paramStruct->dstStageMask             = dstStageMask;
