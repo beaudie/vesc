@@ -52,6 +52,24 @@
       "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce5a7871_c8a79e26",
+        "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-14T18:50:42Z",
+      "side": 1,
+      "message": "Oh, strange, trying this CL again locally does pass but the original version fails.\n\nThis CL:\n[ RUN      ] ProgramPipelineTest31.DetachAndModifyShader/ES3_1_Vulkan_SwiftShader\n[       OK ] ProgramPipelineTest31.DetachAndModifyShader/ES3_1_Vulkan_SwiftShader (609 ms)\n\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2102806\n[ RUN      ] ProgramPipelineTest31.DetachAndModifyShader/ES3_1_Vulkan_SwiftShader\n../../src/tests/gl_tests/ProgramPipelineTest.cpp:454: Failure\nExpected equality of these values:\n  static_cast\u003cGLenum\u003e(0x0502)\n    Which is: 1282\n  glGetError()\n    Which is: 0\n[  FAILED  ] ProgramPipelineTest31.DetachAndModifyShader/ES3_1_Vulkan_SwiftShader, where GetParam() \u003d ES3_1_Vulkan_SwiftShader (586 ms)\n\n\nLooks like something got lost in translation from the old to the new.",
+      "parentUuid": "8ce275bb_232a1a01",
+      "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
