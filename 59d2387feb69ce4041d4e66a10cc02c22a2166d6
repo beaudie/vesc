@@ -88,6 +88,24 @@
       "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a708a4cc_a897801f",
+        "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-14T18:59:23Z",
+      "side": 1,
+      "message": "It should fail until the bug is fixed, which it isn\u0027t yet.\n\nBoth of the pass/fail results I included are running against the same version of angle, so it seems the test code itself is different between the two CLs (with the failing result being the correct one).",
+      "parentUuid": "dd084f66_7989e985",
+      "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
