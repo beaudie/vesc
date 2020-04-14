@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "255c07c7_bd0508de",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-14T16:45:36Z",
+      "side": 1,
+      "message": "nit: ASSERT(mClientVersion.major \u003d\u003d 1)",
+      "range": {
+        "startLine": 1157,
+        "startChar": 0,
+        "endLine": 1162,
+        "endChar": 5
+      },
+      "revId": "4479a6acb868658181e31bf8811156710b440dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f68e51b_1c12b56b",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-14T16:45:36Z",
+      "side": 1,
+      "message": "nit: ASSERT(mClientVersion.major \u003d\u003d 1)",
+      "range": {
+        "startLine": 1288,
+        "startChar": 0,
+        "endLine": 1294,
+        "endChar": 5
+      },
+      "revId": "4479a6acb868658181e31bf8811156710b440dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
