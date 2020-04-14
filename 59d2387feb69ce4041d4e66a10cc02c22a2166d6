@@ -34,6 +34,24 @@
       "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ce275bb_232a1a01",
+        "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-14T18:37:51Z",
+      "side": 1,
+      "message": "The test is not catching the bug then",
+      "parentUuid": "614b3595_2f5fbc77",
+      "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
