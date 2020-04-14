@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c73c73e1_9da62597",
+        "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-14T17:48:29Z",
+      "side": 1,
+      "message": "How is CQ passing with this test that we know fails?   This should need the same skipping:\n\n    // TODO (timvp): Fix this test for Vulkan with PPO\n    // http://anglebug.com/3570\n    ANGLE_SKIP_TEST_IF(IsVulkan());",
+      "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
