@@ -22,6 +22,30 @@
       "revId": "eed930572961718ce80e5fa8c808ae1187f8d026",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bde63c3_3940f673",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-04-14T18:46:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbac2c1a_29828f0e",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 6
+      },
+      "revId": "eed930572961718ce80e5fa8c808ae1187f8d026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
