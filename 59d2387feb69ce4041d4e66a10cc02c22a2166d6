@@ -106,6 +106,24 @@
       "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99cf4c40_0478f82b",
+        "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-14T23:21:30Z",
+      "side": 1,
+      "message": "Chatted with Tim.  The test needed a glLinkProgram to see the failure.  It was failing initially due to other bugs.  I was under the impression the target bug had been fixed.  Uploaded a new version that contains the link and does fail.",
+      "parentUuid": "a708a4cc_a897801f",
+      "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
