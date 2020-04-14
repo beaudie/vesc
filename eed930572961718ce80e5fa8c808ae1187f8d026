@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbac2c1a_29828f0e",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-14T18:34:51Z",
+      "side": 1,
+      "message": "one nit I missed: please leave a one-line comment before each of the new tests your add in ANGLE.",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 6
+      },
+      "revId": "eed930572961718ce80e5fa8c808ae1187f8d026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
