@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11ecf1d5_e712e0ea",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-14T14:56:40Z",
+      "side": 1,
+      "message": "nit: can you wrap to 100 chars to make code review happy?",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 62
+      },
+      "revId": "3f47b9b3df139689915dc4ed81172371abde5bfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
