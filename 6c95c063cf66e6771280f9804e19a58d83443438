@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "caaedb88_65851f28",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-04-14T18:39:25Z",
+      "side": 1,
+      "message": "I see. It\u0027s because pass by ref is not noticable.",
+      "parentUuid": "a3a20f93_9ec13b83",
+      "range": {
+        "startLine": 166,
+        "startChar": 29,
+        "endLine": 166,
+        "endChar": 38
+      },
+      "revId": "6c95c063cf66e6771280f9804e19a58d83443438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b0a0965_0b78c494",
         "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
         "patchSetId": 4
