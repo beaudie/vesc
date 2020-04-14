@@ -70,6 +70,24 @@
       "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd084f66_7989e985",
+        "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-14T18:53:24Z",
+      "side": 1,
+      "message": "By my reading of b/151449648, the test was only supposed to fail with the changes in flight, but would be fixed by the final implementation.  The original version of this test did catch the error:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2102806/2/src/tests/gl_tests/ProgramPipelineTest.cpp#454\n\nDid I read this wrong and the test should *always* fail?",
+      "parentUuid": "8ce275bb_232a1a01",
+      "revId": "59d2387feb69ce4041d4e66a10cc02c22a2166d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
