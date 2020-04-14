@@ -4425,7 +4425,7 @@ void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
     image->changeLayout(aspectFlags, imageLayout, this);
 }
 
-void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
+void CommandBufferHelper::prependExecuteBarriers(vk::CommandBuffer *cmdBuffer)
 {
     if (mImageMemoryBarriers.empty() && mGlobalMemoryBarrierSrcAccess == 0)
     {
@@ -4455,9 +4455,9 @@ void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
 
     srcStages |= mImageBarrierSrcStageMask;
     dstStages |= mImageBarrierDstStageMask;
-    primary->pipelineBarrier(srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0,
-                             nullptr, static_cast<uint32_t>(mImageMemoryBarriers.size()),
-                             mImageMemoryBarriers.data());
+    cmdBuffer->pipelineBarrier<true>(srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0,
+                                     nullptr, static_cast<uint32_t>(mImageMemoryBarriers.size()),
+                                     mImageMemoryBarriers.data());
     mImageMemoryBarriers.clear();
     mImageBarrierSrcStageMask = 0;
     mImageBarrierDstStageMask = 0;
@@ -4486,7 +4486,7 @@ void OutsideRenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
         contextVk->addCommandBufferDiagnostics(out.str());
     }
 
-    executeBarriers(primary);
+    prependExecuteBarriers(&mCommandBuffer);
     mCommandBuffer.executeCommands(primary->getHandle());
 
     // Restart secondary buffer.
@@ -4562,8 +4562,6 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
         addRenderPassCommandDiagnostics(contextVk);
     }
 
-    executeBarriers(primary);
-
     // Pull a RenderPass from the cache.
     RenderPassCache &renderPassCache = contextVk->getRenderPassCache();
     Serial serial                    = contextVk->getCurrentQueueSerial();
@@ -4586,6 +4584,8 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
     // Run commands inside the RenderPass.
     mCommandBuffer.beginRenderPass(&beginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
+    // Prepend barrier before BeginRenderPass
+    prependExecuteBarriers(&mCommandBuffer);
     if (mValidTransformFeedbackBufferCount == 0)
     {
         mCommandBuffer.endRenderPass();
