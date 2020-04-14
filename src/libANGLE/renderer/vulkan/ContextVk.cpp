@@ -125,7 +125,7 @@ constexpr size_t kDriverUniformsAllocatorPageSize = 4 * 1024;
 constexpr size_t kInFlightCommandsLimit = 100u;
 
 // Dumping the command stream is disabled by default.
-constexpr bool kEnableCommandStreamDiagnostics = false;
+constexpr bool kEnableCommandStreamDiagnostics = true;
 
 void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                           const vk::PrimaryCommandBuffer &commandBuffer,
@@ -4450,7 +4450,7 @@ void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
     image->changeLayout(aspectFlags, imageLayout, this);
 }
 
-void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
+void CommandBufferHelper::prependExecuteBarriers(vk::CommandBuffer *cmdBuffer)
 {
     if (mImageMemoryBarriers.empty() && mGlobalMemoryBarrierSrcAccess == 0)
     {
@@ -4480,9 +4480,9 @@ void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
 
     srcStages |= mImageBarrierSrcStageMask;
     dstStages |= mImageBarrierDstStageMask;
-    primary->pipelineBarrier(srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0,
-                             nullptr, static_cast<uint32_t>(mImageMemoryBarriers.size()),
-                             mImageMemoryBarriers.data());
+    cmdBuffer->pipelineBarrier<true>(srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0,
+                                     nullptr, static_cast<uint32_t>(mImageMemoryBarriers.size()),
+                                     mImageMemoryBarriers.data());
     mImageMemoryBarriers.clear();
     mImageBarrierSrcStageMask = 0;
     mImageBarrierDstStageMask = 0;
@@ -4511,7 +4511,7 @@ void OutsideRenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
         contextVk->addCommandBufferDiagnostics(out.str());
     }
 
-    executeBarriers(primary);
+    prependExecuteBarriers(&mCommandBuffer);
     mCommandBuffer.executeCommands(primary->getHandle());
 
     // Restart secondary buffer.
@@ -4587,8 +4587,6 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
         addRenderPassCommandDiagnostics(contextVk);
     }
 
-    executeBarriers(primary);
-
     // Pull a RenderPass from the cache.
     RenderPassCache &renderPassCache = contextVk->getRenderPassCache();
     Serial serial                    = contextVk->getCurrentQueueSerial();
@@ -4611,8 +4609,9 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
     // Run commands inside the RenderPass.
     mCommandBuffer.beginRenderPass(&beginInfo, VK_SUBPASS_CONTENTS_INLINE);
     mCommandBuffer.endRenderPass();
-    mCommandBuffer.executeCommands(primary->getHandle());
 
+    // Prepend barrier before BeginRenderPass
+    prependExecuteBarriers(&mCommandBuffer);
     if (mValidTransformFeedbackBufferCount != 0)
     {
         // Would be better to accumulate this barrier using the command APIs.
@@ -4628,10 +4627,11 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
         bufferBarrier.offset                = 0;
         bufferBarrier.size                  = VK_WHOLE_SIZE;
 
-        primary->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT,
-                                 VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, 0u, 0u, nullptr, 1u,
-                                 &bufferBarrier, 0u, nullptr);
+        mCommandBuffer.pipelineBarrier(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT,
+                                       VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, 0u, 0u, nullptr, 1u,
+                                       &bufferBarrier, 0u, nullptr);
     }
+    mCommandBuffer.executeCommands(primary->getHandle());
 
     // Restart the command buffer.
     reset();
