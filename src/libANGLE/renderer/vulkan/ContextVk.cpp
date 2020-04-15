@@ -857,7 +857,8 @@ angle::Result ContextVk::initialize()
         mPrimaryBufferCounter++;
 
         EventName eventName = GetTraceEventName("Primary", mPrimaryBufferCounter);
-        ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_BEGIN, eventName));
+        ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands.getCommandBuffer(),
+                                TRACE_EVENT_PHASE_BEGIN, eventName));
     }
 
     return angle::Result::Continue;
@@ -1688,7 +1689,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         commandBuffer.waitEvents(1, cpuReady.get().ptr(), VK_PIPELINE_STAGE_HOST_BIT,
                                  VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, 0, nullptr, 0, nullptr, 0,
                                  nullptr);
-        timestampQuery.writeTimestamp(this, &commandBuffer);
+        timestampQuery.writeTimestamp(this, &mOutsideRenderPassCommands.getCommandBuffer());
         commandBuffer.setEvent(gpuDone.get().getHandle(), VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT);
 
         ANGLE_VK_TRY(this, commandBuffer.end());
@@ -1767,7 +1768,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::traceGpuEventImpl(vk::PrimaryCommandBuffer *commandBuffer,
+angle::Result ContextVk::traceGpuEventImpl(vk::CommandBuffer *commandBuffer,
                                            char phase,
                                            const EventName &name)
 {
@@ -3798,7 +3799,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     if (mGpuEventsEnabled)
     {
         EventName eventName = GetTraceEventName("Primary", mPrimaryBufferCounter);
-        ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_END, eventName));
+        ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands.getCommandBuffer(),
+                                TRACE_EVENT_PHASE_END, eventName));
     }
 
     ANGLE_VK_TRY(this, mPrimaryCommands.end());
@@ -3830,7 +3832,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     if (mGpuEventsEnabled)
     {
         EventName eventName = GetTraceEventName("Primary", mPrimaryBufferCounter);
-        ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_BEGIN, eventName));
+        ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands.getCommandBuffer(),
+                                TRACE_EVENT_PHASE_BEGIN, eventName));
     }
 
     return angle::Result::Continue;
@@ -3971,9 +3974,10 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     beginInfo.pInheritanceInfo         = nullptr;
 
-    ANGLE_VK_TRY(this, commandBuffer.begin(beginInfo));
-    timestampQuery.writeTimestamp(this, &commandBuffer);
-    ANGLE_VK_TRY(this, commandBuffer.end());
+    // ANGLE_VK_TRY(this, commandBuffer.begin(beginInfo));
+    timestampQuery.writeTimestamp(this, &mOutsideRenderPassCommands.getCommandBuffer());
+    // ANGLE_VK_TRY(this, commandBuffer.end());
+    mOutsideRenderPassCommands.getCommandBuffer().executeCommands(commandBuffer.getHandle());
 
     // Create fence for the submission
     VkFenceCreateInfo fenceInfo = {};
@@ -4189,13 +4193,13 @@ ANGLE_INLINE angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea)
     ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer));
     if (mActiveQueryAnySamples)
     {
-        mActiveQueryAnySamples->getQueryHelper()->beginOcclusionQuery(this, &mPrimaryCommands,
-                                                                      mRenderPassCommandBuffer);
+        mActiveQueryAnySamples->getQueryHelper()->beginOcclusionQuery(
+            this, &mOutsideRenderPassCommands.getCommandBuffer(), mRenderPassCommandBuffer);
     }
     if (mActiveQueryAnySamplesConservative)
     {
         mActiveQueryAnySamplesConservative->getQueryHelper()->beginOcclusionQuery(
-            this, &mPrimaryCommands, mRenderPassCommandBuffer);
+            this, &mOutsideRenderPassCommands.getCommandBuffer(), mRenderPassCommandBuffer);
     }
     return angle::Result::Continue;
 }
@@ -4227,7 +4231,8 @@ angle::Result ContextVk::endRenderPass()
         mRenderPassCounter++;
 
         EventName eventName = GetTraceEventName("RP", mRenderPassCounter);
-        ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_BEGIN, eventName));
+        ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands.getCommandBuffer(),
+                                TRACE_EVENT_PHASE_BEGIN, eventName));
     }
 
     mRenderPassCommands.pauseTransformFeedbackIfStarted();
@@ -4237,7 +4242,8 @@ angle::Result ContextVk::endRenderPass()
     if (mGpuEventsEnabled)
     {
         EventName eventName = GetTraceEventName("RP", mRenderPassCounter);
-        ANGLE_TRY(traceGpuEvent(&mPrimaryCommands, TRACE_EVENT_PHASE_END, eventName));
+        ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands.getCommandBuffer(),
+                                TRACE_EVENT_PHASE_END, eventName));
     }
 
     return angle::Result::Continue;
@@ -4343,8 +4349,8 @@ void ContextVk::beginOcclusionQuery(QueryVk *queryVk)
     // not yet started, we just remember it and defer the start call.
     if (mRenderPassCommands.started())
     {
-        queryVk->getQueryHelper()->beginOcclusionQuery(this, &mPrimaryCommands,
-                                                       mRenderPassCommandBuffer);
+        queryVk->getQueryHelper()->beginOcclusionQuery(
+            this, &mOutsideRenderPassCommands.getCommandBuffer(), mRenderPassCommandBuffer);
     }
     if (queryVk->isAnySamplesQuery())
     {

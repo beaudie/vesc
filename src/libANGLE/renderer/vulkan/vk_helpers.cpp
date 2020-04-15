@@ -1167,31 +1167,31 @@ void QueryHelper::deinit()
 
 angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
 {
-    vk::PrimaryCommandBuffer *primaryCommands;
-    ANGLE_TRY(contextVk->flushAndGetPrimaryCommandBuffer(&primaryCommands));
+    vk::CommandBuffer *outsideRenderPassCommands;
+    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&outsideRenderPassCommands));
     const QueryPool &queryPool = getQueryPool();
-    primaryCommands->resetQueryPool(queryPool, mQuery, 1);
-    primaryCommands->beginQuery(queryPool, mQuery, 0);
+    outsideRenderPassCommands->resetQueryPool(queryPool.getHandle(), mQuery, 1);
+    outsideRenderPassCommands->beginQuery(queryPool.getHandle(), mQuery, 0);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
     return angle::Result::Continue;
 }
 
 angle::Result QueryHelper::endQuery(ContextVk *contextVk)
 {
-    vk::PrimaryCommandBuffer *primaryCommands;
-    ANGLE_TRY(contextVk->flushAndGetPrimaryCommandBuffer(&primaryCommands));
-    primaryCommands->endQuery(getQueryPool(), mQuery);
+    vk::CommandBuffer *outsideRenderPassCommands;
+    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&outsideRenderPassCommands));
+    outsideRenderPassCommands->endQuery(getQueryPool().getHandle(), mQuery);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
     return angle::Result::Continue;
 }
 
 void QueryHelper::beginOcclusionQuery(ContextVk *contextVk,
-                                      PrimaryCommandBuffer *primaryCommands,
+                                      CommandBuffer *outsideRenderPassCommandBuffer,
                                       CommandBuffer *renderPassCommandBuffer)
 {
     const QueryPool &queryPool = getQueryPool();
     // reset has to be encoded in primary command buffer per spec
-    primaryCommands->resetQueryPool(queryPool, mQuery, 1);
+    outsideRenderPassCommandBuffer->resetQueryPool(queryPool.getHandle(), mQuery, 1);
     renderPassCommandBuffer->beginQuery(queryPool.getHandle(), mQuery, 0);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
 }
@@ -1204,17 +1204,18 @@ void QueryHelper::endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderP
 
 angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)
 {
-    vk::PrimaryCommandBuffer *primary;
-    ANGLE_TRY(contextVk->flushAndGetPrimaryCommandBuffer(&primary));
-    writeTimestamp(contextVk, primary);
+    vk::CommandBuffer *outsideRenderPassCommands;
+    ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&outsideRenderPassCommands));
+    writeTimestamp(contextVk, outsideRenderPassCommands);
     return angle::Result::Continue;
 }
 
-void QueryHelper::writeTimestamp(ContextVk *contextVk, PrimaryCommandBuffer *primary)
+void QueryHelper::writeTimestamp(ContextVk *contextVk, CommandBuffer *outsideRenderPassCommands)
 {
     const QueryPool &queryPool = getQueryPool();
-    primary->resetQueryPool(queryPool, mQuery, 1);
-    primary->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, mQuery);
+    outsideRenderPassCommands->resetQueryPool(queryPool.getHandle(), mQuery, 1);
+    outsideRenderPassCommands->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+                                              queryPool.getHandle(), mQuery);
     mMostRecentSerial = contextVk->getCurrentQueueSerial();
 }
 

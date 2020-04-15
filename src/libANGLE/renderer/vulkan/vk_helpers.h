@@ -389,12 +389,12 @@ class QueryHelper final
 
     // for occlusion query
     void beginOcclusionQuery(ContextVk *contextVk,
-                             PrimaryCommandBuffer *primaryCommands,
+                             CommandBuffer *outsideRenderPassCommandBuffer,
                              CommandBuffer *renderPassCommandBuffer);
     void endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
 
     angle::Result flushAndWriteTimestamp(ContextVk *contextVk);
-    void writeTimestamp(ContextVk *contextVk, PrimaryCommandBuffer *primary);
+    void writeTimestamp(ContextVk *contextVk, CommandBuffer *outsideRenderPassCommands);
 
     Serial getStoredQueueSerial() { return mMostRecentSerial; }
     bool hasPendingWork(ContextVk *contextVk);
