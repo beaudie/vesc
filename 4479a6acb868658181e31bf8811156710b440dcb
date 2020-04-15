@@ -45,6 +45,23 @@
       "revId": "4479a6acb868658181e31bf8811156710b440dcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f5b7c45_c1081433",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-15T14:39:59Z",
+      "side": 1,
+      "message": "nit similar to Jamie\u0027s comment, could be: if (context-\u003egetClientVersion().major !\u003d 1) just to align with the earlier code",
+      "revId": "4479a6acb868658181e31bf8811156710b440dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
