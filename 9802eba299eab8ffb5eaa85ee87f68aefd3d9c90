@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2477552_993eb35d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-15T14:15:01Z",
+      "side": 1,
+      "message": "This assert seems unnecessary, did just assign it in the line above.",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6df60f30_5103e8a7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-15T14:15:01Z",
+      "side": 1,
+      "message": "Since this is the only difference between initWithLoad maybe make this a parameter?",
+      "range": {
+        "startLine": 1476,
+        "startChar": 28,
+        "endLine": 1476,
+        "endChar": 59
+      },
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
