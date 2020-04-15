@@ -1965,6 +1965,7 @@ angle::Result GlslangTransformSpirvCode(const GlslangErrorCallback &callback,
 }
 
 angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
+                                        const gl::ProgramExecutable &executable,
                                         const gl::Caps &glCaps,
                                         const gl::ShaderMap<std::string> &shaderSources,
                                         const ShaderMapInterfaceVariableInfoMap &variableInfoMap,
@@ -1973,7 +1974,7 @@ angle::Result GlslangGetShaderSpirvCode(const GlslangErrorCallback &callback,
     gl::ShaderMap<SpirvBlob> initialSpirvBlobs;
     ANGLE_TRY(GetShaderSpirvCode(callback, glCaps, shaderSources, &initialSpirvBlobs));
 
-    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : executable.getLinkedShaderStages())
     {
         // we pass in false here to skip modifications related to  early fragment tests
         // optimizations and line rasterization. These are done in the initProgram time since they
