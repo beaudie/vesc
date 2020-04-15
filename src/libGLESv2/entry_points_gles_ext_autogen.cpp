@@ -8792,18 +8792,20 @@ GLenum GL_APIENTRY ClientWaitSyncContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SyncID syncPacked                                     = FromGL<SyncID>(sync);
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateClientWaitSync(context, sync, flags, timeout));
+        bool isCallValid                                      = (context->skipValidation() ||
+                            ValidateClientWaitSync(context, syncPacked, flags, timeout));
         if (isCallValid)
         {
-            returnValue = context->clientWaitSync(sync, flags, timeout);
+            returnValue = context->clientWaitSync(syncPacked, flags, timeout);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::ClientWaitSync, GLenum>();
         }
-        ANGLE_CAPTURE(ClientWaitSync, isCallValid, context, sync, flags, timeout, returnValue);
+        ANGLE_CAPTURE(ClientWaitSync, isCallValid, context, syncPacked, flags, timeout,
+                      returnValue);
     }
     else
     {
@@ -10206,13 +10208,14 @@ void GL_APIENTRY DeleteSyncContextANGLE(GLeglContext ctx, GLsync sync)
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SyncID syncPacked                                     = FromGL<SyncID>(sync);
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateDeleteSync(context, sync));
+        bool isCallValid = (context->skipValidation() || ValidateDeleteSync(context, syncPacked));
         if (isCallValid)
         {
-            context->deleteSync(sync);
+            context->deleteSync(syncPacked);
         }
-        ANGLE_CAPTURE(DeleteSync, isCallValid, context, sync);
+        ANGLE_CAPTURE(DeleteSync, isCallValid, context, syncPacked);
     }
 }
 
@@ -14955,14 +14958,15 @@ void GL_APIENTRY GetSyncivContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SyncID syncPacked                                     = FromGL<SyncID>(sync);
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
-                            ValidateGetSynciv(context, sync, pname, bufSize, length, values));
+                            ValidateGetSynciv(context, syncPacked, pname, bufSize, length, values));
         if (isCallValid)
         {
-            context->getSynciv(sync, pname, bufSize, length, values);
+            context->getSynciv(syncPacked, pname, bufSize, length, values);
         }
-        ANGLE_CAPTURE(GetSynciv, isCallValid, context, sync, pname, bufSize, length, values);
+        ANGLE_CAPTURE(GetSynciv, isCallValid, context, syncPacked, pname, bufSize, length, values);
     }
 }
 
@@ -16638,17 +16642,18 @@ GLboolean GL_APIENTRY IsSyncContextANGLE(GLeglContext ctx, GLsync sync)
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SyncID syncPacked                                     = FromGL<SyncID>(sync);
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateIsSync(context, sync));
+        bool isCallValid = (context->skipValidation() || ValidateIsSync(context, syncPacked));
         if (isCallValid)
         {
-            returnValue = context->isSync(sync);
+            returnValue = context->isSync(syncPacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsSync, GLboolean>();
         }
-        ANGLE_CAPTURE(IsSync, isCallValid, context, sync, returnValue);
+        ANGLE_CAPTURE(IsSync, isCallValid, context, syncPacked, returnValue);
     }
     else
     {
@@ -23427,14 +23432,15 @@ void GL_APIENTRY WaitSyncContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SyncID syncPacked                                     = FromGL<SyncID>(sync);
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateWaitSync(context, sync, flags, timeout));
+            (context->skipValidation() || ValidateWaitSync(context, syncPacked, flags, timeout));
         if (isCallValid)
         {
-            context->waitSync(sync, flags, timeout);
+            context->waitSync(syncPacked, flags, timeout);
         }
-        ANGLE_CAPTURE(WaitSync, isCallValid, context, sync, flags, timeout);
+        ANGLE_CAPTURE(WaitSync, isCallValid, context, syncPacked, flags, timeout);
     }
 }
 

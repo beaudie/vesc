@@ -538,7 +538,7 @@ void WriteCppReplayForCall(const CallCapture &call,
             {
                 WriteGLFloatValue(callOut, param.value.GLfloatVal);
             }
-            else if (param.type == ParamType::TGLsync)
+            else if (param.type == ParamType::TSyncID)
             {
                 callOut << "gSyncMap[" << param.value.GLintVal << "]";
             }
@@ -604,7 +604,7 @@ void WriteCppReplayForCall(const CallCapture &call,
                     WriteResourceIDPointerParamReplay<gl::SemaphoreID>(counters, callOut, out, call,
                                                                        param);
                     break;
-                case ParamType::TGLsync:
+                case ParamType::TSyncID:
                     WriteResourceIDPointerParamReplay<gl::SyncID>(counters, callOut, out, call,
                                                                   param);
                     break;
@@ -3566,7 +3566,7 @@ void WriteParamValueReplay<ParamType::TShaderProgramID>(std::ostream &os,
 }
 
 template <>
-void WriteParamValueReplay<ParamType::TGLsync>(std::ostream &os,
+void WriteParamValueReplay<ParamType::TSyncID>(std::ostream &os,
                                                const CallCapture &call,
                                                gl::SyncID value)
 {

@@ -211,9 +211,6 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
             WriteParamValueReplay<ParamType::TGLsizeiptrConstPointer>(
                 os, call, param.value.GLsizeiptrConstPointerVal);
             break;
-        case ParamType::TGLsync:
-            WriteParamValueReplay<ParamType::TGLsync>(os, call, param.value.GLsyncVal);
-            break;
         case ParamType::TGLubyte:
             WriteParamValueReplay<ParamType::TGLubyte>(os, call, param.value.GLubyteVal);
             break;
@@ -389,6 +386,9 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
             break;
         case ParamType::TShadingModel:
             WriteParamValueReplay<ParamType::TShadingModel>(os, call, param.value.ShadingModelVal);
+            break;
+        case ParamType::TSyncID:
+            WriteParamValueReplay<ParamType::TSyncID>(os, call, param.value.SyncIDVal);
             break;
         case ParamType::TTextureEnvParameter:
             WriteParamValueReplay<ParamType::TTextureEnvParameter>(
@@ -579,8 +579,6 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLsizeiptr";
         case ParamType::TGLsizeiptrConstPointer:
             return "const GLsizeiptr *";
-        case ParamType::TGLsync:
-            return "GLsync";
         case ParamType::TGLubyte:
             return "GLubyte";
         case ParamType::TGLubyteConstPointer:
@@ -675,6 +673,8 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLenum";
         case ParamType::TShadingModel:
             return "GLenum";
+        case ParamType::TSyncID:
+            return "GLuint";
         case ParamType::TTextureEnvParameter:
             return "GLenum";
         case ParamType::TTextureEnvTarget:
@@ -783,6 +783,8 @@ ResourceIDType GetResourceIDTypeFromParamType(ParamType paramType)
             return ResourceIDType::ShaderProgram;
         case ParamType::TShaderProgramIDPointer:
             return ResourceIDType::ShaderProgram;
+        case ParamType::TSyncID:
+            return ResourceIDType::Sync;
         case ParamType::TTextureID:
             return ResourceIDType::Texture;
         case ParamType::TTextureIDConstPointer:
@@ -830,6 +832,8 @@ const char *GetResourceIDTypeName(ResourceIDType resourceIDType)
             return "Semaphore";
         case ResourceIDType::ShaderProgram:
             return "ShaderProgram";
+        case ResourceIDType::Sync:
+            return "Sync";
         case ResourceIDType::Texture:
             return "Texture";
         case ResourceIDType::TransformFeedback:

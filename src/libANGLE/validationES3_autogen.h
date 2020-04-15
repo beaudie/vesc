@@ -63,7 +63,7 @@ bool ValidateClearBufferuiv(const Context *context,
                             GLint drawbuffer,
                             const GLuint *value);
 bool ValidateClientWaitSync(const Context *context,
-                            GLsync sync,
+                            SyncID syncPacked,
                             GLbitfield flags,
                             GLuint64 timeout);
 bool ValidateCompressedTexImage3D(const Context *context,
@@ -106,7 +106,7 @@ bool ValidateCopyTexSubImage3D(const Context *context,
                                GLsizei height);
 bool ValidateDeleteQueries(const Context *context, GLsizei n, const QueryID *idsPacked);
 bool ValidateDeleteSamplers(const Context *context, GLsizei count, const SamplerID *samplersPacked);
-bool ValidateDeleteSync(const Context *context, GLsync sync);
+bool ValidateDeleteSync(const Context *context, SyncID syncPacked);
 bool ValidateDeleteTransformFeedbacks(const Context *context,
                                       GLsizei n,
                                       const TransformFeedbackID *idsPacked);
@@ -215,7 +215,7 @@ bool ValidateGetSamplerParameteriv(const Context *context,
                                    const GLint *params);
 bool ValidateGetStringi(const Context *context, GLenum name, GLuint index);
 bool ValidateGetSynciv(const Context *context,
-                       GLsync sync,
+                       SyncID syncPacked,
                        GLenum pname,
                        GLsizei bufSize,
                        const GLsizei *length,
@@ -262,7 +262,7 @@ bool ValidateInvalidateSubFramebuffer(const Context *context,
                                       GLsizei height);
 bool ValidateIsQuery(const Context *context, QueryID idPacked);
 bool ValidateIsSampler(const Context *context, SamplerID samplerPacked);
-bool ValidateIsSync(const Context *context, GLsync sync);
+bool ValidateIsSync(const Context *context, SyncID syncPacked);
 bool ValidateIsTransformFeedback(const Context *context, TransformFeedbackID idPacked);
 bool ValidateIsVertexArray(const Context *context, VertexArrayID arrayPacked);
 bool ValidateMapBufferRange(const Context *context,
@@ -433,7 +433,10 @@ bool ValidateVertexAttribIPointer(const Context *context,
                                   VertexAttribType typePacked,
                                   GLsizei stride,
                                   const void *pointer);
-bool ValidateWaitSync(const Context *context, GLsync sync, GLbitfield flags, GLuint64 timeout);
+bool ValidateWaitSync(const Context *context,
+                      SyncID syncPacked,
+                      GLbitfield flags,
+                      GLuint64 timeout);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES3_AUTOGEN_H_

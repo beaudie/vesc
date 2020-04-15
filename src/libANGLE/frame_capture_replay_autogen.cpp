@@ -309,7 +309,7 @@ void FrameCapture::ReplayCall(gl::Context *context,
             break;
         case gl::EntryPoint::ClientWaitSync:
             context->clientWaitSync(
-                params.getParam("sync", ParamType::TGLsync, 0).value.GLsyncVal,
+                params.getParam("syncPacked", ParamType::TSyncID, 0).value.SyncIDVal,
                 params.getParam("flags", ParamType::TGLbitfield, 1).value.GLbitfieldVal,
                 params.getParam("timeout", ParamType::TGLuint64, 2).value.GLuint64Val);
             break;
@@ -585,7 +585,8 @@ void FrameCapture::ReplayCall(gl::Context *context,
                                       .value.ShaderProgramIDVal);
             break;
         case gl::EntryPoint::DeleteSync:
-            context->deleteSync(params.getParam("sync", ParamType::TGLsync, 0).value.GLsyncVal);
+            context->deleteSync(
+                params.getParam("syncPacked", ParamType::TSyncID, 0).value.SyncIDVal);
             break;
         case gl::EntryPoint::DeleteTextures:
             context->deleteTextures(
@@ -1461,7 +1462,7 @@ void FrameCapture::ReplayCall(gl::Context *context,
                                 params.getParam("index", ParamType::TGLuint, 1).value.GLuintVal);
             break;
         case gl::EntryPoint::GetSynciv:
-            context->getSynciv(params.getParam("sync", ParamType::TGLsync, 0).value.GLsyncVal,
+            context->getSynciv(params.getParam("syncPacked", ParamType::TSyncID, 0).value.SyncIDVal,
                                params.getParam("pname", ParamType::TGLenum, 1).value.GLenumVal,
                                params.getParam("bufSize", ParamType::TGLsizei, 2).value.GLsizeiVal,
                                replayContext->getReadBufferPointer<GLsizei *>(
@@ -1763,7 +1764,7 @@ void FrameCapture::ReplayCall(gl::Context *context,
                                   .value.ShaderProgramIDVal);
             break;
         case gl::EntryPoint::IsSync:
-            context->isSync(params.getParam("sync", ParamType::TGLsync, 0).value.GLsyncVal);
+            context->isSync(params.getParam("syncPacked", ParamType::TSyncID, 0).value.SyncIDVal);
             break;
         case gl::EntryPoint::IsTexture:
             context->isTexture(
@@ -3330,7 +3331,7 @@ void FrameCapture::ReplayCall(gl::Context *context,
             break;
         case gl::EntryPoint::WaitSync:
             context->waitSync(
-                params.getParam("sync", ParamType::TGLsync, 0).value.GLsyncVal,
+                params.getParam("syncPacked", ParamType::TSyncID, 0).value.SyncIDVal,
                 params.getParam("flags", ParamType::TGLbitfield, 1).value.GLbitfieldVal,
                 params.getParam("timeout", ParamType::TGLuint64, 2).value.GLuint64Val);
             break;
