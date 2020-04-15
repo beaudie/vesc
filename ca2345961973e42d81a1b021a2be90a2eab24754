@@ -277,6 +277,30 @@
     },
     {
       "key": {
+        "uuid": "bdd6c18a_06d61f8a",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-15T00:39:08Z",
+      "side": 1,
+      "message": "For color mask, ElementType is uint8_t as there\u0027s no uint4_t type. So a non-hacky way would likely involve\n- checking if ElementType is an enum and accessing its EnumCount;\n- special-casing uint8_t.\n\nThe most straightforward way I could think of would need \"if constexpr\" that is unavailable before C++17.\n\nAlternatively, we could make a dummy enum for color mask values.\n\nThoughts?",
+      "parentUuid": "db06f2c8_8ea93f0f",
+      "range": {
+        "startLine": 402,
+        "startChar": 39,
+        "endLine": 402,
+        "endChar": 81
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce4e8be6_fc4230ef",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 2
