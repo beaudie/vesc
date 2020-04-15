@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fcb56ff1_3c348528",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-15T15:58:09Z",
+      "side": 1,
+      "message": "The exact reason I added this assertion is to catch the case that people pass in other extension layout that has more than 5 bits. That is also the reason I added VK_IMAGE_LAYOUT_PRESENT_ANGLE to replace VK_IMAGE_LAYOUT_PRESENT_SRC_KHR. The other option is to make the layout 32 bit instead of 5 bit, but I figured this probably is better in terms of cost/benefit balance for now.",
+      "parentUuid": "f2477552_993eb35d",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6df60f30_5103e8a7",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 7
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "6cb33368_fe037d1c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-15T15:58:09Z",
+      "side": 1,
+      "message": "That is right. I don\u0027t have much preference here. Compiler will inline them anyway. I think.",
+      "parentUuid": "6df60f30_5103e8a7",
+      "range": {
+        "startLine": 1476,
+        "startChar": 28,
+        "endLine": 1476,
+        "endChar": 59
+      },
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f15c2bda_4f70dd65",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 7
@@ -53,6 +95,24 @@
       "writtenOn": "2020-04-15T14:54:04Z",
       "side": 1,
       "message": "To clarify, this is a private/internal-to-ANGLE layout, that will never be published?\n\nSeems possible that this value (31) can be taken by a future core version of Vulkan.  Not sure it\u0027s a big risk.",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "758dbbed_2d1abdff",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-15T15:58:09Z",
+      "side": 1,
+      "message": "That is right, there is a small risk here. As I explained above, it most about cost/benefit balance. When that day arrives, 5 bit will not be enough and we will just remove the private enum here.",
+      "parentUuid": "f15c2bda_4f70dd65",
       "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
