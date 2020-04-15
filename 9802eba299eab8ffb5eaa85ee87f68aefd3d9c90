@@ -39,6 +39,23 @@
       "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f15c2bda_4f70dd65",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-04-15T14:54:04Z",
+      "side": 1,
+      "message": "To clarify, this is a private/internal-to-ANGLE layout, that will never be published?\n\nSeems possible that this value (31) can be taken by a future core version of Vulkan.  Not sure it\u0027s a big risk.",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
