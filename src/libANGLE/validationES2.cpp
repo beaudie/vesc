@@ -2555,7 +2555,7 @@ bool ValidateGetObjectLabelKHR(const Context *context,
 
 static bool ValidateObjectPtrName(const Context *context, const void *ptr)
 {
-    if (context->getSync(reinterpret_cast<GLsync>(const_cast<void *>(ptr))) == nullptr)
+    if (context->getSync({reinterpret_cast<GLuint>(ptr)}) == nullptr)
     {
         context->validationError(GL_INVALID_VALUE, kInvalidSyncPointer);
         return false;

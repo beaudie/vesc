@@ -3152,7 +3152,7 @@ bool ValidateVertexAttribIPointer(const Context *context,
 }
 
 bool ValidateGetSynciv(const Context *context,
-                       GLsync sync,
+                       SyncID sync,
                        GLenum pname,
                        GLsizei bufSize,
                        const GLsizei *length,
@@ -4089,7 +4089,7 @@ bool ValidateFenceSync(const Context *context, GLenum condition, GLbitfield flag
     return true;
 }
 
-bool ValidateIsSync(const Context *context, GLsync sync)
+bool ValidateIsSync(const Context *context, SyncID sync)
 {
     if ((context->getClientMajorVersion() < 3) && !context->getExtensions().glSyncARB)
     {
@@ -4100,7 +4100,7 @@ bool ValidateIsSync(const Context *context, GLsync sync)
     return true;
 }
 
-bool ValidateDeleteSync(const Context *context, GLsync sync)
+bool ValidateDeleteSync(const Context *context, SyncID sync)
 {
     if ((context->getClientMajorVersion() < 3) && !context->getExtensions().glSyncARB)
     {
@@ -4108,7 +4108,7 @@ bool ValidateDeleteSync(const Context *context, GLsync sync)
         return false;
     }
 
-    if (sync != static_cast<GLsync>(0) && !context->getSync(sync))
+    if (sync != FromGL<SyncID>(0) && !context->getSync(sync))
     {
         context->validationError(GL_INVALID_VALUE, kSyncMissing);
         return false;
@@ -4117,7 +4117,7 @@ bool ValidateDeleteSync(const Context *context, GLsync sync)
     return true;
 }
 
-bool ValidateClientWaitSync(const Context *context, GLsync sync, GLbitfield flags, GLuint64 timeout)
+bool ValidateClientWaitSync(const Context *context, SyncID sync, GLbitfield flags, GLuint64 timeout)
 {
     if ((context->getClientMajorVersion() < 3) && !context->getExtensions().glSyncARB)
     {
@@ -4141,7 +4141,7 @@ bool ValidateClientWaitSync(const Context *context, GLsync sync, GLbitfield flag
     return true;
 }
 
-bool ValidateWaitSync(const Context *context, GLsync sync, GLbitfield flags, GLuint64 timeout)
+bool ValidateWaitSync(const Context *context, SyncID sync, GLbitfield flags, GLuint64 timeout)
 {
     if ((context->getClientMajorVersion() < 3) && !context->getExtensions().glSyncARB)
     {

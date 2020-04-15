@@ -403,6 +403,11 @@ void WriteParamValueReplay<ParamType::TUniformLocation>(std::ostream &os,
                                                         const CallCapture &call,
                                                         gl::UniformLocation value);
 
+template <>
+void WriteParamValueReplay<ParamType::TSyncID>(std::ostream &os,
+                                               const CallCapture &call,
+                                               gl::SyncID value);
+
 // General fallback for any unspecific type.
 template <ParamType ParamT, typename T>
 void WriteParamValueReplay(std::ostream &os, const CallCapture &call, T value)

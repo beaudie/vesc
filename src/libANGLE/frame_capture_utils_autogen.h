@@ -118,6 +118,7 @@ enum class ParamType
     TShaderProgramIDPointer,
     TShaderType,
     TShadingModel,
+    TSyncID,
     TTextureEnvParameter,
     TTextureEnvTarget,
     TTextureID,
@@ -139,7 +140,7 @@ enum class ParamType
     TvoidPointerPointer,
 };
 
-constexpr uint32_t kParamTypeCount = 120;
+constexpr uint32_t kParamTypeCount = 121;
 
 union ParamValue
 {
@@ -244,6 +245,7 @@ union ParamValue
     gl::ShaderProgramID *ShaderProgramIDPointerVal;
     gl::ShaderType ShaderTypeVal;
     gl::ShadingModel ShadingModelVal;
+    gl::SyncID SyncIDVal;
     gl::TextureEnvParameter TextureEnvParameterVal;
     gl::TextureEnvTarget TextureEnvTargetVal;
     gl::TextureID TextureIDVal;
@@ -936,6 +938,12 @@ inline gl::ShadingModel GetParamVal<ParamType::TShadingModel, gl::ShadingModel>(
 }
 
 template <>
+inline gl::SyncID GetParamVal<ParamType::TSyncID, gl::SyncID>(const ParamValue &value)
+{
+    return value.SyncIDVal;
+}
+
+template <>
 inline gl::TextureEnvParameter
 GetParamVal<ParamType::TTextureEnvParameter, gl::TextureEnvParameter>(const ParamValue &value)
 {
@@ -1279,6 +1287,8 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TShaderType, T>(value);
         case ParamType::TShadingModel:
             return GetParamVal<ParamType::TShadingModel, T>(value);
+        case ParamType::TSyncID:
+            return GetParamVal<ParamType::TSyncID, T>(value);
         case ParamType::TTextureEnvParameter:
             return GetParamVal<ParamType::TTextureEnvParameter, T>(value);
         case ParamType::TTextureEnvTarget:
@@ -1973,6 +1983,12 @@ inline void SetParamVal<ParamType::TShadingModel>(gl::ShadingModel valueIn, Para
 }
 
 template <>
+inline void SetParamVal<ParamType::TSyncID>(gl::SyncID valueIn, ParamValue *valueOut)
+{
+    valueOut->SyncIDVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TTextureEnvParameter>(gl::TextureEnvParameter valueIn,
                                                          ParamValue *valueOut)
 {
@@ -2412,6 +2428,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
         case ParamType::TShadingModel:
             SetParamVal<ParamType::TShadingModel>(valueIn, valueOut);
             break;
+        case ParamType::TSyncID:
+            SetParamVal<ParamType::TSyncID>(valueIn, valueOut);
+            break;
         case ParamType::TTextureEnvParameter:
             SetParamVal<ParamType::TTextureEnvParameter>(valueIn, valueOut);
             break;
@@ -2490,6 +2509,7 @@ enum class ResourceIDType
     Sampler,
     Semaphore,
     ShaderProgram,
+    Sync,
     Texture,
     TransformFeedback,
     VertexArray,

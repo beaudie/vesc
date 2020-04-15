@@ -115,6 +115,9 @@
     "glCheckNamedFramebufferStatus": {
         "framebuffer": "FramebufferID"
     },
+    "glClientWaitSync": {
+        "sync": "SyncID"
+    },
     "glClearNamedBufferData": {
         "buffer": "BufferID"
     },
@@ -299,6 +302,9 @@
     "glDeleteShader": {
         "shader": "ShaderProgramID"
     },
+    "glDeleteSync": {
+        "sync": "SyncID"
+    },
     "glDeleteTextures": {
         "textures": "const TextureID *"
     },
@@ -391,6 +397,9 @@
     },
     "glExtIsProgramBinary": {
         "program": "ShaderProgramID"
+    },
+    "glFenceSync": {
+        "sync": "GLsync"
     },
     "glFinishFenceNV": {
         "fence": "FenceNVID"
@@ -759,6 +768,9 @@
     "glGetSubroutineUniformLocation": {
         "program": "ShaderProgramID"
     },
+    "glGetSynciv": {
+        "sync": "SyncID"
+    },
     "glGetTexEnvfv": {
         "pname": "TextureEnvParameter",
         "target": "TextureEnvTarget"
@@ -971,6 +983,9 @@
     },
     "glIsShader": {
         "shader": "ShaderProgramID"
+    },
+    "glIsSync": {
+        "sync": "SyncID"
     },
     "glIsTexture": {
         "texture": "TextureID"
@@ -1863,5 +1878,8 @@
         "buffers": "const BufferID *",
         "semaphore": "SemaphoreID",
         "textures": "const TextureID *"
+    },
+    "glWaitSync": {
+        "sync": "SyncID"
     }
 }

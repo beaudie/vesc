@@ -109,7 +109,7 @@ template class TypedResourceManager<Renderbuffer,
                                     RenderbufferManager,
                                     RenderbufferID>;
 template class TypedResourceManager<Sampler, HandleAllocator, SamplerManager, SamplerID>;
-template class TypedResourceManager<Sync, HandleAllocator, SyncManager, GLuint>;
+template class TypedResourceManager<Sync, HandleAllocator, SyncManager, SyncID>;
 template class TypedResourceManager<Framebuffer,
                                     HandleAllocator,
                                     FramebufferManager,
@@ -331,16 +331,16 @@ void SyncManager::DeleteObject(const Context *context, Sync *sync)
     sync->release(context);
 }
 
-GLuint SyncManager::createSync(rx::GLImplFactory *factory)
+SyncID SyncManager::createSync(rx::GLImplFactory *factory)
 {
-    GLuint handle = mHandleAllocator.allocate();
+    SyncID handle = {mHandleAllocator.allocate()};
     Sync *sync    = new Sync(factory, handle);
     sync->addRef();
     mObjectMap.assign(handle, sync);
     return handle;
 }
 
-Sync *SyncManager::getSync(GLuint handle) const
+Sync *SyncManager::getSync(SyncID handle) const
 {
     return mObjectMap.query(handle);
 }

@@ -251,11 +251,11 @@ class SamplerManager
     ~SamplerManager() override {}
 };
 
-class SyncManager : public TypedResourceManager<Sync, HandleAllocator, SyncManager, GLuint>
+class SyncManager : public TypedResourceManager<Sync, HandleAllocator, SyncManager, SyncID>
 {
   public:
-    GLuint createSync(rx::GLImplFactory *factory);
-    Sync *getSync(GLuint handle) const;
+    SyncID createSync(rx::GLImplFactory *factory);
+    Sync *getSync(SyncID handle) const;
 
     static void DeleteObject(const Context *context, Sync *sync);
 

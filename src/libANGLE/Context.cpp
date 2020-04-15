@@ -779,6 +779,11 @@ SemaphoreID Context::createSemaphore()
     return mState.mSemaphoreManager->createSemaphore(mImplementation.get());
 }
 
+SyncID Context::createSync()
+{
+    return mState.mSyncManager->createSync(mImplementation.get());
+}
+
 void Context::deleteBuffer(BufferID bufferName)
 {
     Buffer *buffer = mState.mBufferManager->getBuffer(bufferName);
@@ -820,13 +825,13 @@ void Context::deleteRenderbuffer(RenderbufferID renderbuffer)
     mState.mRenderbufferManager->deleteObject(this, renderbuffer);
 }
 
-void Context::deleteSync(GLsync sync)
+void Context::deleteSync(SyncID sync)
 {
     // The spec specifies the underlying Fence object is not deleted until all current
     // wait commands finish. However, since the name becomes invalid, we cannot query the fence,
     // and since our API is currently designed for being called from a single thread, we can delete
     // the fence immediately.
-    mState.mSyncManager->deleteObject(this, static_cast<GLuint>(reinterpret_cast<uintptr_t>(sync)));
+    mState.mSyncManager->deleteObject(this, sync);
 }
 
 void Context::deleteProgramPipeline(ProgramPipelineID pipelineID)
@@ -902,9 +907,9 @@ EGLenum Context::getContextPriority() const
     return egl::ToEGLenum(mImplementation->getContextPriority());
 }
 
-Sync *Context::getSync(GLsync handle) const
+Sync *Context::getSync(SyncID handle) const
 {
-    return mState.mSyncManager->getSync(static_cast<GLuint>(reinterpret_cast<uintptr_t>(handle)));
+    return mState.mSyncManager->getSync(handle);
 }
 
 VertexArray *Context::getVertexArray(VertexArrayID handle) const
@@ -961,7 +966,7 @@ gl::LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) con
 
 gl::LabeledObject *Context::getLabeledObjectFromPtr(const void *ptr) const
 {
-    return getSync(reinterpret_cast<GLsync>(const_cast<void *>(ptr)));
+    return getSync({reinterpret_cast<GLuint>(ptr)});
 }
 
 void Context::objectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
@@ -5432,7 +5437,7 @@ void Context::framebufferTexture2DMultisample(GLenum target,
     mState.setObjectDirty(target);
 }
 
-void Context::getSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
+void Context::getSynciv(SyncID sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
 {
     const Sync *syncObject = nullptr;
     if (!isContextLost())
@@ -7126,25 +7131,25 @@ void Context::uniformBlockBinding(ShaderProgramID program,
 
 GLsync Context::fenceSync(GLenum condition, GLbitfield flags)
 {
-    GLuint handle     = mState.mSyncManager->createSync(mImplementation.get());
-    GLsync syncHandle = reinterpret_cast<GLsync>(static_cast<uintptr_t>(handle));
+    SyncID handle = mState.mSyncManager->createSync(mImplementation.get());
 
-    Sync *syncObject = getSync(syncHandle);
+    Sync *syncObject = getSync(handle);
     if (syncObject->set(this, condition, flags) == angle::Result::Stop)
     {
-        deleteSync(syncHandle);
-        return nullptr;
+        deleteSync(handle);
+        return 0;
     }
 
-    return syncHandle;
+    return reinterpret_cast<GLsync>(handle.value);
+    // return handle;
 }
 
-GLboolean Context::isSync(GLsync sync) const
+GLboolean Context::isSync(SyncID sync) const
 {
     return (getSync(sync) != nullptr);
 }
 
-GLenum Context::clientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
+GLenum Context::clientWaitSync(SyncID sync, GLbitfield flags, GLuint64 timeout)
 {
     Sync *syncObject = getSync(sync);
 
@@ -7156,7 +7161,7 @@ GLenum Context::clientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
     return result;
 }
 
-void Context::waitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
+void Context::waitSync(SyncID sync, GLbitfield flags, GLuint64 timeout)
 {
     Sync *syncObject = getSync(sync);
     ANGLE_CONTEXT_TRY(syncObject->serverWait(this, flags, timeout));

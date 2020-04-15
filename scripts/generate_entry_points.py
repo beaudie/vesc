@@ -824,10 +824,18 @@ def format_entry_point_def(command_node, cmd_name, proto, params, is_explicit_co
         if name in packed_gl_enums:
             internal_name = name + "Packed"
             internal_type = packed_gl_enums[name]
-            packed_gl_enum_conversions += [
-                "\n        " + internal_type + " " + internal_name + " = FromGL<" + internal_type +
-                ">(" + name + ");"
-            ]
+            if name == 'sync':
+                # sync, e.g. GLsync is a special type that doesn't conform to the rest
+                # of the GL types so need to treat it specially here.
+                packed_gl_enum_conversions += [
+                    "\n        " + internal_type + " " + internal_name +
+                    " = {reinterpret_cast<GLuint>(" + name + ")};"
+                ]
+            else:
+                packed_gl_enum_conversions += [
+                    "\n        " + internal_type + " " + internal_name + " = FromGL<" +
+                    internal_type + ">(" + name + ");"
+                ]
 
     pass_params = [param_print_argument(command_node, param) for param in params]
     format_params = [param_format_string(param) for param in params]
@@ -893,6 +901,19 @@ def get_capture_param_type_name(param_type):
     return param_type
 
 
+def get_cmd_return_type(param_type):
+
+    param_type = param_type.replace("*", "").strip()
+
+    cmd_elements = param_type.split()
+    type_idx = 0
+    if cmd_elements[0] == "const":
+        type_idx += 1
+    return_type = cmd_elements[type_idx]
+
+    return return_type
+
+
 def format_capture_method(command, cmd_name, proto, params, all_param_types, capture_pointer_funcs,
                           cmd_packed_gl_enums):
 
@@ -934,6 +955,9 @@ def format_capture_method(command, cmd_name, proto, params, all_param_types, cap
         parameter_captures += [capture]
 
     return_type = proto[:-len(cmd_name)].strip()
+    command_return_type = get_cmd_return_type(return_type)
+    if (command_return_type != "void"):
+        all_param_types.add(command_return_type)
 
     format_args = {
         "full_name": cmd_name,
