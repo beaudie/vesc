@@ -3569,6 +3569,29 @@ ANGLE_INLINE angle::Result Context::prepareForCopyImage()
 
 ANGLE_INLINE angle::Result Context::prepareForDispatch()
 {
+    ProgramExecutable *executable = mState.mExecutable;
+    ASSERT(executable);
+
+    // If we are changing between draw and dispatch and using a PPO, we need to
+    // treat this the same as changing executables and set the appropriate dirty
+    // bits. Programs don't require this, since changing between draw and dispatch
+    // already requires a useProgram()/linkProgram() which set the dirty bits.
+    if (!executable->isCompute())
+    {
+        ProgramPipeline *pipeline = mState.getProgramPipeline();
+        if (pipeline)
+        {
+            pipeline->setDirtyBit(ProgramPipeline::DirtyBitType::DIRTY_BIT_DRAW_DISPATCH_CHANGE);
+            mState.mDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
+            if (!mState.getProgram())
+            {
+                mState.mDirtyBits.set(State::DirtyBitType::DIRTY_BIT_PROGRAM_EXECUTABLE);
+            }
+        }
+    }
+
+    executable->setIsCompute(true);
+
     ANGLE_TRY(syncDirtyObjects(mComputeDirtyObjects));
     return syncDirtyBits(mComputeDirtyBits);
 }
