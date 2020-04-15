@@ -27,6 +27,7 @@ class ShaderInfo final : angle::NonCopyable
     ~ShaderInfo();
 
     angle::Result initShaders(ContextVk *contextVk,
+                              const gl::ProgramExecutable &executable,
                               const gl::ShaderMap<std::string> &shaderSources,
                               const ShaderMapInterfaceVariableInfoMap &variableInfoMap);
     void release(ContextVk *contextVk);
@@ -108,11 +109,11 @@ class ProgramExecutableVk
                              gl::ShaderMap<const gl::ProgramState *> *programStatesOut);
     const gl::ProgramExecutable &getGlExecutable();
 
-    ProgramInfo &getDefaultProgramInfo() { return mDefaultProgramInfo; }
-    ProgramInfo &getProgramInfo(bool enableLineRasterEmulation)
+    ProgramInfo &getGraphicsProgramInfo(bool enableLineRasterEmulation)
     {
         return enableLineRasterEmulation ? mLineRasterProgramInfo : mDefaultProgramInfo;
     }
+    ProgramInfo &getComputeProgramInfo() { return mComputeProgramInfo; }
 
     angle::Result getGraphicsPipeline(ContextVk *contextVk,
                                       gl::PrimitiveMode mode,
@@ -210,7 +211,6 @@ class ProgramExecutableVk
     // deleted while this program is in use.
     vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
-    bool mPipelineLayoutCreated;
 
     // Keep bindings to the descriptor pools. This ensures the pools stay valid while the Program
     // is in use.
@@ -229,6 +229,7 @@ class ProgramExecutableVk
 
     ProgramInfo mDefaultProgramInfo;
     ProgramInfo mLineRasterProgramInfo;
+    ProgramInfo mComputeProgramInfo;
 
     ProgramVk *mProgram;
     ProgramPipelineVk *mProgramPipeline;
