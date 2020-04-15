@@ -92,7 +92,32 @@ ANGLE_INLINE angle::Result Context::syncDirtyObjects(const State::DirtyObjects &
 
 ANGLE_INLINE angle::Result Context::prepareForDraw(PrimitiveMode mode)
 {
-    if (mGLES1Renderer)
+    // Need to skip if GLES1, since there is no program or executable
+    if (!mGLES1Renderer)
+    {
+        ProgramExecutable *executable = mState.mExecutable;
+        ASSERT(executable);
+
+        // If we are changing between draw and dispatch and using a PPO, we need to
+        // treat this the same as changing executables and set the appropriate dirty
+        // bits. Programs don't require this, since changing between draw and dispatch
+        // already requires a useProgram()/linkProgram() which set the dirty bits.
+        if (executable->isCompute())
+        {
+            // We must be handling a PPO, since programs override pipelines and
+            // can't be both graphics and compute, so a Program can never execute a
+            // dispatch while returning 'false' for isCompute().
+            ProgramPipeline *pipeline = mState.getProgramPipeline();
+            ASSERT(mState.getProgram() == nullptr);
+            ASSERT(pipeline);
+            pipeline->setDirtyBit(ProgramPipeline::DirtyBitType::DIRTY_BIT_DRAW_DISPATCH_CHANGE);
+            mState.mDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
+            mState.mDirtyBits.set(State::DirtyBitType::DIRTY_BIT_PROGRAM_EXECUTABLE);
+        }
+
+        executable->setIsCompute(false);
+    }
+    else
     {
         ANGLE_TRY(mGLES1Renderer->prepareForDraw(mode, this, &mState));
     }
