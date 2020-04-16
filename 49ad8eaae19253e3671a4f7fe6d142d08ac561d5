@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd5c460d_7aa12155",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-16T22:32:36Z",
+      "side": 0,
+      "message": "drive-by:\n\nWith this change, nothing actually reads mLastIndexBufferOffset anymore.   Assuming this is the right fix, this member can probably be removed entirely.",
+      "revId": "49ad8eaae19253e3671a4f7fe6d142d08ac561d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
