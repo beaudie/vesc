@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "4cb12c88_c1e48c7e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-16T18:21:30Z",
+      "side": 1,
+      "message": "Ah, ok, done.",
+      "parentUuid": "92dea4e8_6b58f54b",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 19
+      },
+      "revId": "e39cc3e8efada510f16c38410f42252163b388d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "65adc1d6_332bd83d",
         "filename": "WATCHLISTS",
         "patchSetId": 1
