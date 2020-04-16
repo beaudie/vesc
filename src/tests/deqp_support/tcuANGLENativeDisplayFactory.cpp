@@ -74,7 +74,7 @@ constexpr eglu::NativeWindow::Capability kWindowCapabilities =
 class ANGLENativeDisplay : public eglu::NativeDisplay
 {
   public:
-    explicit ANGLENativeDisplay(std::vector<eglw::EGLAttrib> attribs);
+    explicit ANGLENativeDisplay(EGLNativeDisplayType display, std::vector<eglw::EGLAttrib> attribs);
     ~ANGLENativeDisplay() override = default;
 
     void *getPlatformNative() override
@@ -169,9 +169,9 @@ class NativeWindow : public eglu::NativeWindow
 
 // ANGLE NativeDisplay
 
-ANGLENativeDisplay::ANGLENativeDisplay(std::vector<EGLAttrib> attribs)
+ANGLENativeDisplay::ANGLENativeDisplay(EGLNativeDisplayType display, std::vector<EGLAttrib> attribs)
     : eglu::NativeDisplay(kDisplayCapabilities, EGL_PLATFORM_ANGLE_ANGLE, "EGL_EXT_platform_base"),
-      mDeviceContext(EGL_DEFAULT_DISPLAY),
+      mDeviceContext(display),
       mLibrary(ANGLE_EGL_LIBRARY_FULL_NAME),
       mPlatformAttributes(std::move(attribs))
 {}
@@ -364,8 +364,16 @@ ANGLENativeDisplayFactory::ANGLENativeDisplayFactory(
                                  kDisplayCapabilities,
                                  EGL_PLATFORM_ANGLE_ANGLE,
                                  "EGL_EXT_platform_base"),
+      mNativeDisplay(EGL_DEFAULT_DISPLAY),
       mPlatformAttributes(std::move(platformAttributes))
 {
+
+#if (DE_OS == DE_OS_UNIX)
+    // Make sure to only open the X display once so that it can be used by the EGL display as well
+    // as pixmaps
+    mNativeDisplay = XOpenDisplay(nullptr);
+#endif  // (DE_OS == DE_OS_UNIX)
+
     m_nativeWindowRegistry.registerFactory(new NativeWindowFactory(eventState));
     m_nativePixmapRegistry.registerFactory(new NativePixmapFactory());
 }
@@ -376,7 +384,8 @@ eglu::NativeDisplay *ANGLENativeDisplayFactory::createDisplay(
     const eglw::EGLAttrib *attribList) const
 {
     DE_UNREF(attribList);
-    return new ANGLENativeDisplay(mPlatformAttributes);
+    return new ANGLENativeDisplay(static_cast<EGLNativeDisplayType>(mNativeDisplay),
+                                  mPlatformAttributes);
 }
 
 }  // namespace tcu

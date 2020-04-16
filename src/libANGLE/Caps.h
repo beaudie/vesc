@@ -1051,6 +1051,9 @@ struct DisplayExtensions
 
     // EGL_EXT_image_gl_colorspace
     bool imageGlColorspace = false;
+
+    // EGL_NOK_texture_from_pixmap
+    bool textureFromPixmapNOK = false;
 };
 
 struct DeviceExtensions
