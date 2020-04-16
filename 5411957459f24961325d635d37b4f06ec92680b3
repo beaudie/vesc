@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98d05e11_266624ad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1977,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-16T20:30:22Z",
+      "side": 1,
+      "message": "nit: Isn\u0027t these lines are identical to lines 1936-1946? Maybe just create a ImageHelper::init() to init them to default value?",
+      "range": {
+        "startLine": 1967,
+        "startChar": 4,
+        "endLine": 1977,
+        "endChar": 39
+      },
+      "revId": "5411957459f24961325d635d37b4f06ec92680b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
