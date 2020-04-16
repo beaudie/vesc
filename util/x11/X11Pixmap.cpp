@@ -20,7 +20,11 @@ X11Pixmap::~X11Pixmap()
 
 bool X11Pixmap::initialize(EGLNativeDisplayType display, size_t width, size_t height, int depth)
 {
-    mDisplay = display;
+    mDisplay = XOpenDisplay(nullptr);
+    if (!mDisplay)
+    {
+        return false;
+    }
 
     int screen  = DefaultScreen(mDisplay);
     Window root = RootWindow(mDisplay, screen);
