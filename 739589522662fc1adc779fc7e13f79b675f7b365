@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e94b9715_cd4b04ae",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3582,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:47:16Z",
+      "side": 1,
+      "message": "Don\u0027t Programs override ProgramPipelines? I guess it\u0027s impossible to have a Program bound here, since otherwise the executable would necessarily by `isCompute()`. Can you ASSERT(mState.getProgram() \u003d\u003d nullptr);`?",
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd73561a_cf575748",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:47:16Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77555a87_94b55266",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:47:16Z",
+      "side": 1,
+      "message": "The condition of the above `if` and this `if` should look similar (preferably test `mGLES1Renderer`). And this can be an `else`.",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 23
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a803d46_2bb5be76",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:47:16Z",
+      "side": 1,
+      "message": "!any() is more efficient.",
+      "range": {
+        "startLine": 1214,
+        "startChar": 44,
+        "endLine": 1214,
+        "endChar": 56
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a83679e_c2905203",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:47:16Z",
+      "side": 1,
+      "message": "nit: can directly `return *...begin();`.",
+      "range": {
+        "startLine": 1219,
+        "startChar": 4,
+        "endLine": 1219,
+        "endChar": 38
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da1623fa_eed70597",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:47:16Z",
+      "side": 1,
+      "message": "Shouldn\u0027t one of them suffice? Can they contradict each other?",
+      "range": {
+        "startLine": 360,
+        "startChar": 15,
+        "endLine": 361,
+        "endChar": 58
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8a5dca8_94d97615",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:47:16Z",
+      "side": 1,
+      "message": "nit: wrap to 100 chars",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 20
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

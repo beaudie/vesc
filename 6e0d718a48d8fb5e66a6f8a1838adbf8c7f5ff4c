@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07df02aa_7f5d7782",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:47:16Z",
+      "side": 0,
+      "message": "Why was this necessary before? Can you ASSERT that the pipeline is not created? (check `mPipelineLayout` probably)",
+      "revId": "6e0d718a48d8fb5e66a6f8a1838adbf8c7f5ff4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
