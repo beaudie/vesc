@@ -7,13 +7,17 @@
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
+#include "util/OSPixmap.h"
+#include "util/OSWindow.h"
+
+#include <iostream>
 
 using namespace angle;
 
-class PbufferTest : public ANGLETest
+class PixmapTest : public ANGLETest
 {
   protected:
-    PbufferTest()
+    PixmapTest()
     {
         setWindowWidth(512);
         setWindowHeight(512);
@@ -60,26 +64,42 @@ class PbufferTest : public ANGLETest
         EGLint surfaceType = 0;
         eglGetConfigAttrib(window->getDisplay(), window->getConfig(), EGL_SURFACE_TYPE,
                            &surfaceType);
-        mSupportsPbuffers = (surfaceType & EGL_PBUFFER_BIT) != 0;
+        mSupportsPixmaps = (surfaceType & EGL_PIXMAP_BIT) != 0;
 
         EGLint bindToTextureRGBA = 0;
         eglGetConfigAttrib(window->getDisplay(), window->getConfig(), EGL_BIND_TO_TEXTURE_RGBA,
                            &bindToTextureRGBA);
-        mSupportsBindTexImage = (bindToTextureRGBA == EGL_TRUE);
+        mSupportsBindTexImage =
+            IsEGLDisplayExtensionEnabled(window->getDisplay(), "EGL_NOK_texture_from_pixmap") &&
+            (bindToTextureRGBA == EGL_TRUE);
 
-        if (mSupportsPbuffers)
+        if (mSupportsPixmaps)
         {
-            const EGLint pBufferAttributes[] = {
-                EGL_WIDTH,          static_cast<EGLint>(mPbufferSize),
-                EGL_HEIGHT,         static_cast<EGLint>(mPbufferSize),
-                EGL_TEXTURE_FORMAT, mSupportsBindTexImage ? EGL_TEXTURE_RGBA : EGL_NO_TEXTURE,
-                EGL_TEXTURE_TARGET, mSupportsBindTexImage ? EGL_TEXTURE_2D : EGL_NO_TEXTURE,
-                EGL_NONE,           EGL_NONE,
-            };
+            mOSPixmap.reset(CreateOSPixmap());
 
-            mPbuffer = eglCreatePbufferSurface(window->getDisplay(), window->getConfig(),
-                                               pBufferAttributes);
-            ASSERT_NE(mPbuffer, EGL_NO_SURFACE);
+            OSWindow *osWindow = getOSWindow();
+
+            EGLint nativeVisual = 0;
+            ASSERT_TRUE(eglGetConfigAttrib(window->getDisplay(), window->getConfig(),
+                                           EGL_NATIVE_VISUAL_ID, &nativeVisual));
+            ASSERT_TRUE(mOSPixmap->initialize(osWindow->getNativeDisplay(), mPixmapSize,
+                                              mPixmapSize, nativeVisual));
+
+            std::vector<EGLint> attribs;
+            if (mSupportsBindTexImage)
+            {
+                attribs.push_back(EGL_TEXTURE_FORMAT);
+                attribs.push_back(EGL_TEXTURE_RGBA);
+
+                attribs.push_back(EGL_TEXTURE_TARGET);
+                attribs.push_back(EGL_TEXTURE_2D);
+            }
+
+            attribs.push_back(EGL_NONE);
+
+            mPixmap = eglCreatePixmapSurface(window->getDisplay(), window->getConfig(),
+                                             mOSPixmap->getNativePixmap(), attribs.data());
+            ASSERT_NE(mPixmap, EGL_NO_SURFACE);
             ASSERT_EGL_SUCCESS();
         }
 
@@ -90,26 +110,30 @@ class PbufferTest : public ANGLETest
     {
         glDeleteProgram(mTextureProgram);
 
-        if (mPbuffer)
+        if (mPixmap)
         {
             EGLWindow *window = getEGLWindow();
-            eglDestroySurface(window->getDisplay(), mPbuffer);
+            eglDestroySurface(window->getDisplay(), mPixmap);
         }
+
+        mOSPixmap = nullptr;
     }
 
     GLuint mTextureProgram;
     GLint mTextureUniformLocation;
 
-    const size_t mPbufferSize = 32;
-    EGLSurface mPbuffer       = EGL_NO_SURFACE;
-    bool mSupportsPbuffers;
+    std::unique_ptr<OSPixmap> mOSPixmap;
+    EGLSurface mPixmap = EGL_NO_SURFACE;
+
+    const size_t mPixmapSize = 32;
+    bool mSupportsPixmaps;
     bool mSupportsBindTexImage;
 };
 
-// Test clearing a Pbuffer and checking the color is correct
-TEST_P(PbufferTest, Clearing)
+// Test clearing a Pixmap and checking the color is correct
+TEST_P(PixmapTest, Clearing)
 {
-    ANGLE_SKIP_TEST_IF(!mSupportsPbuffers);
+    ANGLE_SKIP_TEST_IF(!mSupportsPixmaps);
 
     EGLWindow *window = getEGLWindow();
 
@@ -122,15 +146,15 @@ TEST_P(PbufferTest, Clearing)
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 0, 0, 255, 255);
 
-    // Apply the Pbuffer and clear it to purple and verify
-    eglMakeCurrent(window->getDisplay(), mPbuffer, mPbuffer, window->getContext());
+    // Apply the Pixmap and clear it to purple and verify
+    eglMakeCurrent(window->getDisplay(), mPixmap, mPixmap, window->getContext());
     ASSERT_EGL_SUCCESS();
 
-    glViewport(0, 0, static_cast<GLsizei>(mPbufferSize), static_cast<GLsizei>(mPbufferSize));
+    glViewport(0, 0, static_cast<GLsizei>(mPixmapSize), static_cast<GLsizei>(mPixmapSize));
     glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     ASSERT_GL_NO_ERROR();
-    EXPECT_PIXEL_EQ(static_cast<GLint>(mPbufferSize) / 2, static_cast<GLint>(mPbufferSize) / 2, 255,
+    EXPECT_PIXEL_EQ(static_cast<GLint>(mPixmapSize) / 2, static_cast<GLint>(mPixmapSize) / 2, 255,
                     0, 255, 255);
 
     // Rebind the window surface and verify that it is still blue
@@ -139,31 +163,34 @@ TEST_P(PbufferTest, Clearing)
     EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 0, 0, 255, 255);
 }
 
-// Bind the Pbuffer to a texture and verify it renders correctly
-TEST_P(PbufferTest, BindTexImage)
+// Bind the Pixmap to a texture and verify it renders correctly
+TEST_P(PixmapTest, BindTexImage)
 {
-    // Test skipped because Pbuffers are not supported or Pbuffer does not support binding to RGBA
+    // Test skipped because pixmaps are not supported or pixmaps do not support binding to RGBA
     // textures.
-    ANGLE_SKIP_TEST_IF(!mSupportsPbuffers || !mSupportsBindTexImage);
+    ANGLE_SKIP_TEST_IF(!mSupportsPixmaps || !mSupportsBindTexImage);
+
+    // This test fails flakily on Linux intel when run with many other tests.
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel());
 
     EGLWindow *window = getEGLWindow();
 
-    // Apply the Pbuffer and clear it to purple
-    eglMakeCurrent(window->getDisplay(), mPbuffer, mPbuffer, window->getContext());
+    // Apply the Pixmap and clear it to purple
+    eglMakeCurrent(window->getDisplay(), mPixmap, mPixmap, window->getContext());
     ASSERT_EGL_SUCCESS();
 
-    glViewport(0, 0, static_cast<GLsizei>(mPbufferSize), static_cast<GLsizei>(mPbufferSize));
+    glViewport(0, 0, static_cast<GLsizei>(mPixmapSize), static_cast<GLsizei>(mPixmapSize));
     glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     ASSERT_GL_NO_ERROR();
 
-    EXPECT_PIXEL_EQ(static_cast<GLint>(mPbufferSize) / 2, static_cast<GLint>(mPbufferSize) / 2, 255,
+    EXPECT_PIXEL_EQ(static_cast<GLint>(mPixmapSize) / 2, static_cast<GLint>(mPixmapSize) / 2, 255,
                     0, 255, 255);
 
     // Apply the window surface
     window->makeCurrent();
 
-    // Create a texture and bind the Pbuffer to it
+    // Create a texture and bind the pixmap to it
     GLuint texture = 0;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -173,7 +200,7 @@ TEST_P(PbufferTest, BindTexImage)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     EXPECT_GL_NO_ERROR();
 
-    eglBindTexImage(window->getDisplay(), mPbuffer, EGL_BACK_BUFFER);
+    eglBindTexImage(window->getDisplay(), mPixmap, EGL_BACK_BUFFER);
     glViewport(0, 0, getWindowWidth(), getWindowHeight());
     ASSERT_EGL_SUCCESS();
 
@@ -185,7 +212,7 @@ TEST_P(PbufferTest, BindTexImage)
     EXPECT_GL_NO_ERROR();
 
     // Unbind the texture
-    eglReleaseTexImage(window->getDisplay(), mPbuffer, EGL_BACK_BUFFER);
+    eglReleaseTexImage(window->getDisplay(), mPixmap, EGL_BACK_BUFFER);
     ASSERT_EGL_SUCCESS();
 
     // Verify that purple was drawn
@@ -194,80 +221,31 @@ TEST_P(PbufferTest, BindTexImage)
     glDeleteTextures(1, &texture);
 }
 
-// Verify that when eglBind/ReleaseTexImage are called, the texture images are freed and their
-// size information is correctly updated.
-TEST_P(PbufferTest, TextureSizeReset)
+// Bind a Pixmap, redefine the texture, and verify it renders correctly
+TEST_P(PixmapTest, BindTexImageAndRedefineTexture)
 {
-    ANGLE_SKIP_TEST_IF(!mSupportsPbuffers);
-    ANGLE_SKIP_TEST_IF(!mSupportsBindTexImage);
-    ANGLE_SKIP_TEST_IF(IsARM64() && IsWindows() && IsD3D());
-
-    GLTexture texture;
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    EXPECT_GL_NO_ERROR();
-
-    glUseProgram(mTextureProgram);
-    glUniform1i(mTextureUniformLocation, 0);
-
-    // Fill the texture with white pixels
-    std::vector<GLColor> whitePixels(mPbufferSize * mPbufferSize, GLColor::white);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<GLsizei>(mPbufferSize),
-                 static_cast<GLsizei>(mPbufferSize), 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                 whitePixels.data());
-    EXPECT_GL_NO_ERROR();
-
-    // Draw the white texture and verify that the pixels are correct
-    drawQuad(mTextureProgram, "position", 0.5f);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
-
-    // Bind the EGL surface and draw with it, results are undefined since nothing has
-    // been written to it
-    EGLWindow *window = getEGLWindow();
-    eglBindTexImage(window->getDisplay(), mPbuffer, EGL_BACK_BUFFER);
-    drawQuad(mTextureProgram, "position", 0.5f);
-    EXPECT_GL_NO_ERROR();
-
-    // Clear the back buffer to a unique color (green)
-    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
-
-    // Unbind the EGL surface and try to draw with the texture again, the texture's size should
-    // now be zero and incomplete so the back buffer should be black
-    eglReleaseTexImage(window->getDisplay(), mPbuffer, EGL_BACK_BUFFER);
-    drawQuad(mTextureProgram, "position", 0.5f);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
-}
-
-// Bind a Pbuffer, redefine the texture, and verify it renders correctly
-TEST_P(PbufferTest, BindTexImageAndRedefineTexture)
-{
-    // Test skipped because Pbuffers are not supported or Pbuffer does not support binding to RGBA
+    // Test skipped because pixmaps are not supported or Pixmaps do not support binding to RGBA
     // textures.
-    ANGLE_SKIP_TEST_IF(!mSupportsPbuffers || !mSupportsBindTexImage);
+    ANGLE_SKIP_TEST_IF(!mSupportsPixmaps || !mSupportsBindTexImage);
 
     EGLWindow *window = getEGLWindow();
 
-    // Apply the Pbuffer and clear it to purple
-    eglMakeCurrent(window->getDisplay(), mPbuffer, mPbuffer, window->getContext());
+    // Apply the Pixmap and clear it to purple
+    eglMakeCurrent(window->getDisplay(), mPixmap, mPixmap, window->getContext());
     ASSERT_EGL_SUCCESS();
 
-    glViewport(0, 0, static_cast<GLsizei>(mPbufferSize), static_cast<GLsizei>(mPbufferSize));
+    glViewport(0, 0, static_cast<GLsizei>(mPixmapSize), static_cast<GLsizei>(mPixmapSize));
     glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     ASSERT_GL_NO_ERROR();
 
-    EXPECT_PIXEL_EQ(static_cast<GLint>(mPbufferSize) / 2, static_cast<GLint>(mPbufferSize) / 2, 255,
+    EXPECT_PIXEL_EQ(static_cast<GLint>(mPixmapSize) / 2, static_cast<GLint>(mPixmapSize) / 2, 255,
                     0, 255, 255);
 
     // Apply the window surface
     window->makeCurrent();
 
-    // Create a texture and bind the Pbuffer to it
+    // Create a texture and bind the Pixmap to it
     GLuint texture = 0;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -277,7 +255,7 @@ TEST_P(PbufferTest, BindTexImageAndRedefineTexture)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     EXPECT_GL_NO_ERROR();
 
-    eglBindTexImage(window->getDisplay(), mPbuffer, EGL_BACK_BUFFER);
+    eglBindTexImage(window->getDisplay(), mPixmap, EGL_BACK_BUFFER);
     glViewport(0, 0, getWindowWidth(), getWindowHeight());
     ASSERT_EGL_SUCCESS();
 
@@ -300,4 +278,4 @@ TEST_P(PbufferTest, BindTexImageAndRedefineTexture)
     glDeleteTextures(1, &texture);
 }
 
-ANGLE_INSTANTIATE_TEST_ES2(PbufferTest);
+ANGLE_INSTANTIATE_TEST_ES2(PixmapTest);

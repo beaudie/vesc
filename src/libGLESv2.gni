@@ -807,6 +807,8 @@ libangle_gl_glx_sources = [
   "src/libANGLE/renderer/gl/glx/FunctionsGLX.h",
   "src/libANGLE/renderer/gl/glx/PbufferSurfaceGLX.cpp",
   "src/libANGLE/renderer/gl/glx/PbufferSurfaceGLX.h",
+  "src/libANGLE/renderer/gl/glx/PixmapSurfaceGLX.cpp",
+  "src/libANGLE/renderer/gl/glx/PixmapSurfaceGLX.h",
   "src/libANGLE/renderer/gl/glx/RendererGLX.cpp",
   "src/libANGLE/renderer/gl/glx/RendererGLX.h",
   "src/libANGLE/renderer/gl/glx/SurfaceGLX.h",
