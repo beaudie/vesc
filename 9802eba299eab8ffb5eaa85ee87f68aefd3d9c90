@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "81880290_5e3a0bec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:21:00Z",
+      "side": 1,
+      "message": "Nice. I suggest splitting the change in three, at least to ease bisecting bugs, if any.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 30
+      },
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2477552_993eb35d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
@@ -49,6 +72,70 @@
       "side": 1,
       "message": "You\u0027re getting bit because of technical debt. We should be using packed enums for all these values instead of the Vulkan ones. I didn\u0027t to save time. See this comment in the code:\n\nhttps://chromium.googlesource.com/angle/angle/+/005793e4c95a53c327690a7538e650c8e8c40e5b/src/libANGLE/renderer/vulkan/vk_cache_utils.cpp#523\n\nCan you please make a small prior patch to store vk::ImageLayout instead for the attachment op layouts? As well as unpacking it in vk_cache_utils. vk::ImageLayout will pack well into the 5 bits. Also please use \"SetBitField\" to set the bits while ensuring safety. You won\u0027t need the custom enum any more.\n\nIn general when running into small problems like this we usually resolve them in lieu of adding more debt. Larger technical debt problems can be deferred.",
       "parentUuid": "fcb56ff1_3c348528",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8867ef00_eb0ef416",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:21:00Z",
+      "side": 1,
+      "message": "+1 to not having a `#define`d layout mixed with standard ones.",
+      "parentUuid": "00752f94_4d9d544d",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99b8ff1a_b2780220",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:21:00Z",
+      "side": 1,
+      "message": "Don\u0027t need to test this. `isLayoutChangeNecessary` automatically called by `changeLayout` should return false.",
+      "range": {
+        "startLine": 1136,
+        "startChar": 4,
+        "endLine": 1136,
+        "endChar": 72
+      },
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d2b5e0c_3a008c51",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:21:00Z",
+      "side": 1,
+      "message": "nit: `? true : false` in `condition ? true : false` is redundant. If you want to be explicit, you can say `return ...Count() \u003e 0;`",
+      "range": {
+        "startLine": 1536,
+        "startChar": 45,
+        "endLine": 1536,
+        "endChar": 60
+      },
       "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
