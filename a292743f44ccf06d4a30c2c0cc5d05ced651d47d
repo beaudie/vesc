@@ -443,6 +443,30 @@
     },
     {
       "key": {
+        "uuid": "a025175c_6b43a237",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-16T21:04:27Z",
+      "side": 1,
+      "message": "What controls the lifetime? Sorry I\u0027m not as familiar with this stuff. Does the app delete the fence? What happens if they delete a fence that is in-use by the GL?",
+      "parentUuid": "0117df17_4d5a18ed",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 50
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91f26732_4ca4ca2f",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 6
