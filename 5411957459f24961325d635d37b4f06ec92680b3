@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d672b0c_c12e5083",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-04-16T23:41:45Z",
+      "side": 0,
+      "message": "I wonder if the test passed before because 0 is default stencil clear value?",
+      "range": {
+        "startLine": 841,
+        "startChar": 0,
+        "endLine": 843,
+        "endChar": 0
+      },
+      "revId": "5411957459f24961325d635d37b4f06ec92680b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
