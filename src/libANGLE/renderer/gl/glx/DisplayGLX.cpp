@@ -20,6 +20,7 @@
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/gl/ContextGL.h"
 #include "libANGLE/renderer/gl/glx/PbufferSurfaceGLX.h"
+#include "libANGLE/renderer/gl/glx/PixmapSurfaceGLX.h"
 #include "libANGLE/renderer/gl/glx/RendererGLX.h"
 #include "libANGLE/renderer/gl/glx/WindowSurfaceGLX.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
@@ -426,8 +427,17 @@ SurfaceImpl *DisplayGLX::createPixmapSurface(const egl::SurfaceState &state,
                                              NativePixmapType nativePixmap,
                                              const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return nullptr;
+    ASSERT(configIdToGLXConfig.count(state.config->configID) > 0);
+    glx::FBConfig fbConfig = configIdToGLXConfig[state.config->configID];
+    return new PixmapSurfaceGLX(state, nativePixmap, mGLX.getDisplay(), mGLX, fbConfig);
+}
+
+egl::Error DisplayGLX::validatePixmap(egl::Config *config,
+                                      EGLNativePixmapType pixmap,
+                                      const egl::AttributeMap &attributes) const
+{
+    // TODO
+    return egl::NoError();
 }
 
 ContextImpl *DisplayGLX::createContext(const gl::State &state,
@@ -654,14 +664,6 @@ egl::ConfigSet DisplayGLX::generateConfigs()
         // Misc
         config.level = getGLXFBConfigAttrib(glxConfig, GLX_LEVEL);
 
-        config.bindToTextureRGB  = EGL_FALSE;
-        config.bindToTextureRGBA = EGL_FALSE;
-
-        int glxDrawable    = getGLXFBConfigAttrib(glxConfig, GLX_DRAWABLE_TYPE);
-        config.surfaceType = 0 | (glxDrawable & GLX_WINDOW_BIT ? EGL_WINDOW_BIT : 0) |
-                             (glxDrawable & GLX_PBUFFER_BIT ? EGL_PBUFFER_BIT : 0) |
-                             (glxDrawable & GLX_PIXMAP_BIT ? EGL_PIXMAP_BIT : 0);
-
         config.minSwapInterval = mMinSwapInterval;
         config.maxSwapInterval = mMaxSwapInterval;
 
@@ -677,6 +679,38 @@ egl::ConfigSet DisplayGLX::generateConfigs()
         config.matchNativePixmap = EGL_NONE;
 
         config.colorComponentType = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+
+        // GLX doesn't support binding pbuffers to textures and there is no way to differentiate in
+        // EGL that pixmaps can be bound but pbuffers cannot.  If both pixmaps and pbuffers are
+        // supported, generate extra configs with either pbuffer or pixmap support.
+        int glxDrawable     = getGLXFBConfigAttrib(glxConfig, GLX_DRAWABLE_TYPE);
+        bool pbufferSupport = (glxDrawable & EGL_PBUFFER_BIT) != 0;
+        bool pixmapSupport  = glxDrawable & GLX_PIXMAP_BIT;
+        bool pixmapBindToTextureSupport =
+            pixmapSupport && mGLX.hasExtension("GLX_EXT_texture_from_pixmap");
+
+        if (pbufferSupport && pixmapBindToTextureSupport)
+        {
+            // Generate the pixmap-only config
+            config.surfaceType = 0 | (glxDrawable & GLX_WINDOW_BIT ? EGL_WINDOW_BIT : 0) |
+                                 (pixmapSupport ? EGL_PIXMAP_BIT : 0);
+
+            config.bindToTextureRGB  = getGLXFBConfigAttrib(glxConfig, GLX_BIND_TO_TEXTURE_RGB_EXT);
+            config.bindToTextureRGBA = getGLXFBConfigAttrib(glxConfig, GLX_BIND_TO_TEXTURE_RGB_EXT);
+            config.yInverted         = getGLXFBConfigAttrib(glxConfig, GLX_Y_INVERTED_EXT);
+
+            int id                  = configs.add(config);
+            configIdToGLXConfig[id] = glxConfig;
+        }
+
+        // Generate the pbuffer config. It can support pixmaps but not bind-to-texture.
+        config.surfaceType = 0 | (glxDrawable & GLX_WINDOW_BIT ? EGL_WINDOW_BIT : 0) |
+                             (pbufferSupport ? EGL_PBUFFER_BIT : 0) |
+                             (pixmapSupport ? EGL_PIXMAP_BIT : 0);
+
+        config.bindToTextureRGB  = false;
+        config.bindToTextureRGBA = false;
+        config.yInverted         = false;
 
         int id                  = configs.add(config);
         configIdToGLXConfig[id] = glxConfig;
@@ -829,6 +863,8 @@ void DisplayGLX::generateExtensions(egl::DisplayExtensions *outExtensions) const
     const bool hasSyncControlOML        = mGLX.hasExtension("GLX_OML_sync_control");
     outExtensions->syncControlCHROMIUM  = hasSyncControlOML;
     outExtensions->syncControlRateANGLE = hasSyncControlOML;
+
+    outExtensions->textureFromPixmapNOK = mGLX.hasExtension("GLX_EXT_texture_from_pixmap");
 
     DisplayGL::generateExtensions(outExtensions);
 }
