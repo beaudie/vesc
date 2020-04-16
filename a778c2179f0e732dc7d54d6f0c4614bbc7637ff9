@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f2aaf39_b935d7dc",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-16T14:24:03Z",
+      "side": 1,
+      "message": "These supressed configs were required to turn off unicode.",
+      "range": {
+        "startLine": 798,
+        "startChar": 0,
+        "endLine": 802,
+        "endChar": 7
+      },
+      "revId": "a778c2179f0e732dc7d54d6f0c4614bbc7637ff9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33b17239_ddaef023",
+        "filename": "util/test_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-16T14:24:03Z",
+      "side": 1,
+      "message": "This was required to handle the unicode being disabled for this target.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 17
+      },
+      "revId": "a778c2179f0e732dc7d54d6f0c4614bbc7637ff9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
