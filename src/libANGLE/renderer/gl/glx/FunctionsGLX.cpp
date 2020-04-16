@@ -56,6 +56,8 @@ struct FunctionsGLX::GLXFunctionTable
           createPbufferPtr(nullptr),
           destroyPbufferPtr(nullptr),
           queryDrawablePtr(nullptr),
+          createPixmapPtr(nullptr),
+          destroyPixmapPtr(nullptr),
           createContextAttribsARBPtr(nullptr),
           swapIntervalEXTPtr(nullptr),
           swapIntervalMESAPtr(nullptr),
@@ -90,6 +92,8 @@ struct FunctionsGLX::GLXFunctionTable
     PFNGLXCREATEPBUFFERPROC createPbufferPtr;
     PFNGLXDESTROYPBUFFERPROC destroyPbufferPtr;
     PFNGLXQUERYDRAWABLEPROC queryDrawablePtr;
+    PFNGLXCREATEPIXMAPPROC createPixmapPtr;
+    PFNGLXDESTROYPIXMAPPROC destroyPixmapPtr;
 
     // GLX_ARB_create_context
     PFNGLXCREATECONTEXTATTRIBSARBPROC createContextAttribsARBPtr;
@@ -228,6 +232,8 @@ bool FunctionsGLX::initialize(Display *xDisplay, int screen, std::string *errorS
     GET_FNPTR_OR_ERROR(&mFnPtrs->createPbufferPtr, glXCreatePbuffer);
     GET_FNPTR_OR_ERROR(&mFnPtrs->destroyPbufferPtr, glXDestroyPbuffer);
     GET_FNPTR_OR_ERROR(&mFnPtrs->queryDrawablePtr, glXQueryDrawable);
+    GET_FNPTR_OR_ERROR(&mFnPtrs->createPixmapPtr, glXCreatePixmap);
+    GET_FNPTR_OR_ERROR(&mFnPtrs->destroyPixmapPtr, glXDestroyPixmap);
 
     // Extensions
     if (hasExtension("GLX_ARB_create_context"))
@@ -381,6 +387,18 @@ void FunctionsGLX::destroyPbuffer(glx::Pbuffer pbuffer) const
 void FunctionsGLX::queryDrawable(glx::Drawable drawable, int attribute, unsigned int *value) const
 {
     mFnPtrs->queryDrawablePtr(mXDisplay, drawable, attribute, value);
+}
+
+glx::Pixmap FunctionsGLX::createPixmap(glx::FBConfig config,
+                                       Pixmap pixmap,
+                                       const int *attribList) const
+{
+    GLXFBConfig cfg = reinterpret_cast<GLXFBConfig>(config);
+    return mFnPtrs->createPixmapPtr(mXDisplay, cfg, pixmap, attribList);
+}
+void FunctionsGLX::destroyPixmap(Pixmap pixmap) const
+{
+    mFnPtrs->destroyPixmapPtr(mXDisplay, pixmap);
 }
 
 // GLX_ARB_create_context

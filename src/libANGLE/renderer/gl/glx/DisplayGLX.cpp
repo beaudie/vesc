@@ -430,8 +430,17 @@ SurfaceImpl *DisplayGLX::createPixmapSurface(const egl::SurfaceState &state,
                                              NativePixmapType nativePixmap,
                                              const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return nullptr;
+    ASSERT(configIdToGLXConfig.count(state.config->configID) > 0);
+    glx::FBConfig fbConfig = configIdToGLXConfig[state.config->configID];
+    return new PixmapSurfaceGLX(state, nativePixmap, mGLX.getDisplay(), mGLX, fbConfig);
+}
+
+egl::Error DisplayGLX::validatePixmap(egl::Config *config,
+                                      EGLNativePixmapType pixmap,
+                                      const egl::AttributeMap &attributes) const
+{
+    // TODO
+    return egl::NoError();
 }
 
 ContextImpl *DisplayGLX::createContext(const gl::State &state,
