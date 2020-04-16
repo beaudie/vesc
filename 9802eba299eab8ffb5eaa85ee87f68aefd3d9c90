@@ -96,6 +96,40 @@
     },
     {
       "key": {
+        "uuid": "634f8bed_c5123608",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-16T20:14:04Z",
+      "side": 1,
+      "message": "Do we need:\n   other.mContentDefined \u003d false;\n\nTo match the constructor above?",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ff93c9f_ca6a9a71",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-16T20:14:04Z",
+      "side": 1,
+      "message": "Can you add a comment here explaining why all of these conditions need to line up this way before you can call optimizeRenderPassForPresent()?",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99b8ff1a_b2780220",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
