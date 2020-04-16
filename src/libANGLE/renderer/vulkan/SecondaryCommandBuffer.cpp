@@ -493,8 +493,10 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                         getParamPtr<BeginTransformFeedbackParams>(currentCommand);
                     const VkBuffer *counterBuffers =
                         Offset<VkBuffer>(params, sizeof(BeginTransformFeedbackParams));
+                    gl::TransformFeedbackBuffersArray<VkDeviceSize> offsets;
+                    offsets.fill(0);
                     vkCmdBeginTransformFeedbackEXT(cmdBuffer, 0, params->bufferCount,
-                                                   counterBuffers, nullptr);
+                                                   counterBuffers, offsets.data());
                     break;
                 }
                 case CommandID::EndTransformFeedback:
@@ -503,8 +505,10 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                         getParamPtr<EndTransformFeedbackParams>(currentCommand);
                     const VkBuffer *counterBuffers =
                         Offset<VkBuffer>(params, sizeof(EndTransformFeedbackParams));
+                    gl::TransformFeedbackBuffersArray<VkDeviceSize> offsets;
+                    offsets.fill(0);
                     vkCmdEndTransformFeedbackEXT(cmdBuffer, 0, params->bufferCount, counterBuffers,
-                                                 nullptr);
+                                                 offsets.data());
                     break;
                 }
                 default:
