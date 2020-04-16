@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af45249_a28e2375",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-16T22:32:55Z",
+      "side": 1,
+      "message": "In this case, can mLastIndexBufferOffset be removed since it\u0027s not really been used?",
+      "range": {
+        "startLine": 1001,
+        "startChar": 12,
+        "endLine": 1001,
+        "endChar": 34
+      },
+      "revId": "9f9263bc5eb1fe5f9b1338c026ab6985abfc2f3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
