@@ -43,8 +43,10 @@ def _CheckChangeHasBugField(input_api, output_api):
     if len(bugs) == 1 and bugs[0] == 'None':
         return []
 
-    projects = ['angleproject', 'chromium', 'dawn', 'fuchsia', 'skia', 'swiftshader', 'b']
-    bug_regex = re.compile(r"([a-z]+):(\d+)")
+    projects = [
+        'angleproject:', 'chromium:', 'dawn:', 'fuchsia:', 'skia:', 'swiftshade:r', 'b:', 'b/'
+    ]
+    bug_regex = re.compile(r"([a-z]+[:/])(\d+)")
     errors = []
     extra_help = None
 
