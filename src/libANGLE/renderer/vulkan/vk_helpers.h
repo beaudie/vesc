@@ -719,6 +719,8 @@ enum class ImageLayout
     EnumCount   = 19,
 };
 
+VkImageLayout convertImageLayoutToVkImageLayout(ImageLayout imageLayout);
+
 class ImageHelper final : public Resource, public angle::Subject
 {
   public:
