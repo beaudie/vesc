@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a08dd1b7_96b1aa20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:28:04Z",
+      "side": 1,
+      "message": "A test would be nice.",
+      "range": {
+        "startLine": 10,
+        "startChar": 25,
+        "endLine": 10,
+        "endChar": 52
+      },
+      "revId": "f5fe073f04a6b1e9d1c075d683667a959322240b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e43c2d48_a29383f3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:28:04Z",
+      "side": 1,
+      "message": "emplace_back?",
+      "range": {
+        "startLine": 805,
+        "startChar": 36,
+        "endLine": 806,
+        "endChar": 38
+      },
+      "revId": "f5fe073f04a6b1e9d1c075d683667a959322240b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f39ff12d_309895d6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-16T18:28:04Z",
+      "side": 1,
+      "message": "Can bind in the same loop above",
+      "revId": "f5fe073f04a6b1e9d1c075d683667a959322240b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
