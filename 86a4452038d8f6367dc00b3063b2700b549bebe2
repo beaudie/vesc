@@ -25,6 +25,47 @@
     },
     {
       "key": {
+        "uuid": "5dde1444_0bc05cf3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-16T16:24:21Z",
+      "side": 1,
+      "message": "I\u0027m importing FD to Semaphore - but not exporting. Not clear from spec if I need this one.",
+      "parentUuid": "717aba67_ba30d1c8",
+      "range": {
+        "startLine": 594,
+        "startChar": 48,
+        "endLine": 594,
+        "endChar": 49
+      },
+      "revId": "86a4452038d8f6367dc00b3063b2700b549bebe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25538a48_0010509a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-16T16:24:21Z",
+      "side": 1,
+      "message": "I\u0027m importing, not creating with FD. Not sure I need this one. Spec not clear to me.\n\nRemoving both, unless someone interprets otherwise.",
+      "revId": "86a4452038d8f6367dc00b3063b2700b549bebe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64cd9f4e_fbb92e9f",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 10
@@ -48,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "e370be9f_a24ff426",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-16T16:24:21Z",
+      "side": 1,
+      "message": "yep.",
+      "parentUuid": "64cd9f4e_fbb92e9f",
+      "range": {
+        "startLine": 1751,
+        "startChar": 12,
+        "endLine": 1754,
+        "endChar": 86
+      },
+      "revId": "86a4452038d8f6367dc00b3063b2700b549bebe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76adf9f9_75e36d3b",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 10
@@ -59,6 +124,30 @@
       "writtenOn": "2020-04-16T15:10:16Z",
       "side": 1,
       "message": "Same here, all parentheses are unnecessary.",
+      "range": {
+        "startLine": 1759,
+        "startChar": 32,
+        "endLine": 1760,
+        "endChar": 81
+      },
+      "revId": "86a4452038d8f6367dc00b3063b2700b549bebe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "836c6c03_0e965010",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-16T16:24:21Z",
+      "side": 1,
+      "message": "Yep.",
+      "parentUuid": "76adf9f9_75e36d3b",
       "range": {
         "startLine": 1759,
         "startChar": 32,
