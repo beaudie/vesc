@@ -303,16 +303,21 @@ EGLSurface EGLAPIENTRY EGL_CreatePixmapSurface(EGLDisplay dpy,
                (uintptr_t)dpy, (uintptr_t)config, (uintptr_t)pixmap, (uintptr_t)attrib_list);
     Thread *thread = egl::GetCurrentThread();
 
-    egl::Display *display = static_cast<egl::Display *>(dpy);
-    Config *configuration = static_cast<Config *>(config);
+    egl::Display *display   = static_cast<egl::Display *>(dpy);
+    Config *configuration   = static_cast<Config *>(config);
+    AttributeMap attributes = AttributeMap::CreateFromIntArray(attrib_list);
 
-    ANGLE_EGL_TRY_RETURN(thread, ValidateConfig(display, configuration), "eglCreatePixmapSurface",
-                         GetDisplayIfValid(display), EGL_NO_SURFACE);
+    ANGLE_EGL_TRY_RETURN(thread,
+                         ValidateCreatePixmapSurface(display, configuration, pixmap, attributes),
+                         "eglCreatePixmapSurface", GetDisplayIfValid(display), EGL_NO_SURFACE);
 
-    UNIMPLEMENTED();  // FIXME
+    egl::Surface *surface = nullptr;
+    ANGLE_EGL_TRY_RETURN(thread,
+                         display->createPixmapSurface(configuration, pixmap, attributes, &surface),
+                         "eglCreatePixmapSurface", GetDisplayIfValid(display), EGL_NO_SURFACE);
 
     thread->setSuccess();
-    return EGL_NO_SURFACE;
+    return static_cast<EGLSurface>(surface);
 }
 
 EGLBoolean EGLAPIENTRY EGL_DestroySurface(EGLDisplay dpy, EGLSurface surface)
