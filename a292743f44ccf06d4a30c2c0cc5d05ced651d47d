@@ -467,6 +467,30 @@
     },
     {
       "key": {
+        "uuid": "e0af3306_81c59660",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-16T21:15:34Z",
+      "side": 1,
+      "message": "App can destroy any object it creates at any time. However if the object is used with current context, it does not really get deleted. Kinda a ref count thing.\nSo, the queueSubmit below could still be in the process, while front end call the releaseToRenderer() and destructor above - (unless, EGLContext from above is kept current with gl::Context and ContextVk). But the release() and dtor() could come much, much later.\nI thought the ContextVk/RendererVk did cleaned up any resources after queueSubmit is processed. So My fence holding a FD could eventually be Garbage Collected and its VKFence handle destroyed sometime in the future. And then this code doesn\u0027t need to worry about the timing of close(fd);",
+      "parentUuid": "a025175c_6b43a237",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 50
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91f26732_4ca4ca2f",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 6
