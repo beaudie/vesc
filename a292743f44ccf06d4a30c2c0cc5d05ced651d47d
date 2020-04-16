@@ -395,6 +395,30 @@
     },
     {
       "key": {
+        "uuid": "eec69cb6_bd8880ee",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-16T17:54:09Z",
+      "side": 1,
+      "message": "It will retain the resource until the current set of command buffers are submitted and completed.\n\nLooking at the code SyncHelper should be a vk::Resource like Images and Buffers. Jeff if you can, could you make a small refactor patch to make SyncHelper inherit from vk::Resource? Resource is a simple mixin to own a SharedResourceUse and exposes functions like \"retain\" which are easier to understand for the reader.",
+      "parentUuid": "230f6d83_1fd27bef",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 50
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91f26732_4ca4ca2f",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 6
