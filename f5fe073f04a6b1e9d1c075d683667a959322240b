@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "993a06bb_4da3bd8c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-16T18:41:52Z",
+      "side": 1,
+      "message": "Should this be done in RenderbufferVk::releaseAndDeleteImage() above also?",
+      "revId": "f5fe073f04a6b1e9d1c075d683667a959322240b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e43c2d48_a29383f3",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
