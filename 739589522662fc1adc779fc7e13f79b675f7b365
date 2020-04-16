@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "02d8d8bc_96abc05d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3588,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-16T22:00:02Z",
+      "side": 1,
+      "message": "Why is this conditional on !mState.getProgram()?\nWhy wouldn\u0027t that state need to processed if we get here?\nI\u0027m assuming there is a relationship between mState.getProgramPipeline() and mState.getProgram() that\u0027s not obvious here.",
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fd73561a_cf575748",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 5
@@ -105,6 +122,30 @@
     },
     {
       "key": {
+        "uuid": "8f1bf0fa_fdad2800",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-16T22:00:02Z",
+      "side": 1,
+      "message": "This reminds me of a question I\u0027ve had on something like this.\nIs it better to directly return the value?\nWhen I\u0027m debugging I find myself often breaking up statements to like what Tim did so that I can see the value in the debugger before returning, otherwise it can be challenging to extract what\u0027s going on.\nSo, I would find the code as-is more friendly to follow-up debugging, but that could just be me.",
+      "parentUuid": "4a83679e_c2905203",
+      "range": {
+        "startLine": 1219,
+        "startChar": 4,
+        "endLine": 1219,
+        "endChar": 38
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da1623fa_eed70597",
         "filename": "src/libANGLE/Program.h",
         "patchSetId": 5
@@ -144,6 +185,29 @@
         "startChar": 0,
         "endLine": 113,
         "endChar": 20
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dde4c11_2ec5270f",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-16T22:00:02Z",
+      "side": 1,
+      "message": "I like this, cleaned up a bunch of these processing loops.",
+      "range": {
+        "startLine": 552,
+        "startChar": 39,
+        "endLine": 552,
+        "endChar": 81
       },
       "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
