@@ -86,28 +86,29 @@ bool IsInStd140UniformBlock(TIntermTyped *node)
     return false;
 }
 
-bool IsInstanceUniformBlock(TIntermTyped *node)
+const TInterfaceBlock *GetInterfaceBlockForInstanceUniformBlock(TIntermTyped *node)
 {
     TIntermBinary *binaryNode = node->getAsBinaryNode();
 
     if (binaryNode)
     {
-        return IsInstanceUniformBlock(binaryNode->getLeft());
+        return GetInterfaceBlockForInstanceUniformBlock(binaryNode->getLeft());
     }
 
     const TVariable &variable = node->getAsSymbolNode()->variable();
     const TType &variableType = variable.getType();
 
-    const TType &type = node->getType();
-
-    if (type.getQualifier() == EvqUniform)
+    if (variableType.getQualifier() == EvqUniform &&
+        variable.symbolType() == SymbolType::UserDefined)
     {
         // determine if it is instance uniform block.
-        const TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
-        return interfaceBlock && variableType.isInterfaceBlock();
+        if (variableType.isInterfaceBlock())
+        {
+            return variableType.getInterfaceBlock();
+        }
     }
 
-    return false;
+    return nullptr;
 }
 
 const char *GetHLSLAtomicFunctionStringAndLeftParenthesis(TOperator op)
@@ -1634,6 +1635,42 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
             else
             {
                 outputTriplet(out, visit, "", "[", "]");
+                if (visit == PostVisit)
+                {
+                    const TInterfaceBlock *interfaceBlock =
+                        node->getLeft()->getType().getInterfaceBlock();
+                    if (interfaceBlock)
+                    {
+                        TIntermSymbol *symbolNode = node->getLeft()->getAsSymbolNode();
+                        if (symbolNode != nullptr &&
+                            symbolNode->variable().symbolType() == SymbolType::UserDefined &&
+                            mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(
+                                *interfaceBlock))
+                        {
+                            const TField *field = interfaceBlock->fields()[0];
+                            if (field->type()->isMatrix())
+                            {
+                                out << "._matrix_" << Decorate(field->name());
+                            }
+                        }
+                    }
+                    else
+                    {
+                        const TInterfaceBlock *instanceInterfaceBlock = nullptr;
+                        instanceInterfaceBlock =
+                            needPackInstanceUniformBlockMemberInStructure(node->getLeft());
+                        if (instanceInterfaceBlock &&
+                            mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(
+                                *instanceInterfaceBlock))
+                        {
+                            const TField *field = instanceInterfaceBlock->fields()[0];
+                            if (field->type()->isMatrix())
+                            {
+                                out << "._matrix_" << Decorate(field->name());
+                            }
+                        }
+                    }
+                }
             }
         }
         break;
@@ -1650,6 +1687,42 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
             else
             {
                 outputTriplet(out, visit, "", "[", "]");
+                if (visit == PostVisit)
+                {
+                    const TInterfaceBlock *interfaceBlock =
+                        node->getLeft()->getType().getInterfaceBlock();
+                    if (interfaceBlock)
+                    {
+                        TIntermSymbol *symbolNode = node->getLeft()->getAsSymbolNode();
+                        if (symbolNode != nullptr &&
+                            symbolNode->variable().symbolType() == SymbolType::UserDefined &&
+                            mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(
+                                *interfaceBlock))
+                        {
+                            const TField *field = interfaceBlock->fields()[0];
+                            if (field->type()->isMatrix())
+                            {
+                                out << "._matrix_" << Decorate(field->name());
+                            }
+                        }
+                    }
+                    else
+                    {
+                        const TInterfaceBlock *instanceInterfaceBlock = nullptr;
+                        instanceInterfaceBlock =
+                            needPackInstanceUniformBlockMemberInStructure(node->getLeft());
+                        if (instanceInterfaceBlock &&
+                            mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(
+                                *instanceInterfaceBlock))
+                        {
+                            const TField *field = instanceInterfaceBlock->fields()[0];
+                            if (field->type()->isMatrix())
+                            {
+                                out << "._matrix_" << Decorate(field->name());
+                            }
+                        }
+                    }
+                }
             }
             break;
         }
@@ -1707,11 +1780,12 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                     node->getLeft()->getType().getInterfaceBlock();
                 const TIntermConstantUnion *index = node->getRight()->getAsConstantUnion();
                 const TField *field               = interfaceBlock->fields()[index->getIConst(0)];
-                bool instanceUniformBlock         = IsInstanceUniformBlock(node->getLeft());
+                const TInterfaceBlock *instanceInterfaceBlock =
+                    GetInterfaceBlockForInstanceUniformBlock(node->getLeft());
                 if (structInStd140UniformBlock ||
-                    (instanceUniformBlock &&
+                    (instanceInterfaceBlock &&
                      mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(
-                         *interfaceBlock)))
+                         *instanceInterfaceBlock)))
                 {
                     out << "_";
                 }
@@ -3620,6 +3694,17 @@ const char *OutputHLSL::generateOutputCall() const
     {
         return "generateOutput()";
     }
+}
+
+const TInterfaceBlock *OutputHLSL::needPackInstanceUniformBlockMemberInStructure(TIntermTyped *node)
+{
+    TIntermBinary *binaryNode = node->getAsBinaryNode();
+    if (binaryNode != nullptr && binaryNode->getOp() == EOpIndexDirectInterfaceBlock)
+    {
+        return GetInterfaceBlockForInstanceUniformBlock(node);
+    }
+
+    return nullptr;
 }
 
 }  // namespace sh
