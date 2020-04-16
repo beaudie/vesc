@@ -275,6 +275,7 @@ class OutputHLSL : public TIntermTraverser
     // We need to do struct mapping when pass the struct to a function or copy the struct via
     // assignment.
     bool needStructMapping(TIntermTyped *node);
+    const TInterfaceBlock *needPackInstanceUniformBlockMemberInStructure(TIntermTyped *node);
 
     ShaderStorageBlockOutputHLSL *mSSBOOutputHLSL;
     bool mNeedStructMapping;
