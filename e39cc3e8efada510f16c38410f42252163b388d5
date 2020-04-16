@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93d222d2_b340df9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-16T17:35:55Z",
+      "side": 1,
+      "message": "use \"None\" instead of an imaginary invalid bug.",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 19
+      },
+      "revId": "e39cc3e8efada510f16c38410f42252163b388d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65adc1d6_332bd83d",
+        "filename": "WATCHLISTS",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-16T17:35:55Z",
+      "side": 1,
+      "message": "nit: can you format this into separate lines?",
+      "range": {
+        "startLine": 22,
+        "startChar": 15,
+        "endLine": 22,
+        "endChar": 107
+      },
+      "revId": "e39cc3e8efada510f16c38410f42252163b388d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
