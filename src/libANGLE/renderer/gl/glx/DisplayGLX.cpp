@@ -434,6 +434,14 @@ SurfaceImpl *DisplayGLX::createPixmapSurface(const egl::SurfaceState &state,
     return nullptr;
 }
 
+egl::Error DisplayGLX::validatePixmap(egl::Config *config,
+                                      EGLNativePixmapType pixmap,
+                                      const egl::AttributeMap &attributes) const
+{
+    // TODO
+    return egl::NoError();
+}
+
 ContextImpl *DisplayGLX::createContext(const gl::State &state,
                                        gl::ErrorSet *errorSet,
                                        const egl::Config *configuration,

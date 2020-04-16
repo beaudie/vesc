@@ -62,6 +62,8 @@ class FunctionsGLX
     glx::Pbuffer createPbuffer(glx::FBConfig config, const int *attribList) const;
     void destroyPbuffer(glx::Pbuffer pbuffer) const;
     void queryDrawable(glx::Drawable drawable, int attribute, unsigned int *value) const;
+    glx::Pixmap createPixmap(glx::FBConfig config, Pixmap pixmap, const int *attribList) const;
+    void destroyPixmap(Pixmap pixmap) const;
 
     // GLX_ARB_create_context
     glx::Context createContextAttribsARB(glx::FBConfig config,

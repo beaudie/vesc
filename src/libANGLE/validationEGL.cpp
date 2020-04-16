@@ -1914,6 +1914,48 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display,
     return NoError();
 }
 
+Error ValidateCreatePixmapSurface(Display *display,
+                                  Config *config,
+
+                                  EGLNativePixmapType pixmap,
+                                  const AttributeMap &attributes)
+{
+    ANGLE_TRY(ValidateConfig(display, config));
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+
+    for (AttributeMap::const_iterator attributeIter = attributes.begin();
+         attributeIter != attributes.end(); attributeIter++)
+    {
+        EGLAttrib attribute = attributeIter->first;
+        EGLAttrib value     = attributeIter->second;
+
+        switch (attribute)
+        {
+            case EGL_GL_COLORSPACE:
+                ANGLE_TRY(ValidateColorspaceAttribute(displayExtensions, value));
+                break;
+
+            case EGL_VG_COLORSPACE:
+                break;
+            case EGL_VG_ALPHA_FORMAT:
+                break;
+
+            default:
+                return EglBadAttribute() << "Unknown attribute";
+        }
+    }
+
+    if (!(config->surfaceType & EGL_PIXMAP_BIT))
+    {
+        return EglBadMatch() << "Congfig does not suport pixmaps.";
+    }
+
+    ANGLE_TRY(display->valdiatePixmap(config, pixmap, attributes));
+
+    return NoError();
+}
+
 Error ValidateMakeCurrent(Display *display, Surface *draw, Surface *read, gl::Context *context)
 {
     if (context == EGL_NO_CONTEXT && (draw != EGL_NO_SURFACE || read != EGL_NO_SURFACE))
