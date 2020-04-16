@@ -994,7 +994,8 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
     }
     else
     {
-        if (indices != mLastIndexBufferOffset)
+        if (reinterpret_cast<VkDeviceSize>(indices) !=
+            mVertexArray->getCurrentElementArrayBufferOffset())
         {
             mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
             mLastIndexBufferOffset = indices;
