@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abd6c2bd_a9296b97",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-16T18:42:54Z",
+      "side": 1,
+      "message": "We\u0027d be wise to remove the b: notation and consolidate on being the same as other projects (e.g. SwS) that consistently use the b/ notation.",
+      "range": {
+        "startLine": 47,
+        "startChar": 83,
+        "endLine": 47,
+        "endChar": 89
+      },
+      "revId": "5e5644a1ce56f8c2b3283ac0250816aff99422b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3d16a98_a4d99e43",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-16T18:42:54Z",
+      "side": 1,
+      "message": "nit: typo here",
+      "range": {
+        "startLine": 47,
+        "startChar": 79,
+        "endLine": 47,
+        "endChar": 81
+      },
+      "revId": "5e5644a1ce56f8c2b3283ac0250816aff99422b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
