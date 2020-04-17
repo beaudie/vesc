@@ -9,7 +9,9 @@
 
 #include "vk_mem_alloc_wrapper.h"
 
-#define VMA_IMPLEMENTATION
+#ifndef(VMA_IMPLEMENTATION)
+#    define VMA_IMPLEMENTATION
+#endif
 #include <vk_mem_alloc.h>
 
 namespace vma
