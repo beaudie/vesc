@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42f9db2a_81e88329",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-17T20:20:43Z",
+      "side": 1,
+      "message": "Very minor nit: consistent",
+      "range": {
+        "startLine": 185,
+        "startChar": 23,
+        "endLine": 185,
+        "endChar": 34
+      },
+      "revId": "0d1f0140251de32d53d9bb0b47d98776db6d11a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
