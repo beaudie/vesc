@@ -4609,18 +4609,12 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
     beginInfo.pClearValues             = mClearValues.data();
 
     // Run commands inside the RenderPass.
-    primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+    mCommandBuffer.beginRenderPass(&beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+    mCommandBuffer.endRenderPass();
+    mCommandBuffer.executeCommands(primary->getHandle());
 
-    if (mValidTransformFeedbackBufferCount == 0)
+    if (mValidTransformFeedbackBufferCount != 0)
     {
-        mCommandBuffer.executeCommands(primary->getHandle());
-        primary->endRenderPass();
-    }
-    else
-    {
-        mCommandBuffer.executeCommands(primary->getHandle());
-        primary->endRenderPass();
-
         // Would be better to accumulate this barrier using the command APIs.
         // TODO: Clean thus up before we close http://anglebug.com/3206
         VkBufferMemoryBarrier bufferBarrier = {};
