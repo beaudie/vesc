@@ -263,7 +263,8 @@ void CaptureDrawElementsBaseVertexOES_indices(const State &glState,
                                               GLint basevertex,
                                               ParamCapture *indicesParam)
 {
-    UNIMPLEMENTED();
+    CaptureDrawElements_indices(glState, isCallValid, modePacked, count, typePacked, indices,
+                                indicesParam);
 }
 
 void CaptureDrawElementsInstancedBaseVertexOES_indices(const State &glState,

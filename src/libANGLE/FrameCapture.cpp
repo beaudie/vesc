@@ -484,6 +484,12 @@ void WriteCppReplayForCall(const CallCapture &call,
         callOut << "gShaderProgramMap[" << id << "] = ";
     }
 
+    if (call.entryPoint == gl::EntryPoint::FenceSync)
+    {
+        GLuint id = call.params.getReturnValue().value.GLuintVal;
+        callOut << "gSyncMap[" << id << "] = ";
+    }
+
     if (call.entryPoint == gl::EntryPoint::MapBufferRange ||
         call.entryPoint == gl::EntryPoint::MapBufferRangeEXT)
     {
@@ -535,6 +541,17 @@ void WriteCppReplayForCall(const CallCapture &call,
             else if (param.type == ParamType::TGLsync)
             {
                 callOut << "gSyncMap[" << param.value.GLintVal << "]";
+            }
+            else if (param.type == ParamType::TGLuint64 && param.name == "timeout")
+            {
+                if (param.value.GLuint64Val == GL_TIMEOUT_IGNORED)
+                {
+                    callOut << "GL_TIMEOUT_IGNORED";
+                }
+                else
+                {
+                    WriteParamCaptureReplay(callOut, call, param);
+                }
             }
             else
             {
