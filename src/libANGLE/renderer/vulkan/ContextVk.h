@@ -518,11 +518,7 @@ class ContextVk : public ContextImpl, public vk::Context
     }
     const gl::ActiveTextureArray<TextureVk *> &getActiveImages() const { return mActiveImages; }
 
-    void setIndexBufferDirty()
-    {
-        mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
-        mLastIndexBufferOffset = reinterpret_cast<const void *>(angle::DirtyPointer);
-    }
+    void setIndexBufferDirty() { mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER); }
 
     void insertWaitSemaphore(const vk::Semaphore *waitSemaphore);
 
@@ -986,8 +982,6 @@ class ContextVk : public ContextImpl, public vk::Context
     // Graph resource used to record dispatch commands and hold resource dependencies.
     vk::DispatchHelper mDispatcher;
 
-    // The offset we had the last time we bound the index buffer.
-    const GLvoid *mLastIndexBufferOffset;
     gl::DrawElementsType mCurrentDrawElementsType;
     angle::PackedEnumMap<gl::DrawElementsType, VkIndexType> mIndexTypeMap;
 

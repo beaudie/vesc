@@ -613,7 +613,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mExecutable(nullptr),
       mActiveQueryAnySamples(nullptr),
       mActiveQueryAnySamplesConservative(nullptr),
-      mLastIndexBufferOffset(0),
       mCurrentDrawElementsType(gl::DrawElementsType::InvalidEnum),
       mXfbBaseVertex(0),
       mXfbVertexCountPerInstance(0),
@@ -994,11 +993,11 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
     }
     else
     {
-        if (indices != mLastIndexBufferOffset)
+        if (reinterpret_cast<VkDeviceSize>(indices) !=
+            mVertexArray->getCurrentElementArrayBufferOffset())
         {
             mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
-            mLastIndexBufferOffset = indices;
-            mVertexArray->updateCurrentElementArrayBufferOffset(mLastIndexBufferOffset);
+            mVertexArray->updateCurrentElementArrayBufferOffset(indices);
         }
         if (shouldConvertUint8VkIndexType(indexType) && mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
         {
