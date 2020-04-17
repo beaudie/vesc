@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8615561_a45ac716",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-17T21:44:47Z",
+      "side": 1,
+      "message": "nit: increment",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "47dbfb507d8a19e310d1fc3ac35297d2160e29f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6591fd56_c8e1e0ee",
+        "filename": "src/libANGLE/renderer/vulkan/doc/APPLE_clip_distance.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-17T21:44:47Z",
+      "side": 1,
+      "message": "this doc shares a lot in common between the two back-ends. Could it be in a common place like doc/ and have links pointing there from the vulkan/ and metal/ folders or something like that?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 54
+      },
+      "revId": "47dbfb507d8a19e310d1fc3ac35297d2160e29f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
