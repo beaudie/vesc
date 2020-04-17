@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1207bec1_2d2cc559",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-17T21:54:48Z",
+      "side": 1,
+      "message": "3) https://chromium-review.googlesource.com/c/angle/angle/+/2155250",
+      "parentUuid": "81880290_5e3a0bec",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 30
+      },
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2477552_993eb35d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
@@ -114,6 +138,24 @@
     },
     {
       "key": {
+        "uuid": "fb88808c_13a51947",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-17T21:54:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5b00061_2dd975b8",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "634f8bed_c5123608",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 7
@@ -148,6 +190,24 @@
     },
     {
       "key": {
+        "uuid": "d4f656b4_ff5c0ce9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-17T21:54:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ff93c9f_ca6a9a71",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99b8ff1a_b2780220",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
@@ -171,6 +231,30 @@
     },
     {
       "key": {
+        "uuid": "bb1fbad7_916e8d86",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-17T21:54:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99b8ff1a_b2780220",
+      "range": {
+        "startLine": 1136,
+        "startChar": 4,
+        "endLine": 1136,
+        "endChar": 72
+      },
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d2b5e0c_3a008c51",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
@@ -191,6 +275,30 @@
       "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e51a6438_4cbe0563",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-17T21:54:48Z",
+      "side": 1,
+      "message": "I was under impression from past CL review that this is the preferred style. But anyway, I have fixed it.",
+      "parentUuid": "9d2b5e0c_3a008c51",
+      "range": {
+        "startLine": 1536,
+        "startChar": 45,
+        "endLine": 1536,
+        "endChar": 60
+      },
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -273,6 +381,24 @@
       "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27797cfc_04cbecc3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-17T21:54:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "758dbbed_2d1abdff",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
