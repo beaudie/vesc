@@ -230,6 +230,261 @@ ImageUnit::ImageUnit(const ImageUnit &other) = default;
 
 ImageUnit::~ImageUnit() = default;
 
+BlendStateExt::BlendStateExt(const size_t drawBuffers)
+    : maxBlendFactorMask(BlendFactorStorage::Mask(drawBuffers)),
+      blendFactorSrcColor(
+          BlendFactorStorage::GetReplicatedValue(BlendFactorType::One, maxBlendFactorMask)),
+      blendFactorDstColor(
+          BlendFactorStorage::GetReplicatedValue(BlendFactorType::Zero, maxBlendFactorMask)),
+      blendFactorSrcAlpha(
+          BlendFactorStorage::GetReplicatedValue(BlendFactorType::One, maxBlendFactorMask)),
+      blendFactorDstAlpha(
+          BlendFactorStorage::GetReplicatedValue(BlendFactorType::Zero, maxBlendFactorMask)),
+      maxBlendEquationMask(BlendEquationStorage::Mask(drawBuffers)),
+      blendEquationColor(
+          BlendEquationStorage::GetReplicatedValue(BlendEquationType::Add, maxBlendEquationMask)),
+      blendEquationAlpha(
+          BlendEquationStorage::GetReplicatedValue(BlendEquationType::Add, maxBlendEquationMask)),
+      maxColorMask(ColorMaskStorage::Mask(drawBuffers)),
+      colorMask(ColorMaskStorage::GetReplicatedValue(PackColorMask(true, true, true, true),
+                                                     maxColorMask)),
+      maxBlendEnabedMask(0xFF >> (8 - drawBuffers)),
+      blendEnabledMask(),
+      maxDrawBuffers(drawBuffers)
+{}
+
+BlendStateExt &BlendStateExt::operator=(const BlendStateExt &other)
+{
+    memcpy(this, &other, sizeof(BlendStateExt));
+    return *this;
+}
+
+void BlendStateExt::setBlend(const bool enabled)
+{
+    if (enabled)
+    {
+        blendEnabledMask = maxBlendEnabedMask;
+    }
+    else
+    {
+        blendEnabledMask.reset();
+    }
+}
+
+void BlendStateExt::setBlendIndexed(const bool enabled, const size_t index)
+{
+    ASSERT(index < maxDrawBuffers);
+    blendEnabledMask.set(index, enabled);
+}
+
+BlendStateExt::ColorMaskStorage::Type BlendStateExt::expandColorMaskValue(const bool red,
+                                                                          const bool green,
+                                                                          const bool blue,
+                                                                          const bool alpha) const
+{
+    return BlendStateExt::ColorMaskStorage::GetReplicatedValue(
+        PackColorMask(red, green, blue, alpha), maxColorMask);
+}
+
+BlendStateExt::ColorMaskStorage::Type BlendStateExt::expandColorMaskIndexed(
+    const size_t index) const
+{
+    return ColorMaskStorage::GetReplicatedValue(ColorMaskStorage::GetValueIndexed(colorMask, index),
+                                                maxColorMask);
+}
+
+void BlendStateExt::setColorMask(const bool red,
+                                 const bool green,
+                                 const bool blue,
+                                 const bool alpha)
+{
+    colorMask = expandColorMaskValue(red, green, blue, alpha);
+}
+
+void BlendStateExt::setColorMaskIndexed(const bool red,
+                                        const bool green,
+                                        const bool blue,
+                                        const bool alpha,
+                                        const size_t index)
+{
+    ASSERT(index < maxDrawBuffers);
+    ColorMaskStorage::SetValueIndexed(colorMask, PackColorMask(red, green, blue, alpha), index);
+}
+
+void BlendStateExt::getColorMaskIndexed(bool &red,
+                                        bool &green,
+                                        bool &blue,
+                                        bool &alpha,
+                                        size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    UnpackColorMask(ColorMaskStorage::GetValueIndexed(colorMask, index), red, green, blue, alpha);
+}
+
+DrawBufferMask BlendStateExt::compareColorMask(ColorMaskStorage::Type other) const
+{
+    return ColorMaskStorage::GetDiffMask(colorMask, other);
+}
+
+BlendStateExt::BlendEquationStorage::Type BlendStateExt::expandBlendEquationValue(
+    const GLenum mode) const
+{
+    return BlendEquationStorage::GetReplicatedValue(FromGLenum<BlendEquationType>(mode),
+                                                    maxBlendEquationMask);
+}
+
+BlendStateExt::BlendEquationStorage::Type BlendStateExt::expandBlendEquationColorIndexed(
+    const size_t index) const
+{
+    return BlendEquationStorage::GetReplicatedValue(
+        BlendEquationStorage::GetValueIndexed(blendEquationColor, index), maxBlendEquationMask);
+}
+
+BlendStateExt::BlendEquationStorage::Type BlendStateExt::expandBlendEquationAlphaIndexed(
+    const size_t index) const
+{
+    return BlendEquationStorage::GetReplicatedValue(
+        BlendEquationStorage::GetValueIndexed(blendEquationAlpha, index), maxBlendEquationMask);
+}
+
+void BlendStateExt::setBlendEquation(const GLenum modeColor, const GLenum modeAlpha)
+{
+    blendEquationColor = expandBlendEquationValue(modeColor);
+    blendEquationAlpha = expandBlendEquationValue(modeAlpha);
+}
+
+void BlendStateExt::setBlendEquationIndexed(const GLenum modeColor,
+                                            const GLenum modeAlpha,
+                                            const size_t index)
+{
+    ASSERT(index < maxDrawBuffers);
+    BlendEquationStorage::SetValueIndexed(blendEquationColor,
+                                          FromGLenum<BlendEquationType>(modeColor), index);
+    BlendEquationStorage::SetValueIndexed(blendEquationAlpha,
+                                          FromGLenum<BlendEquationType>(modeAlpha), index);
+}
+
+GLenum BlendStateExt::getBlendEquationColorIndexed(size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    return ToGLenum(BlendEquationStorage::GetValueIndexed(blendEquationColor, index));
+}
+
+GLenum BlendStateExt::getBlendEquationAlphaIndexed(size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    return ToGLenum(BlendEquationStorage::GetValueIndexed(blendEquationAlpha, index));
+}
+
+DrawBufferMask BlendStateExt::compareBlendEquations(const BlendEquationStorage::Type color,
+                                                    const BlendEquationStorage::Type alpha) const
+{
+    return BlendEquationStorage::GetDiffMask(blendEquationColor, color) |
+           BlendEquationStorage::GetDiffMask(blendEquationAlpha, alpha);
+}
+
+BlendStateExt::BlendFactorStorage::Type BlendStateExt::expandBlendFactorValue(
+    const GLenum func) const
+{
+    return BlendFactorStorage::GetReplicatedValue(FromGLenum<BlendFactorType>(func),
+                                                  maxBlendFactorMask);
+}
+
+BlendStateExt::BlendFactorStorage::Type BlendStateExt::expandBlendFactorSrcColorIndexed(
+    const size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    return BlendFactorStorage::GetReplicatedValue(
+        BlendFactorStorage::GetValueIndexed(blendFactorSrcColor, index), maxBlendFactorMask);
+}
+
+BlendStateExt::BlendFactorStorage::Type BlendStateExt::expandBlendFactorDstColorIndexed(
+    const size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    return BlendFactorStorage::GetReplicatedValue(
+        BlendFactorStorage::GetValueIndexed(blendFactorDstColor, index), maxBlendFactorMask);
+}
+
+BlendStateExt::BlendFactorStorage::Type BlendStateExt::expandBlendFactorSrcAlphaIndexed(
+    const size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    return BlendFactorStorage::GetReplicatedValue(
+        BlendFactorStorage::GetValueIndexed(blendFactorSrcAlpha, index), maxBlendFactorMask);
+}
+
+BlendStateExt::BlendFactorStorage::Type BlendStateExt::expandBlendFactorDstAlphaIndexed(
+    const size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    return BlendFactorStorage::GetReplicatedValue(
+        BlendFactorStorage::GetValueIndexed(blendFactorDstAlpha, index), maxBlendFactorMask);
+}
+
+void BlendStateExt::setBlendFactors(const GLenum srcColor,
+                                    const GLenum dstColor,
+                                    const GLenum srcAlpha,
+                                    const GLenum dstAlpha)
+{
+    blendFactorSrcColor = expandBlendFactorValue(srcColor);
+    blendFactorDstColor = expandBlendFactorValue(dstColor);
+    blendFactorSrcAlpha = expandBlendFactorValue(srcAlpha);
+    blendFactorDstAlpha = expandBlendFactorValue(dstAlpha);
+}
+
+void BlendStateExt::setBlendFactorsIndexed(const GLenum srcColor,
+                                           const GLenum dstColor,
+                                           const GLenum srcAlpha,
+                                           const GLenum dstAlpha,
+                                           const size_t index)
+{
+    ASSERT(index < maxDrawBuffers);
+    BlendFactorStorage::SetValueIndexed(blendFactorSrcColor, FromGLenum<BlendFactorType>(srcColor),
+                                        index);
+    BlendFactorStorage::SetValueIndexed(blendFactorDstColor, FromGLenum<BlendFactorType>(dstColor),
+                                        index);
+    BlendFactorStorage::SetValueIndexed(blendFactorSrcAlpha, FromGLenum<BlendFactorType>(srcAlpha),
+                                        index);
+    BlendFactorStorage::SetValueIndexed(blendFactorDstAlpha, FromGLenum<BlendFactorType>(dstAlpha),
+                                        index);
+}
+
+GLenum BlendStateExt::getBlendFactorSrcColorIndexed(size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    return ToGLenum(BlendFactorStorage::GetValueIndexed(blendFactorSrcColor, index));
+}
+
+GLenum BlendStateExt::getBlendFactorDstColorIndexed(size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    return ToGLenum(BlendFactorStorage::GetValueIndexed(blendFactorDstColor, index));
+}
+
+GLenum BlendStateExt::getBlendFactorSrcAlphaIndexed(size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    return ToGLenum(BlendFactorStorage::GetValueIndexed(blendFactorSrcAlpha, index));
+}
+
+GLenum BlendStateExt::getBlendFactorDstAlphaIndexed(size_t index) const
+{
+    ASSERT(index < maxDrawBuffers);
+    return ToGLenum(BlendFactorStorage::GetValueIndexed(blendFactorDstAlpha, index));
+}
+
+DrawBufferMask BlendStateExt::compareBlendFactors(const BlendFactorStorage::Type srcColor,
+                                                  const BlendFactorStorage::Type dstColor,
+                                                  const BlendFactorStorage::Type srcAlpha,
+                                                  const BlendFactorStorage::Type dstAlpha) const
+{
+    return BlendFactorStorage::GetDiffMask(blendFactorSrcColor, srcColor) |
+           BlendFactorStorage::GetDiffMask(blendFactorDstColor, dstColor) |
+           BlendFactorStorage::GetDiffMask(blendFactorSrcAlpha, srcAlpha) |
+           BlendFactorStorage::GetDiffMask(blendFactorDstAlpha, dstAlpha);
+}
+
 static void MinMax(int a, int b, int *minimum, int *maximum)
 {
     if (a < b)
