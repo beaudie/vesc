@@ -491,6 +491,30 @@
     },
     {
       "key": {
+        "uuid": "cfeb1d7e_e1c4a50d",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-17T16:44:50Z",
+      "side": 1,
+      "message": "Yes, then the lifetime management via SharedResourdUse is what we want.\n\nNot sure if you saw my other two comments - could you make the refactor to change SyncHelper into a vk::Resource a small separate CL that we can land quickly? That will help separate out the refactoring and functionality changes from this CL.",
+      "parentUuid": "e0af3306_81c59660",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 50
+      },
+      "revId": "a292743f44ccf06d4a30c2c0cc5d05ced651d47d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91f26732_4ca4ca2f",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 6
