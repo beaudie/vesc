@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "893d3686_c8b98220",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-17T13:54:45Z",
+      "side": 1,
+      "message": "nit: Caps for static functions.\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#variable-names",
+      "range": {
+        "startLine": 451,
+        "startChar": 14,
+        "endLine": 451,
+        "endChar": 47
+      },
+      "revId": "d20b8022474d58055cf49b388d4fbe0cbbe23be6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
