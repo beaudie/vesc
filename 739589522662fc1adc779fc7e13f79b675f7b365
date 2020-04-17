@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ebb0b91f_6c4c7b76",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3582,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 1,
+      "message": "Good catch.   I like the assert idea.",
+      "parentUuid": "e94b9715_cd4b04ae",
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02d8d8bc_96abc05d",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "14b76b14_90129c48",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3588,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 1,
+      "message": "We only want to do this work if there isn\u0027t a Program bound, since Programs override PPOs. \n  However, as Shabi points out, we can\u0027t get into here if we have a Program bound, since a Program can never return \u0027false\u0027 for isCompute() (since a Program is only either graphics or compute).\n\nThe correct thing to do here is remove this conditional since the whole thing only applies to PPOs already.",
+      "parentUuid": "02d8d8bc_96abc05d",
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd73561a_cf575748",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 5
@@ -50,6 +86,24 @@
       "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64f5c901_aa66fa0f",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd73561a_cf575748",
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "238d3471_65eed9c6",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77555a87_94b55266",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 23
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a803d46_2bb5be76",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 5
@@ -96,6 +174,30 @@
       "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ec8a14d_38f5a54f",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 1,
+      "message": "Oops, you\u0027ve told me that before.",
+      "parentUuid": "0a803d46_2bb5be76",
+      "range": {
+        "startLine": 1214,
+        "startChar": 44,
+        "endLine": 1214,
+        "endChar": 56
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -146,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "4d2ca176_442b3f71",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 1,
+      "message": "That\u0027s a good question Courtney.\n\nI would guess that the compiler generates the same code in the end, but I went ahead and condensed it here for now since the rest of ANGLE seems to follow that pattern (as Courtney pointed out).",
+      "parentUuid": "8f1bf0fa_fdad2800",
+      "range": {
+        "startLine": 1219,
+        "startChar": 4,
+        "endLine": 1219,
+        "endChar": 38
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da1623fa_eed70597",
         "filename": "src/libANGLE/Program.h",
         "patchSetId": 5
@@ -166,6 +292,30 @@
       "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63c19d3f_9b38ed06",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 1,
+      "message": "Ah, yeah, this is a remnant of some issues I was hitting earlier in the initial PPO stuff where they could disagree (a Program can have a Shader attached before it\u0027s linked).   Looking back at the old Program::isCompute():\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2040512/64/src/libANGLE/Program.h\n\nWe only need mExecutable.hasLinkedShaderStage() for Programs.",
+      "parentUuid": "da1623fa_eed70597",
+      "range": {
+        "startLine": 360,
+        "startChar": 15,
+        "endLine": 361,
+        "endChar": 58
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -192,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "202b7ffa_9975eabf",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8a5dca8_94d97615",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 20
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0dde4c11_2ec5270f",
         "filename": "src/libANGLE/ProgramPipeline.cpp",
         "patchSetId": 5
@@ -212,6 +386,30 @@
       "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee8f0c95_990969d0",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0dde4c11_2ec5270f",
+      "range": {
+        "startLine": 552,
+        "startChar": 39,
+        "endLine": 552,
+        "endChar": 81
+      },
+      "revId": "739589522662fc1adc779fc7e13f79b675f7b365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

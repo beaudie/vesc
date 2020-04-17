@@ -16,6 +16,41 @@
       "revId": "6e0d718a48d8fb5e66a6f8a1838adbf8c7f5ff4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf6bf824_c1b7f044",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 0,
+      "message": "The problem before was that the pipeline was being re-created in a way that the rest of the code couldn\u0027t handle correctly (not enough state was being reset I think).   It felt like a hack at the time and I\u0027d been hoping to get rid of it again to get back to the previous (pre-PPO changes) behavior.\n\nWith it in as part of this CL, we miss creating the pipeline due to the order of dirty bit handling (we handle dirty objects before dirty state) when switching between draw and dispatch.\n\nAdding an ASSERT(!mPipelineLayout.valid()) here fails, since we only have a single mPipelineLayout to handle graphics and compute.   For example, one of the tests that fails:\n\nKHR-GLES31.core.compute_shader.sso-compute-pipeline\n\t\tglBindProgramPipeline(m_pipeline);\n\t\tglBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_storage_buffer);\n\t\tglDispatchCompute(1, 1, 1);\n\n\t\tglClear(GL_COLOR_BUFFER_BIT);\n\t\tglBindVertexArray(m_vertex_array);\n\t\tglMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);\n\t\tglDrawArrays(GL_TRIANGLE_STRIP, 0, 4);\n\nWe intended to re-use the same mPipelineLayout, but reset it below on line 635 (see ref).\n\nAnother idea is to instead duplicate mPipelineLayout into mComputePipelineLayout and mGraphicsPipelineLayout.   This is a relatively small change, but still hits issues with an even more straightforward case for PPOs:\n\nKHR-GLES31.core.compute_shader.sso-case3\n\t\tglBindProgramPipeline(m_pipeline);\n\t\tglUseProgramStages(m_pipeline, GL_ALL_SHADER_BITS, m_program_b);\n                glDispatchCompute(1, 1, 1);\n    ...\n\t\tglUseProgramStages(m_pipeline, GL_COMPUTE_SHADER_BIT, m_program_a);\n\t\tglDispatchCompute(1, 1, 1);\n\nIn this case, the same PPO has different Programs bound for the compute stage and each glUseProgramStages() call will set the PPO dirty bit and trigger a re-link as part of dispatchCompute().   The PPO re-link will call createPipelineLayout() (here), and is also the first opportunity for the VK backend to do any work, including resetting mComputePipelineLayout.   This means that the ASSERT() will always fail when re-using a PPO for multiple draw/dispatch calls when changing the bounds Program(s), since the VK backend never gets a chance to do any work to clean things up beforehand.",
+      "parentUuid": "07df02aa_7f5d7782",
+      "revId": "6e0d718a48d8fb5e66a6f8a1838adbf8c7f5ff4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f76d496_b639394d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-17T07:29:59Z",
+      "side": 0,
+      "message": "ref",
+      "revId": "6e0d718a48d8fb5e66a6f8a1838adbf8c7f5ff4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
