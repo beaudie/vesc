@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e8c6ea9_8ee92104",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-04-17T23:31:33Z",
+      "side": 1,
+      "message": "Bug and condition don\u0027t match. Did you mean isSwiftShader instead of IsD3D11?\nAlso, this looks like something that SwiftShader team should investigate, so perhaps the meta-bug is not appropriate here.",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 275,
+        "endChar": 49
+      },
+      "revId": "bd347c9db49cdd5bb31488bae2dcedae6427c623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
