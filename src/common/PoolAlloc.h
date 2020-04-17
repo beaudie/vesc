@@ -40,6 +40,8 @@
 #include "angleutils.h"
 #include "common/debug.h"
 
+#define ANGLE_DISABLE_POOL_ALLOC 1
+
 namespace angle
 {
 // If we are using guard blocks, we must track each individual
