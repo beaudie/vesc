@@ -22,6 +22,30 @@
       "revId": "bd347c9db49cdd5bb31488bae2dcedae6427c623",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79c4251e_aa193064",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-04-18T13:49:46Z",
+      "side": 1,
+      "message": "Hmm.  I cloned this from the test above.  I did skip this for SwiftShader because of the problem on the bot (same type of problem this test gets with D3D11).",
+      "parentUuid": "1e8c6ea9_8ee92104",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 275,
+        "endChar": 49
+      },
+      "revId": "bd347c9db49cdd5bb31488bae2dcedae6427c623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
