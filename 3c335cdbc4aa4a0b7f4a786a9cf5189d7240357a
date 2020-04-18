@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "475daa80_0382d75c",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-18T02:49:09Z",
+      "side": 1,
+      "message": "Adding a link to the previous comment chain about how to improve this:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2072652/88/src/libANGLE/Context.inl.h#75",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 80
+      },
+      "revId": "3c335cdbc4aa4a0b7f4a786a9cf5189d7240357a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
