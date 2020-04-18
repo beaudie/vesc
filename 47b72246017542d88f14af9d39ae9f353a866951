@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de121e2f_8c4dbff5",
+        "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-18T00:43:38Z",
+      "side": 1,
+      "message": "rename to -\u003e AndroidNativeFence_ClientWait",
+      "revId": "47b72246017542d88f14af9d39ae9f353a866951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "639615b0_239f2264",
+        "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-18T00:43:38Z",
+      "side": 1,
+      "message": "this fd was not cleaned up",
+      "revId": "47b72246017542d88f14af9d39ae9f353a866951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76375f00_3160813c",
+        "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-18T00:43:38Z",
+      "side": 1,
+      "message": "in terms of ordering of tests, this test should be the first one to run, since this is a simple creation of sync test",
+      "revId": "47b72246017542d88f14af9d39ae9f353a866951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "084ce83d_194f37e3",
+        "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-18T00:43:38Z",
+      "side": 1,
+      "message": "curious, what happens if we do a ClientWait here?",
+      "revId": "47b72246017542d88f14af9d39ae9f353a866951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6d41141_4b1badc5",
+        "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-18T00:43:38Z",
+      "side": 1,
+      "message": "never ran for vulkan backend, why?",
+      "revId": "47b72246017542d88f14af9d39ae9f353a866951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
