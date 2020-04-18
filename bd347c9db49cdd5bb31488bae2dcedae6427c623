@@ -46,6 +46,30 @@
       "revId": "bd347c9db49cdd5bb31488bae2dcedae6427c623",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41860767_43652d38",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-04-18T18:34:00Z",
+      "side": 1,
+      "message": "It looks like this is wrong in the above test as well.\nCould you please open a new bug about these 2 tests failing on D3D11 and SwiftShader and use it in the above test, too?",
+      "parentUuid": "79c4251e_aa193064",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 275,
+        "endChar": 49
+      },
+      "revId": "bd347c9db49cdd5bb31488bae2dcedae6427c623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
