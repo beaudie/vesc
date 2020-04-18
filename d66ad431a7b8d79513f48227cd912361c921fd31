@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59988db3_64d24fcd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-18T00:42:01Z",
+      "side": 1,
+      "message": "Thanks for adding this.",
+      "range": {
+        "startLine": 1138,
+        "startChar": 0,
+        "endLine": 1140,
+        "endChar": 20
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
