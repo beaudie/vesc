@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "daf20ff6_8015f1d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-19T21:00:15Z",
+      "side": 1,
+      "message": "After more testing on AMD/Windows (without ANGLE at all, just a standalone OpenGL app), it seems that it\u0027s a driver issue: setting a color mask for buffer 0 actually affects all buffers; setting a color mask for any other buffer is ignored. State queries work as if everything is okay, though. \n\nLinux driver doesn\u0027t have this problem.",
+      "parentUuid": "9f70f2e7_065e6690",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 47
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7846cf93_81c37f7e",
         "filename": "src/common/PackedEnums.h",
         "patchSetId": 2
@@ -500,6 +524,24 @@
     },
     {
       "key": {
+        "uuid": "21c89b01_65bf1996",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-19T21:00:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9c7e3ce_23ce92df",
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3e40733_bd082f75",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
         "patchSetId": 2
@@ -523,6 +565,30 @@
     },
     {
       "key": {
+        "uuid": "0de506cf_e4deefca",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-19T21:00:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3e40733_bd082f75",
+      "range": {
+        "startLine": 1254,
+        "startChar": 12,
+        "endLine": 1254,
+        "endChar": 48
+      },
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "946e062f_249754b8",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
         "patchSetId": 2
@@ -537,6 +603,24 @@
       "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c60b1da9_d2fc991b",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2143,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-19T21:00:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "946e062f_249754b8",
+      "revId": "ca2345961973e42d81a1b021a2be90a2eab24754",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
