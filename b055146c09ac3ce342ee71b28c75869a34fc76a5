@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7facff31_6a942ee6",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-19T05:33:50Z",
+      "side": 1,
+      "message": "Excellent explanation",
+      "revId": "b055146c09ac3ce342ee71b28c75869a34fc76a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9121f3ec_65c0e54b",
+        "filename": "src/libANGLE/angletypes_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-19T05:33:50Z",
+      "side": 1,
+      "message": "It\u0027s 2020!",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "b055146c09ac3ce342ee71b28c75869a34fc76a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daf15a21_5d0ff9bc",
+        "filename": "src/libANGLE/angletypes_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-19T05:33:50Z",
+      "side": 1,
+      "message": "Needs updating",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 70
+      },
+      "revId": "b055146c09ac3ce342ee71b28c75869a34fc76a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
