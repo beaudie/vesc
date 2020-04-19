@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ce18799_8ec9dd6f",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-19T05:15:25Z",
+      "side": 1,
+      "message": "You can use an initializer list (i.e. `\u003d {-1.0f, 1.0f, ....}`) with `std::vector` to avoid all the push_backs.",
+      "range": {
+        "startLine": 328,
+        "startChar": 37,
+        "endLine": 328,
+        "endChar": 38
+      },
+      "revId": "008532e7acb3b582483c08ec794275ef2fb5a26b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "671a5fbd_b80b46df",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-19T05:15:25Z",
+      "side": 1,
+      "message": "already green!\n\nAlso, `EXPECT_PIXEL_EQ` performs a `glFinish`. Since this is a state synchronization issue, I suggest writing the test such that the relevant draw calls are issued back to back, then the results checked.",
+      "range": {
+        "startLine": 396,
+        "startChar": 14,
+        "endLine": 396,
+        "endChar": 23
+      },
+      "revId": "008532e7acb3b582483c08ec794275ef2fb5a26b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
