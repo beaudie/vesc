@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a0dbfa5_19713e49",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-19T05:45:33Z",
+      "side": 1,
+      "message": "Since this is on the hot path, maybe test `mGLES1Renderer` to avoid the non-inlined function call (that also tests two pairs of integers). Could be good to look at the assembly to verify using `mGLES1Renderer` is actually simpler than the call.",
+      "range": {
+        "startLine": 72,
+        "startChar": 9,
+        "endLine": 72,
+        "endChar": 18
+      },
+      "revId": "1c1e16e715b14c4de30496fc209daf630015ef8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57642bf3_63c7b697",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-19T05:45:33Z",
+      "side": 1,
+      "message": "Unrelated change?",
+      "revId": "1c1e16e715b14c4de30496fc209daf630015ef8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
