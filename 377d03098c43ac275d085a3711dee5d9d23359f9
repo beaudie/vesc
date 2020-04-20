@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ef6ae10_90608dff",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2389,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-20T19:27:19Z",
+      "side": 1,
+      "message": "I\u0027ve seen this in multiple places but I have to think about it each time. What would folks think about having a method for getting the index for the depth/stencil attachment?\nmDrawFramebuffer-\u003egetState().getDepthStencilBufferIndex() or something like that?",
+      "revId": "377d03098c43ac275d085a3711dee5d9d23359f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
