@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "eff263d9_8a00f18d",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-20T20:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a0dbfa5_19713e49",
+      "range": {
+        "startLine": 72,
+        "startChar": 9,
+        "endLine": 72,
+        "endChar": 18
+      },
+      "revId": "1c1e16e715b14c4de30496fc209daf630015ef8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57642bf3_63c7b697",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 21
@@ -36,6 +60,24 @@
       "writtenOn": "2020-04-19T05:45:33Z",
       "side": 1,
       "message": "Unrelated change?",
+      "revId": "1c1e16e715b14c4de30496fc209daf630015ef8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1f63dc5_115a6d36",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-20T20:05:19Z",
+      "side": 1,
+      "message": "Good catch.    It looks like This may have been missed as part of the rebase on top of the \"Vulkan: Support VS, FS, and CS in the same PPO\" CL (which adds it to the ProgramExecutable::[load|save]).\n\nI\u0027ll give this another CQ to verify, but I should be able to remove it.",
+      "parentUuid": "57642bf3_63c7b697",
       "revId": "1c1e16e715b14c4de30496fc209daf630015ef8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

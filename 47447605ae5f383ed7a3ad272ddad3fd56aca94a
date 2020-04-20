@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fb26e643_3849f33a",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-20T20:05:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4b61c2e8_ec55574c",
+      "range": {
+        "startLine": 67,
+        "startChar": 18,
+        "endLine": 67,
+        "endChar": 35
+      },
+      "revId": "47447605ae5f383ed7a3ad272ddad3fd56aca94a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f4c45ac7_382b2940",
         "filename": "src/libANGLE/ProgramExecutable.cpp",
         "patchSetId": 22
@@ -36,6 +60,30 @@
       "writtenOn": "2020-04-20T17:45:36Z",
       "side": 1,
       "message": "Not sure if we have any guideline about API name for this type of scenario. I usually use the same API name for all classes if they serve the same purpose. I am not insisting anything here, just FYI.",
+      "range": {
+        "startLine": 462,
+        "startChar": 24,
+        "endLine": 462,
+        "endChar": 41
+      },
+      "revId": "47447605ae5f383ed7a3ad272ddad3fd56aca94a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85e40b87_f7da563a",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-20T20:05:19Z",
+      "side": 1,
+      "message": "I think you are referring to Context::updateCanDraw() and this ProgramExecutable::updateCanDrawWith().   The intent for this naming is that Contexts draw, while Programs are drawn with.",
+      "parentUuid": "f4c45ac7_382b2940",
       "range": {
         "startLine": 462,
         "startChar": 24,
