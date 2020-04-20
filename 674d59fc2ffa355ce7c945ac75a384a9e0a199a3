@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99dcd65c_14de32a9",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:27:47Z",
+      "side": 1,
+      "message": "nit: looks like you can use a range-for:\n\nfor (const gl::VariableLocation \u0026location : locations)\n{\n    ...\n}",
+      "range": {
+        "startLine": 1379,
+        "startChar": 4,
+        "endLine": 1379,
+        "endChar": 89
+      },
+      "revId": "674d59fc2ffa355ce7c945ac75a384a9e0a199a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "765952fe_c5132001",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:27:47Z",
+      "side": 1,
+      "message": "also needs additional handling for non-square matrices.",
+      "range": {
+        "startLine": 1390,
+        "startChar": 0,
+        "endLine": 1394,
+        "endChar": 0
+      },
+      "revId": "674d59fc2ffa355ce7c945ac75a384a9e0a199a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4938a912_46dad84f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1396,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:27:47Z",
+      "side": 1,
+      "message": "we need to record this in the coding standard - please ensure every todo is tagged with a bug id so it can be tracked in the code.",
+      "range": {
+        "startLine": 1396,
+        "startChar": 11,
+        "endLine": 1396,
+        "endChar": 15
+      },
+      "revId": "674d59fc2ffa355ce7c945ac75a384a9e0a199a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36daa86d_381c9fbb",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:27:47Z",
+      "side": 1,
+      "message": "nit: std::vector\u003cGLfloat\u003e components(typeInfo-\u003ecomponentCount);",
+      "range": {
+        "startLine": 1407,
+        "startChar": 16,
+        "endLine": 1408,
+        "endChar": 60
+      },
+      "revId": "674d59fc2ffa355ce7c945ac75a384a9e0a199a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "807278c3_8d2a338e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:27:47Z",
+      "side": 1,
+      "message": "same for all these guys",
+      "range": {
+        "startLine": 1451,
+        "startChar": 0,
+        "endLine": 1452,
+        "endChar": 60
+      },
+      "revId": "674d59fc2ffa355ce7c945ac75a384a9e0a199a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
