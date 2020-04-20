@@ -284,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "788396e5_4b04294f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T17:36:55Z",
+      "side": 1,
+      "message": "BTW, the whole overlay thing is for debug purpose, right? I think you probably should wrap it with a compile time flag (gn argument?). Then we can simply just opt out of this optimization if overlay is enabled. You dont even need to check if any widgte enabled or not etc, that way, no run time cost and we don\u0027t really care this kind of optimization if overlay is enabled.",
+      "parentUuid": "e2602f8c_396d0c9d",
+      "range": {
+        "startLine": 1549,
+        "startChar": 22,
+        "endLine": 1549,
+        "endChar": 35
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41e5264b_f33c9b5b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 1
