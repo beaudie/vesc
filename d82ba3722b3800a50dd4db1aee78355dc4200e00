@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b74d9b9_54e9292a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-20T01:53:10Z",
+      "side": 1,
+      "message": "Could be a split change",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 13
+      },
+      "revId": "d82ba3722b3800a50dd4db1aee78355dc4200e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4683593_4168facc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 4614,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-20T01:53:10Z",
+      "side": 1,
+      "message": "The change in SecondaryCommandBuffer looked good until I saw that this is out of order! Perhaps a rename could make it clearer: `prepentBeginRenderPass`, and something else for execute.\n\nAlso, it looks like this definitely means Vulkan secondary command buffers are no longer supported. Could be good to remove the option altogether, unless we can somehow make the API in such a way that can support both (i.e. execute is called before endRP)",
+      "range": {
+        "startLine": 4613,
+        "startChar": 0,
+        "endLine": 4614,
+        "endChar": 57
+      },
+      "revId": "d82ba3722b3800a50dd4db1aee78355dc4200e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dfc67e5_51c9df9a",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-20T01:53:10Z",
+      "side": 1,
+      "message": "`header` (that looks more obvious to me).",
+      "range": {
+        "startLine": 697,
+        "startChar": 27,
+        "endLine": 697,
+        "endChar": 82
+      },
+      "revId": "d82ba3722b3800a50dd4db1aee78355dc4200e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc1d78f0_03db1e0f",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-20T01:53:10Z",
+      "side": 1,
+      "message": "only `\u003c`? Same with `initCommand`.",
+      "range": {
+        "startLine": 766,
+        "startChar": 35,
+        "endLine": 766,
+        "endChar": 37
+      },
+      "revId": "d82ba3722b3800a50dd4db1aee78355dc4200e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
