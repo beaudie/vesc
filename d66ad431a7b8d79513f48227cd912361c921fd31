@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e760d7d4_f7bedf7d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T16:52:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6f7270e_15e6dfba",
+      "range": {
+        "startLine": 12,
+        "startChar": 32,
+        "endLine": 12,
+        "endChar": 40
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b39a80e_af5a4ab0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "838e9933_2a9b04cd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2365,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T16:52:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b39a80e_af5a4ab0",
+      "range": {
+        "startLine": 2365,
+        "startChar": 1,
+        "endLine": 2365,
+        "endChar": 2
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3cf77296_838c6167",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32f27434_5a91d705",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T16:52:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cf77296_838c6167",
+      "range": {
+        "startLine": 1139,
+        "startChar": 7,
+        "endLine": 1139,
+        "endChar": 12
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +189,54 @@
     },
     {
       "key": {
+        "uuid": "96beb13e_6ce06e6b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T16:52:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59988db3_64d24fcd",
+      "range": {
+        "startLine": 1138,
+        "startChar": 0,
+        "endLine": 1140,
+        "endChar": 20
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d6a2d2a_c74b8e3d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T16:52:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "674ba8bd_b25711b6",
+      "range": {
+        "startLine": 1140,
+        "startChar": 7,
+        "endLine": 1140,
+        "endChar": 19
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf082632_5525722e",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "e2602f8c_396d0c9d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T16:52:09Z",
+      "side": 1,
+      "message": "This is too verbose. Maybe I just make it void and add a get function. They will inline anyway so no perf diff but make code easier to read.",
+      "parentUuid": "cf082632_5525722e",
+      "range": {
+        "startLine": 1549,
+        "startChar": 22,
+        "endLine": 1549,
+        "endChar": 35
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41e5264b_f33c9b5b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 1
@@ -151,6 +295,30 @@
       "writtenOn": "2020-04-20T16:09:16Z",
       "side": 1,
       "message": "nit: how about using the verb \u0027updateCurrentLayout\u0027 ? we used to have this function a while back. \u0027set\u0027 to me implies that it does more work.",
+      "range": {
+        "startLine": 822,
+        "startChar": 9,
+        "endLine": 822,
+        "endChar": 30
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4099769b_da3a0aa6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T16:52:09Z",
+      "side": 1,
+      "message": "I thought it is opposite though. update usually means set + update other related state.",
+      "parentUuid": "41e5264b_f33c9b5b",
       "range": {
         "startLine": 822,
         "startChar": 9,
