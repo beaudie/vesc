@@ -642,14 +642,16 @@ class ContextVk : public ContextImpl, public vk::Context
         return mRenderPassCommands;
     }
 
-    angle::Result flushAndGetPrimaryCommandBuffer(vk::PrimaryCommandBuffer **primaryCommands)
+    angle::Result flushToPrimaryAndGetOutsideRenderPassCommandBuffer(
+        vk::CommandBuffer **outsideRenderPassCommands)
     {
+        // When we flush to primary, assume primary has commands
+        mHasPrimaryCommands = true;
+
         flushOutsideRenderPassCommands();
         ANGLE_TRY(endRenderPass());
-        *primaryCommands = &mPrimaryCommands;
+        *outsideRenderPassCommands = &mOutsideRenderPassCommands.getCommandBuffer();
 
-        // We assume any calling code is going to record primary commands.
-        mHasPrimaryCommands = true;
         return angle::Result::Continue;
     }
 
