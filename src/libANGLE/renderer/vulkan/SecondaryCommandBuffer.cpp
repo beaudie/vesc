@@ -25,6 +25,8 @@ const char *GetCommandString(CommandID id)
     {
         case CommandID::Invalid:
             return "--Invalid--";
+        case CommandID::BeginDebugUtilsLabel:
+            return "BeginDebugUtilsLabel";
         case CommandID::BeginQuery:
             return "BeginQuery";
         case CommandID::BindComputePipeline:
@@ -81,6 +83,8 @@ const char *GetCommandString(CommandID id)
             return "DrawIndexedIndirect";
         case CommandID::DrawIndirect:
             return "DrawIndirect";
+        case CommandID::EndDebugUtilsLabel:
+            return "EndDebugUtilsLabel";
         case CommandID::EndQuery:
             return "EndQuery";
         case CommandID::ExecutionBarrier:
@@ -89,6 +93,8 @@ const char *GetCommandString(CommandID id)
             return "FillBuffer";
         case CommandID::ImageBarrier:
             return "ImageBarrier";
+        case CommandID::InsertDebugUtilsLabel:
+            return "InsertDebugUtilsLabel";
         case CommandID::MemoryBarrier:
             return "MemoryBarrier";
         case CommandID::PipelineBarrier:
@@ -135,6 +141,13 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
         {
             switch (currentCommand->id)
             {
+                case CommandID::BeginDebugUtilsLabel:
+                {
+                    const BeginDebugUtilsLabelParams *params =
+                        getParamPtr<BeginDebugUtilsLabelParams>(currentCommand);
+                    vkCmdBeginDebugUtilsLabelEXT(cmdBuffer, &params->labelInfo);
+                    break;
+                }
                 case CommandID::BeginQuery:
                 {
                     const BeginQueryParams *params = getParamPtr<BeginQueryParams>(currentCommand);
@@ -366,6 +379,11 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                     vkCmdDrawIndexedIndirect(cmdBuffer, params->buffer, params->offset, 1, 0);
                     break;
                 }
+                case CommandID::EndDebugUtilsLabel:
+                {
+                    vkCmdEndDebugUtilsLabelEXT(cmdBuffer);
+                    break;
+                }
                 case CommandID::EndQuery:
                 {
                     const EndQueryParams *params = getParamPtr<EndQueryParams>(currentCommand);
@@ -393,6 +411,13 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                         getParamPtr<ImageBarrierParams>(currentCommand);
                     vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask, 0,
                                          0, nullptr, 0, nullptr, 1, &params->imageMemoryBarrier);
+                    break;
+                }
+                case CommandID::InsertDebugUtilsLabel:
+                {
+                    const InsertDebugUtilsLabelParams *params =
+                        getParamPtr<InsertDebugUtilsLabelParams>(currentCommand);
+                    vkCmdInsertDebugUtilsLabelEXT(cmdBuffer, &params->labelInfo);
                     break;
                 }
                 case CommandID::MemoryBarrier:
