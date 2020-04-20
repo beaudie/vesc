@@ -25,6 +25,52 @@
     },
     {
       "key": {
+        "uuid": "0b39a80e_af5a4ab0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2365,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T16:09:16Z",
+      "side": 1,
+      "message": "nit: return void - you\u0027re not consuming the return value. so best to leave the code as simple as possible.",
+      "range": {
+        "startLine": 2365,
+        "startChar": 1,
+        "endLine": 2365,
+        "endChar": 2
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cf77296_838c6167",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T16:09:16Z",
+      "side": 1,
+      "message": "grammar nit: \u0027the\u0027 swapchain image.",
+      "range": {
+        "startLine": 1139,
+        "startChar": 7,
+        "endLine": 1139,
+        "endChar": 12
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59988db3_64d24fcd",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
@@ -41,6 +87,75 @@
         "startChar": 0,
         "endLine": 1140,
         "endChar": 20
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "674ba8bd_b25711b6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T16:09:16Z",
+      "side": 1,
+      "message": "grammar nit: \u0027the\u0027 optimization.",
+      "range": {
+        "startLine": 1140,
+        "startChar": 7,
+        "endLine": 1140,
+        "endChar": 19
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf082632_5525722e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T16:09:16Z",
+      "side": 1,
+      "message": "nit: updateOverlayAndReturnHasWidget to clarify the return value?",
+      "range": {
+        "startLine": 1549,
+        "startChar": 22,
+        "endLine": 1549,
+        "endChar": 35
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41e5264b_f33c9b5b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T16:09:16Z",
+      "side": 1,
+      "message": "nit: how about using the verb \u0027updateCurrentLayout\u0027 ? we used to have this function a while back. \u0027set\u0027 to me implies that it does more work.",
+      "range": {
+        "startLine": 822,
+        "startChar": 9,
+        "endLine": 822,
+        "endChar": 30
       },
       "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
