@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "643135bc_87a0a130",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T23:12:48Z",
+      "side": 1,
+      "message": "good point. will do.",
+      "parentUuid": "1e284204_2895db3d",
+      "range": {
+        "startLine": 1369,
+        "startChar": 0,
+        "endLine": 1380,
+        "endChar": 9
+      },
+      "revId": "e1f7ad0ec4c7030f5177f808a87fc778bee0a0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f122e640_c41e56f4",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 9
@@ -36,6 +60,24 @@
       "writtenOn": "2020-04-20T23:00:21Z",
       "side": 1,
       "message": "Why does this need to be set to \u0027true\u0027 for a color draw if this optimization is only targeting depth/stencil attachments?   The assert above even guarantees that there are no depth/stencil bits.\n\nShould \u0027mContentDefined\u0027 be \u0027mDepthStencilContentDefined\u0027 to avoid having to set the value here?",
+      "revId": "e1f7ad0ec4c7030f5177f808a87fc778bee0a0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cb5679c_8cc98130",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T23:12:48Z",
+      "side": 1,
+      "message": "I don\u0027t need it here. I added mainly to keep it consistent. It depends on if we would ever do this kind of tracking for color buffer as well for optimization in future. Maybe I just leave the name as mContentDefined with comment saying that right now we are only tracking depth/stencil.",
+      "parentUuid": "f122e640_c41e56f4",
       "revId": "e1f7ad0ec4c7030f5177f808a87fc778bee0a0a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
