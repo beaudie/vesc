@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ca7886d2_285f6aad",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2389,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T21:11:44Z",
+      "side": 1,
+      "message": "can you rebase this onto your other CL and use your new method?",
+      "range": {
+        "startLine": 2388,
+        "startChar": 7,
+        "endLine": 2389,
+        "endChar": 73
+      },
+      "revId": "76ae87395d03a5cd3becf8c200680ba896794a13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6112b3e5_651df42c",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 8
@@ -31,6 +54,47 @@
       "side": 1,
       "message": "I originally add this mainly because I feel reset is wrong name here since this is just init. But now I looked again, looks like reset never get used at all. Maybe I should just get rid of reset.",
       "parentUuid": "6112b3e5_651df42c",
+      "revId": "76ae87395d03a5cd3becf8c200680ba896794a13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9aaf741_5728638b",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T21:11:44Z",
+      "side": 1,
+      "message": "yes, please use reset() as it is our convention. even if you feel it is the wrong name.",
+      "parentUuid": "54e3c257_78a03f45",
+      "revId": "76ae87395d03a5cd3becf8c200680ba896794a13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8caa81e_f23b1e72",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T21:11:44Z",
+      "side": 1,
+      "message": "nit: redundant private, you can remove. not sure on where it says this in the style guide.",
+      "range": {
+        "startLine": 87,
+        "startChar": 2,
+        "endLine": 87,
+        "endChar": 9
+      },
       "revId": "76ae87395d03a5cd3becf8c200680ba896794a13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
