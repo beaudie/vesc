@@ -52,6 +52,24 @@
       "revId": "377d03098c43ac275d085a3711dee5d9d23359f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "957ba1f2_01bb4f5b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2389,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T20:52:43Z",
+      "side": 1,
+      "message": "Actually not much value here to cache it. Just add a get API should be enough. It helps code reading a bit.",
+      "parentUuid": "4f887b36_a59808f6",
+      "revId": "377d03098c43ac275d085a3711dee5d9d23359f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
