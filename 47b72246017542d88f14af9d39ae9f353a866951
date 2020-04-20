@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "43932c5e_ad127a9d",
+        "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-20T16:23:50Z",
+      "side": 1,
+      "message": "It is called below. We did a finish above, so this should be signaled and the ClientWait should return immediately.",
+      "parentUuid": "084ce83d_194f37e3",
+      "revId": "47b72246017542d88f14af9d39ae9f353a866951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6d41141_4b1badc5",
         "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
         "patchSetId": 14
@@ -81,6 +99,24 @@
       "writtenOn": "2020-04-18T00:43:38Z",
       "side": 1,
       "message": "never ran for vulkan backend, why?",
+      "revId": "47b72246017542d88f14af9d39ae9f353a866951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "262c95b1_fd0d6623",
+        "filename": "src/tests/egl_tests/EGLSyncTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-20T16:23:50Z",
+      "side": 1,
+      "message": "Look across both failed test sets and it looks like ES2 and ES3 ping-ponged between the tests. I am testing a theory about requirement for signal before wait requirement, because tests improved when I added glFinish().\nBut it it could just be that vkGetFenceFD returns FD \u003d -1 when it has been signaled - which is valid by spec. So test may need to change not to always expect a valid Dup. Which is not covered in extension.",
+      "parentUuid": "d6d41141_4b1badc5",
       "revId": "47b72246017542d88f14af9d39ae9f353a866951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
