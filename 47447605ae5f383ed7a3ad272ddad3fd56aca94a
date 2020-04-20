@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b61c2e8_ec55574c",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T17:45:36Z",
+      "side": 1,
+      "message": "Since this is on the draw call path, one idea is to create a ContextVKNoopDraw subclass that will actually nop the draw call. Then you can just swap the mImplementation pointer to the ContextVKNoopDraw instance rather than call this function. It can be a separate CL, just want to bring up the idea since I spot it.",
+      "range": {
+        "startLine": 67,
+        "startChar": 18,
+        "endLine": 67,
+        "endChar": 35
+      },
+      "revId": "47447605ae5f383ed7a3ad272ddad3fd56aca94a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4c45ac7_382b2940",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T17:45:36Z",
+      "side": 1,
+      "message": "Not sure if we have any guideline about API name for this type of scenario. I usually use the same API name for all classes if they serve the same purpose. I am not insisting anything here, just FYI.",
+      "range": {
+        "startLine": 462,
+        "startChar": 24,
+        "endLine": 462,
+        "endChar": 41
+      },
+      "revId": "47447605ae5f383ed7a3ad272ddad3fd56aca94a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
