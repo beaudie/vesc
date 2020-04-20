@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b302e142_a42b3363",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-20T20:27:42Z",
+      "side": 1,
+      "message": "Nit: I\u0027m just wondering if it\u0027s possible to do this similar to how you had split the GLES1/2 enums in the validation?",
+      "revId": "45ffcfee43d467c0347778046674a416c2c5f0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "945dabfe_f4c8c1f7",
+        "filename": "src/tests/compiler_tests/APPLE_clip_distance_test.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-20T20:27:42Z",
+      "side": 1,
+      "message": "Nit: could split this up into 2 tests that are skipped if !defined(ANGLE_ENABLED_METAL) or !defined(ANGLE_ENABLE_VULKAN)\n(Maybe 3 tests to split the reset functionality testing?)",
+      "revId": "45ffcfee43d467c0347778046674a416c2c5f0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
