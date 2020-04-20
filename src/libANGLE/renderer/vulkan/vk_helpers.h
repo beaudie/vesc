@@ -395,6 +395,7 @@ class QueryHelper final
 
     angle::Result flushAndWriteTimestamp(ContextVk *contextVk);
     void writeTimestamp(ContextVk *contextVk, PrimaryCommandBuffer *primary);
+    void writeTimestamp(ContextVk *contextVk, CommandBuffer *outsideRenderPassCommandBuffer);
 
     Serial getStoredQueueSerial() { return mMostRecentSerial; }
     bool hasPendingWork(ContextVk *contextVk);
