@@ -2380,6 +2380,18 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
         return;
     }
 
+    // EGL1.5 spec: The contents of ancillary buffers are always undefined after calling
+    // eglSwapBuffers
+    RenderTargetVk *depthStencilRenderTarget = mDrawFramebuffer->getDepthStencilRenderTarget();
+    if (depthStencilRenderTarget)
+    {
+        size_t depthStencilAttachmentIndexVk =
+            mDrawFramebuffer->getState().getEnabledDrawBuffers().count();
+        // Change depthstencil attachment storeOp to DONT_CARE
+        mRenderPassCommands.invalidateRenderPassStencilAttachment(depthStencilAttachmentIndexVk);
+        mRenderPassCommands.invalidateRenderPassDepthAttachment(depthStencilAttachmentIndexVk);
+    }
+
     // Use finalLayout instead of extra barrier for layout change to present
     vk::ImageHelper &image = color0RenderTarget->getImage();
     image.setCurrentImageLayout(vk::ImageLayout::Present);
