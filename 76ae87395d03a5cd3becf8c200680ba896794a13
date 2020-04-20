@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "54e3c257_78a03f45",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T21:05:52Z",
+      "side": 1,
+      "message": "I originally add this mainly because I feel reset is wrong name here since this is just init. But now I looked again, looks like reset never get used at all. Maybe I should just get rid of reset.",
+      "parentUuid": "6112b3e5_651df42c",
+      "revId": "76ae87395d03a5cd3becf8c200680ba896794a13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8108f198_1707d3b6",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 8
@@ -30,6 +48,30 @@
       "writtenOn": "2020-04-20T20:03:51Z",
       "side": 1,
       "message": "pass as parameter to reuse code?",
+      "range": {
+        "startLine": 1467,
+        "startChar": 28,
+        "endLine": 1467,
+        "endChar": 59
+      },
+      "revId": "76ae87395d03a5cd3becf8c200680ba896794a13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b47c3967_d183508a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T21:05:52Z",
+      "side": 1,
+      "message": "Will do. rename it to initWithStore(size_t index, bool load, ...).",
+      "parentUuid": "8108f198_1707d3b6",
       "range": {
         "startLine": 1467,
         "startChar": 28,
