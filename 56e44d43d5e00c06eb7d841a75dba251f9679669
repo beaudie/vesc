@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf8f9046_a294d3ca",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-04-20T20:41:35Z",
+      "side": 1,
+      "message": "https://ci.chromium.org/p/chromium/g/tryserver.chromium.angle/builders",
+      "range": {
+        "startLine": 5,
+        "startChar": 35,
+        "endLine": 5,
+        "endChar": 81
+      },
+      "revId": "56e44d43d5e00c06eb7d841a75dba251f9679669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baff37f4_7b1a58b6",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-04-20T20:41:35Z",
+      "side": 1,
+      "message": "https://ci.chromium.org/p/chromium/g/tryserver.chromium.angle/builders",
+      "range": {
+        "startLine": 26,
+        "startChar": 22,
+        "endLine": 26,
+        "endChar": 68
+      },
+      "revId": "56e44d43d5e00c06eb7d841a75dba251f9679669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
