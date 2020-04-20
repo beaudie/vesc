@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "874d904a_6618c797",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T19:48:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1207bec1_2d2cc559",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 30
+      },
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2477552_993eb35d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 7
@@ -170,6 +194,24 @@
       "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dac52bc_33640945",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T19:48:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "634f8bed_c5123608",
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -370,6 +412,30 @@
       "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cb7aacd_cd407172",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T19:48:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6cb33368_fe037d1c",
+      "range": {
+        "startLine": 1476,
+        "startChar": 28,
+        "endLine": 1476,
+        "endChar": 59
+      },
+      "revId": "9802eba299eab8ffb5eaa85ee87f68aefd3d9c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
