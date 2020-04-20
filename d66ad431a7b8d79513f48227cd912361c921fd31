@@ -308,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "150fb261_f56adf0d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T17:39:34Z",
+      "side": 1,
+      "message": "It was that way at some point. There\u0027s no regression testing for this tiny perf overhead (or correctness for that matter) so it can regress. It still is a GN argument.",
+      "parentUuid": "788396e5_4b04294f",
+      "range": {
+        "startLine": 1549,
+        "startChar": 22,
+        "endLine": 1549,
+        "endChar": 35
+      },
+      "revId": "d66ad431a7b8d79513f48227cd912361c921fd31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41e5264b_f33c9b5b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 1
