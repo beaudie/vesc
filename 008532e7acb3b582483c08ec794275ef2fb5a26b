@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "71006859_e7dd7913",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-04-20T15:36:32Z",
+      "side": 1,
+      "message": "Done.  I tried it.  The test fails on the 32-bit bots (alpha component missing).  I filed a bug and added a comment here.",
+      "parentUuid": "8bad97da_89ad1937",
+      "range": {
+        "startLine": 274,
+        "startChar": 7,
+        "endLine": 274,
+        "endChar": 31
+      },
+      "revId": "008532e7acb3b582483c08ec794275ef2fb5a26b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ce18799_8ec9dd6f",
         "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
         "patchSetId": 7
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "708b83c2_aa02fa9e",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-04-20T15:36:32Z",
+      "side": 1,
+      "message": "Done (for the above test too, that I cloned from).",
+      "parentUuid": "0ce18799_8ec9dd6f",
+      "range": {
+        "startLine": 328,
+        "startChar": 37,
+        "endLine": 328,
+        "endChar": 38
+      },
+      "revId": "008532e7acb3b582483c08ec794275ef2fb5a26b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "671a5fbd_b80b46df",
         "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
         "patchSetId": 7
@@ -116,6 +164,30 @@
       "revId": "008532e7acb3b582483c08ec794275ef2fb5a26b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6db403cb_abfe207d",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-04-20T15:36:32Z",
+      "side": 1,
+      "message": "Done (for the above test too, that I cloned from).",
+      "parentUuid": "671a5fbd_b80b46df",
+      "range": {
+        "startLine": 396,
+        "startChar": 14,
+        "endLine": 396,
+        "endChar": 23
+      },
+      "revId": "008532e7acb3b582483c08ec794275ef2fb5a26b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
