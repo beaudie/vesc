@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80b500eb_23197186",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:23:12Z",
+      "side": 1,
+      "message": "nit: new style \u003d /",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 16
+      },
+      "revId": "fc397d15886783469e3d57f3c54d99610d6b2544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c9ea339_5308f73f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:23:12Z",
+      "side": 1,
+      "message": "minor nit: I\u0027d probably just call TexStorage out of the loop with getBaseLevelDesc",
+      "range": {
+        "startLine": 1691,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 13
+      },
+      "revId": "fc397d15886783469e3d57f3c54d99610d6b2544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2933c50a_4f05984e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:23:12Z",
+      "side": 1,
+      "message": "nit: can you make this into a helper? it\u0027s getting massive.",
+      "range": {
+        "startLine": 1741,
+        "startChar": 0,
+        "endLine": 1775,
+        "endChar": 21
+      },
+      "revId": "fc397d15886783469e3d57f3c54d99610d6b2544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "551ec66a_1bcd37f1",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1839,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:23:12Z",
+      "side": 1,
+      "message": "I think you can make this a helper and share it with the below (only things that change are a couple params?)",
+      "range": {
+        "startLine": 1808,
+        "startChar": 0,
+        "endLine": 1839,
+        "endChar": 21
+      },
+      "revId": "fc397d15886783469e3d57f3c54d99610d6b2544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
