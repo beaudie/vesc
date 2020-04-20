@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "5dcc72cd_16b23652",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-20T20:00:51Z",
+      "side": 1,
+      "message": "I believe an immutable texture will always have mip-level 0, so I moved this to a helper that uses that.",
+      "parentUuid": "15732b07_6b2f405d",
+      "range": {
+        "startLine": 1691,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 13
+      },
+      "revId": "fc397d15886783469e3d57f3c54d99610d6b2544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2933c50a_4f05984e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -167,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "0ef4b2c6_5022a99a",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-20T20:00:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfcc416f_3666c6ac",
+      "range": {
+        "startLine": 1741,
+        "startChar": 0,
+        "endLine": 1775,
+        "endChar": 21
+      },
+      "revId": "fc397d15886783469e3d57f3c54d99610d6b2544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "551ec66a_1bcd37f1",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -211,6 +259,30 @@
       "revId": "fc397d15886783469e3d57f3c54d99610d6b2544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4829f90_6f9a7a7b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1839,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-20T20:00:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "265330f4_ec266326",
+      "range": {
+        "startLine": 1808,
+        "startChar": 0,
+        "endLine": 1839,
+        "endChar": 21
+      },
+      "revId": "fc397d15886783469e3d57f3c54d99610d6b2544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
