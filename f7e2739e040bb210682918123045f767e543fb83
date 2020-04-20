@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbd38d11_f14356c0",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-20T16:26:49Z",
+      "side": 1,
+      "message": "initializer list?\n\u003d {{0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4},{0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4}}",
+      "revId": "f7e2739e040bb210682918123045f767e543fb83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
