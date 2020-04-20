@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8bad97da_89ad1937",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:32:18Z",
+      "side": 1,
+      "message": "can you lift the SwS part of this failure and see if it passes? if it fails, can file a new bug.",
+      "range": {
+        "startLine": 274,
+        "startChar": 7,
+        "endLine": 274,
+        "endChar": 31
+      },
+      "revId": "008532e7acb3b582483c08ec794275ef2fb5a26b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0ce18799_8ec9dd6f",
         "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
         "patchSetId": 7
@@ -25,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "c146ba4f_8bf1379d",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:32:18Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "0ce18799_8ec9dd6f",
+      "range": {
+        "startLine": 328,
+        "startChar": 37,
+        "endLine": 328,
+        "endChar": 38
+      },
+      "revId": "008532e7acb3b582483c08ec794275ef2fb5a26b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "671a5fbd_b80b46df",
         "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
         "patchSetId": 7
@@ -36,6 +83,30 @@
       "writtenOn": "2020-04-19T05:15:25Z",
       "side": 1,
       "message": "already green!\n\nAlso, `EXPECT_PIXEL_EQ` performs a `glFinish`. Since this is a state synchronization issue, I suggest writing the test such that the relevant draw calls are issued back to back, then the results checked.",
+      "range": {
+        "startLine": 396,
+        "startChar": 14,
+        "endLine": 396,
+        "endChar": 23
+      },
+      "revId": "008532e7acb3b582483c08ec794275ef2fb5a26b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65787ca9_223a4fc0",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:32:18Z",
+      "side": 1,
+      "message": "+1. Also use EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::colorname);",
+      "parentUuid": "671a5fbd_b80b46df",
       "range": {
         "startLine": 396,
         "startChar": 14,
