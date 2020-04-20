@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3728754d_30c3ad02",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:45:05Z",
+      "side": 1,
+      "message": "nit: please use the following declaration order for classes:\n\nhttps://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "range": {
+        "startLine": 389,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 25
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f34b6056_b8fca3eb",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:45:05Z",
+      "side": 1,
+      "message": "I want to reuse the code in bitset_utils here which uses enable_if. I\u0027m not sure how though. I think this is too fragile to compare to BlendFactorType directly. At least you should be checking enum maximums vs std::numeric_limits::max of uintptr_t or size_t or something.",
+      "range": {
+        "startLine": 397,
+        "startChar": 0,
+        "endLine": 404,
+        "endChar": 0
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5664799_6b6da8f1",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:45:05Z",
+      "side": 1,
+      "message": "nit: just FactorStorage. You\u0027re in Blend* so Blend* is redundant. Same for the others.",
+      "range": {
+        "startLine": 516,
+        "startChar": 10,
+        "endLine": 516,
+        "endChar": 29
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91d024e9_64526587",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:45:05Z",
+      "side": 1,
+      "message": "nit: please use the \u0027m\u0027 prefix for member variables as per style guide:\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#variable-names",
+      "range": {
+        "startLine": 518,
+        "startChar": 29,
+        "endLine": 518,
+        "endChar": 48
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd2cd279_f81916f2",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T14:45:05Z",
+      "side": 1,
+      "message": "nit: don\u0027t pass non-const \u0026 arguments for style guide conformity:\n\nhttps://google.github.io/styleguide/cppguide.html#Reference_Arguments\n\nyou can use pointers here if you need to output all 4 channels as bools.",
+      "range": {
+        "startLine": 560,
+        "startChar": 42,
+        "endLine": 560,
+        "endChar": 53
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
