@@ -34,6 +34,24 @@
       "revId": "377d03098c43ac275d085a3711dee5d9d23359f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f887b36_a59808f6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2389,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-20T20:09:28Z",
+      "side": 1,
+      "message": "If that\u0027s convenient to all the users that would make sense. Shouldn\u0027t be changing the bound buffers during a renderpass.",
+      "parentUuid": "78eb1e93_58b17de6",
+      "revId": "377d03098c43ac275d085a3711dee5d9d23359f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
