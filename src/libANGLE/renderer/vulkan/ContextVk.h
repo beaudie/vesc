@@ -932,7 +932,12 @@ class ContextVk : public ContextImpl, public vk::Context
     void dumpCommandStreamDiagnostics();
     void flushOutsideRenderPassCommands();
 
-    ANGLE_INLINE void onRenderPassFinished() { mRenderPassCommandBuffer = nullptr; }
+    ANGLE_INLINE void onRenderPassFinished()
+    {
+        mRenderPassCommandBuffer    = nullptr;
+        mIndirectDrawCounters       = 0;
+        mAccumulateVerticesCounters = 0;
+    }
 
     void initIndexTypeMap();
 
@@ -1102,6 +1107,14 @@ class ContextVk : public ContextImpl, public vk::Context
     egl::ContextPriority mContextPriority;
 
     std::vector<std::string> mCommandBufferDiagnostics;
+
+    // The number of indirect draws.
+    uint32_t mIndirectDrawCounters;
+
+    // The number of vertices.
+    uint32_t mAccumulateVerticesCounters;
+
+    bool mIsIncrementalRenderingEnabled;
 };
 }  // namespace rx
 

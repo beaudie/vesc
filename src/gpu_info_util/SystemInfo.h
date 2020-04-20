@@ -126,6 +126,8 @@ void GetDualGPUInfo(SystemInfo *info);
 void PrintSystemInfo(const SystemInfo &info);
 
 VersionInfo ParseNvidiaDriverVersion(uint32_t version);
+
+bool IsInternalFlushNeeded(VendorID vendorId, const std::string &deviceName);
 }  // namespace angle
 
 #endif  // GPU_INFO_UTIL_SYSTEM_INFO_H_

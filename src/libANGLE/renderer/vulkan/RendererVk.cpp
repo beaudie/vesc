@@ -1683,6 +1683,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportDepthStencilRenderingFeedbackLoops, true);
 
+    // Work around flushing a number of draw calls before it exceeds the memory limit
+    // on some Mali GPUs.
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableIncrementalRendering,
+                            angle::IsInternalFlushNeeded(mPhysicalDeviceProperties.vendorID,
+                                                         mPhysicalDeviceProperties.deviceName));
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 

@@ -335,4 +335,37 @@ VersionInfo ParseNvidiaDriverVersion(uint32_t version)
         version & 0x3f         // patch
     };
 }
+
+bool IsInternalFlushNeeded(VendorID vendorId, const std::string &deviceName)
+{
+    // Only for Mali Bifrost GPUs now.
+    if (!IsARM(vendorId))
+    {
+        return false;
+    }
+
+    const size_t begin = deviceName.find_first_of("Mali-G");
+    if (begin == std::string::npos)
+    {
+        return false;
+    }
+
+    char *pEnd;
+    int32_t maliVersion =
+        static_cast<int32_t>(std::strtol(deviceName.substr(6, 2).c_str(), &pEnd, 10));
+
+    switch (maliVersion)
+    {
+        case 31:
+        case 51:
+        case 52:
+        case 71:
+        case 72:
+        case 76:
+            return true;
+        default:
+            return false;
+    }
+}
+
 }  // namespace angle

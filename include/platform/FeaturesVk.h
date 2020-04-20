@@ -274,6 +274,12 @@ struct FeaturesVk : FeatureSetBase
     Feature supportDepthStencilRenderingFeedbackLoops = {
         "support_depth_stencil_rendering_feedback_loops", FeatureCategory::VulkanFeatures,
         "Suport depth/stencil rendering feedback loops", &members, "http://anglebug.com/4490"};
+
+    // On Mali Bifrost GPUs, a very high vertex load might trigger an OOM condition so
+    // it needs internal flush.
+    Feature enableIncrementalRendering = {
+        "enable_incremental_rendering", FeatureCategory::VulkanWorkarounds,
+        "Enable context to flush a number of draw calls before OOM", &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

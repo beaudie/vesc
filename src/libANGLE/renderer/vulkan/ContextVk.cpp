@@ -51,6 +51,11 @@ namespace
 // automatically convert to the actual data type.
 constexpr unsigned int kEmulatedAlphaValue = 1;
 
+// The value to limit a high vertex load on some Mali GPUs. Exceeding such thresholds might
+// result in an OOM error.
+constexpr uint32_t kIndirectThreshold           = 2000;
+constexpr uint32_t kAccumulateVerticesThreshold = 2000000;
+
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
 {
@@ -629,7 +634,10 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuEventTimestampOrigin(0),
       mPrimaryBufferCounter(0),
       mRenderPassCounter(0),
-      mContextPriority(renderer->getDriverPriority(GetContextPriority(state)))
+      mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
+      mIndirectDrawCounters(0),
+      mAccumulateVerticesCounters(0),
+      mIsIncrementalRenderingEnabled(getFeatures().enableIncrementalRendering.enabled)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -897,6 +905,28 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    DirtyBits dirtyBitMask,
                                    vk::CommandBuffer **commandBufferOut)
 {
+    // Flush to avoid OOM only for Mali.
+    if (mIsIncrementalRenderingEnabled)
+    {
+        if (vertexOrIndexCount == 0)
+        {
+            // For the indirect draw
+            mIndirectDrawCounters++;
+        }
+        else
+        {
+            // For the non-indirect draw
+            uint32_t accumVertices = vertexOrIndexCount * instanceCount;
+            mAccumulateVerticesCounters += accumVertices;
+        }
+        if (mIndirectDrawCounters >= kIndirectThreshold ||
+            mAccumulateVerticesCounters >= kAccumulateVerticesThreshold)
+        {
+            ANGLE_TRY(flush(context));
+            mIndirectDrawCounters       = 0;
+            mAccumulateVerticesCounters = 0;
+        }
+    }
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
     {
