@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "15732b07_6b2f405d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-20T15:50:30Z",
+      "side": 1,
+      "message": "OK, how about we just at a getImmutableLevelZeroDesc() helper for this? anyway, minor at best.",
+      "parentUuid": "2b19d77e_3aa80f18",
+      "range": {
+        "startLine": 1691,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 13
+      },
+      "revId": "fc397d15886783469e3d57f3c54d99610d6b2544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2933c50a_4f05984e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
