@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6112b3e5_651df42c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-20T20:03:51Z",
+      "side": 1,
+      "message": "Curious, why a new function when reset() appears to do what we want?",
+      "revId": "76ae87395d03a5cd3becf8c200680ba896794a13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8108f198_1707d3b6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-20T20:03:51Z",
+      "side": 1,
+      "message": "pass as parameter to reuse code?",
+      "range": {
+        "startLine": 1467,
+        "startChar": 28,
+        "endLine": 1467,
+        "endChar": 59
+      },
+      "revId": "76ae87395d03a5cd3becf8c200680ba896794a13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
