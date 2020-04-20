@@ -4204,8 +4204,8 @@ angle::Result ContextVk::flushAndBeginRenderPass(
     const std::vector<VkClearValue> &clearValues,
     vk::CommandBuffer **commandBufferOut)
 {
-    vk::PrimaryCommandBuffer *primary;
-    ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
+    vk::CommandBuffer *outsideRenderPassCommandBuffer;
+    ANGLE_TRY(endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
 
     gl::Rectangle rotatedRenderArea = renderArea;
     if (isRotatedAspectRatioForDrawFBO())
