@@ -4195,8 +4195,9 @@ angle::Result ContextVk::flushAndBeginRenderPass(
     const std::vector<VkClearValue> &clearValues,
     vk::CommandBuffer **commandBufferOut)
 {
-    vk::PrimaryCommandBuffer *primary;
-    ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
+    // End any currently outstanding renderPass. Will also flush any outsideRP commands.
+    vk::CommandBuffer *outsideRenderPassCommandBuffer;
+    ANGLE_TRY(endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
 
     gl::Rectangle rotatedRenderArea = renderArea;
     if (isRotatedAspectRatioForDrawFBO())
@@ -4237,6 +4238,7 @@ angle::Result ContextVk::endRenderPass()
         return angle::Result::Continue;
     }
 
+    flushOutsideRenderPassCommands();
     if (mActiveQueryAnySamples)
     {
         mActiveQueryAnySamples->getQueryHelper()->endOcclusionQuery(this, mRenderPassCommandBuffer);
@@ -4262,6 +4264,7 @@ angle::Result ContextVk::endRenderPass()
     mRenderPassCommands.pauseTransformFeedbackIfStarted();
 
     ANGLE_TRY(mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
+    mHasPrimaryCommands = true;
 
     if (mGpuEventsEnabled)
     {
@@ -4608,8 +4611,7 @@ void RenderPassCommandBuffer::beginTransformFeedback(size_t validBufferCount,
 angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
                                                       vk::PrimaryCommandBuffer *primary)
 {
-    if (empty())
-        return angle::Result::Continue;
+    ASSERT(!empty());
 
     if (kEnableCommandStreamDiagnostics)
     {
