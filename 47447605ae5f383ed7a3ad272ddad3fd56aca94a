@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "76e5a1c4_baab05d4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 6489,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-20T23:19:03Z",
+      "side": 1,
+      "message": "You don\u0027t need to make this call here. App has to call UseProgram to use the program which means it is redundent with the call in State::setProgram(), right?",
+      "range": {
+        "startLine": 6489,
+        "startChar": 4,
+        "endLine": 6489,
+        "endChar": 25
+      },
+      "revId": "47447605ae5f383ed7a3ad272ddad3fd56aca94a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b61c2e8_ec55574c",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 22
