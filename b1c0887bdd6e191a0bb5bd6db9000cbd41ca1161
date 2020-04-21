@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "518a5bab_457745b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-21T17:54:02Z",
+      "side": 1,
+      "message": "are you sure jamie? i dont think that is useful since it then requires us to include the VMA header in all callers of this method.\n\nif you really want to i can move it but i really dont see the advantage here",
+      "parentUuid": "ce4cfb88_4359b223",
+      "range": {
+        "startLine": 66,
+        "startChar": 22,
+        "endLine": 66,
+        "endChar": 52
+      },
+      "revId": "b1c0887bdd6e191a0bb5bd6db9000cbd41ca1161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1797ac87_9202aad7",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 2
