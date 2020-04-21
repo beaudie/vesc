@@ -46,6 +46,30 @@
       "revId": "2a859925d26960dab89078dc1c157b0c42c24634",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c80b63c9_41b52029",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-21T22:18:03Z",
+      "side": 1,
+      "message": "Yes, exactly. We always make sure we have room for the extra header which starts out as an \"Invalid\" command. The end of each block allocation will be an \"Invalid\" command which signals the executeCommands() function to start processing the next block.",
+      "parentUuid": "6441ae59_b8146f78",
+      "range": {
+        "startLine": 702,
+        "startChar": 55,
+        "endLine": 702,
+        "endChar": 76
+      },
+      "revId": "2a859925d26960dab89078dc1c157b0c42c24634",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
