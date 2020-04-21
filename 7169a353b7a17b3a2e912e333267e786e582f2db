@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e46d28c2_00661c7a",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T01:58:42Z",
+      "side": 1,
+      "message": "Can you add an example of the string you are parsing with this function?",
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dad0316_4008540f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T01:58:42Z",
+      "side": 1,
+      "message": "To help make it clearer where the 2,000,000 came from, can you add:\n\n\u003e The only real solution to the issue is to keep the application’s vertex count below approximately 2 million, as derived above for an average of 64 bytes of varying data per vertex.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 26
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d7db590_aa2a497e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T01:58:42Z",
+      "side": 1,
+      "message": "My first impression is that it would be best to put these types of values into some kind of vendor-specific struct.   This would help with code readability by indicating who/what these values are for and allow each vendor to have their own values if there\u0027s any overlap in the future.   This would also allow us to fine-tune these values for specific SOCs to help improve performance and reduce the number of flushes, if future generations have different limits.\n\n\nAlso, pardon my ignorance here, but is it possible for these values to not be constants, but adjust with the amount of varying data per vertex (assuming we can determine that within ANGLE)?   It seems like these values would solve \"most\" cases, but assuming some amount of users are over the average value (half?), those will still fail with OOM errors.   Of course, the lower we set kAccumulateVerticesThreshold, the more robust ANGLE becomes at the cost of performance.",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 58
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be67066f_9874fc27",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T01:58:42Z",
+      "side": 1,
+      "message": "You should be able to just call flushImpl(nullptr) directly here.",
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2ec2148_7a682e8c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T01:58:42Z",
+      "side": 1,
+      "message": "These 2 lines are unnecessary:\n\nflushImpl() -\u003e endRenderPass() -\u003e onRenderPassFinished()",
+      "range": {
+        "startLine": 926,
+        "startChar": 0,
+        "endLine": 927,
+        "endChar": 44
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14491169_9ad1e744",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T01:58:42Z",
+      "side": 1,
+      "message": "Can you move this block into a helper function?",
+      "range": {
+        "startLine": 911,
+        "startChar": 0,
+        "endLine": 928,
+        "endChar": 9
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
