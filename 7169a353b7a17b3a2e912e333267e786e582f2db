@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "df9d872d_50244c86",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2020-04-21T02:36:57Z",
+      "side": 1,
+      "message": "Thanks Tim, It\u0027s better and accurate to use varying memory used instead of vertex counts. Could you give me some ideas to get the varying size and type from the program within ANGLE?",
+      "parentUuid": "1d7db590_aa2a497e",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 58
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be67066f_9874fc27",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
