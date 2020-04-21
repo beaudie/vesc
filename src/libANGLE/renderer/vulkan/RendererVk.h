@@ -245,6 +245,8 @@ class RendererVk : angle::NonCopyable
 
     bool enableDebugUtils() const { return mEnableDebugUtils; }
 
+    vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -360,6 +362,7 @@ class RendererVk : angle::NonCopyable
     bool mGlslangInitialized;
 
     VmaAllocator mAllocator;
+    vk::ActiveHandleCounter mActiveHandleCounts;
 };
 
 }  // namespace rx
