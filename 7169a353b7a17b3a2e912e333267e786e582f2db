@@ -89,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "bc34e272_eb7e8019",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-21T13:44:10Z",
+      "side": 1,
+      "message": "Would it be satisfactory to flush after every # commands? Are these counters similar to what your GL driver does?",
+      "parentUuid": "df9d872d_50244c86",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 58
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be67066f_9874fc27",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
