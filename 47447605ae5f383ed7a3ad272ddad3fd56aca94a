@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1d5563d2_fe337ffb",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 6489,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T01:04:25Z",
+      "side": 1,
+      "message": "From the OpenGL ES 3.1 spec:\n\n\u003e If LinkProgram or ProgramBinary successfully re-links a program object\n\u003e that is active for any shader stage, then the newly generated executable code will\n\u003e be installed as part of the current rendering state for all shader stages where the\n\u003e program is active.\n\nThis means caller can do:\n\n    linkProgram() \u003c\u003c--- assume VS and FS present\n    useProgram()\n    draw          \u003c\u003c--- draws something\n    linkProgram() \u003c\u003c--- assume only separable FS present\n    draw          \u003c\u003c--- no-op\n\nWe need updateCanDraw() here in linkProgram() so we recognize that the program was re-linked without a VS and that any future draws need to be no-op\u0027ed.\n\nThe program would just need to be marked \u0027separable\u0027 to allow ANGLE to link it successfully, so it should be possible to get into this state.   I\u0027m updating ANGLE to handle this correctly since the spec states it\u0027s undefined, but not an error:\n\n\u003e  If there\n\u003e is no active program for the vertex or fragment shader stages, the results of vertex\n\u003e and fragment shader execution will respectively be undefined. However, this is not\n\u003e an error\n\nIt\u0027s possible I\u0027m misinterpreting the spec, but I believe this is the correct thing to do here.",
+      "parentUuid": "76e5a1c4_baab05d4",
+      "range": {
+        "startLine": 6489,
+        "startChar": 4,
+        "endLine": 6489,
+        "endChar": 25
+      },
+      "revId": "47447605ae5f383ed7a3ad272ddad3fd56aca94a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b61c2e8_ec55574c",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 22
