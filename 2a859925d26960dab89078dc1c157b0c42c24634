@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "769986e4_db3e18a5",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-21T20:06:38Z",
+      "side": 1,
+      "message": "Question: isn\u0027t that the sizeof(ComandHeader) was added twice as well (line 699 already added it)?",
+      "range": {
+        "startLine": 702,
+        "startChar": 55,
+        "endLine": 702,
+        "endChar": 76
+      },
+      "revId": "2a859925d26960dab89078dc1c157b0c42c24634",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
