@@ -484,6 +484,12 @@ void WriteCppReplayForCall(const CallCapture &call,
         callOut << "gShaderProgramMap[" << id << "] = ";
     }
 
+    if (call.entryPoint == gl::EntryPoint::FenceSync)
+    {
+        GLsync sync = call.params.getReturnValue().value.GLsyncVal;
+        callOut << "gSyncMap[" << reinterpret_cast<uintptr_t>(sync) << "] = ";
+    }
+
     if (call.entryPoint == gl::EntryPoint::MapBufferRange ||
         call.entryPoint == gl::EntryPoint::MapBufferRangeEXT)
     {
@@ -531,6 +537,21 @@ void WriteCppReplayForCall(const CallCapture &call,
             else if (param.type == ParamType::TGLfloat)
             {
                 WriteGLFloatValue(callOut, param.value.GLfloatVal);
+            }
+            else if (param.type == ParamType::TGLsync)
+            {
+                callOut << "gSyncMap[" << param.value.GLintVal << "]";
+            }
+            else if (param.type == ParamType::TGLuint64 && param.name == "timeout")
+            {
+                if (param.value.GLuint64Val == GL_TIMEOUT_IGNORED)
+                {
+                    callOut << "GL_TIMEOUT_IGNORED";
+                }
+                else
+                {
+                    WriteParamCaptureReplay(callOut, call, param);
+                }
             }
             else
             {
@@ -3538,6 +3559,14 @@ void WriteParamValueReplay<ParamType::TShaderProgramID>(std::ostream &os,
                                                         gl::ShaderProgramID value)
 {
     os << "gShaderProgramMap[" << value.value << "]";
+}
+
+template <>
+void WriteParamValueReplay<ParamType::TGLsync>(std::ostream &os,
+                                               const CallCapture &call,
+                                               GLsync value)
+{
+    os << "gSyncMap[" << reinterpret_cast<uintptr_t>(value) << "]";
 }
 
 template <>

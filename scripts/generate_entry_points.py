@@ -824,10 +824,18 @@ def format_entry_point_def(command_node, cmd_name, proto, params, is_explicit_co
         if name in packed_gl_enums:
             internal_name = name + "Packed"
             internal_type = packed_gl_enums[name]
-            packed_gl_enum_conversions += [
-                "\n        " + internal_type + " " + internal_name + " = FromGL<" + internal_type +
-                ">(" + name + ");"
-            ]
+            if name == 'sync':
+                # sync, e.g. GLsync is a special type that doesn't conform to the rest
+                # of the GL types so need to treat it specially here.
+                packed_gl_enum_conversions += [
+                    "\n        " + internal_type + " " + internal_name +
+                    " = {reinterpret_cast<uintptr_t>(" + name + ")};"
+                ]
+            else:
+                packed_gl_enum_conversions += [
+                    "\n        " + internal_type + " " + internal_name + " = FromGL<" +
+                    internal_type + ">(" + name + ");"
+                ]
 
     pass_params = [param_print_argument(command_node, param) for param in params]
     format_params = [param_format_string(param) for param in params]
