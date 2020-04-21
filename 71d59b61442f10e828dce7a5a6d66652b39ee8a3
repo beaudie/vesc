@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "2f41c574_46e32771",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-21T14:54:52Z",
+      "side": 1,
+      "message": "I wonder if we\u0027re really that concerned about the lost performance of just using 64-bit everywhere.  It would make this structure much easier to follow and the unit test could remove the special cases around 64-bits.",
+      "parentUuid": "f34b6056_b8fca3eb",
+      "range": {
+        "startLine": 397,
+        "startChar": 0,
+        "endLine": 404,
+        "endChar": 0
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5664799_6b6da8f1",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 3
@@ -110,6 +134,29 @@
         "startChar": 42,
         "endLine": 560,
         "endChar": 53
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeda7a50_de3912a7",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-21T14:54:52Z",
+      "side": 1,
+      "message": "Can the \u0027expand\u0027 methods be private?  Is it possible for the public interface to only work with GLenums?\n\nIf they\u0027re only needed for the unittests, you can add a test fixture class BlendStateExtTest and make this a friend of it.",
+      "range": {
+        "startLine": 584,
+        "startChar": 0,
+        "endLine": 586,
+        "endChar": 89
       },
       "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
