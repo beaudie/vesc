@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "aae9f700_b38968b6",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-21T23:57:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "408ffd33_ef1518e3",
+      "range": {
+        "startLine": 1048,
+        "startChar": 54,
+        "endLine": 1048,
+        "endChar": 75
+      },
+      "revId": "c676ceda5111c3c4f6cd7c47fa4328210302a638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ccc2e26_4374ac5f",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
         "patchSetId": 3
