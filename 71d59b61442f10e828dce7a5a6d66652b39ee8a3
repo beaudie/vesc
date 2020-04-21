@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "524f7ba8_f538bf27",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-21T18:35:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3728754d_30c3ad02",
+      "range": {
+        "startLine": 389,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 25
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f34b6056_b8fca3eb",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 3
@@ -95,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "dd76f712_c527b751",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-21T18:35:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5664799_6b6da8f1",
+      "range": {
+        "startLine": 516,
+        "startChar": 10,
+        "endLine": 516,
+        "endChar": 29
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91d024e9_64526587",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 3
@@ -115,6 +163,30 @@
       "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76980f73_0b21b566",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-21T18:35:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91d024e9_64526587",
+      "range": {
+        "startLine": 518,
+        "startChar": 29,
+        "endLine": 518,
+        "endChar": 48
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -141,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "60fe6af1_c7d317ed",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-21T18:35:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd2cd279_f81916f2",
+      "range": {
+        "startLine": 560,
+        "startChar": 42,
+        "endLine": 560,
+        "endChar": 53
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aeda7a50_de3912a7",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 3
@@ -152,6 +248,30 @@
       "writtenOn": "2020-04-21T14:54:52Z",
       "side": 1,
       "message": "Can the \u0027expand\u0027 methods be private?  Is it possible for the public interface to only work with GLenums?\n\nIf they\u0027re only needed for the unittests, you can add a test fixture class BlendStateExtTest and make this a friend of it.",
+      "range": {
+        "startLine": 584,
+        "startChar": 0,
+        "endLine": 586,
+        "endChar": 89
+      },
+      "revId": "71d59b61442f10e828dce7a5a6d66652b39ee8a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66306351_7689bd3a",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-21T18:35:13Z",
+      "side": 1,
+      "message": "That would require moving finding of the most common state from StateManagerGL to this class. Would it be preferred?",
+      "parentUuid": "aeda7a50_de3912a7",
       "range": {
         "startLine": 584,
         "startChar": 0,
