@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e8ac910_387ca2c5",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-21T18:43:12Z",
+      "side": 1,
+      "message": "can we make this a proper class with private data? the style guide recommends structs with public POD and classes with public/private encapsulation.",
+      "range": {
+        "startLine": 608,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 33
+      },
+      "revId": "a966db71ae639c326fb26f47211a28c8582d3cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
