@@ -19,16 +19,6 @@ namespace rx
 {
 namespace vk
 {
-SyncHelper::SyncHelper()
-{
-    mUse.init();
-}
-
-SyncHelper::~SyncHelper()
-{
-    mUse.release();
-}
-
 void SyncHelper::releaseToRenderer(RendererVk *renderer)
 {
     renderer->collectGarbageAndReinit(&mUse, &mEvent);

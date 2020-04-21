@@ -25,11 +25,11 @@ namespace vk
 {
 // The behaviors of SyncImpl and EGLSyncImpl as fence syncs (only supported type) are currently
 // identical for the Vulkan backend, and this class implements both interfaces.
-class SyncHelper
+class SyncHelper : public vk::Resource
 {
   public:
-    SyncHelper();
-    ~SyncHelper();
+    SyncHelper() {}
+    ~SyncHelper() {}
 
     void releaseToRenderer(RendererVk *renderer);
 
@@ -49,8 +49,6 @@ class SyncHelper
     // The fence is signaled once the CB including the `init` signal is executed.
     // `clientWait` waits on this fence.
     Shared<Fence> mFence;
-
-    SharedResourceUse mUse;
 };
 }  // namespace vk
 
