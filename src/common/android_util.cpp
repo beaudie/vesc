@@ -275,6 +275,16 @@ int GLInternalFormatToNativePixelFormat(GLenum internalFormat)
         case GL_RGB8:
             return AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM;
         case GL_RGB565:
+        {
+            static bool skipNext = true;
+            if (skipNext)
+            {
+                skipNext = false;
+                WARN() << "Not setting visual ID for first " << internalFormat
+                       << " config. Treating as 0";
+                return 0;
+            }
+        }
             return AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM;
         case GL_BGRA8_EXT:
             return AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM;
