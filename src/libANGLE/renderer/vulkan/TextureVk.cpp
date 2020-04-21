@@ -1538,7 +1538,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         samplerInfo.maxLod     = 0.25f;
     }
 
-    ANGLE_VK_TRY(contextVk, mSampler.get().init(contextVk->getDevice(), samplerInfo));
+    ANGLE_TRY(mSampler.init(contextVk, samplerInfo));
 
     // Regenerate the serial on a sampler change.
     mSerial = contextVk->generateTextureSerial();
