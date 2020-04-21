@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7132b0be_3b697b08",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-21T18:18:45Z",
+      "side": 1,
+      "message": "Good point. bool is preferable.",
+      "parentUuid": "518a5bab_457745b2",
+      "range": {
+        "startLine": 66,
+        "startChar": 22,
+        "endLine": 66,
+        "endChar": 52
+      },
+      "revId": "b1c0887bdd6e191a0bb5bd6db9000cbd41ca1161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1797ac87_9202aad7",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 2
