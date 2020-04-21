@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53fb1f26_7f716eee",
+        "filename": "src/libANGLE/EGLSync.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-21T14:42:32Z",
+      "side": 1,
+      "message": "Can you add a comment about what this is doing?",
+      "revId": "abab975eb2ab76a29b411ada17d3ca7542a32106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a36d5731_ba56e5c4",
+        "filename": "src/libANGLE/EGLSync.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-21T14:42:32Z",
+      "side": 1,
+      "message": "This can still be const.",
+      "range": {
+        "startLine": 55,
+        "startChar": 25,
+        "endLine": 55,
+        "endChar": 26
+      },
+      "revId": "abab975eb2ab76a29b411ada17d3ca7542a32106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
