@@ -123,6 +123,24 @@
       "revId": "e1f7ad0ec4c7030f5177f808a87fc778bee0a0a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d31c5fe_a3b10b6c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-21T19:23:53Z",
+      "side": 1,
+      "message": "Oh, sorry, missed this discussion. SGTM.",
+      "parentUuid": "986b9b17_7064c17f",
+      "revId": "e1f7ad0ec4c7030f5177f808a87fc778bee0a0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
