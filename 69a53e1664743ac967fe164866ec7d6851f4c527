@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49a31bdd_daeb2c0a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T22:33:20Z",
+      "side": 1,
+      "message": "Why doesn\u0027t mAllocatedCounts ever decrement?   What does it always increasing tell us that\u0027s different than mActiveCounts not oscillating between steady-state values?",
+      "revId": "69a53e1664743ac967fe164866ec7d6851f4c527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
