@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7f233740_99ba446a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 6489,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-21T01:30:18Z",
+      "side": 1,
+      "message": "I was reading this part which make me think you need to call useProgram to use it after link:\n\"If a program has been successfully linked by LinkProgram or loaded by ProgramBinary (see section 7.5), it can be made part of the current rendering state\nfor all shader stages with the command\nvoid UseProgram( uint program );\"\n\nBut the text you pasted above does sound like you don\u0027t need to call useProgram.",
+      "parentUuid": "1d5563d2_fe337ffb",
+      "range": {
+        "startLine": 6489,
+        "startChar": 4,
+        "endLine": 6489,
+        "endChar": 25
+      },
+      "revId": "47447605ae5f383ed7a3ad272ddad3fd56aca94a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b61c2e8_ec55574c",
         "filename": "src/libANGLE/Context.inl.h",
         "patchSetId": 22
@@ -140,6 +164,30 @@
       "revId": "47447605ae5f383ed7a3ad272ddad3fd56aca94a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c261dab_62ae51be",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-21T01:30:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "85e40b87_f7da563a",
+      "range": {
+        "startLine": 462,
+        "startChar": 24,
+        "endLine": 462,
+        "endChar": 41
+      },
+      "revId": "47447605ae5f383ed7a3ad272ddad3fd56aca94a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
