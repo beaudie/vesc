@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9c31aa1_589910fd",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-21T18:54:31Z",
+      "side": 1,
+      "message": "just noticed this - for consistency you should probably set content defined here as well as for D/S. If you want to only use this flag for D/S, you should rename it to make that clear.",
+      "range": {
+        "startLine": 75,
+        "startChar": 30,
+        "endLine": 75,
+        "endChar": 41
+      },
+      "revId": "b61624ed7276919b5aa50dfd902b3a6f18da2be6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
