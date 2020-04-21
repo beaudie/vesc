@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b147cf9_3ad8f9fb",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5534,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-21T13:50:18Z",
+      "side": 1,
+      "message": "nit: can you make this a helper? it\u0027s common between the two.",
+      "range": {
+        "startLine": 5531,
+        "startChar": 0,
+        "endLine": 5534,
+        "endChar": 81
+      },
+      "revId": "d387ab0050dc1135fe74abf6490fc4e80ad1b02b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e44cc9a6_ffef6486",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-21T13:50:18Z",
+      "side": 1,
+      "message": "nit: can use none() to remove the !",
+      "range": {
+        "startLine": 1214,
+        "startChar": 8,
+        "endLine": 1214,
+        "endChar": 50
+      },
+      "revId": "d387ab0050dc1135fe74abf6490fc4e80ad1b02b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14439512_28cb42c2",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1977,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-21T13:50:18Z",
+      "side": 1,
+      "message": "would it make more sense to just pass the linked stages? will we need the executable in the future?",
+      "range": {
+        "startLine": 1977,
+        "startChar": 43,
+        "endLine": 1977,
+        "endChar": 77
+      },
+      "revId": "d387ab0050dc1135fe74abf6490fc4e80ad1b02b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
