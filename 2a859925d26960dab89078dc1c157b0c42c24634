@@ -22,6 +22,30 @@
       "revId": "2a859925d26960dab89078dc1c157b0c42c24634",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6441ae59_b8146f78",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-21T20:10:51Z",
+      "side": 1,
+      "message": "I guess per comment, that double header space is intentional, for \"Invalid\" command.",
+      "parentUuid": "769986e4_db3e18a5",
+      "range": {
+        "startLine": 702,
+        "startChar": 55,
+        "endLine": 702,
+        "endChar": 76
+      },
+      "revId": "2a859925d26960dab89078dc1c157b0c42c24634",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
