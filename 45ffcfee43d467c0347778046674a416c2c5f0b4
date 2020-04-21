@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba73e9d7_2a9f860a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-21T15:02:03Z",
+      "side": 1,
+      "message": "Currently only GL_MAX_CLIP_PLANES has two meanings in this function. I\u0027m not sure it is worth to split the code either. The validation code has to be split since there are multiple conflicted enums, i.e. GLES2+: GL_CLIP_DISTANCE0 - GL_CLIP_DISTANCE8 (while GLES1 enum range is only from GL_CLIP_PLANE0 to GL_CLIP_PLANE5)",
+      "parentUuid": "b302e142_a42b3363",
+      "revId": "45ffcfee43d467c0347778046674a416c2c5f0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "945dabfe_f4c8c1f7",
         "filename": "src/tests/compiler_tests/APPLE_clip_distance_test.cpp",
         "patchSetId": 18
@@ -33,6 +51,24 @@
       "revId": "45ffcfee43d467c0347778046674a416c2c5f0b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cef02c26_6a9c5c02",
+        "filename": "src/tests/compiler_tests/APPLE_clip_distance_test.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-04-21T15:02:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "945dabfe_f4c8c1f7",
+      "revId": "45ffcfee43d467c0347778046674a416c2c5f0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
