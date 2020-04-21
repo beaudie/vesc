@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5045b81d_257a9293",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-21T18:05:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33e4ff4c_439ae590",
+      "range": {
+        "startLine": 827,
+        "startChar": 0,
+        "endLine": 839,
+        "endChar": 0
+      },
+      "revId": "54c46abcadef838b786b43e8dd73bbf1be8d2636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "925ba2c1_994713d8",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "54c46abcadef838b786b43e8dd73bbf1be8d2636",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcee9b48_829aaaa8",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-21T18:05:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "925ba2c1_994713d8",
+      "range": {
+        "startLine": 543,
+        "startChar": 54,
+        "endLine": 543,
+        "endChar": 63
+      },
+      "revId": "54c46abcadef838b786b43e8dd73bbf1be8d2636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
