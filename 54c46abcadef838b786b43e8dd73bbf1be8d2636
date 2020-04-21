@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33e4ff4c_439ae590",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-21T16:32:23Z",
+      "side": 1,
+      "message": "can you revert this? I don\u0027t think you\u0027re treating sync as packed/converted any longer.",
+      "range": {
+        "startLine": 827,
+        "startChar": 0,
+        "endLine": 839,
+        "endChar": 0
+      },
+      "revId": "54c46abcadef838b786b43e8dd73bbf1be8d2636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "925ba2c1_994713d8",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-21T16:32:23Z",
+      "side": 1,
+      "message": "this isn\u0027t safe. GLint is 32-bits, sync is 64. If you need to reinterpret the data you should do it with an explicit reinterpret_cast.\n\nMight be worth making helper functions to convert to/from sync/uintptr_t.",
+      "range": {
+        "startLine": 543,
+        "startChar": 54,
+        "endLine": 543,
+        "endChar": 63
+      },
+      "revId": "54c46abcadef838b786b43e8dd73bbf1be8d2636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
