@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16e2c73a_85a077f9",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-21T22:47:49Z",
+      "side": 1,
+      "message": "Now that the internal StorageType struct template became public (because of style guide ordering rules), this line is even more fragile.\n\nGiven that ElementType is not always an enum (it\u0027s uint8_t for color mask), I could think only of these options:\n- make a style guide exemption for StorageType to keep it private;\n- add another template parameter instead of kBits constexpr;\n- define a new enum for all 16 possible color mask values;\n- always use 64-bit storage.\n\nWDYT?",
+      "revId": "a73255da07fe63468c06928fd733902e487b899e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
