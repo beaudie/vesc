@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "15d99b0c_b24dbf0e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5534,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T18:11:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b147cf9_3ad8f9fb",
+      "range": {
+        "startLine": 5531,
+        "startChar": 0,
+        "endLine": 5534,
+        "endChar": 81
+      },
+      "revId": "d387ab0050dc1135fe74abf6490fc4e80ad1b02b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e44cc9a6_ffef6486",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 9
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "0cc5d9f1_51a3882e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T18:11:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e44cc9a6_ffef6486",
+      "range": {
+        "startLine": 1214,
+        "startChar": 8,
+        "endLine": 1214,
+        "endChar": 50
+      },
+      "revId": "d387ab0050dc1135fe74abf6490fc4e80ad1b02b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14439512_28cb42c2",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 9
@@ -68,6 +116,30 @@
       "revId": "d387ab0050dc1135fe74abf6490fc4e80ad1b02b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e510cae5_15a0f65a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1977,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T18:11:01Z",
+      "side": 1,
+      "message": "I went back and forth on this. I\u0027ve converted to passing in the linked shader stages since you brought it up too.",
+      "parentUuid": "14439512_28cb42c2",
+      "range": {
+        "startLine": 1977,
+        "startChar": 43,
+        "endLine": 1977,
+        "endChar": 77
+      },
+      "revId": "d387ab0050dc1135fe74abf6490fc4e80ad1b02b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
