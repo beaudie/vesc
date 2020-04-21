@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0dcfef1_de459117",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T22:44:07Z",
+      "side": 1,
+      "message": "To avoid the copy, this can be simplified to:\n\n    if (!(dirtyBits.bits() \u0026 ~gl::Texture::DIRTY_BIT_IMPLEMENTATION) \u0026\u0026 mSampler.valid())\n    {\n        return angle::Result::Continue;\n    }",
+      "range": {
+        "startLine": 1464,
+        "startChar": 0,
+        "endLine": 1471,
+        "endChar": 5
+      },
+      "revId": "43ccdd98bd582729e328a8b7f0819ae960eb7f49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bc287aa_13e6ef9f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-21T22:44:07Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like you need to use localBits here, since you are testing specific bits which don\u0027t include DIRTY_BIT_IMPLEMENTATION.",
+      "range": {
+        "startLine": 1479,
+        "startChar": 0,
+        "endLine": 1482,
+        "endChar": 61
+      },
+      "revId": "43ccdd98bd582729e328a8b7f0819ae960eb7f49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
