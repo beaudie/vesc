@@ -4252,7 +4252,6 @@ angle::Result ContextVk::endRenderPass()
         onRenderPassFinished();
         return angle::Result::Continue;
     }
-
     if (mActiveQueryAnySamples)
     {
         mActiveQueryAnySamples->getQueryHelper()->endOcclusionQuery(this, mRenderPassCommandBuffer);
@@ -4277,6 +4276,8 @@ angle::Result ContextVk::endRenderPass()
 
     mRenderPassCommands.pauseTransformFeedbackIfStarted();
 
+    // Commands being flushed to primary cmd buffer
+    mHasPrimaryCommands = true;
     ANGLE_TRY(mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
 
     if (mGpuEventsEnabled)
