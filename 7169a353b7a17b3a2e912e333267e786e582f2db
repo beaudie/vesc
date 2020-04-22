@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "00cdc337_9b658a2f",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:41:04Z",
+      "side": 1,
+      "message": "how about naming this enableIncrementalFlush",
+      "range": {
+        "startLine": 280,
+        "startChar": 12,
+        "endLine": 280,
+        "endChar": 39
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e46d28c2_00661c7a",
         "filename": "src/gpu_info_util/SystemInfo.cpp",
         "patchSetId": 1
@@ -13,6 +36,29 @@
       "writtenOn": "2020-04-21T01:58:42Z",
       "side": 1,
       "message": "Can you add an example of the string you are parsing with this function?",
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ee1c850_46734e71",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:41:04Z",
+      "side": 1,
+      "message": "seems like this could be a helper in RendererVk. I\u0027m not sure we\u0027ll need this in other back-ends.",
+      "range": {
+        "startLine": 130,
+        "startChar": 5,
+        "endLine": 130,
+        "endChar": 26
+      },
       "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -185,6 +231,30 @@
     },
     {
       "key": {
+        "uuid": "28c3eedb_36b66021",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:41:04Z",
+      "side": 1,
+      "message": "Tim, we should cache or otherwise use something in ProgramExecutableVk.",
+      "parentUuid": "4e0b2127_1afa3153",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 58
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be67066f_9874fc27",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -248,6 +318,29 @@
     },
     {
       "key": {
+        "uuid": "10c6fa65_ef59a94b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:41:04Z",
+      "side": 1,
+      "message": "You should put this resetting in ContextVk::endRenderPass when there is a non-empty RP.",
+      "range": {
+        "startLine": 934,
+        "startChar": 0,
+        "endLine": 940,
+        "endChar": 5
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b70eb7df_0f8fb886",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
@@ -271,6 +364,30 @@
     },
     {
       "key": {
+        "uuid": "1313b18b_4f8a1cd2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:41:04Z",
+      "side": 1,
+      "message": "or counter.",
+      "parentUuid": "b70eb7df_0f8fb886",
+      "range": {
+        "startLine": 1112,
+        "startChar": 26,
+        "endLine": 1112,
+        "endChar": 34
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be3a51a6_abd404a7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
@@ -282,6 +399,30 @@
       "writtenOn": "2020-04-22T05:30:16Z",
       "side": 1,
       "message": "nit: Accumulative",
+      "range": {
+        "startLine": 1115,
+        "startChar": 14,
+        "endLine": 1115,
+        "endChar": 24
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6246b75_f3fff3c1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:41:04Z",
+      "side": 1,
+      "message": "just call this mVertexDataCount/Counter.",
+      "parentUuid": "be3a51a6_abd404a7",
       "range": {
         "startLine": 1115,
         "startChar": 14,
