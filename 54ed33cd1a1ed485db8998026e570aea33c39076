@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3673b21_c3181333",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:21:24Z",
+      "side": 1,
+      "message": "can you update to use the retain commands here and below?",
+      "range": {
+        "startLine": 48,
+        "startChar": 3,
+        "endLine": 48,
+        "endChar": 46
+      },
+      "revId": "54ed33cd1a1ed485db8998026e570aea33c39076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "175c9f89_4a18b766",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:21:24Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 46
+      },
+      "revId": "54ed33cd1a1ed485db8998026e570aea33c39076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbc5dc56_e9d2636c",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:21:24Z",
+      "side": 1,
+      "message": "nit: can you keep these in the cpp? use \u003d default if you like to keep them simple. It\u0027s good practice in general to keep default constructors in the source as it prevents multiple copies of sometimes-large default constructors/destructors.",
+      "range": {
+        "startLine": 31,
+        "startChar": 1,
+        "endLine": 32,
+        "endChar": 20
+      },
+      "revId": "54ed33cd1a1ed485db8998026e570aea33c39076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
