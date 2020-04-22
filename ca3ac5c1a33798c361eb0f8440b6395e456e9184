@@ -70,6 +70,24 @@
       "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c720234d_5ae8eb1f",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2020-04-22T23:25:47Z",
+      "side": 1,
+      "message": "// The Vulkan back-end will not support a sample count of 1, because of a Vulkan specification\n// restriction:\n//\n//   If the image was created with VkImageCreateInfo::samples equal to VK_SAMPLE_COUNT_1_BIT, the\n//   instruction must: have MS \u003d 0.\n//\n// This restriction was tracked in http://anglebug.com/4196 and Khronos-private Vulkan\n// specification issue https://gitlab.khronos.org/vulkan/vulkan/issues/1925.\n//\n// In addition, the Vulkan back-end will not support sample counts of 32 or 64, since there are no\n// standard sample locations for those sample counts.\nconstexpr unsigned int kSupportedSampleCounts \u003d (VK_SAMPLE_COUNT_2_BIT | VK_SAMPLE_COUNT_4_BIT |VK_SAMPLE_COUNT_8_BIT | VK_SAMPLE_COUNT_16_BIT);",
+      "parentUuid": "e49bb33e_3624f9b3",
+      "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
