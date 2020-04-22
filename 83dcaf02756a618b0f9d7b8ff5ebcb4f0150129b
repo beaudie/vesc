@@ -314,6 +314,30 @@
     },
     {
       "key": {
+        "uuid": "b1d0ff63_4aa8cc1b",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-22T01:18:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87b29e74_643b07d9",
+      "range": {
+        "startLine": 235,
+        "startChar": 4,
+        "endLine": 235,
+        "endChar": 30
+      },
+      "revId": "83dcaf02756a618b0f9d7b8ff5ebcb4f0150129b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b4d824c_0cfa914f",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 1
