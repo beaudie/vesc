@@ -30,6 +30,7 @@ enum class CommandID : uint16_t
 {
     // Invalid cmd used to mark end of sequence of commands
     Invalid = 0,
+    BeginDebugUtilsLabel,
     BeginQuery,
     BeginTransformFeedback,
     BindComputePipeline,
@@ -59,11 +60,13 @@ enum class CommandID : uint16_t
     DrawIndirect,
     DrawInstanced,
     DrawInstancedBaseInstance,
+    EndDebugUtilsLabel,
     EndQuery,
     EndTransformFeedback,
     ExecutionBarrier,
     FillBuffer,
     ImageBarrier,
+    InsertDebugUtilsLabel,
     MemoryBarrier,
     PipelineBarrier,
     PushConstants,
@@ -82,6 +85,12 @@ enum class CommandID : uint16_t
 // This makes it easy to know the size of params & to copy params
 // TODO: Could optimize the size of some of these structs through bit-packing
 //  and customizing sizing based on limited parameter sets used by ANGLE
+struct BeginDebugUtilsLabelParams
+{
+    float color[4];
+};
+VERIFY_4_BYTE_ALIGNMENT(BeginDebugUtilsLabelParams)
+
 struct BeginQueryParams
 {
     VkQueryPool queryPool;
@@ -298,6 +307,10 @@ struct DrawInstancedBaseInstanceParams
 };
 VERIFY_4_BYTE_ALIGNMENT(DrawInstancedBaseInstanceParams)
 
+// A special struct used with commands that don't have params
+struct EmptyParams
+{};
+
 struct EndQueryParams
 {
     VkQueryPool queryPool;
@@ -333,6 +346,9 @@ struct ImageBarrierParams
     VkImageMemoryBarrier imageMemoryBarrier;
 };
 VERIFY_4_BYTE_ALIGNMENT(ImageBarrierParams)
+
+// Params are exactly the same for Begin/Insert functions
+using InsertDebugUtilsLabelParams = BeginDebugUtilsLabelParams;
 
 struct MemoryBarrierParams
 {
@@ -444,6 +460,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     static constexpr bool ExecutesInline() { return true; }
 
     // Add commands
+    void beginDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &label);
+
     void beginQuery(VkQueryPool queryPool, uint32_t query, VkQueryControlFlags flags);
 
     void beginTransformFeedback(uint32_t counterBufferCount, const VkBuffer *pCounterBuffers);
@@ -558,6 +576,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                                    uint32_t firstVertex,
                                    uint32_t firstInstance);
 
+    void endDebugUtilsLabelEXT();
+
     void endQuery(VkQueryPool queryPool, uint32_t query);
 
     void endTransformFeedback(uint32_t counterBufferCount, const VkBuffer *pCounterBuffers);
@@ -572,6 +592,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags dstStageMask,
                       const VkImageMemoryBarrier &imageMemoryBarrier);
+
+    void insertDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &label);
 
     void memoryBarrier(VkPipelineStageFlags srcStageMask,
                        VkPipelineStageFlags dstStageMask,
@@ -679,11 +701,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         reinterpret_cast<CommandHeader *>(mCurrentWritePointer)->id = CommandID::Invalid;
         return Offset<StructType>(header, sizeof(CommandHeader));
     }
-    ANGLE_INLINE void allocateNewBlock()
+    ANGLE_INLINE void allocateNewBlock(size_t blockSize = kBlockSize)
     {
         ASSERT(mAllocator);
-        mCurrentWritePointer   = mAllocator->fastAllocate(kBlockSize);
-        mCurrentBytesRemaining = kBlockSize;
+        mCurrentWritePointer   = mAllocator->fastAllocate(blockSize);
+        mCurrentBytesRemaining = blockSize;
         mCommands.push_back(reinterpret_cast<CommandHeader *>(mCurrentWritePointer));
     }
 
@@ -698,9 +720,14 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         constexpr size_t fixedAllocationSize = sizeof(StructType) + sizeof(CommandHeader);
         const size_t allocationSize          = fixedAllocationSize + variableSize;
         // Make sure we have enough room to mark follow-on header "Invalid"
-        if (mCurrentBytesRemaining < (allocationSize + sizeof(CommandHeader)))
+        const size_t requiredSize = allocationSize + sizeof(CommandHeader);
+        if (mCurrentBytesRemaining < requiredSize)
         {
-            allocateNewBlock();
+            // variable size command can potentially exceed default cmd allocation blockSize
+            if (requiredSize <= kBlockSize)
+                allocateNewBlock();
+            else
+                allocateNewBlock(requiredSize);
         }
         *variableDataPtr = Offset<uint8_t>(mCurrentWritePointer, fixedAllocationSize);
         return commonInit<StructType>(cmdID, allocationSize);
@@ -710,10 +737,13 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     template <class StructType>
     ANGLE_INLINE StructType *initCommand(CommandID cmdID)
     {
-        constexpr size_t allocationSize = sizeof(StructType) + sizeof(CommandHeader);
+        constexpr size_t paramSize =
+            std::is_same<StructType, EmptyParams>::value ? 0 : sizeof(StructType);
+        constexpr size_t allocationSize = paramSize + sizeof(CommandHeader);
         // Make sure we have enough room to mark follow-on header "Invalid"
         if (mCurrentBytesRemaining < (allocationSize + sizeof(CommandHeader)))
         {
+            ASSERT((allocationSize + sizeof(CommandHeader)) < kBlockSize);
             allocateNewBlock();
         }
         return commonInit<StructType>(cmdID, allocationSize);
@@ -749,6 +779,19 @@ ANGLE_INLINE SecondaryCommandBuffer::SecondaryCommandBuffer()
     : mAllocator(nullptr), mCurrentWritePointer(nullptr), mCurrentBytesRemaining(0)
 {}
 ANGLE_INLINE SecondaryCommandBuffer::~SecondaryCommandBuffer() {}
+
+ANGLE_INLINE void SecondaryCommandBuffer::beginDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &label)
+{
+    uint8_t *writePtr;
+    size_t stringSize                       = strlen(label.pLabelName) + 1;
+    BeginDebugUtilsLabelParams *paramStruct = initCommand<BeginDebugUtilsLabelParams>(
+        CommandID::BeginDebugUtilsLabel, stringSize, &writePtr);
+    paramStruct->color[0] = label.color[0];
+    paramStruct->color[1] = label.color[1];
+    paramStruct->color[2] = label.color[2];
+    paramStruct->color[3] = label.color[3];
+    storePointerParameter(writePtr, label.pLabelName, stringSize);
+}
 
 ANGLE_INLINE void SecondaryCommandBuffer::beginQuery(VkQueryPool queryPool,
                                                      uint32_t query,
@@ -1124,6 +1167,11 @@ ANGLE_INLINE void SecondaryCommandBuffer::drawInstancedBaseInstance(uint32_t ver
     paramStruct->firstInstance = firstInstance;
 }
 
+ANGLE_INLINE void SecondaryCommandBuffer::endDebugUtilsLabelEXT()
+{
+    initCommand<EmptyParams>(CommandID::EndDebugUtilsLabel);
+}
+
 ANGLE_INLINE void SecondaryCommandBuffer::endQuery(VkQueryPool queryPool, uint32_t query)
 {
     EndQueryParams *paramStruct = initCommand<EndQueryParams>(CommandID::EndQuery);
@@ -1171,6 +1219,20 @@ ANGLE_INLINE void SecondaryCommandBuffer::imageBarrier(
     paramStruct->srcStageMask       = srcStageMask;
     paramStruct->dstStageMask       = dstStageMask;
     paramStruct->imageMemoryBarrier = imageMemoryBarrier;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::insertDebugUtilsLabelEXT(
+    const VkDebugUtilsLabelEXT &label)
+{
+    uint8_t *writePtr;
+    size_t stringSize                        = strlen(label.pLabelName) + 1;
+    InsertDebugUtilsLabelParams *paramStruct = initCommand<InsertDebugUtilsLabelParams>(
+        CommandID::InsertDebugUtilsLabel, stringSize, &writePtr);
+    paramStruct->color[0] = label.color[0];
+    paramStruct->color[1] = label.color[1];
+    paramStruct->color[2] = label.color[2];
+    paramStruct->color[3] = label.color[3];
+    storePointerParameter(writePtr, label.pLabelName, stringSize);
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::memoryBarrier(VkPipelineStageFlags srcStageMask,

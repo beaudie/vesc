@@ -246,7 +246,8 @@ TEST_P(DebugTest, GetPointer)
 // Test usage of message control.  Example taken from GL_KHR_debug spec.
 TEST_P(DebugTest, MessageControl1)
 {
-    ANGLE_SKIP_TEST_IF(!mDebugExtensionAvailable);
+    ANGLE_SKIP_TEST_IF(!mDebugExtensionAvailable ||
+                       (IsAndroid() && (IsPixel2() || IsPixel2XL()) && !IsARM64()));
 
     std::vector<Message> messages;
 
@@ -294,7 +295,8 @@ TEST_P(DebugTest, MessageControl1)
 // Test usage of message control.  Example taken from GL_KHR_debug spec.
 TEST_P(DebugTest, MessageControl2)
 {
-    ANGLE_SKIP_TEST_IF(!mDebugExtensionAvailable);
+    ANGLE_SKIP_TEST_IF(!mDebugExtensionAvailable ||
+                       (IsAndroid() && (IsPixel2() || IsPixel2XL()) && !IsARM64()));
 
     std::vector<Message> messages;
 

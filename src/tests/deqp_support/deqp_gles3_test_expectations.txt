@@ -573,6 +573,7 @@
 4024 PIXEL2ORXL VULKAN : dEQP-GLES3.functional.draw.random.49 = SKIP
 4024 PIXEL2ORXL VULKAN : dEQP-GLES3.functional.draw.random.96 = FAIL
 
+
 // Fixed in later driver versions.
 2727 VULKAN ANDROID : dEQP-GLES3.functional.shaders.builtin_variable.pointcoord = FAIL
 
