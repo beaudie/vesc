@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be40f268_e6cd400e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-22T20:18:47Z",
+      "side": 1,
+      "message": "So this was a real bug where endRPAndGetCB didn\u0027t flush outside RP CB? I wonder why there was no test failure or glitches in apps. Jamie can shed some light on this.",
+      "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
