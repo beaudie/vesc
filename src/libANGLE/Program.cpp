@@ -2184,6 +2184,11 @@ GLuint Program::getOutputResourceMaxNameSize() const
 
 GLuint Program::getResourceLocation(const GLchar *name, const sh::ShaderVariable &variable) const
 {
+    if (variable.isBuiltIn())
+    {
+        return GL_INVALID_INDEX;
+    }
+
     GLint location = variable.location;
     if (variable.isArray())
     {
