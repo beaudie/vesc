@@ -16,6 +16,24 @@
       "revId": "769dd255a9c8e5858457388daeb3a924a84887b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88c22a72_41fa4da4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5535,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-22T18:14:33Z",
+      "side": 1,
+      "message": "We always return the PPO back to draw at the end of every dispatch, so we need to do this work with every dispatch.",
+      "parentUuid": "75f86218_c29ce4b0",
+      "revId": "769dd255a9c8e5858457388daeb3a924a84887b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
