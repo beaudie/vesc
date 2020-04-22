@@ -52,6 +52,24 @@
       "revId": "769dd255a9c8e5858457388daeb3a924a84887b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e81ec18_6ecf5f4c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5535,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-22T21:15:14Z",
+      "side": 1,
+      "message": "We only come into here twice:\n1. Start of dispatch (isCompute \u003d true)\n2. End of dispatch (isCompute \u003d false)\n\nWe can\u0027t change from dispatching with a PPO to a Program or another PPO between (1) and (2), so the same PPO will always execute the call twice.   Also, no PPO is inherently compute before (1), so it will always be transitioned to compute and then transitioned back to draw with (2). \n  So, setIsCompute() will be called with the same value twice, since a PPO is never \u0027compute\u0027 before a dispatch call.\n\nNote that a PPO may only have a CS program at dispatch time, but could have VS/FS programs attached after the dispatch command which is why we always need to return it back to a draw-tpye so we do the necessary work during the draw command.   This also means we can\u0027t check for the presence of VS/FS and skip this work if there aren\u0027t any present.",
+      "parentUuid": "cbb13bee_820ab4c6",
+      "revId": "769dd255a9c8e5858457388daeb3a924a84887b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
