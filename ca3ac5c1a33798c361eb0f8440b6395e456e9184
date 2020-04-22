@@ -34,6 +34,24 @@
       "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1078cb19_67a4f57b",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-22T18:56:27Z",
+      "side": 1,
+      "message": "Another quick fix would be to disable GL_RGB565 format for EGL surfaces (may be disable them for window but allow them for pbuffer window type?)",
+      "parentUuid": "37accc77_9c326863",
+      "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
