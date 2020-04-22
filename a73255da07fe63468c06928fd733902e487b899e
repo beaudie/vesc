@@ -16,6 +16,24 @@
       "revId": "a73255da07fe63468c06928fd733902e487b899e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f56f0cd1_bec0b894",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-22T04:29:46Z",
+      "side": 1,
+      "message": "My suggestion is to add another template parameter. I see the following:\n\n- BlendFactorType is an enum of 19 values -\u003e uses 8 bits\n- BlendEquationType is an enum of 6 values -\u003e uses 4 bits\n- Color mask is uint8_t, but is really four packed booleans -\u003e uses 4 bits\n\nI guess we could technically add an enum for color mask just to get an EnumCount out of it, but that feels contrived. Without it, it\u0027s also pretty clear there is no way to automatically deduce this.\n\nThat said, my suggestion is not to add the kBits template parameter, but rather an `ElementEnumCount` template parameter and deduce the bits from that.\n\nThen you would have:\n\n    using FactorStorage    \u003d StorageType\u003cBlendFactorType, EnumSize\u003cBlendFactorType\u003e()\u003e;\n    using EquationStorage  \u003d StorageType\u003cBlendEquationType, EnumSize\u003cBlendEquationType\u003e()\u003e;\n    using ColorMaskStorage \u003d StorageType\u003cuint8_t, 16\u003e;\n\nAnd\n\n    static_assert(ElementEnumCount \u003c\u003d 256, ...);\n    static constexpr size_t kBits \u003d ElementEnumCount \u003e 16 ? 8 : 4;",
+      "parentUuid": "16e2c73a_85a077f9",
+      "revId": "a73255da07fe63468c06928fd733902e487b899e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
