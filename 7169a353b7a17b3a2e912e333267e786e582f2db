@@ -137,6 +137,30 @@
     },
     {
       "key": {
+        "uuid": "82d5461b_583010be",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-22T05:30:16Z",
+      "side": 1,
+      "message": "+1 to Tim\u0027s suggestions. My immediate impression was also that this should be in some per-vendor/device-family struct.\n\nRegarding your question @Xinyi, Program::getMergedVaryings() is what you need. You should be able to get size information out of the sh::ShaderVariable variables found within. Tim will have some insight on how to get to this for PPOs.",
+      "parentUuid": "d9f8adda_c57c0c3a",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 58
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be67066f_9874fc27",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -193,6 +217,75 @@
         "startChar": 0,
         "endLine": 928,
         "endChar": 9
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b70eb7df_0f8fb886",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-22T05:30:16Z",
+      "side": 1,
+      "message": "nit: Count\n\nSame below",
+      "range": {
+        "startLine": 1112,
+        "startChar": 26,
+        "endLine": 1112,
+        "endChar": 34
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be3a51a6_abd404a7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-22T05:30:16Z",
+      "side": 1,
+      "message": "nit: Accumulative",
+      "range": {
+        "startLine": 1115,
+        "startChar": 14,
+        "endLine": 1115,
+        "endChar": 24
+      },
+      "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2fbd4ea_78377578",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-22T05:30:16Z",
+      "side": 1,
+      "message": "Can be queried from features (through renderer), so no need to cache it here.",
+      "range": {
+        "startLine": 1117,
+        "startChar": 9,
+        "endLine": 1117,
+        "endChar": 39
       },
       "revId": "7169a353b7a17b3a2e912e333267e786e582f2db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
