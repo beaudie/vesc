@@ -34,6 +34,24 @@
       "revId": "a73255da07fe63468c06928fd733902e487b899e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9bf6e17_abfb71a6",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-22T06:02:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f56f0cd1_bec0b894",
+      "revId": "a73255da07fe63468c06928fd733902e487b899e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
