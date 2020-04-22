@@ -88,6 +88,24 @@
       "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25e606dc_cc1ec378",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-04-22T23:59:23Z",
+      "side": 1,
+      "message": "To clarify, I\u0027m not disabling anything.  I\u0027m just not adding the EGL_NATIVE_VISUAL_ID for the config.  Leaving it set to 0 is fine for the test.\n\nAlso (to Shabi), the particular config has a sample count of 0, depth of 0, stencil of 0.  Other depths and stencils with a sample count of 0 are fine, and other sample counts are fine.  That\u0027s why its mysterious:-).  Why is that config having trouble (the most boring config)?",
+      "parentUuid": "1078cb19_67a4f57b",
+      "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
