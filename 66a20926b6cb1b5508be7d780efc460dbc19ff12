@@ -69,6 +69,30 @@
       "revId": "66a20926b6cb1b5508be7d780efc460dbc19ff12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5246e28_21ce10c0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3658,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:14:46Z",
+      "side": 1,
+      "message": "Can leave this on if you don\u0027t mind to be consistent with the other back-ends.",
+      "parentUuid": "d0909205_18745bf3",
+      "range": {
+        "startLine": 3658,
+        "startChar": 16,
+        "endLine": 3658,
+        "endChar": 22
+      },
+      "revId": "66a20926b6cb1b5508be7d780efc460dbc19ff12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
