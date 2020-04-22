@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa465fe0_ed88cf63",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:01:50Z",
+      "side": 1,
+      "message": "I was considering feeding this into the overlay. We can always define it out if we don\u0027t need it later.",
+      "parentUuid": "ad37a5cb_2c63433d",
+      "range": {
+        "startLine": 9,
+        "startChar": 64,
+        "endLine": 10,
+        "endChar": 45
+      },
+      "revId": "69a53e1664743ac967fe164866ec7d6851f4c527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49a31bdd_daeb2c0a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 1
@@ -54,6 +78,24 @@
       "side": 1,
       "message": "Free integral?",
       "parentUuid": "49a31bdd_daeb2c0a",
+      "revId": "69a53e1664743ac967fe164866ec7d6851f4c527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4564932_2921dc9d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-22T15:01:50Z",
+      "side": 1,
+      "message": "It tells us how many objects exist over the duration of a program instead of how many are in the steady state. e.g. if create/destroy are called during the program to create tons of garbage.",
+      "parentUuid": "e26e0630_f3346a55",
       "revId": "69a53e1664743ac967fe164866ec7d6851f4c527",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
