@@ -52,6 +52,24 @@
       "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e49bb33e_3624f9b3",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-22T21:51:11Z",
+      "side": 1,
+      "message": "Shahbaz mentioned multisample support. If that\u0027s part of the config I could imagine that could be an issue with 565.",
+      "parentUuid": "1078cb19_67a4f57b",
+      "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
