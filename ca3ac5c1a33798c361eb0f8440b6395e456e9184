@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d7f88c7_63169de7",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-22T04:40:17Z",
+      "side": 1,
+      "message": "A quick trace of the code shows me that this is how we get here:\n\n    vk_caps_utils.cpp: GenerateConfigs\n    -\u003e GenerateDefaultConfig\n    -\u003e formatutils.h: GetNativeVisualID\n    -\u003e android_util.cpp: GLInternalFormatToNativePixelFormat\n\nThe code that calls GenerateDefaultConfig looks like this:\n\n    for (EGLint sampleCount : *configSampleCounts)\n    {\n        egl::Config config \u003d GenerateDefaultConfig(display-\u003egetRenderer(), colorFormatInfo,\n                                                   depthStencilFormatInfo, sampleCount);\n        if (display-\u003echeckConfigSupport(\u0026config))\n        {\n            configSet.add(config);\n        }\n    }\n\nIt looks to me like the best solution would be to add this workaround to `DisplayVkAndroid::checkConfigSupport()`. You can determine which sampleCount is the problematic one and instead of skipping \"the first 565 format\", skip \"the 565 format with N sample counts\".\n\n---\n\nOn a related note, DisplayVkAndroid::checkConfigSupport says:\n\n    bool DisplayVkAndroid::checkConfigSupport(egl::Config *config)\n    {\n        // TODO(geofflang): Test for native support and modify the config accordingly.\n        // anglebug.com/2692\n        return true;\n    }\n\nSo maybe fixing anglebug.com/2692 would automatically fix this issue as well because presumably we would discover that there is no native support for the \"565 format with N sample counts\" in question.",
+      "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
