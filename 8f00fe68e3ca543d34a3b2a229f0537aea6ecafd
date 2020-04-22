@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4887a846_eb802c94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-22T23:53:06Z",
+      "side": 1,
+      "message": "Can you open a bug to Khronos about this?   We don\u0027t have to wait for it to be fixed (or even acknowledged) before landing this, but it would be good to at least let them know about the issue.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 37
+      },
+      "revId": "8f00fe68e3ca543d34a3b2a229f0537aea6ecafd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fa14f5e_b16ccb87",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-22T23:53:06Z",
+      "side": 1,
+      "message": "Can/Should we check if EXT_texture_sRGB_decode is not enabled also (and then we don\u0027t need the TODO)?",
+      "revId": "8f00fe68e3ca543d34a3b2a229f0537aea6ecafd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
