@@ -16,6 +16,24 @@
       "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37accc77_9c326863",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-22T18:54:14Z",
+      "side": 1,
+      "message": "\u003e It looks to me like the best solution would be to add this workaround to\n\u003e `DisplayVkAndroid::checkConfigSupport()`. You can determine which sampleCount\n\u003e is the problematic one and instead of skipping \"the first 565 format\",\n\u003e skip \"the 565 format with N sample counts\".\n\n+1\n\nthough i would still like to understand why removing just the first one makes the test pass. EGL config sorting rules are very explicit and deterministic. We should be able to uniquely identify the condition under which a particular config is \"bad\" for the test",
+      "parentUuid": "9d7f88c7_63169de7",
+      "revId": "ca3ac5c1a33798c361eb0f8440b6395e456e9184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
