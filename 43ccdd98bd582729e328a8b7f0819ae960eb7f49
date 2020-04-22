@@ -132,6 +132,30 @@
     },
     {
       "key": {
+        "uuid": "8fc56c45_b68af838",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-22T19:02:41Z",
+      "side": 1,
+      "message": "Is that optimized code? I\u0027m surprised to see this for example:\n\n    fd91b5:\te8 b6 cc e9 ff       \tcallq  e75e70 \u003c_ZNK5angle7BitSetTILm23EmmE4noneEv\u003e\n\n---\n\nP.S. you can pipe this to `c++filt` to get C++y symbols",
+      "parentUuid": "b2c3e3de_fb0c8349",
+      "range": {
+        "startLine": 1464,
+        "startChar": 0,
+        "endLine": 1471,
+        "endChar": 5
+      },
+      "revId": "43ccdd98bd582729e328a8b7f0819ae960eb7f49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4bc287aa_13e6ef9f",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
