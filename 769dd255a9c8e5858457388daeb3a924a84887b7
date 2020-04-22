@@ -70,6 +70,24 @@
       "revId": "769dd255a9c8e5858457388daeb3a924a84887b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96a266c0_acc55778",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5535,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-22T21:47:04Z",
+      "side": 1,
+      "message": "\u003eWe only come into here twice:\n\u003e1. Start of dispatch (isCompute \u003d true)\n\u003e2. End of dispatch (isCompute \u003d false)\n\nSounds good.",
+      "parentUuid": "3e81ec18_6ecf5f4c",
+      "revId": "769dd255a9c8e5858457388daeb3a924a84887b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
