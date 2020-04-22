@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5be51c14_a11dd292",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-22T23:19:30Z",
+      "side": 1,
+      "message": "I also not sure why this is needed. My understanding is that this is tracking if we have put any commands into primary command buffer or not. If my understanding is correct, then why we need to set it to true here instead of set it to true in flushToPrimary()?",
+      "range": {
+        "startLine": 636,
+        "startChar": 8,
+        "endLine": 636,
+        "endChar": 27
+      },
+      "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be40f268_e6cd400e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 6
@@ -13,6 +36,24 @@
       "writtenOn": "2020-04-22T20:18:47Z",
       "side": 1,
       "message": "So this was a real bug where endRPAndGetCB didn\u0027t flush outside RP CB? I wonder why there was no test failure or glitches in apps. Jamie can shed some light on this.",
+      "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ee7ecc8_46b21996",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-22T23:19:30Z",
+      "side": 1,
+      "message": "I also have the same question as Shabi asked here. My understanding is that when we startRP, we ensure outsideRP flushed to primary first so that they will always go before RP. It is unclear to me that the commands recorded into outsideRP while RP is open should go before RP or after or doesn\u0027t matter. Can you or Jamie clarify this and maybe put comment somewhere in the code?\n\nAlso if it is truly required that outsideRP commands flushed before RP, then maybe we should do it inside endRenderPass().",
+      "parentUuid": "be40f268_e6cd400e",
       "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
