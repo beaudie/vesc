@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21b58a8a_30b22b79",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3657,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-22T05:21:06Z",
+      "side": 1,
+      "message": "About %d: this is not printf ;) What you want is:\n\n    errorStream \u003c\u003c \"Internal Vulkan error (\" \u003c\u003c errorCode \u003c\u003c \"): \" \u003c\u003c VulkanResultString(errorCode);",
+      "range": {
+        "startLine": 3657,
+        "startChar": 4,
+        "endLine": 3657,
+        "endChar": 95
+      },
+      "revId": "66a20926b6cb1b5508be7d780efc460dbc19ff12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0909205_18745bf3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3658,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-22T05:21:06Z",
+      "side": 1,
+      "message": "Might as well just drop this. A newline will follow, so who cares about `.`?",
+      "range": {
+        "startLine": 3658,
+        "startChar": 16,
+        "endLine": 3658,
+        "endChar": 22
+      },
+      "revId": "66a20926b6cb1b5508be7d780efc460dbc19ff12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
