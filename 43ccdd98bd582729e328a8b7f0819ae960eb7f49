@@ -108,6 +108,30 @@
     },
     {
       "key": {
+        "uuid": "b2c3e3de_fb0c8349",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-22T18:43:07Z",
+      "side": 1,
+      "message": "ASM comparison:\n\n    // Mask out the IMPLEMENTATION dirty bit to avoid unnecessary syncs.\n    gl::Texture::DirtyBits localBits \u003d dirtyBits;\n    localBits.reset(gl::Texture::DIRTY_BIT_IMPLEMENTATION);\n\n    if (localBits.none() \u0026\u0026 mSampler.valid())\n    {\n        return angle::Result::Continue;\n    }\n\nTurns into 23 asm instructions:\n\n  fd9184:\t48 8b 05 25 f1 2c ff \tmov    -0xd30edb(%rip),%rax        # 2a82b0 \u003c_ZStL19piecewise_construct-0x2e8\u003e\n  fd918b:\t48 89 45 c0          \tmov    %rax,-0x40(%rbp)\n  fd918f:\t48 8b 75 e0          \tmov    -0x20(%rbp),%rsi\n  fd9193:\t48 8d 7d c0          \tlea    -0x40(%rbp),%rdi\n  fd9197:\te8 84 e9 e9 ff       \tcallq  e77b20 \u003c_ZN5angle7BitSetTILm23EmmEC2ERKS1_\u003e\n  fd919c:\t48 8d 7d c0          \tlea    -0x40(%rbp),%rdi\n  fd91a0:\tbe 16 00 00 00       \tmov    $0x16,%esi\n  fd91a5:\te8 c6 56 c1 ff       \tcallq  bee870 \u003c_ZN5angle7BitSetTILm23EmmE5resetEm\u003e\n  fd91aa:\t48 8d 7d c0          \tlea    -0x40(%rbp),%rdi\n  fd91ae:\t48 89 85 f0 fe ff ff \tmov    %rax,-0x110(%rbp)\n  fd91b5:\te8 b6 cc e9 ff       \tcallq  e75e70 \u003c_ZNK5angle7BitSetTILm23EmmE4noneEv\u003e\n  fd91ba:\ta8 01                \ttest   $0x1,%al\n  fd91bc:\t0f 85 05 00 00 00    \tjne    fd91c7 \u003c_ZN2rx9TextureVk9syncStateEPKN2gl7ContextERKN5angle7BitSetTILm23EmmEE+0x277\u003e\n  fd91c2:\te9 2e 00 00 00       \tjmpq   fd91f5 \u003c_ZN2rx9TextureVk9syncStateEPKN2gl7ContextERKN5angle7BitSetTILm23EmmEE+0x2a5\u003e\n  fd91c7:\t48 8b 85 18 ff ff ff \tmov    -0xe8(%rbp),%rax\n  fd91ce:\t48 05 28 01 00 00    \tadd    $0x128,%rax\n  fd91d4:\t48 89 c7             \tmov    %rax,%rdi\n  fd91d7:\te8 d4 36 f9 ff       \tcallq  f6c8b0 \u003c_ZNK2rx2vk13SamplerHelper5validEv\u003e\n  fd91dc:\ta8 01                \ttest   $0x1,%al\n  fd91de:\t0f 85 05 00 00 00    \tjne    fd91e9 \u003c_ZN2rx9TextureVk9syncStateEPKN2gl7ContextERKN5angle7BitSetTILm23EmmEE+0x299\u003e\n  fd91e4:\te9 0c 00 00 00       \tjmpq   fd91f5 \u003c_ZN2rx9TextureVk9syncStateEPKN2gl7ContextERKN5angle7BitSetTILm23EmmEE+0x2a5\u003e\n  fd91e9:\tc7 45 fc 00 00 00 00 \tmovl   $0x0,-0x4(%rbp)\n  fd91f0:\te9 77 05 00 00       \tjmpq   fd976c \u003c_ZN2rx9TextureVk9syncStateEPKN2gl7ContextERKN5angle7BitSetTILm23EmmEE+0x81c\u003e\n  fd91f5:\t48 b8 aa aa aa aa aa \tmovabs $0xaaaaaaaaaaaaaaaa,%rax\n\n\u003d\u003d\u003d\u003d\n\n    if (!(dirtyBits.bits() \u0026 ~gl::Texture::DIRTY_BIT_IMPLEMENTATION) \u0026\u0026 mSampler.valid())\n    {\n        return angle::Result::Continue;\n    }\n\nTurns into 14 asm instructions:\n\n  fd9184:\t48 8b 7d e0          \tmov    -0x20(%rbp),%rdi\n  fd9188:\te8 b3 e9 e9 ff       \tcallq  e77b40 \u003c_ZNK5angle7BitSetTILm23EmmE4bitsEv\u003e\n  fd918d:\t48 25 e9 ff ff ff    \tand    $0xffffffffffffffe9,%rax\n  fd9193:\t48 83 f8 00          \tcmp    $0x0,%rax\n  fd9197:\t0f 85 2e 00 00 00    \tjne    fd91cb \u003c_ZN2rx9TextureVk9syncStateEPKN2gl7ContextERKN5angle7BitSetTILm23EmmEE+0x27b\u003e\n  fd919d:\t48 8b 85 20 ff ff ff \tmov    -0xe0(%rbp),%rax\n  fd91a4:\t48 05 28 01 00 00    \tadd    $0x128,%rax\n  fd91aa:\t48 89 c7             \tmov    %rax,%rdi\n  fd91ad:\te8 fe 36 f9 ff       \tcallq  f6c8b0 \u003c_ZNK2rx2vk13SamplerHelper5validEv\u003e\n  fd91b2:\ta8 01                \ttest   $0x1,%al\n  fd91b4:\t0f 85 05 00 00 00    \tjne    fd91bf \u003c_ZN2rx9TextureVk9syncStateEPKN2gl7ContextERKN5angle7BitSetTILm23EmmEE+0x26f\u003e\n  fd91ba:\te9 0c 00 00 00       \tjmpq   fd91cb \u003c_ZN2rx9TextureVk9syncStateEPKN2gl7ContextERKN5angle7BitSetTILm23EmmEE+0x27b\u003e\n  fd91bf:\tc7 45 fc 00 00 00 00 \tmovl   $0x0,-0x4(%rbp)\n  fd91c6:\te9 71 05 00 00       \tjmpq   fd973c \u003c_ZN2rx9TextureVk9syncStateEPKN2gl7ContextERKN5angle7BitSetTILm23EmmEE+0x7ec\u003e\n  fd91cb:\t48 b8 aa aa aa aa aa \tmovabs $0xaaaaaaaaaaaaaaaa,%rax\n\n\nWe just have to do some bit twiddling vs constructing a new object that has to survive a few conditionals.   This looks like enough to justify the simpler code to me.",
+      "parentUuid": "8bbd8ec2_5e0d45d1",
+      "range": {
+        "startLine": 1464,
+        "startChar": 0,
+        "endLine": 1471,
+        "endChar": 5
+      },
+      "revId": "43ccdd98bd582729e328a8b7f0819ae960eb7f49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4bc287aa_13e6ef9f",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
