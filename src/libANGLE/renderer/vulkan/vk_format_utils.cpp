@@ -230,6 +230,14 @@ void FormatTable::initialize(RendererVk *renderer,
         const GLenum internalFormat = format.internalFormat;
         format.intendedFormatID     = formatID;
 
+        // TODO: angleproject:3609
+        // Due to a dEQP bug, this texture format cannot be exposed until EXT_texture_sRGB_decode is
+        // implemented
+        if (internalFormat == GL_SR8_EXT)
+        {
+            continue;
+        }
+
         if (!format.valid())
         {
             continue;
