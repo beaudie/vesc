@@ -123,8 +123,7 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-vkDestroySemaphore-semaphore-parameter",
     // http://anglebug.com/4063
     "VUID-VkDeviceCreateInfo-pNext-pNext",
-    "VUID-VkPipelineRasterizationStateCreateInfo-pNext-pNext",
-    "VUID_Undefined",
+    "VUID-VkPipelineRasterizationStateCreateInfo-pNext-pNext", "VUID_Undefined",
     // http://anglebug.com/3078
     "UNASSIGNED-CoreValidation-Shader-InterfaceTypeMismatch",
     // http://anglebug.com/4510
@@ -134,15 +133,15 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/4577
     "VUID-vkCmdClearColorImage-image-01993",
     // http://anglebug.com/4578 for next two
-    "VUID-vkCmdBlitImage-srcImage-01999",
-    "VUID-vkCmdBlitImage-filter-02001",
+    "VUID-vkCmdBlitImage-srcImage-01999", "VUID-vkCmdBlitImage-filter-02001",
     // http://anglebug.com/4579
     "VUID-vkCmdBlitImage-dstImage-02000",
     // http://anglebug.com/4580
     "VUID-vkCmdResolveImage-dstImage-02003",
     // http://anglebug.com/4583
     "VUID-VkGraphicsPipelineCreateInfo-blendEnable-02023",
-};
+    "UNASSIGNED-CoreValidation-DrawState-DescriptorSetNotUpdated",
+    "VUID-VkDescriptorImageInfo-imageView-00343"};
 
 // Suppress validation errors that are known
 //  return "true" if given code/prefix/message is known, else return "false"
