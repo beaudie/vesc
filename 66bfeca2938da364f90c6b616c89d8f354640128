@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e804145_ef2e04af",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4248,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-23T17:15:10Z",
+      "side": 1,
+      "message": "Could you also add assert here that outsideRPCommand is empty, as Jamie suggested?",
+      "range": {
+        "startLine": 4248,
+        "startChar": 14,
+        "endLine": 4248,
+        "endChar": 38
+      },
+      "revId": "66bfeca2938da364f90c6b616c89d8f354640128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a484be62_e62c872f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4280,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-23T17:15:10Z",
+      "side": 1,
+      "message": "nit: inside flushToPrimary could we assert renderPass is not empty instead of take early return? Technically if we take early return there, mHasPrimaryCommands should not set true. And we already checked it is not empty here on line 4250, so it is a waste anyway.",
+      "range": {
+        "startLine": 4280,
+        "startChar": 14,
+        "endLine": 4280,
+        "endChar": 48
+      },
+      "revId": "66bfeca2938da364f90c6b616c89d8f354640128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
