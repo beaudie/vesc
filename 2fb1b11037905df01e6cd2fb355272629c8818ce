@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d26897e2_2a399716",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4241,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T18:17:59Z",
+      "side": 1,
+      "message": "This makes certain that any outstanding outsideRP commands are flushed prior to insideRP commands.",
+      "revId": "2fb1b11037905df01e6cd2fb355272629c8818ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa61ef49_1e638cb2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4614,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T18:17:59Z",
+      "side": 1,
+      "message": "Should never get here if there aren\u0027t insideRP commands to flush.",
+      "revId": "2fb1b11037905df01e6cd2fb355272629c8818ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

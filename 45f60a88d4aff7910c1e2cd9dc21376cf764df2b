@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9a1ca8e_5cc5a24c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T18:17:59Z",
+      "side": 1,
+      "message": "Moved to private until I can kill it.",
+      "revId": "45f60a88d4aff7910c1e2cd9dc21376cf764df2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

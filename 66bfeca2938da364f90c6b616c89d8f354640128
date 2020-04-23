@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a4f04d2b_e83f8463",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4248,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T18:17:59Z",
+      "side": 1,
+      "message": "That assert fires due to contextVk-\u003eonImageWrite() in ImageHelper::flushedStagedUpdates() writing into the outsideRP cmd buffer and then onBufferRead() is called which calls endRP().\n\nAs an alternative I\u0027ve added flushOutsideRP() call below when mRenderPassCommands is not empty().",
+      "parentUuid": "2e804145_ef2e04af",
+      "range": {
+        "startLine": 4248,
+        "startChar": 14,
+        "endLine": 4248,
+        "endChar": 38
+      },
+      "revId": "66bfeca2938da364f90c6b616c89d8f354640128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a484be62_e62c872f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "66bfeca2938da364f90c6b616c89d8f354640128",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50449d72_8709e3cd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4280,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T18:17:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a484be62_e62c872f",
+      "range": {
+        "startLine": 4280,
+        "startChar": 14,
+        "endLine": 4280,
+        "endChar": 48
+      },
+      "revId": "66bfeca2938da364f90c6b616c89d8f354640128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

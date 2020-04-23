@@ -22,6 +22,30 @@
       "revId": "6fc0066aad6772ff6173bf0f58e488f7ebdda1a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1031530_5828ad48",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T18:17:59Z",
+      "side": 0,
+      "message": "Made private in this CL. Trying to kill it in another CL where I\u0027m moving dbg utils label to SecondaryCommandBuffer.",
+      "parentUuid": "1300ea10_44b7d5e4",
+      "range": {
+        "startLine": 104,
+        "startChar": 25,
+        "endLine": 104,
+        "endChar": 56
+      },
+      "revId": "6fc0066aad6772ff6173bf0f58e488f7ebdda1a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
