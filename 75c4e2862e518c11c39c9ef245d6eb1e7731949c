@@ -57,6 +57,24 @@
       "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c075e947_b9020dc9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-23T02:35:52Z",
+      "side": 1,
+      "message": "@Charlie, I think the idea was that even if the RP has started, you could go back and record to the outside RP CB (which is run before the RP) as a way of reordering commands without having to break the RP. That\u0027s why you could still record to outside RP CB after the RP has started.",
+      "parentUuid": "8ee7ecc8_46b21996",
+      "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
