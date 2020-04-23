@@ -93,6 +93,24 @@
       "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ddc2e74_5c758ce8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-23T08:59:42Z",
+      "side": 1,
+      "message": "~~~On the contrary, I think they _do_ need to go before the RP. For example, if the RP is open and a texture is to be used but it has staged updates, then flushing those updates can be moved before the RP (in the outside RP CB).~~~\n\nBut now that I look again at the code, it seems like the contrary is true, as in the outside RP CB must be executed *after* the RP. For example onBufferRead/Write first close the render pass, then flush outside RP CB (which implies that the opposite of what I said above is true). Same with ImageHelper::flushAllStagedUpdates calling endRenderPassAndGetCommandBuffer which closes the RP then returns the outside RP CB for further recording.\n\nOn the other hand, if outside RP CB needs to be run after RP, why did `flushAndGetPrimaryCommandBuffer()` flush them in the opposite order? And why doesn\u0027t `startRenderPass()` flush outside RP CB?\n\n\u003e My understanding is that the outside RP commands are considered as no dependency between current open RP.\n\nIf that were true, why would TextureVk::ensureImageInitializedImpl for example have to end the RP? There are more examples like that.",
+      "parentUuid": "d8cd86c2_8eff4de2",
+      "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
