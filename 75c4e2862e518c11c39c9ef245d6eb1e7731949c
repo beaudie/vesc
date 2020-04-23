@@ -75,6 +75,24 @@
       "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8cd86c2_8eff4de2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-23T02:54:16Z",
+      "side": 1,
+      "message": "Right. I think my question here really is the part you said above that \"...outside RP CB (which is run before the RP)...\". My understanding is that the outside RP commands are considered as no dependency between current open RP. They could go either before or after RP during flush. If they must flush before RP commands, then why not move it to endRenderPass() function so that you ensure outsideRPCommands always flushed to primary before RP commands.",
+      "parentUuid": "c075e947_b9020dc9",
+      "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
