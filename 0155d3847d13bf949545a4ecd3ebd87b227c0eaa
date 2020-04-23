@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4df9ac3_4adbd548",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T19:54:41Z",
+      "side": 1,
+      "message": "Would prefer to keep this code as-is and guard it here with \"#if defined(ANGLE_SHARED_LIBVULKAN)\"",
+      "revId": "0155d3847d13bf949545a4ecd3ebd87b227c0eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5d801b3_501d00dc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T19:54:41Z",
+      "side": 1,
+      "message": "Would prefer to keep this code as-is and guard it here with \"#if defined(ANGLE_SHARED_LIBVULKAN)\"",
+      "revId": "0155d3847d13bf949545a4ecd3ebd87b227c0eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e43a86e3_904c56a5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T19:54:41Z",
+      "side": 1,
+      "message": "Would like to see the \"#if !defined(ANGLE_SHARED_LIBVULKAN)\" guarding this call-site instead of the function itself. Same for all of the new Init*Functions() calls below.",
+      "revId": "0155d3847d13bf949545a4ecd3ebd87b227c0eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68aa88ec_fdbf6fd6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T19:54:41Z",
+      "side": 1,
+      "message": "Would prefer to keep this code as-is and guard it here with \"#if defined(ANGLE_SHARED_LIBVULKAN)\"",
+      "revId": "0155d3847d13bf949545a4ecd3ebd87b227c0eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52979c67_5bab46d8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T19:54:41Z",
+      "side": 1,
+      "message": "Would prefer to guard based on \"#if defined(ANGLE_SHARED_LIBVULKAN)\" at the call-site instead of in these functions.",
+      "range": {
+        "startLine": 2105,
+        "startChar": 0,
+        "endLine": 2129,
+        "endChar": 0
+      },
+      "revId": "0155d3847d13bf949545a4ecd3ebd87b227c0eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1246f0f_683e2b54",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T19:54:41Z",
+      "side": 1,
+      "message": "The intention of the \"IfNeeded()\" in the name here is that volk is only reloaded if that\u0027s needed due to a change in the underlying vulkan device or instance.\n\nYou\u0027ve transitioned \"IfNeeded()\" to mean \"If we\u0027re using volk() instead of statically linking.\" I\u0027d prefer to keep things as-is and guards the volk calls so that they\u0027re simply not made in the case of static linking.\n\nThere\u0027s not too many volk call sites, so I don\u0027t think it\u0027s a big difference in code size either way, but avoiding the calls altogether makes more sense to me from a correctness standpoint.",
+      "revId": "0155d3847d13bf949545a4ecd3ebd87b227c0eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4dd4d85_352269bd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T19:54:41Z",
+      "side": 1,
+      "message": "Similar comment in these init calls but in reverse. Would prefer to see the call-site guarded and not the function interior.",
+      "revId": "0155d3847d13bf949545a4ecd3ebd87b227c0eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
