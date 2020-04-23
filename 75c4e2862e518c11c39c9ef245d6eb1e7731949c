@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3ade5e78_a3592d1c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-23T15:34:13Z",
+      "side": 1,
+      "message": "Chatted with Tobin: I recommend moving this to endRenderPass and flushOutsideRPCommands when we actually write command data to the primary.",
+      "parentUuid": "5be51c14_a11dd292",
+      "range": {
+        "startLine": 636,
+        "startChar": 8,
+        "endLine": 636,
+        "endChar": 27
+      },
+      "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be40f268_e6cd400e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 6
@@ -108,6 +132,24 @@
       "side": 1,
       "message": "~~~On the contrary, I think they _do_ need to go before the RP. For example, if the RP is open and a texture is to be used but it has staged updates, then flushing those updates can be moved before the RP (in the outside RP CB).~~~\n\nBut now that I look again at the code, it seems like the contrary is true, as in the outside RP CB must be executed *after* the RP. For example onBufferRead/Write first close the render pass, then flush outside RP CB (which implies that the opposite of what I said above is true). Same with ImageHelper::flushAllStagedUpdates calling endRenderPassAndGetCommandBuffer which closes the RP then returns the outside RP CB for further recording.\n\nOn the other hand, if outside RP CB needs to be run after RP, why did `flushAndGetPrimaryCommandBuffer()` flush them in the opposite order? And why doesn\u0027t `startRenderPass()` flush outside RP CB?\n\n\u003e My understanding is that the outside RP commands are considered as no dependency between current open RP.\n\nIf that were true, why would TextureVk::ensureImageInitializedImpl for example have to end the RP? There are more examples like that.",
       "parentUuid": "d8cd86c2_8eff4de2",
+      "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c334c135_8d0d10c3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-23T15:34:13Z",
+      "side": 1,
+      "message": "\u003e you could still record to outside RP CB after the RP has started.\n\nThis is unintentional. The simplified non-graph recording wants you to record and flush immediately. You don\u0027t go back and reorder commands.\n\nWe shouldn\u0027t need to flush the outside RP commands here because either the current outside commands should be empty or the RP should be empty. Probably we should make that an ASSERT with a comment. Tobin and I chatted so there\u0027s a few things left we can try before landing this code.",
+      "parentUuid": "3ddc2e74_5c758ce8",
       "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
