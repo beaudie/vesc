@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "dafa56dd_cbe931ae",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4241,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-23T19:46:11Z",
+      "side": 1,
+      "message": "Damn, it cut off my comment. Was going to say:\n\nAfter that you can change this line to ASSERT(mOutsideRenderPassCommands.empty());.",
+      "parentUuid": "1ce62d4f_47cba644",
+      "revId": "2fb1b11037905df01e6cd2fb355272629c8818ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa61ef49_1e638cb2",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 13
