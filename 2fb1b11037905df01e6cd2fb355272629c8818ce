@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "cd58b415_2e482e4a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4241,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-23T19:01:24Z",
+      "side": 1,
+      "message": "Per the discussion, if the current design is to never have two command buffers open at  the same time, then you shouldn\u0027t need this call here, right?",
+      "parentUuid": "1574f196_a144a725",
+      "revId": "2fb1b11037905df01e6cd2fb355272629c8818ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa61ef49_1e638cb2",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 13
