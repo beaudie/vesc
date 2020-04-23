@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25934de9_4173fa49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-23T15:04:53Z",
+      "side": 1,
+      "message": "tiny nit: can you wrap the commit message 70 characters?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 7
+      },
+      "revId": "ef2a9fa0f68e57be68a5a01eb728feec7b2f9c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d3cd58f_2eec5db4",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-23T15:04:53Z",
+      "side": 1,
+      "message": "use vk::DeviceScoped for waitSemaphore so you can use ANGLE_TRY for calling flushImpl.",
+      "range": {
+        "startLine": 289,
+        "startChar": 8,
+        "endLine": 289,
+        "endChar": 21
+      },
+      "revId": "ef2a9fa0f68e57be68a5a01eb728feec7b2f9c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c80103d_8c480694",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-23T15:04:53Z",
+      "side": 1,
+      "message": "nit: initialize mSyncHelper to nullptr",
+      "range": {
+        "startLine": 398,
+        "startChar": 11,
+        "endLine": 398,
+        "endChar": 20
+      },
+      "revId": "ef2a9fa0f68e57be68a5a01eb728feec7b2f9c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47059503_3f966a08",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-23T15:04:53Z",
+      "side": 1,
+      "message": "nit: use SafeDelete.",
+      "range": {
+        "startLine": 402,
+        "startChar": 4,
+        "endLine": 402,
+        "endChar": 11
+      },
+      "revId": "ef2a9fa0f68e57be68a5a01eb728feec7b2f9c4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
