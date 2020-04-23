@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "02193990_8b9ab788",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4248,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T19:00:04Z",
+      "side": 1,
+      "message": "That assert fails. Example call stack:\n\n[ RUN      ] dEQP.GLES2/functional_texture_mipmap_2d_affine_linear_nearest_mirror\ndEQP-GLES2.functional.texture.mipmap.2d.affine.linear_nearest_mirror\n../../src/tests/deqp_support/angle_deqp_gtest.cpp(45): error: Failed\nendRenderPassAndGetCommandBuffer(635):  ! Assert failed in endRenderPassAndGetCommandBuffer (../../src\\libANGLE/renderer/vulkan/ContextVk.h:635): !mRenderPassCommands.empty() || !mOutsideRenderPassCommands.empty()\nFATAL: endRenderPassAndGetCommandBuffer(635):   ! Assert failed in endRenderPassAndGetCommandBuffer (../../src\\libANGLE/renderer/vulkan/ContextVk.h:635): !mRenderPassCommands.empty() || !mOutsideRenderPassCommands.empty()\nNo results file specified.\n\nCaught exception 3221225477 EXCEPTION_ACCESS_VIOLATION\nBacktrace:\n    gl::LogMessage::~LogMessage (C:\\src\\angle\\src\\common\\debug.cpp:183)\n    rx::ContextVk::endRenderPassAndGetCommandBuffer (C:\\src\\angle\\src\\libANGLE\\renderer\\vulkan\\ContextVk.h:636)\n    rx::ContextVk::flushAndBeginRenderPass (C:\\src\\angle\\src\\libANGLE\\renderer\\vulkan\\ContextVk.cpp:4200)\n    rx::FramebufferVk::startNewRenderPass (C:\\src\\angle\\src\\libANGLE\\renderer\\vulkan\\FramebufferVk.cpp:1391)\n    rx::ContextVk::startRenderPass (C:\\src\\angle\\src\\libANGLE\\renderer\\vulkan\\ContextVk.cpp:4219)\n    rx::ContextVk::clearWithRenderPassOp (C:\\src\\angle\\src\\libANGLE\\renderer\\vulkan\\ContextVk.cpp:2277)\n    rx::FramebufferVk::clearImpl (C:\\src\\angle\\src\\libANGLE\\renderer\\vulkan\\FramebufferVk.cpp:291)\n    rx::FramebufferVk::clear (C:\\src\\angle\\src\\libANGLE\\renderer\\vulkan\\FramebufferVk.cpp:178)\n    gl::Framebuffer::clear (C:\\src\\angle\\src\\libANGLE\\Framebuffer.cpp:1526)\n    gl::Context::clear (C:\\src\\angle\\src\\libANGLE\\Context.cpp:3635)\n    gl::Clear (C:\\src\\angle\\src\\libGLESv2\\entry_points_gles_2_0_autogen.cpp:368)\n    deqp::gles2::TestCaseWrapper::iterate (C:\\src\\angle\\third_party\\VK-GL-CTS\\src\\modules\\gles2\\tes2TestPackage.cpp:91)\n    tcu::RandomOrderExecutor::executeInner (C:\\src\\angle\\src\\tests\\deqp_support\\tcuRandomOrderExecutor.cpp:229)\n    tcu::RandomOrderExecutor::execute (C:\\src\\angle\\src\\tests\\deqp_support\\tcuRandomOrderExecutor.cpp:184)\n    deqp_libtester_run (C:\\src\\angle\\src\\tests\\deqp_support\\angle_deqp_libtester_main.cpp:181)\n    angle::`anonymous namespace\u0027::dEQPTest\u003c0\u003e::runTest (C:\\src\\angle\\src\\tests\\deqp_support\\angle_deqp_gtest.cpp:384)\n    angle::`anonymous namespace\u0027::dEQP_GLES2_Test::TestBody (C:\\src\\angle\\src\\tests\\deqp_support\\angle_deqp_gtest.cpp:551)\n    testing::internal::HandleExceptionsInMethodIfSupported\u003ctesting::Test,void\u003e (C:\\src\\angle\\third_party\\googletest\\src\\googletest\\src\\gtest.cc:2493)\n    testing::Test::Run (C:\\src\\angle\\third_party\\googletest\\src\\googletest\\src\\gtest.cc:2515)\n    testing::TestInfo::Run (C:\\src\\angle\\third_party\\googletest\\src\\googletest\\src\\gtest.cc:2687)\n    testing::TestSuite::Run (C:\\src\\angle\\third_party\\googletest\\src\\googletest\\src\\gtest.cc:2815)\n    testing::internal::UnitTestImpl::RunAllTests (C:\\src\\angle\\third_party\\googletest\\src\\googletest\\src\\gtest.cc:5337)\n    testing::internal::HandleExceptionsInMethodIfSupported\u003ctesting::internal::UnitTestImpl,bool\u003e (C:\\src\\angle\\third_party\\googletest\\src\\googletest\\src\\gtest.cc:2491)\n    testing::UnitTest::Run (C:\\src\\angle\\third_party\\googletest\\src\\googletest\\src\\gtest.cc:4925)\n    RUN_ALL_TESTS (C:\\src\\angle\\third_party\\googletest\\src\\googletest\\include\\gtest\\gtest.h:2473)\n    angle::TestSuite::run (C:\\src\\angle\\src\\tests\\test_utils\\runner\\TestSuite.cpp:1005)\n    main (C:\\src\\angle\\src\\tests\\angle_deqp_tests_main.cpp:24)\n    invoke_main (d:\\agent\\_work\\3\\s\\src\\vctools\\crt\\vcstartup\\src\\startup\\exe_common.inl:79)\n    __scrt_common_main_seh (d:\\agent\\_work\\3\\s\\src\\vctools\\crt\\vcstartup\\src\\startup\\exe_common.inl:288)\n    __scrt_common_main (d:\\agent\\_work\\3\\s\\src\\vctools\\crt\\vcstartup\\src\\startup\\exe_common.inl:331)\n    mainCRTStartup (d:\\agent\\_work\\3\\s\\src\\vctools\\crt\\vcstartup\\src\\startup\\exe_main.cpp:17)\n    BaseThreadInitThunk - 00007FFEA50A4034 (KERNEL32): (filename not available)\n    RtlUserThreadStart - 00007FFEA70B3691 (ntdll): (filename not available)",
+      "parentUuid": "4d67b891_895060c8",
+      "range": {
+        "startLine": 4248,
+        "startChar": 14,
+        "endLine": 4248,
+        "endChar": 38
+      },
+      "revId": "66bfeca2938da364f90c6b616c89d8f354640128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a484be62_e62c872f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8

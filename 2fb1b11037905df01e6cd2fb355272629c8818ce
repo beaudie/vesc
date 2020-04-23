@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2dd7cbf8_86a047b5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4241,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T19:00:04Z",
+      "side": 1,
+      "message": "I can kill the flush here and just have it at the start of flushAndBeginRenderPass() and I believe the CL is still clean. There is just at least one other case, noted with comment in my last update, that will call endRenderPass() with an image barrier in outsideRP commands. Should any such code paths be updated and we should assert here that outsideRP commands is empty?",
+      "parentUuid": "1574f196_a144a725",
+      "revId": "2fb1b11037905df01e6cd2fb355272629c8818ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa61ef49_1e638cb2",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 13
