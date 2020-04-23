@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "4301d6d0_94f16139",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T16:21:31Z",
+      "side": 1,
+      "message": "flushOutsideRenderPassCommands(); already sets mHasPrimaryCommands \u003d true when it has commands so added a similar line to endRenderPass() when RP cmd buffer has commands and they\u0027re flushed to primary.\nKilled this line here.",
+      "parentUuid": "3ade5e78_a3592d1c",
+      "range": {
+        "startLine": 636,
+        "startChar": 8,
+        "endLine": 636,
+        "endChar": 27
+      },
+      "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be40f268_e6cd400e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 6
@@ -150,6 +174,24 @@
       "side": 1,
       "message": "\u003e you could still record to outside RP CB after the RP has started.\n\nThis is unintentional. The simplified non-graph recording wants you to record and flush immediately. You don\u0027t go back and reorder commands.\n\nWe shouldn\u0027t need to flush the outside RP commands here because either the current outside commands should be empty or the RP should be empty. Probably we should make that an ASSERT with a comment. Tobin and I chatted so there\u0027s a few things left we can try before landing this code.",
       "parentUuid": "3ddc2e74_5c758ce8",
+      "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "238a8180_1e828d29",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T16:21:31Z",
+      "side": 1,
+      "message": "I ran a separate CL that excludes the flushOutsideRenderPassCommands() call and it fails:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2161949\n\nQuick check of fails seems to be all invalid image layout errors, implying that image layout transitions are outstanding in the outside RP CmdBuffer and need to be executed before the RP cmd buffer.",
+      "parentUuid": "c334c135_8d0d10c3",
       "revId": "75c4e2862e518c11c39c9ef245d6eb1e7731949c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
