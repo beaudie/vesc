@@ -35,6 +35,7 @@ constexpr std::array<GLfloat, 2> kQuadRadius      = {0.25f * kTileSize[0], 0.25f
 constexpr std::array<uint32_t, 2> kPixelCheckSize = {
     static_cast<uint32_t>(kQuadRadius[0] * kWidth),
     static_cast<uint32_t>(kQuadRadius[1] * kHeight)};
+constexpr GLenum kBufferDataUsage[] = {GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW};
 
 constexpr std::array<GLfloat, 2> GetTileCenter(uint32_t x, uint32_t y)
 {
@@ -62,9 +63,38 @@ enum class DrawCallVariants
     DrawElementsInstancedBaseVertexBaseInstance
 };
 
+using DrawBaseVertexVariantsTestParams = std::tuple<angle::PlatformParameters, GLenum>;
+
+std::string DrawBaseVertexVariantsTestPrint(
+    const ::testing::TestParamInfo<DrawBaseVertexVariantsTestParams> &paramsInfo)
+{
+    const DrawBaseVertexVariantsTestParams &params = paramsInfo.param;
+    std::ostringstream out;
+
+    out << std::get<0>(params) << '_';
+
+    switch (std::get<1>(params))
+    {
+        case GL_STATIC_DRAW:
+            out << "SATIC_DRAW";
+            break;
+        case GL_DYNAMIC_DRAW:
+            out << "DYNAMIC_DRAW";
+            break;
+        case GL_STREAM_DRAW:
+            out << "STREAM_DRAW";
+            break;
+        default:
+            out << "UPDATE_THIS_SWITCH";
+            break;
+    }
+
+    return out.str();
+}
+
 // These tests check correctness of variants of baseVertex draw calls from different extensions
 
-class DrawBaseVertexVariantsTest : public ANGLETest
+class DrawBaseVertexVariantsTest : public ANGLETestWithParam<DrawBaseVertexVariantsTestParams>
 {
   protected:
     DrawBaseVertexVariantsTest()
@@ -173,23 +203,24 @@ void main()
                              GLBuffer &vertexColorBuffer,
                              GLBuffer &indexBuffer)
     {
+        GLenum usage = std::get<1>(GetParam());
+
         glBindBuffer(GL_ARRAY_BUFFER, vertexColorBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte) * mVertexColors.size(), mVertexColors.data(),
-                     GL_STATIC_DRAW);
+                     usage);
 
         glEnableVertexAttribArray(mColorLoc);
         glVertexAttribPointer(mColorLoc, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0);
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexPositionBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mVertices.size(), mVertices.data(),
-                     GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mVertices.size(), mVertices.data(), usage);
 
         glEnableVertexAttribArray(mPositionLoc);
         glVertexAttribPointer(mPositionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * mIndices.size(), mIndices.data(),
-                     GL_STATIC_DRAW);
+                     usage);
 
         ASSERT_GL_NO_ERROR();
     }
@@ -365,6 +396,12 @@ TEST_P(DrawBaseVertexVariantsTest, DrawElementsInstancedBaseVertexBaseInstance)
     doDrawElementsBaseVertexVariants(DrawCallVariants::DrawElementsInstancedBaseVertexBaseInstance);
 }
 
-ANGLE_INSTANTIATE_TEST_ES3(DrawBaseVertexVariantsTest);
+ANGLE_INSTANTIATE_TEST_COMBINE_1(DrawBaseVertexVariantsTest,
+                                 DrawBaseVertexVariantsTestPrint,
+                                 testing::ValuesIn(kBufferDataUsage),
+                                 ES3_D3D11(),
+                                 ES3_OPENGL(),
+                                 ES3_OPENGLES(),
+                                 ES3_VULKAN());
 
 }  // namespace
