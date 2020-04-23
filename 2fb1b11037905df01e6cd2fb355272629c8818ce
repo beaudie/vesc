@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "9476c728_e3b237a0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4241,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-23T21:13:26Z",
+      "side": 1,
+      "message": "Yes, that was my rev9 patch code that I changed to accommodate a different recommended assert that was firing. I\u0027ve gone back to the rev9 patch with this assert.",
+      "parentUuid": "dafa56dd_cbe931ae",
+      "revId": "2fb1b11037905df01e6cd2fb355272629c8818ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa61ef49_1e638cb2",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 13
