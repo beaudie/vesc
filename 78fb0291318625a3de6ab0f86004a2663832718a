@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc6f0804_88c664c2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 6505,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-23T19:48:58Z",
+      "side": 1,
+      "message": "Can you move this caching to be in gl::StateCache? That\u0027s the general place for these things to live. We already get a notification in there when certain things change (e.g. onProgramExecutableChange).",
+      "range": {
+        "startLine": 6505,
+        "startChar": 4,
+        "endLine": 6505,
+        "endChar": 27
+      },
+      "revId": "78fb0291318625a3de6ab0f86004a2663832718a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a4be56a_81441bb7",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-23T19:48:58Z",
+      "side": 1,
+      "message": "This GLES1 renderer check should be baked into the bool in StateCache to streamline this function as much as possible.",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 0
+      },
+      "revId": "78fb0291318625a3de6ab0f86004a2663832718a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
