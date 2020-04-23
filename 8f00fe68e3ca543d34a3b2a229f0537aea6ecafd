@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "ea9ef090_7cf90f88",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-04-23T17:44:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64ac5c81_086f91f1",
+      "range": {
+        "startLine": 233,
+        "startChar": 11,
+        "endLine": 233,
+        "endChar": 34
+      },
+      "revId": "8f00fe68e3ca543d34a3b2a229f0537aea6ecafd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7fa14f5e_b16ccb87",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 1
@@ -62,6 +86,24 @@
       "revId": "8f00fe68e3ca543d34a3b2a229f0537aea6ecafd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "786b63c9_308c6297",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-04-23T17:44:34Z",
+      "side": 1,
+      "message": "Changed the logic to disable. No longer doing this check here.",
+      "parentUuid": "7fa14f5e_b16ccb87",
+      "revId": "8f00fe68e3ca543d34a3b2a229f0537aea6ecafd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
