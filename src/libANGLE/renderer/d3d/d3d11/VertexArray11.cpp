@@ -135,7 +135,7 @@ angle::Result VertexArray11::syncStateForDraw(const gl::Context *context,
     const gl::State &glState   = context->getState();
     const gl::Program *program = glState.getProgram();
     ASSERT(program);
-    const gl::ProgramExecutable &executable = program->getExecutable();
+    const gl::ProgramExecutable *executable = program->getExecutable();
 
     mAppliedNumViewsToDivisor = (program->usesMultiview() ? program->getNumViews() : 1);
 

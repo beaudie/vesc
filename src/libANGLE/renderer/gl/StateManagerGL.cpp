@@ -1982,7 +1982,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 }
 
                 if (!program ||
-                    !program->getExecutable().hasLinkedShaderStage(gl::ShaderType::Compute))
+                    !program->getExecutable()->hasLinkedShaderStage(gl::ShaderType::Compute))
                 {
                     propagateProgramToVAO(program,
                                           GetImplAs<VertexArrayGL>(state.getVertexArray()));
@@ -2322,7 +2322,7 @@ void StateManagerGL::propagateProgramToVAO(const gl::Program *program, VertexArr
     if (program)
     {
         vao->applyActiveAttribLocationsMask(
-            program->getExecutable().getActiveAttribLocationsMask());
+            program->getExecutable()->getActiveAttribLocationsMask());
     }
 }
 
