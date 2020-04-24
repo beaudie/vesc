@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88004aa1_868b7532",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-24T18:27:38Z",
+      "side": 1,
+      "message": "Instead of adding an initEmptyCommand() function, have you tried to add an empty struct?\nstruct EmptyParams\n{\n    uint32_t pad[0];\n}",
+      "range": {
+        "startLine": 745,
+        "startChar": 22,
+        "endLine": 745,
+        "endChar": 38
+      },
+      "revId": "b78c252bb095b7e79900ce17ea0326c7f5736917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
