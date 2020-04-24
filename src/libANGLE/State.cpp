@@ -1778,13 +1778,13 @@ angle::Result State::setProgram(const Context *context, Program *newProgram)
 
         if (mProgram)
         {
-            mExecutable = &mProgram->getExecutable();
+            mExecutable = mProgram->getExecutable();
             newProgram->addRef();
             ANGLE_TRY(onProgramExecutableChange(context, newProgram));
         }
         else if (mProgramPipeline.get())
         {
-            mExecutable = &mProgramPipeline->getExecutable();
+            mExecutable = mProgramPipeline->getExecutable();
         }
 
         // Note that rendering is undefined if glUseProgram(0) is called. But ANGLE will generate
@@ -1843,7 +1843,7 @@ angle::Result State::setProgramPipelineBinding(const Context *context, ProgramPi
 
     if (mProgramPipeline.get())
     {
-        unsetActiveTextures(mProgramPipeline->getExecutable().getActiveSamplersMask());
+        unsetActiveTextures(mProgramPipeline->getExecutable()->getActiveSamplersMask());
     }
 
     mProgramPipeline.set(context, pipeline);
@@ -1855,7 +1855,7 @@ angle::Result State::setProgramPipelineBinding(const Context *context, ProgramPi
     {
         if (mProgramPipeline.get())
         {
-            mExecutable = &mProgramPipeline->getExecutable();
+            mExecutable = mProgramPipeline->getExecutable();
         }
         else
         {
@@ -3244,9 +3244,9 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
     }
 
     // Set any bound textures.
-    const ProgramExecutable &executable        = program->getExecutable();
-    const ActiveTextureTypeArray &textureTypes = executable.getActiveSamplerTypes();
-    for (size_t textureIndex : executable.getActiveSamplersMask())
+    const ProgramExecutable *executable        = program->getExecutable();
+    const ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
+    for (size_t textureIndex : executable->getActiveSamplersMask())
     {
         TextureType type = textureTypes[textureIndex];
 
@@ -3258,7 +3258,7 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
         updateActiveTexture(context, textureIndex, texture);
     }
 
-    for (size_t imageUnitIndex : executable.getActiveImagesMask())
+    for (size_t imageUnitIndex : executable->getActiveImagesMask())
     {
         Texture *image = mImageUnits[imageUnitIndex].texture.get();
         if (!image)
@@ -3290,8 +3290,8 @@ angle::Result State::onProgramPipelineExecutableChange(const Context *context,
 
     // Set any bound textures.
     const ActiveTextureTypeArray &textureTypes =
-        programPipeline->getExecutable().getActiveSamplerTypes();
-    for (size_t textureIndex : programPipeline->getExecutable().getActiveSamplersMask())
+        programPipeline->getExecutable()->getActiveSamplerTypes();
+    for (size_t textureIndex : programPipeline->getExecutable()->getActiveSamplersMask())
     {
         TextureType type = textureTypes[textureIndex];
 
@@ -3303,7 +3303,7 @@ angle::Result State::onProgramPipelineExecutableChange(const Context *context,
         updateActiveTexture(context, textureIndex, texture);
     }
 
-    for (size_t imageUnitIndex : programPipeline->getExecutable().getActiveImagesMask())
+    for (size_t imageUnitIndex : programPipeline->getExecutable()->getActiveImagesMask())
     {
         Texture *image = mImageUnits[imageUnitIndex].texture.get();
         if (!image)
