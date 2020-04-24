@@ -34,6 +34,29 @@
       "revId": "ead6d5fa71a95573dddf7409f24f4b9e92f848d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b152f106_bac5d648",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-24T19:31:57Z",
+      "side": 1,
+      "message": "This disable flag adds some extra conditions to this file that add a bit of technical complexity. I think we can remove it. If you totally get rid of the flag and use the mAlignment normally, etc, what tests start to fail?",
+      "range": {
+        "startLine": 467,
+        "startChar": 6,
+        "endLine": 467,
+        "endChar": 27
+      },
+      "revId": "ead6d5fa71a95573dddf7409f24f4b9e92f848d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
