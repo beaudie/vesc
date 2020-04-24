@@ -444,6 +444,7 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
     : SurfaceVk(surfaceState),
       mNativeWindowType(window),
       mSurface(VK_NULL_HANDLE),
+      mDisplayVk(nullptr),
       mSwapchain(VK_NULL_HANDLE),
       mSwapchainPresentMode(VK_PRESENT_MODE_FIFO_KHR),
       mDesiredSwapchainPresentMode(VK_PRESENT_MODE_FIFO_KHR),
@@ -520,6 +521,7 @@ egl::Error WindowSurfaceVk::initialize(const egl::Display *display)
 
 angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 {
+    mDisplayVk           = displayVk;
     RendererVk *renderer = displayVk->getRenderer();
 
     renderer->reloadVolkIfNeeded();
@@ -937,7 +939,6 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
         contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled)
     {
         gl::Extents swapchainExtents(getWidth(), getHeight(), 1);
-
         gl::Extents currentExtents;
         ANGLE_TRY(getCurrentWindowSize(contextVk, &currentExtents));
 
@@ -1395,12 +1396,34 @@ void WindowSurfaceVk::setSwapInterval(EGLint interval)
 
 EGLint WindowSurfaceVk::getWidth() const
 {
-    return static_cast<EGLint>(mColorRenderTarget.getExtents().width);
+    EGLint value = 0;
+    if (mDisplayVk)
+    {
+        const VkPhysicalDevice &physicalDevice = mDisplayVk->getRenderer()->getPhysicalDevice();
+        VkSurfaceCapabilitiesKHR surfaceCaps;
+        if (VK_SUCCESS ==
+            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface, &surfaceCaps))
+        {
+            value = static_cast<EGLint>(surfaceCaps.currentExtent.width);
+        }
+    }
+    return value;
 }
 
 EGLint WindowSurfaceVk::getHeight() const
 {
-    return static_cast<EGLint>(mColorRenderTarget.getExtents().height);
+    EGLint value = 0;
+    if (mDisplayVk)
+    {
+        const VkPhysicalDevice &physicalDevice = mDisplayVk->getRenderer()->getPhysicalDevice();
+        VkSurfaceCapabilitiesKHR surfaceCaps;
+        if (VK_SUCCESS ==
+            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface, &surfaceCaps))
+        {
+            value = static_cast<EGLint>(surfaceCaps.currentExtent.height);
+        }
+    }
+    return value;
 }
 
 EGLint WindowSurfaceVk::isPostSubBufferSupported() const

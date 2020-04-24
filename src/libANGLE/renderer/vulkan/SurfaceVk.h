@@ -270,6 +270,7 @@ class WindowSurfaceVk : public SurfaceVk
 
     std::vector<VkPresentModeKHR> mPresentModes;
 
+    DisplayVk *mDisplayVk;
     VkSwapchainKHR mSwapchain;
     // Cached information used to recreate swapchains.
     VkPresentModeKHR mSwapchainPresentMode;         // Current swapchain mode
