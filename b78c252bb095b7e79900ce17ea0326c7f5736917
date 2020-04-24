@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fcadbb52_555961dd",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-24T19:52:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53ced34d_b812486c",
+      "revId": "b78c252bb095b7e79900ce17ea0326c7f5736917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "88004aa1_868b7532",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
         "patchSetId": 4
@@ -63,6 +81,30 @@
       "revId": "b78c252bb095b7e79900ce17ea0326c7f5736917",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ef11ea0_5970d690",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-24T19:52:14Z",
+      "side": 1,
+      "message": "Yeah, I had tried the empty struct route with existing code but that added extra size and messed up alignment. I like your suggestion, though, Shabi, thanks!",
+      "parentUuid": "654d145d_0a4fad16",
+      "range": {
+        "startLine": 745,
+        "startChar": 22,
+        "endLine": 745,
+        "endChar": 38
+      },
+      "revId": "b78c252bb095b7e79900ce17ea0326c7f5736917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
