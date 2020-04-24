@@ -264,8 +264,8 @@ ProgramVk *ProgramExecutableVk::getShaderProgram(const gl::State &glState,
 {
     if (mProgram)
     {
-        const gl::ProgramExecutable &glExecutable = mProgram->getState().getProgramExecutable();
-        if (glExecutable.hasLinkedShaderStage(shaderType))
+        const gl::ProgramExecutable *glExecutable = mProgram->getState().getProgramExecutable();
+        if (glExecutable->hasLinkedShaderStage(shaderType))
         {
             return mProgram;
         }
@@ -295,7 +295,7 @@ void ProgramExecutableVk::fillProgramStateMap(
     }
 }
 
-const gl::ProgramExecutable &ProgramExecutableVk::getGlExecutable()
+const gl::ProgramExecutable *ProgramExecutableVk::getGlExecutable()
 {
     ASSERT(mProgram || mProgramPipeline);
     if (mProgram)
@@ -431,7 +431,7 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramState &prog
         uint32_t arraySize = static_cast<uint32_t>(imageBinding.boundImageUnits.size());
 
         for (const gl::ShaderType shaderType :
-             programState.getProgramExecutable().getLinkedShaderStages())
+             programState.getProgramExecutable()->getLinkedShaderStages())
         {
             if (!imageUniform.isActive(shaderType))
             {
@@ -486,7 +486,7 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(const gl::ProgramState &pr
         }
 
         for (const gl::ShaderType shaderType :
-             programState.getProgramExecutable().getLinkedShaderStages())
+             programState.getProgramExecutable()->getLinkedShaderStages())
         {
             if (!samplerUniform.isActive(shaderType))
             {
@@ -619,8 +619,8 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
     ContextVk *contextVk                       = vk::GetImpl(glContext);
     RendererVk *renderer                       = contextVk->getRenderer();
     gl::TransformFeedback *transformFeedback   = glState.getCurrentTransformFeedback();
-    const gl::ProgramExecutable &glExecutable  = getGlExecutable();
-    const gl::ShaderBitSet &linkedShaderStages = glExecutable.getLinkedShaderStages();
+    const gl::ProgramExecutable *glExecutable  = getGlExecutable();
+    const gl::ShaderBitSet &linkedShaderStages = glExecutable->getLinkedShaderStages();
     gl::ShaderMap<const gl::ProgramState *> programStates;
     fillProgramStateMap(contextVk, &programStates);
 
@@ -644,7 +644,7 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
                                      gl_vk::kShaderStageMap[shaderType]);
         mNumDefaultUniformDescriptors++;
     }
-    bool hasVertexShader = glExecutable.hasLinkedShaderStage(gl::ShaderType::Vertex);
+    bool hasVertexShader = glExecutable->hasLinkedShaderStage(gl::ShaderType::Vertex);
     bool hasXfbVaryings =
         (programStates[gl::ShaderType::Vertex] &&
          !programStates[gl::ShaderType::Vertex]->getLinkedTransformFeedbackVaryings().empty());
@@ -703,7 +703,7 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
 
     // Driver uniforms:
     VkShaderStageFlags driverUniformsStages =
-        glExecutable.isCompute() ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_ALL_GRAPHICS;
+        glExecutable->isCompute() ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_ALL_GRAPHICS;
     vk::DescriptorSetLayoutDesc driverUniformsSetDesc =
         contextVk->getDriverUniformsDescriptorSetDesc(driverUniformsStages);
     ANGLE_TRY(renderer->getDescriptorSetLayout(
@@ -792,7 +792,7 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
                                                                            &textureSetSize, 1));
     }
 
-    mDynamicBufferOffsets.resize(glExecutable.getLinkedShaderStageCount());
+    mDynamicBufferOffsets.resize(glExecutable->getLinkedShaderStageCount());
 
     // Initialize an "empty" buffer for use with default uniform blocks where there are no uniforms,
     // or atomic counter buffer array indices that are unused.
@@ -1182,13 +1182,13 @@ angle::Result ProgramExecutableVk::updateTransformFeedbackDescriptorSet(
     gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
     ContextVk *contextVk)
 {
-    const gl::ProgramExecutable &executable = programState.getProgramExecutable();
-    ASSERT(executable.hasTransformFeedbackOutput());
+    const gl::ProgramExecutable *executable = programState.getProgramExecutable();
+    ASSERT(executable->hasTransformFeedbackOutput());
 
     ANGLE_TRY(allocateDescriptorSet(contextVk, kUniformsAndXfbDescriptorSetIndex));
 
     mDescriptorBuffersCache.clear();
-    for (const gl::ShaderType shaderType : executable.getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : executable->getLinkedShaderStages())
     {
         updateDefaultUniformsDescriptorSet(shaderType, defaultUniformBlocks, contextVk);
     }
@@ -1204,9 +1204,9 @@ void ProgramExecutableVk::updateTransformFeedbackDescriptorSetImpl(
 {
     const gl::State &glState                 = contextVk->getState();
     gl::TransformFeedback *transformFeedback = glState.getCurrentTransformFeedback();
-    const gl::ProgramExecutable &executable  = programState.getProgramExecutable();
+    const gl::ProgramExecutable *executable  = programState.getProgramExecutable();
 
-    if (!executable.hasTransformFeedbackOutput())
+    if (!executable->hasTransformFeedbackOutput())
     {
         // If xfb has no output there is no need to update descriptor set.
         return;
