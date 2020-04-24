@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc75d2ff_303f555e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-24T19:06:08Z",
+      "side": 1,
+      "message": "Why don\u0027t the sizes need to match here?",
+      "revId": "ead6d5fa71a95573dddf7409f24f4b9e92f848d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
