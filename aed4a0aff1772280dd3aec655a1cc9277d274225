@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "48e7c70a_1592cc16",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-04-24T20:08:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35cd176a_8508a5be",
+      "revId": "aed4a0aff1772280dd3aec655a1cc9277d274225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2390857c_ad135149",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "aed4a0aff1772280dd3aec655a1cc9277d274225",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b8810ae_6aed3a25",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1465,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-04-24T20:08:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2390857c_ad135149",
+      "revId": "aed4a0aff1772280dd3aec655a1cc9277d274225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "09455ce9_f49f4fd4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-04-24T20:08:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11e18ef2_0a24dd81",
+      "range": {
+        "startLine": 176,
+        "startChar": 22,
+        "endLine": 176,
+        "endChar": 45
+      },
+      "revId": "aed4a0aff1772280dd3aec655a1cc9277d274225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5be2cf5_987190bc",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "69b6d33b_8e8e9d7c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3961,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-04-24T20:08:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5be2cf5_987190bc",
+      "range": {
+        "startLine": 3961,
+        "startChar": 35,
+        "endLine": 3961,
+        "endChar": 43
+      },
+      "revId": "aed4a0aff1772280dd3aec655a1cc9277d274225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2bf7b31d_c638efea",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -93,6 +177,30 @@
       "writtenOn": "2020-04-19T05:06:25Z",
       "side": 1,
       "message": "Can both views be used at the same time? If not, would it be ok if the views are recreated when respecifying the image? I imagine DIRTY_BIT_SRGB_OVERRIDE is likely a one time toggle, so keeping both views alive is probably pointless. The code would look nicer too.",
+      "range": {
+        "startLine": 1238,
+        "startChar": 0,
+        "endLine": 1239,
+        "endChar": 38
+      },
+      "revId": "aed4a0aff1772280dd3aec655a1cc9277d274225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0dce4df_975a9e83",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-04-24T20:08:06Z",
+      "side": 1,
+      "message": "While that is the case for EXT_texture_format_sRGB_override, this design will become more important for EXT_texture_sRGB_decode, in which both views can be used at the same time.\nThis is because srgb_decode allows the srgb state to be controlled by sampler objects as well as texture state, so a texture may be used in one way but have that state overridden by a sampler. Srgb_override only requires this to be controlled by texture state.\n\nIf we were to implement this in the minimal way required for srgb_override, we would have to redo this logic for srgb_decode.",
+      "parentUuid": "2bf7b31d_c638efea",
       "range": {
         "startLine": 1238,
         "startChar": 0,
