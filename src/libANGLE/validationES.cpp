@@ -460,8 +460,8 @@ bool ValidateVertexShaderAttributeTypeMatch(const Context *context)
     vaoAttribTypeBits |= (~vaoAttribEnabledMask & stateCurrentValuesTypeBits);
 
     return ValidateComponentTypeMasks(
-        program->getExecutable().getAttributesTypeMask().to_ulong(), vaoAttribTypeBits,
-        program->getExecutable().getAttributesMask().to_ulong(), 0xFFFF);
+        program->getExecutable()->getAttributesTypeMask().to_ulong(), vaoAttribTypeBits,
+        program->getExecutable()->getAttributesMask().to_ulong(), 0xFFFF);
 }
 
 bool IsCompatibleDrawModeWithGeometryShader(PrimitiveMode drawMode,
@@ -2787,8 +2787,8 @@ const char *ValidateProgramPipelineAttachedPrograms(ProgramPipeline *programPipe
         Program *shaderProgram = programPipeline->getShaderProgram(shaderType);
         if (shaderProgram)
         {
-            ProgramExecutable &executable = shaderProgram->getExecutable();
-            for (const ShaderType programShaderType : executable.getLinkedShaderStages())
+            ProgramExecutable *executable = shaderProgram->getExecutable();
+            for (const ShaderType programShaderType : executable->getLinkedShaderStages())
             {
                 if (shaderProgram != programPipeline->getShaderProgram(programShaderType))
                 {
@@ -3050,7 +3050,7 @@ void RecordDrawModeError(const Context *context, PrimitiveMode mode)
         ASSERT(program);
 
         // Do geometry shader specific validations
-        if (program->getExecutable().hasLinkedShaderStage(ShaderType::Geometry))
+        if (program->getExecutable()->hasLinkedShaderStage(ShaderType::Geometry))
         {
             if (!IsCompatibleDrawModeWithGeometryShader(
                     mode, program->getGeometryShaderInputPrimitiveType()))
@@ -4503,7 +4503,7 @@ bool ValidateGetProgramivBase(const Context *context,
                 context->validationError(GL_INVALID_OPERATION, kProgramNotLinked);
                 return false;
             }
-            if (!programObject->getExecutable().hasLinkedShaderStage(ShaderType::Compute))
+            if (!programObject->getExecutable()->hasLinkedShaderStage(ShaderType::Compute))
             {
                 context->validationError(GL_INVALID_OPERATION, kNoActiveComputeShaderStage);
                 return false;
@@ -4530,7 +4530,7 @@ bool ValidateGetProgramivBase(const Context *context,
                 context->validationError(GL_INVALID_OPERATION, kProgramNotLinked);
                 return false;
             }
-            if (!programObject->getExecutable().hasLinkedShaderStage(ShaderType::Geometry))
+            if (!programObject->getExecutable()->hasLinkedShaderStage(ShaderType::Geometry))
             {
                 context->validationError(GL_INVALID_OPERATION, kNoActiveGeometryShaderStage);
                 return false;
