@@ -57,6 +57,30 @@
       "revId": "ead6d5fa71a95573dddf7409f24f4b9e92f848d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a62fa3e5_b7d3d52d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2020-04-24T19:43:06Z",
+      "side": 1,
+      "message": "angle_end2end_tests.exe --gtest_filter\u003dShaderStorageBufferTest31.UnsizedArrayLength/ES3_1_Vulkan* will start to fail. This is mainly due to the `roundUp(sizeInBytes, mAlignment);` in `allocate()` and how mAlignment gets set in `updateAlignment()`.\n\nAdditionally, we use this as an indicator in `releaseInFlightBuffers()` to determine if the buffers are compatible to be reused or not.",
+      "parentUuid": "b152f106_bac5d648",
+      "range": {
+        "startLine": 467,
+        "startChar": 6,
+        "endLine": 467,
+        "endChar": 27
+      },
+      "revId": "ead6d5fa71a95573dddf7409f24f4b9e92f848d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
