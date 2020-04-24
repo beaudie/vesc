@@ -757,7 +757,7 @@ GLuint Context::createShaderProgramv(ShaderType type, GLsizei count, const GLcha
                 programObject->detachShader(this, shaderObject);
             }
 
-            InfoLog &programInfoLog = programObject->getExecutable().getInfoLog();
+            InfoLog &programInfoLog = programObject->getExecutable()->getInfoLog();
             programInfoLog << shaderObject->getInfoLogString();
         }
 
@@ -5544,7 +5544,7 @@ void Context::convertPpoToComputeOrDraw(bool isCompute)
     ProgramPipeline *pipeline = mState.getProgramPipeline();
     if (!program && pipeline)
     {
-        pipeline->getExecutable().setIsCompute(isCompute);
+        pipeline->getExecutable()->setIsCompute(isCompute);
         pipeline->setDirtyBit(ProgramPipeline::DirtyBitType::DIRTY_BIT_DRAW_DISPATCH_CHANGE);
         mState.mDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_PIPELINE);
         mState.mDirtyBits.set(State::DirtyBitType::DIRTY_BIT_PROGRAM_EXECUTABLE);
@@ -6256,7 +6256,7 @@ void Context::getProgramInfoLog(ShaderProgramID program,
 {
     Program *programObject = getProgramResolveLink(program);
     ASSERT(programObject);
-    programObject->getExecutable().getInfoLog(bufsize, length, infolog);
+    programObject->getExecutable()->getInfoLog(bufsize, length, infolog);
 }
 
 void Context::getProgramPipelineInfoLog(ProgramPipelineID pipeline,
@@ -6267,7 +6267,7 @@ void Context::getProgramPipelineInfoLog(ProgramPipelineID pipeline,
     ProgramPipeline *programPipeline = getProgramPipeline(pipeline);
     if (programPipeline)
     {
-        programPipeline->getExecutable().getInfoLog(bufSize, length, infoLog);
+        programPipeline->getExecutable()->getInfoLog(bufSize, length, infoLog);
     }
     else
     {

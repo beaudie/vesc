@@ -118,7 +118,7 @@ class ProgramExecutableVk
 
     void fillProgramStateMap(const ContextVk *contextVk,
                              gl::ShaderMap<const gl::ProgramState *> *programStatesOut);
-    const gl::ProgramExecutable &getGlExecutable();
+    const gl::ProgramExecutable *getGlExecutable();
 
     ProgramInfo &getGraphicsDefaultProgramInfo() { return mGraphicsProgramInfos[0]; }
     ProgramInfo &getGraphicsProgramInfo(ProgramTransformOptionBits optionBits)
