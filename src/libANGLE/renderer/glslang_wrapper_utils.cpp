@@ -711,7 +711,7 @@ void AssignUniformBindings(GlslangSourceOptions &options,
                            ShaderMapInterfaceVariableInfoMap *variableInfoMapOut)
 {
     if (programState.getAttachedShader(shaderType) ||
-        programState.getProgramExecutable().hasLinkedShaderStage(shaderType))
+        programState.getProgramExecutable()->hasLinkedShaderStage(shaderType))
     {
         AddResourceInfo(&(*variableInfoMapOut)[shaderType], kDefaultUniformNames[shaderType],
                         programInterfaceInfo->uniformsAndXfbDescriptorSetIndex,
@@ -739,7 +739,7 @@ void AssignInterfaceBlockBindings(GlslangSourceOptions &options,
         if (!block.isArray || block.arrayElement == 0)
         {
             // TODO: http://anglebug.com/4523: All blocks should be active
-            if (programState.getProgramExecutable().hasLinkedShaderStage(shaderType) &&
+            if (programState.getProgramExecutable()->hasLinkedShaderStage(shaderType) &&
                 block.isActive(shaderType))
             {
                 AddResourceInfo(&(*variableInfoMapOut)[shaderType], block.mappedName,
@@ -766,7 +766,7 @@ void AssignAtomicCounterBufferBindings(GlslangSourceOptions &options,
         return;
     }
 
-    if (programState.getProgramExecutable().hasLinkedShaderStage(shaderType))
+    if (programState.getProgramExecutable()->hasLinkedShaderStage(shaderType))
     {
         AddResourceInfo(&(*variableInfoMapOut)[shaderType], sh::vk::kAtomicCountersBlockName,
                         programInterfaceInfo->shaderResourceDescriptorSetIndex,
@@ -792,7 +792,7 @@ void AssignImageBindings(GlslangSourceOptions &options,
         std::string name = imageUniform.mappedName;
         if (GetImageNameWithoutIndices(&name))
         {
-            if (programState.getProgramExecutable().hasLinkedShaderStage(shaderType))
+            if (programState.getProgramExecutable()->hasLinkedShaderStage(shaderType))
             {
                 AddResourceInfo(&(*variableInfoMapOut)[shaderType], name,
                                 programInterfaceInfo->shaderResourceDescriptorSetIndex,
@@ -858,7 +858,7 @@ void AssignTextureBindings(GlslangSourceOptions &options,
                                                 : GlslangGetMappedSamplerName(samplerUniform.name);
 
             // TODO: http://anglebug.com/4523: All uniforms should be active
-            if (programState.getProgramExecutable().hasLinkedShaderStage(shaderType) &&
+            if (programState.getProgramExecutable()->hasLinkedShaderStage(shaderType) &&
                 samplerUniform.isActive(shaderType))
             {
                 AddResourceInfo(&(*variableInfoMapOut)[shaderType], samplerName,
@@ -1852,12 +1852,12 @@ void GlslangAssignLocations(GlslangSourceOptions &options,
                             GlslangProgramInterfaceInfo *programInterfaceInfo,
                             ShaderMapInterfaceVariableInfoMap *variableInfoMapOut)
 {
-    const gl::ProgramExecutable &executable = programState.getProgramExecutable();
+    const gl::ProgramExecutable *executable = programState.getProgramExecutable();
 
     // Assign outputs to the fragment shader, if any.
     if ((shaderType == gl::ShaderType::Fragment) &&
         (programState.getAttachedShader(gl::ShaderType::Fragment) ||
-         executable.hasLinkedShaderStage(gl::ShaderType::Fragment)))
+         executable->hasLinkedShaderStage(gl::ShaderType::Fragment)))
     {
         AssignOutputLocations(programState, gl::ShaderType::Fragment,
                               &(*variableInfoMapOut)[gl::ShaderType::Fragment]);
@@ -1866,14 +1866,14 @@ void GlslangAssignLocations(GlslangSourceOptions &options,
     // Assign attributes to the vertex shader, if any.
     if ((shaderType == gl::ShaderType::Vertex) &&
         (programState.getAttachedShader(gl::ShaderType::Vertex) ||
-         executable.hasLinkedShaderStage(gl::ShaderType::Vertex)))
+         executable->hasLinkedShaderStage(gl::ShaderType::Vertex)))
     {
         AssignAttributeLocations(programState, gl::ShaderType::Vertex,
                                  &(*variableInfoMapOut)[gl::ShaderType::Vertex]);
     }
 
     if (!programState.getAttachedShader(gl::ShaderType::Compute) &&
-        !executable.hasLinkedShaderStage(gl::ShaderType::Compute))
+        !executable->hasLinkedShaderStage(gl::ShaderType::Compute))
     {
         // Assign varying locations.
         AssignVaryingLocations(options, programState, resources, shaderType, programInterfaceInfo,
@@ -1936,7 +1936,7 @@ void GlslangGetShaderSource(GlslangSourceOptions &options,
     }
 
     for (const gl::ShaderType shaderType :
-         programState.getProgramExecutable().getLinkedShaderStages())
+         programState.getProgramExecutable()->getLinkedShaderStages())
     {
         GlslangAssignLocations(options, programState, resources, shaderType, programInterfaceInfo,
                                variableInfoMapOut);

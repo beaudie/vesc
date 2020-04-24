@@ -193,9 +193,9 @@ void SortAttributesByLayout(const ProgramD3D &programD3D,
     sortedAttributesOut->clear();
 
     const AttribIndexArray &locationToSemantic = programD3D.getAttribLocationToD3DSemantics();
-    const gl::ProgramExecutable &executable    = programD3D.getState().getProgramExecutable();
+    const gl::ProgramExecutable *executable    = programD3D.getState().getProgramExecutable();
 
-    for (auto locationIndex : executable.getActiveAttribLocationsMask())
+    for (auto locationIndex : executable->getActiveAttribLocationsMask())
     {
         int d3dSemantic = locationToSemantic[locationIndex];
         if (sortedAttributesOut->size() <= static_cast<size_t>(d3dSemantic))
@@ -2053,8 +2053,8 @@ angle::Result StateManager11::syncCurrentValueAttribs(
     const gl::Context *context,
     const std::vector<gl::VertexAttribCurrentValueData> &currentValues)
 {
-    const gl::ProgramExecutable &executable = mProgramD3D->getState().getProgramExecutable();
-    const auto &activeAttribsMask           = executable.getActiveAttribLocationsMask();
+    const gl::ProgramExecutable *executable = mProgramD3D->getState().getProgramExecutable();
+    const auto &activeAttribsMask           = executable->getActiveAttribLocationsMask();
     const auto &dirtyActiveAttribs          = (activeAttribsMask & mDirtyCurrentValueAttribs);
 
     if (!dirtyActiveAttribs.any())
