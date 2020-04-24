@@ -29,7 +29,8 @@ ProgramPipelineState::ProgramPipelineState()
       mValid(false),
       mHasBeenBound(false)
 {
-    mExecutable.setProgramPipelineState(this);
+    mExecutable = new ProgramExecutable();
+    mExecutable->setProgramPipelineState(this);
 
     for (const ShaderType shaderType : gl::AllShaderTypes())
     {
@@ -37,7 +38,10 @@ ProgramPipelineState::ProgramPipelineState()
     }
 }
 
-ProgramPipelineState::~ProgramPipelineState() {}
+ProgramPipelineState::~ProgramPipelineState()
+{
+    delete (mExecutable);
+}
 
 const std::string &ProgramPipelineState::getLabel() const
 {
@@ -63,7 +67,7 @@ void ProgramPipelineState::useProgramStage(const Context *context,
     // stage, glUseProgramStages installs the executable code for that stage in the indicated
     // program pipeline object pipeline.
     if (shaderProgram && (shaderProgram->id().value != 0) &&
-        shaderProgram->getExecutable().hasLinkedShaderStage(shaderType))
+        shaderProgram->getExecutable()->hasLinkedShaderStage(shaderType))
     {
         mPrograms[shaderType] = shaderProgram;
         shaderProgram->addRef();
@@ -122,7 +126,7 @@ bool ProgramPipelineState::usesShaderProgram(ShaderProgramID programId) const
 
 bool ProgramPipelineState::hasDefaultUniforms() const
 {
-    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasDefaultUniforms())
@@ -136,7 +140,7 @@ bool ProgramPipelineState::hasDefaultUniforms() const
 
 bool ProgramPipelineState::hasTextures() const
 {
-    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasTextures())
@@ -150,7 +154,7 @@ bool ProgramPipelineState::hasTextures() const
 
 bool ProgramPipelineState::hasUniformBuffers() const
 {
-    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasUniformBuffers())
@@ -164,7 +168,7 @@ bool ProgramPipelineState::hasUniformBuffers() const
 
 bool ProgramPipelineState::hasStorageBuffers() const
 {
-    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasStorageBuffers())
@@ -178,7 +182,7 @@ bool ProgramPipelineState::hasStorageBuffers() const
 
 bool ProgramPipelineState::hasAtomicCounterBuffers() const
 {
-    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasAtomicCounterBuffers())
@@ -192,7 +196,7 @@ bool ProgramPipelineState::hasAtomicCounterBuffers() const
 
 bool ProgramPipelineState::hasImages() const
 {
-    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasImages())
@@ -206,7 +210,7 @@ bool ProgramPipelineState::hasImages() const
 
 bool ProgramPipelineState::hasTransformFeedbackOutput() const
 {
-    for (const gl::ShaderType shaderType : mExecutable.getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasTransformFeedbackOutput())
@@ -277,18 +281,18 @@ void ProgramPipeline::useProgramStages(const Context *context,
 
 void ProgramPipeline::updateLinkedShaderStages()
 {
-    mState.mExecutable.resetLinkedShaderStages();
+    mState.mExecutable->resetLinkedShaderStages();
 
     for (const ShaderType shaderType : gl::AllShaderTypes())
     {
         Program *program = mState.mPrograms[shaderType];
         if (program)
         {
-            mState.mExecutable.setLinkedShaderStages(shaderType);
+            mState.mExecutable->setLinkedShaderStages(shaderType);
         }
     }
 
-    mState.mExecutable.updateCanDrawWith();
+    mState.mExecutable->updateCanDrawWith();
 }
 
 void ProgramPipeline::updateExecutableAttributes()
@@ -300,32 +304,33 @@ void ProgramPipeline::updateExecutableAttributes()
         return;
     }
 
-    const ProgramExecutable &vertexExecutable     = vertexProgram->getExecutable();
-    mState.mExecutable.mActiveAttribLocationsMask = vertexExecutable.mActiveAttribLocationsMask;
-    mState.mExecutable.mMaxActiveAttribLocation   = vertexExecutable.mMaxActiveAttribLocation;
-    mState.mExecutable.mAttributesTypeMask        = vertexExecutable.mAttributesTypeMask;
-    mState.mExecutable.mAttributesMask            = vertexExecutable.mAttributesMask;
+    const ProgramExecutable *vertexExecutable      = vertexProgram->getExecutable();
+    mState.mExecutable->mActiveAttribLocationsMask = vertexExecutable->mActiveAttribLocationsMask;
+    mState.mExecutable->mMaxActiveAttribLocation   = vertexExecutable->mMaxActiveAttribLocation;
+    mState.mExecutable->mAttributesTypeMask        = vertexExecutable->mAttributesTypeMask;
+    mState.mExecutable->mAttributesMask            = vertexExecutable->mAttributesMask;
 }
 
 void ProgramPipeline::updateExecutableTextures()
 {
-    for (const ShaderType shaderType : mState.mExecutable.getLinkedShaderStages())
+    for (const ShaderType shaderType : mState.mExecutable->getLinkedShaderStages())
     {
         const Program *program = getShaderProgram(shaderType);
         if (program)
         {
-            mState.mExecutable.mActiveSamplersMask |=
-                program->getExecutable().getActiveSamplersMask();
-            mState.mExecutable.mActiveImagesMask |= program->getExecutable().getActiveImagesMask();
+            mState.mExecutable->mActiveSamplersMask |=
+                program->getExecutable()->getActiveSamplersMask();
+            mState.mExecutable->mActiveImagesMask |=
+                program->getExecutable()->getActiveImagesMask();
             // Updates mActiveSamplerRefCounts, mActiveSamplerTypes, and mActiveSamplerFormats
-            mState.mExecutable.updateActiveSamplers(program->getState());
+            mState.mExecutable->updateActiveSamplers(program->getState());
         }
     }
 }
 
 void ProgramPipeline::updateExecutable()
 {
-    mState.mExecutable.reset();
+    mState.mExecutable->reset();
 
     // Vertex Shader ProgramExecutable properties
     updateExecutableAttributes();
@@ -336,7 +341,7 @@ void ProgramPipeline::updateExecutable()
 
 ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
 {
-    ASSERT(!mState.mExecutable.isCompute());
+    ASSERT(!mState.mExecutable->isCompute());
 
     // Varyings are matched between pairs of consecutive stages, by location if assigned or
     // by name otherwise.  Note that it's possible for one stage to specify location and the other
@@ -349,7 +354,7 @@ ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
 
     // Note that kAllGraphicsShaderTypes is sorted according to the rendering pipeline.
     ShaderType lastActiveStage = ShaderType::InvalidEnum;
-    for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
+    for (ShaderType shaderType : getExecutable()->getLinkedShaderStages())
     {
         previousActiveStage[shaderType] = lastActiveStage;
 
@@ -367,7 +372,7 @@ ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
     ProgramMergedVaryings merged;
 
     // Gather output varyings.
-    for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
+    for (ShaderType shaderType : getExecutable()->getLinkedShaderStages())
     {
         const Program *program = getShaderProgram(shaderType);
         ASSERT(program);
@@ -396,7 +401,7 @@ ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
     }
 
     // Gather input varyings, and match them with output varyings of the previous stage.
-    for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
+    for (ShaderType shaderType : getExecutable()->getLinkedShaderStages())
     {
         const Program *program = getShaderProgram(shaderType);
         ASSERT(program);
@@ -456,9 +461,9 @@ ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const
 // The code gets compiled into binaries.
 angle::Result ProgramPipeline::link(const Context *context)
 {
-    if (!getExecutable().isCompute())
+    if (!getExecutable()->isCompute())
     {
-        InfoLog &infoLog = mState.mExecutable.getInfoLog();
+        InfoLog &infoLog = mState.mExecutable->getInfoLog();
         infoLog.reset();
         const State &state = context->getState();
 
@@ -480,7 +485,7 @@ angle::Result ProgramPipeline::link(const Context *context)
             return angle::Result::Stop;
         }
 
-        if (!mState.mExecutable.linkValidateGlobalNames(infoLog))
+        if (!mState.mExecutable->linkValidateGlobalNames(infoLog))
         {
             return angle::Result::Stop;
         }
@@ -490,7 +495,7 @@ angle::Result ProgramPipeline::link(const Context *context)
         VaryingPacking varyingPacking(maxVaryingVectors, packMode);
 
         const ProgramMergedVaryings &mergedVaryings = getMergedVaryings();
-        for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
+        for (ShaderType shaderType : getExecutable()->getLinkedShaderStages())
         {
             Program *program = mState.mPrograms[shaderType];
             ASSERT(program);
@@ -507,7 +512,7 @@ angle::Result ProgramPipeline::link(const Context *context)
 bool ProgramPipeline::linkVaryings(InfoLog &infoLog) const
 {
     Shader *previousShader = nullptr;
-    for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
+    for (ShaderType shaderType : getExecutable()->getLinkedShaderStages())
     {
         Program *currentProgram = mState.mPrograms[shaderType];
         ASSERT(currentProgram);
@@ -548,17 +553,17 @@ void ProgramPipeline::validate(const gl::Context *context)
 {
     const Caps &caps = context->getCaps();
     mState.mValid    = true;
-    InfoLog &infoLog = mState.mExecutable.getInfoLog();
+    InfoLog &infoLog = mState.mExecutable->getInfoLog();
     infoLog.reset();
 
-    for (const ShaderType shaderType : mState.mExecutable.getLinkedShaderStages())
+    for (const ShaderType shaderType : mState.mExecutable->getLinkedShaderStages())
     {
         Program *shaderProgram = mState.mPrograms[shaderType];
         if (shaderProgram)
         {
             shaderProgram->resolveLink(context);
             shaderProgram->validate(caps);
-            std::string shaderInfoString = shaderProgram->getExecutable().getInfoLogString();
+            std::string shaderInfoString = shaderProgram->getExecutable()->getInfoLogString();
             if (shaderInfoString.length())
             {
                 mState.mValid = false;
@@ -579,12 +584,12 @@ void ProgramPipeline::validate(const gl::Context *context)
     {
         mState.mValid = false;
 
-        for (const ShaderType shaderType : mState.mExecutable.getLinkedShaderStages())
+        for (const ShaderType shaderType : mState.mExecutable->getLinkedShaderStages())
         {
             Program *shaderProgram = mState.mPrograms[shaderType];
             ASSERT(shaderProgram);
             shaderProgram->validate(caps);
-            std::string shaderInfoString = shaderProgram->getExecutable().getInfoLogString();
+            std::string shaderInfoString = shaderProgram->getExecutable()->getInfoLogString();
             if (shaderInfoString.length())
             {
                 infoLog << shaderInfoString << "\n";
