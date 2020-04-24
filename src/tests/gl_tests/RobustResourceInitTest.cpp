@@ -79,15 +79,13 @@ void UncompressDXTBlock(int destX,
                 case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
                     alpha = (code == 3 && !c0gtc1) ? 0 : 255;
                     break;
-                case GL_COMPRESSED_RGBA_S3TC_DXT3_EXT:
-                {
+                case GL_COMPRESSED_RGBA_S3TC_DXT3_EXT: {
                     uint8_t alpha0 = src[srcOffset + yy * 2 + (xx >> 1)];
                     uint8_t alpha1 = (alpha0 >> ((xx % 2) * 4)) & 0xF;
                     alpha          = alpha1 | (alpha1 << 4);
                 }
                 break;
-                case GL_COMPRESSED_RGBA_S3TC_DXT5_EXT:
-                {
+                case GL_COMPRESSED_RGBA_S3TC_DXT5_EXT: {
                     uint8_t alpha0 = src[srcOffset + 0];
                     uint8_t alpha1 = src[srcOffset + 1];
                     int alphaOff   = (yy >> 1) * 3 + 2;
@@ -1686,8 +1684,6 @@ TEST_P(RobustResourceInitTestES3, CompressedSubImage)
 {
     ANGLE_SKIP_TEST_IF(!hasGLExtension());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
-    // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(IsVulkan());
 
     constexpr int width     = 8;
     constexpr int height    = 8;
