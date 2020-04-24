@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "53ced34d_b812486c",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-24T19:15:30Z",
+      "side": 1,
+      "message": "nit: `if` would be clearer. `?:` is a good shorthand in expressions, but weird when it evaluates to void.",
+      "revId": "b78c252bb095b7e79900ce17ea0326c7f5736917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88004aa1_868b7532",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
         "patchSetId": 4
@@ -13,6 +30,30 @@
       "writtenOn": "2020-04-24T18:27:38Z",
       "side": 1,
       "message": "Instead of adding an initEmptyCommand() function, have you tried to add an empty struct?\nstruct EmptyParams\n{\n    uint32_t pad[0];\n}",
+      "range": {
+        "startLine": 745,
+        "startChar": 22,
+        "endLine": 745,
+        "endChar": 38
+      },
+      "revId": "b78c252bb095b7e79900ce17ea0326c7f5736917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "654d145d_0a4fad16",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-24T19:15:30Z",
+      "side": 1,
+      "message": "Array with 0 size is illegal code. There are no 0-sized structs in C++: http://www.stroustrup.com/bs_faq2.html#sizeof-empty\n\nYou could do this though:\n\n    struct EmptyParams {};\n\n    template \u003cclass StructType\u003e\n    ANGLE_INLINE StructType *initCommand(CommandID cmdID)\n    {\n        constexpr size_t paramSize \u003d std::is_same\u003cStructType, EmptyParams\u003e::value ? 0 : sizeof(StructType);\n        ...\n    }\n\nAnd use paramSize everywhere.",
+      "parentUuid": "88004aa1_868b7532",
       "range": {
         "startLine": 745,
         "startChar": 22,
