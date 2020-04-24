@@ -157,8 +157,8 @@ angle::Result RenderbufferVk::getAttachmentRenderTarget(const gl::Context *conte
                                                         GLsizei samples,
                                                         FramebufferAttachmentRenderTarget **rtOut)
 {
+    // Note that we flush staging updates in FramebufferVk so we can defer clears.
     ASSERT(mImage && mImage->valid());
-    ANGLE_TRY(mRenderTarget.flushStagedUpdates(vk::GetImpl(context)));
     *rtOut = &mRenderTarget;
     return angle::Result::Continue;
 }
@@ -167,7 +167,7 @@ angle::Result RenderbufferVk::initializeContents(const gl::Context *context,
                                                  const gl::ImageIndex &imageIndex)
 {
     // Note: stageSubresourceRobustClear only uses the intended format to count channels.
-    mImage->stageSubresourceClear(imageIndex);
+    mImage->stageRobustResourceClear(imageIndex);
     return mImage->flushAllStagedUpdates(vk::GetImpl(context));
 }
 
