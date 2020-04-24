@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87faa68a_9e03c0a3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-24T14:33:51Z",
+      "side": 1,
+      "message": "nit: you can remove this since StateCache::initialize is called in initCaps()",
+      "range": {
+        "startLine": 435,
+        "startChar": 7,
+        "endLine": 435,
+        "endChar": 40
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2932e3cd_f1b330c8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 8517,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-24T14:33:51Z",
+      "side": 1,
+      "message": "nit: call updateCanDraw here",
+      "range": {
+        "startLine": 8517,
+        "startChar": 4,
+        "endLine": 8517,
+        "endChar": 37
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78426730_33e9a84d",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-24T14:33:51Z",
+      "side": 1,
+      "message": "nit: can you put this above the notifications to match the prior organization, and call it getCanDraw to match the other names? update you can make private. also you can mention the one place CanDraw gets set - onProgramExecutableChange.",
+      "range": {
+        "startLine": 281,
+        "startChar": 4,
+        "endLine": 281,
+        "endChar": 45
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12ca7e21_517a6ae5",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-24T14:33:51Z",
+      "side": 1,
+      "message": "nit: to match the naming: mCachedCanDraw",
+      "range": {
+        "startLine": 331,
+        "startChar": 9,
+        "endLine": 331,
+        "endChar": 17
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45d5a55a_02a98ce7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-24T14:33:51Z",
+      "side": 1,
+      "message": "maybe set this inside setLinkedShaderStages? even if it gets called a couple extra times on link, should be okay.",
+      "range": {
+        "startLine": 1670,
+        "startChar": 4,
+        "endLine": 1670,
+        "endChar": 43
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fe432c0_cd09e830",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-24T14:33:51Z",
+      "side": 1,
+      "message": "nit: hasVertexAndFragmentShader?",
+      "range": {
+        "startLine": 169,
+        "startChar": 9,
+        "endLine": 169,
+        "endChar": 20
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
