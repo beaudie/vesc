@@ -135,13 +135,13 @@ angle::Result VertexArray11::syncStateForDraw(const gl::Context *context,
     const gl::State &glState   = context->getState();
     const gl::Program *program = glState.getProgram();
     ASSERT(program);
-    const gl::ProgramExecutable &executable = program->getExecutable();
+    const gl::ProgramExecutable *executable = program->getExecutable();
 
     mAppliedNumViewsToDivisor = (program->usesMultiview() ? program->getNumViews() : 1);
 
     if (mAttribsToTranslate.any())
     {
-        const gl::AttributesMask &activeLocations = executable.getActiveAttribLocationsMask();
+        const gl::AttributesMask &activeLocations = executable->getActiveAttribLocationsMask();
         gl::AttributesMask activeDirtyAttribs     = (mAttribsToTranslate & activeLocations);
         if (activeDirtyAttribs.any())
         {
@@ -152,7 +152,7 @@ angle::Result VertexArray11::syncStateForDraw(const gl::Context *context,
 
     if (mDynamicAttribsMask.any())
     {
-        const gl::AttributesMask &activeLocations = executable.getActiveAttribLocationsMask();
+        const gl::AttributesMask &activeLocations = executable->getActiveAttribLocationsMask();
         gl::AttributesMask activeDynamicAttribs   = (mDynamicAttribsMask & activeLocations);
 
         if (activeDynamicAttribs.any())

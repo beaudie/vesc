@@ -66,7 +66,7 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext)
 
     // Now that the program pipeline has all of the programs attached, the various descriptor
     // set/binding locations need to be re-assigned to their correct values.
-    for (const gl::ShaderType shaderType : glPipeline->getExecutable().getLinkedShaderStages())
+    for (const gl::ShaderType shaderType : glPipeline->getExecutable()->getLinkedShaderStages())
     {
         gl::Program *glProgram =
             const_cast<gl::Program *>(glPipeline->getShaderProgram(shaderType));
