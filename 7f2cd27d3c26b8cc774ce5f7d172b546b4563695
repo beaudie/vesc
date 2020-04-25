@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dec36a7b_dc443192",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-25T04:48:56Z",
+      "side": 1,
+      "message": "gl::ImageIndex specifies a range of indices.:\n\n    copyRegion.imageSubresource.baseArrayLayer \u003d index.hasLayer() ? index.getLayerIndex() : 0\n    copyRegion.imageSubresource.layerCount \u003d index.getLayerCount();\n\nCould be nice if you added a test that creates a layered compressed texture with robust init enabled to verify this.",
+      "range": {
+        "startLine": 3150,
+        "startChar": 49,
+        "endLine": 3150,
+        "endChar": 50
+      },
+      "revId": "7f2cd27d3c26b8cc774ce5f7d172b546b4563695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
