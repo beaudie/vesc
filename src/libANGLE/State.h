@@ -125,8 +125,22 @@ class State : angle::NonCopyable
     bool allActiveDrawBufferChannelsMasked() const;
     bool anyActiveDrawBufferChannelMasked() const;
     const RasterizerState &getRasterizerState() const;
-    const BlendState &getBlendState() const { return mBlendStateArray[0]; }
-    const BlendStateArray &getBlendStateArray() const { return mBlendStateArray; }
+    const BlendState &getBlendState() const
+    {
+        mBlendState.blend              = mBlendStateExt.mEnabledMask.test(0);
+        mBlendState.sourceBlendRGB     = mBlendStateExt.getSrcColorIndexed(0);
+        mBlendState.destBlendRGB       = mBlendStateExt.getDstColorIndexed(0);
+        mBlendState.sourceBlendAlpha   = mBlendStateExt.getSrcAlphaIndexed(0);
+        mBlendState.destBlendAlpha     = mBlendStateExt.getDstAlphaIndexed(0);
+        mBlendState.blendEquationRGB   = mBlendStateExt.getEquationColorIndexed(0);
+        mBlendState.blendEquationAlpha = mBlendStateExt.getEquationAlphaIndexed(0);
+        mBlendStateExt.getColorMaskIndexed(0, &mBlendState.colorMaskRed,
+                                           &mBlendState.colorMaskGreen, &mBlendState.colorMaskBlue,
+                                           &mBlendState.colorMaskAlpha);
+
+        return mBlendState;
+    }
+    const BlendStateExt &getBlendStateExt() const { return mBlendStateExt; }
     const DepthStencilState &getDepthStencilState() const;
 
     // Clear behavior setters & state parameter block generation function
@@ -166,11 +180,11 @@ class State : angle::NonCopyable
     float getFarPlane() const { return mFarZ; }
 
     // Blend state manipulation
-    bool isBlendEnabled() const { return mBlendStateArray[0].blend; }
+    bool isBlendEnabled() const { return mBlendStateExt.mEnabledMask.test(0); }
     bool isBlendEnabledIndexed(GLuint index) const
     {
-        ASSERT(index < mBlendStateArray.size());
-        return mBlendStateArray[index].blend;
+        ASSERT(static_cast<size_t>(index) < mBlendStateExt.mMaxDrawBuffers);
+        return mBlendStateExt.mEnabledMask.test(index);
     }
     DrawBufferMask getBlendEnabledDrawBufferMask() const { return mBlendStateExt.mEnabledMask; }
     void setBlend(bool enabled);
@@ -780,8 +794,6 @@ class State : angle::NonCopyable
 
     bool isEarlyFragmentTestsOptimizationAllowed() const { return isSampleCoverageEnabled(); }
 
-    const BlendStateExt &getBlendStateExt() const { return mBlendStateExt; }
-
   private:
     friend class Context;
 
@@ -876,7 +888,7 @@ class State : angle::NonCopyable
     bool mScissorTest;
     Rectangle mScissor;
 
-    BlendStateArray mBlendStateArray;
+    mutable BlendState mBlendState;  // Buffer zero blend state legacy struct
     BlendStateExt mBlendStateExt;
     ColorF mBlendColor;
     bool mSampleAlphaToCoverage;
