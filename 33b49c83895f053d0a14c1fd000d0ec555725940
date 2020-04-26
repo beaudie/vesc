@@ -48,6 +48,98 @@
     },
     {
       "key": {
+        "uuid": "2f758dd6_bb6ab41e",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-04-26T02:30:21Z",
+      "side": 1,
+      "message": "const TInterfaceBlock *interfaceBlock \u003d\n    binaryNode-\u003egetLeft()-\u003egetType().getInterfaceBlock();\nreturn interfaceBlock;",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 13
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "147a4458_0325ea23",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-04-26T02:30:21Z",
+      "side": 1,
+      "message": "Why this condition is needed?",
+      "range": {
+        "startLine": 115,
+        "startChar": 12,
+        "endLine": 115,
+        "endChar": 60
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "041dd4b3_529a01cc",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1661,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-04-26T02:30:21Z",
+      "side": 1,
+      "message": "[a]",
+      "range": {
+        "startLine": 1650,
+        "startChar": 0,
+        "endLine": 1661,
+        "endChar": 21
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd6a975b_d68746d6",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1692,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-04-26T02:30:21Z",
+      "side": 1,
+      "message": "This is totally same with [a]. How about further refactoring this part like below:\nif (visit \u003d\u003d PostVisit)\n{\n   AddMatrixSuffixWhenNecessary(node-\u003egetLeft());\n}\n\nThen you can write a helper function like below. And GetInterfaceBlockOfUniformBlockNearestIndexOperator can be removed.\n\n// Only add matrix suffix when the parent of index op is a uniform block. \nvoid AddMatrixSuffixWhenNecessary(const TIntermTyped *node)\n{\n    bool needMatrixSuffix \u003d false;\n    const TIntermBinary *binaryNode \u003d node-\u003egetAsBinaryNode();\n    if (binaryNode)\n    {\n        if (binaryNode-\u003egetOp() \u003d\u003d EOpIndexDirectInterfaceBlock)\n        {\n           needMatrixSuffix \u003d true;\n        }\n    }\n    else\n    {\n        const TIntermSymbol *symbolNode \u003d node-\u003egetAsSymbolNode();\n        if (symbolNode)\n        {\n            const TVariable \u0026variable \u003d symbolNode-\u003evariable();\n            const TType \u0026variableType \u003d variable.getType();\n\n            if (variableType.getQualifier() \u003d\u003d EvqUniform \u0026\u0026\n                variable.symbolType() \u003d\u003d SymbolType::UserDefined)\n            {\n                needMatrixSuffix \u003d true;\n            }\n        }\n    }\n\n    if (needMatrixSuffix)\n    {\n       TInfoSinkBase \u0026out \u003d getInfoSink();\n       out \u003c\u003c \"._matrix_\";\n    }\n}\n\nYou may notice that I didn\u0027t use Decorate(field-\u003ename()). I think you can use a unified name \u0027._matrix\u0027 instead of \u0027._matrix\u0027 + Decorate(field-\u003ename()).",
+      "range": {
+        "startLine": 1681,
+        "startChar": 0,
+        "endLine": 1692,
+        "endChar": 21
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7a90b87_7ebf7ac5",
         "filename": "src/compiler/translator/ResourcesHLSL.cpp",
         "patchSetId": 5
