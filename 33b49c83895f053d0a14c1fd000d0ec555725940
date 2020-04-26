@@ -140,6 +140,30 @@
     },
     {
       "key": {
+        "uuid": "1f823edc_8a617616",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1692,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-04-26T02:35:05Z",
+      "side": 1,
+      "message": "Sorry I missed mResourcesHLSL-\u003eshouldTranslateUniformBlockToStructuredBuffer. Then the function should be like:\nvoid AddMatrixSuffixWhenNecessary(const TIntermTyped *node)\n{\n\n    TInterfaceBlock * interfaceBlock \u003d nullptr;\n    const TIntermBinary *binaryNode \u003d node-\u003egetAsBinaryNode();\n    if (binaryNode)\n    {\n        if (binaryNode-\u003egetOp() \u003d\u003d EOpIndexDirectInterfaceBlock)\n        {\n           interfaceBlock \u003d binaryNode-\u003egetLeft()-\u003egetType().getInterfaceBlock();\n        }\n    }\n    else\n    {\n        const TIntermSymbol *symbolNode \u003d node-\u003egetAsSymbolNode();\n        if (symbolNode)\n        {\n            const TVariable \u0026variable \u003d symbolNode-\u003evariable();\n            const TType \u0026variableType \u003d variable.getType();\n            if (variableType.getQualifier() \u003d\u003d EvqUniform \u0026\u0026\n                variable.symbolType() \u003d\u003d SymbolType::UserDefined)\n            {\n                interfaceBlock \u003d \u003d variableType.getInterfaceBlock();\n            }\n        }\n    }\n    if (interfaceBlock \u0026\u0026 mResourcesHLSL-\u003eshouldTranslateUniformBlockToStructuredBuffer(\n                            *interfaceBlock))\n    {\n       TInfoSinkBase \u0026out \u003d getInfoSink();\n       out \u003c\u003c \"._matrix_\";\n    }\n}",
+      "parentUuid": "cd6a975b_d68746d6",
+      "range": {
+        "startLine": 1681,
+        "startChar": 0,
+        "endLine": 1692,
+        "endChar": 21
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7a90b87_7ebf7ac5",
         "filename": "src/compiler/translator/ResourcesHLSL.cpp",
         "patchSetId": 5
