@@ -2221,6 +2221,7 @@ void SetPositionLayerTexCoord3DVertex(PositionLayerTexCoord3DVertex *vertex,
 BlendStateKey::BlendStateKey()
 {
     memset(this, 0, sizeof(BlendStateKey));
+    blendStateExt = gl::BlendStateExt(D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT);
 }
 
 BlendStateKey::BlendStateKey(const BlendStateKey &other)
