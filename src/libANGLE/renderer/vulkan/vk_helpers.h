@@ -845,6 +845,8 @@ class ImageHelper final : public Resource, public angle::Subject
     Serial getAssignSerial(ContextVk *contextVk);
     void resetSerial() { mSerial = rx::kZeroSerial; }
 
+    static void Update3DSubresourceLayer(VkImageSubresourceLayers &Subresource);
+
     static void Copy(ImageHelper *srcImage,
                      ImageHelper *dstImage,
                      const gl::Offset &srcOffset,
