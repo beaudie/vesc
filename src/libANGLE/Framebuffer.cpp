@@ -263,10 +263,10 @@ angle::Result InitAttachment(const Context *context, FramebufferAttachment *atta
     return angle::Result::Continue;
 }
 
-bool IsColorMaskedOut(const BlendState &blend)
+bool IsColorMaskedOut(const BlendStateExt &blendStateExt, const GLint drawbuffer)
 {
-    return (!blend.colorMaskRed && !blend.colorMaskGreen && !blend.colorMaskBlue &&
-            !blend.colorMaskAlpha);
+    ASSERT(static_cast<size_t>(drawbuffer) < blendStateExt.mMaxDrawBuffers);
+    return blendStateExt.getColorMaskIndexed(static_cast<size_t>(drawbuffer)) == 0;
 }
 
 bool IsDepthMaskedOut(const DepthStencilState &depthStencil)
@@ -284,9 +284,7 @@ bool IsClearBufferMaskedOut(const Context *context, GLenum buffer, GLint drawbuf
     switch (buffer)
     {
         case GL_COLOR:
-            ASSERT(static_cast<size_t>(drawbuffer) <
-                   context->getState().getBlendStateArray().size());
-            return IsColorMaskedOut(context->getState().getBlendStateArray()[drawbuffer]);
+            return IsColorMaskedOut(context->getState().getBlendStateExt(), drawbuffer);
         case GL_DEPTH:
             return IsDepthMaskedOut(context->getState().getDepthStencilState());
         case GL_STENCIL:
@@ -713,8 +711,7 @@ bool FramebufferState::updateAttachmentFeedbackLoopAndReturnIfChanged(size_t dir
             mStencilBufferFeedbackLoop = loop;
             break;
 
-        default:
-        {
+        default: {
             ASSERT(dirtyBit <= Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX);
             previous = mDrawBufferFeedbackLoops.test(dirtyBit);
             loop     = mColorAttachments[dirtyBit].isBoundAsSamplerOrImage(mOwningContextID);
@@ -1918,8 +1915,7 @@ void Framebuffer::setAttachmentImpl(const Context *context,
                              resource, numViews, baseViewIndex, isMultiview, samples);
             break;
 
-        default:
-        {
+        default: {
             size_t colorIndex = binding - GL_COLOR_ATTACHMENT0;
             ASSERT(colorIndex < mState.mColorAttachments.size());
             size_t dirtyBit = DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex;
@@ -2324,8 +2320,7 @@ void Framebuffer::markBufferInitialized(GLenum bufferType, GLint bufferIndex)
 {
     switch (bufferType)
     {
-        case GL_COLOR:
-        {
+        case GL_COLOR: {
             ASSERT(bufferIndex < static_cast<GLint>(mState.mColorAttachments.size()));
             if (mState.mColorAttachments[bufferIndex].isAttached())
             {
@@ -2334,8 +2329,7 @@ void Framebuffer::markBufferInitialized(GLenum bufferType, GLint bufferIndex)
             }
             break;
         }
-        case GL_DEPTH:
-        {
+        case GL_DEPTH: {
             if (mState.mDepthAttachment.isAttached())
             {
                 mState.mDepthAttachment.setInitState(InitState::Initialized);
@@ -2343,8 +2337,7 @@ void Framebuffer::markBufferInitialized(GLenum bufferType, GLint bufferIndex)
             }
             break;
         }
-        case GL_STENCIL:
-        {
+        case GL_STENCIL: {
             if (mState.mStencilAttachment.isAttached())
             {
                 mState.mStencilAttachment.setInitState(InitState::Initialized);
@@ -2352,8 +2345,7 @@ void Framebuffer::markBufferInitialized(GLenum bufferType, GLint bufferIndex)
             }
             break;
         }
-        case GL_DEPTH_STENCIL:
-        {
+        case GL_DEPTH_STENCIL: {
             if (mState.mDepthAttachment.isAttached())
             {
                 mState.mDepthAttachment.setInitState(InitState::Initialized);
@@ -2395,8 +2387,7 @@ angle::Result Framebuffer::ensureBufferInitialized(const Context *context,
 
     switch (bufferType)
     {
-        case GL_COLOR:
-        {
+        case GL_COLOR: {
             ASSERT(bufferIndex < static_cast<GLint>(mState.mColorAttachments.size()));
             if (mState.mResourceNeedsInit[bufferIndex])
             {
@@ -2405,8 +2396,7 @@ angle::Result Framebuffer::ensureBufferInitialized(const Context *context,
             }
             break;
         }
-        case GL_DEPTH:
-        {
+        case GL_DEPTH: {
             if (mState.mResourceNeedsInit[DIRTY_BIT_DEPTH_ATTACHMENT])
             {
                 ANGLE_TRY(InitAttachment(context, &mState.mDepthAttachment));
@@ -2414,8 +2404,7 @@ angle::Result Framebuffer::ensureBufferInitialized(const Context *context,
             }
             break;
         }
-        case GL_STENCIL:
-        {
+        case GL_STENCIL: {
             if (mState.mResourceNeedsInit[DIRTY_BIT_STENCIL_ATTACHMENT])
             {
                 ANGLE_TRY(InitAttachment(context, &mState.mStencilAttachment));
@@ -2423,8 +2412,7 @@ angle::Result Framebuffer::ensureBufferInitialized(const Context *context,
             }
             break;
         }
-        case GL_DEPTH_STENCIL:
-        {
+        case GL_DEPTH_STENCIL: {
             if (mState.mResourceNeedsInit[DIRTY_BIT_DEPTH_ATTACHMENT])
             {
                 ANGLE_TRY(InitAttachment(context, &mState.mDepthAttachment));
