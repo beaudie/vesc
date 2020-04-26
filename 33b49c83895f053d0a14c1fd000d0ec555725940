@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbfb5578_85b43330",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-04-26T01:11:04Z",
+      "side": 1,
+      "message": "Maybe it is better to change this title to another more meaningful one that can better express what you have done in this patch?",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f4d7599_ae99fc95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-04-26T01:11:04Z",
+      "side": 1,
+      "message": "What \"necessary\" means here?\n\nAccording to [1], does it mean that we can always translate uniform blocks with a large matrix array as its only one member to structured buffer except when the uniform blocks are declared with \"row-major/column-major\" qualifiers?",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7a90b87_7ebf7ac5",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-04-26T01:11:04Z",
+      "side": 1,
+      "message": "[1]",
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
