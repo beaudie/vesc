@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "157d2081_a34e3159",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-04-26T05:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbfb5578_85b43330",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f4d7599_ae99fc95",
         "filename": "/COMMIT_MSG",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "1c5096a4_f30df386",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-04-26T05:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f4d7599_ae99fc95",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f758dd6_bb6ab41e",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 5
@@ -59,6 +107,30 @@
       "writtenOn": "2020-04-26T02:30:21Z",
       "side": 1,
       "message": "const TInterfaceBlock *interfaceBlock \u003d\n    binaryNode-\u003egetLeft()-\u003egetType().getInterfaceBlock();\nreturn interfaceBlock;",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 13
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87850e86_6bac92fd",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-04-26T05:02:54Z",
+      "side": 1,
+      "message": "[ss]",
+      "parentUuid": "2f758dd6_bb6ab41e",
       "range": {
         "startLine": 96,
         "startChar": 0,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "68ab504c_f5552699",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-04-26T05:02:54Z",
+      "side": 1,
+      "message": "Angle inserts some TInterfaceBlock nodes in the tree in RemoveDynamicIndexing.cpp, these codes are angele defined, we cannot add suffix string for these nodes.",
+      "parentUuid": "147a4458_0325ea23",
+      "range": {
+        "startLine": 115,
+        "startChar": 12,
+        "endLine": 115,
+        "endChar": 60
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "041dd4b3_529a01cc",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 5
@@ -114,6 +210,30 @@
       "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e0079bf_05c20818",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1661,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-04-26T05:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "041dd4b3_529a01cc",
+      "range": {
+        "startLine": 1650,
+        "startChar": 0,
+        "endLine": 1661,
+        "endChar": 21
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -164,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "e16be3ee_742e85dc",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1692,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-04-26T05:02:54Z",
+      "side": 1,
+      "message": "Jiajia, I accept your [ss] comment. I think it it better that this function here is only a helper function, don\u0027t output tree content in this function.",
+      "parentUuid": "1f823edc_8a617616",
+      "range": {
+        "startLine": 1681,
+        "startChar": 0,
+        "endLine": 1692,
+        "endChar": 21
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7a90b87_7ebf7ac5",
         "filename": "src/compiler/translator/ResourcesHLSL.cpp",
         "patchSetId": 5
@@ -178,6 +322,24 @@
       "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "767e7a9e_981d18e5",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2020-04-26T05:02:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b7a90b87_7ebf7ac5",
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
