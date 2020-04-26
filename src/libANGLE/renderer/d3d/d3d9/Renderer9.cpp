@@ -1949,10 +1949,12 @@ void Renderer9::clear(const ClearParameters &clearParams,
                                            ? 0.0f
                                            : clearParams.colorF.blue));
 
-        if ((formatInfo.redBits > 0 && !clearParams.colorMaskRed[0]) ||
-            (formatInfo.greenBits > 0 && !clearParams.colorMaskGreen[0]) ||
-            (formatInfo.blueBits > 0 && !clearParams.colorMaskBlue[0]) ||
-            (formatInfo.alphaBits > 0 && !clearParams.colorMaskAlpha[0]))
+        const uint8_t colorMask =
+            gl::BlendStateExt::ColorMaskStorage::GetValueIndexed(0, clearParams.colorMask);
+        bool r, g, b, a;
+        gl::BlendStateExt::UnpackColorMask(colorMask, &r, &g, &b, &a);
+        if ((formatInfo.redBits > 0 && !r) || (formatInfo.greenBits > 0 && !g) ||
+            (formatInfo.blueBits > 0 && !b) || (formatInfo.alphaBits > 0 && !a))
         {
             needMaskedColorClear = true;
         }
@@ -2019,11 +2021,9 @@ void Renderer9::clear(const ClearParameters &clearParams,
 
         if (clearColor)
         {
-            mDevice->SetRenderState(D3DRS_COLORWRITEENABLE,
-                                    gl_d3d9::ConvertColorMask(clearParams.colorMaskRed[0],
-                                                              clearParams.colorMaskGreen[0],
-                                                              clearParams.colorMaskBlue[0],
-                                                              clearParams.colorMaskAlpha[0]));
+            mDevice->SetRenderState(
+                D3DRS_COLORWRITEENABLE,
+                gl::BlendStateExt::ColorMaskStorage::GetValueIndexed(0, clearParams.colorMask));
         }
         else
         {
@@ -2621,15 +2621,13 @@ angle::Result Renderer9::loadExecutable(d3d::Context *context,
 
     switch (type)
     {
-        case gl::ShaderType::Vertex:
-        {
+        case gl::ShaderType::Vertex: {
             IDirect3DVertexShader9 *vshader = nullptr;
             ANGLE_TRY(createVertexShader(context, (DWORD *)function, length, &vshader));
             *outExecutable = new ShaderExecutable9(function, length, vshader);
         }
         break;
-        case gl::ShaderType::Fragment:
-        {
+        case gl::ShaderType::Fragment: {
             IDirect3DPixelShader9 *pshader = nullptr;
             ANGLE_TRY(createPixelShader(context, (DWORD *)function, length, &pshader));
             *outExecutable = new ShaderExecutable9(function, length, pshader);

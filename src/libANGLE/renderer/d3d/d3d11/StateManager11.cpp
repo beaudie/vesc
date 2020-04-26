@@ -41,8 +41,7 @@ bool ImageIndexConflictsWithSRV(const gl::ImageIndex &index, D3D11_SHADER_RESOUR
 
     switch (desc.ViewDimension)
     {
-        case D3D11_SRV_DIMENSION_TEXTURE2D:
-        {
+        case D3D11_SRV_DIMENSION_TEXTURE2D: {
             bool allLevels         = (desc.Texture2D.MipLevels == std::numeric_limits<UINT>::max());
             unsigned int maxSrvMip = desc.Texture2D.MipLevels + desc.Texture2D.MostDetailedMip;
             maxSrvMip              = allLevels ? INT_MAX : maxSrvMip;
@@ -55,8 +54,7 @@ bool ImageIndexConflictsWithSRV(const gl::ImageIndex &index, D3D11_SHADER_RESOUR
                        .intersects(gl::RangeUI(desc.Texture2D.MostDetailedMip, maxSrvMip));
         }
 
-        case D3D11_SRV_DIMENSION_TEXTURE2DARRAY:
-        {
+        case D3D11_SRV_DIMENSION_TEXTURE2DARRAY: {
             GLint layerIndex = index.getLayerIndex();
 
             bool allLevels = (desc.Texture2DArray.MipLevels == std::numeric_limits<UINT>::max());
@@ -74,8 +72,7 @@ bool ImageIndexConflictsWithSRV(const gl::ImageIndex &index, D3D11_SHADER_RESOUR
                    static_cast<UINT>(layerIndex) < maxSlice;
         }
 
-        case D3D11_SRV_DIMENSION_TEXTURECUBE:
-        {
+        case D3D11_SRV_DIMENSION_TEXTURECUBE: {
             bool allLevels = (desc.TextureCube.MipLevels == std::numeric_limits<UINT>::max());
             unsigned int maxSrvMip = desc.TextureCube.MipLevels + desc.TextureCube.MostDetailedMip;
             maxSrvMip              = allLevels ? INT_MAX : maxSrvMip;
@@ -84,8 +81,7 @@ bool ImageIndexConflictsWithSRV(const gl::ImageIndex &index, D3D11_SHADER_RESOUR
                    desc.TextureCube.MostDetailedMip <= mipLevel && mipLevel < maxSrvMip;
         }
 
-        case D3D11_SRV_DIMENSION_TEXTURE3D:
-        {
+        case D3D11_SRV_DIMENSION_TEXTURE3D: {
             bool allLevels         = (desc.Texture3D.MipLevels == std::numeric_limits<UINT>::max());
             unsigned int maxSrvMip = desc.Texture3D.MipLevels + desc.Texture3D.MostDetailedMip;
             maxSrvMip              = allLevels ? INT_MAX : maxSrvMip;
@@ -108,13 +104,11 @@ bool ImageIndexConflictsWithUAV(const gl::ImageIndex &index, D3D11_UNORDERED_ACC
 
     switch (desc.ViewDimension)
     {
-        case D3D11_UAV_DIMENSION_TEXTURE2D:
-        {
+        case D3D11_UAV_DIMENSION_TEXTURE2D: {
             return textureType == gl::TextureType::_2D && mipLevel == desc.Texture2D.MipSlice;
         }
 
-        case D3D11_UAV_DIMENSION_TEXTURE2DARRAY:
-        {
+        case D3D11_UAV_DIMENSION_TEXTURE2DARRAY: {
             GLint layerIndex         = index.getLayerIndex();
             unsigned mipSlice        = desc.Texture2DArray.MipSlice;
             unsigned firstArraySlice = desc.Texture2DArray.FirstArraySlice;
@@ -126,8 +120,7 @@ bool ImageIndexConflictsWithUAV(const gl::ImageIndex &index, D3D11_UNORDERED_ACC
                                                 .contains(static_cast<UINT>(layerIndex)));
         }
 
-        case D3D11_UAV_DIMENSION_TEXTURE3D:
-        {
+        case D3D11_UAV_DIMENSION_TEXTURE3D: {
             GLint layerIndex     = index.getLayerIndex();
             unsigned mipSlice    = desc.Texture3D.MipSlice;
             unsigned firstWSlice = desc.Texture3D.FirstWSlice;
@@ -667,7 +660,7 @@ StateManager11::StateManager11(Renderer11 *renderer)
     : mRenderer(renderer),
       mInternalDirtyBits(),
       mCurSampleAlphaToCoverage(false),
-      mCurBlendStateArray(),
+      mCurBlendStateExt(),
       mCurBlendColor(0, 0, 0, 0),
       mCurSampleMask(0),
       mCurStencilRef(0),
@@ -785,8 +778,7 @@ void StateManager11::setShaderResourceInternal(gl::ShaderType shaderType,
             case gl::ShaderType::Fragment:
                 deviceContext->PSSetShaderResources(resourceSlot, 1, &srvPtr);
                 break;
-            case gl::ShaderType::Compute:
-            {
+            case gl::ShaderType::Compute: {
                 if (srvPtr)
                 {
                     uintptr_t resource = reinterpret_cast<uintptr_t>(GetViewResource(srvPtr));
@@ -948,65 +940,39 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
     {
         switch (dirtyBit)
         {
-            case gl::State::DIRTY_BIT_BLEND_EQUATIONS:
-            {
-                const gl::BlendStateArray &blendStateArray = state.getBlendStateArray();
-                const size_t statesCount = mIndependentBlendStates ? blendStateArray.size() : 1;
-                for (size_t i = 0; i < statesCount; i++)
+            case gl::State::DIRTY_BIT_BLEND_EQUATIONS: {
+                const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
+                ASSERT(mCurBlendStateExt.mMaxDrawBuffers == blendStateExt.mMaxDrawBuffers);
+                // Compare blend equations only for buffers with blending enabled because
+                // subsequent sync stages enforce default values for buffers with blending disabled.
+                if ((blendStateExt.mEnabledMask &
+                     mCurBlendStateExt.compareEquations(blendStateExt.mEquationColor,
+                                                        blendStateExt.mEquationAlpha))
+                        .any())
                 {
-                    const gl::BlendState &blendState = blendStateArray[i];
-                    if (!blendState.blend)
-                    {
-                        // Subsequent sync stages enforce default values for buffers with disabled
-                        // blending anyway, no need to touch internal dirty bits.
-                        continue;
-                    }
-                    const gl::BlendState &curBlendState = mCurBlendStateArray[i];
-                    if (blendState.blendEquationRGB != curBlendState.blendEquationRGB ||
-                        blendState.blendEquationAlpha != curBlendState.blendEquationAlpha)
-                    {
-                        mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
-                        break;
-                    }
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             }
-            case gl::State::DIRTY_BIT_BLEND_FUNCS:
-            {
-                const gl::BlendStateArray &blendStateArray = state.getBlendStateArray();
-                const size_t statesCount = mIndependentBlendStates ? blendStateArray.size() : 1;
-                for (size_t i = 0; i < statesCount; i++)
+            case gl::State::DIRTY_BIT_BLEND_FUNCS: {
+                const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
+                ASSERT(mCurBlendStateExt.mMaxDrawBuffers == blendStateExt.mMaxDrawBuffers);
+                // Compare blend factors only for buffers with blending enabled because
+                // subsequent sync stages enforce default values for buffers with blending disabled.
+                if ((blendStateExt.mEnabledMask &
+                     mCurBlendStateExt.compareFactors(
+                         blendStateExt.mSrcColor, blendStateExt.mDstColor, blendStateExt.mSrcAlpha,
+                         blendStateExt.mDstAlpha))
+                        .any())
                 {
-                    const gl::BlendState &blendState = blendStateArray[i];
-                    if (!blendState.blend)
-                    {
-                        // Subsequent sync stages enforce default values for buffers with disabled
-                        // blending anyway, no need to touch internal dirty bits.
-                        continue;
-                    }
-                    const gl::BlendState &curBlendState = mCurBlendStateArray[i];
-                    if (blendState.sourceBlendRGB != curBlendState.sourceBlendRGB ||
-                        blendState.destBlendRGB != curBlendState.destBlendRGB ||
-                        blendState.sourceBlendAlpha != curBlendState.sourceBlendAlpha ||
-                        blendState.destBlendAlpha != curBlendState.destBlendAlpha)
-                    {
-                        mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
-                        break;
-                    }
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             }
-            case gl::State::DIRTY_BIT_BLEND_ENABLED:
-            {
-                const gl::BlendStateArray &blendStateArray = state.getBlendStateArray();
-                const size_t statesCount = mIndependentBlendStates ? blendStateArray.size() : 1;
-                for (size_t i = 0; i < statesCount; i++)
+            case gl::State::DIRTY_BIT_BLEND_ENABLED: {
+                if (state.getBlendStateExt().mEnabledMask != mCurBlendStateExt.mEnabledMask)
                 {
-                    if (blendStateArray[i].blend != mCurBlendStateArray[i].blend)
-                    {
-                        mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
-                        break;
-                    }
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             }
@@ -1022,22 +988,10 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                     mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
                 }
                 break;
-            case gl::State::DIRTY_BIT_COLOR_MASK:
-            {
-                const gl::BlendStateArray &blendStateArray = state.getBlendStateArray();
-                const size_t statesCount = mIndependentBlendStates ? blendStateArray.size() : 1;
-                for (size_t i = 0; i < statesCount; i++)
+            case gl::State::DIRTY_BIT_COLOR_MASK: {
+                if (state.getBlendStateExt().mColorMask != mCurBlendStateExt.mColorMask)
                 {
-                    const gl::BlendState &blendState    = blendStateArray[i];
-                    const gl::BlendState &curBlendState = mCurBlendStateArray[i];
-                    if (blendState.colorMaskRed != curBlendState.colorMaskRed ||
-                        blendState.colorMaskGreen != curBlendState.colorMaskGreen ||
-                        blendState.colorMaskBlue != curBlendState.colorMaskBlue ||
-                        blendState.colorMaskAlpha != curBlendState.colorMaskAlpha)
-                    {
-                        mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
-                        break;
-                    }
+                    mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
                 }
                 break;
             }
@@ -1108,8 +1062,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                     mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
                 }
                 break;
-            case gl::State::DIRTY_BIT_POLYGON_OFFSET:
-            {
+            case gl::State::DIRTY_BIT_POLYGON_OFFSET: {
                 const gl::RasterizerState &rasterState = state.getRasterizerState();
                 if (rasterState.polygonOffsetFactor != mCurRasterState.polygonOffsetFactor ||
                     rasterState.polygonOffsetUnits != mCurRasterState.polygonOffsetUnits)
@@ -1197,8 +1150,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
                 mProgramD3D = GetImplAs<ProgramD3D>(state.getProgram());
                 break;
-            case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
-            {
+            case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE: {
                 invalidateShaders();
                 invalidateTexturesAndSamplers();
                 invalidateProgramUniforms();
@@ -1226,8 +1178,7 @@ void StateManager11::syncState(const gl::Context *context, const gl::State::Dirt
                 }
                 break;
             }
-            case gl::State::DIRTY_BIT_CURRENT_VALUES:
-            {
+            case gl::State::DIRTY_BIT_CURRENT_VALUES: {
                 for (auto attribIndex : state.getAndResetDirtyCurrentValues())
                 {
                     invalidateCurrentValueAttrib(attribIndex);
@@ -1261,7 +1212,7 @@ void StateManager11::handleMultiviewDrawFramebufferChange(const gl::Context *con
 }
 
 angle::Result StateManager11::syncBlendState(const gl::Context *context,
-                                             const gl::BlendStateArray &blendStateArray,
+                                             const gl::BlendStateExt &blendStateExt,
                                              const gl::ColorF &blendColor,
                                              unsigned int sampleMask,
                                              bool sampleAlphaToCoverage,
@@ -1269,7 +1220,7 @@ angle::Result StateManager11::syncBlendState(const gl::Context *context,
 {
     const d3d11::BlendState *dxBlendState = nullptr;
     const d3d11::BlendStateKey &key       = RenderStateCache::GetBlendStateKey(
-        context, mFramebuffer11, blendStateArray, sampleAlphaToCoverage);
+        context, mFramebuffer11, blendStateExt, sampleAlphaToCoverage);
 
     ANGLE_TRY(mRenderer->getBlendState(context, key, &dxBlendState));
 
@@ -1287,7 +1238,7 @@ angle::Result StateManager11::syncBlendState(const gl::Context *context,
 
     mRenderer->getDeviceContext()->OMSetBlendState(dxBlendState->get(), blendColors, sampleMask);
 
-    mCurBlendStateArray       = blendStateArray;
+    mCurBlendStateExt         = blendStateExt;
     mCurBlendColor            = blendColor;
     mCurSampleMask            = sampleMask;
     mCurSampleAlphaToCoverage = sampleAlphaToCoverage;
@@ -1936,6 +1887,10 @@ angle::Result StateManager11::ensureInitialized(const gl::Context *context)
 
     mIndependentBlendStates = extensions.drawBuffersIndexedAny();  // requires FL10_1
 
+    // FL9_3 is limited to 4; ES3.1 context on FL11_0 is limited to 7
+    mCurBlendStateExt =
+        gl::BlendStateExt(GetImplAs<Context11>(context)->getNativeCaps().maxDrawBuffers);
+
     ANGLE_TRY(mVertexDataManager.initialize(context));
 
     mCurrentAttributes.reserve(gl::MAX_VERTEX_ATTRIBS);
@@ -2276,7 +2231,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
                 break;
             case DIRTY_BIT_BLEND_STATE:
                 ANGLE_TRY(syncBlendState(
-                    context, glState.getBlendStateArray(), glState.getBlendColor(), sampleMask,
+                    context, glState.getBlendStateExt(), glState.getBlendColor(), sampleMask,
                     glState.isSampleAlphaToCoverageEnabled(), glState.hasConstantAlphaBlendFunc()));
                 break;
             case DIRTY_BIT_DEPTH_STENCIL_STATE:
@@ -3545,8 +3500,7 @@ angle::Result StateManager11::syncUniformBuffersForShader(const gl::Context *con
 
         switch (shaderType)
         {
-            case gl::ShaderType::Vertex:
-            {
+            case gl::ShaderType::Vertex: {
                 if (mCurrentConstantBufferVS[bufferIndex] == constantBuffer->getSerial() &&
                     mCurrentConstantBufferVSOffset[bufferIndex] == uniformBufferOffset &&
                     mCurrentConstantBufferVSSize[bufferIndex] == uniformBufferSize)
@@ -3573,8 +3527,7 @@ angle::Result StateManager11::syncUniformBuffersForShader(const gl::Context *con
                 break;
             }
 
-            case gl::ShaderType::Fragment:
-            {
+            case gl::ShaderType::Fragment: {
                 if (mCurrentConstantBufferPS[bufferIndex] == constantBuffer->getSerial() &&
                     mCurrentConstantBufferPSOffset[bufferIndex] == uniformBufferOffset &&
                     mCurrentConstantBufferPSSize[bufferIndex] == uniformBufferSize)
@@ -3600,8 +3553,7 @@ angle::Result StateManager11::syncUniformBuffersForShader(const gl::Context *con
                 break;
             }
 
-            case gl::ShaderType::Compute:
-            {
+            case gl::ShaderType::Compute: {
                 if (mCurrentConstantBufferCS[bufferIndex] == constantBuffer->getSerial() &&
                     mCurrentConstantBufferCSOffset[bufferIndex] == uniformBufferOffset &&
                     mCurrentConstantBufferCSSize[bufferIndex] == uniformBufferSize)
@@ -3723,8 +3675,7 @@ angle::Result StateManager11::syncShaderStorageBuffersForShader(const gl::Contex
 
         switch (shaderType)
         {
-            case gl::ShaderType::Compute:
-            {
+            case gl::ShaderType::Compute: {
                 setUnorderedAccessViewInternal(shaderType, registerIndex, uavPtr);
                 break;
             }
@@ -3878,8 +3829,7 @@ void StateManager11::syncPrimitiveTopology(const gl::State &glState,
 
     switch (currentDrawMode)
     {
-        case gl::PrimitiveMode::Points:
-        {
+        case gl::PrimitiveMode::Points: {
             bool usesPointSize = mProgramD3D->usesPointSize();
 
             // ProgramBinary assumes non-point rendering if gl_PointSize isn't written,
