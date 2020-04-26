@@ -2498,6 +2498,14 @@ Serial ImageHelper::getAssignSerial(ContextVk *contextVk)
     return mSerial;
 }
 
+void ImageHelper::Update3DSubresourceLayer(VkImageSubresourceLayers &Subresource)
+{
+    // If the srcImage/dstImage parameters are of VkImageType VK_IMAGE_TYPE_3D, the baseArrayLayer
+    // and layerCount members of the corresponding subresource must be 0 and 1, respectively.
+    Subresource.baseArrayLayer = 0;
+    Subresource.layerCount     = 1;
+}
+
 // static
 void ImageHelper::Copy(ImageHelper *srcImage,
                        ImageHelper *dstImage,
