@@ -587,6 +587,15 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
     srcSubresource.baseArrayLayer           = static_cast<uint32_t>(sourceLayer);
     srcSubresource.layerCount               = layerCount;
 
+    if (srcImage->getExtents().depth > 1)
+    {
+        // The srcImage parameters are of VkImageType VK_IMAGE_TYPE_3D, the baseArrayLayer
+        // and layerCount members of the corresponding subresource must be 0 and 1, respectively.
+        srcOffset.z                   = srcSubresource.baseArrayLayer;
+        srcSubresource.baseArrayLayer = 0;
+        srcSubresource.layerCount     = 1;
+    }
+
     // If destination is valid, copy the source directly into it.
     if (mImage->valid())
     {
