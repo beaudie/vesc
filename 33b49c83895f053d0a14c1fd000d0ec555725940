@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "91889dc4_0b6944f9",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-04-26T05:33:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "68ab504c_f5552699",
+      "range": {
+        "startLine": 115,
+        "startChar": 12,
+        "endLine": 115,
+        "endChar": 60
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "041dd4b3_529a01cc",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 5
@@ -305,6 +329,30 @@
       "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a425315_5877e17b",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1692,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2020-04-26T05:33:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e16be3ee_742e85dc",
+      "range": {
+        "startLine": 1681,
+        "startChar": 0,
+        "endLine": 1692,
+        "endChar": 21
+      },
+      "revId": "33b49c83895f053d0a14c1fd000d0ec555725940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
