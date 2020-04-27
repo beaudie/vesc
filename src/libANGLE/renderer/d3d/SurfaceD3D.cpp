@@ -409,6 +409,16 @@ EGLint SurfaceD3D::getHeight() const
     return mHeight;
 }
 
+EGLint SurfaceD3D::getEglWidth(const egl::Display *display) const
+{
+    return mWidth;
+}
+
+EGLint SurfaceD3D::getEglHeight(const egl::Display *display) const
+{
+    return mHeight;
+}
+
 EGLint SurfaceD3D::isPostSubBufferSupported() const
 {
     // post sub buffer is always possible on D3D surfaces

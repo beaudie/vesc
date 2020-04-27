@@ -29,6 +29,8 @@ class SurfaceGL : public SurfaceImpl
                                      const gl::ImageIndex &imageIndex) override;
 
     virtual bool hasEmulatedAlphaChannel() const;
+    EGLint getEglWidth(const egl::Display *display) const override;
+    EGLint getEglHeight(const egl::Display *display) const override;
 };
 
 }  // namespace rx

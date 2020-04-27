@@ -89,6 +89,18 @@ EGLint SurfaceNULL::getHeight() const
     return 100;
 }
 
+EGLint SurfaceNULL::getEglWidth(const egl::Display *display) const
+{
+    // TODO(geofflang): Read from an actual window?
+    return 100;
+}
+
+EGLint SurfaceNULL::getEglHeight(const egl::Display *display) const
+{
+    // TODO(geofflang): Read from an actual window?
+    return 100;
+}
+
 EGLint SurfaceNULL::isPostSubBufferSupported() const
 {
     return EGL_TRUE;

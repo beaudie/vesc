@@ -334,6 +334,16 @@ EGLint OffscreenSurfaceVk::getHeight() const
     return mHeight;
 }
 
+EGLint OffscreenSurfaceVk::getEglWidth(const egl::Display *display) const
+{
+    return mWidth;
+}
+
+EGLint OffscreenSurfaceVk::getEglHeight(const egl::Display *display) const
+{
+    return mHeight;
+}
+
 EGLint OffscreenSurfaceVk::isPostSubBufferSupported() const
 {
     return EGL_FALSE;
@@ -1401,6 +1411,34 @@ EGLint WindowSurfaceVk::getWidth() const
 EGLint WindowSurfaceVk::getHeight() const
 {
     return static_cast<EGLint>(mColorRenderTarget.getExtents().height);
+}
+
+EGLint WindowSurfaceVk::getEglWidth(const egl::Display *display) const
+{
+    EGLint value                           = 0;
+    DisplayVk *displayVk                   = vk::GetImpl(display);
+    const VkPhysicalDevice &physicalDevice = displayVk->getRenderer()->getPhysicalDevice();
+    VkSurfaceCapabilitiesKHR surfaceCaps;
+    if (VK_SUCCESS ==
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface, &surfaceCaps))
+    {
+        value = static_cast<EGLint>(surfaceCaps.currentExtent.width);
+    }
+    return value;
+}
+
+EGLint WindowSurfaceVk::getEglHeight(const egl::Display *display) const
+{
+    EGLint value                           = 0;
+    DisplayVk *displayVk                   = vk::GetImpl(display);
+    const VkPhysicalDevice &physicalDevice = displayVk->getRenderer()->getPhysicalDevice();
+    VkSurfaceCapabilitiesKHR surfaceCaps;
+    if (VK_SUCCESS ==
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface, &surfaceCaps))
+    {
+        value = static_cast<EGLint>(surfaceCaps.currentExtent.height);
+    }
+    return value;
 }
 
 EGLint WindowSurfaceVk::isPostSubBufferSupported() const

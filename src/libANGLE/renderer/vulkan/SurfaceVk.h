@@ -66,6 +66,8 @@ class OffscreenSurfaceVk : public SurfaceVk
     // width and height can change with client window resizing
     EGLint getWidth() const override;
     EGLint getHeight() const override;
+    EGLint getEglWidth(const egl::Display *display) const override;
+    EGLint getEglHeight(const egl::Display *display) const override;
 
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
@@ -211,6 +213,15 @@ class WindowSurfaceVk : public SurfaceVk
     // width and height can change with client window resizing
     EGLint getWidth() const override;
     EGLint getHeight() const override;
+    // Note: windows cannot be resized on Android.  The approach requires
+    // calling vkGetPhysicalDeviceSurfaceCapabilitiesKHR.  However, that is
+    // expensive; and there are troublesome timing issues for other parts of
+    // ANGLE (which cause test failures and crashes).  Therefore, a
+    // special-Android-only path is created just for the querying of EGL_WIDTH
+    // and EGL_HEIGHT.
+    // https://issuetracker.google.com/issues/153329980
+    EGLint getEglWidth(const egl::Display *display) const override;
+    EGLint getEglHeight(const egl::Display *display) const override;
 
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;

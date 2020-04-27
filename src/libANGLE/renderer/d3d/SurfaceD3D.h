@@ -52,6 +52,8 @@ class SurfaceD3D : public SurfaceImpl
 
     EGLint getWidth() const override;
     EGLint getHeight() const override;
+    EGLint getEglWidth(const egl::Display *display) const override;
+    EGLint getEglHeight(const egl::Display *display) const override;
 
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;

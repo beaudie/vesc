@@ -57,4 +57,16 @@ bool SurfaceGL::hasEmulatedAlphaChannel() const
     return false;
 }
 
+EGLint SurfaceGL::getEglWidth(const egl::Display *display) const
+{
+    // TODO(geofflang): Read from an actual window?
+    return 100;
+}
+
+EGLint SurfaceGL::getEglHeight(const egl::Display *display) const
+{
+    // TODO(geofflang): Read from an actual window?
+    return 100;
+}
+
 }  // namespace rx
