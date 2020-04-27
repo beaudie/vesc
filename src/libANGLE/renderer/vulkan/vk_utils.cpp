@@ -950,6 +950,11 @@ VkShaderStageFlags GetShaderStageFlags(gl::ShaderBitSet activeShaders)
     return flags;
 }
 
+VkShaderStageFlags GetShaderStageFlag(gl::ShaderType shaderType)
+{
+    return kShaderStageMap[shaderType];
+}
+
 void GetViewport(const gl::Rectangle &viewport,
                  float nearPlane,
                  float farPlane,

@@ -622,11 +622,17 @@ class BufferHelper final : public Resource
 
     void updateReadBarrier(VkAccessFlags readAccessType,
                            VkAccessFlags *barrierSrcOut,
-                           VkAccessFlags *barrierDstOut);
+                           VkAccessFlags *barrierDstOut,
+                           VkPipelineStageFlags readStage,
+                           VkPipelineStageFlags *barrierSrcStageOut,
+                           VkPipelineStageFlags *barrierDstStageOut);
 
     void updateWriteBarrier(VkAccessFlags writeAccessType,
                             VkAccessFlags *barrierSrcOut,
-                            VkAccessFlags *barrierDstOut);
+                            VkAccessFlags *barrierDstOut,
+                            VkPipelineStageFlags writeStage,
+                            VkPipelineStageFlags *barrierSrcStageOut,
+                            VkPipelineStageFlags *barrierDstStageOut);
 
   private:
     angle::Result mapImpl(ContextVk *contextVk);
@@ -664,6 +670,8 @@ class BufferHelper final : public Resource
     // For memory barriers.
     VkFlags mCurrentWriteAccess;
     VkFlags mCurrentReadAccess;
+    VkPipelineStageFlags mCurrentWriteStages;
+    VkPipelineStageFlags mCurrentReadStages;
 };
 
 // Imagine an image going through a few layout transitions:
