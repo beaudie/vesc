@@ -389,7 +389,7 @@ class QueryHelper final
 
     // for occlusion query
     void beginOcclusionQuery(ContextVk *contextVk,
-                             PrimaryCommandBuffer *primaryCommands,
+                             CommandBuffer *primaryCommands,
                              CommandBuffer *renderPassCommandBuffer);
     void endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
 
