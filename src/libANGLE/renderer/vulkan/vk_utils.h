@@ -696,12 +696,20 @@ constexpr gl::ShaderMap<VkShaderStageFlagBits> kShaderStageMap = {
     {gl::ShaderType::Compute, VK_SHADER_STAGE_COMPUTE_BIT},
 };
 
+constexpr gl::ShaderMap<VkPipelineStageFlagBits> kPipelineStageShaderMap = {
+    {gl::ShaderType::Vertex, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT},
+    {gl::ShaderType::Fragment, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+    {gl::ShaderType::Geometry, VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT},
+    {gl::ShaderType::Compute, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT},
+};
+
 void GetOffset(const gl::Offset &glOffset, VkOffset3D *vkOffset);
 void GetExtent(const gl::Extents &glExtent, VkExtent3D *vkExtent);
 VkImageType GetImageType(gl::TextureType textureType);
 VkImageViewType GetImageViewType(gl::TextureType textureType);
 VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bool alpha);
 VkShaderStageFlags GetShaderStageFlags(gl::ShaderBitSet activeShaders);
+VkShaderStageFlags GetPipelineStageShaderFlag(gl::ShaderType shaderType);
 
 void GetViewport(const gl::Rectangle &viewport,
                  float nearPlane,
