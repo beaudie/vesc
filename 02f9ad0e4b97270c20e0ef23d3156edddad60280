@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e931d32_323c216e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-27T21:40:04Z",
+      "side": 1,
+      "message": "why not be more explicit and static_assert that \"sizeof(VkDeviceSize) \u003d\u003d sizeof(GLsizeiptr)\"?",
+      "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e787a4c_00ff6f3a",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1982,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-27T21:40:04Z",
+      "side": 1,
+      "message": "is this comment and skip still valid?",
+      "range": {
+        "startLine": 1981,
+        "startChar": 4,
+        "endLine": 1982,
+        "endChar": 67
+      },
+      "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
