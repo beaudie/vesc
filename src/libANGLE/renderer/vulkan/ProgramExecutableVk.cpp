@@ -931,12 +931,13 @@ void ProgramExecutableVk::updateBuffersDescriptorSet(ContextVk *contextVk,
         {
             // We set the SHADER_READ_BIT to be conservative.
             VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-            commandBufferHelper->bufferWrite(resourceUseList, accessFlags, &bufferHelper);
+            commandBufferHelper->bufferWrite(resourceUseList, accessFlags,
+                                             gl_vk::GetShaderStageFlag(shaderType), &bufferHelper);
         }
         else
         {
             commandBufferHelper->bufferRead(resourceUseList, VK_ACCESS_UNIFORM_READ_BIT,
-                                            &bufferHelper);
+                                            gl_vk::GetShaderStageFlag(shaderType), &bufferHelper);
         }
 
         ++writeCount;
@@ -1005,8 +1006,9 @@ void ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
         // We set SHADER_READ_BIT to be conservative.
-        commandBufferHelper->bufferWrite(
-            resourceUseList, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT, &bufferHelper);
+        commandBufferHelper->bufferWrite(resourceUseList,
+                                         VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+                                         gl_vk::GetShaderStageFlag(shaderType), &bufferHelper);
 
         writtenBindings.set(binding);
     }
