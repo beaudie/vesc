@@ -931,6 +931,7 @@ if (build_angle_deqp_tests && !is_fuchsia) {
       "$deqp_path/framework/common",
       "$deqp_path/framework/randomshaders",
       "$deqp_path/framework/referencerenderer",
+      "$deqp_path/framework/xexml",
     ]
   }
 
