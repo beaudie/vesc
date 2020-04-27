@@ -22,6 +22,30 @@
       "revId": "b9dff46e459c3cdf975912787393f32ff48a341f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ee5def3_029e208b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-27T21:32:19Z",
+      "side": 1,
+      "message": "Done, did the full cleanup.",
+      "parentUuid": "a3b6cae2_d2d2b05e",
+      "range": {
+        "startLine": 921,
+        "startChar": 12,
+        "endLine": 921,
+        "endChar": 91
+      },
+      "revId": "b9dff46e459c3cdf975912787393f32ff48a341f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
