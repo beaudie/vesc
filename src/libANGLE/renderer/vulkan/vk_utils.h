@@ -702,6 +702,7 @@ VkImageType GetImageType(gl::TextureType textureType);
 VkImageViewType GetImageViewType(gl::TextureType textureType);
 VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bool alpha);
 VkShaderStageFlags GetShaderStageFlags(gl::ShaderBitSet activeShaders);
+VkShaderStageFlags GetShaderStageFlag(gl::ShaderType shaderType);
 
 void GetViewport(const gl::Rectangle &viewport,
                  float nearPlane,
