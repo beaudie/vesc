@@ -913,10 +913,16 @@ void ProgramExecutableVk::updateBuffersDescriptorSet(ContextVk *contextVk,
             continue;
         }
 
+        const gl::Buffer *bufferGL       = bufferBinding.get();
         ShaderInterfaceVariableInfo info = mVariableInfoMap[shaderType][block.mappedName];
         uint32_t binding                 = info.binding;
         uint32_t arrayElement            = block.isArray ? block.arrayElement : 0;
-        VkDeviceSize maxBlockSize        = isStorageBuffer ? 0 : block.dataSize;
+        VkDeviceSize maxBlockSize =
+            (bufferBinding.getSize() == 0 ? bufferGL->getSize() : bufferBinding.getSize());
+        if (!isStorageBuffer)
+        {
+            maxBlockSize = block.dataSize;
+        }
 
         VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[writeCount];
         VkWriteDescriptorSet &writeInfo    = writeDescriptorInfo[writeCount];
@@ -924,7 +930,7 @@ void ProgramExecutableVk::updateBuffersDescriptorSet(ContextVk *contextVk,
         WriteBufferDescriptorSetBinding(bufferBinding, maxBlockSize, descriptorSet, descriptorType,
                                         binding, arrayElement, 0, &bufferInfo, &writeInfo);
 
-        BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
+        BufferVk *bufferVk             = vk::GetImpl(bufferGL);
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
         if (isStorageBuffer)
