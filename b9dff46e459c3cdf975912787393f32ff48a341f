@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3b6cae2_d2d2b05e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-27T21:00:36Z",
+      "side": 1,
+      "message": "Can this move to else part bellow to avoid maxBlockSize set twice (and easier to read as well)?",
+      "range": {
+        "startLine": 921,
+        "startChar": 12,
+        "endLine": 921,
+        "endChar": 91
+      },
+      "revId": "b9dff46e459c3cdf975912787393f32ff48a341f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
