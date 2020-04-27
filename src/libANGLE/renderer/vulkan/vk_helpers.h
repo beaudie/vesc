@@ -20,6 +20,9 @@ class ImageIndex;
 
 namespace rx
 {
+
+class OutsideRenderPassCommandBuffer;
+
 namespace vk
 {
 constexpr VkBufferUsageFlags kVertexBufferUsageFlags =
@@ -388,9 +391,9 @@ class QueryHelper final
     angle::Result endQuery(ContextVk *contextVk);
 
     // for occlusion query
-    void beginOcclusionQuery(ContextVk *contextVk,
-                             PrimaryCommandBuffer *primaryCommands,
-                             CommandBuffer *renderPassCommandBuffer);
+    // Must resetQueryPool outside of RenderPass before beginning occlusion query.
+    void resetQueryPool(ContextVk *contextVk, CommandBuffer *outsideRenderPassCommandBuffer);
+    void beginOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
     void endOcclusionQuery(ContextVk *contextVk, CommandBuffer *renderPassCommandBuffer);
 
     angle::Result flushAndWriteTimestamp(ContextVk *contextVk);
