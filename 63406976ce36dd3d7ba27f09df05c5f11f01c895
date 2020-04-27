@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32ff2807_768d581a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-27T18:02:19Z",
+      "side": 1,
+      "message": "just one request for this CL. For the \"get\" functions, can you make them call \"find\" internally, and only create the RT if the \"find\" returns nullptr?",
+      "range": {
+        "startLine": 924,
+        "startChar": 0,
+        "endLine": 970,
+        "endChar": 1
+      },
+      "revId": "63406976ce36dd3d7ba27f09df05c5f11f01c895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
