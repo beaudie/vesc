@@ -177,6 +177,41 @@ class DataCounters final : angle::NonCopyable
     std::map<Counter, int> mData;
 };
 
+// Helpers to track resources that need to be reset when frame looping
+using StartingBuffers    = std::set<gl::BufferID>;
+using GennedBuffers      = std::set<gl::BufferID>;
+using DeletedBuffers     = std::set<gl::BufferID>;
+using BufferResetCalls   = std::map<gl::BufferID, std::vector<CallCapture>>;
+using BufferRestoreCalls = std::map<gl::BufferID, std::vector<CallCapture>>;
+
+// Helper to track resource changes during the capture
+class ResourceTracker final : angle::NonCopyable
+{
+  public:
+    ResourceTracker();
+    ~ResourceTracker();
+
+    BufferResetCalls *getBufferResetCalls() { return &mBufferResetCalls; }
+    BufferRestoreCalls *getBufferRestoreCalls() { return &mBufferRestoreCalls; }
+
+    StartingBuffers *getStartingBuffers() { return &mStartingBuffers; }
+    GennedBuffers *getGennedBuffers() { return &mGennedBuffers; }
+    DeletedBuffers *getDeletedBuffers() { return &mDeletedBuffers; }
+
+    bool getBufferMappedWritable(gl::BufferID id);
+    void setBufferMappedWritable(gl::BufferID id);
+
+  private:
+    std::map<gl::BufferID, std::vector<CallCapture>> mBufferResetCalls;
+    std::map<gl::BufferID, std::vector<CallCapture>> mBufferRestoreCalls;
+
+    std::set<gl::BufferID> mStartingBuffers;
+    std::set<gl::BufferID> mGennedBuffers;
+    std::set<gl::BufferID> mDeletedBuffers;
+
+    std::set<gl::BufferID> mWritableBuffers;
+};
+
 // Used by the CPP replay to filter out unnecessary code.
 using HasResourceTypeMap = angle::PackedEnumBitSet<ResourceIDType>;
 
@@ -225,7 +260,6 @@ class FrameCapture final : angle::NonCopyable
 
     std::vector<CallCapture> mSetupCalls;
     std::vector<CallCapture> mFrameCalls;
-    std::vector<CallCapture> mTearDownCalls;
 
     // We save one large buffer of binary data for the whole CPP replay.
     // This simplifies a lot of file management.
@@ -243,6 +277,8 @@ class FrameCapture final : angle::NonCopyable
     size_t mReadBufferSize;
     HasResourceTypeMap mHasResourceType;
     BufferDataMap mBufferDataMap;
+
+    ResourceTracker mResourceTracker;
 
     // Cache most recently compiled and linked sources.
     ShaderSourceMap mCachedShaderSources;

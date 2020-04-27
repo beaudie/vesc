@@ -9,6 +9,7 @@
 
 #include "libANGLE/FrameCapture.h"
 
+#include <algorithm>
 #include <cerrno>
 #include <cstring>
 #include <fstream>
@@ -734,13 +735,112 @@ void WriteLoadBinaryDataCall(bool compression,
     out << "    LoadBinaryData(\"" << binaryDataFileName << "\");\n";
 }
 
+void MaybeResetResources(std::stringstream &out,
+                         ResourceIDType resourceIDType,
+                         DataCounters *counters,
+                         std::stringstream &header,
+                         ResourceTracker *resourceTracker,
+                         std::vector<uint8_t> *binaryData)
+{
+    switch (resourceIDType)
+    {
+        case ResourceIDType::Buffer:
+        {
+            StartingBuffers *startingBuffers       = resourceTracker->getStartingBuffers();
+            GennedBuffers *gennedBuffers           = resourceTracker->getGennedBuffers();
+            DeletedBuffers *deletedBuffers         = resourceTracker->getDeletedBuffers();
+            BufferResetCalls *bufferResetCalls     = resourceTracker->getBufferResetCalls();
+            BufferRestoreCalls *bufferRestoreCalls = resourceTracker->getBufferRestoreCalls();
+
+            // Delete all the buffers that were genned beyond our starting buffers
+            std::vector<gl::BufferID> buffersToDelete;
+            for (const auto &gennedBuffer : *gennedBuffers)
+            {
+                // If it wasn't in our starting buffer set, track it
+                if (std::find(startingBuffers->begin(), startingBuffers->end(), gennedBuffer) ==
+                    startingBuffers->end())
+                {
+                    buffersToDelete.push_back(gennedBuffer);
+                }
+            }
+
+            // Delete all the new buffers with one call
+            if (!buffersToDelete.empty())
+            {
+                out << "    const GLuint deleteBuffers[] = {";
+                for (size_t i = 0; i < buffersToDelete.size(); i++)
+                {
+                    if (i > 0)
+                    {
+                        out << ", ";
+                    }
+                    if ((i % 4) == 0)
+                    {
+                        out << "\n        ";
+                    }
+                    out << "gBufferMap[" << buffersToDelete[i].value << "]";
+                }
+                out << "};\n";
+                out << "    glDeleteBuffers(" << buffersToDelete.size() << ", deleteBuffers);\n";
+            }
+
+            // Look through the starting buffers
+            for (auto &startingBuffer : *startingBuffers)
+            {
+                // If any of our buffers were deleted during the run, restore them
+                if (deletedBuffers)
+                {
+                    if (deletedBuffers->find(startingBuffer) != deletedBuffers->end())
+                    {
+                        // Emit their reset calls
+                        for (CallCapture &call : (*bufferResetCalls)[startingBuffer])
+                        {
+                            out << "    ";
+                            WriteCppReplayForCall(call, counters, out, header, binaryData);
+                            out << ";\n";
+                        }
+
+                        // And their restore calls
+                        for (CallCapture &call : (*bufferRestoreCalls)[startingBuffer])
+                        {
+                            out << "    ";
+                            WriteCppReplayForCall(call, counters, out, header, binaryData);
+                            out << ";\n";
+                        }
+
+                        // Move to the next buffer
+                        continue;
+                    }
+                }
+
+                // If it wasn't deleted but was mapped writable, we need to restore its contents
+                if (resourceTracker->getBufferMappedWritable(startingBuffer))
+                {
+                    for (CallCapture &call : (*bufferRestoreCalls)[startingBuffer])
+                    {
+                        out << "    ";
+                        WriteCppReplayForCall(call, counters, out, header, binaryData);
+                        out << ";\n";
+                    }
+                }
+            }
+            break;
+        }
+        default:
+            // TODO (http://anglebug.com/3662): Reset more than just buffers
+            break;
+    }
+}
+
 void WriteCppReplay(bool compression,
                     const std::string &outDir,
                     gl::ContextID contextId,
                     const std::string &captureLabel,
                     uint32_t frameIndex,
+                    uint32_t frameEnd,
                     const std::vector<CallCapture> &frameCalls,
                     const std::vector<CallCapture> &setupCalls,
+                    ResourceTracker *resourceTracker,
                     std::vector<uint8_t> *binaryData)
 {
     DataCounters counters;
@@ -777,6 +877,26 @@ void WriteCppReplay(bool compression,
         }
 
         out << setupCallStream.str();
+
+        out << "}\n";
+        out << "\n";
+    }
+
+    if (frameIndex == frameEnd)
+    {
+        // Emit interesting reset code
+        out << "void ResetContext" << Str(static_cast<int>(contextId)) << "Replay()\n";
+        out << "{\n";
+
+        std::stringstream restoreCallStream;
+
+        for (ResourceIDType resourceType : AllEnums<ResourceIDType>())
+        {
+            MaybeResetResources(restoreCallStream, resourceType, &counters, header, resourceTracker,
+                                binaryData);
+        }
+
+        out << restoreCallStream.str();
 
         out << "}\n";
         out << "\n";
@@ -869,6 +989,7 @@ void WriteCppReplayIndexFiles(bool compression,
     header << "void SetupContext" << static_cast<int>(contextId) << "Replay();\n";
     header << "void ReplayContext" << static_cast<int>(contextId)
            << "Frame(uint32_t frameIndex);\n";
+    header << "void ResetContext" << static_cast<int>(contextId) << "Replay();\n";
     header << "\n";
     header << "using FramebufferChangeCallback = void(*)(void *userData, GLenum target, GLuint "
               "framebuffer);\n";
@@ -1734,8 +1855,34 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
     }
 }
 
+void CaptureBufferResetCalls(const gl::State &replayState,
+                             ResourceTracker *resourceTracker,
+                             gl::BufferID *id,
+                             const gl::Buffer *buffer)
+{
+    // Track this as a starting resource that may need to be restored.
+    StartingBuffers *startingBuffers = resourceTracker->getStartingBuffers();
+    startingBuffers->insert(*id);
+
+    // Track calls to regenerate a given buffer
+    BufferResetCalls *bufferResetCalls = resourceTracker->getBufferResetCalls();
+    Capture(&(*bufferResetCalls)[*id], CaptureDeleteBuffers(replayState, true, 1, id));
+    Capture(&(*bufferResetCalls)[*id], CaptureGenBuffers(replayState, true, 1, id));
+    MaybeCaptureUpdateResourceIDs(&(*bufferResetCalls)[*id]);
+
+    // Track calls to restore a given buffer's contents
+    BufferRestoreCalls *bufferRestoreCalls = resourceTracker->getBufferRestoreCalls();
+    Capture(&(*bufferRestoreCalls)[*id],
+            CaptureBindBuffer(replayState, true, gl::BufferBinding::Array, *id));
+    Capture(&(*bufferRestoreCalls)[*id],
+            CaptureBufferData(replayState, true, gl::BufferBinding::Array,
+                              static_cast<GLsizeiptr>(buffer->getSize()), buffer->getMapPointer(),
+                              buffer->getUsage()));
+}
+
 void CaptureMidExecutionSetup(const gl::Context *context,
                               std::vector<CallCapture> *setupCalls,
+                              ResourceTracker *resourceTracker,
                               const ShaderSourceMap &cachedShaderSources,
                               const ProgramSourceMap &cachedProgramSources,
                               const TextureLevelDataMap &cachedTextureLevelData)
@@ -1788,6 +1935,9 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         cap(CaptureBufferData(replayState, true, gl::BufferBinding::Array,
                               static_cast<GLsizeiptr>(buffer->getSize()), buffer->getMapPointer(),
                               buffer->getUsage()));
+
+        // Generate the calls needed to restore this buffer to original state for frame looping
+        CaptureBufferResetCalls(replayState, resourceTracker, &id, buffer);
 
         GLboolean dontCare;
         (void)buffer->unmap(context, &dontCare);
@@ -3202,6 +3352,25 @@ void FrameCapture::maybeCaptureClientData(const gl::Context *context, CallCaptur
                 {
                     mBufferDataMap.erase(bufferDataInfo);
                 }
+
+                mResourceTracker.getDeletedBuffers()->insert(bufferIDs[i]);
+            }
+            break;
+        }
+
+        case gl::EntryPoint::GenBuffers:
+        {
+            // If we're capturing, track what new buffers have been genned
+            if (mFrameIndex >= mFrameStart)
+            {
+                GLsizei count = call.params.getParam("n", ParamType::TGLsizei, 0).value.GLsizeiVal;
+                const gl::BufferID *bufferIDs =
+                    call.params.getParam("buffersPacked", ParamType::TBufferIDPointer, 1)
+                        .value.BufferIDPointerVal;
+                for (GLsizei i = 0; i < count; i++)
+                {
+                    mResourceTracker.getGennedBuffers()->insert(bufferIDs[i]);
+                }
             }
             break;
         }
@@ -3364,6 +3533,9 @@ void FrameCapture::maybeCaptureClientData(const gl::Context *context, CallCaptur
 
                 // Track the bufferID that was just mapped
                 call.params.setMappedBufferID(buffer->id());
+
+                // Remember that is was mapped writable, for use during state reset
+                mResourceTracker.setBufferMappedWritable(buffer->id());
             }
             break;
         }
@@ -3547,7 +3719,7 @@ void FrameCapture::onEndFrame(const gl::Context *context)
     if (!mFrameCalls.empty() && mFrameIndex >= mFrameStart)
     {
         WriteCppReplay(mCompression, mOutDirectory, context->id(), mCaptureLabel, mFrameIndex,
-                       mFrameCalls, mSetupCalls, &mBinaryData);
+                       mFrameEnd, mFrameCalls, mSetupCalls, &mResourceTracker, &mBinaryData);
 
         // Save the index files after the last frame.
         if (mFrameIndex == mFrameEnd)
@@ -3585,8 +3757,8 @@ void FrameCapture::onEndFrame(const gl::Context *context)
     if (enabled() && mFrameIndex == mFrameStart)
     {
         mSetupCalls.clear();
-        CaptureMidExecutionSetup(context, &mSetupCalls, mCachedShaderSources, mCachedProgramSources,
-                                 mCachedTextureLevelData);
+        CaptureMidExecutionSetup(context, &mSetupCalls, &mResourceTracker, mCachedShaderSources,
+                                 mCachedProgramSources, mCachedTextureLevelData);
     }
 }
 
@@ -3598,6 +3770,21 @@ int DataCounters::getAndIncrement(gl::EntryPoint entryPoint, const std::string &
 {
     Counter counterKey = {entryPoint, paramName};
     return mData[counterKey]++;
+}
+
+ResourceTracker::ResourceTracker() {}
+
+ResourceTracker::~ResourceTracker() = default;
+
+bool ResourceTracker::getBufferMappedWritable(gl::BufferID id)
+{
+    const auto &writableBuffer = mWritableBuffers.find(id);
+    return writableBuffer != mWritableBuffers.end();
+}
+
+void ResourceTracker::setBufferMappedWritable(gl::BufferID id)
+{
+    mWritableBuffers.insert(id);
 }
 
 bool FrameCapture::isCapturing() const
