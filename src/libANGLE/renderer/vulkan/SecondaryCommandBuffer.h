@@ -60,7 +60,6 @@ enum class CommandID : uint16_t
     DrawIndirect,
     DrawInstanced,
     DrawInstancedBaseInstance,
-    EndDebugUtilsLabel,
     EndQuery,
     EndTransformFeedback,
     ExecutionBarrier,
@@ -572,8 +571,6 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                                    uint32_t firstVertex,
                                    uint32_t firstInstance);
 
-    void endDebugUtilsLabelEXT();
-
     void endQuery(VkQueryPool queryPool, uint32_t query);
 
     void endTransformFeedback(uint32_t counterBufferCount, const VkBuffer *pCounterBuffers);
@@ -741,28 +738,6 @@ class SecondaryCommandBuffer final : angle::NonCopyable
             allocateNewBlock();
         }
         return commonInit<StructType>(cmdID, allocationSize);
-    }
-
-    // Initialize a command that doesn't have any params
-    ANGLE_INLINE void initEmptyCommand(CommandID cmdID)
-    {
-        constexpr size_t allocationSize = sizeof(CommandHeader);
-        // Make sure we have enough room to mark follow-on header "Invalid"
-        if (mCurrentBytesRemaining < (allocationSize + sizeof(CommandHeader)))
-        {
-            allocateNewBlock();
-        }
-        mCurrentBytesRemaining -= allocationSize;
-
-        CommandHeader *header = reinterpret_cast<CommandHeader *>(mCurrentWritePointer);
-        header->id            = cmdID;
-        header->size          = sizeof(CommandHeader);
-
-        ASSERT(allocationSize <= std::numeric_limits<uint16_t>::max());
-
-        mCurrentWritePointer += allocationSize;
-        // Set next cmd header to Invalid (0) so cmd sequence will be terminated
-        reinterpret_cast<CommandHeader *>(mCurrentWritePointer)->id = CommandID::Invalid;
     }
 
     // Return a ptr to the parameter type
@@ -1181,11 +1156,6 @@ ANGLE_INLINE void SecondaryCommandBuffer::drawInstancedBaseInstance(uint32_t ver
     paramStruct->instanceCount = instanceCount;
     paramStruct->firstVertex   = firstVertex;
     paramStruct->firstInstance = firstInstance;
-}
-
-ANGLE_INLINE void SecondaryCommandBuffer::endDebugUtilsLabelEXT()
-{
-    initEmptyCommand(CommandID::EndDebugUtilsLabel);
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::endQuery(VkQueryPool queryPool, uint32_t query)

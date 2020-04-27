@@ -2453,9 +2453,9 @@ angle::Result ContextVk::popGroupMarker()
     if (!mRenderer->enableDebugUtils())
         return angle::Result::Continue;
 
-    vk::CommandBuffer *outsideRenderPassCommandBuffer;
-    ANGLE_TRY(endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
-    outsideRenderPassCommandBuffer->endDebugUtilsLabelEXT();
+    vk::PrimaryCommandBuffer *primary;
+    ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
+    primary->endDebugUtilsLabelEXT();
 
     return angle::Result::Continue;
 }
@@ -2483,9 +2483,9 @@ angle::Result ContextVk::popDebugGroup(const gl::Context *context)
     if (!mRenderer->enableDebugUtils())
         return angle::Result::Continue;
 
-    vk::CommandBuffer *outsideRenderPassCommandBuffer;
-    ANGLE_TRY(endRenderPassAndGetCommandBuffer(&outsideRenderPassCommandBuffer));
-    outsideRenderPassCommandBuffer->endDebugUtilsLabelEXT();
+    vk::PrimaryCommandBuffer *primary;
+    ANGLE_TRY(flushAndGetPrimaryCommandBuffer(&primary));
+    primary->endDebugUtilsLabelEXT();
 
     return angle::Result::Continue;
 }

@@ -85,8 +85,6 @@ const char *GetCommandString(CommandID id)
             return "DrawInstanced";
         case CommandID::DrawInstancedBaseInstance:
             return "DrawInstancedBaseInstance";
-        case CommandID::EndDebugUtilsLabel:
-            return "EndDebugUtilsLabel";
         case CommandID::EndQuery:
             return "EndQuery";
         case CommandID::EndTransformFeedback:
@@ -399,12 +397,6 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                         getParamPtr<DrawInstancedBaseInstanceParams>(currentCommand);
                     vkCmdDraw(cmdBuffer, params->vertexCount, params->instanceCount,
                               params->firstVertex, params->firstInstance);
-                    break;
-                }
-                case CommandID::EndDebugUtilsLabel:
-                {
-                    ASSERT(vkCmdEndDebugUtilsLabelEXT);
-                    vkCmdEndDebugUtilsLabelEXT(cmdBuffer);
                     break;
                 }
                 case CommandID::EndQuery:
