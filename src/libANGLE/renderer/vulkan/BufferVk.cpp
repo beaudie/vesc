@@ -304,8 +304,10 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
 
     vk::CommandBuffer *commandBuffer = nullptr;
 
-    ANGLE_TRY(contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, &sourceBuffer->getBuffer()));
-    ANGLE_TRY(contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, &mBuffer));
+    ANGLE_TRY(contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                      &sourceBuffer->getBuffer()));
+    ANGLE_TRY(contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                       &mBuffer));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 
     // Enqueue a copy command on the GPU.
@@ -499,11 +501,11 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
     ASSERT(mapPointer);
 
     memcpy(mapPointer, data, size);
+    mStagingBuffer.getCurrentBuffer()->onExternalWrite(VK_ACCESS_HOST_WRITE_BIT);
 
     // Enqueue a copy command on the GPU.
     VkBufferCopy copyRegion = {stagingBufferOffset, offset, size};
-    ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, mStagingBuffer.getCurrentBuffer(),
-                                     VK_ACCESS_HOST_WRITE_BIT, copyRegion));
+    ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, mStagingBuffer.getCurrentBuffer(), copyRegion));
     mStagingBuffer.getCurrentBuffer()->retain(&contextVk->getResourceUseList());
 
     return angle::Result::Continue;
@@ -539,8 +541,10 @@ angle::Result BufferVk::copyToBufferImpl(ContextVk *contextVk,
                                          const VkBufferCopy *copies)
 {
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, destBuffer));
-    ANGLE_TRY(contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, &mBuffer));
+    ANGLE_TRY(contextVk->onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                       destBuffer));
+    ANGLE_TRY(contextVk->onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                      &mBuffer));
     ANGLE_TRY(contextVk->endRenderPassAndGetCommandBuffer(&commandBuffer));
 
     commandBuffer->copyBuffer(mBuffer.getBuffer(), destBuffer->getBuffer(), copyCount, copies);
