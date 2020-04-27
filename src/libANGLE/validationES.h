@@ -983,7 +983,8 @@ ANGLE_INLINE bool ValidateDrawElementsCommon(const Context *context,
             return false;
         }
 
-        if (elementDataSizeWithOffset > static_cast<uint64_t>(elementArrayBuffer->getSize()))
+        if ((elementDataSizeWithOffset > static_cast<uint64_t>(elementArrayBuffer->getSize())) &&
+            (primcount > 0))
         {
             context->validationError(GL_INVALID_OPERATION, err::kInsufficientBufferSize);
             return false;
