@@ -948,6 +948,8 @@ ANGLE_INLINE bool ValidateDrawElementsCommon(const Context *context,
     const VertexArray *vao     = state.getVertexArray();
     Buffer *elementArrayBuffer = vao->getElementArrayBuffer();
 
+    uint64_t elementDataSizeWithOffset = 0;
+
     if (!elementArrayBuffer)
     {
         if (!indices)
@@ -975,23 +977,23 @@ ANGLE_INLINE bool ValidateDrawElementsCommon(const Context *context,
         uint64_t elementDataSizeNoOffset = elementCount << GetDrawElementsTypeShift(type);
 
         // The offset can be any value, check for overflows
-        uint64_t offset = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(indices));
-        uint64_t elementDataSizeWithOffset = elementDataSizeNoOffset + offset;
+        uint64_t offset           = static_cast<uint64_t>(reinterpret_cast<uintptr_t>(indices));
+        elementDataSizeWithOffset = elementDataSizeNoOffset + offset;
         if (elementDataSizeWithOffset < elementDataSizeNoOffset)
         {
             context->validationError(GL_INVALID_OPERATION, err::kIntegerOverflow);
-            return false;
-        }
-
-        if (elementDataSizeWithOffset > static_cast<uint64_t>(elementArrayBuffer->getSize()))
-        {
-            context->validationError(GL_INVALID_OPERATION, err::kInsufficientBufferSize);
             return false;
         }
     }
 
     if (context->isBufferAccessValidationEnabled() && primcount > 0)
     {
+        if (elementDataSizeWithOffset > static_cast<uint64_t>(elementArrayBuffer->getSize()))
+        {
+            context->validationError(GL_INVALID_OPERATION, err::kInsufficientBufferSize);
+            return false;
+        }
+
         // Use the parameter buffer to retrieve and cache the index range.
         IndexRange indexRange{IndexRange::Undefined()};
         ANGLE_VALIDATION_TRY(vao->getIndexRange(context, type, count, indices, &indexRange));
