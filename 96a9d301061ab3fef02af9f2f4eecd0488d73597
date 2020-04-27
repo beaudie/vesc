@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b6f75d5_2dad3f68",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-04-27T20:25:46Z",
+      "side": 1,
+      "message": "Context11 on FL11_0 overrides maxDrawBuffers and maxColorAttachments for ES 3.1 client contexts.\n\nPlease take a look if this should be replaced with\n  GetImplAs\u003cContext11\u003e(context)-\u003egetNativeCaps()",
+      "range": {
+        "startLine": 1877,
+        "startChar": 39,
+        "endLine": 1877,
+        "endChar": 65
+      },
+      "revId": "96a9d301061ab3fef02af9f2f4eecd0488d73597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
