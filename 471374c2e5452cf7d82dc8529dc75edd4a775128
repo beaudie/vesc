@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc26bc0c_a8f3fc8f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4227,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-27T20:32:29Z",
+      "side": 1,
+      "message": "This refactor to pull reset separate is not great, but seemed ok to maintain separation of use of inside/outside RP command buffers.\nI initially explored an alternative where I would expose either the primaryCB or one of its flush functions from the ContextVk so that it could be called directly from QueryHelper.\nHowever, that seemed about as messy and since the pattern here only occurs 3 times I felt this approach is reasonable.",
+      "revId": "471374c2e5452cf7d82dc8529dc75edd4a775128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
