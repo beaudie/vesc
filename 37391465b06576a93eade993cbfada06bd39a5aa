@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75909b73_790967f7",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-27T20:02:28Z",
+      "side": 1,
+      "message": "This is frustrating. way to work around it?",
+      "range": {
+        "startLine": 651,
+        "startChar": 0,
+        "endLine": 654,
+        "endChar": 26
+      },
+      "revId": "37391465b06576a93eade993cbfada06bd39a5aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7ab3a85_3f1e5026",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 10
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-27T20:02:28Z",
+      "side": 1,
+      "message": "I think I need to also check that it\u0027s a 3.2 context",
+      "range": {
+        "startLine": 1112,
+        "startChar": 22,
+        "endLine": 1112,
+        "endChar": 42
+      },
+      "revId": "37391465b06576a93eade993cbfada06bd39a5aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cc27e17_1d6e001f",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-27T20:02:28Z",
+      "side": 1,
+      "message": "Do I really need 3 versions of this bool? They\u0027re all assigned the exact same value, and it\u0027s always checked as Any()\nCouldn\u0027t I just declare one that\u0027s enabled for any version of the extension, and visible to clients as any version of the extension?",
+      "revId": "37391465b06576a93eade993cbfada06bd39a5aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "789e95d9_aefde9dd",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-27T20:02:28Z",
+      "side": 1,
+      "message": "Technically in this case it\u0027s because it\u0027s not a multiple of 6. Should I make this more specific or is a general error ok?",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 25
+      },
+      "revId": "37391465b06576a93eade993cbfada06bd39a5aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
