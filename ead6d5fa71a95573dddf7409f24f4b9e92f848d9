@@ -153,6 +153,30 @@
       "revId": "ead6d5fa71a95573dddf7409f24f4b9e92f848d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9adf024_d1a5f752",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-27T20:18:19Z",
+      "side": 1,
+      "message": "thanks jamie, will hold off until you merge that fix",
+      "parentUuid": "83c2de1e_3bb153e6",
+      "range": {
+        "startLine": 467,
+        "startChar": 6,
+        "endLine": 467,
+        "endChar": 27
+      },
+      "revId": "ead6d5fa71a95573dddf7409f24f4b9e92f848d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
