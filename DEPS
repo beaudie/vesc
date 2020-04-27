@@ -22,10 +22,10 @@ vars = {
   'chromium_revision': 'fa9d5805c421133e9d13cf698c4502d13398b2ce',
 
   # Current revision of VK-GL-CTS (a.k.a dEQP).
-  'vk_gl_cts_revision': 'a6b249819f7177821d4b7eefff36af07fef71825',
+  'vk_gl_cts_revision': '60972ed7fa8fb66b64e21186e7fb13dc082bdac8',
 
   # Current revision of glslang, the Khronos SPIRV compiler.
-  'glslang_revision': 'bcf6a2430e99e8fc24f9f266e99316905e6d5134',
+  'glslang_revision': 'b5f003d7a3ece37db45578a8a3140b370036fc64',
 
   # Current revision of googletest.
   # Note: this dep cannot be auto-rolled b/c of nesting.
