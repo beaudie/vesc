@@ -134,6 +134,11 @@ ANGLE_INLINE const CommandHeader *NextCommand(const CommandHeader *command)
 // Parse the cmds in this cmd buffer into given primary cmd buffer
 void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
 {
+    for (const ResetQueryPoolParams &queryParams : mResetQueryQueue)
+    {
+        vkCmdResetQueryPool(cmdBuffer, queryParams.queryPool, queryParams.firstQuery,
+                            queryParams.queryCount);
+    }
     for (const CommandHeader *command : mCommands)
     {
         for (const CommandHeader *currentCommand                      = command;
