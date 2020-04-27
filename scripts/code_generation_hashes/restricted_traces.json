@@ -1,0 +1,8 @@
+{
+  "src/tests/perf_tests/restricted_traces/gen_restricted_traces.py":
+    "22d46588759b0a3466883258f80b1bf3",
+  "src/tests/perf_tests/restricted_traces/restricted_traces.json":
+    "ffcedbf9261c0f2ead638167b6abb7b5",
+  "src/tests/perf_tests/restricted_traces/restricted_traces_autogen.gni":
+    "00afbfd7987ff25af045af104477a680"
+}
