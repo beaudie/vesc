@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbc3fca2_9274b7e0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-27T15:10:49Z",
+      "side": 1,
+      "message": "this code is common with the code you added. Can you make it into a small helper function in this file? Also checking imageType is probably a bit nicer.",
+      "range": {
+        "startLine": 614,
+        "startChar": 0,
+        "endLine": 620,
+        "endChar": 0
+      },
+      "revId": "41ee051a9bec5575b34f2b5c37ef05013c9718b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcf2df9d_a5400e0f",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-27T15:10:49Z",
+      "side": 1,
+      "message": "nit: you can omit these lines. not necessary to reset state manually after tests.",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 673,
+        "endChar": 46
+      },
+      "revId": "41ee051a9bec5575b34f2b5c37ef05013c9718b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
