@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c140cdaa_d6d7ab38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2458,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-04-27T13:03:49Z",
+      "side": 1,
+      "message": "If I replace \"intendedFormat\" with \"actualImageFormat\", it gets rid of the assert in local tests.\nI\u0027ll do that for now, you can tell me if that\u0027s incorrect.",
+      "range": {
+        "startLine": 2458,
+        "startChar": 48,
+        "endLine": 2458,
+        "endChar": 62
+      },
+      "revId": "7d1034a0995122cbd5a8bd5c647d7266aee1ca89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e0dee9a_337d726e",
         "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
         "patchSetId": 1
