@@ -591,6 +591,15 @@ class ContextVk : public ContextImpl, public vk::Context
         return angle::Result::Continue;
     }
 
+    ANGLE_INLINE angle::Result traceGpuEvent(vk::CommandBuffer *commandBuffer,
+                                             char phase,
+                                             const EventName &name)
+    {
+        if (mGpuEventsEnabled)
+            return traceGpuEventImpl(commandBuffer, phase, name);
+        return angle::Result::Continue;
+    }
+
     RenderPassCache &getRenderPassCache() { return mRenderPassCache; }
 
     vk::DescriptorSetLayoutDesc getDriverUniformsDescriptorSetDesc(
@@ -926,6 +935,9 @@ class ContextVk : public ContextImpl, public vk::Context
 
     angle::Result synchronizeCpuGpuTime();
     angle::Result traceGpuEventImpl(vk::PrimaryCommandBuffer *commandBuffer,
+                                    char phase,
+                                    const EventName &name);
+    angle::Result traceGpuEventImpl(vk::CommandBuffer *commandBuffer,
                                     char phase,
                                     const EventName &name);
     angle::Result checkCompletedGpuEvents();
