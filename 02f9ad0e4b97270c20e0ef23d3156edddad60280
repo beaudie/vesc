@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "254f31e0_edbe2ada",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-27T22:02:46Z",
+      "side": 1,
+      "message": "Curious, how can this be a compile time assert given bufferBinding.getSize()? I know the left side also doing the same assertion, it must be correct. Just curious what that getSize returns. it is not obvious to me from code search.",
+      "parentUuid": "9e931d32_323c216e",
+      "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5e787a4c_00ff6f3a",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 3
