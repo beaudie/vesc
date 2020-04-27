@@ -81,6 +81,30 @@
       "revId": "ead6d5fa71a95573dddf7409f24f4b9e92f848d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db4ebd5d_bf785797",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-27T16:21:13Z",
+      "side": 1,
+      "message": "OK, I was able to patch this in locally and understand what\u0027s going wrong. It seems our non-coherent-atom-size fixing is messing up the \"alignment \u003d\u003d 1\" aspect of your CL. You can work around this by passing in the buffer size as the initial size for the DynamicBuffer in BufferVk::setData. Then in DynamicBuffer::allocate use this line to compute a new sizeToAllocate:\n\n    size_t sizeToAllocate \u003d\n        sizeInBytes \u003d\u003d mInitialSize ? sizeInBytes : roundUp(sizeInBytes, mAlignment);\n\nThis is easier than fighting with the alignment and doesn\u0027t require any extra state tracking code or special casing. Just running this through CI to verify it doesn\u0027t introduce any new bugs:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2167918",
+      "parentUuid": "a62fa3e5_b7d3d52d",
+      "range": {
+        "startLine": 467,
+        "startChar": 6,
+        "endLine": 467,
+        "endChar": 27
+      },
+      "revId": "ead6d5fa71a95573dddf7409f24f4b9e92f848d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
