@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29e3208a_75607aaa",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T15:07:19Z",
+      "side": 1,
+      "message": "to me it looks like this whole else case should be part of the if (isBufferAccessValidationEnabled \u0026\u0026 primcount \u003e 0). Can you run that through CQ? It could save a few more instructions.",
+      "revId": "399c063c9abf3b7fc4715375ffc624d030184f35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
