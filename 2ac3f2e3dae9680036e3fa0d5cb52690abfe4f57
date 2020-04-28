@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "888eb292_5c82b9b1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-28T17:47:29Z",
+      "side": 1,
+      "message": "This will go back once you update to latest clang format, right?",
+      "range": {
+        "startLine": 2723,
+        "startChar": 48,
+        "endLine": 2723,
+        "endChar": 49
+      },
+      "revId": "2ac3f2e3dae9680036e3fa0d5cb52690abfe4f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5ab2e800_298cc7ed",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
