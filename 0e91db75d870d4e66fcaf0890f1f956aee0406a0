@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9c403ca_ab555136",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T19:46:10Z",
+      "side": 1,
+      "message": "I would also prefer to see the legacy struct removed altogether. If not, at least make this return `BlendState` (instead of a reference), and let RVO take care of it, then remove mBlendState.",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 128,
+        "endChar": 22
+      },
+      "revId": "0e91db75d870d4e66fcaf0890f1f956aee0406a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
