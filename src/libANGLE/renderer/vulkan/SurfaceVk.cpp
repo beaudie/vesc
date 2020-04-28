@@ -1441,6 +1441,36 @@ EGLint WindowSurfaceVk::getHeight() const
     return static_cast<EGLint>(mColorRenderTarget.getExtents().height);
 }
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+EGLint WindowSurfaceVk::getEglWidth(const egl::Display *display) const
+{
+    EGLint value                           = 0;
+    DisplayVk *displayVk                   = vk::GetImpl(display);
+    const VkPhysicalDevice &physicalDevice = displayVk->getRenderer()->getPhysicalDevice();
+    VkSurfaceCapabilitiesKHR surfaceCaps;
+    if (VK_SUCCESS ==
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface, &surfaceCaps))
+    {
+        value = static_cast<EGLint>(surfaceCaps.currentExtent.width);
+    }
+    return value;
+}
+
+EGLint WindowSurfaceVk::getEglHeight(const egl::Display *display) const
+{
+    EGLint value                           = 0;
+    DisplayVk *displayVk                   = vk::GetImpl(display);
+    const VkPhysicalDevice &physicalDevice = displayVk->getRenderer()->getPhysicalDevice();
+    VkSurfaceCapabilitiesKHR surfaceCaps;
+    if (VK_SUCCESS ==
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface, &surfaceCaps))
+    {
+        value = static_cast<EGLint>(surfaceCaps.currentExtent.height);
+    }
+    return value;
+}
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
 EGLint WindowSurfaceVk::isPostSubBufferSupported() const
 {
     // TODO(jmadill)

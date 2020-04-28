@@ -3964,7 +3964,10 @@ void QueryContextAttrib(const gl::Context *context, EGLint attribute, EGLint *va
     }
 }
 
-void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
+void QuerySurfaceAttrib(const Display *display,
+                        const Surface *surface,
+                        EGLint attribute,
+                        EGLint *value)
 {
     switch (attribute)
     {
@@ -3981,7 +3984,7 @@ void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
             *value = surface->getConfig()->configID;
             break;
         case EGL_HEIGHT:
-            *value = surface->getHeight();
+            *value = surface->getEglHeight(display);
             break;
         case EGL_HORIZONTAL_RESOLUTION:
             *value = surface->getHorizontalResolution();
@@ -4037,7 +4040,7 @@ void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
             *value = surface->getVerticalResolution();
             break;
         case EGL_WIDTH:
-            *value = surface->getWidth();
+            *value = surface->getEglWidth(display);
             break;
         case EGL_POST_SUB_BUFFER_SUPPORTED_NV:
             *value = surface->isPostSubBufferSupported();
