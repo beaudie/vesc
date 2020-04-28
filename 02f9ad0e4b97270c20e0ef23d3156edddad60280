@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "21de953d_525a9b45",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T14:21:45Z",
+      "side": 1,
+      "message": "Using the variable itself is a preference that Shabi had when first laying down this ASSERT. I think it makes sense as it\u0027s very clear you\u0027re looking at the variable.\n\nIt\u0027s compile-time because it uses the sizeof operator which works on a type instead of a value.",
+      "parentUuid": "9e931d32_323c216e",
+      "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e787a4c_00ff6f3a",
         "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
         "patchSetId": 3
@@ -57,6 +75,30 @@
       "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3b63ec4_b1114e63",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1982,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T14:21:45Z",
+      "side": 1,
+      "message": "Yes, I believe so.",
+      "parentUuid": "5e787a4c_00ff6f3a",
+      "range": {
+        "startLine": 1981,
+        "startChar": 4,
+        "endLine": 1982,
+        "endChar": 67
+      },
+      "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
