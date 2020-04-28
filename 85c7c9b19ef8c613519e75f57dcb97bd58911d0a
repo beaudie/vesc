@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a840c2f_e7ee300b",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-28T13:06:24Z",
+      "side": 1,
+      "message": "Make sure that the size we get for the arbitrarily long string is 4-byte aligned. This will maintain alignment for the color member of the struct.",
+      "revId": "85c7c9b19ef8c613519e75f57dcb97bd58911d0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
