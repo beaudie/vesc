@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b53900d_ffbffb7b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T16:03:46Z",
+      "side": 1,
+      "message": "the VK_SUCCESS \u003d\u003d thing is a bit unconventional. How about you cache the surfaceCaps in the SurfaceVk since we do that for various physical device properties in the renderer already? Then here there would be no opportunity to error out.",
+      "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
