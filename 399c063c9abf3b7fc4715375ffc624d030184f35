@@ -34,6 +34,24 @@
       "revId": "399c063c9abf3b7fc4715375ffc624d030184f35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0329148_fe5cc89d",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T18:32:15Z",
+      "side": 1,
+      "message": "Pretty sure these are test bugs. Filed https://github.com/KhronosGroup/WebGL/issues/3064 to get clarification. Going to to the original CL seems fine to get the test passing.",
+      "parentUuid": "76c9b735_de95dada",
+      "revId": "399c063c9abf3b7fc4715375ffc624d030184f35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
