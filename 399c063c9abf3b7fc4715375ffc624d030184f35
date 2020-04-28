@@ -16,6 +16,24 @@
       "revId": "399c063c9abf3b7fc4715375ffc624d030184f35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76c9b735_de95dada",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-04-28T18:26:09Z",
+      "side": 1,
+      "message": "No, that doesn\u0027t work, will revert to original cl.",
+      "parentUuid": "29e3208a_75607aaa",
+      "revId": "399c063c9abf3b7fc4715375ffc624d030184f35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
