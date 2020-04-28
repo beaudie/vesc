@@ -16,6 +16,24 @@
       "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55fcb12a_4421f66d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-04-28T16:11:57Z",
+      "side": 1,
+      "message": "Perhaps I\u0027m misunderstanding what you\u0027re saying.  Is it that I put the constant (VK_SUCCESS) on the left of \"\u003d\u003d\", or that I\u0027m calling vkGetPhysicalDeviceSurfaceCapabilitiesKHR here?\n\nWe have cached surfaceCaps now.  The problem this CL is trying to address is that the \"EGL resize tests\" change the values that are cached in the Android platform, but don\u0027t do anything to trigger ANGLE to update it\u0027s cache.  Thus, we need to call vkGetPhysicalDeviceSurfaceCapabilitiesKHR here to get the values the test is looking for.\n\nDoes that help?",
+      "parentUuid": "9b53900d_ffbffb7b",
+      "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
