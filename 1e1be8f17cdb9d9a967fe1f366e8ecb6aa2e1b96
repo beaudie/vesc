@@ -34,6 +34,24 @@
       "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b234572_2e10025d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T16:13:46Z",
+      "side": 1,
+      "message": "Ah, I see. In that case you should make this function return an error. Sorry... it\u0027s a bit annoying.",
+      "parentUuid": "55fcb12a_4421f66d",
+      "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
