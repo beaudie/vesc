@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8fdc36ff_99104b4c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T19:13:54Z",
+      "side": 1,
+      "message": "Could also be separate CLs.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "471374c2e5452cf7d82dc8529dc75edd4a775128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc26bc0c_a8f3fc8f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -13,6 +36,41 @@
       "writtenOn": "2020-04-27T20:32:29Z",
       "side": 1,
       "message": "This refactor to pull reset separate is not great, but seemed ok to maintain separation of use of inside/outside RP command buffers.\nI initially explored an alternative where I would expose either the primaryCB or one of its flush functions from the ContextVk so that it could be called directly from QueryHelper.\nHowever, that seemed about as messy and since the pattern here only occurs 3 times I felt this approach is reasonable.",
+      "revId": "471374c2e5452cf7d82dc8529dc75edd4a775128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82df3a0e_03a604f9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T19:13:54Z",
+      "side": 1,
+      "message": "Would I be right to assume mOutsideRenderPassCommands is empty here? Can you ASSERT that?\n\nIf so, it\u0027s a pity that this would allocate a big chunk of memory for just one command. That actually got me thinking, now that we have only one CB active at a time, maybe we should rethink a bit how allocation is done from the memory pool. Doing kBlockSize chunks for each CB doesn\u0027t make much sense anymore. The CB might as well take a whole page, and if flushed, give back the unused memory for the next CB to use.\n\n(Just a thought)",
+      "parentUuid": "bc26bc0c_a8f3fc8f",
+      "revId": "471374c2e5452cf7d82dc8529dc75edd4a775128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9d3fe3e_24a35012",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T19:13:54Z",
+      "side": 1,
+      "message": "Call flushOutsideRenderPassCommands()?",
       "revId": "471374c2e5452cf7d82dc8529dc75edd4a775128",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
