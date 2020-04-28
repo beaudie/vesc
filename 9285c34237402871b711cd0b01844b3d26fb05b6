@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "266954a2_53840c03",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3967,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T18:24:48Z",
+      "side": 1,
+      "message": "switch this up to return egl::Error",
+      "range": {
+        "startLine": 3967,
+        "startChar": 0,
+        "endLine": 3967,
+        "endChar": 11
+      },
+      "revId": "9285c34237402871b711cd0b01844b3d26fb05b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa508785_ac84b687",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T18:24:48Z",
+      "side": 1,
+      "message": "also egl::Error (see other examples in this file)",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 13
+      },
+      "revId": "9285c34237402871b711cd0b01844b3d26fb05b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54659f3a_a636828b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T18:24:48Z",
+      "side": 1,
+      "message": "example",
+      "range": {
+        "startLine": 247,
+        "startChar": 10,
+        "endLine": 247,
+        "endChar": 60
+      },
+      "revId": "9285c34237402871b711cd0b01844b3d26fb05b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bee4cc10_a658c365",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T18:24:48Z",
+      "side": 1,
+      "message": "here, use the \"impl\" function pattern. see other examples in this file.\n\negl::Error getUserWidth(Display)\n{\n    DisplayVk *displayVk \u003d ...;\n    return ToEGL(getUserWithImpl(displayVk), EGL_BAD_SURFACE);\n}\n\nangle::Result getUserWidthImpl(DisplayVk)\n{\n   ANGLE_VK_TRY(...);\n}",
+      "range": {
+        "startLine": 1450,
+        "startChar": 4,
+        "endLine": 1450,
+        "endChar": 16
+      },
+      "revId": "9285c34237402871b711cd0b01844b3d26fb05b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
