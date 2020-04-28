@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "200f9a78_b868e6d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T15:00:28Z",
+      "side": 1,
+      "message": "minor nit: can you keep change-id to be the last line in the commit message? I think it\u0027s fine either way, just a minor consistency thing.",
+      "revId": "f5c0214a7542b05bb5e0c7367ea49850c2638672",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
