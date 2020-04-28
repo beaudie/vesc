@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db5beed3_8da9601c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T19:53:11Z",
+      "side": 1,
+      "message": "This is the access mask of how the data was written to the staging buffer. It was a memcpy, so should remain HOST_WRITE.",
+      "range": {
+        "startLine": 510,
+        "startChar": 37,
+        "endLine": 510,
+        "endChar": 65
+      },
+      "revId": "0f1e943fc59ba47ad5971ca010a29a8460ab3061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
