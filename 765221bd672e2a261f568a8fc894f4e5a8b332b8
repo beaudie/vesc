@@ -52,6 +52,24 @@
       "revId": "765221bd672e2a261f568a8fc894f4e5a8b332b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3cd21b8_432344ce",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-28T22:37:40Z",
+      "side": 1,
+      "message": "\"If a memory object does not have the VK_MEMORY_PROPERTY_HOST_COHERENT_BIT property, then vkFlushMappedMemoryRanges must be called in order to guarantee that writes to the memory object from the host are made available to the host domain, where they can be further made available to the device domain via a domain operation. Similarly, vkInvalidateMappedMemoryRanges must be called to guarantee that writes which are available to the host domain are made visible to host operations.\"\n\nIt does not say that HOST_WRITE implies flush.\n\nBut that been said, I am going to remove the flush call from this CL and do a separate CL for flush call. I think there are other places are missing flush as well.",
+      "parentUuid": "95df34b5_c947e3d1",
+      "revId": "765221bd672e2a261f568a8fc894f4e5a8b332b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
