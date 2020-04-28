@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab3b3c9_e1c3b271",
+        "filename": "src/tests/gl_tests/DrawBaseVertexVariantsTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T15:09:08Z",
+      "side": 1,
+      "message": "nit: STATIC_DRAW",
+      "revId": "40422857f5287ccb3e59ad71051f0601bff37e61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
