@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b1eead8e_aa311342",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-04-28T07:52:30Z",
+      "side": 1,
+      "message": "I make part of it into vk::ImageHelper::Update3DSubresourceLayer().\nImageType here is of destSubresource, I think I can\u0027t get srcImage\u0027s ImageType through the input srcImage.",
+      "parentUuid": "fbc3fca2_9274b7e0",
+      "range": {
+        "startLine": 614,
+        "startChar": 0,
+        "endLine": 620,
+        "endChar": 0
+      },
+      "revId": "41ee051a9bec5575b34f2b5c37ef05013c9718b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fcf2df9d_a5400e0f",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "41ee051a9bec5575b34f2b5c37ef05013c9718b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82b926a5_d22c9254",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-04-28T07:52:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcf2df9d_a5400e0f",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 673,
+        "endChar": 46
+      },
+      "revId": "41ee051a9bec5575b34f2b5c37ef05013c9718b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
