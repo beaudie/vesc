@@ -46,6 +46,30 @@
       "revId": "0f1e943fc59ba47ad5971ca010a29a8460ab3061",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e2a3be9_b8bfa12c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-28T20:07:09Z",
+      "side": 1,
+      "message": "It is handled inside copyFromBuffer. I think some of these APIs should clean up, but I will defer it to another CL for non-functional changes.",
+      "parentUuid": "e70f1c75_f6c45e63",
+      "range": {
+        "startLine": 510,
+        "startChar": 37,
+        "endLine": 510,
+        "endChar": 65
+      },
+      "revId": "0f1e943fc59ba47ad5971ca010a29a8460ab3061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
