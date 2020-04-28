@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "dd8547b4_1a2b6204",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-28T16:59:46Z",
+      "side": 1,
+      "message": "should we assert buffer size \u003e offset here?",
+      "range": {
+        "startLine": 38,
+        "startChar": 11,
+        "endLine": 38,
+        "endChar": 58
+      },
+      "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e931d32_323c216e",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 3
