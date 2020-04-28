@@ -70,6 +70,24 @@
       "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69239280_7c0cb8ec",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-28T16:36:45Z",
+      "side": 1,
+      "message": "Ian, doesnt eglQuerySurface return a bool?",
+      "parentUuid": "6d7f236d_c18fd007",
+      "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
