@@ -65,6 +65,24 @@
     },
     {
       "key": {
+        "uuid": "a5a694da_b7535b41",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T18:44:35Z",
+      "side": 1,
+      "message": "If they are identical, that\u0027s fine to me (to have one bool, and advertise all three extensions with it.\n\nWhat you should be really annoyed about is the fact that you need to tell the translator which of these is supported by the GL driver, so it will emit that `#extension` directive.",
+      "parentUuid": "4cc27e17_1d6e001f",
+      "revId": "37391465b06576a93eade993cbfada06bd39a5aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "789e95d9_aefde9dd",
         "filename": "src/libANGLE/ErrorStrings.h",
         "patchSetId": 10
@@ -82,6 +100,47 @@
         "endLine": 76,
         "endChar": 25
       },
+      "revId": "37391465b06576a93eade993cbfada06bd39a5aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5f17cfb_0451fa32",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T18:44:35Z",
+      "side": 1,
+      "message": "If the error is issued only when depth is not a multiple of 6, just say so, why not.",
+      "parentUuid": "789e95d9_aefde9dd",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 25
+      },
+      "revId": "37391465b06576a93eade993cbfada06bd39a5aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdea8772_1b61d48e",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T18:44:35Z",
+      "side": 1,
+      "message": "What if a driver advertises GL_OES_texture_cube_map_array but not GL_EXT_texture_cube_map_array for example (or vice versa)? Then you tell the application that EXT is supported, they use it in the shader which the translator forwards to the driver. Then driver would complain that the extension is not available.\n\nYour choices are either to be nice, use one bool in Caps and forward the exact information of which of the three is supported by the driver so the translator could output that variant. Or, have three bools and leave it to the application to choose the right `#extension` directive.\n\nA last choice would be to support only one of the extensions (the more ubiquitous one) and be done with it.",
       "revId": "37391465b06576a93eade993cbfada06bd39a5aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
