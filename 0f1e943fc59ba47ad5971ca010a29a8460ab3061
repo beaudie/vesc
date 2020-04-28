@@ -70,6 +70,30 @@
       "revId": "0f1e943fc59ba47ad5971ca010a29a8460ab3061",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8eeb97c_09495634",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T20:11:36Z",
+      "side": 1,
+      "message": "I should stop replying too early. Looks like copyFromBuffer has been a little butchered over time, and the bufferAccessType parameter doesn\u0027t make sense anymore. It should be removed here and hardcoded in the function (after all, the function is doing a transfer from src to dst, so it has all the necessary information).\n\nProbably what\u0027s missing here is something like `onExternalWrite` or maybe:\n\n     ANGLE_TRY(contextVk-\u003eonBufferWrite(VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT, mStagingBuffer.getCurrentBuffer()));\n\nbefore `copyFromBuffer` (not sure if onExternalWrite is correct, or even necessary nowadays)\n\n---\n\nIn other words, there is probably stale data in the GPU cache that\u0027s not being invalidated because of a missing barrier whose src access is HOST_WRITE.",
+      "parentUuid": "e70f1c75_f6c45e63",
+      "range": {
+        "startLine": 510,
+        "startChar": 37,
+        "endLine": 510,
+        "endChar": 65
+      },
+      "revId": "0f1e943fc59ba47ad5971ca010a29a8460ab3061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
