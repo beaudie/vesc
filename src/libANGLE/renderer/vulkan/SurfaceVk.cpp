@@ -1441,6 +1441,32 @@ EGLint WindowSurfaceVk::getHeight() const
     return static_cast<EGLint>(mColorRenderTarget.getExtents().height);
 }
 
+angle::Result WindowSurfaceVk::getUserWidth(const egl::Display *display, EGLint *value) const
+{
+    DisplayVk *displayVk                   = vk::GetImpl(display);
+    const VkPhysicalDevice &physicalDevice = displayVk->getRenderer()->getPhysicalDevice();
+    VkSurfaceCapabilitiesKHR surfaceCaps;
+
+    ANGLE_VK_TRY(displayVk,
+                 vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface, &surfaceCaps));
+    *value = static_cast<EGLint>(surfaceCaps.currentExtent.width);
+
+    return angle::Result::Continue;
+}
+
+angle::Result WindowSurfaceVk::getUserHeight(const egl::Display *display, EGLint *value) const
+{
+    DisplayVk *displayVk                   = vk::GetImpl(display);
+    const VkPhysicalDevice &physicalDevice = displayVk->getRenderer()->getPhysicalDevice();
+    VkSurfaceCapabilitiesKHR surfaceCaps;
+
+    ANGLE_VK_TRY(displayVk,
+                 vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface, &surfaceCaps));
+    *value = static_cast<EGLint>(surfaceCaps.currentExtent.height);
+
+    return angle::Result::Continue;
+}
+
 EGLint WindowSurfaceVk::isPostSubBufferSupported() const
 {
     // TODO(jmadill)

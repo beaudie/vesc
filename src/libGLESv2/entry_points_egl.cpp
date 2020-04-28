@@ -353,10 +353,10 @@ EGLBoolean EGLAPIENTRY EGL_QuerySurface(EGLDisplay dpy,
     ANGLE_EGL_TRY_RETURN(thread, ValidateQuerySurface(display, eglSurface, attribute, value),
                          "eglQuerySurface", GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
 
-    QuerySurfaceAttrib(eglSurface, attribute, value);
+    EGLBoolean rtn = QuerySurfaceAttrib(display, eglSurface, attribute, value);
 
     thread->setSuccess();
-    return EGL_TRUE;
+    return rtn;
 }
 
 EGLContext EGLAPIENTRY EGL_CreateContext(EGLDisplay dpy,
