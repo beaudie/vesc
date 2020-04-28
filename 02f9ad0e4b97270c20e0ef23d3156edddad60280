@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "4e41fe21_c0b735dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T19:37:50Z",
+      "side": 1,
+      "message": "Not really true, we didn\u0027t use VK_WHOLE_SIZE. The change is just to use the BufferGL size instead of the vk::BufferHelper size.",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 38
+      },
+      "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd2e79e8_243138d1",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T19:37:50Z",
+      "side": 1,
+      "message": "The comment needs updating. This function is only used in case of SSBO, so this can be shortened to:\n\n    // If size is 0, we can\u0027t always use VK_WHOLE_SIZE (or bufferHelper.getSize()), as the\n    // backing buffer may be larger than max*BufferRange.  In that case, we use the backing\n    // buffer size (what\u0027s left after offset).",
+      "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd8547b4_1a2b6204",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 3
@@ -72,6 +112,24 @@
       "side": 1,
       "message": "Using the variable itself is a preference that Shabi had when first laying down this ASSERT. I think it makes sense as it\u0027s very clear you\u0027re looking at the variable.\n\nIt\u0027s compile-time because it uses the sizeof operator which works on a type instead of a value.",
       "parentUuid": "9e931d32_323c216e",
+      "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "57773d43_04d5db62",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T19:37:50Z",
+      "side": 1,
+      "message": "Hah, I don\u0027t remember that, but that was good advice (if I may pat my old self on the back). The reason is this assert would be valid regardless of what changes the return type of `getSize()` may go through.",
+      "parentUuid": "21de953d_525a9b45",
       "revId": "02f9ad0e4b97270c20e0ef23d3156edddad60280",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
