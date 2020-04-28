@@ -52,6 +52,24 @@
       "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d7f236d_c18fd007",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-04-28T16:29:18Z",
+      "side": 1,
+      "message": "I had considered that.  However, QuerySurfaceAttrib() returns a void.  It didn\u0027t seem to make sense to return an error to it that it couldn\u0027t propagate up.\n\nWould you like me to change QuerySurfaceAttrib() and EGL_QuerySurface() to handle errors?",
+      "parentUuid": "0b234572_2e10025d",
+      "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
