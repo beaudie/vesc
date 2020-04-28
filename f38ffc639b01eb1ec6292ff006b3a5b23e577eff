@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f13c3e2e_7edb3d17",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3988,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T21:07:06Z",
+      "side": 1,
+      "message": "nit: use ANGLE_TRY(surface-\u003egetUserHeight);\n         break;",
+      "range": {
+        "startLine": 3988,
+        "startChar": 12,
+        "endLine": 3988,
+        "endChar": 17
+      },
+      "revId": "f38ffc639b01eb1ec6292ff006b3a5b23e577eff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d7b4eb0_1ab22e76",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4043,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T21:07:06Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 4043,
+        "startChar": 12,
+        "endLine": 4043,
+        "endChar": 18
+      },
+      "revId": "f38ffc639b01eb1ec6292ff006b3a5b23e577eff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
