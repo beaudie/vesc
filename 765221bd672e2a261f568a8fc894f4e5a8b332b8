@@ -34,6 +34,24 @@
       "revId": "765221bd672e2a261f568a8fc894f4e5a8b332b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95df34b5_c947e3d1",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-04-28T22:29:46Z",
+      "side": 1,
+      "message": "i might have incorrectly assumed that setting \"VK_ACCESS_HOST_WRITE_BIT\" would trigger the appropriate cache ops. is that not the case per spec?",
+      "parentUuid": "195b3e08_ca987c7c",
+      "revId": "765221bd672e2a261f568a8fc894f4e5a8b332b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
