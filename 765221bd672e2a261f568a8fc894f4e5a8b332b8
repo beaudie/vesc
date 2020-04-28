@@ -16,6 +16,24 @@
       "revId": "765221bd672e2a261f568a8fc894f4e5a8b332b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "195b3e08_ca987c7c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-28T22:24:27Z",
+      "side": 1,
+      "message": "Sorry meant to be mBuffer.flush. copy/paste error.\nI think unmap and onExternalWrite are not doing cache flush and no other place is doing cache flush for direct write, right?",
+      "parentUuid": "24596719_afdf4c80",
+      "revId": "765221bd672e2a261f568a8fc894f4e5a8b332b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
