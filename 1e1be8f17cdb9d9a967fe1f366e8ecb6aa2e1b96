@@ -88,6 +88,24 @@
       "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78b5a0d6_1e4704c1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-04-28T16:44:54Z",
+      "side": 1,
+      "message": "Yes, it does.  Seems like we should plumb a non-VK_SUCCESS return to vkGetPhysicalDeviceSurfaceCapabilitiesKHR up.",
+      "parentUuid": "69239280_7c0cb8ec",
+      "revId": "1e1be8f17cdb9d9a967fe1f366e8ecb6aa2e1b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
