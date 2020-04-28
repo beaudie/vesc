@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8db74062_d911de7f",
+        "filename": "src/libANGLE/validationES.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T18:34:16Z",
+      "side": 1,
+      "message": "can you leave a comment here linking to the WebGL issue for posterity?\n\nhttps://github.com/KhronosGroup/WebGL/issues/3064",
+      "range": {
+        "startLine": 987,
+        "startChar": 13,
+        "endLine": 987,
+        "endChar": 23
+      },
+      "revId": "0000f8e10ce991ff5b88243a2dac2fae08db5cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
