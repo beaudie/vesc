@@ -91,6 +91,30 @@
       "revId": "9285c34237402871b711cd0b01844b3d26fb05b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54b061c2_5a544149",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T18:27:13Z",
+      "side": 1,
+      "message": "Also, might as well do angle::Result getUserExtentsImpl and make userWidth/userHeight just call that and return the width/height as necesary from the extents.",
+      "parentUuid": "bee4cc10_a658c365",
+      "range": {
+        "startLine": 1450,
+        "startChar": 4,
+        "endLine": 1450,
+        "endChar": 16
+      },
+      "revId": "9285c34237402871b711cd0b01844b3d26fb05b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
