@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e9812a28_863a8c96",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1237274
+      },
+      "writtenOn": "2020-04-28T01:53:46Z",
+      "side": 1,
+      "message": "I\u0027m wondering if I should move this into releaseTexStorage(), WDYT?",
+      "revId": "63406976ce36dd3d7ba27f09df05c5f11f01c895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7fb9e67_3fdf888b",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 1
@@ -25,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "b3dc0d48_1bd7352a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1237274
+      },
+      "writtenOn": "2020-04-28T01:53:46Z",
+      "side": 1,
+      "message": "This is mostly cloned from getMultisampledRenderTarget(). I guess the subtle difference is that if outRT can be guaranteed to be unchanged when ANGLE_TRY() fails, but I\u0027m not sure which one is better.",
+      "parentUuid": "b7fb9e67_3fdf888b",
+      "range": {
+        "startLine": 919,
+        "startChar": 89,
+        "endLine": 919,
+        "endChar": 92
+      },
+      "revId": "63406976ce36dd3d7ba27f09df05c5f11f01c895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32ff2807_768d581a",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 1
@@ -36,6 +77,30 @@
       "writtenOn": "2020-04-27T18:02:19Z",
       "side": 1,
       "message": "just one request for this CL. For the \"get\" functions, can you make them call \"find\" internally, and only create the RT if the \"find\" returns nullptr?",
+      "range": {
+        "startLine": 924,
+        "startChar": 0,
+        "endLine": 970,
+        "endChar": 1
+      },
+      "revId": "63406976ce36dd3d7ba27f09df05c5f11f01c895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a7b9f4c_dbc946ef",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1237274
+      },
+      "writtenOn": "2020-04-28T01:53:46Z",
+      "side": 1,
+      "message": "This is exactly what I\u0027m considering as a follow-up! Do you mind if I make the requested change in a separate CL?",
+      "parentUuid": "32ff2807_768d581a",
       "range": {
         "startLine": 924,
         "startChar": 0,
