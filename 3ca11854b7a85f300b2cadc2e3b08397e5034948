@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a24c341f_da000fb5",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-28T13:56:40Z",
+      "side": 1,
+      "message": "you\u0027ll probably need to re-run git cl format. The version of clang-format that comes with MSVC 2019 is newer than the one Chromium uses. (Ideally at some point Chrome should upgrade)",
+      "revId": "3ca11854b7a85f300b2cadc2e3b08397e5034948",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
