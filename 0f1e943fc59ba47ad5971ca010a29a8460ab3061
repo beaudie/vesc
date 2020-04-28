@@ -94,6 +94,30 @@
       "revId": "0f1e943fc59ba47ad5971ca010a29a8460ab3061",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43b96d8e_0816aae3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-28T20:28:06Z",
+      "side": 1,
+      "message": "I totally agree with you on the hard code bufferAccessType. Lets do it as a follow up CL.\nI just kicked trybot with onExternalWrite to see if fix the issue or not.",
+      "parentUuid": "d8eeb97c_09495634",
+      "range": {
+        "startLine": 510,
+        "startChar": 37,
+        "endLine": 510,
+        "endChar": 65
+      },
+      "revId": "0f1e943fc59ba47ad5971ca010a29a8460ab3061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
