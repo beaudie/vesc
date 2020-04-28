@@ -308,8 +308,7 @@ void QueryTexParameterBase(const Context *context,
             *params =
                 CastFromGLintStateValue<ParamType>(pname, texture->getDepthStencilTextureMode());
             break;
-        case GL_TEXTURE_CROP_RECT_OES:
-        {
+        case GL_TEXTURE_CROP_RECT_OES: {
             const gl::Rectangle &crop = texture->getCrop();
             params[0]                 = CastFromSpecialValue<isGLfixed, ParamType>(pname, crop.x);
             params[1]                 = CastFromSpecialValue<isGLfixed, ParamType>(pname, crop.y);
@@ -410,8 +409,7 @@ void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const
         case GL_TEXTURE_SWIZZLE_A:
             texture->setSwizzleAlpha(context, ConvertToGLenum(pname, params[0]));
             break;
-        case GL_TEXTURE_BASE_LEVEL:
-        {
+        case GL_TEXTURE_BASE_LEVEL: {
             (void)(texture->setBaseLevel(
                 context, clampCast<GLuint>(CastQueryValueTo<GLint>(pname, params[0]))));
             break;
@@ -1099,8 +1097,7 @@ void QueryFramebufferAttachmentParameteriv(const Context *context,
             *params = attachmentObject->mipLevel();
             break;
 
-        case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
-        {
+        case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: {
             TextureTarget face = attachmentObject->cubeMapFace();
             if (face != TextureTarget::InvalidEnum)
             {
@@ -1279,8 +1276,7 @@ void QueryProgramiv(Context *context, const Program *program, GLenum pname, GLin
             //       program has no linked binary.
             *params = program->isSeparable() && program->isLinked();
             break;
-        case GL_COMPUTE_WORK_GROUP_SIZE:
-        {
+        case GL_COMPUTE_WORK_GROUP_SIZE: {
             const sh::WorkGroupSize &localSize = program->getComputeShaderLocalSize();
             params[0]                          = localSize[0];
             params[1]                          = localSize[1];
@@ -1561,8 +1557,7 @@ void QueryInternalFormativ(const TextureCaps &format, GLenum pname, GLsizei bufS
             }
             break;
 
-        case GL_SAMPLES:
-        {
+        case GL_SAMPLES: {
             size_t returnCount   = std::min<size_t>(bufSize, format.sampleCounts.size());
             auto sampleReverseIt = format.sampleCounts.rbegin();
             for (size_t sampleIndex = 0; sampleIndex < returnCount; ++sampleIndex)
@@ -2216,8 +2211,7 @@ void SetLightParameters(GLES1State *state,
         case LightParameter::Specular:
             lightParams.specular = ColorF::fromData(params);
             break;
-        case LightParameter::Position:
-        {
+        case LightParameter::Position: {
             angle::Mat4 mv = state->getModelviewMatrix();
             angle::Vector4 transformedPos =
                 mv.product(angle::Vector4(params[0], params[1], params[2], params[3]));
@@ -2227,8 +2221,7 @@ void SetLightParameters(GLES1State *state,
             lightParams.position[3] = transformedPos[3];
         }
         break;
-        case LightParameter::SpotDirection:
-        {
+        case LightParameter::SpotDirection: {
             angle::Mat4 mv = state->getModelviewMatrix();
             angle::Vector4 transformedPos =
                 mv.product(angle::Vector4(params[0], params[1], params[2], 0.0f));
@@ -2942,14 +2935,12 @@ bool GetQueryParameterInfo(const State &glState,
     // application.
     switch (pname)
     {
-        case GL_COMPRESSED_TEXTURE_FORMATS:
-        {
+        case GL_COMPRESSED_TEXTURE_FORMATS: {
             *type      = GL_INT;
             *numParams = static_cast<unsigned int>(caps.compressedTextureFormats.size());
             return true;
         }
-        case GL_SHADER_BINARY_FORMATS:
-        {
+        case GL_SHADER_BINARY_FORMATS: {
             *type      = GL_INT;
             *numParams = static_cast<unsigned int>(caps.shaderBinaryFormats.size());
             return true;
@@ -3014,14 +3005,12 @@ bool GetQueryParameterInfo(const State &glState,
         case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
         case GL_TEXTURE_BINDING_2D:
         case GL_TEXTURE_BINDING_CUBE_MAP:
-        case GL_RESET_NOTIFICATION_STRATEGY_EXT:
-        {
+        case GL_RESET_NOTIFICATION_STRATEGY_EXT: {
             *type      = GL_INT;
             *numParams = 1;
             return true;
         }
-        case GL_PACK_REVERSE_ROW_ORDER_ANGLE:
-        {
+        case GL_PACK_REVERSE_ROW_ORDER_ANGLE: {
             if (!extensions.packReverseRowOrder)
             {
                 return false;
@@ -3031,8 +3020,7 @@ bool GetQueryParameterInfo(const State &glState,
             return true;
         }
         case GL_MAX_RECTANGLE_TEXTURE_SIZE_ANGLE:
-        case GL_TEXTURE_BINDING_RECTANGLE_ANGLE:
-        {
+        case GL_TEXTURE_BINDING_RECTANGLE_ANGLE: {
             if (!extensions.textureRectangle)
             {
                 return false;
@@ -3042,8 +3030,7 @@ bool GetQueryParameterInfo(const State &glState,
             return true;
         }
         case GL_MAX_DRAW_BUFFERS_EXT:
-        case GL_MAX_COLOR_ATTACHMENTS_EXT:
-        {
+        case GL_MAX_COLOR_ATTACHMENTS_EXT: {
             if ((clientMajorVersion < 3) && !extensions.drawBuffers)
             {
                 return false;
@@ -3052,15 +3039,13 @@ bool GetQueryParameterInfo(const State &glState,
             *numParams = 1;
             return true;
         }
-        case GL_MAX_VIEWPORT_DIMS:
-        {
+        case GL_MAX_VIEWPORT_DIMS: {
             *type      = GL_INT;
             *numParams = 2;
             return true;
         }
         case GL_VIEWPORT:
-        case GL_SCISSOR_BOX:
-        {
+        case GL_SCISSOR_BOX: {
             *type      = GL_INT;
             *numParams = 4;
             return true;
@@ -3078,14 +3063,12 @@ bool GetQueryParameterInfo(const State &glState,
         case GL_DEPTH_TEST:
         case GL_BLEND:
         case GL_DITHER:
-        case GL_CONTEXT_ROBUST_ACCESS_EXT:
-        {
+        case GL_CONTEXT_ROBUST_ACCESS_EXT: {
             *type      = GL_BOOL;
             *numParams = 1;
             return true;
         }
-        case GL_COLOR_WRITEMASK:
-        {
+        case GL_COLOR_WRITEMASK: {
             *type      = GL_BOOL;
             *numParams = 4;
             return true;
@@ -3094,23 +3077,20 @@ bool GetQueryParameterInfo(const State &glState,
         case GL_POLYGON_OFFSET_UNITS:
         case GL_SAMPLE_COVERAGE_VALUE:
         case GL_DEPTH_CLEAR_VALUE:
-        case GL_LINE_WIDTH:
-        {
+        case GL_LINE_WIDTH: {
             *type      = GL_FLOAT;
             *numParams = 1;
             return true;
         }
         case GL_ALIASED_LINE_WIDTH_RANGE:
         case GL_ALIASED_POINT_SIZE_RANGE:
-        case GL_DEPTH_RANGE:
-        {
+        case GL_DEPTH_RANGE: {
             *type      = GL_FLOAT;
             *numParams = 2;
             return true;
         }
         case GL_COLOR_CLEAR_VALUE:
-        case GL_BLEND_COLOR:
-        {
+        case GL_BLEND_COLOR: {
             *type      = GL_FLOAT;
             *numParams = 4;
             return true;
@@ -3176,8 +3156,7 @@ bool GetQueryParameterInfo(const State &glState,
         switch (pname)
         {
             case GL_CONTEXT_FLAGS:
-            case GL_CONTEXT_PROFILE_MASK:
-            {
+            case GL_CONTEXT_PROFILE_MASK: {
                 *type      = GL_INT;
                 *numParams = 1;
                 return true;
@@ -3349,8 +3328,7 @@ bool GetQueryParameterInfo(const State &glState,
             *type      = GL_INT;
             *numParams = 1;
             return true;
-        case GL_MAX_SAMPLES:
-        {
+        case GL_MAX_SAMPLES: {
             static_assert(GL_MAX_SAMPLES_ANGLE == GL_MAX_SAMPLES,
                           "GL_MAX_SAMPLES_ANGLE not equal to GL_MAX_SAMPLES");
             if ((clientMajorVersion < 3) &&
@@ -3533,8 +3511,7 @@ bool GetQueryParameterInfo(const State &glState,
         case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS:
         case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS:
         case GL_UNPACK_IMAGE_HEIGHT:
-        case GL_UNPACK_SKIP_IMAGES:
-        {
+        case GL_UNPACK_SKIP_IMAGES: {
             *type      = GL_INT;
             *numParams = 1;
             return true;
@@ -3544,8 +3521,7 @@ bool GetQueryParameterInfo(const State &glState,
         case GL_MAX_UNIFORM_BLOCK_SIZE:
         case GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS:
         case GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS:
-        case GL_MAX_SERVER_WAIT_TIMEOUT:
-        {
+        case GL_MAX_SERVER_WAIT_TIMEOUT: {
             *type      = GL_INT_64_ANGLEX;
             *numParams = 1;
             return true;
@@ -3554,15 +3530,13 @@ bool GetQueryParameterInfo(const State &glState,
         case GL_TRANSFORM_FEEDBACK_ACTIVE:
         case GL_TRANSFORM_FEEDBACK_PAUSED:
         case GL_PRIMITIVE_RESTART_FIXED_INDEX:
-        case GL_RASTERIZER_DISCARD:
-        {
+        case GL_RASTERIZER_DISCARD: {
             *type      = GL_BOOL;
             *numParams = 1;
             return true;
         }
 
-        case GL_MAX_TEXTURE_LOD_BIAS:
-        {
+        case GL_MAX_TEXTURE_LOD_BIAS: {
             *type      = GL_FLOAT;
             *numParams = 1;
             return true;
@@ -3705,8 +3679,7 @@ void QueryProgramPipelineiv(const Context *context,
 
     switch (pname)
     {
-        case GL_ACTIVE_PROGRAM:
-        {
+        case GL_ACTIVE_PROGRAM: {
             // the name of the active program object of the program pipeline object is returned in
             // params
             *params = 0;
@@ -3721,8 +3694,7 @@ void QueryProgramPipelineiv(const Context *context,
             break;
         }
 
-        case GL_VERTEX_SHADER:
-        {
+        case GL_VERTEX_SHADER: {
             // the name of the current program object for the vertex shader type of the program
             // pipeline object is returned in params
             *params = 0;
@@ -3737,8 +3709,7 @@ void QueryProgramPipelineiv(const Context *context,
             break;
         }
 
-        case GL_FRAGMENT_SHADER:
-        {
+        case GL_FRAGMENT_SHADER: {
             // the name of the current program object for the fragment shader type of the program
             // pipeline object is returned in params
             *params = 0;
@@ -3753,8 +3724,7 @@ void QueryProgramPipelineiv(const Context *context,
             break;
         }
 
-        case GL_COMPUTE_SHADER:
-        {
+        case GL_COMPUTE_SHADER: {
             // the name of the current program object for the compute shader type of the program
             // pipeline object is returned in params
             *params = 0;
@@ -3769,8 +3739,7 @@ void QueryProgramPipelineiv(const Context *context,
             break;
         }
 
-        case GL_INFO_LOG_LENGTH:
-        {
+        case GL_INFO_LOG_LENGTH: {
             // the length of the info log, including the null terminator, is returned in params. If
             // there is no info log, zero is returned.
             *params = 0;
@@ -3781,8 +3750,7 @@ void QueryProgramPipelineiv(const Context *context,
             break;
         }
 
-        case GL_VALIDATE_STATUS:
-        {
+        case GL_VALIDATE_STATUS: {
             // the validation status of pipeline, as determined by glValidateProgramPipeline, is
             // returned in params
             *params = 0;
@@ -3964,7 +3932,10 @@ void QueryContextAttrib(const gl::Context *context, EGLint attribute, EGLint *va
     }
 }
 
-void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
+void QuerySurfaceAttrib(const Display *display,
+                        const Surface *surface,
+                        EGLint attribute,
+                        EGLint *value)
 {
     switch (attribute)
     {
@@ -3981,7 +3952,7 @@ void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
             *value = surface->getConfig()->configID;
             break;
         case EGL_HEIGHT:
-            *value = surface->getHeight();
+            *value = surface->getEglHeight(display);
             break;
         case EGL_HORIZONTAL_RESOLUTION:
             *value = surface->getHorizontalResolution();
@@ -4037,7 +4008,7 @@ void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
             *value = surface->getVerticalResolution();
             break;
         case EGL_WIDTH:
-            *value = surface->getWidth();
+            *value = surface->getEglWidth(display);
             break;
         case EGL_POST_SUB_BUFFER_SUPPORTED_NV:
             *value = surface->isPostSubBufferSupported();
