@@ -2,6 +2,69 @@
   "comments": [
     {
       "key": {
+        "uuid": "8b2064d6_072f09a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T18:17:03Z",
+      "side": 1,
+      "message": "nit: stray whitespace",
+      "range": {
+        "startLine": 7,
+        "startChar": 35,
+        "endLine": 7,
+        "endChar": 36
+      },
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d6f4718_7b7e8593",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T18:17:03Z",
+      "side": 1,
+      "message": "Not sure a function is really helpful here. Standalone, it\u0027s not very clear what \"Update\" is. Might as well just set `baseArrayLayer` and `layerCount` right here.",
+      "range": {
+        "startLine": 595,
+        "startChar": 25,
+        "endLine": 595,
+        "endChar": 49
+      },
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a177f5b_b11f2e3b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T18:17:03Z",
+      "side": 1,
+      "message": "Does destOffset.z need to be set here? Could you add another copy test that does a 2D to 3D copy?",
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7f013889_f70ec150",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 10
@@ -13,6 +76,29 @@
       "writtenOn": "2020-04-28T14:27:29Z",
       "side": 1,
       "message": "minor nits: can you make this an anonymous static helper in TextureVk.cpp, and pass the argument by pointer?\n\nhttps://google.github.io/styleguide/cppguide.html#Reference_Arguments",
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfd63558_171e5192",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-28T18:17:03Z",
+      "side": 1,
+      "message": "We don\u0027t normally add such comments. If some refactoring moves these around, then they could actually become wrong.\n\nThe man page is a quick web search away anyway.",
+      "range": {
+        "startLine": 656,
+        "startChar": 37,
+        "endLine": 656,
+        "endChar": 48
+      },
       "revId": "9a0dd9ede6be36500b253da131025b960449e280",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
