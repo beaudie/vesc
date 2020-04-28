@@ -457,6 +457,16 @@ EGLint Surface::getHeight() const
     return mFixedSize ? static_cast<EGLint>(mFixedHeight) : mImplementation->getHeight();
 }
 
+EGLint Surface::getUserWidth(const egl::Display *display) const
+{
+    return mFixedSize ? static_cast<EGLint>(mFixedWidth) : mImplementation->getUserWidth(display);
+}
+
+EGLint Surface::getUserHeight(const egl::Display *display) const
+{
+    return mFixedSize ? static_cast<EGLint>(mFixedHeight) : mImplementation->getUserHeight(display);
+}
+
 Error Surface::bindTexImage(gl::Context *context, gl::Texture *texture, EGLint buffer)
 {
     ASSERT(!mTexture);

@@ -99,4 +99,14 @@ egl::Error SurfaceImpl::swapWithFrameToken(const gl::Context *context,
     UNREACHABLE();
     return egl::EglBadDisplay();
 }
+
+EGLint SurfaceImpl::getUserWidth(const egl::Display *display) const
+{
+    return getWidth();
+}
+
+EGLint SurfaceImpl::getUserHeight(const egl::Display *display) const
+{
+    return getHeight();
+}
 }  // namespace rx
