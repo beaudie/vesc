@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7a776e50_5a79a715",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-28T21:41:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8fdc36ff_99104b4c",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "471374c2e5452cf7d82dc8529dc75edd4a775128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc26bc0c_a8f3fc8f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -60,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "46209f71_c7c5e2a6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4227,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-28T21:41:28Z",
+      "side": 1,
+      "message": "Agreed. This is the shorter-term command buffer use overhaul intended to enable the worker thread. Longer-term I would like to overhaul command buffer use in the main thread so that both inside \u0026 outside RP commands can exist in a single SecondaryCommandBuffer and little/no flushing to the primary is required. Instead main thread store commands in this unified SCB until flush is required and only then hands off to worker thread.",
+      "parentUuid": "82df3a0e_03a604f9",
+      "revId": "471374c2e5452cf7d82dc8529dc75edd4a775128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f9d3fe3e_24a35012",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -74,6 +116,24 @@
       "revId": "471374c2e5452cf7d82dc8529dc75edd4a775128",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7905917_9723db71",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4229,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-28T21:41:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9d3fe3e_24a35012",
+      "revId": "471374c2e5452cf7d82dc8529dc75edd4a775128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
