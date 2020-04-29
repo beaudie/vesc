@@ -3098,6 +3098,7 @@ Extensions Context::generateSupportedExtensions() const
         supportedExtensions.textureMultisample       = false;
         supportedExtensions.drawBuffersIndexedEXT    = false;
         supportedExtensions.drawBuffersIndexedOES    = false;
+        supportedExtensions.floatBlend               = false;
 
         // Requires glCompressedTexImage3D
         supportedExtensions.textureCompressionASTCOES = false;
