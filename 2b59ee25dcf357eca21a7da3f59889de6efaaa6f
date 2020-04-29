@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "048e87db_2768204c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-04-29T05:55:28Z",
+      "side": 1,
+      "message": "Could you please use a more specific title for this CL? I made a small suggested change to the bug title of https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d4206 . Thanks.",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "2b59ee25dcf357eca21a7da3f59889de6efaaa6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
