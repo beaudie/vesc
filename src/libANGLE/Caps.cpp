@@ -163,36 +163,46 @@ static bool GetFormatSupportBase(const TextureCapsMap &textureCaps,
                                  bool requiresRenderbufferSupport,
                                  bool requiresBlending)
 {
+    IOS_LOG << "GetFormatSupportBase begin" << std::endl;
     for (size_t i = 0; i < requiredFormatsSize; i++)
     {
+        IOS_LOG << "GetFormatSupportBase begin format: " << gl::FmtHex(requiredFormats[i]) << std::endl;
         const TextureCaps &cap = textureCaps.get(requiredFormats[i]);
 
         if (requiresTexturing && !cap.texturable)
         {
+            IOS_LOG << "GetFormatSupportBase failed because !cap.texturable" << std::endl;
             return false;
         }
 
         if (requiresFiltering && !cap.filterable)
         {
+            IOS_LOG << "GetFormatSupportBase failed because !cap.filterable" << std::endl;
             return false;
         }
 
         if (requiresAttachingTexture && !cap.textureAttachment)
         {
+            IOS_LOG << "GetFormatSupportBase failed because !cap.textureAttachment" << std::endl;
             return false;
         }
 
         if (requiresRenderbufferSupport && !cap.renderbuffer)
         {
+            IOS_LOG << "GetFormatSupportBase failed because !cap.renderbuffer" << std::endl;
             return false;
         }
 
         if (requiresBlending && !cap.blendable)
         {
+            IOS_LOG << "GetFormatSupportBase failed because !cap.blendable" << std::endl;
             return false;
         }
+
+        IOS_LOG << "GetFormatSupportBase end format (success)" << std::endl;
     }
 
+    IOS_LOG << "GetFormatSupportBase end (success)" << std::endl;
     return true;
 }
 
@@ -629,7 +639,10 @@ static bool DetermineDepthTextureANGLESupport(const TextureCapsMap &textureCaps)
         GL_DEPTH24_STENCIL8_OES,
     };
 
-    return GetFormatSupport(textureCaps, requiredFormats, true, true, true, false, false);
+    IOS_LOG << "DetermineDepthTextureANGLESupport begin" << std::endl;
+    bool ret = GetFormatSupport(textureCaps, requiredFormats, true, true, true, false, false);
+    IOS_LOG << "DetermineDepthTextureANGLESupport end (supported: " << ret << ")" << std::endl;
+    return ret;
 }
 
 // Check for GL_OES_depth_texture support
@@ -640,7 +653,10 @@ static bool DetermineDepthTextureOESSupport(const TextureCapsMap &textureCaps)
         GL_DEPTH_COMPONENT32_OES,
     };
 
-    return GetFormatSupport(textureCaps, requiredFormats, true, true, true, true, false);
+    IOS_LOG << "DetermineDepthTextureOESSupport begin" << std::endl;
+    bool ret = GetFormatSupport(textureCaps, requiredFormats, true, true, true, true, false);
+    IOS_LOG << "DetermineDepthTextureOESSupport end (supported: " << ret << ")" << std::endl;
+    return ret;
 }
 
 // Check for GL_OES_depth24

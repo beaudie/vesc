@@ -15,6 +15,7 @@
 
 #include <iomanip>
 #include <ios>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -24,6 +25,8 @@
 #if !defined(TRACE_OUTPUT_FILE)
 #    define TRACE_OUTPUT_FILE "angle_debug.txt"
 #endif
+
+#define IOS_LOG std::cerr
 
 namespace gl
 {

@@ -118,11 +118,16 @@ void FunctionsGL::initialize(const egl::AttributeMap &displayAttributes)
         angle::SplitStringAlongWhitespace(std::string(exts), &extensions);
     }
 
+    IOS_LOG << "FunctionsGL::initialize begin extensions:" << std::endl;
+
     std::set<std::string> extensionSet;
     for (const auto &extension : extensions)
     {
+        IOS_LOG << extension << std::endl;
         extensionSet.insert(extension);
     }
+
+    IOS_LOG << "FunctionsGL::initialize end extensions" << std::endl;
 
     // Note:
     // Even though extensions are written against specific versions of GL, many drivers expose the
