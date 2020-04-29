@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46b5a1f3_5c0ff962",
+        "filename": "src/libEGL/egl_loader_autogen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-29T19:08:13Z",
+      "side": 0,
+      "message": "These had duplicate symbols too?",
+      "range": {
+        "startLine": 18,
+        "startChar": 46,
+        "endLine": 18,
+        "endChar": 62
+      },
+      "revId": "d93b9559e6b9b24fd6bbf308d44fcaf79aa390e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
