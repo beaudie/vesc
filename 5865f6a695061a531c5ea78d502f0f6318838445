@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "45c32c25_4010e760",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1920,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-29T04:43:22Z",
+      "side": 1,
+      "message": "Also, you would need the same fix here!",
+      "revId": "5865f6a695061a531c5ea78d502f0f6318838445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01c2bf47_ec6b4953",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
