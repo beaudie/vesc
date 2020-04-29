@@ -22,6 +22,30 @@
       "revId": "3839d3eca84273c590b84a922dfdeee44b27db70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a35e10b4_ef7f3293",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-29T20:35:55Z",
+      "side": 1,
+      "message": "Actually I think this one is right to be here, since it is tracking the CPU write part. The copyFromBuffer is handling the copy form src to dst.",
+      "parentUuid": "623315ec_5855e2e0",
+      "range": {
+        "startLine": 504,
+        "startChar": 4,
+        "endLine": 504,
+        "endChar": 18
+      },
+      "revId": "3839d3eca84273c590b84a922dfdeee44b27db70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
