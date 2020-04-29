@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c66b2571_c8f58c01",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-29T23:08:26Z",
+      "side": 1,
+      "message": "Loss of precision here.",
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cfddda3_7b436ae0",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-29T23:08:26Z",
+      "side": 1,
+      "message": "And here.\nI expect this is the \"somewhat inconsistent code in the desktop GL side\" you mentioned.",
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b63cb72_098a42fc",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5650,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-29T23:08:26Z",
+      "side": 1,
+      "message": "This looks like some other change. Just cleaning up types while in this code I expect.",
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
