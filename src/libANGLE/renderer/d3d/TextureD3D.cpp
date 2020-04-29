@@ -673,6 +673,39 @@ angle::Result TextureD3D::releaseTexStorage(const gl::Context *context)
         return angle::Result::Continue;
     }
 
+    // Iterate over all images, and backup the content if it's been used as a render target. The
+    // D3D11 backend can automatically restore images on storage destroy, but it only works for
+    // images that have been associated with the texture storage before, which is insufficient.
+    if (mTexStorage->isRenderTarget())
+    {
+        gl::ImageIndexIterator iterator = imageIterator();
+        while (iterator.hasNext())
+        {
+            const gl::ImageIndex index = iterator.next();
+            ImageD3D *image            = getImage(index);
+
+            // Guard against invalid images. This may occur, for example, when a texture object is
+            // being destroyed.
+            if (!image)
+                continue;
+
+            if (!image->isDirty())
+            {
+                // Note we should avoid trying to look up the render target when the storage is from
+                // an EGL image. The assumption here is that the image content should have been
+                // copied back just before the call site, which makes the image dirty, so the
+                // following path is considered unreachable for that case.
+                const GLsizei samples         = getRenderToTextureSamples();
+                RenderTargetD3D *renderTarget = nullptr;
+                ANGLE_TRY(mTexStorage->findRenderTarget(context, index, samples, &renderTarget));
+                if (renderTarget)
+                {
+                    ANGLE_TRY(image->copyFromTexStorage(context, index, mTexStorage));
+                }
+            }
+        }
+    }
+
     auto err = mTexStorage->onDestroy(context);
     SafeDelete(mTexStorage);
     return err;
