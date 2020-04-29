@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c78023bd_6e5388d3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-29T17:41:37Z",
+      "side": 1,
+      "message": "Sure, SGTM.",
+      "parentUuid": "82bd907d_6ff18c2b",
+      "range": {
+        "startLine": 595,
+        "startChar": 25,
+        "endLine": 595,
+        "endChar": 49
+      },
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a177f5b_b11f2e3b",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 10
