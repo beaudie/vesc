@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "623315ec_5855e2e0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-29T20:23:27Z",
+      "side": 1,
+      "message": "can\u0027t you do this in copyFromBuffer? seems like it\u0027s a bug in copyFromBuffer.",
+      "range": {
+        "startLine": 504,
+        "startChar": 4,
+        "endLine": 504,
+        "endChar": 18
+      },
+      "revId": "3839d3eca84273c590b84a922dfdeee44b27db70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
