@@ -680,6 +680,11 @@ struct UniformLocation
 {
     int value;
 };
+
+struct AttributeLocation
+{
+    int value;
+};
 }  // namespace gl
 
 namespace egl

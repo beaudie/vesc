@@ -1575,9 +1575,11 @@ void CaptureVertexArrayData(std::vector<CallCapture> *setupCalls,
         const gl::VertexAttribute &attrib = vertexAttribs[attribIndex];
         const gl::VertexBinding &binding  = vertexBindings[attrib.bindingIndex];
 
+        gl::AttributeLocation attribLoc = {static_cast<GLint>(attribIndex)};
+
         if (attrib.enabled != defaultAttrib.enabled)
         {
-            Capture(setupCalls, CaptureEnableVertexAttribArray(*replayState, false, attribIndex));
+            Capture(setupCalls, CaptureEnableVertexAttribArray(*replayState, false, attribLoc));
         }
 
         if (attrib.format != defaultAttrib.format || attrib.pointer != defaultAttrib.pointer ||
@@ -1594,14 +1596,14 @@ void CaptureVertexArrayData(std::vector<CallCapture> *setupCalls,
             }
 
             Capture(setupCalls, CaptureVertexAttribPointer(
-                                    *replayState, true, attribIndex, attrib.format->channelCount,
+                                    *replayState, true, attribLoc, attrib.format->channelCount,
                                     attrib.format->vertexAttribType, attrib.format->isNorm(),
                                     binding.getStride(), attrib.pointer));
         }
 
         if (binding.getDivisor() != 0)
         {
-            Capture(setupCalls, CaptureVertexAttribDivisor(*replayState, true, attribIndex,
+            Capture(setupCalls, CaptureVertexAttribDivisor(*replayState, true, attribLoc,
                                                            binding.getDivisor()));
         }
     }
@@ -1806,7 +1808,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         const gl::VertexAttribCurrentValueData &defaultValue = currentValues[attribIndex];
         if (!IsDefaultCurrentValue(defaultValue))
         {
-            Capture(setupCalls, CaptureVertexAttrib4fv(replayState, true, attribIndex,
+            Capture(setupCalls, CaptureVertexAttrib4fv(replayState, true, {attribIndex},
                                                        defaultValue.Values.FloatValues));
         }
     }
@@ -3442,8 +3444,9 @@ void FrameCapture::captureClientArraySnapshot(const gl::Context *context,
     // Capture client array data.
     for (size_t attribIndex : context->getStateCache().getActiveClientAttribsMask())
     {
-        const gl::VertexAttribute &attrib = vao->getVertexAttribute(attribIndex);
-        const gl::VertexBinding &binding  = vao->getVertexBinding(attrib.bindingIndex);
+        const gl::VertexAttribute &attrib =
+            vao->getVertexAttribute({static_cast<int>(attribIndex)});
+        const gl::VertexBinding &binding = vao->getVertexBinding(attrib.bindingIndex);
 
         int callIndex = mClientVertexArrayMap[attribIndex];
 
@@ -3883,6 +3886,15 @@ bool FindShaderProgramIDInCall(const CallCapture &call, gl::ShaderProgramID *idO
     }
 
     return false;
+}
+
+template <>
+void WriteParamValueReplay<ParamType::TAttributeLocation>(std::ostream &os,
+                                                          const CallCapture &call,
+                                                          gl::AttributeLocation value)
+{
+    // TODO(jmadill): Use attribute map. http://anglebug.com/4598
+    os << value.value;
 }
 
 template <>

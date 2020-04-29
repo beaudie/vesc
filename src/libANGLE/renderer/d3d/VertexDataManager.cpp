@@ -271,7 +271,7 @@ angle::Result VertexDataManager::prepareVertexData(
         translatedAttribs->resize(attribIndex + 1);
 
         TranslatedAttribute *translated = &(*translatedAttribs)[attribIndex];
-        auto currentValueData           = state.getVertexAttribCurrentValue(attribIndex);
+        auto currentValueData = state.getVertexAttribCurrentValue({static_cast<int>(attribIndex)});
 
         // Record the attribute now
         translated->active           = true;
