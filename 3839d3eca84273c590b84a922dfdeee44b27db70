@@ -46,6 +46,30 @@
       "revId": "3839d3eca84273c590b84a922dfdeee44b27db70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e53b6ff1_6287c7ef",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-29T21:13:20Z",
+      "side": 1,
+      "message": "Right right. Missed that.",
+      "parentUuid": "a35e10b4_ef7f3293",
+      "range": {
+        "startLine": 504,
+        "startChar": 4,
+        "endLine": 504,
+        "endChar": 18
+      },
+      "revId": "3839d3eca84273c590b84a922dfdeee44b27db70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
