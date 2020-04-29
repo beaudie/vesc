@@ -260,7 +260,7 @@ void ProgramVk::save(const gl::Context *context, gl::BinaryOutputStream *stream)
 
 void ProgramVk::setBinaryRetrievableHint(bool retrievable)
 {
-    UNIMPLEMENTED();
+    // Nohting to do here yet.
 }
 
 void ProgramVk::setSeparable(bool separable)
