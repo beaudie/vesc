@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "82bd907d_6ff18c2b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-29T17:26:31Z",
+      "side": 1,
+      "message": "Jamie requested it be moved into a function:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2166863/7/src/libANGLE/renderer/vulkan/TextureVk.cpp#614\n\nI agree that a function is overkill here though.",
+      "parentUuid": "9d6f4718_7b7e8593",
+      "range": {
+        "startLine": 595,
+        "startChar": 25,
+        "endLine": 595,
+        "endChar": 49
+      },
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a177f5b_b11f2e3b",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 10
