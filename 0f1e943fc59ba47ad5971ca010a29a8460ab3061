@@ -118,6 +118,30 @@
       "revId": "0f1e943fc59ba47ad5971ca010a29a8460ab3061",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6be04ef_e206c014",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-29T04:32:42Z",
+      "side": 1,
+      "message": "That\u0027s fine by me, but FYI this is the only user of copyFromBuffer, so the change in this CL might as well be to remove this parameter, instead of changing it.",
+      "parentUuid": "43b96d8e_0816aae3",
+      "range": {
+        "startLine": 510,
+        "startChar": 37,
+        "endLine": 510,
+        "endChar": 65
+      },
+      "revId": "0f1e943fc59ba47ad5971ca010a29a8460ab3061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
