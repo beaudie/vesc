@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f11561c_c5ccc79c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1920,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-29T18:08:24Z",
+      "side": 1,
+      "message": "Sorry, I am not sure why we need add mCurrentReadStages here? Read op should only depend on prior write, not prior read, right?",
+      "parentUuid": "45c32c25_4010e760",
+      "revId": "5865f6a695061a531c5ea78d502f0f6318838445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01c2bf47_ec6b4953",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
@@ -54,6 +72,30 @@
       "side": 1,
       "message": "IIRC there\u0027s no point in adding the read access mask here. WAR hazards don\u0027t need memory barriers (only execution barriers).\n\nAdding `mCurrentReadStages` alone is probably what fixed the issue.",
       "parentUuid": "01c2bf47_ec6b4953",
+      "range": {
+        "startLine": 1940,
+        "startChar": 45,
+        "endLine": 1940,
+        "endChar": 66
+      },
+      "revId": "5865f6a695061a531c5ea78d502f0f6318838445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e09bdfb_3c67a19c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1940,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-29T18:08:24Z",
+      "side": 1,
+      "message": "I think I agree with you. Let me remove mCurrentReadAccess here and give ti a try. But I think it shouldn\u0027t hurt with the mCurrentReadAccess as well, flush read operation\u0027s cache should be a nop anyway.",
+      "parentUuid": "461008f4_4fb89864",
       "range": {
         "startLine": 1940,
         "startChar": 45,
