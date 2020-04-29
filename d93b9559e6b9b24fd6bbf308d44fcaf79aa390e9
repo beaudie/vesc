@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18e913e0_68176fab",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-29T17:07:41Z",
+      "side": 0,
+      "message": "@Courtney note sequencing of commands here. We would always have outsideRP command first flushed to primary, then we\u0027d end any current RP and also flush those commands to primary.\n\nThis CL maintains this ordering without touching primary CB directly.",
+      "range": {
+        "startLine": 763,
+        "startChar": 8,
+        "endLine": 764,
+        "endChar": 35
+      },
+      "revId": "d93b9559e6b9b24fd6bbf308d44fcaf79aa390e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

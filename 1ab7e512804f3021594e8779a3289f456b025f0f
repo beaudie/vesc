@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6294dc9b_a1bca04b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2427,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-29T17:07:41Z",
+      "side": 1,
+      "message": "We don\u0027t have to end the renderPass. This change is simply moving the command from the primary to the SCB without any modification to the command ordering. Note that previously the commands were placed directly in the primary command buffer, and anything directly in the primary command buffer exists outside of the renderPass. Only commands in the renderPassCommandBuffer exist inside of the renderpass. When those commands are flushed to the primary, the renderPass is always ended so anything directly in the primary is either before or after a renderPass.\nThe old flushAndGetPrimaryCommandBuffer() function had the same effect of ending any active renderPass.\n\nYour point is taken, but the purpose of this CL is not to improve the treatment of debug utils commands in the cmd buffer, but just to get them off of the primary directly, which in this case means putting them into outsideRenderPassCommandBuffer.",
+      "parentUuid": "edc91f32_f704f2d0",
+      "revId": "1ab7e512804f3021594e8779a3289f456b025f0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1fa0cfe6_7ef2ca96",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 20
@@ -30,6 +48,24 @@
       "writtenOn": "2020-04-29T15:25:51Z",
       "side": 1,
       "message": "Likewise, don\u0027t think it\u0027s necessary to end a renderpass for this.",
+      "revId": "1ab7e512804f3021594e8779a3289f456b025f0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "917f88d2_19a2e0c4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2442,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-29T17:07:41Z",
+      "side": 1,
+      "message": "Same comment as above.",
+      "parentUuid": "1fa0cfe6_7ef2ca96",
       "revId": "1ab7e512804f3021594e8779a3289f456b025f0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "aa498a7b_40d418d1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2476,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-29T17:07:41Z",
+      "side": 1,
+      "message": "Why do you suspect that? Note that this change is just replicating the previous code. It\u0027s not attempting to change any functionality. This code as-is passes current debug label tests. If we want to change this functionality and add tests to verify that we should do that in a different CL.",
+      "parentUuid": "926250cf_36e62041",
+      "range": {
+        "startLine": 2476,
+        "startChar": 36,
+        "endLine": 2476,
+        "endChar": 60
+      },
+      "revId": "1ab7e512804f3021594e8779a3289f456b025f0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "acef0eb2_362daa23",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
         "patchSetId": 20
@@ -73,6 +133,24 @@
       "revId": "1ab7e512804f3021594e8779a3289f456b025f0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92dc1bc6_3297cc2a",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-29T17:07:41Z",
+      "side": 1,
+      "message": "Sweet, thanks!",
+      "parentUuid": "acef0eb2_362daa23",
+      "revId": "1ab7e512804f3021594e8779a3289f456b025f0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
