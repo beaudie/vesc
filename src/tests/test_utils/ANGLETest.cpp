@@ -1001,6 +1001,25 @@ void ANGLETestBase::draw3DTexturedQuad(GLfloat positionAttribZ,
     }
 }
 
+GLuint ANGLETestBase::getProgramShader(GLuint program, GLint requestedType)
+{
+    static constexpr GLsizei kMaxShaderCount = 16;
+    GLuint attachedShaders[kMaxShaderCount]  = {0u};
+    GLsizei count                            = 0;
+    glGetAttachedShaders(program, kMaxShaderCount, &count, attachedShaders);
+    for (int i = 0; i < count; ++i)
+    {
+        GLint type = 0;
+        glGetShaderiv(attachedShaders[i], GL_SHADER_TYPE, &type);
+        if (type == requestedType)
+        {
+            return attachedShaders[i];
+        }
+    }
+
+    return 0;
+}
+
 bool ANGLETestBase::platformSupportsMultithreading() const
 {
     return (IsOpenGLES() && IsAndroid()) || IsVulkan();
