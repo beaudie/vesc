@@ -1162,7 +1162,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     vk::GraphicsPipelineDesc pipelineDesc;
     pipelineDesc.initDefaults();
     pipelineDesc.setCullMode(VK_CULL_MODE_NONE);
-    pipelineDesc.setColorWriteMask(0, gl::DrawBufferMask());
+    pipelineDesc.setColorWriteMasks(0, gl::DrawBufferMask());
     pipelineDesc.setSingleColorWriteMask(params.colorAttachmentIndexGL, params.colorMaskFlags);
     pipelineDesc.setRasterizationSamples(framebuffer->getSamples());
     pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc());
@@ -1373,12 +1373,15 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     pipelineDesc.initDefaults();
     if (blitColor)
     {
-        pipelineDesc.setColorWriteMask(kAllColorComponents,
-                                       framebuffer->getEmulatedAlphaAttachmentMask());
+        pipelineDesc.setColorWriteMasks(
+            gl::BlendStateExt::ColorMaskStorage::GetReplicatedValue(
+                kAllColorComponents, gl::BlendStateExt::ColorMaskStorage::GetMask(
+                                         framebuffer->getRenderPassDesc().colorAttachmentRange())),
+            framebuffer->getEmulatedAlphaAttachmentMask());
     }
     else
     {
-        pipelineDesc.setColorWriteMask(0, gl::DrawBufferMask());
+        pipelineDesc.setColorWriteMasks(0, gl::DrawBufferMask());
     }
     pipelineDesc.setCullMode(VK_CULL_MODE_NONE);
     pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc());
