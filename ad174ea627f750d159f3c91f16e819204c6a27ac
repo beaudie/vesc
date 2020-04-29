@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe5d6f4d_5e2f3d2e",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-29T03:39:37Z",
+      "side": 1,
+      "message": "I think if you update everything, and run git cl format again, this should go away.",
+      "range": {
+        "startLine": 200,
+        "startChar": 49,
+        "endLine": 200,
+        "endChar": 50
+      },
+      "revId": "ad174ea627f750d159f3c91f16e819204c6a27ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
