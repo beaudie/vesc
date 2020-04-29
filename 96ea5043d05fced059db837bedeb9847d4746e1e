@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee70410b_1e46055a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-29T17:18:26Z",
+      "side": 1,
+      "message": "nit: Nothing\n\nI see this is probably copy/pasted from below.",
+      "range": {
+        "startLine": 263,
+        "startChar": 7,
+        "endLine": 263,
+        "endChar": 14
+      },
+      "revId": "96ea5043d05fced059db837bedeb9847d4746e1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
