@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce4c922e_eed9d534",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-29T23:56:35Z",
+      "side": 0,
+      "message": "Oh, it looks like you had to pull it out so you could call flushOutsideRenderPassCommands()?   Can you just make that public instead and call it here?",
+      "revId": "92b3a720a253c4ce7d406f50ce3426b3329fd5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

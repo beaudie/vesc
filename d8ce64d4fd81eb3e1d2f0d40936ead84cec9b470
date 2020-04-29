@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a59175b2_77319e31",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4399,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-29T23:56:35Z",
+      "side": 1,
+      "message": "This looks like a common pattern.   Is there a way to abstract it out into a vk::QueryHelper function?",
+      "range": {
+        "startLine": 4395,
+        "startChar": 0,
+        "endLine": 4399,
+        "endChar": 87
+      },
+      "revId": "d8ce64d4fd81eb3e1d2f0d40936ead84cec9b470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
