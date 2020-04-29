@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4152b6bb_1e2d038d",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-29T19:35:18Z",
+      "side": 1,
+      "message": "I would make sure that the extension is being requested\n\n        if ((iter.first \u003d\u003d TExtension::OES_texture_cube_map_array ||\n            iter.first \u003d\u003d TExtension::EXT_texture_cube_map_array) \u0026\u0026\n            (iter.second \u003d\u003d EBhRequire || iter.second \u003d\u003d EBhEnable))",
+      "range": {
+        "startLine": 311,
+        "startChar": 12,
+        "endLine": 312,
+        "endChar": 64
+      },
+      "revId": "261eb4a52a691dac501b21032df31a06ba96ca20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08c6f1f4_b4a6e09d",
         "filename": "src/compiler/translator/TranslatorGLSL.cpp",
         "patchSetId": 13
@@ -13,6 +36,144 @@
       "writtenOn": "2020-04-29T18:09:16Z",
       "side": 1,
       "message": "Can you take a look to make sure these changes look right?",
+      "revId": "261eb4a52a691dac501b21032df31a06ba96ca20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d3b2917_173a6760",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-29T19:35:18Z",
+      "side": 1,
+      "message": "Since this became core in GL 4.0, I think this can be\n\n   getOutputType() \u003e\u003d SH_GLSL_COMPATIBILITY_OUTPUT \u0026\u0026 getOutputType() \u003c SH_GLSL_400_CORE_OUTPUT",
+      "range": {
+        "startLine": 338,
+        "startChar": 8,
+        "endLine": 341,
+        "endChar": 9
+      },
+      "revId": "261eb4a52a691dac501b21032df31a06ba96ca20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16639b37_3c0e5eb1",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-29T19:35:18Z",
+      "side": 1,
+      "message": "We probably don\u0027t need to enforce that this extension can\u0027t be used in an ES 2/3 context here.  How about:\n\n   getOutputType() \u003d\u003d SH_ESSL_OUTPUT \u0026\u0026 getShaderVersion() \u003c 320",
+      "range": {
+        "startLine": 342,
+        "startChar": 17,
+        "endLine": 342,
+        "endChar": 51
+      },
+      "revId": "261eb4a52a691dac501b21032df31a06ba96ca20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a60d4d0_98b6eee6",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3701,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-29T19:35:18Z",
+      "side": 1,
+      "message": "Let\u0027s move this up in the file, this extension may be fine to enable on top of ES 3 in the future.  We can do that logic somewhere else.",
+      "range": {
+        "startLine": 3692,
+        "startChar": 0,
+        "endLine": 3701,
+        "endChar": 5
+      },
+      "revId": "261eb4a52a691dac501b21032df31a06ba96ca20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c1a525c_9166aa6e",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-29T19:35:18Z",
+      "side": 1,
+      "message": "GLES",
+      "range": {
+        "startLine": 1130,
+        "startChar": 23,
+        "endLine": 1130,
+        "endChar": 25
+      },
+      "revId": "261eb4a52a691dac501b21032df31a06ba96ca20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "922b0e91_d349b0c8",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-29T19:35:18Z",
+      "side": 1,
+      "message": "GLES",
+      "range": {
+        "startLine": 1131,
+        "startChar": 23,
+        "endLine": 1131,
+        "endChar": 25
+      },
+      "revId": "261eb4a52a691dac501b21032df31a06ba96ca20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc9648d7_67a4b1f9",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1544,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-04-29T19:35:18Z",
+      "side": 1,
+      "message": "Let\u0027s merge this with the other check above.",
+      "range": {
+        "startLine": 1537,
+        "startChar": 0,
+        "endLine": 1544,
+        "endChar": 76
+      },
       "revId": "261eb4a52a691dac501b21032df31a06ba96ca20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
