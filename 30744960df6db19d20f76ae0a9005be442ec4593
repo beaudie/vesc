@@ -22,6 +22,30 @@
       "revId": "30744960df6db19d20f76ae0a9005be442ec4593",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf499789_75c498d3",
+        "filename": "src/tests/perf_tests/restricted_traces/restricted_traces_autogen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-29T15:55:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59834ebd_d4e25164",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 18
+      },
+      "revId": "30744960df6db19d20f76ae0a9005be442ec4593",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
