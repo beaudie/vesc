@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9d4f7aeb_e7047bb4",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-30T14:34:37Z",
+      "side": 1,
+      "message": "What do these changes feed into?  Its not clear what this affects.",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 6
+      },
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c66b2571_c8f58c01",
         "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
         "patchSetId": 1
@@ -36,6 +59,29 @@
     },
     {
       "key": {
+        "uuid": "50a52a4c_ea848f12",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-30T14:34:37Z",
+      "side": 1,
+      "message": "The is unrelated, but appears to be valid.  This function was already called with a const void*.",
+      "range": {
+        "startLine": 669,
+        "startChar": 39,
+        "endLine": 669,
+        "endChar": 58
+      },
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b63cb72_098a42fc",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 1
@@ -47,6 +93,24 @@
       "writtenOn": "2020-04-29T23:08:26Z",
       "side": 1,
       "message": "This looks like some other change. Just cleaning up types while in this code I expect.",
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1804b57_a1b55901",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5650,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-04-30T14:34:37Z",
+      "side": 1,
+      "message": "Did these pop out of a tool, or did you just happen to notice when scanning the code?  They now match the autogenned headers.",
+      "parentUuid": "2b63cb72_098a42fc",
       "revId": "34df194641c443de00b6e242824364ac75bd86fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
