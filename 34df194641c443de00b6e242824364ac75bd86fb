@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "227f64eb_d30328d9",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-30T15:45:03Z",
+      "side": 1,
+      "message": "Yep.",
+      "parentUuid": "75ecdfab_2b1f473b",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 6
+      },
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c66b2571_c8f58c01",
         "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
         "patchSetId": 1
@@ -63,6 +87,24 @@
       "revId": "34df194641c443de00b6e242824364ac75bd86fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c9d7f12_571f1ba8",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-30T15:45:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c66b2571_c8f58c01",
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "b240b70e_e135ab96",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-30T15:45:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8cfddda3_7b436ae0",
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50a52a4c_ea848f12",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
@@ -94,6 +154,30 @@
       "writtenOn": "2020-04-30T14:34:37Z",
       "side": 1,
       "message": "The is unrelated, but appears to be valid.  This function was already called with a const void*.",
+      "range": {
+        "startLine": 669,
+        "startChar": 39,
+        "endLine": 669,
+        "endChar": 58
+      },
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30c0f127_494d4ee8",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-30T15:45:03Z",
+      "side": 1,
+      "message": "Again to match the header.",
+      "parentUuid": "50a52a4c_ea848f12",
       "range": {
         "startLine": 669,
         "startChar": 39,
@@ -135,6 +219,24 @@
       "side": 1,
       "message": "Did these pop out of a tool, or did you just happen to notice when scanning the code?  They now match the autogenned headers.",
       "parentUuid": "2b63cb72_098a42fc",
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a46b637d_83c7951c",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5650,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-30T15:45:03Z",
+      "side": 1,
+      "message": "I was using the tool to find mismatching function definitions. These were getting in the way. Ideally I\u0027d clean this up in a split CL. I didn\u0027t to save time.",
+      "parentUuid": "d1804b57_a1b55901",
       "revId": "34df194641c443de00b6e242824364ac75bd86fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
