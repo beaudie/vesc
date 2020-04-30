@@ -82,13 +82,27 @@ def gn_target_to_blueprint_target(target, target_info):
     if 'output_name' in target_info:
         return target_info['output_name']
 
-    # Prefix all targets with angle_
-    # Remove the prefix //: from gn target names
-    cleaned_path = re.sub(r'^//.*:', '', target)
-    prefix = "angle_"
-    if not cleaned_path.startswith(prefix):
-        cleaned_path = prefix + cleaned_path
-    return cleaned_path
+    # Split the gn target name (in the form of //gn_file_path:target_name) into gn_file_path and
+    # target_name
+    target_regex = re.compile(r"^//([a-zA-Z0-9\-_/]*):([a-zA-Z0-9\-_\.]+)$")
+    match = re.match(target_regex, target)
+    assert match != None
+
+    gn_file_path = match.group(1)
+    target_name = match.group(2)
+    assert len(target_name) > 0
+
+    # Generate a blueprint target name by merging the gn path and target so each target is unique.
+    # Append the angle_ prefix to all targets in the root path
+    root_prefix = "angle"
+    gn_file_path = gn_file_path.replace("/", "_").replace(".", "_").replace("-", "_")
+
+    if len(gn_file_path) == 0 and not target_name.startswith(root_prefix):
+        gn_file_path = root_prefix
+    if len(gn_file_path) > 0:
+        gn_file_path += "_"
+
+    return gn_file_path + target_name
 
 
 def remap_gn_path(path):
