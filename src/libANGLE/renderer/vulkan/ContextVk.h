@@ -384,6 +384,12 @@ class ContextVk : public ContextImpl, public vk::Context
     // render area must be swapped.
     bool isRotatedAspectRatioForDrawFBO() const;
     bool isRotatedAspectRatioForReadFBO() const;
+//#define OLD_CODE
+#ifdef OLD_CODE
+#else   // OLD_CODE
+    SurfaceRotationType getRotationDrawFramebuffer() const;
+    SurfaceRotationType getRotationReadFramebuffer() const;
+#endif  // OLD_CODE
 
     void invalidateProgramBindingHelper(const gl::State &glState);
     angle::Result invalidateProgramExecutableHelper(const gl::Context *context);

@@ -283,6 +283,53 @@ SurfaceRotationType DetermineSurfaceRotation(gl::Framebuffer *framebuffer,
     }
 }
 
+#ifdef OLD_CODE
+#else   // OLD_CODE
+void RotateRectangle(const SurfaceRotationType rotation,
+                     const bool flipY,
+                     const int framebufferWidth,
+                     const int framebufferHeight,
+                     const gl::Rectangle &incoming,
+                     gl::Rectangle *outgoing)
+{
+    // GLES's y-axis points up; Vulkan's points down.
+    switch (rotation)
+    {
+        case SurfaceRotationType::Identity:
+            // Do not rotate gl_Position (surface matches the device's orientation):
+            outgoing->x     = incoming.x;
+            outgoing->y     = flipY ? framebufferHeight - incoming.y - incoming.height : incoming.y;
+            outgoing->width = incoming.width;
+            outgoing->height = incoming.height;
+            break;
+        case SurfaceRotationType::Rotated90Degrees:
+            // Rotate gl_Position 90 degrees:
+            outgoing->x      = incoming.y;
+            outgoing->y      = flipY ? incoming.x : framebufferWidth - incoming.x - incoming.width;
+            outgoing->width  = incoming.height;
+            outgoing->height = incoming.width;
+            break;
+        case SurfaceRotationType::Rotated180Degrees:
+            // Rotate gl_Position 180 degrees:
+            outgoing->x     = framebufferWidth - incoming.x - incoming.width;
+            outgoing->y     = flipY ? incoming.y : framebufferHeight - incoming.y - incoming.height;
+            outgoing->width = incoming.width;
+            outgoing->height = incoming.height;
+            break;
+        case SurfaceRotationType::Rotated270Degrees:
+            // Rotate gl_Position 270 degrees:
+            outgoing->x      = framebufferHeight - incoming.y - incoming.height;
+            outgoing->y      = flipY ? framebufferWidth - incoming.x - incoming.width : incoming.x;
+            outgoing->width  = incoming.height;
+            outgoing->height = incoming.width;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+#endif  // OLD_CODE
+
 // Should not generate a copy with modern C++.
 EventName GetTraceEventName(const char *title, uint32_t counter)
 {
@@ -2511,6 +2558,17 @@ bool ContextVk::isRotatedAspectRatioForReadFBO() const
 {
     return IsRotatedAspectRatio(mCurrentRotationReadFramebuffer);
 }
+#ifdef OLD_CODE
+#else   // OLD_CODE
+SurfaceRotationType ContextVk::getRotationDrawFramebuffer() const
+{
+    return mCurrentRotationDrawFramebuffer;
+}
+SurfaceRotationType ContextVk::getRotationReadFramebuffer() const
+{
+    return mCurrentRotationReadFramebuffer;
+}
+#endif  // OLD_CODE
 
 void ContextVk::updateColorMask(const gl::BlendState &blendState)
 {
@@ -2579,6 +2637,7 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
         correctedHeight = viewportBoundsRangeHigh - correctedY;
     }
 
+#ifdef OLD_CODE
     gl::Box framebufferDimensions = framebufferVk->getState().getDimensions();
     if (isRotatedAspectRatioForDrawFBO())
     {
@@ -2594,6 +2653,19 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
 
     gl_vk::GetViewport(correctedRect, nearPlane, farPlane, invertViewport,
                        framebufferDimensions.height, &vkViewport);
+#else   // OLD_CODE
+    gl::Box fbDimensions = framebufferVk->getState().getDimensions();
+    gl::Rectangle correctedRect =
+        gl::Rectangle(correctedX, correctedY, correctedWidth, correctedHeight);
+    gl::Rectangle rotatedRect;
+    RotateRectangle(getRotationDrawFramebuffer(), false, fbDimensions.width, fbDimensions.height,
+                    correctedRect, &rotatedRect);
+    gl_vk::GetViewport(rotatedRect, nearPlane, farPlane, invertViewport,
+                       // If the surface is rotated 90/270 degrees, use the framebuffer's width
+                       // instead of the height for calculating the final viewport.
+                       isRotatedAspectRatioForDrawFBO() ? fbDimensions.width : fbDimensions.height,
+                       &vkViewport);
+#endif  // OLD_CODE
     mGraphicsPipelineDesc->updateViewport(&mGraphicsPipelineTransition, vkViewport);
     invalidateGraphicsDriverUniforms();
 }
@@ -2614,6 +2686,7 @@ angle::Result ContextVk::updateScissor(const gl::State &glState)
     gl::ClipRectangle(renderArea, glState.getViewport(), &viewportClippedRenderArea);
 
     gl::Rectangle scissoredArea = ClipRectToScissor(getState(), viewportClippedRenderArea, false);
+#ifdef OLD_CODE
     if (isViewportFlipEnabledForDrawFBO())
     {
         scissoredArea.y = renderArea.height - scissoredArea.y - scissoredArea.height;
@@ -2628,6 +2701,14 @@ angle::Result ContextVk::updateScissor(const gl::State &glState)
 
     mGraphicsPipelineDesc->updateScissor(&mGraphicsPipelineTransition,
                                          gl_vk::GetRect(scissoredArea));
+#else   // OLD_CODE
+    gl::Rectangle rotatedScissoredArea;
+    RotateRectangle(getRotationDrawFramebuffer(), isViewportFlipEnabledForDrawFBO(),
+                    renderArea.width, renderArea.height, scissoredArea, &rotatedScissoredArea);
+
+    mGraphicsPipelineDesc->updateScissor(&mGraphicsPipelineTransition,
+                                         gl_vk::GetRect(rotatedScissoredArea));
+#endif  // OLD_CODE
 
     // If the scissor has grown beyond the previous scissoredRenderArea, make sure the render pass
     // is restarted.  Otherwise, we can continue using the same renderpass area.
