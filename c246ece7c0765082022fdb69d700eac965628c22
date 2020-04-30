@@ -22,6 +22,30 @@
       "revId": "c246ece7c0765082022fdb69d700eac965628c22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28a29a2c_08174c2d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4227,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-30T22:56:48Z",
+      "side": 1,
+      "message": "Overall I find the queryHelper a bit confusing as it usually leads to calls a few objects deep such as this one. That said, I think that for now embedding the queueResetQueryPool() call in the query helper makes the most sense. The Query helper owns the query pool and query id so if we called queueResetQueryPool() here before beginOcclusionQuery() then we\u0027d still have to call into the queryHelper() to get the query pool handle and query id, which, in my opinion would be messier and more confusing.",
+      "parentUuid": "48bca8dc_31b47afa",
+      "range": {
+        "startLine": 4227,
+        "startChar": 50,
+        "endLine": 4227,
+        "endChar": 70
+      },
+      "revId": "c246ece7c0765082022fdb69d700eac965628c22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
