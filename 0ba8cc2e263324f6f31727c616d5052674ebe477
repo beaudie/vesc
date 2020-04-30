@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d084b861_d2551b62",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T20:20:25Z",
+      "side": 1,
+      "message": "Done.\n\nAs you noted below, this required adding updateCanDraw() to StateCache::initialize().",
+      "parentUuid": "87faa68a_9e03c0a3",
+      "range": {
+        "startLine": 435,
+        "startChar": 7,
+        "endLine": 435,
+        "endChar": 40
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2932e3cd_f1b330c8",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 24
@@ -45,6 +69,30 @@
       "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c34b2810_1d9bc652",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 8517,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T20:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2932e3cd_f1b330c8",
+      "range": {
+        "startLine": 8517,
+        "startChar": 4,
+        "endLine": 8517,
+        "endChar": 37
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4ee380a7_4efc0153",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T20:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78426730_33e9a84d",
+      "range": {
+        "startLine": 281,
+        "startChar": 4,
+        "endLine": 281,
+        "endChar": 45
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12ca7e21_517a6ae5",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 24
@@ -91,6 +163,30 @@
       "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c89958a_4ad166fc",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T20:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12ca7e21_517a6ae5",
+      "range": {
+        "startLine": 331,
+        "startChar": 9,
+        "endLine": 331,
+        "endChar": 17
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "cf1c992a_c429cba3",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T20:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45d5a55a_02a98ce7",
+      "range": {
+        "startLine": 1670,
+        "startChar": 4,
+        "endLine": 1670,
+        "endChar": 43
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7fe432c0_cd09e830",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 24
@@ -137,6 +257,30 @@
       "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7497357_d0e7441d",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T20:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fe432c0_cd09e830",
+      "range": {
+        "startLine": 169,
+        "startChar": 9,
+        "endLine": 169,
+        "endChar": 20
+      },
+      "revId": "0ba8cc2e263324f6f31727c616d5052674ebe477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
