@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b653c64c_f80540c0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-30T22:07:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "84ff4fd3_a7c3f748",
+      "range": {
+        "startLine": 1436,
+        "startChar": 63,
+        "endLine": 1436,
+        "endChar": 89
+      },
+      "revId": "24293758f1d4d188330ed2c48db4c1e4ec289c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e0d1b49_1a64ce61",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -83,6 +107,30 @@
       "writtenOn": "2020-04-30T21:18:35Z",
       "side": 1,
       "message": "I can move this to private methods if people agree.",
+      "range": {
+        "startLine": 638,
+        "startChar": 18,
+        "endLine": 638,
+        "endChar": 31
+      },
+      "revId": "24293758f1d4d188330ed2c48db4c1e4ec289c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "948612ba_34262abb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-30T22:07:29Z",
+      "side": 1,
+      "message": "Sounds good if it doesn\u0027t get called. \n\nCan you also please update the docs in vulkan/README.md?",
+      "parentUuid": "eaba3c6f_b49618d9",
       "range": {
         "startLine": 638,
         "startChar": 18,
