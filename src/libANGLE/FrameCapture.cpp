@@ -1419,6 +1419,7 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
         if (uniform.isArray())
         {
             UNIMPLEMENTED();
+            return;
         }
 
         // We need to bind the program and update its uniforms
