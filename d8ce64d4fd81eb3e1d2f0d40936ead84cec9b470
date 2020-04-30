@@ -46,6 +46,30 @@
       "revId": "d8ce64d4fd81eb3e1d2f0d40936ead84cec9b470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b216955_3428a543",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4399,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-30T18:59:18Z",
+      "side": 1,
+      "message": "This is another good input. I\u0027ve created a bug to track this improvement:\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d4603\n\nThe point of the current CL is to lay the groundwork for the worker thread by moving all uses of primary command buffer in the main thread to be on SecondaryCommandBuffer (SCB) instead. I\u0027d prefer to avoid functional changes in this CL and track them for follow-on work. This keeps the current SCB refactor simple and allows creation of the worker thread to proceed.\n\nThere are a number of improvements that can be made to SCBs, which I would like to save for separate CLs and follow-on work after the worker thread is complete.",
+      "parentUuid": "b960c85a_76c7b6c6",
+      "range": {
+        "startLine": 4395,
+        "startChar": 0,
+        "endLine": 4399,
+        "endChar": 87
+      },
+      "revId": "d8ce64d4fd81eb3e1d2f0d40936ead84cec9b470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
