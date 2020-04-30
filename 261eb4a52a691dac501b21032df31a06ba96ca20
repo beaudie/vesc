@@ -105,6 +105,24 @@
     },
     {
       "key": {
+        "uuid": "f9e9b3b7_910d6987",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-04-30T02:27:27Z",
+      "side": 1,
+      "message": "I can\u0027t take credit for this, but Geoff said this should work!\nMakes sense because enabled fails with only a warning so even if one fails the other will work (because the frontend knows there\u0027s at least something available)",
+      "parentUuid": "82b00e09_de2e496c",
+      "revId": "261eb4a52a691dac501b21032df31a06ba96ca20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a60d4d0_98b6eee6",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 13
