@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48bca8dc_31b47afa",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4227,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-30T21:13:10Z",
+      "side": 1,
+      "message": "Thanks for the change, overall looks good to me. I always feel a bit awkward that context calls helper object and helper object turns around calls renderPass\u0027s method. Could you just call mRenderPassCommandBuffer-\u003eresetQueryPool(queryPool.getHandle(), queryHelper-\u003egetQuery()) before calling beginOcclusionQuery? Not sure which way fits the current coding style guideline better, just want to speak out my opinion here.",
+      "range": {
+        "startLine": 4227,
+        "startChar": 50,
+        "endLine": 4227,
+        "endChar": 70
+      },
+      "revId": "c246ece7c0765082022fdb69d700eac965628c22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
