@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "4c73353b_4984426b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1438,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-30T02:45:39Z",
+      "side": 1,
+      "message": "You\u0027re right Tim, this is a bug introduced by the command graph linearization: https://chromium-review.googlesource.com/c/angle/angle/+/2040197/14/src/libANGLE/renderer/vulkan/ContextVk.cpp#1276\n\nThe original code used VK_ACCESS_SHADER_WRITE_BIT in emulation: https://chromium-review.googlesource.com/c/angle/angle/+/2057804/9/src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp#b194\n\n@Charlie, do you mind fixing this in another CL?",
+      "parentUuid": "4f5ec758_3077c266",
+      "range": {
+        "startLine": 1437,
+        "startChar": 0,
+        "endLine": 1438,
+        "endChar": 77
+      },
+      "revId": "8bce9adf6a3f8b6c785dce2f7b1ff4c9c58105ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c26d5461_28e584ec",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 10
