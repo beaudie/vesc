@@ -2288,6 +2288,15 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                                                  varyingsStrings.data(), xfbMode));
         }
 
+        // Force the attributes to be bound the same way as in the existing program.
+        // This can affect attributes that are optimized out in some implementations.
+        for (const sh::ShaderVariable &attrib : program->getState().getProgramInputs())
+        {
+            ASSERT(attrib.location != -1);
+            cap(CaptureBindAttribLocation(
+                replayState, true, id, static_cast<GLuint>(attrib.location), attrib.name.c_str()));
+        }
+
         cap(CaptureLinkProgram(replayState, true, id));
         CaptureUpdateUniformLocations(program, setupCalls);
         CaptureUpdateUniformValues(replayState, context, program, setupCalls);
@@ -3898,7 +3907,6 @@ void WriteParamValueReplay<ParamType::TAttributeLocation>(std::ostream &os,
                                                           const CallCapture &call,
                                                           gl::AttributeLocation value)
 {
-    // TODO(jmadill): Use attribute map. http://anglebug.com/4598
     os << value.value;
 }
 
