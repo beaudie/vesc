@@ -94,6 +94,30 @@
       "revId": "c246ece7c0765082022fdb69d700eac965628c22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63d4292b_a0f047fe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4227,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-30T23:49:12Z",
+      "side": 1,
+      "message": "Sounds good to me.",
+      "parentUuid": "5021a1e0_9496e1a9",
+      "range": {
+        "startLine": 4227,
+        "startChar": 50,
+        "endLine": 4227,
+        "endChar": 70
+      },
+      "revId": "c246ece7c0765082022fdb69d700eac965628c22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
