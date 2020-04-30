@@ -70,6 +70,30 @@
       "revId": "c246ece7c0765082022fdb69d700eac965628c22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5021a1e0_9496e1a9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4227,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-30T23:38:27Z",
+      "side": 1,
+      "message": "Point noted. I\u0027d rather centralize the single call in the queryHelper and save adding these two lines to three separate call sites for beginOcclusionQuery(). Current implementation saves 5 LOC and avoids complexity of having to pull different query pool type from context.",
+      "parentUuid": "8bc17276_7b67dc9d",
+      "range": {
+        "startLine": 4227,
+        "startChar": 50,
+        "endLine": 4227,
+        "endChar": 70
+      },
+      "revId": "c246ece7c0765082022fdb69d700eac965628c22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
