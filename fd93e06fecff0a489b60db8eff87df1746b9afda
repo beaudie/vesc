@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6c70f6e_e7243dc7",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T20:32:43Z",
+      "side": 1,
+      "message": "This part doesn\u0027t look to be entirely true, since \"angle_\" is only being prefixed to the target name if there isn\u0027t a gn_file_path.   Otherwise, I\u0027d expect to see something like:\n\n    root_prefix \u003d \"angle\"\n    gn_file_path \u003d root_prefix + \"_\" + gn_file_path\n    gn_file_path \u003d gn_file_path.replace(\"/\", \"_\").replace(\".\", \"_\").replace(\"-\", \"_\")\n\nI\u0027m not sure if that\u0027s necessarily better, and would end up with the double \"angle\" prefixes that the conditional below is trying to avoid (which could be fixed with some more cleverness).\n\nMy suggestion is to move this comment to below.",
+      "range": {
+        "startLine": 96,
+        "startChar": 6,
+        "endLine": 96,
+        "endChar": 62
+      },
+      "revId": "fd93e06fecff0a489b60db8eff87df1746b9afda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5555ec2_e744089e",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T20:32:43Z",
+      "side": 1,
+      "message": "This is where I think the comment should live.\n\n    # Make sure all targets are unique to ANGLE\u0027s build by prefixing them with \"angle\".",
+      "revId": "fd93e06fecff0a489b60db8eff87df1746b9afda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
