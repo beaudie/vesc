@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e75e5403_d8e75401",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d_luid.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2020-04-30T19:36:57Z",
+      "side": 1,
+      "message": "All of the other specs have \u0027XXX\u0027, \u0027#??\u0027, or some variation of that, except for a couple that have corresponding official Khronos specs.",
+      "parentUuid": "e4914052_a72b7123",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 21
+      },
+      "revId": "4ebdd1bf3912c2188b27af783ffae9dc07c7e459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "19172874_b58de4be",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "65d169fc_67e427b8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2020-04-30T19:36:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19172874_b58de4be",
+      "range": {
+        "startLine": 708,
+        "startChar": 16,
+        "endLine": 708,
+        "endChar": 37
+      },
+      "revId": "4ebdd1bf3912c2188b27af783ffae9dc07c7e459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7edb4255_c0f66df6",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "4ebdd1bf3912c2188b27af783ffae9dc07c7e459",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a9790d8_1a00be24",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2020-04-30T19:36:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7edb4255_c0f66df6",
+      "range": {
+        "startLine": 693,
+        "startChar": 0,
+        "endLine": 695,
+        "endChar": 76
+      },
+      "revId": "4ebdd1bf3912c2188b27af783ffae9dc07c7e459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
