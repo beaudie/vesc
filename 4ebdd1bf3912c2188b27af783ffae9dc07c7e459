@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4914052_a72b7123",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d_luid.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-04-30T18:04:58Z",
+      "side": 1,
+      "message": "Does XXX need to be filled in with an actual number?",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 21
+      },
+      "revId": "4ebdd1bf3912c2188b27af783ffae9dc07c7e459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19172874_b58de4be",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-04-30T18:04:58Z",
+      "side": 1,
+      "message": "IDXGIAdapter.GetDesc returns an HRESULT that must be checked. Advise returning early from the method on error HRESULTs.",
+      "range": {
+        "startLine": 708,
+        "startChar": 16,
+        "endLine": 708,
+        "endChar": 37
+      },
+      "revId": "4ebdd1bf3912c2188b27af783ffae9dc07c7e459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7edb4255_c0f66df6",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-04-30T18:04:58Z",
+      "side": 1,
+      "message": "Nit: The error message doesn\u0027t quite match what is in the spec. The spec says that one of these can be zero, where as the error message says that both must be non-zero.",
+      "range": {
+        "startLine": 693,
+        "startChar": 0,
+        "endLine": 695,
+        "endChar": 76
+      },
+      "revId": "4ebdd1bf3912c2188b27af783ffae9dc07c7e459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
