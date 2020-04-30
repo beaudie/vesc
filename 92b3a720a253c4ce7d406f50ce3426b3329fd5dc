@@ -16,6 +16,24 @@
       "revId": "92b3a720a253c4ce7d406f50ce3426b3329fd5dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b04d374c_c6ffbeae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-04-30T14:43:46Z",
+      "side": 0,
+      "message": "Tim, see original discussion of this and let me know what you think:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2168114/6/src/libANGLE/renderer/vulkan/ContextVk.cpp#4227\n\nSince the call was only made 3 times, I elected to not expose more parts of ContextVk publicly, but that\u0027s certainly an option. Longer term I want to refactor SecondaryCommandBuffer to provide unified interface for inside \u0026 outside RenderPass commands which will render all of this moot.",
+      "parentUuid": "ce4c922e_eed9d534",
+      "revId": "92b3a720a253c4ce7d406f50ce3426b3329fd5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
