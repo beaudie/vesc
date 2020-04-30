@@ -57,6 +57,24 @@
       "revId": "ba1d6770bda27ca45c4a333b4f3ca1245732229c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f4ea8581_8fa603a6",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-04-30T02:57:46Z",
+      "side": 1,
+      "message": "Ah. For my understanding, `linkValidateShaders()` is what\u0027s failing in the test?\n\n(Ok, I just checked, and `loadBinary()` (called through `cache-\u003egetProgram()`) also calls an `unlink()`, so removing this should be fine)",
+      "parentUuid": "82b330d1_bdabad07",
+      "revId": "ba1d6770bda27ca45c4a333b4f3ca1245732229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
