@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "799b1e2f_1a0278ff",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d_luid.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1003154
+      },
+      "writtenOn": "2020-04-30T19:52:41Z",
+      "side": 1,
+      "message": "nit: backed by",
+      "revId": "683ceea2efe3832816515f7f864e8a66f5881fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56de4a84_fd93212f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1003154
+      },
+      "writtenOn": "2020-04-30T19:52:41Z",
+      "side": 1,
+      "message": "comparison type mismatch. need to static_cast",
+      "revId": "683ceea2efe3832816515f7f864e8a66f5881fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88459887_4fb02ccd",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1003154
+      },
+      "writtenOn": "2020-04-30T19:52:41Z",
+      "side": 1,
+      "message": "Do we want to validate if the created device\u0027s driver type matches mRequestedDriverType?",
+      "revId": "683ceea2efe3832816515f7f864e8a66f5881fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
