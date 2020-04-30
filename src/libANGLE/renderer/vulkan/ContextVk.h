@@ -143,9 +143,12 @@ struct CommandBufferHelper : angle::NonCopyable
   protected:
     CommandBufferHelper();
     ~CommandBufferHelper();
-
+#define ANGLE_ENABLE_WORK_QUEUE 1
+#if ANGLE_ENABLE_WORK_QUEUE
+    void storePrependBarriers(vk::CommandBuffer *commandBuffer);
+#else
     void executeBarriers(vk::PrimaryCommandBuffer *primary);
-
+#endif
     VkPipelineStageFlags mImageBarrierSrcStageMask;
     VkPipelineStageFlags mImageBarrierDstStageMask;
     std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
@@ -685,7 +688,12 @@ class ContextVk : public ContextImpl, public vk::Context
     // occlusion query
     void beginOcclusionQuery(QueryVk *queryVk);
     void endOcclusionQuery(QueryVk *queryVk);
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    ANGLE_INLINE void addWorkBlock(const vk::priv::CommandBlock &scbBlock, VkCommandBuffer primary)
+    {
+        mRenderer->addWorkBlock(scbBlock, primary);
+    }
+#endif
   private:
     // Dirty bits.
     enum DirtyBitType : size_t

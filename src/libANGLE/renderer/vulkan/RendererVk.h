@@ -247,7 +247,18 @@ class RendererVk : angle::NonCopyable
 
     SamplerCache &getSamplerCache() { return mSamplerCache; }
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    void addWorkBlock(const vk::priv::CommandBlock &scbBlock, VkCommandBuffer primary)
+    {
+        mCommandsQueue.push_back(scbBlock);
+        // TODO: Just processing in-line w/ primary passed in as first pass
+        //  Really renderer should own primary CB and processing will be done
+        //  in separate thread that loops over queue
+        vk::priv::CommandBlock block = mCommandsQueue.front();
+        mCommandsQueue.pop_front();
+        block.scb->executeCommands(primary);
+    }
+#endif
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -360,7 +371,10 @@ class RendererVk : angle::NonCopyable
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    // Queue of work for worker thread
+    std::deque<vk::priv::CommandBlock> mCommandsQueue;
+#endif
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;
 

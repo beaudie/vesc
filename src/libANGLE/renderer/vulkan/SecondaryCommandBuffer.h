@@ -11,6 +11,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_SECONDARYCOMMANDBUFFERVK_H_
 #define LIBANGLE_RENDERER_VULKAN_SECONDARYCOMMANDBUFFERVK_H_
 
+#define ANGLE_ENABLE_WORK_QUEUE 1
+
 #include "common/PoolAlloc.h"
 #include "libANGLE/renderer/vulkan/vk_headers.h"
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
@@ -32,6 +34,7 @@ enum class CommandID : uint16_t
     Invalid = 0,
     BeginDebugUtilsLabel,
     BeginQuery,
+    BeginRenderPass,
     BeginTransformFeedback,
     BindComputePipeline,
     BindDescriptorSets,
@@ -92,6 +95,15 @@ struct BeginQueryParams
     VkQueryControlFlags flags;
 };
 VERIFY_4_BYTE_ALIGNMENT(BeginQueryParams)
+
+struct BeginRenderPassParams
+{
+    VkRenderPass renderPass;
+    VkFramebuffer framebuffer;
+    VkRect2D renderArea;
+    uint32_t clearValueCount;
+};
+VERIFY_4_BYTE_ALIGNMENT(BeginRenderPassParams)
 
 struct BeginTransformFeedbackParams
 {
@@ -653,6 +665,18 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     //  This should only be called on a cmdBuffer without an active renderPass
     void executeQueuedResetQueryPoolCommands(VkCommandBuffer cmdBuffer);
 
+    // Special commands that store parameters to be prepended to command buffer
+    void storeBeginRenderPass(const VkRenderPassBeginInfo *pRenderPassBegin);
+    void storePrependBarrier(VkPipelineStageFlags srcStageMask,
+                             VkPipelineStageFlags dstStageMask,
+                             VkDependencyFlags dependencyFlags,
+                             uint32_t memoryBarrierCount,
+                             const VkMemoryBarrier *memoryBarriers,
+                             uint32_t bufferMemoryBarrierCount,
+                             const VkBufferMemoryBarrier *bufferMemoryBarriers,
+                             uint32_t imageMemoryBarrierCount,
+                             const VkImageMemoryBarrier *imageMemoryBarriers);
+
     // Calculate memory usage of this command buffer for diagnostics.
     void getMemoryUsageStats(size_t *usedMemoryOut, size_t *allocatedMemoryOut) const;
 
@@ -678,6 +702,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void reset()
     {
         mCommands.clear();
+        mBeginRenderPassCommand = nullptr;
+        mPrependBarrierCommand  = nullptr;
         initialize(mAllocator);
         mResetQueryQueue.clear();
     }
@@ -778,6 +804,9 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     }
 
     std::vector<CommandHeader *> mCommands;
+    // Special commands that can be stored separately to be pre-pended to command buffer
+    CommandHeader *mBeginRenderPassCommand;
+    CommandHeader *mPrependBarrierCommand;
 
     // Allocator used by this class. If non-null then the class is valid.
     angle::PoolAllocator *mAllocator;
@@ -790,7 +819,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
 };
 
 ANGLE_INLINE SecondaryCommandBuffer::SecondaryCommandBuffer()
-    : mAllocator(nullptr), mCurrentWritePointer(nullptr), mCurrentBytesRemaining(0)
+    : mBeginRenderPassCommand(nullptr),
+      mPrependBarrierCommand(nullptr),
+      mAllocator(nullptr),
+      mCurrentWritePointer(nullptr),
+      mCurrentBytesRemaining(0)
 {}
 ANGLE_INLINE SecondaryCommandBuffer::~SecondaryCommandBuffer() {}
 
@@ -1398,6 +1431,97 @@ ANGLE_INLINE void SecondaryCommandBuffer::writeTimestamp(VkPipelineStageFlagBits
     paramStruct->queryPool     = queryPool;
     paramStruct->query         = query;
 }
+
+ANGLE_INLINE void SecondaryCommandBuffer::storeBeginRenderPass(
+    const VkRenderPassBeginInfo *pRenderPassBegin)
+{
+    // We should only ever have a single RenderPassBegin saved for SCB
+    ASSERT(mBeginRenderPassCommand == nullptr);
+    const size_t clearValuesSize = pRenderPassBegin->clearValueCount * sizeof(VkClearValue);
+    // TODO: CommandHeader can be implicit since this is single-command allocation
+    //  Keeping header for now for debug/validation purposes
+    constexpr size_t fixedAllocationSize = sizeof(BeginRenderPassParams) + sizeof(CommandHeader);
+    const size_t totalSize               = clearValuesSize + fixedAllocationSize;
+    // Allocate block for beginRenderPass command
+    ASSERT(mAllocator);
+    uint8_t *cmdPtr               = mAllocator->fastAllocate(totalSize);
+    mBeginRenderPassCommand       = reinterpret_cast<CommandHeader *>(cmdPtr);
+    mBeginRenderPassCommand->id   = CommandID::BeginRenderPass;
+    mBeginRenderPassCommand->size = totalSize;
+    BeginRenderPassParams *paramStruct =
+        Offset<BeginRenderPassParams>(mBeginRenderPassCommand, sizeof(CommandHeader));
+    cmdPtr = Offset<uint8_t>(cmdPtr, fixedAllocationSize);
+    // Copy params into memory
+    paramStruct->renderPass      = pRenderPassBegin->renderPass;
+    paramStruct->framebuffer     = pRenderPassBegin->framebuffer;
+    paramStruct->renderArea      = pRenderPassBegin->renderArea;
+    paramStruct->clearValueCount = pRenderPassBegin->clearValueCount;
+    // Copy variable sized data
+    storePointerParameter(cmdPtr, pRenderPassBegin->pClearValues, clearValuesSize);
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::storePrependBarrier(
+    VkPipelineStageFlags srcStageMask,
+    VkPipelineStageFlags dstStageMask,
+    VkDependencyFlags dependencyFlags,
+    uint32_t memoryBarrierCount,
+    const VkMemoryBarrier *memoryBarriers,
+    uint32_t bufferMemoryBarrierCount,
+    const VkBufferMemoryBarrier *bufferMemoryBarriers,
+    uint32_t imageMemoryBarrierCount,
+    const VkImageMemoryBarrier *imageMemoryBarriers)
+{
+    // We should only ever have a single PrependBarrier saved for SCB
+    ASSERT(mPrependBarrierCommand == nullptr);
+    const size_t memBarrierSize  = memoryBarrierCount * sizeof(VkMemoryBarrier);
+    const size_t buffBarrierSize = bufferMemoryBarrierCount * sizeof(VkBufferMemoryBarrier);
+    const size_t imgBarrierSize  = imageMemoryBarrierCount * sizeof(VkImageMemoryBarrier);
+    // TODO: CommandHeader can be implicit since this is single-command allocation
+    //  Keeping header for now for debug/validation purposes
+    constexpr size_t fixedAllocationSize = sizeof(PipelineBarrierParams) + sizeof(CommandHeader);
+    const size_t totalSize =
+        memBarrierSize + buffBarrierSize + imgBarrierSize + fixedAllocationSize;
+    // Allocate block for beginRenderPass command
+    ASSERT(mAllocator);
+    uint8_t *cmdPtr              = mAllocator->fastAllocate(totalSize);
+    mPrependBarrierCommand       = reinterpret_cast<CommandHeader *>(cmdPtr);
+    mPrependBarrierCommand->id   = CommandID::PipelineBarrier;
+    mPrependBarrierCommand->size = totalSize;
+    PipelineBarrierParams *paramStruct =
+        Offset<PipelineBarrierParams>(mPrependBarrierCommand, sizeof(CommandHeader));
+    cmdPtr = Offset<uint8_t>(cmdPtr, fixedAllocationSize);
+    // Copy params into memory
+    paramStruct->srcStageMask             = srcStageMask;
+    paramStruct->dstStageMask             = dstStageMask;
+    paramStruct->dependencyFlags          = dependencyFlags;
+    paramStruct->memoryBarrierCount       = memoryBarrierCount;
+    paramStruct->bufferMemoryBarrierCount = bufferMemoryBarrierCount;
+    paramStruct->imageMemoryBarrierCount  = imageMemoryBarrierCount;
+    // Copy variable sized data
+    cmdPtr = storePointerParameter(cmdPtr, memoryBarriers, memBarrierSize);
+    cmdPtr = storePointerParameter(cmdPtr, bufferMemoryBarriers, buffBarrierSize);
+    storePointerParameter(cmdPtr, imageMemoryBarriers, imgBarrierSize);
+}
+
+#if ANGLE_ENABLE_WORK_QUEUE
+// Definition of types used in passing work to worker thread
+
+// Command types
+enum class CommandBlockID : uint16_t
+{
+    Invalid = 0,
+    COMMANDS_ONLY,
+    COMMANDS_BARRIER,            // w/ PipelineBarrierParams
+    COMMANDS_RENDERPASS,         // w/ VkRenderPassBeginInfo
+    COMMANDS_BARRIER_RENDERPASS  // w/ both
+};
+// Command structure
+struct CommandBlock
+{
+    CommandBlockID id;
+    SecondaryCommandBuffer *scb;
+};
+#endif
 }  // namespace priv
 }  // namespace vk
 }  // namespace rx
