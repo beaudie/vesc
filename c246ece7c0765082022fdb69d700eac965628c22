@@ -46,6 +46,30 @@
       "revId": "c246ece7c0765082022fdb69d700eac965628c22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bc17276_7b67dc9d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4227,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-30T23:20:05Z",
+      "side": 1,
+      "message": "Just to FYI, QueryHelper gets the pool from contextVk, which you are easily accessible here by calling getQueryPool(). If you want to make call here, it will be like this:\n\nvk::QueryHelper *queryHelper \u003d mActiveQueryAnySamples-\u003egetQueryHelper();\nmRenderPassCommandBuffer-\u003eresetQueryPool(getQueryPool(gl::QueryType::AnySamples), queryHelper-\u003egetQuery(), 1);\nqueryHelper-\u003ebeginOcclusionQuery(this, \u0026mPrimaryCommands,mRenderPassCommandBuffer);",
+      "parentUuid": "28a29a2c_08174c2d",
+      "range": {
+        "startLine": 4227,
+        "startChar": 50,
+        "endLine": 4227,
+        "endChar": 70
+      },
+      "revId": "c246ece7c0765082022fdb69d700eac965628c22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
