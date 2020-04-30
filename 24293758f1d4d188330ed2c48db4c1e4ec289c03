@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "56a97138_a5bd378d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-30T21:49:16Z",
+      "side": 1,
+      "message": "this one looks like a separate fix. still seems like it could be correct.",
+      "range": {
+        "startLine": 1436,
+        "startChar": 63,
+        "endLine": 1436,
+        "endChar": 89
+      },
+      "revId": "24293758f1d4d188330ed2c48db4c1e4ec289c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e0d1b49_1a64ce61",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-04-30T21:49:16Z",
+      "side": 1,
+      "message": "this one looks like it might be incorrect.",
+      "range": {
+        "startLine": 1476,
+        "startChar": 59,
+        "endLine": 1476,
+        "endChar": 85
+      },
+      "revId": "24293758f1d4d188330ed2c48db4c1e4ec289c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eaba3c6f_b49618d9",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
