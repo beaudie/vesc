@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "6da7729a_819b2ecd",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1237274
+      },
+      "writtenOn": "2020-04-30T06:25:47Z",
+      "side": 1,
+      "message": "I just realized it\u0027s incorrect to put this in releaseTexStorage(). There will be an error if an image is redefined with a different dimension followed by releaseTexStorage().",
+      "parentUuid": "b40c8b7c_f804c4e1",
+      "revId": "63406976ce36dd3d7ba27f09df05c5f11f01c895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7fb9e67_3fdf888b",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 1
