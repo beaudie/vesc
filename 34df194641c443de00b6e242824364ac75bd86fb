@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "75ecdfab_2b1f473b",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-04-30T14:48:46Z",
+      "side": 1,
+      "message": "These change location to AttributeLocation locationPacked in all the autogen files.",
+      "parentUuid": "9d4f7aeb_e7047bb4",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 6
+      },
+      "revId": "34df194641c443de00b6e242824364ac75bd86fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c66b2571_c8f58c01",
         "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
         "patchSetId": 1
