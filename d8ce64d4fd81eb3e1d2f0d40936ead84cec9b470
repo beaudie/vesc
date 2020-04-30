@@ -22,6 +22,30 @@
       "revId": "d8ce64d4fd81eb3e1d2f0d40936ead84cec9b470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b960c85a_76c7b6c6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4399,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-04-30T18:07:07Z",
+      "side": 1,
+      "message": "The other choice here is just record the mQuery and defer the reset call. You can save mQuery number in mRenderPassCommands object and call reset at flushToPrimary time. I think it will be much simpler and efficient than has to record it in mOutsideRenderPassCommands immediately.",
+      "parentUuid": "a59175b2_77319e31",
+      "range": {
+        "startLine": 4395,
+        "startChar": 0,
+        "endLine": 4399,
+        "endChar": 87
+      },
+      "revId": "d8ce64d4fd81eb3e1d2f0d40936ead84cec9b470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
