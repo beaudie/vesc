@@ -639,6 +639,10 @@ RendererVk::RendererVk()
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
       mPipelineCacheDirty(false),
       mPipelineCacheInitialized(false),
+#if ANGLE_ENABLE_WORK_QUEUE
+      mPrimaryCommandBuffer(VK_NULL_HANDLE),
+      mWorkerThreadIdle(true),
+#endif
       mGlslangInitialized(false)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
@@ -1019,6 +1023,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     // Initialize the format table.
     mFormatTable.initialize(this, &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
+#if ANGLE_ENABLE_WORK_QUEUE
+    mWorkerThread = std::thread(&RendererVk::workerThread, this);
+#endif
 
     return angle::Result::Continue;
 }
