@@ -845,7 +845,7 @@ angle::Result ContextVk::initialize()
 
     // Push a scope in the pool allocator so we can easily reinitialize on flush.
     mPoolAllocator.push();
-    mOutsideRenderPassCommands.getCommandBuffer().initialize(&mPoolAllocator);
+    mOutsideRenderPassCommands.initialize(&mPoolAllocator);
     mRenderPassCommands.initialize(&mPoolAllocator);
     ANGLE_TRY(startPrimaryCommandBuffer());
 
@@ -877,7 +877,10 @@ angle::Result ContextVk::startPrimaryCommandBuffer()
     beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     beginInfo.pInheritanceInfo         = nullptr;
     ANGLE_VK_TRY(this, mPrimaryCommands.begin(beginInfo));
-
+    // printf("Main thread called beginCB w/ primaryCB %p\n", mPrimaryCommands.getHandle());
+#if ANGLE_ENABLE_WORK_QUEUE
+    mRenderer->setPrimaryCommandBuffer(mPrimaryCommands.getHandle());
+#endif
     mHasPrimaryCommands = false;
     return angle::Result::Continue;
 }
@@ -3834,6 +3837,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
                                 TRACE_EVENT_PHASE_END, eventName));
     }
     flushOutsideRenderPassCommands();
+    mRenderer->workerThreadWaitIdle();
     ANGLE_VK_TRY(this, mPrimaryCommands.end());
 
     // Free secondary command pool allocations and restart command buffers with the new page.
@@ -4275,8 +4279,11 @@ angle::Result ContextVk::endRenderPass()
     }
 
     mRenderPassCommands.pauseTransformFeedbackIfStarted();
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    ANGLE_TRY(mRenderPassCommands.flushToWorker(this));
+#else
     ANGLE_TRY(mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
+#endif
     mHasPrimaryCommands = true;
 
     if (mGpuEventsEnabled)
@@ -4379,7 +4386,11 @@ void ContextVk::flushOutsideRenderPassCommands()
 {
     if (!mOutsideRenderPassCommands.empty())
     {
+#if ANGLE_ENABLE_WORK_QUEUE
+        mOutsideRenderPassCommands.flushToWorker(this);
+#else
         mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands);
+#endif
         mHasPrimaryCommands = true;
     }
 }
@@ -4446,6 +4457,14 @@ CommandBufferHelper::CommandBufferHelper()
 
 CommandBufferHelper::~CommandBufferHelper() = default;
 
+void CommandBufferHelper::initialize(angle::PoolAllocator *poolAllocator)
+{
+    for (uint32_t i = 0; i < kNumCommandBuffers; ++i)
+    {
+        mCommandBuffers[i].initialize(poolAllocator);
+    }
+}
+
 void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
                                      VkAccessFlags readAccessType,
                                      VkPipelineStageFlags readStage,
@@ -4499,6 +4518,46 @@ void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
     image->changeLayout(aspectFlags, imageLayout, this);
 }
 
+#if ANGLE_ENABLE_WORK_QUEUE
+void CommandBufferHelper::storePrependBarriers()
+{
+    if (mImageMemoryBarriers.empty() && mGlobalMemoryBarrierSrcAccess == 0)
+    {
+        return;
+    }
+
+    VkPipelineStageFlags srcStages = 0;
+    VkPipelineStageFlags dstStages = 0;
+
+    VkMemoryBarrier memoryBarrier = {};
+    uint32_t memoryBarrierCount   = 0;
+
+    if (mGlobalMemoryBarrierSrcAccess != 0)
+    {
+        memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask = mGlobalMemoryBarrierSrcAccess;
+        memoryBarrier.dstAccessMask = mGlobalMemoryBarrierDstAccess;
+
+        memoryBarrierCount++;
+        srcStages |= mGlobalMemoryBarrierSrcStages;
+        dstStages |= mGlobalMemoryBarrierDstStages;
+
+        mGlobalMemoryBarrierSrcAccess = 0;
+        mGlobalMemoryBarrierDstAccess = 0;
+        mGlobalMemoryBarrierSrcStages = 0;
+        mGlobalMemoryBarrierDstStages = 0;
+    }
+
+    srcStages |= mImageBarrierSrcStageMask;
+    dstStages |= mImageBarrierDstStageMask;
+    getCommandBuffer().storePrependBarrier(
+        srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0, nullptr,
+        static_cast<uint32_t>(mImageMemoryBarriers.size()), mImageMemoryBarriers.data());
+    mImageMemoryBarriers.clear();
+    mImageBarrierSrcStageMask = 0;
+    mImageBarrierDstStageMask = 0;
+}
+#else
 void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
 {
     if (mImageMemoryBarriers.empty() && mGlobalMemoryBarrierSrcAccess == 0)
@@ -4537,13 +4596,16 @@ void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
     mImageBarrierSrcStageMask = 0;
     mImageBarrierDstStageMask = 0;
 }
-
+#endif
 OutsideRenderPassCommandBuffer::OutsideRenderPassCommandBuffer() = default;
 
 OutsideRenderPassCommandBuffer::~OutsideRenderPassCommandBuffer() = default;
-
+#if ANGLE_ENABLE_WORK_QUEUE
+void OutsideRenderPassCommandBuffer::flushToWorker(ContextVk *contextVk)
+#else
 void OutsideRenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
                                                     vk::PrimaryCommandBuffer *primary)
+#endif
 {
     if (empty())
         return;
@@ -4557,20 +4619,40 @@ void OutsideRenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
                 << " &rarr; Dst: 0x" << std::hex << mGlobalMemoryBarrierDstAccess << "\\l";
         }
 
-        out << mCommandBuffer.dumpCommands("\\l");
+        out << getCommandBuffer().dumpCommands("\\l");
         contextVk->addCommandBufferDiagnostics(out.str());
     }
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    // TODO: submit scb w/ barrier to work queue
+    storePrependBarriers();
+    // Create work block and add to work queue
+    vk::priv::CommandBlock scbBlock = {vk::priv::CommandBlockID::COMMANDS_BARRIER,
+                                       &getCommandBuffer()};
+    contextVk->addWorkBlock(scbBlock);
+    // Currently resetting in-line will need to do this separately when threaded
+    swap();
+#else
     executeBarriers(primary);
     mCommandBuffer.executeCommands(primary->getHandle());
-
     // Restart secondary buffer.
     reset();
+#endif
 }
 
 void OutsideRenderPassCommandBuffer::reset()
 {
-    mCommandBuffer.reset();
+    ASSERT(kNumCommandBuffers == 2);
+    mCommandBuffers[0].reset();
+    mCommandBuffers[1].reset();
+}
+
+void OutsideRenderPassCommandBuffer::swap()
+{
+    ASSERT(kNumCommandBuffers == 2);
+    mCurrentCommandBufferIndex = 1 - mCurrentCommandBufferIndex;
+    // Make sure command buffer is empty, otherwise wait for it to finish processing
+    while (!getCommandBuffer().empty())
+        std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1));
 }
 
 RenderPassCommandBuffer::RenderPassCommandBuffer()
@@ -4585,11 +4667,6 @@ RenderPassCommandBuffer::RenderPassCommandBuffer()
 RenderPassCommandBuffer::~RenderPassCommandBuffer()
 {
     mFramebuffer.setHandle(VK_NULL_HANDLE);
-}
-
-void RenderPassCommandBuffer::initialize(angle::PoolAllocator *poolAllocator)
-{
-    mCommandBuffer.initialize(poolAllocator);
 }
 
 void RenderPassCommandBuffer::beginRenderPass(const vk::Framebuffer &framebuffer,
@@ -4607,7 +4684,7 @@ void RenderPassCommandBuffer::beginRenderPass(const vk::Framebuffer &framebuffer
     mRenderArea = renderArea;
     std::copy(clearValues.begin(), clearValues.end(), mClearValues.begin());
 
-    *commandBufferOut = &mCommandBuffer;
+    *commandBufferOut = &getCommandBuffer();
 
     mRenderPassStarted = true;
     mCounter++;
@@ -4625,9 +4702,12 @@ void RenderPassCommandBuffer::beginTransformFeedback(size_t validBufferCount,
         mTransformFeedbackCounterBuffers[index] = counterBuffers[index];
     }
 }
-
+#if ANGLE_ENABLE_WORK_QUEUE
+angle::Result RenderPassCommandBuffer::flushToWorker(ContextVk *contextVk)
+#else
 angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
                                                       vk::PrimaryCommandBuffer *primary)
+#endif
 {
     ASSERT(!empty());
 
@@ -4635,10 +4715,15 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
     {
         addRenderPassCommandDiagnostics(contextVk);
     }
-    // Commands that are added to primary before beginRenderPass command
-    executeBarriers(primary);
-    mCommandBuffer.executeQueuedResetQueryPoolCommands(primary->getHandle());
 
+#if ANGLE_ENABLE_WORK_QUEUE
+    // TODO: This barrier will be included in work submission below
+    storePrependBarriers();
+#else
+    // Commands that are added to primary before beginRenderPass command
+    getCommandBuffer().executeQueuedResetQueryPoolCommands(primary->getHandle());
+    executeBarriers(primary);
+#endif
     // Pull a RenderPass from the cache.
     RenderPassCache &renderPassCache = contextVk->getRenderPassCache();
     Serial serial                    = contextVk->getCurrentQueueSerial();
@@ -4657,20 +4742,27 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
     beginInfo.renderArea.extent.height = static_cast<uint32_t>(mRenderArea.height);
     beginInfo.clearValueCount          = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
     beginInfo.pClearValues             = mClearValues.data();
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    // Store RP params w/ SCB
+    getCommandBuffer().storeBeginRenderPass(&beginInfo);
+#else
     // Run commands inside the RenderPass.
     primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+#endif
 
-    if (mValidTransformFeedbackBufferCount == 0)
+#if ANGLE_ENABLE_WORK_QUEUE
+    // TODO: submit scb w/ barrier to work queue
+    // Create work block and add to work queue
+    vk::priv::CommandBlock scbBlock = {vk::priv::CommandBlockID::COMMANDS_BARRIER_RENDERPASS,
+                                       &getCommandBuffer()};
+    contextVk->addWorkBlock(scbBlock);
+    swap();
+#else
+    getCommandBuffer().executeCommands(primary->getHandle());
+    primary->endRenderPass();
+#endif
+    if (mValidTransformFeedbackBufferCount != 0)
     {
-        mCommandBuffer.executeCommands(primary->getHandle());
-        primary->endRenderPass();
-    }
-    else
-    {
-        mCommandBuffer.executeCommands(primary->getHandle());
-        primary->endRenderPass();
-
         // Would be better to accumulate this barrier using the command APIs.
         // TODO: Clean thus up before we close http://anglebug.com/3206
         VkBufferMemoryBarrier bufferBarrier = {};
@@ -4683,14 +4775,25 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
         bufferBarrier.buffer                = mTransformFeedbackCounterBuffers[0];
         bufferBarrier.offset                = 0;
         bufferBarrier.size                  = VK_WHOLE_SIZE;
-
+#if ANGLE_ENABLE_WORK_QUEUE
+        // TODO: This could be placed into outsideRP Cmd buffer
+        getCommandBuffer().storePrependBarrier(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT,
+                                               VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, 0u, 0u, nullptr,
+                                               1u, &bufferBarrier, 0u, nullptr);
+#else
         primary->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT,
                                  VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, 0u, 0u, nullptr, 1u,
                                  &bufferBarrier, 0u, nullptr);
+#endif
     }
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    // Nothing to do here, we want to swap() above before the potential XFB barrier gets added so
+    // that
+    //  that barrier will be before the *next* beginRenderPass
+#else
     // Restart the command buffer.
     reset();
+#endif
 
     return angle::Result::Continue;
 }
@@ -4743,16 +4846,30 @@ void RenderPassCommandBuffer::addRenderPassCommandDiagnostics(ContextVk *context
         out << "StoreOp: " << storeOps << "\\l";
     }
 
-    out << mCommandBuffer.dumpCommands("\\l");
+    out << getCommandBuffer().dumpCommands("\\l");
     contextVk->addCommandBufferDiagnostics(out.str());
 }
 
 void RenderPassCommandBuffer::reset()
 {
-    mCommandBuffer.reset();
+    ASSERT(kNumCommandBuffers == 2);
+    mCommandBuffers[0].reset();
+    mCommandBuffers[1].reset();
     mRenderPassStarted                 = false;
     mValidTransformFeedbackBufferCount = 0;
     mRebindTransformFeedbackBuffers    = false;
+}
+
+void RenderPassCommandBuffer::swap()
+{
+    ASSERT(kNumCommandBuffers == 2);
+    mCurrentCommandBufferIndex         = 1 - mCurrentCommandBufferIndex;
+    mRenderPassStarted                 = false;
+    mValidTransformFeedbackBufferCount = 0;
+    mRebindTransformFeedbackBuffers    = false;
+    // Make sure command buffer is empty, otherwise wait for it to finish processing
+    while (!getCommandBuffer().empty())
+        std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1));
 }
 
 void RenderPassCommandBuffer::resumeTransformFeedbackIfStarted()
@@ -4767,8 +4884,8 @@ void RenderPassCommandBuffer::resumeTransformFeedbackIfStarted()
 
     mRebindTransformFeedbackBuffers = false;
 
-    mCommandBuffer.beginTransformFeedback(numCounterBuffers,
-                                          mTransformFeedbackCounterBuffers.data());
+    getCommandBuffer().beginTransformFeedback(numCounterBuffers,
+                                              mTransformFeedbackCounterBuffers.data());
 }
 
 void RenderPassCommandBuffer::pauseTransformFeedbackIfStarted()
@@ -4778,8 +4895,8 @@ void RenderPassCommandBuffer::pauseTransformFeedbackIfStarted()
         return;
     }
 
-    mCommandBuffer.endTransformFeedback(mValidTransformFeedbackBufferCount,
-                                        mTransformFeedbackCounterBuffers.data());
+    getCommandBuffer().endTransformFeedback(mValidTransformFeedbackBufferCount,
+                                            mTransformFeedbackCounterBuffers.data());
 }
 
 }  // namespace rx
