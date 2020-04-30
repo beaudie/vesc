@@ -134,6 +134,44 @@ ANGLE_INLINE const CommandHeader *NextCommand(const CommandHeader *command)
 // Parse the cmds in this cmd buffer into given primary cmd buffer
 void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
 {
+#if ANGLE_ENABLE_WORK_QUEUE
+    // Prepend barrier is first priority
+    if (mPrependBarrierCommand != nullptr)
+    {
+        ASSERT(mPrependBarrierCommand->id == CommandID::PipelineBarrier);
+        const PipelineBarrierParams *params =
+            getParamPtr<PipelineBarrierParams>(mPrependBarrierCommand);
+        const VkMemoryBarrier *memoryBarriers =
+            Offset<VkMemoryBarrier>(params, sizeof(PipelineBarrierParams));
+        const VkBufferMemoryBarrier *bufferMemoryBarriers = Offset<VkBufferMemoryBarrier>(
+            memoryBarriers, params->memoryBarrierCount * sizeof(VkMemoryBarrier));
+        const VkImageMemoryBarrier *imageMemoryBarriers = Offset<VkImageMemoryBarrier>(
+            bufferMemoryBarriers, params->bufferMemoryBarrierCount * sizeof(VkBufferMemoryBarrier));
+        vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask,
+                             params->dependencyFlags, params->memoryBarrierCount, memoryBarriers,
+                             params->bufferMemoryBarrierCount, bufferMemoryBarriers,
+                             params->imageMemoryBarrierCount, imageMemoryBarriers);
+    }
+    // BeginRenderPass
+    bool endRenderPass = false;
+    if (mBeginRenderPassCommand != nullptr)
+    {
+        ASSERT(mBeginRenderPassCommand->id == CommandID::BeginRenderPass);
+        endRenderPass = true;
+        const BeginRenderPassParams *params =
+            getParamPtr<BeginRenderPassParams>(mBeginRenderPassCommand);
+        const VkClearValue *pClearValues =
+            Offset<VkClearValue>(params, sizeof(BeginRenderPassParams));
+        const VkRenderPassBeginInfo beginInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                                                 nullptr,
+                                                 params->renderPass,
+                                                 params->framebuffer,
+                                                 params->renderArea,
+                                                 params->clearValueCount,
+                                                 pClearValues};
+        vkCmdBeginRenderPass(cmdBuffer, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+    }
+#endif
     for (const CommandHeader *command : mCommands)
     {
         for (const CommandHeader *currentCommand                      = command;
@@ -563,6 +601,12 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
             }
         }
     }
+#if ANGLE_ENABLE_WORK_QUEUE
+    if (endRenderPass)
+    {
+        vkCmdEndRenderPass(cmdBuffer);
+    }
+#endif
 }
 
 void SecondaryCommandBuffer::getMemoryUsageStats(size_t *usedMemoryOut,
