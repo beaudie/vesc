@@ -115,6 +115,8 @@ class CommandQueue final : angle::NonCopyable
 struct CommandBufferHelper : angle::NonCopyable
 {
   public:
+    void initialize(angle::PoolAllocator *poolAllocator);
+
     void bufferRead(vk::ResourceUseList *resourceUseList,
                     VkAccessFlags readAccessType,
                     VkPipelineStageFlags readStage,
@@ -138,14 +140,16 @@ struct CommandBufferHelper : angle::NonCopyable
                       VkPipelineStageFlags dstStageMask,
                       const VkImageMemoryBarrier &imageMemoryBarrier);
 
-    vk::CommandBuffer &getCommandBuffer() { return mCommandBuffer; }
+    vk::CommandBuffer &getCommandBuffer() { return mCommandBuffers[mCurrentCommandBufferIndex]; }
 
   protected:
     CommandBufferHelper();
     ~CommandBufferHelper();
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    void storePrependBarriers();
+#else
     void executeBarriers(vk::PrimaryCommandBuffer *primary);
-
+#endif
     VkPipelineStageFlags mImageBarrierSrcStageMask;
     VkPipelineStageFlags mImageBarrierDstStageMask;
     std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
@@ -153,7 +157,9 @@ struct CommandBufferHelper : angle::NonCopyable
     VkFlags mGlobalMemoryBarrierDstAccess;
     VkPipelineStageFlags mGlobalMemoryBarrierSrcStages;
     VkPipelineStageFlags mGlobalMemoryBarrierDstStages;
-    vk::CommandBuffer mCommandBuffer;
+    constexpr static size_t kNumCommandBuffers = 2;
+    vk::CommandBuffer mCommandBuffers[kNumCommandBuffers];
+    uint32_t mCurrentCommandBufferIndex = 0;
 };
 
 class OutsideRenderPassCommandBuffer final : public CommandBufferHelper
@@ -164,7 +170,7 @@ class OutsideRenderPassCommandBuffer final : public CommandBufferHelper
 
     void flushToPrimary(ContextVk *contextVk, vk::PrimaryCommandBuffer *primary);
 
-    bool empty() const { return mCommandBuffer.empty(); }
+    bool empty() const { return mCommandBuffers[mCurrentCommandBufferIndex].empty(); }
     void reset();
 };
 
@@ -173,8 +179,6 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
   public:
     RenderPassCommandBuffer();
     ~RenderPassCommandBuffer();
-
-    void initialize(angle::PoolAllocator *poolAllocator);
 
     void beginRenderPass(const vk::Framebuffer &framebuffer,
                          const gl::Rectangle &renderArea,
@@ -230,7 +234,7 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
 
     angle::Result flushToPrimary(ContextVk *contextVk, vk::PrimaryCommandBuffer *primary);
 
-    bool empty() const { return !started() && mCommandBuffer.empty(); }
+    bool empty() const { return !started() && mCommandBuffers[mCurrentCommandBufferIndex].empty(); }
     bool started() const { return mRenderPassStarted; }
     void reset();
 
@@ -685,7 +689,12 @@ class ContextVk : public ContextImpl, public vk::Context
     // occlusion query
     void beginOcclusionQuery(QueryVk *queryVk);
     void endOcclusionQuery(QueryVk *queryVk);
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    ANGLE_INLINE void addWorkBlock(const vk::priv::CommandBlock &scbBlock, VkCommandBuffer primary)
+    {
+        mRenderer->addWorkBlock(scbBlock, primary);
+    }
+#endif
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
