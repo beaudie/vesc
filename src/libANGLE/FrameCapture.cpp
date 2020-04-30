@@ -854,9 +854,12 @@ void WriteCppReplayIndexFiles(bool compression,
     header
         << "using LocationsMap = std::unordered_map<GLuint, std::unordered_map<GLint, GLint>>;\n";
     header << "extern LocationsMap gUniformLocations;\n";
+    header << "extern LocationsMap gAttributeLocations;\n";
     header << "extern GLuint gCurrentProgram;\n";
     header << "void UpdateUniformLocation(GLuint program, const char *name, GLint location);\n";
+    header << "void UpdateAttributeLocation(GLuint program, const char *name, GLint location);\n";
     header << "void DeleteUniformLocations(GLuint program);\n";
+    header << "void DeleteAttributeLocations(GLuint program);\n";
     header << "void UpdateCurrentProgram(GLuint program);\n";
     header << "\n";
     header << "// Maps from captured Resource ID to run-time Resource ID.\n";
@@ -921,15 +924,24 @@ void WriteCppReplayIndexFiles(bool compression,
     source << "}  // namespace\n";
     source << "\n";
     source << "LocationsMap gUniformLocations;\n";
+    source << "LocationsMap gAttributeLocations;\n";
     source << "GLuint gCurrentProgram = 0;\n";
     source << "\n";
     source << "void UpdateUniformLocation(GLuint program, const char *name, GLint location)\n";
     source << "{\n";
     source << "    gUniformLocations[program][location] = glGetUniformLocation(program, name);\n";
     source << "}\n";
+    source << "void UpdateAttributeLocation(GLuint program, const char *name, GLint location)\n";
+    source << "{\n";
+    source << "    gAttributeLocations[program][location] = glGetAttribLocation(program, name);\n";
+    source << "}\n";
     source << "void DeleteUniformLocations(GLuint program)\n";
     source << "{\n";
     source << "    gUniformLocations.erase(program);\n";
+    source << "}\n";
+    source << "void DeleteAttributeLocations(GLuint program)\n";
+    source << "{\n";
+    source << "    gAttributeLocations.erase(program);\n";
     source << "}\n";
     source << "void UpdateCurrentProgram(GLuint program)\n";
     source << "{\n";
@@ -1212,11 +1224,38 @@ void CaptureUpdateUniformLocations(const gl::Program *program, std::vector<CallC
     }
 }
 
+void CaptureUpdateAttributeLocations(const gl::Program *program, std::vector<CallCapture> *callsOut)
+{
+    const std::vector<sh::ShaderVariable> &inputs = program->getState().getProgramInputs();
+
+    for (const sh::ShaderVariable &input : inputs)
+    {
+        GLint location = input.location;
+
+        ParamBuffer params;
+        params.addValueParam("program", ParamType::TShaderProgramID, program->id());
+
+        ParamCapture nameParam("name", ParamType::TGLcharConstPointer);
+        CaptureString(input.name.c_str(), &nameParam);
+        params.addParam(std::move(nameParam));
+
+        params.addValueParam("location", ParamType::TGLint, location);
+        callsOut->emplace_back("UpdateAttributeLocation", std::move(params));
+    }
+}
 void CaptureDeleteUniformLocations(gl::ShaderProgramID program, std::vector<CallCapture> *callsOut)
 {
     ParamBuffer params;
     params.addValueParam("program", ParamType::TShaderProgramID, program);
     callsOut->emplace_back("DeleteUniformLocations", std::move(params));
+}
+
+void CaptureDeleteAttributeLocations(gl::ShaderProgramID program,
+                                     std::vector<CallCapture> *callsOut)
+{
+    ParamBuffer params;
+    params.addValueParam("program", ParamType::TShaderProgramID, program);
+    callsOut->emplace_back("DeleteAttributeLocations", std::move(params));
 }
 
 void CaptureOnFramebufferChange(GLenum target,
@@ -2290,6 +2329,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
         cap(CaptureLinkProgram(replayState, true, id));
         CaptureUpdateUniformLocations(program, setupCalls);
+        CaptureUpdateAttributeLocations(program, setupCalls);
         CaptureUpdateUniformValues(replayState, context, program, setupCalls);
     }
 
@@ -3412,6 +3452,7 @@ void FrameCapture::maybeCapturePostCallUpdates(const gl::Context *context)
             const gl::Program *program =
                 context->getProgramResolveLink(param.value.ShaderProgramIDVal);
             CaptureUpdateUniformLocations(program, &mFrameCalls);
+            CaptureUpdateAttributeLocations(program, &mFrameCalls);
             break;
         }
         case gl::EntryPoint::UseProgram:
@@ -3422,6 +3463,7 @@ void FrameCapture::maybeCapturePostCallUpdates(const gl::Context *context)
             const ParamCapture &param =
                 lastCall.params.getParam("programPacked", ParamType::TShaderProgramID, 0);
             CaptureDeleteUniformLocations(param.value.ShaderProgramIDVal, &mFrameCalls);
+            CaptureDeleteAttributeLocations(param.value.ShaderProgramIDVal, &mFrameCalls);
             break;
         }
         case gl::EntryPoint::BindFramebuffer:
@@ -3896,8 +3938,26 @@ void WriteParamValueReplay<ParamType::TAttributeLocation>(std::ostream &os,
                                                           const CallCapture &call,
                                                           gl::AttributeLocation value)
 {
-    // TODO(jmadill): Use attribute map. http://anglebug.com/4598
-    os << value.value;
+    if (value.value == static_cast<uint32_t>(-1))
+    {
+        os << "-1";
+        return;
+    }
+
+    os << "gAttributeLocations[";
+
+    // Find the program from the call parameters.
+    gl::ShaderProgramID programID;
+    if (FindShaderProgramIDInCall(call, &programID))
+    {
+        os << "gShaderProgramMap[" << programID.value << "]";
+    }
+    else
+    {
+        os << "gCurrentProgram";
+    }
+
+    os << "][" << value.value << "]";
 }
 
 template <>
