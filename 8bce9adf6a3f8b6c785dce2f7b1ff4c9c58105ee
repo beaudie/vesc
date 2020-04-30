@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff17c5c1_0e384282",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T01:01:25Z",
+      "side": 1,
+      "message": "nit:\nmGlobalMemoryBarrierStages, which is used for",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 71
+      },
+      "revId": "8bce9adf6a3f8b6c785dce2f7b1ff4c9c58105ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bb9b876_a00295a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T01:01:25Z",
+      "side": 1,
+      "message": "nit:\nlet the caller",
+      "range": {
+        "startLine": 12,
+        "startChar": 49,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "8bce9adf6a3f8b6c785dce2f7b1ff4c9c58105ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20be7a09_f6aec8a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T01:01:25Z",
+      "side": 1,
+      "message": "nit:\n\nthe specific stage it will be used for, allowing us to track write and read stage dependencies separately and request the corresponding barriers.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "8bce9adf6a3f8b6c785dce2f7b1ff4c9c58105ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f5ec758_3077c266",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1438,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T01:01:25Z",
+      "side": 1,
+      "message": "Not entirely related to this change since VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT was being used before, but for my own understanding:\n\nJamie/Shabi - How does the XFB emulation use bits defined by VK_EXT_transform_feedback?   If the vulkan driver understands those bits, doesn\u0027t that imply it supports VK_EXT_transform_feedback and we don\u0027t need to do the emulation in the first place?",
+      "range": {
+        "startLine": 1437,
+        "startChar": 0,
+        "endLine": 1438,
+        "endChar": 77
+      },
+      "revId": "8bce9adf6a3f8b6c785dce2f7b1ff4c9c58105ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c26d5461_28e584ec",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4140,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T01:01:25Z",
+      "side": 1,
+      "message": "Even with this change, are these still biting us here when trying to overlap work with more fine-grained barriers?\n\n    bool BufferHelper::canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType)\n    {\n        // We only need to start a new command buffer when we need a new barrier.\n        // For simplicity\u0027s sake for now we always start a new command buffer.\n        // TODO(jmadill): Re-use the command buffer. http://anglebug.com/4429\n        return false;\n    }\n\n    bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType)\n    {\n        // We only need to start a new command buffer when we need a new barrier.\n        // For simplicity\u0027s sake for now we always start a new command buffer.\n        // TODO(jmadill): Re-use the command buffer. http://anglebug.com/4429\n        return false;\n    }",
+      "range": {
+        "startLine": 4137,
+        "startChar": 0,
+        "endLine": 4140,
+        "endChar": 5
+      },
+      "revId": "8bce9adf6a3f8b6c785dce2f7b1ff4c9c58105ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94eb6f69_f15c2b27",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1953,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T01:01:25Z",
+      "side": 1,
+      "message": "Can you add an assert for this?   It sounds like you\u0027re describing this:\n\n    ASSERT((!mCurrentReadStages \u0026\u0026 !mCurrentReadAccess) ||\n           (mCurrentReadStages \u0026\u0026 mCurrentReadAccess));",
+      "revId": "8bce9adf6a3f8b6c785dce2f7b1ff4c9c58105ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "078c0fe0_a608ecb8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1954,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-04-30T01:01:25Z",
+      "side": 1,
+      "message": "nit:\nnot be zero",
+      "range": {
+        "startLine": 1954,
+        "startChar": 12,
+        "endLine": 1954,
+        "endChar": 20
+      },
+      "revId": "8bce9adf6a3f8b6c785dce2f7b1ff4c9c58105ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
