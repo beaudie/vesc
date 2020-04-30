@@ -13,6 +13,7 @@
 #include <deque>
 #include <memory>
 #include <mutex>
+#include <thread>
 
 #include "vk_ext_provoking_vertex.h"
 
@@ -247,7 +248,45 @@ class RendererVk : angle::NonCopyable
 
     SamplerCache &getSamplerCache() { return mSamplerCache; }
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    void setPrimaryCommandBuffer(VkCommandBuffer cmdBuffer) { mPrimaryCommandBuffer = cmdBuffer; }
+    void addWorkBlock(const vk::priv::CommandBlock &scbBlock)
+    {
+        mCommandsQueue.push_back(scbBlock);
+    }
+    void workerThread()
+    {
+        while (true)
+        {
+            if (!mCommandsQueue.empty())
+            {
+                std::unique_lock<std::mutex> lock(mWorkerMutex);
+                mWorkerThreadIdle = false;
+                ASSERT(mPrimaryCommandBuffer != VK_NULL_HANDLE);
+                vk::priv::CommandBlock block = mCommandsQueue.front();
+                mCommandsQueue.pop_front();
+                if ((block.id == vk::priv::CommandBlockID::COMMANDS_BARRIER_RENDERPASS) ||
+                    (block.id == vk::priv::CommandBlockID::COMMANDS_BARRIER_RENDERPASS))
+                {
+                    block.scb->executeQueuedResetQueryPoolCommands(mPrimaryCommandBuffer);
+                }
+                block.scb->executeCommands(mPrimaryCommandBuffer);
+            }
+            else
+            {
+                mWorkerThreadIdle = true;
+                workerIdleCondition.notify_all();
+                // std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1));
+            }
+        }
+    }
+    void workerThreadWaitIdle()
+    {
+        std::unique_lock<std::mutex> lock(mWorkerMutex);
+        while (!mWorkerThreadIdle)
+            workerIdleCondition.wait(lock);
+    }
+#endif
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -360,7 +399,15 @@ class RendererVk : angle::NonCopyable
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
-
+#if ANGLE_ENABLE_WORK_QUEUE
+    // Queue of work for worker thread
+    std::deque<vk::priv::CommandBlock> mCommandsQueue;
+    VkCommandBuffer mPrimaryCommandBuffer;
+    std::thread mWorkerThread;
+    std::mutex mWorkerMutex;
+    bool mWorkerThreadIdle;
+    std::condition_variable workerIdleCondition;
+#endif
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;
 
