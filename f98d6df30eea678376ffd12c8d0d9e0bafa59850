@@ -140,6 +140,24 @@
       "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f79e415_250083f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-01T02:31:45Z",
+      "side": 1,
+      "message": "Then you will have go over all over places to add flush call there as well and rely on flush() implementation to nop it. IMHO, the disadvantage (add more flush call and run time check) is bigger than convenience (you don\u0027t worry about it just bluntly call flush).\n\nOr the other option is just allocate coherent memory and remove flush call from every where except external memory. I don\u0027t know whoever made the initial decision has data back it. Not saying which is the better, just stating that this is another option. My own experience is that modern hardware handles coherent memory pretty efficiently.",
+      "parentUuid": "e0ff6a10_b0460cff",
+      "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
