@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "26c3ac51_c98a1373",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-01T02:04:59Z",
+      "side": 1,
+      "message": "... (and recall that flush() should be called while the memory is mapped)",
+      "parentUuid": "02e77386_db805dc7",
+      "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b6f319ed_66ec4227",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -69,6 +87,23 @@
       "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "64757ca1_025a6ebc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-01T02:04:59Z",
+      "side": 1,
+      "message": "I would rather see `flush()` automatically test this, and skip if coherent (same way it tests for mHostVisible, there could be a cached flag like mHostVisibleNonCoherent). Then call flush liberally and don\u0027t worry about how the buffer was created.\n\nThat\u0027s similar to how BufferHelper::flush/invalidate do it. Then you won\u0027t need `isCoherent` or the assertions.",
+      "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
