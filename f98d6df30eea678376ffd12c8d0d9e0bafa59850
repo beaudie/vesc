@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6f319ed_66ec4227",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4080,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-01T00:11:28Z",
+      "side": 1,
+      "message": "Is being coherent an error here?\nCertainly unnecessary to do a flush if coherent but what if that was the only memory given to us?\nProbably this is assured at allocation time but that\u0027s not obvious here.",
+      "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
