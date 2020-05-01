@@ -104,6 +104,24 @@
       "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0be475fa_2eb2567b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-01T02:11:14Z",
+      "side": 1,
+      "message": "Then this will be a run time check. If we designed this to be a coherent memory, we should catch error with assert.\nNote that most places are doing properly as I checked. SO far I only able to find one place missing flush.",
+      "parentUuid": "64757ca1_025a6ebc",
+      "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
