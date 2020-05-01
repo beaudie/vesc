@@ -122,6 +122,24 @@
       "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0ff6a10_b0460cff",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-01T02:19:38Z",
+      "side": 1,
+      "message": "Yes, and that\u0027s fine. There\u0027s already a run-time check for `mHostVisible`, it might as well be `mHostVisibleNonCoherent`.\n\nI don\u0027t think it\u0027s done right now, but DynamicBuffer should really look at the actual memory properties to make this decision instead of the requested one. As it stands, DynamicBuffer asks for host visible memory, which it may or may not get a coherent one for it, so the decision is technically really a runtime one.",
+      "parentUuid": "0be475fa_2eb2567b",
+      "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
