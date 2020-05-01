@@ -149,7 +149,7 @@ const char *EGLAPIENTRY EGL_QueryString(EGLDisplay dpy, EGLint name)
             result = display->getVendorString().c_str();
             break;
         case EGL_VERSION:
-            result = "1.4 (ANGLE " ANGLE_VERSION_STRING ")";
+            result = "1.5 (ANGLE " ANGLE_VERSION_STRING ")";
             break;
         default:
             thread->setError(EglBadParameter(), GetDebug(), "eglQueryString",
