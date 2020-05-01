@@ -46,6 +46,30 @@
       "revId": "cbdc1a34a97eaf757a0ea25ca1c1cfe839d4b8eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0939d7b6_86f285b6",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-01T20:52:08Z",
+      "side": 1,
+      "message": "Doing this in a follow-up would be fine. Thanks.",
+      "parentUuid": "4fc08596_f3919b49",
+      "range": {
+        "startLine": 557,
+        "startChar": 55,
+        "endLine": 557,
+        "endChar": 62
+      },
+      "revId": "cbdc1a34a97eaf757a0ea25ca1c1cfe839d4b8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
