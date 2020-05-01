@@ -379,9 +379,19 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     Buffer *getBuffer(BufferID handle) const;
     FenceNV *getFenceNV(FenceNVID handle) const;
     Sync *getSync(GLsync handle) const;
+
     ANGLE_INLINE Texture *getTexture(TextureID handle) const
     {
         return mState.mTextureManager->getTexture(handle);
+    }
+
+    ANGLE_INLINE gl::TextureType getTextureType(TextureID handle) const
+    {
+        if (isTexture(handle))
+        {
+            return mState.mTextureManager->getTexture(handle)->getType();
+        }
+        return gl::TextureType::InvalidEnum;
     }
 
     Framebuffer *getFramebuffer(FramebufferID handle) const;

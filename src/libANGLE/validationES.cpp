@@ -3604,6 +3604,13 @@ bool ValidateEGLImageTargetTexture2DOES(const Context *context,
             }
             break;
 
+        case TextureType::_2DArray:
+            if (!context->getExtensions().eglImageArray)
+            {
+                context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+            }
+            break;
+
         case TextureType::External:
             if (!context->getExtensions().eglImageExternalOES)
             {
