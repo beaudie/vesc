@@ -249,6 +249,24 @@
     },
     {
       "key": {
+        "uuid": "1def1b22_a72cefab",
+        "filename": "src/compiler/translator/TranslatorGLSL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-01T13:42:27Z",
+      "side": 1,
+      "message": "Luckily the driver that does this (mesa in xvfb) is only GL 3.3!",
+      "parentUuid": "5b731df0_a9a479e5",
+      "revId": "261eb4a52a691dac501b21032df31a06ba96ca20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a60d4d0_98b6eee6",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 13
