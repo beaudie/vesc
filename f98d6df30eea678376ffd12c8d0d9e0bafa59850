@@ -16,6 +16,24 @@
       "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "053da485_565ff960",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4080,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-01T00:16:42Z",
+      "side": 1,
+      "message": "Not an error. I add here because we are calling flush , we are expecting buffer is not coherent. If someday someone changed the memory allocation flag to make it coherent but did not remove flush call here, this assertion will catch it. Basically try to ensure implementation matches expectation with this ASSERT.",
+      "parentUuid": "b6f319ed_66ec4227",
+      "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
