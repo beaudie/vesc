@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "6a8a47ca_75900778",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-01T18:09:49Z",
+      "side": 1,
+      "message": "This is the same discussion as line 115. But I can move ASSERT above unmap call.",
+      "parentUuid": "26c3ac51_c98a1373",
+      "revId": "f98d6df30eea678376ffd12c8d0d9e0bafa59850",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b6f319ed_66ec4227",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
