@@ -394,11 +394,11 @@ EGLContext EGLWindow::createContext(EGLContext share) const
         return EGL_NO_CONTEXT;
     }
 
-    bool hasBackwardsCompatibleContextExtension =
-        strstr(displayExtensions, "EGL_ANGLE_create_context_backwards_compatible") != nullptr;
-    if (!hasProgramCacheControlExtension)
+    bool hasKHRCreateContextNoError =
+        strstr(displayExtensions, "EGL_KHR_create_context_no_error") != nullptr;
+    if (mConfigParams.noError && !hasKHRCreateContextNoError)
     {
-        std::cerr << "EGL_ANGLE_create_context_backwards_compatible missing.\n";
+        std::cerr << "EGL_KHR_create_context_no_error missing.\n";
         return EGL_NO_CONTEXT;
     }
 
@@ -418,15 +418,18 @@ EGLContext EGLWindow::createContext(EGLContext share) const
         contextAttributes.push_back(EGL_CONTEXT_MINOR_VERSION_KHR);
         contextAttributes.push_back(mClientMinorVersion);
 
-        contextAttributes.push_back(EGL_CONTEXT_OPENGL_DEBUG);
-        contextAttributes.push_back(mConfigParams.debug ? EGL_TRUE : EGL_FALSE);
+        // EGL_CONTEXT_OPENGL_DEBUG is only valid as of EGL 1.5.
+        if (mEGLMinorVersion >= 5)
+        {
+            contextAttributes.push_back(EGL_CONTEXT_OPENGL_DEBUG);
+            contextAttributes.push_back(mConfigParams.debug ? EGL_TRUE : EGL_FALSE);
+        }
 
-        // TODO(jmadill): Check for the extension string.
-        // bool hasKHRCreateContextNoError = strstr(displayExtensions,
-        // "EGL_KHR_create_context_no_error") != nullptr;
-
-        contextAttributes.push_back(EGL_CONTEXT_OPENGL_NO_ERROR_KHR);
-        contextAttributes.push_back(mConfigParams.noError ? EGL_TRUE : EGL_FALSE);
+        if (hasKHRCreateContextNoError)
+        {
+            contextAttributes.push_back(EGL_CONTEXT_OPENGL_NO_ERROR_KHR);
+            contextAttributes.push_back(mConfigParams.noError ? EGL_TRUE : EGL_FALSE);
+        }
 
         if (mConfigParams.webGLCompatibility.valid())
         {
@@ -470,6 +473,8 @@ EGLContext EGLWindow::createContext(EGLContext share) const
                 mConfigParams.contextProgramCacheEnabled.value() ? EGL_TRUE : EGL_FALSE);
         }
 
+        bool hasBackwardsCompatibleContextExtension =
+            strstr(displayExtensions, "EGL_ANGLE_create_context_backwards_compatible") != nullptr;
         if (hasBackwardsCompatibleContextExtension)
         {
             // Always request the exact context version that the config wants
