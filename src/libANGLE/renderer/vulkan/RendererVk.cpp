@@ -1056,6 +1056,10 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
     mPhysicalDeviceExternalMemoryHostProperties.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_MEMORY_HOST_PROPERTIES_EXT;
 
+    mSamplerYcbcrConversionFeatures = {};
+    mSamplerYcbcrConversionFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES;
+
     if (!vkGetPhysicalDeviceProperties2KHR || !vkGetPhysicalDeviceFeatures2KHR)
     {
         return;
@@ -1105,11 +1109,18 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
         vk::AddToPNextChain(&deviceProperties, &mPhysicalDeviceExternalMemoryHostProperties);
     }
 
+    // Query Ycbcr conversion properties
+    vk::AddToPNextChain(&deviceProperties, &mSamplerYcbcrConversionFeatures);
+
     // Query subgroup properties
     vk::AddToPNextChain(&deviceProperties, &mPhysicalDeviceSubgroupProperties);
 
     vkGetPhysicalDeviceFeatures2KHR(mPhysicalDevice, &deviceFeatures);
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
+
+    WARN() << "&mSamplerYcbcrConversionFeatures:";
+    WARN() << "\tsamplerYcbcrConversion = "
+           << mSamplerYcbcrConversionFeatures.samplerYcbcrConversion;
 
     // Fence properties
     if (mFeatures.supportsExternalFenceCapabilities.enabled)
