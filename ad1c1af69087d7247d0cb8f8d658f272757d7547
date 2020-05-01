@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "3cd28e54_decafc7d",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-01T02:08:53Z",
+      "side": 1,
+      "message": "...eShaderR... according to code, though maybe better to drop Shader from the names.",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 41
+      },
+      "revId": "ad1c1af69087d7247d0cb8f8d658f272757d7547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8851788_4393a0d2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
