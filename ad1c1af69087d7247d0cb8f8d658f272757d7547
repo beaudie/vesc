@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8851788_4393a0d2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1817,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-01T01:29:17Z",
+      "side": 1,
+      "message": "really small nit if there are other changes:\nIt looks like the pattern is typically read followed by write when issuing these calls.   Can you swap these to match?\n\n    ANGLE_TRY(contextVk-\u003eonBufferTransferRead(srcBuffer));\n    ANGLE_TRY(contextVk-\u003eonBufferTransferWrite(this));",
+      "range": {
+        "startLine": 1816,
+        "startChar": 0,
+        "endLine": 1817,
+        "endChar": 58
+      },
+      "revId": "ad1c1af69087d7247d0cb8f8d658f272757d7547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
