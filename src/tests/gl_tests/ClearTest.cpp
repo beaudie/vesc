@@ -1500,6 +1500,35 @@ TEST_P(ClearTestES3, ClearBuffer1OnDefaultFramebufferNoAssert)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that clearBuffer with disabled non-zero drawbuffer or disabled read source doesn't cause an
+// assert.
+TEST_P(ClearTestES3, ClearDisabledNonZeroAttachmentNoAssert)
+{
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+
+    GLRenderbuffer rb;
+    glBindRenderbuffer(GL_RENDERBUFFER, rb);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, 16, 16);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, rb);
+    glDrawBuffers(0, nullptr);
+    glReadBuffer(GL_NONE);
+
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    float clearColorf[4] = {0.5, 0.5, 0.5, 0.5};
+    glClearBufferfv(GL_COLOR, 1, clearColorf);
+
+    GLuint clearColorui[4] = {255, 255, 255, 255};
+    glClearBufferuiv(GL_COLOR, 1, clearColorui);
+
+    GLint clearColori[4] = {-127, -127, -127, -127};
+    glClearBufferiv(GL_COLOR, 1, clearColori);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 #ifdef Bool
 // X11 craziness.
 #    undef Bool
