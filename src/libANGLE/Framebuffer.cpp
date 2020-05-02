@@ -1534,7 +1534,8 @@ angle::Result Framebuffer::clearBufferfv(const Context *context,
                                          GLint drawbuffer,
                                          const GLfloat *values)
 {
-    if (context->getState().isRasterizerDiscardEnabled() ||
+    if ((buffer == GL_COLOR && !mState.getEnabledDrawBuffers()[drawbuffer]) ||
+        context->getState().isRasterizerDiscardEnabled() ||
         IsClearBufferMaskedOut(context, buffer, drawbuffer))
     {
         return angle::Result::Continue;
@@ -1550,7 +1551,8 @@ angle::Result Framebuffer::clearBufferuiv(const Context *context,
                                           GLint drawbuffer,
                                           const GLuint *values)
 {
-    if (context->getState().isRasterizerDiscardEnabled() ||
+    if ((buffer == GL_COLOR && !mState.getEnabledDrawBuffers()[drawbuffer]) ||
+        context->getState().isRasterizerDiscardEnabled() ||
         IsClearBufferMaskedOut(context, buffer, drawbuffer))
     {
         return angle::Result::Continue;
@@ -1566,7 +1568,8 @@ angle::Result Framebuffer::clearBufferiv(const Context *context,
                                          GLint drawbuffer,
                                          const GLint *values)
 {
-    if (context->getState().isRasterizerDiscardEnabled() ||
+    if ((buffer == GL_COLOR && !mState.getEnabledDrawBuffers()[drawbuffer]) ||
+        context->getState().isRasterizerDiscardEnabled() ||
         IsClearBufferMaskedOut(context, buffer, drawbuffer))
     {
         return angle::Result::Continue;
