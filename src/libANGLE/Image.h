@@ -120,7 +120,10 @@ class ExternalImageSibling : public ImageSibling
 
 struct ImageState : private angle::NonCopyable
 {
-    ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap &attribs);
+    ImageState(EGLenum target,
+               ImageSibling *buffer,
+               const AttributeMap &attribs,
+               gl::TextureType glTextureType);
     ~ImageState();
 
     EGLLabelKHR label;
