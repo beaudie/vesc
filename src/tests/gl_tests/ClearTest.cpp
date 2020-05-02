@@ -1500,6 +1500,24 @@ TEST_P(ClearTestES3, ClearBuffer1OnDefaultFramebufferNoAssert)
     EXPECT_GL_NO_ERROR();
 }
 
+TEST_P(ClearTestES3, ClearDisabledNonZeroAttachmentNoAssert)
+{
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+
+    GLRenderbuffer rb;
+    glBindRenderbuffer(GL_RENDERBUFFER, rb);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB8, 1, 1);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, rb);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    float clearColor[4] = {0.5, 0.5, 0.5, 0.5};
+    glClearBufferfv(GL_COLOR, 1, clearColor);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 #ifdef Bool
 // X11 craziness.
 #    undef Bool
