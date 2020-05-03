@@ -174,7 +174,7 @@ angle::Result BufferMtl::copySubData(const gl::Context *context,
     auto srcMtl = GetAs<BufferMtl>(source);
 
     // NOTE(hqle): use blit command.
-    return setSubDataImpl(context, srcMtl->getClientShadowCopyData(context) + sourceOffset, size,
+    return setSubDataImpl(context, srcMtl->getClientShadowCopyData() + sourceOffset, size,
                           destOffset);
 }
 
@@ -228,8 +228,7 @@ angle::Result BufferMtl::getIndexRange(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result BufferMtl::getFirstLastIndices(const gl::Context *context,
-                                             gl::DrawElementsType type,
+angle::Result BufferMtl::getFirstLastIndices(gl::DrawElementsType type,
                                              size_t offset,
                                              size_t count,
                                              std::pair<uint32_t, uint32_t> *outIndices) const
@@ -256,7 +255,7 @@ angle::Result BufferMtl::getFirstLastIndices(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-const uint8_t *BufferMtl::getClientShadowCopyData(const gl::Context *context)
+const uint8_t *BufferMtl::getClientShadowCopyData()
 {
     // NOTE(hqle): Support buffer update from GPU.
     // Which mean we have to stall the GPU by calling finish and copy
