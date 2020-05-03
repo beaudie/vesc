@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c555117_e6164b2f",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-03T04:48:39Z",
+      "side": 1,
+      "message": "Prefer `ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER)` in new code.",
+      "revId": "4035ce10449f87a698423c64ad419f8bac7f36d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
