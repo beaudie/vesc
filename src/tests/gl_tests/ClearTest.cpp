@@ -300,6 +300,16 @@ TEST_P(ClearTest, DefaultFramebuffer)
     EXPECT_PIXEL_NEAR(0, 0, 64, 128, 128, 128, 1.0);
 }
 
+// Test clearing the default framebuffer
+TEST_P(ClearTest, DoubleClear)
+{
+    glClearColor(0.25f, 0.5f, 0.5f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.5f, 0.5f, 0.5f, 0.25f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_NEAR(0, 0, 128, 128, 128, 64, 1.0);
+}
+
 // Test clearing the default framebuffer with scissor and mask
 // This forces down path that uses draw to do clear
 TEST_P(ClearTest, EmptyScissor)
@@ -1518,6 +1528,7 @@ ANGLE_INSTANTIATE_TEST_COMBINE_4(MaskedScissoredClearTest,
                                  ES2_D3D9(),
                                  ES2_D3D11(),
                                  ES3_D3D11(),
+                                 ES2_METAL(),
                                  ES2_OPENGL(),
                                  ES3_OPENGL(),
                                  ES2_OPENGLES(),

@@ -162,7 +162,7 @@ void R8G8B8::readColor(gl::ColorUI *dst, const R8G8B8 *src)
 {
     dst->red   = src->R;
     dst->green = src->G;
-    dst->blue  = src->G;
+    dst->blue  = src->B;
     dst->alpha = 1;
 }
 
