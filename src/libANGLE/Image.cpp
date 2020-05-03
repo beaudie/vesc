@@ -23,7 +23,9 @@ namespace egl
 
 namespace
 {
-gl::ImageIndex GetImageIndex(EGLenum eglTarget, const egl::AttributeMap &attribs)
+gl::ImageIndex GetImageIndex(EGLenum eglTarget,
+                             const egl::AttributeMap &attribs,
+                             ImageSibling *buffer)
 {
     if (!IsTextureTarget(eglTarget))
     {
@@ -34,14 +36,15 @@ gl::ImageIndex GetImageIndex(EGLenum eglTarget, const egl::AttributeMap &attribs
     GLint mip                = static_cast<GLint>(attribs.get(EGL_GL_TEXTURE_LEVEL_KHR, 0));
     GLint layer              = static_cast<GLint>(attribs.get(EGL_GL_TEXTURE_ZOFFSET_KHR, 0));
 
-    if (target == gl::TextureTarget::_3D)
+    switch (static_cast<gl::Texture *>(buffer)->getType())
     {
-        return gl::ImageIndex::Make3D(mip, layer);
-    }
-    else
-    {
-        ASSERT(layer == 0);
-        return gl::ImageIndex::MakeFromTarget(target, mip, 1);
+        case gl::TextureType::_2DArray:
+            return gl::ImageIndex::Make2DArray(mip, layer);
+        case gl::TextureType::_3D:
+            return gl::ImageIndex::Make3D(mip, layer);
+        default:
+            ASSERT(layer == 0);
+            return gl::ImageIndex::MakeFromTarget(target, mip, 1);
     }
 }
 
@@ -230,7 +233,7 @@ rx::FramebufferAttachmentObjectImpl *ExternalImageSibling::getAttachmentImpl() c
 ImageState::ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap &attribs)
     : label(nullptr),
       target(target),
-      imageIndex(GetImageIndex(target, attribs)),
+      imageIndex(GetImageIndex(target, attribs, buffer)),
       source(buffer),
       targets(),
       format(GL_NONE),

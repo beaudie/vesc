@@ -2082,6 +2082,70 @@ Error ValidateCompatibleSurface(const Display *display,
     return NoError();
 }
 
+ANGLE_INLINE Error hasValidLevels(const gl::Texture *texture,
+                                  size_t level,
+                                  size_t zOffset,
+                                  gl::TextureTarget texTarget = gl::TextureTarget::InvalidEnum)
+{
+    switch (texture->getType())
+    {
+        case gl::TextureType::_2D:
+            if ((texture->getWidth(gl::TextureTarget::_2D, level) == 0) ||
+                (texture->getHeight(gl::TextureTarget::_2D, level) == 0))
+            {
+                return EglBadParameter()
+                       << "target 2D texture does not have a valid size at specified level.";
+            }
+            break;
+        case gl::TextureType::CubeMap:
+            if (texTarget != gl::TextureTarget::InvalidEnum &&
+                ((texture->getWidth(texTarget, level) == 0) ||
+                 (texture->getHeight(texTarget, level) == 0)))
+            {
+                return EglBadParameter() << "target cubemap texture does not have a valid "
+                                            "size at specified level and face.";
+            }
+            break;
+        case gl::TextureType::_2DArray:
+            if ((texture->getWidth(gl::TextureTarget::_2DArray, level) == 0) ||
+                (texture->getHeight(gl::TextureTarget::_2DArray, level) == 0) ||
+                (texture->getDepth(gl::TextureTarget::_2DArray, level) == 0))
+            {
+                return EglBadParameter() << "target 2D array texture does not have a valid "
+                                            "size at specified level.";
+            }
+
+            if (zOffset >= texture->getDepth(gl::TextureTarget::_2DArray, level))
+            {
+                return EglBadParameter() << "target 2D array texture does not have enough layers "
+                                            "for the specified Z offset at the specified "
+                                            "level.";
+            }
+            break;
+        case gl::TextureType::_3D:
+            if ((texture->getWidth(gl::TextureTarget::_3D, level) == 0) ||
+                (texture->getHeight(gl::TextureTarget::_3D, level) == 0) ||
+                (texture->getDepth(gl::TextureTarget::_3D, level) == 0))
+            {
+                return EglBadParameter()
+                       << "target 3D texture does not have a valid size at specified level.";
+            }
+
+            if (zOffset >= texture->getDepth(gl::TextureTarget::_3D, level))
+            {
+                return EglBadParameter() << "target 3D texture does not have enough layers "
+                                            "for the specified Z offset at the specified "
+                                            "level.";
+            }
+            break;
+        default:
+            return EglBadParameter()
+                   << "invalid target: 0x" << std::hex << std::uppercase << texTarget;
+    }
+
+    return NoError();
+}
+
 Error ValidateCreateImage(const Display *display,
                           gl::Context *context,
                           EGLenum target,
@@ -2092,7 +2156,7 @@ Error ValidateCreateImage(const Display *display,
     ANGLE_TRY(ValidateDisplay(display));
 
     const DisplayExtensions &displayExtensions = display->getExtensions();
-
+    const gl::Extensions &contextExtensions    = context->getExtensions();
     // TODO(geofflang): Complete validation from EGL_KHR_image_base:
     // If the resource specified by <dpy>, <ctx>, <target>, <buffer> and <attrib_list> is itself an
     // EGLImage sibling, the error EGL_BAD_ACCESS is generated.
@@ -2120,7 +2184,8 @@ Error ValidateCreateImage(const Display *display,
 
             case EGL_GL_TEXTURE_LEVEL:
                 if (!displayExtensions.glTexture2DImage &&
-                    !displayExtensions.glTextureCubemapImage && !displayExtensions.glTexture3DImage)
+                    !displayExtensions.glTextureCubemapImage &&
+                    !displayExtensions.glTexture3DImage && !contextExtensions.eglImageArray)
                 {
                     return EglBadParameter() << "EGL_GL_TEXTURE_LEVEL cannot be used "
                                                 "without KHR_gl_texture_*_image support.";
@@ -2133,7 +2198,7 @@ Error ValidateCreateImage(const Display *display,
                 break;
 
             case EGL_GL_TEXTURE_ZOFFSET:
-                if (!displayExtensions.glTexture3DImage)
+                if (!displayExtensions.glTexture3DImage && !contextExtensions.eglImageArray)
                 {
                     return EglBadParameter() << "EGL_GL_TEXTURE_ZOFFSET cannot be used "
                                                 "without KHR_gl_texture_3D_image support.";
@@ -2302,12 +2367,7 @@ Error ValidateCreateImage(const Display *display,
             }
 
             EGLAttrib level = attributes.get(EGL_GL_TEXTURE_LEVEL, 0);
-            if (texture->getWidth(gl::TextureTarget::_2D, static_cast<size_t>(level)) == 0 ||
-                texture->getHeight(gl::TextureTarget::_2D, static_cast<size_t>(level)) == 0)
-            {
-                return EglBadParameter()
-                       << "target 2D texture does not have a valid size at specified level.";
-            }
+            ANGLE_TRY(hasValidLevels(texture, static_cast<size_t>(level), 0));
 
             ANGLE_TRY(ValidateCreateImageMipLevelCommon(context, texture, level));
         }
@@ -2346,13 +2406,7 @@ Error ValidateCreateImage(const Display *display,
 
             EGLAttrib level               = attributes.get(EGL_GL_TEXTURE_LEVEL, 0);
             gl::TextureTarget cubeMapFace = egl_gl::EGLCubeMapTargetToCubeMapTarget(target);
-            if (texture->getWidth(cubeMapFace, static_cast<size_t>(level)) == 0 ||
-                texture->getHeight(cubeMapFace, static_cast<size_t>(level)) == 0)
-            {
-                return EglBadParameter() << "target cubemap texture does not have a valid "
-                                            "size at specified level and face.";
-            }
-
+            ANGLE_TRY(hasValidLevels(texture, static_cast<size_t>(level), 0, cubeMapFace));
             ANGLE_TRY(ValidateCreateImageMipLevelCommon(context, texture, level));
 
             if (level == 0 && !texture->isMipmapComplete() &&
@@ -2367,7 +2421,7 @@ Error ValidateCreateImage(const Display *display,
 
         case EGL_GL_TEXTURE_3D:
         {
-            if (!displayExtensions.glTexture3DImage)
+            if (!displayExtensions.glTexture3DImage && !contextExtensions.eglImageArray)
             {
                 return EglBadParameter() << "KHR_gl_texture_3D_image not supported.";
             }
@@ -2380,9 +2434,10 @@ Error ValidateCreateImage(const Display *display,
             ANGLE_TRY(ValidateContext(display, context));
             const gl::Texture *texture =
                 context->getTexture({egl_gl::EGLClientBufferToGLObjectHandle(buffer)});
-            if (texture == nullptr || texture->getType() != gl::TextureType::_3D)
+            if (texture == nullptr || !(texture->getType() == gl::TextureType::_3D ||
+                                        texture->getType() == gl::TextureType::_2DArray))
             {
-                return EglBadParameter() << "target is not a 3D texture.";
+                return EglBadParameter() << "target is not a 3D or 2D array texture.";
             }
 
             if (texture->getBoundSurface() != nullptr)
@@ -2392,22 +2447,9 @@ Error ValidateCreateImage(const Display *display,
 
             EGLAttrib level   = attributes.get(EGL_GL_TEXTURE_LEVEL, 0);
             EGLAttrib zOffset = attributes.get(EGL_GL_TEXTURE_ZOFFSET, 0);
-            if (texture->getWidth(gl::TextureTarget::_3D, static_cast<size_t>(level)) == 0 ||
-                texture->getHeight(gl::TextureTarget::_3D, static_cast<size_t>(level)) == 0 ||
-                texture->getDepth(gl::TextureTarget::_3D, static_cast<size_t>(level)) == 0)
-            {
-                return EglBadParameter()
-                       << "target 3D texture does not have a valid size at specified level.";
-            }
 
-            if (static_cast<size_t>(zOffset) >=
-                texture->getDepth(gl::TextureTarget::_3D, static_cast<size_t>(level)))
-            {
-                return EglBadParameter() << "target 3D texture does not have enough layers "
-                                            "for the specified Z offset at the specified "
-                                            "level.";
-            }
-
+            ANGLE_TRY(
+                hasValidLevels(texture, static_cast<size_t>(level), static_cast<size_t>(zOffset)));
             ANGLE_TRY(ValidateCreateImageMipLevelCommon(context, texture, level));
         }
         break;
