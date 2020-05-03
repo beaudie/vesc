@@ -27,6 +27,8 @@ class DisplayMtl;
 class FramebufferMtl;
 class VertexArrayMtl;
 class ProgramMtl;
+class RenderTargetMtl;
+class WindowSurfaceMtl;
 
 class ContextMtl : public ContextImpl, public mtl::Context
 {
@@ -225,9 +227,12 @@ class ContextMtl : public ContextImpl, public mtl::Context
     void invalidateRenderPipeline();
 
     // Call this to notify ContextMtl whenever FramebufferMtl's state changed
-    void onDrawFrameBufferChange(const gl::Context *context, FramebufferMtl *framebuffer);
+    void onDrawFrameBufferChangedState(const gl::Context *context,
+                                       FramebufferMtl *framebuffer,
+                                       bool renderPassChanged);
+    void onBackbufferResized(const gl::Context *context, WindowSurfaceMtl *backbuffer);
 
-    const MTLClearColor &getClearColorValue() const;
+    const mtl::ClearColorValue &getClearColorValue() const;
     MTLColorWriteMask getColorMask() const;
     float getClearDepthValue() const;
     uint32_t getClearStencilValue() const;
@@ -236,9 +241,14 @@ class ContextMtl : public ContextImpl, public mtl::Context
     bool getDepthMask() const;
 
     const mtl::Format &getPixelFormat(angle::FormatID angleFormatId) const;
+    const mtl::FormatCaps &getNativeFormatCaps(MTLPixelFormat mtlFormat) const;
     // See mtl::FormatTable::getVertexFormat()
     const mtl::VertexFormat &getVertexFormat(angle::FormatID angleFormatId,
                                              bool tightlyPacked) const;
+
+    angle::Result getNullTexture(const gl::Context *context,
+                                 gl::TextureType type,
+                                 gl::Texture **textureOut);
 
     // Recommended to call these methods to end encoding instead of invoking the encoder's
     // endEncoding() directly.
@@ -252,25 +262,20 @@ class ContextMtl : public ContextImpl, public mtl::Context
 
     // Check whether compatible render pass has been started.
     bool hasStartedRenderPass(const mtl::RenderPassDesc &desc);
-    bool hasStartedRenderPass(FramebufferMtl *framebuffer);
 
     // Get current render encoder. May be nullptr if no render pass has been started.
     mtl::RenderCommandEncoder *getRenderCommandEncoder();
-
-    mtl::RenderCommandEncoder *getCurrentFramebufferRenderCommandEncoder();
 
     // Will end current command encoder if it is valid, then start new encoder.
     // Unless hasStartedRenderPass(desc) returns true.
     mtl::RenderCommandEncoder *getRenderCommandEncoder(const mtl::RenderPassDesc &desc);
 
-    // Utilities to quickly create render command enconder to a specific texture:
+    // Utilities to quickly create render command encoder to a specific texture:
     // The previous content of texture will be loaded if clearColor is not provided
-    mtl::RenderCommandEncoder *getRenderCommandEncoder(const mtl::TextureRef &textureTarget,
-                                                       const gl::ImageIndex &index,
+    mtl::RenderCommandEncoder *getRenderCommandEncoder(const RenderTargetMtl &renderTarget,
                                                        const Optional<MTLClearColor> &clearColor);
     // The previous content of texture will be loaded
-    mtl::RenderCommandEncoder *getRenderCommandEncoder(const mtl::TextureRef &textureTarget,
-                                                       const gl::ImageIndex &index);
+    mtl::RenderCommandEncoder *getRenderCommandEncoder(const RenderTargetMtl &renderTarget);
 
     // Will end current command encoder and start new blit command encoder. Unless a blit comamnd
     // encoder is already started.
@@ -282,6 +287,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
 
   private:
     void ensureCommandBufferValid();
+    angle::Result ensureIncompleteTexturesCreated(const gl::Context *context);
     angle::Result setupDraw(const gl::Context *context,
                             gl::PrimitiveMode mode,
                             GLint firstVertex,
@@ -289,13 +295,6 @@ class ContextMtl : public ContextImpl, public mtl::Context
                             GLsizei instanceCount,
                             gl::DrawElementsType indexTypeOrNone,
                             const void *indices);
-    angle::Result genLineLoopLastSegment(const gl::Context *context,
-                                         GLint firstVertex,
-                                         GLsizei vertexOrIndexCount,
-                                         GLsizei instanceCount,
-                                         gl::DrawElementsType indexTypeOrNone,
-                                         const void *indices,
-                                         mtl::BufferRef *lastSegmentIndexBufferOut);
 
     angle::Result drawTriFanArrays(const gl::Context *context,
                                    GLint first,
@@ -315,6 +314,23 @@ class ContextMtl : public ContextImpl, public mtl::Context
                                      const void *indices,
                                      GLsizei instances);
 
+    angle::Result drawLineLoopArraysNonInstanced(const gl::Context *context,
+                                                 GLint first,
+                                                 GLsizei count);
+    angle::Result drawLineLoopArrays(const gl::Context *context,
+                                     GLint first,
+                                     GLsizei count,
+                                     GLsizei instances);
+    angle::Result drawLineLoopElementsNonInstancedNoPrimitiveRestart(const gl::Context *context,
+                                                                     GLsizei count,
+                                                                     gl::DrawElementsType type,
+                                                                     const void *indices);
+    angle::Result drawLineLoopElements(const gl::Context *context,
+                                       GLsizei count,
+                                       gl::DrawElementsType type,
+                                       const void *indices,
+                                       GLsizei instances);
+
     angle::Result drawArraysImpl(const gl::Context *context,
                                  gl::PrimitiveMode mode,
                                  GLint first,
@@ -327,6 +343,18 @@ class ContextMtl : public ContextImpl, public mtl::Context
                                    gl::DrawElementsType type,
                                    const void *indices,
                                    GLsizei instanceCount);
+
+    void execDrawInstanced(MTLPrimitiveType primitiveType,
+                           uint32_t vertexStart,
+                           uint32_t vertexCount,
+                           uint32_t instances);
+
+    void execDrawIndexedInstanced(MTLPrimitiveType primitiveType,
+                                  uint32_t indexCount,
+                                  MTLIndexType indexType,
+                                  const mtl::BufferRef &indexBuffer,
+                                  size_t bufferOffset,
+                                  uint32_t instances);
 
     void updateExtendedState(const gl::State &glState);
 
@@ -351,7 +379,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
     angle::Result handleDirtyDepthBias(const gl::Context *context);
     angle::Result checkIfPipelineChanged(const gl::Context *context,
                                          gl::PrimitiveMode primitiveMode,
-                                         Optional<mtl::RenderPipelineDesc> *changedPipelineDesc);
+                                         bool *pipelineDescChanged);
 
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -399,11 +427,14 @@ class ContextMtl : public ContextImpl, public mtl::Context
         // Used to pre-rotate gl_Position for Vulkan swapchain images on Android (a mat2, which is
         // padded to the size of two vec4's).
         float preRotation[8];
+
+        uint32_t coverageMask;
+
+        float padding2[3];
     };
 
     struct DefaultAttribute
     {
-        // NOTE(hqle): Support integer default attributes in ES 3.0
         float values[4];
     };
 
@@ -417,12 +448,6 @@ class ContextMtl : public ContextImpl, public mtl::Context
     VertexArrayMtl *mVertexArray     = nullptr;
     ProgramMtl *mProgram             = nullptr;
 
-    // Special flag to indicate current draw framebuffer is default framebuffer.
-    // We need this instead of calling mDrawFramebuffer->getState().isDefault() because
-    // mDrawFramebuffer might point to a deleted object, ContextMtl only knows about this very late,
-    // only during syncState() function call.
-    bool mDrawFramebufferIsDefault = true;
-
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
 
     gl::AttributesMask mDirtyDefaultAttribsMask;
@@ -432,7 +457,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
     mtl::RenderPipelineDesc mRenderPipelineDesc;
     mtl::DepthStencilDesc mDepthStencilDesc;
     mtl::BlendDesc mBlendDesc;
-    MTLClearColor mClearColor;
+    mtl::ClearColorValue mClearColor;
     uint32_t mClearStencil    = 0;
     uint32_t mStencilRefFront = 0;
     uint32_t mStencilRefBack  = 0;
@@ -444,6 +469,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
 
     // Lineloop and TriFan index buffer
     mtl::BufferPool mLineLoopIndexBuffer;
+    mtl::BufferPool mLineLoopLastSegmentIndexBuffer;
     mtl::BufferPool mTriFanIndexBuffer;
     // one buffer can be reused for any starting vertex in DrawArrays()
     mtl::BufferRef mTriFanArraysIndexBuffer;
@@ -451,6 +477,9 @@ class ContextMtl : public ContextImpl, public mtl::Context
     DriverUniforms mDriverUniforms;
 
     DefaultAttribute mDefaultAttributes[mtl::kMaxVertexAttribs];
+
+    IncompleteTextureSet mIncompleteTextures;
+    bool mIncompleteTexturesInitialized = false;
 };
 
 }  // namespace rx
