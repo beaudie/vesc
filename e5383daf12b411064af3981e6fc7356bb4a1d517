@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69b89d0f_4cf8ff2f",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-05-03T11:56:31Z",
+      "side": 1,
+      "message": "The new test fails on macOS (exclusively) because of incomplete framebuffer. Why is actual GL status always hidden behind \"GL_FRAMEBUFFER_UNSUPPORTED\"?\n\nCould someone with hardware access debug this?",
+      "range": {
+        "startLine": 1154,
+        "startChar": 12,
+        "endLine": 1154,
+        "endChar": 54
+      },
+      "revId": "e5383daf12b411064af3981e6fc7356bb4a1d517",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "268ac564_361e2512",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-05-03T11:56:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b830b11_cf50a978",
+      "revId": "713e1fd7e331cd89d24c492b506e1af6c19a20bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "231069cd_b9fe14fc",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "713e1fd7e331cd89d24c492b506e1af6c19a20bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0134f074_3f0c652f",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-05-03T11:56:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "231069cd_b9fe14fc",
+      "revId": "713e1fd7e331cd89d24c492b506e1af6c19a20bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
