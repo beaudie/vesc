@@ -326,6 +326,7 @@ class ANGLETestBase
 
     virtual void overrideWorkaroundsD3D(angle::FeaturesD3D *featuresD3D) {}
     virtual void overrideFeaturesVk(angle::FeaturesVk *featuresVulkan) {}
+    virtual void overrideFeaturesMetal(angle::FeaturesMtl *featuresMtl) {}
 
     static void ReleaseFixtures();
 

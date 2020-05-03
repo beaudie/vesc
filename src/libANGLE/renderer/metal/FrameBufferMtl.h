@@ -18,13 +18,19 @@
 
 namespace rx
 {
+namespace mtl
+{
+class RenderCommandEncoder;
+}  // namespace mtl
 class ContextMtl;
-class SurfaceMtl;
+class WindowSurfaceMtl;
 
 class FramebufferMtl : public FramebufferImpl
 {
   public:
-    explicit FramebufferMtl(const gl::FramebufferState &state, bool flipY);
+    explicit FramebufferMtl(const gl::FramebufferState &state,
+                            bool flipY,
+                            WindowSurfaceMtl *backbuffer);
     ~FramebufferMtl() override;
     void destroy(const gl::Context *context) override;
 
@@ -82,19 +88,26 @@ class FramebufferMtl : public FramebufferImpl
                                     size_t index,
                                     GLfloat *xy) const override;
 
-    RenderTargetMtl *getColorReadRenderTarget() const;
+    RenderTargetMtl *getColorReadRenderTarget(const gl::Context *context) const;
+    RenderTargetMtl *getDepthRenderTarget() const { return mDepthRenderTarget; }
+    RenderTargetMtl *getStencilRenderTarget() const { return mStencilRenderTarget; }
 
     bool flipY() const { return mFlipY; }
 
     gl::Rectangle getCompleteRenderArea() const;
+    int getSamples() const;
+    WindowSurfaceMtl *getAttachedBackbuffer() const { return mBackbuffer; }
 
-    const mtl::RenderPassDesc &getRenderPassDesc(ContextMtl *context);
+    bool renderPassHasStarted(ContextMtl *contextMtl) const;
+    mtl::RenderCommandEncoder *ensureRenderPassStarted(const gl::Context *context);
 
     // Call this to notify FramebufferMtl whenever its render pass has started.
     void onStartedDrawingToFrameBuffer(const gl::Context *context);
+    void onFrameEnd(const gl::Context *context);
 
     // The actual area will be adjusted based on framebuffer flipping property.
-    gl::Rectangle getReadPixelArea(const gl::Rectangle &glArea);
+    gl::Rectangle getCorrectFlippedReadArea(const gl::Context *context,
+                                            const gl::Rectangle &glArea) const;
 
     // NOTE: this method doesn't do the flipping of area. Caller must do it if needed before
     // callling this. See getReadPixelsArea().
@@ -115,13 +128,25 @@ class FramebufferMtl : public FramebufferImpl
                                   gl::DrawBufferMask clearColorBuffers,
                                   const mtl::ClearRectParams &clearOpts);
 
+    angle::Result clearWithLoadOpRenderPassNotStarted(const gl::Context *context,
+                                                      gl::DrawBufferMask clearColorBuffers,
+                                                      const mtl::ClearRectParams &clearOpts);
+
+    angle::Result clearWithLoadOpRenderPassStarted(const gl::Context *context,
+                                                   gl::DrawBufferMask clearColorBuffers,
+                                                   const mtl::ClearRectParams &clearOpts,
+                                                   mtl::RenderCommandEncoder *encoder);
+
     angle::Result clearWithDraw(const gl::Context *context,
                                 gl::DrawBufferMask clearColorBuffers,
                                 const mtl::ClearRectParams &clearOpts);
 
-    angle::Result prepareRenderPass(const gl::Context *context,
-                                    gl::DrawBufferMask drawColorBuffers,
-                                    mtl::RenderPassDesc *descOut);
+    void initLoadStoreActionOnRenderPassFirstStart(mtl::RenderPassAttachmentDesc *attachmentOut);
+
+    angle::Result prepareRenderPass(const gl::Context *context, mtl::RenderPassDesc *descOut);
+
+    mtl::RenderCommandEncoder *ensureRenderPassStarted(const gl::Context *context,
+                                                       const mtl::RenderPassDesc &desc);
 
     void overrideClearColor(const mtl::TextureRef &texture,
                             MTLClearColor clearColor,
@@ -134,6 +159,23 @@ class FramebufferMtl : public FramebufferImpl
                                            const gl::FramebufferAttachment *attachment,
                                            RenderTargetMtl **cachedRenderTarget);
 
+    // This function either returns the render target's texture itself if the texture is readable
+    // or create a copy of that texture that is readable if not. This function is typically used
+    // for packed depth stencil where reading stencil requires a stencil view. However if a texture
+    // has both render target, pixel format view & shader readable usage flags, there will be
+    // some glitches happen in Metal framework.
+    // So the solution is creating a depth stencil texture without pixel format view flag but has
+    // render target flag, then during blitting process, this texture is copied to another
+    // intermidiate texture having pixel format view flag, but not render target flag.
+    angle::Result getReadableViewForRenderTarget(const gl::Context *context,
+                                                 const RenderTargetMtl &rtt,
+                                                 const gl::Rectangle &readArea,
+                                                 mtl::TextureRef *readableDepthView,
+                                                 mtl::TextureRef *readableStencilView,
+                                                 uint32_t *readableViewLevel,
+                                                 uint32_t *readableViewLayer,
+                                                 gl::Rectangle *readableViewArea);
+
     // NOTE: we cannot use RenderTargetCache here because it doesn't support separate
     // depth & stencil attachments as of now. Separate depth & stencil could be useful to
     // save spaces on iOS devices. See doc/PackedDepthStencilSupport.md.
@@ -141,7 +183,18 @@ class FramebufferMtl : public FramebufferImpl
     RenderTargetMtl *mDepthRenderTarget   = nullptr;
     RenderTargetMtl *mStencilRenderTarget = nullptr;
     mtl::RenderPassDesc mRenderPassDesc;
-    const bool mFlipY = false;
+
+    const mtl::Format *mRenderPassFirstColorAttachmentFormat = nullptr;
+    bool mRenderPassAttachmentsSameColorType                 = false;
+
+    // Flag indicating the render pass start is a clean start or a resume from interruption such
+    // as by a compute pass.
+    bool mRenderPassCleanStart = false;
+
+    WindowSurfaceMtl *mBackbuffer = nullptr;
+    const bool mFlipY             = false;
+
+    mtl::BufferRef mReadPixelBuffer;
 };
 }  // namespace rx
 

@@ -26,8 +26,17 @@
 #include "libANGLE/angletypes.h"
 
 #if TARGET_OS_IPHONE
+#    if !defined(__IPHONE_11_0)
+#        define __IPHONE_11_0 110000
+#    endif
 #    if !defined(ANGLE_IOS_DEPLOY_TARGET)
 #        define ANGLE_IOS_DEPLOY_TARGET __IPHONE_11_0
+#    endif
+#    if !defined(__IPHONE_OS_VERSION_MAX_ALLOWED)
+#        define __IPHONE_OS_VERSION_MAX_ALLOWED __IPHONE_11_0
+#    endif
+#    if !defined(__TV_OS_VERSION_MAX_ALLOWED)
+#        define __TV_OS_VERSION_MAX_ALLOWED __IPHONE_11_0
 #    endif
 #endif
 
@@ -35,8 +44,12 @@
 
 #if !__has_feature(objc_arc)
 #    define ANGLE_MTL_AUTORELEASE autorelease
+#    define ANGLE_MTL_RETAIN retain
+#    define ANGLE_MTL_RELEASE release
 #else
 #    define ANGLE_MTL_AUTORELEASE self
+#    define ANGLE_MTL_RETAIN self
+#    define ANGLE_MTL_RELEASE self
 #endif
 
 #define ANGLE_MTL_UNUSED __attribute__((unused))
@@ -93,7 +106,7 @@ namespace mtl
 // NOTE(hqle): support variable max number of vertex attributes
 constexpr uint32_t kMaxVertexAttribs = gl::MAX_VERTEX_ATTRIBS;
 // NOTE(hqle): support variable max number of render targets
-constexpr uint32_t kMaxRenderTargets = 1;
+constexpr uint32_t kMaxRenderTargets = 4;
 
 constexpr size_t kDefaultAttributeSize = 4 * sizeof(float);
 
@@ -112,6 +125,9 @@ constexpr uint32_t kUniformBufferSettingOffsetMinAlignment = 4;
 #endif
 constexpr uint32_t kIndexBufferOffsetAlignment = 4;
 
+// Front end binding limits
+constexpr uint32_t kMaxGLSamplerBindings = 2 * kMaxShaderSamplers;
+
 // Binding index start for vertex data buffers:
 constexpr uint32_t kVboBindingIndexStart = 0;
 
@@ -128,6 +144,51 @@ constexpr float kEmulatedAlphaValue = 1.0f;
 
 // NOTE(hqle): Support ES 3.0.
 constexpr gl::Version kMaxSupportedGLVersion = gl::Version(2, 0);
+
+enum class PixelType
+{
+    Int,
+    UInt,
+    Float,
+    EnumCount,
+};
+
+struct ClearColorValue
+{
+    PixelType type = PixelType::Float;
+
+    union
+    {
+        struct
+        {
+            float red, green, blue, alpha;
+        };
+        struct
+        {
+            int32_t redI, greenI, blueI, alphaI;
+        };
+        struct
+        {
+            uint32_t redU, greenU, blueU, alphaU;
+        };
+    };
+    // Convert to native Metal value
+    inline operator MTLClearColor() const
+    {
+        switch (type)
+        {
+            case PixelType::Int:
+                return MTLClearColorMake(redI, greenI, blueI, alphaI);
+            case PixelType::UInt:
+                return MTLClearColorMake(redU, greenU, blueU, alphaU);
+            case PixelType::Float:
+                return MTLClearColorMake(red, green, blue, alpha);
+            default:
+                UNREACHABLE();
+                return MTLClearColorMake(0, 0, 0, 0);
+        }
+    }
+};
 
 template <typename T>
 struct ImplTypeHelper;
@@ -272,13 +333,6 @@ class AutoObjCPtr : public WrappedObject<T>
 
 template <typename T>
 using AutoObjCObj = AutoObjCPtr<T *>;
-
-struct ClearOptions
-{
-    Optional<MTLClearColor> clearColor;
-    Optional<float> clearDepth;
-    Optional<uint32_t> clearStencil;
-};
 
 class CommandQueue;
 class ErrorHandler

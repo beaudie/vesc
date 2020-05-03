@@ -14,9 +14,11 @@
 #include "common/MemoryBuffer.h"
 #include "common/debug.h"
 #include "common/mathutil.h"
+#include "libANGLE/Surface.h"
 #include "libANGLE/renderer/metal/ContextMtl.h"
 #include "libANGLE/renderer/metal/DisplayMtl.h"
 #include "libANGLE/renderer/metal/FrameBufferMtl.h"
+#include "libANGLE/renderer/metal/SurfaceMtl.h"
 #include "libANGLE/renderer/metal/mtl_common.h"
 #include "libANGLE/renderer/metal/mtl_format_utils.h"
 #include "libANGLE/renderer/metal/mtl_utils.h"
@@ -27,45 +29,6 @@ namespace rx
 
 namespace
 {
-
-MTLColorWriteMask GetColorWriteMask(const mtl::Format &mtlFormat, bool *emulatedChannelsOut)
-{
-    const angle::Format &intendedFormat = mtlFormat.intendedAngleFormat();
-    const angle::Format &actualFormat   = mtlFormat.actualAngleFormat();
-    bool emulatedChannels               = false;
-    MTLColorWriteMask colorWritableMask = MTLColorWriteMaskAll;
-    if (intendedFormat.alphaBits == 0 && actualFormat.alphaBits)
-    {
-        emulatedChannels = true;
-        // Disable alpha write to this texture
-        colorWritableMask = colorWritableMask & (~MTLColorWriteMaskAlpha);
-    }
-    if (intendedFormat.luminanceBits == 0)
-    {
-        if (intendedFormat.redBits == 0 && actualFormat.redBits)
-        {
-            emulatedChannels = true;
-            // Disable red write to this texture
-            colorWritableMask = colorWritableMask & (~MTLColorWriteMaskRed);
-        }
-        if (intendedFormat.greenBits == 0 && actualFormat.greenBits)
-        {
-            emulatedChannels = true;
-            // Disable green write to this texture
-            colorWritableMask = colorWritableMask & (~MTLColorWriteMaskGreen);
-        }
-        if (intendedFormat.blueBits == 0 && actualFormat.blueBits)
-        {
-            emulatedChannels = true;
-            // Disable blue write to this texture
-            colorWritableMask = colorWritableMask & (~MTLColorWriteMaskBlue);
-        }
-    }
-
-    *emulatedChannelsOut = emulatedChannels;
-
-    return colorWritableMask;
-}
 
 gl::ImageIndex GetImageBaseLevelIndex(const mtl::TextureRef &image)
 {
@@ -335,14 +298,19 @@ void TextureMtl::releaseTexture(bool releaseImages)
     mNativeTexture     = nullptr;
     mMetalSamplerState = nil;
 
-    for (RenderTargetMtl &rt : mLayeredRenderTargets)
-    {
-        rt.set(nullptr);
-    }
-
     if (releaseImages)
     {
         mTexImages.clear();
+        mImplicitMSTextures.clear();
+        // Clear render target cache for each texture's image. We don't erase them because they
+        // might still be referenced by a framebuffer.
+        for (auto &sliceRenderTargets : mTexImageRenderTargets)
+        {
+            for (auto &mipRenderTarget : sliceRenderTargets.second)
+            {
+                mipRenderTarget.reset();
+            }
+        }
     }
 
     mLayeredTextureViews.clear();
@@ -371,23 +339,21 @@ angle::Result TextureMtl::ensureTextureCreated(const gl::Context *context)
         case gl::TextureType::_2D:
             layers = 1;
             ANGLE_TRY(mtl::Texture::Make2DTexture(contextMtl, mFormat, desc.size.width,
-                                                  desc.size.height, mips, false, true,
-                                                  &mNativeTexture));
-            mLayeredRenderTargets.resize(1);
-            mLayeredRenderTargets[0].set(mNativeTexture, 0, 0, mFormat);
+                                                  desc.size.height, mips,
+                                                  /** renderTargetOnly */ false,
+                                                  /** allowFormatView */ false, &mNativeTexture));
             mLayeredTextureViews.resize(1);
             mLayeredTextureViews[0] = mNativeTexture;
             break;
         case gl::TextureType::CubeMap:
             layers = 6;
             ANGLE_TRY(mtl::Texture::MakeCubeTexture(contextMtl, mFormat, desc.size.width, mips,
-                                                    false, true, &mNativeTexture));
-            mLayeredRenderTargets.resize(gl::kCubeFaceCount);
+                                                    /** renderTargetOnly */ false,
+                                                    /** allowFormatView */ false, &mNativeTexture));
             mLayeredTextureViews.resize(gl::kCubeFaceCount);
             for (uint32_t f = 0; f < gl::kCubeFaceCount; ++f)
             {
                 mLayeredTextureViews[f] = mNativeTexture->createCubeFaceView(f);
-                mLayeredRenderTargets[f].set(mLayeredTextureViews[f], 0, 0, mFormat);
             }
             break;
         default:
@@ -418,8 +384,8 @@ angle::Result TextureMtl::ensureTextureCreated(const gl::Context *context)
                 {
                     encoder = contextMtl->getBlitCommandEncoder();
                 }
-                encoder->copyTexture(mNativeTexture, layer, mip, mtlOrigin, mtlSize,
-                                     imageToTransfer, 0, 0, mtlOrigin);
+                encoder->copyTexture(imageToTransfer, 0, 0, mtlOrigin, mtlSize, mNativeTexture,
+                                     layer, mip, mtlOrigin);
             }
 
             imageToTransfer = nullptr;
@@ -427,6 +393,8 @@ angle::Result TextureMtl::ensureTextureCreated(const gl::Context *context)
             // So that in future, glTexSubImage* will update the actual texture
             // directly.
             mTexImages[layer][mip] = mNativeTexture->createSliceMipView(layer, mip);
+
+            mTexImageRenderTargets[layer][mip].set(mTexImages[layer][mip], 0, 0, mFormat);
         }
     }
 
@@ -723,8 +691,9 @@ angle::Result TextureMtl::generateMipmapCPU(const gl::Context *context)
 
         // Download base level data
         mLayeredTextureViews[layer]->getBytes(
-            contextMtl, prevLevelRowPitch, MTLRegionMake2D(0, 0, prevLevelWidth, prevLevelHeight),
-            firstLevel, prevLevelData.get());
+            contextMtl, prevLevelRowPitch, 0,
+            MTLRegionMake2D(0, 0, prevLevelWidth, prevLevelHeight), firstLevel, 0,
+            prevLevelData.get());
 
         for (int mip = firstLevel + 1; mip <= maxMipLevel; ++mip)
         {
@@ -771,16 +740,26 @@ angle::Result TextureMtl::setBaseLevel(const gl::Context *context, GLuint baseLe
 
 angle::Result TextureMtl::bindTexImage(const gl::Context *context, egl::Surface *surface)
 {
-    UNIMPLEMENTED();
+    releaseTexture(true);
 
-    return angle::Result::Stop;
+    OffscreenSurfaceMtl *surfaceMtl = GetImplAs<OffscreenSurfaceMtl>(surface);
+    mNativeTexture                  = surfaceMtl->getColorTexture();
+    mFormat                         = surfaceMtl->getColorFormat();
+    gl::Extents size                = mNativeTexture->size();
+    mIsPow2 = gl::isPow2(size.width) && gl::isPow2(size.height) && gl::isPow2(size.depth);
+    ANGLE_TRY(ensureSamplerStateCreated(context));
+
+    // Tell context to rebind textures
+    ContextMtl *contextMtl = mtl::GetImpl(context);
+    contextMtl->invalidateCurrentTextures();
+
+    return angle::Result::Continue;
 }
 
 angle::Result TextureMtl::releaseTexImage(const gl::Context *context)
 {
-    UNIMPLEMENTED();
-
-    return angle::Result::Stop;
+    releaseTexture(true);
+    return angle::Result::Continue;
 }
 
 angle::Result TextureMtl::getAttachmentRenderTarget(const gl::Context *context,
@@ -790,20 +769,46 @@ angle::Result TextureMtl::getAttachmentRenderTarget(const gl::Context *context,
                                                     FramebufferAttachmentRenderTarget **rtOut)
 {
     ANGLE_TRY(ensureTextureCreated(context));
-    // NOTE(hqle): Support MSAA.
-    // Non-zero mip level attachments are an ES 3.0 feature.
-    ASSERT(imageIndex.getLevelIndex() == 0);
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
     ANGLE_MTL_TRY(contextMtl, mNativeTexture);
 
+    gl::Extents size = mNativeTexture ? mNativeTexture->size(imageIndex) : gl::Extents(0, 0, 0);
+
     switch (imageIndex.getType())
     {
         case gl::TextureType::_2D:
-            *rtOut = &mLayeredRenderTargets[0];
-            break;
+        {
+            RenderTargetMtl &rtt = mTexImageRenderTargets[0][imageIndex.getLevelIndex()];
+            *rtOut               = &rtt;
+
+            if (samples > 0 && rtt.getTexture())
+            {
+                // This format must supports implicit resolve
+                ANGLE_MTL_CHECK(contextMtl, mFormat.getCaps().resolve, GL_INVALID_VALUE);
+
+                const gl::TextureCaps &textureCaps =
+                    contextMtl->getTextureCaps().get(mFormat.intendedFormatId);
+                samples = textureCaps.getNearestSamples(std::max(2, samples));
+                ANGLE_MTL_CHECK(contextMtl, samples != 0, GL_INVALID_VALUE);
+
+                // Create implicit MS texture.
+                mtl::TextureRef &msTexture = mImplicitMSTextures[0][imageIndex.getLevelIndex()];
+                if (!msTexture || msTexture->samples() != static_cast<uint32_t>(samples))
+                {
+                    ANGLE_TRY(
+                        mtl::Texture::Make2DMSTexture(contextMtl, mFormat, size.width, size.height,
+                                                      samples, /* renderTargetOnly */ true,
+                                                      /* allowFormatView */ false, &msTexture));
+                }
+
+                rtt.setImplicitMSTexture(msTexture);
+            }
+        }
+        break;  // case gl::TextureType::_2D:
         case gl::TextureType::CubeMap:
-            *rtOut = &mLayeredRenderTargets[imageIndex.cubeMapFaceIndex()];
+            *rtOut =
+                &mTexImageRenderTargets[imageIndex.cubeMapFaceIndex()][imageIndex.getLevelIndex()];
             break;
         default:
             UNREACHABLE();
@@ -826,43 +831,21 @@ angle::Result TextureMtl::syncState(const gl::Context *context,
 
     return angle::Result::Continue;
 }
-
-angle::Result TextureMtl::bindVertexShader(const gl::Context *context,
-                                           mtl::RenderCommandEncoder *cmdEncoder,
-                                           int textureSlotIndex,
-                                           int samplerSlotIndex)
+angle::Result TextureMtl::bindToShader(const gl::Context *context,
+                                       mtl::RenderCommandEncoder *cmdEncoder,
+                                       gl::ShaderType shaderType,
+                                       gl::Sampler *sampler,
+                                       int textureSlotIndex,
+                                       int samplerSlotIndex)
 {
     ASSERT(mNativeTexture);
-    // ES 2.0: non power of two texture won't have any mipmap.
-    // We don't support OES_texture_npot atm.
+    // NOTE(hqle): Support separate sampler object.
+    ASSERT(!sampler);
+
     float maxLodClamp = FLT_MAX;
-    if (!mIsPow2)
-    {
-        maxLodClamp = 0;
-    }
 
-    cmdEncoder->setVertexTexture(mNativeTexture, textureSlotIndex);
-    cmdEncoder->setVertexSamplerState(mMetalSamplerState, 0, maxLodClamp, samplerSlotIndex);
-
-    return angle::Result::Continue;
-}
-
-angle::Result TextureMtl::bindFragmentShader(const gl::Context *context,
-                                             mtl::RenderCommandEncoder *cmdEncoder,
-                                             int textureSlotIndex,
-                                             int samplerSlotIndex)
-{
-    ASSERT(mNativeTexture);
-    // ES 2.0: non power of two texture won't have any mipmap.
-    // We don't support OES_texture_npot atm.
-    float maxLodClamp = FLT_MAX;
-    if (!mIsPow2)
-    {
-        maxLodClamp = 0;
-    }
-
-    cmdEncoder->setFragmentTexture(mNativeTexture, textureSlotIndex);
-    cmdEncoder->setFragmentSamplerState(mMetalSamplerState, 0, maxLodClamp, samplerSlotIndex);
+    cmdEncoder->setTexture(shaderType, mNativeTexture, textureSlotIndex);
+    cmdEncoder->setSamplerState(shaderType, mMetalSamplerState, 0, maxLodClamp, samplerSlotIndex);
 
     return angle::Result::Continue;
 }
@@ -899,6 +882,8 @@ angle::Result TextureMtl::redefineImage(const gl::Context *context,
     // Cache last defined image format:
     mFormat                = mtlFormat;
     mtl::TextureRef &image = mTexImages[GetImageLayerIndex(index)][index.getLevelIndex()];
+    RenderTargetMtl &imageRtt =
+        mTexImageRenderTargets[GetImageLayerIndex(index)][index.getLevelIndex()];
 
     // If actual texture exists, it means the size hasn't been changed, no need to create new image
     if (mNativeTexture && image)
@@ -914,11 +899,15 @@ angle::Result TextureMtl::redefineImage(const gl::Context *context,
             case gl::TextureType::_2D:
             case gl::TextureType::CubeMap:
                 ANGLE_TRY(mtl::Texture::Make2DTexture(contextMtl, mtlFormat, size.width,
-                                                      size.height, 1, false, false, &image));
+                                                      size.height, 1,
+                                                      /** renderTargetOnly */ false,
+                                                      /** allowFormatView */ false, &image));
                 break;
             default:
                 UNREACHABLE();
         }
+
+        imageRtt.set(image, 0, 0, mtlFormat);
     }
 
     // Make sure emulated channels are properly initialized
@@ -1017,7 +1006,7 @@ angle::Result TextureMtl::setSubImageImpl(const gl::Context *context,
     {
         // area must be the whole mip level
         sourceRowPitch   = 0;
-        gl::Extents size = image->size(index);
+        gl::Extents size = image->size();
         if (area.x != 0 || area.y != 0 || area.width != size.width || area.height != size.height)
         {
             ANGLE_MTL_CHECK(contextMtl, false, GL_INVALID_OPERATION);
@@ -1031,7 +1020,7 @@ angle::Result TextureMtl::setSubImageImpl(const gl::Context *context,
         angle::Format::Get(angle::Format::InternalFormatToID(formatInfo.sizedInternalFormat));
 
     // If source pixels are luminance or RGB8, we need to convert them to RGBA
-    if (mFormat.actualFormatId != srcAngleFormat.id)
+    if (mFormat.needConversion(srcAngleFormat.id))
     {
         return convertAndSetSubImage(context, index, mtlRegion, formatInfo, srcAngleFormat,
                                      sourceRowPitch, pixels);
@@ -1090,9 +1079,7 @@ angle::Result TextureMtl::checkForEmulatedChannels(const gl::Context *context,
                                                    const mtl::Format &mtlFormat,
                                                    const mtl::TextureRef &texture)
 {
-    bool emulatedChannels               = false;
-    MTLColorWriteMask colorWritableMask = GetColorWriteMask(mtlFormat, &emulatedChannels);
-    texture->setColorWritableMask(colorWritableMask);
+    bool emulatedChannels = mtl::IsFormatEmulated(mtlFormat);
 
     // For emulated channels that GL texture intends to not have,
     // we need to initialize their content.
@@ -1154,7 +1141,7 @@ angle::Result TextureMtl::copySubImageImpl(const gl::Context *context,
 
     ANGLE_TRY(ensureImageCreated(context, index));
 
-    if (!mtl::Format::FormatRenderable(mFormat.metalFormat))
+    if (!mFormat.getCaps().isRenderable())
     {
         return copySubImageCPU(context, index, modifiedDestOffset, clippedSourceArea,
                                internalFormat, source);
@@ -1176,7 +1163,7 @@ angle::Result TextureMtl::copySubImageWithDraw(const gl::Context *context,
     DisplayMtl *displayMtl         = contextMtl->getDisplay();
     FramebufferMtl *framebufferMtl = mtl::GetImpl(source);
 
-    RenderTargetMtl *colorReadRT = framebufferMtl->getColorReadRenderTarget();
+    RenderTargetMtl *colorReadRT = framebufferMtl->getColorReadRenderTarget(context);
 
     if (!colorReadRT || !colorReadRT->getTexture())
     {
@@ -1185,24 +1172,29 @@ angle::Result TextureMtl::copySubImageWithDraw(const gl::Context *context,
     }
 
     mtl::TextureRef &image = mTexImages[GetImageLayerIndex(index)][index.getLevelIndex()];
+    const RenderTargetMtl &imageRtt =
+        mTexImageRenderTargets[GetImageLayerIndex(index)][index.getLevelIndex()];
     ASSERT(image && image->valid());
 
-    mtl::RenderCommandEncoder *cmdEncoder =
-        contextMtl->getRenderCommandEncoder(image, GetImageBaseLevelIndex(image));
-    mtl::BlitParams blitParams;
+    mtl::RenderCommandEncoder *cmdEncoder = contextMtl->getRenderCommandEncoder(imageRtt);
+    mtl::ColorBlitParams blitParams;
 
-    blitParams.dstOffset    = modifiedDestOffset;
-    blitParams.dstColorMask = image->getColorWritableMask();
+    blitParams.dstTextureSize = imageRtt.getTexture()->size(imageRtt.getLevelIndex());
+    blitParams.dstRect        = gl::Rectangle(modifiedDestOffset.x, modifiedDestOffset.y,
+                                       clippedSourceArea.width, clippedSourceArea.height);
+    blitParams.dstScissorRect = blitParams.dstRect;
+
+    blitParams.enabledBuffers.set(0);
 
     blitParams.src          = colorReadRT->getTexture();
-    blitParams.srcLevel     = static_cast<uint32_t>(colorReadRT->getLevelIndex());
+    blitParams.srcLevel     = colorReadRT->getLevelIndex();
+    blitParams.srcLayer     = colorReadRT->getLayerIndex();
     blitParams.srcRect      = clippedSourceArea;
     blitParams.srcYFlipped  = framebufferMtl->flipY();
     blitParams.dstLuminance = internalFormat.isLUMA();
 
-    displayMtl->getUtils().blitWithDraw(context, cmdEncoder, blitParams);
-
-    return angle::Result::Continue;
+    return displayMtl->getUtils().blitColorWithDraw(
+        context, cmdEncoder, colorReadRT->getFormat()->actualAngleFormat(), blitParams);
 }
 
 angle::Result TextureMtl::copySubImageCPU(const gl::Context *context,
@@ -1217,7 +1209,7 @@ angle::Result TextureMtl::copySubImageCPU(const gl::Context *context,
 
     ContextMtl *contextMtl         = mtl::GetImpl(context);
     FramebufferMtl *framebufferMtl = mtl::GetImpl(source);
-    RenderTargetMtl *colorReadRT   = framebufferMtl->getColorReadRenderTarget();
+    RenderTargetMtl *colorReadRT   = framebufferMtl->getColorReadRenderTarget(context);
 
     if (!colorReadRT || !colorReadRT->getTexture())
     {
@@ -1241,9 +1233,10 @@ angle::Result TextureMtl::copySubImageCPU(const gl::Context *context,
         PackPixelsParams packParams(srcRowArea, dstFormat, dstRowPitch, false, nullptr, 0);
 
         // Read pixels from framebuffer to memory:
-        gl::Rectangle flippedSrcRowArea = framebufferMtl->getReadPixelArea(srcRowArea);
+        gl::Rectangle flippedSrcRowArea =
+            framebufferMtl->getCorrectFlippedReadArea(context, srcRowArea);
         ANGLE_TRY(framebufferMtl->readPixelsImpl(context, flippedSrcRowArea, packParams,
-                                                 framebufferMtl->getColorReadRenderTarget(),
+                                                 framebufferMtl->getColorReadRenderTarget(context),
                                                  conversionRow.data()));
 
         // Upload to texture
