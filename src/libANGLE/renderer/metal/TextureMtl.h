@@ -149,14 +149,12 @@ class TextureMtl : public TextureImpl
     // to the actual texture.
     angle::Result ensureTextureCreated(const gl::Context *context);
 
-    angle::Result bindVertexShader(const gl::Context *context,
-                                   mtl::RenderCommandEncoder *cmdEncoder,
-                                   int textureSlotIndex,
-                                   int samplerSlotIndex);
-    angle::Result bindFragmentShader(const gl::Context *context,
-                                     mtl::RenderCommandEncoder *cmdEncoder,
-                                     int textureSlotIndex,
-                                     int samplerSlotIndex);
+    angle::Result bindToShader(const gl::Context *context,
+                               mtl::RenderCommandEncoder *cmdEncoder,
+                               gl::ShaderType shaderType,
+                               gl::Sampler *sampler, /** nullable */
+                               int textureSlotIndex,
+                               int samplerSlotIndex);
 
     const mtl::Format &getFormat() const { return mFormat; }
 
@@ -231,12 +229,14 @@ class TextureMtl : public TextureImpl
     mtl::TextureRef mNativeTexture;
     id<MTLSamplerState> mMetalSamplerState = nil;
 
-    std::vector<RenderTargetMtl> mLayeredRenderTargets;
+    // Full mipmap views of texture at each slice/cube face:
     std::vector<mtl::TextureRef> mLayeredTextureViews;
 
     // Stored images array defined by glTexImage/glCopy*.
     // Once the images array is complete, they will be transferred to real texture object.
     std::map<int, gl::TexLevelArray<mtl::TextureRef>> mTexImages;
+    std::map<int, gl::TexLevelArray<RenderTargetMtl>> mTexImageRenderTargets;
+    std::map<int, gl::TexLevelArray<mtl::TextureRef>> mImplicitMSTextures;
 
     bool mIsPow2 = false;
 };

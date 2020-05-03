@@ -19,6 +19,7 @@
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/metal/mtl_command_buffer.h"
+#include "libANGLE/renderer/metal/mtl_glslang_utils.h"
 #include "libANGLE/renderer/metal/mtl_resources.h"
 #include "libANGLE/renderer/metal/mtl_state_cache.h"
 
@@ -26,7 +27,17 @@ namespace rx
 {
 class ContextMtl;
 
-class ProgramMtl : public ProgramImpl
+// Store info specific to a specialized metal shader variant.
+struct ProgramShaderVariantMtl
+{
+    void reset(ContextMtl *contextMtl);
+
+    mtl::AutoObjCPtr<id<MTLFunction>> metalShader;
+
+    // NOTE(hqle): additional infos: UBO, XFB, etc.
+};
+
+class ProgramMtl : public ProgramImpl, public mtl::RenderPipelineCacheSpecializeShaderFactory
 {
   public:
     ProgramMtl(const gl::ProgramState &state);
@@ -99,11 +110,20 @@ class ProgramMtl : public ProgramImpl
     void getUniformiv(const gl::Context *context, GLint location, GLint *params) const override;
     void getUniformuiv(const gl::Context *context, GLint location, GLuint *params) const override;
 
+    // Override mtl::RenderPipelineCacheSpecializeShaderFactory
+    angle::Result getSpecializedShader(mtl::Context *context,
+                                       gl::ShaderType shaderType,
+                                       const mtl::RenderPipelineDesc &renderPipelineDesc,
+                                       id<MTLFunction> *shaderOut) override;
+    bool hasSpecializedShader(gl::ShaderType shaderType,
+                              const mtl::RenderPipelineDesc &renderPipelineDesc) override;
+
     // Calls this before drawing, changedPipelineDesc is passed when vertex attributes desc and/or
     // shader program changed.
     angle::Result setupDraw(const gl::Context *glContext,
                             mtl::RenderCommandEncoder *cmdEncoder,
-                            const Optional<mtl::RenderPipelineDesc> &changedPipelineDesc,
+                            const mtl::RenderPipelineDesc &pipelineDesc,
+                            bool pipelineDescChanged,
                             bool forceTexturesSetting);
 
   private:
@@ -119,6 +139,8 @@ class ProgramMtl : public ProgramImpl
     void setUniformImpl(GLint location, GLsizei count, const T *v, GLenum entryPointType);
 
     angle::Result initDefaultUniformBlocks(const gl::Context *glContext);
+    angle::Result resizeDefaultUniformBlocksMemory(const gl::Context *glContext,
+                                                   const gl::ShaderMap<size_t> &requiredBufferSize);
 
     angle::Result commitUniforms(ContextMtl *context, mtl::RenderCommandEncoder *cmdEncoder);
     angle::Result updateTextures(const gl::Context *glContext,
@@ -130,10 +152,6 @@ class ProgramMtl : public ProgramImpl
     angle::Result linkImpl(const gl::Context *glContext,
                            const gl::ProgramLinkedResources &resources,
                            gl::InfoLog &infoLog);
-    angle::Result convertToMsl(const gl::Context *glContext,
-                               gl::ShaderType shaderType,
-                               gl::InfoLog &infoLog,
-                               std::vector<uint32_t> *sprivCode);
 
     angle::Result createMslShader(const gl::Context *glContext,
                                   gl::ShaderType shaderType,
@@ -157,6 +175,17 @@ class ProgramMtl : public ProgramImpl
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
     gl::ShaderBitSet mSamplerBindingsDirty;
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
+
+    gl::ShaderMap<std::string> mTranslatedMslShader;
+
+    gl::ShaderMap<mtl::TranslatedShaderInfo> mMslShaderTranslateInfo;
+    gl::ShaderMap<mtl::AutoObjCPtr<id<MTLLibrary>>> mMslShaderLibrary;
+
+    // Shader variants:
+    // - Vertex shader: One with emulated rasterization discard, one without.
+    std::array<ProgramShaderVariantMtl, 2> mVertexShaderVariants;
+    // - Fragment shader: One for sample coverage mask enabled, one with it disabled.
+    std::array<ProgramShaderVariantMtl, 2> mFragmentShaderVariants;
 
     mtl::RenderPipelineCache mMetalRenderPipelineCache;
 };

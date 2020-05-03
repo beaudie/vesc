@@ -30,9 +30,23 @@ struct FeaturesMtl : FeatureSetBase
     Feature hasNonUniformDispatch = {
         "has_non_uniform_dispatch", FeatureCategory::MetalFeatures,
         "The renderer supports non uniform compute shader dispatch's group size", &members};
+
+    // fragment stencil output support
+    Feature hasStencilOutput = {"has_stencil_output", FeatureCategory::MetalFeatures,
+                                "The renderer supports stencil output from fragment shader",
+                                &members};
+
     // Texture swizzle support:
     Feature hasTextureSwizzle = {"has_texture_swizzle", FeatureCategory::MetalFeatures,
                                  "The renderer supports texture swizzle", &members};
+
+    Feature hasDepthAutoResolve = {
+        "has_msaa_depth_auto_resolve", FeatureCategory::MetalFeatures,
+        "The renderer supports MSAA depth auto resolve at the end of render pass", &members};
+
+    Feature hasStencilAutoResolve = {
+        "has_msaa_stencil_auto_resolve", FeatureCategory::MetalFeatures,
+        "The renderer supports MSAA stencil auto resolve at the end of render pass", &members};
 
     // On macos, separate depth & stencil buffers are not supproted. However, on iOS devices,
     // they are supproted:
@@ -41,6 +55,13 @@ struct FeaturesMtl : FeatureSetBase
         "Some Apple platforms such as iOS allows separate depth & stencil buffers, "
         "whereas others such as macOS don't",
         &members};
+
+    Feature allowMultisampleStoreAndResolve = {
+        "allow_msaa_store_and_resolve", FeatureCategory::MetalFeatures,
+        "The renderer supports MSAA store and resolve in the same pass", &members};
+
+    Feature breakRenderPassIsCheap = {"break_render_pass_is_cheap", FeatureCategory::MetalFeatures,
+                                      "Breaking render pass is a cheap operation", &members};
 };
 
 }  // namespace angle

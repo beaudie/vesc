@@ -49,35 +49,36 @@ class Resource : angle::NonCopyable
   public:
     virtual ~Resource() {}
 
+    // Check whether the resource still being used by GPU
     bool isBeingUsedByGPU(Context *context) const;
+    // Checks whether the last command buffer that uses the given resource has been committed or not
+    bool hasPendingWorks(Context *context) const;
 
     void setUsedByCommandBufferWithQueueSerial(uint64_t serial, bool writing);
 
-    const std::atomic<uint64_t> &getCommandBufferQueueSerial() const
-    {
-        return mUsageRef->cmdBufferQueueSerial;
-    }
+    uint64_t getCommandBufferQueueSerial() const { return mUsageRef->cmdBufferQueueSerial; }
 
-    // Flag indicate whether we should synchornize the content to CPU after GPU changed this
+    // Flag indicate whether we should synchronize the content to CPU after GPU changed this
     // resource's content.
-    bool isCPUReadMemDirty() const { return mUsageRef->cpuReadMemDirty; }
-    void resetCPUReadMemDirty() { mUsageRef->cpuReadMemDirty = false; }
+    bool isCPUReadMemNeedSync() const { return mUsageRef->cpuReadMemNeedSync; }
+    void resetCPUReadMemNeedSync() { mUsageRef->cpuReadMemNeedSync = false; }
 
   protected:
     Resource();
     // Share the GPU usage ref with other resource
     Resource(Resource *other);
 
+    void reset();
+
   private:
     struct UsageRef
     {
         // The id of the last command buffer that is using this resource.
-        std::atomic<uint64_t> cmdBufferQueueSerial{0};
+        uint64_t cmdBufferQueueSerial = 0;
 
-        // NOTE(hqle): resource dirty handle is not threadsafe.
         // This flag means the resource was issued to be modified by GPU, if CPU wants to read
-        // its content, explicit synchornization call must be invoked.
-        bool cpuReadMemDirty = false;
+        // its content, explicit synchronization call must be invoked.
+        bool cpuReadMemNeedSync = false;
     };
 
     // One resource object might just be a view of another resource. For example, a texture 2d
@@ -99,7 +100,7 @@ class Texture final : public Resource,
                                        uint32_t height,
                                        uint32_t mips /** use zero to create full mipmaps chain */,
                                        bool renderTargetOnly,
-                                       bool allowTextureView,
+                                       bool allowFormatView,
                                        TextureRef *refOut);
 
     static angle::Result MakeCubeTexture(ContextMtl *context,
@@ -107,32 +108,57 @@ class Texture final : public Resource,
                                          uint32_t size,
                                          uint32_t mips /** use zero to create full mipmaps chain */,
                                          bool renderTargetOnly,
-                                         bool allowTextureView,
+                                         bool allowFormatView,
+                                         TextureRef *refOut);
+
+    static angle::Result Make2DMSTexture(ContextMtl *context,
+                                         const Format &format,
+                                         uint32_t width,
+                                         uint32_t height,
+                                         uint32_t samples,
+                                         bool renderTargetOnly,
+                                         bool allowFormatView,
                                          TextureRef *refOut);
 
     static TextureRef MakeFromMetal(id<MTLTexture> metalTexture);
 
     // Allow CPU to read & write data directly to this texture?
     bool isCPUAccessible() const;
+    // Allow shaders to read/sample this texture?
+    // Texture created with renderTargetOnly flag won't be readable
+    bool isShaderReadable() const;
+
+    bool supportFormatView() const;
 
     void replaceRegion(ContextMtl *context,
-                       MTLRegion region,
+                       const MTLRegion &region,
                        uint32_t mipmapLevel,
                        uint32_t slice,
                        const uint8_t *data,
                        size_t bytesPerRow);
 
-    // read pixel data from slice 0
+    void replaceRegion(ContextMtl *context,
+                       const MTLRegion &region,
+                       uint32_t mipmapLevel,
+                       uint32_t slice,
+                       const uint8_t *data,
+                       size_t bytesPerRow,
+                       size_t bytesPer2DImage);
+
     void getBytes(ContextMtl *context,
                   size_t bytesPerRow,
-                  MTLRegion region,
+                  size_t bytesPer2DInage,
+                  const MTLRegion &region,
                   uint32_t mipmapLevel,
+                  uint32_t slice,
                   uint8_t *dataOut);
 
     // Create 2d view of a cube face which full range of mip levels.
     TextureRef createCubeFaceView(uint32_t face);
     // Create a view of one slice at a level.
     TextureRef createSliceMipView(uint32_t slice, uint32_t level);
+    // Create a view of a level.
+    TextureRef createMipView(uint32_t level);
     // Create a view with different format
     TextureRef createViewWithDifferentFormat(MTLPixelFormat format);
 
@@ -140,41 +166,89 @@ class Texture final : public Resource,
     MTLPixelFormat pixelFormat() const;
 
     uint32_t mipmapLevels() const;
+    uint32_t arrayLength() const;
+    uint32_t cubeFacesOrArrayLength() const;
 
     uint32_t width(uint32_t level = 0) const;
     uint32_t height(uint32_t level = 0) const;
+    uint32_t depth(uint32_t level = 0) const;
 
     gl::Extents size(uint32_t level = 0) const;
     gl::Extents size(const gl::ImageIndex &index) const;
+
+    uint32_t samples() const;
 
     // For render target
     MTLColorWriteMask getColorWritableMask() const { return *mColorWritableMask; }
     void setColorWritableMask(MTLColorWriteMask mask) { *mColorWritableMask = mask; }
 
+    // Get stencil view
+    TextureRef getStencilView();
+
+    // Get reading copy. Used for reading non-readable texture or reading stencil value from
+    // packed depth & stencil texture.
+    // NOTE: this only copies 1 depth slice of the 3D texture.
+    // The texels will be copied to region(0, 0, 0, areaToCopy.size) of the returned texture.
+    // The returned pointer will be retained by the original texture object.
+    // Calling getReadableCopy() will overwrite previously returned texture.
+    TextureRef getReadableCopy(ContextMtl *context,
+                               mtl::BlitCommandEncoder *encoder,
+                               const uint32_t levelToCopy,
+                               const uint32_t sliceToCopy,
+                               const MTLRegion &areaToCopy);
+
+    void releaseReadableCopy();
+
     // Change the wrapped metal object. Special case for swapchain image
     void set(id<MTLTexture> metalTexture);
 
-    // sync content between CPU and GPU
+    // Explicitly sync content between CPU and GPU
     void syncContent(ContextMtl *context, mtl::BlitCommandEncoder *encoder);
 
   private:
     using ParentClass = WrappedObject<id<MTLTexture>>;
+
+    static angle::Result MakeTexture(ContextMtl *context,
+                                     const Format &mtlFormat,
+                                     MTLTextureDescriptor *desc,
+                                     uint32_t mips,
+                                     bool renderTargetOnly,
+                                     bool allowFormatView,
+                                     TextureRef *refOut);
+
+    static angle::Result MakeTexture(ContextMtl *context,
+                                     const Format &mtlFormat,
+                                     MTLTextureDescriptor *desc,
+                                     uint32_t mips,
+                                     bool renderTargetOnly,
+                                     bool allowFormatView,
+                                     bool memoryLess,
+                                     TextureRef *refOut);
 
     Texture(id<MTLTexture> metalTexture);
     Texture(ContextMtl *context,
             MTLTextureDescriptor *desc,
             uint32_t mips,
             bool renderTargetOnly,
-            bool supportTextureView);
+            bool allowFormatView);
+    Texture(ContextMtl *context,
+            MTLTextureDescriptor *desc,
+            uint32_t mips,
+            bool renderTargetOnly,
+            bool allowFormatView,
+            bool memoryLess);
 
     // Create a texture view
     Texture(Texture *original, MTLPixelFormat format);
-    Texture(Texture *original, MTLTextureType type, NSRange mipmapLevelRange, uint32_t slice);
+    Texture(Texture *original, MTLTextureType type, NSRange mipmapLevelRange, NSRange slices);
 
     void syncContent(ContextMtl *context);
 
     // This property is shared between this object and its views:
     std::shared_ptr<MTLColorWriteMask> mColorWritableMask;
+
+    TextureRef mStencilView;
+    TextureRef mReadCopy;
 };
 
 class Buffer final : public Resource, public WrappedObject<id<MTLBuffer>>
