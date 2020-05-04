@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2870729_3920a7eb",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-04T18:11:33Z",
+      "side": 1,
+      "message": "Is it impossible for the image to have been externally initialized then?\n\nIf so, and if vk::ImageLayout::ExternalPreInitialized is no longer used, please remove that enum value.",
+      "range": {
+        "startLine": 188,
+        "startChar": 34,
+        "endLine": 188,
+        "endChar": 60
+      },
+      "revId": "4a8f602c8c810d63c8262b2cf11ab15e1db7b3c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da9f43e2_00f23ff6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2411,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-04T18:11:33Z",
+      "side": 1,
+      "message": "You could keep the layout ExternalPreInitialized and assert on that instead of Undefined, no? That would in fact be a better assertion because that enum is really only set on newly allocated external images.\n\nThat is if the image *can* be externally initialized. If I\u0027m wrong in thinking that, and that externally allocated images are always uninitialized, this is fine.",
+      "range": {
+        "startLine": 2411,
+        "startChar": 42,
+        "endLine": 2411,
+        "endChar": 51
+      },
+      "revId": "4a8f602c8c810d63c8262b2cf11ab15e1db7b3c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
