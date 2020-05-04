@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "182224ef_c80f9083",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2424,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-04T20:10:56Z",
+      "side": 1,
+      "message": "I don\u0027t think this extension allows creating an EGL image with a 3D texture and then binding it to a 2D array.\n\nEXT_EGL_image_array says the texture must have more than one layer. Creating an EGL image this way will only have one due to the EGL_GL_TEXTURE_ZOFFSET argument.\n\nI think this extension is specifically for EGL images created from non-texture buffer types such as AHardwareBuffer that have multiple layers in some cases such as YUV textures.",
+      "range": {
+        "startLine": 2424,
+        "startChar": 51,
+        "endLine": 2424,
+        "endChar": 87
+      },
+      "revId": "b330fc8bbcb3c70ee92a23c6002c19854e10d7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5a265720_0c40bc63",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 5
