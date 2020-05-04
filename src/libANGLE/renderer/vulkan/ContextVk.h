@@ -146,7 +146,7 @@ struct CommandBufferHelper : angle::NonCopyable
     CommandBufferHelper();
     ~CommandBufferHelper();
 
-    void executeBarriers(vk::PrimaryCommandBuffer *primary);
+    void storePrependBarriers();
 
     VkPipelineStageFlags mImageBarrierSrcStageMask;
     VkPipelineStageFlags mImageBarrierDstStageMask;

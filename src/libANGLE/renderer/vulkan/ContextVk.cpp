@@ -4547,7 +4547,7 @@ void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
     image->changeLayout(aspectFlags, imageLayout, this);
 }
 
-void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
+void CommandBufferHelper::storePrependBarriers()
 {
     if (mImageMemoryBarriers.empty() && mGlobalMemoryBarrierSrcAccess == 0)
     {
@@ -4578,9 +4578,9 @@ void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
 
     srcStages |= mImageBarrierSrcStageMask;
     dstStages |= mImageBarrierDstStageMask;
-    primary->pipelineBarrier(srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0,
-                             nullptr, static_cast<uint32_t>(mImageMemoryBarriers.size()),
-                             mImageMemoryBarriers.data());
+    mCommandBuffer.storePrependBarrier(
+        srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0, nullptr,
+        static_cast<uint32_t>(mImageMemoryBarriers.size()), mImageMemoryBarriers.data());
     mImageMemoryBarriers.clear();
     mImageBarrierSrcStageMask = 0;
     mImageBarrierDstStageMask = 0;
@@ -4609,7 +4609,7 @@ void OutsideRenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
         contextVk->addCommandBufferDiagnostics(out.str());
     }
 
-    executeBarriers(primary);
+    storePrependBarriers();
     mCommandBuffer.executeCommands(primary->getHandle());
 
     // Restart secondary buffer.
@@ -4678,8 +4678,8 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
     {
         addRenderPassCommandDiagnostics(contextVk);
     }
-    // Commands that are added to primary before beginRenderPass command
-    executeBarriers(primary);
+    // Barrier command added to primary before beginRenderPass command
+    storePrependBarriers();
     mCommandBuffer.executeQueuedResetQueryPoolCommands(primary->getHandle());
 
     // Pull a RenderPass from the cache.
@@ -4701,10 +4701,9 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
     beginInfo.clearValueCount          = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
     beginInfo.pClearValues             = mClearValues.data();
 
-    // Run commands inside the RenderPass.
-    primary->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+    // Run commands inside the RenderPass, EndRenderPass is implicit.
+    mCommandBuffer.storeBeginRenderPass(&beginInfo);
     mCommandBuffer.executeCommands(primary->getHandle());
-    primary->endRenderPass();
 
     if (mValidTransformFeedbackBufferCount != 0)
     {
@@ -4721,9 +4720,9 @@ angle::Result RenderPassCommandBuffer::flushToPrimary(ContextVk *contextVk,
         bufferBarrier.offset                = 0;
         bufferBarrier.size                  = VK_WHOLE_SIZE;
 
-        primary->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT,
-                                 VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, 0u, 0u, nullptr, 1u,
-                                 &bufferBarrier, 0u, nullptr);
+        mCommandBuffer.storePrependBarrier(VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT,
+                                           VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, 0u, 0u, nullptr, 1u,
+                                           &bufferBarrier, 0u, nullptr);
     }
 
     // Restart the command buffer.
