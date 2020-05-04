@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d932033f_a49c741c",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2424,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-04T20:14:39Z",
+      "side": 1,
+      "message": "Sorry, scratch the \"EXT_EGL_image_array says the texture must have more than one layer. Creating an EGL image this way will only have one due to the EGL_GL_TEXTURE_ZOFFSET argument.\" part.\n\nStill, I don\u0027t think this extension allows creating images from 2D array textures, only creating targets that are 2D arrays.  It\u0027s a GLES extension, not EGL.  The validation in this function probably doesn\u0027t need to be changed.",
+      "parentUuid": "182224ef_c80f9083",
+      "range": {
+        "startLine": 2424,
+        "startChar": 51,
+        "endLine": 2424,
+        "endChar": 87
+      },
+      "revId": "b330fc8bbcb3c70ee92a23c6002c19854e10d7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5a265720_0c40bc63",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 5
