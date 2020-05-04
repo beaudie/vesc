@@ -816,19 +816,19 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     static void getFilteredVaryings(const std::vector<sh::ShaderVariable> &varyings,
                                     std::vector<const sh::ShaderVariable *> *filteredVaryingsOut);
-    static bool doShaderVariablesMatch(gl::Shader *generatingShader,
-                                       gl::Shader *consumingShader,
+    static bool doShaderVariablesMatch(const ShaderState &generatingShaderState,
+                                       const ShaderState &consumingShaderState,
                                        const sh::ShaderVariable &input,
                                        const sh::ShaderVariable &output,
                                        bool validateGeometryShaderInputs,
                                        bool isSeparable,
                                        gl::InfoLog &infoLog);
-    static bool linkValidateShaderInterfaceMatching(Shader *generatingShader,
-                                                    Shader *consumingShader,
+    static bool linkValidateShaderInterfaceMatching(const ShaderState &generatingShaderState,
+                                                    const ShaderState &consumingShaderState,
                                                     bool isSeparable,
                                                     InfoLog &infoLog);
-    static bool linkValidateBuiltInVaryings(Shader *vertexShader,
-                                            Shader *fragmentShader,
+    static bool linkValidateBuiltInVaryings(const ShaderState &vertexShaderState,
+                                            const ShaderState &fragmentShaderState,
                                             InfoLog &infoLog);
 
   private:
