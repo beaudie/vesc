@@ -511,28 +511,24 @@ angle::Result ProgramPipeline::link(const Context *context)
 
 bool ProgramPipeline::linkVaryings(InfoLog &infoLog) const
 {
-    Shader *previousShader = nullptr;
+    ShaderState *previousShaderState = nullptr;
     for (ShaderType shaderType : getExecutable().getLinkedShaderStages())
     {
         Program *currentProgram = mState.mPrograms[shaderType];
         ASSERT(currentProgram);
-
         Shader *currentShader =
             const_cast<Shader *>(currentProgram->getState().getAttachedShader(shaderType));
-        if (!currentShader)
-        {
-            continue;
-        }
+        const ShaderState &currentShaderState = currentShader->getState();
 
-        if (previousShader)
+        if (previousShaderState)
         {
-            if (!Program::linkValidateShaderInterfaceMatching(
-                    previousShader, currentShader, currentProgram->isSeparable(), infoLog))
+            if (!Program::linkValidateShaderInterfaceMatching(*previousShaderState,
+                                                              currentShaderState, true, infoLog))
             {
                 return false;
             }
         }
-        previousShader = currentShader;
+        previousShaderState = const_cast<ShaderState *>(&currentShaderState);
     }
 
     Program *vertexProgram   = mState.mPrograms[ShaderType::Vertex];
@@ -541,12 +537,15 @@ bool ProgramPipeline::linkVaryings(InfoLog &infoLog) const
     {
         return false;
     }
-
     Shader *vertexShader =
         const_cast<Shader *>(vertexProgram->getState().getAttachedShader(ShaderType::Vertex));
+    ASSERT(vertexShader);
+    const ShaderState &vertexShaderState = vertexShader->getState();
     Shader *fragmentShader =
         const_cast<Shader *>(fragmentProgram->getState().getAttachedShader(ShaderType::Fragment));
-    return Program::linkValidateBuiltInVaryings(vertexShader, fragmentShader, infoLog);
+    ASSERT(fragmentShader);
+    const ShaderState &fragmentShaderState = fragmentShader->getState();
+    return Program::linkValidateBuiltInVaryings(vertexShaderState, fragmentShaderState, infoLog);
 }
 
 void ProgramPipeline::validate(const gl::Context *context)
