@@ -115,6 +115,9 @@ class CommandQueue final : angle::NonCopyable
 struct CommandBufferHelper : angle::NonCopyable
 {
   public:
+    CommandBufferHelper(bool canHaveRenderPass);
+    ~CommandBufferHelper();
+
     void initialize(angle::PoolAllocator *poolAllocator);
 
     void bufferRead(vk::ResourceUseList *resourceUseList,
@@ -142,39 +145,7 @@ struct CommandBufferHelper : angle::NonCopyable
 
     vk::CommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
-  protected:
-    CommandBufferHelper();
-    ~CommandBufferHelper();
-
-    void executeBarriers(vk::PrimaryCommandBuffer *primary);
-
-    VkPipelineStageFlags mImageBarrierSrcStageMask;
-    VkPipelineStageFlags mImageBarrierDstStageMask;
-    std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
-    VkFlags mGlobalMemoryBarrierSrcAccess;
-    VkFlags mGlobalMemoryBarrierDstAccess;
-    VkPipelineStageFlags mGlobalMemoryBarrierSrcStages;
-    VkPipelineStageFlags mGlobalMemoryBarrierDstStages;
-    vk::CommandBuffer mCommandBuffer;
-};
-
-class OutsideRenderPassCommandBuffer final : public CommandBufferHelper
-{
-  public:
-    OutsideRenderPassCommandBuffer();
-    ~OutsideRenderPassCommandBuffer();
-
-    void flushToPrimary(ContextVk *contextVk, vk::PrimaryCommandBuffer *primary);
-
-    bool empty() const { return mCommandBuffer.empty(); }
-    void reset();
-};
-
-class RenderPassCommandBuffer final : public CommandBufferHelper
-{
-  public:
-    RenderPassCommandBuffer();
-    ~RenderPassCommandBuffer();
+    angle::Result flushToPrimary(ContextVk *contextVk, vk::PrimaryCommandBuffer *primary);
 
     void beginRenderPass(const vk::Framebuffer &framebuffer,
                          const gl::Rectangle &renderArea,
@@ -228,9 +199,7 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
 
     const gl::Rectangle &getRenderArea() const { return mRenderArea; }
 
-    angle::Result flushToPrimary(ContextVk *contextVk, vk::PrimaryCommandBuffer *primary);
-
-    bool empty() const { return !started() && mCommandBuffer.empty(); }
+    bool empty() const { return (!mCommandBuffer.empty() || started()) ? false : true; }
     bool started() const { return mRenderPassStarted; }
     void reset();
 
@@ -246,8 +215,19 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
 
     VkFramebuffer getFramebufferHandle() const { return mFramebuffer.getHandle(); }
 
+    void executeBarriers(vk::PrimaryCommandBuffer *primary);
+
   private:
     void addRenderPassCommandDiagnostics(ContextVk *contextVk);
+
+    VkPipelineStageFlags mImageBarrierSrcStageMask;
+    VkPipelineStageFlags mImageBarrierDstStageMask;
+    std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
+    VkFlags mGlobalMemoryBarrierSrcAccess;
+    VkFlags mGlobalMemoryBarrierDstAccess;
+    VkPipelineStageFlags mGlobalMemoryBarrierSrcStages;
+    VkPipelineStageFlags mGlobalMemoryBarrierDstStages;
+    vk::CommandBuffer mCommandBuffer;
 
     uint32_t mCounter;
     vk::RenderPassDesc mRenderPassDesc;
@@ -261,6 +241,8 @@ class RenderPassCommandBuffer final : public CommandBufferHelper
     gl::TransformFeedbackBuffersArray<VkBuffer> mTransformFeedbackCounterBuffers;
     uint32_t mValidTransformFeedbackBufferCount;
     bool mRebindTransformFeedbackBuffers;
+
+    const bool mIsRenderPassCommandBuffer;
 };
 
 static constexpr uint32_t kMaxGpuEventNameLen = 32;
@@ -668,7 +650,7 @@ class ContextVk : public ContextImpl, public vk::Context
 
     bool hasStartedRenderPass() const { return !mRenderPassCommands.empty(); }
 
-    RenderPassCommandBuffer &getStartedRenderPassCommands()
+    CommandBufferHelper &getStartedRenderPassCommands()
     {
         ASSERT(hasStartedRenderPass());
         return mRenderPassCommands;
@@ -951,7 +933,7 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result startPrimaryCommandBuffer();
     bool hasRecordedCommands();
     void dumpCommandStreamDiagnostics();
-    void flushOutsideRenderPassCommands();
+    angle::Result flushOutsideRenderPassCommands();
 
     ANGLE_INLINE void onRenderPassFinished() { mRenderPassCommandBuffer = nullptr; }
 
@@ -1085,8 +1067,8 @@ class ContextVk : public ContextImpl, public vk::Context
 
     // When the command graph is disabled we record commands completely linearly. We have plans to
     // reorder independent draws so that we can create fewer RenderPasses in some scenarios.
-    OutsideRenderPassCommandBuffer mOutsideRenderPassCommands;
-    RenderPassCommandBuffer mRenderPassCommands;
+    CommandBufferHelper mOutsideRenderPassCommands;
+    CommandBufferHelper mRenderPassCommands;
     vk::PrimaryCommandBuffer mPrimaryCommands;
     bool mHasPrimaryCommands;
 
