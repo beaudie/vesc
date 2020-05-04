@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce7df767_02114782",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-04T22:52:42Z",
+      "side": 1,
+      "message": "Note - wrapping to 70 characters is recommended for this project.",
+      "revId": "0d33fe7e314076a8f696bc348de332b7c550279b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf986c17_74e13026",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-04T22:52:42Z",
+      "side": 1,
+      "message": "Does this also need to be applied here?  If not, is it solved in another way?  I\u0027m not opposed to the solution you\u0027ve provided, just want to double check that we\u0027re not missing it in other paths, or maybe they\u0027ve solved it differently.",
+      "range": {
+        "startLine": 892,
+        "startChar": 18,
+        "endLine": 892,
+        "endChar": 50
+      },
+      "revId": "0d33fe7e314076a8f696bc348de332b7c550279b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
