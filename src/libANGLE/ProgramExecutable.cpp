@@ -47,6 +47,15 @@ void ProgramExecutable::reset()
     mActiveSamplerFormats.fill(SamplerFormat::InvalidEnum);
 
     mActiveImagesMask.reset();
+
+    mProgramInputs.clear();
+    mLinkedTransformFeedbackVaryings.clear();
+    mUniforms.clear();
+    mUniformBlocks.clear();
+    mShaderStorageBlocks.clear();
+    mAtomicCounterBuffers.clear();
+    mOutputVariables.clear();
+    mOutputLocations.clear();
 }
 
 void ProgramExecutable::load(gl::BinaryInputStream *stream)
