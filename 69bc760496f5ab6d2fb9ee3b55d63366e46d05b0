@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "51f6ee13_49af19bb",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-04T19:45:23Z",
+      "side": 1,
+      "message": "nit: constexpr GLuint kDeleteBuffers if possible. Also generally it\u0027s nice to put these in the preamble with the other data if you can to be consistent. that way they won\u0027t be reallocated on the stack every reset.",
+      "range": {
+        "startLine": 755,
+        "startChar": 27,
+        "endLine": 755,
+        "endChar": 54
+      },
+      "revId": "69bc760496f5ab6d2fb9ee3b55d63366e46d05b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d4bf154_83f7b8ba",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-04T19:45:23Z",
+      "side": 1,
+      "message": "nit: can you use a range-for here?",
+      "range": {
+        "startLine": 774,
+        "startChar": 4,
+        "endLine": 776,
+        "endChar": 24
+      },
+      "revId": "69bc760496f5ab6d2fb9ee3b55d63366e46d05b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f82e81f_5bb9896e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-04T19:45:23Z",
+      "side": 1,
+      "message": "nit: can you use a range-for here?",
+      "range": {
+        "startLine": 789,
+        "startChar": 6,
+        "endLine": 791,
+        "endChar": 13
+      },
+      "revId": "69bc760496f5ab6d2fb9ee3b55d63366e46d05b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01b0c3cc_9e1e64ee",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
@@ -18,6 +87,52 @@
         "startChar": 33,
         "endLine": 3520,
         "endChar": 35
+      },
+      "revId": "69bc760496f5ab6d2fb9ee3b55d63366e46d05b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f536307_841ec9fb",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-04T19:45:23Z",
+      "side": 1,
+      "message": "you can make these return references if you want. the non-const reference restriction is only for parameters and excludes return values. whichever makes the code nicer.",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 0
+      },
+      "revId": "69bc760496f5ab6d2fb9ee3b55d63366e46d05b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bb5eba1_c22c9fd3",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-04T19:45:23Z",
+      "side": 1,
+      "message": "maybe some comments as to what a \u0027regenerated\u0027 vs \u0027restored\u0027 buffer is?",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 0
       },
       "revId": "69bc760496f5ab6d2fb9ee3b55d63366e46d05b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
