@@ -1134,6 +1134,8 @@ class ImageHelper final : public Resource, public angle::Subject
     // Current state.
     ImageLayout mCurrentLayout;
     uint32_t mCurrentQueueFamilyIndex;
+    bool mYuvConversionNeeded;
+    VkSamplerYcbcrConversion mYuvConversion;
 
     // Cached properties.
     uint32_t mBaseLevel;

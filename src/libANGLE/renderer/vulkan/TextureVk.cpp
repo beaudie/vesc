@@ -1497,6 +1497,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         }
     }
 
+    // Anything to do here for yuv sampler?
     vk::SamplerDesc samplerDesc(mState.getSamplerState(), mState.isStencilMode());
     ANGLE_TRY(renderer->getSamplerCache().getSampler(contextVk, samplerDesc, &mSampler));
 

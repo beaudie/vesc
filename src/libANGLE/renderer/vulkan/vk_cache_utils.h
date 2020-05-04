@@ -614,6 +614,7 @@ class SamplerDesc final
     size_t hash() const;
     bool operator==(const SamplerDesc &other) const;
 
+    // Somehow need to include YuvConversion object in this
   private:
     // 32*4 bits for floating point data.
     // Note: anisotropy enabled is implicitly determined by maxAnisotropy and caps.

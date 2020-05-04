@@ -1797,6 +1797,10 @@ VkSamplerCreateInfo SamplerDesc::unpack(ContextVk *contextVk) const
     createInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
     createInfo.unnormalizedCoordinates = VK_FALSE;
 
+    // Need to link in a VkSamplerYcbcrConversionInfo to pNext if creating a YUV conversion sampler
+    // Can't just return the createInfo because now it has another structure attached.
+    // Maybe a follow-up call to unpack rather than add Yuv info here?
+
     return createInfo;
 }
 

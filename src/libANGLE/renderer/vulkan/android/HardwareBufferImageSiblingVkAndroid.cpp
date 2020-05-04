@@ -54,7 +54,31 @@ egl::Error HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(RendererV
         return egl::EglBadParameter() << "Failed to query AHardwareBuffer properties";
     }
 
-    if (!HasFullTextureFormatSupport(renderer, bufferFormatProperties.format))
+    WARN() << "bufferFormatProperties:";
+    WARN() << "\tformat: 0x" << std::hex << bufferFormatProperties.format;
+    WARN() << "\texternalFormat: 0x" << std::hex << bufferFormatProperties.externalFormat;
+    WARN() << "\tformatFeatures: 0x" << std::hex << bufferFormatProperties.formatFeatures;
+    WARN() << "\tsamplerYcbcrConversionComponents: "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.r << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.g << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.b << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.a;
+    WARN() << "\tsuggestedYcbcrModel: " << bufferFormatProperties.suggestedYcbcrModel;
+    WARN() << "\tsuggestedYcbcrRange: " << bufferFormatProperties.suggestedYcbcrRange;
+    WARN() << "\tsuggestedXChromaOffset: " << bufferFormatProperties.suggestedXChromaOffset;
+    WARN() << "\tsuggestedYChromaOffset: " << bufferFormatProperties.suggestedYChromaOffset;
+
+    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+    {
+        VkSamplerYcbcrConversionCreateInfo yuvConversionInfo = {};
+        yuvConversionInfo.sType         = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO;
+        yuvConversionInfo.format        = bufferFormatProperties.format;
+        yuvConversionInfo.xChromaOffset = bufferFormatProperties.suggestedXChromaOffset;
+        yuvConversionInfo.yChromaOffset = bufferFormatProperties.suggestedYChromaOffset;
+        yuvConversionInfo.ycbcrModel    = bufferFormatProperties.suggestedYcbcrModel;
+        yuvConversionInfo.ycbcrRange    = bufferFormatProperties.suggestedYcbcrRange;
+    }
+    else if (!HasFullTextureFormatSupport(renderer, bufferFormatProperties.format))
     {
         return egl::EglBadParameter()
                << "AHardwareBuffer format does not support enough features to use as a texture.";
@@ -111,9 +135,26 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     externalFormat.sType                   = VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID;
     externalFormat.externalFormat          = 0;
 
+    VkSamplerYcbcrConversion yuvConversion = nullptr;
+
     if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
     {
         externalFormat.externalFormat = bufferFormatProperties.externalFormat;
+
+        VkSamplerYcbcrConversionCreateInfo yuvConversionInfo = {};
+        yuvConversionInfo.sType         = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO;
+        yuvConversionInfo.format        = bufferFormatProperties.format;
+        yuvConversionInfo.xChromaOffset = bufferFormatProperties.suggestedXChromaOffset;
+        yuvConversionInfo.yChromaOffset = bufferFormatProperties.suggestedYChromaOffset;
+        yuvConversionInfo.ycbcrModel    = bufferFormatProperties.suggestedYcbcrModel;
+        yuvConversionInfo.ycbcrRange    = bufferFormatProperties.suggestedYcbcrRange;
+        // ...
+
+        // vkCreateSamplerYcbcrConversionKHR(
+        //    VkDevice                                    device,
+        //    const VkSamplerYcbcrConversionCreateInfo*   pCreateInfo,
+        //    const VkAllocationCallbacks*                pAllocator,
+        //    VkSamplerYcbcrConversion*                   &yuvConversion);
     }
 
     VkExternalMemoryImageCreateInfo externalMemoryImageCreateInfo = {};
@@ -125,6 +166,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     VkExtent3D vkExtents;
     gl_vk::GetExtent(mSize, &vkExtents);
 
+    // Add yuvConversion to arguments for initExternal
     mImage = new vk::ImageHelper();
     ANGLE_TRY(mImage->initExternal(displayVk, gl::TextureType::_2D, vkExtents, vkFormat, 1, usage,
                                    vk::ImageLayout::ExternalPreInitialized,
