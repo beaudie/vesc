@@ -114,6 +114,8 @@ struct Shader::CompilingState
     ShCompilerInstance shCompilerInstance;
 };
 
+ShaderState::ShaderState() : ShaderState(ShaderType::InvalidEnum) {}
+
 ShaderState::ShaderState(ShaderType shaderType)
     : mLabel(),
       mShaderType(shaderType),

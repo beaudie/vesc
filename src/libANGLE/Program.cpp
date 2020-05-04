@@ -1093,18 +1093,18 @@ ProgramState::ProgramState()
       mBaseVertexLocation(-1),
       mBaseInstanceLocation(-1),
       mCachedBaseVertex(0),
-      mCachedBaseInstance(0)
+      mCachedBaseInstance(0),
+      mLinkedExecutable(nullptr)
 {
     mComputeShaderLocalSize.fill(1);
 
-    mExecutable = new ProgramExecutable();
+    mExecutable.reset(new ProgramExecutable());
     mExecutable->setProgramState(this);
 }
 
 ProgramState::~ProgramState()
 {
     ASSERT(!hasAttachedShader());
-    delete (mExecutable);
 }
 
 const std::string &ProgramState::getLabel()
@@ -1408,10 +1408,26 @@ angle::Result Program::linkMergedVaryings(const Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result Program::link(const Context *context)
+{
+    angle::Result status = linkImpl(context);
+
+    // If this Program is currently active, we need to update the State's pointer to the current
+    // ProgramExecutable if we just changed it.
+    if ((context->getState().getProgram() == this) &&
+        context->getState().getProgramExecutable() != mState.mExecutable.get())
+    {
+        State &state = const_cast<State &>(context->getState());
+        state.setProgramExecutable(mState.mExecutable.get());
+    }
+
+    return status;
+}
+
 // The attached shaders are checked for linking errors by matching up their variables.
 // Uniform, input and output variables get collected.
 // The code gets compiled into binaries.
-angle::Result Program::link(const Context *context)
+angle::Result Program::linkImpl(const Context *context)
 {
     ASSERT(mLinkResolved);
     const auto &data = context->getState();
@@ -1584,12 +1600,12 @@ angle::Result Program::link(const Context *context)
         {
             const ProgramMergedVaryings &mergedVaryings =
                 context->getState().getProgramPipeline()->getMergedVaryings();
-            ANGLE_TRY(linkMergedVaryings(context, mState.mExecutable, mergedVaryings));
+            ANGLE_TRY(linkMergedVaryings(context, mState.mExecutable.get(), mergedVaryings));
         }
         else
         {
             const ProgramMergedVaryings &mergedVaryings = getMergedVaryings();
-            ANGLE_TRY(linkMergedVaryings(context, mState.mExecutable, mergedVaryings));
+            ANGLE_TRY(linkMergedVaryings(context, mState.mExecutable.get(), mergedVaryings));
         }
     }
 
@@ -1604,6 +1620,11 @@ angle::Result Program::link(const Context *context)
     // Must be after mProgram->link() to avoid misleading the linker about output variables.
     mState.updateProgramInterfaceInputs();
     mState.updateProgramInterfaceOutputs();
+
+    // Linking has succeeded, so we need to save some information that may get overwritten by a
+    // later linkProgram() that could fail.
+    mState.mExecutable->saveLinkedStateInfo();
+    mState.mLinkedExecutable = mState.mExecutable;
 
     return angle::Result::Continue;
 }
@@ -1805,6 +1826,14 @@ void ProgramState::updateProgramInterfaceOutputs()
 // Returns the program object to an unlinked state, before re-linking, or at destruction
 void Program::unlink()
 {
+    if (mState.mLinkedExecutable)
+    {
+        // The new ProgramExecutable that we'll attempt to link with needs to start from a copy of
+        // the last successfully linked ProgramExecutable, so we don't lose any state information.
+        mState.mExecutable.reset(new ProgramExecutable(*mState.mLinkedExecutable));
+    }
+    mState.mExecutable->reset();
+
     mState.mUniformLocations.clear();
     mState.mBufferVariables.clear();
     mState.mActiveUniformBlockBindings.reset();
@@ -1830,8 +1859,6 @@ void Program::unlink()
     mValidated = false;
 
     mLinked = false;
-
-    mState.mExecutable->reset();
 }
 
 angle::Result Program::loadBinary(const Context *context,
@@ -2988,7 +3015,7 @@ void Program::validate(const Caps &caps)
 
 bool Program::validateSamplersImpl(InfoLog *infoLog, const Caps &caps)
 {
-    const ProgramExecutable *executable = mState.mExecutable;
+    const ProgramExecutable *executable = mState.mExecutable.get();
     ASSERT(mLinkResolved);
 
     // if any two active samplers in a program are of different types, but refer to the same
