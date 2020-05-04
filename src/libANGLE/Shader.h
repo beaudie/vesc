@@ -56,7 +56,7 @@ enum class CompileStatus
     COMPILED,
 };
 
-class ShaderState final : angle::NonCopyable
+class ShaderState final
 {
   public:
     ShaderState();
