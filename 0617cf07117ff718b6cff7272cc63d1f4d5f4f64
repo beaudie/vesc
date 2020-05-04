@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c29a3898_4f896da4",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-04T20:29:41Z",
+      "side": 1,
+      "message": "Can you move this initialization to line 120?\n\n    D3D11_BLEND_DESC blendDesc \u003d {};\n\nAnd then use blendStateExt.mMaxDrawBuffers as the loop bound?",
+      "range": {
+        "startLine": 134,
+        "startChar": 8,
+        "endLine": 134,
+        "endChar": 63
+      },
+      "revId": "0617cf07117ff718b6cff7272cc63d1f4d5f4f64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b10cebc6_9234f6d4",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1907,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-04T20:29:41Z",
+      "side": 1,
+      "message": "nit: There is a \u0027caps\u0027 in this scope already, it will be the same as this one.",
+      "range": {
+        "startLine": 1907,
+        "startChar": 26,
+        "endLine": 1907,
+        "endChar": 87
+      },
+      "revId": "0617cf07117ff718b6cff7272cc63d1f4d5f4f64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "767c05a6_9ccf4e70",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-04T20:29:41Z",
+      "side": 1,
+      "message": "Can you verify/add a similar comment about the packing scheme matching D3D?",
+      "range": {
+        "startLine": 2024,
+        "startChar": 12,
+        "endLine": 2026,
+        "endChar": 96
+      },
+      "revId": "0617cf07117ff718b6cff7272cc63d1f4d5f4f64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
