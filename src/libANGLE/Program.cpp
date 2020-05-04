@@ -1093,7 +1093,8 @@ ProgramState::ProgramState()
       mBaseVertexLocation(-1),
       mBaseInstanceLocation(-1),
       mCachedBaseVertex(0),
-      mCachedBaseInstance(0)
+      mCachedBaseInstance(0),
+      mLinkedExecutable(nullptr)
 {
     mComputeShaderLocalSize.fill(1);
 
@@ -1105,6 +1106,10 @@ ProgramState::~ProgramState()
 {
     ASSERT(!hasAttachedShader());
     delete (mExecutable);
+    if (mLinkedExecutable && (mExecutable != mLinkedExecutable))
+    {
+        delete (mLinkedExecutable);
+    }
 }
 
 const std::string &ProgramState::getLabel()
@@ -1408,10 +1413,27 @@ angle::Result Program::linkMergedVaryings(const Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result Program::link(const Context *context)
+{
+    angle::Result status = linkImpl(context);
+
+    // We want to point mState.mExecutable back to mState.mLinkedExecutable so it's always pointing
+    // to something valid. If the link succeeded, they will already match, but if it failed, we want
+    // to throw away the old data anyway and revert back to the last successfully linked
+    // ProgramExecutable.
+    if (mState.mLinkedExecutable && (mState.mExecutable != mState.mLinkedExecutable))
+    {
+        delete (mState.mExecutable);
+        mState.mExecutable = mState.mLinkedExecutable;
+    }
+
+    return status;
+}
+
 // The attached shaders are checked for linking errors by matching up their variables.
 // Uniform, input and output variables get collected.
 // The code gets compiled into binaries.
-angle::Result Program::link(const Context *context)
+angle::Result Program::linkImpl(const Context *context)
 {
     ASSERT(mLinkResolved);
     const auto &data = context->getState();
@@ -1604,6 +1626,15 @@ angle::Result Program::link(const Context *context)
     // Must be after mProgram->link() to avoid misleading the linker about output variables.
     mState.updateProgramInterfaceInputs();
     mState.updateProgramInterfaceOutputs();
+
+    // Linking has succeeded, so we need to save some information that may get overwritten by a
+    // later linkProgram() that could fail.
+    if (mState.mLinkedExecutable)
+    {
+        delete (mState.mLinkedExecutable);
+    }
+    getExecutable()->saveLinkedStateInfo();
+    mState.mLinkedExecutable = getExecutable();
 
     return angle::Result::Continue;
 }
@@ -1805,6 +1836,13 @@ void ProgramState::updateProgramInterfaceOutputs()
 // Returns the program object to an unlinked state, before re-linking, or at destruction
 void Program::unlink()
 {
+    if (mState.mExecutable != mState.mLinkedExecutable)
+    {
+        delete (mState.mExecutable);
+    }
+    mState.mExecutable = new ProgramExecutable();
+    mState.mExecutable->setProgramState(&mState);
+
     mState.mUniformLocations.clear();
     mState.mBufferVariables.clear();
     mState.mActiveUniformBlockBindings.reset();
@@ -1830,8 +1868,6 @@ void Program::unlink()
     mValidated = false;
 
     mLinked = false;
-
-    mState.mExecutable->reset();
 }
 
 angle::Result Program::loadBinary(const Context *context,
