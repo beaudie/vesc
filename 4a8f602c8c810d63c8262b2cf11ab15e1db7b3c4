@@ -69,6 +69,30 @@
       "revId": "4a8f602c8c810d63c8262b2cf11ab15e1db7b3c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5daea04_e0067cc7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2411,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-04T18:40:17Z",
+      "side": 1,
+      "message": "I don\u0027t think VK_IMAGE_LAYOUT_PREINITIALIZED has anything to do with external memory handles, and is not designed for use with them.\n\nThere\u0027s no such thing as VK_IMAGE_LAYOUT_EXTERNAL_PREINITIALIZED. VK_IMAGE_LAYOUT_PREINITIALIZED pertains to initialization through host accesses made in the same vulkan instance.",
+      "parentUuid": "da9f43e2_00f23ff6",
+      "range": {
+        "startLine": 2411,
+        "startChar": 42,
+        "endLine": 2411,
+        "endChar": 51
+      },
+      "revId": "4a8f602c8c810d63c8262b2cf11ab15e1db7b3c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
