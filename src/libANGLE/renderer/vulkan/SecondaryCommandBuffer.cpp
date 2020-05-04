@@ -29,6 +29,8 @@ const char *GetCommandString(CommandID id)
             return "BeginDebugUtilsLabel";
         case CommandID::BeginQuery:
             return "BeginQuery";
+        case CommandID::BeginRenderPass:
+            return "BeginRenderPass";
         case CommandID::BeginTransformFeedback:
             return "BeginTransformFeedback";
         case CommandID::BindComputePipeline:
@@ -144,6 +146,41 @@ void SecondaryCommandBuffer::executeQueuedResetQueryPoolCommands(VkCommandBuffer
 // Parse the cmds in this cmd buffer into given primary cmd buffer
 void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
 {
+    // Prepend barrier commands are first priority
+    for (const CommandHeader *barrierCommand : mPrependBarrierCommands)
+    {
+        ASSERT(barrierCommand->id == CommandID::PipelineBarrier);
+        const PipelineBarrierParams *params = getParamPtr<PipelineBarrierParams>(barrierCommand);
+        const VkMemoryBarrier *memoryBarriers =
+            Offset<VkMemoryBarrier>(params, sizeof(PipelineBarrierParams));
+        const VkBufferMemoryBarrier *bufferMemoryBarriers = Offset<VkBufferMemoryBarrier>(
+            memoryBarriers, params->memoryBarrierCount * sizeof(VkMemoryBarrier));
+        const VkImageMemoryBarrier *imageMemoryBarriers = Offset<VkImageMemoryBarrier>(
+            bufferMemoryBarriers, params->bufferMemoryBarrierCount * sizeof(VkBufferMemoryBarrier));
+        vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask,
+                             params->dependencyFlags, params->memoryBarrierCount, memoryBarriers,
+                             params->bufferMemoryBarrierCount, bufferMemoryBarriers,
+                             params->imageMemoryBarrierCount, imageMemoryBarriers);
+    }
+    // BeginRenderPass
+    bool endRenderPass = false;
+    if (mBeginRenderPassCommand != nullptr)
+    {
+        ASSERT(mBeginRenderPassCommand->id == CommandID::BeginRenderPass);
+        endRenderPass = true;
+        const BeginRenderPassParams *params =
+            getParamPtr<BeginRenderPassParams>(mBeginRenderPassCommand);
+        const VkClearValue *pClearValues =
+            Offset<VkClearValue>(params, sizeof(BeginRenderPassParams));
+        const VkRenderPassBeginInfo beginInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                                                 nullptr,
+                                                 params->renderPass,
+                                                 params->framebuffer,
+                                                 params->renderArea,
+                                                 params->clearValueCount,
+                                                 pClearValues};
+        vkCmdBeginRenderPass(cmdBuffer, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+    }
     for (const CommandHeader *command : mCommands)
     {
         for (const CommandHeader *currentCommand                      = command;
@@ -573,6 +610,10 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
             }
         }
     }
+    if (endRenderPass)
+    {
+        vkCmdEndRenderPass(cmdBuffer);
+    }
 }
 
 void SecondaryCommandBuffer::getMemoryUsageStats(size_t *usedMemoryOut,
@@ -581,6 +622,14 @@ void SecondaryCommandBuffer::getMemoryUsageStats(size_t *usedMemoryOut,
     *allocatedMemoryOut = kBlockSize * mCommands.size();
 
     *usedMemoryOut = 0;
+    for (const CommandHeader *barrierCommand : mPrependBarrierCommands)
+    {
+        *usedMemoryOut += static_cast<size_t>(barrierCommand->size);
+    }
+    if (mBeginRenderPassCommand != nullptr)
+    {
+        *usedMemoryOut += static_cast<size_t>(mBeginRenderPassCommand->size);
+    }
     for (const CommandHeader *command : mCommands)
     {
         const CommandHeader *commandEnd = command;
@@ -599,6 +648,14 @@ void SecondaryCommandBuffer::getMemoryUsageStats(size_t *usedMemoryOut,
 std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
 {
     std::stringstream result;
+    for (const CommandHeader *barrierCommand : mPrependBarrierCommands)
+    {
+        result << GetCommandString(barrierCommand->id) << separator;
+    }
+    if (mBeginRenderPassCommand != nullptr)
+    {
+        result << GetCommandString(mBeginRenderPassCommand->id) << separator;
+    }
     for (const CommandHeader *command : mCommands)
     {
         for (const CommandHeader *currentCommand                      = command;
