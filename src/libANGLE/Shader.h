@@ -59,7 +59,6 @@ enum class CompileStatus
 class ShaderState final : angle::NonCopyable
 {
   public:
-    ShaderState();
     ShaderState(ShaderType shaderType);
     ~ShaderState();
 
@@ -198,8 +197,6 @@ class Shader final : angle::NonCopyable, public LabeledObject
     Optional<GLint> getGeometryShaderMaxVertices();
 
     const std::string &getCompilerResourcesString() const;
-
-    ShaderState &getState() { return mState; }
 
   private:
     struct CompilingState;

@@ -318,6 +318,16 @@ class ProgramState final : angle::NonCopyable
         ASSERT(mExecutable);
         return *mExecutable;
     }
+    const ProgramExecutable &getLinkedProgramExecutable() const
+    {
+        ASSERT(mLinkedExecutable);
+        return *mLinkedExecutable;
+    }
+    ProgramExecutable &getLinkedProgramExecutable()
+    {
+        ASSERT(mLinkedExecutable);
+        return *mLinkedExecutable;
+    }
 
     bool hasDefaultUniforms() const { return !getDefaultUniformRange().empty(); }
     bool hasTextures() const { return !getSamplerBindings().empty(); }
@@ -414,7 +424,8 @@ class ProgramState final : angle::NonCopyable
     // uniforms in GLES3.1+. It is used to pre-set the location of uniforms.
     ProgramAliasedBindings mUniformLocationBindings;
 
-    ProgramExecutable *mExecutable;
+    std::shared_ptr<ProgramExecutable> mExecutable;
+    std::shared_ptr<ProgramExecutable> mLinkedExecutable;
 };
 
 struct ProgramVaryingRef
@@ -473,6 +484,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     // Try to link the program asynchrously. As a result, background threads may be launched to
     // execute the linking tasks concurrently.
     angle::Result link(const Context *context);
+    angle::Result linkImpl(const Context *context);
 
     // Peek whether there is any running linking tasks.
     bool isLinking() const;
@@ -811,6 +823,11 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     const ProgramExecutable &getExecutable() const { return mState.getProgramExecutable(); }
     ProgramExecutable &getExecutable() { return mState.getProgramExecutable(); }
+    const ProgramExecutable &getLinkedProgramExecutable() const
+    {
+        return mState.getLinkedProgramExecutable();
+    }
+    ProgramExecutable &getLinkedProgramExecutable() { return mState.getLinkedProgramExecutable(); }
 
     const char *validateDrawStates(const State &state, const gl::Extensions &extensions) const;
 
