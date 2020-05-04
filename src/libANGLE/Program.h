@@ -414,7 +414,8 @@ class ProgramState final : angle::NonCopyable
     // uniforms in GLES3.1+. It is used to pre-set the location of uniforms.
     ProgramAliasedBindings mUniformLocationBindings;
 
-    ProgramExecutable *mExecutable;
+    std::shared_ptr<ProgramExecutable> mExecutable;
+    std::shared_ptr<ProgramExecutable> mLinkedExecutable;
 };
 
 struct ProgramVaryingRef
@@ -473,6 +474,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     // Try to link the program asynchrously. As a result, background threads may be launched to
     // execute the linking tasks concurrently.
     angle::Result link(const Context *context);
+    angle::Result linkImpl(const Context *context);
 
     // Peek whether there is any running linking tasks.
     bool isLinking() const;
