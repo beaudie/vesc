@@ -242,6 +242,12 @@ class ProgramExecutable
         return *mResources;
     }
 
+    const ShaderState &getLinkedShaderState(ShaderType shaderType) const
+    {
+        return mLinkedShaderStates[shaderType];
+    }
+    void saveLinkedStateInfo();
+
   private:
     // TODO(timvp): http://anglebug.com/3570: Investigate removing these friend
     // class declarations and accessing the necessary members with getters/setters.
@@ -312,6 +318,7 @@ class ProgramExecutable
     RangeUI mImageUniformRange;
     std::vector<InterfaceBlock> mShaderStorageBlocks;
 
+    ShaderMap<ShaderState> mLinkedShaderStates;
     // TODO: http://anglebug.com/4514: Remove
     std::unique_ptr<gl::ProgramLinkedResources> mResources;
 };

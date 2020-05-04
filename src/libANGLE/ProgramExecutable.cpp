@@ -474,4 +474,17 @@ void ProgramExecutable::updateCanDrawWith()
         (hasLinkedShaderStage(ShaderType::Vertex) && hasLinkedShaderStage(ShaderType::Fragment));
 }
 
+void ProgramExecutable::saveLinkedStateInfo()
+{
+    // Only a Program's linked data needs to be saved, not a ProgramPipeline's
+    ASSERT(mProgramState);
+
+    for (ShaderType shaderType : getLinkedShaderStages())
+    {
+        Shader *shader = mProgramState->getAttachedShader(shaderType);
+        ASSERT(shader);
+        mLinkedShaderStates[shaderType] = shader->getState();
+    }
+}
+
 }  // namespace gl
