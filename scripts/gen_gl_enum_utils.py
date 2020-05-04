@@ -58,13 +58,21 @@ template_gl_enums_source = """// GENERATED FILE - DO NOT EDIT.
 
 namespace gl
 {{
+
+const char *GLUnknownEnum(unsigned int value)
+{{
+    static char unknownGLenumString[20];
+    snprintf(unknownGLenumString, 20, "%s: 0x%x", kUnknownGLenumString, value);
+    return unknownGLenumString;
+}}
+
 const char *GLenumToString(GLenumGroup enumGroup, unsigned int value)
 {{
     switch (enumGroup)
     {{
         {gl_enums_value_to_string_table}
         default:
-            return kUnknownGLenumString;
+            return GLUnknownEnum(value);
     }}
 }}
 
@@ -102,7 +110,7 @@ template_enum_group_case = """case GLenumGroup::{group_name}: {{
     switch (value) {{
         {inner_group_cases}
         default:
-            return kUnknownGLenumString;
+            return GLUnknownEnum(value);
     }}
 }}
 """
