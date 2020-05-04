@@ -184,10 +184,10 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
     uint32_t layerCount;
     gl_vk::GetExtentsAndLayerCount(type, size, &vkExtents, &layerCount);
 
-    ANGLE_TRY(image->initExternal(
-        contextVk, type, vkExtents, vkFormat, 1, imageUsageFlags,
-        vk::ImageLayout::ExternalPreInitialized, &externalMemoryImageCreateInfo, 0,
-        static_cast<uint32_t>(levels) - 1, static_cast<uint32_t>(levels), layerCount));
+    ANGLE_TRY(image->initExternal(contextVk, type, vkExtents, vkFormat, 1, imageUsageFlags,
+                                  vk::ImageLayout::Undefined, &externalMemoryImageCreateInfo, 0,
+                                  static_cast<uint32_t>(levels) - 1, static_cast<uint32_t>(levels),
+                                  layerCount));
 
     VkMemoryRequirements externalMemoryRequirements;
     image->getImage().getMemoryRequirements(renderer->getDevice(), &externalMemoryRequirements);
@@ -224,7 +224,7 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
     VkMemoryPropertyFlags flags = 0;
     ANGLE_TRY(image->initExternalMemory(contextVk, renderer->getMemoryProperties(),
                                         externalMemoryRequirements, importMemoryInfo,
-                                        VK_QUEUE_FAMILY_EXTERNAL, flags));
+                                        renderer->getQueueFamilyIndex(), flags));
 
     return angle::Result::Continue;
 }
