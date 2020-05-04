@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6aaf993c_9173da86",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-04T18:37:24Z",
+      "side": 1,
+      "message": "Yes, it may be initialized.\n\nIf it is initialized, the first operation must be a wait semaphore, which overwrites current layout before issuing the barrier. The barrier data for external pre initialized will not be used in this case since the barrier is made with the real layout.\n\nThe spec says that binding VkImages that alias external memory with an initial layout of VK_IMAGE_LAYOUT_UNDEFINED to external memory is safe, and does not make the content undefined. \"The undefined layout specified when creating it is a placeholder to simplify valid usage requirements.\"\n\nIf it is not initialized, then the first operation may not be a wait, but the content really is undefined in that case.\n\nAHB is still using ExternalPreInitialized but perhaps it shouldn\u0027t, either; according to spec VK_IMAGE_LAYOUT_PREINITIALIZED is only for linear images written by the host, that layout does not appear to be intended for use with external resource sharing at all.",
+      "parentUuid": "c2870729_3920a7eb",
+      "range": {
+        "startLine": 188,
+        "startChar": 34,
+        "endLine": 188,
+        "endChar": 60
+      },
+      "revId": "4a8f602c8c810d63c8262b2cf11ab15e1db7b3c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da9f43e2_00f23ff6",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
