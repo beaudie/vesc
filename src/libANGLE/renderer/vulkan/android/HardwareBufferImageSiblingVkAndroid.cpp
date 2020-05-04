@@ -54,10 +54,24 @@ egl::Error HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(RendererV
         return egl::EglBadParameter() << "Failed to query AHardwareBuffer properties";
     }
 
+    WARN() << "bufferFormatProperties:";
+    WARN() << "\tformat: 0x" << std::hex << bufferFormatProperties.format;
+    WARN() << "\texternalFormat: 0x" << std::hex << bufferFormatProperties.externalFormat;
+    WARN() << "\tformatFeatures: 0x" << std::hex << bufferFormatProperties.formatFeatures;
+    WARN() << "\tsamplerYcbcrConversionComponents: "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.r << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.g << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.b << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.a;
+    WARN() << "\tsuggestedYcbcrModel: " << bufferFormatProperties.suggestedYcbcrModel;
+    WARN() << "\tsuggestedYcbcrRange: " << bufferFormatProperties.suggestedYcbcrRange;
+    WARN() << "\tsuggestedXChromaOffset: " << bufferFormatProperties.suggestedXChromaOffset;
+    WARN() << "\tsuggestedYChromaOffset: " << bufferFormatProperties.suggestedYChromaOffset;
     if (!HasFullTextureFormatSupport(renderer, bufferFormatProperties.format))
     {
-        return egl::EglBadParameter()
-               << "AHardwareBuffer format does not support enough features to use as a texture.";
+        WARN() << "bufferFormatProperties: 0x" << std::hex << bufferFormatProperties.format;
+        // return egl::EglBadParameter()
+        //        << "AHardwareBuffer format does not support enough features to use as a texture.";
     }
 
     return egl::NoError();
