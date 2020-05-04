@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a21d241a_99f88c5a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-04T23:46:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce7df767_02114782",
+      "revId": "0d33fe7e314076a8f696bc348de332b7c550279b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ec7a147_41d942ee",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "a4146a63_325a4619",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-04T23:46:06Z",
+      "side": 1,
+      "message": "Good question.  I believe we\u0027re okay here.  This code is for when we\u0027re re-doing a texture and the updatedExtents (e.g. what was previously used as the bufferRowLength) are smaller than the compressed block width/height.  The checking for a multiple of the compressed block width/height was done previously, when something like glCompressedTexImage2D was called).",
+      "parentUuid": "0ec7a147_41d942ee",
+      "range": {
+        "startLine": 1218,
+        "startChar": 28,
+        "endLine": 1218,
+        "endChar": 36
+      },
+      "revId": "0d33fe7e314076a8f696bc348de332b7c550279b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf986c17_74e13026",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 1
@@ -62,6 +104,30 @@
       "revId": "0d33fe7e314076a8f696bc348de332b7c550279b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0596bc8_8782b51f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-04T23:46:06Z",
+      "side": 1,
+      "message": "I don\u0027t know.  I don\u0027t have any test that tries this.\n\nDoes this deal with compressed textures?  I see it is used with GPU generation of mipmaps, so perhaps it does.  If so, would the mipmap levels be compressed or uncompressed?\n\nIf it\u0027s okay with you, I prefer to not address this question in this CL.",
+      "parentUuid": "bf986c17_74e13026",
+      "range": {
+        "startLine": 892,
+        "startChar": 18,
+        "endLine": 892,
+        "endChar": 50
+      },
+      "revId": "0d33fe7e314076a8f696bc348de332b7c550279b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
