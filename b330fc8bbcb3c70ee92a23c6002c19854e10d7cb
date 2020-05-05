@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "15a89dad_38b233c0",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2188,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-05T15:43:59Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem right. How were these uses valid before without this extension?\nEglBadParameter below doesn\u0027t mention that an EGL extension is required.\nAh, Geoff commented below, this validation change is probably not necessary.",
+      "range": {
+        "startLine": 2188,
+        "startChar": 60,
+        "endLine": 2188,
+        "endChar": 91
+      },
+      "revId": "b330fc8bbcb3c70ee92a23c6002c19854e10d7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "182224ef_c80f9083",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 5
@@ -43,6 +66,23 @@
         "endLine": 2424,
         "endChar": 87
       },
+      "revId": "b330fc8bbcb3c70ee92a23c6002c19854e10d7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7053a7e_ab21f2d3",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-05T15:43:59Z",
+      "side": 1,
+      "message": "nit: this line would be better before the new block of code since it\u0027s related to the previous CompileProgram.",
       "revId": "b330fc8bbcb3c70ee92a23c6002c19854e10d7cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
