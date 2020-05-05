@@ -107,6 +107,29 @@
     },
     {
       "key": {
+        "uuid": "61c2b048_ab11dbdf",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-05-05T18:16:40Z",
+      "side": 1,
+      "message": "nit: existing code in this file uses \"std::cerr \u003c\u003c\". Not sure if stdout is treated the same way by the harness. Would prefer consistency.",
+      "range": {
+        "startLine": 118,
+        "startChar": 8,
+        "endLine": 118,
+        "endChar": 14
+      },
+      "revId": "6675f6f30436ad8b99bd107c31fdd6b4c65188bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7641b58f_cb6792a8",
         "filename": "util/EGLWindow.cpp",
         "patchSetId": 6
