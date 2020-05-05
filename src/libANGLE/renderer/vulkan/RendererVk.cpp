@@ -451,6 +451,7 @@ RendererVk::RendererVk()
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
       mPipelineCacheDirty(false),
       mPipelineCacheInitialized(false),
+      mWorkerThreadIdle(true),
       mGlslangInitialized(false)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
@@ -531,6 +532,16 @@ void RendererVk::onDestroy()
 
     mMemoryProperties.destroy();
     mPhysicalDevice = VK_NULL_HANDLE;
+
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // Shutdown worker thread with null pointers in work block
+        ASSERT(mWorkerThreadIdle);
+        vk::CommandWorkBlock cwb = {nullptr, nullptr, nullptr};
+        queueCommands(cwb);
+        if (mWorkerThread.joinable())
+            mWorkerThread.join();
+    }
 }
 
 void RendererVk::notifyDeviceLost()
@@ -831,6 +842,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     // Initialize the format table.
     mFormatTable.initialize(this, &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
+
+    if (getFeatures().enableCommandProcessingThread.enabled)
+        mWorkerThread = std::thread(&RendererVk::workerThread, this);
 
     return angle::Result::Continue;
 }
@@ -1688,6 +1702,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportDepthStencilRenderingFeedbackLoops, true);
 
+    // Currently disabled by default: http://anglebug.com/4324
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableCommandProcessingThread, false);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
@@ -1918,6 +1935,9 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       const vk::Fence *fence,
                                       Serial *serialOut)
 {
+    if (getFeatures().enableCommandProcessingThread.enabled)
+        workerThreadWaitIdle();
+
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         VkFence handle = fence ? fence->getHandle() : VK_NULL_HANDLE;
@@ -1952,6 +1972,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 
 angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriority priority)
 {
+    ASSERT(mWorkerThreadIdle);
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueues[priority]));
@@ -1964,6 +1985,7 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriori
 
 angle::Result RendererVk::deviceWaitIdle(vk::Context *context)
 {
+    ASSERT(mWorkerThreadIdle);
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         ANGLE_VK_TRY(context, vkDeviceWaitIdle(mDevice));
@@ -1978,6 +2000,9 @@ VkResult RendererVk::queuePresent(egl::ContextPriority priority,
                                   const VkPresentInfoKHR &presentInfo)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queuePresent");
+
+    if (getFeatures().enableCommandProcessingThread.enabled)
+        workerThreadWaitIdle();
 
     std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
 
@@ -2144,5 +2169,51 @@ angle::Result RendererVk::getCommandBufferOneOff(vk::Context *context,
     ANGLE_VK_TRY(context, commandBufferOut->begin(beginInfo));
 
     return angle::Result::Continue;
+}
+
+void RendererVk::queueCommands(vk::CommandWorkBlock commandWork)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queueCommands");
+    std::lock_guard<std::mutex> queueLock(mWorkerMutex);
+    ASSERT(commandWork.cbh == nullptr || !commandWork.cbh->empty());
+    mCommandsQueue.push(commandWork);
+    mWorkAvailableCondition.notify_one();
+}
+
+angle::Result RendererVk::workerThread()
+{
+    ASSERT(getFeatures().enableCommandProcessingThread.enabled);
+    while (true)
+    {
+        std::unique_lock<std::mutex> lock(mWorkerMutex);
+        mWorkerIdleCondition.notify_one();
+        mWorkerThreadIdle = true;
+        // Only wake if notified and command queue is not empty
+        mWorkAvailableCondition.wait(lock, [this] { return !mCommandsQueue.empty(); });
+        mWorkerThreadIdle        = false;
+        vk::CommandWorkBlock cwb = mCommandsQueue.front();
+        mCommandsQueue.pop();
+        lock.unlock();
+        // A work block with null ptrs signals worker thread to exit
+        if (cwb.cbh == nullptr && cwb.contextVk == nullptr)
+            break;
+
+        ASSERT(!cwb.cbh->empty());
+        // TODO: Will need some way to synchronize error reporting between threads
+        ANGLE_TRY(cwb.cbh->flushToPrimary(cwb.contextVk, cwb.primaryCB));
+        ASSERT(cwb.cbh->empty());
+        cwb.cbh->releaseToContextQueue(cwb.contextVk);
+    }
+    // printf("Worker Thread shutting down\n");
+    return angle::Result::Continue;
+}
+
+void RendererVk::workerThreadWaitIdle()
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::workerThreadWaitIdle");
+    std::unique_lock<std::mutex> lock(mWorkerMutex);
+    mWorkerIdleCondition.wait(lock, [this] { return (mCommandsQueue.empty()); });
+    // Worker thread is idle and command queue is empty so good to continue
+    lock.unlock();
 }
 }  // namespace rx
