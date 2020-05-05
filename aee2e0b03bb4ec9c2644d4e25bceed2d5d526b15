@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7be6fa3_54cc8b5f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-05T16:52:21Z",
+      "side": 1,
+      "message": "maybe omit this? not sure what it means.",
+      "range": {
+        "startLine": 1221,
+        "startChar": 46,
+        "endLine": 1222,
+        "endChar": 45
+      },
+      "revId": "aee2e0b03bb4ec9c2644d4e25bceed2d5d526b15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
