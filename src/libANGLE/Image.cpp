@@ -388,6 +388,11 @@ size_t Image::getHeight() const
     return mState.size.height;
 }
 
+size_t Image::getDepth() const
+{
+    return mState.size.depth;
+}
+
 size_t Image::getSamples() const
 {
     return mState.samples;

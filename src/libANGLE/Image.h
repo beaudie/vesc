@@ -156,6 +156,7 @@ class Image final : public RefCountObject, public LabeledObject
     bool isTexturable(const gl::Context *context) const;
     size_t getWidth() const;
     size_t getHeight() const;
+    size_t getDepth() const;
     size_t getSamples() const;
 
     Error initialize(const Display *display);
