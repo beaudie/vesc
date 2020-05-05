@@ -470,6 +470,18 @@ RendererVk::~RendererVk()
 
 void RendererVk::onDestroy()
 {
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // Shutdown worker thread with null pointers in work block
+        mCommandProcessor.waitForWorkComplete();
+        vk::CommandProcessorTask task = {nullptr, nullptr, nullptr};
+        mCommandProcessor.queueCommands(task);
+        if (mCommandProcessorThread.joinable())
+        {
+            mCommandProcessorThread.join();
+        }
+    }
+
     // Force all commands to finish by flushing all queues.
     for (VkQueue queue : mQueues)
     {
@@ -833,6 +845,11 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Initialize the format table.
     mFormatTable.initialize(this, &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
 
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        mCommandProcessorThread =
+            std::thread(&CommandProcessor::processCommandProcessorTasks, &mCommandProcessor);
+    }
     return angle::Result::Continue;
 }
 
@@ -1695,6 +1712,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
 
     ANGLE_FEATURE_CONDITION(&mFeatures, preferAggregateBarrierCalls, !IsAndroid());
 
+    // Currently disabled by default: http://anglebug.com/4324
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableCommandProcessingThread, false);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
@@ -1925,6 +1945,14 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       const vk::Fence *fence,
                                       Serial *serialOut)
 {
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // For initial threading phase 1 code make sure any outstanding command processing
+        //  is complete.
+        // TODO: For phase2 investigate if this is required as most submits will take place
+        //  through worker thread except for one-off submits below.
+        mCommandProcessor.waitForWorkComplete();
+    }
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         VkFence handle = fence ? fence->getHandle() : VK_NULL_HANDLE;
@@ -1959,6 +1987,11 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 
 angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriority priority)
 {
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // First make sure command processor is complete when waiting for queue idle.
+        mCommandProcessor.waitForWorkComplete();
+    }
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueues[priority]));
@@ -1971,6 +2004,11 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriori
 
 angle::Result RendererVk::deviceWaitIdle(vk::Context *context)
 {
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // First make sure command processor is complete when waiting for device idle.
+        mCommandProcessor.waitForWorkComplete();
+    }
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         ANGLE_VK_TRY(context, vkDeviceWaitIdle(mDevice));
@@ -1985,6 +2023,13 @@ VkResult RendererVk::queuePresent(egl::ContextPriority priority,
                                   const VkPresentInfoKHR &presentInfo)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queuePresent");
+
+    if (getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // First make sure command processor is complete before queue present as
+        //  present may have dependencies on that thread.
+        mCommandProcessor.waitForWorkComplete();
+    }
 
     std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
 
