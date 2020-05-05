@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "4b0ae619_838cb92f",
+        "filename": "src/common/system_utils_winuwp.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-05T18:24:54Z",
+      "side": 1,
+      "message": "Oh, whoops. A bug. I\u0027ll just make this \"WithExtension\" thing unimplemented.",
+      "parentUuid": "843d8f60_8e3814ef",
+      "range": {
+        "startLine": 94,
+        "startChar": 39,
+        "endLine": 94,
+        "endChar": 60
+      },
+      "revId": "6675f6f30436ad8b99bd107c31fdd6b4c65188bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "58c36132_75323d22",
         "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
         "patchSetId": 6
@@ -127,6 +151,30 @@
       "revId": "6675f6f30436ad8b99bd107c31fdd6b4c65188bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f932618_2edfe221",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-05T18:24:54Z",
+      "side": 1,
+      "message": "Formatting output to std::cerr with hex values is really weird. I changed this line and didn\u0027t change the others.",
+      "parentUuid": "61c2b048_ab11dbdf",
+      "range": {
+        "startLine": 118,
+        "startChar": 8,
+        "endLine": 118,
+        "endChar": 14
+      },
+      "revId": "6675f6f30436ad8b99bd107c31fdd6b4c65188bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
