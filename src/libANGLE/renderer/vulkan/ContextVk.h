@@ -123,11 +123,11 @@ struct CommandBufferHelper : angle::NonCopyable
 
     void bufferRead(vk::ResourceUseList *resourceUseList,
                     VkAccessFlags readAccessType,
-                    VkPipelineStageFlags readStage,
+                    vk::PipelineStage readStage,
                     vk::BufferHelper *buffer);
     void bufferWrite(vk::ResourceUseList *resourceUseList,
                      VkAccessFlags writeAccessType,
-                     VkPipelineStageFlags writeStage,
+                     vk::PipelineStage writeStage,
                      vk::BufferHelper *buffer);
 
     void imageRead(vk::ResourceUseList *resourceUseList,
@@ -224,13 +224,7 @@ struct CommandBufferHelper : angle::NonCopyable
     void addCommandDiagnostics(ContextVk *contextVk);
 
     // General state (non-renderPass related)
-    VkPipelineStageFlags mImageBarrierSrcStageMask;
-    VkPipelineStageFlags mImageBarrierDstStageMask;
-    std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
-    VkFlags mGlobalMemoryBarrierSrcAccess;
-    VkFlags mGlobalMemoryBarrierDstAccess;
-    VkPipelineStageFlags mGlobalMemoryBarrierSrcStages;
-    VkPipelineStageFlags mGlobalMemoryBarrierDstStages;
+    vk::PipelineBarrier mPipelineBarrier;
     vk::CommandBuffer mCommandBuffer;
 
     // RenderPass state
@@ -602,21 +596,19 @@ class ContextVk : public ContextImpl, public vk::Context
 
     angle::Result onBufferTransferRead(vk::BufferHelper *buffer)
     {
-        return onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, buffer);
+        return onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, vk::PipelineStage::Transfer, buffer);
     }
     angle::Result onBufferTransferWrite(vk::BufferHelper *buffer)
     {
-        return onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, buffer);
+        return onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, vk::PipelineStage::Transfer, buffer);
     }
     angle::Result onBufferComputeShaderRead(vk::BufferHelper *buffer)
     {
-        return onBufferRead(VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-                            buffer);
+        return onBufferRead(VK_ACCESS_SHADER_READ_BIT, vk::PipelineStage::ComputeShader, buffer);
     }
     angle::Result onBufferComputeShaderWrite(vk::BufferHelper *buffer)
     {
-        return onBufferWrite(VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-                             buffer);
+        return onBufferWrite(VK_ACCESS_SHADER_WRITE_BIT, vk::PipelineStage::ComputeShader, buffer);
     }
 
     angle::Result onImageRead(VkImageAspectFlags aspectFlags,
@@ -937,10 +929,10 @@ class ContextVk : public ContextImpl, public vk::Context
     ANGLE_INLINE void onRenderPassFinished() { mRenderPassCommandBuffer = nullptr; }
 
     angle::Result onBufferRead(VkAccessFlags readAccessType,
-                               VkPipelineStageFlags readStage,
+                               vk::PipelineStage readStage,
                                vk::BufferHelper *buffer);
     angle::Result onBufferWrite(VkAccessFlags writeAccessType,
-                                VkPipelineStageFlags writeStage,
+                                vk::PipelineStage writeStage,
                                 vk::BufferHelper *buffer);
 
     void initIndexTypeMap();
