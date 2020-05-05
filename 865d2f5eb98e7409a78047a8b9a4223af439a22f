@@ -46,6 +46,53 @@
       "revId": "865d2f5eb98e7409a78047a8b9a4223af439a22f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f57ab3c0_a0ca2cc5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-05T15:41:59Z",
+      "side": 1,
+      "message": "Actually, you can see the new tests in deqp.gni.  I\u0027ll still update the description.",
+      "parentUuid": "69b49eab_792d0d32",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "865d2f5eb98e7409a78047a8b9a4223af439a22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40e62e3b_00ffa409",
+        "filename": "src/tests/deqp_support/deqp.gni",
+        "patchSetId": 7
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-05T15:41:59Z",
+      "side": 1,
+      "message": "New test ref",
+      "range": {
+        "startLine": 895,
+        "startChar": 48,
+        "endLine": 895,
+        "endChar": 67
+      },
+      "revId": "865d2f5eb98e7409a78047a8b9a4223af439a22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
