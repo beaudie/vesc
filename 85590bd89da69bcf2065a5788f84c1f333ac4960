@@ -22,6 +22,30 @@
       "revId": "85590bd89da69bcf2065a5788f84c1f333ac4960",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97d59cfa_671d0e96",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-05T16:49:49Z",
+      "side": 1,
+      "message": "There are 3 uses of mRenderPassCommands.started() in ContextVk.cpp.\nI used started() b/c I was merging the code from the RenderPassCommandBuffer empty() function, which used started(), and the OutsideRenderPassCommandBuffer empty().\nI think for this simple function I like using member variable instead so I\u0027ll make that update and keep started() function for other uses.",
+      "parentUuid": "1c60bcc8_ca315feb",
+      "range": {
+        "startLine": 153,
+        "startChar": 60,
+        "endLine": 153,
+        "endChar": 67
+      },
+      "revId": "85590bd89da69bcf2065a5788f84c1f333ac4960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
