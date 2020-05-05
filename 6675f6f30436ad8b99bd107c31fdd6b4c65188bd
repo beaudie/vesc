@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58c36132_75323d22",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-05T17:00:07Z",
+      "side": 1,
+      "message": "remove?",
+      "revId": "6675f6f30436ad8b99bd107c31fdd6b4c65188bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
