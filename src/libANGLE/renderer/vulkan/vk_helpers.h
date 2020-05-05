@@ -827,6 +827,12 @@ struct CommandBufferHelper : angle::NonCopyable
     const bool mIsRenderPassCommandBuffer;
 };
 
+struct CommandWorkBlock
+{
+    ContextVk *contextVk;
+    CommandBufferHelper *cbh;
+};
+
 // Imagine an image going through a few layout transitions:
 //
 //           srcStage 1    dstStage 2          srcStage 2     dstStage 3

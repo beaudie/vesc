@@ -892,6 +892,8 @@ angle::Result ContextVk::startPrimaryCommandBuffer()
     beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     beginInfo.pInheritanceInfo         = nullptr;
     ANGLE_VK_TRY(this, mPrimaryCommands.begin(beginInfo));
+    // printf("Main thread called beginCB w/ primaryCB %p\n", mPrimaryCommands.getHandle());
+    mRenderer->setPrimaryCommandBuffer(&mPrimaryCommands);
 
     mHasPrimaryCommands = false;
     return angle::Result::Continue;
@@ -3742,6 +3744,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
                                 TRACE_EVENT_PHASE_END, eventName));
     }
     ANGLE_TRY(flushOutsideRenderPassCommands());
+    mRenderer->workerThreadWaitIdle();
     ANGLE_VK_TRY(this, mPrimaryCommands.end());
 
     // Free secondary command pool allocations and restart command buffers with the new page.
@@ -4191,7 +4194,12 @@ angle::Result ContextVk::endRenderPass()
 
     mRenderPassCommands.pauseTransformFeedbackIfStarted();
 
-    ANGLE_TRY(mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
+    // ANGLE_TRY(mRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
+    vk::CommandWorkBlock cwb = {this, &mRenderPassCommands};
+    submitCommandsToWorker(cwb);
+    // Currently stalling main thread to verify that everything work serially
+    //  TODO: Need to continue main thread and assign mRPCommands to new instance
+    mRenderer->workerThreadWaitIdle();
     mHasPrimaryCommands = true;
 
     if (mGpuEventsEnabled)
@@ -4294,7 +4302,12 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
     if (!mOutsideRenderPassCommands.empty())
     {
-        ANGLE_TRY(mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
+        // ANGLE_TRY(mOutsideRenderPassCommands.flushToPrimary(this, &mPrimaryCommands));
+        vk::CommandWorkBlock cwb = {this, &mOutsideRenderPassCommands};
+        submitCommandsToWorker(cwb);
+        // Currently stalling main thread to verify that everything work serially
+        //  TODO: Need to continue main thread and assign mRPCommands to new instance
+        mRenderer->workerThreadWaitIdle();
         mHasPrimaryCommands = true;
     }
     return angle::Result::Continue;

@@ -543,6 +543,11 @@ class ContextVk : public ContextImpl, public vk::Context
     void beginOcclusionQuery(QueryVk *queryVk);
     void endOcclusionQuery(QueryVk *queryVk);
 
+    ANGLE_INLINE void submitCommandsToWorker(vk::CommandWorkBlock commandWork)
+    {
+        mRenderer->submitCommands(commandWork);
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t

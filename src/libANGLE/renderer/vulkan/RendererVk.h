@@ -10,9 +10,12 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
 #define LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
 
+#include <condition_variable>
 #include <deque>
 #include <memory>
 #include <mutex>
+#include <queue>
+#include <thread>
 
 #include "vk_ext_provoking_vertex.h"
 
@@ -249,6 +252,48 @@ class RendererVk : angle::NonCopyable
     SamplerCache &getSamplerCache() { return mSamplerCache; }
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
 
+    // Worker thread related functions
+    void setPrimaryCommandBuffer(vk::PrimaryCommandBuffer *cmdBuffer)
+    {
+        // printf("Setting worker thread primary CB from %p to %p\n", mPrimaryCommandBuffer,
+        // cmdBuffer);
+        mPrimaryCommandBuffer = cmdBuffer;
+    }
+    void submitCommands(vk::CommandWorkBlock commandWork)
+    {
+        std::lock_guard<std::mutex> queueLock(mWorkerMutex);
+        mCommandsQueue.push(commandWork);
+        mWorkAvailableCondition.notify_one();
+    }
+    angle::Result workerThread()
+    {
+        while (true)
+        {
+            std::unique_lock<std::mutex> lock(mWorkerMutex);
+            mWorkerIdleCondition.notify_one();
+            mWorkerThreadIdle = true;
+            // Only wake if notified and command queue is not empty
+            mWorkAvailableCondition.wait(lock, [this] { return !mCommandsQueue.empty(); });
+            mWorkerThreadIdle        = false;
+            vk::CommandWorkBlock cwb = mCommandsQueue.front();
+            mCommandsQueue.pop();
+            lock.unlock();
+
+            // printf("Worker Thread processing SCB w/ primaryCB %p\n", mPrimaryCommandBuffer);
+            ASSERT(mPrimaryCommandBuffer != VK_NULL_HANDLE);
+            ANGLE_TRY(cwb.cbh->flushToPrimary(cwb.contextVk, mPrimaryCommandBuffer));
+        }
+        return angle::Result::Continue;
+    }
+    void workerThreadWaitIdle()
+    {
+        // If the thread is not idle or the command queue is empty, wait
+        while (!mWorkerThreadIdle || !mCommandsQueue.empty())
+        {
+            std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1));
+        }
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -361,6 +406,17 @@ class RendererVk : angle::NonCopyable
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
+
+    // Worker Thread related members
+    std::queue<vk::CommandWorkBlock> mCommandsQueue;
+    vk::PrimaryCommandBuffer *mPrimaryCommandBuffer;
+    std::thread mWorkerThread;
+    std::mutex mWorkerMutex;
+    // Signal worker thread when work is available
+    std::condition_variable mWorkAvailableCondition;
+    // Signal main thread when all work completed
+    std::condition_variable mWorkerIdleCondition;
+    bool mWorkerThreadIdle;
 
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;
