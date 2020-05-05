@@ -1086,7 +1086,7 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
     GLsizei instanceCount = 1;
 
     mRenderPassCommands.bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
-                                   VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, indirectBuffer);
+                                   vk::PipelineStage::DrawInDirect, indirectBuffer);
 
     ANGLE_TRY(setupDraw(context, mode, firstVertex, vertexCount, instanceCount,
                         gl::DrawElementsType::InvalidEnum, nullptr, dirtyBitMask,
@@ -1399,7 +1399,7 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(const gl::Context *con
         if (arrayBuffer)
         {
             mRenderPassCommands.bufferRead(&mResourceUseList, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
-                                           VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, arrayBuffer);
+                                           vk::PipelineStage::VertexInput, arrayBuffer);
         }
     }
 
@@ -1417,7 +1417,7 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(const gl::Context *conte
                                    getVkIndexType(mCurrentDrawElementsType));
 
     mRenderPassCommands.bufferRead(&mResourceUseList, VK_ACCESS_INDEX_READ_BIT,
-                                   VK_PIPELINE_STAGE_VERTEX_INPUT_BIT, elementArrayBuffer);
+                                   vk::PipelineStage::VertexInput, elementArrayBuffer);
 
     return angle::Result::Continue;
 }
@@ -1477,7 +1477,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
             vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
             mRenderPassCommands.bufferWrite(&mResourceUseList, VK_ACCESS_SHADER_WRITE_BIT,
-                                            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT, &bufferHelper);
+                                            vk::PipelineStage::VertexShader, &bufferHelper);
         }
 
         // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
@@ -1516,9 +1516,9 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
         bufferHandles[bufferIndex]     = bufferHelper.getBuffer().getHandle();
 
-        mRenderPassCommands.bufferWrite(
-            &mResourceUseList, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
-            VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT, &bufferHelper);
+        mRenderPassCommands.bufferWrite(&mResourceUseList,
+                                        VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
+                                        vk::PipelineStage::TransformFeedback, &bufferHelper);
     }
 
     const TransformFeedbackBufferRange &xfbBufferRangeExtension =
@@ -2185,7 +2185,7 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
         mRenderPassCommands.bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
-                                       VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, currentIndirectBuf);
+                                       vk::PipelineStage::DrawInDirect, currentIndirectBuf);
 
         // We have instanced vertex attributes that need to be emulated for Vulkan.
         // invalidate any cache and map the buffer so that we can read the indirect data.
@@ -2239,7 +2239,7 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
         mRenderPassCommands.bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
-                                       VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, currentIndirectBuf);
+                                       vk::PipelineStage::DrawInDirect, currentIndirectBuf);
 
         // We have instanced vertex attributes that need to be emulated for Vulkan.
         // invalidate any cache and map the buffer so that we can read the indirect data.
@@ -3276,7 +3276,7 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
     gl::Buffer *glBuffer     = getState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
     vk::BufferHelper &buffer = vk::GetImpl(glBuffer)->getBuffer();
     mOutsideRenderPassCommands.bufferRead(&mResourceUseList, VK_ACCESS_INDIRECT_COMMAND_READ_BIT,
-                                          VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT, &buffer);
+                                          vk::PipelineStage::DrawInDirect, &buffer);
 
     commandBuffer->dispatchIndirect(buffer.getBuffer(), indirect);
 
@@ -4066,7 +4066,7 @@ bool ContextVk::shouldUseOldRewriteStructSamplers() const
 }
 
 angle::Result ContextVk::onBufferRead(VkAccessFlags readAccessType,
-                                      VkPipelineStageFlags readStage,
+                                      vk::PipelineStage readStage,
                                       vk::BufferHelper *buffer)
 {
     ANGLE_TRY(endRenderPass());
@@ -4082,7 +4082,7 @@ angle::Result ContextVk::onBufferRead(VkAccessFlags readAccessType,
 }
 
 angle::Result ContextVk::onBufferWrite(VkAccessFlags writeAccessType,
-                                       VkPipelineStageFlags writeStage,
+                                       vk::PipelineStage writeStage,
                                        vk::BufferHelper *buffer)
 {
     ANGLE_TRY(endRenderPass());
@@ -4379,12 +4379,7 @@ bool ContextVk::isRobustResourceInitEnabled() const
 }
 
 CommandBufferHelper::CommandBufferHelper(bool hasRenderPass)
-    : mImageBarrierSrcStageMask(0),
-      mImageBarrierDstStageMask(0),
-      mGlobalMemoryBarrierSrcAccess(0),
-      mGlobalMemoryBarrierDstAccess(0),
-      mGlobalMemoryBarrierSrcStages(0),
-      mGlobalMemoryBarrierDstStages(0),
+    : mPipelineBarrier(),
       mCounter(0),
       mClearValues{},
       mRenderPassStarted(false),
@@ -4406,34 +4401,29 @@ void CommandBufferHelper::initialize(angle::PoolAllocator *poolAllocator)
 
 void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
                                      VkAccessFlags readAccessType,
-                                     VkPipelineStageFlags readStage,
+                                     vk::PipelineStage readStage,
                                      vk::BufferHelper *buffer)
 {
     buffer->retain(resourceUseList);
-    buffer->updateReadBarrier(readAccessType, &mGlobalMemoryBarrierSrcAccess,
-                              &mGlobalMemoryBarrierDstAccess, readStage,
-                              &mGlobalMemoryBarrierSrcStages, &mGlobalMemoryBarrierDstStages);
+    VkPipelineStageFlagBits stageBits = vk::VkPipelineStageFlagBitMap[readStage];
+    buffer->updateReadBarrier(readAccessType, stageBits, &mPipelineBarrier);
 }
 
 void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
                                       VkAccessFlags writeAccessType,
-                                      VkPipelineStageFlags writeStage,
+                                      vk::PipelineStage writeStage,
                                       vk::BufferHelper *buffer)
 {
     buffer->retain(resourceUseList);
-    buffer->updateWriteBarrier(writeAccessType, &mGlobalMemoryBarrierSrcAccess,
-                               &mGlobalMemoryBarrierDstAccess, writeStage,
-                               &mGlobalMemoryBarrierSrcStages, &mGlobalMemoryBarrierDstStages);
+    VkPipelineStageFlagBits stageBits = vk::VkPipelineStageFlagBitMap[writeStage];
+    buffer->updateWriteBarrier(writeAccessType, stageBits, &mPipelineBarrier);
 }
 
 void CommandBufferHelper::imageBarrier(VkPipelineStageFlags srcStageMask,
                                        VkPipelineStageFlags dstStageMask,
                                        const VkImageMemoryBarrier &imageMemoryBarrier)
 {
-    ASSERT(imageMemoryBarrier.pNext == nullptr);
-    mImageBarrierSrcStageMask |= srcStageMask;
-    mImageBarrierDstStageMask |= dstStageMask;
-    mImageMemoryBarriers.push_back(imageMemoryBarrier);
+    mPipelineBarrier.merge(srcStageMask, dstStageMask, imageMemoryBarrier);
 }
 
 void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
@@ -4459,41 +4449,8 @@ void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
 
 void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
 {
-    if (mImageMemoryBarriers.empty() && mGlobalMemoryBarrierSrcAccess == 0)
-    {
-        return;
-    }
-
-    VkPipelineStageFlags srcStages = 0;
-    VkPipelineStageFlags dstStages = 0;
-
-    VkMemoryBarrier memoryBarrier = {};
-    uint32_t memoryBarrierCount   = 0;
-
-    if (mGlobalMemoryBarrierSrcAccess != 0)
-    {
-        memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-        memoryBarrier.srcAccessMask = mGlobalMemoryBarrierSrcAccess;
-        memoryBarrier.dstAccessMask = mGlobalMemoryBarrierDstAccess;
-
-        memoryBarrierCount++;
-        srcStages |= mGlobalMemoryBarrierSrcStages;
-        dstStages |= mGlobalMemoryBarrierDstStages;
-
-        mGlobalMemoryBarrierSrcAccess = 0;
-        mGlobalMemoryBarrierDstAccess = 0;
-        mGlobalMemoryBarrierSrcStages = 0;
-        mGlobalMemoryBarrierDstStages = 0;
-    }
-
-    srcStages |= mImageBarrierSrcStageMask;
-    dstStages |= mImageBarrierDstStageMask;
-    primary->pipelineBarrier(srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0,
-                             nullptr, static_cast<uint32_t>(mImageMemoryBarriers.size()),
-                             mImageMemoryBarriers.data());
-    mImageMemoryBarriers.clear();
-    mImageBarrierSrcStageMask = 0;
-    mImageBarrierDstStageMask = 0;
+    mPipelineBarrier.executeBarrier(primary);
+    mPipelineBarrier.reset();
 }
 
 void CommandBufferHelper::beginRenderPass(const vk::Framebuffer &framebuffer,
@@ -4604,11 +4561,11 @@ angle::Result CommandBufferHelper::flushToPrimary(ContextVk *contextVk,
 void CommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
 {
     std::ostringstream out;
-    if (mGlobalMemoryBarrierSrcAccess != 0 || mGlobalMemoryBarrierDstAccess != 0)
-    {
-        out << "Memory Barrier Src: 0x" << std::hex << mGlobalMemoryBarrierSrcAccess
-            << " &rarr; Dst: 0x" << std::hex << mGlobalMemoryBarrierDstAccess << "\\l";
-    }
+
+    out << "Memory Barrier: ";
+    mPipelineBarrier.addDiagnosticsString(out);
+    out << "\\l";
+
     if (mIsRenderPassCommandBuffer)
     {
         size_t attachmentCount             = mRenderPassDesc.attachmentCount();
