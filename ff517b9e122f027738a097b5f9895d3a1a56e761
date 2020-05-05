@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9ed60c5_e381a630",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-05T18:48:27Z",
+      "side": 1,
+      "message": "Probably the most (only) controversial thing in the CL is making this a static class member instead of global var.",
+      "revId": "ff517b9e122f027738a097b5f9895d3a1a56e761",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
