@@ -131,6 +131,29 @@ ANGLE_INLINE const CommandHeader *NextCommand(const CommandHeader *command)
                                                    command->size);
 }
 
+bool SecondaryCommandBuffer::empty() const
+{
+    bool empty = false;
+    if (mCommands.size() == 0)
+    {
+        // printf("\tSCB %p mCommands.size() == 0 so it's empty\n", this);
+        empty = true;
+    }
+    if (mCommands[0]->id == CommandID::Invalid)
+    {
+        // printf("\tSCB %p mCommands[0]->id == CommandID::Invalid so it's empty, mC[0] address
+        // %p\n", this, &mCommands[0]);
+        empty = true;
+    }
+    else
+    {
+        // printf("\tSCB %p is not empty and mCommands[0]->id is %s w/ mC[0] address %p\n", this,
+        // GetCommandString(mCommands[0]->id), &mCommands[0]);
+    }
+    return empty;
+    // return mCommands.size() == 0 || mCommands[0]->id == CommandID::Invalid;
+}
+
 // Add any queued resetQueryPool commands to the given cmdBuffer
 void SecondaryCommandBuffer::executeQueuedResetQueryPoolCommands(VkCommandBuffer cmdBuffer)
 {
