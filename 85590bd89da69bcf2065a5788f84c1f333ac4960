@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c60bcc8_ca315feb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-05T16:10:09Z",
+      "side": 1,
+      "message": "question: this appears to be the only use of started(), why a getter rather than just using the member variable mRenderPassStarted?",
+      "range": {
+        "startLine": 153,
+        "startChar": 60,
+        "endLine": 153,
+        "endChar": 67
+      },
+      "revId": "85590bd89da69bcf2065a5788f84c1f333ac4960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
