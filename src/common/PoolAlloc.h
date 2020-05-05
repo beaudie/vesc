@@ -125,7 +125,7 @@ class PoolAllocator : angle::NonCopyable
   public:
     static const int kDefaultAlignment = 16;
     //
-    // Create PoolAllocator. If alignment is be set to 1 byte then fastAllocate()
+    // Create PoolAllocator. If alignment is set to 1 byte then fastAllocate()
     //  function can be used to make allocations with less overhead.
     //
     PoolAllocator(int growthIncrement = 8 * 1024, int allocationAlignment = kDefaultAlignment);
