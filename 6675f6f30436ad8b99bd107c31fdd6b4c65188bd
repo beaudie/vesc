@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c4ab95f3_60acdf98",
+        "filename": "src/common/system_utils_winuwp.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-05-05T17:48:54Z",
+      "side": 1,
+      "message": "nit: the other place says \"not supported in UWP\", so this call doesn\u0027t make much sense to me.",
+      "range": {
+        "startLine": 94,
+        "startChar": 39,
+        "endLine": 94,
+        "endChar": 60
+      },
+      "revId": "6675f6f30436ad8b99bd107c31fdd6b4c65188bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "58c36132_75323d22",
         "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
         "patchSetId": 6
@@ -13,6 +36,29 @@
       "writtenOn": "2020-05-05T17:00:07Z",
       "side": 1,
       "message": "remove?",
+      "revId": "6675f6f30436ad8b99bd107c31fdd6b4c65188bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7641b58f_cb6792a8",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2020-05-05T17:48:54Z",
+      "side": 1,
+      "message": "nit: Implementing the Android workaround here seems to me to be easier to read the condition.",
+      "range": {
+        "startLine": 449,
+        "startChar": 12,
+        "endLine": 449,
+        "endChar": 20
+      },
       "revId": "6675f6f30436ad8b99bd107c31fdd6b4c65188bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
