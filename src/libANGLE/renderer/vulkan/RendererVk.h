@@ -10,9 +10,12 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
 #define LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
 
+#include <condition_variable>
 #include <deque>
 #include <memory>
 #include <mutex>
+#include <queue>
+#include <thread>
 
 #include "vk_ext_provoking_vertex.h"
 
@@ -249,6 +252,14 @@ class RendererVk : angle::NonCopyable
     SamplerCache &getSamplerCache() { return mSamplerCache; }
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
 
+    // Worker thread related functions
+    // Called by main thread to queue work for worker thread to process
+    void queueCommands(vk::CommandWorkBlock commandWork);
+    // Actual worker thread that loops waiting for work from main thread
+    angle::Result workerThread();
+    // Used by main thread to wait for worker thread to complete all work
+    void workerThreadWaitIdle();
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -361,6 +372,17 @@ class RendererVk : angle::NonCopyable
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
+
+    // Worker Thread related members
+    std::queue<vk::CommandWorkBlock> mCommandsQueue;
+    std::thread mWorkerThread;
+    std::mutex mWorkerMutex;
+    // Signal worker thread when work is available
+    std::condition_variable mWorkAvailableCondition;
+    // Signal main thread when all work completed
+    std::condition_variable mWorkerIdleCondition;
+    // Track worker thread Idle state for assertion purposes
+    bool mWorkerThreadIdle;
 
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;
