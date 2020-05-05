@@ -669,16 +669,20 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void initialize(angle::PoolAllocator *allocator)
     {
         ASSERT(allocator);
+        ASSERT(mCommands.empty());
         mAllocator = allocator;
         allocateNewBlock();
         // Set first command to Invalid to start
+        // printf("\tInitializing SCB %p w/ &mCommands[0] of %p\n", this, &mCommands[0]);
         reinterpret_cast<CommandHeader *>(mCurrentWritePointer)->id = CommandID::Invalid;
     }
 
     void reset()
     {
+        // printf("\tResetting SCB %p w/ &mCommands[0] of %p\n", this, &mCommands[0]);
         mCommands.clear();
         initialize(mAllocator);
+        // printf("\tJust resetting SCB %p w/ new page Ptr of %p\n", this, mCurrentWritePointer);
         mResetQueryQueue.clear();
     }
 
@@ -688,7 +692,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     bool valid() const { return mAllocator != nullptr; }
 
     static bool CanKnowIfEmpty() { return true; }
-    bool empty() const { return mCommands.size() == 0 || mCommands[0]->id == CommandID::Invalid; }
+    bool empty() const;
+    uint8_t *getPagePtr() const { return mCurrentWritePointer; }
 
   private:
     void commonDebugUtilsLabel(CommandID cmd, const VkDebugUtilsLabelEXT &label);
@@ -712,6 +717,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         ASSERT(mAllocator);
         mCurrentWritePointer   = mAllocator->fastAllocate(blockSize);
         mCurrentBytesRemaining = blockSize;
+        // printf("\tAllocating new block for SCB %p w/ &mCommands[0] of %p\n", this,
+        // &mCommands[0]);
         mCommands.push_back(reinterpret_cast<CommandHeader *>(mCurrentWritePointer));
     }
 

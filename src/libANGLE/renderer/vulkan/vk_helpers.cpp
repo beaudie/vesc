@@ -470,15 +470,14 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
 }
 
 // CommandBufferHelper implementation.
-CommandBufferHelper::CommandBufferHelper(bool hasRenderPass)
+CommandBufferHelper::CommandBufferHelper()
     : mPipelineBarrier(),
       mCounter(0),
       mClearValues{},
       mRenderPassStarted(false),
       mTransformFeedbackCounterBuffers{},
       mValidTransformFeedbackBufferCount(0),
-      mRebindTransformFeedbackBuffers(false),
-      mIsRenderPassCommandBuffer(hasRenderPass)
+      mRebindTransformFeedbackBuffers(false)
 {}
 
 CommandBufferHelper::~CommandBufferHelper()
@@ -486,9 +485,12 @@ CommandBufferHelper::~CommandBufferHelper()
     mFramebuffer.setHandle(VK_NULL_HANDLE);
 }
 
-void CommandBufferHelper::initialize(angle::PoolAllocator *poolAllocator)
+void CommandBufferHelper::initialize(angle::PoolAllocator *poolAllocator,
+                                     bool isRenderPassCommandBuffer)
 {
+    mAllocator = poolAllocator;
     mCommandBuffer.initialize(poolAllocator);
+    mIsRenderPassCommandBuffer = isRenderPassCommandBuffer;
 }
 
 void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
@@ -583,8 +585,9 @@ void CommandBufferHelper::beginTransformFeedback(size_t validBufferCount,
 angle::Result CommandBufferHelper::flushToPrimary(ContextVk *contextVk,
                                                   vk::PrimaryCommandBuffer *primary)
 {
+    // printf("Asserting that cmdBuffer %p is not empty\n", this);
     ASSERT(!empty());
-
+    // printf("Asserted that cmdBuffer %p is not empty\n", this);
     if (kEnableCommandStreamDiagnostics)
     {
         addCommandDiagnostics(contextVk);
@@ -729,6 +732,8 @@ void CommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
 
 void CommandBufferHelper::reset()
 {
+    mAllocator->pop();
+    mAllocator->push();
     mCommandBuffer.reset();
     if (mIsRenderPassCommandBuffer)
     {
@@ -740,6 +745,11 @@ void CommandBufferHelper::reset()
     ASSERT(mRenderPassStarted == false);
     ASSERT(mValidTransformFeedbackBufferCount == 0);
     ASSERT(mRebindTransformFeedbackBuffers == false);
+}
+
+void CommandBufferHelper::releaseToContextQueue(ContextVk *contextVk)
+{
+    contextVk->releaseCommandBufferToQueue(this);
 }
 
 void CommandBufferHelper::resumeTransformFeedbackIfStarted()
