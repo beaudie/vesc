@@ -552,6 +552,110 @@ class LineLoopHelper final : angle::NonCopyable
     DynamicBuffer mDynamicIndirectBuffer;
 };
 
+// This defines enum for VkPipelineStageFlagBits so that we can use it to compare and index into
+// array.
+enum class PipelineStage : uint16_t
+{
+    // Bellow are ordered based on Graphics Pipeline Stages
+    TopOfPipe             = 0,
+    DrawInDirect          = 1,
+    VertexInput           = 2,
+    VertexShader          = 3,
+    GeometryShader        = 4,
+    TransformFeedback     = 5,
+    EarlyFragmentTest     = 6,
+    FragmentShader        = 7,
+    LateFragmentTest      = 8,
+    ColorAttachmentOutPut = 9,
+
+    // Compute specific pipeline Stage
+    ComputeShader = 10,
+
+    // Transfer specific pipeline Stage
+    Transfer     = 11,
+    BottomOfPipe = 12,
+
+    // Host specific pipeline stage
+    Host = 13,
+
+    InvalidEnum = 14,
+    EnumCount   = InvalidEnum,
+};
+using PipelineStagesMask = angle::PackedEnumBitSet<PipelineStage, uint16_t>;
+
+constexpr angle::PackedEnumMap<PipelineStage, VkPipelineStageFlagBits> VkPipelineStageFlagBitMap = {
+    {PipelineStage::TopOfPipe, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT},
+    {PipelineStage::DrawInDirect, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT},
+    {PipelineStage::VertexInput, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT},
+    {PipelineStage::VertexShader, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT},
+    {PipelineStage::GeometryShader, VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT},
+    {PipelineStage::TransformFeedback, VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT},
+    {PipelineStage::EarlyFragmentTest, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT},
+    {PipelineStage::FragmentShader, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
+    {PipelineStage::LateFragmentTest, VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT},
+    {PipelineStage::ColorAttachmentOutPut, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
+    {PipelineStage::ComputeShader, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT},
+    {PipelineStage::Transfer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT},
+    {PipelineStage::BottomOfPipe, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT},
+    {PipelineStage::Host, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT}};
+
+constexpr gl::ShaderMap<PipelineStage> kPipelineStageShaderMap = {
+    {gl::ShaderType::Vertex, PipelineStage::VertexShader},
+    {gl::ShaderType::Fragment, PipelineStage::FragmentShader},
+    {gl::ShaderType::Geometry, PipelineStage::GeometryShader},
+    {gl::ShaderType::Compute, PipelineStage::ComputeShader},
+};
+
+// This wraps data and API for vkCmdPipelineBarrier call
+class PipelineBarrier : angle::NonCopyable
+{
+  public:
+    PipelineBarrier()  = default;
+    ~PipelineBarrier() = default;
+
+    void executeBarrier(vk::PrimaryCommandBuffer *primary)
+    {
+        // Issue vkCmdPipelineBarrier call
+        VkMemoryBarrier memoryBarrier = {};
+        uint32_t memoryBarrierCount   = 0;
+        if (mMemoryBarrierSrcAccess != 0)
+        {
+            memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+            memoryBarrier.srcAccessMask = mMemoryBarrierSrcAccess;
+            memoryBarrier.dstAccessMask = mMemoryBarrierDstAccess;
+            memoryBarrierCount++;
+        }
+        primary->pipelineBarrier(
+            mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier, 0, nullptr,
+            static_cast<uint32_t>(mImageMemoryBarriers.size()), mImageMemoryBarriers.data());
+    }
+
+    // merge two barriers into one
+    void merge(const PipelineBarrier &other)
+    {
+        mMemoryBarrierSrcAccess |= other.mMemoryBarrierSrcAccess;
+        mMemoryBarrierDstAccess |= other.mMemoryBarrierDstAccess;
+        mSrcStageMask |= other.mSrcStageMask;
+        mDstStageMask |= other.mDstStageMask;
+        mImageMemoryBarriers.insert(mImageMemoryBarriers.end(), other.mImageMemoryBarriers.begin(),
+                                    other.mImageMemoryBarriers.end());
+    }
+
+    void reset()
+    {
+        mImageMemoryBarriers.clear();
+        mSrcStageMask = 0;
+        mDstStageMask = 0;
+    }
+
+    VkPipelineStageFlags mSrcStageMask;
+    VkPipelineStageFlags mDstStageMask;
+    VkFlags mMemoryBarrierSrcAccess;
+    VkFlags mMemoryBarrierDstAccess;
+    std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
+};
+using PipelineBarrierArray = angle::PackedEnumMap<PipelineStage, PipelineBarrier>;
+
 class FramebufferHelper;
 
 class BufferHelper final : public Resource
@@ -642,18 +746,12 @@ class BufferHelper final : public Resource
     bool canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType);
 
     void updateReadBarrier(VkAccessFlags readAccessType,
-                           VkAccessFlags *barrierSrcOut,
-                           VkAccessFlags *barrierDstOut,
                            VkPipelineStageFlags readStage,
-                           VkPipelineStageFlags *barrierSrcStageOut,
-                           VkPipelineStageFlags *barrierDstStageOut);
+                           PipelineBarrier *barrier);
 
     void updateWriteBarrier(VkAccessFlags writeAccessType,
-                            VkAccessFlags *barrierSrcOut,
-                            VkAccessFlags *barrierDstOut,
                             VkPipelineStageFlags writeStage,
-                            VkPipelineStageFlags *barrierSrcStageOut,
-                            VkPipelineStageFlags *barrierDstStageOut);
+                            PipelineBarrier *barrier);
 
   private:
     angle::Result mapImpl(ContextVk *contextVk);

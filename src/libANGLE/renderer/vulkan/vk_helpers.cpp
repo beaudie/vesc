@@ -1923,21 +1923,18 @@ bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeA
 }
 
 void BufferHelper::updateReadBarrier(VkAccessFlags readAccessType,
-                                     VkAccessFlags *barrierSrcOut,
-                                     VkAccessFlags *barrierDstOut,
                                      VkPipelineStageFlags readStage,
-                                     VkPipelineStageFlags *barrierSrcStageOut,
-                                     VkPipelineStageFlags *barrierDstStageOut)
+                                     PipelineBarrier *barrier)
 {
     // If there was a prior write and we are making a read that is either a new access type or from
     // a new stage, we need a barrier
     if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccessType) != readAccessType) ||
                                      ((mCurrentReadStages & readStage) != readStage)))
     {
-        *barrierSrcOut |= mCurrentWriteAccess;
-        *barrierDstOut |= readAccessType;
-        *barrierSrcStageOut |= mCurrentWriteStages;
-        *barrierDstStageOut |= readStage;
+        barrier->mMemoryBarrierSrcAccess |= mCurrentWriteAccess;
+        barrier->mMemoryBarrierDstAccess |= readAccessType;
+        barrier->mSrcStageMask |= mCurrentWriteStages;
+        barrier->mDstStageMask |= readStage;
     }
 
     // Accumulate new read usage.
@@ -1946,11 +1943,8 @@ void BufferHelper::updateReadBarrier(VkAccessFlags readAccessType,
 }
 
 void BufferHelper::updateWriteBarrier(VkAccessFlags writeAccessType,
-                                      VkAccessFlags *barrierSrcOut,
-                                      VkAccessFlags *barrierDstOut,
                                       VkPipelineStageFlags writeStage,
-                                      VkPipelineStageFlags *barrierSrcStageOut,
-                                      VkPipelineStageFlags *barrierDstStageOut)
+                                      PipelineBarrier *barrier)
 {
     // We don't need to check mCurrentReadStages here since if it is not zero, mCurrentReadAccess
     // must not be zero as well. stage is finer grain than accessType.
@@ -1958,10 +1952,10 @@ void BufferHelper::updateWriteBarrier(VkAccessFlags writeAccessType,
            (mCurrentReadStages && mCurrentReadAccess));
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
     {
-        *barrierSrcOut |= mCurrentWriteAccess;
-        *barrierDstOut |= writeAccessType;
-        *barrierSrcStageOut |= mCurrentWriteStages | mCurrentReadStages;
-        *barrierDstStageOut |= writeStage;
+        barrier->mMemoryBarrierSrcAccess |= mCurrentWriteAccess;
+        barrier->mMemoryBarrierDstAccess |= writeAccessType;
+        barrier->mSrcStageMask |= mCurrentWriteStages | mCurrentReadStages;
+        barrier->mDstStageMask |= writeStage;
     }
 
     // Reset usages on the new write.
