@@ -669,16 +669,20 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void initialize(angle::PoolAllocator *allocator)
     {
         ASSERT(allocator);
+        ASSERT(mCommands.empty());
         mAllocator = allocator;
         allocateNewBlock();
         // Set first command to Invalid to start
+        // printf("\tInitializing SCB %p w/ &mCommands[0] of %p\n", this, &mCommands[0]);
         reinterpret_cast<CommandHeader *>(mCurrentWritePointer)->id = CommandID::Invalid;
     }
 
     void reset()
     {
+        // printf("\tResetting SCB %p w/ &mCommands[0] of %p\n", this, &mCommands[0]);
         mCommands.clear();
         initialize(mAllocator);
+        // printf("\tJust resetting SCB %p w/ new page Ptr of %p\n", this, mCurrentWritePointer);
         mResetQueryQueue.clear();
     }
 
@@ -712,6 +716,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         ASSERT(mAllocator);
         mCurrentWritePointer   = mAllocator->fastAllocate(blockSize);
         mCurrentBytesRemaining = blockSize;
+        // printf("\tAllocating new block for SCB %p w/ &mCommands[0] of %p\n", this,
+        // &mCommands[0]);
         mCommands.push_back(reinterpret_cast<CommandHeader *>(mCurrentWritePointer));
     }
 
