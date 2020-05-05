@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0612c00c_6758a76d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-05T15:27:56Z",
+      "side": 1,
+      "message": "When I saw this I was expecting to see tests.\nMaybe more clear to indicate: Update expectations for failures with new deqp tests",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "865d2f5eb98e7409a78047a8b9a4223af439a22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
