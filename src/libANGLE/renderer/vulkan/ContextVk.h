@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_CONTEXTVK_H_
 #define LIBANGLE_RENDERER_VULKAN_CONTEXTVK_H_
 
+#include <condition_variable>
 #include "common/PackedEnums.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/vulkan/OverlayVk.h"
@@ -494,9 +495,9 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result endRenderPassAndGetCommandBuffer(vk::CommandBuffer **commandBufferOut)
     {
         // Only one command buffer should be active at a time
-        ASSERT(mOutsideRenderPassCommands.empty() || mRenderPassCommands.empty());
+        ASSERT(mOutsideRenderPassCommands->empty() || mRenderPassCommands->empty());
         ANGLE_TRY(endRenderPass());
-        *commandBufferOut = &mOutsideRenderPassCommands.getCommandBuffer();
+        *commandBufferOut = &mOutsideRenderPassCommands->getCommandBuffer();
         return angle::Result::Continue;
     }
 
@@ -507,12 +508,12 @@ class ContextVk : public ContextImpl, public vk::Context
                                           const vk::ClearValuesArray &clearValues,
                                           vk::CommandBuffer **commandBufferOut);
 
-    bool hasStartedRenderPass() const { return !mRenderPassCommands.empty(); }
+    bool hasStartedRenderPass() const { return !mRenderPassCommands->empty(); }
 
     vk::CommandBufferHelper &getStartedRenderPassCommands()
     {
         ASSERT(hasStartedRenderPass());
-        return mRenderPassCommands;
+        return *mRenderPassCommands;
     }
 
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
@@ -540,6 +541,21 @@ class ContextVk : public ContextImpl, public vk::Context
     // occlusion query
     void beginOcclusionQuery(QueryVk *queryVk);
     void endOcclusionQuery(QueryVk *queryVk);
+
+    // Submit commands to worker thread for processing
+    ANGLE_INLINE void queueCommandsToWorker(vk::CommandWorkBlock commandWork)
+    {
+        mRenderer->queueCommands(commandWork);
+    }
+    // When worker thread completes, it releases command buffers back to context queue
+    ANGLE_INLINE void releaseCommandBufferToQueue(vk::CommandBufferHelper *commandBuffer)
+    {
+        std::lock_guard<std::mutex> queueLock(mCommandBufferQueueMutex);
+        ASSERT(commandBuffer->empty());
+        // printf("Releasing verified empty cmdBuffer %p to queue in main thread\n", commandBuffer);
+        mAvailableCommandBuffers.push(commandBuffer);
+        mAvailableCommandBufferCondition.notify_one();
+    }
 
   private:
     // Dirty bits.
@@ -921,14 +937,38 @@ class ContextVk : public ContextImpl, public vk::Context
     // http://anglebug.com/2701
     vk::Shared<vk::Fence> mSubmitFence;
 
-    // Pool allocator used for command graph but may be expanded to other allocations
-    angle::PoolAllocator mPoolAllocator;
-
     // When the command graph is disabled we record commands completely linearly. We have plans to
-    // reorder independent draws so that we can create fewer RenderPasses in some scenarios.
-    vk::CommandBufferHelper mOutsideRenderPassCommands;
-    vk::CommandBufferHelper mRenderPassCommands;
+    //  reorder independent draws so that we can create fewer RenderPasses in some scenarios.
+    // We have a queue of CommandBufferHelpers (CBHs) that is drawn from for the two active command
+    //  buffers in the main thread. The two active command buffers are the inside and outside
+    //  RenderPass command buffers.
+    constexpr static size_t kNumCommandBuffers = 2;
+    // Pool allocator used per CommandBufferHelper for custom command allocations
+    angle::PoolAllocator mPoolAllocator[kNumCommandBuffers];
+    vk::CommandBufferHelper mCommandBuffers[kNumCommandBuffers];
+    std::queue<vk::CommandBufferHelper *> mAvailableCommandBuffers;
+    // Lock access to the command buffer queue
+    std::mutex mCommandBufferQueueMutex;
+    std::condition_variable mAvailableCommandBufferCondition;
+    vk::CommandBufferHelper *mOutsideRenderPassCommands;
+    vk::CommandBufferHelper *mRenderPassCommands;
     vk::PrimaryCommandBuffer mPrimaryCommands;
+    // Pull an available CBH ptr from the CBH queue and set to specified hasRenderPass state
+    void getNextAvailableCommandBuffer(vk::CommandBufferHelper **commandBuffer, bool hasRenderPass)
+    {
+        std::unique_lock<std::mutex> lock(mCommandBufferQueueMutex);
+        // Only wake if notified and command queue is not empty
+        mAvailableCommandBufferCondition.wait(lock,
+                                              [this] { return !mAvailableCommandBuffers.empty(); });
+        *commandBuffer = mAvailableCommandBuffers.front();
+        // printf("In main thread, got cmdBuffer %p from queue, ASSERTING that it's empty\n",
+        // *commandBuffer);
+        ASSERT((*commandBuffer)->empty());
+        mAvailableCommandBuffers.pop();
+        lock.unlock();
+        (*commandBuffer)->setHasRenderPass(hasRenderPass);
+    }
+    // Function releaseCommandBufferToQueue() is public above
     bool mHasPrimaryCommands;
 
     // Internal shader library.
