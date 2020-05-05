@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "20c24193_71af1e4d",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-05T04:48:36Z",
+      "side": 1,
+      "message": "Thank you for the explanation. Could you please add the above (minus the AHB paragraph) as a comment somewhere?\n\nAlso, if the AHB case is simple to fix too, it would be appreciated if you did it as a follow up so ExternalPreInitialized can be removed.",
+      "parentUuid": "6aaf993c_9173da86",
+      "range": {
+        "startLine": 188,
+        "startChar": 34,
+        "endLine": 188,
+        "endChar": 60
+      },
+      "revId": "4a8f602c8c810d63c8262b2cf11ab15e1db7b3c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da9f43e2_00f23ff6",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
