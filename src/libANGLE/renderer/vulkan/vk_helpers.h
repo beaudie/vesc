@@ -818,11 +818,11 @@ class BufferHelper final : public Resource
 struct CommandBufferHelper : angle::NonCopyable
 {
   public:
-    CommandBufferHelper(bool canHaveRenderPass);
+    CommandBufferHelper();
     ~CommandBufferHelper();
 
     // General Functions (non-renderPass specific)
-    void initialize(angle::PoolAllocator *poolAllocator);
+    void initialize(angle::PoolAllocator *poolAllocator, bool isRenderPassCommandBuffer);
 
     void bufferRead(vk::ResourceUseList *resourceUseList,
                     VkAccessFlags readAccessType,
@@ -850,8 +850,9 @@ struct CommandBufferHelper : angle::NonCopyable
     void executeBarriers(vk::PrimaryCommandBuffer *primary);
 
     bool empty() const { return (!mCommandBuffer.empty() || mRenderPassStarted) ? false : true; }
-
+    void setHasRenderPass(bool hasRenderPass) { mIsRenderPassCommandBuffer = hasRenderPass; }
     void reset();
+    void releaseToContextQueue(ContextVk *contextVk);
 
     // RenderPass related functions
     bool started() const
@@ -924,6 +925,8 @@ struct CommandBufferHelper : angle::NonCopyable
 
   private:
     void addCommandDiagnostics(ContextVk *contextVk);
+    // Allocator used by this class. If non-null then the class is valid.
+    angle::PoolAllocator *mAllocator;
 
     // General state (non-renderPass related)
     PipelineBarrierArray mPipelineBarriers;
@@ -944,7 +947,13 @@ struct CommandBufferHelper : angle::NonCopyable
     uint32_t mValidTransformFeedbackBufferCount;
     bool mRebindTransformFeedbackBuffers;
 
-    const bool mIsRenderPassCommandBuffer;
+    bool mIsRenderPassCommandBuffer;
+};
+
+struct CommandWorkBlock
+{
+    ContextVk *contextVk;
+    CommandBufferHelper *cbh;
 };
 
 // Imagine an image going through a few layout transitions:
