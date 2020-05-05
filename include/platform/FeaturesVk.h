@@ -304,6 +304,13 @@ struct FeaturesVk : FeatureSetBase
     Feature supportDepthStencilRenderingFeedbackLoops = {
         "support_depth_stencil_rendering_feedback_loops", FeatureCategory::VulkanFeatures,
         "Suport depth/stencil rendering feedback loops", &members, "http://anglebug.com/4490"};
+
+    // Enable parallel thread that processes and submits vulkan command buffers.
+    // Currently off by default to enable testing.
+    Feature enableCommandProcessingThread = {
+        "enable_command_processing_thread", FeatureCategory::VulkanFeatures,
+        "Enable parallel processing and submission of Vulkan commands in worker thread", &members,
+        "http://anglebug.com/4324"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

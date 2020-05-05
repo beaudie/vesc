@@ -10,9 +10,12 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
 #define LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
 
+#include <condition_variable>
 #include <deque>
 #include <memory>
 #include <mutex>
+#include <queue>
+#include <thread>
 
 #include "vk_ext_provoking_vertex.h"
 
@@ -249,6 +252,61 @@ class RendererVk : angle::NonCopyable
     SamplerCache &getSamplerCache() { return mSamplerCache; }
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
 
+    // Worker thread related functions
+    // void setPrimaryCommandBuffer(vk::PrimaryCommandBuffer *cmdBuffer)
+    //{
+    //    printf("Setting worker thread primary CB from %p to %p\n", mPrimaryCommandBuffer,
+    //    cmdBuffer); mPrimaryCommandBuffer = cmdBuffer;
+    //}
+    // Queue commands for the worker thread
+    void queueCommands(vk::CommandWorkBlock commandWork)
+    {
+        std::lock_guard<std::mutex> queueLock(mWorkerMutex);
+        ASSERT(commandWork.cbh == nullptr || !commandWork.cbh->empty());
+        // printf("Putting non-empty cmdBuffer %p in worker thread work queue\n", commandWork.cbh);
+        mCommandsQueue.push(commandWork);
+        mWorkAvailableCondition.notify_one();
+    }
+    angle::Result workerThread()
+    {
+        ASSERT(getFeatures().enableCommandProcessingThread.enabled);
+        while (true)
+        {
+            std::unique_lock<std::mutex> lock(mWorkerMutex);
+            mWorkerIdleCondition.notify_one();
+            mWorkerThreadIdle = true;
+            // Only wake if notified and command queue is not empty
+            mWorkAvailableCondition.wait(lock, [this] { return !mCommandsQueue.empty(); });
+            mWorkerThreadIdle        = false;
+            vk::CommandWorkBlock cwb = mCommandsQueue.front();
+            // printf("Worker thread woke to process cmdBuffer %p w/ SCB %p\n", cwb.cbh,
+            // &cwb.cbh->getCommandBuffer());
+            mCommandsQueue.pop();
+            lock.unlock();
+            // A work block with null ptrs signals worker thread to exit
+            if (cwb.cbh == nullptr && cwb.contextVk == nullptr)
+                break;
+            ASSERT(!cwb.cbh->empty());
+            // printf("Worker Thread processing SCB w/ primaryCB %p\n", mPrimaryCommandBuffer);
+            // ASSERT(mPrimaryCommandBuffer != VK_NULL_HANDLE);
+            // TODO: Will need some way to synchronize error reporting between threads
+            // printf("Worker thread calling flushToPrimary() w/ primaryCB %p\n",
+            // cwb.primaryCB->getHandle());
+            ANGLE_TRY(cwb.cbh->flushToPrimary(cwb.contextVk, cwb.primaryCB));
+            ASSERT(cwb.cbh->empty());
+            cwb.cbh->releaseToContextQueue(cwb.contextVk);
+        }
+        // printf("Worker Thread shutting down\n");
+        return angle::Result::Continue;
+    }
+    void workerThreadWaitIdle()
+    {
+        std::unique_lock<std::mutex> lock(mWorkerMutex);
+        mWorkerIdleCondition.wait(lock, [this] { return (mCommandsQueue.empty()); });
+        // Worker thread is idle and command queue is empty so good to continue
+        lock.unlock();
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -361,6 +419,18 @@ class RendererVk : angle::NonCopyable
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
+
+    // Worker Thread related members
+    std::queue<vk::CommandWorkBlock> mCommandsQueue;
+    // vk::PrimaryCommandBuffer *mPrimaryCommandBuffer;
+    std::thread mWorkerThread;
+    std::mutex mWorkerMutex;
+    // Signal worker thread when work is available
+    std::condition_variable mWorkAvailableCondition;
+    // Signal main thread when all work completed
+    std::condition_variable mWorkerIdleCondition;
+    // Track worker thread Idle state for assertion purposes
+    bool mWorkerThreadIdle;
 
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;

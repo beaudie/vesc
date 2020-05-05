@@ -274,7 +274,7 @@ bool ValidateFragColorAndFragData(GLenum shaderType,
 
 }  // namespace
 
-TShHandleBase::TShHandleBase()
+TShHandleBase::TShHandleBase() : allocator()
 {
     allocator.push();
     SetGlobalPoolAllocator(&allocator);
