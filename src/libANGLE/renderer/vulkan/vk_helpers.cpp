@@ -455,12 +455,7 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
 
 // CommandBufferHelper implementation.
 CommandBufferHelper::CommandBufferHelper(bool hasRenderPass)
-    : mImageBarrierSrcStageMask(0),
-      mImageBarrierDstStageMask(0),
-      mGlobalMemoryBarrierSrcAccess(0),
-      mGlobalMemoryBarrierDstAccess(0),
-      mGlobalMemoryBarrierSrcStages(0),
-      mGlobalMemoryBarrierDstStages(0),
+    : mPipelineBarrier(),
       mCounter(0),
       mClearValues{},
       mRenderPassStarted(false),
@@ -482,34 +477,29 @@ void CommandBufferHelper::initialize(angle::PoolAllocator *poolAllocator)
 
 void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
                                      VkAccessFlags readAccessType,
-                                     VkPipelineStageFlags readStage,
+                                     vk::PipelineStage readStage,
                                      vk::BufferHelper *buffer)
 {
     buffer->retain(resourceUseList);
-    buffer->updateReadBarrier(readAccessType, &mGlobalMemoryBarrierSrcAccess,
-                              &mGlobalMemoryBarrierDstAccess, readStage,
-                              &mGlobalMemoryBarrierSrcStages, &mGlobalMemoryBarrierDstStages);
+    VkPipelineStageFlagBits stageBits = vk::VkPipelineStageFlagBitMap[readStage];
+    buffer->updateReadBarrier(readAccessType, stageBits, &mPipelineBarrier);
 }
 
 void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
                                       VkAccessFlags writeAccessType,
-                                      VkPipelineStageFlags writeStage,
+                                      vk::PipelineStage writeStage,
                                       vk::BufferHelper *buffer)
 {
     buffer->retain(resourceUseList);
-    buffer->updateWriteBarrier(writeAccessType, &mGlobalMemoryBarrierSrcAccess,
-                               &mGlobalMemoryBarrierDstAccess, writeStage,
-                               &mGlobalMemoryBarrierSrcStages, &mGlobalMemoryBarrierDstStages);
+    VkPipelineStageFlagBits stageBits = vk::VkPipelineStageFlagBitMap[writeStage];
+    buffer->updateWriteBarrier(writeAccessType, stageBits, &mPipelineBarrier);
 }
 
 void CommandBufferHelper::imageBarrier(VkPipelineStageFlags srcStageMask,
                                        VkPipelineStageFlags dstStageMask,
                                        const VkImageMemoryBarrier &imageMemoryBarrier)
 {
-    ASSERT(imageMemoryBarrier.pNext == nullptr);
-    mImageBarrierSrcStageMask |= srcStageMask;
-    mImageBarrierDstStageMask |= dstStageMask;
-    mImageMemoryBarriers.push_back(imageMemoryBarrier);
+    mPipelineBarrier.merge(srcStageMask, dstStageMask, imageMemoryBarrier);
 }
 
 void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
@@ -535,41 +525,8 @@ void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
 
 void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
 {
-    if (mImageMemoryBarriers.empty() && mGlobalMemoryBarrierSrcAccess == 0)
-    {
-        return;
-    }
-
-    VkPipelineStageFlags srcStages = 0;
-    VkPipelineStageFlags dstStages = 0;
-
-    VkMemoryBarrier memoryBarrier = {};
-    uint32_t memoryBarrierCount   = 0;
-
-    if (mGlobalMemoryBarrierSrcAccess != 0)
-    {
-        memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-        memoryBarrier.srcAccessMask = mGlobalMemoryBarrierSrcAccess;
-        memoryBarrier.dstAccessMask = mGlobalMemoryBarrierDstAccess;
-
-        memoryBarrierCount++;
-        srcStages |= mGlobalMemoryBarrierSrcStages;
-        dstStages |= mGlobalMemoryBarrierDstStages;
-
-        mGlobalMemoryBarrierSrcAccess = 0;
-        mGlobalMemoryBarrierDstAccess = 0;
-        mGlobalMemoryBarrierSrcStages = 0;
-        mGlobalMemoryBarrierDstStages = 0;
-    }
-
-    srcStages |= mImageBarrierSrcStageMask;
-    dstStages |= mImageBarrierDstStageMask;
-    primary->pipelineBarrier(srcStages, dstStages, 0, memoryBarrierCount, &memoryBarrier, 0,
-                             nullptr, static_cast<uint32_t>(mImageMemoryBarriers.size()),
-                             mImageMemoryBarriers.data());
-    mImageMemoryBarriers.clear();
-    mImageBarrierSrcStageMask = 0;
-    mImageBarrierDstStageMask = 0;
+    mPipelineBarrier.executeBarrier(primary);
+    mPipelineBarrier.reset();
 }
 
 void CommandBufferHelper::beginRenderPass(const vk::Framebuffer &framebuffer,
@@ -705,11 +662,11 @@ char GetStoreOpShorthand(uint32_t storeOp)
 void CommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
 {
     std::ostringstream out;
-    if (mGlobalMemoryBarrierSrcAccess != 0 || mGlobalMemoryBarrierDstAccess != 0)
-    {
-        out << "Memory Barrier Src: 0x" << std::hex << mGlobalMemoryBarrierSrcAccess
-            << " &rarr; Dst: 0x" << std::hex << mGlobalMemoryBarrierDstAccess << "\\l";
-    }
+
+    out << "Memory Barrier: ";
+    mPipelineBarrier.addDiagnosticsString(out);
+    out << "\\l";
+
     if (mIsRenderPassCommandBuffer)
     {
         size_t attachmentCount             = mRenderPassDesc.attachmentCount();
@@ -2269,21 +2226,15 @@ bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeA
 }
 
 void BufferHelper::updateReadBarrier(VkAccessFlags readAccessType,
-                                     VkAccessFlags *barrierSrcOut,
-                                     VkAccessFlags *barrierDstOut,
                                      VkPipelineStageFlags readStage,
-                                     VkPipelineStageFlags *barrierSrcStageOut,
-                                     VkPipelineStageFlags *barrierDstStageOut)
+                                     PipelineBarrier *barrier)
 {
     // If there was a prior write and we are making a read that is either a new access type or from
     // a new stage, we need a barrier
     if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccessType) != readAccessType) ||
                                      ((mCurrentReadStages & readStage) != readStage)))
     {
-        *barrierSrcOut |= mCurrentWriteAccess;
-        *barrierDstOut |= readAccessType;
-        *barrierSrcStageOut |= mCurrentWriteStages;
-        *barrierDstStageOut |= readStage;
+        barrier->merge(mCurrentWriteStages, readStage, mCurrentWriteAccess, readAccessType);
     }
 
     // Accumulate new read usage.
@@ -2292,11 +2243,8 @@ void BufferHelper::updateReadBarrier(VkAccessFlags readAccessType,
 }
 
 void BufferHelper::updateWriteBarrier(VkAccessFlags writeAccessType,
-                                      VkAccessFlags *barrierSrcOut,
-                                      VkAccessFlags *barrierDstOut,
                                       VkPipelineStageFlags writeStage,
-                                      VkPipelineStageFlags *barrierSrcStageOut,
-                                      VkPipelineStageFlags *barrierDstStageOut)
+                                      PipelineBarrier *barrier)
 {
     // We don't need to check mCurrentReadStages here since if it is not zero, mCurrentReadAccess
     // must not be zero as well. stage is finer grain than accessType.
@@ -2304,10 +2252,8 @@ void BufferHelper::updateWriteBarrier(VkAccessFlags writeAccessType,
            (mCurrentReadStages && mCurrentReadAccess));
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
     {
-        *barrierSrcOut |= mCurrentWriteAccess;
-        *barrierDstOut |= writeAccessType;
-        *barrierSrcStageOut |= mCurrentWriteStages | mCurrentReadStages;
-        *barrierDstStageOut |= writeStage;
+        barrier->merge(mCurrentWriteStages | mCurrentReadStages, writeStage, mCurrentWriteAccess,
+                       writeAccessType);
     }
 
     // Reset usages on the new write.
