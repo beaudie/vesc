@@ -128,6 +128,30 @@
       "revId": "0d33fe7e314076a8f696bc348de332b7c550279b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a29cfbd5_a11713e1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-05T03:27:35Z",
+      "side": 1,
+      "message": "No need to hold up the CL for it, but the functions have similar lineage, thought there could be a problem in both.  I don\u0027t see anything via code inspection, but it\u0027s a lot of code.  I\u0027m sure CopyTexImage and CopyTexSubImage are well tested.",
+      "parentUuid": "b0596bc8_8782b51f",
+      "range": {
+        "startLine": 892,
+        "startChar": 18,
+        "endLine": 892,
+        "endChar": 50
+      },
+      "revId": "0d33fe7e314076a8f696bc348de332b7c550279b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
