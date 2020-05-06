@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2d6bd841_0b0a9cc0",
+        "filename": "codereview.settings",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-06T23:38:55Z",
+      "side": 1,
+      "message": "I am seeing git cl upload script complains this, so I did locally. I am not sure if someone else already get to this or not, but this is not intended in this CL anyway.",
+      "parentUuid": "ceb6aa64_1ac2e7ae",
+      "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96c184c3_44d33866",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -84,6 +102,30 @@
     },
     {
       "key": {
+        "uuid": "d0493fa5_54b1db2b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-06T23:38:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "088a72d9_2e3b884d",
+      "range": {
+        "startLine": 1062,
+        "startChar": 54,
+        "endLine": 1062,
+        "endChar": 66
+      },
+      "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19cad2d6_4044882f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -116,6 +158,24 @@
       "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc0b1a70_9ba775a5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-06T23:38:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ae99cb8d_66d97766",
+      "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
