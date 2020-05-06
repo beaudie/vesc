@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88f438cc_feeb90cb",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-06T17:33:53Z",
+      "side": 1,
+      "message": "This fixes the webgl crash.",
+      "range": {
+        "startLine": 726,
+        "startChar": 16,
+        "endLine": 726,
+        "endChar": 31
+      },
+      "revId": "3cd8a0fea131cc612705280cba4eb982c3071680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31b4f570_bed08089",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-06T17:33:53Z",
+      "side": 1,
+      "message": "This fixes the webgl crash.",
+      "range": {
+        "startLine": 462,
+        "startChar": 11,
+        "endLine": 462,
+        "endChar": 21
+      },
+      "revId": "3cd8a0fea131cc612705280cba4eb982c3071680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
