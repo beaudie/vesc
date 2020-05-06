@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "24649eab_1acb661c",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-06T19:05:11Z",
+      "side": 1,
+      "message": "Thanks, you\u0027re exactly right that I\u0027m trying to avoid target names like angle_angle_common and avoid issues such as _angle_common.\n\nI updated the comments to be very clear about what\u0027s going on.",
+      "parentUuid": "d6c70f6e_e7243dc7",
+      "range": {
+        "startLine": 96,
+        "startChar": 6,
+        "endLine": 96,
+        "endChar": 62
+      },
+      "revId": "fd93e06fecff0a489b60db8eff87df1746b9afda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5555ec2_e744089e",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "fd93e06fecff0a489b60db8eff87df1746b9afda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2d7ee4b_e2996036",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-06T19:05:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5555ec2_e744089e",
+      "revId": "fd93e06fecff0a489b60db8eff87df1746b9afda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
