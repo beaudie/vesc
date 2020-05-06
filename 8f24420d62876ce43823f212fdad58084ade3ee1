@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9c75f932_001b7315",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-06T19:12:29Z",
+      "side": 1,
+      "message": "I hope it will be OK.  It\u0027s only one driver that complains in this way and if we were to really require the extension by doing\n  #extension GL_ARB_gpu_shader5 : required\n\nit would generate an error instead.",
+      "parentUuid": "4746699e_f6e59bb6",
+      "range": {
+        "startLine": 68,
+        "startChar": 94,
+        "endLine": 69,
+        "endChar": 42
+      },
+      "revId": "8f24420d62876ce43823f212fdad58084ade3ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8c81fdb6_c51d4f55",
         "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2020-05-06T18:03:24Z",
       "side": 1,
       "message": "Do we need the vertex and fragment shader versions of this string, or can we just use:\n\n    \"extension `GL_ARB_gpu_shader5\u0027 unsupported\"\n\nAlso, is this string format common across all/most drivers or do they have different variations of things like the backtick and single quote?   Should we go even simpler to just any warning about these extensions so the list is just:\n\n    const char *kIgnoredWarnings[] \u003d {\n        \"GL_ARB_gpu_shader5\",\n        \"GL_EXT_gpu_shader5\",\n    }",
+      "revId": "8f24420d62876ce43823f212fdad58084ade3ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bcbd6bb_4d394528",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-06T19:12:29Z",
+      "side": 1,
+      "message": "Good point, I\u0027ll remove the vertex/fragment bits.\n\nI don\u0027t want to go too simple.  This list is mostly about working around driver issues and it\u0027s just this one driver that spams warnings.",
+      "parentUuid": "8c81fdb6_c51d4f55",
       "revId": "8f24420d62876ce43823f212fdad58084ade3ee1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -56,6 +98,24 @@
       "revId": "8f24420d62876ce43823f212fdad58084ade3ee1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ba25e7a_468273b4",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-06T19:12:29Z",
+      "side": 1,
+      "message": "You should be fine.  Those are only enabled when the user requests it.  These are an issue because we request them unconditionally so they spam a lot.",
+      "parentUuid": "468739d6_48cd94f1",
+      "revId": "8f24420d62876ce43823f212fdad58084ade3ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
