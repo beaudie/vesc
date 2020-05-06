@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f44aa391_1fbd5819",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/RenderStateCache.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-05-06T11:32:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c29a3898_4f896da4",
+      "range": {
+        "startLine": 134,
+        "startChar": 8,
+        "endLine": 134,
+        "endChar": 63
+      },
+      "revId": "0617cf07117ff718b6cff7272cc63d1f4d5f4f64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b10cebc6_9234f6d4",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 11
@@ -36,6 +60,30 @@
       "writtenOn": "2020-05-04T20:29:41Z",
       "side": 1,
       "message": "nit: There is a \u0027caps\u0027 in this scope already, it will be the same as this one.",
+      "range": {
+        "startLine": 1907,
+        "startChar": 26,
+        "endLine": 1907,
+        "endChar": 87
+      },
+      "revId": "0617cf07117ff718b6cff7272cc63d1f4d5f4f64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b3272c3_ed67e441",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1907,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-05-06T11:32:19Z",
+      "side": 1,
+      "message": "`caps` that are in scope come from `renderer`. Context11::getNativeCaps() overrides maxDrawBuffers for ES3.1 on FL11_0 (hence failures on AMD before PS5).\n\nMaybe change scoped `caps` to come from Context11?",
+      "parentUuid": "b10cebc6_9234f6d4",
       "range": {
         "startLine": 1907,
         "startChar": 26,
@@ -68,6 +116,30 @@
       "revId": "0617cf07117ff718b6cff7272cc63d1f4d5f4f64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd1b737c_fbd81706",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-05-06T11:32:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "767c05a6_9ccf4e70",
+      "range": {
+        "startLine": 2024,
+        "startChar": 12,
+        "endLine": 2026,
+        "endChar": 96
+      },
+      "revId": "0617cf07117ff718b6cff7272cc63d1f4d5f4f64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
