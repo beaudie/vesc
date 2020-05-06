@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cfae48f_11824aad",
+        "filename": "codereview.settings",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-06T23:27:19Z",
+      "side": 1,
+      "message": "Does this change belong here?\nShouldn\u0027t it be it\u0027s own separate CL?",
+      "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96c184c3_44d33866",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-06T23:27:19Z",
+      "side": 1,
+      "message": "nit: I think this should be DrawIndirect, Indirect is one word, not two.",
+      "range": {
+        "startLine": 1062,
+        "startChar": 54,
+        "endLine": 1062,
+        "endChar": 66
+      },
+      "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19cad2d6_4044882f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-06T23:27:19Z",
+      "side": 1,
+      "message": "I\u0027m curious, why a map here rather than have PipelineStage::TopOfPipe be VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT?",
+      "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
