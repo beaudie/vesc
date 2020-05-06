@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d4772db_29714b55",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-06T19:31:14Z",
+      "side": 1,
+      "message": "it\u0027s a bit of a concern to put these in the header as they\u0027ll be duplicated into every object file. Maybe you can put them in the cpp and expose an accessor function.",
+      "range": {
+        "startLine": 586,
+        "startChar": 0,
+        "endLine": 607,
+        "endChar": 2
+      },
+      "revId": "67a780cb7a48d6446afa2f4a5fafb492319ec030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df4236ff_97d880b7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-06T19:31:14Z",
+      "side": 1,
+      "message": "please ensure all members have correct default init.",
+      "range": {
+        "startLine": 613,
+        "startChar": 4,
+        "endLine": 613,
+        "endChar": 19
+      },
+      "revId": "67a780cb7a48d6446afa2f4a5fafb492319ec030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf91da4d_89802c7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-06T19:31:14Z",
+      "side": 1,
+      "message": "nit: you can call this just \"execute\" since we know it\u0027s always a barrier. also you can make this a const method.",
+      "range": {
+        "startLine": 618,
+        "startChar": 9,
+        "endLine": 618,
+        "endChar": 23
+      },
+      "revId": "67a780cb7a48d6446afa2f4a5fafb492319ec030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6403f57b_4f7ab5ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-06T19:31:14Z",
+      "side": 1,
+      "message": "nit: avoid overloading to reduce confusion when reading the code. can you clarify these methods with explicit names like merge/mergeBuffer/mergeImage?",
+      "range": {
+        "startLine": 651,
+        "startChar": 9,
+        "endLine": 651,
+        "endChar": 14
+      },
+      "revId": "67a780cb7a48d6446afa2f4a5fafb492319ec030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a0b6195_99b00de6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-06T19:31:14Z",
+      "side": 1,
+      "message": "again can be const. also for anything where performance isn\u0027t critical please move these into the cpp file to reduce incremental compile times.",
+      "range": {
+        "startLine": 679,
+        "startChar": 9,
+        "endLine": 679,
+        "endChar": 29
+      },
+      "revId": "67a780cb7a48d6446afa2f4a5fafb492319ec030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
