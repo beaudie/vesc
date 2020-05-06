@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "4746699e_f6e59bb6",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-06T18:03:24Z",
+      "side": 1,
+      "message": "Any ideas on if this will make debugging the tests that require these extensions more difficult since we won\u0027t see the warning that the extension isn\u0027t available?   Or do those tests do extra verification that the extension is actually available to be used?",
+      "range": {
+        "startLine": 68,
+        "startChar": 94,
+        "endLine": 69,
+        "endChar": 42
+      },
+      "revId": "8f24420d62876ce43823f212fdad58084ade3ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c81fdb6_c51d4f55",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-06T18:03:24Z",
+      "side": 1,
+      "message": "Do we need the vertex and fragment shader versions of this string, or can we just use:\n\n    \"extension `GL_ARB_gpu_shader5\u0027 unsupported\"\n\nAlso, is this string format common across all/most drivers or do they have different variations of things like the backtick and single quote?   Should we go even simpler to just any warning about these extensions so the list is just:\n\n    const char *kIgnoredWarnings[] \u003d {\n        \"GL_ARB_gpu_shader5\",\n        \"GL_EXT_gpu_shader5\",\n    }",
+      "revId": "8f24420d62876ce43823f212fdad58084ade3ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "468739d6_48cd94f1",
         "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
         "patchSetId": 3
