@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "89b6a5ff_b21b04f8",
+        "filename": "extensions/EGL_ANGLE_platform_angle_d3d_luid.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-05-06T20:43:08Z",
+      "side": 1,
+      "message": "OK. When in Rome do as the Romans. :-)",
+      "parentUuid": "e75e5403_d8e75401",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 21
+      },
+      "revId": "4ebdd1bf3912c2188b27af783ffae9dc07c7e459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "19172874_b58de4be",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 5

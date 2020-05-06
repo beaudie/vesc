@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "691b75ad_fb549ecb",
+        "filename": "src/tests/egl_tests/EGLDisplayLuidTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-05-06T20:43:08Z",
+      "side": 1,
+      "message": "(Apologies for not realizing this earlier)\n\nConsider changing ASSERT_XXX to EXPECT_XXX. \n\nWith ASSERT_XXX, the test will abort when the assert fires. Good for conditions (like resource allocation) where the test cannot possibly continue if the condition is false. \n\nWith EXPECT_XXXX, on the other hand, your test will continue to run and output all of the errors. This is ideal for tests which are flaky or fail only in a test environment. You\u0027ll receive more information in the log to help you diagnose the root cause. Just having ASSERT_XXX means only the first failure will be outputted.",
+      "range": {
+        "startLine": 23,
+        "startChar": 12,
+        "endLine": 23,
+        "endChar": 27
+      },
+      "revId": "a3bbc6075cdb4d65bf47b11c15b6129a13700d0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
