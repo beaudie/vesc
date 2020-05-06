@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "468739d6_48cd94f1",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-06T17:38:35Z",
+      "side": 1,
+      "message": "Will this mean I have to add GL_EXT_texture_cube_map_array etc to this list as well?\nDoes this apply to every extension that\u0027s requested with \u0027enable\u0027?",
+      "revId": "8f24420d62876ce43823f212fdad58084ade3ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
