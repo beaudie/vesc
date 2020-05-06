@@ -18,6 +18,7 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#include "libANGLE/renderer/vulkan/vk_google_filtering_precision.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 #include <type_traits>
@@ -1772,7 +1773,7 @@ void SamplerDesc::update(const gl::SamplerState &samplerState, bool stencilMode)
     }
 }
 
-VkSamplerCreateInfo SamplerDesc::unpack(ContextVk *contextVk) const
+angle::Result SamplerDesc::init(ContextVk *contextVk, vk::Sampler *sampler) const
 {
     const gl::Extensions &extensions = contextVk->getExtensions();
 
@@ -1797,7 +1798,22 @@ VkSamplerCreateInfo SamplerDesc::unpack(ContextVk *contextVk) const
     createInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
     createInfo.unnormalizedCoordinates = VK_FALSE;
 
-    return createInfo;
+    VkSamplerFilteringPrecisionGOOGLE filteringInfo = {};
+    if (extensions.textureFilteringCHROMIUM)
+    {
+        GLenum hint = contextVk->getState().getTextureFilteringHint();
+        if (hint == GL_NICEST)
+        {
+            filteringInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_FILTERING_PRECISION_GOOGLE;
+            filteringInfo.samplerFilteringPrecisionMode =
+                VK_SAMPLER_FILTERING_PRECISION_MODE_HIGH_GOOGLE;
+            vk::AddToPNextChain(&createInfo, &filteringInfo);
+        }
+    }
+
+    ANGLE_VK_TRY(contextVk, sampler->init(contextVk->getDevice(), createInfo));
+
+    return angle::Result::Continue;
 }
 
 size_t SamplerDesc::hash() const
@@ -2156,10 +2172,8 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    VkSamplerCreateInfo createInfo = desc.unpack(contextVk);
-
     vk::Sampler sampler;
-    ANGLE_VK_TRY(contextVk, sampler.init(contextVk->getDevice(), createInfo));
+    ANGLE_TRY(desc.init(contextVk, &sampler));
 
     auto insertedItem = mPayload.emplace(desc, vk::RefCountedSampler(std::move(sampler)));
     vk::RefCountedSampler &insertedSampler = insertedItem.first->second;
