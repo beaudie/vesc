@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ceb6aa64_1ac2e7ae",
+        "filename": "codereview.settings",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-06T23:33:19Z",
+      "side": 1,
+      "message": "Sorry, I thought this file is not part of git. I will revert this change.",
+      "parentUuid": "5cfae48f_11824aad",
+      "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "96c184c3_44d33866",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "088a72d9_2e3b884d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-06T23:33:19Z",
+      "side": 1,
+      "message": "Thanks. Will fix.",
+      "parentUuid": "96c184c3_44d33866",
+      "range": {
+        "startLine": 1062,
+        "startChar": 54,
+        "endLine": 1062,
+        "endChar": 66
+      },
+      "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "19cad2d6_4044882f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -53,6 +95,24 @@
       "writtenOn": "2020-05-06T23:27:19Z",
       "side": 1,
       "message": "I\u0027m curious, why a map here rather than have PipelineStage::TopOfPipe be VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT?",
+      "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae99cb8d_66d97766",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-06T23:33:19Z",
+      "side": 1,
+      "message": "The reason is that for the next CL, I am going to use PipelineStage index into the array. So I need to define my own enum for this since VK only defines bit not enum. Also VK\u0027s bit is not strictly in the order of graphics pipeline execution order, my enum is.",
+      "parentUuid": "19cad2d6_4044882f",
       "revId": "b36d6d1c3735123974debe7a26c8f41ba201d2c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
