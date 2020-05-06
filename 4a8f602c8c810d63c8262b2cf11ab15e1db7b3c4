@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "8a05cb3e_777533d3",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-06T06:41:43Z",
+      "side": 1,
+      "message": "Done.\n\nI am unsure what the correct approach for AHB is; VK_IMAGE_LAYOUT_PREINITIALIZED does actually seem like a reasonable choice for initial layout there, because the API does not use layouts.\n\nImplementing EGLImage is outside the scope of the Vulkan specs; it may not mean much that the specs document VK_IMAGE_LAYOUT_PREINITIALIZED as intended for use as the initial layout of an image whose contents are initialized on the host.",
+      "parentUuid": "20c24193_71af1e4d",
+      "range": {
+        "startLine": 188,
+        "startChar": 34,
+        "endLine": 188,
+        "endChar": 60
+      },
+      "revId": "4a8f602c8c810d63c8262b2cf11ab15e1db7b3c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9f43e2_00f23ff6",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
