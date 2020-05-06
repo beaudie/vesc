@@ -323,7 +323,7 @@ class StateManager11 final : angle::NonCopyable
 
     angle::Result syncRasterizerState(const gl::Context *context, gl::PrimitiveMode mode);
 
-    void syncScissorRectangle(const gl::Rectangle &scissor, bool enabled);
+    void syncScissorRectangle(const gl::Context *context);
 
     void syncViewport(const gl::Context *context);
 

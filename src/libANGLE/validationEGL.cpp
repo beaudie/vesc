@@ -1817,12 +1817,14 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display,
                     return EglBadAttribute() << "<buftype> doesn't support texture internal format";
                 }
                 break;
+
             case EGL_GL_COLORSPACE:
                 if (buftype != EGL_D3D_TEXTURE_ANGLE)
                 {
                     return EglBadAttribute() << "<buftype> doesn't support setting GL colorspace";
                 }
                 break;
+
             case EGL_IOSURFACE_USAGE_HINT_ANGLE:
                 if (value & ~(EGL_IOSURFACE_READ_HINT_ANGLE | EGL_IOSURFACE_WRITE_HINT_ANGLE))
                 {
@@ -1830,6 +1832,15 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display,
                            << "IOSurface usage hint must only contain READ or WRITE";
                 }
                 break;
+
+            case EGL_DRAW_OFFSET_X_ANGLE:
+            case EGL_DRAW_OFFSET_Y_ANGLE:
+                if (buftype != EGL_D3D_TEXTURE_ANGLE)
+                {
+                    return EglBadAttribute() << "<buftype> doesn't support setting draw offset";
+                }
+                break;
+
             default:
                 return EglBadAttribute();
         }

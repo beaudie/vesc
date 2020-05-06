@@ -119,6 +119,9 @@ Surface::Surface(EGLint surfaceType,
     }
 
     mOrientation = static_cast<EGLint>(attributes.get(EGL_SURFACE_ORIENTATION_ANGLE, 0));
+
+    mDrawOffset.x = static_cast<int>(mState.attributes.get(EGL_DRAW_OFFSET_X_ANGLE, 0));
+    mDrawOffset.y = static_cast<int>(mState.attributes.get(EGL_DRAW_OFFSET_Y_ANGLE, 0));
 }
 
 Surface::~Surface() {}

@@ -178,6 +178,8 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
                              const EGLint *timestamps,
                              EGLnsecsANDROID *values) const;
 
+    gl::Offset getDrawOffset() const { return mDrawOffset; }
+
   protected:
     Surface(EGLint surfaceType,
             const egl::Config *config,
@@ -234,6 +236,8 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
 
     gl::Format mColorFormat;
     gl::Format mDSFormat;
+
+    gl::Offset mDrawOffset;
 
   private:
     Error destroyImpl(const Display *display);
