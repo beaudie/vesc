@@ -16,6 +16,24 @@
       "revId": "6d883094f308b3161bc9c9d94bf4fb5d8c2553a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c016696f_f20d4940",
+        "filename": "src/tests/perf_tests/restricted_traces/restricted_traces_autogen.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-06T15:01:27Z",
+      "side": 1,
+      "message": "We store the capture\u0027s source and binary data in our cloud bucket.  We considered putting the source in a separate repository, but decided it wasn\u0027t worth the extra hassle.",
+      "parentUuid": "f43dd8d0_9cd42c76",
+      "revId": "6d883094f308b3161bc9c9d94bf4fb5d8c2553a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
