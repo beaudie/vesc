@@ -1033,6 +1033,12 @@ class ImageHelper final : public Resource, public angle::Subject
                                       GLuint *inputDepthPitch,
                                       GLuint *inputSkipBytes);
 
+    void setYuvExternalFormat(uint64_t externalFormat)
+    {
+        mYuvConversionNeeded = true;
+        mExternalFormat      = externalFormat;
+    }
+
   private:
     enum class UpdateSource
     {
@@ -1134,6 +1140,9 @@ class ImageHelper final : public Resource, public angle::Subject
     // Current state.
     ImageLayout mCurrentLayout;
     uint32_t mCurrentQueueFamilyIndex;
+    bool mYuvConversionNeeded;
+    uint64_t mExternalFormat;
+    VkSamplerYcbcrConversion mYuvConversion;
 
     // Cached properties.
     uint32_t mBaseLevel;

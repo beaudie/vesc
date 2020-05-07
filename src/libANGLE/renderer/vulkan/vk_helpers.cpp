@@ -1962,6 +1962,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mSerial(other.mSerial),
       mCurrentLayout(other.mCurrentLayout),
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
+      mYuvConversionNeeded(other.mYuvConversionNeeded),
+      mYuvConversion(other.mYuvConversion),
       mBaseLevel(other.mBaseLevel),
       mMaxLevel(other.mMaxLevel),
       mLayerCount(other.mLayerCount),
@@ -1987,6 +1989,7 @@ void ImageHelper::resetCachedProperties()
     mSerial                  = rx::kZeroSerial;
     mCurrentLayout           = ImageLayout::Undefined;
     mCurrentQueueFamilyIndex = std::numeric_limits<uint32_t>::max();
+    mYuvConversionNeeded     = false;
     mBaseLevel               = 0;
     mMaxLevel                = 0;
     mLayerCount              = 0;
@@ -2069,6 +2072,8 @@ angle::Result ImageHelper::initExternal(Context *context,
 
     mCurrentLayout = initialLayout;
 
+    mYuvConversionNeeded = false;
+
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
     stageClearIfEmulatedFormat(context);
@@ -2080,6 +2085,11 @@ void ImageHelper::releaseImage(RendererVk *renderer)
 {
     mSerial = rx::kZeroSerial;
     renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);
+
+    if (mYuvConversionNeeded)
+    {
+        vkDestroySamplerYcbcrConversionKHR(renderer->getDevice(), mYuvConversion, nullptr);
+    }
 }
 
 void ImageHelper::releaseStagingBuffer(RendererVk *renderer)

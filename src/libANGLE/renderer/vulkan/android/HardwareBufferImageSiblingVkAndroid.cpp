@@ -54,7 +54,16 @@ egl::Error HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(RendererV
         return egl::EglBadParameter() << "Failed to query AHardwareBuffer properties";
     }
 
-    if (!HasFullTextureFormatSupport(renderer, bufferFormatProperties.format))
+    if (bufferFormatProperties.format != VK_FORMAT_UNDEFINED)
+    {
+        // Check that external format supports sampling
+        if (!(bufferFormatProperties.formatFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT))
+        {
+            return egl::EglBadParameter() << "AHardwareBuffer format does not support "
+                                             "VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT.";
+        }
+    }
+    else if (!HasFullTextureFormatSupport(renderer, bufferFormatProperties.format))
     {
         return egl::EglBadParameter()
                << "AHardwareBuffer format does not support enough features to use as a texture.";
@@ -98,6 +107,20 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     ANGLE_VK_TRY(displayVk, vkGetAndroidHardwareBufferPropertiesANDROID(device, hardwareBuffer,
                                                                         &bufferProperties));
 
+    WARN() << "bufferFormatProperties:";
+    WARN() << "\tformat: 0x" << std::hex << bufferFormatProperties.format;
+    WARN() << "\texternalFormat: 0x" << std::hex << bufferFormatProperties.externalFormat;
+    WARN() << "\tformatFeatures: 0x" << std::hex << bufferFormatProperties.formatFeatures;
+    WARN() << "\tsamplerYcbcrConversionComponents: "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.r << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.g << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.b << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.a;
+    WARN() << "\tsuggestedYcbcrModel: " << bufferFormatProperties.suggestedYcbcrModel;
+    WARN() << "\tsuggestedYcbcrRange: " << bufferFormatProperties.suggestedYcbcrRange;
+    WARN() << "\tsuggestedXChromaOffset: " << bufferFormatProperties.suggestedXChromaOffset;
+    WARN() << "\tsuggestedYChromaOffset: " << bufferFormatProperties.suggestedYChromaOffset;
+
     const vk::Format &vkFormat       = renderer->getFormat(internalFormat);
     const angle::Format &imageFormat = vkFormat.actualImageFormat();
     bool isDepthOrStencilFormat      = imageFormat.depthBits > 0 || imageFormat.stencilBits > 0;
@@ -113,6 +136,9 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
 
     if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
     {
+        // Note from Vulkan spec: Since GL_OES_EGL_image_external does not require the same sampling
+        // and conversion calculations as Vulkan does, achieving identical results between APIs may
+        // not be possible on some implementations.
         externalFormat.externalFormat = bufferFormatProperties.externalFormat;
     }
 
@@ -125,6 +151,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     VkExtent3D vkExtents;
     gl_vk::GetExtent(mSize, &vkExtents);
 
+    // Add yuvConversion to arguments for initExternal
     mImage = new vk::ImageHelper();
     ANGLE_TRY(mImage->initExternal(displayVk, gl::TextureType::_2D, vkExtents, vkFormat, 1, usage,
                                    vk::ImageLayout::ExternalPreInitialized,
@@ -149,6 +176,29 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     ANGLE_TRY(mImage->initExternalMemory(displayVk, renderer->getMemoryProperties(),
                                          externalMemoryRequirements, &dedicatedAllocInfo,
                                          VK_QUEUE_FAMILY_FOREIGN_EXT, flags));
+
+    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+    {
+        // Note from Vulkan spec: Since GL_OES_EGL_image_external does not require the same sampling
+        // and conversion calculations as Vulkan does, achieving identical results between APIs may
+        // not be possible on some implementations.
+        if (renderer->getFeatures().supportsYUVSamplerConversion.enabled)
+        {
+            VkSamplerYcbcrConversionCreateInfo yuvConversionInfo = {};
+            yuvConversionInfo.sType  = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO;
+            yuvConversionInfo.format = bufferFormatProperties.format;
+            yuvConversionInfo.xChromaOffset = bufferFormatProperties.suggestedXChromaOffset;
+            yuvConversionInfo.yChromaOffset = bufferFormatProperties.suggestedYChromaOffset;
+            yuvConversionInfo.ycbcrModel    = bufferFormatProperties.suggestedYcbcrModel;
+            yuvConversionInfo.ycbcrRange    = bufferFormatProperties.suggestedYcbcrRange;
+            yuvConversionInfo.chromaFilter  = VK_FILTER_LINEAR;
+            yuvConversionInfo.components = bufferFormatProperties.samplerYcbcrConversionComponents;
+
+            ANGLE_TRY(renderer->getYuvConversionCache().createYuvConversion(
+                displayVk, bufferFormatProperties.externalFormat, &yuvConversionInfo));
+            mImage->setYuvExternalFormat(bufferFormatProperties.externalFormat);
+        }
+    }
 
     constexpr uint32_t kColorRenderableRequiredBits        = VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
     constexpr uint32_t kDepthStencilRenderableRequiredBits = VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;

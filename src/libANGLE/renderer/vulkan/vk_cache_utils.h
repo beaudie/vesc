@@ -596,6 +596,26 @@ static_assert(sizeof(PipelineLayoutDesc) ==
                    sizeof(gl::ShaderMap<PackedPushConstantRange>)),
               "Unexpected Size");
 
+// YuvConversion Cache
+class YuvConversionCache final : angle::NonCopyable
+{
+  public:
+    YuvConversionCache();
+    ~YuvConversionCache();
+
+    void destroy(RendererVk *render);
+
+    angle::Result getYuvConversion(uint64_t externalFormat,
+                                   VkSamplerYcbcrConversion *yuvConversion);
+
+    angle::Result createYuvConversion(DisplayVk *displayVk,
+                                      uint64_t externalFormat,
+                                      VkSamplerYcbcrConversionCreateInfo *yuvConversionInfo);
+
+  private:
+    std::unordered_map<uint64_t, VkSamplerYcbcrConversion> mPayload;
+};
+
 // Packed sampler description for the sampler cache.
 class SamplerDesc final
 {
@@ -614,6 +634,7 @@ class SamplerDesc final
     size_t hash() const;
     bool operator==(const SamplerDesc &other) const;
 
+    // Somehow need to include YuvConversion object in this
   private:
     // 32*4 bits for floating point data.
     // Note: anisotropy enabled is implicitly determined by maxAnisotropy and caps.

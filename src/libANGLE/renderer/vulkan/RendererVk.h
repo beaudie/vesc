@@ -246,6 +246,7 @@ class RendererVk : angle::NonCopyable
     bool enableDebugUtils() const { return mEnableDebugUtils; }
 
     SamplerCache &getSamplerCache() { return mSamplerCache; }
+    vk::YuvConversionCache &getYuvConversionCache() { return mYuvConversionCache; }
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
 
   private:
@@ -367,6 +368,7 @@ class RendererVk : angle::NonCopyable
 
     VmaAllocator mAllocator;
     SamplerCache mSamplerCache;
+    vk::YuvConversionCache mYuvConversionCache;
     vk::ActiveHandleCounter mActiveHandleCounts;
 };
 
