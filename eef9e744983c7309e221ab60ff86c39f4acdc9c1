@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50942d68_c03d2cf9",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-07T18:46:54Z",
+      "side": 1,
+      "message": "This can now be an enableableExtension after https://chromium-review.googlesource.com/c/chromium/src/+/2188531 lands",
+      "range": {
+        "startLine": 1007,
+        "startChar": 52,
+        "endLine": 1007,
+        "endChar": 67
+      },
+      "revId": "eef9e744983c7309e221ab60ff86c39f4acdc9c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08595333_2291a867",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5063,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-07T18:46:54Z",
+      "side": 1,
+      "message": "Need to check that the extension is present here.",
+      "range": {
+        "startLine": 5063,
+        "startChar": 12,
+        "endLine": 5063,
+        "endChar": 18
+      },
+      "revId": "eef9e744983c7309e221ab60ff86c39f4acdc9c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
