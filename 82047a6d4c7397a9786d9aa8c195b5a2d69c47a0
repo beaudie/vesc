@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0302aa3_9f60ecbf",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-07T22:56:39Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be: mExecutable-\u003egetUniformBlocks()?\nLooks like there are a number of references to the member variable rather than using the getter.",
+      "range": {
+        "startLine": 1466,
+        "startChar": 48,
+        "endLine": 1466,
+        "endChar": 75
+      },
+      "revId": "82047a6d4c7397a9786d9aa8c195b5a2d69c47a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
