@@ -25,6 +25,75 @@
     },
     {
       "key": {
+        "uuid": "d98c11f6_c9fae7da",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-07T19:30:54Z",
+      "side": 1,
+      "message": "we have a policy that all TODOs require bug links. if you don\u0027t plan on fixing this, please just leave a note instead of a TODO. some more info than \u0027set dirty bit\u0027 is probably warranted.",
+      "range": {
+        "startLine": 1436,
+        "startChar": 3,
+        "endLine": 1436,
+        "endChar": 26
+      },
+      "revId": "eef9e744983c7309e221ab60ff86c39f4acdc9c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0776c440_41a0a09e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-07T19:30:54Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need to check the extension. You can just check the enum. You can move this to an ASSERT inside the if if you like.",
+      "range": {
+        "startLine": 1802,
+        "startChar": 3,
+        "endLine": 1802,
+        "endChar": 44
+      },
+      "revId": "eef9e744983c7309e221ab60ff86c39f4acdc9c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c0c3015_7b768300",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-07T19:30:54Z",
+      "side": 1,
+      "message": "This has a subtle bug. If you create a sampler with the hint enabled, disable the hint, then run again, ANGLE will use the cached sampler with the hint enabled. Leaving a comment should be fine.",
+      "range": {
+        "startLine": 1801,
+        "startChar": 0,
+        "endLine": 1812,
+        "endChar": 5
+      },
+      "revId": "eef9e744983c7309e221ab60ff86c39f4acdc9c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08595333_2291a867",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 2
