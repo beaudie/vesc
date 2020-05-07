@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d468e6fb_9c97a933",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T01:12:57Z",
+      "side": 1,
+      "message": "Can this be moved into execute()?   Is there ever a case where execute() would be called without a reset()?",
+      "revId": "fe79a312832e2498b8c193d612b02d505cc20790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0edca484_31e5bf16",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T01:12:57Z",
+      "side": 1,
+      "message": "I know this is a copy/paste, but this should probably just be an ascii \"-\u003e\".",
+      "range": {
+        "startLine": 2011,
+        "startChar": 69,
+        "endLine": 2011,
+        "endChar": 75
+      },
+      "revId": "fe79a312832e2498b8c193d612b02d505cc20790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
