@@ -22,6 +22,30 @@
       "revId": "9139c01ca71a32b99ec21f1ac129097e672400c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de415b5a_76d8a1f1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-07T17:56:55Z",
+      "side": 1,
+      "message": "Yes, I don\u0027t know how I end up with V there. Will fix.",
+      "parentUuid": "39dca661_0eb12dd2",
+      "range": {
+        "startLine": 50,
+        "startChar": 71,
+        "endLine": 50,
+        "endChar": 96
+      },
+      "revId": "9139c01ca71a32b99ec21f1ac129097e672400c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
