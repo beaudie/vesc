@@ -622,8 +622,23 @@ class PipelineBarrier : angle::NonCopyable
         reset();
     }
 
+    bool canMergeWithoutExtraDependency(const PipelineBarrier &other)
+    {
+        // If mDstStageMask already have the other's mDstStageMask bits, then merge it
+        if (mDstStageMask == (mDstStageMask | other.mDstStageMask))
+        {
+            return true;
+        }
+        // If my dependency is stronger then we can merge
+        if (gl::ScanReverse(mSrcStageMask) >= gl::ScanReverse(other.mSrcStageMask))
+        {
+            return true;
+        }
+        return false;
+    }
+
     // merge two barriers into one
-    void merge(const PipelineBarrier &other)
+    void merge(PipelineBarrier &other)
     {
         mSrcStageMask |= other.mSrcStageMask;
         mDstStageMask |= other.mDstStageMask;
@@ -631,6 +646,7 @@ class PipelineBarrier : angle::NonCopyable
         mMemoryBarrierDstAccess |= other.mMemoryBarrierDstAccess;
         mImageMemoryBarriers.insert(mImageMemoryBarriers.end(), other.mImageMemoryBarriers.begin(),
                                     other.mImageMemoryBarriers.end());
+        other.reset();
     }
 
     void mergeMemoryBarrier(VkPipelineStageFlags srcStageMask,
@@ -775,11 +791,11 @@ class BufferHelper final : public Resource
     bool canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType);
     bool canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType);
 
-    void updateReadBarrier(VkAccessFlags readAccessType,
+    bool updateReadBarrier(VkAccessFlags readAccessType,
                            VkPipelineStageFlags readStage,
                            PipelineBarrier *barrier);
 
-    void updateWriteBarrier(VkAccessFlags writeAccessType,
+    bool updateWriteBarrier(VkAccessFlags writeAccessType,
                             VkPipelineStageFlags writeStage,
                             PipelineBarrier *barrier);
 
@@ -841,10 +857,6 @@ struct CommandBufferHelper : angle::NonCopyable
                     VkImageAspectFlags aspectFlags,
                     vk::ImageLayout imageLayout,
                     vk::ImageHelper *image);
-
-    void imageBarrier(VkPipelineStageFlags srcStageMask,
-                      VkPipelineStageFlags dstStageMask,
-                      const VkImageMemoryBarrier &imageMemoryBarrier);
 
     vk::CommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
@@ -929,7 +941,8 @@ struct CommandBufferHelper : angle::NonCopyable
     void addCommandDiagnostics(ContextVk *contextVk);
 
     // General state (non-renderPass related)
-    vk::PipelineBarrier mPipelineBarrier;
+    PipelineBarrierArray mPipelineBarriers;
+    PipelineStagesMask mPipelineBarrierMask;
     vk::CommandBuffer mCommandBuffer;
 
     // RenderPass state
@@ -1277,6 +1290,10 @@ class ImageHelper final : public Resource, public angle::Subject
                               ImageLayout newLayout,
                               uint32_t newQueueFamilyIndex,
                               CommandBuffer *commandBuffer);
+
+    void updateLayoutAndBarrier(VkImageAspectFlags aspectMask,
+                                ImageLayout newLayout,
+                                PipelineBarrier *barrier);
 
     // Performs an ownership transfer from an external instance or API.
     void acquireFromExternal(ContextVk *contextVk,
