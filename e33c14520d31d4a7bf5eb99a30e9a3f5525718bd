@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1abcd2fb_52319801",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-07T19:39:19Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s a virtual function overridden in this class.",
+      "parentUuid": "6ad45672_0898fe16",
+      "range": {
+        "startLine": 94,
+        "startChar": 59,
+        "endLine": 94,
+        "endChar": 67
+      },
+      "revId": "e33c14520d31d4a7bf5eb99a30e9a3f5525718bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e879137_5dca076e",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "e33c14520d31d4a7bf5eb99a30e9a3f5525718bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af9250ec_49999bc6",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-07T19:39:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e879137_5dca076e",
+      "range": {
+        "startLine": 328,
+        "startChar": 30,
+        "endLine": 328,
+        "endChar": 50
+      },
+      "revId": "e33c14520d31d4a7bf5eb99a30e9a3f5525718bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
