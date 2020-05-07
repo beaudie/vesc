@@ -1,0 +1,192 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "776627bf_8f7a939e",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T02:19:13Z",
+      "side": 1,
+      "message": "This lists 3 states, but there are only 2 enum values.   Why isn\u0027t the \"forced off\" case in the enum?   Maybe remove the \"forced off\" portion of this comment?",
+      "range": {
+        "startLine": 232,
+        "startChar": 34,
+        "endLine": 232,
+        "endChar": 94
+      },
+      "revId": "64166269941a0bba474b99f772fe30bf6c2bb1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a191e577_6286a67c",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T02:19:13Z",
+      "side": 1,
+      "message": "Since there are only 2 states, does this need to be an enum?   Can TextureState::mSrgbOverride just be a bool instead (and renamed to \u0027mEnableSrgbOverride\u0027)?",
+      "range": {
+        "startLine": 234,
+        "startChar": 11,
+        "endLine": 234,
+        "endChar": 23
+      },
+      "revId": "64166269941a0bba474b99f772fe30bf6c2bb1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bb6c734_62124764",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T02:19:13Z",
+      "side": 1,
+      "message": "Why does this need to take a Context* parameter?",
+      "revId": "64166269941a0bba474b99f772fe30bf6c2bb1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a167ca5_e7775e71",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T02:19:13Z",
+      "side": 1,
+      "message": "We probably want to only set this dirty bit if the value actually changes.",
+      "revId": "64166269941a0bba474b99f772fe30bf6c2bb1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1b47f4d_98d8c34d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T02:19:13Z",
+      "side": 1,
+      "message": "Can requiresNewImageAttributes above instead be:\n\n    VkImageUsageFlags oldImageUseFlags \u003d mImageUsageFlags;\n\nThen, this conditional can become:\n\n    if (oldImageUseFlags !\u003d mImageUsageFlags)\n\nThat way we don\u0027t need to set a conditional every time we modify mImageCreateFlags and any new blocks that modify mImageCreateFlags will get respecifyImageAttributes() called for free.",
+      "revId": "64166269941a0bba474b99f772fe30bf6c2bb1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1969572_a711ec3e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T02:19:13Z",
+      "side": 1,
+      "message": "The spec definition of VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT:\n\nVK_IMAGE_CREATE_MUTABLE_FORMAT_BIT specifies that the image can be used to create a VkImageView with a different format from the image. For multi-planar formats, VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT specifies that a VkImageView can be created of a plane of the image.\n\nIt feels a little weird to redefine VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT within ANGLE to mean \"sRGB\".   I\u0027m not sure of a better answer though.",
+      "revId": "64166269941a0bba474b99f772fe30bf6c2bb1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a31cc69_ee627136",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T02:19:13Z",
+      "side": 1,
+      "message": "TextureVk::syncState() sets VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT if getSRGBOverride() !\u003d gl::SrgbOverride::Default, which (presumably) could be either enabled or disabled, if disabled is meant to be supported also.   However, this only supports getSRGBOverride() returning enabled, since it assumes we want to skip the decode here.\n\nIs the \u0027disabled\u0027 part of the feature meant to be supported?",
+      "revId": "64166269941a0bba474b99f772fe30bf6c2bb1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eadd56d8_fb2f9f2a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T02:19:13Z",
+      "side": 1,
+      "message": "How exhaustive do we expect these lists of formats to become and when can/should new formats be added?",
+      "revId": "64166269941a0bba474b99f772fe30bf6c2bb1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b48d0b2_d7e6c58e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4025,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T02:19:13Z",
+      "side": 1,
+      "message": "linearFormat was just used above to initialize mLinearReadImageView.   Can linearFormat actually be VK_FORMAT_UNDEFINED here?   If so, what does that mean for the call to initLayerImageViewImpl() above?   Should the conditional on line 4006 actually be:\n\n    if ((linearFormat !\u003d VK_FORMAT_UNDEFINED) \u0026\u0026 !mLinearReadImageView.valid())",
+      "revId": "64166269941a0bba474b99f772fe30bf6c2bb1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6eb47fdb_e5158c58",
+        "filename": "src/tests/gl_tests/SRGBTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-07T02:19:13Z",
+      "side": 1,
+      "message": "These essentially look like random numbers.   Is there a way to make them more human-readable?\n\nWe have these already:\n\n    [[[ ANGLETest.cpp ]]]\n    const GLColorRGB GLColorRGB::green(0u, 255u, 0u);\n    const GLColorRGB GLColorRGB::red(255u, 0u, 0u);\n    const GLColorRGB GLColorRGB::yellow(255u, 255u, 0);\n\n    const GLColor GLColor::black            \u003d GLColor(0u, 0u, 0u, 255u);\n    const GLColor GLColor::blue             \u003d GLColor(0u, 0u, 255u, 255u);\n    const GLColor GLColor::cyan             \u003d GLColor(0u, 255u, 255u, 255u);\n\nCan you add the sRGB versions you are using here?",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 278,
+        "endChar": 40
+      },
+      "revId": "64166269941a0bba474b99f772fe30bf6c2bb1f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
