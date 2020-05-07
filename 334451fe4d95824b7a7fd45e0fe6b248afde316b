@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2c7fc15b_80b80e30",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-07T14:58:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02fb9a5b_d7255032",
+      "revId": "334451fe4d95824b7a7fd45e0fe6b248afde316b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48f246cf_140bf4c6",
         "filename": "util/png_utils.cpp",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2020-05-07T04:27:52Z",
       "side": 1,
       "message": "nit: These aren\u0027t helpful on Android. Is there a more centralized error logging you can use that supports ALOGE?",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 15
+      },
+      "revId": "334451fe4d95824b7a7fd45e0fe6b248afde316b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "537c444d_7e3856d3",
+        "filename": "util/png_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-07T14:58:57Z",
+      "side": 1,
+      "message": "I think we can use ANGLE\u0027s logging macros at some point. Will leave that for a future patch set.",
+      "parentUuid": "48f246cf_140bf4c6",
       "range": {
         "startLine": 50,
         "startChar": 8,
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "fa0c69f5_62bdba77",
+        "filename": "util/png_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-07T14:58:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddd7316d_62b94a79",
+      "revId": "334451fe4d95824b7a7fd45e0fe6b248afde316b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2765dd9f_5a151e97",
         "filename": "util/png_utils.cpp",
         "patchSetId": 2
@@ -79,6 +139,30 @@
       "revId": "334451fe4d95824b7a7fd45e0fe6b248afde316b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f2d67f6_04daf448",
+        "filename": "util/png_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-07T14:58:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2765dd9f_5a151e97",
+      "range": {
+        "startLine": 112,
+        "startChar": 43,
+        "endLine": 112,
+        "endChar": 50
+      },
+      "revId": "334451fe4d95824b7a7fd45e0fe6b248afde316b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
