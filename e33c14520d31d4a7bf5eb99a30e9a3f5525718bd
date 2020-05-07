@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ad45672_0898fe16",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-07T18:51:23Z",
+      "side": 1,
+      "message": "Did you need this?",
+      "range": {
+        "startLine": 94,
+        "startChar": 59,
+        "endLine": 94,
+        "endChar": 67
+      },
+      "revId": "e33c14520d31d4a7bf5eb99a30e9a3f5525718bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e879137_5dca076e",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-07T18:51:23Z",
+      "side": 1,
+      "message": "Probably should increment this by one to avoid running the first frame again, which can fail.",
+      "range": {
+        "startLine": 328,
+        "startChar": 30,
+        "endLine": 328,
+        "endChar": 50
+      },
+      "revId": "e33c14520d31d4a7bf5eb99a30e9a3f5525718bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
