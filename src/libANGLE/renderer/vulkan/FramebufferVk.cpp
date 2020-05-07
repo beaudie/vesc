@@ -1114,9 +1114,12 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
 
     // Only defer clears for whole draw framebuffer ops. If the scissor test is on and the scissor
     // rect doesn't match the draw rect, forget it.
-    gl::Rectangle renderArea          = getCompleteRenderArea();
-    gl::Rectangle scissoredRenderArea = ClipRectToScissor(context->getState(), renderArea, false);
-    bool deferClears = binding == GL_DRAW_FRAMEBUFFER && renderArea == scissoredRenderArea;
+    // Temporarily disabled: http://anglebug.com/4617
+    // gl::Rectangle renderArea          = getCompleteRenderArea();
+    // gl::Rectangle scissoredRenderArea = ClipRectToScissor(context->getState(), renderArea,
+    // false); bool deferClears = binding == GL_DRAW_FRAMEBUFFER && renderArea ==
+    // scissoredRenderArea;
+    bool deferClears = false;
 
     // For any updated attachments we'll update their Serials below
     ASSERT(dirtyBits.any());
