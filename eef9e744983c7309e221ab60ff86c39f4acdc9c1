@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e18d98a8_be6aa40e",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-05-07T20:02:35Z",
+      "side": 1,
+      "message": "So should I wait for your change to land before landing this one?",
+      "parentUuid": "50942d68_c03d2cf9",
+      "range": {
+        "startLine": 1007,
+        "startChar": 52,
+        "endLine": 1007,
+        "endChar": 67
+      },
+      "revId": "eef9e744983c7309e221ab60ff86c39f4acdc9c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98c11f6_c9fae7da",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 2
@@ -82,6 +106,30 @@
       "writtenOn": "2020-05-07T19:30:54Z",
       "side": 1,
       "message": "This has a subtle bug. If you create a sampler with the hint enabled, disable the hint, then run again, ANGLE will use the cached sampler with the hint enabled. Leaving a comment should be fine.",
+      "range": {
+        "startLine": 1801,
+        "startChar": 0,
+        "endLine": 1812,
+        "endChar": 5
+      },
+      "revId": "eef9e744983c7309e221ab60ff86c39f4acdc9c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06740875_172f63f7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-05-07T20:02:35Z",
+      "side": 1,
+      "message": "This is because we\u0027re lacking dirty-bit logic for this flag in State, as we discussed over chat. You also left a comment about the \"TODO: set dirty bit\" (https://chromium-review.googlesource.com/c/angle/angle/+/2185822/2/src/libANGLE/State.cpp#1436). What I\u0027ll do is remove that TODO and add a comment that explains that we\u0027re not adding a dirty bit as this option is likely not to be toggled at runtime. That should imply that toggling it won\u0027t work.",
+      "parentUuid": "4c0c3015_7b768300",
       "range": {
         "startLine": 1801,
         "startChar": 0,
