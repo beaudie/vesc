@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "30d25396_3101c271",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-08T23:49:49Z",
+      "side": 1,
+      "message": "Why doesn\u0027t mPipelineBarrierMask.reset(pipelineStage); work?   Isn\u0027t that what *iter is?",
+      "parentUuid": "ecf9d82b_f60106a9",
+      "range": {
+        "startLine": 583,
+        "startChar": 0,
+        "endLine": 584,
+        "endChar": 16
+      },
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c468352b_616631f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -183,6 +207,24 @@
       "side": 1,
       "message": "The caller already calls isLayoutChangeNecessary().",
       "parentUuid": "6381549b_237d21e8",
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcc49b8d_5306f060",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2855,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-08T23:49:49Z",
+      "side": 1,
+      "message": "Right.   Why isn\u0027t this checking layoutData.sameLayoutTransitionRequiresBarrier also?   Why is this always assuming a memory barrier is required, when there are ImageMemoryBarrierData entries where sameLayoutTransitionRequiresBarrier is false?",
+      "parentUuid": "acb48c54_151c67e5",
       "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
