@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "950a6dd4_f0b7cbb9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-08T20:44:27Z",
+      "side": 1,
+      "message": "Curious, why does this get VertexShader but ExternalShadersReadOnly  uses PipelineStage::TopOfPipe?\nLooks like it\u0027s related to new data from CPU vs. this one where it\u0027s protecting against changes other shaders made.",
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
