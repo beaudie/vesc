@@ -747,6 +747,10 @@ template <typename T>
 using TransformFeedbackBuffersArray =
     std::array<T, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS>;
 
+template <typename T>
+using TransformFeedbackBuffersVector =
+    angle::FixedVector<T, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS>;
+
 constexpr size_t kBarrierVectorDefaultSize = 16;
 
 template <typename T>
