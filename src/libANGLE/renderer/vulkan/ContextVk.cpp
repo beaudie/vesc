@@ -1470,36 +1470,31 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     if (!executable->hasTransformFeedbackOutput() || !mState.isTransformFeedbackActive())
         return angle::Result::Continue;
 
-    size_t bufferIndex                       = 0;
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
+    size_t bufferCount                       = executable->getTransformFeedbackBufferCount(mState);
 
-    size_t bufferCount = executable->getTransformFeedbackBufferCount(mState);
-    gl::TransformFeedbackBuffersArray<VkBuffer> bufferHandles;
+    const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &bufferHelpers =
+        transformFeedbackVk->getBufferHelpers();
 
-    const std::vector<gl::OffsetBindingPointer<gl::Buffer>> &xfbBuffers =
-        mState.getCurrentTransformFeedback()->getIndexedBuffers();
-
-    for (bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+    for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
     {
-        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = xfbBuffers[bufferIndex];
-        gl::Buffer *buffer                                        = bufferBinding.get();
-        ASSERT(buffer != nullptr);
-        BufferVk *bufferVk = vk::GetImpl(buffer);
-
-        vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
-        bufferHandles[bufferIndex]     = bufferHelper.getBuffer().getHandle();
-
+        vk::BufferHelper *bufferHelper = bufferHelpers[bufferIndex];
+        ASSERT(bufferHelper);
         mRenderPassCommands.bufferWrite(&mResourceUseList,
                                         VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT,
-                                        vk::PipelineStage::TransformFeedback, &bufferHelper);
+                                        vk::PipelineStage::TransformFeedback, bufferHelper);
     }
 
-    const TransformFeedbackBufferRange &xfbBufferRangeExtension =
-        transformFeedbackVk->getTransformFeedbackBufferRange();
+    const gl::TransformFeedbackBuffersArray<VkBuffer> &bufferHandles =
+        transformFeedbackVk->getBufferHandles();
+    const gl::TransformFeedbackBuffersArray<VkDeviceSize> &bufferOffsets =
+        transformFeedbackVk->getBufferOffsets();
+    const gl::TransformFeedbackBuffersArray<VkDeviceSize> &bufferSizes =
+        transformFeedbackVk->getBufferSizes();
 
-    commandBuffer->bindTransformFeedbackBuffers(
-        static_cast<uint32_t>(bufferCount), bufferHandles.data(),
-        xfbBufferRangeExtension.offsets.data(), xfbBufferRangeExtension.sizes.data());
+    commandBuffer->bindTransformFeedbackBuffers(static_cast<uint32_t>(bufferCount),
+                                                bufferHandles.data(), bufferOffsets.data(),
+                                                bufferSizes.data());
 
     return angle::Result::Continue;
 }
