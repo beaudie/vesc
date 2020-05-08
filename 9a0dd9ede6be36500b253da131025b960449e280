@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ea771df7_c461dd77",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-05-08T09:32:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b2064d6_072f09a9",
+      "range": {
+        "startLine": 7,
+        "startChar": 35,
+        "endLine": 7,
+        "endChar": 36
+      },
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d6f4718_7b7e8593",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 10
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "87d3fdaa_b3577553",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-05-08T09:32:11Z",
+      "side": 1,
+      "message": "Done.\nThanks, I move it into anonymous namespace in TextureVk.cpp, and call it \"Set3DBaseArrayLayerAndLayerCount\".",
+      "parentUuid": "c78023bd_6e5388d3",
+      "range": {
+        "startLine": 595,
+        "startChar": 25,
+        "endLine": 595,
+        "endChar": 49
+      },
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a177f5b_b11f2e3b",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 10
@@ -107,6 +155,24 @@
       "writtenOn": "2020-04-28T18:17:03Z",
       "side": 1,
       "message": "Does destOffset.z need to be set here? Could you add another copy test that does a 2D to 3D copy?",
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f702667_a3f114fa",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-05-08T09:32:11Z",
+      "side": 1,
+      "message": "I think there are already conversion tests from 2D to 3D. Such as CopyTexImageTestES3.3DSubImageDrawTextureData and CopyTexImageTestES3.3DSubImageRawTextureData end2end tests.\nIt\u0027s not needed to set destOffset.z here because the index is made of zoffset in Context::copyTexSubImage3D and the input destOffset.z here includes the zoffset value.",
+      "parentUuid": "6a177f5b_b11f2e3b",
       "revId": "9a0dd9ede6be36500b253da131025b960449e280",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -130,6 +196,24 @@
     },
     {
       "key": {
+        "uuid": "ad13044e_b5fcab37",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-05-08T09:32:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f013889_f70ec150",
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfd63558_171e5192",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 10
@@ -150,6 +234,30 @@
       "revId": "9a0dd9ede6be36500b253da131025b960449e280",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a1eb441_2612a73a",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1393148
+      },
+      "writtenOn": "2020-05-08T09:32:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfd63558_171e5192",
+      "range": {
+        "startLine": 656,
+        "startChar": 37,
+        "endLine": 656,
+        "endChar": 48
+      },
+      "revId": "9a0dd9ede6be36500b253da131025b960449e280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
