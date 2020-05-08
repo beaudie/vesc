@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f13bdd00_f6771a60",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-08T23:56:49Z",
+      "side": 1,
+      "message": "It used to be called getExecutable() until you asked for it to be getProgramExecutable():\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2040512/14/src/libANGLE/Context.cpp#8672\n\nI\u0027m going to leave it as it is, since it\u0027s gone back and forth already.",
+      "parentUuid": "df5bea68_883891b1",
+      "range": {
+        "startLine": 336,
+        "startChar": 29,
+        "endLine": 336,
+        "endChar": 49
+      },
+      "revId": "9cd83f05a51449c5f988f1e1f71c9e630b97d172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5611655_83646cb0",
         "filename": "src/libANGLE/ProgramPipeline.h",
         "patchSetId": 15
@@ -45,6 +69,30 @@
       "revId": "9cd83f05a51449c5f988f1e1f71c9e630b97d172",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4fbdfb0_0c31b424",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-08T23:56:49Z",
+      "side": 1,
+      "message": "See the other response.",
+      "parentUuid": "d5611655_83646cb0",
+      "range": {
+        "startLine": 47,
+        "startChar": 29,
+        "endLine": 47,
+        "endChar": 49
+      },
+      "revId": "9cd83f05a51449c5f988f1e1f71c9e630b97d172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
