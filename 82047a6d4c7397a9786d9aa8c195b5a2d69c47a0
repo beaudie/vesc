@@ -22,6 +22,30 @@
       "revId": "82047a6d4c7397a9786d9aa8c195b5a2d69c47a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71936490_d2f0d4e2",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-08T01:03:09Z",
+      "side": 1,
+      "message": "I\u0027ve updated the accesses that can use const getters, but I haven\u0027t added non-const getters or setters.\n\nAdding the non-const getters would be straightforward also (same find/replace).   However, the setters will take a bit more work.   I\u0027d like to know that this is the right approach before doing that work, or if the functions that access the members should be moved/refactored.",
+      "parentUuid": "d0302aa3_9f60ecbf",
+      "range": {
+        "startLine": 1466,
+        "startChar": 48,
+        "endLine": 1466,
+        "endChar": 75
+      },
+      "revId": "82047a6d4c7397a9786d9aa8c195b5a2d69c47a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
