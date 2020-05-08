@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "000b98f5_2ff506a8",
+        "filename": "src/tests/gl_tests/TextureFilteringHintTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T18:07:11Z",
+      "side": 1,
+      "message": "nit: comment before every new test is an angle test guideline.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 6
+      },
+      "revId": "055308c26e505bda90305a18f1225f3e614449a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeda9e85_82a6de6e",
+        "filename": "src/tests/gl_tests/TextureFilteringHintTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T18:07:11Z",
+      "side": 1,
+      "message": "nit: use EXPECT_GLENUM_EQ or EXPECT_EQ if GLENUM_EQ is giving you issues.",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 18
+      },
+      "revId": "055308c26e505bda90305a18f1225f3e614449a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

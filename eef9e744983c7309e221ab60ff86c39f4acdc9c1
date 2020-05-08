@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "109b4fc3_7f7379a7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T18:07:11Z",
+      "side": 1,
+      "message": "Could use a comment here explaining the bug:\n\n- render with hint enabled\n- disable hint\n- render again - vk sampler state still has the hint enabled.",
+      "parentUuid": "e5a28490_b3d2989b",
+      "range": {
+        "startLine": 1801,
+        "startChar": 0,
+        "endLine": 1812,
+        "endChar": 5
+      },
+      "revId": "eef9e744983c7309e221ab60ff86c39f4acdc9c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08595333_2291a867",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 2
@@ -273,6 +297,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "08595333_2291a867",
+      "range": {
+        "startLine": 5063,
+        "startChar": 12,
+        "endLine": 5063,
+        "endChar": 18
+      },
+      "revId": "eef9e744983c7309e221ab60ff86c39f4acdc9c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1b47489d_82a87811",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5063,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T18:07:11Z",
+      "side": 1,
+      "message": "You\u0027re not generating an error here. Can you add a negative test to catch this?",
+      "parentUuid": "ec427cbb_beeeef29",
       "range": {
         "startLine": 5063,
         "startChar": 12,
