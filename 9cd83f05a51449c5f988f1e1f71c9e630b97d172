@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df5bea68_883891b1",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T20:05:15Z",
+      "side": 1,
+      "message": "nit: just getExecutable is fine as this is always a \"Program\" object.",
+      "range": {
+        "startLine": 336,
+        "startChar": 29,
+        "endLine": 336,
+        "endChar": 49
+      },
+      "revId": "9cd83f05a51449c5f988f1e1f71c9e630b97d172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5611655_83646cb0",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T20:05:15Z",
+      "side": 1,
+      "message": "nit: just getExecutable is fine as this is always a \"Program\" object.",
+      "range": {
+        "startLine": 47,
+        "startChar": 29,
+        "endLine": 47,
+        "endChar": 49
+      },
+      "revId": "9cd83f05a51449c5f988f1e1f71c9e630b97d172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
