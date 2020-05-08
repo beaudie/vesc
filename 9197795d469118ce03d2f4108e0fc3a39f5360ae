@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fd90fe16_c9d6070d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-08T20:53:05Z",
+      "side": 1,
+      "message": "This is to tell which bin this barrier should put in. For barrier against single stage, it is single. But for barriers with multiple stages, the question is which bin should the barrier goes in. What I did here is I pick the bin that corresponds to the lowest pipeline stage. For this specific layout, we pick this whenever there are multiple shaders reading it, so the lowest stage is vertex. I can pick TopOfPipe, but I think it would be too strong.",
+      "parentUuid": "950a6dd4_f0b7cbb9",
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8e9ee121_cd2a4351",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
