@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c963c1b7_b8b6c66c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T16:17:52Z",
+      "side": 1,
+      "message": "why does this do anything? mReserved is initialized in reset() and never touched.",
+      "range": {
+        "startLine": 1774,
+        "startChar": 5,
+        "endLine": 1774,
+        "endChar": 18
+      },
+      "revId": "a9eb9a4f12b1eb07121408e6668ee3408bdb44bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
