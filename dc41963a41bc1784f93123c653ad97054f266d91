@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e1dce3f_235a5da9",
+        "filename": "src/tests/gl_tests/TextureFilteringHintTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T19:44:56Z",
+      "side": 1,
+      "message": "non-blocking nit: you can also add a test that verifies passing an invalid hint enum (like GL_TEXTURE_2D) generates invalid_enum.",
+      "range": {
+        "startLine": 48,
+        "startChar": 25,
+        "endLine": 48,
+        "endChar": 34
+      },
+      "revId": "dc41963a41bc1784f93123c653ad97054f266d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
