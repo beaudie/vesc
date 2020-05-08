@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39eebe72_92f806cc",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T15:24:07Z",
+      "side": 1,
+      "message": "nit: can be in initializer list",
+      "range": {
+        "startLine": 1102,
+        "startChar": 0,
+        "endLine": 1103,
+        "endChar": 42
+      },
+      "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bdca532_61e8feb7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T15:24:07Z",
+      "side": 1,
+      "message": "nit: SafeDelete",
+      "range": {
+        "startLine": 1110,
+        "startChar": 4,
+        "endLine": 1110,
+        "endChar": 11
+      },
+      "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8f9b606_36810367",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T15:24:07Z",
+      "side": 1,
+      "message": "these could remain \u0026, right? with an ASSERT They\u0027re non-null.",
+      "range": {
+        "startLine": 336,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 69
+      },
+      "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3085fc32_8f2a174e",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T15:24:07Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 42
+      },
+      "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c169a389_d50046f2",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T15:24:07Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 43,
+        "startChar": 3,
+        "endLine": 43,
+        "endChar": 4
+      },
+      "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cda0a504_0df02aca",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T15:24:07Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd2f4cc4_e3c69089",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T15:24:07Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 80
+      },
+      "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c204506_78c971de",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T15:24:07Z",
+      "side": 1,
+      "message": "same.. also we should remove this pattern when you can as it\u0027s layer breaking.",
+      "range": {
+        "startLine": 121,
+        "startChar": 33,
+        "endLine": 121,
+        "endChar": 48
+      },
+      "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
