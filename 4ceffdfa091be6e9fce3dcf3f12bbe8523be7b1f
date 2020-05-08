@@ -399,6 +399,30 @@
       "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be976949_4a9d4bf7",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T20:03:51Z",
+      "side": 1,
+      "message": "Forgot the types were unrelated and you\u0027re not using an impl object... so this mostly doesn\u0027t apply. What we should do later is remove the gl::Program/gl::ProgramPipeline pointers from this object so the Executable can live without a program/pipeline.",
+      "parentUuid": "2dd439cb_793af40e",
+      "range": {
+        "startLine": 121,
+        "startChar": 33,
+        "endLine": 121,
+        "endChar": 48
+      },
+      "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
