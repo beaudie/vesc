@@ -1452,7 +1452,14 @@ egl::Error WindowSurfaceVk::getUserWidth(const egl::Display *display, EGLint *va
     if (result == angle::Result::Continue)
     {
         // The EGL spec states that value is not written if there is an error
-        *value = static_cast<EGLint>(surfaceCaps.currentExtent.width);
+        if (surfaceCaps.currentExtent.width != 0xffffffff)
+        {
+            *value = static_cast<EGLint>(surfaceCaps.currentExtent.width);
+        }
+        else
+        {
+            *value = getWidth();
+        }
     }
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
@@ -1466,7 +1473,14 @@ egl::Error WindowSurfaceVk::getUserHeight(const egl::Display *display, EGLint *v
     if (result == angle::Result::Continue)
     {
         // The EGL spec states that value is not written if there is an error
-        *value = static_cast<EGLint>(surfaceCaps.currentExtent.height);
+        if (surfaceCaps.currentExtent.height != 0xffffffff)
+        {
+            *value = static_cast<EGLint>(surfaceCaps.currentExtent.height);
+        }
+        else
+        {
+            *value = getHeight();
+        }
     }
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
