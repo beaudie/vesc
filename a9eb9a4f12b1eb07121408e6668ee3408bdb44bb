@@ -22,6 +22,30 @@
       "revId": "a9eb9a4f12b1eb07121408e6668ee3408bdb44bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51e5dd15_0095e9ba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T16:18:58Z",
+      "side": 1,
+      "message": "ah, nevermind, it\u0027s the secondary constructor.",
+      "parentUuid": "c963c1b7_b8b6c66c",
+      "range": {
+        "startLine": 1774,
+        "startChar": 5,
+        "endLine": 1774,
+        "endChar": 18
+      },
+      "revId": "a9eb9a4f12b1eb07121408e6668ee3408bdb44bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
