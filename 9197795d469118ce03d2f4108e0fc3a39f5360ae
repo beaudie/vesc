@@ -16,6 +16,92 @@
       "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e9ee121_cd2a4351",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-08T20:48:28Z",
+      "side": 1,
+      "message": "This looks like enough to put into a helper function that can be called here and in imageRead().",
+      "range": {
+        "startLine": 569,
+        "startChar": 0,
+        "endLine": 573,
+        "endChar": 47
+      },
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b02429b4_ba4f8c57",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-08T20:48:28Z",
+      "side": 1,
+      "message": "This should be able to be:\n\n    for (PipelineStage pipelineStage : mPipelineBarrierMask)",
+      "range": {
+        "startLine": 583,
+        "startChar": 0,
+        "endLine": 584,
+        "endChar": 16
+      },
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c468352b_616631f5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-08T20:48:28Z",
+      "side": 1,
+      "message": "I think this should be called something like \"barrierRequired\" or \"needsBarrier\".",
+      "range": {
+        "startLine": 2329,
+        "startChar": 9,
+        "endLine": 2329,
+        "endChar": 15
+      },
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6381549b_237d21e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2855,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-08T20:48:28Z",
+      "side": 1,
+      "message": "Should this call ImageHelper::isLayoutChangeNecessary()?   Or is that too restrictive?",
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
