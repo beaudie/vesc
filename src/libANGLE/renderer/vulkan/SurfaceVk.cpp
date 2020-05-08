@@ -1446,12 +1446,20 @@ EGLint WindowSurfaceVk::getHeight() const
 egl::Error WindowSurfaceVk::getUserWidth(const egl::Display *display, EGLint *value) const
 {
     DisplayVk *displayVk = vk::GetImpl(display);
-    VkSurfaceCapabilitiesKHR surfaceCaps;
 
+    if (mSurfaceCaps.currentExtent.width == 0xffffffff)
+    {
+        // Surface has no intrinsic size; use current size.
+        *value = getWidth();
+        return egl::NoError();
+    }
+
+    VkSurfaceCapabilitiesKHR surfaceCaps;
     angle::Result result = getUserExtentsImpl(displayVk, &surfaceCaps);
     if (result == angle::Result::Continue)
     {
         // The EGL spec states that value is not written if there is an error
+        ASSERT(surfaceCaps.currentExtent.width != 0xffffffff);
         *value = static_cast<EGLint>(surfaceCaps.currentExtent.width);
     }
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
@@ -1460,12 +1468,20 @@ egl::Error WindowSurfaceVk::getUserWidth(const egl::Display *display, EGLint *va
 egl::Error WindowSurfaceVk::getUserHeight(const egl::Display *display, EGLint *value) const
 {
     DisplayVk *displayVk = vk::GetImpl(display);
-    VkSurfaceCapabilitiesKHR surfaceCaps;
 
+    if (mSurfaceCaps.currentExtent.height == 0xffffffff)
+    {
+        // Surface has no intrinsic size; use current size.
+        *value = getHeight();
+        return egl::NoError();
+    }
+
+    VkSurfaceCapabilitiesKHR surfaceCaps;
     angle::Result result = getUserExtentsImpl(displayVk, &surfaceCaps);
     if (result == angle::Result::Continue)
     {
         // The EGL spec states that value is not written if there is an error
+        ASSERT(surfaceCaps.currentExtent.height != 0xffffffff);
         *value = static_cast<EGLint>(surfaceCaps.currentExtent.height);
     }
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
