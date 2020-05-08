@@ -375,6 +375,30 @@
       "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dd439cb_793af40e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-08T19:57:51Z",
+      "side": 1,
+      "message": "The executable should be able to get its linked stages from ProgramExecutableState and not need the front-end object. Although it\u0027s possible in the code we don\u0027t want to go from a back-end object to a front-end object once the front layer is discarded. That\u0027s going up a layer (conceptually dynamic_cast)",
+      "parentUuid": "d886eb30_f3039633",
+      "range": {
+        "startLine": 121,
+        "startChar": 33,
+        "endLine": 121,
+        "endChar": 48
+      },
+      "revId": "4ceffdfa091be6e9fce3dcf3f12bbe8523be7b1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
