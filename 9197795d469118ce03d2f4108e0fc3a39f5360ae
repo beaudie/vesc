@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "fd1df940_36d5a037",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-08T21:00:37Z",
+      "side": 1,
+      "message": "You won\u0027t save much lines here though. IMO, this is easier to read rather than have to jump to another helper func to figure out what it is doing. But I will add a helper func if anyone has strong opinion on this.",
+      "parentUuid": "8e9ee121_cd2a4351",
+      "range": {
+        "startLine": 569,
+        "startChar": 0,
+        "endLine": 573,
+        "endChar": 47
+      },
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b02429b4_ba4f8c57",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -71,6 +95,30 @@
       "writtenOn": "2020-05-08T20:48:28Z",
       "side": 1,
       "message": "This should be able to be:\n\n    for (PipelineStage pipelineStage : mPipelineBarrierMask)",
+      "range": {
+        "startLine": 583,
+        "startChar": 0,
+        "endLine": 584,
+        "endChar": 16
+      },
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecf9d82b_f60106a9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-08T21:00:37Z",
+      "side": 1,
+      "message": "The thing is I need \"iter\" to clear bit mask bellow at line 588.",
+      "parentUuid": "b02429b4_ba4f8c57",
       "range": {
         "startLine": 583,
         "startChar": 0,
@@ -117,6 +165,24 @@
       "writtenOn": "2020-05-08T20:48:28Z",
       "side": 1,
       "message": "Should this call ImageHelper::isLayoutChangeNecessary()?   Or is that too restrictive?",
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acb48c54_151c67e5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2855,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-08T21:00:37Z",
+      "side": 1,
+      "message": "The caller already calls isLayoutChangeNecessary().",
+      "parentUuid": "6381549b_237d21e8",
       "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
