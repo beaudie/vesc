@@ -193,35 +193,35 @@ typedef IndexedPointsTest<GLubyte, GL_UNSIGNED_BYTE> IndexedPointsTestUByte;
 TEST_P(IndexedPointsTestUByte, UnsignedByteOffset0)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(0);
 }
 
 TEST_P(IndexedPointsTestUByte, UnsignedByteOffset1)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(1);
 }
 
 TEST_P(IndexedPointsTestUByte, UnsignedByteOffset2)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(2);
 }
 
 TEST_P(IndexedPointsTestUByte, UnsignedByteOffset3)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(3);
 }
 
 TEST_P(IndexedPointsTestUByte, VertexWithColorUnsignedByteOffset0)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     runTest(0, true);
 }
@@ -229,7 +229,7 @@ TEST_P(IndexedPointsTestUByte, VertexWithColorUnsignedByteOffset0)
 TEST_P(IndexedPointsTestUByte, VertexWithColorUnsignedByteOffset1)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     runTest(1, true);
 }
@@ -237,7 +237,7 @@ TEST_P(IndexedPointsTestUByte, VertexWithColorUnsignedByteOffset1)
 TEST_P(IndexedPointsTestUByte, VertexWithColorUnsignedByteOffset2)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     runTest(2, true);
 }
@@ -245,7 +245,7 @@ TEST_P(IndexedPointsTestUByte, VertexWithColorUnsignedByteOffset2)
 TEST_P(IndexedPointsTestUByte, VertexWithColorUnsignedByteOffset3)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     runTest(3, true);
 }
@@ -255,35 +255,35 @@ typedef IndexedPointsTest<GLushort, GL_UNSIGNED_SHORT> IndexedPointsTestUShort;
 TEST_P(IndexedPointsTestUShort, UnsignedShortOffset0)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(0);
 }
 
 TEST_P(IndexedPointsTestUShort, UnsignedShortOffset1)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(1);
 }
 
 TEST_P(IndexedPointsTestUShort, UnsignedShortOffset2)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(2);
 }
 
 TEST_P(IndexedPointsTestUShort, UnsignedShortOffset3)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(3);
 }
 
 TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffset0)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     runTest(0, true);
 }
@@ -291,7 +291,7 @@ TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffset0)
 TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffset1)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     runTest(1, true);
 }
@@ -299,7 +299,7 @@ TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffset1)
 TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffset2)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     runTest(2, true);
 }
@@ -307,7 +307,7 @@ TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffset2)
 TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffset3)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     runTest(3, true);
 }
@@ -315,7 +315,7 @@ TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffset3)
 TEST_P(IndexedPointsTestUShort, VertexWithColorUnsignedShortOffsetChangingIndices)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     // TODO(fjhenigman): Figure out why this fails on Ozone Intel.
     ANGLE_SKIP_TEST_IF(IsOzone() && IsIntel() && IsOpenGLES());
@@ -335,7 +335,7 @@ TEST_P(IndexedPointsTestUInt, UnsignedIntOffset0)
         return;
     }
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(0);
 }
 
@@ -346,7 +346,7 @@ TEST_P(IndexedPointsTestUInt, UnsignedIntOffset1)
         return;
     }
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(1);
 }
 
@@ -357,7 +357,7 @@ TEST_P(IndexedPointsTestUInt, UnsignedIntOffset2)
         return;
     }
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(2);
 }
 
@@ -368,7 +368,7 @@ TEST_P(IndexedPointsTestUInt, UnsignedIntOffset3)
         return;
     }
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(3);
 }
 
@@ -379,7 +379,7 @@ TEST_P(IndexedPointsTestUInt, VertexWithColorUnsignedIntOffset0)
         return;
     }
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(0, true);
 }
 
@@ -390,7 +390,7 @@ TEST_P(IndexedPointsTestUInt, VertexWithColorUnsignedIntOffset1)
         return;
     }
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(1, true);
 }
 
@@ -401,7 +401,7 @@ TEST_P(IndexedPointsTestUInt, VertexWithColorUnsignedIntOffset2)
         return;
     }
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(2, true);
 }
 
@@ -412,7 +412,7 @@ TEST_P(IndexedPointsTestUInt, VertexWithColorUnsignedIntOffset3)
         return;
     }
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     runTest(3, true);
 }
 

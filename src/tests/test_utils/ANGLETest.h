@@ -332,12 +332,6 @@ class ANGLETestBase
 
     static void ReleaseFixtures();
 
-    bool isSwiftshader() const
-    {
-        return mCurrentParams->eglParameters.deviceType ==
-               EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE;
-    }
-
   protected:
     void ANGLETestSetUp();
     void ANGLETestTearDown();

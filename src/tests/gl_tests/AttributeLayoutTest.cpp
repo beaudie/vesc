@@ -455,7 +455,7 @@ class AttributeLayoutBufferIndexed : public AttributeLayoutTest
 TEST_P(AttributeLayoutNonIndexed, Test)
 {
     // Flaky on Linux SwANGLE http://anglebug.com/4502
-    ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsSwiftshader());
 
     Run(true);
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsOpenGL());
@@ -465,7 +465,7 @@ TEST_P(AttributeLayoutNonIndexed, Test)
 TEST_P(AttributeLayoutMemoryIndexed, Test)
 {
     // Flaky on Linux SwANGLE http://anglebug.com/4502
-    ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsSwiftshader());
 
     Run(true);
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && (IsOpenGL() || IsD3D11_FL93()));
@@ -475,7 +475,7 @@ TEST_P(AttributeLayoutMemoryIndexed, Test)
 TEST_P(AttributeLayoutBufferIndexed, Test)
 {
     // Flaky on Linux SwANGLE http://anglebug.com/4502
-    ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsSwiftshader());
 
     Run(true);
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && (IsOpenGL() || IsD3D11_FL93()));
