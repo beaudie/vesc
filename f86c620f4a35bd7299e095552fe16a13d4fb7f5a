@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8d31dc8f_7413377b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-09T16:29:18Z",
+      "side": 1,
+      "message": "I changed to barrierIndex and added quite detailed comment explanation what it is used for. My thinking is that fundamentally this is an index. If we choose all fragment bits merge into one bucket, then it is pretty clear to name \"index\". The fact we are using stage as index doesn\u0027t really change what it is. So I think barrierIndex makes more sense.",
+      "parentUuid": "0375b9a3_48be29db",
+      "range": {
+        "startLine": 88,
+        "startChar": 18,
+        "endLine": 88,
+        "endChar": 34
+      },
+      "revId": "f86c620f4a35bd7299e095552fe16a13d4fb7f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0c77972_0036d1f6",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
