@@ -109,15 +109,29 @@ bool IsAndroidDevice(const std::string &deviceName)
     return false;
 }
 
-bool HasSystemVendorID(VendorID vendorID)
+GPUDeviceInfo *GetActiveGPUDeviceInfo()
 {
     SystemInfo *systemInfo = GetTestSystemInfo();
     // Unfortunately sometimes GPU info collection can fail.
     if (systemInfo->gpus.empty())
     {
-        return false;
+        return nullptr;
     }
-    return systemInfo->gpus[systemInfo->activeGPUIndex].vendorId == vendorID;
+    return &systemInfo->gpus[systemInfo->activeGPUIndex];
+}
+
+bool HasSystemVendorID(VendorID vendorID)
+{
+    GPUDeviceInfo *gpuInfo = GetActiveGPUDeviceInfo();
+
+    return gpuInfo && gpuInfo->vendorId == vendorID;
+}
+
+bool HasSystemDeviceID(VendorID vendorID, DeviceID deviceID)
+{
+    GPUDeviceInfo *gpuInfo = GetActiveGPUDeviceInfo();
+
+    return gpuInfo && gpuInfo->vendorId == vendorID && gpuInfo->deviceId == deviceID;
 }
 
 using ParamAvailabilityCache = std::map<PlatformParameters, bool>;
@@ -284,6 +298,11 @@ bool IsARM()
     return HasSystemVendorID(kVendorID_ARM);
 }
 
+bool IsSwiftshaderSystem()
+{
+    return HasSystemDeviceID(kVendorID_GOOGLE, kDeviceID_Swiftshader);
+}
+
 bool IsNVIDIA()
 {
 #if defined(ANGLE_PLATFORM_ANDROID)
@@ -307,8 +326,10 @@ bool IsARM64()
 
 bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters &param)
 {
-    VendorID vendorID =
-        systemInfo.gpus.empty() ? 0 : systemInfo.gpus[systemInfo.activeGPUIndex].vendorId;
+    const GPUDeviceInfo *gpuDeviceInfo =
+        systemInfo.gpus.empty() ? nullptr : &systemInfo.gpus[systemInfo.activeGPUIndex];
+    VendorID vendorID = gpuDeviceInfo ? gpuDeviceInfo->vendorId : 0;
+    DeviceID deviceID = gpuDeviceInfo ? gpuDeviceInfo->deviceId : 0;
 
     // We support the default and null back-ends on every platform.
     if (param.driver == GLESDriverType::AngleEGL)
@@ -317,6 +338,19 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
             return true;
         if (param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE)
             return true;
+    }
+
+    // TODO: http://crbug.com/swiftshader/145
+    // Swiftshader does not currently have all the robustness features
+    // we need for ANGLE. In particular, it is unable to detect and recover
+    // from infinitely looping shaders. That bug is the tracker for fixing
+    // that and when resolved we can remove the following code.
+    // This test will disable tests marked with the config WithRobustness
+    // when run with the swiftshader Vulkan driver and on Android.
+    bool isGpuSwiftshader = IsGoogle(vendorID) && deviceID == kDeviceID_Swiftshader;
+    if ((param.isSwiftshader() || isGpuSwiftshader) && param.eglParameters.robustness == EGL_TRUE)
+    {
+        return false;
     }
 
     if (IsWindows())
@@ -470,21 +504,6 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
             {
                 return false;
             }
-        }
-
-        // TODO: http://crbug.com/swiftshader/145
-        // Swiftshader does not currently have all the robustness features
-        // we need for ANGLE. In particular, it is unable to detect and recover
-        // from infinitely looping shaders. That bug is the tracker for fixing
-        // that and when resolved we can remove the following code.
-        // This test will disable tests marked with the config WithRobustness
-        // when run with the swiftshader Vulkan driver and on Android.
-        DeviceID deviceID =
-            systemInfo.gpus.empty() ? 0 : systemInfo.gpus[systemInfo.activeGPUIndex].deviceId;
-        if ((param.isSwiftshader() || (IsGoogle(vendorID) && deviceID == kDeviceID_Swiftshader)) &&
-            param.eglParameters.robustness)
-        {
-            return false;
         }
 
         // Currently we support the GLES and Vulkan back-ends on Android.
