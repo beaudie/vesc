@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "50232578_dd9f5cad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-09T03:02:59Z",
+      "side": 1,
+      "message": "Sorry missed this in previous patch",
+      "parentUuid": "ab95a843_1f0ecb99",
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e9ee121_cd2a4351",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
