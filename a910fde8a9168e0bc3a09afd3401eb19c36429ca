@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7210e8c8_af86f0c6",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T19:35:52Z",
+      "side": 1,
+      "message": "The result is the same, but the current condition is kind of indirect. The outer if tests `a \u0026\u0026 b`, and inside this if is complaining about `b`. Testing `!a` here indirectly implies `b`, but why do the indirect implication when `b` itself can be tested directly?",
+      "parentUuid": "3cd2bd0a_82834f99",
+      "range": {
+        "startLine": 375,
+        "startChar": 12,
+        "endLine": 375,
+        "endChar": 51
+      },
+      "revId": "a910fde8a9168e0bc3a09afd3401eb19c36429ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2b57e70_981345b3",
         "filename": "src/libANGLE/validationES31.cpp",
         "patchSetId": 1
