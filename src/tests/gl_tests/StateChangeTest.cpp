@@ -1832,7 +1832,7 @@ TEST_P(SimpleStateChangeTest, DrawElementsUBYTEX2ThenDrawElementsUSHORT)
 TEST_P(SimpleStateChangeTest, DrawRepeatUnalignedVboChange)
 {
     // http://anglebug.com/4470
-    ANGLE_SKIP_TEST_IF(isSwiftshader() && (IsWindows() || IsLinux()));
+    ANGLE_SKIP_TEST_IF(IsSwiftshader() && (IsWindows() || IsLinux()));
 
     const int kRepeat = 2;
 

@@ -43,6 +43,7 @@ bool IsAMD();
 bool IsNVIDIA();
 bool IsARM();
 bool IsARM64();
+bool IsSwiftshader();
 
 inline bool IsASan()
 {

@@ -366,7 +366,7 @@ TEST_P(IOSurfaceClientBufferTest, ReadFromBGRA8888IOSurface)
     ANGLE_SKIP_TEST_IF(!hasIOSurfaceExt());
 
     // TODO(http://anglebug.com/4369)
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'BGRA', 4);
 
@@ -380,7 +380,7 @@ TEST_P(IOSurfaceClientBufferTest, RenderToBGRX8888IOSurface)
     ANGLE_SKIP_TEST_IF(!hasIOSurfaceExt());
 
     // TODO(http://anglebug.com/4369)
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(1, 1, 'BGRA', 4);
 
@@ -451,7 +451,7 @@ TEST_P(IOSurfaceClientBufferTest, RenderToR16IOSurface)
     // This test only works on ES3.
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
     // TODO(http://anglebug.com/4369)
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
 
     // HACK(cwallez@chromium.org) 'L016' doesn't seem to be an official pixel format but it works
     // sooooooo let's test using it

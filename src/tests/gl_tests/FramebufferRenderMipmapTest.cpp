@@ -54,7 +54,7 @@ class FramebufferRenderMipmapTest : public ANGLETest
 TEST_P(FramebufferRenderMipmapTest, Validation)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     bool renderToMipmapSupported =
         IsGLExtensionEnabled("GL_OES_fbo_render_mipmap") || getClientMajorVersion() > 2;
 

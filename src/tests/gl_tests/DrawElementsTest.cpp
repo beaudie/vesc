@@ -241,7 +241,7 @@ TEST_P(DrawElementsTest, PartOfIndexBufferThenAll)
 {
     // http://anglebug.com/4575 - Test skipped on D3D11 (alpha channel not correct)
     // http://anglebug.com/4576 - Test skipped on SwiftShader (alpha channel not drawn)
-    ANGLE_SKIP_TEST_IF(IsWindows() && (IsD3D11() || isSwiftshader()));
+    ANGLE_SKIP_TEST_IF(IsWindows() && (IsD3D11() || IsSwiftshader()));
     // Init program
     constexpr char kVS[] =
         "attribute vec2 position;\n"

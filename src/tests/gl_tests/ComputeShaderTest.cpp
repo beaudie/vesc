@@ -873,7 +873,7 @@ void main()
 TEST_P(ComputeShaderTest, TexelFetchFunction)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     constexpr char kCS[] = R"(#version 310 es
 layout(local_size_x=16, local_size_y=16) in;
 precision highp usampler2D;
@@ -943,7 +943,7 @@ void main()
 TEST_P(ComputeShaderTest, TextureFunction)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     constexpr char kCS[] = R"(#version 310 es
 layout(local_size_x=16, local_size_y=16) in;
 precision highp usampler2D;
@@ -2821,7 +2821,7 @@ void main()
 TEST_P(ComputeShaderTest, StorageBufferBoundUnchanged)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     constexpr char kCS[] = R"(#version 310 es
 layout(local_size_x=16, local_size_y=16) in;
 precision highp usampler2D;

@@ -41,7 +41,7 @@ class SamplersTest : public ANGLETest
 TEST_P(SamplersTest, ValidTextureSamplerMaxAnisotropyExt)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     GLSampler sampler;
 
     // Exact min
@@ -63,7 +63,7 @@ TEST_P(SamplersTest, ValidTextureSamplerMaxAnisotropyExt)
 TEST_P(SamplersTest, InvalidUnderTextureSamplerMaxAnisotropyExt)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     GLSampler sampler;
 
     // Under min
@@ -75,7 +75,7 @@ TEST_P(SamplersTest, InvalidUnderTextureSamplerMaxAnisotropyExt)
 TEST_P(SamplersTest, InvalidOverTextureSamplerMaxAnisotropyExt)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     GLSampler sampler;
 
     GLfloat maxValue = 0.0f;

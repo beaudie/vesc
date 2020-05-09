@@ -1245,7 +1245,7 @@ void ANGLETestBase::setWindowVisible(OSWindow *osWindow, bool isVisible)
 {
     // SwiftShader windows are not required to be visible for test correctness,
     // moreover, making a SwiftShader window visible flaky hangs on Xvfb, so we keep them hidden.
-    if (isSwiftshader())
+    if (IsSwiftshader())
     {
         return;
     }

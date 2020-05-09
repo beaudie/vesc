@@ -123,7 +123,7 @@ TEST_P(ProgramInterfaceTestES31, GetResourceName)
 TEST_P(ProgramInterfaceTestES31, GetResourceLocation)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     constexpr char kVS[] =
         "#version 310 es\n"
         "precision highp float;\n"
@@ -184,7 +184,7 @@ TEST_P(ProgramInterfaceTestES31, GetResourceLocation)
 TEST_P(ProgramInterfaceTestES31, GetResource)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     constexpr char kVS[] =
         "#version 310 es\n"
         "precision highp float;\n"

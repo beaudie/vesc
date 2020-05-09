@@ -685,7 +685,7 @@ TEST_P(InstancingTestES31, UpdateAttribBindingByVertexAttribDivisor)
 TEST_P(InstancingTestES3, LargeDivisor)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     constexpr char kVS[] = R"(#version 300 es
 layout(location = 0) in vec4 a_position;
 layout(location = 1) in vec4 a_color;
@@ -786,7 +786,7 @@ void main()
 TEST_P(InstancingTestES3, LargestDivisor)
 {
     // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    ANGLE_SKIP_TEST_IF(IsSwiftshader());
     constexpr GLuint kLargeDivisor = std::numeric_limits<GLuint>::max();
     glVertexAttribDivisor(0, kLargeDivisor);
 

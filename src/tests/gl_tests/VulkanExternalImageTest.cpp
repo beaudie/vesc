@@ -87,7 +87,7 @@ TEST_P(VulkanExternalImageTest, ShouldImportMemoryOpaqueFd)
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
 
     VulkanExternalHelper helper;
-    helper.initialize(isSwiftshader());
+    helper.initialize(IsSwiftshader());
 
     VkFormat format = ChooseAnyImageFormat(helper);
     ANGLE_SKIP_TEST_IF(format == VK_FORMAT_UNDEFINED);
@@ -130,7 +130,7 @@ TEST_P(VulkanExternalImageTest, ShouldImportSemaphoreOpaqueFd)
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_semaphore_fd"));
 
     VulkanExternalHelper helper;
-    helper.initialize(isSwiftshader());
+    helper.initialize(IsSwiftshader());
 
     ANGLE_SKIP_TEST_IF(!helper.canCreateSemaphoreOpaqueFd());
 
@@ -159,7 +159,7 @@ TEST_P(VulkanExternalImageTest, ShouldClearOpaqueFdRGBA8)
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
 
     VulkanExternalHelper helper;
-    helper.initialize(isSwiftshader());
+    helper.initialize(IsSwiftshader());
 
     VkFormat format = VK_FORMAT_R8G8B8A8_UNORM;
     ANGLE_SKIP_TEST_IF(
@@ -209,7 +209,7 @@ TEST_P(VulkanExternalImageTest, ShouldClearZirconVmoRGBA8)
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_memory_object_fuchsia"));
 
     VulkanExternalHelper helper;
-    helper.initialize(isSwiftshader());
+    helper.initialize(IsSwiftshader());
 
     VkFormat format = VK_FORMAT_R8G8B8A8_UNORM;
     ANGLE_SKIP_TEST_IF(
@@ -260,7 +260,7 @@ TEST_P(VulkanExternalImageTest, TextureFormatCompatChromiumFd)
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
 
     VulkanExternalHelper helper;
-    helper.initialize(isSwiftshader());
+    helper.initialize(IsSwiftshader());
     for (const ImageFormatPair &format : kChromeFormats)
     {
         if (!helper.canCreateImageOpaqueFd(format.vkFormat, VK_IMAGE_TYPE_2D,
@@ -311,7 +311,7 @@ TEST_P(VulkanExternalImageTest, TextureFormatCompatChromiumZirconHandle)
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_memory_object_fuchsia"));
 
     VulkanExternalHelper helper;
-    helper.initialize(isSwiftshader());
+    helper.initialize(IsSwiftshader());
     for (const ImageFormatPair &format : kChromeFormats)
     {
         if (!helper.canCreateImageZirconVmo(format.vkFormat, VK_IMAGE_TYPE_2D,
