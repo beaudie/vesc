@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69bd3c55_99c697d0",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-09T17:48:45Z",
+      "side": 1,
+      "message": "Forgive my ignorance of Fuschia.  I\u0027m guessing that the existing value of mSurfaceCaps.currentExtent.width is also 0xffffffff.  True?  If so, it seems like this test can be done at the top of this method, using mSurfaceCaps.currentExtent.width.  That would avoid the call of getUserExtentsImpl(), etc.",
+      "revId": "41077a768175ee7897753abb29612c34f6b42910",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
