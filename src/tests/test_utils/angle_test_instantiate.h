@@ -44,6 +44,9 @@ bool IsNVIDIA();
 bool IsARM();
 bool IsARM64();
 
+// GPU implementations.
+bool IsSwiftshaderSystem();
+
 inline bool IsASan()
 {
 #if defined(ANGLE_WITH_ASAN)
