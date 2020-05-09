@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "397dea43_66432b37",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1627,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T01:38:54Z",
+      "side": 1,
+      "message": "I took a cursory glance, and this is the part I don\u0027t like. Basically ProgramExecutable is permanently keeping a duplicate of the linked state, am I right?\n\nThat\u0027s just wasted memory. So instead of:\n\n    clearState();\n    linkIntoState();\n    if (success)\n        saveState();\n\nI suggest this:\n\n    linkIntoTemp();\n    if (success)\n        clearState();\n        moveTempIntoState();\n\nWhich means the same amount of memory is used as before, except it\u0027s doubled during link only. At the same time, the end result is a \"move\" from the temp to state instead of \"copy\".\n\n(It\u0027s possible I misunderstood something, I didn\u0027t look too deeply)",
+      "revId": "c58c30a31fa41c31ef1560bb1388ffe9bd51ce62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
