@@ -22,6 +22,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c53efda_218d1a65",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-05-09T04:59:21Z",
+      "side": 1,
+      "message": "I don\u0027t know why it is VK_REMAINING_ARRAY_LAYERS, if it is mLayerCount in SubresourceUpdate, I think the issue can also be fixed. But don\u0027t know if this breaks something",
+      "parentUuid": "16171085_aa972ae8",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
