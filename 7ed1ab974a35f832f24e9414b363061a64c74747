@@ -94,6 +94,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fe59d58_ba80120c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T19:39:20Z",
+      "side": 1,
+      "message": "I was thinking of passing it to the constructor.\n\nI\u0027m not 100% sure if `!imageIndex.hasLayer()` implies a layer count of 1. Note that `ImageIndex` is something similar to `VkImageSubresourceRange` (so it selects a subresource of an image, and doesn\u0027t \"specify\" an image). I think `!hasLayer()` means take every layer, but I don\u0027t remember the details exactly.",
+      "parentUuid": "c3a3eadc_241530a2",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
