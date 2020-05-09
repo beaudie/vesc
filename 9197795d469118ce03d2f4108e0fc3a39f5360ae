@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "46c93dd7_e837f69c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T02:10:58Z",
+      "side": 1,
+      "message": "nit: capitalize",
+      "range": {
+        "startLine": 87,
+        "startChar": 7,
+        "endLine": 87,
+        "endChar": 8
+      },
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "950a6dd4_f0b7cbb9",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -31,6 +54,24 @@
       "side": 1,
       "message": "This is to tell which bin this barrier should put in. For barrier against single stage, it is single. But for barriers with multiple stages, the question is which bin should the barrier goes in. What I did here is I pick the bin that corresponds to the lowest pipeline stage. For this specific layout, we pick this whenever there are multiple shaders reading it, so the lowest stage is vertex. I can pick TopOfPipe, but I think it would be too strong.",
       "parentUuid": "950a6dd4_f0b7cbb9",
+      "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab95a843_1f0ecb99",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T02:10:58Z",
+      "side": 1,
+      "message": "@Charlie, it could be a good idea, if at least for clarity, to change the stage masks here to reflect this information. So instead of `VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT`, we could use:\n\n    constexpr VkPipelineStageFlags kAllGraphicsShaderStages \u003d VK_PIPELINE_STAGE_VERTEX_BIT | ...;\n\n    ...\n    {\n        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,\n        kAllGraphicsShaderStages,\n        kAllGraphicsShaderStages,\n        ...\n\nAt which point it would be obvious why PipelineStage::VertexShader is selected here. It could also end up being a slight performance improvement.",
+      "parentUuid": "fd90fe16_c9d6070d",
       "revId": "9197795d469118ce03d2f4108e0fc3a39f5360ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

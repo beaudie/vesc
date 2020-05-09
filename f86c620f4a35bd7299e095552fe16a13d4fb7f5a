@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60ebb8d1_097d9a05",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T02:10:58Z",
+      "side": 1,
+      "message": "nit: The naming of `dstPipelineStage` could perhaps be improved to be a bit clearer it\u0027s about which barrier bucket it goes in (the name as it is is kind of too generic).",
+      "range": {
+        "startLine": 88,
+        "startChar": 18,
+        "endLine": 88,
+        "endChar": 34
+      },
+      "revId": "f86c620f4a35bd7299e095552fe16a13d4fb7f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0c77972_0036d1f6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T02:10:58Z",
+      "side": 1,
+      "message": "Move out of the loop and do a single `mPipelineBarrierMask.reset()`.",
+      "revId": "f86c620f4a35bd7299e095552fe16a13d4fb7f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0fe079c_31f0a94d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2061,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T02:10:58Z",
+      "side": 1,
+      "message": "If we are keeping this still in the dot file format, make sure then that { and } are alright.\n\nYou can paste the diagnostics in https://dreampuf.github.io/GraphvizOnline and make sure it renders fine.\n\nI would personally put every barrier in its own line, so this line doesn\u0027t get too long. Then the {} would be unnecessary too.",
+      "revId": "f86c620f4a35bd7299e095552fe16a13d4fb7f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45b3315f_805f04cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2858,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T02:10:58Z",
+      "side": 1,
+      "message": "I\u0027m so happy you could fit this in here!",
+      "revId": "f86c620f4a35bd7299e095552fe16a13d4fb7f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb080388_e62a0955",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2882,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T02:10:58Z",
+      "side": 1,
+      "message": "Could you make a helper out of this to avoid duplication with `forceChangeLayoutAndQueue`?",
+      "range": {
+        "startLine": 2864,
+        "startChar": 0,
+        "endLine": 2882,
+        "endChar": 73
+      },
+      "revId": "f86c620f4a35bd7299e095552fe16a13d4fb7f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ded2ff26_59c65234",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T02:10:58Z",
+      "side": 1,
+      "message": "Use pointer for non-const parameters (per style guide)",
+      "range": {
+        "startLine": 626,
+        "startChar": 31,
+        "endLine": 626,
+        "endChar": 32
+      },
+      "revId": "f86c620f4a35bd7299e095552fe16a13d4fb7f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
