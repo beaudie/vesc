@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58bf61ea_90b2057e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-09T04:51:18Z",
+      "side": 1,
+      "message": "renit: Capitalize\n\nAlso, maybe the name could be `firstDstStage`, which is what it is, and matches the name `dstStageMask`.",
+      "range": {
+        "startLine": 87,
+        "startChar": 7,
+        "endLine": 87,
+        "endChar": 8
+      },
+      "revId": "d32c4d1f3e1037bd6cbd1ca870af51c8c5a2375e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
