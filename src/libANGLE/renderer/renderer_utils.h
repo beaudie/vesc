@@ -43,6 +43,23 @@ namespace rx
 {
 class ContextImpl;
 
+// The possible rotations of the surface/draw framebuffer, particularly for the Vulkan back-end on
+// Android.
+enum class SurfaceRotationType
+{
+    Identity,
+    Rotated90Degrees,
+    Rotated180Degrees,
+    Rotated270Degrees,
+    FlippedIdentity,
+    FlippedRotated90Degrees,
+    FlippedRotated180Degrees,
+    FlippedRotated270Degrees,
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
+};
+
 using MipGenerationFunction = void (*)(size_t sourceWidth,
                                        size_t sourceHeight,
                                        size_t sourceDepth,
@@ -86,7 +103,8 @@ struct PackPixelsParams
                      GLuint outputPitch,
                      bool reverseRowOrderIn,
                      gl::Buffer *packBufferIn,
-                     ptrdiff_t offset);
+                     ptrdiff_t offset,
+                     SurfaceRotationType orientation);
 
     gl::Rectangle area;
     const angle::Format *destFormat;
@@ -94,6 +112,7 @@ struct PackPixelsParams
     gl::Buffer *packBuffer;
     bool reverseRowOrder;
     ptrdiff_t offset;
+    SurfaceRotationType orientation;
 };
 
 void PackPixels(const PackPixelsParams &params,

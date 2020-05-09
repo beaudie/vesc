@@ -3399,7 +3399,7 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     const angle::Format &copyFormat =
         GetFormatFromFormatType(formatInfo.internalFormat, formatInfo.type);
     PackPixelsParams params(clippedRectangle, copyFormat, static_cast<GLuint>(outputRowPitch),
-                            isViewportFlipEnabled, nullptr, 0);
+                            isViewportFlipEnabled, nullptr, 0, SurfaceRotationType::Identity);
 
     RenderTargetVk *readRenderTarget = framebufferVk->getColorReadRenderTarget();
 
@@ -3970,7 +3970,7 @@ angle::Result ImageHelper::GetReadPixelsParams(ContextVk *contextVk,
     const angle::Format &angleFormat = GetFormatFromFormatType(format, type);
 
     *paramsOut = PackPixelsParams(clippedArea, angleFormat, outputPitch, packState.reverseRowOrder,
-                                  packBuffer, 0);
+                                  packBuffer, 0, SurfaceRotationType::Identity);
     return angle::Result::Continue;
 }
 

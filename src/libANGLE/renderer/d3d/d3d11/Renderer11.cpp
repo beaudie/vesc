@@ -3373,7 +3373,8 @@ angle::Result Renderer11::readFromAttachment(const gl::Context *context,
     const angle::Format &angleFormat = GetFormatFromFormatType(format, type);
     gl::Buffer *packBuffer = context->getState().getTargetBuffer(gl::BufferBinding::PixelPack);
 
-    PackPixelsParams packParams(safeArea, angleFormat, outputPitch, reverseRowOrder, packBuffer, 0);
+    PackPixelsParams packParams(safeArea, angleFormat, outputPitch, reverseRowOrder, packBuffer, 0,
+                                SurfaceRotationType::Identity);
     return packPixels(context, stagingHelper, packParams, pixelsOut);
 }
 
