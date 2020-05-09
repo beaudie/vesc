@@ -205,11 +205,14 @@ void SetFloatUniformMatrixFast(unsigned int arrayElementOffset,
 
     memcpy(targetData, valueData, matrixSize * count);
 }
-
 }  // anonymous namespace
 
 PackPixelsParams::PackPixelsParams()
-    : destFormat(nullptr), outputPitch(0), packBuffer(nullptr), offset(0)
+    : destFormat(nullptr),
+      outputPitch(0),
+      packBuffer(nullptr),
+      offset(0),
+      orientation(SurfaceRotationType::Identity)
 {}
 
 PackPixelsParams::PackPixelsParams(const gl::Rectangle &areaIn,
@@ -217,13 +220,15 @@ PackPixelsParams::PackPixelsParams(const gl::Rectangle &areaIn,
                                    GLuint outputPitchIn,
                                    bool reverseRowOrderIn,
                                    gl::Buffer *packBufferIn,
-                                   ptrdiff_t offsetIn)
+                                   ptrdiff_t offsetIn,
+                                   SurfaceRotationType orientationIn)
     : area(areaIn),
       destFormat(&destFormat),
       outputPitch(outputPitchIn),
       packBuffer(packBufferIn),
       reverseRowOrder(reverseRowOrderIn),
-      offset(offsetIn)
+      offset(offsetIn),
+      orientation(orientationIn)
 {}
 
 void PackPixels(const PackPixelsParams &params,
@@ -236,14 +241,46 @@ void PackPixels(const PackPixelsParams &params,
 
     const uint8_t *source = sourceIn;
     int inputPitch        = inputPitchIn;
-
-    if (params.reverseRowOrder)
+    bool memcpySupport    = true;
+    int destWidth         = params.area.width;
+    int destHeight        = params.area.height;
+    switch (params.orientation)
     {
-        source += inputPitch * (params.area.height - 1);
-        inputPitch = -inputPitch;
+        case SurfaceRotationType::Identity:
+            // Do not rotate gl_Position (surface matches the device's orientation):
+            if (params.reverseRowOrder)
+            {
+                source += inputPitchIn * (params.area.height - 1);
+                inputPitch = -inputPitch;
+            }
+            break;
+        case SurfaceRotationType::Rotated90Degrees:
+            // Rotate gl_Position 90 degrees:
+            memcpySupport = false;
+            destWidth     = params.area.height;
+            destHeight    = params.area.width;
+            // TODO(ianelliott): Does params.reverseRowOrder ever vary for this orientation?
+            break;
+        case SurfaceRotationType::Rotated180Degrees:
+            // Rotate gl_Position 180 degrees:
+            memcpySupport = false;
+            // TODO(ianelliott): what to do about "source"?
+            break;
+        case SurfaceRotationType::Rotated270Degrees:
+            // Rotate gl_Position 270 degrees:
+            memcpySupport = false;
+            destWidth     = params.area.height;
+            destHeight    = params.area.width;
+            source += inputPitch * (params.area.height - 1) +
+                      sourceFormat.pixelBytes * (params.area.width - 1);
+            // TODO(ianelliott): Does params.reverseRowOrder ever vary for this orientation?
+            break;
+        default:
+            UNREACHABLE();
+            break;
     }
 
-    if (sourceFormat == *params.destFormat)
+    if (memcpySupport && sourceFormat == *params.destFormat)
     {
         // Direct copy possible
         for (int y = 0; y < params.area.height; ++y)
@@ -259,13 +296,36 @@ void PackPixels(const PackPixelsParams &params,
     if (fastCopyFunc)
     {
         // Fast copy is possible through some special function
-        for (int y = 0; y < params.area.height; ++y)
+        for (int y = 0; y < destHeight; ++y)
         {
-            for (int x = 0; x < params.area.width; ++x)
+            for (int x = 0; x < destWidth; ++x)
             {
                 uint8_t *dest =
                     destWithOffset + y * params.outputPitch + x * params.destFormat->pixelBytes;
-                const uint8_t *src = source + y * inputPitch + x * sourceFormat.pixelBytes;
+                const uint8_t *src;
+                switch (params.orientation)
+                {
+                    case SurfaceRotationType::Identity:
+                        // Do not rotate gl_Position (surface matches the device's orientation):
+                        src = source + y * inputPitch + x * sourceFormat.pixelBytes;
+                        break;
+                    case SurfaceRotationType::Rotated90Degrees:
+                        // Rotate gl_Position 90 degrees:
+                        src = source + x * inputPitch + y * sourceFormat.pixelBytes;
+                        break;
+                    case SurfaceRotationType::Rotated180Degrees:
+                        // Rotate gl_Position 180 degrees:
+                        // TODO(ianelliott): TEST THE FOLLOWING:
+                        src = source - y * inputPitch - x * sourceFormat.pixelBytes;
+                        break;
+                    case SurfaceRotationType::Rotated270Degrees:
+                        // Rotate gl_Position 270 degrees:
+                        src = source - (x * inputPitch) - (y * sourceFormat.pixelBytes);
+                        break;
+                    default:
+                        UNREACHABLE();
+                        break;
+                }
 
                 fastCopyFunc(src, dest);
             }
@@ -286,13 +346,36 @@ void PackPixels(const PackPixelsParams &params,
     PixelReadFunction pixelReadFunction = sourceFormat.pixelReadFunction;
     ASSERT(pixelReadFunction != nullptr);
 
-    for (int y = 0; y < params.area.height; ++y)
+    for (int y = 0; y < destHeight; ++y)
     {
-        for (int x = 0; x < params.area.width; ++x)
+        for (int x = 0; x < destWidth; ++x)
         {
             uint8_t *dest =
                 destWithOffset + y * params.outputPitch + x * params.destFormat->pixelBytes;
-            const uint8_t *src = source + y * inputPitch + x * sourceFormat.pixelBytes;
+            const uint8_t *src;
+            switch (params.orientation)
+            {
+                case SurfaceRotationType::Identity:
+                    // Do not rotate gl_Position (surface matches the device's orientation):
+                    src = source + y * inputPitch + x * sourceFormat.pixelBytes;
+                    break;
+                case SurfaceRotationType::Rotated90Degrees:
+                    // Rotate gl_Position 90 degrees:
+                    src = source + x * inputPitch + y * sourceFormat.pixelBytes;
+                    break;
+                case SurfaceRotationType::Rotated180Degrees:
+                    // Rotate gl_Position 180 degrees:
+                    // TODO(ianelliott): TEST THE FOLLOWING:
+                    src = source - y * inputPitch - x * sourceFormat.pixelBytes;
+                    break;
+                case SurfaceRotationType::Rotated270Degrees:
+                    // Rotate gl_Position 270 degrees:
+                    src = source - (x * inputPitch) - (y * sourceFormat.pixelBytes);
+                    break;
+                default:
+                    UNREACHABLE();
+                    break;
+            }
 
             // readFunc and writeFunc will be using the same type of color, CopyTexImage
             // will not allow the copy otherwise.

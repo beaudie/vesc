@@ -1238,7 +1238,8 @@ angle::Result TextureMtl::copySubImageCPU(const gl::Context *context,
         mtlDstRowArea.origin.y = modifiedDestOffset.y + r;
         srcRowArea.y           = clippedSourceArea.y + r;
 
-        PackPixelsParams packParams(srcRowArea, dstFormat, dstRowPitch, false, nullptr, 0);
+        PackPixelsParams packParams(srcRowArea, dstFormat, dstRowPitch, false, nullptr, 0,
+                                    SurfaceRotationType::Identity);
 
         // Read pixels from framebuffer to memory:
         gl::Rectangle flippedSrcRowArea = framebufferMtl->getReadPixelArea(srcRowArea);

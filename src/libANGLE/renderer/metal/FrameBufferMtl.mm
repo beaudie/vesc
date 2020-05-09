@@ -184,7 +184,8 @@ angle::Result FramebufferMtl::readPixels(const gl::Context *context,
     const angle::Format &angleFormat = GetFormatFromFormatType(format, type);
 
     PackPixelsParams params(flippedArea, angleFormat, outputPitch, packState.reverseRowOrder,
-                            glState.getTargetBuffer(gl::BufferBinding::PixelPack), 0);
+                            glState.getTargetBuffer(gl::BufferBinding::PixelPack), 0,
+                            SurfaceRotationType::Identity);
     if (mFlipY)
     {
         params.reverseRowOrder = !params.reverseRowOrder;
