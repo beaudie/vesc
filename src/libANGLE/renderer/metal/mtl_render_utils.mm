@@ -17,8 +17,6 @@
 #include "libANGLE/renderer/metal/DisplayMtl.h"
 #include "libANGLE/renderer/metal/mtl_common.h"
 #include "libANGLE/renderer/metal/mtl_utils.h"
-#include "libANGLE/renderer/metal/shaders/compiled/mtl_default_shaders.inc"
-#include "libANGLE/renderer/metal/shaders/mtl_default_shaders_src_autogen.inc"
 
 namespace rx
 {
@@ -100,23 +98,16 @@ void GetFirstLastIndicesFromClientElements(GLsizei count,
 
 }  // namespace
 
-bool RenderUtils::IndexConvesionPipelineCacheKey::operator==(
-    const IndexConvesionPipelineCacheKey &other) const
+bool IndexConversionPipelineCacheKey::operator==(const IndexConversionPipelineCacheKey &other) const
 {
     return srcType == other.srcType && srcBufferOffsetAligned == other.srcBufferOffsetAligned;
 }
-bool RenderUtils::IndexConvesionPipelineCacheKey::operator<(
-    const IndexConvesionPipelineCacheKey &other) const
+size_t IndexConversionPipelineCacheKey::hash() const
 {
-    if (!srcBufferOffsetAligned && other.srcBufferOffsetAligned)
-    {
-        return true;
-    }
-    if (srcBufferOffsetAligned && !other.srcBufferOffsetAligned)
-    {
-        return false;
-    }
-    return static_cast<int>(srcType) < static_cast<int>(other.srcType);
+    size_t h = srcBufferOffsetAligned ? 1 : 0;
+    h        = (h << static_cast<size_t>(gl::DrawElementsType::EnumCount));
+    h        = h | static_cast<size_t>(srcType);
+    return h;
 }
 
 RenderUtils::RenderUtils(DisplayMtl *display) : Context(display) {}
@@ -125,12 +116,6 @@ RenderUtils::~RenderUtils() {}
 
 angle::Result RenderUtils::initialize()
 {
-    auto re = initShaderLibrary();
-    if (re != angle::Result::Continue)
-    {
-        return re;
-    }
-
     initClearResources();
     initBlitResources();
 
@@ -139,8 +124,6 @@ angle::Result RenderUtils::initialize()
 
 void RenderUtils::onDestroy()
 {
-    mDefaultShaders = nil;
-
     mClearRenderPipelineCache.clear();
     mBlitRenderPipelineCache.clear();
     mBlitPremultiplyAlphaRenderPipelineCache.clear();
@@ -176,37 +159,16 @@ void RenderUtils::handleError(NSError *nserror,
           << nserror.localizedDescription.UTF8String;
 }
 
-angle::Result RenderUtils::initShaderLibrary()
-{
-    AutoObjCObj<NSError> err = nil;
-
-#if defined(ANGLE_MTL_DEBUG_INTERNAL_SHADERS)
-    mDefaultShaders = CreateShaderLibrary(getDisplay()->getMetalDevice(), default_metallib_src,
-                                          sizeof(default_metallib_src), &err);
-#else
-    mDefaultShaders =
-        CreateShaderLibraryFromBinary(getDisplay()->getMetalDevice(), compiled_default_metallib,
-                                      compiled_default_metallib_len, &err);
-#endif
-
-    if (err && !mDefaultShaders)
-    {
-        ANGLE_MTL_CHECK(this, false, err.get());
-        return angle::Result::Stop;
-    }
-
-    return angle::Result::Continue;
-}
-
 void RenderUtils::initClearResources()
 {
     ANGLE_MTL_OBJC_SCOPE
     {
+        id<MTLLibrary> shaderLib = getDisplay()->getDefaultShadersLib();
         // Shader pipeline
         mClearRenderPipelineCache.setVertexShader(
-            this, [[mDefaultShaders.get() newFunctionWithName:@"clearVS"] ANGLE_MTL_AUTORELEASE]);
+            this, [[shaderLib newFunctionWithName:@"clearVS"] ANGLE_MTL_AUTORELEASE]);
         mClearRenderPipelineCache.setFragmentShader(
-            this, [[mDefaultShaders.get() newFunctionWithName:@"clearFS"] ANGLE_MTL_AUTORELEASE]);
+            this, [[shaderLib newFunctionWithName:@"clearFS"] ANGLE_MTL_AUTORELEASE]);
     }
 }
 
@@ -214,8 +176,9 @@ void RenderUtils::initBlitResources()
 {
     ANGLE_MTL_OBJC_SCOPE
     {
-        auto shaderLib    = mDefaultShaders.get();
-        auto vertexShader = [[shaderLib newFunctionWithName:@"blitVS"] ANGLE_MTL_AUTORELEASE];
+        id<MTLLibrary> shaderLib = getDisplay()->getDefaultShadersLib();
+        id<MTLFunction> vertexShader =
+            [[shaderLib newFunctionWithName:@"blitVS"] ANGLE_MTL_AUTORELEASE];
 
         mBlitRenderPipelineCache.setVertexShader(this, vertexShader);
         mBlitRenderPipelineCache.setFragmentShader(
@@ -539,7 +502,7 @@ AutoObjCPtr<id<MTLComputePipelineState>> RenderUtils::getIndexConversionPipeline
     size_t elementSize        = gl::GetDrawElementsTypeSize(srcType);
     bool aligned              = (srcOffset % elementSize) == 0;
 
-    IndexConvesionPipelineCacheKey key = {srcType, aligned};
+    IndexConversionPipelineCacheKey key = {srcType, aligned};
 
     auto &cache = mIndexConversionPipelineCaches[key];
 
@@ -547,8 +510,8 @@ AutoObjCPtr<id<MTLComputePipelineState>> RenderUtils::getIndexConversionPipeline
     {
         ANGLE_MTL_OBJC_SCOPE
         {
-            auto shaderLib         = mDefaultShaders.get();
-            id<MTLFunction> shader = nil;
+            id<MTLLibrary> shaderLib = getDisplay()->getDefaultShadersLib();
+            id<MTLFunction> shader   = nil;
             auto funcConstants = [[[MTLFunctionConstantValues alloc] init] ANGLE_MTL_AUTORELEASE];
             NSError *err       = nil;
 
@@ -603,7 +566,7 @@ AutoObjCPtr<id<MTLComputePipelineState>> RenderUtils::getTriFanFromElemArrayGene
     size_t elementSize        = gl::GetDrawElementsTypeSize(srcType);
     bool aligned              = (srcOffset % elementSize) == 0;
 
-    IndexConvesionPipelineCacheKey key = {srcType, aligned};
+    IndexConversionPipelineCacheKey key = {srcType, aligned};
 
     auto &cache = mTriFanFromElemArrayGeneratorPipelineCaches[key];
 
@@ -611,8 +574,8 @@ AutoObjCPtr<id<MTLComputePipelineState>> RenderUtils::getTriFanFromElemArrayGene
     {
         ANGLE_MTL_OBJC_SCOPE
         {
-            auto shaderLib         = mDefaultShaders.get();
-            id<MTLFunction> shader = nil;
+            id<MTLLibrary> shaderLib = getDisplay()->getDefaultShadersLib();
+            id<MTLFunction> shader   = nil;
             auto funcConstants = [[[MTLFunctionConstantValues alloc] init] ANGLE_MTL_AUTORELEASE];
             NSError *err       = nil;
 
@@ -677,7 +640,7 @@ angle::Result RenderUtils::ensureTriFanFromArrayGeneratorInitialized(ContextMtl 
         ANGLE_MTL_OBJC_SCOPE
         {
             id<MTLDevice> metalDevice = context->getMetalDevice();
-            auto shaderLib            = mDefaultShaders.get();
+            id<MTLLibrary> shaderLib  = getDisplay()->getDefaultShadersLib();
             NSError *err              = nil;
             id<MTLFunction> shader = [shaderLib newFunctionWithName:@"genTriFanIndicesFromArray"];
 
