@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "2bf76bef_e7398028",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-10T15:09:13Z",
+      "side": 1,
+      "message": "Ah yes, which further proves my point that testing `if (b)` is clearer (and in this case, actually correct).",
+      "parentUuid": "257b8e2a_90ba18ee",
+      "range": {
+        "startLine": 375,
+        "startChar": 12,
+        "endLine": 375,
+        "endChar": 51
+      },
+      "revId": "a910fde8a9168e0bc3a09afd3401eb19c36429ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2b57e70_981345b3",
         "filename": "src/libANGLE/validationES31.cpp",
         "patchSetId": 1
