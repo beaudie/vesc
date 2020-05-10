@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "9d839b5f_a8b59950",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-10T15:17:41Z",
+      "side": 1,
+      "message": "Wait, I wasn\u0027t really paying attention to the outside if, that\u0027s what needs fixing too. The whole thing should probably look like this:\n\n    if (ES \u003c 3.1)\n        if (!supports(extension))\n            complain(needs ES3.1)\n        else if (!enabled(extension))\n            complain(no extension)\n\nbut without looking too closely, I\u0027m not sure how supporting the extension and enabling the extension are tested respectively.",
+      "parentUuid": "2bf76bef_e7398028",
+      "range": {
+        "startLine": 375,
+        "startChar": 12,
+        "endLine": 375,
+        "endChar": 51
+      },
+      "revId": "a910fde8a9168e0bc3a09afd3401eb19c36429ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2b57e70_981345b3",
         "filename": "src/libANGLE/validationES31.cpp",
         "patchSetId": 1
