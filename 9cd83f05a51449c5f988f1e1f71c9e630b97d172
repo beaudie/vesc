@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "059fc3c6_b69d9d25",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T15:24:23Z",
+      "side": 1,
+      "message": "Tim - to be more precise and clear, gl::Program should have \"getExecutable\" because the Program is implicit. gl::State should have \"getProgramExecutable\" because the \"Program\" is not implicit. If you go back and read the comment I left in the link you put I\u0027ve been consistent.",
+      "parentUuid": "f13bdd00_f6771a60",
+      "range": {
+        "startLine": 336,
+        "startChar": 29,
+        "endLine": 336,
+        "endChar": 49
+      },
+      "revId": "9cd83f05a51449c5f988f1e1f71c9e630b97d172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d5611655_83646cb0",
         "filename": "src/libANGLE/ProgramPipeline.h",
         "patchSetId": 15
