@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ec56fd45_294b19f6",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1627,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T19:03:13Z",
+      "side": 1,
+      "message": "I\u0027m not super enthusiastic about trying to save memory when linking. Is there a more fundamental concern? Not sure I fully understand your idea either.",
+      "parentUuid": "397dea43_66432b37",
+      "revId": "c58c30a31fa41c31ef1560bb1388ffe9bd51ce62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4823b48b_b584c672",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 19
