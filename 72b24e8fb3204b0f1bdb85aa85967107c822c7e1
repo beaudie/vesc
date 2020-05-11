@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c0d15b2f_b934e742",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T23:51:34Z",
+      "side": 1,
+      "message": "Thanks!  Tim\u0027s suggestion obviated the need for this.  My original intention was to construct this differently in the Vulkan back-end, but that didn\u0027t work out in the end.  I just have one place to change it in the Vulkan back-end at this point (post-construction).",
+      "parentUuid": "113f17c1_b3caa273",
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4071050_01e15f81",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ecc9a12_aa526a94",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T23:51:34Z",
+      "side": 1,
+      "message": "It\u0027s set.  Sorry, that was an early question to myself.  I wanted to make sure that my learnings from my previous pre-rotation work was true: rotation is only applied to visible (i.e. swapbuffer) images.  Thus, for 90, 180, and 270, I don\u0027t check params.reverseRowOrder; it\u0027s assumed true.",
+      "parentUuid": "d4071050_01e15f81",
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "2db7fdfc_f91c27a3",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T23:51:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28499abf_93e5af12",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 283,
+        "endChar": 22
+      },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea882edf_c6e259fb",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 3
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "a9632afb_1a640f03",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T23:51:34Z",
+      "side": 1,
+      "message": "Actually, \"fastCopy\" is somewhat of a misnomer (at least compared with how code worked from our past lives).  This function is called once per-pixel.  The slow approach (at the bottom) uses 2 functions per-pixel (pixelReadFunction() and pixelWriteFunction()).",
+      "parentUuid": "ea882edf_c6e259fb",
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c427cb9_a63ba57d",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 3
@@ -90,6 +168,24 @@
       "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf469e54_d3dd6a5c",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T23:51:34Z",
+      "side": 1,
+      "message": "Yes, I agree.  I added some comments here, and I\u0027ll add something to my design doc.\n\nBTW, that\u0027s why I designed my new test the way I did (a little like the SLC street map:-), to make it easier to visualize where/how things went wrong when they did.",
+      "parentUuid": "6c427cb9_a63ba57d",
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "ee700ae1_b48ac250",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T23:51:34Z",
+      "side": 1,
+      "message": "Yes, when I asked for this initial review, I pointed out that 180-degree code wasn\u0027t done yet.  I\u0027ve removed it now that I have this working and tested.",
+      "parentUuid": "f3f3a9f8_ce826152",
+      "range": {
+        "startLine": 318,
+        "startChar": 24,
+        "endLine": 318,
+        "endChar": 64
+      },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ee4978a_470ff017",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 3
@@ -139,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "89035dec_6742c71b",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T23:51:34Z",
+      "side": 1,
+      "message": "I found a way to simplify the code, similar to the way it was before this CL.",
+      "parentUuid": "8ee4978a_470ff017",
+      "range": {
+        "startLine": 306,
+        "startChar": 0,
+        "endLine": 328,
+        "endChar": 17
+      },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59dee866_af8e827a",
         "filename": "src/libANGLE/renderer/renderer_utils.h",
         "patchSetId": 3
@@ -150,6 +294,30 @@
       "writtenOn": "2020-05-11T15:36:56Z",
       "side": 1,
       "message": "nit: you can probably omit \"Type\" just to make this a bit easier to work with.",
+      "range": {
+        "startLine": 48,
+        "startChar": 11,
+        "endLine": 48,
+        "endChar": 30
+      },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8775575b_4a9489e6",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T23:51:34Z",
+      "side": 1,
+      "message": "How about if I do that in a follow-on CL, so that this CL remains focused on the pre-rotation changes for ReadPixels?",
+      "parentUuid": "59dee866_af8e827a",
       "range": {
         "startLine": 48,
         "startChar": 11,
@@ -179,6 +347,24 @@
     },
     {
       "key": {
+        "uuid": "e8477ce3_ca686836",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T23:51:34Z",
+      "side": 1,
+      "message": "Done.  Thanks!  That\u0027s certainly the way it ended up.",
+      "parentUuid": "682503f7_9bd186ce",
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59628c86_169b2e61",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
@@ -199,6 +385,30 @@
       "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2220cf6d_5c30f824",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T23:51:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59628c86_169b2e61",
+      "range": {
+        "startLine": 462,
+        "startChar": 4,
+        "endLine": 462,
+        "endChar": 98
+      },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
