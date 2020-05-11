@@ -22,6 +22,23 @@
       "revId": "d7bdbb29362cdc8290376522b0fa1d7d1b0fe79a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f0a440b_61d9a2c9",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2020-05-11T16:17:35Z",
+      "side": 1,
+      "message": "[1]",
+      "revId": "d7bdbb29362cdc8290376522b0fa1d7d1b0fe79a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
