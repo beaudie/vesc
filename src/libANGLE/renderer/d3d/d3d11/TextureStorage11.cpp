@@ -926,10 +926,12 @@ angle::Result TextureStorage11::getMultisampledRenderTarget(const gl::Context *c
                                                             GLsizei samples,
                                                             RenderTargetD3D **outRT)
 {
-    const int level = index.getLevelIndex();
-    if (!mMSTexInfo || level != mMSTexInfo->indexSS.getLevelIndex() ||
-        samples != mMSTexInfo->samples || !mMSTexInfo->msTex)
+    RenderTargetD3D *rt = nullptr;
+    ANGLE_TRY(findRenderTarget(context, index, samples, &rt));
+    if (!rt)
     {
+        const int level = index.getLevelIndex();
+
         // if mMSTexInfo already exists, then we want to resolve and release it
         // since the mMSTexInfo must be for a different sample count or level
         ANGLE_TRY(resolveTexture(context));
@@ -958,9 +960,9 @@ angle::Result TextureStorage11::getMultisampledRenderTarget(const gl::Context *c
                                                   false, false));
         mMSTexInfo = std::make_unique<MultisampledRenderToTextureInfo>(samples, index, indexMS);
         mMSTexInfo->msTex = std::move(texMS);
+
+        ANGLE_TRY(mMSTexInfo->msTex->getRenderTarget(context, mMSTexInfo->indexMS, samples, &rt));
     }
-    RenderTargetD3D *rt;
-    ANGLE_TRY(mMSTexInfo->msTex->getRenderTarget(context, mMSTexInfo->indexMS, samples, &rt));
     // By returning the multisampled render target to the caller, the render target
     // is expected to be changed so we need to resolve to a single sampled texture
     // next time resolveTexture is called.
@@ -1339,9 +1341,12 @@ angle::Result TextureStorage11_2D::getRenderTarget(const gl::Context *context,
     ASSERT(
         !(mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3 && level > 0));
     ASSERT(outRT);
-    if (mRenderTarget[level])
+
+    RenderTargetD3D *rt = nullptr;
+    ANGLE_TRY(findRenderTarget(context, index, samples, &rt));
+    if (rt)
     {
-        *outRT = mRenderTarget[level].get();
+        *outRT = rt;
         return angle::Result::Continue;
     }
 
@@ -1364,23 +1369,19 @@ angle::Result TextureStorage11_2D::getRenderTarget(const gl::Context *context,
 
     if (mUseLevelZeroTexture)
     {
-        if (!mLevelZeroRenderTarget)
-        {
-            D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
-            rtvDesc.Format             = mFormatInfo.rtvFormat;
-            rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
-            rtvDesc.Texture2D.MipSlice = mTopLevel + level;
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format             = mFormatInfo.rtvFormat;
+        rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.Texture2D.MipSlice = mTopLevel + level;
 
-            d3d11::RenderTargetView rtv;
-            ANGLE_TRY(
-                mRenderer->allocateResource(context11, rtvDesc, mLevelZeroTexture.get(), &rtv));
-            rtv.setDebugName("TexStorage2D.Level0RTV");
+        d3d11::RenderTargetView rtv;
+        ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, mLevelZeroTexture.get(), &rtv));
+        rtv.setDebugName("TexStorage2D.Level0RTV");
 
-            mLevelZeroRenderTarget.reset(new TextureRenderTarget11(
-                std::move(rtv), mLevelZeroTexture, d3d11::SharedSRV(), d3d11::SharedSRV(),
-                mFormatInfo.internalFormat, getFormatSet(), getLevelWidth(level),
-                getLevelHeight(level), 1, 0));
-        }
+        mLevelZeroRenderTarget.reset(new TextureRenderTarget11(
+            std::move(rtv), mLevelZeroTexture, d3d11::SharedSRV(), d3d11::SharedSRV(),
+            mFormatInfo.internalFormat, getFormatSet(), getLevelWidth(level), getLevelHeight(level),
+            1, 0));
 
         *outRT = mLevelZeroRenderTarget.get();
         return angle::Result::Continue;
@@ -2465,99 +2466,101 @@ angle::Result TextureStorage11_Cube::getRenderTarget(const gl::Context *context,
         ANGLE_TRY(resolveTexture(context));
     }
 
+    RenderTargetD3D *rt = nullptr;
+    ANGLE_TRY(findRenderTarget(context, index, samples, &rt));
+    if (rt)
+    {
+        ASSERT(outRT);
+        *outRT = rt;
+        return angle::Result::Continue;
+    }
+
     Context11 *context11 = GetImplAs<Context11>(context);
 
-    if (!mRenderTarget[faceIndex][level])
+    if (mRenderer->getFeatures().zeroMaxLodWorkaround.enabled)
     {
-        if (mRenderer->getFeatures().zeroMaxLodWorkaround.enabled)
-        {
-            ASSERT(index.getLevelIndex() == 0);
-            ANGLE_TRY(useLevelZeroWorkaroundTexture(context, true));
-        }
+        ASSERT(index.getLevelIndex() == 0);
+        ANGLE_TRY(useLevelZeroWorkaroundTexture(context, true));
+    }
 
-        const TextureHelper11 *texture = nullptr;
-        ANGLE_TRY(getResource(context, &texture));
+    const TextureHelper11 *texture = nullptr;
+    ANGLE_TRY(getResource(context, &texture));
 
-        if (mUseLevelZeroTexture)
-        {
-            if (!mLevelZeroRenderTarget[faceIndex])
-            {
-                D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
-                rtvDesc.Format                         = mFormatInfo.rtvFormat;
-                rtvDesc.ViewDimension                  = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
-                rtvDesc.Texture2DArray.MipSlice        = mTopLevel + level;
-                rtvDesc.Texture2DArray.FirstArraySlice = faceIndex;
-                rtvDesc.Texture2DArray.ArraySize       = 1;
+    if (mUseLevelZeroTexture)
+    {
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format                         = mFormatInfo.rtvFormat;
+        rtvDesc.ViewDimension                  = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+        rtvDesc.Texture2DArray.MipSlice        = mTopLevel + level;
+        rtvDesc.Texture2DArray.FirstArraySlice = faceIndex;
+        rtvDesc.Texture2DArray.ArraySize       = 1;
 
-                d3d11::RenderTargetView rtv;
-                ANGLE_TRY(
-                    mRenderer->allocateResource(context11, rtvDesc, mLevelZeroTexture.get(), &rtv));
+        d3d11::RenderTargetView rtv;
+        ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, mLevelZeroTexture.get(), &rtv));
 
-                mLevelZeroRenderTarget[faceIndex].reset(new TextureRenderTarget11(
-                    std::move(rtv), mLevelZeroTexture, d3d11::SharedSRV(), d3d11::SharedSRV(),
-                    mFormatInfo.internalFormat, getFormatSet(), getLevelWidth(level),
-                    getLevelHeight(level), 1, 0));
-            }
+        mLevelZeroRenderTarget[faceIndex].reset(new TextureRenderTarget11(
+            std::move(rtv), mLevelZeroTexture, d3d11::SharedSRV(), d3d11::SharedSRV(),
+            mFormatInfo.internalFormat, getFormatSet(), getLevelWidth(level), getLevelHeight(level),
+            1, 0));
 
-            ASSERT(outRT);
-            *outRT = mLevelZeroRenderTarget[faceIndex].get();
-            return angle::Result::Continue;
-        }
+        ASSERT(outRT);
+        *outRT = mLevelZeroRenderTarget[faceIndex].get();
+        return angle::Result::Continue;
+    }
 
-        d3d11::SharedSRV srv;
-        ANGLE_TRY(createRenderTargetSRV(context, *texture, index, mFormatInfo.srvFormat, &srv));
-        d3d11::SharedSRV blitSRV;
-        if (mFormatInfo.blitSRVFormat != mFormatInfo.srvFormat)
-        {
-            ANGLE_TRY(createRenderTargetSRV(context, *texture, index, mFormatInfo.blitSRVFormat,
-                                            &blitSRV));
-        }
-        else
-        {
-            blitSRV = srv.makeCopy();
-        }
+    d3d11::SharedSRV srv;
+    ANGLE_TRY(createRenderTargetSRV(context, *texture, index, mFormatInfo.srvFormat, &srv));
+    d3d11::SharedSRV blitSRV;
+    if (mFormatInfo.blitSRVFormat != mFormatInfo.srvFormat)
+    {
+        ANGLE_TRY(
+            createRenderTargetSRV(context, *texture, index, mFormatInfo.blitSRVFormat, &blitSRV));
+    }
+    else
+    {
+        blitSRV = srv.makeCopy();
+    }
 
-        srv.setDebugName("TexStorageCube.RenderTargetSRV");
+    srv.setDebugName("TexStorageCube.RenderTargetSRV");
 
-        if (mFormatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN)
-        {
-            D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
-            rtvDesc.Format                         = mFormatInfo.rtvFormat;
-            rtvDesc.ViewDimension                  = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
-            rtvDesc.Texture2DArray.MipSlice        = mTopLevel + level;
-            rtvDesc.Texture2DArray.FirstArraySlice = faceIndex;
-            rtvDesc.Texture2DArray.ArraySize       = 1;
+    if (mFormatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN)
+    {
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format                         = mFormatInfo.rtvFormat;
+        rtvDesc.ViewDimension                  = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+        rtvDesc.Texture2DArray.MipSlice        = mTopLevel + level;
+        rtvDesc.Texture2DArray.FirstArraySlice = faceIndex;
+        rtvDesc.Texture2DArray.ArraySize       = 1;
 
-            d3d11::RenderTargetView rtv;
-            ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, texture->get(), &rtv));
-            rtv.setDebugName("TexStorageCube.RenderTargetRTV");
+        d3d11::RenderTargetView rtv;
+        ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, texture->get(), &rtv));
+        rtv.setDebugName("TexStorageCube.RenderTargetRTV");
 
-            mRenderTarget[faceIndex][level].reset(new TextureRenderTarget11(
-                std::move(rtv), *texture, srv, blitSRV, mFormatInfo.internalFormat, getFormatSet(),
-                getLevelWidth(level), getLevelHeight(level), 1, 0));
-        }
-        else if (mFormatInfo.dsvFormat != DXGI_FORMAT_UNKNOWN)
-        {
-            D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-            dsvDesc.Format                         = mFormatInfo.dsvFormat;
-            dsvDesc.ViewDimension                  = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
-            dsvDesc.Flags                          = 0;
-            dsvDesc.Texture2DArray.MipSlice        = mTopLevel + level;
-            dsvDesc.Texture2DArray.FirstArraySlice = faceIndex;
-            dsvDesc.Texture2DArray.ArraySize       = 1;
+        mRenderTarget[faceIndex][level].reset(new TextureRenderTarget11(
+            std::move(rtv), *texture, srv, blitSRV, mFormatInfo.internalFormat, getFormatSet(),
+            getLevelWidth(level), getLevelHeight(level), 1, 0));
+    }
+    else if (mFormatInfo.dsvFormat != DXGI_FORMAT_UNKNOWN)
+    {
+        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+        dsvDesc.Format                         = mFormatInfo.dsvFormat;
+        dsvDesc.ViewDimension                  = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
+        dsvDesc.Flags                          = 0;
+        dsvDesc.Texture2DArray.MipSlice        = mTopLevel + level;
+        dsvDesc.Texture2DArray.FirstArraySlice = faceIndex;
+        dsvDesc.Texture2DArray.ArraySize       = 1;
 
-            d3d11::DepthStencilView dsv;
-            ANGLE_TRY(mRenderer->allocateResource(context11, dsvDesc, texture->get(), &dsv));
-            dsv.setDebugName("TexStorageCube.RenderTargetDSV");
+        d3d11::DepthStencilView dsv;
+        ANGLE_TRY(mRenderer->allocateResource(context11, dsvDesc, texture->get(), &dsv));
+        dsv.setDebugName("TexStorageCube.RenderTargetDSV");
 
-            mRenderTarget[faceIndex][level].reset(new TextureRenderTarget11(
-                std::move(dsv), *texture, srv, mFormatInfo.internalFormat, getFormatSet(),
-                getLevelWidth(level), getLevelHeight(level), 1, 0));
-        }
-        else
-        {
-            UNREACHABLE();
-        }
+        mRenderTarget[faceIndex][level].reset(new TextureRenderTarget11(
+            std::move(dsv), *texture, srv, mFormatInfo.internalFormat, getFormatSet(),
+            getLevelWidth(level), getLevelHeight(level), 1, 0));
+    }
+    else
+    {
+        UNREACHABLE();
     }
 
     ASSERT(outRT);
@@ -3001,6 +3004,15 @@ angle::Result TextureStorage11_3D::getRenderTarget(const gl::Context *context,
                                                    GLsizei samples,
                                                    RenderTargetD3D **outRT)
 {
+    RenderTargetD3D *rt = nullptr;
+    ANGLE_TRY(findRenderTarget(context, index, samples, &rt));
+    if (rt)
+    {
+        ASSERT(outRT);
+        *outRT = rt;
+        return angle::Result::Continue;
+    }
+
     const int mipLevel = index.getLevelIndex();
     ASSERT(mipLevel >= 0 && mipLevel < getLevelCount());
 
@@ -3010,33 +3022,29 @@ angle::Result TextureStorage11_3D::getRenderTarget(const gl::Context *context,
 
     if (!index.hasLayer())
     {
-        if (!mLevelRenderTargets[mipLevel])
-        {
-            const TextureHelper11 *texture = nullptr;
-            ANGLE_TRY(getResource(context, &texture));
+        const TextureHelper11 *texture = nullptr;
+        ANGLE_TRY(getResource(context, &texture));
 
-            const d3d11::SharedSRV *srv = nullptr;
-            ANGLE_TRY(getSRVLevel(context, mipLevel, false, &srv));
+        const d3d11::SharedSRV *srv = nullptr;
+        ANGLE_TRY(getSRVLevel(context, mipLevel, false, &srv));
 
-            const d3d11::SharedSRV *blitSRV = nullptr;
-            ANGLE_TRY(getSRVLevel(context, mipLevel, true, &blitSRV));
+        const d3d11::SharedSRV *blitSRV = nullptr;
+        ANGLE_TRY(getSRVLevel(context, mipLevel, true, &blitSRV));
 
-            D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
-            rtvDesc.Format                = mFormatInfo.rtvFormat;
-            rtvDesc.ViewDimension         = D3D11_RTV_DIMENSION_TEXTURE3D;
-            rtvDesc.Texture3D.MipSlice    = mTopLevel + mipLevel;
-            rtvDesc.Texture3D.FirstWSlice = 0;
-            rtvDesc.Texture3D.WSize       = static_cast<UINT>(-1);
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format                = mFormatInfo.rtvFormat;
+        rtvDesc.ViewDimension         = D3D11_RTV_DIMENSION_TEXTURE3D;
+        rtvDesc.Texture3D.MipSlice    = mTopLevel + mipLevel;
+        rtvDesc.Texture3D.FirstWSlice = 0;
+        rtvDesc.Texture3D.WSize       = static_cast<UINT>(-1);
 
-            d3d11::RenderTargetView rtv;
-            ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, texture->get(), &rtv));
-            rtv.setDebugName("TexStorage3D.RTV");
+        d3d11::RenderTargetView rtv;
+        ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, texture->get(), &rtv));
+        rtv.setDebugName("TexStorage3D.RTV");
 
-            mLevelRenderTargets[mipLevel].reset(new TextureRenderTarget11(
-                std::move(rtv), *texture, *srv, *blitSRV, mFormatInfo.internalFormat,
-                getFormatSet(), getLevelWidth(mipLevel), getLevelHeight(mipLevel),
-                getLevelDepth(mipLevel), 0));
-        }
+        mLevelRenderTargets[mipLevel].reset(new TextureRenderTarget11(
+            std::move(rtv), *texture, *srv, *blitSRV, mFormatInfo.internalFormat, getFormatSet(),
+            getLevelWidth(mipLevel), getLevelHeight(mipLevel), getLevelDepth(mipLevel), 0));
 
         ASSERT(outRT);
         *outRT = mLevelRenderTargets[mipLevel].get();
@@ -3046,30 +3054,28 @@ angle::Result TextureStorage11_3D::getRenderTarget(const gl::Context *context,
     const int layer = index.getLayerIndex();
 
     LevelLayerKey key(mipLevel, layer);
-    if (mLevelLayerRenderTargets.find(key) == mLevelLayerRenderTargets.end())
-    {
-        const TextureHelper11 *texture = nullptr;
-        ANGLE_TRY(getResource(context, &texture));
 
-        // TODO, what kind of SRV is expected here?
-        const d3d11::SharedSRV srv;
-        const d3d11::SharedSRV blitSRV;
+    const TextureHelper11 *texture = nullptr;
+    ANGLE_TRY(getResource(context, &texture));
 
-        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
-        rtvDesc.Format                = mFormatInfo.rtvFormat;
-        rtvDesc.ViewDimension         = D3D11_RTV_DIMENSION_TEXTURE3D;
-        rtvDesc.Texture3D.MipSlice    = mTopLevel + mipLevel;
-        rtvDesc.Texture3D.FirstWSlice = layer;
-        rtvDesc.Texture3D.WSize       = 1;
+    // TODO, what kind of SRV is expected here?
+    const d3d11::SharedSRV srv;
+    const d3d11::SharedSRV blitSRV;
 
-        d3d11::RenderTargetView rtv;
-        ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, texture->get(), &rtv));
-        rtv.setDebugName("TexStorage3D.LayerRTV");
+    D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+    rtvDesc.Format                = mFormatInfo.rtvFormat;
+    rtvDesc.ViewDimension         = D3D11_RTV_DIMENSION_TEXTURE3D;
+    rtvDesc.Texture3D.MipSlice    = mTopLevel + mipLevel;
+    rtvDesc.Texture3D.FirstWSlice = layer;
+    rtvDesc.Texture3D.WSize       = 1;
 
-        mLevelLayerRenderTargets[key].reset(new TextureRenderTarget11(
-            std::move(rtv), *texture, srv, blitSRV, mFormatInfo.internalFormat, getFormatSet(),
-            getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, 0));
-    }
+    d3d11::RenderTargetView rtv;
+    ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, texture->get(), &rtv));
+    rtv.setDebugName("TexStorage3D.LayerRTV");
+
+    mLevelLayerRenderTargets[key].reset(new TextureRenderTarget11(
+        std::move(rtv), *texture, srv, blitSRV, mFormatInfo.internalFormat, getFormatSet(),
+        getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, 0));
 
     ASSERT(outRT);
     *outRT = mLevelLayerRenderTargets[key].get();
@@ -3398,6 +3404,15 @@ angle::Result TextureStorage11_2DArray::getRenderTarget(const gl::Context *conte
                                                         GLsizei samples,
                                                         RenderTargetD3D **outRT)
 {
+    RenderTargetD3D *rt = nullptr;
+    ANGLE_TRY(findRenderTarget(context, index, samples, &rt));
+    if (rt)
+    {
+        ASSERT(outRT);
+        *outRT = rt;
+        return angle::Result::Continue;
+    }
+
     ASSERT(index.hasLayer());
 
     const int mipLevel  = index.getLevelIndex();
@@ -3407,64 +3422,62 @@ angle::Result TextureStorage11_2DArray::getRenderTarget(const gl::Context *conte
     ASSERT(mipLevel >= 0 && mipLevel < getLevelCount());
 
     LevelLayerRangeKey key(mipLevel, layer, numLayers);
-    if (mRenderTargets.find(key) == mRenderTargets.end())
+
+    const TextureHelper11 *texture = nullptr;
+    ANGLE_TRY(getResource(context, &texture));
+    d3d11::SharedSRV srv;
+    ANGLE_TRY(createRenderTargetSRV(context, *texture, index, mFormatInfo.srvFormat, &srv));
+    d3d11::SharedSRV blitSRV;
+    if (mFormatInfo.blitSRVFormat != mFormatInfo.srvFormat)
     {
-        const TextureHelper11 *texture = nullptr;
-        ANGLE_TRY(getResource(context, &texture));
-        d3d11::SharedSRV srv;
-        ANGLE_TRY(createRenderTargetSRV(context, *texture, index, mFormatInfo.srvFormat, &srv));
-        d3d11::SharedSRV blitSRV;
-        if (mFormatInfo.blitSRVFormat != mFormatInfo.srvFormat)
-        {
-            ANGLE_TRY(createRenderTargetSRV(context, *texture, index, mFormatInfo.blitSRVFormat,
-                                            &blitSRV));
-        }
-        else
-        {
-            blitSRV = srv.makeCopy();
-        }
+        ANGLE_TRY(
+            createRenderTargetSRV(context, *texture, index, mFormatInfo.blitSRVFormat, &blitSRV));
+    }
+    else
+    {
+        blitSRV = srv.makeCopy();
+    }
 
-        srv.setDebugName("TexStorage2DArray.RenderTargetSRV");
+    srv.setDebugName("TexStorage2DArray.RenderTargetSRV");
 
-        if (mFormatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN)
-        {
-            D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
-            rtvDesc.Format                         = mFormatInfo.rtvFormat;
-            rtvDesc.ViewDimension                  = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
-            rtvDesc.Texture2DArray.MipSlice        = mTopLevel + mipLevel;
-            rtvDesc.Texture2DArray.FirstArraySlice = layer;
-            rtvDesc.Texture2DArray.ArraySize       = numLayers;
+    if (mFormatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN)
+    {
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format                         = mFormatInfo.rtvFormat;
+        rtvDesc.ViewDimension                  = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+        rtvDesc.Texture2DArray.MipSlice        = mTopLevel + mipLevel;
+        rtvDesc.Texture2DArray.FirstArraySlice = layer;
+        rtvDesc.Texture2DArray.ArraySize       = numLayers;
 
-            d3d11::RenderTargetView rtv;
-            ANGLE_TRY(mRenderer->allocateResource(GetImplAs<Context11>(context), rtvDesc,
-                                                  texture->get(), &rtv));
-            rtv.setDebugName("TexStorage2DArray.RenderTargetRTV");
+        d3d11::RenderTargetView rtv;
+        ANGLE_TRY(mRenderer->allocateResource(GetImplAs<Context11>(context), rtvDesc,
+                                              texture->get(), &rtv));
+        rtv.setDebugName("TexStorage2DArray.RenderTargetRTV");
 
-            mRenderTargets[key].reset(new TextureRenderTarget11(
-                std::move(rtv), *texture, srv, blitSRV, mFormatInfo.internalFormat, getFormatSet(),
-                getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, 0));
-        }
-        else
-        {
-            ASSERT(mFormatInfo.dsvFormat != DXGI_FORMAT_UNKNOWN);
+        mRenderTargets[key].reset(new TextureRenderTarget11(
+            std::move(rtv), *texture, srv, blitSRV, mFormatInfo.internalFormat, getFormatSet(),
+            getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, 0));
+    }
+    else
+    {
+        ASSERT(mFormatInfo.dsvFormat != DXGI_FORMAT_UNKNOWN);
 
-            D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-            dsvDesc.Format                         = mFormatInfo.dsvFormat;
-            dsvDesc.ViewDimension                  = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
-            dsvDesc.Texture2DArray.MipSlice        = mTopLevel + mipLevel;
-            dsvDesc.Texture2DArray.FirstArraySlice = layer;
-            dsvDesc.Texture2DArray.ArraySize       = numLayers;
-            dsvDesc.Flags                          = 0;
+        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+        dsvDesc.Format                         = mFormatInfo.dsvFormat;
+        dsvDesc.ViewDimension                  = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
+        dsvDesc.Texture2DArray.MipSlice        = mTopLevel + mipLevel;
+        dsvDesc.Texture2DArray.FirstArraySlice = layer;
+        dsvDesc.Texture2DArray.ArraySize       = numLayers;
+        dsvDesc.Flags                          = 0;
 
-            d3d11::DepthStencilView dsv;
-            ANGLE_TRY(mRenderer->allocateResource(GetImplAs<Context11>(context), dsvDesc,
-                                                  texture->get(), &dsv));
-            dsv.setDebugName("TexStorage2DArray.RenderTargetDSV");
+        d3d11::DepthStencilView dsv;
+        ANGLE_TRY(mRenderer->allocateResource(GetImplAs<Context11>(context), dsvDesc,
+                                              texture->get(), &dsv));
+        dsv.setDebugName("TexStorage2DArray.RenderTargetDSV");
 
-            mRenderTargets[key].reset(new TextureRenderTarget11(
-                std::move(dsv), *texture, srv, mFormatInfo.internalFormat, getFormatSet(),
-                getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, 0));
-        }
+        mRenderTargets[key].reset(new TextureRenderTarget11(
+            std::move(dsv), *texture, srv, mFormatInfo.internalFormat, getFormatSet(),
+            getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, 0));
     }
 
     ASSERT(outRT);
@@ -3676,17 +3689,21 @@ angle::Result TextureStorage11_2DMultisample::getRenderTarget(const gl::Context 
                                                               GLsizei samples,
                                                               RenderTargetD3D **outRT)
 {
+    RenderTargetD3D *rt = nullptr;
+    ANGLE_TRY(findRenderTarget(context, index, samples, &rt));
+    if (rt)
+    {
+        ASSERT(outRT);
+        *outRT = rt;
+        return angle::Result::Continue;
+    }
+
     ASSERT(!index.hasLayer());
 
     const int level = index.getLevelIndex();
     ASSERT(level == 0);
 
     ASSERT(outRT);
-    if (mRenderTarget)
-    {
-        *outRT = mRenderTarget.get();
-        return angle::Result::Continue;
-    }
 
     const TextureHelper11 *texture = nullptr;
     ANGLE_TRY(getResource(context, &texture));
@@ -3914,6 +3931,15 @@ angle::Result TextureStorage11_2DMultisampleArray::getRenderTarget(const gl::Con
                                                                    GLsizei samples,
                                                                    RenderTargetD3D **outRT)
 {
+    RenderTargetD3D *rt = nullptr;
+    ANGLE_TRY(findRenderTarget(context, index, samples, &rt));
+    if (rt)
+    {
+        ASSERT(outRT);
+        *outRT = rt;
+        return angle::Result::Continue;
+    }
+
     ASSERT(index.hasLayer());
 
     const int mipLevel = index.getLevelIndex();
@@ -3924,62 +3950,60 @@ angle::Result TextureStorage11_2DMultisampleArray::getRenderTarget(const gl::Con
     ASSERT(mipLevel >= 0 && mipLevel < getLevelCount());
 
     TextureStorage11_2DArray::LevelLayerRangeKey key(mipLevel, layer, numLayers);
-    if (mRenderTargets.find(key) == mRenderTargets.end())
+
+    const TextureHelper11 *texture = nullptr;
+    ANGLE_TRY(getResource(context, &texture));
+    d3d11::SharedSRV srv;
+    ANGLE_TRY(createRenderTargetSRV(context, *texture, index, mFormatInfo.srvFormat, &srv));
+    d3d11::SharedSRV blitSRV;
+    if (mFormatInfo.blitSRVFormat != mFormatInfo.srvFormat)
     {
-        const TextureHelper11 *texture = nullptr;
-        ANGLE_TRY(getResource(context, &texture));
-        d3d11::SharedSRV srv;
-        ANGLE_TRY(createRenderTargetSRV(context, *texture, index, mFormatInfo.srvFormat, &srv));
-        d3d11::SharedSRV blitSRV;
-        if (mFormatInfo.blitSRVFormat != mFormatInfo.srvFormat)
-        {
-            ANGLE_TRY(createRenderTargetSRV(context, *texture, index, mFormatInfo.blitSRVFormat,
-                                            &blitSRV));
-        }
-        else
-        {
-            blitSRV = srv.makeCopy();
-        }
+        ANGLE_TRY(
+            createRenderTargetSRV(context, *texture, index, mFormatInfo.blitSRVFormat, &blitSRV));
+    }
+    else
+    {
+        blitSRV = srv.makeCopy();
+    }
 
-        srv.setDebugName("TexStorage2DMSArray.RenderTargetSRV");
+    srv.setDebugName("TexStorage2DMSArray.RenderTargetSRV");
 
-        if (mFormatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN)
-        {
-            D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
-            rtvDesc.Format                           = mFormatInfo.rtvFormat;
-            rtvDesc.ViewDimension                    = D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY;
-            rtvDesc.Texture2DMSArray.FirstArraySlice = layer;
-            rtvDesc.Texture2DMSArray.ArraySize       = numLayers;
+    if (mFormatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN)
+    {
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format                           = mFormatInfo.rtvFormat;
+        rtvDesc.ViewDimension                    = D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY;
+        rtvDesc.Texture2DMSArray.FirstArraySlice = layer;
+        rtvDesc.Texture2DMSArray.ArraySize       = numLayers;
 
-            d3d11::RenderTargetView rtv;
-            ANGLE_TRY(mRenderer->allocateResource(GetImplAs<Context11>(context), rtvDesc,
-                                                  texture->get(), &rtv));
-            rtv.setDebugName("TexStorage2DMSArray.RenderTargetRTV");
+        d3d11::RenderTargetView rtv;
+        ANGLE_TRY(mRenderer->allocateResource(GetImplAs<Context11>(context), rtvDesc,
+                                              texture->get(), &rtv));
+        rtv.setDebugName("TexStorage2DMSArray.RenderTargetRTV");
 
-            mRenderTargets[key].reset(new TextureRenderTarget11(
-                std::move(rtv), *texture, srv, blitSRV, mFormatInfo.internalFormat, getFormatSet(),
-                getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, mSamples));
-        }
-        else
-        {
-            ASSERT(mFormatInfo.dsvFormat != DXGI_FORMAT_UNKNOWN);
+        mRenderTargets[key].reset(new TextureRenderTarget11(
+            std::move(rtv), *texture, srv, blitSRV, mFormatInfo.internalFormat, getFormatSet(),
+            getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, mSamples));
+    }
+    else
+    {
+        ASSERT(mFormatInfo.dsvFormat != DXGI_FORMAT_UNKNOWN);
 
-            D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-            dsvDesc.Format                           = mFormatInfo.dsvFormat;
-            dsvDesc.ViewDimension                    = D3D11_DSV_DIMENSION_TEXTURE2DMSARRAY;
-            dsvDesc.Texture2DMSArray.FirstArraySlice = layer;
-            dsvDesc.Texture2DMSArray.ArraySize       = numLayers;
-            dsvDesc.Flags                            = 0;
+        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+        dsvDesc.Format                           = mFormatInfo.dsvFormat;
+        dsvDesc.ViewDimension                    = D3D11_DSV_DIMENSION_TEXTURE2DMSARRAY;
+        dsvDesc.Texture2DMSArray.FirstArraySlice = layer;
+        dsvDesc.Texture2DMSArray.ArraySize       = numLayers;
+        dsvDesc.Flags                            = 0;
 
-            d3d11::DepthStencilView dsv;
-            ANGLE_TRY(mRenderer->allocateResource(GetImplAs<Context11>(context), dsvDesc,
-                                                  texture->get(), &dsv));
-            dsv.setDebugName("TexStorage2DMSArray.RenderTargetDSV");
+        d3d11::DepthStencilView dsv;
+        ANGLE_TRY(mRenderer->allocateResource(GetImplAs<Context11>(context), dsvDesc,
+                                              texture->get(), &dsv));
+        dsv.setDebugName("TexStorage2DMSArray.RenderTargetDSV");
 
-            mRenderTargets[key].reset(new TextureRenderTarget11(
-                std::move(dsv), *texture, srv, mFormatInfo.internalFormat, getFormatSet(),
-                getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, mSamples));
-        }
+        mRenderTargets[key].reset(new TextureRenderTarget11(
+            std::move(dsv), *texture, srv, mFormatInfo.internalFormat, getFormatSet(),
+            getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, mSamples));
     }
 
     ASSERT(outRT);

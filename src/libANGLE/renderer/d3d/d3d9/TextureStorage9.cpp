@@ -197,9 +197,18 @@ angle::Result TextureStorage9_2D::getRenderTarget(const gl::Context *context,
                                                   GLsizei samples,
                                                   RenderTargetD3D **outRT)
 {
+    RenderTargetD3D *rt = nullptr;
+    ANGLE_TRY(findRenderTarget(context, index, samples, &rt));
+    if (rt)
+    {
+        ASSERT(outRT);
+        *outRT = rt;
+        return angle::Result::Continue;
+    }
+
     ASSERT(index.getLevelIndex() < getLevelCount());
 
-    if (!mRenderTargets[index.getLevelIndex()] && isRenderTarget())
+    if (isRenderTarget())
     {
         IDirect3DBaseTexture9 *baseTexture = nullptr;
         ANGLE_TRY(getBaseTexture(context, &baseTexture));
@@ -477,6 +486,15 @@ angle::Result TextureStorage9_Cube::getRenderTarget(const gl::Context *context,
                                                     RenderTargetD3D **outRT)
 {
     ASSERT(outRT);
+
+    RenderTargetD3D *rt = nullptr;
+    ANGLE_TRY(findRenderTarget(context, index, samples, &rt));
+    if (rt)
+    {
+        *outRT = rt;
+        return angle::Result::Continue;
+    }
+
     ASSERT(index.getLevelIndex() == 0);
     ASSERT(samples == 0);
 
@@ -484,7 +502,7 @@ angle::Result TextureStorage9_Cube::getRenderTarget(const gl::Context *context,
            gl::IsCubeMapFaceTarget(index.getTarget()));
     const size_t renderTargetIndex = index.cubeMapFaceIndex();
 
-    if (mRenderTarget[renderTargetIndex] == nullptr && isRenderTarget())
+    if (isRenderTarget())
     {
         IDirect3DBaseTexture9 *baseTexture = nullptr;
         ANGLE_TRY(getBaseTexture(context, &baseTexture));
