@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fa52e09_4d5d7b15",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-11T15:55:01Z",
+      "side": 1,
+      "message": "If unlink can change mExecutable, what happens to getInfoLog() data collected so far?\nI suspect it\u0027s returned/used if linkValidateShaders (@1430) fails.\nAnd if unlink does change mExecutable, then it\u0027s guaranteed that it has an empty infolog, right?",
+      "revId": "62b2c0994568ef58f684fe67a6b9bf888412f0ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "268ccaca_af8561ff",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1818,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-11T15:55:01Z",
+      "side": 1,
+      "message": "return here?",
+      "revId": "62b2c0994568ef58f684fe67a6b9bf888412f0ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
