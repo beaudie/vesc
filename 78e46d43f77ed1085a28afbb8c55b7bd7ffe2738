@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "327cdb64_909b0094",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-11T14:50:27Z",
+      "side": 1,
+      "message": "nit: Not sure it\u0027s necessary, but do you want an ASSERT(currentShader) since you got rid of the if, I\u0027m assuming that you are confident that we will get a shader here. Maybe reference object will assert if currentShader is null?",
+      "revId": "78e46d43f77ed1085a28afbb8c55b7bd7ffe2738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
