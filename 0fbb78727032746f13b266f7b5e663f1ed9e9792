@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46b1ae24_de3b9fd6",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T18:20:02Z",
+      "side": 1,
+      "message": "you can flatten this using \n\nif (mIncompleteTexturesInitialized)\n{\n   return;\n}\n\nalso again auto isn\u0027t helping the code read well so better to use the explicit type.",
+      "range": {
+        "startLine": 131,
+        "startChar": 1,
+        "endLine": 143,
+        "endChar": 5
+      },
+      "revId": "0fbb78727032746f13b266f7b5e663f1ed9e9792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c80c46d5_31607fe5",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T18:20:02Z",
+      "side": 1,
+      "message": "nit: getIncompleteTexture to be consistent with the naming.",
+      "range": {
+        "startLine": 1050,
+        "startChar": 26,
+        "endLine": 1050,
+        "endChar": 40
+      },
+      "revId": "0fbb78727032746f13b266f7b5e663f1ed9e9792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
