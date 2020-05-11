@@ -871,8 +871,6 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
 
 void ProgramExecutableVk::updateBuffersDescriptorSet(ContextVk *contextVk,
                                                      const gl::ShaderType shaderType,
-                                                     vk::ResourceUseList *resourceUseList,
-                                                     vk::CommandBufferHelper *commandBufferHelper,
                                                      const std::vector<gl::InterfaceBlock> &blocks,
                                                      VkDescriptorType descriptorType)
 {
@@ -948,13 +946,13 @@ void ProgramExecutableVk::updateBuffersDescriptorSet(ContextVk *contextVk,
         {
             // We set the SHADER_READ_BIT to be conservative.
             VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-            commandBufferHelper->bufferWrite(resourceUseList, accessFlags,
-                                             kPipelineStageShaderMap[shaderType], &bufferHelper);
+            contextVk->onRenderPassBufferWrite(&bufferHelper, accessFlags,
+                                               kPipelineStageShaderMap[shaderType]);
         }
         else
         {
-            commandBufferHelper->bufferRead(resourceUseList, VK_ACCESS_UNIFORM_READ_BIT,
-                                            kPipelineStageShaderMap[shaderType], &bufferHelper);
+            contextVk->onRenderPassBufferRead(&bufferHelper, VK_ACCESS_UNIFORM_READ_BIT,
+                                              kPipelineStageShaderMap[shaderType]);
         }
 
         ++writeCount;
@@ -968,9 +966,7 @@ void ProgramExecutableVk::updateBuffersDescriptorSet(ContextVk *contextVk,
 void ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
     const gl::ProgramState &programState,
     const gl::ShaderType shaderType,
-    ContextVk *contextVk,
-    vk::ResourceUseList *resourceUseList,
-    vk::CommandBufferHelper *commandBufferHelper)
+    ContextVk *contextVk)
 {
     const gl::State &glState = contextVk->getState();
     const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers =
@@ -1025,9 +1021,9 @@ void ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
                                         &writeInfo);
 
         // We set SHADER_READ_BIT to be conservative.
-        commandBufferHelper->bufferWrite(resourceUseList,
-                                         VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
-                                         kPipelineStageShaderMap[shaderType], &bufferHelper);
+        contextVk->onRenderPassBufferWrite(&bufferHelper,
+                                           VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+                                           kPipelineStageShaderMap[shaderType]);
 
         writtenBindings.set(binding);
     }
@@ -1147,10 +1143,7 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(const gl::ProgramSt
     return angle::Result::Continue;
 }
 
-angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
-    ContextVk *contextVk,
-    vk::ResourceUseList *resourceUseList,
-    vk::CommandBufferHelper *commandBufferHelper)
+angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(ContextVk *contextVk)
 {
     const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
     ASSERT(executable);
@@ -1164,14 +1157,11 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
         const gl::ProgramState *programState = programStates[shaderType];
         ASSERT(programState);
 
-        updateBuffersDescriptorSet(contextVk, shaderType, resourceUseList, commandBufferHelper,
-                                   programState->getUniformBlocks(),
+        updateBuffersDescriptorSet(contextVk, shaderType, programState->getUniformBlocks(),
                                    VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER);
-        updateBuffersDescriptorSet(contextVk, shaderType, resourceUseList, commandBufferHelper,
-                                   programState->getShaderStorageBlocks(),
+        updateBuffersDescriptorSet(contextVk, shaderType, programState->getShaderStorageBlocks(),
                                    VK_DESCRIPTOR_TYPE_STORAGE_BUFFER);
-        updateAtomicCounterBuffersDescriptorSet(*programState, shaderType, contextVk,
-                                                resourceUseList, commandBufferHelper);
+        updateAtomicCounterBuffersDescriptorSet(*programState, shaderType, contextVk);
         angle::Result status = updateImagesDescriptorSet(*programState, shaderType, contextVk);
         if (status != angle::Result::Continue)
         {

@@ -140,9 +140,7 @@ class ProgramExecutableVk
     angle::Result createPipelineLayout(const gl::Context *glContext);
 
     angle::Result updateTexturesDescriptorSet(ContextVk *contextVk);
-    angle::Result updateShaderResourcesDescriptorSet(ContextVk *contextVk,
-                                                     vk::ResourceUseList *resourceUseList,
-                                                     vk::CommandBufferHelper *commandBufferHelper);
+    angle::Result updateShaderResourcesDescriptorSet(ContextVk *contextVk);
     angle::Result updateTransformFeedbackDescriptorSet(
         const gl::ProgramState &programState,
         gl::ShaderMap<DefaultUniformBlock> &defaultUniformBlocks,
@@ -193,15 +191,11 @@ class ProgramExecutableVk
                                                   ContextVk *contextVk);
     void updateBuffersDescriptorSet(ContextVk *contextVk,
                                     const gl::ShaderType shaderType,
-                                    vk::ResourceUseList *resourceUseList,
-                                    vk::CommandBufferHelper *commandBufferHelper,
                                     const std::vector<gl::InterfaceBlock> &blocks,
                                     VkDescriptorType descriptorType);
     void updateAtomicCounterBuffersDescriptorSet(const gl::ProgramState &programState,
                                                  const gl::ShaderType shaderType,
-                                                 ContextVk *contextVk,
-                                                 vk::ResourceUseList *resourceUseList,
-                                                 vk::CommandBufferHelper *commandBufferHelper);
+                                                 ContextVk *contextVk);
     angle::Result updateImagesDescriptorSet(const gl::ProgramState &programState,
                                             const gl::ShaderType shaderType,
                                             ContextVk *contextVk);
