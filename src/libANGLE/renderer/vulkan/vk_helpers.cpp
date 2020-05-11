@@ -2242,6 +2242,7 @@ void BufferHelper::acquireFromExternal(ContextVk *contextVk,
 {
     mCurrentQueueFamilyIndex = externalQueueFamilyIndex;
 
+    retain(&contextVk->getResourceUseList());
     changeQueue(rendererQueueFamilyIndex, commandBuffer);
 }
 
@@ -2252,6 +2253,7 @@ void BufferHelper::releaseToExternal(ContextVk *contextVk,
 {
     ASSERT(mCurrentQueueFamilyIndex == rendererQueueFamilyIndex);
 
+    retain(&contextVk->getResourceUseList());
     changeQueue(externalQueueFamilyIndex, commandBuffer);
 }
 
@@ -2733,6 +2735,7 @@ void ImageHelper::acquireFromExternal(ContextVk *contextVk,
     mCurrentLayout           = currentLayout;
     mCurrentQueueFamilyIndex = externalQueueFamilyIndex;
 
+    retain(&contextVk->getResourceUseList());
     changeLayoutAndQueue(getAspectFlags(), mCurrentLayout, rendererQueueFamilyIndex, commandBuffer);
 }
 
@@ -2744,6 +2747,7 @@ void ImageHelper::releaseToExternal(ContextVk *contextVk,
 {
     ASSERT(mCurrentQueueFamilyIndex == rendererQueueFamilyIndex);
 
+    retain(&contextVk->getResourceUseList());
     changeLayoutAndQueue(getAspectFlags(), desiredLayout, externalQueueFamilyIndex, commandBuffer);
 }
 
