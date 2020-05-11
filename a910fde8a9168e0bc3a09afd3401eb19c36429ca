@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "16d847a6_e0ac18b0",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-11T18:01:28Z",
+      "side": 1,
+      "message": "I would not make the logic for choosing error messages overly complex.  How about just one error message: \"EXT/OES_draw_buffers_indexed or ES 3.1 are required but not available.\"",
+      "parentUuid": "9d839b5f_a8b59950",
+      "range": {
+        "startLine": 375,
+        "startChar": 12,
+        "endLine": 375,
+        "endChar": 51
+      },
+      "revId": "a910fde8a9168e0bc3a09afd3401eb19c36429ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2b57e70_981345b3",
         "filename": "src/libANGLE/validationES31.cpp",
         "patchSetId": 1
