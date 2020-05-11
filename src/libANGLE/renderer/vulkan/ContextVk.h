@@ -462,6 +462,16 @@ class ContextVk : public ContextImpl, public vk::Context
 
     vk::ResourceUseList &getResourceUseList() { return mResourceUseList; }
 
+    // Set write access mask when the buffer is modified externally by host.
+    void onHostWrite()
+    {
+        mCurrentWriteAccess |= VK_ACCESS_HOST_WRITE_BIT;
+        mCurrentWriteStages |= VK_PIPELINE_STAGE_HOST_BIT;
+    }
+
+    // Helper functions to reduce API verbosity. The APIs that has RenderPass in the name inserts
+    // barrier into mRenderPassCommands. The ones that without RenderPass in the name inserts
+    // barrier in the mOutsideRenderPassCommands
     angle::Result onBufferTransferRead(vk::BufferHelper *buffer)
     {
         return onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, vk::PipelineStage::Transfer, buffer);
@@ -477,6 +487,38 @@ class ContextVk : public ContextImpl, public vk::Context
     angle::Result onBufferComputeShaderWrite(vk::BufferHelper *buffer)
     {
         return onBufferWrite(VK_ACCESS_SHADER_WRITE_BIT, vk::PipelineStage::ComputeShader, buffer);
+    }
+
+    void onRenderPassBufferRead(vk::BufferHelper *buffer,
+                                VkAccessFlags readAccessType,
+                                vk::PipelineStage readStage)
+    {
+        buffer->retain(&mResourceUseList);
+        // Compute shader uses mOutsideRenderPassCommands
+        if (readStage == vk::PipelineStage::ComputeShader)
+        {
+            updateMemoryBarrierForRead(readAccessType, readStage, &mOutsideRenderPassCommands);
+        }
+        else
+        {
+            updateMemoryBarrierForRead(readAccessType, readStage, &mRenderPassCommands);
+        }
+    }
+
+    void onRenderPassBufferWrite(vk::BufferHelper *buffer,
+                                 VkAccessFlags writeAccessType,
+                                 vk::PipelineStage writeStage)
+    {
+        buffer->retain(&mResourceUseList);
+        // Compute shader uses mOutsideRenderPassCommands
+        if (writeStage == vk::PipelineStage::ComputeShader)
+        {
+            updateMemoryBarrierForWrite(writeAccessType, writeStage, &mOutsideRenderPassCommands);
+        }
+        else
+        {
+            updateMemoryBarrierForWrite(writeAccessType, writeStage, &mRenderPassCommands);
+        }
     }
 
     angle::Result onImageRead(VkImageAspectFlags aspectFlags,
@@ -803,7 +845,21 @@ class ContextVk : public ContextImpl, public vk::Context
                                 vk::PipelineStage writeStage,
                                 vk::BufferHelper *buffer);
 
+    void updateMemoryBarrierForRead(VkAccessFlags readAccessType,
+                                    vk::PipelineStage readStage,
+                                    vk::CommandBufferHelper *commandBufferHelper);
+
+    void updateMemoryBarrierForWrite(VkAccessFlags writeAccessType,
+                                     vk::PipelineStage writeStage,
+                                     vk::CommandBufferHelper *commandBufferHelper);
+
     void initIndexTypeMap();
+
+    // For memory barriers.
+    VkFlags mCurrentWriteAccess;
+    VkFlags mCurrentReadAccess;
+    VkPipelineStageFlags mCurrentWriteStages;
+    VkPipelineStageFlags mCurrentReadStages;
 
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
