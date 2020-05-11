@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "113f17c1_b3caa273",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-11T18:13:23Z",
+      "side": 1,
+      "message": "Could add a new constructor that adds the rotation parameter, then this becomes a call to the new constructor with a fixed SurfaceRotationType::Identity for the rotation. That would save you from having to change the non-Vulkan backends.",
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4071050_01e15f81",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-11T18:13:23Z",
+      "side": 1,
+      "message": "Do we need to set reverseRowOrder here?",
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "28499abf_93e5af12",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 3
@@ -19,6 +53,40 @@
         "endLine": 283,
         "endChar": 22
       },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea882edf_c6e259fb",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-11T18:13:23Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this fastCopyFunctions care about orientation too?\nOr maybe they only apply if using identity?",
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c427cb9_a63ba57d",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-11T18:13:23Z",
+      "side": 1,
+      "message": "This is really hard to visualize, at least for me. Do you have a doc with some diagrams?",
       "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
