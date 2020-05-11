@@ -22,6 +22,30 @@
       "revId": "555de000d75e902a1ae2b26de378e0f7037eef29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac8281b5_a2cc171c",
+        "filename": "src/tests/perf_tests/restricted_traces/RestrictedTraceTests.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T15:45:34Z",
+      "side": 0,
+      "message": "You should only need to run download_from_google_storage --config. I\u0027ve never run gcloud auth login and I\u0027ve uploaded new traces.",
+      "parentUuid": "f73f56b1_94f1b91e",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 17
+      },
+      "revId": "555de000d75e902a1ae2b26de378e0f7037eef29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
