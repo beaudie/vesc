@@ -94,6 +94,23 @@
     },
     {
       "key": {
+        "uuid": "682503f7_9bd186ce",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-11T17:27:56Z",
+      "side": 1,
+      "message": "This constructor is only ever called with SurfaceRotationType::Identity, so it looks like it can be the default value and this parameter can be removed.",
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59628c86_169b2e61",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
