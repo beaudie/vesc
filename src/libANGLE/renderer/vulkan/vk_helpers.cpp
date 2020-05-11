@@ -47,22 +47,6 @@ constexpr int kLineLoopDynamicIndirectBufferInitialSize = sizeof(VkDrawIndirectC
 // This is an arbitrary max. We can change this later if necessary.
 constexpr uint32_t kDefaultDescriptorPoolMaxSets = 128;
 
-constexpr angle::PackedEnumMap<PipelineStage, VkPipelineStageFlagBits> kPipelineStageFlagBitMap = {
-    {PipelineStage::TopOfPipe, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT},
-    {PipelineStage::DrawIndirect, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT},
-    {PipelineStage::VertexInput, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT},
-    {PipelineStage::VertexShader, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT},
-    {PipelineStage::GeometryShader, VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT},
-    {PipelineStage::TransformFeedback, VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT},
-    {PipelineStage::EarlyFragmentTest, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT},
-    {PipelineStage::FragmentShader, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT},
-    {PipelineStage::LateFragmentTest, VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT},
-    {PipelineStage::ColorAttachmentOutput, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT},
-    {PipelineStage::ComputeShader, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT},
-    {PipelineStage::Transfer, VK_PIPELINE_STAGE_TRANSFER_BIT},
-    {PipelineStage::BottomOfPipe, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT},
-    {PipelineStage::Host, VK_PIPELINE_STAGE_HOST_BIT}};
-
 struct ImageMemoryBarrierData
 {
     // The Vk layout corresponding to the ImageLayout key.
@@ -522,32 +506,6 @@ CommandBufferHelper::~CommandBufferHelper()
 void CommandBufferHelper::initialize(angle::PoolAllocator *poolAllocator)
 {
     mCommandBuffer.initialize(poolAllocator);
-}
-
-void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
-                                     VkAccessFlags readAccessType,
-                                     vk::PipelineStage readStage,
-                                     vk::BufferHelper *buffer)
-{
-    buffer->retain(resourceUseList);
-    VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
-    if (buffer->updateReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
-    {
-        mPipelineBarrierMask.set(readStage);
-    }
-}
-
-void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
-                                      VkAccessFlags writeAccessType,
-                                      vk::PipelineStage writeStage,
-                                      vk::BufferHelper *buffer)
-{
-    buffer->retain(resourceUseList);
-    VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
-    if (buffer->updateWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
-    {
-        mPipelineBarrierMask.set(writeStage);
-    }
 }
 
 void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
@@ -2074,11 +2032,7 @@ BufferHelper::BufferHelper()
       mSize(0),
       mMappedMemory(nullptr),
       mViewFormat(nullptr),
-      mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
-      mCurrentWriteAccess(0),
-      mCurrentReadAccess(0),
-      mCurrentWriteStages(0),
-      mCurrentReadStages(0)
+      mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max())
 {}
 
 BufferHelper::~BufferHelper() = default;
@@ -2325,51 +2279,6 @@ bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeA
     // For simplicity's sake for now we always start a new command buffer.
     // TODO(jmadill): Re-use the command buffer. http://anglebug.com/4429
     return false;
-}
-
-bool BufferHelper::updateReadBarrier(VkAccessFlags readAccessType,
-                                     VkPipelineStageFlags readStage,
-                                     PipelineBarrier *barrier)
-{
-    bool barrierModified = false;
-    // If there was a prior write and we are making a read that is either a new access type or from
-    // a new stage, we need a barrier
-    if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccessType) != readAccessType) ||
-                                     ((mCurrentReadStages & readStage) != readStage)))
-    {
-        barrier->mergeMemoryBarrier(mCurrentWriteStages, readStage, mCurrentWriteAccess,
-                                    readAccessType);
-        barrierModified = true;
-    }
-
-    // Accumulate new read usage.
-    mCurrentReadAccess |= readAccessType;
-    mCurrentReadStages |= readStage;
-    return barrierModified;
-}
-
-bool BufferHelper::updateWriteBarrier(VkAccessFlags writeAccessType,
-                                      VkPipelineStageFlags writeStage,
-                                      PipelineBarrier *barrier)
-{
-    bool barrierModified = false;
-    // We don't need to check mCurrentReadStages here since if it is not zero, mCurrentReadAccess
-    // must not be zero as well. stage is finer grain than accessType.
-    ASSERT((!mCurrentReadStages && !mCurrentReadAccess) ||
-           (mCurrentReadStages && mCurrentReadAccess));
-    if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
-    {
-        barrier->mergeMemoryBarrier(mCurrentWriteStages | mCurrentReadStages, writeStage,
-                                    mCurrentWriteAccess, writeAccessType);
-        barrierModified = true;
-    }
-
-    // Reset usages on the new write.
-    mCurrentWriteAccess = writeAccessType;
-    mCurrentReadAccess  = 0;
-    mCurrentWriteStages = writeStage;
-    mCurrentReadStages  = 0;
-    return barrierModified;
 }
 
 // ImageHelper implementation.
