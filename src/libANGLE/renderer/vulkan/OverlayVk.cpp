@@ -105,7 +105,7 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
     ANGLE_TRY(fontDataBuffer.get().flush(renderer, 0, fontDataBuffer.get().getSize()));
     fontDataBuffer.get().unmap(renderer);
 
-    fontDataBuffer.get().onExternalWrite(VK_ACCESS_HOST_WRITE_BIT);
+    contextVk->onHostWrite();
 
     // Create the font image.
     ANGLE_TRY(
@@ -174,7 +174,7 @@ angle::Result OverlayVk::cullWidgets(ContextVk *contextVk)
     ANGLE_TRY(enabledWidgetsBuffer.get().flush(renderer, 0, enabledWidgetsBuffer.get().getSize()));
     enabledWidgetsBuffer.get().unmap(renderer);
 
-    enabledWidgetsBuffer.get().onExternalWrite(VK_ACCESS_HOST_WRITE_BIT);
+    contextVk->onHostWrite();
 
     // Allocate mCulledWidget and its view.
     VkExtent3D culledWidgetsExtent = {

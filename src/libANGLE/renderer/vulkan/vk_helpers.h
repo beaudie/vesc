@@ -702,15 +702,6 @@ class BufferHelper final : public Resource
         return (mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) != 0;
     }
 
-    // Set write access mask when the buffer is modified externally, e.g. by host.  There is no
-    // graph resource to create a dependency to.
-    void onExternalWrite(VkAccessFlags writeAccessType)
-    {
-        ASSERT(writeAccessType == VK_ACCESS_HOST_WRITE_BIT);
-        mCurrentWriteAccess |= writeAccessType;
-        mCurrentWriteStages |= VK_PIPELINE_STAGE_HOST_BIT;
-    }
-
     // Also implicitly sets up the correct barriers.
     angle::Result copyFromBuffer(ContextVk *contextVk,
                                  BufferHelper *srcBuffer,
@@ -776,14 +767,6 @@ class BufferHelper final : public Resource
     bool canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType);
     bool canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType);
 
-    bool updateReadBarrier(VkAccessFlags readAccessType,
-                           VkPipelineStageFlags readStage,
-                           PipelineBarrier *barrier);
-
-    bool updateWriteBarrier(VkAccessFlags writeAccessType,
-                            VkPipelineStageFlags writeStage,
-                            PipelineBarrier *barrier);
-
   private:
     angle::Result mapImpl(ContextVk *contextVk);
     angle::Result initializeNonZeroMemory(Context *context, VkDeviceSize size);
@@ -799,12 +782,6 @@ class BufferHelper final : public Resource
     uint8_t *mMappedMemory;
     const Format *mViewFormat;
     uint32_t mCurrentQueueFamilyIndex;
-
-    // For memory barriers.
-    VkFlags mCurrentWriteAccess;
-    VkFlags mCurrentReadAccess;
-    VkPipelineStageFlags mCurrentWriteStages;
-    VkPipelineStageFlags mCurrentReadStages;
 };
 
 // CommandBufferHelper (CBH) class wraps ANGLE's custom command buffer
@@ -824,14 +801,16 @@ struct CommandBufferHelper : angle::NonCopyable
     // General Functions (non-renderPass specific)
     void initialize(angle::PoolAllocator *poolAllocator);
 
-    void bufferRead(vk::ResourceUseList *resourceUseList,
-                    VkAccessFlags readAccessType,
-                    vk::PipelineStage readStage,
-                    vk::BufferHelper *buffer);
-    void bufferWrite(vk::ResourceUseList *resourceUseList,
-                     VkAccessFlags writeAccessType,
-                     vk::PipelineStage writeStage,
-                     vk::BufferHelper *buffer);
+    void addMemoryBarrier(VkPipelineStageFlags srcStageMask,
+                          VkPipelineStageFlags dstStageMask,
+                          VkFlags srcAccess,
+                          VkFlags dstAccess,
+                          PipelineStage barrierIndex)
+    {
+        mPipelineBarriers[barrierIndex].mergeMemoryBarrier(srcStageMask, dstStageMask, srcAccess,
+                                                           dstAccess);
+        mPipelineBarrierMask.set(barrierIndex);
+    }
 
     void imageRead(vk::ResourceUseList *resourceUseList,
                    VkImageAspectFlags aspectFlags,
