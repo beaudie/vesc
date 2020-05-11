@@ -1,0 +1,334 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5a6ba09_f386ee9a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "Setting up CBH queue. Initialize all the CBHs, put them into queue, then pull a CBH each for the working in/out RP cmd buffers.",
+      "range": {
+        "startLine": 861,
+        "startChar": 0,
+        "endLine": 875,
+        "endChar": 62
+      },
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09d2b35f_df94e1dc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3758,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "Since flushes are on main thread currently, have to let worker thread finish all tasks before we can put then cmdbuffer end on below.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09c7c3b4_eaaa8b30",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3782,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "I\u0027m struggling with best way to manage the pool allocator push/pop and cmd buffer init/reset when we have more than 2 CBHs. Should single pool allocator be shared amongst them all? If so then I\u0027m finding my current attempts to manage this are buggy and I\u0027m having to do extra reset() calls on cmd buffers to prevent leaking of allocations between two different CBHs.",
+      "range": {
+        "startLine": 3762,
+        "startChar": 0,
+        "endLine": 3782,
+        "endChar": 5
+      },
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "752eedac_f20f76bc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4188,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "Quick way to force serialization of work. Still see CI errors with this on.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6833d15d_739a6bc1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "Threading related public context functions",
+      "range": {
+        "startLine": 545,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 0
+      },
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f8b99f4_867e082f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "For current test set kNumCommandBuffers to 2 which should effectively serialize the threads. Still seeing errors though so I\u0027m doing something wrong even in this simplest case. A this number goes up, so does the number of fails.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b0c2280_516587ab",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "A queue where available CBHs are pulled from.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e63843da_308404f8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "As CBHs are submitted, this function is called immediately following submit to get a new CBH that the main thread can work with.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "827991a9_cfe94ae5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "Is there something I should be doing to clean up the worker thread? detach() it? Should I make it\u0027s looping var a private member that I can set to false and then join() thread on shutdown?\nNot sure if thread clean-up issues could lead to some fails that I see in back-to-back test runs that don\u0027t seem to occur on single test runs.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43ae244f_941541cd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1960,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "For all these VK queue-related functions I\u0027m asserting that worker thread is complete.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2d9a03c_a75b434b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "Public worker thread functions",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc71f6b8_300dadcf",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "Unlock after accessing queue and flush to primary occurs outside of lock below.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69988c4e_d9928a4e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "I don\u0027t love this with the sleep but I think it works for initial testing. Any suggestions on best way to stall main thread while waiting for worker thread to complete?",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f17b3e3d_745c5f76",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "Worker thread private data",
+      "range": {
+        "startLine": 417,
+        "startChar": 0,
+        "endLine": 426,
+        "endChar": 27
+      },
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "992761c4_793ef525",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "No functionality change here, just hacked up function for debugging outputs.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c141c7c_4592618e",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "Used this as a debug function and found that with 3+ CBHs in queue, I see allocation aliasing between CBHs that leads to errors. Some issue with how I\u0027m managing pool allocator.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed483a92_830cd395",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "Called by the worker thread to release CBH back to queue.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17c27db2_a2cf3462",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-11T16:18:42Z",
+      "side": 1,
+      "message": "As CBHs are shared in the queue, needed to make it possible to set a CBH as in/out of RenderPass after the fact.",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
