@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "734465cd_7a20567b",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T22:24:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26d971e0_516773ba",
+      "range": {
+        "startLine": 635,
+        "startChar": 10,
+        "endLine": 635,
+        "endChar": 17
+      },
+      "revId": "42e7909a00071c235e8a4078c962f7b3c824779f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47d2f376_da34cd4d",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 4
@@ -39,6 +63,24 @@
       "revId": "42e7909a00071c235e8a4078c962f7b3c824779f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73a8acc7_6b73b4f8",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-11T22:24:54Z",
+      "side": 1,
+      "message": "The test only draws black if I remove this line.  I remember trying this before.  You can see this same pattern of repeating this call in \"DrawElementsTest.cpp\" (both the DeletingAfterStreamingIndexes and PartOfIndexBufferThenAll tests), which I started from.",
+      "parentUuid": "47d2f376_da34cd4d",
+      "revId": "42e7909a00071c235e8a4078c962f7b3c824779f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
