@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28499abf_93e5af12",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T15:36:56Z",
+      "side": 1,
+      "message": "maybe just check for identity here?",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 283,
+        "endChar": 22
+      },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3f3a9f8_ce826152",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T15:36:56Z",
+      "side": 1,
+      "message": "we need to remove this kind of TODO from production code and either replace it with something actionable or more informative.",
+      "range": {
+        "startLine": 318,
+        "startChar": 24,
+        "endLine": 318,
+        "endChar": 64
+      },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ee4978a_470ff017",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T15:36:56Z",
+      "side": 1,
+      "message": "this looks pretty similar to the below. can you pull these out into a helper?",
+      "range": {
+        "startLine": 306,
+        "startChar": 0,
+        "endLine": 328,
+        "endChar": 17
+      },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59dee866_af8e827a",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T15:36:56Z",
+      "side": 1,
+      "message": "nit: you can probably omit \"Type\" just to make this a bit easier to work with.",
+      "range": {
+        "startLine": 48,
+        "startChar": 11,
+        "endLine": 48,
+        "endChar": 30
+      },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59628c86_169b2e61",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T15:36:56Z",
+      "side": 1,
+      "message": "same here, we should make these TODOs more formal.",
+      "range": {
+        "startLine": 462,
+        "startChar": 4,
+        "endLine": 462,
+        "endChar": 98
+      },
+      "revId": "72b24e8fb3204b0f1bdb85aa85967107c822c7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
