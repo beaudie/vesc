@@ -55,6 +55,18 @@ struct Optional
     T &value() { return mValue; }
     const T &value() const { return mValue; }
 
+    const T value_or(T defaultValue) const
+    {
+        if (mValid)
+        {
+            return mValue;
+        }
+        else
+        {
+            return defaultValue;
+        }
+    }
+
     bool operator==(const Optional &other) const
     {
         return ((mValid == other.mValid) && (!mValid || (mValue == other.mValue)));

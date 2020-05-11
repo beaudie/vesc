@@ -8,6 +8,7 @@
 #ifndef ANGLE_TESTS_TESTUTILS_VULKANEXTERNALHELPER_H_
 #define ANGLE_TESTS_TESTUTILS_VULKANEXTERNALHELPER_H_
 
+#include "common/Optional.h"
 #include "libANGLE/renderer/vulkan/vk_headers.h"
 #include "vulkan/vulkan_fuchsia_ext.h"
 
@@ -20,7 +21,7 @@ class VulkanExternalHelper
     VulkanExternalHelper();
     ~VulkanExternalHelper();
 
-    void initialize(bool useSwiftshader);
+    void initialize(bool useSwiftshader, Optional<bool> enableValidationLayers = {});
 
     VkInstance getInstance() const { return mInstance; }
     VkPhysicalDevice getPhysicalDevice() const { return mPhysicalDevice; }

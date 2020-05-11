@@ -140,7 +140,7 @@ VulkanExternalHelper::~VulkanExternalHelper()
     }
 }
 
-void VulkanExternalHelper::initialize(bool useSwiftshader)
+void VulkanExternalHelper::initialize(bool useSwiftshader, Optional<bool> enableValidationLayers)
 {
     vk::ICD icd = useSwiftshader ? vk::ICD::SwiftShader : vk::ICD::Default;
 
@@ -183,13 +183,19 @@ void VulkanExternalHelper::initialize(bool useSwiftshader)
     uint32_t enabledInstanceExtensionCount =
         static_cast<uint32_t>(enabledInstanceExtensions.size());
 
+    std::vector<const char *> enabledLayerNames;
+    if (enableValidationLayers.value_or(true))
+    {
+        enabledLayerNames.push_back("VK_LAYER_KHRONOS_validation");
+    }
+
     VkInstanceCreateInfo instanceCreateInfo = {
         /* .sType = */ VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
         /* .pNext = */ nullptr,
         /* .flags = */ 0,
         /* .pApplicationInfo = */ &applicationInfo,
-        /* .enabledLayerCount = */ 0,
-        /* .ppEnabledLayerNames = */ nullptr,
+        /* .enabledLayerCount = */ enabledLayerNames.size(),
+        /* .ppEnabledLayerNames = */ enabledLayerNames.data(),
         /* .enabledExtensionCount = */ enabledInstanceExtensionCount,
         /* .ppEnabledExtensionName = */ enabledInstanceExtensions.data(),
     };
@@ -528,7 +534,9 @@ bool VulkanExternalHelper::canCreateSemaphoreOpaqueFd() const
         /* .handleType = */ VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT,
     };
 
-    VkExternalSemaphoreProperties externalSemaphoreProperties = {};
+    VkExternalSemaphoreProperties externalSemaphoreProperties = {
+        /* .sType = */ VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES,
+    };
     vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(mPhysicalDevice, &externalSemaphoreInfo,
                                                       &externalSemaphoreProperties);
 
