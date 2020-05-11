@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f73f56b1_94f1b91e",
+        "filename": "src/tests/perf_tests/restricted_traces/RestrictedTraceTests.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-11T15:37:11Z",
+      "side": 0,
+      "message": "Is this encompassed in a script somewhere?  How were you able to verify this isn\u0027t required?\n\nThis section actually needs to be enhanced.  The first question I usually get on this is \"How do I get cloud access setup?\" and I link people to public docs:  https://cloud.google.com/sdk/install\n\nCan you add that as a quick bullet item?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 17
+      },
+      "revId": "555de000d75e902a1ae2b26de378e0f7037eef29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
