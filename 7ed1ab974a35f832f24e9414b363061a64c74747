@@ -118,6 +118,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bff6970a_067c9873",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T15:39:14Z",
+      "side": 1,
+      "message": "It would be nice if we didn\u0027t use VK_REMAINING_ARRAY_LAYERS. So would be happy to have one of Shabi\u0027s proposed fixes. Maybe we could try that and accept it if it works. Otherwise LGTM.",
+      "parentUuid": "1fe59d58_ba80120c",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
