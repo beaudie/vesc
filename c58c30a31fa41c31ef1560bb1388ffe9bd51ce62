@@ -16,6 +16,29 @@
       "revId": "c58c30a31fa41c31ef1560bb1388ffe9bd51ce62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4823b48b_b584c672",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T18:56:28Z",
+      "side": 1,
+      "message": "Let\u0027s try to get rid of this and store the information you need in here instead of the ShaderState class itself.",
+      "range": {
+        "startLine": 353,
+        "startChar": 14,
+        "endLine": 353,
+        "endChar": 25
+      },
+      "revId": "c58c30a31fa41c31ef1560bb1388ffe9bd51ce62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
