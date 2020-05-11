@@ -142,6 +142,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff78e6e8_34c777b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-11T17:56:41Z",
+      "side": 1,
+      "message": "`!imageIndex.hasLayer()` implies the entire mip level.  The bug I was fixing with my CL that regressed this was that we always passed a single layer to clearing 3D textures (incorrect) and when I fixed it to pass the entire mip the VK backend didn\u0027t handle that correctly (-1 layer count).\n\nI could potentially go back and make sure instead of telling the backend to clear the entire level it clears a layer range equal to the entire level.  I do think the current approach (whole level) leaves room for optimizations though.  Using VK_REMAINING_ARRAY_LAYERS or attaching the entire texture to the framebuffer in OpenGL can save passing information.",
+      "parentUuid": "bff6970a_067c9873",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
