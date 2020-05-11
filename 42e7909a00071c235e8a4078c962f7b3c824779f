@@ -81,6 +81,24 @@
       "revId": "42e7909a00071c235e8a4078c962f7b3c824779f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98d0a58a_52126d24",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-11T23:05:58Z",
+      "side": 1,
+      "message": "Interesting. Not obvious to me why that would be needed.",
+      "parentUuid": "73a8acc7_6b73b4f8",
+      "revId": "42e7909a00071c235e8a4078c962f7b3c824779f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
