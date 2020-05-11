@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ca88e1c_9e361c77",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-11T18:17:32Z",
+      "side": 1,
+      "message": "nit: I see you\u0027re using static_cast, still auto here isn\u0027t helping the code read better. better to just use float.",
+      "range": {
+        "startLine": 476,
+        "startChar": 4,
+        "endLine": 476,
+        "endChar": 8
+      },
+      "revId": "8064be56421901d45ebd9201c893f971111f107e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
