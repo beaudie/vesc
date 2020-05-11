@@ -587,12 +587,51 @@ void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
         return;
     }
 
-    for (PipelineStage pipelineStage : mPipelineBarrierMask)
+    constexpr PipelineStagesMask kHostTransferAndCompute(
+        (1 << static_cast<int>(PipelineStage::Host)) |
+        (1 << static_cast<int>(PipelineStage::Transfer)) |
+        (1 << static_cast<int>(PipelineStage::ComputeShader)));
+    PipelineBarrier *barrier;
+
+    // Process Host/Transfer/Compute barriers individually
+    PipelineStagesMask mask = mPipelineBarrierMask & kHostTransferAndCompute;
+    for (PipelineStage pipelineStage : mask)
     {
-        PipelineBarrier &barrier = mPipelineBarriers[pipelineStage];
-        barrier.writeCommand(primary);
+        barrier = &mPipelineBarriers[pipelineStage];
+        barrier->writeCommand(primary);
+    }
+    mPipelineBarrierMask &= ~mask;
+
+    // Graphics pipeline
+    if (!mPipelineBarrierMask.any())
+    {
+        return;
+    }
+
+    // Now we walk through all stages in graphics pipeline and see if we can merge them without
+    // introducing extra dependency. If the lower stage's dependency already covers the higher
+    // stage's dependency, then we just merge the higher stage into lower stage.
+    barrier = nullptr;
+    mask    = mPipelineBarrierMask;
+    for (PipelineStage pipelineStage : mask)
+    {
+        PipelineBarrier *newBarrier = &mPipelineBarriers[pipelineStage];
+        if (!barrier)
+        {
+            barrier = newBarrier;
+        }
+        else if (!barrier->mergeIfNoFalseDependency(newBarrier))
+        {
+            barrier->writeCommand(primary);
+            barrier = newBarrier;
+        }
     }
     mPipelineBarrierMask.reset();
+
+    if (barrier)
+    {
+        barrier->writeCommand(primary);
+    }
 }
 
 void CommandBufferHelper::beginRenderPass(const vk::Framebuffer &framebuffer,
