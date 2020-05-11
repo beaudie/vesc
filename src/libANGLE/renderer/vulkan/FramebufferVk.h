@@ -157,6 +157,15 @@ class FramebufferVk : public FramebufferImpl
                             bool clearStencil,
                             const VkClearColorValue &clearColorValue,
                             const VkClearDepthStencilValue &clearDepthStencilValue);
+
+    angle::Result clearImmediately(ContextVk *contextVk,
+                                   const gl::Rectangle &clearArea,
+                                   gl::DrawBufferMask clearColorBuffers,
+                                   bool clearDepth,
+                                   bool clearStencil,
+                                   const VkClearColorValue &clearColorValue,
+                                   const VkClearDepthStencilValue &clearDepthStencilValue);
+
     angle::Result clearWithDraw(ContextVk *contextVk,
                                 const gl::Rectangle &clearArea,
                                 gl::DrawBufferMask clearColorBuffers,
