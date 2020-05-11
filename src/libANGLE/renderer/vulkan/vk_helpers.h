@@ -622,6 +622,21 @@ class PipelineBarrier : angle::NonCopyable
         reset();
     }
 
+    bool canMergeWithoutExtraDependency(const PipelineBarrier &other)
+    {
+        // If mDstStageMask already have the other's mDstStageMask bits, then merge it
+        if (mDstStageMask == (mDstStageMask | other.mDstStageMask))
+        {
+            return true;
+        }
+        // If my dependency is stronger then we can merge
+        if (gl::ScanReverse(mSrcStageMask) >= gl::ScanReverse(other.mSrcStageMask))
+        {
+            return true;
+        }
+        return false;
+    }
+
     // merge two barriers into one
     void merge(PipelineBarrier *other)
     {

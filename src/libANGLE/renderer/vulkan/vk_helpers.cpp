@@ -587,12 +587,63 @@ void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
         return;
     }
 
+    // Host
+    PipelineBarrier *barrier;
+    if (mPipelineBarrierMask[PipelineStage::Host])
+    {
+        barrier = &mPipelineBarriers[PipelineStage::Host];
+        barrier->writeCommand(primary);
+        mPipelineBarrierMask.reset(PipelineStage::Host);
+    }
+
+    // Transfer
+    if (mPipelineBarrierMask[PipelineStage::Transfer])
+    {
+        barrier = &mPipelineBarriers[PipelineStage::Transfer];
+        barrier->writeCommand(primary);
+        mPipelineBarrierMask.reset(PipelineStage::Transfer);
+    }
+
+    // Compute pipeline
+    if (mPipelineBarrierMask[PipelineStage::ComputeShader])
+    {
+        barrier = &mPipelineBarriers[PipelineStage::ComputeShader];
+        barrier->writeCommand(primary);
+        mPipelineBarrierMask.reset(PipelineStage::ComputeShader);
+    }
+
+    // Graphics pipeline
+    if (!mPipelineBarrierMask.any())
+    {
+        return;
+    }
+
+    // Now we walk through all stages in graphics pipeline and see if we can merge then without
+    // introducing extra dependency. If the lower stage's dependency already covers the higher
+    // stage's dependency, then we just merge the higher stage into lower stage.
+    barrier = nullptr;
     for (PipelineStage pipelineStage : mPipelineBarrierMask)
     {
-        PipelineBarrier &barrier = mPipelineBarriers[pipelineStage];
-        barrier.writeCommand(primary);
+        if (!barrier)
+        {
+            barrier = &mPipelineBarriers[pipelineStage];
+        }
+        else if (barrier->canMergeWithoutExtraDependency(mPipelineBarriers[pipelineStage]))
+        {
+            barrier->merge(&mPipelineBarriers[pipelineStage]);
+        }
+        else
+        {
+            barrier->writeCommand(primary);
+            barrier = &mPipelineBarriers[pipelineStage];
+        }
+        mPipelineBarrierMask.reset(pipelineStage);
     }
-    mPipelineBarrierMask.reset();
+
+    if (barrier)
+    {
+        barrier->writeCommand(primary);
+    }
 }
 
 void CommandBufferHelper::beginRenderPass(const vk::Framebuffer &framebuffer,
