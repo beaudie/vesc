@@ -2440,6 +2440,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
       mLastNonShaderReadOnlyLayout(other.mLastNonShaderReadOnlyLayout),
       mCurrentShaderReadStageMask(other.mCurrentShaderReadStageMask),
+      mExternalFormat(other.mExternalFormat),
       mBaseLevel(other.mBaseLevel),
       mMaxLevel(other.mMaxLevel),
       mLayerCount(other.mLayerCount),
@@ -2471,6 +2472,7 @@ void ImageHelper::resetCachedProperties()
     mMaxLevel                    = 0;
     mLayerCount                  = 0;
     mLevelCount                  = 0;
+    mExternalFormat              = 0;
 }
 
 void ImageHelper::initStagingBuffer(RendererVk *renderer,
@@ -2550,6 +2552,8 @@ angle::Result ImageHelper::initExternal(Context *context,
 
     mCurrentLayout = initialLayout;
 
+    mExternalFormat = 0;
+
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
     stageClearIfEmulatedFormat(context);
@@ -2561,6 +2565,17 @@ void ImageHelper::releaseImage(RendererVk *renderer)
 {
     mSerial = rx::kZeroSerial;
     renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);
+
+    if (mExternalFormat)
+    {
+        VkSamplerYcbcrConversion yuvConversion;
+        // TODO: This needs to be reference counted
+        if (angle::Result::Continue ==
+            renderer->getYuvConversionCache().getYuvConversion(mExternalFormat, &yuvConversion))
+        {
+            vkDestroySamplerYcbcrConversionKHR(renderer->getDevice(), yuvConversion, nullptr);
+        }
+    }
 }
 
 void ImageHelper::releaseStagingBuffer(RendererVk *renderer)
@@ -2703,9 +2718,8 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
     viewInfo.image                 = mImage.getHandle();
     viewInfo.viewType              = gl_vk::GetImageViewType(textureType);
     viewInfo.format                = imageFormat;
-    ASSERT(viewInfo.format != VK_FORMAT_UNDEFINED);
 
-    if (swizzleMap.swizzleRequired())
+    if (swizzleMap.swizzleRequired() && !mExternalFormat)
     {
         viewInfo.components.r = gl_vk::GetSwizzle(swizzleMap.swizzleRed);
         viewInfo.components.g = gl_vk::GetSwizzle(swizzleMap.swizzleGreen);
@@ -2725,6 +2739,17 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
     viewInfo.subresourceRange.baseArrayLayer = baseArrayLayer;
     viewInfo.subresourceRange.layerCount     = layerCount;
 
+    VkSamplerYcbcrConversionInfo yuvConversionInfo = {};
+    if (mExternalFormat)
+    {
+        WARN() << "Adding yuvConversionInfo to imageView createInfo chain";
+        ASSERT((context->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
+        yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
+        yuvConversionInfo.pNext = nullptr;
+        ANGLE_TRY(context->getRenderer()->getYuvConversionCache().getYuvConversion(
+            mExternalFormat, &yuvConversionInfo.conversion));
+        vk::AddToPNextChain(&viewInfo, &yuvConversionInfo);
+    }
     ANGLE_VK_TRY(context, imageViewOut->init(context->getDevice(), viewInfo));
     return angle::Result::Continue;
 }
