@@ -2161,59 +2161,68 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
 }
 
 // YuvConversionCache implementation
-vk::YuvConversionCache::YuvConversionCache() = default;
+vk::SamplerYcbcrConversionCache::SamplerYcbcrConversionCache() = default;
 
-vk::YuvConversionCache::~YuvConversionCache()
+vk::SamplerYcbcrConversionCache::~SamplerYcbcrConversionCache()
 {
     ASSERT(mPayload.empty());
 }
 
-void vk::YuvConversionCache::destroy(RendererVk *renderer)
+void vk::SamplerYcbcrConversionCache::destroy(RendererVk *renderer)
 {
     VkDevice device = renderer->getDevice();
 
     for (auto &iter : mPayload)
     {
-        VkSamplerYcbcrConversion &yuvConversion = iter.second;
-        vkDestroySamplerYcbcrConversionKHR(device, yuvConversion, nullptr);
+        vk::RefCountedSamplerYcbcrConversion &yuvSampler = iter.second;
+        ASSERT(!yuvSampler.isReferenced());
+        yuvSampler.get().destroy(device);
+
+        renderer->getActiveHandleCounts().onDeallocate(vk::HandleType::SamplerYcbcrConversion);
     }
 
     mPayload.clear();
 }
 
-angle::Result vk::YuvConversionCache::getYuvConversion(uint64_t externalFormat,
-                                                       VkSamplerYcbcrConversion *yuvConversion)
+angle::Result vk::SamplerYcbcrConversionCache::getYuvConversion(
+    uint64_t externalFormat,
+    VkSamplerYcbcrConversion *yuvConversion)
 {
     auto iter = mPayload.find(externalFormat);
     if (iter != mPayload.end())
     {
-        *yuvConversion = iter->second;
+        *yuvConversion = iter->second.get().getHandle();
         return angle::Result::Continue;
     }
 
     return angle::Result::Stop;
 }
 
-angle::Result vk::YuvConversionCache::createYuvConversion(
+angle::Result vk::SamplerYcbcrConversionCache::createYuvConversion(
     DisplayVk *displayVk,
     uint64_t externalFormat,
     VkSamplerYcbcrConversionCreateInfo *yuvConversionInfo)
 {
-    VkSamplerYcbcrConversion yuvConversion;
-
     ASSERT(externalFormat != 0);
 
-    if (getYuvConversion(externalFormat, &yuvConversion) == angle::Result::Continue)
+    auto iter = mPayload.find(externalFormat);
+    if (iter != mPayload.end())
     {
-        // Already have that externalFormat & yuvConversion in the cache
+        vk::RefCountedSamplerYcbcrConversion &refCountedYuvConversion = iter->second;
+        refCountedYuvConversion.addRef();
         return angle::Result::Continue;
     }
 
     RendererVk *renderer = displayVk->getRenderer();
     VkDevice device      = renderer->getDevice();
 
-    ANGLE_VK_TRY(displayVk, vkCreateSamplerYcbcrConversionKHR(device, yuvConversionInfo, nullptr,
-                                                              &yuvConversion));
+    SamplerYcbcrConversion wrappedYuvConversion;
+    wrappedYuvConversion.init(device, *yuvConversionInfo);
+    mPayload.emplace(externalFormat,
+                     vk::RefCountedSamplerYcbcrConversion(std::move(wrappedYuvConversion)));
+
+    renderer->getActiveHandleCounts().onAllocate(vk::HandleType::SamplerYcbcrConversion);
+
     return angle::Result::Continue;
 }
 

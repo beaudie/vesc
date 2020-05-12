@@ -26,9 +26,10 @@ enum class ImageLayout;
 using RenderPassAndSerial = ObjectAndSerial<RenderPass>;
 using PipelineAndSerial   = ObjectAndSerial<Pipeline>;
 
-using RefCountedDescriptorSetLayout = RefCounted<DescriptorSetLayout>;
-using RefCountedPipelineLayout      = RefCounted<PipelineLayout>;
-using RefCountedSampler             = RefCounted<Sampler>;
+using RefCountedDescriptorSetLayout    = RefCounted<DescriptorSetLayout>;
+using RefCountedPipelineLayout         = RefCounted<PipelineLayout>;
+using RefCountedSampler                = RefCounted<Sampler>;
+using RefCountedSamplerYcbcrConversion = RefCounted<SamplerYcbcrConversion>;
 
 // Helper macro that casts to a bitfield type then verifies no bits were dropped.
 #define SetBitField(lhs, rhs)                                         \
@@ -597,11 +598,11 @@ static_assert(sizeof(PipelineLayoutDesc) ==
               "Unexpected Size");
 
 // YuvConversion Cache
-class YuvConversionCache final : angle::NonCopyable
+class SamplerYcbcrConversionCache final : angle::NonCopyable
 {
   public:
-    YuvConversionCache();
-    ~YuvConversionCache();
+    SamplerYcbcrConversionCache();
+    ~SamplerYcbcrConversionCache();
 
     void destroy(RendererVk *render);
 
@@ -613,7 +614,7 @@ class YuvConversionCache final : angle::NonCopyable
                                       VkSamplerYcbcrConversionCreateInfo *yuvConversionInfo);
 
   private:
-    std::unordered_map<uint64_t, VkSamplerYcbcrConversion> mPayload;
+    std::unordered_map<uint64_t, vk::RefCountedSamplerYcbcrConversion> mPayload;
 };
 
 // Packed sampler description for the sampler cache.
