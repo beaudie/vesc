@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71ad11e1_e430e804",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T03:30:25Z",
+      "side": 1,
+      "message": "Why is it called \"onRenderPass\" if it can be called for either draw or dispatch?!",
+      "range": {
+        "startLine": 492,
+        "startChar": 11,
+        "endLine": 492,
+        "endChar": 21
+      },
+      "revId": "3f0aa75a16145fb5fad4c8f7850258058d3ea629",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54263dd5_20687b91",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T03:30:25Z",
+      "side": 1,
+      "message": "nit: slight preference for something like:\n\n    commands \u003d readStage \u003d\u003d Compute ? Outside : RP;\n    updateMemoryBarrierForRead(readAccessType, readStage, commands);\n\nTo avoid duplicate function call.",
+      "range": {
+        "startLine": 498,
+        "startChar": 0,
+        "endLine": 505,
+        "endChar": 9
+      },
+      "revId": "3f0aa75a16145fb5fad4c8f7850258058d3ea629",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
