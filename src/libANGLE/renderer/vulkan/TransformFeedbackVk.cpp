@@ -51,8 +51,6 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    contextVk->onTransformFeedbackStateChanged();
-
     const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
     ASSERT(executable);
     size_t xfbBufferCount = executable->getTransformFeedbackBufferCount(contextVk->getState());
@@ -114,7 +112,7 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
         mRebindTransformFeedbackBuffer = true;
     }
 
-    return onTransformFeedbackStateChanged(contextVk);
+    return contextVk->onBeginTransformFeedback(xfbBufferCount, mBufferHelpers);
 }
 
 angle::Result TransformFeedbackVk::end(const gl::Context *context)
@@ -131,39 +129,20 @@ angle::Result TransformFeedbackVk::end(const gl::Context *context)
 
     ContextVk *contextVk = vk::GetImpl(context);
     contextVk->onTransformFeedbackStateChanged();
-
-    return onTransformFeedbackStateChanged(contextVk);
+    return angle::Result::Continue;
 }
 
 angle::Result TransformFeedbackVk::pause(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-
     contextVk->onTransformFeedbackStateChanged();
-
-    if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
-    {
-        // We need to end the RenderPass to perform transform feedback pause/resume
-        // becasue vkCmdBegin/EndTransformFeedback can be placed once per RenderPass.
-        ANGLE_TRY(onTransformFeedbackStateChanged(contextVk));
-    }
-
     return angle::Result::Continue;
 }
 
 angle::Result TransformFeedbackVk::resume(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-
     contextVk->onTransformFeedbackStateChanged();
-
-    if (contextVk->getFeatures().supportsTransformFeedbackExtension.enabled)
-    {
-        // We need to end the RenderPass to perform transform feedback pause/resume
-        // becasue vkCmdBegin/EndTransformFeedback can be placed once per RenderPass.
-        ANGLE_TRY(onTransformFeedbackStateChanged(contextVk));
-    }
-
     return angle::Result::Continue;
 }
 
@@ -288,20 +267,6 @@ void TransformFeedbackVk::getBufferOffsets(ContextVk *contextVk,
         // Assert on overflow.  For now, support transform feedback up to 2GB.
         ASSERT(offsetsOut[bufferIndex] == writeOffset);
     }
-}
-
-angle::Result TransformFeedbackVk::onTransformFeedbackStateChanged(ContextVk *contextVk)
-{
-    // Currently, we don't handle resources switching from read-only to writable and back correctly.
-    // In the case of transform feedback, the attached buffers can switch between being written by
-    // transform feedback and being read as a vertex array buffer.  For now, we'll end the render
-    // pass every time transform feedback is started or ended to work around this issue temporarily.
-    //
-    // TODO(syoussefi): detect changes to buffer usage (e.g. as transform feedback output, vertex
-    // or index data etc) in the front end and notify the backend.  A new node should be created
-    // only on such changes.  http://anglebug.com/3205
-    ANGLE_TRY(contextVk->endRenderPass());
-    return angle::Result::Continue;
 }
 
 void TransformFeedbackVk::writeDescriptorSet(ContextVk *contextVk,

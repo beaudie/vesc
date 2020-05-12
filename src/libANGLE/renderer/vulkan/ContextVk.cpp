@@ -3196,6 +3196,29 @@ void ContextVk::onTransformFeedbackStateChanged()
     }
 }
 
+angle::Result ContextVk::onBeginTransformFeedback(
+    size_t bufferCount,
+    const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers)
+{
+    onTransformFeedbackStateChanged();
+
+    for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+    {
+        if (mTransformFeedbackBufferSerials.count(buffers[bufferIndex]->getSerial()) != 0)
+        {
+            ANGLE_TRY(endRenderPass());
+            break;
+        }
+    }
+
+    for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+    {
+        mTransformFeedbackBufferSerials.insert(buffers[bufferIndex]->getSerial());
+    }
+
+    return angle::Result::Continue;
+}
+
 void ContextVk::invalidateGraphicsDescriptorSet(uint32_t usedDescriptorSet)
 {
     // UtilsVk currently only uses set 0
@@ -4164,6 +4187,8 @@ angle::Result ContextVk::endRenderPass()
             this, mRenderPassCommandBuffer);
         ANGLE_TRY(mActiveQueryAnySamplesConservative->stashQueryHelper(this));
     }
+
+    mTransformFeedbackBufferSerials.clear();
 
     onRenderPassFinished();
 
