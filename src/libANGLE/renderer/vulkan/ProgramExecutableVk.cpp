@@ -454,9 +454,11 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramState &prog
     }
 }
 
-void ProgramExecutableVk::addTextureDescriptorSetDesc(const gl::ProgramState &programState,
-                                                      bool useOldRewriteStructSamplers,
-                                                      vk::DescriptorSetLayoutDesc *descOut)
+void ProgramExecutableVk::addTextureDescriptorSetDesc(
+    const gl::ProgramState &programState,
+    bool useOldRewriteStructSamplers,
+    vk::DescriptorSetLayoutDesc *descOut,
+    const gl::ActiveTextureArray<vk::TextureUnit> *activeTextures)
 {
     const std::vector<gl::SamplerBinding> &samplerBindings = programState.getSamplerBindings();
     const std::vector<gl::LinkedUniform> &uniforms         = programState.getUniforms();
@@ -501,8 +503,28 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(const gl::ProgramState &pr
             ShaderInterfaceVariableInfo &info = mVariableInfoMap[shaderType][samplerName];
             VkShaderStageFlags activeStages   = gl_vk::kShaderStageMap[shaderType];
 
-            descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
-                            activeStages);
+            bool kForceImmutableSampler = false;
+            // TODO: https://b.corp.google.com/issues/158215272: how do we handle array of immutable
+            // samplers?
+            GLuint textureUnit = samplerBinding.boundTextureUnits[0];
+            if (activeTextures &&
+                ((*activeTextures)[textureUnit].texture->getImage().getExternalFormat() != 0 ||
+                 kForceImmutableSampler))
+            {
+                ASSERT(samplerBinding.boundTextureUnits.size() == 1);
+                // ASSERT((*activeTextures)[textureUnit].sampler == nullptr);
+                // Always take the texture's sampler, that's only way to get to yuv conversion for
+                // externalFormat
+                const vk::Sampler &immutableSampler =
+                    (*activeTextures)[textureUnit].texture->getSampler();
+                descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
+                                activeStages, &immutableSampler);
+            }
+            else
+            {
+                descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
+                                activeStages, nullptr);
+            }
         }
     }
 }
@@ -618,7 +640,9 @@ angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,
     return shaderProgram->getComputePipeline(contextVk, getPipelineLayout(), pipelineOut);
 }
 
-angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glContext)
+angle::Result ProgramExecutableVk::createPipelineLayout(
+    const gl::Context *glContext,
+    gl::ActiveTextureArray<vk::TextureUnit> *activeTextures)
 {
     const gl::State &glState                   = glContext->getState();
     ContextVk *contextVk                       = vk::GetImpl(glContext);
@@ -700,7 +724,7 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
         const gl::ProgramState *programState = programStates[shaderType];
         ASSERT(programState);
         addTextureDescriptorSetDesc(*programState, contextVk->useOldRewriteStructSamplers(),
-                                    &texturesSetDesc);
+                                    &texturesSetDesc, activeTextures);
     }
 
     ANGLE_TRY(renderer->getDescriptorSetLayout(contextVk, texturesSetDesc,
@@ -1341,6 +1365,11 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(ContextVk *contex
                         textureVk->getReadImageViewAndRecordUse(contextVk).getHandle();
                 }
 
+                if (textureVk->getImage().getExternalFormat() != 0)
+                {
+                    // We have immutable sampler
+                    imageInfo.sampler = textureVk->getSampler().getHandle();
+                }
                 ShaderInterfaceVariableInfoMap &variableInfoMap = mVariableInfoMap[shaderType];
                 const std::string samplerName =
                     contextVk->getRenderer()->getFeatures().forceOldRewriteStructSamplers.enabled

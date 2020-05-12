@@ -1371,6 +1371,10 @@ class ImageHelper final : public Resource, public angle::Subject
                                       GLuint *inputDepthPitch,
                                       GLuint *inputSkipBytes);
 
+    void setExternalFormat(uint64_t externalFormat) { mExternalFormat = externalFormat; }
+
+    uint64_t getExternalFormat() { return mExternalFormat; }
+
   private:
     enum class UpdateSource
     {
@@ -1480,6 +1484,9 @@ class ImageHelper final : public Resource, public angle::Subject
     // For optimizing transition between different shader readonly layouts
     ImageLayout mLastNonShaderReadOnlyLayout;
     VkPipelineStageFlags mCurrentShaderReadStageMask;
+
+    // For imported images
+    uint64_t mExternalFormat;
 
     // Cached properties.
     uint32_t mBaseLevel;
