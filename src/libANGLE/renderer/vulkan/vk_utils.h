@@ -714,46 +714,43 @@ void InitExternalFenceFdFunctions(VkInstance instance);
 // VK_KHR_external_semaphore_capabilities
 void InitExternalSemaphoreCapabilitiesFunctions(VkInstance instance);
 
+// VK_KHR_sampler_ycbcr_conversion
+void InitExternalSamplerYCbCrConversionFunctions(VkDevice device)
+
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
 
-namespace gl_vk
+    namespace gl_vk
 {
-VkRect2D GetRect(const gl::Rectangle &source);
-VkFilter GetFilter(const GLenum filter);
-VkSamplerMipmapMode GetSamplerMipmapMode(const GLenum filter);
-VkSamplerAddressMode GetSamplerAddressMode(const GLenum wrap);
-VkPrimitiveTopology GetPrimitiveTopology(gl::PrimitiveMode mode);
-VkCullModeFlagBits GetCullMode(const gl::RasterizerState &rasterState);
-VkFrontFace GetFrontFace(GLenum frontFace, bool invertCullFace);
-VkSampleCountFlagBits GetSamples(GLint sampleCount);
-VkComponentSwizzle GetSwizzle(const GLenum swizzle);
-VkCompareOp GetCompareOp(const GLenum compareFunc);
+    VkRect2D GetRect(const gl::Rectangle &source);
+    VkFilter GetFilter(const GLenum filter);
+    VkSamplerMipmapMode GetSamplerMipmapMode(const GLenum filter);
+    VkSamplerAddressMode GetSamplerAddressMode(const GLenum wrap);
+    VkPrimitiveTopology GetPrimitiveTopology(gl::PrimitiveMode mode);
+    VkCullModeFlagBits GetCullMode(const gl::RasterizerState &rasterState);
+    VkFrontFace GetFrontFace(GLenum frontFace, bool invertCullFace);
+    VkSampleCountFlagBits GetSamples(GLint sampleCount);
+    VkComponentSwizzle GetSwizzle(const GLenum swizzle);
+    VkCompareOp GetCompareOp(const GLenum compareFunc);
 
-constexpr gl::ShaderMap<VkShaderStageFlagBits> kShaderStageMap = {
-    {gl::ShaderType::Vertex, VK_SHADER_STAGE_VERTEX_BIT},
-    {gl::ShaderType::Fragment, VK_SHADER_STAGE_FRAGMENT_BIT},
-    {gl::ShaderType::Geometry, VK_SHADER_STAGE_GEOMETRY_BIT},
-    {gl::ShaderType::Compute, VK_SHADER_STAGE_COMPUTE_BIT},
-};
+    constexpr gl::ShaderMap<VkShaderStageFlagBits> kShaderStageMap = {
+        {gl::ShaderType::Vertex, VK_SHADER_STAGE_VERTEX_BIT},
+        {gl::ShaderType::Fragment, VK_SHADER_STAGE_FRAGMENT_BIT},
+        {gl::ShaderType::Geometry, VK_SHADER_STAGE_GEOMETRY_BIT},
+        {gl::ShaderType::Compute, VK_SHADER_STAGE_COMPUTE_BIT},
+    };
 
-void GetOffset(const gl::Offset &glOffset, VkOffset3D *vkOffset);
-void GetExtent(const gl::Extents &glExtent, VkExtent3D *vkExtent);
-VkImageType GetImageType(gl::TextureType textureType);
-VkImageViewType GetImageViewType(gl::TextureType textureType);
-VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bool alpha);
-VkShaderStageFlags GetShaderStageFlags(gl::ShaderBitSet activeShaders);
+    void GetOffset(const gl::Offset &glOffset, VkOffset3D *vkOffset);
+    void GetExtent(const gl::Extents &glExtent, VkExtent3D *vkExtent);
+    VkImageType GetImageType(gl::TextureType textureType);
+    VkImageViewType GetImageViewType(gl::TextureType textureType);
+    VkColorComponentFlags GetColorComponentFlags(bool red, bool green, bool blue, bool alpha);
+    VkShaderStageFlags GetShaderStageFlags(gl::ShaderBitSet activeShaders);
 
-void GetViewport(const gl::Rectangle &viewport,
-                 float nearPlane,
-                 float farPlane,
-                 bool invertViewport,
-                 GLint renderAreaHeight,
-                 VkViewport *viewportOut);
+    void GetViewport(const gl::Rectangle &viewport, float nearPlane, float farPlane,
+                     bool invertViewport, GLint renderAreaHeight, VkViewport *viewportOut);
 
-void GetExtentsAndLayerCount(gl::TextureType textureType,
-                             const gl::Extents &extents,
-                             VkExtent3D *extentsOut,
-                             uint32_t *layerCountOut);
+    void GetExtentsAndLayerCount(gl::TextureType textureType, const gl::Extents &extents,
+                                 VkExtent3D *extentsOut, uint32_t *layerCountOut);
 }  // namespace gl_vk
 
 namespace vk_gl

@@ -26,9 +26,10 @@ enum class ImageLayout;
 using RenderPassAndSerial = ObjectAndSerial<RenderPass>;
 using PipelineAndSerial   = ObjectAndSerial<Pipeline>;
 
-using RefCountedDescriptorSetLayout = RefCounted<DescriptorSetLayout>;
-using RefCountedPipelineLayout      = RefCounted<PipelineLayout>;
-using RefCountedSampler             = RefCounted<Sampler>;
+using RefCountedDescriptorSetLayout    = RefCounted<DescriptorSetLayout>;
+using RefCountedPipelineLayout         = RefCounted<PipelineLayout>;
+using RefCountedSampler                = RefCounted<Sampler>;
+using RefCountedSamplerYcbcrConversion = RefCounted<SamplerYcbcrConversion>;
 
 // Helper macro that casts to a bitfield type then verifies no bits were dropped.
 #define SetBitField(lhs, rhs)                                         \
@@ -618,13 +619,15 @@ class SamplerDesc final
 {
   public:
     SamplerDesc();
-    explicit SamplerDesc(const gl::SamplerState &samplerState, bool stencilMode);
+    explicit SamplerDesc(const gl::SamplerState &samplerState,
+                         bool stencilMode,
+                         uint64_t externalFormat);
     ~SamplerDesc();
 
     SamplerDesc(const SamplerDesc &other);
     SamplerDesc &operator=(const SamplerDesc &rhs);
 
-    void update(const gl::SamplerState &samplerState, bool stencilMode);
+    void update(const gl::SamplerState &samplerState, bool stencilMode, uint64_t externalFormat);
     void reset();
     angle::Result init(ContextVk *contextVk, vk::Sampler *sampler) const;
 
@@ -638,6 +641,12 @@ class SamplerDesc final
     float mMaxAnisotropy;
     float mMinLod;
     float mMaxLod;
+
+    // If the sampler needs to convert the image content (e.g. from YUV to RGB) then mExternalFormat
+    // will be non-zero and match the external format as returned from
+    // vkGetAndroidHardwareBufferPropertiesANDROID.
+    // TODO: Do we want to ifdef this to be ANDROID only to keep this structure smaller?
+    uint64_t mExternalFormat;
 
     // 16 bits for modes + states.
     // 1 bit per filter (only 2 possible values in GL: linear/nearest)
@@ -659,11 +668,12 @@ class SamplerDesc final
     // Border color and unnormalized coordinates implicitly set to contants.
 
     // 16 extra bits reserved for future use.
-    uint16_t mReserved;
+    uint16_t mReserved[3];
 };
 
-// Total size: 160 bits == 20 bytes.
-static_assert(sizeof(SamplerDesc) == 20, "Unexpected SamplerDesc size");
+// Total size: 224 bits == 28 bytes. Except that since we have a 64bit (8 byte) data structure,
+// the entire structure must then be a multiple of 8 bytes in size, so this is 32bytes.
+static_assert(sizeof(SamplerDesc) == 32, "Unexpected SamplerDesc size");
 
 // Disable warnings about struct padding.
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
@@ -1040,6 +1050,26 @@ class SamplerCache final : angle::NonCopyable
 
   private:
     std::unordered_map<vk::SamplerDesc, vk::RefCountedSampler> mPayload;
+};
+
+// YuvConversion Cache
+class SamplerYcbcrConversionCache final : angle::NonCopyable
+{
+  public:
+    SamplerYcbcrConversionCache();
+    ~SamplerYcbcrConversionCache();
+
+    void destroy(RendererVk *render);
+
+    angle::Result getYuvConversion(uint64_t externalFormat,
+                                   VkSamplerYcbcrConversion *yuvConversion);
+
+    void createYuvConversion(DisplayVk *displayVk,
+                             uint64_t externalFormat,
+                             VkSamplerYcbcrConversionCreateInfo *yuvConversionInfo);
+
+  private:
+    std::unordered_map<uint64_t, vk::RefCountedSamplerYcbcrConversion> mPayload;
 };
 
 // Some descriptor set and pipeline layout constants.
