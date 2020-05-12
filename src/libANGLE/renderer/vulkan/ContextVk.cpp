@@ -617,6 +617,8 @@ egl::ContextPriority GetContextPriority(const gl::State &state)
 ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer)
     : ContextImpl(state, errorSet),
       vk::Context(renderer),
+      mGraphicsDirtyBitHandlers{},
+      mComputeDirtyBitHandlers{},
       mRenderPassCommandBuffer(nullptr),
       mCurrentGraphicsPipeline(nullptr),
       mCurrentComputePipeline(nullptr),
@@ -1437,7 +1439,10 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
 
     if (!executable->hasTransformFeedbackOutput() || !mState.isTransformFeedbackActive())
     {
-        return angle::Result::Continue;
+        if (mTransformFeedbackBufferSerials.empty())
+        {
+            return angle::Result::Continue;
+        }
     }
 
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
@@ -1466,7 +1471,12 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     ASSERT(executable);
 
     if (!executable->hasTransformFeedbackOutput() || !mState.isTransformFeedbackActive())
-        return angle::Result::Continue;
+    {
+        if (mTransformFeedbackBufferSerials.empty())
+        {
+            return angle::Result::Continue;
+        }
+    }
 
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
     size_t bufferCount                       = executable->getTransformFeedbackBufferCount(mState);
@@ -3177,7 +3187,7 @@ void ContextVk::invalidateCurrentTransformFeedbackBuffers()
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
     }
-    if (getFeatures().emulateTransformFeedback.enabled)
+    else if (getFeatures().emulateTransformFeedback.enabled)
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
@@ -3188,11 +3198,45 @@ void ContextVk::onTransformFeedbackStateChanged()
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_STATE);
+        invalidateCurrentTransformFeedbackBuffers();
     }
     else if (getFeatures().emulateTransformFeedback.enabled)
     {
         invalidateGraphicsDriverUniforms();
     }
+}
+
+angle::Result ContextVk::onBeginTransformFeedback(
+    size_t bufferCount,
+    const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers)
+{
+    onTransformFeedbackStateChanged();
+
+    for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+    {
+        if (mTransformFeedbackBufferSerials.count(buffers[bufferIndex]->getSerial()) != 0)
+        {
+            ANGLE_TRY(endRenderPass());
+            break;
+        }
+    }
+
+    for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
+    {
+        mTransformFeedbackBufferSerials.insert(buffers[bufferIndex]->getSerial());
+    }
+
+    if (getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME);
+    }
+
+    return angle::Result::Continue;
+}
+
+void ContextVk::onEndTransformFeedback()
+{
+    mRenderPassCommands.endTransformFeedback();
 }
 
 void ContextVk::invalidateGraphicsDescriptorSet(uint32_t usedDescriptorSet)
@@ -4171,6 +4215,8 @@ angle::Result ContextVk::endRenderPass()
             this, mRenderPassCommandBuffer);
         ANGLE_TRY(mActiveQueryAnySamplesConservative->stashQueryHelper(this));
     }
+
+    mTransformFeedbackBufferSerials.clear();
 
     onRenderPassFinished();
 
