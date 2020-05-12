@@ -191,6 +191,24 @@
     },
     {
       "key": {
+        "uuid": "ecb021f6_8b0f4ee1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-12T17:47:40Z",
+      "side": 1,
+      "message": "Thanks Shabi! In the latest iteration I\u0027ve added a special command w/ nullptrs that will cause the loop to break.",
+      "parentUuid": "4017b5dd_f1500475",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43ae244f_941541cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 20
@@ -274,6 +292,24 @@
       "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1dc08b1_f9e4fd45",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-12T17:47:40Z",
+      "side": 1,
+      "message": "Yes, I migrated this to condition variable in latest iteration",
+      "parentUuid": "bf0abc8b_8cd921fc",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
