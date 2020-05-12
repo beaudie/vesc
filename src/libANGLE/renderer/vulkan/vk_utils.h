@@ -714,6 +714,9 @@ void InitExternalFenceFdFunctions(VkInstance instance);
 // VK_KHR_external_semaphore_capabilities
 void InitExternalSemaphoreCapabilitiesFunctions(VkInstance instance);
 
+// VK_KHR_sampler_ycbcr_conversion
+void InitExternalSamplerYCbCrConversionFunctions(VkDevice device);
+
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
 
 namespace gl_vk

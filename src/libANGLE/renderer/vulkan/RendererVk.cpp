@@ -491,6 +491,7 @@ void RendererVk::onDestroy()
 
     mPipelineCache.destroy(mDevice);
     mSamplerCache.destroy(this);
+    mYuvConversionCache.destroy(this);
     mTheNullBuffer.destroy(this);
 
     mAllocator.destroy();
@@ -879,6 +880,10 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
     mPhysicalDeviceExternalMemoryHostProperties.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_MEMORY_HOST_PROPERTIES_EXT;
 
+    mSamplerYcbcrConversionFeatures = {};
+    mSamplerYcbcrConversionFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES;
+
     if (!vkGetPhysicalDeviceProperties2KHR || !vkGetPhysicalDeviceFeatures2KHR)
     {
         return;
@@ -928,6 +933,12 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
         vk::AddToPNextChain(&deviceProperties, &mPhysicalDeviceExternalMemoryHostProperties);
     }
 
+    // Query Ycbcr conversion properties
+    if (ExtensionFound(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mSamplerYcbcrConversionFeatures);
+    }
+
     // Query subgroup properties
     vk::AddToPNextChain(&deviceProperties, &mPhysicalDeviceSubgroupProperties);
 
@@ -969,6 +980,7 @@ void RendererVk::queryDeviceExtensionFeatures(const ExtensionNameList &deviceExt
     mIndexTypeUint8Features.pNext                     = nullptr;
     mPhysicalDeviceSubgroupProperties.pNext           = nullptr;
     mPhysicalDeviceExternalMemoryHostProperties.pNext = nullptr;
+    mSamplerYcbcrConversionFeatures.pNext             = nullptr;
 }
 
 angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex)
@@ -1271,6 +1283,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
     }
 
+    if (getFeatures().supportsYUVSamplerConversion.enabled)
+    {
+        enabledDeviceExtensions.push_back(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
+        vk::AddToPNextChain(&createInfo, &mSamplerYcbcrConversionFeatures);
+    }
+
     createInfo.sType                 = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     createInfo.flags                 = 0;
     createInfo.queueCreateInfoCount  = 1;
@@ -1319,6 +1337,10 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        InitTransformFeedbackEXTFunctions(mDevice);
+    }
+    if (getFeatures().supportsYUVSamplerConversion.enabled)
     {
         InitTransformFeedbackEXTFunctions(mDevice);
     }
@@ -1724,6 +1746,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
 
     // Currently disabled by default: http://anglebug.com/4324
     ANGLE_FEATURE_CONDITION(&mFeatures, enableCommandProcessingThread, false);
+
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsYUVSamplerConversion,
+        ExtensionFound(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME, deviceExtensionNames));
 
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
