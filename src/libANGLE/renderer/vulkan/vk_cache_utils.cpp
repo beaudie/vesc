@@ -13,6 +13,7 @@
 #include "common/aligned_memory.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/VertexAttribute.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
@@ -1714,9 +1715,11 @@ SamplerDesc::SamplerDesc(const SamplerDesc &other) = default;
 
 SamplerDesc &SamplerDesc::operator=(const SamplerDesc &rhs) = default;
 
-SamplerDesc::SamplerDesc(const gl::SamplerState &samplerState, bool stencilMode)
+SamplerDesc::SamplerDesc(const gl::SamplerState &samplerState,
+                         bool stencilMode,
+                         uint64_t externalFormat)
 {
-    update(samplerState, stencilMode);
+    update(samplerState, stencilMode, externalFormat);
 }
 
 void SamplerDesc::reset()
@@ -1725,6 +1728,7 @@ void SamplerDesc::reset()
     mMaxAnisotropy  = 0.0f;
     mMinLod         = 0.0f;
     mMaxLod         = 0.0f;
+    mExternalFormat = 0;
     mMagFilter      = 0;
     mMinFilter      = 0;
     mMipmapMode     = 0;
@@ -1736,12 +1740,18 @@ void SamplerDesc::reset()
     mReserved       = 0;
 }
 
-void SamplerDesc::update(const gl::SamplerState &samplerState, bool stencilMode)
+// Need Vulkan version of SamplerState that contains the yuv conversion info
+void SamplerDesc::update(const gl::SamplerState &samplerState,
+                         bool stencilMode,
+                         uint64_t externalFormat)
 {
     mMipLodBias    = 0.0f;
     mMaxAnisotropy = samplerState.getMaxAnisotropy();
     mMinLod        = samplerState.getMinLod();
     mMaxLod        = samplerState.getMaxLod();
+
+    // GL has no notion of external format, this must be provided from metadata from the image
+    mExternalFormat = externalFormat;
 
     bool compareEnable    = samplerState.getCompareMode() == GL_COMPARE_REF_TO_TEXTURE;
     VkCompareOp compareOp = gl_vk::GetCompareOp(samplerState.getCompareFunc());
@@ -1812,6 +1822,17 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, vk::Sampler *sampler) cons
         filteringInfo.samplerFilteringPrecisionMode =
             VK_SAMPLER_FILTERING_PRECISION_MODE_HIGH_GOOGLE;
         vk::AddToPNextChain(&createInfo, &filteringInfo);
+    }
+
+    VkSamplerYcbcrConversionInfo yuvConversionInfo = {};
+    if (mExternalFormat)
+    {
+        ASSERT((contextVk->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
+        yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
+        yuvConversionInfo.pNext = nullptr;
+        ANGLE_TRY(contextVk->getRenderer()->getYuvConversionCache().getYuvConversion(
+            mExternalFormat, &yuvConversionInfo.conversion));
+        vk::AddToPNextChain(&createInfo, &yuvConversionInfo);
     }
 
     ANGLE_VK_TRY(contextVk, sampler->init(contextVk->getDevice(), createInfo));
@@ -2136,6 +2157,63 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     vk::RefCountedPipelineLayout &insertedLayout = insertedItem.first->second;
     pipelineLayoutOut->set(&insertedLayout);
 
+    return angle::Result::Continue;
+}
+
+// YuvConversionCache implementation
+vk::YuvConversionCache::YuvConversionCache() = default;
+
+vk::YuvConversionCache::~YuvConversionCache()
+{
+    ASSERT(mPayload.empty());
+}
+
+void vk::YuvConversionCache::destroy(RendererVk *renderer)
+{
+    VkDevice device = renderer->getDevice();
+
+    for (auto &iter : mPayload)
+    {
+        VkSamplerYcbcrConversion &yuvConversion = iter.second;
+        vkDestroySamplerYcbcrConversionKHR(device, yuvConversion, nullptr);
+    }
+
+    mPayload.clear();
+}
+
+angle::Result vk::YuvConversionCache::getYuvConversion(uint64_t externalFormat,
+                                                       VkSamplerYcbcrConversion *yuvConversion)
+{
+    auto iter = mPayload.find(externalFormat);
+    if (iter != mPayload.end())
+    {
+        *yuvConversion = iter->second;
+        return angle::Result::Continue;
+    }
+
+    return angle::Result::Stop;
+}
+
+angle::Result vk::YuvConversionCache::createYuvConversion(
+    DisplayVk *displayVk,
+    uint64_t externalFormat,
+    VkSamplerYcbcrConversionCreateInfo *yuvConversionInfo)
+{
+    VkSamplerYcbcrConversion yuvConversion;
+
+    ASSERT(externalFormat != 0);
+
+    if (getYuvConversion(externalFormat, &yuvConversion) == angle::Result::Continue)
+    {
+        // Already have that externalFormat & yuvConversion in the cache
+        return angle::Result::Continue;
+    }
+
+    RendererVk *renderer = displayVk->getRenderer();
+    VkDevice device      = renderer->getDevice();
+
+    ANGLE_VK_TRY(displayVk, vkCreateSamplerYcbcrConversionKHR(device, yuvConversionInfo, nullptr,
+                                                              &yuvConversion));
     return angle::Result::Continue;
 }
 

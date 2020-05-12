@@ -247,6 +247,7 @@ class RendererVk : angle::NonCopyable
     bool enableDebugUtils() const { return mEnableDebugUtils; }
 
     SamplerCache &getSamplerCache() { return mSamplerCache; }
+    vk::YuvConversionCache &getYuvConversionCache() { return mYuvConversionCache; }
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
 
   private:
@@ -296,6 +297,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceVertexAttributeDivisorPropertiesEXT mVertexAttributeDivisorProperties;
     VkPhysicalDeviceTransformFeedbackFeaturesEXT mTransformFeedbackFeatures;
     VkPhysicalDeviceIndexTypeUint8FeaturesEXT mIndexTypeUint8Features;
+    VkPhysicalDeviceSamplerYcbcrConversionFeatures mSamplerYcbcrConversionFeatures;
     VkPhysicalDeviceSubgroupProperties mPhysicalDeviceSubgroupProperties;
     VkPhysicalDeviceExternalMemoryHostPropertiesEXT mPhysicalDeviceExternalMemoryHostProperties;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
@@ -367,6 +369,7 @@ class RendererVk : angle::NonCopyable
 
     VmaAllocator mAllocator;
     SamplerCache mSamplerCache;
+    vk::YuvConversionCache mYuvConversionCache;
     vk::ActiveHandleCounter mActiveHandleCounts;
 };
 
