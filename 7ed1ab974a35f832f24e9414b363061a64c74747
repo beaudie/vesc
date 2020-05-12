@@ -310,6 +310,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a0ee319_74a5b092",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-05-12T04:51:17Z",
+      "side": 1,
+      "message": "It doesn\u0027t have that bug, this is the current code:\n\nImageIndex ImageIndex::Make2DArray(GLint levelIndex, GLint layerIndex)\n{\n    return ImageIndex(TextureType::_2DArray, levelIndex, layerIndex, 1);\n}\n\nfor 2D array, the layerIndex is not (-1)",
+      "parentUuid": "f4d99c2a_52060a3f",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
