@@ -238,6 +238,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cd8911f_2a666cbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-05-12T02:49:15Z",
+      "side": 1,
+      "message": "Hi\nI am a little bit confused, the problematic \"ImageIndex\" is not from something like stageRobustSubresourceClear[WithFormat], here is the callstack:\n\n(gdb) bt\n#0  gl::ImageIndex::ImageIndex (this\u003d0x7fffffd560, type\u003dgl::TextureType::_2D, levelIndex\u003d0, layerIndex\u003d-1, layerCount\u003d1)\n    at ../../src/libANGLE/ImageIndex.cpp:243\n#1  0x0000007fb4e56d64 in gl::ImageIndex::Make2D (levelIndex\u003d0) at ../../src/libANGLE/ImageIndex.cpp:164\n#2  0x0000007fb510bbfc in rx::RenderTargetVk::getImageIndex (this\u003d0x835c40) at ../../src/libANGLE/renderer/vulkan/RenderTargetVk.cpp:188\n#3  0x0000007fb50d7238 in rx::FramebufferVk::clearWithRenderPassOp (this\u003d0x8b7b80, clearColorBuffers\u003d..., clearDepth\u003dtrue, clearStencil\u003dfalse,\n    clearColorValue\u003d..., clearDepthStencilValue\u003d...) at ../../src/libANGLE/renderer/vulkan/FramebufferVk.cpp:1439\n#4  0x0000007fb50d6d20 in rx::FramebufferVk::clearImpl (this\u003d0x8b7b80, context\u003d0x83e760, clearColorBuffers\u003d..., clearDepth\u003dtrue,\n    clearStencil\u003dfalse, clearColorValue\u003d..., clearDepthStencilValue\u003d...) at ../../src/libANGLE/renderer/vulkan/FramebufferVk.cpp:302\n#5  0x0000007fb50d61c8 in rx::FramebufferVk::clear (this\u003d0x8b7b80, context\u003d0x83e760, mask\u003d16640)\n    at ../../src/libANGLE/renderer/vulkan/FramebufferVk.cpp:182\n#6  0x0000007fb4e26f78 in gl::Framebuffer::clear (this\u003d0x8b78a0, context\u003d0x83e760, mask\u003d16640) at ../../src/libANGLE/Framebuffer.cpp:1526\n\nor can you points to the function names as you mentioned \"You can change just those two functions to make a copy of the index\"",
+      "parentUuid": "0bdab94e_b57b668a",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
