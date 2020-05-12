@@ -3627,6 +3627,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
     const gl::ActiveTextureMask &activeTextures    = executable->getActiveSamplersMask();
     const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
 
+    bool haveImmutableSampler = false;
     for (size_t textureUnit : activeTextures)
     {
         gl::Texture *texture        = textures[textureUnit];
@@ -3654,11 +3655,24 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
             samplerSerial = samplerVk->getSerial();
         }
 
+        haveImmutableSampler |= textureVk->getImage().getExternalFormat() != 0;
+
         mActiveTextures[textureUnit].texture = textureVk;
         mActiveTextures[textureUnit].sampler = samplerVk;
         // Cache serials from sampler and texture, but re-use texture if no sampler bound
         ASSERT(textureVk != nullptr);
         mActiveTexturesDesc.update(textureUnit, textureVk->getSerial(), samplerSerial);
+    }
+
+    if (haveImmutableSampler)
+    {
+        const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+        ASSERT(executable);
+
+        if (executable->hasTextures())
+        {
+            ANGLE_TRY(mExecutable->updatePipelineLayout(context, &mActiveTextures));
+        }
     }
 
     return angle::Result::Continue;
