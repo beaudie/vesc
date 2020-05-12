@@ -214,6 +214,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bdab94e_b57b668a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T02:22:28Z",
+      "side": 1,
+      "message": "It\u0027s only `stageRobustSubresourceClear[WithFormat]` that can receive such an image index, I think. Your comment gave me another idea Sunny. You can change just those two functions to make a copy of the index, and if layer count is not specified, set it to `mLayerCount` in the copy.\n\nThen in `SubresourceUpdate::SubresourceUpdate`, `ASSERT()` that it always has a layer count.\n\nThe point is, this fix up will be done once, and then the `if` that runs over and over remains simpler.",
+      "parentUuid": "1e37bbd7_609e2132",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
