@@ -247,7 +247,7 @@ class RendererVk : angle::NonCopyable
     bool enableDebugUtils() const { return mEnableDebugUtils; }
 
     SamplerCache &getSamplerCache() { return mSamplerCache; }
-    vk::YuvConversionCache &getYuvConversionCache() { return mYuvConversionCache; }
+    vk::SamplerYcbcrConversionCache &getYuvConversionCache() { return mYuvConversionCache; }
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
 
     // Queue commands to worker thread for processing
@@ -382,7 +382,7 @@ class RendererVk : angle::NonCopyable
 
     vk::Allocator mAllocator;
     SamplerCache mSamplerCache;
-    vk::YuvConversionCache mYuvConversionCache;
+    vk::SamplerYcbcrConversionCache mYuvConversionCache;
     vk::ActiveHandleCounter mActiveHandleCounts;
 
     // Vulkan does not allow binding a null vertex buffer. We use a dummy as a placeholder.
