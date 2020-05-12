@@ -2440,6 +2440,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
       mLastNonShaderReadOnlyLayout(other.mLastNonShaderReadOnlyLayout),
       mCurrentShaderReadStageMask(other.mCurrentShaderReadStageMask),
+      mExternalFormat(other.mExternalFormat),
       mBaseLevel(other.mBaseLevel),
       mMaxLevel(other.mMaxLevel),
       mLayerCount(other.mLayerCount),
@@ -2471,6 +2472,7 @@ void ImageHelper::resetCachedProperties()
     mMaxLevel                    = 0;
     mLayerCount                  = 0;
     mLevelCount                  = 0;
+    mExternalFormat              = 0;
 }
 
 void ImageHelper::initStagingBuffer(RendererVk *renderer,
@@ -2550,6 +2552,8 @@ angle::Result ImageHelper::initExternal(Context *context,
 
     mCurrentLayout = initialLayout;
 
+    mExternalFormat = 0;
+
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
     stageClearIfEmulatedFormat(context);
@@ -2561,6 +2565,17 @@ void ImageHelper::releaseImage(RendererVk *renderer)
 {
     mSerial = rx::kZeroSerial;
     renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);
+
+    if (mExternalFormat)
+    {
+        VkSamplerYcbcrConversion yuvConversion;
+        // TODO: This needs to be reference counted
+        if (angle::Result::Continue ==
+            renderer->getYuvConversionCache().getYuvConversion(mExternalFormat, &yuvConversion))
+        {
+            vkDestroySamplerYcbcrConversionKHR(renderer->getDevice(), yuvConversion, nullptr);
+        }
+    }
 }
 
 void ImageHelper::releaseStagingBuffer(RendererVk *renderer)
