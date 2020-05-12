@@ -146,6 +146,8 @@ class RendererVk : angle::NonCopyable
     // Issues a new serial for linked shader modules. Used in the pipeline cache.
     Serial issueShaderSerial();
 
+    Serial issueBufferSerial();
+
     const angle::FeaturesVk &getFeatures() const { return mFeatures; }
     uint32_t getMaxVertexAttribDivisor() const { return mMaxVertexAttribDivisor; }
     VkDeviceSize getMaxVertexAttribStride() const { return mMaxVertexAttribStride; }
@@ -309,6 +311,7 @@ class RendererVk : angle::NonCopyable
     VkDevice mDevice;
     AtomicSerialFactory mQueueSerialFactory;
     AtomicSerialFactory mShaderSerialFactory;
+    AtomicSerialFactory mBufferSerialFactory;
 
     Serial mLastCompletedQueueSerial;
     Serial mLastSubmittedQueueSerial;
