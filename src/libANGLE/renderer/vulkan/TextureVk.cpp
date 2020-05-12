@@ -1557,7 +1557,8 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         }
     }
 
-    vk::SamplerDesc samplerDesc(mState.getSamplerState(), mState.isStencilMode());
+    vk::SamplerDesc samplerDesc(mState.getSamplerState(), mState.isStencilMode(),
+                                mImage->getExternalFormat());
     ANGLE_TRY(renderer->getSamplerCache().getSampler(contextVk, samplerDesc, &mSampler));
 
     // Regenerate the serial on a sampler change.
