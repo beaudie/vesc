@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc140251_be4c15f8",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-12T15:22:17Z",
+      "side": 1,
+      "message": "you should be able to revert the changes to this file.",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 15
+      },
+      "revId": "e16f52727fc45ea8a4f171b6d3ecb65f30a1280c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
