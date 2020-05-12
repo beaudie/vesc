@@ -382,6 +382,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e31e099a_55323030",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2020-05-12T15:38:00Z",
+      "side": 1,
+      "message": "Let me clarify\nFramebufferVk::clearWithRenderPassOp -\u003e imageIndex \u003d renderTarget-\u003egetImageIndex(), the imageIndex\n{static kEntireLevel \u003d -1, mType \u003d gl::TextureType::_2D, mLevelIndex \u003d 0, mLayerIndex \u003d -1, mLayerCount \u003d 1}\n\n-\u003e rx::vk::ImageHelper::stageClear -\u003e ImageHelper::SubresourceUpdate::SubresourceUpdate -\u003e layerCount \u003d VK_REMAINING_ARRAY_LAYERS (because mLayerIndex \u003d -1) -\u003e ImageHelper::flushSingleSubresourceStagedUpdates cannot find the cache",
+      "parentUuid": "cfbf196a_f6435ce4",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
