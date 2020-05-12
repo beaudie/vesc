@@ -358,6 +358,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfbf196a_f6435ce4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T15:27:39Z",
+      "side": 1,
+      "message": "Oh, sorry I misread the code around Make2DArray and Make2DArrayRange. Then can you please figure out how FramebufferVk::clearWithRenderPassOp is resulting in an image index with no layer count set? Because using VK_REMAINING_ARRAY_LAYERS through that code is a bug.",
+      "parentUuid": "0c41d007_d7a436c2",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
