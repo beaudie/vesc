@@ -494,6 +494,13 @@ VkClearValue GetRobustResourceClearValue(const vk::Format &format)
     }
     return clearValue;
 }
+
+bool IsExternalQueueFamily(uint32_t queueFamilyIndex)
+{
+    return queueFamilyIndex == VK_QUEUE_FAMILY_EXTERNAL ||
+           queueFamilyIndex == VK_QUEUE_FAMILY_FOREIGN_EXT;
+}
+
 }  // anonymous namespace
 
 VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
@@ -2311,6 +2318,11 @@ void BufferHelper::releaseToExternal(ContextVk *contextVk,
     changeQueue(externalQueueFamilyIndex, commandBuffer);
 }
 
+bool BufferHelper::isReleasedToExternal()
+{
+    return IsExternalQueueFamily(mCurrentQueueFamilyIndex);
+}
+
 bool BufferHelper::canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType)
 {
     // We only need to start a new command buffer when we need a new barrier.
@@ -2807,6 +2819,11 @@ void ImageHelper::releaseToExternal(ContextVk *contextVk,
     ASSERT(mCurrentQueueFamilyIndex == rendererQueueFamilyIndex);
 
     changeLayoutAndQueue(getAspectFlags(), desiredLayout, externalQueueFamilyIndex, commandBuffer);
+}
+
+bool ImageHelper::isReleasedToExternal()
+{
+    return IsExternalQueueFamily(mCurrentQueueFamilyIndex);
 }
 
 uint32_t ImageHelper::getBaseLevel()
