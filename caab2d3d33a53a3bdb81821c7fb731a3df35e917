@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30d9de79_da9bf5a3",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-12T20:58:21Z",
+      "side": 1,
+      "message": "nit: rotation to be consistent with the type name. Or we could rename this to SurfaceOrientation.",
+      "range": {
+        "startLine": 114,
+        "startChar": 20,
+        "endLine": 114,
+        "endChar": 31
+      },
+      "revId": "caab2d3d33a53a3bdb81821c7fb731a3df35e917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
