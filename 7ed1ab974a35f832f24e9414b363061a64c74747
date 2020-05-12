@@ -406,6 +406,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90bb0a40_64f82f97",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T15:48:13Z",
+      "side": 1,
+      "message": "Ok, I don\u0027t know why I had presumed `hasLayer` looks at the layer count.\n\nI\u0027m guessing Make2D is setting mLayerIndex to -1 so later users can distinguish between a non-layered image and a single layer of an array image. @Geoff or @Jamie, could Make2D just set mLayerIndex to 0? All usages under vulkan/ at least consistently do:\n\n    imageIndex.hasLayer() ? imageIndex.getLayerIndex() : 0",
+      "parentUuid": "e31e099a_55323030",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
