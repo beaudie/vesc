@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "643fa33b_5bb6fea8",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1627,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-12T01:01:32Z",
+      "side": 1,
+      "message": "With the latest change, rather than the full ShaderState being saved, it\u0027s just the vectors of input and output varyings for each stage (along with versions), so I think this should be a minimal impact - especially with the addition of only doing it for separable programs.\n\nDoes that work for you Shabi?",
+      "parentUuid": "ec56fd45_294b19f6",
+      "revId": "c58c30a31fa41c31ef1560bb1388ffe9bd51ce62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4823b48b_b584c672",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 19
@@ -57,6 +75,30 @@
       "revId": "c58c30a31fa41c31ef1560bb1388ffe9bd51ce62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d915a78_ba1a7a02",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-12T01:01:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4823b48b_b584c672",
+      "range": {
+        "startLine": 353,
+        "startChar": 14,
+        "endLine": 353,
+        "endChar": 25
+      },
+      "revId": "c58c30a31fa41c31ef1560bb1388ffe9bd51ce62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
