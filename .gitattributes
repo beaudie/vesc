@@ -15,3 +15,4 @@ src/compiler/translator/glslang_*.*        eol=lf
 # Git conflict markers in the json file break the code generator.
 # Using a binary merge strategy forces conflicts without changing file contents.
 scripts/code_generation_hashes/*.json merge=binary
+src/tests/perf_tests/restricted_traces/*.json merge=binary
