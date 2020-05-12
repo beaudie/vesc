@@ -271,9 +271,7 @@ TEST_P(TransformFeedbackTest, RecordAndDraw)
 }
 
 // Test that XFB does not allow writing more vertices than fit in the bound buffers.
-// TODO(jmadill): Enable this test after fixing the last case where the buffer size changes after
-// calling glBeginTransformFeedback.
-TEST_P(TransformFeedbackTest, DISABLED_TooSmallBuffers)
+TEST_P(TransformFeedbackTest, TooSmallBuffers)
 {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
