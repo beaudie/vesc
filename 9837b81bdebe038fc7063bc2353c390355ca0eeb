@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c99f8a9_4367d4c7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T02:47:47Z",
+      "side": 1,
+      "message": "Use:\n\n    for (PipelineStage pipelineStage : mPipelineBarrierMask \u0026 kHostTransferAndCompute)\n\nThen before the if, do:\n\n    mPipelineBarrierMask \u0026\u003d !kHostTransferAndCompute;\n\nAlso, it\u0027s better if you create a copy of the mask at the top and use the local variable to avoid many indirect instructions (load/store through `this`).",
+      "range": {
+        "startLine": 590,
+        "startChar": 0,
+        "endLine": 613,
+        "endChar": 5
+      },
+      "revId": "9837b81bdebe038fc7063bc2353c390355ca0eeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a200d0e_885845a2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T02:47:47Z",
+      "side": 1,
+      "message": "nit: them",
+      "range": {
+        "startLine": 621,
+        "startChar": 83,
+        "endLine": 621,
+        "endChar": 87
+      },
+      "revId": "9837b81bdebe038fc7063bc2353c390355ca0eeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24c77aa8_9cc0208b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T02:47:47Z",
+      "side": 1,
+      "message": "If you move the `merge` inside the helper function, for example call it `mergeIfNoFalseDependency`, then this could be simpler:\n\n    PipelineBarrier *newBarrier \u003d \u0026mPipelineBarriers[pipelineStage];\n\n    if (!barrier)\n    {\n        barrier \u003d newBarrier;\n    }\n    else if (!barrier-\u003emergeIfNoFalseDependency(*newBarrier))\n    {\n        barrier-\u003ewriteCommand(primary);\n        barrier \u003d newBarrier;\n    }\n\nIt could be made even simpler knowing that the first `if` is only run for the first bit:\n\n    PipelineStage firstStage \u003d *mPipelineBarrierMask.begin();\n    mPipelineBarrierMask.reset(firstStage);\n    barrier \u003d mPipelineBarriers[firstStage];\n\n    for (PipelineStage pipelineStage : mPipelineBarrierMask)\n    {\n        PipelineBarrier *newBarrier \u003d \u0026mPipelineBarriers[pipelineStage];\n\n        if (!barrier-\u003emergeIfNoFalseDependency(*newBarrier))\n        {\n            barrier-\u003ewriteCommand(primary);\n            barrier \u003d newBarrier;\n        }\n    }",
+      "range": {
+        "startLine": 627,
+        "startChar": 0,
+        "endLine": 639,
+        "endChar": 9
+      },
+      "revId": "9837b81bdebe038fc7063bc2353c390355ca0eeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd333501_281bddd4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T02:47:47Z",
+      "side": 1,
+      "message": "Move out of loop, and do `mPipelineBarrierMask.reset();`.",
+      "range": {
+        "startLine": 640,
+        "startChar": 0,
+        "endLine": 640,
+        "endChar": 50
+      },
+      "revId": "9837b81bdebe038fc7063bc2353c390355ca0eeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef270926_0bead8ed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T02:47:47Z",
+      "side": 1,
+      "message": "Maybe call it `False`? As in \"can merge without false dependency\".",
+      "range": {
+        "startLine": 625,
+        "startChar": 24,
+        "endLine": 625,
+        "endChar": 29
+      },
+      "revId": "9837b81bdebe038fc7063bc2353c390355ca0eeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed735d0d_d380aead",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T02:47:47Z",
+      "side": 1,
+      "message": "nit: has",
+      "range": {
+        "startLine": 627,
+        "startChar": 36,
+        "endLine": 627,
+        "endChar": 40
+      },
+      "revId": "9837b81bdebe038fc7063bc2353c390355ca0eeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dce79d06_4a0e4077",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T02:47:47Z",
+      "side": 1,
+      "message": "nit: Can also say\n\n    return gl::ScanReverse(mSrcStageMask) \u003e\u003d gl::ScanReverse(other.mSrcStageMask);",
+      "range": {
+        "startLine": 633,
+        "startChar": 0,
+        "endLine": 637,
+        "endChar": 21
+      },
+      "revId": "9837b81bdebe038fc7063bc2353c390355ca0eeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
