@@ -1888,6 +1888,11 @@ Serial RendererVk::issueShaderSerial()
     return mShaderSerialFactory.generate();
 }
 
+Serial RendererVk::issueBufferSerial()
+{
+    return mBufferSerialFactory.generate();
+}
+
 // These functions look at the mandatory format for support, and fallback to querying the device (if
 // necessary) to test the availability of the bits.
 bool RendererVk::hasLinearImageFormatFeatureBits(VkFormat format,
