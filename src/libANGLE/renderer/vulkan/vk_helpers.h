@@ -772,6 +772,9 @@ class BufferHelper final : public Resource
                            uint32_t externalQueueFamilyIndex,
                            CommandBuffer *commandBuffer);
 
+    // Returns true if the image is owned by an external API or instance.
+    bool isReleasedToExternal() const;
+
     // Currently always returns false. Should be smarter about accumulation.
     bool canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType);
     bool canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType);
@@ -1293,6 +1296,9 @@ class ImageHelper final : public Resource, public angle::Subject
                            uint32_t externalQueueFamilyIndex,
                            ImageLayout desiredLayout,
                            CommandBuffer *commandBuffer);
+
+    // Returns true if the image is owned by an external API or instance.
+    bool isReleasedToExternal() const;
 
     // If the image is used externally to GL, its layout could be different from ANGLE's internal
     // state.  This function is used to inform ImageHelper of an external layout change.
