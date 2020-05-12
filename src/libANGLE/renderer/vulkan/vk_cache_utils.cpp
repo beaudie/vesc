@@ -1827,6 +1827,7 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, vk::Sampler *sampler) cons
     VkSamplerYcbcrConversionInfo yuvConversionInfo = {};
     if (mExternalFormat)
     {
+        WARN() << "Adding yuvConversionInfo to sampler createInfo chain";
         ASSERT((contextVk->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
         yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
         yuvConversionInfo.pNext = nullptr;
@@ -2171,7 +2172,7 @@ vk::SamplerYcbcrConversionCache::~SamplerYcbcrConversionCache()
 void vk::SamplerYcbcrConversionCache::destroy(RendererVk *renderer)
 {
     VkDevice device = renderer->getDevice();
-
+    WARN() << "destroying SamplerYcbcrConversionCache";
     for (auto &iter : mPayload)
     {
         vk::RefCountedSamplerYcbcrConversion &yuvSampler = iter.second;
@@ -2191,10 +2192,11 @@ angle::Result vk::SamplerYcbcrConversionCache::getYuvConversion(
     auto iter = mPayload.find(externalFormat);
     if (iter != mPayload.end())
     {
+        WARN() << "got cached YcbcrConversion";
         *yuvConversion = iter->second.get().getHandle();
         return angle::Result::Continue;
     }
-
+    ERR() << "Should have found yuvConversion in cache";
     return angle::Result::Stop;
 }
 
@@ -2208,6 +2210,7 @@ angle::Result vk::SamplerYcbcrConversionCache::createYuvConversion(
     auto iter = mPayload.find(externalFormat);
     if (iter != mPayload.end())
     {
+        WARN() << "Found matching externalFormat in YuvConversion cache";
         vk::RefCountedSamplerYcbcrConversion &refCountedYuvConversion = iter->second;
         refCountedYuvConversion.addRef();
         return angle::Result::Continue;
@@ -2216,6 +2219,7 @@ angle::Result vk::SamplerYcbcrConversionCache::createYuvConversion(
     RendererVk *renderer = displayVk->getRenderer();
     VkDevice device      = renderer->getDevice();
 
+    WARN() << "Create YuvConversion object";
     SamplerYcbcrConversion wrappedYuvConversion;
     wrappedYuvConversion.init(device, *yuvConversionInfo);
     mPayload.emplace(externalFormat,
