@@ -22,6 +22,30 @@
       "revId": "caab2d3d33a53a3bdb81821c7fb731a3df35e917",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "668b0704_688934f1",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-12T21:48:35Z",
+      "side": 1,
+      "message": "I was tempted do rename this to SurfaceOrientation, but I see other code (e.g. Renderer11.cpp) using optimalSurfaceOrientation and EGL_SURFACE_ORIENTATION_... for something different than Android.  Nothing else was using \"rotation\".  I want to avoid overloaded terms in the code base (I\u0027ve seen that cause trouble in a past life), and so I\u0027ll rename \"orientation\" to \"rotation\".  Hope that\u0027s okay.",
+      "parentUuid": "30d9de79_da9bf5a3",
+      "range": {
+        "startLine": 114,
+        "startChar": 20,
+        "endLine": 114,
+        "endChar": 31
+      },
+      "revId": "caab2d3d33a53a3bdb81821c7fb731a3df35e917",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
