@@ -97,9 +97,12 @@ egl::Error ImageVk::initialize(const egl::Display *display)
             return egl::EglBadAccess();
         }
 
-        // Make sure a staging buffer is ready to use to upload data
-        mImage->initStagingBuffer(renderer, mImage->getFormat(), vk::kStagingBufferFlags,
-                                  vk::kStagingBufferSize);
+        if (!egl::IsExternalImageTarget(mState.target))
+        {
+            // Make sure a staging buffer is ready to use to upload data
+            mImage->initStagingBuffer(renderer, mImage->getFormat(), vk::kStagingBufferFlags,
+                                      vk::kStagingBufferSize);
+        }
 
         mOwnsImage = false;
 
