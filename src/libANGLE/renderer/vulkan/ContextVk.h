@@ -328,6 +328,10 @@ class ContextVk : public ContextImpl, public vk::Context
 
     void invalidateCurrentTransformFeedbackBuffers();
     void onTransformFeedbackStateChanged();
+    angle::Result onBeginTransformFeedback(
+        size_t bufferCount,
+        const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
+    void onEndTransformFeedback();
 
     // When UtilsVk issues draw or dispatch calls, it binds descriptor sets that the context is not
     // aware of.  This function is called to make sure affected descriptor set bindings are dirtied
@@ -914,6 +918,9 @@ class ContextVk : public ContextImpl, public vk::Context
     vk::PrimaryCommandBuffer mPrimaryCommands;
     bool mHasPrimaryCommands;
 
+    // Transform feedback buffers.
+    std::unordered_set<Serial> mTransformFeedbackBufferSerials;
+
     // Internal shader library.
     vk::ShaderLibrary mShaderLibrary;
     UtilsVk mUtils;
@@ -952,6 +959,8 @@ class ContextVk : public ContextImpl, public vk::Context
     vk::ResourceUseList mResourceUseList;
 
     egl::ContextPriority mContextPriority;
+
+    Serial mIndirectbufferSerial;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 };

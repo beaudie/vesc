@@ -102,4 +102,13 @@ using SerialFactory       = SerialFactoryBase<uint64_t>;
 using AtomicSerialFactory = SerialFactoryBase<std::atomic<uint64_t>>;
 }  // namespace rx
 
+namespace std
+{
+template <>
+struct hash<rx::Serial>
+{
+    std::size_t operator()(rx::Serial s) const { return std::hash<uint64_t>()(s.getValue()); }
+};
+}  // namespace std
+
 #endif  // LIBANGLE_RENDERER_SERIAL_UTILS_H_
