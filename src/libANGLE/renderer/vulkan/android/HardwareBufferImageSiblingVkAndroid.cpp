@@ -107,6 +107,20 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     ANGLE_VK_TRY(displayVk, vkGetAndroidHardwareBufferPropertiesANDROID(device, hardwareBuffer,
                                                                         &bufferProperties));
 
+    WARN() << "bufferFormatProperties:";
+    WARN() << "\tformat: 0x" << std::hex << bufferFormatProperties.format;
+    WARN() << "\texternalFormat: 0x" << std::hex << bufferFormatProperties.externalFormat;
+    WARN() << "\tformatFeatures: 0x" << std::hex << bufferFormatProperties.formatFeatures;
+    WARN() << "\tsamplerYcbcrConversionComponents: "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.r << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.g << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.b << ", "
+           << bufferFormatProperties.samplerYcbcrConversionComponents.a;
+    WARN() << "\tsuggestedYcbcrModel: " << bufferFormatProperties.suggestedYcbcrModel;
+    WARN() << "\tsuggestedYcbcrRange: " << bufferFormatProperties.suggestedYcbcrRange;
+    WARN() << "\tsuggestedXChromaOffset: " << bufferFormatProperties.suggestedXChromaOffset;
+    WARN() << "\tsuggestedYChromaOffset: " << bufferFormatProperties.suggestedYChromaOffset;
+
     const vk::Format &vkFormat       = renderer->getFormat(internalFormat);
     const angle::Format &imageFormat = vkFormat.actualImageFormat();
     bool isDepthOrStencilFormat      = imageFormat.depthBits > 0 || imageFormat.stencilBits > 0;
