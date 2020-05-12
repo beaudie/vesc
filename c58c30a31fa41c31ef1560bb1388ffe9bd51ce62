@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "284efa1d_143fac50",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1627,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T03:11:03Z",
+      "side": 1,
+      "message": "@Jamie, it\u0027s not about saving memory during link. Current implementation increases memory footprint by saving duplicate information permanently. My suggestion is in fact to increase memory usage during link, to avoid having to increase it afterwards.\n\n@Tim, it\u0027s better, sure, but it\u0027s still a waste. ShaderVar is not exactly a small struct. But if it\u0027s too much work to fix it, I\u0027m not blocking the change!",
+      "parentUuid": "643fa33b_5bb6fea8",
+      "revId": "c58c30a31fa41c31ef1560bb1388ffe9bd51ce62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4823b48b_b584c672",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 19
