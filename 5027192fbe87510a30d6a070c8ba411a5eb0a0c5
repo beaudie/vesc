@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e15f99d_6ca35d2d",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-12T15:23:20Z",
+      "side": 1,
+      "message": "this isn\u0027t a standard constructor signture. either make a move constructor or a copy constructor.",
+      "range": {
+        "startLine": 36,
+        "startChar": 37,
+        "endLine": 36,
+        "endChar": 62
+      },
+      "revId": "5027192fbe87510a30d6a070c8ba411a5eb0a0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "969847f8_a03a7932",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-12T15:23:20Z",
+      "side": 1,
+      "message": "and this, right? maybe remove the header constructor as well.",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 68
+      },
+      "revId": "5027192fbe87510a30d6a070c8ba411a5eb0a0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc31d582_aaf76c38",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-12T15:23:20Z",
+      "side": 1,
+      "message": "you can revert this.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 23
+      },
+      "revId": "5027192fbe87510a30d6a070c8ba411a5eb0a0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
