@@ -262,6 +262,30 @@
       "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f39971e1_0746e50d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T03:22:52Z",
+      "side": 1,
+      "message": "I see. That\u0027s even simpler to resolve! `clearWithRenderPassOp` is calling `renderTarget-\u003egetImageIndex()` to get the image index. That in turn calls one of ImageIndex::Make3D, Make2DArray or Make2D. Make3D and Make2D already set the layer count to 1, so this change can be as simple as:\n\n    RenderTargetVk::getImageIndex()\n\n    if (mImage-\u003egetLayerCount() \u003e 1)\n    {\n -      return gl::ImageIndex::Make2DArray(mLevelIndex, mLayerIndex);\n +      return gl::ImageIndex::Make2DArray(mLevelIndex, mLayerIndex, 1);\n    }\n\nWhich is actually a bugfix too, as clearing the render target should not be clearing the rest of the layers! You could even write a test for it (create a 2-layer texture, create a render target from layer 0, clear it through the framebuffer, then make sure layer 1 is not cleared). Using VK_REMAINING_ARRAY_LAYERS would clear the other layer which is wrong.",
+      "parentUuid": "1cd8911f_2a666cbe",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "7ed1ab974a35f832f24e9414b363061a64c74747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
