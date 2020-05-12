@@ -2120,7 +2120,8 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
         renderer->getAllocator(), createInfo, requiredFlags, preferredFlags,
         renderer->getFeatures().persistentlyMappedBuffers.enabled, &mBuffer, &mMemoryPropertyFlags);
 
-    mCurrentQueueFamilyIndex = contextVk->getRenderer()->getQueueFamilyIndex();
+    mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
+    mSerial                  = renderer->issueBufferSerial();
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
     {
@@ -2186,6 +2187,7 @@ void BufferHelper::destroy(RendererVk *renderer)
     mBuffer.destroy(device);
     mBufferView.destroy(device);
     mAllocation.destroy(renderer->getAllocator());
+    mSerial = Serial();
 }
 
 void BufferHelper::release(RendererVk *renderer)
@@ -2195,6 +2197,7 @@ void BufferHelper::release(RendererVk *renderer)
     mViewFormat = nullptr;
 
     renderer->collectGarbageAndReinit(&mUse, &mBuffer, &mBufferView, &mAllocation);
+    mSerial = Serial();
 }
 
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,

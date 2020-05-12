@@ -701,6 +701,7 @@ class BufferHelper final : public Resource
     {
         return (mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) != 0;
     }
+    Serial getSerial() const { return mSerial; }
 
     // Set write access mask when the buffer is modified externally, e.g. by host.  There is no
     // graph resource to create a dependency to.
@@ -799,6 +800,7 @@ class BufferHelper final : public Resource
     uint8_t *mMappedMemory;
     const Format *mViewFormat;
     uint32_t mCurrentQueueFamilyIndex;
+    Serial mSerial;
 
     // For memory barriers.
     VkFlags mCurrentWriteAccess;
