@@ -173,6 +173,24 @@
     },
     {
       "key": {
+        "uuid": "4017b5dd_f1500475",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T01:59:49Z",
+      "side": 1,
+      "message": "No, detach() is something like `\u0026` in bash (as in `ls \u0026`).\n\nI see the worker thread has `while (true)` with no break, so it never exits? You can use an atomic to do this. Make a private variable:\n\n    std::atomic\u003cbool\u003e mWorkerThreadStop{false};\n\nWhen you want the thread to stop, do:\n\n    mWorkerThreadStop.store(true, std::memory_order_release);\n\nAnd make the worker thread test like this:\n\n    while (mWorkerThreadStop.load(std::memory_order_acquire))\n\n---\n\nI also just found out about std::atomic_flag, which can be similarly used, but I\u0027ve never tried it. std::atomic_flag should be a special (maybe more efficient) equivalent of std::atomic\u003cbool\u003e.\n\nAlso, when `join()`ing thread, add an `if (joinable())` to avoid issues if the thread was never created for some reason (or has already exited). I\u0027ve seen assertion failures in libstdc++.",
+      "parentUuid": "827991a9_cfe94ae5",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43ae244f_941541cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 20
@@ -235,6 +253,24 @@
       "writtenOn": "2020-05-11T16:18:42Z",
       "side": 1,
       "message": "I don\u0027t love this with the sleep but I think it works for initial testing. Any suggestions on best way to stall main thread while waiting for worker thread to complete?",
+      "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf0abc8b_8cd921fc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-12T01:59:49Z",
+      "side": 1,
+      "message": "Condition variable?",
+      "parentUuid": "69988c4e_d9928a4e",
       "revId": "9ada1924a8a8b46f84958e53ca653a21a43ac40c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
