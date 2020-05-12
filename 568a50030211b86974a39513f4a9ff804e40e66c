@@ -22,6 +22,30 @@
       "revId": "568a50030211b86974a39513f4a9ff804e40e66c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ac29ec1_27781bbe",
+        "filename": "src/tests/gl_tests/VulkanExternalImageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-12T23:06:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f3c4153_1da13fb3",
+      "range": {
+        "startLine": 58,
+        "startChar": 16,
+        "endLine": 58,
+        "endChar": 34
+      },
+      "revId": "568a50030211b86974a39513f4a9ff804e40e66c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
