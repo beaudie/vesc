@@ -702,17 +702,6 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         enabledInstanceExtensions.empty() ? nullptr : enabledInstanceExtensions.data();
     instanceInfo.enabledLayerCount   = static_cast<uint32_t>(enabledInstanceLayerNames.size());
     instanceInfo.ppEnabledLayerNames = enabledInstanceLayerNames.data();
-
-    // Disable certain validation features, specifically:
-    // * Unique handles so that 'pNext' isn't cleared for pre-release or custom extensions
-    VkValidationFeatureDisableEXT disabledFeatures[] = {
-        VK_VALIDATION_FEATURE_DISABLE_UNIQUE_HANDLES_EXT};
-    VkValidationFeaturesEXT validationFeatures        = {};
-    validationFeatures.sType                          = VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT;
-    validationFeatures.disabledValidationFeatureCount = 1;
-    validationFeatures.pDisabledValidationFeatures    = disabledFeatures;
-    vk::AddToPNextChain(&instanceInfo, &validationFeatures);
-
     ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Load volk if we are linking dynamically
