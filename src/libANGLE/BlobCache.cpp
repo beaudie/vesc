@@ -147,8 +147,9 @@ bool BlobCache::getAt(size_t index, const BlobCache::Key **keyOut, BlobCache::Va
 
 void BlobCache::remove(const BlobCache::Key &key)
 {
-    bool result = mBlobCache.eraseByKey(key);
-    ASSERT(result);
+    // eraseByKey can fail if the key is found in the external cache (mSetBlobFunc/mGetBlobFunc)
+    // but not in the local cache. Hence, we cannot assert the return value is true here.
+    mBlobCache.eraseByKey(key);
 }
 
 void BlobCache::setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID get)

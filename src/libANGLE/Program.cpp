@@ -1866,12 +1866,30 @@ angle::Result Program::loadBinary(const Context *context,
         mDirtyBits.set(uniformBlockIndex);
     }
 
-    mLinkingState.reset(new LinkingState());
-    mLinkingState->linkingFromBinary = true;
-    mLinkingState->linkEvent         = mProgram->load(context, &stream, infoLog);
-    mLinkResolved                    = false;
+    // If load returns a linkEvent, the binary is compatible with the backend and
+    // can be resolved by resolveLinkImpl.
+    // If load returns nullptr, the binary is not compatible with the backend. Returning
+    // 'Incomplete' to the caller results in link happening from the original shader
+    // sources.
+    angle::Result result;
+    std::unique_ptr<LinkingState> linkingState;
+    std::unique_ptr<rx::LinkEvent> linkEvent = mProgram->load(context, &stream, infoLog);
+    if (linkEvent)
+    {
+        linkingState                    = std::make_unique<LinkingState>();
+        linkingState->linkingFromBinary = true;
+        linkingState->linkEvent         = std::move(linkEvent);
+        result                          = angle::Result::Continue;
+        mLinkResolved                   = false;
+    }
+    else
+    {
+        result        = angle::Result::Incomplete;
+        mLinkResolved = true;
+    }
+    mLinkingState = std::move(linkingState);
 
-    return angle::Result::Continue;
+    return result;
 #endif  // #if ANGLE_PROGRAM_BINARY_LOAD == ANGLE_ENABLED
 }
 

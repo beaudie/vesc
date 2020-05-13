@@ -7,6 +7,7 @@
 #include "test_utils/ANGLETest.h"
 
 #include <stdint.h>
+#include <map>
 #include <memory>
 
 #include "common/string_utils.h"
@@ -1089,7 +1090,7 @@ std::ostream &operator<<(std::ostream &stream, const PlatformsWithLinkResult &pl
 
 class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWithLinkResult>
 {
-  public:
+  protected:
     void SetUp() override
     {
         mOSWindow   = OSWindow::New();
@@ -1104,7 +1105,7 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
             angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ApplicationDir));
     }
 
-    EGLWindow *createAndInitEGLWindow(angle::PlatformParameters &param)
+    EGLWindow *createAndInitEGLWindow(const angle::PlatformParameters &param)
     {
         EGLWindow *eglWindow = EGLWindow::New(param.majorVersion, param.minorVersion);
         ConfigParameters configParams;
@@ -1165,13 +1166,59 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
 
     void TearDown() override
     {
+        // Program cache entries should persist across tests
+        ASSERT_EQ(sProgramCache.size(), 0u);
+
         mOSWindow->destroy();
         OSWindow::Delete(&mOSWindow);
     }
 
+    static void SetBlob(const void *key,
+                        EGLsizeiANDROID keySize,
+                        const void *value,
+                        EGLsizeiANDROID valueSize)
+    {
+        const uint8_t *key_begin = reinterpret_cast<const uint8_t *>(key);
+        CacheKey entry_key(key_begin, key_begin + keySize);
+
+        const uint8_t *value_begin = reinterpret_cast<const uint8_t *>(value);
+        CacheValue entry_value(value_begin, value_begin + valueSize);
+
+        sProgramCache.emplace(std::move(entry_key), std::move(entry_value));
+    }
+    static EGLsizeiANDROID GetBlob(const void *key,
+                                   EGLsizeiANDROID keySize,
+                                   void *value,
+                                   EGLsizeiANDROID valueSize)
+    {
+        std::vector<uint8_t> keyVec(keySize);
+        memcpy(keyVec.data(), key, keySize);
+
+        auto entry = sProgramCache.find(keyVec);
+        if (entry == sProgramCache.end())
+        {
+            return 0;
+        }
+
+        if (entry->second.size() <= static_cast<size_t>(valueSize))
+        {
+            memcpy(value, entry->second.data(), entry->second.size());
+        }
+
+        return entry->second.size();
+    }
+
+  protected:
+    using CacheKey   = std::vector<uint8_t>;
+    using CacheValue = std::vector<uint8_t>;
+    static std::map<CacheKey, CacheValue> sProgramCache;
+
     OSWindow *mOSWindow = nullptr;
     std::unique_ptr<angle::Library> mEntryPointsLib;
 };
+
+std::map<ProgramBinariesAcrossPlatforms::CacheKey, ProgramBinariesAcrossPlatforms::CacheValue>
+    ProgramBinariesAcrossPlatforms::sProgramCache;
 
 // Tries to create a program binary using one set of platform params, then load it using a different
 // sent of params
@@ -1188,12 +1235,6 @@ TEST_P(ProgramBinariesAcrossPlatforms, CreateAndReloadBinary)
     ANGLE_SKIP_TEST_IF(!(IsPlatformAvailable(secondRenderer)));
 
     EGLWindow *eglWindow = nullptr;
-    std::vector<uint8_t> binary(0);
-    GLuint program = 0;
-
-    GLint programLength = 0;
-    GLint writtenLength = 0;
-    GLenum binaryFormat = 0;
 
     // Create a EGL window with the first renderer
     eglWindow = createAndInitEGLWindow(firstRenderer);
@@ -1221,7 +1262,10 @@ TEST_P(ProgramBinariesAcrossPlatforms, CreateAndReloadBinary)
                            softwareAdapterPos != std::string::npos);
     }
 
+    eglSetBlobCacheFuncsANDROID(eglWindow->getDisplay(), SetBlob, GetBlob);
+
     // Create a program
+    GLuint program = 0;
     if (firstRenderer.majorVersion == 3)
     {
         program = createES3ProgramFromSource();
@@ -1242,9 +1286,14 @@ TEST_P(ProgramBinariesAcrossPlatforms, CreateAndReloadBinary)
     EXPECT_GL_NO_ERROR();
 
     // Save the program binary out from this renderer
+    GLint programLength = 0;
     glGetProgramiv(program, GL_PROGRAM_BINARY_LENGTH_OES, &programLength);
     EXPECT_GL_NO_ERROR();
+
+    std::vector<uint8_t> binary(0);
     binary.resize(programLength);
+    GLint writtenLength = 0;
+    GLenum binaryFormat = 0;
     glGetProgramBinaryOES(program, programLength, &writtenLength, &binaryFormat, binary.data());
     EXPECT_GL_NO_ERROR();
 
@@ -1260,6 +1309,8 @@ TEST_P(ProgramBinariesAcrossPlatforms, CreateAndReloadBinary)
         return;
     }
 
+    eglSetBlobCacheFuncsANDROID(eglWindow->getDisplay(), SetBlob, GetBlob);
+
     program = glCreateProgram();
     glProgramBinaryOES(program, binaryFormat, binary.data(), writtenLength);
 
@@ -1274,10 +1325,26 @@ TEST_P(ProgramBinariesAcrossPlatforms, CreateAndReloadBinary)
         drawWithProgram(program);
         EXPECT_GL_NO_ERROR();
     }
+    glDeleteProgram(program);
+
+    // Rendering with the created-from-scratch program should not use the previously cached
+    // entry.
+    if (secondRenderer.majorVersion == 3)
+    {
+        program = createES3ProgramFromSource();
+    }
+    else
+    {
+        program = createES2ProgramFromSource();
+    }
+    drawWithProgram(program);
+    EXPECT_GL_NO_ERROR();
 
     // Destroy the second renderer
     glDeleteProgram(program);
     destroyEGLWindow(&eglWindow);
+
+    sProgramCache.clear();
 }
 
 // clang-format off
@@ -1286,6 +1353,7 @@ ANGLE_INSTANTIATE_TEST(ProgramBinariesAcrossPlatforms,
                        //                     | using these params | using these params    | link result
                        PlatformsWithLinkResult(ES2_D3D11(),         ES2_D3D11(),            true         ), // Loading + reloading binary should work
                        PlatformsWithLinkResult(ES3_D3D11(),         ES3_D3D11(),            true         ), // Loading + reloading binary should work
+                       PlatformsWithLinkResult(ES2_D3D11(),         ES2_D3D11_WARP(),       false        ), // Switching from hardware to software shouldn't work
                        PlatformsWithLinkResult(ES2_D3D11(),         ES2_D3D9(),             false        ), // Switching from D3D11 to D3D9 shouldn't work
                        PlatformsWithLinkResult(ES2_D3D9(),          ES2_D3D11(),            false        ), // Switching from D3D9 to D3D11 shouldn't work
                        PlatformsWithLinkResult(ES2_D3D11(),         ES3_D3D11(),            false        ), // Switching to newer client version shouldn't work
