@@ -161,7 +161,7 @@ bool ImageIndex::isEntireLevelCubeMap() const
 
 ImageIndex ImageIndex::Make2D(GLint levelIndex)
 {
-    return ImageIndex(TextureType::_2D, levelIndex, kEntireLevel, 1);
+    return ImageIndex(TextureType::_2D, levelIndex, 0, 1);
 }
 
 ImageIndex ImageIndex::MakeRectangle(GLint levelIndex)
