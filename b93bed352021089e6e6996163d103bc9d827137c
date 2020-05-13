@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a0d997e_d9e88fab",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-05-13T05:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "397d3e86_a4525843",
+      "range": {
+        "startLine": 25,
+        "startChar": 8,
+        "endLine": 25,
+        "endChar": 43
+      },
+      "revId": "b93bed352021089e6e6996163d103bc9d827137c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1360a0d_eec34729",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "b93bed352021089e6e6996163d103bc9d827137c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6316fa5_47ceb587",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-05-13T05:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1360a0d_eec34729",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 48
+      },
+      "revId": "b93bed352021089e6e6996163d103bc9d827137c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "286d64d9_2df0e33d",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-05-13T05:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d270c8fc_e59ef566",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 14
+      },
+      "revId": "b93bed352021089e6e6996163d103bc9d827137c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be895a6d_47b10480",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "116004a0_caeb5e06",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-05-13T05:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be895a6d_47b10480",
+      "range": {
+        "startLine": 1415,
+        "startChar": 0,
+        "endLine": 1419,
+        "endChar": 5
+      },
+      "revId": "b93bed352021089e6e6996163d103bc9d827137c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ed7258b_903b1e0c",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 1
@@ -114,6 +210,30 @@
       "revId": "b93bed352021089e6e6996163d103bc9d827137c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d142d63_2e7f35e9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-05-13T05:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ed7258b_903b1e0c",
+      "range": {
+        "startLine": 1562,
+        "startChar": 0,
+        "endLine": 1564,
+        "endChar": 53
+      },
+      "revId": "b93bed352021089e6e6996163d103bc9d827137c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
