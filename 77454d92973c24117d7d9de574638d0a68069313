@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e64436ce_02e8b058",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-13T18:12:14Z",
+      "side": 1,
+      "message": "Messed up the logic here, need to inverse",
+      "range": {
+        "startLine": 1138,
+        "startChar": 0,
+        "endLine": 1139,
+        "endChar": 50
+      },
+      "revId": "77454d92973c24117d7d9de574638d0a68069313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
