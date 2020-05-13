@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "de71de91_f303047a",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-13T01:34:09Z",
+      "side": 1,
+      "message": "A move constructor doesn\u0027t work, since I need 2 copies.\n\nThe default copy constructor doesn\u0027t work:\n\n    ../../src/libANGLE/ProgramExecutable.h:105:5: error: explicitly defaulted copy constructor is implicitly deleted [-Werror,-Wdefaulted-function-deleted]\n        ProgramExecutable(const ProgramExecutable \u0026other) \u003d default;\n        ^\n    ../../src/libANGLE/ProgramExecutable.h:306:13: note: copy constructor of \u0027ProgramExecutable\u0027 is implicitly deleted because field \u0027mInfoLog\u0027 has a deleted copy constructor\n        InfoLog mInfoLog;\n                ^\n    ../../src/libANGLE/InfoLog.h:15:17: note: copy constructor of \u0027InfoLog\u0027 is implicitly deleted because base class \u0027angle::NonCopyable\u0027 has a deleted copy constructor\n    class InfoLog : angle::NonCopyable\n                    ^\n    ../../src/common/angleutils.h:37:5: note: \u0027NonCopyable\u0027 has been explicitly marked deleted here\n        NonCopyable(const NonCopyable \u0026) \u003d delete;\n\n\nRemoving the \u0027NonCopyable\u0027 from InfoLog leads to:\n\n    ../../src/libANGLE/ProgramExecutable.h:105:5: error: explicitly defaulted copy constructor is implicitly deleted [-Werror,-Wdefaulted-function-deleted]\n        ProgramExecutable(const ProgramExecutable \u0026other) \u003d default;\n        ^\n    ../../src/libANGLE/ProgramExecutable.h:306:13: note: copy constructor of \u0027ProgramExecutable\u0027 is implicitly deleted because field \u0027mInfoLog\u0027 has a deleted copy constructor\n        InfoLog mInfoLog;\n                ^\n    ../../src/libANGLE/InfoLog.h:85:40: note: copy constructor of \u0027InfoLog\u0027 is implicitly deleted because field \u0027mLazyStream\u0027 has a deleted copy constructor\n        std::unique_ptr\u003cstd::stringstream\u003e mLazyStream;\n                                           ^\n    ../../build/linux/debian_sid_amd64-sysroot/usr/lib/gcc/x86_64-linux-gnu/7/../../../../include/c++/7/bits/unique_ptr.h:383:7: note: \u0027unique_ptr\u0027 has been explicitly marked deleted here\n          unique_ptr(const unique_ptr\u0026) \u003d delete;\n          ^\n\nThis is how I ended up with this more manual copy constructor.",
+      "parentUuid": "2e15f99d_6ca35d2d",
+      "range": {
+        "startLine": 36,
+        "startChar": 37,
+        "endLine": 36,
+        "endChar": 62
+      },
+      "revId": "5027192fbe87510a30d6a070c8ba411a5eb0a0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "969847f8_a03a7932",
         "filename": "src/libANGLE/Shader.cpp",
         "patchSetId": 22
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "1275f7a1_b525e5df",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-13T01:34:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "969847f8_a03a7932",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 68
+      },
+      "revId": "5027192fbe87510a30d6a070c8ba411a5eb0a0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc31d582_aaf76c38",
         "filename": "src/libANGLE/Shader.h",
         "patchSetId": 22
@@ -68,6 +116,30 @@
       "revId": "5027192fbe87510a30d6a070c8ba411a5eb0a0c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "548d830d_14e9982f",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-13T01:34:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc31d582_aaf76c38",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 23
+      },
+      "revId": "5027192fbe87510a30d6a070c8ba411a5eb0a0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

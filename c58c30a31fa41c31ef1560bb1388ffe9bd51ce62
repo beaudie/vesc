@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "2ca4057d_71332580",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1627,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-13T01:34:09Z",
+      "side": 1,
+      "message": "Take a look at the link/linkImpl() changes (I forgot to add that back in after fixing another bug).   This makes it so there is always just a single ProgramExecutable, except when we are doing a linkProgram().   At the end of a link:\n\n- if successful:\n  - mState.mLinkedExecutable \u003d mState.mExecutable\n    - this deletes the old mLinkedExecutable ProgramExecutable, so we only have the new (successfully linked) ProgramExecutable\n- if failed (well, actually always done in link()):\n  - mState.mExecutable \u003d mState.mLinkedExecutable (if mLinkedExecutable !\u003d null)\n    - This deletes the temporarily created ProgramExecutable that failed to link\n    - This is actually always done at the end of link(), but if the link succeeded, mState.mExecutable is already pointing to mState.mLinkedExecutable, so it\u0027s a no-op.\n\nThe only extra memory that\u0027s being consumed now outside of linkProgram() is the input/output varyings and versions for each shader stage.",
+      "parentUuid": "b5532940_8ce6b206",
+      "revId": "c58c30a31fa41c31ef1560bb1388ffe9bd51ce62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4823b48b_b584c672",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 19
