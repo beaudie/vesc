@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50660470_185c3dac",
+        "filename": "src/tests/perf_tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-13T20:59:35Z",
+      "side": 1,
+      "message": "Cute code I saw on Stack Overflow:\n\ncontext \u003d file[[x.isdigit() for x in file].index(True)]\nThat will select the first digit in file.\nTo really get fancy can do:\ncontext \u003d file[[x.isdigit() for x in file].index(True):len(file)-2]\nThat will grab the substring that starts with the first digit until two characters from the end (dropping the .h).\nThen you can handle if context is larger than a single digit.",
+      "revId": "de602ea42cdfc0846d2e17587f530572d50cf1a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
