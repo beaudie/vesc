@@ -9,6 +9,7 @@
 
 #include "ANGLETest.h"
 
+#include "common/debug.h"
 #include "common/platform.h"
 #include "gpu_info_util/SystemInfo.h"
 #include "util/EGLWindow.h"
@@ -19,6 +20,10 @@
 #if defined(ANGLE_PLATFORM_WINDOWS)
 #    include <VersionHelpers.h>
 #endif  // defined(ANGLE_PLATFORM_WINDOWS)
+
+#if defined(ANGLE_PLATFORM_POSIX)
+#    include <dlfcn.h>
+#endif
 
 namespace angle
 {
@@ -588,6 +593,20 @@ void ANGLETestBase::ANGLETestSetUp()
             FAIL() << "GL Context init failed.";
         }
     }
+
+#if defined(ANGLE_PLATFORM_POSIX)
+    if (mCurrentParams->isSwiftshader() &&
+        mCurrentParams->getRenderer() == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
+    {
+        // Workaround for anglebug.com/4396 - Keep libvk_swiftshader.so loaded.
+        static void *libvkswiftshaderHandle =
+            dlopen("libvk_swiftshader.so", RTLD_NOW | RTLD_NOLOAD);
+        if (!libvkswiftshaderHandle)
+        {
+            WARN() << "Unable to open libvk_swiftshader.so, is it loaded?";
+        }
+    }
+#endif
 
     if (needSwap)
     {
