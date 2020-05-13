@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d9b765d_859f9876",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-13T02:10:45Z",
+      "side": 1,
+      "message": "Since this is setting the values to 0, is this block necessary (assuming the memory is zero-initialized)?   Or can this array be re-used and we need to clear out stale data here?",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 57
+      },
+      "revId": "dd5f18a305a9a0711296a93a546e46c3baa7fc52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
