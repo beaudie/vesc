@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "479b9675_664746cd",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-13T16:35:42Z",
+      "side": 1,
+      "message": "It looks like everyone is ignoring the return value of this function now and it can be updated to return void.",
+      "range": {
+        "startLine": 152,
+        "startChar": 15,
+        "endLine": 152,
+        "endChar": 25
+      },
+      "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea954dc8_a0393665",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-13T16:35:42Z",
+      "side": 1,
+      "message": "This may be saying the same thing as Jamie, but can the value in linkEvent be returned as the result instead of the null/non-null checking?\n\n    mLinkingState.reset(new LinkingState());\n    mLinkingState-\u003elinkingFromBinary \u003d true;\n    mLinkingState-\u003elinkEvent         \u003d mProgram-\u003eload(context, \u0026stream, infoLog);\n    mLinkResolved                    \u003d false;\n\n    // wait() returns mResult, but a new getResult() probably makes more sense\n    return mLinkingState-\u003elinkEvent.mResult;",
+      "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
