@@ -22,6 +22,30 @@
       "revId": "6c31ac5a851caed8fe491d95c2d6504fd0f7cb3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b2feba9_1924c196",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-13T16:24:21Z",
+      "side": 0,
+      "message": "This was the cause of the failures.",
+      "parentUuid": "9b759101_ba58dc4c",
+      "range": {
+        "startLine": 706,
+        "startChar": 0,
+        "endLine": 714,
+        "endChar": 60
+      },
+      "revId": "6c31ac5a851caed8fe491d95c2d6504fd0f7cb3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
