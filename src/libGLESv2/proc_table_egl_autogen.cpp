@@ -1284,6 +1284,10 @@ const ProcEntry g_procTable[] = {
     {"glStencilOpSeparateContextANGLE", P(gl::StencilOpSeparateContextANGLE)},
     {"glTestFenceNV", P(gl::TestFenceNV)},
     {"glTestFenceNVContextANGLE", P(gl::TestFenceNVContextANGLE)},
+    {"glTexBufferOES", P(gl::TexBufferOES)},
+    {"glTexBufferOESContextANGLE", P(gl::TexBufferOESContextANGLE)},
+    {"glTexBufferRangeOES", P(gl::TexBufferRangeOES)},
+    {"glTexBufferRangeOESContextANGLE", P(gl::TexBufferRangeOESContextANGLE)},
     {"glTexCoordPointer", P(gl::TexCoordPointer)},
     {"glTexCoordPointerContextANGLE", P(gl::TexCoordPointerContextANGLE)},
     {"glTexEnvf", P(gl::TexEnvf)},
@@ -1521,5 +1525,5 @@ const ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-const size_t g_numProcs = 1427;
+const size_t g_numProcs = 1431;
 }  // namespace egl

@@ -1123,6 +1123,14 @@ ANGLE_EXPORT void GL_APIENTRY TexParameterIuivOES(GLenum target,
                                                   GLenum pname,
                                                   const GLuint *params);
 
+// GL_OES_texture_buffer
+ANGLE_EXPORT void GL_APIENTRY TexBufferOES(GLenum target, GLenum internalformat, GLuint buffer);
+ANGLE_EXPORT void GL_APIENTRY TexBufferRangeOES(GLenum target,
+                                                GLenum internalformat,
+                                                GLuint buffer,
+                                                GLintptr offset,
+                                                GLsizeiptr size);
+
 // GL_OES_texture_cube_map
 ANGLE_EXPORT void GL_APIENTRY GetTexGenfvOES(GLenum coord, GLenum pname, GLfloat *params);
 ANGLE_EXPORT void GL_APIENTRY GetTexGenivOES(GLenum coord, GLenum pname, GLint *params);
@@ -3077,12 +3085,22 @@ ANGLE_EXPORT void GL_APIENTRY TexBufferContextANGLE(GLeglContext ctx,
                                                     GLenum target,
                                                     GLenum internalformat,
                                                     GLuint buffer);
+ANGLE_EXPORT void GL_APIENTRY TexBufferOESContextANGLE(GLeglContext ctx,
+                                                       GLenum target,
+                                                       GLenum internalformat,
+                                                       GLuint buffer);
 ANGLE_EXPORT void GL_APIENTRY TexBufferRangeContextANGLE(GLeglContext ctx,
                                                          GLenum target,
                                                          GLenum internalformat,
                                                          GLuint buffer,
                                                          GLintptr offset,
                                                          GLsizeiptr size);
+ANGLE_EXPORT void GL_APIENTRY TexBufferRangeOESContextANGLE(GLeglContext ctx,
+                                                            GLenum target,
+                                                            GLenum internalformat,
+                                                            GLuint buffer,
+                                                            GLintptr offset,
+                                                            GLsizeiptr size);
 ANGLE_EXPORT void GL_APIENTRY TexCoordPointerContextANGLE(GLeglContext ctx,
                                                           GLint size,
                                                           GLenum type,

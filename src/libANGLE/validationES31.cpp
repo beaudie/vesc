@@ -2133,4 +2133,23 @@ bool ValidateGetProgramResourceLocationIndexEXT(const Context *context,
     return true;
 }
 
+// GL_OES_texture_buffer
+bool ValidateTexBufferOES(const Context *context,
+                          GLenum target,
+                          GLenum internalformat,
+                          BufferID bufferPacked)
+{
+    return true;
+}
+
+bool ValidateTexBufferRangeOES(const Context *context,
+                               GLenum target,
+                               GLenum internalformat,
+                               BufferID bufferPacked,
+                               GLintptr offset,
+                               GLsizeiptr size)
+{
+    return true;
+}
+
 }  // namespace gl

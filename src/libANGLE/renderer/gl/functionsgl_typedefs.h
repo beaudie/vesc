@@ -1923,6 +1923,11 @@ typedef void(INTERNAL_GL_APIENTRY *PFNGLIMPORTSEMAPHOREWIN32NAMEEXTPROC)(GLuint 
                                                                          GLenum handleType,
                                                                          const void *name);
 
+// GL_OES_texture_buffer
+typedef void(INTERNAL_GL_APIENTRY *PFNGLTEXBUFFEROESPROC)(GLenum, GLenum, GLuint);
+typedef void(
+    INTERNAL_GL_APIENTRY *PFNGLTEXBUFFERRANGEOESPROC)(GLenum, GLenum, GLuint, GLintptr, GLsizeiptr);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_GL_FUNCTIONSGLTYPEDEFS_H_

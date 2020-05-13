@@ -4760,6 +4760,21 @@ void GL_APIENTRY glTexParameterIuivOES(GLenum target, GLenum pname, const GLuint
     return gl::TexParameterIuivOES(target, pname, params);
 }
 
+// GL_OES_texture_buffer
+void GL_APIENTRY glTexBufferOES(GLenum target, GLenum internalformat, GLuint buffer)
+{
+    return gl::TexBufferOES(target, internalformat, buffer);
+}
+
+void GL_APIENTRY glTexBufferRangeOES(GLenum target,
+                                     GLenum internalformat,
+                                     GLuint buffer,
+                                     GLintptr offset,
+                                     GLsizeiptr size)
+{
+    return gl::TexBufferRangeOES(target, internalformat, buffer, offset, size);
+}
+
 // GL_OES_texture_cube_map
 void GL_APIENTRY glGetTexGenfvOES(GLenum coord, GLenum pname, GLfloat *params)
 {
@@ -8662,6 +8677,14 @@ void GL_APIENTRY glTexBufferContextANGLE(GLeglContext ctx,
     return gl::TexBufferContextANGLE(ctx, target, internalformat, buffer);
 }
 
+void GL_APIENTRY glTexBufferOESContextANGLE(GLeglContext ctx,
+                                            GLenum target,
+                                            GLenum internalformat,
+                                            GLuint buffer)
+{
+    return gl::TexBufferOESContextANGLE(ctx, target, internalformat, buffer);
+}
+
 void GL_APIENTRY glTexBufferRangeContextANGLE(GLeglContext ctx,
                                               GLenum target,
                                               GLenum internalformat,
@@ -8670,6 +8693,16 @@ void GL_APIENTRY glTexBufferRangeContextANGLE(GLeglContext ctx,
                                               GLsizeiptr size)
 {
     return gl::TexBufferRangeContextANGLE(ctx, target, internalformat, buffer, offset, size);
+}
+
+void GL_APIENTRY glTexBufferRangeOESContextANGLE(GLeglContext ctx,
+                                                 GLenum target,
+                                                 GLenum internalformat,
+                                                 GLuint buffer,
+                                                 GLintptr offset,
+                                                 GLsizeiptr size)
+{
+    return gl::TexBufferRangeOESContextANGLE(ctx, target, internalformat, buffer, offset, size);
 }
 
 void GL_APIENTRY glTexCoordPointerContextANGLE(GLeglContext ctx,

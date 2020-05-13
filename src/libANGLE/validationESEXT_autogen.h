@@ -1388,6 +1388,18 @@ bool ValidateTexParameterIuivOES(const Context *context,
                                  GLenum pname,
                                  const GLuint *params);
 
+// GL_OES_texture_buffer
+bool ValidateTexBufferOES(const Context *context,
+                          GLenum target,
+                          GLenum internalformat,
+                          BufferID bufferPacked);
+bool ValidateTexBufferRangeOES(const Context *context,
+                               GLenum target,
+                               GLenum internalformat,
+                               BufferID bufferPacked,
+                               GLintptr offset,
+                               GLsizeiptr size);
+
 // GL_OES_texture_cube_map
 bool ValidateGetTexGenfvOES(const Context *context,
                             GLenum coord,

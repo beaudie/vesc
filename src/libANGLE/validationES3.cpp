@@ -1933,6 +1933,26 @@ static bool ValidateBindBufferCommon(const Context *context,
             }
             break;
         }
+        case BufferBinding::Texture:
+        {
+            if (!context->getExtensions().textureBufferAny())
+            {
+                context->validationError(GL_INVALID_ENUM, kTextureBufferExtensionNotAvailable);
+                return false;
+            }
+            if (index >= static_cast<GLuint>(caps.maxUniformBufferBindings))
+            {
+                context->validationError(GL_INVALID_VALUE, kIndexExceedsMaxUniformBufferBindings);
+                return false;
+            }
+            ASSERT(caps.shaderStorageBufferOffsetAlignment);
+            if (buffer.value != 0 && (offset % caps.shaderStorageBufferOffsetAlignment) != 0)
+            {
+                context->validationError(GL_INVALID_VALUE, kShaderStorageBufferOffsetAlignment);
+                return false;
+            }
+            break;
+        }
         default:
             context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
             return false;

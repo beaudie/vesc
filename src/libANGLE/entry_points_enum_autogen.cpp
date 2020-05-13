@@ -2072,8 +2072,12 @@ const char *GetEntryPointName(EntryPoint ep)
             return "glTestFenceNV";
         case EntryPoint::TexBuffer:
             return "glTexBuffer";
+        case EntryPoint::TexBufferOES:
+            return "glTexBufferOES";
         case EntryPoint::TexBufferRange:
             return "glTexBufferRange";
+        case EntryPoint::TexBufferRangeOES:
+            return "glTexBufferRangeOES";
         case EntryPoint::TexCoord1d:
             return "glTexCoord1d";
         case EntryPoint::TexCoord1dv:

@@ -2396,6 +2396,16 @@ bool ValidateStateQuery(const Context *context,
                 return false;
             }
             break;
+        case GL_TEXTURE_BUFFER_BINDING:
+        case GL_TEXTURE_BINDING_BUFFER:
+        case GL_TEXTURE_BUFFER_OFFSET_ALIGNMENT:
+        case GL_MAX_TEXTURE_BUFFER_SIZE:
+            if (!context->getExtensions().textureBufferAny())
+            {
+                context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+                return false;
+            }
+            break;
 
         case GL_IMPLEMENTATION_COLOR_READ_TYPE:
         case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
@@ -6790,6 +6800,15 @@ bool ValidateGetTexLevelParameterBase(const Context *context,
         case GL_TEXTURE_FIXED_SAMPLE_LOCATIONS:
             break;
         case GL_TEXTURE_COMPRESSED:
+            break;
+        case GL_TEXTURE_BUFFER_DATA_STORE_BINDING:
+        case GL_TEXTURE_BUFFER_OFFSET:
+        case GL_TEXTURE_BUFFER_SIZE:
+            if (!context->getExtensions().textureBufferAny())
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidPname);
+                return false;
+            }
             break;
         default:
             context->validationError(GL_INVALID_ENUM, kInvalidPname);

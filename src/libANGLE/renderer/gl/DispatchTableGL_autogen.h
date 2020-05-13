@@ -793,6 +793,10 @@ class DispatchTableGL : angle::NonCopyable
     PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESPROC eGLImageTargetRenderbufferStorageOES = nullptr;
     PFNGLEGLIMAGETARGETTEXTURE2DOESPROC eGLImageTargetTexture2DOES = nullptr;
 
+    // GL_OES_texture_buffer
+    PFNGLTEXBUFFEROESPROC texBufferOES = nullptr;
+    PFNGLTEXBUFFERRANGEOESPROC texBufferRangeOES = nullptr;
+
     // GL_OVR_multiview2
     PFNGLFRAMEBUFFERTEXTUREMULTIVIEWOVRPROC framebufferTextureMultiviewOVR = nullptr;
     // clang-format on

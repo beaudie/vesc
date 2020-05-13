@@ -104,6 +104,7 @@ gles_extensions = [
     "GL_OES_mapbuffer",
     "GL_OES_texture_3D",
     "GL_OES_texture_border_clamp",
+    "GL_OES_texture_buffer",
     "GL_OES_texture_cube_map_array",
     "GL_OES_texture_half_float",
     "GL_OES_texture_storage_multisample_2d_array",

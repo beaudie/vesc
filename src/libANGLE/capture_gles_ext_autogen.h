@@ -1733,6 +1733,20 @@ angle::CallCapture CaptureTexParameterIuivOES(const State &glState,
                                               GLenum pname,
                                               const GLuint *params);
 
+// GL_OES_texture_buffer
+angle::CallCapture CaptureTexBufferOES(const State &glState,
+                                       bool isCallValid,
+                                       GLenum target,
+                                       GLenum internalformat,
+                                       BufferID bufferPacked);
+angle::CallCapture CaptureTexBufferRangeOES(const State &glState,
+                                            bool isCallValid,
+                                            GLenum target,
+                                            GLenum internalformat,
+                                            BufferID bufferPacked,
+                                            GLintptr offset,
+                                            GLsizeiptr size);
+
 // GL_OES_texture_cube_map
 angle::CallCapture CaptureGetTexGenfvOES(const State &glState,
                                          bool isCallValid,

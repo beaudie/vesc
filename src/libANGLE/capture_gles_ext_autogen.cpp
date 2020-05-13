@@ -5777,6 +5777,42 @@ CallCapture CaptureTexParameterIuivOES(const State &glState,
     return CallCapture(gl::EntryPoint::TexParameterIuivOES, std::move(paramBuffer));
 }
 
+CallCapture CaptureTexBufferOES(const State &glState,
+                                bool isCallValid,
+                                GLenum target,
+                                GLenum internalformat,
+                                BufferID bufferPacked)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addEnumParam("target", GLenumGroup::TextureTarget, ParamType::TGLenum, target);
+    paramBuffer.addEnumParam("internalformat", GLenumGroup::InternalFormat, ParamType::TGLenum,
+                             internalformat);
+    paramBuffer.addValueParam("bufferPacked", ParamType::TBufferID, bufferPacked);
+
+    return CallCapture(gl::EntryPoint::TexBufferOES, std::move(paramBuffer));
+}
+
+CallCapture CaptureTexBufferRangeOES(const State &glState,
+                                     bool isCallValid,
+                                     GLenum target,
+                                     GLenum internalformat,
+                                     BufferID bufferPacked,
+                                     GLintptr offset,
+                                     GLsizeiptr size)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addEnumParam("target", GLenumGroup::TextureTarget, ParamType::TGLenum, target);
+    paramBuffer.addEnumParam("internalformat", GLenumGroup::InternalFormat, ParamType::TGLenum,
+                             internalformat);
+    paramBuffer.addValueParam("bufferPacked", ParamType::TBufferID, bufferPacked);
+    paramBuffer.addValueParam("offset", ParamType::TGLintptr, offset);
+    paramBuffer.addValueParam("size", ParamType::TGLsizeiptr, size);
+
+    return CallCapture(gl::EntryPoint::TexBufferRangeOES, std::move(paramBuffer));
+}
+
 CallCapture CaptureGetTexGenfvOES(const State &glState,
                                   bool isCallValid,
                                   GLenum coord,

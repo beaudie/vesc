@@ -845,6 +845,10 @@ EXPORTS
     glTexParameterIivOES
     glTexParameterIuivOES
 
+    ; GL_OES_texture_buffer
+    glTexBufferOES
+    glTexBufferRangeOES
+
     ; GL_OES_texture_cube_map
     glGetTexGenfvOES
     glGetTexGenivOES
@@ -1461,7 +1465,9 @@ EXPORTS
     glStencilOpSeparateContextANGLE
     glTestFenceNVContextANGLE
     glTexBufferContextANGLE
+    glTexBufferOESContextANGLE
     glTexBufferRangeContextANGLE
+    glTexBufferRangeOESContextANGLE
     glTexCoordPointerContextANGLE
     glTexEnvfContextANGLE
     glTexEnvfvContextANGLE
