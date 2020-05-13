@@ -734,6 +734,13 @@ bool ValidateDrawInstancedANGLE(const Context *context)
     const State &state                  = context->getState();
     const ProgramExecutable *executable = state.getProgramExecutable();
 
+    if (!executable)
+    {
+        // No executable means there is no Program/PPO bound, which is undefined behavior, but isn't
+        // an error.
+        return true;
+    }
+
     const auto &attribs  = state.getVertexArray()->getVertexAttributes();
     const auto &bindings = state.getVertexArray()->getVertexBindings();
     for (size_t attributeIndex = 0; attributeIndex < MAX_VERTEX_ATTRIBS; attributeIndex++)
