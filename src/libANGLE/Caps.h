@@ -633,6 +633,13 @@ struct Extensions
     {
         return (textureCubeMapArrayOES || textureCubeMapArrayEXT);
     }
+
+    // GL_OES_texture_buffer
+    bool textureBufferOES = false;
+    // GL_EXT_texture_buffer
+    bool textureBufferEXT = false;
+    // Any version of the texture buffer extension
+    bool textureBufferAny() const { return (textureBufferOES || textureBufferEXT); }
 };
 
 // Pointer to a boolean memeber of the Extensions struct
