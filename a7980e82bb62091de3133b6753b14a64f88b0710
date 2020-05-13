@@ -22,6 +22,30 @@
       "revId": "a7980e82bb62091de3133b6753b14a64f88b0710",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5008cb1_df76582f",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-13T17:25:07Z",
+      "side": 1,
+      "message": "7.3. PROGRAM OBJECTS\nIf there is no active program for the vertex or fragment shader\nstages, the results of vertex and fragment shader execution will\nrespectively be undefined. However, this is not an error.\n\n\nThis support was added for the PPO work and affects all draw calls:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2136386\n\nBeforehand, we would fail earlier during validation (before making it this far) with an error indicating there is no bound program.   Adding the warning sounds good to me.   I\u0027ll try adding that here and see how it does.",
+      "parentUuid": "5ba56d39_913302b1",
+      "range": {
+        "startLine": 739,
+        "startChar": 8,
+        "endLine": 740,
+        "endChar": 20
+      },
+      "revId": "a7980e82bb62091de3133b6753b14a64f88b0710",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
