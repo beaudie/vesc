@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ba56d39_913302b1",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-13T16:55:15Z",
+      "side": 1,
+      "message": "Any spec text to reference?\n\nCould this affect other draw call types as well?\n\nFinally, this could be a good place to insert a warning:\n\n   context-\u003egetState().getDebug().insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR, 0, GL_DEBUG_SEVERITY_HIGH, \"Attempting to draw without a program\", gl::LOG_WARN);",
+      "range": {
+        "startLine": 739,
+        "startChar": 8,
+        "endLine": 740,
+        "endChar": 20
+      },
+      "revId": "a7980e82bb62091de3133b6753b14a64f88b0710",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
