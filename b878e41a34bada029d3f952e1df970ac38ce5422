@@ -171,6 +171,24 @@
       "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "399fe5e7_f40598c4",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-14T19:39:45Z",
+      "side": 1,
+      "message": "I\u0027m fine with the nullptr approach and some additional comments. I\u0027m not sure I fully understand the code and would like to unblock your fix. I appreciate the detailed explanation in any case.",
+      "parentUuid": "54e3e004_5403ab98",
+      "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
