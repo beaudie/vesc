@@ -135,6 +135,24 @@
       "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c97b4ed5_0d82afda",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-14T18:58:53Z",
+      "side": 1,
+      "message": "More enums for angle::Result is bad. I\u0027d prefer if we get rid of ::Incomplete and add a new return value (output value, or in a struct, somewhere) that indicates the success/fail of the operation. Anyway if Rafael you are too busy to do that it would be good to land this as a stop-gap improvement with a couple comments.",
+      "parentUuid": "50eec251_92d317ad",
+      "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
