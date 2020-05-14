@@ -638,23 +638,24 @@ egl::Config GenerateDefaultConfig(const RendererVk *renderer,
     config.bindToTextureRGBA  = colorFormat.format == GL_RGBA || colorFormat.format == GL_BGRA_EXT;
     config.colorBufferType    = EGL_RGB_BUFFER;
     config.configCaveat       = GetConfigCaveat(colorFormat.internalFormat);
-    config.conformant         = es1Support | es2Support | es3Support;
-    config.depthSize          = depthStencilFormat.depthBits;
-    config.stencilSize        = depthStencilFormat.stencilBits;
-    config.level              = 0;
-    config.matchNativePixmap  = EGL_NONE;
-    config.maxPBufferWidth    = physicalDeviceProperties.limits.maxImageDimension2D;
-    config.maxPBufferHeight   = physicalDeviceProperties.limits.maxImageDimension2D;
-    config.maxPBufferPixels   = ComputeMaximumPBufferPixels(physicalDeviceProperties);
-    config.maxSwapInterval    = 1;
-    config.minSwapInterval    = 0;
-    config.nativeRenderable   = EGL_TRUE;
-    config.nativeVisualID     = static_cast<EGLint>(GetNativeVisualID(colorFormat));
-    config.nativeVisualType   = EGL_NONE;
-    config.renderableType     = es1Support | es2Support | es3Support;
-    config.sampleBuffers      = (sampleCount > 0) ? 1 : 0;
-    config.samples            = sampleCount;
-    config.surfaceType        = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
+    config.conformant =
+        colorFormat.internalFormat == GL_BGRX8_ANGLEX ? 0 : es1Support | es2Support | es3Support;
+    config.depthSize         = depthStencilFormat.depthBits;
+    config.stencilSize       = depthStencilFormat.stencilBits;
+    config.level             = 0;
+    config.matchNativePixmap = EGL_NONE;
+    config.maxPBufferWidth   = physicalDeviceProperties.limits.maxImageDimension2D;
+    config.maxPBufferHeight  = physicalDeviceProperties.limits.maxImageDimension2D;
+    config.maxPBufferPixels  = ComputeMaximumPBufferPixels(physicalDeviceProperties);
+    config.maxSwapInterval   = 1;
+    config.minSwapInterval   = 0;
+    config.nativeRenderable  = EGL_TRUE;
+    config.nativeVisualID    = static_cast<EGLint>(GetNativeVisualID(colorFormat));
+    config.nativeVisualType  = EGL_NONE;
+    config.renderableType    = es1Support | es2Support | es3Support;
+    config.sampleBuffers     = (sampleCount > 0) ? 1 : 0;
+    config.samples           = sampleCount;
+    config.surfaceType       = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
     // Vulkan surfaces use a different origin than OpenGL, always prefer to be flipped vertically if
     // possible.
     config.optimalOrientation    = EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE;
