@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2bbf83ac_361943f8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-14T18:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14dc8c1f_10cfa4ac",
+      "range": {
+        "startLine": 600,
+        "startChar": 8,
+        "endLine": 600,
+        "endChar": 52
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab9f52fb_f83d0ff9",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4585e720_d83af623",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-14T18:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab9f52fb_f83d0ff9",
+      "range": {
+        "startLine": 601,
+        "startChar": 17,
+        "endLine": 601,
+        "endChar": 29
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3f41fbe4_a40afba9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-14T18:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26b808be_98545e79",
+      "range": {
+        "startLine": 606,
+        "startChar": 8,
+        "endLine": 606,
+        "endChar": 35
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea3bb064_9bd49cc7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "b504fbf5_57dc049d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-14T18:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea3bb064_9bd49cc7",
+      "range": {
+        "startLine": 619,
+        "startChar": 0,
+        "endLine": 622,
+        "endChar": 9
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2adf9c46_32bde764",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -105,6 +201,30 @@
       "writtenOn": "2020-05-14T17:16:58Z",
       "side": 1,
       "message": "You should be able to make this if an ASSERT. You already check above for any()/none().",
+      "range": {
+        "startLine": 631,
+        "startChar": 0,
+        "endLine": 634,
+        "endChar": 5
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67e3cb88_18272b98",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-14T18:59:36Z",
+      "side": 1,
+      "message": "This is still needed to execute the last barrier.",
+      "parentUuid": "2adf9c46_32bde764",
       "range": {
         "startLine": 631,
         "startChar": 0,
@@ -161,6 +281,30 @@
       "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cf74ea5_46ce39fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-14T18:59:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20f51111_4359446e",
+      "range": {
+        "startLine": 625,
+        "startChar": 9,
+        "endLine": 625,
+        "endChar": 33
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
