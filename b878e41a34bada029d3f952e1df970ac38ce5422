@@ -117,6 +117,24 @@
       "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50eec251_92d317ad",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-14T18:25:36Z",
+      "side": 1,
+      "message": "My concern is that nullptr is implicitly adding a new angle::Result value.   The other issue is that \u0027null\u0027 doesn\u0027t really tell you anything about why ProgramD3D::load() would return Incomplete in some cases but null in others (or what other backends should be doing when they hit errors).\n\nUnfortunately, I\u0027m not familiar enough with C++ threading (or how things like std::unique_ptr plays into that) to come up with something I\u0027m confident would work.   If we are able to trust null though, it seems we should be able to get linkEvent to contain something we trust also.\n\nWhat about creating a new angle::Result::Incompatible value that must have been set by a completed attempt?   Or should we initialize linkEvent to a new angle::Result::Pending value to indicate the background task is still running, so we know any value other than Pending means we are done?",
+      "parentUuid": "bed08ee1_6ffa294b",
+      "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
