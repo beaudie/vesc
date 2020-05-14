@@ -330,6 +330,11 @@ struct FeaturesVk : FeatureSetBase
         "enable_command_processing_thread", FeatureCategory::VulkanFeatures,
         "Enable parallel processing and submission of Vulkan commands in worker thread", &members,
         "http://anglebug.com/4324"};
+
+    // Turn on validation best practices layer (includes ARM perfdoc layer)
+    Feature enableBestPracticesLayer = {
+        "enable_best_practices_layer", FeatureCategory::VulkanFeatures,
+        "Enable validation best practices layer", &members, "b/156661359"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
