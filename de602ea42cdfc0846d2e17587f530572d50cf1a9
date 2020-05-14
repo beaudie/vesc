@@ -16,6 +16,24 @@
       "revId": "de602ea42cdfc0846d2e17587f530572d50cf1a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42b4f326_54b1ae06",
+        "filename": "src/tests/perf_tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-14T04:55:55Z",
+      "side": 1,
+      "message": "I like improving this, but there are other numbers in the filename.  For instance:\n\n    manhattan_10_capture_context1.h\n\nSo , all we\u0027re really guaranteed at the moment is that context will be the last number in the filename.  So it has to be detected from the end.",
+      "parentUuid": "50660470_185c3dac",
+      "revId": "de602ea42cdfc0846d2e17587f530572d50cf1a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
