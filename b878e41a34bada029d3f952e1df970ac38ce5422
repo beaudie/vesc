@@ -153,6 +153,24 @@
       "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54e3e004_5403ab98",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-05-14T19:35:41Z",
+      "side": 1,
+      "message": "\u003e I\u0027d prefer if we get rid of ::Incomplete and add a new return value (output value, or in a struct, somewhere) that indicates the success/fail of the operation. \n\nThe problem is not with angle::Result, the problem is that mProgram-\u003eload returns a pointer to an object that may or may not signify the operation is currently happening on a background thread. \n\nIn my solution, nullptr is the new return value that signifies the failure of the operation. This tells the caller \"don\u0027t bother waiting because we failed in making the background task\".  \n\n@Jamie, are you proposing that mProgram-\u003eloadLoad should return either an EventObject or some other enum? Is so, which enum did you have in mind? Something that doesn\u0027t exist today?\n\n\n\nIf you\u0027re uncomfortable with returning null from mProgram-\u003eload and you don\u0027t want to change the LinkEvent interface, here is an alternative: \n1. Restore ProgramD3D.cpp back to its original state.  \n2. In Program::loadBinary, instead of unconditionally returning angle::Result::Continue, we first call linkEvent-\u003eisLinking(). \n\nIf isLinking() returns false --\u003e We know the background thread is not active and it is safe to wait on the event. Passthrough the result of calling linkEvent-\u003ewait(). If the binary is incompatible, ProgramD3D::load will return an instance of LinkEventDone. LinkEventDone\u0027s isLinking implementation always returns false. The wait() implementation will return angle::Result::Incomplete.  \n\nIf isLinking() returns true --\u003e We know the background thread is active and doing its business. Return angle::Result::Continue like we did before and do not wait on the event. \n\nOne drawback of the proposal is that Program::loadBinary will now call isLinking where it didn\u0027t before. This will incur a small amount of overhead in the multi-threading case of checking state and potentially entering/leaving critical sections depending on the implementation.\n\nAnother drawback of the proposal, is that if the background thread finishes before the call to islinking, we will end up returning the result of the background thread\u0027s result. If the background thread returns \u0027Incomplete\u0027, the Program::loadBinary will attempt to recompile the shader again on a background thread, this time with the original source GLSL, not a binary. That\u0027s probably fine but it\u0027s a behavior change from what we had before .. and racy since sometimes you get a double compile, and sometimes you don\u0027t.\n\n\n\nIf you\u0027re comfortable with changing the interface of LinkEvent, then we can add a new method called \"ismultithread()\" or something similar. Program::loadBinary can use the return value of isMultithreaded to determine whether it is safe to wait on the event or return angle::Result::Continue unconditionally.  \n\n\n@Jamie and @Tim, WDTY?",
+      "parentUuid": "c97b4ed5_0d82afda",
+      "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
