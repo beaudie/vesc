@@ -22,6 +22,30 @@
       "revId": "8064be56421901d45ebd9201c893f971111f107e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce341ca5_47c76de9",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-05-14T16:20:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ca88e1c_9e361c77",
+      "range": {
+        "startLine": 476,
+        "startChar": 4,
+        "endLine": 476,
+        "endChar": 8
+      },
+      "revId": "8064be56421901d45ebd9201c893f971111f107e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
