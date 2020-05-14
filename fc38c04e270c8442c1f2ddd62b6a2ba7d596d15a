@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "29592aa1_0e52b33f",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-14T18:45:40Z",
+      "side": 1,
+      "message": "Hm, I wonder if I missed this during the PPO stuff - but should this be checking mExecutable instead of mProgram so we do the work whether a Program or PPO is bound?   We call mExecutable-\u003egetSamplerFormatForTextureUnitIndex() in this block, which supports both.",
+      "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58a83284_562764f8",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-14T18:45:40Z",
+      "side": 1,
+      "message": "If !texture then the texture\u0027s type is TextureType::InvalidEnum, so why do we set this to false?   Does TextureType::InvalidEnum mean it\u0027s compatible with every sampler?",
+      "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68ff4a69_bb8d73c8",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3371,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-14T18:45:40Z",
+      "side": 1,
+      "message": "Oh, there are a few mProgram checks rather than mExecutable in State\u0027s image/texture/sampler stuff.   The dEQP tests are passing for PPOs, but maybe this is a lightly tested area in that regard.",
+      "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34243d3c_17cd15f4",
         "filename": "src/tests/gl_tests/ActiveTextureCacheTest.cpp",
         "patchSetId": 7
@@ -34,6 +85,23 @@
       "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "82c91396_158f3fb8",
+        "filename": "src/tests/gl_tests/ActiveTextureCacheTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-14T18:45:40Z",
+      "side": 1,
+      "message": "I wonder if we should add a PPO version of this test also to show that checking \u0027mProgram\u0027 in State isn\u0027t the right thing to do.",
+      "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
