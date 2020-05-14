@@ -99,6 +99,24 @@
       "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bed08ee1_6ffa294b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2020-05-14T17:29:23Z",
+      "side": 1,
+      "message": "@Jamie, by the time Program::loadBinary receives the linkEvent, it doesn\u0027t know whether the link event represents a background compilation thread OR a failed attempt. In order to get the final result, it needs to wait for task to finish. Waiting here defeats the purpose of background compilation, where the wait happens later on when the program is used or the link status is queried.  \n\nBy returning nullptr instead, we have a definite answer that the program binary is for-sure incompatible. The caller can, then, queue up a different background compilation link event.",
+      "parentUuid": "d7784a15_b71adda6",
+      "revId": "b878e41a34bada029d3f952e1df970ac38ce5422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
