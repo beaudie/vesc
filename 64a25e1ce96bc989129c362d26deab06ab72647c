@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14dc8c1f_10cfa4ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-14T17:16:58Z",
+      "side": 1,
+      "message": "It isn\u0027t necessary to use the pointer here since you nullptr it out below. Better to use mPipelineBarriers[piplineStage].writeCommand (or execute)",
+      "range": {
+        "startLine": 600,
+        "startChar": 8,
+        "endLine": 600,
+        "endChar": 52
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab9f52fb_f83d0ff9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-14T17:16:58Z",
+      "side": 1,
+      "message": "I still like calling this execute. ANGLE generally \u0027executes\u0027 commands on a primary.",
+      "range": {
+        "startLine": 601,
+        "startChar": 17,
+        "endLine": 601,
+        "endChar": 29
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26b808be_98545e79",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-14T17:16:58Z",
+      "side": 1,
+      "message": "nit: you can phrase this positively as .none()",
+      "range": {
+        "startLine": 606,
+        "startChar": 8,
+        "endLine": 606,
+        "endChar": 35
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea3bb064_9bd49cc7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-14T17:16:58Z",
+      "side": 1,
+      "message": "you can extract this from the loop by first scanning for the first barrier and setting it up outside the loop. You\u0027ll also need to mask out first bit.",
+      "range": {
+        "startLine": 619,
+        "startChar": 0,
+        "endLine": 622,
+        "endChar": 9
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2adf9c46_32bde764",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-14T17:16:58Z",
+      "side": 1,
+      "message": "You should be able to make this if an ASSERT. You already check above for any()/none().",
+      "range": {
+        "startLine": 631,
+        "startChar": 0,
+        "endLine": 634,
+        "endChar": 5
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "193feb22_af4e1fed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-14T17:16:58Z",
+      "side": 1,
+      "message": "\u0027no false dependency\u0027 is a bit hard to understand. Can you phrase this positively, like \"mergeIfCompatibleStages\" with a comment?",
+      "range": {
+        "startLine": 625,
+        "startChar": 9,
+        "endLine": 625,
+        "endChar": 33
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
