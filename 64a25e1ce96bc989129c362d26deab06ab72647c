@@ -261,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "8588c6e3_8d8cbd6a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-14T19:47:05Z",
+      "side": 1,
+      "message": "Thanks, now I see your point.",
+      "parentUuid": "3a93020e_e9aeb233",
+      "range": {
+        "startLine": 631,
+        "startChar": 0,
+        "endLine": 634,
+        "endChar": 5
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "193feb22_af4e1fed",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -344,6 +368,30 @@
       "side": 1,
       "message": "Sure, just include a very specific comment indicating what \u0027stronger than\u0027 means as that\u0027s not a standard term.",
       "parentUuid": "7cf74ea5_46ce39fd",
+      "range": {
+        "startLine": 625,
+        "startChar": 9,
+        "endLine": 625,
+        "endChar": 33
+      },
+      "revId": "64a25e1ce96bc989129c362d26deab06ab72647c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "797268af_c6930a55",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-14T19:47:05Z",
+      "side": 1,
+      "message": "More comment added.",
+      "parentUuid": "1ae1c761_da9944cc",
       "range": {
         "startLine": 625,
         "startChar": 9,
