@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "872be599_03a02202",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-05-14T15:35:41Z",
+      "side": 1,
+      "message": "ACK. Will be done in different CL. Enabling ANGLE_ENABLE_STRUCT_PADDING_WARNINGS will introduce some compiler errors due to struct\u0027s hidden padding, forcing me to change the current struct definitions.\nSome hidden paddings are acceptable for now (I did a quick test, the paddings are not that bad, if I change the struct definitions, the size of struct would remain the same), so I will do it in future CL together with the replacements of assignments with SetBitField.",
+      "parentUuid": "fda3013a_e3dd0264",
+      "range": {
+        "startLine": 39,
+        "startChar": 35,
+        "endLine": 39,
+        "endChar": 39
+      },
+      "revId": "d7bdbb29362cdc8290376522b0fa1d7d1b0fe79a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f0a440b_61d9a2c9",
         "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "d7bdbb29362cdc8290376522b0fa1d7d1b0fe79a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd0cfc78_073b6f1f",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2020-05-14T15:35:41Z",
+      "side": 1,
+      "message": "ACK. Will be done in different CL.",
+      "parentUuid": "8f0a440b_61d9a2c9",
+      "revId": "d7bdbb29362cdc8290376522b0fa1d7d1b0fe79a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
