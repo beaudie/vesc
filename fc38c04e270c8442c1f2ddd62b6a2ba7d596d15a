@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a9f264b_b88f5489",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-15T16:33:32Z",
+      "side": 1,
+      "message": "Let\u0027s update these in a follow-up patch.  I want to make this as targeted as possible.",
+      "parentUuid": "29592aa1_0e52b33f",
+      "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "58a83284_562764f8",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 7
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "57b676f6_3785b246",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-15T16:33:32Z",
+      "side": 1,
+      "message": "This is the fallback case of the cache being inactive due to no program. It\u0027s safe to enter this case with a null texture too.",
+      "parentUuid": "58a83284_562764f8",
+      "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68ff4a69_bb8d73c8",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 7
@@ -50,6 +86,24 @@
       "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a428420_44f3b8ca",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3371,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-15T16:33:32Z",
+      "side": 1,
+      "message": "Should all the mProgram checks be updated to mExectuable?\n\nEither way, I/we can do it in a followup patch.",
+      "parentUuid": "68ff4a69_bb8d73c8",
+      "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -102,6 +156,24 @@
       "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9a937d8_e0902a98",
+        "filename": "src/tests/gl_tests/ActiveTextureCacheTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-15T16:33:32Z",
+      "side": 1,
+      "message": "Agreed, we should add coverage.",
+      "parentUuid": "82c91396_158f3fb8",
+      "revId": "fc38c04e270c8442c1f2ddd62b6a2ba7d596d15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
