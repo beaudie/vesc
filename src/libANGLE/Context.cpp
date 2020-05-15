@@ -6620,6 +6620,12 @@ void Context::onSamplerUniformChange(size_t textureUnitIndex)
 {
     mState.onActiveTextureChange(this, textureUnitIndex);
     mStateCache.onActiveTextureChange(this);
+    // If setting this uniform means the program is no longer using this texture unit,
+    // mark it as inactive.
+    if (!mState.getProgram()->getExecutable().getActiveSamplersMask()[textureUnitIndex])
+    {
+        mState.setTextureIndexInactive(textureUnitIndex);
+    }
 }
 
 void Context::uniform1i(UniformLocation location, GLint x)

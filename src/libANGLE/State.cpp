@@ -587,6 +587,11 @@ void State::reset(const Context *context)
     setAllDirtyBits();
 }
 
+void State::setTextureIndexInactive(size_t textureIndex)
+{
+    mActiveTexturesCache.reset(mID, textureIndex);
+}
+
 ANGLE_INLINE void State::unsetActiveTextures(ActiveTextureMask textureMask)
 {
     // Unset any relevant bound textures.
