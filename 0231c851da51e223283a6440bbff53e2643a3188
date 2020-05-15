@@ -52,6 +52,24 @@
       "revId": "0231c851da51e223283a6440bbff53e2643a3188",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09599d23_28d68b83",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-15T18:55:38Z",
+      "side": 1,
+      "message": "Thanks for your feedback. The logic I added is definitely wrong in the general case. Most of the backends should require EXT_texture_storage in order to advertise the presence of OES_texture_float and OES_texture_half_float. Maybe your suggestion is the best way to do that?",
+      "parentUuid": "619d53e6_5dded48f",
+      "revId": "0231c851da51e223283a6440bbff53e2643a3188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
