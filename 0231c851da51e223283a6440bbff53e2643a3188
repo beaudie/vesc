@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ddb9efc8_ca19d28c",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-15T05:43:24Z",
+      "side": 1,
+      "message": "I see that some signal from the backend needs to be passed up indicating whether it\u0027s properly handling absence of the EXT_texture_storage extension.",
+      "revId": "0231c851da51e223283a6440bbff53e2643a3188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
