@@ -93,6 +93,30 @@
       "revId": "47e5bde5400f07c19048941b92e08f1956697d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "975f67a1_11bdbb07",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-15T19:03:01Z",
+      "side": 1,
+      "message": "Yeah, this is something we want to do. Duplicated I\u0027m not sure is necessary. It should just be moved over and have the Executable own it.",
+      "parentUuid": "28322547_231c417f",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 48
+      },
+      "revId": "47e5bde5400f07c19048941b92e08f1956697d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
