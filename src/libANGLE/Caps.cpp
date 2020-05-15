@@ -298,13 +298,30 @@ static bool DetermineColorBufferHalfFloatSupport(const TextureCapsMap &textureCa
 }
 
 // Checks for GL_OES_texture_half_float support
-static bool DetermineHalfFloatTextureSupport(const TextureCapsMap &textureCaps)
+static bool DetermineHalfFloatTextureSupport(const TextureCapsMap &textureCaps, bool textureStorage)
 {
     constexpr GLenum requiredFormats[] = {
-        GL_RGBA16F, GL_RGB16F, GL_LUMINANCE_ALPHA16F_EXT, GL_LUMINANCE16F_EXT, GL_ALPHA16F_EXT,
+        GL_RGBA16F,
+        GL_RGB16F,
     };
 
-    return GetFormatSupport(textureCaps, requiredFormats, true, false, false, false, false);
+    if (!GetFormatSupport(textureCaps, requiredFormats, true, false, false, false, false))
+        return false;
+
+    if (textureStorage)
+    {
+        // If EXT_texture_storage is available, these formats must be
+        // supported; otherwise, they'll be emulated in the backend.
+        constexpr GLenum requiredTexStorageFormats[] = {
+            GL_LUMINANCE_ALPHA16F_EXT,
+            GL_LUMINANCE16F_EXT,
+            GL_ALPHA16F_EXT,
+        };
+        return GetFormatSupport(textureCaps, requiredTexStorageFormats, true, false, false, false,
+                                false);
+    }
+
+    return true;
 }
 
 // Checks for GL_OES_texture_half_float_linear support
@@ -327,13 +344,30 @@ static bool DetermineHalfFloatTextureFilteringSupport(const TextureCapsMap &text
 }
 
 // Checks for GL_OES_texture_float support
-static bool DetermineFloatTextureSupport(const TextureCapsMap &textureCaps)
+static bool DetermineFloatTextureSupport(const TextureCapsMap &textureCaps, bool textureStorage)
 {
     constexpr GLenum requiredFormats[] = {
-        GL_RGBA32F, GL_RGB32F, GL_LUMINANCE_ALPHA32F_EXT, GL_LUMINANCE32F_EXT, GL_ALPHA32F_EXT,
+        GL_RGBA32F,
+        GL_RGB32F,
     };
 
-    return GetFormatSupport(textureCaps, requiredFormats, true, false, false, false, false);
+    if (!GetFormatSupport(textureCaps, requiredFormats, true, false, false, false, false))
+        return false;
+
+    if (textureStorage)
+    {
+        // If EXT_texture_storage is available, these formats must be
+        // supported; otherwise, they'll be emulated in the backend.
+        constexpr GLenum requiredTexStorageFormats[] = {
+            GL_LUMINANCE_ALPHA32F_EXT,
+            GL_LUMINANCE32F_EXT,
+            GL_ALPHA32F_EXT,
+        };
+        return GetFormatSupport(textureCaps, requiredTexStorageFormats, true, false, false, false,
+                                false);
+    }
+
+    return true;
 }
 
 // Checks for GL_OES_texture_float_linear support
@@ -801,11 +835,12 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     depthBufferFloat2NV   = DetermineDepthBufferFloat2Support(textureCaps);
     textureFormatBGRA8888 = DetermineBGRA8TextureSupport(textureCaps);
     readFormatBGRA        = DetermineBGRAReadFormatSupport(textureCaps);
-    textureHalfFloat      = DetermineHalfFloatTextureSupport(textureCaps);
+    textureHalfFloat      = DetermineHalfFloatTextureSupport(textureCaps, textureStorage);
     textureHalfFloatLinear =
-        DetermineHalfFloatTextureFilteringSupport(textureCaps, textureHalfFloat);
-    textureFloatOES       = DetermineFloatTextureSupport(textureCaps);
-    textureFloatLinearOES = DetermineFloatTextureFilteringSupport(textureCaps, textureFloatOES);
+        DetermineHalfFloatTextureFilteringSupport(textureCaps, textureHalfFloat && textureStorage);
+    textureFloatOES = DetermineFloatTextureSupport(textureCaps, textureStorage);
+    textureFloatLinearOES =
+        DetermineFloatTextureFilteringSupport(textureCaps, textureFloatOES && textureStorage);
     textureRG = DetermineRGTextureSupport(textureCaps, textureHalfFloat, textureFloatOES);
     colorBufferHalfFloat   = textureHalfFloat && DetermineColorBufferHalfFloatSupport(textureCaps);
     textureCompressionDXT1 = DetermineDXT1TextureSupport(textureCaps);
