@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "942f303e_0440129e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-15T16:10:19Z",
+      "side": 1,
+      "message": "can mLinkingState be nullptr here? Just wondering if this could be an ASSERT. Also shouldn\u0027t you ignore the linked executable change if result is Stop?",
+      "range": {
+        "startLine": 1417,
+        "startChar": 8,
+        "endLine": 1417,
+        "endChar": 22
+      },
+      "revId": "47e5bde5400f07c19048941b92e08f1956697d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c28bf2b_8bbd7678",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-15T16:10:19Z",
+      "side": 1,
+      "message": "hopefully we can remove these still in a follow-up?",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 48
+      },
+      "revId": "47e5bde5400f07c19048941b92e08f1956697d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
