@@ -117,6 +117,30 @@
       "revId": "47e5bde5400f07c19048941b92e08f1956697d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ae71cda_700d5b79",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-15T19:29:37Z",
+      "side": 1,
+      "message": "By duplicating, I don\u0027t mean the members, but the data.   The PPOs will need to have copies of each Program\u0027s data, since they\u0027ll need to mix and match Program data into an overall PPO collection of all of the Program that are attached.   The Programs still need to retain their own data so they can be added to/removed from multiple PPOs and any changes to those data structures needs to be propagated to all of them.\n\nI\u0027m not sure how complicated any of that will end up being in practice, just something that has to be considered as part of that change.",
+      "parentUuid": "975f67a1_11bdbb07",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 48
+      },
+      "revId": "47e5bde5400f07c19048941b92e08f1956697d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
