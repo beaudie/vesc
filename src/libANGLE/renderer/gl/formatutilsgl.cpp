@@ -494,11 +494,43 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
     }
     else if (functions->isAtLeastGLES(gl::Version(3, 0)))
     {
-        if (internalFormat.componentType == GL_FLOAT && !internalFormat.isLUMA())
+        if (internalFormat.componentType == GL_FLOAT)
         {
-            // Use sized internal formats for floating point textures.  Extensions such as
-            // EXT_color_buffer_float require the sized formats to be renderable.
-            result = internalFormat.sizedInternalFormat;
+            if (!internalFormat.isLUMA())
+            {
+                // Use sized internal formats for floating point textures.  Extensions such as
+                // EXT_color_buffer_float require the sized formats to be renderable.
+                result = internalFormat.sizedInternalFormat;
+            }
+            else if (!functions->hasGLExtension("GL_EXT_texture_storage"))
+            {
+                // The legacy luminance/alpha formats from OES_texture_float are emulated with R/RG
+                // textures.
+                if (internalFormat.format == GL_LUMINANCE || internalFormat.format == GL_ALPHA)
+                {
+                    if (internalFormat.type == GL_FLOAT)
+                    {
+                        result = GL_R32F;
+                    }
+                    else
+                    {
+                        ASSERT(internalFormat.type == GL_HALF_FLOAT_OES);
+                        result = GL_R16F;
+                    }
+                }
+                else if (internalFormat.format == GL_LUMINANCE_ALPHA)
+                {
+                    if (internalFormat.type == GL_FLOAT)
+                    {
+                        result = GL_RG32F;
+                    }
+                    else
+                    {
+                        ASSERT(internalFormat.type == GL_HALF_FLOAT_OES);
+                        result = GL_RG16F;
+                    }
+                }
+            }
         }
         else if (internalFormat.format == GL_RED_EXT || internalFormat.format == GL_RG_EXT)
         {
@@ -519,7 +551,8 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
 
 static GLenum GetNativeFormat(const FunctionsGL *functions,
                               const angle::FeaturesGL &features,
-                              GLenum format)
+                              GLenum format,
+                              GLenum type)
 {
     GLenum result = format;
 
@@ -564,6 +597,22 @@ static GLenum GetNativeFormat(const FunctionsGL *functions,
             if (format == GL_SRGB_ALPHA)
             {
                 result = GL_RGBA;
+            }
+        }
+        else if ((type == GL_FLOAT || type == GL_HALF_FLOAT || type == GL_HALF_FLOAT_OES) &&
+                 !functions->hasGLExtension("GL_EXT_texture_storage"))
+        {
+            // On ES 3.0 systems that don't have GL_EXT_texture_storage, the LUMINANCE/ALPHA formats
+            // from the exposed GL_OES_texture_float and GL_OES_texture_half_float extensions must
+            // be emulated with R/RG textures.
+            if (format == GL_LUMINANCE || format == GL_ALPHA)
+            {
+                result = GL_RED;
+            }
+
+            if (format == GL_LUMINANCE_ALPHA)
+            {
+                result = GL_RG;
             }
         }
     }
@@ -636,6 +685,9 @@ static GLenum GetNativeType(const FunctionsGL *functions,
                 case GL_ALPHA:
                     // In ES3, these formats come from EXT_texture_storage, which uses
                     // HALF_FLOAT_OES. Other formats (like RGBA) use HALF_FLOAT (non-OES) in ES3.
+                    // If they're emulated (see above), use HALF_FLOAT.
+                    if (!functions->hasGLExtension("GL_EXT_texture_storage"))
+                        result = GL_HALF_FLOAT;
                     break;
 
                 default:
@@ -701,7 +753,7 @@ TexImageFormat GetTexImageFormat(const FunctionsGL *functions,
     TexImageFormat result;
     result.internalFormat = GetNativeInternalFormat(
         functions, features, gl::GetInternalFormatInfo(internalFormat, type));
-    result.format = GetNativeFormat(functions, features, format);
+    result.format = GetNativeFormat(functions, features, format, type);
     result.type   = GetNativeType(functions, features, format, type);
     return result;
 }
@@ -712,7 +764,7 @@ TexSubImageFormat GetTexSubImageFormat(const FunctionsGL *functions,
                                        GLenum type)
 {
     TexSubImageFormat result;
-    result.format = GetNativeFormat(functions, features, format);
+    result.format = GetNativeFormat(functions, features, format, type);
     result.type   = GetNativeType(functions, features, format, type);
     return result;
 }
