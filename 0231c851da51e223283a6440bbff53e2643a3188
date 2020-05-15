@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "9b584cff_1f509c83",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-15T22:22:20Z",
+      "side": 1,
+      "message": "Removed these changes in the latest patch set.",
+      "parentUuid": "09599d23_28d68b83",
+      "revId": "0231c851da51e223283a6440bbff53e2643a3188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4eb0085a_a3f9b526",
         "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
         "patchSetId": 2
@@ -93,6 +111,30 @@
       "revId": "0231c851da51e223283a6440bbff53e2643a3188",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23898eac_29e4c4d6",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-15T22:22:20Z",
+      "side": 1,
+      "message": "Thanks for this suggestion. Done, and works at least on iOS.",
+      "parentUuid": "4eb0085a_a3f9b526",
+      "range": {
+        "startLine": 282,
+        "startChar": 4,
+        "endLine": 287,
+        "endChar": 297
+      },
+      "revId": "0231c851da51e223283a6440bbff53e2643a3188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +161,30 @@
     },
     {
       "key": {
+        "uuid": "10ea9a64_2ad16ef0",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-15T22:22:20Z",
+      "side": 1,
+      "message": "Thanks for this pointer.",
+      "parentUuid": "a7db6869_9f71e031",
+      "range": {
+        "startLine": 482,
+        "startChar": 0,
+        "endLine": 492,
+        "endChar": 13
+      },
+      "revId": "0231c851da51e223283a6440bbff53e2643a3188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "508a6331_547c75e8",
         "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
         "patchSetId": 2
@@ -139,6 +205,30 @@
       "revId": "0231c851da51e223283a6440bbff53e2643a3188",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65c5b058_2ba81f44",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-15T22:22:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "508a6331_547c75e8",
+      "range": {
+        "startLine": 507,
+        "startChar": 0,
+        "endLine": 532,
+        "endChar": 17
+      },
+      "revId": "0231c851da51e223283a6440bbff53e2643a3188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -165,6 +255,30 @@
     },
     {
       "key": {
+        "uuid": "e8b39367_ae8862b2",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-15T22:22:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca803e37_14bedf78",
+      "range": {
+        "startLine": 575,
+        "startChar": 0,
+        "endLine": 585,
+        "endChar": 13
+      },
+      "revId": "0231c851da51e223283a6440bbff53e2643a3188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea848117_8c40a1e7",
         "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
         "patchSetId": 2
@@ -185,6 +299,30 @@
       "revId": "0231c851da51e223283a6440bbff53e2643a3188",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8878248d_a451bd06",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-15T22:22:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea848117_8c40a1e7",
+      "range": {
+        "startLine": 608,
+        "startChar": 0,
+        "endLine": 616,
+        "endChar": 13
+      },
+      "revId": "0231c851da51e223283a6440bbff53e2643a3188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
