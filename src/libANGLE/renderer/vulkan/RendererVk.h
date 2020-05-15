@@ -25,6 +25,7 @@
 #include "common/vulkan/vulkan_icd.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/Caps.h"
+#include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
 #include "libANGLE/renderer/vulkan/QueryVk.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
@@ -65,6 +66,54 @@ void CollectGarbage(std::vector<vk::GarbageObject> *garbageOut, ArgT object, Arg
     }
     CollectGarbage(garbageOut, objectsIn...);
 }
+
+class CommandWorkQueue final : angle::NonCopyable
+{
+  public:
+    CommandWorkQueue();
+    ~CommandWorkQueue();
+
+    angle::Result init(RendererVk *context);
+    void destroy(VkDevice device);
+    void handleDeviceLost(RendererVk *renderer);
+
+    bool hasInFlightCommands() const;
+
+    angle::Result allocatePrimaryCommandBuffer(VkDevice device,
+                                               vk::PrimaryCommandBuffer *commandBufferOut);
+    angle::Result releasePrimaryCommandBuffer(vk::PrimaryCommandBuffer &&commandBuffer);
+
+    void clearAllGarbage(RendererVk *renderer);
+
+    angle::Result finishToSerial(RendererVk *renderer, Serial serial);
+
+    angle::Result submitFrame(RendererVk *renderer,
+                              egl::ContextPriority priority,
+                              const VkSubmitInfo &submitInfo,
+                              const vk::Shared<vk::Fence> &sharedFence,
+                              vk::GarbageList *currentGarbage,
+                              vk::CommandPool *commandPool,
+                              vk::PrimaryCommandBuffer &&commandBuffer);
+
+    vk::Shared<vk::Fence> getLastSubmittedFence(const VkDevice device) const;
+
+    // Check to see which batches have finished completion (forward progress for
+    // mLastCompletedQueueSerial, for example for when the application busy waits on a query
+    // result). It would be nice if we didn't have to expose this for QueryVk::getResult.
+    angle::Result checkCompletedCommands(RendererVk *renderer);
+
+  private:
+    angle::Result releaseToCommandBatch(RendererVk *renderer,
+                                        vk::PrimaryCommandBuffer &&commandBuffer,
+                                        vk::CommandPool *commandPool,
+                                        vk::CommandBatch *batch);
+
+    vk::GarbageQueue mGarbageQueue;
+    std::vector<vk::CommandBatch> mInFlightCommands;
+
+    // Keeps a free list of reusable primary command buffers.
+    vk::PersistentCommandPool mPrimaryCommandPool;
+};
 
 class RendererVk : angle::NonCopyable
 {
@@ -173,12 +222,17 @@ class RendererVk : angle::NonCopyable
     {
         return mPriorities[priority];
     }
-
+    // Queue submit that originates from the main thread
     angle::Result queueSubmit(vk::Context *context,
                               egl::ContextPriority priority,
                               const VkSubmitInfo &submitInfo,
                               const vk::Fence *fence,
                               Serial *serialOut);
+    // Queue submit that originates from the worker thread
+    angle::Result workThreadQueueSubmit(egl::ContextPriority priority,
+                                        const VkSubmitInfo &submitInfo,
+                                        const vk::Fence *fence,
+                                        Serial *serialOut);
     angle::Result queueWaitIdle(vk::Context *context, egl::ContextPriority priority);
     angle::Result deviceWaitIdle(vk::Context *context);
     VkResult queuePresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
@@ -225,6 +279,22 @@ class RendererVk : angle::NonCopyable
             mSharedGarbage.emplace_back(std::move(use), std::move(sharedGarbage));
         }
     }
+
+    void clearAllGarbage() { mCommandWorkQueue.clearAllGarbage(this); }
+    angle::Result checkCompletedCommands()
+    {
+        return mCommandWorkQueue.checkCompletedCommands(this);
+    }
+    angle::Result finishToSerial(Serial serial)
+    {
+        return mCommandWorkQueue.finishToSerial(this, serial);
+    }
+    vk::Shared<vk::Fence> getLastSubmittedFence() const
+    {
+        return mCommandWorkQueue.getLastSubmittedFence(getDevice());
+    }
+    bool hasInFlightCommandBuffers() { return mCommandWorkQueue.hasInFlightCommands(); }
+    void handleDeviceLost() { mCommandWorkQueue.handleDeviceLost(this); }
 
     static constexpr size_t kMaxExtensionNames = 200;
     using ExtensionNameList = angle::FixedVector<const char *, kMaxExtensionNames>;
@@ -383,6 +453,10 @@ class RendererVk : angle::NonCopyable
     std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
+    CommandWorkQueue mCommandWorkQueue;
+    // Command pool to allocate worker thread primary command buffers from
+    vk::CommandPool mCommandPool;
+    vk::PrimaryCommandBuffer mPrimaryCommandBuffer;
 
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;

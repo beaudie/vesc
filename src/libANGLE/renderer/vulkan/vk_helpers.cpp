@@ -714,6 +714,32 @@ angle::Result CommandBufferHelper::flushToPrimary(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+// CommandBatch implementation.
+CommandBatch::CommandBatch() = default;
+
+CommandBatch::~CommandBatch() = default;
+
+CommandBatch::CommandBatch(CommandBatch &&other)
+{
+    *this = std::move(other);
+}
+
+CommandBatch &CommandBatch::operator=(CommandBatch &&other)
+{
+    std::swap(primaryCommands, other.primaryCommands);
+    std::swap(commandPool, other.commandPool);
+    std::swap(fence, other.fence);
+    std::swap(serial, other.serial);
+    return *this;
+}
+
+void CommandBatch::destroy(VkDevice device)
+{
+    primaryCommands.destroy(device);
+    commandPool.destroy(device);
+    fence.reset(device);
+}
+
 // Helper functions used below
 char GetLoadOpShorthand(uint32_t loadOp)
 {
