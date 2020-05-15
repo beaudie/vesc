@@ -16,6 +16,24 @@
       "revId": "0231c851da51e223283a6440bbff53e2643a3188",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d627a557_67b8e25c",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-15T16:14:50Z",
+      "side": 1,
+      "message": "Right now textureStorage will not be initialize before setTextureExtensionSupport is called:\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/renderer/gl/renderergl_utils.cpp;l\u003d1130;drc\u003d2f11470d7ad8963a9add116df64d2edd1b85d3a4;bpv\u003d1;bpt\u003d1?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\nMy gut says the right way to do this is to set these textures as supported unconditionally for the GL backend in formatutils.h, and internally we either use EXT_texture_storage or your emulation.\n\nthat way you don\u0027t check the extension here, just always ask that these luminance alpha formats are in the list of required formats",
+      "parentUuid": "ddb9efc8_ca19d28c",
+      "revId": "0231c851da51e223283a6440bbff53e2643a3188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
