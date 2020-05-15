@@ -141,6 +141,30 @@
       "revId": "47e5bde5400f07c19048941b92e08f1956697d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb44def0_c8fbc865",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-15T19:43:29Z",
+      "side": 1,
+      "message": "Yeah that\u0027s a cost we want to pay. It saves us from needing to keep the programs alive when the executables persist, and generally gives a simpler design to maintain. A bit of extra RAM when using PPOs is fine as they\u0027re pretty rare in the wild.",
+      "parentUuid": "8ae71cda_700d5b79",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 48
+      },
+      "revId": "47e5bde5400f07c19048941b92e08f1956697d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
