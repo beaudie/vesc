@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4904e209_79492afa",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-15T22:47:58Z",
+      "side": 1,
+      "message": "If the pool is specific to the commandBuffer, could we just make it part of the commandBufferHelper?\nThat way wouldn\u0027t have to worry about managing a list of pools.",
+      "revId": "8e51c934f3274f1de510b52ad82c586484877939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bd7f282_9131d147",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-15T22:47:58Z",
+      "side": 1,
+      "message": "Why does this need to be a pointer?\nHmm, life cycle of pools !\u003d commandBufferHelpers?",
+      "revId": "8e51c934f3274f1de510b52ad82c586484877939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70a8dab2_cbfb6ad0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-15T22:47:58Z",
+      "side": 1,
+      "message": "pointers",
+      "range": {
+        "startLine": 976,
+        "startChar": 53,
+        "endLine": 976,
+        "endChar": 60
+      },
+      "revId": "8e51c934f3274f1de510b52ad82c586484877939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
