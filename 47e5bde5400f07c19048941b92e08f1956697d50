@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "36ed0e7d_43abd828",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-15T18:45:58Z",
+      "side": 1,
+      "message": "Yes, mLinkingState will be null if we\u0027ve never successfully linked the program before.\n\nIf the result was Stop, we want to revert mExecutable to point back to the last successfully linked ProgramExecutable data so we can still render after a failed link attempt (assuming there was a successful link beforehand).   Otherwise, we have to keep both copies of ProgramExecutable:\n1.) the new (bad) one that returned Stop\n2.) the last successfully linked ProgramExecutable so we can render with it",
+      "parentUuid": "942f303e_0440129e",
+      "range": {
+        "startLine": 1417,
+        "startChar": 8,
+        "endLine": 1417,
+        "endChar": 22
+      },
+      "revId": "47e5bde5400f07c19048941b92e08f1956697d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c28bf2b_8bbd7678",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 28
@@ -36,6 +60,30 @@
       "writtenOn": "2020-05-15T16:10:19Z",
       "side": 1,
       "message": "hopefully we can remove these still in a follow-up?",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 48
+      },
+      "revId": "47e5bde5400f07c19048941b92e08f1956697d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28322547_231c417f",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-15T18:45:58Z",
+      "side": 1,
+      "message": "That will be a large change to remove these.   The ProgramExecutable needs to know whether it\u0027s within a Program or ProgramPipeline to call the correct function.   For example:\n\nbool ProgramExecutable::hasAtomicCounterBuffers() const\n{\n    ASSERT(mProgramState || mProgramPipelineState);\n    if (mProgramState)\n    {\n        return mProgramState-\u003ehasAtomicCounterBuffers();\n    }\n\n    return mProgramPipelineState-\u003ehasAtomicCounterBuffers();\n}\n\nTo remove these pointers, all of those data structures will need to be moved into the ProgramExecutable so it can respond itself.   Then, the PPO\u0027s ProgramExecutable will need to have that data duplicated into it and updated whenever a Program is added/removed/updated in the PPO.\n\nThings that need to be updated to be contained in ProgramExecutable:\n\ngetTransformFeedbackBufferCount\nhasAtomicCounterBuffers\nhasDefaultUniforms\nhasImages\nhasStorageBuffers\nhasTextures\nhasTransformFeedbackOutput\nhasUniformBuffers\nisCompute\n\nSome of those have already moved over as part of these changes to support rendering after a failed link (e.g., getAtomicCounterBuffers()) so we can start chipping away at this, but there are still others like hasImages() that haven\u0027t yet.",
+      "parentUuid": "7c28bf2b_8bbd7678",
       "range": {
         "startLine": 302,
         "startChar": 0,
