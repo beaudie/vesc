@@ -325,32 +325,6 @@ void ContextVk::DriverUniformsDescriptorSet::destroy(RendererVk *renderer)
     dynamicBuffer.destroy(renderer);
 }
 
-// CommandBatch implementation.
-CommandBatch::CommandBatch() = default;
-
-CommandBatch::~CommandBatch() = default;
-
-CommandBatch::CommandBatch(CommandBatch &&other)
-{
-    *this = std::move(other);
-}
-
-CommandBatch &CommandBatch::operator=(CommandBatch &&other)
-{
-    std::swap(primaryCommands, other.primaryCommands);
-    std::swap(commandPool, other.commandPool);
-    std::swap(fence, other.fence);
-    std::swap(serial, other.serial);
-    return *this;
-}
-
-void CommandBatch::destroy(VkDevice device)
-{
-    primaryCommands.destroy(device);
-    commandPool.destroy(device);
-    fence.reset(device);
-}
-
 // CommandQueue implementation.
 CommandQueue::CommandQueue()  = default;
 CommandQueue::~CommandQueue() = default;
@@ -379,7 +353,7 @@ angle::Result CommandQueue::checkCompletedCommands(vk::Context *context)
 
     int finishedCount = 0;
 
-    for (CommandBatch &batch : mInFlightCommands)
+    for (vk::CommandBatch &batch : mInFlightCommands)
     {
         VkResult result = batch.fence.get().getStatus(device);
         if (result == VK_NOT_READY)
@@ -434,7 +408,7 @@ angle::Result CommandQueue::checkCompletedCommands(vk::Context *context)
 angle::Result CommandQueue::releaseToCommandBatch(vk::Context *context,
                                                   vk::PrimaryCommandBuffer &&commandBuffer,
                                                   vk::CommandPool *commandPool,
-                                                  CommandBatch *batch)
+                                                  vk::CommandBatch *batch)
 {
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
@@ -469,7 +443,6 @@ void CommandQueue::clearAllGarbage(RendererVk *renderer)
 }
 
 angle::Result CommandQueue::allocatePrimaryCommandBuffer(vk::Context *context,
-                                                         const vk::CommandPool &commandPool,
                                                          vk::PrimaryCommandBuffer *commandBufferOut)
 {
     return mPrimaryCommandPool.allocate(context, commandBufferOut);
@@ -488,7 +461,7 @@ void CommandQueue::handleDeviceLost(RendererVk *renderer)
 {
     VkDevice device = renderer->getDevice();
 
-    for (CommandBatch &batch : mInFlightCommands)
+    for (vk::CommandBatch &batch : mInFlightCommands)
     {
         // On device loss we need to wait for fence to be signaled before destroying it
         VkResult status = batch.fence.get().wait(device, renderer->getMaxFenceWaitTimeNs());
@@ -537,7 +510,7 @@ angle::Result CommandQueue::finishToSerial(vk::Context *context, Serial serial, 
             break;
         }
     }
-    const CommandBatch &batch = mInFlightCommands[batchIndex];
+    const vk::CommandBatch &batch = mInFlightCommands[batchIndex];
 
     // Wait for it finish
     VkDevice device = context->getDevice();
@@ -565,8 +538,8 @@ angle::Result CommandQueue::submitFrame(vk::Context *context,
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
-    vk::DeviceScoped<CommandBatch> scopedBatch(device);
-    CommandBatch &batch = scopedBatch.get();
+    vk::DeviceScoped<vk::CommandBatch> scopedBatch(device);
+    vk::CommandBatch &batch = scopedBatch.get();
     batch.fence.copy(device, sharedFence);
 
     ANGLE_TRY(
@@ -888,7 +861,7 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::startPrimaryCommandBuffer()
 {
-    ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, mCommandPool, &mPrimaryCommands));
+    ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, &mPrimaryCommands));
 
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -1554,8 +1527,8 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
     {
         dumpCommandStreamDiagnostics();
     }
-
     ANGLE_TRY(ensureSubmitFenceInitialized());
+
     ANGLE_TRY(mCommandQueue.submitFrame(this, mContextPriority, submitInfo, mSubmitFence,
                                         &mCurrentGarbage, &mCommandPool, std::move(commandBuffer)));
 
@@ -1684,7 +1657,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         vk::DeviceScoped<vk::PrimaryCommandBuffer> commandBatch(device);
         vk::PrimaryCommandBuffer &commandBuffer = commandBatch.get();
 
-        ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, mCommandPool, &commandBuffer));
+        ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, &commandBuffer));
 
         VkCommandBufferBeginInfo beginInfo = {};
         beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -1898,15 +1871,29 @@ void ContextVk::clearAllGarbage()
         garbage.destroy(mRenderer);
     }
     mCurrentGarbage.clear();
-    mCommandQueue.clearAllGarbage(mRenderer);
+    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        mRenderer->clearAllGarbage();
+        // TODO: Do we need to also kill Context's mCommandQueue? Should it just die?
+    }
+    else
+    {
+        mCommandQueue.clearAllGarbage(mRenderer);
+    }
 }
 
 void ContextVk::handleDeviceLost()
 {
     mOutsideRenderPassCommands->reset();
     mRenderPassCommands->reset();
-
-    mCommandQueue.handleDeviceLost(mRenderer);
+    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        mRenderer->handleDeviceLost();
+    }
+    else
+    {
+        mCommandQueue.handleDeviceLost(mRenderer);
+    }
     clearAllGarbage();
 
     mRenderer->notifyDeviceLost();
@@ -3734,24 +3721,74 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     }
     ANGLE_TRY(flushOutsideRenderPassCommands());
 
-    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
-        mRenderer->workerThreadWaitIdle();
-
-    ANGLE_VK_TRY(this, mPrimaryCommands.end());
-
+    // TODO: Verify that these 3 calls make sense both w/ & w/o threading. I believe they do, but
+    // want confirmation.
     Serial serial = getCurrentQueueSerial();
     mResourceUseList.releaseResourceUsesAndUpdateSerials(serial);
-
     waitForSwapchainImageIfNecessary();
 
-    VkSubmitInfo submitInfo = {};
-    InitializeSubmitInfo(&submitInfo, mPrimaryCommands, mWaitSemaphores, &mWaitSemaphoreStageMasks,
-                         signalSemaphore);
+    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // Some tasks from ContextVk::submitFrame() that run before CommandQueue::submitFrame()
+        gl::RunningGraphWidget *renderPassCount =
+            mState.getOverlay()->getRunningGraphWidget(gl::WidgetId::VulkanRenderPassCount);
+        renderPassCount->add(mRenderPassCommands->getAndResetCounter());
+        renderPassCount->next();
 
-    ANGLE_TRY(submitFrame(submitInfo, std::move(mPrimaryCommands)));
+        if (vk::CommandBufferHelper::kEnableCommandStreamDiagnostics)
+        {
+            dumpCommandStreamDiagnostics();
+        }
+        ANGLE_TRY(ensureSubmitFenceInitialized());
+        // mRenderer->workerThreadWaitIdle();
+        // Send a flush command to worker thread that will:
+        // 1. Create submitInfo
+        vk::FlushData *flushData           = new vk::FlushData();
+        flushData->waitSemaphores          = mWaitSemaphores;
+        flushData->waitSemaphoreStageMasks = mWaitSemaphoreStageMasks;
+        flushData->semaphore               = signalSemaphore;
+        flushData->contextPriority         = mContextPriority;
+        flushData->submitFence.copy(mRenderer->getDevice(), mSubmitFence);
+        flushData->currentGarbage = std::move(mCurrentGarbage);
+        // TODO: How to manage lifetime of flushData? Do I need to "new" here and destroy in worker?
+        // 2. Call submitFrame()
+        // 3. Allocate new primary command buffer
+        // TODO: How to set up semaphores for submit. Should Context send them to worker?
+        //  Should worker thread have those on its end? Need to explore.
+        vk::CommandWorkBlock cwb;
+        cwb.contextVk     = nullptr;
+        cwb.workerCommand = vk::CustomWorkerCommand::Flush;
+        cwb.commandData   = static_cast<void *>(flushData);
+        queueCommandsToWorker(cwb);
 
-    ANGLE_TRY(startPrimaryCommandBuffer());
+        // Some tasks from ContextVk::submitFrame() that run after CommandQueue::submitFrame()
+        onRenderPassFinished();
+        mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
+        // Make sure a new fence is created for the next submission.
+        // TODO: Is it ok to call this while submit fence is active in worker? That is, does this
+        //  blast the current submit fence or just create new one? We want adding fence to flushData
+        //  above to cause extra ref so that fence is still in use. Need to release at some point
+        //  when worker thread is done with it.
+        mRenderer->resetSharedFence(&mSubmitFence);
+
+        if (mGpuEventsEnabled)
+        {
+            ANGLE_TRY(checkCompletedGpuEvents());
+        }
+    }
+    else
+    {
+        ANGLE_VK_TRY(this, mPrimaryCommands.end());
+
+        VkSubmitInfo submitInfo = {};
+        InitializeSubmitInfo(&submitInfo, mPrimaryCommands, mWaitSemaphores,
+                             &mWaitSemaphoreStageMasks, signalSemaphore);
+
+        ANGLE_TRY(submitFrame(submitInfo, std::move(mPrimaryCommands)));
+
+        ANGLE_TRY(startPrimaryCommandBuffer());
+    }
     mRenderPassCounter = 0;
     mWaitSemaphores.clear();
 
@@ -3775,6 +3812,9 @@ angle::Result ContextVk::finishImpl()
 
     ANGLE_TRY(finishToSerial(getLastSubmittedQueueSerial()));
     ASSERT(!mCommandQueue.hasInFlightCommands());
+
+    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+        ASSERT(!mRenderer->hasInFlightCommandBuffers());
 
     clearAllGarbage();
 
@@ -3814,11 +3854,29 @@ bool ContextVk::isSerialInUse(Serial serial) const
 
 angle::Result ContextVk::checkCompletedCommands()
 {
+    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        return mRenderer->checkCompletedCommands();
+    }
     return mCommandQueue.checkCompletedCommands(this);
 }
 
 angle::Result ContextVk::finishToSerial(Serial serial)
 {
+    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        // Send finish w/ serial to worker thread then wait on it to complete
+        vk::FinishToSerialData *serial = new vk::FinishToSerialData();
+        serial->serial                 = getLastSubmittedQueueSerial();
+        vk::CommandWorkBlock cwb;
+        cwb.contextVk     = nullptr;
+        cwb.workerCommand = vk::CustomWorkerCommand::FinishToSerial;
+        cwb.commandData   = static_cast<void *>(serial);
+        queueCommandsToWorker(cwb);
+        mRenderer->workerThreadWaitIdle();
+        // TODO: Need to sync any errors here
+        return angle::Result::Continue;
+    }
     return mCommandQueue.finishToSerial(this, serial, mRenderer->getMaxFenceWaitTimeNs());
 }
 
@@ -3858,6 +3916,9 @@ angle::Result ContextVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOu
 
 vk::Shared<vk::Fence> ContextVk::getLastSubmittedFence() const
 {
+    if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
+        return mRenderer->getLastSubmittedFence();
+
     return mCommandQueue.getLastSubmittedFence(this);
 }
 
@@ -3895,7 +3956,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     vk::DeviceScoped<vk::PrimaryCommandBuffer> commandBatch(device);
     vk::PrimaryCommandBuffer &commandBuffer = commandBatch.get();
 
-    ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, mCommandPool, &commandBuffer));
+    ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, &commandBuffer));
 
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -4190,7 +4251,7 @@ angle::Result ContextVk::endRenderPass()
 
     if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
     {
-        vk::CommandWorkBlock cwb = {this, &mPrimaryCommands, mRenderPassCommands};
+        vk::CommandWorkBlock cwb = {this, {mRenderPassCommands}, nullptr};
         queueCommandsToWorker(cwb);
         getNextAvailableCommandBuffer(&mRenderPassCommands, true);
     }
@@ -4326,7 +4387,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     {
         if (mRenderer->getFeatures().enableCommandProcessingThread.enabled)
         {
-            vk::CommandWorkBlock cwb = {this, &mPrimaryCommands, mOutsideRenderPassCommands};
+            vk::CommandWorkBlock cwb = {this, {mOutsideRenderPassCommands}, nullptr};
             queueCommandsToWorker(cwb);
             getNextAvailableCommandBuffer(&mOutsideRenderPassCommands, false);
         }
