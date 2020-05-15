@@ -25,6 +25,7 @@
 #include "common/vulkan/vulkan_icd.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/Caps.h"
+#include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
 #include "libANGLE/renderer/vulkan/QueryVk.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
@@ -65,6 +66,55 @@ void CollectGarbage(std::vector<vk::GarbageObject> *garbageOut, ArgT object, Arg
     }
     CollectGarbage(garbageOut, objectsIn...);
 }
+
+class CommandWorkQueue final : angle::NonCopyable
+{
+  public:
+    CommandWorkQueue();
+    ~CommandWorkQueue();
+
+    angle::Result init(RendererVk *context);
+    void destroy(VkDevice device);
+    void handleDeviceLost(RendererVk *renderer);
+
+    bool hasInFlightCommands() const;
+
+    angle::Result allocatePrimaryCommandBuffer(VkDevice device,
+                                               vk::PrimaryCommandBuffer *commandBufferOut);
+    angle::Result releasePrimaryCommandBuffer(vk::Context *context,
+                                              vk::PrimaryCommandBuffer &&commandBuffer);
+
+    void clearAllGarbage(RendererVk *renderer);
+
+    angle::Result finishToSerial(vk::Context *context, Serial serial, uint64_t timeout);
+
+    angle::Result submitFrame(vk::Context *context,
+                              egl::ContextPriority priority,
+                              const VkSubmitInfo &submitInfo,
+                              const vk::Shared<vk::Fence> &sharedFence,
+                              vk::GarbageList *currentGarbage,
+                              vk::CommandPool *commandPool,
+                              vk::PrimaryCommandBuffer &&commandBuffer);
+
+    vk::Shared<vk::Fence> getLastSubmittedFence(const vk::Context *context) const;
+
+    // Check to see which batches have finished completion (forward progress for
+    // mLastCompletedQueueSerial, for example for when the application busy waits on a query
+    // result). It would be nice if we didn't have to expose this for QueryVk::getResult.
+    angle::Result checkCompletedCommands(vk::Context *context);
+
+  private:
+    angle::Result releaseToCommandBatch(vk::Context *context,
+                                        vk::PrimaryCommandBuffer &&commandBuffer,
+                                        vk::CommandPool *commandPool,
+                                        vk::CommandBatch *batch);
+
+    vk::GarbageQueue mGarbageQueue;
+    std::vector<vk::CommandBatch> mInFlightCommands;
+
+    // Keeps a free list of reusable primary command buffers.
+    vk::PersistentCommandPool mPrimaryCommandPool;
+};
 
 class RendererVk : angle::NonCopyable
 {
@@ -383,6 +433,8 @@ class RendererVk : angle::NonCopyable
     std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
+    CommandWorkQueue mCommandWorkQueue;
+    vk::PrimaryCommandBuffer mPrimaryCommandBuffer;
 
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;
