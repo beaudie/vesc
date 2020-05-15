@@ -34,6 +34,24 @@
       "revId": "0231c851da51e223283a6440bbff53e2643a3188",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "619d53e6_5dded48f",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-15T17:12:01Z",
+      "side": 1,
+      "message": "I think I misunderstood. I see, you don\u0027t need to check for support on luminence/alpha textures unless EXT_texture_storage is supported?\nAnd then we emulate support for these textures on the GL backend if EXT_texture_storage is missing?",
+      "parentUuid": "d627a557_67b8e25c",
+      "revId": "0231c851da51e223283a6440bbff53e2643a3188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
