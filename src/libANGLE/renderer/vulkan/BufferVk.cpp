@@ -103,6 +103,18 @@ ANGLE_INLINE VkMemoryPropertyFlags GetPreferredMemoryType(gl::BufferBinding targ
             return kHostCachedFlags;
     }
 }
+
+ANGLE_INLINE bool subDataSizeMeetsThreshold(size_t subDataSize, size_t bufferSize)
+{
+    if (subDataSize == bufferSize)
+    {
+        return true;
+    }
+
+    // Set the threshold to 55% of buffer size, for now
+    constexpr float kSubDataSizeThreshold = 0.55f;
+    return (subDataSize >= static_cast<size_t>(bufferSize * kSubDataSizeThreshold));
+}
 }  // namespace
 
 // ConversionBuffer implementation.
@@ -480,6 +492,41 @@ angle::Result BufferVk::directUpdate(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
+                                         const uint8_t *data,
+                                         size_t size,
+                                         size_t offset)
+{
+    // Here we acquire a new BufferHelper and directUpdate() the new buffer.
+    // If the subData size was less than the buffer's size we additionally enqueue
+    // a GPU copy of the remaining regions from the old mBuffer to the new one
+    vk::BufferHelper *src            = mBuffer;
+    VkBufferCopy regionBeforeSubdata = {0, 0, offset};
+    VkBufferCopy regionAfterSubdata  = {(offset + size), (offset + size),
+                                       (static_cast<size_t>(mState.getSize()) - (offset + size))};
+    bool updateRegionBeforeSubData   = (regionBeforeSubdata.size > 0);
+    bool updateRegionAfterSubData    = (regionAfterSubdata.size > 0);
+
+    if (updateRegionBeforeSubData || updateRegionAfterSubData)
+    {
+        src->retain(&contextVk->getResourceUseList());
+    }
+
+    ANGLE_TRY(acquireBufferHelper(contextVk, size, &mBuffer));
+    ANGLE_TRY(directUpdate(contextVk, data, size, offset));
+
+    if (updateRegionBeforeSubData)
+    {
+        ANGLE_TRY(mBuffer->copyFromBuffer(contextVk, src, regionBeforeSubdata));
+    }
+    if (updateRegionAfterSubData)
+    {
+        ANGLE_TRY(mBuffer->copyFromBuffer(contextVk, src, regionAfterSubdata));
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
                                      const uint8_t *data,
                                      size_t size,
@@ -521,15 +568,14 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
     updateShadowBuffer(data, size, offset);
 
     // if the buffer is currently in use
-    //     if size matches mBuffer's size, acquire a new BufferHelper from the pool
+    //     if sub data size meets threshold, acquire a new BufferHelper from the pool
     //     else stage an update
     // else update the buffer directly
     if (mBuffer->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
     {
-        if (size == static_cast<size_t>(mState.getSize()))
+        if (subDataSizeMeetsThreshold(size, static_cast<size_t>(mState.getSize())))
         {
-            ANGLE_TRY(acquireBufferHelper(contextVk, size, &mBuffer));
-            ANGLE_TRY(directUpdate(contextVk, data, size, offset));
+            ANGLE_TRY(acquireAndUpdate(contextVk, data, size, offset));
         }
         else
         {
