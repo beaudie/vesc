@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e632d443_7e908dc4",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-16T18:14:17Z",
+      "side": 1,
+      "message": "i can switch it to a simple threshold like you mention but wanted to have the option where vendors have a choice to override, through a config, the threshold depending on their gpu architecture.",
+      "parentUuid": "b8a282e3_38207666",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 84
+      },
+      "revId": "12836716d217fd07b016a11ad9aa29fe4612870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "543f68d7_7640180a",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "8bfb2698_79a65b1b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-16T18:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "543f68d7_7640180a",
+      "range": {
+        "startLine": 505,
+        "startChar": 0,
+        "endLine": 506,
+        "endChar": 96
+      },
+      "revId": "12836716d217fd07b016a11ad9aa29fe4612870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "deeba8d0_6c51518d",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "12836716d217fd07b016a11ad9aa29fe4612870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e55a1a6_a4c3cf6d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-16T18:14:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "deeba8d0_6c51518d",
+      "range": {
+        "startLine": 517,
+        "startChar": 0,
+        "endLine": 525,
+        "endChar": 5
+      },
+      "revId": "12836716d217fd07b016a11ad9aa29fe4612870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
