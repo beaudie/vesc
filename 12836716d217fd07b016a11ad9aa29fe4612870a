@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8a282e3_38207666",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-16T03:44:56Z",
+      "side": 1,
+      "message": "Could you just set the threshold to 50% and do:\n\n    return subDataSize \u003e (bufferSize \u003e\u003e 1);\n\nI mean, what are the chances an application is updating 53% of the buffer and you would want a slightly more optimal path for that?",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 84
+      },
+      "revId": "12836716d217fd07b016a11ad9aa29fe4612870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "543f68d7_7640180a",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-16T03:44:56Z",
+      "side": 1,
+      "message": "nit: `offset+size` in a temp variable",
+      "range": {
+        "startLine": 505,
+        "startChar": 0,
+        "endLine": 506,
+        "endChar": 96
+      },
+      "revId": "12836716d217fd07b016a11ad9aa29fe4612870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deeba8d0_6c51518d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-16T03:44:56Z",
+      "side": 1,
+      "message": "I suggest making `copyFromBuffer` take N regions and call it once with both regions. Then there won\u0027t be a barrier between the two updates.",
+      "range": {
+        "startLine": 517,
+        "startChar": 0,
+        "endLine": 525,
+        "endChar": 5
+      },
+      "revId": "12836716d217fd07b016a11ad9aa29fe4612870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
