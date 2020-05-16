@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb05c9ed_6a91104e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2980,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-16T02:46:28Z",
+      "side": 1,
+      "message": "nit: add:\n\n    VkPipelineStageFlags srcStageMask \u003d transitionFrom.srcStageMask;\n    VkPipelineStageFlags dstStageMask \u003d transitionTo.dstStageMask;\n\nand use hereafter for brevity",
+      "revId": "b74ce519e19269065bae735a2abc51c62e28f7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "455f8321_f678a2ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-16T02:46:28Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 2988,
+        "startChar": 33,
+        "endLine": 2988,
+        "endChar": 37
+      },
+      "revId": "b74ce519e19269065bae735a2abc51c62e28f7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dff63887_05774802",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2991,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-16T02:46:28Z",
+      "side": 1,
+      "message": "nit: assign to a temporary variable, like `isNewReadStage`, to make it simpler to follow.",
+      "range": {
+        "startLine": 2990,
+        "startChar": 16,
+        "endLine": 2991,
+        "endChar": 41
+      },
+      "revId": "b74ce519e19269065bae735a2abc51c62e28f7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7270e5e_7319d2ce",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2996,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-16T02:46:28Z",
+      "side": 1,
+      "message": "Say:\n\n    mLastNonShaderReadOnlyLayout \u003d\u003d TRANSFER\n    mCurrentShaderReadStageMask \u003d\u003d FRAGMENT\n\nSome pipeline barrier has taken care of that transition.\n\nSay now we want to transition from FragmentRO to VertexRO. This will create a memory barrier like this:\n\n    {SHADER_READ, FRAGMENT} -\u003e {SHADER_READ, VERTEX}\n\nIt\u0027s not fresh in my memory, does that work? Should there be a `TRANSFER-\u003eVERTEX` barrier there since TRANSFER was the last write?\n\nIn other words, do RAR memory barriers participate in the transitive property of barriers? Does read1-after-write1 followed by read2-after-read1 imply read2-after-write1?\n\n+Tobin",
+      "revId": "b74ce519e19269065bae735a2abc51c62e28f7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b2a99e9_f4972cef",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3020,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-16T02:46:28Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 3020,
+        "startChar": 41,
+        "endLine": 3020,
+        "endChar": 50
+      },
+      "revId": "b74ce519e19269065bae735a2abc51c62e28f7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeacc1d3_40a74b6a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-16T02:46:28Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1490,
+        "startChar": 11,
+        "endLine": 1490,
+        "endChar": 23
+      },
+      "revId": "b74ce519e19269065bae735a2abc51c62e28f7cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
