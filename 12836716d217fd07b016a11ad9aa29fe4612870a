@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "56d09a55_2ec81fef",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-17T04:48:14Z",
+      "side": 1,
+      "message": "I understand. We can always add this complexity should the need arise.",
+      "parentUuid": "e632d443_7e908dc4",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 84
+      },
+      "revId": "12836716d217fd07b016a11ad9aa29fe4612870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "543f68d7_7640180a",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
