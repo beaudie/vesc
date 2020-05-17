@@ -16,6 +16,24 @@
       "revId": "f11a9c1bc0170ad64d9cdf18f0a3652f9e8535b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "459f5eb1_93f455d1",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-17T04:49:08Z",
+      "side": 1,
+      "message": "Also, I know I said `\u003e\u003e 1`, but you could write `/ 2` for clarity and let the compiler compile it as shift.",
+      "parentUuid": "c8e42ef3_813f9a70",
+      "revId": "f11a9c1bc0170ad64d9cdf18f0a3652f9e8535b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
