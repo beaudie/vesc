@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad2ddf12_db1e67ce",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1216852
+      },
+      "writtenOn": "2020-05-18T10:38:20Z",
+      "side": 1,
+      "message": "This function is to get the default suffix of a platform, rather than the real suffix. So I didn\u0027t change here to fix this issue.",
+      "revId": "bbdee141b6d0c2343be90f5f6090adfa74b10f7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
