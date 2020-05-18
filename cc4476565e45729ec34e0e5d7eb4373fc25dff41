@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3467ecb2_6c5b8163",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-18T17:01:34Z",
+      "side": 1,
+      "message": "charlie, all of the code below, will only be executed for bufferSubData calls\nsince for bufferData calls updateRegionBeforeSubData and updateRegionAfterSubData will\nbe false",
+      "revId": "cc4476565e45729ec34e0e5d7eb4373fc25dff41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
