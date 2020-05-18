@@ -28,4 +28,9 @@ bool PrependPathToEnvironmentVar(const char *variableName, const char *path)
     }
     return SetEnvironmentVar(variableName, newValue);
 }
+
+char GetSuffixSeparator()
+{
+    return '.';
+}
 }  // namespace angle
