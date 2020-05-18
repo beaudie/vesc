@@ -18,6 +18,16 @@
 #include "common/platform.h"
 #include "common/system_utils.h"
 
+namespace
+{
+
+bool EndsWith(const char *str, const size_t strLen, const char *suffix, const size_t suffixLen)
+{
+    return suffixLen <= strLen && strncmp(str + strLen - suffixLen, suffix, suffixLen) == 0;
+}
+
+}  // anonymous namespace
+
 namespace angle
 {
 
@@ -178,15 +188,19 @@ bool BeginsWith(const std::string &str, const std::string &prefix, const size_t 
     return strncmp(str.c_str(), prefix.c_str(), prefixLength) == 0;
 }
 
+bool EndsWith(const std::string &str, const std::string &suffix)
+{
+    return ::EndsWith(str.c_str(), str.length(), suffix.c_str(), suffix.length());
+}
+
 bool EndsWith(const std::string &str, const char *suffix)
 {
-    const auto len = strlen(suffix);
-    if (len > str.size())
-        return false;
+    return ::EndsWith(str.c_str(), str.length(), suffix, strlen(suffix));
+}
 
-    const char *end = str.c_str() + str.size() - len;
-
-    return memcmp(end, suffix, len) == 0;
+bool EndsWith(const char *str, const char *suffix)
+{
+    return ::EndsWith(str, strlen(str), suffix, strlen(suffix));
 }
 
 void ToLower(std::string *str)
