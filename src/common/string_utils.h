@@ -50,8 +50,9 @@ bool HexStringToUInt(const std::string &input, unsigned int *uintOut);
 bool ReadFileToString(const std::string &path, std::string *stringOut);
 
 // Check if the string str begins with the given prefix.
+// str and prefix may not be NULL and need to be NULL terminated.
 // The comparison is case sensitive.
-bool BeginsWith(const std::string &str, const std::string &prefix);
+bool BeginsWith(const char *str, const char *prefix);
 
 // Check if the string str begins with the given prefix.
 // Prefix may not be NULL and needs to be NULL terminated.
@@ -59,9 +60,8 @@ bool BeginsWith(const std::string &str, const std::string &prefix);
 bool BeginsWith(const std::string &str, const char *prefix);
 
 // Check if the string str begins with the given prefix.
-// str and prefix may not be NULL and need to be NULL terminated.
 // The comparison is case sensitive.
-bool BeginsWith(const char *str, const char *prefix);
+bool BeginsWith(const std::string &str, const std::string &prefix);
 
 // Check if the string str begins with the first prefixLength characters of the given prefix.
 // The length of the prefix string should be greater than or equal to prefixLength.
@@ -69,9 +69,18 @@ bool BeginsWith(const char *str, const char *prefix);
 bool BeginsWith(const std::string &str, const std::string &prefix, const size_t prefixLength);
 
 // Check if the string str ends with the given suffix.
-// Suffix may not be NUL and needs to be NULL terminated.
+// str and suffix may not be NULL and need to be NULL terminated.
+// The comparison is case sensitive.
+bool EndsWith(const char *str, const char *suffix);
+
+// Check if the string str ends with the given suffix.
+// Suffix may not be NULL and needs to be NULL terminated.
 // The comparison is case sensitive.
 bool EndsWith(const std::string &str, const char *suffix);
+
+// Check if the string str ends with the given suffix.
+// The comparison is case sensitive.
+bool EndsWith(const std::string &str, const std::string &suffix);
 
 // Convert to lower-case.
 void ToLower(std::string *str);

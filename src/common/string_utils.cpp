@@ -158,19 +158,19 @@ bool ReadFileToString(const std::string &path, std::string *stringOut)
     return !inFile.fail();
 }
 
-bool BeginsWith(const std::string &str, const std::string &prefix)
+bool BeginsWith(const char *str, const char *prefix)
 {
-    return strncmp(str.c_str(), prefix.c_str(), prefix.length()) == 0;
+    return strncmp(str, prefix, strlen(prefix)) == 0;
 }
 
 bool BeginsWith(const std::string &str, const char *prefix)
 {
-    return strncmp(str.c_str(), prefix, strlen(prefix)) == 0;
+    return BeginsWith(str.c_str(), prefix);
 }
 
-bool BeginsWith(const char *str, const char *prefix)
+bool BeginsWith(const std::string &str, const std::string &prefix)
 {
-    return strncmp(str, prefix, strlen(prefix)) == 0;
+    return BeginsWith(str.c_str(), prefix.c_str());
 }
 
 bool BeginsWith(const std::string &str, const std::string &prefix, const size_t prefixLength)
@@ -178,15 +178,21 @@ bool BeginsWith(const std::string &str, const std::string &prefix, const size_t 
     return strncmp(str.c_str(), prefix.c_str(), prefixLength) == 0;
 }
 
+bool EndsWith(const char *str, const char *suffix)
+{
+    const size_t strLen    = strlen(str);
+    const size_t suffixLen = strlen(suffix);
+    return suffixLen <= strLen && strncmp(str + strLen - suffixLen, suffix, suffixLen) == 0;
+}
+
 bool EndsWith(const std::string &str, const char *suffix)
 {
-    const auto len = strlen(suffix);
-    if (len > str.size())
-        return false;
+    return EndsWith(str.c_str(), suffix);
+}
 
-    const char *end = str.c_str() + str.size() - len;
-
-    return memcmp(end, suffix, len) == 0;
+bool EndsWith(const std::string &str, const std::string &suffix)
+{
+    return EndsWith(str.c_str(), suffix.c_str());
 }
 
 void ToLower(std::string *str)
