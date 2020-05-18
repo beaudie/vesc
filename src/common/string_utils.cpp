@@ -178,15 +178,33 @@ bool BeginsWith(const std::string &str, const std::string &prefix, const size_t 
     return strncmp(str.c_str(), prefix.c_str(), prefixLength) == 0;
 }
 
+bool EndsWith(const std::string &str, const std::string &suffix)
+{
+    const size_t strLength    = str.length();
+    const size_t suffixLength = suffix.length();
+    if (suffixLength > strLength)
+        return false;
+    return strncmp(str.c_str() + strLength - suffixLength, suffix.c_str(), suffixLength) == 0;
+}
+
 bool EndsWith(const std::string &str, const char *suffix)
 {
-    const auto len = strlen(suffix);
-    if (len > str.size())
+    const size_t len = strlen(suffix);
+    if (len > str.length())
         return false;
 
-    const char *end = str.c_str() + str.size() - len;
+    const char *end = str.c_str() + str.length() - len;
 
-    return memcmp(end, suffix, len) == 0;
+    return strncmp(end, suffix, len) == 0;
+}
+
+bool EndsWith(const char *str, const char *suffix)
+{
+    const size_t strLen    = strlen(str);
+    const size_t suffixLen = strlen(suffix);
+    if (suffixLen > strLen)
+        return false;
+    return strncmp(str + strLen - suffixLen, suffix, suffixLen) == 0;
 }
 
 void ToLower(std::string *str)
