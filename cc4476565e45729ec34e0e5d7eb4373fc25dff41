@@ -16,6 +16,24 @@
       "revId": "cc4476565e45729ec34e0e5d7eb4373fc25dff41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21dc5bac_34355e50",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-18T19:06:18Z",
+      "side": 1,
+      "message": "That\u0027s right. That was part of the reason I initially mentioned the duplicate the code for bufferSubData and bufferData, because it is quite confusing IMO. But that is ok, ignore that part of comment for now.",
+      "parentUuid": "3467ecb2_6c5b8163",
+      "revId": "cc4476565e45729ec34e0e5d7eb4373fc25dff41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
