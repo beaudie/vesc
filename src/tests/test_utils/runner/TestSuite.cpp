@@ -414,6 +414,14 @@ std::string ParseTestSuiteName(const char *executable)
         baseNameStart++;
     }
 
+// on Windows, suffix can be omitted.
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    if (!strrchr(baseNameStart, GetSuffixSeparator()))
+    {
+        return baseNameStart;
+    }
+#endif
+
     const char *suffix = GetExecutableExtension();
     size_t suffixLen   = strlen(suffix);
     if (suffixLen == 0)
