@@ -146,6 +146,30 @@
       "revId": "10e91929300762764651d56ef510d4f057d5c947",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1604b40_8cf08e05",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-19T19:00:39Z",
+      "side": 1,
+      "message": "\u003e you only get to here when mCurrentLayout is not a shaderReadOnly\n\nHow is that enforced?\n\nI still don\u0027t understand what\u0027s preventing mLastNonShaderReadOnlyLayout from containing a ShaderReadOnly value here.   If this is transitioning from a ShaderReadOnly to ShaderReadOnly, mCurrentLayout will contain a ReadOnly layout, which will then be given to mLastNonShaderReadOnlyLayout.   It seems the only thing preventing that is \u0027mLastNonShaderReadOnlyLayout !\u003d ImageLayout::Undefined\u0027 above, which may not necessarily be true (otherwise, presumably you wouldn\u0027t need to check it).\n\nMaybe I\u0027m missing what\u0027s forcing a layout that\u0027s not ReadOnly to be set before a ReadOnly so that \u0027mLastNonShaderReadOnlyLayout !\u003d ImageLayout::Undefined\u0027 is guaranteed to be true when doing ReadOnly-\u003eReadOnly?",
+      "parentUuid": "f8db7771_86928b37",
+      "range": {
+        "startLine": 2989,
+        "startChar": 0,
+        "endLine": 2995,
+        "endChar": 13
+      },
+      "revId": "10e91929300762764651d56ef510d4f057d5c947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
