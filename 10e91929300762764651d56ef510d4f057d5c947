@@ -170,6 +170,30 @@
       "revId": "10e91929300762764651d56ef510d4f057d5c947",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2593ca64_875e359b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-19T19:29:15Z",
+      "side": 1,
+      "message": "Could be nice to sprinkle ASSERTs verifying that mLastNonShaderReadOnlyLayout doesn\u0027t contain a ShaderReadOnly value.",
+      "parentUuid": "b1604b40_8cf08e05",
+      "range": {
+        "startLine": 2989,
+        "startChar": 0,
+        "endLine": 2995,
+        "endChar": 13
+      },
+      "revId": "10e91929300762764651d56ef510d4f057d5c947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
