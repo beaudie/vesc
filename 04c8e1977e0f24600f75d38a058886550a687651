@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "47ef2e30_6d464e83",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T21:52:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98a603c5_64eebf59",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "04c8e1977e0f24600f75d38a058886550a687651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7be9dd1_3d6b7fdd",
         "filename": "include/platform/FeaturesVk.h",
         "patchSetId": 3
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "f851ea5e_5e8da6d8",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T21:52:28Z",
+      "side": 1,
+      "message": "I am fine with either. Will change to !Android",
+      "parentUuid": "a7be9dd1_3d6b7fdd",
+      "range": {
+        "startLine": 308,
+        "startChar": 7,
+        "endLine": 308,
+        "endChar": 13
+      },
+      "revId": "04c8e1977e0f24600f75d38a058886550a687651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62f7f9bd_88d29e74",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T21:52:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8efbf569_95544ad9",
+      "range": {
+        "startLine": 308,
+        "startChar": 88,
+        "endLine": 308,
+        "endChar": 93
+      },
+      "revId": "04c8e1977e0f24600f75d38a058886550a687651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bda31f81_e1d442bb",
         "filename": "include/platform/FeaturesVk.h",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "04c8e1977e0f24600f75d38a058886550a687651",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edb03445_74800966",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T21:52:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bda31f81_e1d442bb",
+      "range": {
+        "startLine": 311,
+        "startChar": 47,
+        "endLine": 311,
+        "endChar": 53
+      },
+      "revId": "04c8e1977e0f24600f75d38a058886550a687651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
