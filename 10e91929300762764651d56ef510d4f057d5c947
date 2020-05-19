@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "b0d7a45e_f833fdda",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2970,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T18:26:13Z",
+      "side": 1,
+      "message": "Good catch, Tim! I will fix that.",
+      "parentUuid": "6d359ca4_77ea4c2d",
+      "revId": "10e91929300762764651d56ef510d4f057d5c947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a1e524ae_3581fd68",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -53,6 +71,30 @@
       "writtenOn": "2020-05-19T18:16:49Z",
       "side": 1,
       "message": "Why is mCurrentLayout guaranteed not to be a non-shaderRead layout here?\n\nIt looks like \u0027mCurrentLayout \u003d newLayout\u0027 will be executed if we are transitioning to a shaderRead layout from something else, so the next time around it will contain that shaderRead layout which will result in mLastNonShaderReadOnlyLayout containing a shaderReadOnly layout value (even though it\u0027s name implies otherwise).",
+      "range": {
+        "startLine": 2989,
+        "startChar": 0,
+        "endLine": 2995,
+        "endChar": 13
+      },
+      "revId": "10e91929300762764651d56ef510d4f057d5c947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8db7771_86928b37",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T18:26:13Z",
+      "side": 1,
+      "message": "As your previous comment pointed out, the line bellow \"mCurrentLayout \u003d newLayout;\" should move outside one level. you only get to here when mCurrentLayout is not a shaderReadOnly. Otherwise, you should get to line 2956.",
+      "parentUuid": "a1e524ae_3581fd68",
       "range": {
         "startLine": 2989,
         "startChar": 0,
