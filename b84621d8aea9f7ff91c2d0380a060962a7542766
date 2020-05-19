@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1759150_b2d10225",
+        "filename": "src/libANGLE/renderer/vulkan/xcb/WindowSurfaceVkXcb.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-19T19:17:51Z",
+      "side": 1,
+      "message": "https://stackoverflow.com/questions/27440953/stdunique-ptr-for-c-functions-that-need-free",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 46
+      },
+      "revId": "b84621d8aea9f7ff91c2d0380a060962a7542766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "105b52d6_f3766fb4",
+        "filename": "src/libANGLE/renderer/vulkan/xcb/WindowSurfaceVkXcb.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-19T19:17:51Z",
+      "side": 1,
+      "message": "nit: you can omit this technically.",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 35
+      },
+      "revId": "b84621d8aea9f7ff91c2d0380a060962a7542766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
