@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98a603c5_64eebf59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-19T19:18:37Z",
+      "side": 1,
+      "message": "Please wrap git commit messages to 72 characters (ideally around 50 for the first line).\n\nA good editor would have automatically done this.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "04c8e1977e0f24600f75d38a058886550a687651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7be9dd1_3d6b7fdd",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-19T19:18:37Z",
+      "side": 1,
+      "message": "Chances are this is true for discrete GPUs in general, so I\u0027d just go with discrete (instead of NVIDIA) and enable it on all desktop platforms (a la `!IsAndroid()`).",
+      "range": {
+        "startLine": 308,
+        "startChar": 7,
+        "endLine": 308,
+        "endChar": 13
+      },
+      "revId": "04c8e1977e0f24600f75d38a058886550a687651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8efbf569_95544ad9",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-19T19:18:37Z",
+      "side": 1,
+      "message": "issuing",
+      "range": {
+        "startLine": 308,
+        "startChar": 88,
+        "endLine": 308,
+        "endChar": 93
+      },
+      "revId": "04c8e1977e0f24600f75d38a058886550a687651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bda31f81_e1d442bb",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-19T19:18:37Z",
+      "side": 1,
+      "message": "Maybe call it `aggregate`?",
+      "range": {
+        "startLine": 311,
+        "startChar": 47,
+        "endLine": 311,
+        "endChar": 53
+      },
+      "revId": "04c8e1977e0f24600f75d38a058886550a687651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
