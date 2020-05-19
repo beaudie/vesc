@@ -83,6 +83,24 @@
     },
     {
       "key": {
+        "uuid": "11c4766d_483870cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-19T18:20:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2da88fe4_a7eb5b55",
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d2f392a_cd9d8f7c",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -175,6 +193,30 @@
       "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4403129_abbe6644",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-19T18:20:09Z",
+      "side": 1,
+      "message": "Oh, I see.   I missed that.   Sounds good.",
+      "parentUuid": "63d9f059_ae53b7a7",
+      "range": {
+        "startLine": 604,
+        "startChar": 0,
+        "endLine": 609,
+        "endChar": 9
+      },
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
