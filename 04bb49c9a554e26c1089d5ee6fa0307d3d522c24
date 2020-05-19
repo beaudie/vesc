@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10bc48b6_bf568e1a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-19T17:19:29Z",
+      "side": 1,
+      "message": "Is this actually any faster?   The member variable mPipelineBarrierMask still has to be read once, so the most expensive part is already paid.\n\nMy preference would be to avoid doing this copy and use mPipelineBarrierMask directly.",
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d2f392a_cd9d8f7c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-19T17:19:29Z",
+      "side": 1,
+      "message": "This can keep the simplified for loop:\n\n        PipelineBarrier \u0026barrier \u003d mPipelineBarriers[*mask.begin()];\n        for (PipelineStage pipelineStage : mask)\n        {\n            barrier.merge(\u0026mPipelineBarriers[pipelineStage]);\n        }",
+      "range": {
+        "startLine": 604,
+        "startChar": 0,
+        "endLine": 609,
+        "endChar": 9
+      },
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
