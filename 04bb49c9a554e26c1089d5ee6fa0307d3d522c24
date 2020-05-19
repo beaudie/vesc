@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2da88fe4_a7eb5b55",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T17:28:34Z",
+      "side": 1,
+      "message": "I don\u0027t disagree with you. Make a local variable or not, compiler might able to optimize it either way and result in the same instruction. But I think making a local copy won\u0027t be any slower at least, that is why I am taking feedback advice here from previous CL.",
+      "parentUuid": "10bc48b6_bf568e1a",
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d2f392a_cd9d8f7c",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2020-05-19T17:19:29Z",
       "side": 1,
       "message": "This can keep the simplified for loop:\n\n        PipelineBarrier \u0026barrier \u003d mPipelineBarriers[*mask.begin()];\n        for (PipelineStage pipelineStage : mask)\n        {\n            barrier.merge(\u0026mPipelineBarriers[pipelineStage]);\n        }",
+      "range": {
+        "startLine": 604,
+        "startChar": 0,
+        "endLine": 609,
+        "endChar": 9
+      },
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1a3f67d_80a4cdf5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T17:28:34Z",
+      "side": 1,
+      "message": "Isn\u0027t that the for loop will iterate over the all set bits in the mask? I want the for loop skip the first element, since the first one already assigned to barrier.",
+      "parentUuid": "3d2f392a_cd9d8f7c",
       "range": {
         "startLine": 604,
         "startChar": 0,
