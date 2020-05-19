@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "42ebe9af_b45a8547",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-19T18:11:28Z",
+      "side": 1,
+      "message": "shabi suggested otherwise, for clarity. let the compiler do the optimization",
+      "parentUuid": "3f1f83aa_586eb71d",
+      "range": {
+        "startLine": 111,
+        "startChar": 37,
+        "endLine": 111,
+        "endChar": 40
+      },
+      "revId": "75580bc8e7ec53f3ce6e35d74d24164a40ffe845",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fea115b_8309be0b",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "10ca5099_6c068cb9",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-19T18:11:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fea115b_8309be0b",
+      "range": {
+        "startLine": 550,
+        "startChar": 3,
+        "endLine": 550,
+        "endChar": 27
+      },
+      "revId": "75580bc8e7ec53f3ce6e35d74d24164a40ffe845",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "58b6df65_c121a233",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "75580bc8e7ec53f3ce6e35d74d24164a40ffe845",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b152e425_ea30c336",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-19T18:11:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58b6df65_c121a233",
+      "range": {
+        "startLine": 561,
+        "startChar": 8,
+        "endLine": 561,
+        "endChar": 19
+      },
+      "revId": "75580bc8e7ec53f3ce6e35d74d24164a40ffe845",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
