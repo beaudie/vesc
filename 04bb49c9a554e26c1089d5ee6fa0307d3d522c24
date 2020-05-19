@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4bd2148f_0a575946",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T18:38:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9dff0b0_ab627b5f",
+      "range": {
+        "startLine": 309,
+        "startChar": 35,
+        "endLine": 309,
+        "endChar": 53
+      },
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d77a2e6a_fb7d2def",
         "filename": "include/platform/FeaturesVk.h",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "712c2c3e_895ece4e",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T18:38:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d77a2e6a_fb7d2def",
+      "range": {
+        "startLine": 314,
+        "startChar": 40,
+        "endLine": 314,
+        "endChar": 49
+      },
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
