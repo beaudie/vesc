@@ -27,7 +27,7 @@ struct BufferSubDataParams final : public RenderTestParams
         minorVersion      = 0;
         windowWidth       = 512;
         windowHeight      = 512;
-        updateSize        = 3000;
+        updateSize        = 32000000;
         bufferSize        = 40000000;
         iterationsPerStep = kIterationsPerStep;
         updateRate        = 1;
