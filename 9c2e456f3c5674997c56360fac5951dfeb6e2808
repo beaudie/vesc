@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28d3c420_f9e1f924",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-19T23:45:02Z",
+      "side": 1,
+      "message": "angle::FixedVector reads better?",
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
