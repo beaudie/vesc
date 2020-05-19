@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f1f83aa_586eb71d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-19T16:25:47Z",
+      "side": 1,
+      "message": "nit: bufferSize \u003e\u003e 1 for micro-optimization.",
+      "range": {
+        "startLine": 111,
+        "startChar": 37,
+        "endLine": 111,
+        "endChar": 40
+      },
+      "revId": "75580bc8e7ec53f3ce6e35d74d24164a40ffe845",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fea115b_8309be0b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-19T16:25:47Z",
+      "side": 1,
+      "message": "nit: you can use angle::FixedVector for this purpose.",
+      "range": {
+        "startLine": 550,
+        "startChar": 3,
+        "endLine": 550,
+        "endChar": 27
+      },
+      "revId": "75580bc8e7ec53f3ce6e35d74d24164a40ffe845",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58b6df65_c121a233",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-19T16:25:47Z",
+      "side": 1,
+      "message": "gt 0 or !empty for FixedVector.",
+      "range": {
+        "startLine": 561,
+        "startChar": 8,
+        "endLine": 561,
+        "endChar": 19
+      },
+      "revId": "75580bc8e7ec53f3ce6e35d74d24164a40ffe845",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
