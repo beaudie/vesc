@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "f691b929_8a11a842",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-19T19:26:12Z",
+      "side": 1,
+      "message": "@Jamie, wait till you see the code the compiler generates for the likes of ` / 12345`.\n\nWhen it comes to unsigned integer types and simple divisions like 2 and 4, rest assured that every compiler does this optimization.",
+      "parentUuid": "70fd0539_071d8d14",
+      "range": {
+        "startLine": 111,
+        "startChar": 37,
+        "endLine": 111,
+        "endChar": 40
+      },
+      "revId": "75580bc8e7ec53f3ce6e35d74d24164a40ffe845",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fea115b_8309be0b",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 5
