@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "401d5d29_26b58238",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 3738,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-19T22:48:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e2a152c_9c0f18df",
+      "revId": "a63063188a7567a0397a2f0b66b5042a07362646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7cc6381_046f9312",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 40
@@ -33,6 +51,24 @@
       "revId": "a63063188a7567a0397a2f0b66b5042a07362646",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "525f06ba_5f2820c0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-19T22:48:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7cc6381_046f9312",
+      "revId": "a63063188a7567a0397a2f0b66b5042a07362646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "0ef55fa9_24159d97",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-19T22:48:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7418e207_66680fee",
+      "revId": "a63063188a7567a0397a2f0b66b5042a07362646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c15f571_3aad73be",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 40
@@ -67,6 +121,24 @@
       "revId": "a63063188a7567a0397a2f0b66b5042a07362646",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac31bc40_044307a7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 1939,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-19T22:48:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c15f571_3aad73be",
+      "revId": "a63063188a7567a0397a2f0b66b5042a07362646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "b24923d6_170a1c87",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 1975,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-19T22:48:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7d22718_a4b968e5",
+      "range": {
+        "startLine": 1975,
+        "startChar": 11,
+        "endLine": 1975,
+        "endChar": 28
+      },
+      "revId": "a63063188a7567a0397a2f0b66b5042a07362646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a40ff4f_c5cf3e09",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 40
@@ -104,6 +200,30 @@
       "writtenOn": "2020-05-19T19:07:58Z",
       "side": 1,
       "message": "Can we pull these out into their own class, preferably in its own file? That\u0027s both clearer to read/review and safer to make sure the rest of the class doesn\u0027t randomly access these (or the thread doesn\u0027t access other members).",
+      "range": {
+        "startLine": 376,
+        "startChar": 0,
+        "endLine": 385,
+        "endChar": 27
+      },
+      "revId": "a63063188a7567a0397a2f0b66b5042a07362646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7b3212a_b8e56839",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-19T22:48:59Z",
+      "side": 1,
+      "message": "This is a bit more involved. I\u0027ll investigate and see how it looks.",
+      "parentUuid": "1a40ff4f_c5cf3e09",
       "range": {
         "startLine": 376,
         "startChar": 0,
