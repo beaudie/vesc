@@ -22,6 +22,46 @@
       "revId": "10e91929300762764651d56ef510d4f057d5c947",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d359ca4_77ea4c2d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2970,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-19T18:16:49Z",
+      "side": 1,
+      "message": "Why don\u0027t we need a \u0027mCurrentLayout \u003d newLayout\u0027 here also?   The layouts don\u0027t match exactly, so we\u0027re losing this new information.",
+      "revId": "10e91929300762764651d56ef510d4f057d5c947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1e524ae_3581fd68",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-19T18:16:49Z",
+      "side": 1,
+      "message": "Why is mCurrentLayout guaranteed not to be a non-shaderRead layout here?\n\nIt looks like \u0027mCurrentLayout \u003d newLayout\u0027 will be executed if we are transitioning to a shaderRead layout from something else, so the next time around it will contain that shaderRead layout which will result in mLastNonShaderReadOnlyLayout containing a shaderReadOnly layout value (even though it\u0027s name implies otherwise).",
+      "range": {
+        "startLine": 2989,
+        "startChar": 0,
+        "endLine": 2995,
+        "endChar": 13
+      },
+      "revId": "10e91929300762764651d56ef510d4f057d5c947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
