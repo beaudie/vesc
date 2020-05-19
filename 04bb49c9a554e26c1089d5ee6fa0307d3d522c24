@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "f9dff0b0_ab627b5f",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-19T17:33:42Z",
+      "side": 1,
+      "message": "fine grained dependency",
+      "range": {
+        "startLine": 309,
+        "startChar": 35,
+        "endLine": 309,
+        "endChar": 53
+      },
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d77a2e6a_fb7d2def",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-19T17:33:42Z",
+      "side": 1,
+      "message": "fine grained",
+      "range": {
+        "startLine": 314,
+        "startChar": 40,
+        "endLine": 314,
+        "endChar": 49
+      },
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "10bc48b6_bf568e1a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -71,6 +117,30 @@
       "writtenOn": "2020-05-19T17:28:34Z",
       "side": 1,
       "message": "Isn\u0027t that the for loop will iterate over the all set bits in the mask? I want the for loop skip the first element, since the first one already assigned to barrier.",
+      "parentUuid": "3d2f392a_cd9d8f7c",
+      "range": {
+        "startLine": 604,
+        "startChar": 0,
+        "endLine": 609,
+        "endChar": 9
+      },
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfa7733c_0451683b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-19T17:33:42Z",
+      "side": 1,
+      "message": "Won\u0027t this call barrier.merge twice for the 1st element?\nThat\u0027s probably not a problem functionality-wise, is it a perf concern?\nBoth loops will also potentially change the first element, is that okay?",
       "parentUuid": "3d2f392a_cd9d8f7c",
       "range": {
         "startLine": 604,
