@@ -1681,14 +1681,9 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         vk::DeviceScoped<vk::PrimaryCommandBuffer> commandBatch(device);
         vk::PrimaryCommandBuffer &commandBuffer = commandBatch.get();
 
-        ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, mCommandPool, &commandBuffer));
-
-        VkCommandBufferBeginInfo beginInfo = {};
-        beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-        beginInfo.pInheritanceInfo         = nullptr;
-
-        ANGLE_VK_TRY(this, commandBuffer.begin(beginInfo));
+        // ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, mCommandPool,
+        // &commandBuffer));
+        ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, &commandBuffer));
 
         commandBuffer.setEvent(gpuReady.get().getHandle(), VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT);
         commandBuffer.waitEvents(1, cpuReady.get().ptr(), VK_PIPELINE_STAGE_HOST_BIT,
@@ -1700,11 +1695,14 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         ANGLE_VK_TRY(this, commandBuffer.end());
 
         // Submit the command buffer
-        VkSubmitInfo submitInfo = {};
+        /*VkSubmitInfo submitInfo = {};
         InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, &mWaitSemaphoreStageMasks,
                              nullptr);
 
-        ANGLE_TRY(submitFrame(submitInfo, commandBatch.release()));
+        ANGLE_TRY(submitFrame(submitInfo, commandBatch.release()));*/
+        Serial throwAwaySerial;
+        ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), mContextPriority,
+                                               nullptr, &throwAwaySerial));
 
         // Wait for GPU to be ready.  This is a short busy wait.
         VkResult result = VK_EVENT_RESET;
@@ -3894,14 +3892,9 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     vk::DeviceScoped<vk::PrimaryCommandBuffer> commandBatch(device);
     vk::PrimaryCommandBuffer &commandBuffer = commandBatch.get();
 
-    ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, mCommandPool, &commandBuffer));
+    // ANGLE_TRY(mCommandQueue.allocatePrimaryCommandBuffer(this, mCommandPool, &commandBuffer));
+    ANGLE_TRY(mRenderer->getCommandBufferOneOff(this, &commandBuffer));
 
-    VkCommandBufferBeginInfo beginInfo = {};
-    beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-    beginInfo.pInheritanceInfo         = nullptr;
-
-    ANGLE_VK_TRY(this, commandBuffer.begin(beginInfo));
     timestampQuery.writeTimestamp(this, &commandBuffer);
     ANGLE_VK_TRY(this, commandBuffer.end());
 
@@ -3925,8 +3918,11 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     submitInfo.pSignalSemaphores    = nullptr;
 
     Serial throwAwaySerial;
-    ANGLE_TRY(
-        mRenderer->queueSubmit(this, mContextPriority, submitInfo, &fence.get(), &throwAwaySerial));
+    /*ANGLE_TRY(
+        mRenderer->queueSubmit(this, mContextPriority, submitInfo, &fence.get(),
+       &throwAwaySerial));*/
+    ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), mContextPriority,
+                                           &fence.get(), &throwAwaySerial));
 
     // Wait for the submission to finish.  Given no semaphores, there is hope that it would execute
     // in parallel with what's already running on the GPU.
@@ -3941,7 +3937,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
         *timestampOut *
         static_cast<double>(getRenderer()->getPhysicalDeviceProperties().limits.timestampPeriod));
 
-    return mCommandQueue.releasePrimaryCommandBuffer(this, commandBatch.release());
+    return angle::Result::Continue;
 }
 
 void ContextVk::invalidateDefaultAttribute(size_t attribIndex)
