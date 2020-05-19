@@ -169,6 +169,30 @@
     },
     {
       "key": {
+        "uuid": "97e330bc_f604f984",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-19T20:00:29Z",
+      "side": 1,
+      "message": "Yeah, for /2 it\u0027s probably a safe bet. I\u0027ve seen them fail to optimize all kinds of things.",
+      "parentUuid": "f691b929_8a11a842",
+      "range": {
+        "startLine": 111,
+        "startChar": 37,
+        "endLine": 111,
+        "endChar": 40
+      },
+      "revId": "75580bc8e7ec53f3ce6e35d74d24164a40ffe845",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fea115b_8309be0b",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 5
