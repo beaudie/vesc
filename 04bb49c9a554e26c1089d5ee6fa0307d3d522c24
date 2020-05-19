@@ -167,6 +167,24 @@
     },
     {
       "key": {
+        "uuid": "98164eb8_86b3a6a1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-19T20:26:31Z",
+      "side": 1,
+      "message": "I\u0027d expect that to happen regardless of a stack vs heap variable since it\u0027s not marked volatile.",
+      "parentUuid": "a08985fc_0d86ebc4",
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d2f392a_cd9d8f7c",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
