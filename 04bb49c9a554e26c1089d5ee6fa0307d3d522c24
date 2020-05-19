@@ -151,6 +151,30 @@
       "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63d9f059_ae53b7a7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-19T18:11:13Z",
+      "side": 1,
+      "message": "It is a problem functionality-wise. That is why patchset1 failed (it was merging the first element).\nMy loop has a ++iter in the initialization part of for loop, so it will skip the first element in the for loop. I can use Tim\u0027s for loop, but I will need to remove the first bit from the mask. I thought about that, and think it is easier to just use the iterator in the for loop since I already have the iterator.",
+      "parentUuid": "dfa7733c_0451683b",
+      "range": {
+        "startLine": 604,
+        "startChar": 0,
+        "endLine": 609,
+        "endChar": 9
+      },
+      "revId": "04bb49c9a554e26c1089d5ee6fa0307d3d522c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
