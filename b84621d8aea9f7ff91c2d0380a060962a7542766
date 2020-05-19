@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e8f60845_964dd6a8",
+        "filename": "src/libANGLE/renderer/vulkan/xcb/WindowSurfaceVkXcb.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-19T20:19:00Z",
+      "side": 1,
+      "message": "I played around with this a bit but it seems like it\u0027s going to be overly complicated to get it working since I need to pass a pointer to the stored pointer:\nhttps://stackoverflow.com/questions/38427175/how-do-a-get-the-address-of-the-pointer-stored-in-a-unique-ptr\n\"You cannot get the address of the pointer stored inside a std::unique_ptr. If you need to call C code that returns a pointer through a double pointer, you need to pass it the address of some other pointer and then separately have the std::unique_ptr take ownership of that pointer.\"",
+      "parentUuid": "a1759150_b2d10225",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 46
+      },
+      "revId": "b84621d8aea9f7ff91c2d0380a060962a7542766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "105b52d6_f3766fb4",
         "filename": "src/libANGLE/renderer/vulkan/xcb/WindowSurfaceVkXcb.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "b84621d8aea9f7ff91c2d0380a060962a7542766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85ee261a_0f817e2d",
+        "filename": "src/libANGLE/renderer/vulkan/xcb/WindowSurfaceVkXcb.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-19T20:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "105b52d6_f3766fb4",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 35
+      },
+      "revId": "b84621d8aea9f7ff91c2d0380a060962a7542766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
