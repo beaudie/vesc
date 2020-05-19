@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "81066410_09482a9b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-19T18:22:45Z",
+      "side": 1,
+      "message": "I vote for \u0027/ 2\u0027 since I think that\u0027s clearer too.   We all know that \u0027\u003e\u003e 1\u0027 means halving a value, while \u0027/ 2\u0027 says that explicitly.",
+      "parentUuid": "1d67c0f8_fb251151",
+      "range": {
+        "startLine": 111,
+        "startChar": 37,
+        "endLine": 111,
+        "endChar": 40
+      },
+      "revId": "75580bc8e7ec53f3ce6e35d74d24164a40ffe845",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fea115b_8309be0b",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 5
