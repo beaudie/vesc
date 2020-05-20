@@ -41,10 +41,28 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
     clearParams.clearStencil     = false;
     clearParams.stencilValue     = state.getStencilClearValue();
     clearParams.stencilWriteMask = state.getDepthStencilState().stencilWritemask;
-    clearParams.scissorEnabled   = state.isScissorTestEnabled();
-    clearParams.scissor          = state.getScissor();
 
-    const gl::Framebuffer *framebufferObject = state.getDrawFramebuffer();
+    const auto *framebufferObject     = state.getDrawFramebuffer();
+    const auto *framebufferAttachment = framebufferObject->getFirstNonNullAttachment();
+    ASSERT(framebufferAttachment);
+    const gl::Extents framebufferSize = framebufferAttachment->getSize();
+    // Use framebuffer size for default scissor in case we override it for surface texture offset.
+    clearParams.scissor = gl::Rectangle(0, 0, framebufferSize.width, framebufferSize.height);
+    if (state.isScissorTestEnabled())
+    {
+        clearParams.scissorEnabled = true;
+        clearParams.scissor        = state.getScissor();
+    }
+    const gl::Offset &surfaceTextureOffset = framebufferObject->getSurfaceTextureOffset();
+    if (surfaceTextureOffset != gl::kOffsetZero)
+    {
+        clearParams.scissorEnabled = true;
+        clearParams.scissor.x      = clearParams.scissor.x + surfaceTextureOffset.x;
+        clearParams.scissor.y      = clearParams.scissor.y + surfaceTextureOffset.y;
+    }
+    clearParams.scissorEnabled = scissorEnabled;
+    clearParams.scissor        = scissor;
+
     const bool clearColor =
         (mask & GL_COLOR_BUFFER_BIT) && framebufferObject->hasEnabledDrawBuffer();
     if (clearColor)
