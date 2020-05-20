@@ -3436,6 +3436,7 @@ angle::Result Renderer11::blitRenderbufferRect(const gl::Context *context,
                                                RenderTargetD3D *drawRenderTarget,
                                                GLenum filter,
                                                const gl::Rectangle *scissor,
+                                               const gl::Offset &surfaceTextureOffset,
                                                bool colorBlit,
                                                bool depthBlit,
                                                bool stencilBlit)
@@ -3656,13 +3657,17 @@ angle::Result Renderer11::blitRenderbufferRect(const gl::Context *context,
         // We also require complete framebuffer copies for depth-stencil blit.
         D3D11_BOX *pSrcBox = wholeBufferCopy ? nullptr : &readBox;
 
+        dstX = dstX + surfaceTextureOffset.x;
+        dstY = dstY + surfaceTextureOffset.y;
+
         mDeviceContext->CopySubresourceRegion(drawTexture.get(), drawSubresource, dstX, dstY, 0,
                                               readTexture.get(), readSubresource, pSrcBox);
     }
     else
     {
         gl::Box readArea(readRect.x, readRect.y, 0, readRect.width, readRect.height, 1);
-        gl::Box drawArea(drawRect.x, drawRect.y, 0, drawRect.width, drawRect.height, 1);
+        gl::Box drawArea(drawRect.x + surfaceTextureOffset.x, drawRect.y + surfaceTextureOffset.y,
+                         0, drawRect.width, drawRect.height, 1);
 
         if (depthBlit && stencilBlit)
         {

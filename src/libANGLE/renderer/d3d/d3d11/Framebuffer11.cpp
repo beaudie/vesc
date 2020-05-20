@@ -292,8 +292,9 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
         ANGLE_TRY(readBuffer->getRenderTarget(context, 0, &readRenderTarget));
         ASSERT(readRenderTarget);
 
-        const auto &colorAttachments = mState.getColorAttachments();
-        const auto &drawBufferStates = mState.getDrawBufferStates();
+        const auto &colorAttachments     = mState.getColorAttachments();
+        const auto &drawBufferStates     = mState.getDrawBufferStates();
+        const auto &surfaceTextureOffset = mState.getSurfaceTextureOffset();
 
         for (size_t colorAttachment = 0; colorAttachment < colorAttachments.size();
              colorAttachment++)
@@ -327,7 +328,7 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
 
                 ANGLE_TRY(mRenderer->blitRenderbufferRect(
                     context, actualSourceArea, actualDestArea, readRenderTarget, drawRenderTarget,
-                    filter, scissor, blitRenderTarget, false, false));
+                    filter, scissor, surfaceTextureOffset, blitRenderTarget, false, false));
             }
         }
     }
@@ -366,9 +367,9 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
             actualDestArea.height              = -destArea.height;
         }
 
-        ANGLE_TRY(mRenderer->blitRenderbufferRect(context, actualSourceArea, actualDestArea,
-                                                  readRenderTarget, drawRenderTarget, filter,
-                                                  scissor, false, blitDepth, blitStencil));
+        ANGLE_TRY(mRenderer->blitRenderbufferRect(
+            context, actualSourceArea, actualDestArea, readRenderTarget, drawRenderTarget, filter,
+            scissor, gl::Offset(), false, blitDepth, blitStencil));
     }
 
     ANGLE_TRY(markAttachmentsDirty(context));

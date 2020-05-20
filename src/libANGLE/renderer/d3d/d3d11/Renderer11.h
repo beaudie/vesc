@@ -392,6 +392,7 @@ class Renderer11 : public RendererD3D
                                        RenderTargetD3D *drawRenderTarget,
                                        GLenum filter,
                                        const gl::Rectangle *scissor,
+                                       const gl::Offset &surfaceTextureOffset,
                                        bool colorBlit,
                                        bool depthBlit,
                                        bool stencilBlit);

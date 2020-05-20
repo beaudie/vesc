@@ -202,9 +202,10 @@ Issues
 
     RESOLVED: The texture offsets specified by EGL_TEXTURE_OFFSET_X_ANGLE and
     EGL_TEXTURE_OFFSET_Y_ANGLE affect only rendering into the surface.
-    Specifically these affect the internal D3D viewport and scissor rect states.
-    This is needed to apply the update offset returned by calling BeginDraw() on
-    IDCompositionSurface, and is needed for correct rendering in that case.
+    Specifically these affect the internal D3D viewport and scissor rect states
+    for draws, clears, and blits. This is needed to apply the update offset
+    returned by calling BeginDraw() on IDCompositionSurface, and is needed for
+    correct rendering in that case.
 
 Revision History
 
