@@ -1,0 +1,85 @@
+Name
+
+    ANGLE_platform_angle_device_type_gbm_angle
+
+Name Strings
+
+    EGL_ANGLE_platform_angle_device_type_gbm_angle
+
+Contributors
+
+    Maksim Sisov, Igalia S.L.
+
+Contacts
+
+    Maksim Sisov, Igalia S.L. (msisov 'at' igalia 'dot' com)
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, 2020-04-20
+
+Number
+
+    EGL Extension XXX
+
+Extension Type
+
+    EGL client extension
+
+Dependencies
+
+    Requires EGL_ANGLE_platform_angle_opengl.
+
+Overview
+
+    This extension enables choosing the driver's EGL implementation when it is
+    available.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    Accepted as values for the EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE
+    attribute:
+
+        EGL_PLATFORM_ANGLE_DEVICE_TYPE_GBM_ANGLE     0x349A
+
+Additions to the EGL Specification
+
+    None.
+
+New Behavior
+
+    When calling eglGetPlatformDisplay:
+
+    To request a driver gbm-egl-backed implementation with ANGLE, the value of
+    EGL_PLATFORM_ANGLE_TYPE_ANGLE should be
+    EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE
+    and the value of EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE should be
+    EGL_PLATFORM_ANGLE_DEVICE_TYPE_GBM_ANGLE.
+
+    If EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE is
+    EGL_PLATFORM_ANGLE_DEVICE_TYPE_GBM_ANGLE and
+    EGL_PLATFORM_ANGLE_TYPE_ANGLE is
+    EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE or is not
+    EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE then an EGL_BAD_ATTRIBUTE error is
+    is generated and EGL_NO_DISPLAY is returned.
+
+Issues
+
+    None
+
+Revision History
+
+    Version 1, 2020-04-20 (Maksim Sisov)
+      - Initial draft

@@ -110,6 +110,16 @@
 #define EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE 0x348E
 #endif /* EGL_ANGLE_platform_angle_device_type_egl_angle */
 
+#ifndef EGL_ANGLE_platform_angle_device_type_gbm_angle
+#define EGL_ANGLE_platform_angle_device_type_gbm_angle
+#define EGL_PLATFORM_ANGLE_DEVICE_TYPE_GBM_ANGLE 0x349A
+#endif /* EGL_ANGLE_platform_angle_device_type_gbm_angle */
+
+#ifndef EGL_ANGLE_platform_angle_device_type_x11_angle
+#define EGL_ANGLE_platform_angle_device_type_x11_angle
+#define EGL_PLATFORM_ANGLE_DEVICE_TYPE_X11_ANGLE 0x349B
+#endif /* EGL_ANGLE_platform_angle_device_type_x11_angle */
+
 #ifndef EGL_ANGLE_platform_angle_context_virtualization
 #define EGL_ANGLE_platform_angle_context_virtualization 1
 #define EGL_PLATFORM_ANGLE_CONTEXT_VIRTUALIZATION_ANGLE 0x3481
