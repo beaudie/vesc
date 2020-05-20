@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd8a273d_faf12bd2",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T19:36:02Z",
+      "side": 1,
+      "message": "I think a name that describes what this loop is doing would be better, like processCommandWorkBlocks() or commandWorkBlockProcessingLoop().",
+      "range": {
+        "startLine": 27,
+        "startChar": 32,
+        "endLine": 27,
+        "endChar": 40
+      },
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1417a2bc_22b0683c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T19:36:02Z",
+      "side": 1,
+      "message": "It may be better to specify the type of work the thread is doing throughout the CL, rather than calling it a generic \u0027worker\u0027, since we may spawn off additional threads in the future to parallelize other work.   Instead, since it\u0027s specific to the CommandProcessor object, maybe call it the \"Command Processor Thread\" or since it processes CommandWorkBlocks maybe \"Command Work Block Thread\".\n\nMaybe my comments all just come down to everything ANGLE is doing is \"work\", so being more specific about what work is being done in the CL would be more helpful.   I\u0027m envisioning a future where we are discussing various \"worker\" threads, and people are getting confused about what work is being referred to.\n\nOh, I also just realized you called the feature enableCommandProcessingThread.   I like the idea of using that name throughout.",
+      "range": {
+        "startLine": 42,
+        "startChar": 7,
+        "endLine": 42,
+        "endChar": 20
+      },
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63f7f240_79b95e1f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 3741,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T19:36:02Z",
+      "side": 1,
+      "message": "Since our overall goal is high performance, stalls like this will stand out to other readers as potential low-hanging fruit to optimize/remove.\n\nCan you add a comment to each place waitForWorkerThreadIdle() is called to explain why we need to stall?   Hopefully it will at least give people a heads up on what could be improved or prevent people from going down a rabbit hole that ultimately doesn\u0027t really lead anywhere.",
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67d80aef_96d7248d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 4241,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T19:36:02Z",
+      "side": 1,
+      "message": "Probably don\u0027t need the \"ToQueue\" since that\u0027s just an implementation detail that could change in the future.\n\nFor example, I\u0027ve seen cases where a flag is used to change between FIFO for performance and FILO for debugging, since FILO prevents previously used command blocks from being overwritten immediately so you can see a little history of the commands.",
+      "range": {
+        "startLine": 4241,
+        "startChar": 36,
+        "endLine": 4241,
+        "endChar": 43
+      },
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc906470_210d3a77",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T19:36:02Z",
+      "side": 1,
+      "message": "Same as above, I don\u0027t think you need the \"Queue\" part.",
+      "range": {
+        "startLine": 836,
+        "startChar": 42,
+        "endLine": 836,
+        "endChar": 47
+      },
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "230ea3bc_55e23906",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T19:36:02Z",
+      "side": 1,
+      "message": "Similar to my comments above.   The type of \"work\" that this struct holds should be specified in the name.   Something like CommandBufferBlock?\n\nGoing further though, I\u0027m wondering if this structure is really necessary.\n\nIt looks like CommandWorkBlocks are always constructed with \u0026mPrimaryCommands.   I don\u0027t know the relationship between PoolAllocator and CommandBufferHelper, but can that information be held in the CommandBufferHelper when it\u0027s created (or added later when we know \u0026mPrimaryCommands)?\n\nAdditionally, can the CommandProcessor::mWorkerThread be constructed with a pointer to ContextVk* somehow?   It\u0027s currently just a std::thread, but maybe we can make a special CommandProcessorThread class that\u0027s derived from std::thread to hold things like ContextVk*.  Thoughts?",
+      "range": {
+        "startLine": 961,
+        "startChar": 0,
+        "endLine": 962,
+        "endChar": 50
+      },
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
