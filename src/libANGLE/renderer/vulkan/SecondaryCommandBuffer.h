@@ -688,7 +688,24 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     bool valid() const { return mAllocator != nullptr; }
 
     static bool CanKnowIfEmpty() { return true; }
-    bool empty() const { return mCommands.size() == 0 || mCommands[0]->id == CommandID::Invalid; }
+    bool empty() const
+    {
+        printf("Checking if SCB is empty\n");
+        if (mCommands.size() == 0)
+        {
+            printf("Checked if SCB is empty, and it is\n");
+            return true;
+        }
+        printf("SCB is not empty\n");
+        printf("Checking if mCommands[0]->id is Invalid\n");
+        if (mCommands[0]->id == CommandID::Invalid)
+        {
+            printf("Yes, mCommands[0]->id is Invalid\n");
+            return true;
+        }
+        return false;
+        // return mCommands.size() == 0 || mCommands[0]->id == CommandID::Invalid;
+    }
 
   private:
     void commonDebugUtilsLabel(CommandID cmd, const VkDebugUtilsLabelEXT &label);
