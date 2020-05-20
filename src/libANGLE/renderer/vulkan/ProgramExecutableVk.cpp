@@ -22,11 +22,11 @@ namespace rx
 {
 namespace
 {
-constexpr gl::ShaderMap<vk::PipelineStage> kPipelineStageShaderMap = {
-    {gl::ShaderType::Vertex, vk::PipelineStage::VertexShader},
-    {gl::ShaderType::Fragment, vk::PipelineStage::FragmentShader},
-    {gl::ShaderType::Geometry, vk::PipelineStage::GeometryShader},
-    {gl::ShaderType::Compute, vk::PipelineStage::ComputeShader},
+constexpr gl::ShaderMap<vk::MemoryReadType> kUniformMemoryReadTypeShaderMap = {
+    {gl::ShaderType::Vertex, vk::MemoryReadType::VertexShaderUniformRead},
+    {gl::ShaderType::Fragment, vk::MemoryReadType::FragmentShaderUniformRead},
+    {gl::ShaderType::Geometry, vk::MemoryReadType::GeometryShaderUniformRead},
+    {gl::ShaderType::Compute, vk::MemoryReadType::ComputeShaderUniformRead},
 };
 
 VkDeviceSize GetShaderBufferBindingSize(const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding)
@@ -944,15 +944,15 @@ void ProgramExecutableVk::updateBuffersDescriptorSet(ContextVk *contextVk,
 
         if (isStorageBuffer)
         {
-            // We set the SHADER_READ_BIT to be conservative.
-            VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-            commandBufferHelper->bufferWrite(resourceUseList, accessFlags,
-                                             kPipelineStageShaderMap[shaderType], &bufferHelper);
+            commandBufferHelper->bufferWrite(resourceUseList,
+                                             static_cast<vk::MemoryWriteType>(shaderType),
+                                             &bufferHelper, contextVk->getMemoryBarrierTracker());
         }
         else
         {
-            commandBufferHelper->bufferRead(resourceUseList, VK_ACCESS_UNIFORM_READ_BIT,
-                                            kPipelineStageShaderMap[shaderType], &bufferHelper);
+            commandBufferHelper->bufferRead(resourceUseList,
+                                            kUniformMemoryReadTypeShaderMap[shaderType],
+                                            &bufferHelper, contextVk->getMemoryBarrierTracker());
         }
 
         ++writeCount;
@@ -1022,10 +1022,9 @@ void ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
                                         info.binding, binding, requiredOffsetAlignment, &bufferInfo,
                                         &writeInfo);
 
-        // We set SHADER_READ_BIT to be conservative.
         commandBufferHelper->bufferWrite(resourceUseList,
-                                         VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
-                                         kPipelineStageShaderMap[shaderType], &bufferHelper);
+                                         static_cast<vk::MemoryWriteType>(shaderType),
+                                         &bufferHelper, contextVk->getMemoryBarrierTracker());
 
         writtenBindings.set(binding);
     }
