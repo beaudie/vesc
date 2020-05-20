@@ -2071,7 +2071,8 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
 
 void StateManagerGL::setFramebufferSRGBEnabled(const gl::Context *context, bool enabled)
 {
-    if (!context->getExtensions().sRGBWriteControl)
+    const angle::FeaturesGL &features = GetFeaturesGL(context);
+    if (!features.setFramebufferSRGB.enabled)
     {
         return;
     }
