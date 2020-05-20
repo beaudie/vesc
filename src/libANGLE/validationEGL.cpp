@@ -575,6 +575,22 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
                             }
                             break;
 
+                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_GBM_ANGLE:
+                            if (!clientExtensions.platformANGLEDeviceTypeGbmANGLE)
+                            {
+                                return EglBadAttribute() << "EGL_ANGLE_platform_angle_device_type_"
+                                                            "gbm_angle is not supported";
+                            }
+                            break;
+
+                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_X11_ANGLE:
+                            if (!clientExtensions.platformANGLEDeviceTypeX11ANGLE)
+                            {
+                                return EglBadAttribute() << "EGL_ANGLE_platform_angle_device_type_"
+                                                            "x11_angle is not supported";
+                            }
+                            break;
+
                         case EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE:
                             if (!clientExtensions.platformANGLEDeviceTypeSwiftShader)
                             {
