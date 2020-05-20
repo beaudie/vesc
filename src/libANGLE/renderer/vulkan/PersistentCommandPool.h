@@ -29,14 +29,19 @@ class PersistentCommandPool final
 
     void destroy(VkDevice device);
     angle::Result init(vk::Context *context, uint32_t queueFamilyIndex);
+    angle::Result init(VkDevice device, uint32_t queueFamilyIndex);
 
     angle::Result allocate(vk::Context *context, vk::PrimaryCommandBuffer *commandBufferOut);
+    angle::Result allocate(VkDevice device, vk::PrimaryCommandBuffer *commandBufferOut);
+
     angle::Result collect(vk::Context *context, vk::PrimaryCommandBuffer &&buffer);
+    angle::Result collect(vk::PrimaryCommandBuffer &&buffer);
 
     bool valid() const { return mCommandPool.valid(); }
 
   private:
     angle::Result allocateCommandBuffer(vk::Context *context);
+    angle::Result allocateCommandBuffer(VkDevice device);
 
     std::vector<vk::PrimaryCommandBuffer> mFreeBuffers;
 

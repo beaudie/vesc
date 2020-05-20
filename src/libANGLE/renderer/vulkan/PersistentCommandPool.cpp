@@ -42,6 +42,27 @@ angle::Result PersistentCommandPool::init(vk::Context *context, uint32_t queueFa
     return angle::Result::Continue;
 }
 
+angle::Result PersistentCommandPool::init(VkDevice device, uint32_t queueFamilyIndex)
+{
+    ASSERT(!mCommandPool.valid());
+
+    // Initialize the command pool now that we know the queue family index.
+    VkCommandPoolCreateInfo commandPoolInfo = {};
+    commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    commandPoolInfo.queueFamilyIndex        = queueFamilyIndex;
+
+    // TODO: Need to wrap this in error detection, what to pass as first param to ANGLE_VK_TRY?
+    mCommandPool.init(device, commandPoolInfo);
+
+    for (uint32_t i = 0; i < kInitBufferNum; i++)
+    {
+        ANGLE_TRY(allocateCommandBuffer(device));
+    }
+
+    return angle::Result::Continue;
+}
+
 void PersistentCommandPool::destroy(VkDevice device)
 {
     if (!valid())
@@ -73,12 +94,39 @@ angle::Result PersistentCommandPool::allocate(vk::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result PersistentCommandPool::allocate(VkDevice device,
+                                              vk::PrimaryCommandBuffer *commandBufferOut)
+{
+    if (mFreeBuffers.empty())
+    {
+        ANGLE_TRY(allocateCommandBuffer(device));
+        ASSERT(!mFreeBuffers.empty());
+    }
+
+    *commandBufferOut = std::move(mFreeBuffers.back());
+    mFreeBuffers.pop_back();
+
+    return angle::Result::Continue;
+}
+
 angle::Result PersistentCommandPool::collect(vk::Context *context,
                                              vk::PrimaryCommandBuffer &&buffer)
 {
     // VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT NOT set, The CommandBuffer
     // can still hold the memory resource
     ANGLE_VK_TRY(context, vkResetCommandBuffer(buffer.getHandle(), 0));
+
+    mFreeBuffers.emplace_back(std::move(buffer));
+    return angle::Result::Continue;
+}
+
+angle::Result PersistentCommandPool::collect(vk::PrimaryCommandBuffer &&buffer)
+{
+    // VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT NOT set, The CommandBuffer
+    // can still hold the memory resource
+    // TODO: Need to handle Vulkan error here, could pass through renderer
+    // ANGLE_VK_TRY(context, vkResetCommandBuffer(buffer.getHandle(), 0));
+    vkResetCommandBuffer(buffer.getHandle(), 0);
 
     mFreeBuffers.emplace_back(std::move(buffer));
     return angle::Result::Continue;
@@ -96,6 +144,25 @@ angle::Result PersistentCommandPool::allocateCommandBuffer(vk::Context *context)
         commandBufferInfo.commandBufferCount = 1;
 
         ANGLE_VK_TRY(context, commandBuffer.init(context->getDevice(), commandBufferInfo));
+    }
+
+    mFreeBuffers.emplace_back(std::move(commandBuffer));
+
+    return angle::Result::Continue;
+}
+
+angle::Result PersistentCommandPool::allocateCommandBuffer(VkDevice device)
+{
+    vk::PrimaryCommandBuffer commandBuffer;
+    {
+        // Only used for primary CommandBuffer allocation
+        VkCommandBufferAllocateInfo commandBufferInfo = {};
+        commandBufferInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        commandBufferInfo.commandPool        = mCommandPool.getHandle();
+        commandBufferInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        commandBufferInfo.commandBufferCount = 1;
+        // TODO: Need to wrap this in error detection, what to pass as first param to ANGLE_VK_TRY?
+        commandBuffer.init(device, commandBufferInfo);
     }
 
     mFreeBuffers.emplace_back(std::move(commandBuffer));
