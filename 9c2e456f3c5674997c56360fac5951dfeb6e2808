@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "851f188c_5fa6aceb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T16:06:02Z",
+      "side": 1,
+      "message": "CommandBufferHelper being non-copyable causes compile errors which attempting to move to angle::FixedVector. Keeping explicit array notation for now.",
+      "parentUuid": "28d3c420_f9e1f924",
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "118056f5_00cdd773",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 41
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ef094101_85ea0aa0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T16:06:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "118056f5_00cdd773",
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b4a1d04_7d46fd4d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 41
@@ -47,6 +83,30 @@
       "writtenOn": "2020-05-20T01:42:54Z",
       "side": 1,
       "message": "Can you make a refactor CL that just changes these to pointers to make it a little easier to focus on the functional changes in this CL?",
+      "range": {
+        "startLine": 927,
+        "startChar": 0,
+        "endLine": 928,
+        "endChar": 49
+      },
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "892d4911_a4b92aa6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T16:06:02Z",
+      "side": 1,
+      "message": "I\u0027ll take a look at this. It\u0027s slightly convoluted b/c the only reason for the pointers is that command buffer ptrs are now pulled off the queue so ptrs w/o the queue isn\u0027t as clear out of context. However, only having 2 cmd buffers in queue is a bit quirky in this initial CL to land threading anyway so I can see that it would simplify things to pull cmd buffer pointer code into separate CL.",
+      "parentUuid": "6b4a1d04_7d46fd4d",
       "range": {
         "startLine": 927,
         "startChar": 0,
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "f05c6159_b3b2919b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T16:06:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18922299_26689273",
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64939b2f_b2005b2d",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 41
@@ -90,6 +168,24 @@
       "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bdf5e74_55b09504",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T16:06:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64939b2f_b2005b2d",
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -113,6 +209,30 @@
       "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ae3adea_2806b2b7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 2220,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T16:06:02Z",
+      "side": 1,
+      "message": "Agreed. Going with \"waitForWorkerThreadIdle()\"",
+      "parentUuid": "07f73dfa_48a68f79",
+      "range": {
+        "startLine": 2220,
+        "startChar": 17,
+        "endLine": 2220,
+        "endChar": 37
+      },
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
