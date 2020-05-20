@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "7d689b23_6520bb90",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T16:40:42Z",
+      "side": 1,
+      "message": "As an example, here\u0027s a CL I did recently that just changes members to pointers.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2181447\n\nDoing that let the real functional changes in the rest of the relation chain stand out a bit more which helps the reviewers.   I also think being in a relation chain gives enough context for the refactor, rather than it looking like you\u0027re just making random changes.",
+      "parentUuid": "892d4911_a4b92aa6",
+      "range": {
+        "startLine": 927,
+        "startChar": 0,
+        "endLine": 928,
+        "endChar": 49
+      },
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "18922299_26689273",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 41
