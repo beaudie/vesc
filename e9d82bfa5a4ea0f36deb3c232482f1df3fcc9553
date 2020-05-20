@@ -114,6 +114,29 @@
       "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d093984d_ecd1a5cc",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-20T15:45:50Z",
+      "side": 1,
+      "message": "Nit to be more precise: (internalFormat.type \u003d\u003d GL_FLOAT \u0026\u0026 !functions-\u003ehasGLExtension(\"GL_OES_texture_float\")) ||\n            (internalFormat.type \u003d\u003d GL_HALF_FLOAT_OES \u0026\u0026 !functions-\u003ehasGLExtension(\"GL_OES_texture_half_float\"))",
+      "range": {
+        "startLine": 531,
+        "startChar": 21,
+        "endLine": 532,
+        "endChar": 76
+      },
+      "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
