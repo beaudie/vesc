@@ -377,7 +377,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
     {
         float viewport[4];
 
-        float halfRenderAreaHeight;
+        float halfRenderArea[2];
+        float flipXY[2];
         float viewportYScale;
         float negViewportYScale;
 
@@ -399,6 +400,10 @@ class ContextMtl : public ContextImpl, public mtl::Context
         // Used to pre-rotate gl_Position for Vulkan swapchain images on Android (a mat2, which is
         // padded to the size of two vec4's).
         float preRotation[8];
+
+        // Used to pre-rotate gl_FragCoord for Vulkan swapchain images on Android (a mat2, which is
+        // padded to the size of two vec4's).
+        float fragRotation[8];
     };
 
     struct DefaultAttribute
