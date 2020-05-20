@@ -59,9 +59,9 @@
 #            include "libANGLE/renderer/gl/egl/ozone/DisplayOzone.h"
 #        else
 #            include "libANGLE/renderer/gl/egl/DisplayEGL.h"
-#            if defined(ANGLE_USE_X11)
-#                include "libANGLE/renderer/gl/glx/DisplayGLX.h"
-#            endif
+#        endif
+#        if defined(ANGLE_USE_X11)
+#            include "libANGLE/renderer/gl/glx/DisplayGLX.h"
 #        endif
 #    elif defined(ANGLE_PLATFORM_ANDROID)
 #        include "libANGLE/renderer/gl/egl/android/DisplayAndroid.h"
@@ -254,19 +254,22 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
             impl = new rx::DisplayEAGL(state);
 #    elif defined(ANGLE_PLATFORM_LINUX)
 #        if defined(ANGLE_USE_OZONE)
-            // This might work but has never been tried, so disallow for now.
-            impl = nullptr;
+            if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_OZONE_ANGLE)
+            {
+                // This might work but has never been tried, so disallow for now.
+                impl = nullptr;
+            }
 #        else
             if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
             {
                 impl = new rx::DisplayEGL(state);
             }
-#            if defined(ANGLE_USE_X11)
+#        endif
+#        if defined(ANGLE_USE_X11)
             else
             {
                 impl = new rx::DisplayGLX(state);
             }
-#            endif
 #        endif
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             // No GL support on this platform, fail display creation.
@@ -286,18 +289,21 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
             impl = new rx::DisplayWGL(state);
 #    elif defined(ANGLE_PLATFORM_LINUX)
 #        if defined(ANGLE_USE_OZONE)
-            impl = new rx::DisplayOzone(state);
+            if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_OZONE_ANGLE)
+            {
+                impl = new rx::DisplayOzone(state);
+            }
 #        else
             if (deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE)
             {
                 impl = new rx::DisplayEGL(state);
             }
-#            if defined(ANGLE_USE_X11)
+#        endif
+#        if defined(ANGLE_USE_X11)
             else
             {
                 impl = new rx::DisplayGLX(state);
             }
-#            endif
 #        endif
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             impl = new rx::DisplayAndroid(state);
@@ -1395,8 +1401,12 @@ static ClientExtensions GenerateClientExtensions()
     extensions.x11Visual = true;
 #endif
 
-#if defined(ANGLE_PLATFORM_LINUX) && !defined(ANGLE_USE_OZONE)
+#if defined(ANGLE_PLATFORM_LINUX)
+#    if defined(ANGLE_USE_OZONE)
+    extensions.platformANGLEDeviceTypeOzoneANGLE = true;
+#    else
     extensions.platformANGLEDeviceTypeEGLANGLE = true;
+#    endif
 #endif
 
     extensions.clientGetAllProcAddresses = true;

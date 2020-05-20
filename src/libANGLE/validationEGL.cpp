@@ -575,6 +575,14 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
                             }
                             break;
 
+                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_OZONE_ANGLE:
+                            if (!clientExtensions.platformANGLEDeviceTypeOzoneANGLE)
+                            {
+                                return EglBadAttribute() << "EGL_ANGLE_platform_angle_device_type_"
+                                                            "ozone_angle is not supported";
+                            }
+                            break;
+
                         case EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE:
                             if (!clientExtensions.platformANGLEDeviceTypeSwiftShader)
                             {
