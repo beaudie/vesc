@@ -436,6 +436,13 @@ struct FeaturesGL : FeatureSetBase
     Feature disableSemaphoreFd = {"disable_semaphore_fd", FeatureCategory::OpenGLWorkarounds,
                                   "Disable GL_EXT_semaphore_fd extension", &members,
                                   "https://crbug.com/1046462"};
+
+    // Some drivers use linear blending when generating mipmaps for sRGB textures. Work around this
+    // by generating mipmaps in a linear texture and copying back to sRGB.
+    Feature encodeAndDecodeSRGBForGenerateMipmap = {
+        "decode_encode_srgb_for_generatemipmap", FeatureCategory::OpenGLWorkarounds,
+        "Decode and encode before generateMipmap for srgb format textures.", &members,
+        "http://anglebug.com/4646"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
