@@ -1161,6 +1161,9 @@ struct ClientExtensions
 
     // EGL_ANGLE_platform_angle_device_type_egl_angle
     bool platformANGLEDeviceTypeEGLANGLE = false;
+
+    // EGL_ANGLE_platform_angle_device_type_ozone_angle
+    bool platformANGLEDeviceTypeOzoneANGLE = false;
 };
 
 }  // namespace egl
