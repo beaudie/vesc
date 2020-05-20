@@ -16,6 +16,103 @@
       "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "118056f5_00cdd773",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T01:42:54Z",
+      "side": 1,
+      "message": "My experience has been to place the locks before any variables it protects, since it\u0027s typically the first things that\u0027s accessed (grab the lock and then modify the data).   The intent is that the cache prefetcher can pull in the data that\u0027s being protected in the subsequent cache lines while the mutex is being locked and mask some of the slow reads from memory.\n\nI don\u0027t know how much that type of micro-optimization applies here though.",
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b4a1d04_7d46fd4d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T01:42:54Z",
+      "side": 1,
+      "message": "Can you make a refactor CL that just changes these to pointers to make it a little easier to focus on the functional changes in this CL?",
+      "range": {
+        "startLine": 927,
+        "startChar": 0,
+        "endLine": 928,
+        "endChar": 49
+      },
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18922299_26689273",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T01:42:54Z",
+      "side": 1,
+      "message": "{}",
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64939b2f_b2005b2d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T01:42:54Z",
+      "side": 1,
+      "message": "{}",
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07f73dfa_48a68f79",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 2220,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-20T01:42:54Z",
+      "side": 1,
+      "message": "This name is a little confusing since it sounds like the worker thread is doing the waiting, rather than the master thread waiting for the worker thread to finish its work and become idle.\n\nI think a better name would be something like: waitForWorkerThread() or waitForWorkerThreadToFinish()\n\nOr maybe something else that indicates what we\u0027re really waiting for: waitForCommandProcessingCompletion()",
+      "range": {
+        "startLine": 2220,
+        "startChar": 17,
+        "endLine": 2220,
+        "endChar": 37
+      },
+      "revId": "9c2e456f3c5674997c56360fac5951dfeb6e2808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
