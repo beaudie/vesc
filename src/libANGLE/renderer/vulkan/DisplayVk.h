@@ -12,6 +12,7 @@
 
 #include "common/MemoryBuffer.h"
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -20,7 +21,15 @@ class RendererVk;
 
 class ShareGroupVk : public ShareGroupImpl
 {
+  public:
+    ShareGroupVk();
+    ~ShareGroupVk() override {}
+
+    vk::MemoryBarrierTimelineTracker *getMemoryBarrierTracker() { return &mMemoryBarrierTracker; }
+
   private:
+    // Tracks memory barriers over the timeline so that redundant barriers would be avoided
+    vk::MemoryBarrierTimelineTracker mMemoryBarrierTracker;
 };
 
 class DisplayVk : public DisplayImpl, public vk::Context
