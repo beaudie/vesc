@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "79722c41_59a6fb69",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-20T23:16:22Z",
+      "side": 1,
+      "message": "Actually it seems like this should be another dimension entirely; I think all of these configurations are valid:\n\nbuild type \u003d\u003d x11, display type \u003d\u003d x11, renderer \u003d glx\nbuild type \u003d\u003d x11, display type \u003d\u003d x11, renderer \u003d egl\nbuild type \u003d\u003d x11, display type \u003d\u003d x11, renderer \u003d vulkan\nbuild type \u003d\u003d x11, display type \u003d\u003d x11, renderer \u003d egl swiftshader\nbuild type \u003d\u003d x11, display type \u003d\u003d x11, renderer \u003d vulkan swiftshader\n\nbuild type \u003d\u003d ozone, display type \u003d\u003d x11, renderer \u003d glx\nbuild type \u003d\u003d ozone, display type \u003d\u003d x11, renderer \u003d egl\nbuild type \u003d\u003d ozone, display type \u003d\u003d x11, renderer \u003d vulkan\nbuild type \u003d\u003d ozone, display type \u003d\u003d x11, renderer \u003d egl swiftshader\nbuild type \u003d\u003d ozone, display type \u003d\u003d x11, renderer \u003d vulkan swiftshader\n\nbuild type \u003d\u003d ozone, display type \u003d\u003d gbm, device type \u003d\u003d egl (*)\nbuild type \u003d\u003d ozone, display type \u003d\u003d gbm, device type \u003d\u003d vulkan\n\n(*) This is what DisplayOzone implements. It should really be renamed to gbm, as unlike other build types ozone doesn\u0027t know what the display type is at compile time.\n\nDisplay type meaning the type of EGLNativeDisplayType which is not what we\u0027re specifying in ANGLE\u0027s \"device type\" attribute. ANGLE doesn\u0027t have its own definition of EGLNativeDisplayType, but it\u0027s taking up the parameter to eglGetPlatformDisplay that disambiguates this on Linux.\n\nEncoding both display type and renderer into one parameter looks like it would be limiting.",
+      "parentUuid": "0bfb7785_db2fd279",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
