@@ -954,8 +954,8 @@ angle::Result TextureStorage11::getMultisampledRenderTarget(const gl::Context *c
         // blit SS -> MS
         // mask: GL_COLOR_BUFFER_BIT, filter: GL_NEAREST
         ANGLE_TRY(mRenderer->blitRenderbufferRect(context, area, area, readRenderTarget,
-                                                  drawRenderTarget, GL_NEAREST, nullptr, true,
-                                                  false, false));
+                                                  drawRenderTarget, GL_NEAREST, nullptr,
+                                                  gl::Offset(), true, false, false));
         mMSTexInfo = std::make_unique<MultisampledRenderToTextureInfo>(samples, index, indexMS);
         mMSTexInfo->msTex = std::move(texMS);
     }

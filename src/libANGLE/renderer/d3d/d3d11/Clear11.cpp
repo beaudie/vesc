@@ -412,7 +412,7 @@ angle::Result Clear11::clearFramebuffer(const gl::Context *context,
     }
 
     bool needScissoredClear = false;
-    D3D11_RECT scissorRect;
+    CD3D11_RECT scissorRect(0, 0, framebufferSize.width, framebufferSize.height);
     if (clearParams.scissorEnabled)
     {
         if (clearParams.scissor.x >= framebufferSize.width ||
@@ -445,6 +445,16 @@ angle::Result Clear11::clearFramebuffer(const gl::Context *context,
             scissorRect.top    = clearParams.scissor.y;
             scissorRect.bottom = scissorRect.top + clearParams.scissor.height;
         }
+    }
+
+    const gl::Offset &surfaceTextureOffset = clearParams.surfaceTextureOffset;
+    if (surfaceTextureOffset != gl::kOffsetZero)
+    {
+        needScissoredClear = true;
+        scissorRect.left   = scissorRect.left + surfaceTextureOffset.x;
+        scissorRect.right  = scissorRect.right + surfaceTextureOffset.x;
+        scissorRect.top    = scissorRect.top + surfaceTextureOffset.y;
+        scissorRect.bottom = scissorRect.bottom + surfaceTextureOffset.y;
     }
 
     ID3D11DeviceContext *deviceContext   = mRenderer->getDeviceContext();

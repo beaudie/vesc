@@ -51,6 +51,8 @@ struct ClearParameters
 
     bool scissorEnabled;
     gl::Rectangle scissor;
+
+    gl::Offset surfaceTextureOffset;
 };
 
 class FramebufferD3D : public FramebufferImpl

@@ -75,6 +75,8 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
         }
     }
 
+    clearParams.surfaceTextureOffset = framebufferObject->getSurfaceTextureOffset();
+
     return clearParams;
 }
 }  // namespace
