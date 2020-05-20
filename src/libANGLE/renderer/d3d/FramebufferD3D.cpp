@@ -41,10 +41,23 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
     clearParams.clearStencil     = false;
     clearParams.stencilValue     = state.getStencilClearValue();
     clearParams.stencilWriteMask = state.getDepthStencilState().stencilWritemask;
-    clearParams.scissorEnabled   = state.isScissorTestEnabled();
-    clearParams.scissor          = state.getScissor();
 
     const gl::Framebuffer *framebufferObject = state.getDrawFramebuffer();
+
+    gl::Rectangle scissor = state.getScissor();
+    bool scissorEnabled   = state.isScissorTestEnabled();
+
+    const gl::Offset &surfaceTextureOffset = framebufferObject->getSurfaceTextureOffset();
+    if (surfaceTextureOffset != gl::kOffsetZero)
+    {
+        scissorEnabled = true;
+        scissor.x      = scissor.x + surfaceTextureOffset.x;
+        scissor.y      = scissor.y + surfaceTextureOffset.y;
+    }
+
+    clearParams.scissorEnabled = scissorEnabled;
+    clearParams.scissor        = scissor;
+
     const bool clearColor =
         (mask & GL_COLOR_BUFFER_BIT) && framebufferObject->hasEnabledDrawBuffer();
     if (clearColor)
