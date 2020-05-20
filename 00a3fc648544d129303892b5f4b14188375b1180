@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "44106ce8_948c9e3d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97bf39a5_a845ead7",
+      "range": {
+        "startLine": 860,
+        "startChar": 0,
+        "endLine": 862,
+        "endChar": 44
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e10ca2a_c9e7a6c1",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 44
@@ -36,6 +60,30 @@
       "writtenOn": "2020-05-20T17:20:25Z",
       "side": 1,
       "message": "can we switch this to pull it from the settings instead of caching it? maybe as a split cl?",
+      "range": {
+        "startLine": 863,
+        "startChar": 38,
+        "endLine": 863,
+        "endChar": 98
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c01b9f6_ed5d7da7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "This came in from a recent merge conflict with recent CL from Charlie and I don\u0027t understand this suggestion. How do I pull it from settings?",
+      "parentUuid": "8e10ca2a_c9e7a6c1",
       "range": {
         "startLine": 863,
         "startChar": 38,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9dbf4ee4_68535138",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6e13edb_5ba56528",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 29
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "918f9d38_bae26459",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 44
@@ -91,6 +163,30 @@
       "revId": "00a3fc648544d129303892b5f4b14188375b1180",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff12a28f_ffaec275",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "918f9d38_bae26459",
+      "range": {
+        "startLine": 922,
+        "startChar": 28,
+        "endLine": 922,
+        "endChar": 43
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "221a978b_59240db0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbe39de5_90cf0961",
+      "range": {
+        "startLine": 932,
+        "startChar": 9,
+        "endLine": 932,
+        "endChar": 38
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e5b11ee_b0c38f7b",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 44
@@ -128,6 +248,30 @@
       "writtenOn": "2020-05-20T17:20:25Z",
       "side": 1,
       "message": "this error is being discarded. You should instead wrap this in a handler that pipes the error up to a vk::Context. You may need to add a custom vk::Context handler.",
+      "range": {
+        "startLine": 2202,
+        "startChar": 0,
+        "endLine": 2202,
+        "endChar": 40
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3aa96b42_a481c7a0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2202,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Ack. Error handling is missing here. Error handling becomes a much bigger issue in phase2 and I was hoping to address it all there as threading disabled in this CL by default.\nWhat does a custom error handler look like? Can I filter worker thread errors to a separate \"handleError()\"-type function to avoid conflicts with main thread?",
+      "parentUuid": "7e5b11ee_b0c38f7b",
       "range": {
         "startLine": 2202,
         "startChar": 0,
@@ -186,6 +330,54 @@
     },
     {
       "key": {
+        "uuid": "ec361031_4e213e31",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2217,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3387912_2e7cc5c1",
+      "range": {
+        "startLine": 2217,
+        "startChar": 0,
+        "endLine": 2217,
+        "endChar": 59
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1b06c957_3165b643",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2217,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b21af133_ea68f67d",
+      "range": {
+        "startLine": 2217,
+        "startChar": 12,
+        "endLine": 2217,
+        "endChar": 15
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0cd43d5f_db95d2f1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 44
@@ -197,6 +389,30 @@
       "writtenOn": "2020-05-20T17:20:25Z",
       "side": 1,
       "message": "this is a race condition - the main thread could be writing an error to the ContextVk at the same time.",
+      "range": {
+        "startLine": 2224,
+        "startChar": 42,
+        "endLine": 2224,
+        "endChar": 55
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50b8decb_f9b71d31",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2224,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Ack, same comment as above.",
+      "parentUuid": "0cd43d5f_db95d2f1",
       "range": {
         "startLine": 2224,
         "startChar": 42,
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "d30a1ed3_75ead5e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "This goes away in phase2 where worker thread completely owns the primary command buffers. Would prefer to just let redundancy live in this transitory CL and avoid adding new interface to query primary from ContextVk that would just be removed next CL.",
+      "parentUuid": "dddb13d5_27f9d4e6",
+      "range": {
+        "startLine": 969,
+        "startChar": 0,
+        "endLine": 970,
+        "endChar": 40
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "61ed8954_52e3ba18",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 44
@@ -252,6 +492,30 @@
       "revId": "00a3fc648544d129303892b5f4b14188375b1180",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cbaa3f9_bfdd83b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61ed8954_52e3ba18",
+      "range": {
+        "startLine": 971,
+        "startChar": 25,
+        "endLine": 971,
+        "endChar": 28
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

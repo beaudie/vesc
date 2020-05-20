@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "69e36063_848141a5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd8a273d_faf12bd2",
+      "range": {
+        "startLine": 27,
+        "startChar": 32,
+        "endLine": 27,
+        "endChar": 40
+      },
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1417a2bc_22b0683c",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 46
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "dddf7f18_1e224c25",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1417a2bc_22b0683c",
+      "range": {
+        "startLine": 42,
+        "startChar": 7,
+        "endLine": 42,
+        "endChar": 20
+      },
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63f7f240_79b95e1f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 46
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "7e16fb15_f8c94888",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 3741,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63f7f240_79b95e1f",
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67d80aef_96d7248d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 46
@@ -76,6 +142,30 @@
       "writtenOn": "2020-05-20T19:36:02Z",
       "side": 1,
       "message": "Probably don\u0027t need the \"ToQueue\" since that\u0027s just an implementation detail that could change in the future.\n\nFor example, I\u0027ve seen cases where a flag is used to change between FIFO for performance and FILO for debugging, since FILO prevents previously used command blocks from being overwritten immediately so you can see a little history of the commands.",
+      "range": {
+        "startLine": 4241,
+        "startChar": 36,
+        "endLine": 4241,
+        "endChar": 43
+      },
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be4f4db0_f7595e1a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 4241,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "In this instance I went with \"ToQueue\" to indicate that the command buffer is still active/live as opposed to releasing it from use completely where it would return to its command pool. There are many an alternate \"release()\" functions that all indicate a resource is done being used so I wanted to distinguish from those.\nPerhaps \"recycleCommandBuffer\" would be better. I\u0027ll try that.",
+      "parentUuid": "67d80aef_96d7248d",
       "range": {
         "startLine": 4241,
         "startChar": 36,
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "e388c56e_05a3d835",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 46
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc906470_210d3a77",
+      "range": {
+        "startLine": 836,
+        "startChar": 42,
+        "endLine": 836,
+        "endChar": 47
+      },
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "230ea3bc_55e23906",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 46
@@ -122,6 +236,30 @@
       "writtenOn": "2020-05-20T19:36:02Z",
       "side": 1,
       "message": "Similar to my comments above.   The type of \"work\" that this struct holds should be specified in the name.   Something like CommandBufferBlock?\n\nGoing further though, I\u0027m wondering if this structure is really necessary.\n\nIt looks like CommandWorkBlocks are always constructed with \u0026mPrimaryCommands.   I don\u0027t know the relationship between PoolAllocator and CommandBufferHelper, but can that information be held in the CommandBufferHelper when it\u0027s created (or added later when we know \u0026mPrimaryCommands)?\n\nAdditionally, can the CommandProcessor::mWorkerThread be constructed with a pointer to ContextVk* somehow?   It\u0027s currently just a std::thread, but maybe we can make a special CommandProcessorThread class that\u0027s derived from std::thread to hold things like ContextVk*.  Thoughts?",
+      "range": {
+        "startLine": 961,
+        "startChar": 0,
+        "endLine": 962,
+        "endChar": 50
+      },
+      "revId": "ff21c930752edc059cc18c73438b69503dc81325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee7662be_2cacbdc1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-20T20:27:52Z",
+      "side": 1,
+      "message": "\"Work\" naming acknowledged.\n\nAlso, I completely agree that for this CL I could use CBH as a convenient way to pass data to worker. However, this changes a fair bit in phase2 threading. There are some new custom commands that make this struct more necessary as the worker thread has to flush commands to the queue and finishToSerial which don\u0027t require a CBH at all.\n\nAlso, there may be multiple contexts submitting to the single worker thread so the worker thread can\u0027t hold a single context reference.",
+      "parentUuid": "230ea3bc_55e23906",
       "range": {
         "startLine": 961,
         "startChar": 0,
