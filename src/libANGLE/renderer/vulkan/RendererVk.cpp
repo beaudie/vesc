@@ -452,6 +452,7 @@ RendererVk::RendererVk()
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
       mPipelineCacheDirty(false),
       mPipelineCacheInitialized(false),
+      mCommandProcessor(this),
       mGlslangInitialized(false)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
@@ -537,7 +538,7 @@ void RendererVk::onDestroy()
     {
         // Shutdown worker thread with null pointers in work block
         mCommandProcessor.waitForWorkComplete();
-        vk::CommandProcessorTask task = {nullptr, nullptr, nullptr};
+        vk::CommandProcessorTask task = vk::EndCommandProcessorThread;
         mCommandProcessor.queueCommands(task);
         if (mCommandProcessorThread.joinable())
         {
@@ -1713,7 +1714,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
     ANGLE_FEATURE_CONDITION(&mFeatures, preferAggregateBarrierCalls, !IsAndroid());
 
     // Currently disabled by default: http://anglebug.com/4324
-    ANGLE_FEATURE_CONDITION(&mFeatures, enableCommandProcessingThread, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableCommandProcessingThread, true);
 
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
@@ -1953,6 +1954,30 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         VkFence handle = fence ? fence->getHandle() : VK_NULL_HANDLE;
         ANGLE_VK_TRY(context, vkQueueSubmit(mQueues[priority], 1, &submitInfo, handle));
+    }
+
+    ANGLE_TRY(cleanupGarbage(false));
+
+    *serialOut                = mCurrentQueueSerial;
+    mLastSubmittedQueueSerial = mCurrentQueueSerial;
+    mCurrentQueueSerial       = mQueueSerialFactory.generate();
+
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::commandProcessorThreadQueueSubmit(egl::ContextPriority priority,
+                                                            const VkSubmitInfo &submitInfo,
+                                                            const vk::Fence *fence,
+                                                            Serial *serialOut)
+{
+    ASSERT(getFeatures().enableCommandProcessingThread.enabled);
+
+    {
+        std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
+        VkFence handle = fence ? fence->getHandle() : VK_NULL_HANDLE;
+        // TODO: Need to handle error here. Store in renderer?
+        // ANGLE_VK_TRY(context, vkQueueSubmit(mQueues[priority], 1, &submitInfo, handle));
+        vkQueueSubmit(mQueues[priority], 1, &submitInfo, handle);
     }
 
     ANGLE_TRY(cleanupGarbage(false));

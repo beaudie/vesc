@@ -960,15 +960,66 @@ struct CommandBufferHelper : angle::NonCopyable
 
 // CommandProcessorTask is used to queue a task to the worker thread when
 //  enableCommandProcessingThread feature is true.
-// The typical task includes pointers in all values and the worker thread will
-//  process the SecondaryCommandBuffer commands in cbh into the primaryCB.
-// There is a special task in which all of the pointers are null that will trigger
+// The "standard" task includes a ContextVk pointer and a CommandBufferHelper (CBH)
+//  pointer and the worker thread will process the SecondaryCommandBuffer (SCB) commands
+//  in the CBH into its primary CommandBuffer.
+// There is a special work block in which all of the pointers are null that will trigger
 //  the worker thread to exit, and is sent when the renderer instance shuts down.
+// If the work block does not involve processing SCB commands, then a CustomTask
+//  will be placed in the 2nd position of the CommandProcessorTask instead.
+// Custom tasks are:
+//  Flush:End the current command buffer and submit commands to the queue
+//  FinishToSerial:Finish queue commands up to given serial value
+//  .... More here
+enum CustomTask
+{
+    Invalid = 0,
+    Flush,
+    FinishToSerial
+};
+
+struct FlushData
+{
+    std::vector<VkSemaphore> waitSemaphores;
+    std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks;
+    const vk::Semaphore *semaphore;
+    egl::ContextPriority contextPriority;
+    vk::Shared<vk::Fence> submitFence;
+    vk::GarbageList currentGarbage;
+};
+
+struct FinishToSerialData
+{
+    Serial serial;
+};
+
 struct CommandProcessorTask
 {
     ContextVk *contextVk;
-    vk::PrimaryCommandBuffer *primaryCB;
-    CommandBufferHelper *commandBuffer;
+    union
+    {
+        CommandBufferHelper *commandBuffer;
+        CustomTask workerCommand;
+    };
+    void *commandData;
+};
+
+static const CommandProcessorTask EndCommandProcessorThread = {nullptr, {nullptr}, nullptr};
+
+struct CommandBatch final : angle::NonCopyable
+{
+    CommandBatch();
+    ~CommandBatch();
+    CommandBatch(CommandBatch &&other);
+    CommandBatch &operator=(CommandBatch &&other);
+
+    void destroy(VkDevice device);
+
+    vk::PrimaryCommandBuffer primaryCommands;
+    // commandPool is for secondary CommandBuffer allocation
+    vk::CommandPool commandPool;
+    vk::Shared<vk::Fence> fence;
+    Serial serial;
 };
 
 // Imagine an image going through a few layout transitions:
