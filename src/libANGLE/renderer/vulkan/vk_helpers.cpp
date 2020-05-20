@@ -47,6 +47,32 @@ constexpr int kLineLoopDynamicIndirectBufferInitialSize = sizeof(VkDrawIndirectC
 // This is an arbitrary max. We can change this later if necessary.
 constexpr uint32_t kDefaultDescriptorPoolMaxSets = 128;
 
+constexpr angle::PackedEnumMap<MemoryWriteType, VkAccessFlags> kMemoryWriteAccessFlagBitMap = {
+    // We set the VK_ACCESS_SHADER_READ_BIT to be conservative.
+    {MemoryWriteType::VertexShaderWrite, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT},
+    {MemoryWriteType::FragmentShaderWrite, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT},
+    {MemoryWriteType::GeometryShaderWrite, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT},
+    {MemoryWriteType::ComputeShaderWrite, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT},
+    {MemoryWriteType::HostWrite, VK_ACCESS_HOST_WRITE_BIT},
+    {MemoryWriteType::TransferWrite, VK_ACCESS_TRANSFER_WRITE_BIT},
+    {MemoryWriteType::ColorAttachmentWrite, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT},
+    {MemoryWriteType::DepthStencilAttachmentWrite, VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT},
+    {MemoryWriteType::TransformFeedbackWrite, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT}};
+
+constexpr angle::PackedEnumMap<MemoryReadType, VkAccessFlags> kMemoryReadAccessFlagBitMap = {
+    {MemoryReadType::VertexShaderRead, VK_ACCESS_SHADER_READ_BIT},
+    {MemoryReadType::FragmentShaderRead, VK_ACCESS_SHADER_READ_BIT},
+    {MemoryReadType::GeometryShaderRead, VK_ACCESS_SHADER_READ_BIT},
+    {MemoryReadType::ComputeShaderRead, VK_ACCESS_SHADER_READ_BIT},
+    {MemoryReadType::TransferRead, VK_ACCESS_TRANSFER_READ_BIT},
+    {MemoryReadType::IndirectCommandRead, VK_ACCESS_INDIRECT_COMMAND_READ_BIT},
+    {MemoryReadType::IndexRead, VK_ACCESS_INDEX_READ_BIT},
+    {MemoryReadType::VertexAttributeRead, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT},
+    {MemoryReadType::UniformRead, VK_ACCESS_UNIFORM_READ_BIT},
+    {MemoryReadType::HostRead, VK_ACCESS_HOST_READ_BIT},
+    {MemoryReadType::ColorAttachmentRead, VK_ACCESS_COLOR_ATTACHMENT_READ_BIT},
+    {MemoryReadType::DepthStencilAttachmentRead, VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT}};
+
 constexpr angle::PackedEnumMap<PipelineStage, VkPipelineStageFlagBits> kPipelineStageFlagBitMap = {
     {PipelineStage::TopOfPipe, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT},
     {PipelineStage::DrawIndirect, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT},
@@ -511,9 +537,12 @@ VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
 }
 
 // CommandBufferHelper implementation.
-CommandBufferHelper::CommandBufferHelper(bool hasRenderPass, bool mergeBarriers)
+CommandBufferHelper::CommandBufferHelper(bool hasRenderPass,
+                                         bool mergeBarriers,
+                                         MemoryBarrierTimelineTracker *tracker)
     : mPipelineBarriers(),
       mPipelineBarrierMask(),
+      mMemoryBarrierTracker(tracker),
       mCounter(0),
       mClearValues{},
       mRenderPassStarted(false),
@@ -535,26 +564,28 @@ void CommandBufferHelper::initialize(angle::PoolAllocator *poolAllocator)
 }
 
 void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
-                                     VkAccessFlags readAccessType,
+                                     MemoryReadType readType,
                                      vk::PipelineStage readStage,
                                      vk::BufferHelper *buffer)
 {
     buffer->retain(resourceUseList);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
-    if (buffer->updateReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
+    if (buffer->updateReadBarrier(readType, stageBits, &mPipelineBarriers[readStage],
+                                  mMemoryBarrierTracker))
     {
         mPipelineBarrierMask.set(readStage);
     }
 }
 
 void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
-                                      VkAccessFlags writeAccessType,
+                                      MemoryWriteType writeType,
                                       vk::PipelineStage writeStage,
                                       vk::BufferHelper *buffer)
 {
     buffer->retain(resourceUseList);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
-    if (buffer->updateWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
+    if (buffer->updateWriteBarrier(writeType, stageBits, &mPipelineBarriers[writeStage],
+                                   mMemoryBarrierTracker))
     {
         mPipelineBarrierMask.set(writeStage);
     }
@@ -618,6 +649,8 @@ void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
         }
     }
     mPipelineBarrierMask.reset();
+    // Notify the tracker that barriers have been submitted
+    mMemoryBarrierTracker->onBarriersExecute();
 }
 
 void CommandBufferHelper::beginRenderPass(const vk::Framebuffer &framebuffer,
@@ -2347,7 +2380,7 @@ bool BufferHelper::isReleasedToExternal() const
 #endif
 }
 
-bool BufferHelper::canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType)
+bool BufferHelper::canAccumulateRead(ContextVk *contextVk, vk::MemoryReadType readType)
 {
     // We only need to start a new command buffer when we need a new barrier.
     // For simplicity's sake for now we always start a new command buffer.
@@ -2355,7 +2388,7 @@ bool BufferHelper::canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAcc
     return false;
 }
 
-bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType)
+bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, vk::MemoryWriteType writeType)
 {
     // We only need to start a new command buffer when we need a new barrier.
     // For simplicity's sake for now we always start a new command buffer.
@@ -2363,32 +2396,36 @@ bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeA
     return false;
 }
 
-bool BufferHelper::updateReadBarrier(VkAccessFlags readAccessType,
+bool BufferHelper::updateReadBarrier(MemoryReadType readType,
                                      VkPipelineStageFlags readStage,
-                                     PipelineBarrier *barrier)
+                                     PipelineBarrier *barrier,
+                                     MemoryBarrierTimelineTracker *tracker)
 {
-    bool barrierModified = false;
+    bool barrierModified     = false;
+    VkAccessFlags readAccess = kMemoryReadAccessFlagBitMap[readType];
     // If there was a prior write and we are making a read that is either a new access type or from
     // a new stage, we need a barrier
-    if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccessType) != readAccessType) ||
+    if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccess) != readAccess) ||
                                      ((mCurrentReadStages & readStage) != readStage)))
     {
         barrier->mergeMemoryBarrier(mCurrentWriteStages, readStage, mCurrentWriteAccess,
-                                    readAccessType);
+                                    readAccess);
         barrierModified = true;
     }
 
     // Accumulate new read usage.
-    mCurrentReadAccess |= readAccessType;
+    mCurrentReadAccess |= readAccess;
     mCurrentReadStages |= readStage;
     return barrierModified;
 }
 
-bool BufferHelper::updateWriteBarrier(VkAccessFlags writeAccessType,
+bool BufferHelper::updateWriteBarrier(MemoryWriteType writeType,
                                       VkPipelineStageFlags writeStage,
-                                      PipelineBarrier *barrier)
+                                      PipelineBarrier *barrier,
+                                      MemoryBarrierTimelineTracker *tracker)
 {
-    bool barrierModified = false;
+    bool barrierModified      = false;
+    VkAccessFlags writeAccess = kMemoryWriteAccessFlagBitMap[writeType];
     // We don't need to check mCurrentReadStages here since if it is not zero, mCurrentReadAccess
     // must not be zero as well. stage is finer grain than accessType.
     ASSERT((!mCurrentReadStages && !mCurrentReadAccess) ||
@@ -2396,12 +2433,14 @@ bool BufferHelper::updateWriteBarrier(VkAccessFlags writeAccessType,
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
     {
         barrier->mergeMemoryBarrier(mCurrentWriteStages | mCurrentReadStages, writeStage,
-                                    mCurrentWriteAccess, writeAccessType);
+                                    mCurrentWriteAccess, writeAccess);
         barrierModified = true;
     }
 
     // Reset usages on the new write.
-    mCurrentWriteAccess = writeAccessType;
+    mCurrentWriteType   = writeType;
+    mCurrentWriteSerial = tracker->getCurrentSerial();
+    mCurrentWriteAccess = writeAccess;
     mCurrentReadAccess  = 0;
     mCurrentWriteStages = writeStage;
     mCurrentReadStages  = 0;

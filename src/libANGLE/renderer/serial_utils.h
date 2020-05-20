@@ -93,6 +93,7 @@ class SerialFactoryBase final : angle::NonCopyable
         ASSERT(mSerial + 1 > mSerial);
         return Serial(mSerial++);
     }
+    Serial getCurrentSerial() const { return Serial(mSerial); }
 
   private:
     SerialBaseType mSerial;
