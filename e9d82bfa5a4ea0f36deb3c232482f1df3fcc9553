@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e7c5227c_3be5f16d",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-20T16:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5632e92_85ae650d",
+      "range": {
+        "startLine": 437,
+        "startChar": 12,
+        "endLine": 437,
+        "endChar": 32
+      },
+      "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0697c15_ab72278e",
         "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df3bc732_ebfc5311",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-20T16:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0697c15_ab72278e",
+      "range": {
+        "startLine": 444,
+        "startChar": 11,
+        "endLine": 445,
+        "endChar": 54
+      },
+      "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5e5774a2_b0e55ed9",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-20T16:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b70fe7f_cb9fd3c3",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 454,
+        "endChar": 65
+      },
+      "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af08089_1d402017",
         "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
         "patchSetId": 6
@@ -91,6 +163,30 @@
       "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "792d0c52_4250506c",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-20T16:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1af08089_1d402017",
+      "range": {
+        "startLine": 462,
+        "startChar": 12,
+        "endLine": 462,
+        "endChar": 87
+      },
+      "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "e326f4d8_f2e1f812",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-20T16:41:04Z",
+      "side": 1,
+      "message": "It\u0027s not 100% the same code and I\u0027m concerned about subtle differences - for example, sized vs. unsized luminance formats coming in.",
+      "parentUuid": "fcd7956b_33171c5b",
+      "range": {
+        "startLine": 515,
+        "startChar": 16,
+        "endLine": 515,
+        "endChar": 59
+      },
+      "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d093984d_ecd1a5cc",
         "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
         "patchSetId": 6
@@ -137,6 +257,30 @@
       "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fa034c6_7a26ee25",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-20T16:41:04Z",
+      "side": 1,
+      "message": "There\u0027s a bug in my code here where this should have been hasGLESExtension, not hasGLExtension, but modulo fixing that, too - done, thanks.",
+      "parentUuid": "d093984d_ecd1a5cc",
+      "range": {
+        "startLine": 531,
+        "startChar": 21,
+        "endLine": 532,
+        "endChar": 76
+      },
+      "revId": "e9d82bfa5a4ea0f36deb3c232482f1df3fcc9553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
