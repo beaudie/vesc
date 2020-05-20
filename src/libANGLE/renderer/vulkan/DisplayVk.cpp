@@ -21,7 +21,11 @@
 
 namespace rx
 {
+// ShareGroupVk
+ShareGroupVk::ShareGroupVk() : mMemoryBarrierTracker() {}
+ShareGroupVk::~ShareGroupVk() {}
 
+// DisplayVk
 DisplayVk::DisplayVk(const egl::DisplayState &state)
     : DisplayImpl(state),
       vk::Context(new RendererVk()),

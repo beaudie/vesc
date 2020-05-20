@@ -46,6 +46,7 @@ namespace egl
 {
 class Display;
 class Image;
+class ShareGroup;
 }  // namespace egl
 
 namespace gl
@@ -73,6 +74,7 @@ class ImageVk;
 class RenderTargetVk;
 class RendererVk;
 class RenderPassCache;
+class ShareGroupVk;
 }  // namespace rx
 
 namespace angle
@@ -180,6 +182,12 @@ template <>
 struct ImplTypeHelper<egl::Image>
 {
     using ImplType = ImageVk;
+};
+
+template <>
+struct ImplTypeHelper<egl::ShareGroup>
+{
+    using ImplType = ShareGroupVk;
 };
 
 template <typename T>
