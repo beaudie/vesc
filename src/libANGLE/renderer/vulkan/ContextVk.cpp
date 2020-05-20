@@ -52,9 +52,11 @@ struct GraphicsDriverUniforms
 {
     std::array<float, 4> viewport;
 
-    float halfRenderAreaHeight;
-    float viewportYScale;
-    float negViewportYScale;
+    // Used to flip gl_FragCoord (both .xy for Android pre-rotation; only .y for desktop)
+    std::array<float, 2> halfRenderArea;
+    std::array<float, 2> flipXY;
+    float viewportYScale;     // TODO(ianelliott): Decide whether to keep for the long term
+    float negViewportYScale;  // TODO(ianelliott): Decide whether to keep for the long term
 
     // 32 bits for 32 clip planes
     uint32_t enabledClipPlanes;
@@ -62,7 +64,7 @@ struct GraphicsDriverUniforms
     uint32_t xfbActiveUnpaused;
     uint32_t xfbVerticesPerDraw;
     // NOTE: Explicit padding. Fill in with useful data when needed in the future.
-    std::array<int32_t, 2> padding;
+    std::array<int32_t, 3> padding;
 
     std::array<int32_t, 4> xfbBufferOffsets;
 
@@ -79,6 +81,9 @@ struct GraphicsDriverUniforms
     // Used to pre-rotate gl_Position for swapchain images on Android (a mat2, which is padded to
     // the size of two vec4's).
     std::array<float, 8> preRotation;
+    // Used to pre-rotate gl_FragCoord for swapchain images on Android (a mat2, which is padded to
+    // the size of two vec4's).
+    std::array<float, 8> fragRotation;
 };
 
 struct ComputeDriverUniforms
@@ -189,7 +194,8 @@ void ApplySampleCoverage(const gl::State &glState,
 }
 
 // When an Android surface is rotated differently than the device's native orientation, ANGLE must
-// rotate gl_Position in the vertex shader.  The following are the rotation matrices used.
+// rotate gl_Position in the vertex shader and gl_FragCoord in the fragment shader.  The following
+// are the rotation matrices used.
 //
 // Note: these are mat2's that are appropriately padded (4 floats per row).
 using PreRotationMatrixValues = std::array<float, 8>;
@@ -210,6 +216,25 @@ constexpr angle::PackedEnumMap<rx::SurfaceRotation,
           {{0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f}}},
          {rx::SurfaceRotation::FlippedRotated180Degrees,
           {{-1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotation::FlippedRotated270Degrees,
+          {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}}}};
+
+constexpr angle::PackedEnumMap<rx::SurfaceRotation,
+                               PreRotationMatrixValues,
+                               angle::EnumSize<rx::SurfaceRotation>()>
+    kFragRotationMatrices = {
+        {{rx::SurfaceRotation::Identity, {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotation::Rotated90Degrees,
+          {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotation::Rotated180Degrees,
+          {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotation::Rotated270Degrees,
+          {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotation::FlippedIdentity, {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotation::FlippedRotated90Degrees,
+          {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}},
+         {rx::SurfaceRotation::FlippedRotated180Degrees,
+          {{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}}},
          {rx::SurfaceRotation::FlippedRotated270Degrees,
           {{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f}}}}};
 
@@ -3372,15 +3397,41 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
                                      &newBuffer));
 
     gl::Rectangle glViewport = mState.getViewport();
+    float halfRenderAreaWidth =
+        static_cast<float>(mDrawFramebuffer->getState().getDimensions().width) * 0.5f;
     float halfRenderAreaHeight =
         static_cast<float>(mDrawFramebuffer->getState().getDimensions().height) * 0.5f;
     if (isRotatedAspectRatioForDrawFBO())
     {
         // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
         // TODO(ianelliott): handle small viewport/scissor cases.  http://anglebug.com/4431
+        std::swap(glViewport.x, glViewport.y);
         std::swap(glViewport.width, glViewport.height);
-        halfRenderAreaHeight =
-            static_cast<float>(mDrawFramebuffer->getState().getDimensions().width) * 0.5f;
+        std::swap(halfRenderAreaWidth, halfRenderAreaHeight);
+    }
+    float flipX = 1.0f;
+    float flipY = -1.0f;
+    switch (mCurrentRotationDrawFramebuffer)
+    {
+        case SurfaceRotation::Identity:
+            flipX = 1.0f;
+            flipY = isViewportFlipEnabledForDrawFBO() ? -1.0f : 1.0f;
+            break;
+        case SurfaceRotation::Rotated90Degrees:
+            flipX = 1.0f;
+            flipY = 1.0f;
+            break;
+        case SurfaceRotation::Rotated180Degrees:
+            flipX = -1.0f;
+            flipY = 1.0f;
+            break;
+        case SurfaceRotation::Rotated270Degrees:
+            flipX = -1.0f;
+            flipY = -1.0f;
+            break;
+        default:
+            UNREACHABLE();
+            break;
     }
     float scaleY = isViewportFlipEnabledForDrawFBO() ? -1.0f : 1.0f;
 
@@ -3395,7 +3446,8 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
     *driverUniforms                        = {
         {static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
          static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)},
-        halfRenderAreaHeight,
+        {halfRenderAreaWidth, halfRenderAreaHeight},
+        {flipX, flipY},
         scaleY,
         -scaleY,
         mState.getEnabledClipDistances().bits(),
@@ -3405,8 +3457,11 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
         {},
         {},
         {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f},
+        {},
         {}};
     memcpy(&driverUniforms->preRotation, &kPreRotationMatrices[mCurrentRotationDrawFramebuffer],
+           sizeof(PreRotationMatrixValues));
+    memcpy(&driverUniforms->fragRotation, &kFragRotationMatrices[mCurrentRotationDrawFramebuffer],
            sizeof(PreRotationMatrixValues));
 
     if (xfbActiveUnpaused)
