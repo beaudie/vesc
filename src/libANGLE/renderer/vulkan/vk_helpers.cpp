@@ -47,6 +47,65 @@ constexpr int kLineLoopDynamicIndirectBufferInitialSize = sizeof(VkDrawIndirectC
 // This is an arbitrary max. We can change this later if necessary.
 constexpr uint32_t kDefaultDescriptorPoolMaxSets = 128;
 
+constexpr angle::PackedEnumMap<MemoryWriteType, VkAccessFlags> kMemoryWriteTypeAccessFlagBitMap = {
+    // We set the VK_ACCESS_SHADER_READ_BIT to be conservative.
+    {MemoryWriteType::VertexShaderWrite, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT},
+    {MemoryWriteType::FragmentShaderWrite, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT},
+    {MemoryWriteType::GeometryShaderWrite, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT},
+    {MemoryWriteType::ComputeShaderWrite, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT},
+    {MemoryWriteType::HostWrite, VK_ACCESS_HOST_WRITE_BIT},
+    {MemoryWriteType::TransferWrite, VK_ACCESS_TRANSFER_WRITE_BIT},
+    {MemoryWriteType::ColorAttachmentWrite,
+     VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT},
+    {MemoryWriteType::DepthStencilAttachmentWrite,
+     VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT},
+    {MemoryWriteType::TransformFeedbackWrite, VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT}};
+
+constexpr angle::PackedEnumMap<MemoryWriteType, PipelineStage> kMemoryWriteTypePipelineStageMap = {
+    {MemoryWriteType::VertexShaderWrite, PipelineStage::VertexShader},
+    {MemoryWriteType::FragmentShaderWrite, PipelineStage::FragmentShader},
+    {MemoryWriteType::GeometryShaderWrite, PipelineStage::GeometryShader},
+    {MemoryWriteType::ComputeShaderWrite, PipelineStage::ComputeShader},
+    {MemoryWriteType::HostWrite, PipelineStage::Host},
+    {MemoryWriteType::TransferWrite, PipelineStage::Transfer},
+    {MemoryWriteType::ColorAttachmentWrite, PipelineStage::ColorAttachmentOutput},
+    {MemoryWriteType::DepthStencilAttachmentWrite, PipelineStage::LateFragmentTest},
+    {MemoryWriteType::TransformFeedbackWrite, PipelineStage::TransformFeedback}};
+
+constexpr angle::PackedEnumMap<MemoryReadType, VkAccessFlags> kMemoryReadAccessFlagBitMap = {
+    {MemoryReadType::VertexShaderRead, VK_ACCESS_SHADER_READ_BIT},
+    {MemoryReadType::FragmentShaderRead, VK_ACCESS_SHADER_READ_BIT},
+    {MemoryReadType::GeometryShaderRead, VK_ACCESS_SHADER_READ_BIT},
+    {MemoryReadType::ComputeShaderRead, VK_ACCESS_SHADER_READ_BIT},
+    {MemoryReadType::TransferRead, VK_ACCESS_TRANSFER_READ_BIT},
+    {MemoryReadType::IndirectCommandRead, VK_ACCESS_INDIRECT_COMMAND_READ_BIT},
+    {MemoryReadType::IndexRead, VK_ACCESS_INDEX_READ_BIT},
+    {MemoryReadType::VertexAttributeRead, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT},
+    {MemoryReadType::VertexShaderUniformRead, VK_ACCESS_UNIFORM_READ_BIT},
+    {MemoryReadType::FragmentShaderUniformRead, VK_ACCESS_UNIFORM_READ_BIT},
+    {MemoryReadType::GeometryShaderUniformRead, VK_ACCESS_UNIFORM_READ_BIT},
+    {MemoryReadType::ComputeShaderUniformRead, VK_ACCESS_UNIFORM_READ_BIT},
+    {MemoryReadType::HostRead, VK_ACCESS_HOST_READ_BIT},
+    {MemoryReadType::ColorAttachmentRead, VK_ACCESS_COLOR_ATTACHMENT_READ_BIT},
+    {MemoryReadType::DepthStencilAttachmentRead, VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT}};
+
+constexpr angle::PackedEnumMap<MemoryReadType, PipelineStage> kMemoryReadTypePipelineStageMap = {
+    {MemoryReadType::VertexShaderRead, PipelineStage::VertexShader},
+    {MemoryReadType::FragmentShaderRead, PipelineStage::FragmentShader},
+    {MemoryReadType::GeometryShaderRead, PipelineStage::GeometryShader},
+    {MemoryReadType::ComputeShaderRead, PipelineStage::ComputeShader},
+    {MemoryReadType::TransferRead, PipelineStage::Transfer},
+    {MemoryReadType::IndirectCommandRead, PipelineStage::DrawIndirect},
+    {MemoryReadType::IndexRead, PipelineStage::VertexInput},
+    {MemoryReadType::VertexAttributeRead, PipelineStage::VertexInput},
+    {MemoryReadType::VertexShaderUniformRead, PipelineStage::VertexShader},
+    {MemoryReadType::FragmentShaderUniformRead, PipelineStage::FragmentShader},
+    {MemoryReadType::GeometryShaderUniformRead, PipelineStage::GeometryShader},
+    {MemoryReadType::ComputeShaderUniformRead, PipelineStage::ComputeShader},
+    {MemoryReadType::HostRead, PipelineStage::Host},
+    {MemoryReadType::ColorAttachmentRead, PipelineStage::ColorAttachmentOutput},
+    {MemoryReadType::DepthStencilAttachmentRead, PipelineStage::LateFragmentTest}};
+
 constexpr angle::PackedEnumMap<PipelineStage, VkPipelineStageFlagBits> kPipelineStageFlagBitMap = {
     {PipelineStage::TopOfPipe, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT},
     {PipelineStage::DrawIndirect, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT},
@@ -83,7 +142,8 @@ struct ImageMemoryBarrierData
     // barrier.
     //
     // Otherwise, some same-layout transitions require a memory barrier.
-    bool sameLayoutTransitionRequiresBarrier;
+    MemoryWriteType memoryWriteType;
+
     // CommandBufferHelper tracks an array of PipelineBarriers. This indicates which array element
     // this should be merged into. Right now we track individual barrier for every PipelineStage. If
     // layout has a single stage mask bit, we use that stage as index. If layout has multiple stage
@@ -95,6 +155,7 @@ struct ImageMemoryBarrierData
 constexpr VkPipelineStageFlags kAllShadersPipelineStageFlags =
     VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
     VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+
 // clang-format off
 constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemoryBarrierData = {
     {
@@ -107,7 +168,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             // Transition from: there's no data in the image to care about.
             0,
-            false,
+            MemoryWriteType::InvalidEnum,
             PipelineStage::InvalidEnum,
         },
     },
@@ -121,7 +182,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_MEMORY_WRITE_BIT,
-            false,
+            MemoryWriteType::InvalidEnum,
             PipelineStage::InvalidEnum,
         },
     },
@@ -135,7 +196,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            false,
+            MemoryWriteType::InvalidEnum,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::TopOfPipe,
         },
@@ -150,7 +211,8 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            true,
+            // This is handled specially in updateLayoutAndBarrier
+            MemoryWriteType::VertexShaderWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::TopOfPipe,
         },
@@ -165,7 +227,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_TRANSFER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            false,
+            MemoryWriteType::InvalidEnum,
             PipelineStage::Transfer,
         },
     },
@@ -179,7 +241,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_TRANSFER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_TRANSFER_WRITE_BIT,
-            true,
+            MemoryWriteType::TransferWrite,
             PipelineStage::Transfer,
         },
     },
@@ -193,7 +255,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            false,
+            MemoryWriteType::InvalidEnum,
             PipelineStage::VertexShader,
         },
     },
@@ -207,7 +269,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            true,
+            MemoryWriteType::VertexShaderWrite,
             PipelineStage::VertexShader,
         },
     },
@@ -221,7 +283,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            false,
+            MemoryWriteType::InvalidEnum,
             PipelineStage::GeometryShader,
         },
     },
@@ -235,7 +297,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            true,
+            MemoryWriteType::GeometryShaderWrite,
             PipelineStage::GeometryShader,
         },
     },
@@ -249,7 +311,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            false,
+            MemoryWriteType::InvalidEnum,
             PipelineStage::FragmentShader,
         },
     },
@@ -263,7 +325,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            true,
+            MemoryWriteType::FragmentShaderWrite,
             PipelineStage::FragmentShader,
         },
     },
@@ -277,7 +339,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            false,
+            MemoryWriteType::InvalidEnum,
             PipelineStage::ComputeShader,
         },
     },
@@ -291,7 +353,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            true,
+            MemoryWriteType::ComputeShaderWrite,
             vk::PipelineStage::ComputeShader,
         },
     },
@@ -305,7 +367,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            false,
+            MemoryWriteType::InvalidEnum,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
         },
@@ -320,7 +382,8 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            true,
+            // This is handled specially in updateLayoutAndBarrier
+            MemoryWriteType::VertexShaderWrite,
             // In case of multiple destination stages, We barrier the earliest stage
             PipelineStage::VertexShader,
         },
@@ -335,7 +398,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            true,
+            MemoryWriteType::ColorAttachmentWrite,
             PipelineStage::ColorAttachmentOutput,
         },
     },
@@ -349,7 +412,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-            true,
+            MemoryWriteType::DepthStencilAttachmentWrite,
             PipelineStage::EarlyFragmentTest,
         },
     },
@@ -368,7 +431,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            false,
+            MemoryWriteType::InvalidEnum,
             PipelineStage::BottomOfPipe,
         },
     },
@@ -538,36 +601,37 @@ void CommandBufferHelper::initialize(angle::PoolAllocator *poolAllocator,
     mMergeBarriers             = mergeBarriers;
 }
 
-void CommandBufferHelper::bufferRead(vk::ResourceUseList *resourceUseList,
-                                     VkAccessFlags readAccessType,
-                                     vk::PipelineStage readStage,
-                                     vk::BufferHelper *buffer)
+void CommandBufferHelper::bufferRead(ResourceUseList *resourceUseList,
+                                     MemoryReadType readType,
+                                     BufferHelper *buffer,
+                                     MemoryBarrierTimelineTracker *tracker)
 {
     buffer->retain(resourceUseList);
-    VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
-    if (buffer->updateReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
+    PipelineStage readStage = kMemoryReadTypePipelineStageMap[readType];
+    if (buffer->updateReadBarrier(readType, readStage, &mPipelineBarriers[readStage], tracker))
     {
         mPipelineBarrierMask.set(readStage);
     }
 }
 
-void CommandBufferHelper::bufferWrite(vk::ResourceUseList *resourceUseList,
-                                      VkAccessFlags writeAccessType,
-                                      vk::PipelineStage writeStage,
-                                      vk::BufferHelper *buffer)
+void CommandBufferHelper::bufferWrite(ResourceUseList *resourceUseList,
+                                      MemoryWriteType writeType,
+                                      BufferHelper *buffer,
+                                      MemoryBarrierTimelineTracker *tracker)
 {
     buffer->retain(resourceUseList);
-    VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
-    if (buffer->updateWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
+    PipelineStage writeStage = kMemoryWriteTypePipelineStageMap[writeType];
+    if (buffer->updateWriteBarrier(writeType, writeStage, &mPipelineBarriers[writeStage], tracker))
     {
         mPipelineBarrierMask.set(writeStage);
     }
 }
 
-void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
+void CommandBufferHelper::imageRead(ResourceUseList *resourceUseList,
                                     VkImageAspectFlags aspectFlags,
-                                    vk::ImageLayout imageLayout,
-                                    vk::ImageHelper *image)
+                                    ImageLayout imageLayout,
+                                    ImageHelper *image,
+                                    MemoryBarrierTimelineTracker *tracker)
 {
     image->retain(resourceUseList);
     if (image->isLayoutChangeNecessary(imageLayout))
@@ -575,23 +639,28 @@ void CommandBufferHelper::imageRead(vk::ResourceUseList *resourceUseList,
         PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
         ASSERT(barrierIndex != PipelineStage::InvalidEnum);
         PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
-        image->updateLayoutAndBarrier(aspectFlags, imageLayout, barrier);
-        mPipelineBarrierMask.set(barrierIndex);
+        if (image->updateLayoutAndBarrier(aspectFlags, imageLayout, barrier, tracker))
+        {
+            mPipelineBarrierMask.set(barrierIndex);
+        }
     }
 }
 
-void CommandBufferHelper::imageWrite(vk::ResourceUseList *resourceUseList,
+void CommandBufferHelper::imageWrite(ResourceUseList *resourceUseList,
                                      VkImageAspectFlags aspectFlags,
-                                     vk::ImageLayout imageLayout,
-                                     vk::ImageHelper *image)
+                                     ImageLayout imageLayout,
+                                     ImageHelper *image,
+                                     MemoryBarrierTimelineTracker *tracker)
 {
     image->retain(resourceUseList);
     // Write always requires a barrier
     PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
     ASSERT(barrierIndex != PipelineStage::InvalidEnum);
     PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
-    image->updateLayoutAndBarrier(aspectFlags, imageLayout, barrier);
-    mPipelineBarrierMask.set(barrierIndex);
+    if (image->updateLayoutAndBarrier(aspectFlags, imageLayout, barrier, tracker))
+    {
+        mPipelineBarrierMask.set(barrierIndex);
+    }
 }
 
 void CommandBufferHelper::executeBarriers(vk::PrimaryCommandBuffer *primary)
@@ -671,6 +740,8 @@ angle::Result CommandBufferHelper::flushToPrimary(ContextVk *contextVk,
     }
     // Commands that are added to primary before beginRenderPass command
     executeBarriers(primary);
+    // Notify the tracker that barriers have been submitted
+    contextVk->getMemoryBarrierTracker()->onBarriersExecute();
 
     if (mIsRenderPassCommandBuffer)
     {
@@ -2097,6 +2168,21 @@ void PipelineBarrier::addDiagnosticsString(std::ostringstream &out) const
     }
 }
 
+// MemoryBarrierTimelineTracker implementation.
+MemoryBarrierTimelineTracker::MemoryBarrierTimelineTracker() : mSerial() {}
+
+// Barrier commands have been produced. We should update the tracker
+// so that the same type of barriers from different objects will be
+// skipped.
+void MemoryBarrierTimelineTracker::onBarriersExecute()
+{
+    // Bump the serial number so that new writes will be tagged after the barrier
+    mSerial.generate();
+}
+
+// Make tracker appear as if memory barriers have been issued for all stages
+void MemoryBarrierTimelineTracker::reset() {}
+
 // BufferHelper implementation.
 BufferHelper::BufferHelper()
     : mMemoryPropertyFlags{},
@@ -2104,10 +2190,12 @@ BufferHelper::BufferHelper()
       mMappedMemory(nullptr),
       mViewFormat(nullptr),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
-      mCurrentWriteAccess(0),
-      mCurrentReadAccess(0),
-      mCurrentWriteStages(0),
-      mCurrentReadStages(0)
+      mCurrentWriteType(MemoryWriteType::InvalidEnum),
+      mCurrentReadTypeMask(),
+      mCurrentWriteStage(PipelineStage::InvalidEnum),
+      mCurrentReadStageMask(),
+      mCurrentWriteSerial(),
+      mCurrentReadSerials()
 {}
 
 BufferHelper::~BufferHelper() = default;
@@ -2351,7 +2439,7 @@ bool BufferHelper::isReleasedToExternal() const
 #endif
 }
 
-bool BufferHelper::canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType)
+bool BufferHelper::canAccumulateRead(ContextVk *contextVk, MemoryReadType readType)
 {
     // We only need to start a new command buffer when we need a new barrier.
     // For simplicity's sake for now we always start a new command buffer.
@@ -2359,7 +2447,7 @@ bool BufferHelper::canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAcc
     return false;
 }
 
-bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType)
+bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, MemoryWriteType writeType)
 {
     // We only need to start a new command buffer when we need a new barrier.
     // For simplicity's sake for now we always start a new command buffer.
@@ -2367,49 +2455,96 @@ bool BufferHelper::canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeA
     return false;
 }
 
-bool BufferHelper::updateReadBarrier(VkAccessFlags readAccessType,
-                                     VkPipelineStageFlags readStage,
-                                     PipelineBarrier *barrier)
+bool BufferHelper::updateReadBarrier(MemoryReadType readType,
+                                     PipelineStage readStage,
+                                     PipelineBarrier *barrier,
+                                     MemoryBarrierTimelineTracker *tracker)
 {
     bool barrierModified = false;
+
     // If there was a prior write and we are making a read that is either a new access type or from
-    // a new stage, we need a barrier
-    if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccessType) != readAccessType) ||
-                                     ((mCurrentReadStages & readStage) != readStage)))
+    // a new stage, we need a barrier. Note that MemoryReadType has both stage and access
+    // information baked together.
+    if (mCurrentWriteType != MemoryWriteType::InvalidEnum && !mCurrentReadTypeMask[readType])
     {
-        barrier->mergeMemoryBarrier(mCurrentWriteStages, readStage, mCurrentWriteAccess,
-                                    readAccessType);
-        barrierModified = true;
+        if (tracker->updateReadAfterWriteBarrier(mCurrentWriteStage, mCurrentWriteType,
+                                                 mCurrentWriteSerial, readType))
+        {
+            // We do need a barrier.
+            VkAccessFlags srcAccessMask = kMemoryWriteTypeAccessFlagBitMap[mCurrentWriteType];
+            VkPipelineStageFlagBits srcStageMask = kPipelineStageFlagBitMap[mCurrentWriteStage];
+            VkAccessFlags dstAccessMask          = kMemoryReadAccessFlagBitMap[readType];
+            VkPipelineStageFlagBits dstStageMask = kPipelineStageFlagBitMap[readStage];
+            barrier->mergeMemoryBarrier(srcStageMask, dstStageMask, srcAccessMask, dstAccessMask);
+            barrierModified = true;
+        }
     }
 
     // Accumulate new read usage.
-    mCurrentReadAccess |= readAccessType;
-    mCurrentReadStages |= readStage;
+    mCurrentReadTypeMask.set(readType);
+    mCurrentReadStageMask.set(readStage);
+    mCurrentReadSerials[readStage] = tracker->getCurrentSerial();
     return barrierModified;
 }
 
-bool BufferHelper::updateWriteBarrier(VkAccessFlags writeAccessType,
-                                      VkPipelineStageFlags writeStage,
-                                      PipelineBarrier *barrier)
+bool BufferHelper::updateWriteBarrier(MemoryWriteType writeType,
+                                      PipelineStage writeStage,
+                                      PipelineBarrier *barrier,
+                                      MemoryBarrierTimelineTracker *tracker)
 {
-    bool barrierModified = false;
-    // We don't need to check mCurrentReadStages here since if it is not zero, mCurrentReadAccess
-    // must not be zero as well. stage is finer grain than accessType.
-    ASSERT((!mCurrentReadStages && !mCurrentReadAccess) ||
-           (mCurrentReadStages && mCurrentReadAccess));
-    if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
+    // write after write barrier
+    bool wawBarrierModified = false;
+    if (mCurrentWriteType != MemoryWriteType::InvalidEnum)
     {
-        barrier->mergeMemoryBarrier(mCurrentWriteStages | mCurrentReadStages, writeStage,
-                                    mCurrentWriteAccess, writeAccessType);
-        barrierModified = true;
+        if (tracker->updateWriteAfterWriteBarrier(mCurrentWriteStage, mCurrentWriteType,
+                                                  mCurrentWriteSerial, writeType))
+        {
+            // We do need a barrier.
+            VkAccessFlags srcAccessMask = kMemoryWriteTypeAccessFlagBitMap[mCurrentWriteType];
+            VkPipelineStageFlagBits srcStageMask = kPipelineStageFlagBitMap[mCurrentWriteStage];
+            VkAccessFlags dstAccessMask          = kMemoryWriteTypeAccessFlagBitMap[writeType];
+            VkPipelineStageFlagBits dstStageMask = kPipelineStageFlagBitMap[writeStage];
+            barrier->mergeMemoryBarrier(srcStageMask, dstStageMask, srcAccessMask, dstAccessMask);
+            wawBarrierModified = true;
+        }
+    }
+
+    // Write after read barrier
+    bool warBarrierModified = false;
+    if (mCurrentReadStageMask.any())
+    {
+        // We don't need to check mCurrentReadTypeMask here since if mCurrentReadStageMask is not
+        // zero, mCurrentReadTypeMask must not be zero as well.
+        ASSERT(mCurrentReadTypeMask.any());
+        VkPipelineStageFlags srcStageMask = 0;
+        for (PipelineStage readStage : mCurrentReadStageMask)
+        {
+            if (tracker->updateWriteAfterReadBarrier(readStage, mCurrentReadSerials))
+            {
+                srcStageMask |= kPipelineStageFlagBitMap[readStage];
+            }
+        }
+        if (srcStageMask)
+        {
+            // We do need to wait
+            VkPipelineStageFlags dstStageMask = kPipelineStageFlagBitMap[writeStage];
+            VkAccessFlags dstAccessMask       = kMemoryWriteTypeAccessFlagBitMap[writeType];
+            barrier->mergeMemoryBarrier(srcStageMask, dstStageMask, 0, dstAccessMask);
+            warBarrierModified = true;
+        }
+        mCurrentReadStageMask.reset();
+        mCurrentReadTypeMask.reset();
+    }
+    else
+    {
+        ASSERT(mCurrentReadTypeMask.none());
     }
 
     // Reset usages on the new write.
-    mCurrentWriteAccess = writeAccessType;
-    mCurrentReadAccess  = 0;
-    mCurrentWriteStages = writeStage;
-    mCurrentReadStages  = 0;
-    return barrierModified;
+    mCurrentWriteType   = writeType;
+    mCurrentWriteStage  = writeStage;
+    mCurrentWriteSerial = tracker->getCurrentSerial();
+    return warBarrierModified || wawBarrierModified;
 }
 
 // ImageHelper implementation.
@@ -2426,6 +2561,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mFormat(other.mFormat),
       mSamples(other.mSamples),
       mSerial(other.mSerial),
+      mCurrentWriteBarrierSerial(other.mCurrentWriteBarrierSerial),
       mCurrentLayout(other.mCurrentLayout),
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
       mBaseLevel(other.mBaseLevel),
@@ -2446,17 +2582,18 @@ ImageHelper::~ImageHelper()
 
 void ImageHelper::resetCachedProperties()
 {
-    mImageType               = VK_IMAGE_TYPE_2D;
-    mExtents                 = {};
-    mFormat                  = nullptr;
-    mSamples                 = 1;
-    mSerial                  = rx::kZeroSerial;
-    mCurrentLayout           = ImageLayout::Undefined;
-    mCurrentQueueFamilyIndex = std::numeric_limits<uint32_t>::max();
-    mBaseLevel               = 0;
-    mMaxLevel                = 0;
-    mLayerCount              = 0;
-    mLevelCount              = 0;
+    mImageType                 = VK_IMAGE_TYPE_2D;
+    mExtents                   = {};
+    mFormat                    = nullptr;
+    mSamples                   = 1;
+    mSerial                    = rx::kZeroSerial;
+    mCurrentWriteBarrierSerial = Serial();
+    mCurrentLayout             = ImageLayout::Undefined;
+    mCurrentQueueFamilyIndex   = std::numeric_limits<uint32_t>::max();
+    mBaseLevel                 = 0;
+    mMaxLevel                  = 0;
+    mLayerCount                = 0;
+    mLevelCount                = 0;
 }
 
 void ImageHelper::initStagingBuffer(RendererVk *renderer,
@@ -2824,7 +2961,7 @@ bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout) const
     // RAR (read-after-read) doesn't need a barrier.  WAW (write-after-write) does require a memory
     // barrier though.
     bool sameLayoutAndNoNeedForBarrier =
-        mCurrentLayout == newLayout && !layoutData.sameLayoutTransitionRequiresBarrier;
+        mCurrentLayout == newLayout && layoutData.memoryWriteType == MemoryWriteType::InvalidEnum;
 
     return !sameLayoutAndNoNeedForBarrier;
 }
@@ -2933,31 +3070,39 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
 
-void ImageHelper::updateLayoutAndBarrier(VkImageAspectFlags aspectMask,
+bool ImageHelper::updateLayoutAndBarrier(VkImageAspectFlags aspectMask,
                                          ImageLayout newLayout,
-                                         PipelineBarrier *barrier)
+                                         PipelineBarrier *barrier,
+                                         MemoryBarrierTimelineTracker *tracker)
 {
+    bool barrierModified = false;
     if (newLayout == mCurrentLayout)
     {
         const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
-        ASSERT(layoutData.sameLayoutTransitionRequiresBarrier);
+        ASSERT(layoutData.memoryWriteType != MemoryWriteType::InvalidEnum);
         // No layout change, only memory barrier is required
         barrier->mergeMemoryBarrier(layoutData.srcStageMask, layoutData.dstStageMask,
                                     layoutData.srcAccessMask, layoutData.dstAccessMask);
+        barrierModified = true;
     }
     else
     {
         const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[mCurrentLayout];
         const ImageMemoryBarrierData &transitionTo   = kImageMemoryBarrierData[newLayout];
 
+        // image layout changes always require barrier
         VkImageMemoryBarrier imageMemoryBarrier = {};
         initImageMemoryBarrierStruct(aspectMask, newLayout, mCurrentQueueFamilyIndex,
                                      &imageMemoryBarrier);
 
         barrier->mergeImageBarrier(transitionFrom.srcStageMask, transitionTo.dstStageMask,
                                    imageMemoryBarrier);
-        mCurrentLayout = newLayout;
+        mCurrentLayout  = newLayout;
+        barrierModified = true;
     }
+
+    mCurrentWriteBarrierSerial = tracker->getCurrentSerial();
+    return barrierModified;
 }
 
 void ImageHelper::clearColor(const VkClearColorValue &color,
