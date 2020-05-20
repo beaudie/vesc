@@ -554,6 +554,113 @@ class LineLoopHelper final : angle::NonCopyable
     DynamicBuffer mDynamicIndirectBuffer;
 };
 
+// This is designed in a way such that the read
+// and write pair can form a packed index into the
+// array of barriers
+enum class MemoryWriteType : uint8_t
+{
+    VertexShaderWrite           = 0,
+    FragmentShaderWrite         = 1,
+    GeometryShaderWrite         = 2,
+    ComputeShaderWrite          = 3,
+    HostWrite                   = 4,
+    TransferWrite               = 5,
+    ColorAttachmentWrite        = 6,
+    DepthStencilAttachmentWrite = 7,
+    TransformFeedbackWrite      = 8,
+
+    InvalidEnum = 9,
+    EnumCount   = InvalidEnum,
+};
+
+enum class MemoryReadType : uint8_t
+{
+    VertexShaderRead           = 0,
+    FragmentShaderRead         = 1,
+    GeometryShaderRead         = 2,
+    ComputeShaderRead          = 3,
+    TransferRead               = 4,
+    IndirectCommandRead        = 5,
+    IndexRead                  = 6,
+    VertexAttributeRead        = 7,
+    UniformRead                = 8,
+    HostRead                   = 9,
+    ColorAttachmentRead        = 10,
+    DepthStencilAttachmentRead = 11,
+
+    InvalidEnum = 12,
+    EnumCount   = InvalidEnum,
+    BitCount    = 4,
+};
+
+// This uses a serial to track when a given type of RAW barrier
+// was issued and provide an API to query if a barrier is still
+// needed for a given type of RAW.
+class MemoryBarrierTimelineTracker : angle::NonCopyable
+{
+  public:
+    MemoryBarrierTimelineTracker() : mSerial(), mBarrierSerials() {}
+
+    // This returns true if a barrier is needed.
+    bool updateRAWriteBarrier(MemoryWriteType writeType,
+                              Serial writeSerial,
+                              MemoryReadType readType)
+    {
+        // The tracked index can easily formed here
+        uint32_t index =
+            (static_cast<uint32_t>(writeType) << static_cast<uint32_t>(MemoryReadType::BitCount)) |
+            static_cast<uint32_t>(readType);
+
+        // If the write occurred before the barrier was
+        // issued, we don't need barrier
+        if (writeSerial < mBarrierSerials[index])
+        {
+            return false;
+        }
+
+        // We do need a barrier. Serial is updated here to prevent
+        // same type of barrier from being reissued
+        mBarrierSerials[index] = mSerial.getCurrentSerial();
+        mDirtyBarrierIndices.push_back(index);
+        return true;
+    }
+
+    // Barrier commands have been produced. We should update the tracker
+    // so that the same type of barriers from different objects will be
+    // skipped.
+    void onBarriersExecute()
+    {
+        for (uint32_t index : mDirtyBarrierIndices)
+        {
+            mBarrierSerials[index] = mSerial.getCurrentSerial();
+        }
+        mDirtyBarrierIndices.clear();
+        // Bump the serial number so that new writes will be tagged after the barrier
+        mSerial.generate();
+    }
+
+    // Make tracker appear as if memory barriers have been issued for all barriers
+    void reset()
+    {
+        for (Serial &serial : mBarrierSerials)
+        {
+            serial = mSerial.getCurrentSerial();
+        }
+        mDirtyBarrierIndices.clear();
+        mSerial.generate();
+    }
+
+    Serial getCurrentSerial() const { return mSerial.getCurrentSerial(); }
+
+  private:
+    SerialFactory mSerial;
+    static constexpr uint32_t kMemoryBarriersCount =
+        static_cast<uint32_t>(MemoryWriteType::EnumCount)
+        << static_cast<uint32_t>(MemoryReadType::BitCount);
+    angle::FixedVector<Serial, kMemoryBarriersCount> mBarrierSerials;
+    angle::FixedVector<uint32_t, kMemoryBarriersCount> mDirtyBarrierIndices;
+};
+
 // This defines enum for VkPipelineStageFlagBits so that we can use it to compare and index into
 // array.
 enum class PipelineStage : uint16_t
@@ -704,12 +811,12 @@ class BufferHelper final : public Resource
         return (mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) != 0;
     }
 
-    // Set write access mask when the buffer is modified externally, e.g. by host.  There is no
-    // graph resource to create a dependency to.
-    void onExternalWrite(VkAccessFlags writeAccessType)
+    // Set write access mask when the buffer is modified externally, e.g. by host.
+    void onExternalHostWrite(MemoryBarrierTimelineTracker *tracker)
     {
-        ASSERT(writeAccessType == VK_ACCESS_HOST_WRITE_BIT);
-        mCurrentWriteAccess |= writeAccessType;
+        mCurrentWriteType   = MemoryWriteType::HostWrite;
+        mCurrentWriteSerial = tracker->getCurrentSerial();
+        mCurrentWriteAccess |= VK_ACCESS_HOST_WRITE_BIT;
         mCurrentWriteStages |= VK_PIPELINE_STAGE_HOST_BIT;
     }
 
@@ -779,16 +886,18 @@ class BufferHelper final : public Resource
     bool isReleasedToExternal() const;
 
     // Currently always returns false. Should be smarter about accumulation.
-    bool canAccumulateRead(ContextVk *contextVk, VkAccessFlags readAccessType);
-    bool canAccumulateWrite(ContextVk *contextVk, VkAccessFlags writeAccessType);
+    bool canAccumulateRead(ContextVk *contextVk, vk::MemoryReadType readType);
+    bool canAccumulateWrite(ContextVk *contextVk, vk::MemoryWriteType writeType);
 
-    bool updateReadBarrier(VkAccessFlags readAccessType,
+    bool updateReadBarrier(MemoryReadType readType,
                            VkPipelineStageFlags readStage,
-                           PipelineBarrier *barrier);
+                           PipelineBarrier *barrier,
+                           MemoryBarrierTimelineTracker *tracker);
 
-    bool updateWriteBarrier(VkAccessFlags writeAccessType,
+    bool updateWriteBarrier(MemoryWriteType writeType,
                             VkPipelineStageFlags writeStage,
-                            PipelineBarrier *barrier);
+                            PipelineBarrier *barrier,
+                            MemoryBarrierTimelineTracker *tracker);
 
   private:
     angle::Result mapImpl(ContextVk *contextVk);
@@ -811,6 +920,8 @@ class BufferHelper final : public Resource
     VkFlags mCurrentReadAccess;
     VkPipelineStageFlags mCurrentWriteStages;
     VkPipelineStageFlags mCurrentReadStages;
+    MemoryWriteType mCurrentWriteType;
+    Serial mCurrentWriteSerial;
 };
 
 // CommandBufferHelper (CBH) class wraps ANGLE's custom command buffer
@@ -824,18 +935,20 @@ class BufferHelper final : public Resource
 struct CommandBufferHelper : angle::NonCopyable
 {
   public:
-    CommandBufferHelper(bool canHaveRenderPass, bool mergeBarriers);
+    CommandBufferHelper(bool canHaveRenderPass,
+                        bool mergeBarriers,
+                        MemoryBarrierTimelineTracker *tracker);
     ~CommandBufferHelper();
 
     // General Functions (non-renderPass specific)
     void initialize(angle::PoolAllocator *poolAllocator);
 
     void bufferRead(vk::ResourceUseList *resourceUseList,
-                    VkAccessFlags readAccessType,
+                    MemoryReadType readType,
                     vk::PipelineStage readStage,
                     vk::BufferHelper *buffer);
     void bufferWrite(vk::ResourceUseList *resourceUseList,
-                     VkAccessFlags writeAccessType,
+                     MemoryWriteType writeType,
                      vk::PipelineStage writeStage,
                      vk::BufferHelper *buffer);
 
@@ -935,6 +1048,7 @@ struct CommandBufferHelper : angle::NonCopyable
     PipelineBarrierArray mPipelineBarriers;
     PipelineStagesMask mPipelineBarrierMask;
     vk::CommandBuffer mCommandBuffer;
+    MemoryBarrierTimelineTracker *mMemoryBarrierTracker;
 
     // RenderPass state
     uint32_t mCounter;
