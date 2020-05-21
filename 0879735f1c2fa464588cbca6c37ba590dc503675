@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "60d6d5b4_d73df37f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3415,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-21T17:35:00Z",
+      "side": 1,
+      "message": "Possibly, but not much time.  I like your inquiry though, because I\u0027ve seen things that can save time in ANGLE, though I don\u0027t know that they would save enough to matter in a benchmark ...\n\nI\u0027ve watched some of the state-setting/dirty-bit-processing code a lot over the past few months.  Some of the functions that I\u0027ve watched get called multiple times for every call to this function (sometimes in the wrong order, and so they are called again).  I haven\u0027t logged calls to ContextVk::updateFlipViewportDrawFramebuffer() and ContextVk::onMakeCurrent(), but I have watched them in the debugger.  My sense is they aren\u0027t called repetitively; and that this isn\u0027t a huge place we spend time.  \n\nThe repetitive calls to lookup/calculate/set the scissor, rendering area, and viewport easily dwarf the time we spend on this.  I would like to look at that sometime, and probably need to to address the bug Charlie filed (b/151111296) about breaking a render pass with pre-rotation enabled.  Looks like it happens in the scissor-processing code when switching the draw framebuffer.\n\nBTW, I\u0027m suspicious of the \"viewport\" uniform value used above.  It could be very different from the one we calculate/set in ContextVk::updateViewport().",
+      "parentUuid": "49429bec_803fce2c",
+      "range": {
+        "startLine": 3415,
+        "startChar": 20,
+        "endLine": 3415,
+        "endChar": 69
+      },
+      "revId": "0879735f1c2fa464588cbca6c37ba590dc503675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3b0f4471_dd00325f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 3
@@ -123,6 +147,24 @@
       "revId": "0879735f1c2fa464588cbca6c37ba590dc503675",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2aab339c_7444c4b3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3419,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-21T17:35:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "898f6ed7_a61419aa",
+      "revId": "0879735f1c2fa464588cbca6c37ba590dc503675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
