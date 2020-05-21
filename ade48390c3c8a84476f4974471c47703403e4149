@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "ac8ae49e_7f880ad7",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-21T13:03:10Z",
+      "side": 1,
+      "message": "We can identify Fuchsia at compile time with ANGLE_PLATFORM_FUCHSIA.\n\nWayland is not supported because there\u0027s no wl_display or wl_surface support in ANGLE right now.\n\nEven if Wayland was supported, I\u0027m not sure if Chrome would be able to be able to pass the display to the GPU process to use it. For Wayland on GBM maybe the gbm platform could be used with modifications.\n\nOn Linux between X11 and GBM I\u0027d definitely agree we should identify the display type by passing in parameters eglGetPlatformDisplay, not by doing the probing that mesa does. ANGLE EGL should implement\n\n  eglGetPlatformDisplay(EGL_PLATFORM_X11_KHR...)\n  eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE,\n                        EGL_PLATFORM_ANGLE_DISPLAY_TYPE_ANGLE \u003d\u003d X11)\n\nChrome would do the latter but the former is what other apps should do if they are using X11 and don\u0027t care who\u0027s providing EGL.\n\nWe could use the existing device type param, but as I said this would be limiting.",
+      "parentUuid": "b433170f_99c04bfb",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
