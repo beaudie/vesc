@@ -22,6 +22,75 @@
       "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81c16535_b5c3ea66",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-21T15:02:37Z",
+      "side": 1,
+      "message": "Instead of putting a new parameter here, how about setting scissorEnabled and offsetting the scissor rect in  GetClearParameters in FramebufferD3D.cpp",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 36
+      },
+      "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "178f49c4_562d5888",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-21T15:02:37Z",
+      "side": 1,
+      "message": "Can you add in the offset to drawRect at the call sites? It looks like only one needs it.",
+      "range": {
+        "startLine": 395,
+        "startChar": 57,
+        "endLine": 395,
+        "endChar": 77
+      },
+      "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51620bf6_5dfdd323",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-21T15:02:37Z",
+      "side": 1,
+      "message": "nit: put the width/height into a constant",
+      "range": {
+        "startLine": 1095,
+        "startChar": 44,
+        "endLine": 1095,
+        "endChar": 47
+      },
+      "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
