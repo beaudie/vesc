@@ -39,11 +39,15 @@ angle::Result WindowSurfaceVkFuchsia::createSurfaceVk(vk::Context *context, gl::
 #if !defined(ANGLE_SHARED_LIBVULKAN)
     InitImagePipeSurfaceFUCHSIAFunctions(context->getRenderer()->getInstance());
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
+#if defined(ANGLE_USE_IMAGE_PIPE)
     fuchsia_egl_window *egl_window = reinterpret_cast<fuchsia_egl_window *>(mNativeWindowType);
+#endif
 
     VkImagePipeSurfaceCreateInfoFUCHSIA createInfo = {};
-    createInfo.sType           = VK_STRUCTURE_TYPE_IMAGEPIPE_SURFACE_CREATE_INFO_FUCHSIA;
+    createInfo.sType = VK_STRUCTURE_TYPE_IMAGEPIPE_SURFACE_CREATE_INFO_FUCHSIA;
+#if defined(ANGLE_USE_IMAGE_PIPE)
     createInfo.imagePipeHandle = fuchsia_egl_window_release_image_pipe(egl_window);
+#endif
     ANGLE_VK_TRY(context, vkCreateImagePipeSurfaceFUCHSIA(context->getRenderer()->getInstance(),
                                                           &createInfo, nullptr, &mSurface));
 
