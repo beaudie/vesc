@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75de51ba_6ca4f6b7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3103,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-05-21T18:53:32Z",
+      "side": 1,
+      "message": "Maybe we should add a isWebGL() here",
+      "revId": "4694bcd9864d2a3e9d7d5750827ec2b5bd6632d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
