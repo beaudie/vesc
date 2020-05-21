@@ -86,11 +86,6 @@ int ChooseCRTC(int fd, drmModeConnectorPtr conn)
 namespace rx
 {
 
-// TODO(fjhenigman) Implement swap control.  Until then this is unused.
-SwapControlData::SwapControlData()
-    : targetSwapInterval(0), maxSwapInterval(-1), currentSwapInterval(-1)
-{}
-
 DisplayOzone::Buffer::Buffer(DisplayOzone *display,
                              uint32_t useFlags,
                              uint32_t gbmFormat,
