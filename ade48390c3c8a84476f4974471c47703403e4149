@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "51fef617_8af0dfd6",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-21T13:37:54Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be DisplayGLX ?\n\nI\u0027m saying that you should likely be able to ask for\n  X11 on DisplayGLX on GLX or EGLGLES\n  X11 on DisplayEGL on swiftshader EGLGLES\n  X11 on DisplayVkXcb on vulkan\n  X11 on DisplayVkXcb on swiftshader vulkan\n\nDo we really want to add 4 new device types for every display type?\n\nSo I was saying that we really need two dimensions: renderer type (which is mostly what device type is doing now) and display type (which would be new, at least for ANGLE, but it is not really new because this is what the |platform| argument to eglGetPlatformDisplay was really for. We could even use those existing platform enums as the value).",
+      "parentUuid": "325ef47d_f85695ad",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
