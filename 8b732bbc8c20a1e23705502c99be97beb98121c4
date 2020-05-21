@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d149ef41_54e901d2",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-21T21:32:55Z",
+      "side": 1,
+      "message": "I would leave the old code that sets the scissor values and put this here instead:\n\n   if (state.isScissorTestEnabled())\n   {\n       clearParams.scissor \u003d state.getScissor() + offset;\n   }\n   else\n   {\n       clearParams.scissor.xy \u003d offset;\n       clearParams.scissor.size \u003d framebuffer size;\n   }",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 84
+      },
+      "revId": "8b732bbc8c20a1e23705502c99be97beb98121c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9ad5736_529f5171",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-21T21:32:55Z",
+      "side": 1,
+      "message": "This is overwriting the values set in the if-statements above.",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 41
+      },
+      "revId": "8b732bbc8c20a1e23705502c99be97beb98121c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
