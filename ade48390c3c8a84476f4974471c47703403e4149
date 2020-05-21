@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b433170f_99c04bfb",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-05-21T07:53:27Z",
+      "side": 1,
+      "message": "Do you mean something like this [1]?\n\nBut how will we identify if it is fuchsia? Does it also use gbm?\nFor wayland - I\u0027m not sure. It crashes with DisplayOzone atm.\n\n\n[1] https://github.com/intel/iotg-lin-gfx-mesa/blob/master/src/egl/main/egldisplay.c#L140",
+      "parentUuid": "79722c41_59a6fb69",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
