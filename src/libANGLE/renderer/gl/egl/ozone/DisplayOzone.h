@@ -30,21 +30,7 @@ namespace rx
 class FramebufferGL;
 class RendererEGL;
 
-// TODO(fjhenigman) Implement swap control.  The following struct will be used for that.
-// State-tracking data for the swap control to allow DisplayOzone to remember per
-// drawable information for swap control.
-struct SwapControlData final
-{
-    SwapControlData();
-
-    // Set by the drawable
-    int targetSwapInterval;
-
-    // DisplayOzone-side state-tracking
-    int maxSwapInterval;
-    int currentSwapInterval;
-};
-
+// TODO(fjhenigman) Implement swap control.  The SwapControlData struct will be used for that.
 class DisplayOzone final : public DisplayEGL
 {
   public:

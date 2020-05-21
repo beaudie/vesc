@@ -22,6 +22,10 @@
 namespace rx
 {
 
+SwapControlData::SwapControlData()
+    : targetSwapInterval(0), maxSwapInterval(-1), currentSwapInterval(-1)
+{}
+
 DisplayGL::DisplayGL(const egl::DisplayState &state) : DisplayImpl(state) {}
 
 DisplayGL::~DisplayGL() {}
