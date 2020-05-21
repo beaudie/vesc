@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "325ef47d_f85695ad",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-05-21T13:22:45Z",
+      "side": 1,
+      "message": "\u003e Even if Wayland was supported, I\u0027m not sure if Chrome would be able to be able to pass the display to the GPU process to use it. For Wayland on GBM maybe the gbm platform could be used with modifications.\n\nExactly, I expected DisplayOzone to work with wayland/gbm, but it crashed (that requires more investigations, but out of the scope of the currents tasks)..\n\nTwo questions just to make it clear:\n\n1) EGL_PLATFORM_X11_KHR should use opengl gl, right? And DisplayEgl impl will be used. We also have EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE display type that uses DisplayEgl impl.\n\n2) You\u0027re proposing to rename EGL_ANGLE_platform_angle_device_type_ozone_angle to EGL_ANGLE_platform_angle_device_type_x11_angle and use as the latter case you mentioned, right?",
+      "parentUuid": "ac8ae49e_7f880ad7",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
