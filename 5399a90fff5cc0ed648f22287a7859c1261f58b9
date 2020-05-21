@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5238864d_8e385afe",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-05-21T16:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44a56897_1d23b4a9",
+      "range": {
+        "startLine": 322,
+        "startChar": 59,
+        "endLine": 322,
+        "endChar": 65
+      },
+      "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81c16535_b5c3ea66",
         "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.h",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e322e53_6149c019",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-05-21T16:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81c16535_b5c3ea66",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 36
+      },
+      "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9bce8851_0716fbc0",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-05-21T16:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "178f49c4_562d5888",
+      "range": {
+        "startLine": 395,
+        "startChar": 57,
+        "endLine": 395,
+        "endChar": 77
+      },
+      "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51620bf6_5dfdd323",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f9d213a_451082fa",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2020-05-21T16:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51620bf6_5dfdd323",
+      "range": {
+        "startLine": 1095,
+        "startChar": 44,
+        "endLine": 1095,
+        "endChar": 47
+      },
+      "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
