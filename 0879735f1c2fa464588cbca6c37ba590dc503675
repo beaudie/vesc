@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d02d9f9_37b033e6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3415,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-21T16:14:35Z",
+      "side": 1,
+      "message": "Yes.  For the \"default framebuffer\" (i.e. to a swapchain image), isViewportFlipEnabledForDrawFBO() will always return true.  It will always return false for FBOs and pbuffers.  As such, we need to query this.",
+      "parentUuid": "1620e606_6012511d",
+      "range": {
+        "startLine": 3415,
+        "startChar": 20,
+        "endLine": 3415,
+        "endChar": 69
+      },
+      "revId": "0879735f1c2fa464588cbca6c37ba590dc503675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3b0f4471_dd00325f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2020-05-21T14:42:39Z",
       "side": 1,
       "message": "flip only applies when no rotation?",
+      "revId": "0879735f1c2fa464588cbca6c37ba590dc503675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0ebe4c9_fbbd664e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3419,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-21T16:14:35Z",
+      "side": 1,
+      "message": "All rotation cases are the \"default framebuffer\" (i.e. to a swapchain image).  As such, isViewportFlipEnabledForDrawFBO() will always return true.  Therefore, it\u0027s assumed as such for 90, 180, and 270-degree rotations.  The values of flipX and flipY are those that are needed in order to properly position the modified gl_FragCoord at the lower-left corner of the window (the GLES origin).",
+      "parentUuid": "3b0f4471_dd00325f",
       "revId": "0879735f1c2fa464588cbca6c37ba590dc503675",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
