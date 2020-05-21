@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1620e606_6012511d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3415,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-21T14:42:39Z",
+      "side": 1,
+      "message": "Is this something we expect to change very often?\nIf not, this test seems a bit of a waste. Could we use a getter that returns the value we need?\nIt\u0027s probably minor perf-wise, what do people think?",
+      "range": {
+        "startLine": 3415,
+        "startChar": 20,
+        "endLine": 3415,
+        "endChar": 69
+      },
+      "revId": "0879735f1c2fa464588cbca6c37ba590dc503675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b0f4471_dd00325f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3419,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-21T14:42:39Z",
+      "side": 1,
+      "message": "flip only applies when no rotation?",
+      "revId": "0879735f1c2fa464588cbca6c37ba590dc503675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
