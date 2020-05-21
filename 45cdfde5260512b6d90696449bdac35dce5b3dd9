@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce60cdcb_0ca3168e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 48
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-21T14:24:00Z",
+      "side": 1,
+      "message": "Should probably shut down and finish threads before we destroy resources.\nI think this should go at the top of this function.",
+      "revId": "45cdfde5260512b6d90696449bdac35dce5b3dd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
