@@ -16,6 +16,24 @@
       "revId": "4694bcd9864d2a3e9d7d5750827ec2b5bd6632d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36fafa34_16c56486",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3103,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-05-21T19:04:11Z",
+      "side": 1,
+      "message": "The main issue here is that Vulkan would need accurate `blendable` format cap which is additionally gated on extensions.colorBufferFloat. Maybe refactor gl::Float32BlendableSupport instead?",
+      "parentUuid": "75de51ba_6ca4f6b7",
+      "revId": "4694bcd9864d2a3e9d7d5750827ec2b5bd6632d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
