@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44a56897_1d23b4a9",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-21T14:24:51Z",
+      "side": 1,
+      "message": "nit: offset*",
+      "range": {
+        "startLine": 322,
+        "startChar": 59,
+        "endLine": 322,
+        "endChar": 65
+      },
+      "revId": "5399a90fff5cc0ed648f22287a7859c1261f58b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
