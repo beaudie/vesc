@@ -167,6 +167,9 @@ config("angle_vulkan_backend_config") {
   if (angle_enable_vulkan_gpu_trace_events) {
     defines += [ "ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS=1" ]
   }
+  if (is_fuchsia && angle_use_image_pipe) {
+    defines += [ "ANGLE_USE_IMAGE_PIPE" ]
+  }
 }
 
 angle_source_set("angle_vk_mem_alloc_wrapper") {

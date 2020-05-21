@@ -143,6 +143,10 @@ config("angle_util_config") {
   if (is_linux && angle_use_x11) {
     libs = [ "X11" ]
   }
+  defines = [ "LIBANGLE_UTIL_IMPLEMENTATION" ]
+  if (is_fuchsia && angle_use_image_pipe) {
+    defines += [ "ANGLE_USE_IMAGE_PIPE" ]
+  }
 }
 
 foreach(is_shared_library,

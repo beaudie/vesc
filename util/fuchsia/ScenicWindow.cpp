@@ -22,6 +22,8 @@
 
 #include "common/debug.h"
 
+#if defined(ANGLE_USE_IMAGE_PIPE)
+
 namespace
 {
 
@@ -306,3 +308,67 @@ OSWindow *OSWindow::New()
 {
     return new ScenicWindow;
 }
+
+#else
+
+class FbWindow : public OSWindow
+{
+  public:
+    FbWindow() {}
+    ~FbWindow() override { destroy(); }
+
+    // OSWindow:
+    bool initialize(const std::string &name, int width, int height) override
+    {
+        mWidth  = width;
+        mHeight = height;
+
+        resetNativeWindow();
+        return true;
+    }
+    void disableErrorMessageDialog() override {}
+    void destroy() override { mFuchsiaEGLWindow.reset(); }
+    void resetNativeWindow() override
+    {
+        mFuchsiaEGLWindow.reset(fuchsia_egl_window_create(0, mWidth, mHeight));
+    }
+    EGLNativeWindowType getNativeWindow() const override
+    {
+        return reinterpret_cast<EGLNativeWindowType>(mFuchsiaEGLWindow.get());
+    }
+    EGLNativeDisplayType getNativeDisplay() const override { return EGL_DEFAULT_DISPLAY; }
+    void messageLoop() override { UNIMPLEMENTED(); }
+    void setMousePosition(int x, int y) override { UNIMPLEMENTED(); }
+    bool setOrientation(int width, int height) override
+    {
+        UNIMPLEMENTED();
+        return false;
+    }
+    bool setPosition(int x, int y) override
+    {
+        UNIMPLEMENTED();
+        return false;
+    }
+    bool resize(int width, int height) override
+    {
+        mWidth  = width;
+        mHeight = height;
+
+        fuchsia_egl_window_resize(mFuchsiaEGLWindow.get(), width, height);
+        return true;
+    }
+    void setVisible(bool isVisible) override {}
+    void signalTestEvent() override {}
+
+  private:
+    // EGL native window.
+    std::unique_ptr<fuchsia_egl_window, FuchsiaEGLWindowDeleter> mFuchsiaEGLWindow;
+};
+
+// static
+OSWindow *OSWindow::New()
+{
+    return new FbWindow;
+}
+
+#endif

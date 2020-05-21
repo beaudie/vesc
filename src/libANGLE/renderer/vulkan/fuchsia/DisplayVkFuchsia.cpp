@@ -49,7 +49,11 @@ const char *DisplayVkFuchsia::getWSIExtension() const
 
 const char *DisplayVkFuchsia::getWSILayer() const
 {
+#if defined(ANGLE_USE_IMAGE_PIPE)
     return "VK_LAYER_FUCHSIA_imagepipe_swapchain";
+#else
+    return "VK_LAYER_FUCHSIA_imagepipe_swapchain_fb";
+#endif
 }
 
 bool IsVulkanFuchsiaDisplayAvailable()
