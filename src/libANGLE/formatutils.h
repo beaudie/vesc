@@ -156,6 +156,8 @@ struct InternalFormat
 
     ANGLE_NO_DISCARD bool computeCompressedImageSize(const Extents &size, GLuint *resultOut) const;
 
+    ANGLE_NO_DISCARD Extents getCompressedImageMinBlocks() const;
+
     ANGLE_NO_DISCARD bool computeSkipBytes(GLenum formatType,
                                            GLuint rowPitch,
                                            GLuint depthPitch,
