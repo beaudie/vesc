@@ -27,7 +27,7 @@ struct VulkanBarriersPerfParams final : public RenderTestParams
 
         // Common default parameters
         eglParameters = egl_platform::VULKAN();
-        majorVersion  = 2;
+        majorVersion  = 3;
         minorVersion  = 0;
         windowWidth   = 256;
         windowHeight  = 256;
@@ -40,7 +40,7 @@ struct VulkanBarriersPerfParams final : public RenderTestParams
     std::string story() const override;
 
     // Static parameters
-    static constexpr int kImageSizes[3] = {256, 512, 4096};
+    static constexpr int kImageSizes[4] = {256, 512, 4096, 4096 * 4096};
 
     bool doLargeTransfers;
     bool doSlowFragmentShaders;
@@ -66,6 +66,7 @@ class VulkanBarriersPerfBenchmark : public ANGLERenderTest,
 
   private:
     void createTexture(uint32_t textureIndex, uint32_t sizeIndex, bool compressed);
+    void createUniformBuffer();
     void createFramebuffer(uint32_t fboIndex, uint32_t textureIndex, uint32_t sizeIndex);
     void createResources();
 
@@ -82,6 +83,9 @@ class VulkanBarriersPerfBenchmark : public ANGLERenderTest,
     // Texture handles
     GLTexture mTextures[4];
 
+    // Uniform buffer handles
+    GLBuffer mUniformBuffers[2];
+
     // Framebuffer handles
     GLFramebuffer mFbos[2];
 
@@ -92,14 +96,18 @@ class VulkanBarriersPerfBenchmark : public ANGLERenderTest,
     static constexpr size_t kSmallFboIndex = 0;
     static constexpr size_t kLargeFboIndex = 1;
 
+    static constexpr size_t kUniformBuffer1Index = 0;
+    static constexpr size_t kUniformBuffer2Index = 1;
+
     static constexpr size_t kSmallTextureIndex     = 0;
     static constexpr size_t kLargeTextureIndex     = 1;
     static constexpr size_t kTransferTexture1Index = 2;
     static constexpr size_t kTransferTexture2Index = 3;
 
-    static constexpr size_t kSmallSizeIndex = 0;
-    static constexpr size_t kLargeSizeIndex = 1;
-    static constexpr size_t kHugeSizeIndex  = 2;
+    static constexpr size_t kSmallSizeIndex         = 0;
+    static constexpr size_t kLargeSizeIndex         = 1;
+    static constexpr size_t kHugeSizeIndex          = 2;
+    static constexpr size_t kUniformBufferSizeIndex = 3;
 };
 
 std::string VulkanBarriersPerfParams::story() const
@@ -178,6 +186,19 @@ void VulkanBarriersPerfBenchmark::createTexture(uint32_t textureIndex,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
+void VulkanBarriersPerfBenchmark::createUniformBuffer()
+{
+    const auto &params = GetParam();
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffers[kUniformBuffer1Index]);
+    glBufferData(GL_UNIFORM_BUFFER, params.kImageSizes[kUniformBufferSizeIndex], nullptr,
+                 GL_DYNAMIC_COPY);
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffers[kUniformBuffer2Index]);
+    glBufferData(GL_UNIFORM_BUFFER, params.kImageSizes[kUniformBufferSizeIndex], nullptr,
+                 GL_DYNAMIC_COPY);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
 void VulkanBarriersPerfBenchmark::createFramebuffer(uint32_t fboIndex,
                                                     uint32_t textureIndex,
                                                     uint32_t sizeIndex)
@@ -229,6 +250,7 @@ void VulkanBarriersPerfBenchmark::createResources()
     // transfers.
     createFramebuffer(kSmallFboIndex, kSmallTextureIndex, kSmallSizeIndex);
     createFramebuffer(kLargeFboIndex, kLargeTextureIndex, kLargeSizeIndex);
+    createUniformBuffer();
 
     if (params.doLargeTransfers)
     {
@@ -276,6 +298,9 @@ void VulkanBarriersPerfBenchmark::drawBenchmark()
      * - Alternately clear and draw from fbo 1 into fbo 2 and back.  This would use the color
      * attachment and shader read-only layouts in the fragment shader and color attachment stages.
      *
+     * Alternately copy data between the 2 uniform buffers. This would use the transfer layouts
+     * in the transfer stage.
+     *
      * Once compressed texture copies are supported, alternately transfer large chunks of data from
      * texture 1 into texture 2 and back.  This would use the transfer layouts in the transfer
      * stage.
@@ -290,6 +315,7 @@ void VulkanBarriersPerfBenchmark::drawBenchmark()
      * The above operations for example should ideally run on the GPU threads in parallel:
      *
      * + |---draw---||---draw---||---draw---||---draw---||---draw---|
+     * + |----buffer copy----||----buffer copy----||----buffer copy----|
      * + |-----------transfer------------||-----------transfer------------|
      * + |-----dispatch------||------dispatch------||------dispatch------|
      *
@@ -309,6 +335,11 @@ void VulkanBarriersPerfBenchmark::drawBenchmark()
      * + |---draw---|                                 |---draw---|
      * +             |-----------transfer------------|            |-----------transfer------------|
      *
+     * Or like this (buffer copy is blocking draw):
+     *
+     * + |---draw---|         |---draw---|         |---draw---|
+     * + |----buffer copy----||----buffer copy----||----buffer copy----|
+     *
      * The idea of doing slow FS calls is to make the second case above slower (by making the draw
      * slower than the transfer):
      *
@@ -321,18 +352,27 @@ void VulkanBarriersPerfBenchmark::drawBenchmark()
     {
         bool altEven = iteration % 2 == 0;
 
-        const int fboDestIndex     = altEven ? kLargeFboIndex : kSmallFboIndex;
-        const int fboTexSrcIndex   = altEven ? kSmallTextureIndex : kLargeTextureIndex;
-        const int fboDestSizeIndex = altEven ? kLargeSizeIndex : kSmallSizeIndex;
+        const int fboDestIndex            = altEven ? kLargeFboIndex : kSmallFboIndex;
+        const int fboTexSrcIndex          = altEven ? kSmallTextureIndex : kLargeTextureIndex;
+        const int fboDestSizeIndex        = altEven ? kLargeSizeIndex : kSmallSizeIndex;
+        const int uniformBufferReadIndex  = altEven ? kUniformBuffer1Index : kUniformBuffer2Index;
+        const int uniformBufferWriteIndex = altEven ? kUniformBuffer2Index : kUniformBuffer1Index;
 
-        // Set the viewport
-        glViewport(0, 0, fboDestSizeIndex, fboDestSizeIndex);
-
-        // Clear the color buffer
-        glClear(GL_COLOR_BUFFER_BIT);
+        // Transfer data between the 2 Uniform buffers
+        glBindBuffer(GL_COPY_READ_BUFFER, mUniformBuffers[uniformBufferReadIndex]);
+        glBindBuffer(GL_COPY_WRITE_BUFFER, mUniformBuffers[uniformBufferWriteIndex]);
+        glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, 0, 0,
+                            params.kImageSizes[kUniformBufferSizeIndex]);
 
         // Bind the framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, mFbos[fboDestIndex]);
+
+        // Set the viewport
+        glViewport(0, 0, params.kImageSizes[fboDestSizeIndex],
+                   params.kImageSizes[fboDestSizeIndex]);
+
+        // Clear the color buffer
+        glClear(GL_COLOR_BUFFER_BIT);
 
         // Bind the texture
         glActiveTexture(GL_TEXTURE0);
