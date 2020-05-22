@@ -193,6 +193,30 @@
     },
     {
       "key": {
+        "uuid": "75386171_2a6f3c01",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-22T14:20:47Z",
+      "side": 1,
+      "message": "I don\u0027t agree that probing is a better solution, we shouldn\u0027t have to rely on probing for correct behavior. New code should not use eglGetDisplay at all if eglGetPlatformDisplay is available. eglGetPlatformDisplay is supposed to solve any ambiguity about display types, it just doesn\u0027t if you select ANGLE as the platform.\n\nIn your code: \n\n  if (deviceType \u003d\u003d EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE) {\n    // This should be disallowed for GBM nativeDisplayType somehow...\n    impl \u003d new DisplayEGL(..);\n    break;\n  }\n\nHow do you select the lower platform type for EGL? Maybe call the new argument EGL_PLATFORM_ANGLE_EGL_PLATFORM_ANGLE and have it be the value of |platform| ANGLE passes to eglGetPlatformDisplay.",
+      "parentUuid": "1cb6f630_79cf8465",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
