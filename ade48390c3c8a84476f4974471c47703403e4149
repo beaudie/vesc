@@ -241,6 +241,30 @@
     },
     {
       "key": {
+        "uuid": "c6a6a7f8_40940fe4",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-05-22T17:01:23Z",
+      "side": 1,
+      "message": "what do you mean by lower platform type?\n\nswitch displayType {\ncase OPENGL_ANGLE:\nif deviceType \u003d\u003d NULL || deviceType \u003d\u003d GBM\n  impl \u003d\u003d NULL\n\nif deviceType \u003d\u003d EGL\n  impl \u003d DisplayEgl\n\nif deviceType \u003d\u003d X11\n  impl \u003d DisplayGLX\n\ncase OPENGLES_ANGLE:\n\nif deviceType \u003d\u003d NULL\n  impl \u003d\u003d NULL\n\nif deviceType \u003d\u003d EGL\n  impl \u003d DisplayEgl\n\nif deviceType \u003d\u003d X11\n  impl \u003d DisplayGLX\n\nif deviceType \u003d\u003d GBM\n  impl \u003d DisplayGbm\n\n}\n\nIsn’t that sufficient? or am I missing something? I’m sorry I’m new to egl implementation internals.",
+      "parentUuid": "558b865c_9e217822",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
