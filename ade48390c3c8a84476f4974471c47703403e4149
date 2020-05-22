@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "87dd4b90_59573152",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-05-22T07:15:36Z",
+      "side": 1,
+      "message": "Yes. GLX, sorry.\n\nThat\u0027s understandable for what we should ask for. However, I see one problem.\n\neglGetPlatformDisplay looks like\n\nEGL_GetPlatformDisplay(EGLenum platform,\n                       void *native_display,\n                       const EGLAttrib *attrib_list);\n\nwhere platform is EGL_PLATFORM_ANGLE_ANGLE if ANGLE should be used (if I\u0027m not mistaken).\nnative_display is the actual native display, and the attrib_list contains additional attributes including EGL_PLATFORM_ANGLE_TYPE_ANGLE display type attribute that (for linux can be EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE, EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE, or EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE). It also contains additional attribute - EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, which can be EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE for Linux.\n\nThe CreateDisplayFromAttribs that is called from GetDisplayFromNativeDisplay, which is called by EGL_GetPlatformDisplay looks like\n\nCreateDisplayFromAttribs(EGLAttrib displayType,\n                         EGLAttrib deviceType,\n                         const DisplayState \u0026state);\n\nSo, if we add additional displayType EGL_PLATFORM_ANGLE_DISPLAY_TYPE_ANGLE \u003d\u003d X11, how will be able to choose between OPENGL and OPENGLES? I\u0027m not sure that\u0027s the correct way to do that as it looks like the displayType has already been used for OPENGL and OPENGLES displayTypes.\n\nInstead, we could add 2 new deviceTypes - EGL_ANGLE_platform_angle_device_type_gbm_angle and EGL_ANGLE_platform_angle_device_type_x11_angle (remember that we can compile ozone/x11/wayland/gbm at the same type. None of them should be a default impl if I understand right).\n\nThus,\n\nswitch(displayType) {\ncase EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:\n  #if defined(ANGLE_USE_GBM)\n  if (deviceType \u003d\u003d EGL_PLATFORM_ANGLE_DEVICE_TYPE_GBM_ANGLE) {\n    impl \u003d nullptr;\n    break;\n  }\n  #endif\n\n  if (deviceType \u003d\u003d EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE) {\n    // This should be disallowed for GBM nativeDisplayType somehow...\n    impl \u003d new DisplayEGL(..);\n    break;\n  }\n\n  #if defined(ANGLE_USE_X11)\n  if (deviceType \u003d\u003d EGL_PLATFORM_ANGLE_DEVICE_TYPE_X11_ANGLE) {\n    impl \u003d new DisplayGLX(..);\n    break;\n  }\n  #endif\n\n  impl \u003d nullptr; // No Display impl available.\n  break;\n\ncase EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:\n  #if defined(ANGLE_USE_GBM)\n  if (deviceType \u003d\u003d EGL_PLATFORM_ANGLE_DEVICE_TYPE_GBM_ANGLE) {\n    impl \u003d DisplayGbm(..);\n    break;\n  }\n  #endif\n\n  if (deviceType \u003d\u003d EGL_PLATFORM_ANGLE_DEVICE_TYPE_EGL_ANGLE) {\n    // This should be disallowed for GBM nativeDisplayType somehow...\n    impl \u003d new DisplayEGL(..);\n    break;\n  }\n\n  #if defined(ANGLE_USE_X11)\n  if (deviceType \u003d\u003d EGL_PLATFORM_ANGLE_DEVICE_TYPE_X11_ANGLE) {\n    impl \u003d new DisplayGLX(..); // But \n    break;\n  }\n  #endif\n\n  impl \u003d nullptr; // No Display impl available.\n  break;\n}\n\nAdding EGL_PLATFORM_ANGLE_TYPE_X11_ANGLE as a new displayType will make it harder to choose between OPENGL and OPENGLES as it looks like EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE and EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE are used in other parts of Angle.\n\nWhy we need two exteensions? I feel like it\u0027s incorrect to allow to choose DisplayGbm by default if not deviceType is provided on Ozone/X11 for example.\n\nAlso, there is a problem with misuse of Angle if ozone/x11/wayland/gbm is compiled. A client can pass EGL_PLATFORM_ANGLE_DEVICE_TYPE_X11_ANGLE for Wayland or Gbm platforms. So it really looks like we have to do probing instead... Wdyt?\n\nPlease also refer to https://cs.chromium.org/chromium/src/ui/gl/gl_surface_egl.h?sq\u003dpackage:chromium\u0026dr\u003dC\u0026g\u003d0\u0026l\u003d55 and https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/Display.cpp?q\u003ddisplay.cpp+file:%5Esrc/third_party/angle/+package:%5Echromium$\u0026dr\u003dC\u0026l\u003d231",
+      "parentUuid": "51fef617_8af0dfd6",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
