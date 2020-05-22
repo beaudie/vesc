@@ -265,6 +265,30 @@
     },
     {
       "key": {
+        "uuid": "f52ca972_4f5b3f93",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-22T18:49:07Z",
+      "side": 1,
+      "message": "Lower platform type \u003d\u003d the first argument that *ANGLE* should be passing to eglGetPlatformDisplay()\n\ne.g., one of the following values\n\n  EGL_PLATFORM_X11_EXT\n  EGL_PLATFORM_WAYLAND_EXT (if we ever got wayland egl support)\n  EGL_PLATFORM_GBM_KHR (*)\n\n(*) This isn\u0027t what DisplayOzone does, that display was written to run tests and is not compatible with a specified platform. It should ought to be rewritten so that it is compatible with mesa\u0027s gbm platform. Modesetting doesn\u0027t belong in libGLES.",
+      "parentUuid": "c6a6a7f8_40940fe4",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
