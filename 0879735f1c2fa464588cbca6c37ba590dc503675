@@ -189,6 +189,24 @@
       "revId": "0879735f1c2fa464588cbca6c37ba590dc503675",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b884f7d_c8536937",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3419,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-22T06:38:53Z",
+      "side": 1,
+      "message": "Please ASSERT it. A possible future extension may allow the default framebuffer to have the same orientation as GLES for performance, for example.",
+      "parentUuid": "2aab339c_7444c4b3",
+      "revId": "0879735f1c2fa464588cbca6c37ba590dc503675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
