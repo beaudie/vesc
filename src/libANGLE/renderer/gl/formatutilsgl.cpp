@@ -547,6 +547,15 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
             // it's in unsized SRGB texture formats.
             result = internalFormat.sizedInternalFormat;
         }
+        else if ((internalFormat.internalFormat == GL_DEPTH_COMPONENT ||
+                  internalFormat.internalFormat == GL_DEPTH_STENCIL) &&
+                 !functions->hasGLESExtension("GL_OES_depth_texture"))
+        {
+            // Use ES 3.0 sized internal formats for depth/stencil textures when the driver doesn't
+            // advertise GL_OES_depth_texture, since it's likely the driver will reject unsized
+            // internal formats.
+            result = internalFormat.sizedInternalFormat;
+        }
     }
 
     return result;
