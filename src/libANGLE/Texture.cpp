@@ -1979,6 +1979,9 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
                 notifySiblings(message);
             }
             break;
+        case angle::SubjectMessage::SubjectColorAttachmentOrphaned:
+            onStateChange(angle::SubjectMessage::SubjectColorAttachmentOrphaned);
+            break;
         default:
             UNREACHABLE();
             break;

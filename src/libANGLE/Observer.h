@@ -51,6 +51,9 @@ enum class SubjectMessage
     // gl::VertexArray, into gl::Context. Used to track validation.
     SubjectMapped,
     SubjectUnmapped,
+
+    // Indicates that an ImageView bound as the color attachment to the framebuffer was destroyed.
+    SubjectColorAttachmentOrphaned,
 };
 
 // The observing class inherits from this interface class.

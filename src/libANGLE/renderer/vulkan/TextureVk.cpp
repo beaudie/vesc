@@ -1549,6 +1549,8 @@ angle::Result TextureVk::syncState(const gl::Context *context,
                 mState.getType() == gl::TextureType::_2D ? 1 : mImage->getLayerCount();
 
             mImageViews.release(renderer);
+            onStateChange(angle::SubjectMessage::SubjectColorAttachmentOrphaned);
+
             const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
             ANGLE_TRY(initImageViews(contextVk, mImage->getFormat(),
@@ -1733,6 +1735,7 @@ void TextureVk::releaseImage(ContextVk *contextVk)
     }
 
     mImageViews.release(renderer);
+    onStateChange(angle::SubjectMessage::SubjectColorAttachmentOrphaned);
 
     for (RenderTargetVector &renderTargetLevels : mRenderTargets)
     {

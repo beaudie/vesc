@@ -201,6 +201,7 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
     }
 
     mImageViews.release(renderer);
+    onStateChange(angle::SubjectMessage::SubjectColorAttachmentOrphaned);
 }
 
 const gl::InternalFormat &RenderbufferVk::getImplementationSizedFormat() const

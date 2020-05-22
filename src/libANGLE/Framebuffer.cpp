@@ -2026,6 +2026,13 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
             return;
         }
 
+        // This can be triggered by the VK back-end TextureVk and RenderbufferVk class.
+        if (message == angle::SubjectMessage::SubjectColorAttachmentOrphaned)
+        {
+            mDirtyBits.set(DIRTY_BIT_COLOR_ATTACHMENT_ORPHANED);
+            return;
+        }
+
         // This can be triggered by the GL back-end TextureGL class.
         ASSERT(message == angle::SubjectMessage::DirtyBitsFlagged);
         return;
