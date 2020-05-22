@@ -217,6 +217,30 @@
     },
     {
       "key": {
+        "uuid": "558b865c_9e217822",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-22T14:38:58Z",
+      "side": 1,
+      "message": "Here\u0027s ANGLE\u0027s call to eglGetDisplay that should be able to set to eglGetPlatformDisplay if the caller requests it:\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp;drc\u003d9d737966acdf628a7cb4e12e4781179ea3be5d7b;l\u003d186\n\n|platform| that we would pass to eglGetPlatformDisplay is currently a free variable; there is no way for the caller to upper eglGetPlatformDisplay to set that.",
+      "parentUuid": "75386171_2a6f3c01",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
