@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83c96b77_b15c9665",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-23T18:59:07Z",
+      "side": 1,
+      "message": "When swizzle changes, we only should really reinitialize the \"read\" image views, and the \"fetch\" and \"draw\" image views can remain intact.\n\nWith the \"draw\" image views intact, there is no need to invalidate the framebuffer.\n\n`initImageViews` only initializes the \"read\" views, so if the `mImageViews.release(renderer);` call above becomes `mImageViews.releaseReadViews(renderer);`, that should make everything else in this change unnecessary, isn\u0027t that so?\n\n---\n\nIf the sRGB override changes, I don\u0027t know though. Does that affect \"fetch\" and \"draw\" views? If they affect \"fetch\", those views could be released too. I doubt it would affect \"draw\".",
+      "range": {
+        "startLine": 1556,
+        "startChar": 22,
+        "endLine": 1556,
+        "endChar": 36
+      },
+      "revId": "074d627fde20d0f7a62b2ff74ab2318f54147cf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
