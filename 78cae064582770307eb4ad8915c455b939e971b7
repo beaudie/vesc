@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25257beb_fad95ed9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-23T19:17:25Z",
+      "side": 1,
+      "message": "`scaleY` is identical to `flipY`, isn\u0027t it? You could save 16 bytes (removing viewportYScale and 3 paddings) if you use `flipXY.y`. You can also rename `negViewportYScale` to `negFlipY` for uniformity.",
+      "revId": "78cae064582770307eb4ad8915c455b939e971b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
