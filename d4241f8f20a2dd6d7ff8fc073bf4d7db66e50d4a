@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d564428_61b02484",
+        "filename": "src/image_util/imageformats.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-05-23T18:49:04Z",
+      "side": 1,
+      "message": "Could you please add an ASSERT in `gl::normalizedToFloat\u003cN, T\u003e(input)` that `(input \u0026 ~((1 \u003c\u003c N) - 1)) \u003d\u003d 0`?\n\nAdditionally, you can try changing `D24X8` to contain:\n\n    uint32_t X : 8;\n    uint32_t D : 24;\n\ninstead of:\n\n    uint32_t D;\n\nmaking it behave identically to `D24S8` for `D`.",
+      "range": {
+        "startLine": 1835,
+        "startChar": 21,
+        "endLine": 1835,
+        "endChar": 38
+      },
+      "revId": "d4241f8f20a2dd6d7ff8fc073bf4d7db66e50d4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
