@@ -289,6 +289,30 @@
     },
     {
       "key": {
+        "uuid": "eb66ba71_4becc072",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-24T21:52:21Z",
+      "side": 1,
+      "message": "BTW we\u0027re having a bit of a problem with terminology here. I said:\n\n * Display type meaning the type of EGLNativeDisplayType\n\nThis was probably the wrong term to use, sorry; I didn\u0027t mean what Chrome calls \"display type\" which seems to be the product of egl provider and aspects of its configuration. I should have said \"native display type\".\n\nThe platform type is closely related to native display type because platform types have specific requirements for the native display type as described in EXT_platform_base:\n\n  Any specification that does define a valid value for\n    \u003cplatform\u003e will also define requirements for the \u003cnative_display\u003e\n    parameter.\n\nClarifying and extending those requirements in the case of ANGLE are what we\u0027re talking about here. For ANGLE EGL on platform\u0027s EGL there may be two platform types:\n\nUpper:\n   chrome -\u003e ANGLE EGL\n      eglGetPlatformDisplay(upper \u003d\u003d EGL_PLATFORM_ANGLE_ANGLE, ....)\n\nLower:\n   ANGLE EGL -\u003e platform EGL\n      eglGetPlatformDisplay(lower \u003d\u003d EGL_PLATFORM_X11_EXT, ...)\n\nBut how do you tell ANGLE to use EGL_PLATFORM_X11_EXT instead of something else? That\u0027s what we\u0027re missing.\n\n(This is specific to EGL on EGL. It is obvious that EGL on GLX uses an X display).",
+      "parentUuid": "f52ca972_4f5b3f93",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
