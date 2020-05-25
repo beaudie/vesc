@@ -111,6 +111,9 @@ TracePerfTest::TracePerfTest()
     {
         mSkipTest = true;
     }
+
+    // Don't swap an extra time in the harness after each iteration.
+    disableTestHarnessSwap();
 }
 
 void TracePerfTest::initializeBenchmark()
@@ -138,6 +141,7 @@ void TracePerfTest::initializeBenchmark()
 
     // Potentially slow. Can load a lot of resources.
     SetupReplay(params.testID);
+    glFinish();
 
     ASSERT_TRUE(mEndFrame > mStartFrame);
 
