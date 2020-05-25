@@ -313,6 +313,30 @@
     },
     {
       "key": {
+        "uuid": "11a26a1a_684d0b17",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-05-25T07:40:19Z",
+      "side": 1,
+      "message": "I\u0027m confused now. EGL_GetPlatformDisplay doesn\u0027t support platform \u003d\u003d EGL_PLATFORM_X11_EXT [1]. It only supports EGL_PLATFORM_DEVICE_EXT (and it looks like it only supports D3D9/11 internally [2]) and EGL_PLATFORM_ANGLE_ANGLE. If you pass EGL_PLATFORM_X11_EXT, Angle will return \"eglGetPlatformDisplay: Bad platform type\". I believe we are trying to solve something outside of the scope of current effort. Probably... Also, you\u0027re referring to lower platform type as -\n\nLower:\n\n   ANGLE EGL -\u003e platform EGL\n      eglGetPlatformDisplay(lower \u003d\u003d EGL_PLATFORM_X11_EXT, ...)\n\nwhere and when exactly does that happen? I grepped ANGLE, and here what it shows - \n\n$ git grep -ni \"eglGetPlatformDisplay(\"\n\nextensions/EGL_ANGLE_feature_control.txt:92:        EGLDisplay eglGetPlatformDisplay(EGLenum platform, void\n\nsrc/libEGL/libEGL.cpp:341:EGLDisplay EGLAPIENTRY eglGetPlatformDisplay(EGLenum platform,\n\nsrc/tests/egl_tests/EGLFeatureControlTest.cpp:39:        mDisplay              \u003d eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE,\n\nsrc/tests/egl_tests/EGLFeatureControlTest.cpp:174:    EGLDisplay dpy_override \u003d eglGetPlatformDisplay(\n\nutil/EGLWindow.cpp:232:        mDisplay \u003d eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE,\n\n\nAs you can see, there is only one call to eglGetPlatformDisplay inside angle and uses EGL_PLATFORM_ANGLE_ANGLE platform type.\n\n\nThe only problem can be the EGL_getDisplay entry point [3], which doesn\u0027t have parameters that specify the platform and device type. It just calls GetDisplayFromNativeDisplay that internally calls \"display \u003d new Display(EGL_PLATFORM_ANGLE_ANGLE, nativeDisplay, nullptr);\" if Display doesn\u0027t exist, and then it chooses GLX on X11 (without this patch). That\u0027s the only problem I can see now. And it seems like the only way to figure out what kind of native display type was passed is by probing that.\n\nIn case of Ozone, it\u0027s simply impossible to choose between different display implementations without probing. EGL_getDisplay won\u0027t work at all.\n\n[1] http://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libGLESv2c/entry_points_egl.cpp;l\u003d987\n[2] https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/Display.cpp;l\u003d121;drc\u003d7f2a66319b71e1cd3be556aeaa50cd18d1be70c1?originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n[3] https://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libGLESv2/entry_points_egl.cpp;l\u003d72?q\u003dEGL_getDisplay\u0026ss\u003dchromium%2Fchromium%2Fsrc\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\n\n1) To sum up, ANGLE\u0027s eglGetPlatformDisplay doesn\u0027t allow to pass EGL_PLATFORM_X11_EXT. If you do that, it returns \"eglGetPlatformDisplay: Bad platform type\".\n2) ANGLE\u0027s impl of eglGetDisplay gets broken with Ozone, because it doesn\u0027t have attributes parameters. Thus, the native display type has to be probed instead.",
+      "parentUuid": "eb66ba71_4becc072",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
