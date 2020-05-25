@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9044f408_b254b9c2",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-25T19:18:18Z",
+      "side": 1,
+      "message": "Very minor nit: it\u0027s a bit repetitive, but I feel like it\u0027s strange to tack this condition on here since it\u0027s completely unrelated to the workaround.\n\nI\u0027m only saying this because I see the same conversion above (:578) for a different case, so if I was reading this I would assume that :578 was one case, and :600 was another case.",
+      "revId": "71878f96573ade1b84428f8b1e0300abc7650cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff94034a_2440064f",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-25T19:18:18Z",
+      "side": 1,
+      "message": "nit: I believe since we always include the core headers this isn\u0027t necessary. If you prefer it this way for stylistic reasons that\u0027s fine",
+      "range": {
+        "startLine": 608,
+        "startChar": 26,
+        "endLine": 608,
+        "endChar": 43
+      },
+      "revId": "71878f96573ade1b84428f8b1e0300abc7650cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
