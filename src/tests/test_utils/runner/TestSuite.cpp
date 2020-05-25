@@ -402,6 +402,13 @@ std::string GetTestFilter(const std::vector<TestIdentifier> &tests)
     return filterStream.str();
 }
 
+bool EndsWith(const char *str, const char *suffix)
+{
+    size_t strLen    = strlen(str);
+    size_t suffixLen = strlen(suffix);
+    return strLen >= suffixLen && strcmp(str + strLen - suffixLen, suffix) == 0;
+}
+
 std::string ParseTestSuiteName(const char *executable)
 {
     const char *baseNameStart = strrchr(executable, GetPathSeparator());
@@ -414,14 +421,6 @@ std::string ParseTestSuiteName(const char *executable)
         baseNameStart++;
     }
 
-// on Windows, suffix can be omitted.
-#if defined(ANGLE_PLATFORM_WINDOWS)
-    if (!strrchr(baseNameStart, GetSuffixSeparator()))
-    {
-        return baseNameStart;
-    }
-#endif
-
     const char *suffix = GetExecutableExtension();
     size_t suffixLen   = strlen(suffix);
     if (suffixLen == 0)
@@ -429,9 +428,17 @@ std::string ParseTestSuiteName(const char *executable)
         return baseNameStart;
     }
 
-    const char *baseNameSuffix = strstr(baseNameStart, suffix);
-    ASSERT(baseNameSuffix == (baseNameStart + strlen(baseNameStart) - suffixLen));
-    return std::string(baseNameStart, baseNameSuffix);
+// On Windows, suffix can be omitted.
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    if (!EndsWith(baseNameStart, suffix))
+    {
+        return baseNameStart;
+    }
+#else
+    ASSERT(EndsWith(baseNameStart, suffix));
+#endif
+
+    return std::string(baseNameStart, baseNameStart + strlen(baseNameStart) - suffixLen);
 }
 
 bool GetTestResultsFromJSON(const js::Document &document, TestResults *resultsOut)
