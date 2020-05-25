@@ -361,6 +361,30 @@
     },
     {
       "key": {
+        "uuid": "c013b3f5_f0fa777e",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_type_ozone_angle.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-25T16:49:45Z",
+      "side": 1,
+      "message": "\u003e In case of Ozone, it\u0027s simply impossible to choose between different display implementations without probing. EGL_getDisplay won\u0027t work at all.\n\nIt is not impossible, it is simply not implemented.\n\n(I\u0027m not going to ask you to implement every missing feature of ANGLE for every ozone platform out there. The only thing I\u0027m asking is that we adopt as a solution that makes sense as part of a broader solution to those problems).",
+      "parentUuid": "b79a27c1_095c7d0d",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "ade48390c3c8a84476f4974471c47703403e4149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d98d731d_73c4c617",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 2
