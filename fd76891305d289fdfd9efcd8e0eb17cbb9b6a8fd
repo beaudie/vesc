@@ -22,6 +22,30 @@
       "revId": "fd76891305d289fdfd9efcd8e0eb17cbb9b6a8fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a9d91b8_b95d8d49",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-26T18:21:05Z",
+      "side": 1,
+      "message": "No.  This greatly surprised me.  The rest of this CL worked 1st time (e.g. for 0, 90, 180 degrees).  I played with 270 for quite some time, with different tests.  The test results are convincing.",
+      "parentUuid": "b29096ae_252512a5",
+      "range": {
+        "startLine": 3440,
+        "startChar": 12,
+        "endLine": 3440,
+        "endChar": 48
+      },
+      "revId": "fd76891305d289fdfd9efcd8e0eb17cbb9b6a8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
