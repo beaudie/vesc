@@ -46,6 +46,217 @@
       "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3869a333_04456609",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "Comment needs to be updated.",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76f7684a_fa24ab8b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "Since you\u0027re using readType to index into kMemoryReadTypePipelineStageMap to get the readStage, you shouldn\u0027t need to pass readType to updateReadBarrier().\n\nInstead, I\u0027d suggest having updateReadBarrier() return the readStage (InvalidEnum rather than false), and then use the returned value for the conditional and mPipelineBarrierMask.set().   I think that\u0027ll help readability also, since the actual stage gives more context than true/false.",
+      "range": {
+        "startLine": 611,
+        "startChar": 16,
+        "endLine": 611,
+        "endChar": 33
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aed90ca4_5da0a898",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a101c78a_688d0e13",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "This work should be part of executeBarriers().",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e275632_c4ba65d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2470,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "This naming (updateReadAfterWriteBarrier and updateWriteAfterWriteBarrier) is a little confusing with the call to mergeMemoryBarrier() in the conditional.   It looks like the barrier is being updated, and then if it succeeds we also merge the barriers.   In truth, these update functions are actually updating anything, they are just returning *if* an update is required or not.\n\nSomething like needReadAfterWriteBarrier() or isBarrierRequired() would be better to indicate it\u0027s not actually doing any work, just checking if some conditions line up correctly so that a new barrier is required.",
+      "range": {
+        "startLine": 2470,
+        "startChar": 21,
+        "endLine": 2470,
+        "endChar": 48
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "554d0397_8a94c22c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2518,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "Since vk::MemoryReadType contains the shader stage, should a local currentReadStageMask be created from mCurrentReadTypeMask to prevent mCurrentReadStageMask and mCurrentReadTypeMask from getting out of sync by having the duplicate data?",
+      "range": {
+        "startLine": 2518,
+        "startChar": 15,
+        "endLine": 2518,
+        "endChar": 35
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c1db664_8092bb4d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2540,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "Can you move this into a single ASSERT() before the conditional so we don\u0027t have an empty else statement here?\n\n    ASSERT((mCurrentReadStageMask.any() \u0026\u0026 mCurrentReadTypeMask.any()) ||\n           (mCurrentReadStageMask.none() \u0026\u0026 mCurrentReadTypeMask.none()))",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc98af00_a2e8755a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3078,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "barrierModified is always set to \u0027true\u0027, so this function can return \u0027void\u0027 again and any work that\u0027s conditional on this function can always be done.",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dfa408e_4a370d04",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "Can this be a const\u0026 ?",
+      "range": {
+        "startLine": 800,
+        "startChar": 29,
+        "endLine": 800,
+        "endChar": 66
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee253381_4f5a4f31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "Why does this need to be an array of Serials, with one Serial per shader stage?",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "252b83af_ea496e2b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 1,
+      "message": "How does this Serial differ from mSerial above?\n\nMore importantly, I don\u0027t see this ever being read.   It\u0027s only being updated in ImageHelper::updateLayoutAndBarrier(), but no one ever uses the value.   Remove?",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff91bdc2_10bc4150",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T18:49:56Z",
+      "side": 0,
+      "message": "Why is the initialization of these pointers being removed?",
+      "range": {
+        "startLine": 643,
+        "startChar": 0,
+        "endLine": 644,
+        "endChar": 35
+      },
+      "revId": "6820f77ae0710f963dd21433d9263b0790f32d09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
