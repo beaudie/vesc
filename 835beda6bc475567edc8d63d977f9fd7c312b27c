@@ -22,6 +22,30 @@
       "revId": "835beda6bc475567edc8d63d977f9fd7c312b27c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2a89267_a6133106",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T20:20:13Z",
+      "side": 1,
+      "message": "Actually, looks like the switch goes in here. And the else doesn\u0027t need a switch anymore. Optionally we convert the switches to if statements.",
+      "parentUuid": "dfa37f35_ac134966",
+      "range": {
+        "startLine": 390,
+        "startChar": 0,
+        "endLine": 392,
+        "endChar": 5
+      },
+      "revId": "835beda6bc475567edc8d63d977f9fd7c312b27c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
