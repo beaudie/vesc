@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c098c3b_4bf5e73e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2020-05-26T21:22:01Z",
+      "side": 1,
+      "message": "FYI, if the version \u003e\u003d 1.1.0, the allocator will use dedicated memory allocation for big size memory request. So in chrome and skia, we set .preferredLargeHeapBlockSize to 4MB (default is 256MB) to reduce the size of the blocks which are used for small memory requests. Not sure if 256MB is too big for normal GL usage as well.\n\n\nhttps://source.chromium.org/chromium/chromium/src/+/master:gpu/vulkan/vma_wrapper.cc;l\u003d52?q\u003dvma_wrapper\u0026ss\u003dchromium\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F",
+      "range": {
+        "startLine": 57,
+        "startChar": 43,
+        "endLine": 57,
+        "endChar": 53
+      },
+      "revId": "6a7bbed3d0cdd2c104b0f13c9a450c49977b2dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
