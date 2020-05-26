@@ -22,6 +22,29 @@
       "revId": "3a721163742e80345d8fd778263b15e336b2aaec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dabf46ea_0553a2a2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2522,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T17:22:28Z",
+      "side": 1,
+      "message": "Is there a good rule of thumb we should be using when trying to decide between calling State::getViewport() vs ContextVk::getCorrectedViewport()?   Should all uses of State::getViewport() be converted to ContextVk::getCorrectedViewport() in the vulkan backend to prevent the integer overflow issue?\n\nsrc/libANGLE/renderer/vulkan\nContextVk.cpp\nhandleDirtyGraphicsDriverUniforms()\n    gl::Rectangle glViewport \u003d mState.getViewport();\nsyncState()\n    updateViewport(framebufferVk, glState.getViewport(), glState.getNearPlane(),\n    updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),\nupdateScissor()\n    gl::ClipRectangle(renderArea, glState.getViewport(), \u0026viewportClippedRenderArea);",
+      "range": {
+        "startLine": 2522,
+        "startChar": 34,
+        "endLine": 2522,
+        "endChar": 54
+      },
+      "revId": "3a721163742e80345d8fd778263b15e336b2aaec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
