@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "bbe8d175_ebae8ce8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T22:41:12Z",
+      "side": 1,
+      "message": "We can revisit this once the threading stuff is settled. Right now, my understanding is that at the time of executeBarrier where this is been used, you don\u0027t have access to ContextVK/RendererVk, that is why it is cached here.",
+      "parentUuid": "afe638fa_1621791b",
+      "range": {
+        "startLine": 863,
+        "startChar": 38,
+        "endLine": 863,
+        "endChar": 98
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6e13edb_5ba56528",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 44
