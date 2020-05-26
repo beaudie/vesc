@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "038d4044_17702bf5",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-26T21:57:08Z",
+      "side": 1,
+      "message": "Can you insert a comment here describing what\u0027s going on?  Basically what\u0027s in your commit message.  Something like \"If we\u0027re writing an enum value or string, just inline the data.  Otherwise, write it out to binary\"",
+      "revId": "1066ec852bfc5e74f071af140d04b981f4b803bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b14ab73_7a612a32",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-26T21:57:08Z",
+      "side": 1,
+      "message": "I believe this should this be overrideType.",
+      "range": {
+        "startLine": 414,
+        "startChar": 56,
+        "endLine": 414,
+        "endChar": 66
+      },
+      "revId": "1066ec852bfc5e74f071af140d04b981f4b803bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
