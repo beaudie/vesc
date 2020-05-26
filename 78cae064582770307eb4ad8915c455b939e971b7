@@ -70,6 +70,24 @@
       "revId": "78cae064582770307eb4ad8915c455b939e971b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "171d4541_89bafe34",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-26T23:56:42Z",
+      "side": 1,
+      "message": "\u003e I\u0027ve been looking at adding code to get a .y from a vec2, and it seems like adding unnecessary code that will cause the shaders to run slower.\n\nWhy is swizzling slow?   It should only be a 1-liner to create a swizzle in the translator code and is already being done in RotateAndFlipBuiltinVariable():\n\n    // Create a swizzle to \"builtin.xy\"\n    TVector\u003cint\u003e swizzleOffsetXY \u003d {0, 1};\n    TIntermSwizzle *builtinXY    \u003d new TIntermSwizzle(builtinRef, swizzleOffsetXY);",
+      "parentUuid": "7161ed20_e0f823ba",
+      "revId": "78cae064582770307eb4ad8915c455b939e971b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
