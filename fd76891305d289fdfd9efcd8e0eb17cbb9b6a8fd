@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b29096ae_252512a5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T18:08:34Z",
+      "side": 1,
+      "message": "you don\u0027t need to swap w/h here?",
+      "range": {
+        "startLine": 3440,
+        "startChar": 12,
+        "endLine": 3440,
+        "endChar": 48
+      },
+      "revId": "fd76891305d289fdfd9efcd8e0eb17cbb9b6a8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
