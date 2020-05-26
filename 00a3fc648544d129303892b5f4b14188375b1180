@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "08830bd0_d6c5565b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-26T23:07:47Z",
+      "side": 1,
+      "message": "Ok, check the feature as is done here, but instead of storing as a cached var in the CBH class, just check it at that point of decision. Tagging that for follow-on.",
+      "parentUuid": "afe638fa_1621791b",
+      "range": {
+        "startLine": 863,
+        "startChar": 38,
+        "endLine": 863,
+        "endChar": 98
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6e13edb_5ba56528",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 44
@@ -356,6 +380,30 @@
     },
     {
       "key": {
+        "uuid": "9830ab25_b2a995b8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2202,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-26T23:07:47Z",
+      "side": 1,
+      "message": "Thanks for the write-up, this is very helpful. I knew the worker thread needed some separate path for the handleError() interface but wasn\u0027t sure where/how to put it. The context proxy makes sense and will probably be easiest to add it to the CommandProcessor as you suggest.\nI added a section on \"Error Handling\" to the design doc and included your details from here.",
+      "parentUuid": "167a039f_3c976db7",
+      "range": {
+        "startLine": 2202,
+        "startChar": 0,
+        "endLine": 2202,
+        "endChar": 40
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3387912_2e7cc5c1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 44
@@ -497,6 +545,30 @@
     },
     {
       "key": {
+        "uuid": "d51e858d_f0dd53eb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2224,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-26T23:07:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50b8decb_f9b71d31",
+      "range": {
+        "startLine": 2224,
+        "startChar": 42,
+        "endLine": 2224,
+        "endChar": 55
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dddb13d5_27f9d4e6",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 44
@@ -565,6 +637,30 @@
       "revId": "00a3fc648544d129303892b5f4b14188375b1180",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c92f9e44_710fbefb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-26T23:07:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e25428cd_f6878edc",
+      "range": {
+        "startLine": 969,
+        "startChar": 0,
+        "endLine": 970,
+        "endChar": 40
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

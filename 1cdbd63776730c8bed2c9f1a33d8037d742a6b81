@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a7fb74cc_47a842f8",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 54
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-26T23:07:47Z",
+      "side": 1,
+      "message": "Great point, thanks, Done.",
+      "parentUuid": "6fac8300_aa9cc1e7",
+      "range": {
+        "startLine": 36,
+        "startChar": 27,
+        "endLine": 36,
+        "endChar": 48
+      },
+      "revId": "1cdbd63776730c8bed2c9f1a33d8037d742a6b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e5ce0ba_7e855601",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 54
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "aefaf473_7bf9e96a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 54
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-26T23:07:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e5ce0ba_7e855601",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 9
+      },
+      "revId": "1cdbd63776730c8bed2c9f1a33d8037d742a6b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82d2889e_1f6783c2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 54
@@ -68,6 +116,30 @@
       "revId": "1cdbd63776730c8bed2c9f1a33d8037d742a6b81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f624d401_c437667a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 54
+      },
+      "lineNbr": 1952,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2020-05-26T23:07:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82d2889e_1f6783c2",
+      "range": {
+        "startLine": 1952,
+        "startChar": 11,
+        "endLine": 1952,
+        "endChar": 15
+      },
+      "revId": "1cdbd63776730c8bed2c9f1a33d8037d742a6b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
