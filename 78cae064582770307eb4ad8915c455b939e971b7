@@ -16,6 +16,24 @@
       "revId": "78cae064582770307eb4ad8915c455b939e971b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1579ab98_e9262e35",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-26T17:06:41Z",
+      "side": 1,
+      "message": "It is.  I wanted this change to be incremental.  My intention is to eliminate viewportYScale and the padding once I support pre-rotation for:\n\n  - gl_PointCoord\n  - dFdy() \u0026 dFdx()\n\nI started to do it as part of this CL, but thought there might be throw-away work when I get to those topics (i.e. do one/both need flipX as well as flipY, which affects whether or not I do swizzling).  I promise to address this in the follow-on CL for those topics.",
+      "parentUuid": "25257beb_fad95ed9",
+      "revId": "78cae064582770307eb4ad8915c455b939e971b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
