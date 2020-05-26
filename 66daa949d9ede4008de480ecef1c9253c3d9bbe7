@@ -46,6 +46,30 @@
       "revId": "66daa949d9ede4008de480ecef1c9253c3d9bbe7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8da89459_858c718e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T18:49:32Z",
+      "side": 1,
+      "message": "In practice we won\u0027t run into super-sized strings and/or enum lists. To simplify the code and omit cases we aren\u0027t immediately worried about its probably best to switch the condition here.",
+      "parentUuid": "6d858285_1db516b2",
+      "range": {
+        "startLine": 388,
+        "startChar": 2,
+        "endLine": 388,
+        "endChar": 43
+      },
+      "revId": "66daa949d9ede4008de480ecef1c9253c3d9bbe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
