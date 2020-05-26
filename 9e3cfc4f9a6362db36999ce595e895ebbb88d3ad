@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c8f1472_7fa4062c",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-26T14:45:55Z",
+      "side": 1,
+      "message": "Can you update this to say something like \"We already swap multiple times in TracePerfTest::drawBenchmark, no need to swap again in the harness\".  I couldn\u0027t immediately recall where the swaps were coming from.",
+      "revId": "9e3cfc4f9a6362db36999ce595e895ebbb88d3ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
