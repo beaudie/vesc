@@ -819,7 +819,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     }
 
     // Create VMA allocator
-    ANGLE_VK_TRY(displayVk, vma::InitAllocator(mPhysicalDevice, mDevice, mInstance, &mAllocator));
+    ANGLE_VK_TRY(displayVk, vma::InitAllocator(mPhysicalDevice, mDevice, mInstance,
+                                               applicationInfo.apiVersion, &mAllocator));
 
     // Store the physical device memory properties so we can find the right memory pools.
     mMemoryProperties.init(mPhysicalDevice);
