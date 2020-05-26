@@ -263,8 +263,8 @@ VkImageUsageFlags GetMaximalImageUsageFlags(RendererVk *renderer, VkFormat forma
     VkImageUsageFlags imageUsageFlags = 0;
     if (featureBits & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
         imageUsageFlags |= VK_IMAGE_USAGE_SAMPLED_BIT;
-    if (featureBits & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT)
-        imageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
+    //    if (featureBits & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT)
+    //        imageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
     if (featureBits & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT)
         imageUsageFlags |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     if (featureBits & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
