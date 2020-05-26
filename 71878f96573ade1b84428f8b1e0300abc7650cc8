@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b774408c_0153fdcc",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-26T17:42:28Z",
+      "side": 1,
+      "message": "Thanks for this feedback. I\u0027d really rather not duplicate all of this code, so instead have turned around the condition to first check the presence of GL_EXT_sRGB, and have added a comment referencing the same Adreno driver bug as mentioned above. The duplication is quite common in this file, which has some similar code for both the desktop Core Profile path and the ES path.",
+      "parentUuid": "9044f408_b254b9c2",
+      "revId": "71878f96573ade1b84428f8b1e0300abc7650cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff94034a_2440064f",
         "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "71878f96573ade1b84428f8b1e0300abc7650cc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10d4dbe0_2e6d7a9a",
+        "filename": "src/libANGLE/renderer/gl/formatutilsgl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-05-26T17:42:28Z",
+      "side": 1,
+      "message": "GL_SRGB_ALPHA is only a desktop GL constant, so even though we include all of the headers to define this constant, it\u0027s confusing to reference it in an ES code path.",
+      "parentUuid": "ff94034a_2440064f",
+      "range": {
+        "startLine": 608,
+        "startChar": 26,
+        "endLine": 608,
+        "endChar": 43
+      },
+      "revId": "71878f96573ade1b84428f8b1e0300abc7650cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
