@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51e60ef7_4a4c5450",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-26T22:31:12Z",
+      "side": 1,
+      "message": "Probably don\u0027t need symbol_level, that will auto default to something appropriate based on is_debug. At least according to the description for it from gn args --list.",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
