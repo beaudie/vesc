@@ -52,6 +52,24 @@
       "revId": "78cae064582770307eb4ad8915c455b939e971b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7161ed20_e0f823ba",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-26T23:00:25Z",
+      "side": 1,
+      "message": "I\u0027m starting to think it not best to eliminate ANGLEUniforms.viewportYScale nor ANGLEUniforms.negFlipY.  I need vec2 (.xy) versions of these for rotating, but I may still need float (.y) versions of each.  I\u0027ve been looking at adding code to get a .y from a vec2, and it seems like adding unnecessary code that will cause the shaders to run slower.\n\nI\u0027m planning to keep both for now.",
+      "parentUuid": "0f45d760_75e993d2",
+      "revId": "78cae064582770307eb4ad8915c455b939e971b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
