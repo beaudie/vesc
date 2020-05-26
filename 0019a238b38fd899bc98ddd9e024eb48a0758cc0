@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "836e1eec_d781262e",
+        "filename": "src/libANGLE/renderer/gl/DisplayGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-26T16:13:46Z",
+      "side": 1,
+      "message": "nit: not GLX-specific anymore",
+      "range": {
+        "startLine": 25,
+        "startChar": 53,
+        "endLine": 25,
+        "endChar": 64
+      },
+      "revId": "0019a238b38fd899bc98ddd9e024eb48a0758cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c281796_d9fa2a6c",
+        "filename": "src/libANGLE/renderer/gl/DisplayGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-26T16:13:46Z",
+      "side": 1,
+      "message": "I think renderergl_utils.h would be the best place for this.",
+      "range": {
+        "startLine": 27,
+        "startChar": 7,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "0019a238b38fd899bc98ddd9e024eb48a0758cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c2242f1_aed13d4c",
+        "filename": "src/libANGLE/renderer/gl/DisplayGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2020-05-26T16:13:46Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 34,
+        "startChar": 7,
+        "endLine": 34,
+        "endChar": 17
+      },
+      "revId": "0019a238b38fd899bc98ddd9e024eb48a0758cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
