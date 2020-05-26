@@ -280,26 +280,6 @@ void WriteInlineData(const std::vector<uint8_t> &vec, std::ostream &out)
 }
 
 template <>
-void WriteInlineData<GLfloat>(const std::vector<uint8_t> &vec, std::ostream &out)
-{
-    const float *data = reinterpret_cast<const GLfloat *>(vec.data());
-    size_t count      = vec.size() / sizeof(GLfloat);
-
-    if (data == nullptr)
-    {
-        return;
-    }
-
-    WriteGLFloatValue(out, data[0]);
-
-    for (size_t dataIndex = 1; dataIndex < count; ++dataIndex)
-    {
-        out << ", ";
-        WriteGLFloatValue(out, data[dataIndex]);
-    }
-}
-
-template <>
 void WriteInlineData<GLchar>(const std::vector<uint8_t> &vec, std::ostream &out)
 {
     const GLchar *data = reinterpret_cast<const GLchar *>(vec.data());
@@ -420,6 +400,7 @@ void WriteBinaryParamReplay(DataCounters *counters,
                 << offset << "])";
         }
     }
+
     else
     {
         ParamType overrideType = param.type;
@@ -428,44 +409,47 @@ void WriteBinaryParamReplay(DataCounters *counters,
         {
             overrideType = ParamType::TGLubyteConstPointer;
         }
-
-        std::string paramTypeString = ParamTypeToString(overrideType);
-        header << paramTypeString.substr(0, paramTypeString.length() - 1);
-        WriteParamStaticVarName(call, param, counter, header);
-
-        header << "[] = { ";
-
+        if (overrideType == ParamType::TGLenumConstPointer ||
+            overrideType == ParamType::TGLcharPointer)
+        {
+            std::string paramTypeString = ParamTypeToString(param.type);
+            header << paramTypeString.substr(0, paramTypeString.length() - 1);
+            WriteParamStaticVarName(call, param, counter, header);
+            header << "[] = { ";
+        }
         switch (overrideType)
         {
-            case ParamType::TGLintConstPointer:
-                WriteInlineData<GLint>(data, header);
-                break;
-            case ParamType::TGLshortConstPointer:
-                WriteInlineData<GLshort>(data, header);
-                break;
-            case ParamType::TGLfloatConstPointer:
-                WriteInlineData<GLfloat>(data, header);
-                break;
-            case ParamType::TGLubyteConstPointer:
-                WriteInlineData<GLubyte, int>(data, header);
-                break;
-            case ParamType::TGLuintConstPointer:
             case ParamType::TGLenumConstPointer:
                 WriteInlineData<GLuint>(data, header);
                 break;
             case ParamType::TGLcharPointer:
                 WriteInlineData<GLchar>(data, header);
                 break;
+            case ParamType::TGLintConstPointer:
+            case ParamType::TGLshortConstPointer:
+            case ParamType::TGLfloatConstPointer:
+            case ParamType::TGLubyteConstPointer:
+            case ParamType::TGLuintConstPointer:
+            {
+                size_t offset = binaryData->size();
+                binaryData->resize(offset + data.size());
+                memcpy(binaryData->data() + offset, data.data(), data.size());
+                out << "reinterpret_cast<" << ParamTypeToString(param.type) << ">(&gBinaryData["
+                    << offset << "])";
+                break;
+            }
             default:
                 INFO() << "Unhandled ParamType: " << angle::ParamTypeToString(overrideType)
                        << " in " << call.name();
                 UNIMPLEMENTED();
                 break;
         }
-
-        header << " };\n";
-
-        WriteParamStaticVarName(call, param, counter, out);
+        if (overrideType == ParamType::TGLenumConstPointer ||
+            overrideType == ParamType::TGLcharPointer)
+        {
+            header << " };\n";
+            WriteParamStaticVarName(call, param, counter, out);
+        }
     }
 }
 
