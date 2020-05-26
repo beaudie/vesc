@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9912fa18_c27dc3d7",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T20:45:33Z",
+      "side": 1,
+      "message": "in here you can ASSERT that the type is TGLcharPointer",
+      "range": {
+        "startLine": 403,
+        "startChar": 12,
+        "endLine": 403,
+        "endChar": 27
+      },
+      "revId": "02662042feadb540cd3fade8a8b5332cf2101766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
