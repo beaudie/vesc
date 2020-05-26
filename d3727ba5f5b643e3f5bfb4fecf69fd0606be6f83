@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "45817918_9f7ffcda",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T21:22:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b02d34a_334c47b5",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76f7684a_fa24ab8b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -131,6 +149,30 @@
     },
     {
       "key": {
+        "uuid": "f9308d1c_ce384d6c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T21:22:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2387591e_f7b1cb12",
+      "range": {
+        "startLine": 611,
+        "startChar": 16,
+        "endLine": 611,
+        "endChar": 33
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aed90ca4_5da0a898",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -145,6 +187,24 @@
       "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2d529b9_355b51ad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T21:22:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aed90ca4_5da0a898",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -230,6 +290,30 @@
     },
     {
       "key": {
+        "uuid": "ffd58a1a_6429ce9e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2470,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T21:22:43Z",
+      "side": 1,
+      "message": "I changed to updateForReadAfterWrite. I picked it over \"onReadAfterWrite\" mainly because onXXX usually called *after* the \"XXX\". Basically the right word here is \"tracker-\u003eupdateTrackerForReadAfterWrite\". Then you remove the redundant words, it becomes tracker-\u003eupdateForReadAndWrite(). I also added comment for what it does.",
+      "parentUuid": "3c96ee2c_ec6f14bc",
+      "range": {
+        "startLine": 2470,
+        "startChar": 21,
+        "endLine": 2470,
+        "endChar": 48
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "554d0397_8a94c22c",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -312,6 +396,24 @@
     },
     {
       "key": {
+        "uuid": "d32e7353_a95082d3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2540,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T21:22:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "920e68c2_cfbe257b",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc98af00_a2e8755a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -344,6 +446,24 @@
       "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71882d9f_0587664b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3078,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T21:22:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6face67c_0001c98d",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -391,6 +511,30 @@
       "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "422654ca_96fc4201",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T21:22:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cccf5876_d2b453a6",
+      "range": {
+        "startLine": 800,
+        "startChar": 29,
+        "endLine": 800,
+        "endChar": 66
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -458,6 +602,24 @@
       "side": 1,
       "message": "These serials are for different purpose. The \"mSerial\" probably should change to a more specific name.",
       "parentUuid": "252b83af_ea496e2b",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d7ed2be_b23d0635",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T21:22:43Z",
+      "side": 1,
+      "message": "I changed it to mAttachmentSerial",
+      "parentUuid": "85f0f819_c238dc68",
       "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
