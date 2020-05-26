@@ -46,6 +46,30 @@
       "revId": "835beda6bc475567edc8d63d977f9fd7c312b27c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "449b0e78_6e931b64",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-26T20:41:28Z",
+      "side": 1,
+      "message": "I have changed the code structure as you asked in the latest patch. But should we worry about getting rid of the unimplemented type check?",
+      "parentUuid": "e2a89267_a6133106",
+      "range": {
+        "startLine": 390,
+        "startChar": 0,
+        "endLine": 392,
+        "endChar": 5
+      },
+      "revId": "835beda6bc475567edc8d63d977f9fd7c312b27c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
