@@ -22,6 +22,30 @@
       "revId": "6a7bbed3d0cdd2c104b0f13c9a450c49977b2dee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0430b64_40422355",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-26T21:35:38Z",
+      "side": 1,
+      "message": "does this mean we need to couple this apiVersion info along with the 4MB change in the allocator struct to save on memory?",
+      "parentUuid": "1c098c3b_4bf5e73e",
+      "range": {
+        "startLine": 57,
+        "startChar": 43,
+        "endLine": 57,
+        "endChar": 53
+      },
+      "revId": "6a7bbed3d0cdd2c104b0f13c9a450c49977b2dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
