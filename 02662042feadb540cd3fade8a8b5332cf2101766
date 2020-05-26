@@ -22,6 +22,30 @@
       "revId": "02662042feadb540cd3fade8a8b5332cf2101766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d3f3264_2e8d1da0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-26T20:57:55Z",
+      "side": 1,
+      "message": "I have done that. But I\u0027m little confused about why we need the ASSERT though. Doesn\u0027t the condition already guarantee that?",
+      "parentUuid": "9912fa18_c27dc3d7",
+      "range": {
+        "startLine": 403,
+        "startChar": 12,
+        "endLine": 403,
+        "endChar": 27
+      },
+      "revId": "02662042feadb540cd3fade8a8b5332cf2101766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
