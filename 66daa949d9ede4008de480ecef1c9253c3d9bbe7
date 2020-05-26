@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb606831_b66ecb3f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T18:31:11Z",
+      "side": 1,
+      "message": "I think you want to modify this line instead of after you enter the if.",
+      "range": {
+        "startLine": 388,
+        "startChar": 2,
+        "endLine": 388,
+        "endChar": 43
+      },
+      "revId": "66daa949d9ede4008de480ecef1c9253c3d9bbe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
