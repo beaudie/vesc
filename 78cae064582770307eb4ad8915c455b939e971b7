@@ -34,6 +34,24 @@
       "revId": "78cae064582770307eb4ad8915c455b939e971b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0f45d760_75e993d2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-26T22:10:22Z",
+      "side": 1,
+      "message": "I\u0027ve worked on gl_PointCoord now.  It needs ANGLEUniforms.negFlipXY (like ANGLEUniforms.flipXY, but with the \".y\" flipped like the old negViewportYScale was flipped) in order to rotate and flip gl_PointCoord.",
+      "parentUuid": "1579ab98_e9262e35",
+      "revId": "78cae064582770307eb4ad8915c455b939e971b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
