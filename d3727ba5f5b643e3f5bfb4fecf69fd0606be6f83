@@ -66,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "1b02d34a_334c47b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T19:17:37Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "3869a333_04456609",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76f7684a_fa24ab8b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -77,6 +95,30 @@
       "writtenOn": "2020-05-26T18:49:56Z",
       "side": 1,
       "message": "Since you\u0027re using readType to index into kMemoryReadTypePipelineStageMap to get the readStage, you shouldn\u0027t need to pass readType to updateReadBarrier().\n\nInstead, I\u0027d suggest having updateReadBarrier() return the readStage (InvalidEnum rather than false), and then use the returned value for the conditional and mPipelineBarrierMask.set().   I think that\u0027ll help readability also, since the actual stage gives more context than true/false.",
+      "range": {
+        "startLine": 611,
+        "startChar": 16,
+        "endLine": 611,
+        "endChar": 33
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2387591e_f7b1cb12",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T19:17:37Z",
+      "side": 1,
+      "message": "This mainly try to avoid another table look up from readType to readStage. I think the easy fix is to make updateReadBarrier inline.",
+      "parentUuid": "76f7684a_fa24ab8b",
       "range": {
         "startLine": 611,
         "startChar": 16,
@@ -123,6 +165,24 @@
     },
     {
       "key": {
+        "uuid": "eb6440c4_f5fd4715",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T19:17:37Z",
+      "side": 1,
+      "message": "I actually intentionally moved it out of executeBarriers(). With Tobin\u0027s work on threading, I would expect executeBarriers will occur in the submission thread. My work is intended to occur on main thread. The API name may need to change a bit once Tobin\u0027s work finishes.",
+      "parentUuid": "a101c78a_688d0e13",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e275632_c4ba65d0",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -134,6 +194,30 @@
       "writtenOn": "2020-05-26T18:49:56Z",
       "side": 1,
       "message": "This naming (updateReadAfterWriteBarrier and updateWriteAfterWriteBarrier) is a little confusing with the call to mergeMemoryBarrier() in the conditional.   It looks like the barrier is being updated, and then if it succeeds we also merge the barriers.   In truth, these update functions are actually updating anything, they are just returning *if* an update is required or not.\n\nSomething like needReadAfterWriteBarrier() or isBarrierRequired() would be better to indicate it\u0027s not actually doing any work, just checking if some conditions line up correctly so that a new barrier is required.",
+      "range": {
+        "startLine": 2470,
+        "startChar": 21,
+        "endLine": 2470,
+        "endChar": 48
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c96ee2c_ec6f14bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2470,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T19:17:37Z",
+      "side": 1,
+      "message": "How about updateReadAfterWriteTracker() or updateReadAfterWriteState() or onReadAfterWrite()? It does modify the state of ytracker, that is why I prefer \"update\" instead of \"is\"/\"need\", which would be a const funciton. But I agree that the currebnt name seems it is updating barrier, but it is really updating tracker state?\n\nIt seems onReadAfterWrite() is more consistent with our current naming.",
+      "parentUuid": "7e275632_c4ba65d0",
       "range": {
         "startLine": 2470,
         "startChar": 21,
@@ -169,6 +253,30 @@
     },
     {
       "key": {
+        "uuid": "bc09b137_8b1aaed1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2518,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T19:17:37Z",
+      "side": 1,
+      "message": "This mainly for performance, try to avoid another table lookup here and other places.",
+      "parentUuid": "554d0397_8a94c22c",
+      "range": {
+        "startLine": 2518,
+        "startChar": 15,
+        "endLine": 2518,
+        "endChar": 35
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c1db664_8092bb4d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -186,6 +294,24 @@
     },
     {
       "key": {
+        "uuid": "920e68c2_cfbe257b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2540,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T19:17:37Z",
+      "side": 1,
+      "message": "Sure. I was thinking current form is less mind twisting than complex logic though. But I don\u0027t have strong opinion on this.",
+      "parentUuid": "7c1db664_8092bb4d",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc98af00_a2e8755a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -197,6 +323,24 @@
       "writtenOn": "2020-05-26T18:49:56Z",
       "side": 1,
       "message": "barrierModified is always set to \u0027true\u0027, so this function can return \u0027void\u0027 again and any work that\u0027s conditional on this function can always be done.",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6face67c_0001c98d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3078,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T19:17:37Z",
+      "side": 1,
+      "message": "This will change in the actual functionality CL",
+      "parentUuid": "bc98af00_a2e8755a",
       "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -226,6 +370,30 @@
     },
     {
       "key": {
+        "uuid": "cccf5876_d2b453a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T19:17:37Z",
+      "side": 1,
+      "message": "Yes. will do.",
+      "parentUuid": "1dfa408e_4a370d04",
+      "range": {
+        "startLine": 800,
+        "startChar": 29,
+        "endLine": 800,
+        "endChar": 66
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ee253381_4f5a4f31",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 4
@@ -243,6 +411,24 @@
     },
     {
       "key": {
+        "uuid": "1cd2ed44_7787b4ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T19:17:37Z",
+      "side": 1,
+      "message": "Yes, because you could have multiple reads and each are different reads. (one is Uniform Read and another is ComputeShaderRead, and another DMA Source, for example).",
+      "parentUuid": "ee253381_4f5a4f31",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "252b83af_ea496e2b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 4
@@ -254,6 +440,24 @@
       "writtenOn": "2020-05-26T18:49:56Z",
       "side": 1,
       "message": "How does this Serial differ from mSerial above?\n\nMore importantly, I don\u0027t see this ever being read.   It\u0027s only being updated in ImageHelper::updateLayoutAndBarrier(), but no one ever uses the value.   Remove?",
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85f0f819_c238dc68",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T19:17:37Z",
+      "side": 1,
+      "message": "These serials are for different purpose. The \"mSerial\" probably should change to a more specific name.",
+      "parentUuid": "252b83af_ea496e2b",
       "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
