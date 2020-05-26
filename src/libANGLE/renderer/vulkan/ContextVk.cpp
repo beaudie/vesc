@@ -55,10 +55,8 @@ struct GraphicsDriverUniforms
     // Used to flip gl_FragCoord (both .xy for Android pre-rotation; only .y for desktop)
     std::array<float, 2> halfRenderArea;
     std::array<float, 2> flipXY;
-    // TODO(ianelliott): Remove the following while doing pre-rotation for gl_PointCoord & dFdy()
-    // https://issuetracker.google.com/issues/157476696
-    // https://issuetracker.google.com/issues/157476241
-    float viewportYScale;
+    std::array<float, 2> negFlipXY;
+    float flipY;
     float negFlipY;
 
     // 32 bits for 32 clip planes
@@ -66,11 +64,7 @@ struct GraphicsDriverUniforms
 
     uint32_t xfbActiveUnpaused;
     uint32_t xfbVerticesPerDraw;
-    // TODO(ianelliott): Remove the following while doing pre-rotation for gl_PointCoord
-    // https://issuetracker.google.com/issues/157476696
-    // https://issuetracker.google.com/issues/157476241
-    // NOTE: Explicit padding. Fill in with useful data when needed in the future.
-    std::array<int32_t, 3> padding;
+    std::array<int32_t, 1> padding;
 
     std::array<int32_t, 4> xfbBufferOffsets;
 
@@ -3460,6 +3454,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
          static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)},
         {halfRenderAreaWidth, halfRenderAreaHeight},
         {flipX, flipY},
+        {flipX, -flipY},
         flipY,
         -flipY,
         mState.getEnabledClipDistances().bits(),
