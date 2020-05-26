@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6fac8300_aa9cc1e7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 54
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T20:34:04Z",
+      "side": 1,
+      "message": "please go through your new APIs and use const \u0026 where you can. Currently you\u0027re going to incur quite a few extra copies using value arguments. 12/16 vs a pointer isn\u0027t a huge different. It\u0027s still worth saving.",
+      "range": {
+        "startLine": 36,
+        "startChar": 27,
+        "endLine": 36,
+        "endChar": 48
+      },
+      "revId": "1cdbd63776730c8bed2c9f1a33d8037d742a6b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e5ce0ba_7e855601",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 54
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T20:34:04Z",
+      "side": 1,
+      "message": "maybe make this a stopWorkerThread helper function?",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 482,
+        "endChar": 9
+      },
+      "revId": "1cdbd63776730c8bed2c9f1a33d8037d742a6b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82d2889e_1f6783c2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 54
+      },
+      "lineNbr": 1952,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T20:34:04Z",
+      "side": 1,
+      "message": "nit: for this and all future TODOs, please include a bug link. It\u0027s an ANGLE policy although it\u0027s lacking from our current style guide. I seem to be the only one who enforces it.",
+      "range": {
+        "startLine": 1952,
+        "startChar": 11,
+        "endLine": 1952,
+        "endChar": 15
+      },
+      "revId": "1cdbd63776730c8bed2c9f1a33d8037d742a6b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4a2c6cd_86c74d29",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 54
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T20:34:04Z",
+      "side": 1,
+      "message": "can this live in CommandProcessor.h?",
+      "range": {
+        "startLine": 961,
+        "startChar": 0,
+        "endLine": 972,
+        "endChar": 2
+      },
+      "revId": "1cdbd63776730c8bed2c9f1a33d8037d742a6b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

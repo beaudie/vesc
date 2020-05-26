@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "afe638fa_1621791b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T20:34:04Z",
+      "side": 1,
+      "message": "Sorry, meant to say, pull this in from the ContextVk/RendererVk features instead of caching them in the CBs. Definitely can be a split CL. The design philosophy of the Vk back-end is to only cache for performance. For other stuff, keep one copy of the data.",
+      "parentUuid": "3c01b9f6_ed5d7da7",
+      "range": {
+        "startLine": 863,
+        "startChar": 38,
+        "endLine": 863,
+        "endChar": 98
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6e13edb_5ba56528",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 44
@@ -284,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "167a039f_3c976db7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T20:34:04Z",
+      "side": 1,
+      "message": "So, I think it\u0027s worth getting this right as it\u0027s a significant piece of understanding.\n\nWhen we run into an unexpected Vulkan error, we call vk::Context::handleError. See ContextVk::handleError and DisplayVk::handleError. ContextVk sets the error immediately in mErrors, which gets passed up to the user when we return.\n\nBecause you may be running in a background thread, it\u0027s a race condition to use ContextVk/DisplayVk in any writable way in a worker thread. So you can\u0027t call ContextVk::handleError in a worker thread. What you can do is make a proxy vk::Context that can accept calls to handleError. For instance, the CommandProcessor itself can become a vk::Context, store a RendererVk pointer, and implement handleError. Then when it detects an unexpected error it can communicate with the main thread to pass this error back. Basically when you have a mutex locked, either the main thread can check the worker thread\u0027s error, or the worker thread can call the main thread.\n\nMaybe tackle this immediately after this CL lands so we can work on it while the memory is fresh? Would it be useful to write this into your ddoc?",
+      "parentUuid": "3aa96b42_a481c7a0",
+      "range": {
+        "startLine": 2202,
+        "startChar": 0,
+        "endLine": 2202,
+        "endChar": 40
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a3387912_2e7cc5c1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 44
@@ -460,6 +508,30 @@
       "side": 1,
       "message": "This goes away in phase2 where worker thread completely owns the primary command buffers. Would prefer to just let redundancy live in this transitory CL and avoid adding new interface to query primary from ContextVk that would just be removed next CL.",
       "parentUuid": "dddb13d5_27f9d4e6",
+      "range": {
+        "startLine": 969,
+        "startChar": 0,
+        "endLine": 970,
+        "endChar": 40
+      },
+      "revId": "00a3fc648544d129303892b5f4b14188375b1180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e25428cd_f6878edc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T20:34:04Z",
+      "side": 1,
+      "message": "OK, please leave a TODO with bug tag.",
+      "parentUuid": "d30a1ed3_75ead5e9",
       "range": {
         "startLine": 969,
         "startChar": 0,
