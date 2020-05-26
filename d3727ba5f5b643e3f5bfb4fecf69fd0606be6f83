@@ -22,6 +22,30 @@
       "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb4aa8f1_83f9df98",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-26T17:48:11Z",
+      "side": 1,
+      "message": "I think it should move to gl::State and ensure that shared context will share the tracker object. My intention is make it per shared group, which seems gl::State is exactly that object. Let me know if my understanding is incorrect, otherwise, I will fix it in next update.",
+      "parentUuid": "cee7a444_5fee3c7b",
+      "range": {
+        "startLine": 909,
+        "startChar": 37,
+        "endLine": 909,
+        "endChar": 59
+      },
+      "revId": "d3727ba5f5b643e3f5bfb4fecf69fd0606be6f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
