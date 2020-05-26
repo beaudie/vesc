@@ -46,6 +46,30 @@
       "revId": "02662042feadb540cd3fade8a8b5332cf2101766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56453f39_6039469d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-26T21:01:08Z",
+      "side": 1,
+      "message": "Yeah, you\u0027re right. It\u0027s still useful as a comment-style line of code. As far as I can see there\u0027s no need to keep the unknown type warning with the new code.",
+      "parentUuid": "7d3f3264_2e8d1da0",
+      "range": {
+        "startLine": 403,
+        "startChar": 12,
+        "endLine": 403,
+        "endChar": 27
+      },
+      "revId": "02662042feadb540cd3fade8a8b5332cf2101766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
