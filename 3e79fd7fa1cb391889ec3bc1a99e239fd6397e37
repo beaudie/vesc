@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "4e4dfb64_f3c1f5c7",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-27T22:55:28Z",
+      "side": 1,
+      "message": "Do you mean if the summary description starts with any of those strings, then we allow it to pass through this test?",
+      "parentUuid": "85cb0778_888d60af",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 33
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2535640_c4d0c806",
         "filename": "PRESUBMIT.py",
         "patchSetId": 1
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "8c2d86e9_dcd9d317",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-27T22:55:28Z",
+      "side": 1,
+      "message": "Hmm, I didn\u0027t know it has to be wrapped to 100 chars. Git cl format didn\u0027t catch it, I think, cause I\u0027m pretty sure I ran it.",
+      "parentUuid": "e2535640_c4d0c806",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 115
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a047e433_fcee7b09",
         "filename": "PRESUBMIT.py",
         "patchSetId": 1
@@ -76,6 +124,30 @@
       "writtenOn": "2020-05-27T19:48:29Z",
       "side": 1,
       "message": "I think this will count Bug:/Test:/Tbr:/ etc lines as the subject. Maybe you should have a way of clipping off the ending tags as a first pass.",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 45
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4da8e6dc_b4d14831",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-27T22:55:28Z",
+      "side": 1,
+      "message": "Just to be clear, the structure of a commit message will be like this?\n1-line summary\nNew line: at least 1\nFull description (can have new lines within it)\nNew line: at least 1\nSubject tags. Lines that start with Bug:/Test:/Tbr:/ (can have new lines in between)",
+      "parentUuid": "a047e433_fcee7b09",
       "range": {
         "startLine": 45,
         "startChar": 39,
@@ -111,6 +183,30 @@
     },
     {
       "key": {
+        "uuid": "83b7dc6d_ec412011",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-27T22:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "286429bf_39c6b4c5",
+      "range": {
+        "startLine": 46,
+        "startChar": 40,
+        "endLine": 46,
+        "endChar": 42
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "979b0454_0fdc6b81",
         "filename": "PRESUBMIT.py",
         "patchSetId": 1
@@ -131,6 +227,30 @@
       "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "340c69fa_8df43385",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-27T22:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "979b0454_0fdc6b81",
+      "range": {
+        "startLine": 49,
+        "startChar": 79,
+        "endLine": 49,
+        "endChar": 81
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -192,6 +312,30 @@
     },
     {
       "key": {
+        "uuid": "90856eb9_631ac735",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-27T22:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c4b26f7_e954dcaf",
+      "range": {
+        "startLine": 63,
+        "startChar": 4,
+        "endLine": 63,
+        "endChar": 26
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80f45887_8f2439bc",
         "filename": "PRESUBMIT.py",
         "patchSetId": 1
@@ -239,6 +383,30 @@
     },
     {
       "key": {
+        "uuid": "02860a6e_c1481ded",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-27T22:55:28Z",
+      "side": 1,
+      "message": "That\u0027s regex right? Why do we stop when we see multiple spaces: multiple spaces?",
+      "parentUuid": "e476f6cb_5bd1ab91",
+      "range": {
+        "startLine": 67,
+        "startChar": 13,
+        "endLine": 67,
+        "endChar": 31
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cea1fbcb_2c56a69a",
         "filename": "PRESUBMIT.py",
         "patchSetId": 1
@@ -259,6 +427,30 @@
       "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb31e648_39a74003",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-27T22:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cea1fbcb_2c56a69a",
+      "range": {
+        "startLine": 69,
+        "startChar": 73,
+        "endLine": 69,
+        "endChar": 75
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -285,6 +477,30 @@
     },
     {
       "key": {
+        "uuid": "2236c251_48b17296",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-27T22:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4accef29_224558cc",
+      "range": {
+        "startLine": 78,
+        "startChar": 72,
+        "endLine": 78,
+        "endChar": 74
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "754abe53_e5f2e1d8",
         "filename": "PRESUBMIT.py",
         "patchSetId": 1
@@ -305,6 +521,30 @@
       "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09dae546_9d8a3b08",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-27T22:55:28Z",
+      "side": 1,
+      "message": "Yes, Python allows something like this.",
+      "parentUuid": "754abe53_e5f2e1d8",
+      "range": {
+        "startLine": 80,
+        "startChar": 7,
+        "endLine": 80,
+        "endChar": 41
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
