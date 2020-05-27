@@ -189,10 +189,13 @@ class ProgramExecutable
     bool hasStorageBuffers() const;
     bool hasAtomicCounterBuffers() const;
     bool hasImages() const;
-    bool hasTransformFeedbackOutput() const;
+    bool hasTransformFeedbackOutput() const
+    {
+        return !getLinkedTransformFeedbackVaryings().empty();
+    }
 
     // Count the number of uniform and storage buffer declarations, counting arrays as one.
-    size_t getTransformFeedbackBufferCount(const gl::State &glState) const;
+    size_t getTransformFeedbackBufferCount() const { return mTransformFeedbackStrides.size(); }
 
     bool linkValidateGlobalNames(InfoLog &infoLog) const;
 
@@ -354,6 +357,13 @@ class ProgramExecutable
     std::vector<AtomicCounterBuffer> mAtomicCounterBuffers;
     RangeUI mImageUniformRange;
     std::vector<InterfaceBlock> mShaderStorageBlocks;
+
+    bool mHasGraphicsUniformBuffers;
+    bool mHasComputeUniformBuffers;
+    bool mHasGraphicsStorageBuffers;
+    bool mHasComputeStorageBuffers;
+    bool mHasGraphicsAtomicCounterBuffers;
+    bool mHasComputeAtomicCounterBuffers;
 
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedOutputVaryings;
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedInputVaryings;
