@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8041859e_c0db2202",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 55
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T15:07:41Z",
+      "side": 1,
+      "message": "nit: use a const \u0026 here to avoid the copy.",
+      "range": {
+        "startLine": 18,
+        "startChar": 68,
+        "endLine": 18,
+        "endChar": 76
+      },
+      "revId": "5206a87eed054d8c8b78cb065992d3813fbb3e40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1f6794b_1851e9c3",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T15:07:41Z",
+      "side": 1,
+      "message": "nit: per naming guide: kEndCommandProcessorThread",
+      "range": {
+        "startLine": 40,
+        "startChar": 34,
+        "endLine": 40,
+        "endChar": 60
+      },
+      "revId": "5206a87eed054d8c8b78cb065992d3813fbb3e40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92d0acb9_6df3f76d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T15:07:41Z",
+      "side": 1,
+      "message": "nit: avoid non-const \u0026 in parameters as per style guide.",
+      "range": {
+        "startLine": 59,
+        "startChar": 31,
+        "endLine": 59,
+        "endChar": 53
+      },
+      "revId": "5206a87eed054d8c8b78cb065992d3813fbb3e40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbf4400d_186e8951",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T15:07:41Z",
+      "side": 1,
+      "message": "nit: can take a const \u0026 as well",
+      "range": {
+        "startLine": 532,
+        "startChar": 48,
+        "endLine": 532,
+        "endChar": 69
+      },
+      "revId": "5206a87eed054d8c8b78cb065992d3813fbb3e40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc77a937_1739e552",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T15:07:41Z",
+      "side": 1,
+      "message": "can also take const \u0026",
+      "range": {
+        "startLine": 258,
+        "startChar": 27,
+        "endLine": 258,
+        "endChar": 48
+      },
+      "revId": "5206a87eed054d8c8b78cb065992d3813fbb3e40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
