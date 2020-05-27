@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "69f6fe61_4b8eb2d0",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T14:57:41Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "51e60ef7_4a4c5450",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99a6f30b_af93bbf8",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 1
@@ -53,6 +71,47 @@
       "writtenOn": "2020-05-27T00:04:46Z",
       "side": 1,
       "message": "I don\u0027t remember if this came up before, but we may want to set:\n    is_official_build \u003d true\n\nI think this does some extra checking also (like making sure is_debug \u003d false).",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd5cb19a_020bcfa7",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T14:57:41Z",
+      "side": 1,
+      "message": "I believe it enables optimization that isn\u0027t present in normal release builds. He put it down below in the \"Profile\" build. I would merge these two.",
+      "parentUuid": "99a6f30b_af93bbf8",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c893db0b_683e3d2f",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T14:57:41Z",
+      "side": 1,
+      "message": "isn\u0027t this default and can be omitted?",
+      "range": {
+        "startLine": 176,
+        "startChar": 40,
+        "endLine": 176,
+        "endChar": 45
+      },
       "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +135,24 @@
     },
     {
       "key": {
+        "uuid": "e9af0875_73bc18b9",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T14:57:41Z",
+      "side": 1,
+      "message": "I\u0027d rename this to release-with-asserts. And add a comment.",
+      "parentUuid": "b237c22e_06f80fca",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f48a7ab_42e6f95d",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 1
@@ -87,6 +164,24 @@
       "writtenOn": "2020-05-27T00:04:46Z",
       "side": 1,
       "message": "Oh, we don\u0027t want this for release builds?   It feels a little contradictory that release builds aren\u0027t official builds though (maybe it\u0027s just badly named)?\n\nWhat does \"enables level of optimization beyond release\" mean?   Wouldn\u0027t we want to be as optimized as possible for release builds?",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "430fc8b0_0c5db3bb",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T14:57:41Z",
+      "side": 1,
+      "message": "I\u0027d merge this with \"Release\" just to avoid confusion, and leave a comment as to what this flag does.",
+      "parentUuid": "6f48a7ab_42e6f95d",
       "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
