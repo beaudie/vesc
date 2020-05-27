@@ -28,6 +28,64 @@ _PRIMARY_EXPORT_TARGETS = [
 ]
 
 
+def _CheckCommitMessageFormatting(input_api, output_api):
+
+    def _IsLineBlank(line):
+        return line.isspace() or line == ""
+
+    git_output = subprocess.check_output(["git", "log", "-n", "1", "--pretty=format:%B"])
+    commit_msg_lines = git_output.expandtabs(4).splitlines()
+    errors = []
+    index = 0
+    # getting rid of newlines before description summary, but not the whitespace on the line of description summary
+    while index < len(commit_msg_lines) and _IsLineBlank(commit_msg_lines[index]):
+        index += 1
+    if index == len(commit_msg_lines):
+        errors.append(
+            output_api.PresubmitError("Please ensure that your description summary is not blank."))
+    elif len(commit_msg_lines[index]) > 65:
+        errors.append(
+            output_api.PresubmitError(
+                "Please ensure that your description summary is on one line of 65 or less characters."
+            ))
+    index += 1
+    blank_line_count = 0
+    # count the number of blank lines between the description summary and the description body
+    while index < len(commit_msg_lines) and _IsLineBlank(commit_msg_lines[index]):
+        blank_line_count += 1
+        index += 1
+    if blank_line_count == 0:
+        errors.append(
+            output_api.PresubmitError(
+                "Please ensure that there exists at least 1 blank line between description summary and description body."
+            ))
+    body_line_count = 0
+    is_bodyline_over_limit = False
+    # increment index until we reach the bug field. the description body and the blank spaces between it
+    # and the bug field are before the index at the end of the loop
+    while index < len(commit_msg_lines) and not commit_msg_lines[index].startswith(
+            "Bug: angleproject:"):
+        body_line_count += 1
+        if not is_bodyline_over_limit and len(commit_msg_lines[index]) > 71:
+            is_bodyline_over_limit = True
+        index += 1
+    if body_line_count == 0:
+        errors.append(
+            output_api.PresubmitError("Please ensure that your description body is not blank."))
+    elif is_bodyline_over_limit:
+        errors.append(
+            output_api.PresubmitError(
+                "Please ensure that your description body is wrapped to 71 characters or less."))
+    # if there is a Bug tag and the line directly before it is not blank
+    if 1 <= index < len(commit_msg_lines) and commit_msg_lines[index].startswith(
+            "Bug: angleproject:") and not _IsLineBlank(commit_msg_lines[index - 1]):
+        errors.append(
+            output_api.PresubmitError(
+                "Please ensure that there exists at least 1 blank line between description body and Bug field."
+            ))
+    return errors
+
+
 def _CheckChangeHasBugField(input_api, output_api):
     """Requires that the changelist have a Bug: field from a known project."""
     bugs = input_api.change.BugsFromDescription()
@@ -47,7 +105,6 @@ def _CheckChangeHasBugField(input_api, output_api):
     bug_regex = re.compile(r"([a-z]+[:/])(\d+)")
     errors = []
     extra_help = None
-
     for bug in bugs:
         if bug == 'None':
             errors.append(
@@ -240,6 +297,7 @@ def CheckChangeOnUpload(input_api, output_api):
     results.extend(
         input_api.canned_checks.CheckPatchFormatted(
             input_api, output_api, result_factory=output_api.PresubmitError))
+    results.extend(_CheckCommitMessageFormatting(input_api, output_api))
     return results
 
 
