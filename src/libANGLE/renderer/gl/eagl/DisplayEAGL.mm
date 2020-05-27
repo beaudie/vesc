@@ -143,7 +143,8 @@ SurfaceImpl *DisplayEAGL::createPixmapSurface(const egl::SurfaceState &state,
     return nullptr;
 }
 
-ContextImpl *DisplayEAGL::createContext(const gl::State &state,
+ContextImpl *DisplayEAGL::createContext(ShareGroupImpl *shareGroup,
+                                        const gl::State &state,
                                         gl::ErrorSet *errorSet,
                                         const egl::Config *configuration,
                                         const gl::Context *shareContext,

@@ -198,7 +198,8 @@ DeviceImpl *DisplayD3D::createDevice()
     return mRenderer->createEGLDevice();
 }
 
-rx::ContextImpl *DisplayD3D::createContext(const gl::State &state,
+rx::ContextImpl *DisplayD3D::createContext(ShareGroupImpl *shareGroup,
+                                           const gl::State &state,
                                            gl::ErrorSet *errorSet,
                                            const egl::Config *configuration,
                                            const gl::Context *shareContext,

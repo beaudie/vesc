@@ -125,14 +125,16 @@ class MockEGLFactory : public EGLImplFactory
                              const gl::Context *,
                              EGLenum,
                              const egl::AttributeMap &));
-    MOCK_METHOD5(createContext,
-                 ContextImpl *(const gl::State &,
+    MOCK_METHOD6(createContext,
+                 ContextImpl *(ShareGroupImpl *shareGroup,
+                               const gl::State &,
                                gl::ErrorSet *,
                                const egl::Config *,
                                const gl::Context *,
                                const egl::AttributeMap &));
     MOCK_METHOD2(createStreamProducerD3DTexture,
                  StreamProducerImpl *(egl::Stream::ConsumerType, const egl::AttributeMap &));
+    MOCK_METHOD0(createShareGroup, ShareGroupImpl *());
 };
 
 }  // namespace rx

@@ -434,7 +434,8 @@ SurfaceImpl *DisplayGLX::createPixmapSurface(const egl::SurfaceState &state,
     return nullptr;
 }
 
-ContextImpl *DisplayGLX::createContext(const gl::State &state,
+ContextImpl *DisplayGLX::createContext(ShareGroupImpl *shareGroup,
+                                       const gl::State &state,
                                        gl::ErrorSet *errorSet,
                                        const egl::Config *configuration,
                                        const gl::Context *shareContext,
