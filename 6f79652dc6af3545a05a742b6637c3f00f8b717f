@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "321055a6_593c7b71",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-05-27T21:18:26Z",
+      "side": 1,
+      "message": "Maybe something like \"intermediate texture\", given that the format is unknown at compile time?",
+      "range": {
+        "startLine": 1008,
+        "startChar": 31,
+        "endLine": 1008,
+        "endChar": 45
+      },
+      "revId": "6f79652dc6af3545a05a742b6637c3f00f8b717f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faf75526_58166077",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-05-27T21:18:26Z",
+      "side": 1,
+      "message": "Maybe add a comment mentioning why glBlitFramebuffer cannot be used on macOS.",
+      "range": {
+        "startLine": 1022,
+        "startChar": 0,
+        "endLine": 1037,
+        "endChar": 70
+      },
+      "revId": "6f79652dc6af3545a05a742b6637c3f00f8b717f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "03ed1e31_6f805cfd",
         "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
         "patchSetId": 4
@@ -18,6 +64,29 @@
         "startChar": 8,
         "endLine": 1154,
         "endChar": 98
+      },
+      "revId": "6f79652dc6af3545a05a742b6637c3f00f8b717f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1422f76f_04a0e5ae",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2020-05-27T21:18:26Z",
+      "side": 1,
+      "message": "SRGB?",
+      "range": {
+        "startLine": 323,
+        "startChar": 21,
+        "endLine": 323,
+        "endChar": 24
       },
       "revId": "6f79652dc6af3545a05a742b6637c3f00f8b717f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
