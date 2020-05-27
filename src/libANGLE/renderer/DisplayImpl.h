@@ -102,6 +102,8 @@ class DisplayImpl : public EGLImplFactory
 
     const egl::DisplayState &getState() const { return mState; }
 
+    ShareGroupImpl *createShareGroup() override;
+
   protected:
     const egl::DisplayState &mState;
 
