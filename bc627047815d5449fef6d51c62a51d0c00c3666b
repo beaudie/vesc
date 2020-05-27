@@ -286,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "98f803e7_94de74ce",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T21:07:22Z",
+      "side": 1,
+      "message": "You\u0027re right, looks like validation layers do default to off in Release.\n\n  $ gn args --list out/Profile | grep -2 angle_enable_vulkan_validation_layers\n      Enable Vulkan GPU trace event capability\n\n  angle_enable_vulkan_validation_layers\n      Current value (from the default) \u003d false\n\nAnd default to True if dcheck_always_on is true:\n\n  $ gn args --list out/Release-With-Asserts | grep -2 angle_enable_vulkan_validation_layers\n      Enable Vulkan GPU trace event capability\n\n  angle_enable_vulkan_validation_layers\n      Current value (from the default) \u003d true\n        From //third_party/angle/gni/angle.gni:130\n\nI think my confusion stemmed from the print out not listing default, even though the values match.  I\u0027ll update the CL to remove the validation setting.",
+      "parentUuid": "aa1d7139_51da0aa7",
+      "range": {
+        "startLine": 176,
+        "startChar": 40,
+        "endLine": 176,
+        "endChar": 45
+      },
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b237c22e_06f80fca",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 1
