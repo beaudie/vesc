@@ -176,7 +176,8 @@ SurfaceImpl *DisplayCGL::createPixmapSurface(const egl::SurfaceState &state,
     return nullptr;
 }
 
-ContextImpl *DisplayCGL::createContext(const gl::State &state,
+ContextImpl *DisplayCGL::createContext(ShareGroupImpl *shareGroup,
+                                       const gl::State &state,
                                        gl::ErrorSet *errorSet,
                                        const egl::Config *configuration,
                                        const gl::Context *shareContext,

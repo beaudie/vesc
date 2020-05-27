@@ -30,6 +30,11 @@ class ProgramExecutableVk;
 class RendererVk;
 class WindowSurfaceVk;
 
+class ShareGroupVk : public ShareGroupImpl
+{
+  private:
+};
+
 struct CommandBatch final : angle::NonCopyable
 {
     CommandBatch();
@@ -102,7 +107,10 @@ using EventName                               = std::array<char, kMaxGpuEventNam
 class ContextVk : public ContextImpl, public vk::Context
 {
   public:
-    ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer);
+    ContextVk(ShareGroupImpl *shareGroup,
+              const gl::State &state,
+              gl::ErrorSet *errorSet,
+              RendererVk *renderer);
     ~ContextVk() override;
 
     angle::Result initialize() override;

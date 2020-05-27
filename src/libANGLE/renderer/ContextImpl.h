@@ -27,6 +27,13 @@ struct Workarounds;
 
 namespace rx
 {
+class ShareGroupImpl : angle::NonCopyable
+{
+  public:
+    ShareGroupImpl() {}
+    ~ShareGroupImpl() {}
+};
+
 class ContextImpl : public GLImplFactory
 {
   public:

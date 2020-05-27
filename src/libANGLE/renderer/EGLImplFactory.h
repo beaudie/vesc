@@ -35,6 +35,7 @@ class EGLSyncImpl;
 class ImageImpl;
 class ExternalImageSiblingImpl;
 class SurfaceImpl;
+class ShareGroupImpl;
 
 class EGLImplFactory : angle::NonCopyable
 {
@@ -60,7 +61,8 @@ class EGLImplFactory : angle::NonCopyable
                                    EGLenum target,
                                    const egl::AttributeMap &attribs) = 0;
 
-    virtual ContextImpl *createContext(const gl::State &state,
+    virtual ContextImpl *createContext(ShareGroupImpl *shareGroup,
+                                       const gl::State &state,
                                        gl::ErrorSet *errorSet,
                                        const egl::Config *configuration,
                                        const gl::Context *shareContext,
@@ -76,6 +78,8 @@ class EGLImplFactory : angle::NonCopyable
                                                                  const egl::AttributeMap &attribs);
 
     virtual EGLSyncImpl *createSync(const egl::AttributeMap &attribs);
+
+    virtual ShareGroupImpl *createShareGroup() = 0;
 };
 
 inline ExternalImageSiblingImpl *EGLImplFactory::createExternalImageSibling(
@@ -93,7 +97,6 @@ inline EGLSyncImpl *EGLImplFactory::createSync(const egl::AttributeMap &attribs)
     UNREACHABLE();
     return nullptr;
 }
-
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_EGLIMPLFACTORY_H_

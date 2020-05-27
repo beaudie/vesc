@@ -59,7 +59,8 @@ class DisplayVk : public DisplayImpl, public vk::Context
                            EGLenum target,
                            const egl::AttributeMap &attribs) override;
 
-    ContextImpl *createContext(const gl::State &state,
+    ContextImpl *createContext(ShareGroupImpl *shareGroup,
+                               const gl::State &state,
                                gl::ErrorSet *errorSet,
                                const egl::Config *configuration,
                                const gl::Context *shareContext,
@@ -96,6 +97,8 @@ class DisplayVk : public DisplayImpl, public vk::Context
     void populateFeatureList(angle::FeatureList *features) override;
 
     bool isRobustResourceInitEnabled() const override;
+
+    ShareGroupImpl *createShareGroup() override;
 
   protected:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
