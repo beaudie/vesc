@@ -193,7 +193,8 @@ ImageImpl *DisplayMtl::createImage(const egl::ImageState &state,
     return nullptr;
 }
 
-rx::ContextImpl *DisplayMtl::createContext(const gl::State &state,
+rx::ContextImpl *DisplayMtl::createContext(ShareGroupImpl *shareGroup,
+                                           const gl::State &state,
                                            gl::ErrorSet *errorSet,
                                            const egl::Config *configuration,
                                            const gl::Context *shareContext,

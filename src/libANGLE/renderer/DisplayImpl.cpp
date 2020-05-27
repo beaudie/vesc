@@ -63,4 +63,8 @@ const egl::Caps &DisplayImpl::getCaps() const
     return mCaps;
 }
 
+ShareGroupImpl *DisplayImpl::createShareGroup()
+{
+    return nullptr;
+}
 }  // namespace rx

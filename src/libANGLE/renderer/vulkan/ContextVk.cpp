@@ -614,9 +614,13 @@ egl::ContextPriority GetContextPriority(const gl::State &state)
 }
 
 // ContextVk implementation.
-ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer)
+ContextVk::ContextVk(ShareGroupImpl *shareGroup,
+                     const gl::State &state,
+                     gl::ErrorSet *errorSet,
+                     RendererVk *renderer)
     : ContextImpl(state, errorSet),
       vk::Context(renderer),
+      mShareGroupVk(static_cast<ShareGroupVk *>(shareGroup)),
       mRenderPassCommandBuffer(nullptr),
       mCurrentGraphicsPipeline(nullptr),
       mCurrentComputePipeline(nullptr),

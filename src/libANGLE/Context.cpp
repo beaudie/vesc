@@ -46,6 +46,36 @@
 #include "libANGLE/renderer/Format.h"
 #include "libANGLE/validationES.h"
 
+namespace egl
+{
+ShareGroup::ShareGroup(rx::EGLImplFactory *factory)
+    : mRefCount(1), mImplementation(factory->createShareGroup())
+{}
+
+ShareGroup::~ShareGroup()
+{
+    if (mImplementation)
+    {
+        delete mImplementation;
+        mImplementation = nullptr;
+    }
+}
+
+void ShareGroup::addRef()
+{
+    // This is protected by global lock, so no atomic is required
+    mRefCount++;
+}
+
+void ShareGroup::release(const gl::Context *context)
+{
+    if (--mRefCount == 0)
+    {
+        delete this;
+    }
+}
+}  // namespace egl
+
 namespace gl
 {
 namespace
@@ -246,6 +276,21 @@ enum SubjectIndexes : angle::SubjectIndex
 };
 }  // anonymous namespace
 
+static egl::ShareGroup *AllocateOrGetShareGroup(egl::Display *display,
+                                                const gl::Context *shareContext)
+{
+    if (shareContext)
+    {
+        egl::ShareGroup *shareGroup = shareContext->getShareGroup();
+        shareGroup->addRef();
+        return shareGroup;
+    }
+    else
+    {
+        return new egl::ShareGroup(display->getImplementation());
+    }
+}
+
 Context::Context(egl::Display *display,
                  const egl::Config *config,
                  const Context *shareContext,
@@ -255,7 +300,8 @@ Context::Context(egl::Display *display,
                  const egl::AttributeMap &attribs,
                  const egl::DisplayExtensions &displayExtensions,
                  const egl::ClientExtensions &clientExtensions)
-    : mState(shareContext ? &shareContext->mState : nullptr,
+    : mShareGroup(AllocateOrGetShareGroup(display, shareContext)),
+      mState(shareContext ? &shareContext->mState : nullptr,
              shareTextures,
              &mOverlay,
              clientType,
@@ -270,8 +316,12 @@ Context::Context(egl::Display *display,
       mSkipValidation(GetNoError(attribs)),
       mDisplayTextureShareGroup(shareTextures != nullptr),
       mErrors(this),
-      mImplementation(display->getImplementation()
-                          ->createContext(mState, &mErrors, config, shareContext, attribs)),
+      mImplementation(display->getImplementation()->createContext(mShareGroup->getImplementation(),
+                                                                  mState,
+                                                                  &mErrors,
+                                                                  config,
+                                                                  shareContext,
+                                                                  attribs)),
       mLabel(nullptr),
       mCompiler(),
       mConfig(config),
@@ -564,6 +614,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     mState.reset(this);
 
+    mShareGroup->release(this);
     mState.mBufferManager->release(this);
     // mProgramPipelineManager must be before mShaderProgramManager to give each
     // PPO the chance to release any references they have to the Programs that

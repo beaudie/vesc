@@ -167,7 +167,8 @@ ImageImpl *DisplayNULL::createImage(const egl::ImageState &state,
     return new ImageNULL(state);
 }
 
-rx::ContextImpl *DisplayNULL::createContext(const gl::State &state,
+rx::ContextImpl *DisplayNULL::createContext(ShareGroupImpl *shareGroup,
+                                            const gl::State &state,
                                             gl::ErrorSet *errorSet,
                                             const egl::Config *configuration,
                                             const gl::Context *shareContext,
