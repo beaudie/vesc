@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "1a506e6f_4e5690a2",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T17:26:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afc5dd53_720b6206",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99a6f30b_af93bbf8",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 1
@@ -128,6 +146,24 @@
       "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06cd2b60_9d9a3610",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T17:26:13Z",
+      "side": 1,
+      "message": "I went with Release-with-asserts and Profiling, which I think are both useful to get us on a common set.",
+      "parentUuid": "233e01f8_a1538953",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -189,6 +225,30 @@
       "writtenOn": "2020-05-27T17:17:48Z",
       "side": 1,
       "message": "How does that indicate the default is true? They should default to off in Release always unless dcheck_always_on is enabled.",
+      "parentUuid": "70d2fcb2_bb118467",
+      "range": {
+        "startLine": 176,
+        "startChar": 40,
+        "endLine": 176,
+        "endChar": 45
+      },
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5659840_7111233d",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T17:26:13Z",
+      "side": 1,
+      "message": "If the value is default, the output will indicate it.  For instance, here\u0027s dcheck_always_on.  Note the \"(from the default)\":\n\n$ gn args --list out/Debug | grep -2 dcheck_always_on\n    argument, and set as the default toolchain.\n\ndcheck_always_on\n    Current value (from the default) \u003d false\n      From //build/config/dcheck_always_on.gni:14",
       "parentUuid": "70d2fcb2_bb118467",
       "range": {
         "startLine": 176,
@@ -273,6 +333,24 @@
     },
     {
       "key": {
+        "uuid": "bc96dfea_1146b449",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T17:26:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29674a29_59c82954",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f48a7ab_42e6f95d",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 1
@@ -323,6 +401,24 @@
       "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32c110fc_43a5657c",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T17:26:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bebdd465_d8754551",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
