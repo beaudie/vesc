@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9727764_ab797d2e",
+        "filename": "66",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T19:31:50Z",
+      "side": 1,
+      "message": "What is this file?",
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "286429bf_39c6b4c5",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T19:31:50Z",
+      "side": 1,
+      "message": "This should be a constant (as much as Python allows them anyway) at the start of the function to avoid burying magic numbers.",
+      "range": {
+        "startLine": 46,
+        "startChar": 40,
+        "endLine": 46,
+        "endChar": 42
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "979b0454_0fdc6b81",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T19:31:50Z",
+      "side": 1,
+      "message": "Use the variable here so the values can\u0027t get out of sync.",
+      "range": {
+        "startLine": 49,
+        "startChar": 79,
+        "endLine": 49,
+        "endChar": 81
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25777607_b1ad073c",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T19:31:50Z",
+      "side": 1,
+      "message": "What about \u003e1 blank lines?",
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c4b26f7_e954dcaf",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T19:31:50Z",
+      "side": 1,
+      "message": "nit: \u0027is_bodyline_length_over_limit\u0027 to indicate we are looking at the length of the lines, not the number of lines in the body.",
+      "range": {
+        "startLine": 63,
+        "startChar": 4,
+        "endLine": 63,
+        "endChar": 26
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80f45887_8f2439bc",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T19:31:50Z",
+      "side": 1,
+      "message": "There are several bug types that are acceptable (see \u0027ref\u0027 below):\n\n    projects \u003d [\u0027angleproject\u0027, \u0027chromium\u0027, \u0027dawn\u0027, \u0027fuchsia\u0027, \u0027skia\u0027, \u0027swiftshader\u0027, \u0027b\u0027]\n\nYou can probably just look for \"Bug:\" here.   If that\u0027s too many false-positives, you should probably look at refactoring the regex stuff out of _CheckChangeHasBugField() so they can both find the relevant line.",
+      "range": {
+        "startLine": 67,
+        "startChar": 13,
+        "endLine": 67,
+        "endChar": 31
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cea1fbcb_2c56a69a",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T19:31:50Z",
+      "side": 1,
+      "message": "Same as above.   Use a constant.",
+      "range": {
+        "startLine": 69,
+        "startChar": 73,
+        "endLine": 69,
+        "endChar": 75
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4accef29_224558cc",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T19:31:50Z",
+      "side": 1,
+      "message": "Same.   Output constant value.",
+      "range": {
+        "startLine": 78,
+        "startChar": 72,
+        "endLine": 78,
+        "endChar": 74
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b924f790_f26efec4",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T19:31:50Z",
+      "side": 1,
+      "message": "ref",
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
