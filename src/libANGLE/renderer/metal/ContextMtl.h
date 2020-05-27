@@ -379,6 +379,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
 
         float halfRenderArea[2];
         float flipXY[2];
+        float negFlipXY[2];
         float viewportYScale;
         float negViewportYScale;
 
@@ -389,7 +390,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
         uint32_t xfbActiveUnpaused;
         uint32_t xfbVerticesPerDraw;
         // NOTE: Explicit padding. Fill in with useful data when needed in the future.
-        int32_t padding[3];
+        int32_t padding;
 
         int32_t xfbBufferOffsets[4];
         uint32_t acbBufferOffsets[4];
