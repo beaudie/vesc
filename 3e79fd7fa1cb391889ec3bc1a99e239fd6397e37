@@ -19,6 +19,75 @@
     },
     {
       "key": {
+        "uuid": "85cb0778_888d60af",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T19:48:29Z",
+      "side": 1,
+      "message": "We want to allow reverts to pass through without this particular presubmit. How about we add a subject whitelist, that has the strings\n\n\"Revert \\\"\"\n\"Roll \"\n\nMaybe also Re-land. At least Revert and Roll though.",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 33
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2535640_c4d0c806",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T19:48:29Z",
+      "side": 1,
+      "message": "not sure if git cl format caught this file, but please make sure everything is wrapped to 100 chars.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 115
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a047e433_fcee7b09",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T19:48:29Z",
+      "side": 1,
+      "message": "I think this will count Bug:/Test:/Tbr:/ etc lines as the subject. Maybe you should have a way of clipping off the ending tags as a first pass.",
+      "range": {
+        "startLine": 45,
+        "startChar": 39,
+        "endLine": 45,
+        "endChar": 45
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "286429bf_39c6b4c5",
         "filename": "PRESUBMIT.py",
         "patchSetId": 1
@@ -82,6 +151,24 @@
     },
     {
       "key": {
+        "uuid": "eff360bd_2608de96",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T19:48:29Z",
+      "side": 1,
+      "message": "might as well require \u003d\u003d 1",
+      "parentUuid": "25777607_b1ad073c",
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c4b26f7_e954dcaf",
         "filename": "PRESUBMIT.py",
         "patchSetId": 1
@@ -116,6 +203,30 @@
       "writtenOn": "2020-05-27T19:31:50Z",
       "side": 1,
       "message": "There are several bug types that are acceptable (see \u0027ref\u0027 below):\n\n    projects \u003d [\u0027angleproject\u0027, \u0027chromium\u0027, \u0027dawn\u0027, \u0027fuchsia\u0027, \u0027skia\u0027, \u0027swiftshader\u0027, \u0027b\u0027]\n\nYou can probably just look for \"Bug:\" here.   If that\u0027s too many false-positives, you should probably look at refactoring the regex stuff out of _CheckChangeHasBugField() so they can both find the relevant line.",
+      "range": {
+        "startLine": 67,
+        "startChar": 13,
+        "endLine": 67,
+        "endChar": 31
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e476f6cb_5bd1ab91",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T19:48:29Z",
+      "side": 1,
+      "message": "I\u0027d maybe stop parsing after you see a line that matches something like\n\n\"\\s+: \\s+\"\n\nYou could have all kinds of other tag in there you\u0027d want to ignore.",
+      "parentUuid": "80f45887_8f2439bc",
       "range": {
         "startLine": 67,
         "startChar": 13,
@@ -167,6 +278,29 @@
         "startChar": 72,
         "endLine": 78,
         "endChar": 74
+      },
+      "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "754abe53_e5f2e1d8",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T19:48:29Z",
+      "side": 1,
+      "message": "does this do what you want? I\u0027m not sure about Python, in C++ this would be evaluated as something like if (bool) \u003c (int)",
+      "range": {
+        "startLine": 80,
+        "startChar": 7,
+        "endLine": 80,
+        "endChar": 41
       },
       "revId": "3e79fd7fa1cb391889ec3bc1a99e239fd6397e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
