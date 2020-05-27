@@ -1651,10 +1651,15 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                         mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(
                             *interfaceBlock))
                     {
-                        const TField *field = interfaceBlock->fields()[0];
-                        if (field->type()->isMatrix())
+                        const TField *field        = interfaceBlock->fields()[0];
+                        const TType *fieldType     = field->type();
+                        const TBasicType basicType = fieldType->getBasicType();
+                        if (fieldType->isMatrix() ||
+                            ((fieldType->isVector() || fieldType->isScalar()) &&
+                             (basicType == EbtFloat || basicType == EbtInt ||
+                              basicType == EbtUInt)))
                         {
-                            out << "._matrix_" << Decorate(field->name());
+                            out << "." << Decorate(field->name());
                         }
                     }
                 }
@@ -1682,10 +1687,15 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                         mResourcesHLSL->shouldTranslateUniformBlockToStructuredBuffer(
                             *interfaceBlock))
                     {
-                        const TField *field = interfaceBlock->fields()[0];
-                        if (field->type()->isMatrix())
+                        const TField *field        = interfaceBlock->fields()[0];
+                        const TType *fieldType     = field->type();
+                        const TBasicType basicType = fieldType->getBasicType();
+                        if (fieldType->isMatrix() ||
+                            ((fieldType->isVector() || fieldType->isScalar()) &&
+                             (basicType == EbtFloat || basicType == EbtInt ||
+                              basicType == EbtUInt)))
                         {
-                            out << "._matrix_" << Decorate(field->name());
+                            out << "." << Decorate(field->name());
                         }
                     }
                 }

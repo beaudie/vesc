@@ -73,6 +73,48 @@ static TString InterfaceBlockFieldTypeString(const TField &field,
     }
 }
 
+static TString InterfaceBlockScalarVectorFieldPaddingString(const TType &type)
+{
+    ASSERT(type.isVector() || type.isScalar());
+    switch (type.getBasicType())
+    {
+        case EbtFloat:
+            switch (type.getNominalSize())
+            {
+                case 1:
+                    return "float3 padding;";
+                case 2:
+                    return "float2 padding;";
+                case 3:
+                    return "float padding;";
+            }
+        case EbtInt:
+            switch (type.getNominalSize())
+            {
+                case 1:
+                    return "int3 padding;";
+                case 2:
+                    return "int2 padding;";
+                case 3:
+                    return "int padding";
+            }
+        case EbtUInt:
+            switch (type.getNominalSize())
+            {
+                case 1:
+                    return "uint3 padding;";
+                case 2:
+                    return "uint2 padding;";
+                case 3:
+                    return "uint padding;";
+            }
+        default:
+            break;
+    }
+
+    return "";
+}
+
 static TString InterfaceBlockStructName(const TInterfaceBlock &interfaceBlock)
 {
     return DecoratePrivate(interfaceBlock.name()) + "_type";
@@ -778,14 +820,30 @@ TString ResourcesHLSL::uniformBlockWithOneLargeArrayMemberString(
     TString hlsl, typeString;
 
     const TField &field                    = *interfaceBlock.fields()[0];
+    const TType &fieldType                 = *field.type();
     const TLayoutBlockStorage blockStorage = interfaceBlock.blockStorage();
-    typeString             = InterfaceBlockFieldTypeString(field, blockStorage, true);
-    const TType &fieldType = *field.type();
+    typeString = InterfaceBlockFieldTypeString(field, blockStorage, true);
+
+    // If the member is an array of scalars or vectors, std140 requires the base array
+    // stride are rounded up to the base alignment of a vec4.
+    TBasicType basicType = fieldType.getBasicType();
+    if (blockStorage == EbsStd140 && (fieldType.isVector() || fieldType.isScalar()) &&
+        (basicType == EbtFloat || basicType == EbtInt || basicType == EbtUInt))
+    {
+        if (arrayIndex == GL_INVALID_INDEX || arrayIndex == 0)
+        {
+            hlsl += "struct std140Padding" + Decorate(field.name()) + " { " + typeString + " " +
+                    Decorate(field.name()) + "; ";
+            hlsl += InterfaceBlockScalarVectorFieldPaddingString(fieldType) + " };\n";
+        }
+        typeString = "std140Padding" + Decorate(field.name());
+    }
+
     if (fieldType.isMatrix())
     {
         if (arrayIndex == GL_INVALID_INDEX || arrayIndex == 0)
         {
-            hlsl += "struct matrix" + Decorate(field.name()) + " { " + typeString + " _matrix_" +
+            hlsl += "struct matrix" + Decorate(field.name()) + " { " + typeString + " " +
                     Decorate(field.name()) + "; };\n";
         }
         typeString = "matrix" + Decorate(field.name());
@@ -888,10 +946,13 @@ bool ResourcesHLSL::shouldTranslateUniformBlockToStructuredBuffer(
     const TInterfaceBlock &interfaceBlock)
 {
     const TType &fieldType = *interfaceBlock.fields()[0]->type();
+    TBasicType basicType   = fieldType.getBasicType();
 
     return (mCompileOptions & SH_DONT_TRANSLATE_UNIFORM_BLOCK_TO_STRUCTUREDBUFFER) == 0 &&
            mSRVRegister < kMaxInputResourceSlotCount && interfaceBlock.fields().size() == 1u &&
-           (fieldType.getStruct() != nullptr || fieldType.isMatrix()) &&
+           (fieldType.getStruct() != nullptr || fieldType.isMatrix() ||
+            ((fieldType.isVector() || fieldType.isScalar()) &&
+             (basicType == EbtFloat || basicType == EbtInt || basicType == EbtUInt))) &&
            fieldType.getNumArraySizes() == 1u &&
            fieldType.getOutermostArraySize() >= kMinArraySizeUseStructuredBuffer;
 }
