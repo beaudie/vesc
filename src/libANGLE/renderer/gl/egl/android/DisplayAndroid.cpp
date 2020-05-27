@@ -199,7 +199,8 @@ void DisplayAndroid::terminate()
     SafeDelete(mEGL);
 }
 
-ContextImpl *DisplayAndroid::createContext(const gl::State &state,
+ContextImpl *DisplayAndroid::createContext(ShareGroupImpl *shareGroup,
+                                           const gl::State &state,
                                            gl::ErrorSet *errorSet,
                                            const egl::Config *configuration,
                                            const gl::Context *shareContext,
