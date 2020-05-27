@@ -55,7 +55,7 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
 
     const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
     ASSERT(executable);
-    size_t xfbBufferCount = executable->getTransformFeedbackBufferCount(contextVk->getState());
+    size_t xfbBufferCount = executable->getTransformFeedbackBufferCount();
 
     for (size_t bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
     {
@@ -220,7 +220,7 @@ void TransformFeedbackVk::updateDescriptorSet(ContextVk *contextVk,
 
     const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
     ASSERT(executable);
-    size_t xfbBufferCount = executable->getTransformFeedbackBufferCount(contextVk->getState());
+    size_t xfbBufferCount = executable->getTransformFeedbackBufferCount();
 
     ASSERT(xfbBufferCount > 0);
     ASSERT(programState.getTransformFeedbackBufferMode() != GL_INTERLEAVED_ATTRIBS ||
@@ -256,7 +256,7 @@ void TransformFeedbackVk::getBufferOffsets(ContextVk *contextVk,
         mState.getBoundProgram()->getTransformFeedbackStrides();
     const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
     ASSERT(executable);
-    size_t xfbBufferCount = executable->getTransformFeedbackBufferCount(contextVk->getState());
+    size_t xfbBufferCount = executable->getTransformFeedbackBufferCount();
 
     ASSERT(xfbBufferCount > 0);
 
