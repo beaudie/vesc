@@ -34,6 +34,24 @@
       "revId": "ca4c47ef0658b117a170b851d1192cb16862af47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fe57d70_f25253f2",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1606,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-27T18:14:59Z",
+      "side": 1,
+      "message": "I\u0027ve created a new PatchSet that eliminates flipY and negFlipY.\n\nI\u0027ve been having difficulty uploading it.  The messages indicate that I have credential problems, but I\u0027ve been through the steps a number of times, and rebooted.  I still get the same errors.  I\u0027m trying rebasing, since Gerrit indicates a merge conflict.",
+      "parentUuid": "0aab3d65_ead1e44e",
+      "revId": "ca4c47ef0658b117a170b851d1192cb16862af47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
