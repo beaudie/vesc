@@ -910,7 +910,8 @@ SurfaceImpl *DisplayOzone::createPbufferSurface(const egl::SurfaceState &state,
     return new SurfaceOzone(state, buffer);
 }
 
-ContextImpl *DisplayOzone::createContext(const gl::State &state,
+ContextImpl *DisplayOzone::createContext(ShareGroupImpl *shareGroup,
+                                         const gl::State &state,
                                          gl::ErrorSet *errorSet,
                                          const egl::Config *configuration,
                                          const gl::Context *shareContext,

@@ -121,7 +121,8 @@ class DisplayOzone final : public DisplayEGL
     SurfaceImpl *createPbufferSurface(const egl::SurfaceState &state,
                                       const egl::AttributeMap &attribs) override;
 
-    ContextImpl *createContext(const gl::State &state,
+    ContextImpl *createContext(ShareGroupImpl *shareGroup,
+                               const gl::State &state,
                                gl::ErrorSet *errorSet,
                                const egl::Config *configuration,
                                const gl::Context *shareContext,

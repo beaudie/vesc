@@ -30,7 +30,8 @@ class DisplayAndroid : public DisplayEGL
     egl::Error initialize(egl::Display *display) override;
     void terminate() override;
 
-    ContextImpl *createContext(const gl::State &state,
+    ContextImpl *createContext(ShareGroupImpl *shareGroup,
+                               const gl::State &state,
                                gl::ErrorSet *errorSet,
                                const egl::Config *configuration,
                                const gl::Context *shareContext,

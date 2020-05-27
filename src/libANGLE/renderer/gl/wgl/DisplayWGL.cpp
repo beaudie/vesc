@@ -463,7 +463,8 @@ SurfaceImpl *DisplayWGL::createPixmapSurface(const egl::SurfaceState &state,
     return nullptr;
 }
 
-rx::ContextImpl *DisplayWGL::createContext(const gl::State &state,
+rx::ContextImpl *DisplayWGL::createContext(ShareGroupImpl *shareGroup,
+                                           const gl::State &state,
                                            gl::ErrorSet *errorSet,
                                            const egl::Config *configuration,
                                            const gl::Context *shareContext,
