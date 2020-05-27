@@ -152,68 +152,12 @@ bool ProgramPipelineState::hasTextures() const
     return false;
 }
 
-bool ProgramPipelineState::hasUniformBuffers() const
-{
-    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
-    {
-        const Program *shaderProgram = getShaderProgram(shaderType);
-        if (shaderProgram && shaderProgram->getState().hasUniformBuffers())
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool ProgramPipelineState::hasStorageBuffers() const
-{
-    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
-    {
-        const Program *shaderProgram = getShaderProgram(shaderType);
-        if (shaderProgram && shaderProgram->getState().hasStorageBuffers())
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool ProgramPipelineState::hasAtomicCounterBuffers() const
-{
-    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
-    {
-        const Program *shaderProgram = getShaderProgram(shaderType);
-        if (shaderProgram && shaderProgram->getState().hasAtomicCounterBuffers())
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool ProgramPipelineState::hasImages() const
 {
     for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasImages())
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool ProgramPipelineState::hasTransformFeedbackOutput() const
-{
-    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
-    {
-        const Program *shaderProgram = getShaderProgram(shaderType);
-        if (shaderProgram && shaderProgram->getState().hasTransformFeedbackOutput())
         {
             return true;
         }
@@ -311,6 +255,21 @@ void ProgramPipeline::updateExecutableAttributes()
     mState.mExecutable->mAttributesMask            = vertexExecutable.mAttributesMask;
 }
 
+void ProgramPipeline::updateTransformFeedbackMembers()
+{
+    Program *vertexProgram = getShaderProgram(gl::ShaderType::Vertex);
+
+    if (!vertexProgram)
+    {
+        return;
+    }
+
+    const ProgramExecutable &vertexExecutable     = vertexProgram->getExecutable();
+    mState.mExecutable->mTransformFeedbackStrides = vertexExecutable.mTransformFeedbackStrides;
+    mState.mExecutable->mLinkedTransformFeedbackVaryings =
+        vertexExecutable.mLinkedTransformFeedbackVaryings;
+}
+
 void ProgramPipeline::updateExecutableTextures()
 {
     for (const ShaderType shaderType : mState.mExecutable->getLinkedShaderStages())
@@ -327,15 +286,41 @@ void ProgramPipeline::updateExecutableTextures()
     }
 }
 
+void ProgramPipeline::updateHasBuffers()
+{
+    mState.mExecutable->mHasUniformBuffers       = false;
+    mState.mExecutable->mHasStorageBuffers       = false;
+    mState.mExecutable->mHasAtomicCounterBuffers = false;
+
+    for (const gl::ShaderType shaderType : mState.mExecutable->getLinkedShaderStages())
+    {
+        const Program *shaderProgram = getShaderProgram(shaderType);
+        if (shaderProgram && shaderProgram->getExecutable().hasUniformBuffers())
+        {
+            mState.mExecutable->mHasUniformBuffers = true;
+        }
+        if (shaderProgram && shaderProgram->getExecutable().hasStorageBuffers())
+        {
+            mState.mExecutable->mHasStorageBuffers = true;
+        }
+        if (shaderProgram && shaderProgram->getExecutable().hasAtomicCounterBuffers())
+        {
+            mState.mExecutable->mHasAtomicCounterBuffers = true;
+        }
+    }
+}
+
 void ProgramPipeline::updateExecutable()
 {
     mState.mExecutable->reset();
 
     // Vertex Shader ProgramExecutable properties
     updateExecutableAttributes();
+    updateTransformFeedbackMembers();
 
     // All Shader ProgramExecutable properties
     updateExecutableTextures();
+    updateHasBuffers();
 }
 
 ProgramMergedVaryings ProgramPipeline::getMergedVaryings() const

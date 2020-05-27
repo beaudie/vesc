@@ -185,14 +185,23 @@ class ProgramExecutable
 
     bool hasDefaultUniforms() const;
     bool hasTextures() const;
-    bool hasUniformBuffers() const;
-    bool hasStorageBuffers() const;
-    bool hasAtomicCounterBuffers() const;
+    bool hasUniformBuffers() const { return mHasUniformBuffers || !getUniformBlocks().empty(); }
+    bool hasStorageBuffers() const
+    {
+        return mHasStorageBuffers || !getShaderStorageBlocks().empty();
+    }
+    bool hasAtomicCounterBuffers() const
+    {
+        return mHasAtomicCounterBuffers || !getAtomicCounterBuffers().empty();
+    }
     bool hasImages() const;
-    bool hasTransformFeedbackOutput() const;
+    bool hasTransformFeedbackOutput() const
+    {
+        return !getLinkedTransformFeedbackVaryings().empty();
+    }
 
     // Count the number of uniform and storage buffer declarations, counting arrays as one.
-    size_t getTransformFeedbackBufferCount(const gl::State &glState) const;
+    size_t getTransformFeedbackBufferCount() const { return mTransformFeedbackStrides.size(); }
 
     bool linkValidateGlobalNames(InfoLog &infoLog) const;
 
@@ -354,6 +363,10 @@ class ProgramExecutable
     std::vector<AtomicCounterBuffer> mAtomicCounterBuffers;
     RangeUI mImageUniformRange;
     std::vector<InterfaceBlock> mShaderStorageBlocks;
+
+    bool mHasUniformBuffers;
+    bool mHasStorageBuffers;
+    bool mHasAtomicCounterBuffers;
 
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedOutputVaryings;
     ShaderMap<std::vector<sh::ShaderVariable>> mLinkedInputVaryings;

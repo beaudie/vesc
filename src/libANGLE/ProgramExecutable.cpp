@@ -28,7 +28,10 @@ ProgramExecutable::ProgramExecutable()
       mCanDrawWith(false),
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
       mSamplerUniformRange(0, 0),
-      mImageUniformRange(0, 0)
+      mImageUniformRange(0, 0),
+      mHasUniformBuffers(false),
+      mHasStorageBuffers(false),
+      mHasAtomicCounterBuffers(false)
 {
     reset();
 }
@@ -61,7 +64,10 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mUniformBlocks(other.mUniformBlocks),
       mAtomicCounterBuffers(other.mAtomicCounterBuffers),
       mImageUniformRange(other.mImageUniformRange),
-      mShaderStorageBlocks(other.mShaderStorageBlocks)
+      mShaderStorageBlocks(other.mShaderStorageBlocks),
+      mHasUniformBuffers(other.mHasUniformBuffers),
+      mHasStorageBuffers(other.mHasStorageBuffers),
+      mHasAtomicCounterBuffers(other.mHasAtomicCounterBuffers)
 {
     reset();
 }
@@ -190,6 +196,7 @@ AttributesMask ProgramExecutable::getAttributesMask() const
     return mAttributesMask;
 }
 
+// TODO: http://anglebug.com/4520: Needs  mDefaultUniformRange moved to ProgramExecutable
 bool ProgramExecutable::hasDefaultUniforms() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
@@ -201,6 +208,7 @@ bool ProgramExecutable::hasDefaultUniforms() const
     return mProgramPipelineState->hasDefaultUniforms();
 }
 
+// TODO: http://anglebug.com/4520: Needs  mSamplerBindings moved to ProgramExecutable
 bool ProgramExecutable::hasTextures() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
@@ -212,39 +220,7 @@ bool ProgramExecutable::hasTextures() const
     return mProgramPipelineState->hasTextures();
 }
 
-bool ProgramExecutable::hasUniformBuffers() const
-{
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
-    {
-        return mProgramState->hasUniformBuffers();
-    }
-
-    return mProgramPipelineState->hasUniformBuffers();
-}
-
-bool ProgramExecutable::hasStorageBuffers() const
-{
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
-    {
-        return mProgramState->hasStorageBuffers();
-    }
-
-    return mProgramPipelineState->hasStorageBuffers();
-}
-
-bool ProgramExecutable::hasAtomicCounterBuffers() const
-{
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
-    {
-        return mProgramState->hasAtomicCounterBuffers();
-    }
-
-    return mProgramPipelineState->hasAtomicCounterBuffers();
-}
-
+// TODO: http://anglebug.com/4520: Needs  mImageBindings moved to ProgramExecutable
 bool ProgramExecutable::hasImages() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
@@ -254,30 +230,6 @@ bool ProgramExecutable::hasImages() const
     }
 
     return mProgramPipelineState->hasImages();
-}
-
-bool ProgramExecutable::hasTransformFeedbackOutput() const
-{
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
-    {
-        return mProgramState->hasTransformFeedbackOutput();
-    }
-
-    return mProgramPipelineState->hasTransformFeedbackOutput();
-}
-
-size_t ProgramExecutable::getTransformFeedbackBufferCount(const gl::State &glState) const
-{
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
-    {
-        return mProgramState->getTransformFeedbackBufferCount();
-    }
-
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
-
-    return 0;
 }
 
 void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
