@@ -52,6 +52,24 @@
       "revId": "ca4c47ef0658b117a170b851d1192cb16862af47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f282cc2a_03987564",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1606,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-27T19:14:33Z",
+      "side": 1,
+      "message": "FYI ... the problem was apparently the need for a rebase, not a credential problem.",
+      "parentUuid": "4fe57d70_f25253f2",
+      "revId": "ca4c47ef0658b117a170b851d1192cb16862af47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
