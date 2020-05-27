@@ -28,6 +28,109 @@ _PRIMARY_EXPORT_TARGETS = [
 ]
 
 
+def _CheckCommitMessageFormatting(input_api, output_api):
+
+    def _IsLineBlank(line):
+        return line.isspace() or line == ""
+
+    whitelist_strings = ['Revert "', "Roll "]
+    summary_linelength_warning_lower_limit = 65
+    summary_linelength_warning_upper_limit = 70
+    description_linelength_limit = 71
+
+    git_output = subprocess.check_output(["git", "log", "-n", "1", "--pretty=format:%B"])
+    commit_msg_lines = git_output.expandtabs(4).splitlines()
+    if len(commit_msg_lines) > 0:
+        for whitelist_string in whitelist_strings:
+            if commit_msg_lines[0].startswith(whitelist_string):
+                return []
+    errors = []
+    description_body_end_index = len(commit_msg_lines) - 1
+    # get rid of newlines after the last paragraph but not the whitespace at the end of the last line
+    # of the last paragraph
+    while description_body_end_index >= 0 and \
+     _IsLineBlank(commit_msg_lines[description_body_end_index]):
+        description_body_end_index -= 1
+    if description_body_end_index < 0:
+        return output_api.PresubmitError("Please ensure that commit message is not blank.")
+
+    # get rid of the last paragraph, which we assume to always be the tags
+    last_paragraph_line_count = 0
+    while description_body_end_index >= 0 and \
+    not _IsLineBlank(commit_msg_lines[description_body_end_index]):
+        last_paragraph_line_count += 1
+        description_body_end_index -= 1
+    if last_paragraph_line_count == 0:
+        errors.append(
+            output_api.PresubmitError("Please ensure that there are tags in your description."))
+
+    # count the number of blank lines between description body and tags
+    blank_line_count = 0
+    while description_body_end_index >= 0 and \
+     _IsLineBlank(commit_msg_lines[description_body_end_index]):
+        blank_line_count += 1
+        description_body_end_index -= 1
+    if blank_line_count != 1:
+        errors.append(
+            output_api.PresubmitError('Please ensure that there exists only 1 blank line '
+                                      'between tags and description summary.'))
+
+    if description_body_end_index < 0:
+        errors.append(
+            output_api.PresubmitError('Please ensure that your description summary'
+                                      ' and description body are not blank.'))
+        return errors
+
+    # getting rid of newlines before description summary, but not the whitespace at the start of
+    # the description summary
+    index = 0
+    while index <= description_body_end_index and _IsLineBlank(commit_msg_lines[index]):
+        index += 1
+    if index > description_body_end_index:
+        errors.append(
+            output_api.PresubmitError('Please ensure that your description summary'
+                                      ' and description body are not blank.'))
+        return errors
+    elif summary_linelength_warning_lower_limit <= len(commit_msg_lines[index]) \
+     <= summary_linelength_warning_upper_limit:
+        errors.append(
+            output_api.PresubmitPromptWarning(
+                "Your description summary should be 64 or less characters."))
+    elif len(commit_msg_lines[index]) > summary_linelength_warning_upper_limit:
+        errors.append(
+            output_api.PresubmitError(
+                "Please ensure that your description summary is on one line of " +
+                str(summary_linelength_warning_upper_limit) + " or less characters."))
+    index += 1
+    blank_line_count = 0
+    # count the number of blank lines between the description summary and the description body
+    while index <= description_body_end_index and _IsLineBlank(commit_msg_lines[index]):
+        blank_line_count += 1
+        index += 1
+    if blank_line_count != 1:
+        errors.append(
+            output_api.PresubmitError(
+                'Please ensure that there exists only 1 blank line between description'
+                ' summary and description body.'))
+    body_line_count = 0
+    is_bodyline_length_over_limit = False
+    # increment index until we reach the end of description body at description_body_end_index
+    while index <= description_body_end_index:
+        body_line_count += 1
+        if not is_bodyline_length_over_limit and \
+         len(commit_msg_lines[index]) > description_linelength_limit:
+            is_bodyline_length_over_limit = True
+        index += 1
+    if body_line_count == 0:
+        errors.append(
+            output_api.PresubmitError("Please ensure that your description body is not blank."))
+    elif is_bodyline_length_over_limit:
+        errors.append(
+            output_api.PresubmitError("Please ensure that your description body is wrapped to " +
+                                      str(description_linelength_limit) + " characters or less."))
+    return errors
+
+
 def _CheckChangeHasBugField(input_api, output_api):
     """Requires that the changelist have a Bug: field from a known project."""
     bugs = input_api.change.BugsFromDescription()
@@ -230,16 +333,17 @@ def _CheckNonAsciiInSourceFiles(input_api, output_api):
 
 def CheckChangeOnUpload(input_api, output_api):
     results = []
-    results.extend(_CheckTabsInSourceFiles(input_api, output_api))
-    results.extend(_CheckNonAsciiInSourceFiles(input_api, output_api))
-    results.extend(_CheckCodeGeneration(input_api, output_api))
-    results.extend(_CheckChangeHasBugField(input_api, output_api))
-    results.extend(input_api.canned_checks.CheckChangeHasDescription(input_api, output_api))
-    results.extend(_CheckNewHeaderWithoutGnChange(input_api, output_api))
-    results.extend(_CheckExportValidity(input_api, output_api))
-    results.extend(
-        input_api.canned_checks.CheckPatchFormatted(
-            input_api, output_api, result_factory=output_api.PresubmitError))
+    # results.extend(_CheckTabsInSourceFiles(input_api, output_api))
+    # results.extend(_CheckNonAsciiInSourceFiles(input_api, output_api))
+    # results.extend(_CheckCodeGeneration(input_api, output_api))
+    # results.extend(_CheckChangeHasBugField(input_api, output_api))
+    # results.extend(input_api.canned_checks.CheckChangeHasDescription(input_api, output_api))
+    # results.extend(_CheckNewHeaderWithoutGnChange(input_api, output_api))
+    # results.extend(_CheckExportValidity(input_api, output_api))
+    # results.extend(
+    #     input_api.canned_checks.CheckPatchFormatted(
+    #         input_api, output_api, result_factory=output_api.PresubmitError))
+    results.extend(_CheckCommitMessageFormatting(input_api, output_api))
     return results
 
 
