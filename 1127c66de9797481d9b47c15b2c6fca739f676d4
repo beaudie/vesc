@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb997a8a_4de2a919",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T06:07:32Z",
+      "side": 1,
+      "message": "It looks like you\u0027re just checking if there are any xfb buffers, so can this check be changed to the following and moved outside of the loop?\n\n        if (!mTransformFeedbackBufferSerials.empty())\n\nOr is the list of buffers that\u0027s passed in a subset of the total xfb buffers that are currently active for the context?",
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66d75123_b4bf6bd3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T06:07:32Z",
+      "side": 1,
+      "message": "This changes the behavior so we no longer do:\n\n    mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);\n\nIs this intentional?",
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79b392ba_9849af22",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T06:07:32Z",
+      "side": 1,
+      "message": "For consistency, I think these should both either check VK_FALSE/TRUE, or neither should.   I\u0027m fine with not checking, since they are 0/1, so the \u0027\u003d\u003d VK_TRUE\u0027 can be removed.",
+      "range": {
+        "startLine": 1652,
+        "startChar": 29,
+        "endLine": 1652,
+        "endChar": 94
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c7657df_9aa97c09",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T06:07:32Z",
+      "side": 1,
+      "message": "Are there bugs tracking these failures?",
+      "range": {
+        "startLine": 1777,
+        "startChar": 0,
+        "endLine": 1781,
+        "endChar": 63
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
