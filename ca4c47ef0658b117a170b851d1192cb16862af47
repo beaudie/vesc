@@ -16,6 +16,24 @@
       "revId": "ca4c47ef0658b117a170b851d1192cb16862af47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aab3d65_ead1e44e",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1606,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T14:53:04Z",
+      "side": 1,
+      "message": "My guess is minimizing the size of the uniforms and doing more work in compute is faster.",
+      "parentUuid": "238b7efa_63ec5300",
+      "revId": "ca4c47ef0658b117a170b851d1192cb16862af47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
