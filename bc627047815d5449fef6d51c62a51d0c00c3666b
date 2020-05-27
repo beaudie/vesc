@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8df5e517_10ba38bf",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T00:04:46Z",
+      "side": 1,
+      "message": "Oh, I thought a \"default\" build was a release build, not a debug build.   Good to know I was backwards there.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 26
+      },
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51e60ef7_4a4c5450",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 1
@@ -13,6 +36,57 @@
       "writtenOn": "2020-05-26T22:31:12Z",
       "side": 1,
       "message": "Probably don\u0027t need symbol_level, that will auto default to something appropriate based on is_debug. At least according to the description for it from gn args --list.",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99a6f30b_af93bbf8",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T00:04:46Z",
+      "side": 1,
+      "message": "I don\u0027t remember if this came up before, but we may want to set:\n    is_official_build \u003d true\n\nI think this does some extra checking also (like making sure is_debug \u003d false).",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b237c22e_06f80fca",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T00:04:46Z",
+      "side": 1,
+      "message": "What\u0027s a \"Triage\" build used for?",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f48a7ab_42e6f95d",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-27T00:04:46Z",
+      "side": 1,
+      "message": "Oh, we don\u0027t want this for release builds?   It feels a little contradictory that release builds aren\u0027t official builds though (maybe it\u0027s just badly named)?\n\nWhat does \"enables level of optimization beyond release\" mean?   Wouldn\u0027t we want to be as optimized as possible for release builds?",
       "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
