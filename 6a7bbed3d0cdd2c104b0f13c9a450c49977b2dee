@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9c164ea3_bbc117c4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1185209
+      },
+      "writtenOn": "2020-05-27T12:22:38Z",
+      "side": 1,
+      "message": "If I recall when setting this up in Skia you\u0027ll want this to be the min of the application.apiVersion and the physicalDevice version. The physical device can have a lower supported version than the instance",
+      "range": {
+        "startLine": 823,
+        "startChar": 47,
+        "endLine": 823,
+        "endChar": 73
+      },
+      "revId": "6a7bbed3d0cdd2c104b0f13c9a450c49977b2dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1c098c3b_4bf5e73e",
         "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
         "patchSetId": 1
@@ -61,6 +84,30 @@
       "side": 1,
       "message": "I think they are unrelated.\n\n+cc egdaniel@google.com, Hi Greg, could you please give us some detail of it? Thanks.",
       "parentUuid": "d0430b64_40422355",
+      "range": {
+        "startLine": 57,
+        "startChar": 43,
+        "endLine": 57,
+        "endChar": 53
+      },
+      "revId": "6a7bbed3d0cdd2c104b0f13c9a450c49977b2dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a263aa2c_656e703e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1185209
+      },
+      "writtenOn": "2020-05-27T12:22:38Z",
+      "side": 1,
+      "message": "TBH I think the best bet would be to read through the allocator code to see exactly how the two values are used. But in general, if I recall correctly, the preferredLargeHeapBlockSize is the max size of memory that the allocator will use for shared, suballocatable memory (I think it starts with blocks that are like 1/16 of max or something like that, and grows them). Any requests for allocations larger than preferredLargeHeapBlockSize gets put into its own allocation.\n\nWhen the dedicated memory allocation is available (either by being in 1.1 or through extension), I believe the allocator will ask the driver if any allocations it is making less than preferredLargeHeapBlockSize would be better in their own allocation instead of a suballocated block. The driver may return it should be its own based on size, format, usage, image/buffer, etc.\n\nFWIW the 4MBs was just decided on based on manual testing on Android. A lot of the images we were seeing there were going into their own dedicated allocations regardless, and thus we were getting very large allocations which we used for our buffers (index, uniform, vertex, transfer, etc.). But these buffers didn\u0027t use much of the allocated memory so there was a lot of wasted space, causing memory pressure issues.",
+      "parentUuid": "434791cc_dcab0e54",
       "range": {
         "startLine": 57,
         "startChar": 43,
