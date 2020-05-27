@@ -178,6 +178,30 @@
     },
     {
       "key": {
+        "uuid": "d4a3829f_5f63c8a5",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T17:17:48Z",
+      "side": 1,
+      "message": "How does that indicate the default is true? They should default to off in Release always unless dcheck_always_on is enabled.",
+      "parentUuid": "70d2fcb2_bb118467",
+      "range": {
+        "startLine": 176,
+        "startChar": 40,
+        "endLine": 176,
+        "endChar": 45
+      },
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b237c22e_06f80fca",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 1
@@ -225,6 +249,24 @@
       "side": 1,
       "message": "This config goes beyond what a normal Debug build would give you, for use when triaging issues.  I\u0027m delicately trying to include more info down here that isn\u0027t redundant with the \"Debug\" config at the top of the doc.  Maybe I could rename it debug-with-asserts?  dcheck_always_on is the only key difference.",
       "parentUuid": "e9af0875_73bc18b9",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "447bd538_afecab0f",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T17:17:48Z",
+      "side": 1,
+      "message": "Oh, dcheck_always_on is irrelevant in debug. Asserts are always on in debug. Probably should remove this config.",
+      "parentUuid": "29674a29_59c82954",
       "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
