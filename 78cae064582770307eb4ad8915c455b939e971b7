@@ -106,6 +106,24 @@
       "revId": "78cae064582770307eb4ad8915c455b939e971b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faa64016_89075291",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3440,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2020-05-27T00:15:52Z",
+      "side": 1,
+      "message": "Please take a look at the follow-on CL: https://chromium-review.googlesource.com/c/angle/angle/+/2216700\n\nI kept/renamed the two float\u0027s as flipY and negFlipY.  See their uses.\n\nPerhaps Jamie and/or Shabi will disagree with me, and want the additional swizzling.",
+      "parentUuid": "0081400a_705a12af",
+      "revId": "78cae064582770307eb4ad8915c455b939e971b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
