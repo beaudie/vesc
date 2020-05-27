@@ -283,4 +283,9 @@ bool DisplayVk::isRobustResourceInitEnabled() const
     // We return true if any surface was created with robust resource init enabled.
     return mHasSurfaceWithRobustInit;
 }
+
+ShareGroupImpl *DisplayVk::createShareGroup()
+{
+    return nullptr;
+}
 }  // namespace rx

@@ -64,6 +64,7 @@ namespace rx
 {
 class ContextImpl;
 class EGLImplFactory;
+class ShareGroupImpl;
 }  // namespace rx
 
 namespace egl
@@ -72,6 +73,23 @@ class AttributeMap;
 class Surface;
 struct Config;
 class Thread;
+class Context;
+
+class ShareGroup : angle::NonCopyable
+{
+  public:
+    ShareGroup(rx::EGLImplFactory *factory);
+    void addRef();
+    void release(const gl::Context *context);
+
+  protected:
+    ~ShareGroup();
+
+  private:
+    size_t mRefCount;
+    std::unique_ptr<rx::ShareGroupImpl> mImplementation;
+};
+
 }  // namespace egl
 
 namespace gl
@@ -517,6 +535,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     // Once a context is setShared() it cannot be undone
     void setShared() { mShared = true; }
 
+    egl::ShareGroup *getShareGroup() const { return mShareGroup; }
     const State &getState() const { return mState; }
     GLint getClientMajorVersion() const { return mState.getClientMajorVersion(); }
     GLint getClientMinorVersion() const { return mState.getClientMinorVersion(); }
@@ -660,6 +679,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     void convertPpoToComputeOrDraw(bool isCompute);
 
+    egl::ShareGroup *mShareGroup;
     State mState;
     bool mShared;
     bool mSkipValidation;
