@@ -152,68 +152,12 @@ bool ProgramPipelineState::hasTextures() const
     return false;
 }
 
-bool ProgramPipelineState::hasUniformBuffers() const
-{
-    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
-    {
-        const Program *shaderProgram = getShaderProgram(shaderType);
-        if (shaderProgram && shaderProgram->getState().hasUniformBuffers())
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool ProgramPipelineState::hasStorageBuffers() const
-{
-    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
-    {
-        const Program *shaderProgram = getShaderProgram(shaderType);
-        if (shaderProgram && shaderProgram->getState().hasStorageBuffers())
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool ProgramPipelineState::hasAtomicCounterBuffers() const
-{
-    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
-    {
-        const Program *shaderProgram = getShaderProgram(shaderType);
-        if (shaderProgram && shaderProgram->getState().hasAtomicCounterBuffers())
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool ProgramPipelineState::hasImages() const
 {
     for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
     {
         const Program *shaderProgram = getShaderProgram(shaderType);
         if (shaderProgram && shaderProgram->getState().hasImages())
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool ProgramPipelineState::hasTransformFeedbackOutput() const
-{
-    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
-    {
-        const Program *shaderProgram = getShaderProgram(shaderType);
-        if (shaderProgram && shaderProgram->getState().hasTransformFeedbackOutput())
         {
             return true;
         }

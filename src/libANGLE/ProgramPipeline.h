@@ -68,11 +68,7 @@ class ProgramPipelineState final : angle::NonCopyable
 
     bool hasDefaultUniforms() const;
     bool hasTextures() const;
-    bool hasUniformBuffers() const;
-    bool hasStorageBuffers() const;
-    bool hasAtomicCounterBuffers() const;
     bool hasImages() const;
-    bool hasTransformFeedbackOutput() const;
 
   private:
     void useProgramStage(const Context *context, ShaderType shaderType, Program *shaderProgram);
