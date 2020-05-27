@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26232621_52f3f88e",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 21
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T15:41:01Z",
+      "side": 1,
+      "message": "nit: can remove this trailing whitespace",
+      "range": {
+        "startLine": 744,
+        "startChar": 33,
+        "endLine": 744,
+        "endChar": 34
+      },
+      "revId": "93fe77d77b73a6bd5a45cc29c9f2d23b3b343a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ce96269_e964feb5",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 21
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-27T15:41:01Z",
+      "side": 1,
+      "message": "neat, this overrides properly?",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 99
+      },
+      "revId": "93fe77d77b73a6bd5a45cc29c9f2d23b3b343a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
