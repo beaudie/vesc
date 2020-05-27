@@ -28,7 +28,13 @@ ProgramExecutable::ProgramExecutable()
       mCanDrawWith(false),
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
       mSamplerUniformRange(0, 0),
-      mImageUniformRange(0, 0)
+      mImageUniformRange(0, 0),
+      mHasGraphicsUniformBuffers(false),
+      mHasComputeUniformBuffers(false),
+      mHasGraphicsStorageBuffers(false),
+      mHasComputeStorageBuffers(false),
+      mHasGraphicsAtomicCounterBuffers(false),
+      mHasComputeAtomicCounterBuffers(false)
 {
     reset();
 }
@@ -61,7 +67,13 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mUniformBlocks(other.mUniformBlocks),
       mAtomicCounterBuffers(other.mAtomicCounterBuffers),
       mImageUniformRange(other.mImageUniformRange),
-      mShaderStorageBlocks(other.mShaderStorageBlocks)
+      mShaderStorageBlocks(other.mShaderStorageBlocks),
+      mHasGraphicsUniformBuffers(other.mHasGraphicsUniformBuffers),
+      mHasComputeUniformBuffers(other.mHasComputeUniformBuffers),
+      mHasGraphicsStorageBuffers(other.mHasGraphicsStorageBuffers),
+      mHasComputeStorageBuffers(other.mHasComputeStorageBuffers),
+      mHasGraphicsAtomicCounterBuffers(other.mHasGraphicsAtomicCounterBuffers),
+      mHasComputeAtomicCounterBuffers(other.mHasComputeAtomicCounterBuffers)
 {
     reset();
 }
@@ -91,6 +103,13 @@ void ProgramExecutable::reset()
     mAtomicCounterBuffers.clear();
     mOutputVariables.clear();
     mOutputLocations.clear();
+
+    mHasGraphicsUniformBuffers       = false;
+    mHasComputeUniformBuffers        = false;
+    mHasGraphicsStorageBuffers       = false;
+    mHasComputeStorageBuffers        = false;
+    mHasGraphicsAtomicCounterBuffers = false;
+    mHasComputeAtomicCounterBuffers  = false;
 }
 
 void ProgramExecutable::load(gl::BinaryInputStream *stream)
@@ -105,6 +124,13 @@ void ProgramExecutable::load(gl::BinaryInputStream *stream)
 
     mLinkedGraphicsShaderStages = ShaderBitSet(stream->readInt<uint8_t>());
     mLinkedComputeShaderStages  = ShaderBitSet(stream->readInt<uint8_t>());
+
+    mHasGraphicsUniformBuffers       = stream->readBool();
+    mHasComputeUniformBuffers        = stream->readBool();
+    mHasGraphicsStorageBuffers       = stream->readBool();
+    mHasComputeStorageBuffers        = stream->readBool();
+    mHasGraphicsAtomicCounterBuffers = stream->readBool();
+    mHasComputeAtomicCounterBuffers  = stream->readBool();
 }
 
 void ProgramExecutable::save(gl::BinaryOutputStream *stream) const
@@ -118,6 +144,13 @@ void ProgramExecutable::save(gl::BinaryOutputStream *stream) const
 
     stream->writeInt(mLinkedGraphicsShaderStages.bits());
     stream->writeInt(mLinkedComputeShaderStages.bits());
+
+    stream->writeInt(static_cast<bool>(mHasGraphicsUniformBuffers));
+    stream->writeInt(static_cast<bool>(mHasComputeUniformBuffers));
+    stream->writeInt(static_cast<bool>(mHasGraphicsStorageBuffers));
+    stream->writeInt(static_cast<bool>(mHasComputeStorageBuffers));
+    stream->writeInt(static_cast<bool>(mHasGraphicsAtomicCounterBuffers));
+    stream->writeInt(static_cast<bool>(mHasComputeAtomicCounterBuffers));
 }
 
 const ProgramState *ProgramExecutable::getProgramState(ShaderType shaderType) const
@@ -190,6 +223,7 @@ AttributesMask ProgramExecutable::getAttributesMask() const
     return mAttributesMask;
 }
 
+// TODO: http://anglebug.com/4520: Needs  mDefaultUniformRange moved to ProgramExecutable
 bool ProgramExecutable::hasDefaultUniforms() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
@@ -201,6 +235,7 @@ bool ProgramExecutable::hasDefaultUniforms() const
     return mProgramPipelineState->hasDefaultUniforms();
 }
 
+// TODO: http://anglebug.com/4520: Needs  mSamplerBindings moved to ProgramExecutable
 bool ProgramExecutable::hasTextures() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
@@ -214,37 +249,41 @@ bool ProgramExecutable::hasTextures() const
 
 bool ProgramExecutable::hasUniformBuffers() const
 {
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
+    if (isCompute())
     {
-        return mProgramState->hasUniformBuffers();
+        return mHasGraphicsUniformBuffers || !getUniformBlocks().empty();
     }
-
-    return mProgramPipelineState->hasUniformBuffers();
+    else
+    {
+        return mHasComputeUniformBuffers || !getUniformBlocks().empty();
+    }
 }
 
 bool ProgramExecutable::hasStorageBuffers() const
 {
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
+    if (isCompute())
     {
-        return mProgramState->hasStorageBuffers();
+        return mHasComputeStorageBuffers || !getShaderStorageBlocks().empty();
     }
-
-    return mProgramPipelineState->hasStorageBuffers();
+    else
+    {
+        return mHasGraphicsStorageBuffers || !getShaderStorageBlocks().empty();
+    }
 }
 
 bool ProgramExecutable::hasAtomicCounterBuffers() const
 {
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
+    if (isCompute())
     {
-        return mProgramState->hasAtomicCounterBuffers();
+        return mHasComputeAtomicCounterBuffers || !getAtomicCounterBuffers().empty();
     }
-
-    return mProgramPipelineState->hasAtomicCounterBuffers();
+    else
+    {
+        return mHasGraphicsAtomicCounterBuffers || !getAtomicCounterBuffers().empty();
+    }
 }
 
+// TODO: http://anglebug.com/4520: Needs  mImageBindings moved to ProgramExecutable
 bool ProgramExecutable::hasImages() const
 {
     ASSERT(mProgramState || mProgramPipelineState);
@@ -254,30 +293,6 @@ bool ProgramExecutable::hasImages() const
     }
 
     return mProgramPipelineState->hasImages();
-}
-
-bool ProgramExecutable::hasTransformFeedbackOutput() const
-{
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
-    {
-        return mProgramState->hasTransformFeedbackOutput();
-    }
-
-    return mProgramPipelineState->hasTransformFeedbackOutput();
-}
-
-size_t ProgramExecutable::getTransformFeedbackBufferCount(const gl::State &glState) const
-{
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
-    {
-        return mProgramState->getTransformFeedbackBufferCount();
-    }
-
-    // TODO(timvp): http://anglebug.com/3570: Support program pipelines
-
-    return 0;
 }
 
 void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
