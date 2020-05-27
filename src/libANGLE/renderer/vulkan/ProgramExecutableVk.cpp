@@ -655,8 +655,9 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
          !programStates[gl::ShaderType::Vertex]->getLinkedTransformFeedbackVaryings().empty());
     if (hasVertexShader && transformFeedback && hasXfbVaryings)
     {
-        size_t xfbBufferCount =
-            programStates[gl::ShaderType::Vertex]->getTransformFeedbackBufferCount();
+        const gl::ProgramExecutable &executable =
+            programStates[gl::ShaderType::Vertex]->getExecutable();
+        size_t xfbBufferCount                    = executable.getTransformFeedbackBufferCount();
         TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(transformFeedback);
         transformFeedbackVk->updateDescriptorSetLayout(contextVk,
                                                        mVariableInfoMap[gl::ShaderType::Vertex],
@@ -1221,9 +1222,10 @@ void ProgramExecutableVk::updateTransformFeedbackDescriptorSetImpl(
         // otherwise Vulkan validation layer generates errors.
         if (transformFeedback)
         {
+            const gl::ProgramExecutable &executable  = programState.getExecutable();
             TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(transformFeedback);
             transformFeedbackVk->initDescriptorSet(
-                contextVk, programState.getTransformFeedbackBufferCount(), &mEmptyBuffer,
+                contextVk, executable.getTransformFeedbackBufferCount(), &mEmptyBuffer,
                 mDescriptorSets[kUniformsAndXfbDescriptorSetIndex]);
         }
         return;
