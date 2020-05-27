@@ -26,6 +26,7 @@ namespace gl
 class Context;
 class ErrorSet;
 class State;
+class SharedState;
 }  // namespace gl
 
 namespace rx
@@ -76,6 +77,8 @@ class EGLImplFactory : angle::NonCopyable
                                                                  const egl::AttributeMap &attribs);
 
     virtual EGLSyncImpl *createSync(const egl::AttributeMap &attribs);
+
+    virtual gl::SharedState *createSharedState() = 0;
 };
 
 inline ExternalImageSiblingImpl *EGLImplFactory::createExternalImageSibling(

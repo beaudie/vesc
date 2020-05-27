@@ -63,6 +63,7 @@ class TypedResourceManager : public ResourceManagerBase<HandleAllocatorType>
 {
   public:
     TypedResourceManager() {}
+    ~TypedResourceManager() override;
 
     void deleteObject(const Context *context, IDType handle);
     ANGLE_INLINE bool isHandleGenerated(IDType handle) const
@@ -78,8 +79,6 @@ class TypedResourceManager : public ResourceManagerBase<HandleAllocatorType>
     typename ResourceMap<ResourceType, IDType>::Iterator end() const { return mObjectMap.end(); }
 
   protected:
-    ~TypedResourceManager() override;
-
     // Inlined in the header for performance.
     template <typename... ArgTypes>
     ANGLE_INLINE ResourceType *checkObjectAllocation(rx::GLImplFactory *factory,
@@ -125,6 +124,7 @@ class TypedResourceManager : public ResourceManagerBase<HandleAllocatorType>
 class BufferManager : public TypedResourceManager<Buffer, HandleAllocator, BufferManager, BufferID>
 {
   public:
+    ~BufferManager() override {}
     BufferID createBuffer();
     Buffer *getBuffer(BufferID handle) const;
 
@@ -136,15 +136,13 @@ class BufferManager : public TypedResourceManager<Buffer, HandleAllocator, Buffe
     // TODO(jmadill): Investigate design which doesn't expose these methods publicly.
     static Buffer *AllocateNewObject(rx::GLImplFactory *factory, BufferID handle);
     static void DeleteObject(const Context *context, Buffer *buffer);
-
-  protected:
-    ~BufferManager() override {}
 };
 
 class ShaderProgramManager : public ResourceManagerBase<HandleAllocator>
 {
   public:
     ShaderProgramManager();
+    ~ShaderProgramManager() override;
 
     ShaderProgramID createShader(rx::GLImplFactory *factory,
                                  const Limitations &rendererLimitations,
@@ -163,9 +161,6 @@ class ShaderProgramManager : public ResourceManagerBase<HandleAllocator>
     // For capture only.
     const ResourceMap<Shader, ShaderProgramID> &getShadersForCapture() const { return mShaders; }
     const ResourceMap<Program, ShaderProgramID> &getProgramsForCapture() const { return mPrograms; }
-
-  protected:
-    ~ShaderProgramManager() override;
 
   private:
     template <typename ObjectType, typename IDType>
@@ -216,6 +211,8 @@ class RenderbufferManager : public TypedResourceManager<Renderbuffer,
                                                         RenderbufferID>
 {
   public:
+    ~RenderbufferManager() override {}
+
     RenderbufferID createRenderbuffer();
     Renderbuffer *getRenderbuffer(RenderbufferID handle) const;
 
@@ -226,15 +223,14 @@ class RenderbufferManager : public TypedResourceManager<Renderbuffer,
 
     static Renderbuffer *AllocateNewObject(rx::GLImplFactory *factory, RenderbufferID handle);
     static void DeleteObject(const Context *context, Renderbuffer *renderbuffer);
-
-  protected:
-    ~RenderbufferManager() override {}
 };
 
 class SamplerManager
     : public TypedResourceManager<Sampler, HandleAllocator, SamplerManager, SamplerID>
 {
   public:
+    ~SamplerManager() override {}
+
     SamplerID createSampler();
     Sampler *getSampler(SamplerID handle) const;
     bool isSampler(SamplerID sampler) const;
@@ -246,21 +242,17 @@ class SamplerManager
 
     static Sampler *AllocateNewObject(rx::GLImplFactory *factory, SamplerID handle);
     static void DeleteObject(const Context *context, Sampler *sampler);
-
-  protected:
-    ~SamplerManager() override {}
 };
 
 class SyncManager : public TypedResourceManager<Sync, HandleAllocator, SyncManager, GLuint>
 {
   public:
+    ~SyncManager() override {}
+
     GLuint createSync(rx::GLImplFactory *factory);
     Sync *getSync(GLuint handle) const;
 
     static void DeleteObject(const Context *context, Sync *sync);
-
-  protected:
-    ~SyncManager() override {}
 };
 
 class FramebufferManager
@@ -317,13 +309,11 @@ class MemoryObjectManager : public ResourceManagerBase<HandleAllocator>
 {
   public:
     MemoryObjectManager();
+    ~MemoryObjectManager() override;
 
     MemoryObjectID createMemoryObject(rx::GLImplFactory *factory);
     void deleteMemoryObject(const Context *context, MemoryObjectID handle);
     MemoryObject *getMemoryObject(MemoryObjectID handle) const;
-
-  protected:
-    ~MemoryObjectManager() override;
 
   private:
     void reset(const Context *context) override;
@@ -335,13 +325,11 @@ class SemaphoreManager : public ResourceManagerBase<HandleAllocator>
 {
   public:
     SemaphoreManager();
+    ~SemaphoreManager() override;
 
     SemaphoreID createSemaphore(rx::GLImplFactory *factory);
     void deleteSemaphore(const Context *context, SemaphoreID handle);
     Semaphore *getSemaphore(SemaphoreID handle) const;
-
-  protected:
-    ~SemaphoreManager() override;
 
   private:
     void reset(const Context *context) override;

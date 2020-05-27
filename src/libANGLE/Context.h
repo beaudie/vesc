@@ -517,6 +517,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     // Once a context is setShared() it cannot be undone
     void setShared() { mShared = true; }
 
+    SharedState *getSharedState() const { return mSharedState; }
     const State &getState() const { return mState; }
     GLint getClientMajorVersion() const { return mState.getClientMajorVersion(); }
     GLint getClientMinorVersion() const { return mState.getClientMinorVersion(); }
@@ -541,7 +542,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     ANGLE_INLINE Program *getProgramResolveLink(ShaderProgramID handle) const
     {
-        Program *program = mState.mShaderProgramManager->getProgram(handle);
+        Program *program = mSharedState->mShaderProgramManager.getProgram(handle);
         if (program)
         {
             program->resolveLink(this);
@@ -559,7 +560,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     ANGLE_INLINE bool isBufferGenerated(BufferID buffer) const
     {
-        return mState.mBufferManager->isHandleGenerated(buffer);
+        return mSharedState->mBufferManager.isHandleGenerated(buffer);
     }
 
     bool isRenderbufferGenerated(RenderbufferID renderbuffer) const;
@@ -660,6 +661,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     void convertPpoToComputeOrDraw(bool isCompute);
 
+    SharedState *mSharedState;
     State mState;
     bool mShared;
     bool mSkipValidation;

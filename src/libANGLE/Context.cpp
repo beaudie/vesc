@@ -246,6 +246,20 @@ enum SubjectIndexes : angle::SubjectIndex
 };
 }  // anonymous namespace
 
+SharedState *AllocateOrGetSharedState(egl::Display *display, const Context *shareContext)
+{
+    if (shareContext)
+    {
+        SharedState *shared = shareContext->getSharedState();
+        shared->addRef();
+        return shared;
+    }
+    else
+    {
+        return display->getImplementation()->createSharedState();
+    }
+}
+
 Context::Context(egl::Display *display,
                  const egl::Config *config,
                  const Context *shareContext,
@@ -255,7 +269,9 @@ Context::Context(egl::Display *display,
                  const egl::AttributeMap &attribs,
                  const egl::DisplayExtensions &displayExtensions,
                  const egl::ClientExtensions &clientExtensions)
-    : mState(shareContext ? &shareContext->mState : nullptr,
+    : mSharedState(AllocateOrGetSharedState(display, shareContext)),
+      mState(shareContext ? &shareContext->mState : nullptr,
+             mSharedState,
              shareTextures,
              &mOverlay,
              clientType,
@@ -564,19 +580,12 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     mState.reset(this);
 
-    mState.mBufferManager->release(this);
     // mProgramPipelineManager must be before mShaderProgramManager to give each
     // PPO the chance to release any references they have to the Programs that
     // are bound to them before the Programs are released()'ed.
     mState.mProgramPipelineManager->release(this);
-    mState.mShaderProgramManager->release(this);
-    mState.mTextureManager->release(this);
-    mState.mRenderbufferManager->release(this);
-    mState.mSamplerManager->release(this);
-    mState.mSyncManager->release(this);
     mState.mFramebufferManager->release(this);
-    mState.mMemoryObjectManager->release(this);
-    mState.mSemaphoreManager->release(this);
+    mSharedState->release(this);
 
     mThreadPool.reset();
 
@@ -667,18 +676,18 @@ egl::Error Context::unMakeCurrent(const egl::Display *display)
 
 BufferID Context::createBuffer()
 {
-    return mState.mBufferManager->createBuffer();
+    return mSharedState->mBufferManager.createBuffer();
 }
 
 GLuint Context::createProgram()
 {
-    return mState.mShaderProgramManager->createProgram(mImplementation.get()).value;
+    return mSharedState->mShaderProgramManager.createProgram(mImplementation.get()).value;
 }
 
 GLuint Context::createShader(ShaderType type)
 {
-    return mState.mShaderProgramManager
-        ->createShader(mImplementation.get(), mState.mLimitations, type)
+    return mSharedState->mShaderProgramManager
+        .createShader(mImplementation.get(), mState.mLimitations, type)
         .value;
 }
 
@@ -689,7 +698,7 @@ TextureID Context::createTexture()
 
 RenderbufferID Context::createRenderbuffer()
 {
-    return mState.mRenderbufferManager->createRenderbuffer();
+    return mSharedState->mRenderbufferManager.createRenderbuffer();
 }
 
 // Returns an unused framebuffer name
@@ -771,33 +780,33 @@ GLuint Context::createShaderProgramv(ShaderType type, GLsizei count, const GLcha
 
 MemoryObjectID Context::createMemoryObject()
 {
-    return mState.mMemoryObjectManager->createMemoryObject(mImplementation.get());
+    return mSharedState->mMemoryObjectManager.createMemoryObject(mImplementation.get());
 }
 
 SemaphoreID Context::createSemaphore()
 {
-    return mState.mSemaphoreManager->createSemaphore(mImplementation.get());
+    return mSharedState->mSemaphoreManager.createSemaphore(mImplementation.get());
 }
 
 void Context::deleteBuffer(BufferID bufferName)
 {
-    Buffer *buffer = mState.mBufferManager->getBuffer(bufferName);
+    Buffer *buffer = mSharedState->mBufferManager.getBuffer(bufferName);
     if (buffer)
     {
         detachBuffer(buffer);
     }
 
-    mState.mBufferManager->deleteObject(this, bufferName);
+    mSharedState->mBufferManager.deleteObject(this, bufferName);
 }
 
 void Context::deleteShader(ShaderProgramID shader)
 {
-    mState.mShaderProgramManager->deleteShader(this, shader);
+    mSharedState->mShaderProgramManager.deleteShader(this, shader);
 }
 
 void Context::deleteProgram(ShaderProgramID program)
 {
-    mState.mShaderProgramManager->deleteProgram(this, program);
+    mSharedState->mShaderProgramManager.deleteProgram(this, program);
 }
 
 void Context::deleteTexture(TextureID texture)
@@ -812,12 +821,12 @@ void Context::deleteTexture(TextureID texture)
 
 void Context::deleteRenderbuffer(RenderbufferID renderbuffer)
 {
-    if (mState.mRenderbufferManager->getRenderbuffer(renderbuffer))
+    if (mSharedState->mRenderbufferManager.getRenderbuffer(renderbuffer))
     {
         detachRenderbuffer(renderbuffer);
     }
 
-    mState.mRenderbufferManager->deleteObject(this, renderbuffer);
+    mSharedState->mRenderbufferManager.deleteObject(this, renderbuffer);
 }
 
 void Context::deleteSync(GLsync sync)
@@ -826,7 +835,8 @@ void Context::deleteSync(GLsync sync)
     // wait commands finish. However, since the name becomes invalid, we cannot query the fence,
     // and since our API is currently designed for being called from a single thread, we can delete
     // the fence immediately.
-    mState.mSyncManager->deleteObject(this, static_cast<GLuint>(reinterpret_cast<uintptr_t>(sync)));
+    mSharedState->mSyncManager.deleteObject(this,
+                                            static_cast<GLuint>(reinterpret_cast<uintptr_t>(sync)));
 }
 
 void Context::deleteProgramPipeline(ProgramPipelineID pipelineID)
@@ -842,12 +852,12 @@ void Context::deleteProgramPipeline(ProgramPipelineID pipelineID)
 
 void Context::deleteMemoryObject(MemoryObjectID memoryObject)
 {
-    mState.mMemoryObjectManager->deleteMemoryObject(this, memoryObject);
+    mSharedState->mMemoryObjectManager.deleteMemoryObject(this, memoryObject);
 }
 
 void Context::deleteSemaphore(SemaphoreID semaphore)
 {
-    mState.mSemaphoreManager->deleteSemaphore(this, semaphore);
+    mSharedState->mSemaphoreManager.deleteSemaphore(this, semaphore);
 }
 
 // GL_CHROMIUM_lose_context
@@ -889,12 +899,12 @@ void Context::deleteFencesNV(GLsizei n, const FenceNVID *fences)
 
 Buffer *Context::getBuffer(BufferID handle) const
 {
-    return mState.mBufferManager->getBuffer(handle);
+    return mSharedState->mBufferManager.getBuffer(handle);
 }
 
 Renderbuffer *Context::getRenderbuffer(RenderbufferID handle) const
 {
-    return mState.mRenderbufferManager->getRenderbuffer(handle);
+    return mSharedState->mRenderbufferManager.getRenderbuffer(handle);
 }
 
 EGLenum Context::getContextPriority() const
@@ -904,7 +914,8 @@ EGLenum Context::getContextPriority() const
 
 Sync *Context::getSync(GLsync handle) const
 {
-    return mState.mSyncManager->getSync(static_cast<GLuint>(reinterpret_cast<uintptr_t>(handle)));
+    return mSharedState->mSyncManager.getSync(
+        static_cast<GLuint>(reinterpret_cast<uintptr_t>(handle)));
 }
 
 VertexArray *Context::getVertexArray(VertexArrayID handle) const
@@ -914,7 +925,7 @@ VertexArray *Context::getVertexArray(VertexArrayID handle) const
 
 Sampler *Context::getSampler(SamplerID handle) const
 {
-    return mState.mSamplerManager->getSampler(handle);
+    return mSharedState->mSamplerManager.getSampler(handle);
 }
 
 TransformFeedback *Context::getTransformFeedback(TransformFeedbackID handle) const
@@ -1010,7 +1021,7 @@ void Context::getObjectPtrLabel(const void *ptr, GLsizei bufSize, GLsizei *lengt
 
 GLboolean Context::isSampler(SamplerID samplerName) const
 {
-    return mState.mSamplerManager->isSampler(samplerName);
+    return mSharedState->mSamplerManager.isSampler(samplerName);
 }
 
 void Context::bindTexture(TextureType target, TextureID handle)
@@ -1063,7 +1074,7 @@ void Context::bindVertexBuffer(GLuint bindingIndex,
                                GLsizei stride)
 {
     Buffer *buffer =
-        mState.mBufferManager->checkBufferAllocation(mImplementation.get(), bufferHandle);
+        mSharedState->mBufferManager.checkBufferAllocation(mImplementation.get(), bufferHandle);
     mState.bindVertexBuffer(this, bindingIndex, buffer, offset, stride);
     mStateCache.onVertexArrayStateChange(this);
 }
@@ -1072,7 +1083,7 @@ void Context::bindSampler(GLuint textureUnit, SamplerID samplerHandle)
 {
     ASSERT(textureUnit < static_cast<GLuint>(mState.mCaps.maxCombinedTextureImageUnits));
     Sampler *sampler =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), samplerHandle);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), samplerHandle);
     mState.setSamplerBinding(this, textureUnit, sampler);
     mSamplerObserverBindings[textureUnit].bind(sampler);
     mStateCache.onActiveTextureChange(this);
@@ -2699,28 +2710,28 @@ void Context::vertexAttribDivisor(GLuint index, GLuint divisor)
 void Context::samplerParameteri(SamplerID sampler, GLenum pname, GLint param)
 {
     Sampler *const samplerObject =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), sampler);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), sampler);
     SetSamplerParameteri(this, samplerObject, pname, param);
 }
 
 void Context::samplerParameteriv(SamplerID sampler, GLenum pname, const GLint *param)
 {
     Sampler *const samplerObject =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), sampler);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), sampler);
     SetSamplerParameteriv(this, samplerObject, pname, param);
 }
 
 void Context::samplerParameterIiv(SamplerID sampler, GLenum pname, const GLint *param)
 {
     Sampler *const samplerObject =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), sampler);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), sampler);
     SetSamplerParameterIiv(this, samplerObject, pname, param);
 }
 
 void Context::samplerParameterIuiv(SamplerID sampler, GLenum pname, const GLuint *param)
 {
     Sampler *const samplerObject =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), sampler);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), sampler);
     SetSamplerParameterIuiv(this, samplerObject, pname, param);
 }
 
@@ -2751,14 +2762,14 @@ void Context::samplerParameterIuivRobust(SamplerID sampler,
 void Context::samplerParameterf(SamplerID sampler, GLenum pname, GLfloat param)
 {
     Sampler *const samplerObject =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), sampler);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), sampler);
     SetSamplerParameterf(this, samplerObject, pname, param);
 }
 
 void Context::samplerParameterfv(SamplerID sampler, GLenum pname, const GLfloat *param)
 {
     Sampler *const samplerObject =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), sampler);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), sampler);
     SetSamplerParameterfv(this, samplerObject, pname, param);
 }
 
@@ -2773,21 +2784,21 @@ void Context::samplerParameterfvRobust(SamplerID sampler,
 void Context::getSamplerParameteriv(SamplerID sampler, GLenum pname, GLint *params)
 {
     const Sampler *const samplerObject =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), sampler);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), sampler);
     QuerySamplerParameteriv(samplerObject, pname, params);
 }
 
 void Context::getSamplerParameterIiv(SamplerID sampler, GLenum pname, GLint *params)
 {
     const Sampler *const samplerObject =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), sampler);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), sampler);
     QuerySamplerParameterIiv(samplerObject, pname, params);
 }
 
 void Context::getSamplerParameterIuiv(SamplerID sampler, GLenum pname, GLuint *params)
 {
     const Sampler *const samplerObject =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), sampler);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), sampler);
     QuerySamplerParameterIuiv(samplerObject, pname, params);
 }
 
@@ -2821,7 +2832,7 @@ void Context::getSamplerParameterIuivRobust(SamplerID sampler,
 void Context::getSamplerParameterfv(SamplerID sampler, GLenum pname, GLfloat *params)
 {
     const Sampler *const samplerObject =
-        mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), sampler);
+        mSharedState->mSamplerManager.checkSamplerAllocation(mImplementation.get(), sampler);
     QuerySamplerParameterfv(samplerObject, pname, params);
 }
 
@@ -5245,8 +5256,8 @@ void Context::bufferSubData(BufferBinding target,
 
 void Context::attachShader(ShaderProgramID program, ShaderProgramID shader)
 {
-    Program *programObject = mState.mShaderProgramManager->getProgram(program);
-    Shader *shaderObject   = mState.mShaderProgramManager->getShader(shader);
+    Program *programObject = mSharedState->mShaderProgramManager.getProgram(program);
+    Shader *shaderObject   = mSharedState->mShaderProgramManager.getShader(shader);
     ASSERT(programObject && shaderObject);
     programObject->attachShader(this, shaderObject);
 }
@@ -5290,7 +5301,8 @@ void Context::bindBufferRange(BufferBinding target,
                               GLintptr offset,
                               GLsizeiptr size)
 {
-    Buffer *object = mState.mBufferManager->checkBufferAllocation(mImplementation.get(), buffer);
+    Buffer *object =
+        mSharedState->mBufferManager.checkBufferAllocation(mImplementation.get(), buffer);
     ANGLE_CONTEXT_TRY(mState.setIndexedBufferBinding(this, target, index, object, offset, size));
     if (target == BufferBinding::Uniform)
     {
@@ -5319,7 +5331,7 @@ void Context::bindFramebuffer(GLenum target, FramebufferID framebuffer)
 void Context::bindRenderbuffer(GLenum target, RenderbufferID renderbuffer)
 {
     ASSERT(target == GL_RENDERBUFFER);
-    Renderbuffer *object = mState.mRenderbufferManager->checkRenderbufferAllocation(
+    Renderbuffer *object = mSharedState->mRenderbufferManager.checkRenderbufferAllocation(
         mImplementation.get(), renderbuffer);
     mState.setRenderbufferBinding(this, object);
 }
@@ -6244,12 +6256,12 @@ void Context::getProgramPipelineiv(ProgramPipelineID pipeline, GLenum pname, GLi
 
 MemoryObject *Context::getMemoryObject(MemoryObjectID handle) const
 {
-    return mState.mMemoryObjectManager->getMemoryObject(handle);
+    return mSharedState->mMemoryObjectManager.getMemoryObject(handle);
 }
 
 Semaphore *Context::getSemaphore(SemaphoreID handle) const
 {
-    return mState.mSemaphoreManager->getSemaphore(handle);
+    return mSharedState->mSemaphoreManager.getSemaphore(handle);
 }
 
 void Context::getProgramInfoLog(ShaderProgramID program,
@@ -7169,7 +7181,7 @@ void Context::uniformBlockBinding(ShaderProgramID program,
 
 GLsync Context::fenceSync(GLenum condition, GLbitfield flags)
 {
-    GLuint handle     = mState.mSyncManager->createSync(mImplementation.get());
+    GLuint handle     = mSharedState->mSyncManager.createSync(mImplementation.get());
     GLsync syncHandle = reinterpret_cast<GLsync>(static_cast<uintptr_t>(handle));
 
     Sync *syncObject = getSync(syncHandle);
@@ -7245,7 +7257,7 @@ void Context::genSamplers(GLsizei count, SamplerID *samplers)
 {
     for (int i = 0; i < count; i++)
     {
-        samplers[i] = mState.mSamplerManager->createSampler();
+        samplers[i] = mSharedState->mSamplerManager.createSampler();
     }
 }
 
@@ -7255,12 +7267,12 @@ void Context::deleteSamplers(GLsizei count, const SamplerID *samplers)
     {
         SamplerID sampler = samplers[i];
 
-        if (mState.mSamplerManager->getSampler(sampler))
+        if (mSharedState->mSamplerManager.getSampler(sampler))
         {
             detachSampler(sampler);
         }
 
-        mState.mSamplerManager->deleteObject(this, sampler);
+        mSharedState->mSamplerManager.deleteObject(this, sampler);
     }
 }
 
@@ -8152,12 +8164,12 @@ bool Context::getIndexedQueryParameterInfo(GLenum target,
 
 Program *Context::getProgramNoResolveLink(ShaderProgramID handle) const
 {
-    return mState.mShaderProgramManager->getProgram(handle);
+    return mSharedState->mShaderProgramManager.getProgram(handle);
 }
 
 Shader *Context::getShader(ShaderProgramID handle) const
 {
-    return mState.mShaderProgramManager->getShader(handle);
+    return mSharedState->mShaderProgramManager.getShader(handle);
 }
 
 const angle::FrontendFeatures &Context::getFrontendFeatures() const
@@ -8167,7 +8179,7 @@ const angle::FrontendFeatures &Context::getFrontendFeatures() const
 
 bool Context::isRenderbufferGenerated(RenderbufferID renderbuffer) const
 {
-    return mState.mRenderbufferManager->isHandleGenerated(renderbuffer);
+    return mSharedState->mRenderbufferManager.isHandleGenerated(renderbuffer);
 }
 
 bool Context::isFramebufferGenerated(FramebufferID framebuffer) const

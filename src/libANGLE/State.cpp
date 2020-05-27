@@ -71,21 +71,6 @@ constexpr std::pair<BufferBinding, State::BufferBindingSetter> GetBufferBindingS
 template <typename T>
 using ContextStateMember = T *(State::*);
 
-template <typename T>
-T *AllocateOrGetSharedResourceManager(const State *shareContextState, ContextStateMember<T> member)
-{
-    if (shareContextState)
-    {
-        T *resourceManager = (*shareContextState).*member;
-        resourceManager->addRef();
-        return resourceManager;
-    }
-    else
-    {
-        return new T();
-    }
-}
-
 TextureManager *AllocateOrGetSharedTextureManager(const State *shareContextState,
                                                   TextureManager *shareTextures,
                                                   ContextStateMember<TextureManager> member)
@@ -131,6 +116,32 @@ bool IsTextureCompatibleWithSampler(TextureType texture, TextureType sampler)
 
 int gIDCounter = 1;
 }  // namespace
+
+SharedState::SharedState()
+    : mRefCount(1),
+      mBufferManager(),
+      mShaderProgramManager(),
+      mRenderbufferManager(),
+      mSamplerManager(),
+      mSyncManager(),
+      mMemoryObjectManager(),
+      mSemaphoreManager()
+{}
+
+SharedState::~SharedState() {}
+
+void SharedState::addRef()
+{
+    mRefCount++;
+}
+
+void SharedState::release(const Context *context)
+{
+    if (--mRefCount == 0)
+    {
+        delete this;
+    }
+}
 
 template <typename BindingT, typename... ArgsT>
 ANGLE_INLINE void UpdateNonTFBufferBinding(const Context *context,
@@ -306,6 +317,7 @@ ANGLE_INLINE void ActiveTexturesCache::set(ContextID contextID,
 }
 
 State::State(const State *shareContextState,
+             SharedState *shareState,
              TextureManager *shareTextures,
              const OverlayType *overlay,
              const EGLenum clientType,
@@ -320,23 +332,12 @@ State::State(const State *shareContextState,
       mClientType(clientType),
       mContextPriority(contextPriority),
       mClientVersion(clientVersion),
-      mBufferManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mBufferManager)),
-      mShaderProgramManager(
-          AllocateOrGetSharedResourceManager(shareContextState, &State::mShaderProgramManager)),
+      mSharedState(shareState),
       mTextureManager(AllocateOrGetSharedTextureManager(shareContextState,
                                                         shareTextures,
                                                         &State::mTextureManager)),
-      mRenderbufferManager(
-          AllocateOrGetSharedResourceManager(shareContextState, &State::mRenderbufferManager)),
-      mSamplerManager(
-          AllocateOrGetSharedResourceManager(shareContextState, &State::mSamplerManager)),
-      mSyncManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mSyncManager)),
       mFramebufferManager(new FramebufferManager()),
       mProgramPipelineManager(new ProgramPipelineManager()),
-      mMemoryObjectManager(
-          AllocateOrGetSharedResourceManager(shareContextState, &State::mMemoryObjectManager)),
-      mSemaphoreManager(
-          AllocateOrGetSharedResourceManager(shareContextState, &State::mSemaphoreManager)),
       mMaxDrawBuffers(0),
       mMaxCombinedTextureImageUnits(0),
       mDepthClearValue(0),
