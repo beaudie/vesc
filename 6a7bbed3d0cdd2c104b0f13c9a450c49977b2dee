@@ -46,6 +46,30 @@
       "revId": "6a7bbed3d0cdd2c104b0f13c9a450c49977b2dee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "434791cc_dcab0e54",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2020-05-27T02:20:43Z",
+      "side": 1,
+      "message": "I think they are unrelated.\n\n+cc egdaniel@google.com, Hi Greg, could you please give us some detail of it? Thanks.",
+      "parentUuid": "d0430b64_40422355",
+      "range": {
+        "startLine": 57,
+        "startChar": 43,
+        "endLine": 57,
+        "endChar": 53
+      },
+      "revId": "6a7bbed3d0cdd2c104b0f13c9a450c49977b2dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
