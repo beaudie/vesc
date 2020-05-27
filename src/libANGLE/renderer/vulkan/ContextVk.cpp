@@ -1466,7 +1466,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     }
 
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
-    size_t bufferCount                       = executable->getTransformFeedbackBufferCount(mState);
+    size_t bufferCount                       = executable->getTransformFeedbackBufferCount();
     const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &bufferHelpers =
         transformFeedbackVk->getBufferHelpers();
 
@@ -1494,7 +1494,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
         return angle::Result::Continue;
 
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
-    size_t bufferCount                       = executable->getTransformFeedbackBufferCount(mState);
+    size_t bufferCount                       = executable->getTransformFeedbackBufferCount();
 
     const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &bufferHelpers =
         transformFeedbackVk->getBufferHelpers();
@@ -1536,7 +1536,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackState(const gl::Con
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(mState.getCurrentTransformFeedback());
 
     // We should have same number of counter buffers as xfb buffers have
-    size_t bufferCount = executable->getTransformFeedbackBufferCount(mState);
+    size_t bufferCount = executable->getTransformFeedbackBufferCount();
     const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBufferHandles =
         transformFeedbackVk->getCounterBufferHandles();
 
