@@ -145,7 +145,7 @@ ANGLE_INLINE void StateCache::onBufferBindingChange(Context *context)
 ANGLE_INLINE void Context::bindBuffer(BufferBinding target, BufferID buffer)
 {
     Buffer *bufferObject =
-        mState.mBufferManager->checkBufferAllocation(mImplementation.get(), buffer);
+        mSharedState->mBufferManager.checkBufferAllocation(mImplementation.get(), buffer);
     mState.setBufferBinding(this, target, bufferObject);
     mStateCache.onBufferBindingChange(this);
 }

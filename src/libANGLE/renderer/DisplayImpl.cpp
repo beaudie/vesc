@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/DisplayImpl.h"
 
 #include "libANGLE/Display.h"
+#include "libANGLE/State.h"
 #include "libANGLE/Surface.h"
 
 namespace rx
@@ -61,6 +62,11 @@ const egl::Caps &DisplayImpl::getCaps() const
     }
 
     return mCaps;
+}
+
+gl::SharedState *DisplayImpl::createSharedState()
+{
+    return new gl::SharedState();
 }
 
 }  // namespace rx

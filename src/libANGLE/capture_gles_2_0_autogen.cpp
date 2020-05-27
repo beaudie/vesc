@@ -1123,7 +1123,7 @@ CallCapture CaptureGetRenderbufferParameteriv(const State &glState,
     return CallCapture(gl::EntryPoint::GetRenderbufferParameteriv, std::move(paramBuffer));
 }
 
-CallCapture CaptureGetShaderInfoLog(const State &glState,
+CallCapture CaptureGetShaderInfoLog(const SharedState &sharedState,
                                     bool isCallValid,
                                     ShaderProgramID shaderPacked,
                                     GLsizei bufSize,
@@ -1137,14 +1137,14 @@ CallCapture CaptureGetShaderInfoLog(const State &glState,
 
     ParamCapture lengthParam("length", ParamType::TGLsizeiPointer);
     InitParamValue(ParamType::TGLsizeiPointer, length, &lengthParam.value);
-    CaptureGetShaderInfoLog_length(glState, isCallValid, shaderPacked, bufSize, length, infoLog,
+    CaptureGetShaderInfoLog_length(sharedState, isCallValid, shaderPacked, bufSize, length, infoLog,
                                    &lengthParam);
     paramBuffer.addParam(std::move(lengthParam));
 
     ParamCapture infoLogParam("infoLog", ParamType::TGLcharPointer);
     InitParamValue(ParamType::TGLcharPointer, infoLog, &infoLogParam.value);
-    CaptureGetShaderInfoLog_infoLog(glState, isCallValid, shaderPacked, bufSize, length, infoLog,
-                                    &infoLogParam);
+    CaptureGetShaderInfoLog_infoLog(sharedState, isCallValid, shaderPacked, bufSize, length,
+                                    infoLog, &infoLogParam);
     paramBuffer.addParam(std::move(infoLogParam));
 
     return CallCapture(gl::EntryPoint::GetShaderInfoLog, std::move(paramBuffer));

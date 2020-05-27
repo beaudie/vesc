@@ -426,7 +426,7 @@ void CaptureGetRenderbufferParameteriv_params(const State &glState,
     UNIMPLEMENTED();
 }
 
-void CaptureGetShaderInfoLog_length(const State &glState,
+void CaptureGetShaderInfoLog_length(const SharedState &sharedState,
                                     bool isCallValid,
                                     ShaderProgramID shader,
                                     GLsizei bufSize,
@@ -437,7 +437,7 @@ void CaptureGetShaderInfoLog_length(const State &glState,
     paramCapture->readBufferSizeBytes = sizeof(GLsizei);
 }
 
-void CaptureGetShaderInfoLog_infoLog(const State &glState,
+void CaptureGetShaderInfoLog_infoLog(const SharedState &sharedState,
                                      bool isCallValid,
                                      ShaderProgramID shader,
                                      GLsizei bufSize,
@@ -445,7 +445,7 @@ void CaptureGetShaderInfoLog_infoLog(const State &glState,
                                      GLchar *infoLog,
                                      ParamCapture *paramCapture)
 {
-    gl::Shader *shaderObj = glState.getShaderProgramManagerForCapture().getShader(shader);
+    gl::Shader *shaderObj = sharedState.getShaderProgramManagerForCapture().getShader(shader);
     ASSERT(shaderObj && shaderObj->isCompiled());
     paramCapture->readBufferSizeBytes = shaderObj->getInfoLogLength() + 1;
 }

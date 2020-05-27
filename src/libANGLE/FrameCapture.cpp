@@ -1902,7 +1902,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     // TODO(jmadill): Use handle mapping for captured objects. http://anglebug.com/3662
 
     // Capture Buffer data.
-    const gl::BufferManager &buffers       = apiState.getBufferManagerForCapture();
+    const gl::BufferManager &buffers = context->getSharedState()->getBufferManagerForCapture();
     const gl::BoundBufferMap &boundBuffers = apiState.getBoundBuffersForCapture();
 
     for (const auto &bufferIter : buffers)
@@ -2256,7 +2256,8 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     }
 
     // Capture Renderbuffers.
-    const gl::RenderbufferManager &renderbuffers = apiState.getRenderbufferManagerForCapture();
+    const gl::RenderbufferManager &renderbuffers =
+        context->getSharedState()->getRenderbufferManagerForCapture();
 
     gl::RenderbufferID currentRenderbuffer = {0};
     for (const auto &renderbufIter : renderbuffers)
@@ -2375,7 +2376,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
     // Capture Shaders and Programs.
     const gl::ShaderProgramManager &shadersAndPrograms =
-        apiState.getShaderProgramManagerForCapture();
+        context->getSharedState()->getShaderProgramManagerForCapture();
     const gl::ResourceMap<gl::Shader, gl::ShaderProgramID> &shaders =
         shadersAndPrograms.getShadersForCapture();
     const gl::ResourceMap<gl::Program, gl::ShaderProgramID> &programs =
@@ -2564,7 +2565,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     cap(CaptureBindTransformFeedback(replayState, true, GL_TRANSFORM_FEEDBACK, currentXFB->id()));
 
     // Capture Sampler Objects
-    const gl::SamplerManager &samplers = apiState.getSamplerManagerForCapture();
+    const gl::SamplerManager &samplers = context->getSharedState()->getSamplerManagerForCapture();
     for (const auto &samplerIter : samplers)
     {
         gl::SamplerID samplerID = {samplerIter.first};
@@ -2896,7 +2897,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         capCap(GL_DITHER, apiState.isDitherEnabled());
     }
 
-    const gl::SyncManager &syncs = apiState.getSyncManagerForCapture();
+    const gl::SyncManager &syncs = context->getSharedState()->getSyncManagerForCapture();
     for (const auto &syncIter : syncs)
     {
         // TODO: Create existing sync objects (http://anglebug.com/3662)
@@ -3929,9 +3930,10 @@ void CaptureStringLimit(const GLchar *str, uint32_t limit, ParamCapture *paramCa
     }
 }
 
-gl::Program *GetLinkedProgramForCapture(const gl::State &glState, gl::ShaderProgramID handle)
+gl::Program *GetLinkedProgramForCapture(const gl::SharedState sharedState,
+                                        gl::ShaderProgramID handle)
 {
-    gl::Program *program = glState.getShaderProgramManagerForCapture().getProgram(handle);
+    gl::Program *program = sharedState.getShaderProgramManagerForCapture().getProgram(handle);
     ASSERT(program->isLinked());
     return program;
 }

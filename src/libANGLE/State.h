@@ -23,6 +23,7 @@
 #include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Renderbuffer.h"
+#include "libANGLE/ResourceManager.h"
 #include "libANGLE/Sampler.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/TransformFeedback.h"
@@ -79,6 +80,45 @@ class ActiveTexturesCache final : angle::NonCopyable
 
   private:
     ActiveTextureArray<Texture *> mTextures;
+};
+
+class SharedState : angle::NonCopyable
+{
+  public:
+    SharedState();
+
+    void addRef();
+    void release(const Context *context);
+
+    // Not for general use
+    const BufferManager &getBufferManagerForCapture() const { return mBufferManager; }
+    const RenderbufferManager &getRenderbufferManagerForCapture() const
+    {
+        return mRenderbufferManager;
+    }
+    const ShaderProgramManager &getShaderProgramManagerForCapture() const
+    {
+        return mShaderProgramManager;
+    }
+    const SyncManager &getSyncManagerForCapture() const { return mSyncManager; }
+    const SamplerManager &getSamplerManagerForCapture() const { return mSamplerManager; }
+
+  protected:
+    ~SharedState();
+
+  private:
+    friend class State;
+    friend class Context;
+    size_t mRefCount;
+
+    // Resource managers
+    BufferManager mBufferManager;
+    ShaderProgramManager mShaderProgramManager;
+    RenderbufferManager mRenderbufferManager;
+    SamplerManager mSamplerManager;
+    SyncManager mSyncManager;
+    MemoryObjectManager mMemoryObjectManager;
+    SemaphoreManager mSemaphoreManager;
 };
 
 class State : angle::NonCopyable
@@ -743,24 +783,13 @@ class State : angle::NonCopyable
     const OverlayType *getOverlay() const { return mOverlay; }
 
     // Not for general use.
-    const BufferManager &getBufferManagerForCapture() const { return *mBufferManager; }
     const BoundBufferMap &getBoundBuffersForCapture() const { return mBoundBuffers; }
     const TextureManager &getTextureManagerForCapture() const { return *mTextureManager; }
     const TextureBindingMap &getBoundTexturesForCapture() const { return mSamplerTextures; }
-    const RenderbufferManager &getRenderbufferManagerForCapture() const
-    {
-        return *mRenderbufferManager;
-    }
     const FramebufferManager &getFramebufferManagerForCapture() const
     {
         return *mFramebufferManager;
     }
-    const ShaderProgramManager &getShaderProgramManagerForCapture() const
-    {
-        return *mShaderProgramManager;
-    }
-    const SyncManager &getSyncManagerForCapture() const { return *mSyncManager; }
-    const SamplerManager &getSamplerManagerForCapture() const { return *mSamplerManager; }
     const SamplerBindingVector &getSamplerBindingsForCapture() const { return mSamplers; }
 
     const ActiveQueryMap &getActiveQueriesForCapture() const { return mActiveQueries; }
@@ -854,16 +883,9 @@ class State : angle::NonCopyable
     Limitations mLimitations;
 
     // Resource managers.
-    BufferManager *mBufferManager;
-    ShaderProgramManager *mShaderProgramManager;
     TextureManager *mTextureManager;
-    RenderbufferManager *mRenderbufferManager;
-    SamplerManager *mSamplerManager;
-    SyncManager *mSyncManager;
     FramebufferManager *mFramebufferManager;
     ProgramPipelineManager *mProgramPipelineManager;
-    MemoryObjectManager *mMemoryObjectManager;
-    SemaphoreManager *mSemaphoreManager;
 
     // Cached values from Context's caps
     GLuint mMaxDrawBuffers;

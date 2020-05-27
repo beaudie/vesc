@@ -41,6 +41,7 @@ class Thread;
 namespace gl
 {
 class Context;
+class SharedState;
 }  // namespace gl
 
 namespace rx
@@ -101,6 +102,8 @@ class DisplayImpl : public EGLImplFactory
     virtual void populateFeatureList(angle::FeatureList *features) = 0;
 
     const egl::DisplayState &getState() const { return mState; }
+
+    virtual gl::SharedState *createSharedState() override;
 
   protected:
     const egl::DisplayState &mState;
