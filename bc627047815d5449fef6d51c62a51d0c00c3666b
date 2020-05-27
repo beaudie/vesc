@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "afc5dd53_720b6206",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T16:29:05Z",
+      "side": 1,
+      "message": "Sure, no strong feelings on this.  It defaults to -1.  I didn\u0027t track down what it deems appropriate.  I prefer controlling it myself.",
+      "parentUuid": "69f6fe61_4b8eb2d0",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99a6f30b_af93bbf8",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 1
@@ -95,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "233e01f8_a1538953",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T16:29:05Z",
+      "side": 1,
+      "message": "I\u0027ll merge the two Release blocks.",
+      "parentUuid": "dd5cb19a_020bcfa7",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c893db0b_683e3d2f",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 1
@@ -106,6 +142,30 @@
       "writtenOn": "2020-05-27T14:57:41Z",
       "side": 1,
       "message": "isn\u0027t this default and can be omitted?",
+      "range": {
+        "startLine": 176,
+        "startChar": 40,
+        "endLine": 176,
+        "endChar": 45
+      },
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70d2fcb2_bb118467",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T16:29:05Z",
+      "side": 1,
+      "message": "No, they have to be disabled:\n\n$ gn args --list out/Release | grep -2 angle_enable_vulkan_validation_layers\n    Enable Vulkan GPU trace event capability\n\nangle_enable_vulkan_validation_layers\n    Current value \u003d false\n      From //out/Release/args.gn:11",
+      "parentUuid": "c893db0b_683e3d2f",
       "range": {
         "startLine": 176,
         "startChar": 40,
@@ -153,6 +213,24 @@
     },
     {
       "key": {
+        "uuid": "29674a29_59c82954",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T16:29:05Z",
+      "side": 1,
+      "message": "This config goes beyond what a normal Debug build would give you, for use when triaging issues.  I\u0027m delicately trying to include more info down here that isn\u0027t redundant with the \"Debug\" config at the top of the doc.  Maybe I could rename it debug-with-asserts?  dcheck_always_on is the only key difference.",
+      "parentUuid": "e9af0875_73bc18b9",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f48a7ab_42e6f95d",
         "filename": "doc/DevSetupAndroid.md",
         "patchSetId": 1
@@ -182,6 +260,24 @@
       "side": 1,
       "message": "I\u0027d merge this with \"Release\" just to avoid confusion, and leave a comment as to what this flag does.",
       "parentUuid": "6f48a7ab_42e6f95d",
+      "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bebdd465_d8754551",
+        "filename": "doc/DevSetupAndroid.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2020-05-27T16:29:05Z",
+      "side": 1,
+      "message": "I included it here because you need it to get the best performance numbers from benchmarks and applications.\n\nFrom the documentation:\n\n    Set to enable the official build level of optimization. This has nothing\n    to do with branding, but enables an additional level of optimization above\n    release (!is_debug). This might be better expressed as a tri-state\n    (debug, release, official) but for historical reasons there are two\n    separate flags.\n\nI\u0027ll just add it to the Release block.",
+      "parentUuid": "430fc8b0_0c5db3bb",
       "revId": "bc627047815d5449fef6d51c62a51d0c00c3666b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
