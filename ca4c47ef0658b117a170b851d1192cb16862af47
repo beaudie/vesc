@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "238b7efa_63ec5300",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1606,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-27T14:23:21Z",
+      "side": 1,
+      "message": "I assume we\u0027ll be eliminating the copies of existing uniforms in a future CL?\nE.g. why have netFlipXY[0] if it\u0027s the same as flipXY[0]?\nSeems like we can construct negFlipXY, viewportYScale and negViewportYScale inside the shader from flipXY.\nDo we know which would be faster?",
+      "revId": "ca4c47ef0658b117a170b851d1192cb16862af47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
