@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "010fc7da_b4c86dbd",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-28T21:42:20Z",
+      "side": 1,
+      "message": "I don\u0027t think this error message is accurate, since you\u0027re generating an error if the summary is \u003e\u003d summary_linelength_warning_lower_limit.   This message needs to output summary_linelength_warning_lower_limit, rather than upper.",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 86
+      },
+      "revId": "4aa10dc23ddd5f8277495fbc722e248fd821c555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ddca22a_213b2c3f",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-28T21:42:20Z",
+      "side": 1,
+      "message": "This check can be removed if you break out of the loop after \u0027is_bodyline_length_over_limit \u003d True\u0027.",
+      "range": {
+        "startLine": 120,
+        "startChar": 11,
+        "endLine": 120,
+        "endChar": 44
+      },
+      "revId": "4aa10dc23ddd5f8277495fbc722e248fd821c555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d2650db_ff062813",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-28T21:42:20Z",
+      "side": 1,
+      "message": "Need to revert this change.",
+      "range": {
+        "startLine": 336,
+        "startChar": 0,
+        "endLine": 345,
+        "endChar": 79
+      },
+      "revId": "4aa10dc23ddd5f8277495fbc722e248fd821c555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
