@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9062aed_11b1e569",
+        "filename": "extensions/EGL_ANGLE_platform_angle.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-05-28T12:25:37Z",
+      "side": 1,
+      "message": "I left comments in the code as well.",
+      "range": {
+        "startLine": 175,
+        "startChar": 4,
+        "endLine": 176,
+        "endChar": 27
+      },
+      "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33721e83_0dc73d6d",
+        "filename": "extensions/EGL_ANGLE_platform_angle.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-05-28T12:25:37Z",
+      "side": 1,
+      "message": "Not sure about this. Thus, mentioned that explicitly here with an additional (***) comment.",
+      "range": {
+        "startLine": 183,
+        "startChar": 36,
+        "endLine": 183,
+        "endChar": 43
+      },
+      "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b16097cc_58133cbd",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-05-28T12:25:37Z",
+      "side": 1,
+      "message": "Please help with choosing a correct value. Thanks!",
+      "range": {
+        "startLine": 59,
+        "startChar": 53,
+        "endLine": 59,
+        "endChar": 59
+      },
+      "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
