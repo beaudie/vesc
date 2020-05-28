@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd182889_f6b1b684",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-05-28T01:17:27Z",
+      "side": 1,
+      "message": "Translate uniform block with one large scalar or vector array to StructuredBuffer",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 56
+      },
+      "revId": "602d03e5fcc2a8cf02b45589f496dfc9070f1e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21fceb14_1fdc75d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-05-28T01:17:27Z",
+      "side": 1,
+      "message": "It is slow to compile an HLSL shader with a cbuffer which only has one large scalar or vector array member. This patch fixes this issue by translating such uniform blocks into StructuredBuffer instead.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "602d03e5fcc2a8cf02b45589f496dfc9070f1e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c264fd62_06b63d47",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-05-28T01:17:27Z",
+      "side": 1,
+      "message": "How about EbtBool and EbtDouble?",
+      "range": {
+        "startLine": 1656,
+        "startChar": 30,
+        "endLine": 1656,
+        "endChar": 41
+      },
+      "revId": "602d03e5fcc2a8cf02b45589f496dfc9070f1e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "786fa17d_c1483707",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2804,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2020-05-28T01:17:27Z",
+      "side": 1,
+      "message": "Now there are tests on float and vec4, do you think we need tests on vec2 and vec3 to verify we are adding the necessary paddings correctly?",
+      "range": {
+        "startLine": 2804,
+        "startChar": 41,
+        "endLine": 2804,
+        "endChar": 46
+      },
+      "revId": "602d03e5fcc2a8cf02b45589f496dfc9070f1e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
