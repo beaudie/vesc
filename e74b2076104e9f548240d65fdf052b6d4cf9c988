@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71c1b422_674052c4",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T20:29:37Z",
+      "side": 1,
+      "message": "couldn\u0027t this integer overflow if SrcIsFloat is false and DestIsFloat is true? Should theoretically be able to write a test that fails. Maybe do two ifs that scale the float number as src or dest?",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 6
+      },
+      "revId": "e74b2076104e9f548240d65fdf052b6d4cf9c988",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
