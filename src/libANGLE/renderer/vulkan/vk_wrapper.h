@@ -472,6 +472,12 @@ class Allocator : public WrappedObject<Allocator, VmaAllocator>
                           bool persistentlyMappedBuffers,
                           Buffer *bufferOut,
                           Allocation *allocationOut);
+
+    VkResult findMemoryTypeIndexForBufferInfo(const VkBufferCreateInfo &bufferCreateInfo,
+                                              VkMemoryPropertyFlags requiredFlags,
+                                              VkMemoryPropertyFlags preferredFlags,
+                                              bool persistentlyMappedBuffers,
+                                              uint32_t *memoryTypeIndexOut);
 };
 
 class Allocation final : public WrappedObject<Allocation, VmaAllocation>
@@ -1389,6 +1395,19 @@ ANGLE_INLINE VkResult Allocator::createBuffer(const VkBufferCreateInfo &bufferCr
     return vma::CreateBuffer(mHandle, &bufferCreateInfo, requiredFlags, preferredFlags,
                              persistentlyMappedBuffers, &allocationOut->mMemoryTypeIndex,
                              &bufferOut->mHandle, &allocationOut->mHandle);
+}
+
+ANGLE_INLINE VkResult
+Allocator::findMemoryTypeIndexForBufferInfo(const VkBufferCreateInfo &bufferCreateInfo,
+                                            VkMemoryPropertyFlags requiredFlags,
+                                            VkMemoryPropertyFlags preferredFlags,
+                                            bool persistentlyMappedBuffers,
+                                            uint32_t *memoryTypeIndexOut)
+{
+    ASSERT(valid());
+    return vma::FindMemoryTypeIndexForBufferInfo(mHandle, &bufferCreateInfo, requiredFlags,
+                                                 preferredFlags, persistentlyMappedBuffers,
+                                                 memoryTypeIndexOut);
 }
 
 // Allocation implementation.
