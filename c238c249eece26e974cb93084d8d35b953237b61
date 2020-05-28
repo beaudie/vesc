@@ -46,6 +46,30 @@
       "revId": "c238c249eece26e974cb93084d8d35b953237b61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c161ebc_6e1f0b13",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T15:12:50Z",
+      "side": 1,
+      "message": "OK, to me that says we should check for the extension\u0027s presence. Can you do an ANGLE_VK_CHECK(feature is enabled) .. we shouldn\u0027t disable this feature on GGP.",
+      "parentUuid": "e93e5a1f_41ce86ec",
+      "range": {
+        "startLine": 1102,
+        "startChar": 4,
+        "endLine": 1102,
+        "endChar": 5
+      },
+      "revId": "c238c249eece26e974cb93084d8d35b953237b61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
