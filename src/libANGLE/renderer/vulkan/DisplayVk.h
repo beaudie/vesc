@@ -97,6 +97,8 @@ class DisplayVk : public DisplayImpl, public vk::Context
 
     bool isRobustResourceInitEnabled() const override;
 
+    ShareGroupImpl *createShareGroup() override;
+
   protected:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
 

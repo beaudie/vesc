@@ -32,6 +32,11 @@ class ProgramExecutableVk;
 class RendererVk;
 class WindowSurfaceVk;
 
+class ShareGroupVk : public ShareGroupImpl
+{
+  private:
+};
+
 struct CommandBatch final : angle::NonCopyable
 {
     CommandBatch();

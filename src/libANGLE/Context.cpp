@@ -46,6 +46,36 @@
 #include "libANGLE/renderer/Format.h"
 #include "libANGLE/validationES.h"
 
+namespace egl
+{
+ShareGroup::ShareGroup(rx::EGLImplFactory *factory)
+    : mRefCount(1), mImplementation(factory->createShareGroup())
+{}
+
+ShareGroup::~ShareGroup()
+{
+    if (mImplementation)
+    {
+        delete mImplementation;
+        mImplementation = nullptr;
+    }
+}
+
+void ShareGroup::addRef()
+{
+    // This is protected by global lock, so no atomic is required
+    mRefCount++;
+}
+
+void ShareGroup::release(const gl::Context *context)
+{
+    if (--mRefCount == 0)
+    {
+        delete this;
+    }
+}
+}  // namespace egl
+
 namespace gl
 {
 namespace
@@ -246,6 +276,21 @@ enum SubjectIndexes : angle::SubjectIndex
 };
 }  // anonymous namespace
 
+static egl::ShareGroup *AllocateOrGetShareGroup(egl::Display *display,
+                                                const gl::Context *shareContext)
+{
+    if (shareContext)
+    {
+        egl::ShareGroup *shareGroup = shareContext->getState().getShareGroup();
+        shareGroup->addRef();
+        return shareGroup;
+    }
+    else
+    {
+        return new egl::ShareGroup(display->getImplementation());
+    }
+}
+
 Context::Context(egl::Display *display,
                  const egl::Config *config,
                  const Context *shareContext,
@@ -256,6 +301,7 @@ Context::Context(egl::Display *display,
                  const egl::DisplayExtensions &displayExtensions,
                  const egl::ClientExtensions &clientExtensions)
     : mState(shareContext ? &shareContext->mState : nullptr,
+             AllocateOrGetShareGroup(display, shareContext),
              shareTextures,
              &mOverlay,
              clientType,
@@ -584,6 +630,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mFramebufferManager->release(this);
     mState.mMemoryObjectManager->release(this);
     mState.mSemaphoreManager->release(this);
+    mState.mShareGroup->release(this);
 
     mThreadPool.reset();
 
