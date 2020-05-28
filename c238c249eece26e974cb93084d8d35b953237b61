@@ -22,6 +22,30 @@
       "revId": "c238c249eece26e974cb93084d8d35b953237b61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e93e5a1f_41ce86ec",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1381265
+      },
+      "writtenOn": "2020-05-28T15:07:30Z",
+      "side": 1,
+      "message": "From what I can tell it\u0027s always present, both in the list and even at runtime whether you enable it or not(!), so it\u0027s hard to say. I think the only way this can ever fail is if you use a custom, self-built Vulkan loader that strips it out by force and try to deploy it there.",
+      "parentUuid": "afffdfc6_27d7225c",
+      "range": {
+        "startLine": 1102,
+        "startChar": 4,
+        "endLine": 1102,
+        "endChar": 5
+      },
+      "revId": "c238c249eece26e974cb93084d8d35b953237b61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
