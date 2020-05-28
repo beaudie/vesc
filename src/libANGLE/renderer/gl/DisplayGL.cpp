@@ -50,6 +50,11 @@ StreamProducerImpl *DisplayGL::createStreamProducerD3DTexture(
     return nullptr;
 }
 
+ShareGroupImpl *DisplayGL::createShareGroup()
+{
+    return new ShareGroupImpl();
+}
+
 egl::Error DisplayGL::makeCurrent(egl::Surface *drawSurface,
                                   egl::Surface *readSurface,
                                   gl::Context *context)
