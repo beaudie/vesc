@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "891ab294_8e144150",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2020-05-28T20:41:03Z",
+      "side": 1,
+      "message": "Did you mean to move this into the failing codepath?",
+      "range": {
+        "startLine": 93,
+        "startChar": 8,
+        "endLine": 93,
+        "endChar": 24
+      },
+      "revId": "e6701ed323e253735d376e73e586706a2a51fab0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
