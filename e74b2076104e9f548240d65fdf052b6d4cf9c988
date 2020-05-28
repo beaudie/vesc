@@ -46,6 +46,30 @@
       "revId": "e74b2076104e9f548240d65fdf052b6d4cf9c988",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e202f8e4_f40b9f6e",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T21:07:52Z",
+      "side": 1,
+      "message": "Sorry, I misread this as || instead of \u0026\u0026. N/m, it looks correct. At least I\u0027m happy if the bots are happy.",
+      "parentUuid": "d76d73f0_51a466ca",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 6
+      },
+      "revId": "e74b2076104e9f548240d65fdf052b6d4cf9c988",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
