@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d567606_f068a533",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T19:26:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b906c005_6109aacb",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 3
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a91a0605_a1529f37",
         "filename": "/COMMIT_MSG",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62873612_0ed7fac5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T19:26:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a91a0605_a1529f37",
+      "range": {
+        "startLine": 13,
+        "startChar": 28,
+        "endLine": 13,
+        "endChar": 31
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1ca57558_f7d1ce92",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T19:26:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16cc90cb_a9a985f4",
+      "range": {
+        "startLine": 14,
+        "startChar": 45,
+        "endLine": 15,
+        "endChar": 10
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc107309_b5765fe7",
         "filename": "/COMMIT_MSG",
         "patchSetId": 9
@@ -82,6 +154,30 @@
       "writtenOn": "2020-05-28T18:59:11Z",
       "side": 1,
       "message": "Should there be a fix-it bug to track moving the rest of the resource managers?",
+      "range": {
+        "startLine": 16,
+        "startChar": 54,
+        "endLine": 18,
+        "endChar": 9
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82bff2cd_553fc630",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T19:26:18Z",
+      "side": 1,
+      "message": "Yea, I will file a bug for it.",
+      "parentUuid": "bc107309_b5765fe7",
       "range": {
         "startLine": 16,
         "startChar": 54,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "4d326b8a_356be3dd",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T19:26:18Z",
+      "side": 1,
+      "message": "I will use SafeDelete. The unique_ptr does not work well with get API",
+      "parentUuid": "5f619f69_fceac816",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 7
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04377fb0_4a0075b3",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 9
@@ -137,6 +257,30 @@
       "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "641b895c_80322db1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T19:26:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04377fb0_4a0075b3",
+      "range": {
+        "startLine": 279,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 7
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "f200221a_580aeb63",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T19:26:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7d6ca48d_eb10e024",
+      "range": {
+        "startLine": 296,
+        "startChar": 17,
+        "endLine": 296,
+        "endChar": 45
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a15cf5e_2a039108",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 9
@@ -174,6 +342,24 @@
       "writtenOn": "2020-05-28T18:59:11Z",
       "side": 1,
       "message": "Is this new parameter necessary?\n\nThe State constructor already gets either \u0027\u0026shareContext-\u003emState\u0027 or \u0027nullptr\u0027, so it already knows whether it has access to a ShareGroup or needs to construct one on its own.   I think this would be better moved into State and let that determine what to do, rather than Context making decisions for the State, based on knowing the State\u0027s internals.",
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "492fbd02_c6362689",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T19:26:18Z",
+      "side": 1,
+      "message": "The problem is that allocate needs display which state object does not have access (?)",
+      "parentUuid": "6a15cf5e_2a039108",
       "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -203,6 +389,30 @@
     },
     {
       "key": {
+        "uuid": "bda8da67_34017520",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T19:26:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97c4dfff_a2d24b46",
+      "range": {
+        "startLine": 78,
+        "startChar": 6,
+        "endLine": 78,
+        "endChar": 17
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9f5a5c4_d0135250",
         "filename": "src/libANGLE/renderer/DisplayImpl.h",
         "patchSetId": 9
@@ -217,6 +427,24 @@
       "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c969235_820c1a3f",
+        "filename": "src/libANGLE/renderer/DisplayImpl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T19:26:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9f5a5c4_d0135250",
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
