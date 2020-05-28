@@ -64,6 +64,7 @@ namespace rx
 {
 class ContextImpl;
 class EGLImplFactory;
+class ShareGroupImpl;
 }  // namespace rx
 
 namespace egl
@@ -72,6 +73,26 @@ class AttributeMap;
 class Surface;
 struct Config;
 class Thread;
+class Context;
+
+class ShareGroup final : angle::NonCopyable
+{
+  public:
+    ShareGroup(rx::EGLImplFactory *factory);
+
+    void addRef();
+
+    void release(const gl::Context *context);
+
+    rx::ShareGroupImpl *getImplementation() const { return mImplementation; }
+
+  protected:
+    ~ShareGroup();
+
+  private:
+    size_t mRefCount;
+    rx::ShareGroupImpl *mImplementation;
+};
 }  // namespace egl
 
 namespace gl
