@@ -106,7 +106,7 @@ class RendererVk : angle::NonCopyable
     }
     VkDevice getDevice() const { return mDevice; }
 
-    const VmaAllocator &getAllocator() const { return mAllocator; }
+    vk::Allocator &getAllocator() { return mAllocator; }
 
     angle::Result selectPresentQueueForSurface(DisplayVk *displayVk,
                                                VkSurfaceKHR surface,
@@ -381,7 +381,7 @@ class RendererVk : angle::NonCopyable
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;
 
-    VmaAllocator mAllocator;
+    vk::Allocator mAllocator;
     SamplerCache mSamplerCache;
     vk::ActiveHandleCounter mActiveHandleCounts;
 };
