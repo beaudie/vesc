@@ -72,6 +72,7 @@ class AttributeMap;
 class Surface;
 struct Config;
 class Thread;
+class Context;
 }  // namespace egl
 
 namespace gl
