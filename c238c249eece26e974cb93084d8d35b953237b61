@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afffdfc6_27d7225c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T14:33:47Z",
+      "side": 1,
+      "message": "do you think we should fail to initialize if the extension isn\u0027t found on GGP?",
+      "range": {
+        "startLine": 1102,
+        "startChar": 4,
+        "endLine": 1102,
+        "endChar": 5
+      },
+      "revId": "c238c249eece26e974cb93084d8d35b953237b61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
