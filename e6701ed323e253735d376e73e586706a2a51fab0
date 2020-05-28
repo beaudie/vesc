@@ -22,6 +22,30 @@
       "revId": "e6701ed323e253735d376e73e586706a2a51fab0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1a2cc81_39271298",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T21:16:16Z",
+      "side": 1,
+      "message": "Fixed. Put it in both.",
+      "parentUuid": "891ab294_8e144150",
+      "range": {
+        "startLine": 93,
+        "startChar": 8,
+        "endLine": 93,
+        "endChar": 24
+      },
+      "revId": "e6701ed323e253735d376e73e586706a2a51fab0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
