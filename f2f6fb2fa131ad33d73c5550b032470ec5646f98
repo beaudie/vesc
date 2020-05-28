@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42d448fe_49b499b4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-28T20:53:38Z",
+      "side": 1,
+      "message": "we need to do this only because Allocator class sets \"mMemoryTypeIndex\" member of Allocation right? is there any other value add?",
+      "range": {
+        "startLine": 490,
+        "startChar": 4,
+        "endLine": 490,
+        "endChar": 27
+      },
+      "revId": "f2f6fb2fa131ad33d73c5550b032470ec5646f98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15833d74_917e670d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-28T20:53:38Z",
+      "side": 1,
+      "message": "is there a reason why \"AndMemory\" removed from the name? the intent was to make it clear that this call would allocate the vkBuffer and the memory needed for it",
+      "range": {
+        "startLine": 1379,
+        "startChar": 33,
+        "endLine": 1379,
+        "endChar": 45
+      },
+      "revId": "f2f6fb2fa131ad33d73c5550b032470ec5646f98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbc22a5c_55190bd6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-28T20:53:38Z",
+      "side": 1,
+      "message": "is there a reason we cache this?",
+      "range": {
+        "startLine": 1390,
+        "startChar": 57,
+        "endLine": 1390,
+        "endChar": 88
+      },
+      "revId": "f2f6fb2fa131ad33d73c5550b032470ec5646f98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
