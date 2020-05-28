@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c4d79340_366c275d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T21:06:11Z",
+      "side": 1,
+      "message": "Also it modifies mHandle.",
+      "parentUuid": "42d448fe_49b499b4",
+      "range": {
+        "startLine": 490,
+        "startChar": 4,
+        "endLine": 490,
+        "endChar": 27
+      },
+      "revId": "f2f6fb2fa131ad33d73c5550b032470ec5646f98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15833d74_917e670d",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "27f31d1c_445642bb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T21:06:11Z",
+      "side": 1,
+      "message": "Yeah, it calls vma::CreateBuffer (vmaCreateBuffer). This class is meant to be a pretty thin wrapper around vma so it tries to mimic the naming 1:1.",
+      "parentUuid": "15833d74_917e670d",
+      "range": {
+        "startLine": 1379,
+        "startChar": 33,
+        "endLine": 1379,
+        "endChar": 45
+      },
+      "revId": "f2f6fb2fa131ad33d73c5550b032470ec5646f98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cbc22a5c_55190bd6",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2020-05-28T20:53:38Z",
       "side": 1,
       "message": "is there a reason we cache this?",
+      "range": {
+        "startLine": 1390,
+        "startChar": 57,
+        "endLine": 1390,
+        "endChar": 88
+      },
+      "revId": "f2f6fb2fa131ad33d73c5550b032470ec5646f98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb2cc18d_2a7f3f54",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T21:06:11Z",
+      "side": 1,
+      "message": "Later to call getMemoryTypeProperties. It adds a small bit of overhead (one uint32 to every buffer) that I thought wouldn\u0027t be too egregious.",
+      "parentUuid": "cbc22a5c_55190bd6",
       "range": {
         "startLine": 1390,
         "startChar": 57,
