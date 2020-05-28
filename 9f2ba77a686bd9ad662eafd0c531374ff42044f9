@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb90287a_ba1b0ab0",
+        "filename": "src/libANGLE/renderer/d3d/DisplayD3D.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T19:43:08Z",
+      "side": 1,
+      "message": "can you make these ShareGroupD3D/Vk/Mtl/Null/GL? That way this\u0027ll be a complete change. No need for new files, can make these classes a part of Display*.h",
+      "range": {
+        "startLine": 230,
+        "startChar": 15,
+        "endLine": 230,
+        "endChar": 29
+      },
+      "revId": "9f2ba77a686bd9ad662eafd0c531374ff42044f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
