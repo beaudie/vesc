@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11bc7f9f_6adcdb8e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-28T23:54:03Z",
+      "side": 0,
+      "message": "This was the only caller of contextVk-\u003eshouldFlush(), so that dead function should be removed too.\n\nGoing down the line, RendererVk::shouldCleanupGarbage() should also be cleaned up.",
+      "revId": "fb3905eba472701e995a7caf1d7a83d7288f86e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
