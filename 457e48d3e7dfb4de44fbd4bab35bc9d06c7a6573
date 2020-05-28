@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0bddca5b_7a2793a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T14:44:29Z",
+      "side": 1,
+      "message": "probably also mention the specific use case (for the barrier timeline that can\u0027t be solved easily in the ContextVk or RendererVk)",
+      "range": {
+        "startLine": 12,
+        "startChar": 54,
+        "endLine": 13,
+        "endChar": 54
+      },
+      "revId": "457e48d3e7dfb4de44fbd4bab35bc9d06c7a6573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "98b60b0c_961120c9",
         "filename": "src/libANGLE/renderer/ContextImpl.h",
         "patchSetId": 8
