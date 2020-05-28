@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f619f69_fceac816",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T18:05:48Z",
+      "side": 1,
+      "message": "nit: SafeDelete, better yet use unique_ptr",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 7
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04377fb0_4a0075b3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T18:05:48Z",
+      "side": 1,
+      "message": "nit: please place in anonymous namespace instead of using static",
+      "range": {
+        "startLine": 279,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 7
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d6ca48d_eb10e024",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T18:05:48Z",
+      "side": 1,
+      "message": "it would be better for the display to manage the share groups and to pass one in here instead. I\u0027m fine with doing that as a follow-up.",
+      "range": {
+        "startLine": 296,
+        "startChar": 17,
+        "endLine": 296,
+        "endChar": 45
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97c4dfff_a2d24b46",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T18:05:48Z",
+      "side": 1,
+      "message": "nit: can be \u0027final\u0027",
+      "range": {
+        "startLine": 78,
+        "startChar": 6,
+        "endLine": 78,
+        "endChar": 17
+      },
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9f5a5c4_d0135250",
+        "filename": "src/libANGLE/renderer/DisplayImpl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-28T18:05:48Z",
+      "side": 1,
+      "message": "you can omit this and implement it in each back-end. that\u0027ll enforce implementations and prevent a missing stub.",
+      "revId": "4968c77cf7c5bff9a3f44c09ce4cd8d0431dbcf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
