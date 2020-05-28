@@ -22,6 +22,30 @@
       "revId": "e74b2076104e9f548240d65fdf052b6d4cf9c988",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d76d73f0_51a466ca",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2020-05-28T20:42:20Z",
+      "side": 1,
+      "message": "Did you mean \"if SrcIsFloat is true and DestIsFloat is false\"? Technically, it could already have overflowed before, no?",
+      "parentUuid": "71c1b422_674052c4",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 6
+      },
+      "revId": "e74b2076104e9f548240d65fdf052b6d4cf9c988",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
