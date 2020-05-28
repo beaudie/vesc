@@ -68,6 +68,30 @@
       "revId": "457e48d3e7dfb4de44fbd4bab35bc9d06c7a6573",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "883e04cd_4bcb9056",
+        "filename": "src/libANGLE/renderer/EGLImplFactory.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-28T16:00:05Z",
+      "side": 1,
+      "message": "The problem is that mState is a const in backend. The ShareGroup is not a const. The lifetime of state and shareGroup are different too. Yes, it will save me lots of diffs, but I was worried that people will flag it as a hack. Passing it into createContext produces more diff but I think architecturally is cleaner.",
+      "parentUuid": "1bda2f9a_9d500539",
+      "range": {
+        "startLine": 64,
+        "startChar": 39,
+        "endLine": 64,
+        "endChar": 66
+      },
+      "revId": "457e48d3e7dfb4de44fbd4bab35bc9d06c7a6573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
