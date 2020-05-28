@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b21b1b97_c551ffd6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-28T21:26:40Z",
+      "side": 1,
+      "message": "The reason this is changing is because init no longer needs the full ContextVk and we like to limit the scope where possible, right?",
+      "revId": "9aca11610981e9bf2916a2b12b9a9e135ccff49e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fc4b7ce_6197bf81",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-28T21:26:40Z",
+      "side": 1,
+      "message": "nit: context",
+      "range": {
+        "startLine": 688,
+        "startChar": 32,
+        "endLine": 688,
+        "endChar": 41
+      },
+      "revId": "9aca11610981e9bf2916a2b12b9a9e135ccff49e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
