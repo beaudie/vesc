@@ -57,6 +57,8 @@ class DisplayD3D : public DisplayImpl, public d3d::Context
                                                          EGLClientBuffer buffer,
                                                          const egl::AttributeMap &attribs) override;
 
+    ShareGroupImpl *createShareGroup() override;
+
     egl::Error makeCurrent(egl::Surface *drawSurface,
                            egl::Surface *readSurface,
                            gl::Context *context) override;
