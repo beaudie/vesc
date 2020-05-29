@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bebf0b93_83900374",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T15:41:18Z",
+      "side": 1,
+      "message": "nit: wrap to 100 chars",
+      "range": {
+        "startLine": 49,
+        "startChar": 81,
+        "endLine": 50,
+        "endChar": 27
+      },
+      "revId": "82cafe3577205b8f4e7ec603a17418890cbdf9bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a70574aa_3f8c73f4",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T15:41:18Z",
+      "side": 1,
+      "message": "can\u0027t you do something clever like \n\n while (_IsLineBlank(commit_msg_lines[-1])):\n    commit_msg_lines.pop()\n\n if (len(commit_msg_lines) \u003d\u003d 0):\n    ... err ...",
+      "range": {
+        "startLine": 51,
+        "startChar": 1,
+        "endLine": 55,
+        "endChar": 91
+      },
+      "revId": "82cafe3577205b8f4e7ec603a17418890cbdf9bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "361527a4_53f83344",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T15:41:18Z",
+      "side": 1,
+      "message": "here you could do something like \n\n while len(commit_msg_lines) \u003e 0 and not _IsLineBlank(commit_msg_lines[-1]):\n  last_paragraph_line_count +\u003d 1\n  commit_msg_lines.pop()\n\n if len(commit_msg_lines) \u003d\u003d 0:\n    ... err ..",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 38
+      },
+      "revId": "82cafe3577205b8f4e7ec603a17418890cbdf9bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa79c27a_ddef0e97",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T15:41:18Z",
+      "side": 1,
+      "message": "here you know the last line is blank because of the above for loop.\n\n commit_msg_lines.pop()\n if len(commit_msg_lines) \u003d\u003d 0:\n    return err1\n if _IsLineBlank(commit_msg_lines[-1]):\n    append (err2)\n    while (_IsLineBlank(commit_msg_lines[-1]):\n      commit_msg_lines.pop()",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 39
+      },
+      "revId": "82cafe3577205b8f4e7ec603a17418890cbdf9bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0742a850_5340f908",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T15:41:18Z",
+      "side": 1,
+      "message": "similarly, I\u0027d do\n\n while !empty and _IsLineBlank(commit_msg_lines[0]):\n  commit_msg_lines.pop(0)",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 21
+      },
+      "revId": "82cafe3577205b8f4e7ec603a17418890cbdf9bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01132068_454ee41e",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T15:41:18Z",
+      "side": 1,
+      "message": "nit: can make this a normal \u0027if\u0027 since the previous one returns",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 9
+      },
+      "revId": "82cafe3577205b8f4e7ec603a17418890cbdf9bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "471ccf78_dca035be",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T15:41:18Z",
+      "side": 1,
+      "message": "similar idea here to the blank line counter above.",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 114,
+        "endChar": 32
+      },
+      "revId": "82cafe3577205b8f4e7ec603a17418890cbdf9bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
