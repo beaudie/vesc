@@ -124,20 +124,6 @@ bool ProgramPipelineState::usesShaderProgram(ShaderProgramID programId) const
     return false;
 }
 
-bool ProgramPipelineState::hasDefaultUniforms() const
-{
-    for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
-    {
-        const Program *shaderProgram = getShaderProgram(shaderType);
-        if (shaderProgram && shaderProgram->getState().hasDefaultUniforms())
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool ProgramPipelineState::hasTextures() const
 {
     for (const gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
