@@ -2179,19 +2179,101 @@ void PipelineBarrier::addDiagnosticsString(std::ostringstream &out) const
 }
 
 // MemoryBarrierTimelineTracker implementation.
-MemoryBarrierTimelineTracker::MemoryBarrierTimelineTracker() : mSerial() {}
+MemoryBarrierTimelineTracker::MemoryBarrierTimelineTracker()
+    : mSerial(),
+      mRAWBarrierSerials(),
+      mRAWBarrierDirtyIndices(),
+      mWAWBarrierSerials(),
+      mWAWBarrierDirtyIndices(),
+      mSrcPipelineStageSerials(),
+      mSrcPipelineStageMask()
+{}
 
 // Barrier commands have been produced. We should update the tracker
 // so that the same type of barriers from different objects will be
 // skipped.
 void MemoryBarrierTimelineTracker::onBarriersExecute()
 {
+    PipelineStagesMask mask = mSrcPipelineStageMask;
+    if (mask.none())
+    {
+        ASSERT(mRAWBarrierDirtyIndices.empty());
+        ASSERT(mWAWBarrierDirtyIndices.empty());
+        return;
+    }
+
+    // read after write
+    for (uint32_t index : mRAWBarrierDirtyIndices)
+    {
+        mRAWBarrierSerials[index] = mSerial.getCurrentSerial();
+    }
+    mRAWBarrierDirtyIndices.clear();
+
+    // write after write
+    for (uint32_t index : mWAWBarrierDirtyIndices)
+    {
+        mWAWBarrierSerials[index] = mSerial.getCurrentSerial();
+    }
+    mWAWBarrierDirtyIndices.clear();
+
+    // write after read
+    constexpr PipelineStagesMask kGraphicsPipelineStages(
+        angle::Bit<uint16_t>(PipelineStage::TopOfPipe) |
+        angle::Bit<uint16_t>(PipelineStage::DrawIndirect) |
+        angle::Bit<uint16_t>(PipelineStage::VertexInput) |
+        angle::Bit<uint16_t>(PipelineStage::VertexShader) |
+        angle::Bit<uint16_t>(PipelineStage::GeometryShader) |
+        angle::Bit<uint16_t>(PipelineStage::TransformFeedback) |
+        angle::Bit<uint16_t>(PipelineStage::EarlyFragmentTest) |
+        angle::Bit<uint16_t>(PipelineStage::FragmentShader) |
+        angle::Bit<uint16_t>(PipelineStage::LateFragmentTest) |
+        angle::Bit<uint16_t>(PipelineStage::ColorAttachmentOutput));
+    // Propagate higher graphics bits to low bits since there is implicit dependency from
+    // high bits to lower bits. If we have waited for higher bits here, it also covers the lower
+    // bits in the pipeline.
+    PipelineStagesMask graphicsBits = mask & kGraphicsPipelineStages;
+    if (graphicsBits.any())
+    {
+        unsigned long highestStage = gl::ScanReverse(graphicsBits.bits());
+        graphicsBits = PipelineStagesMask((0x1 << highestStage) - 1) & kGraphicsPipelineStages;
+        mask |= graphicsBits;
+    }
+    for (PipelineStage stage : mask)
+    {
+        mSrcPipelineStageSerials[stage] = mSerial.getCurrentSerial();
+    }
+    mSrcPipelineStageMask.reset();
+
     // Bump the serial number so that new writes will be tagged after the barrier
     mSerial.generate();
 }
 
 // Make tracker appear as if memory barriers have been issued for all stages
-void MemoryBarrierTimelineTracker::reset() {}
+void MemoryBarrierTimelineTracker::reset()
+{
+    // read after write
+    for (Serial &serial : mRAWBarrierSerials)
+    {
+        serial = mSerial.getCurrentSerial();
+    }
+    mRAWBarrierDirtyIndices.clear();
+
+    // write after write
+    for (Serial &serial : mWAWBarrierSerials)
+    {
+        serial = mSerial.getCurrentSerial();
+    }
+    mWAWBarrierDirtyIndices.clear();
+
+    // write after read
+    for (Serial &serial : mSrcPipelineStageSerials)
+    {
+        serial = mSerial.getCurrentSerial();
+    }
+    mSrcPipelineStageMask.reset();
+
+    mSerial.generate();
+}
 
 // BufferHelper implementation.
 BufferHelper::BufferHelper()
@@ -3094,11 +3176,51 @@ ANGLE_INLINE bool ImageHelper::updateLayoutAndBarrier(VkImageAspectFlags aspectM
     if (newLayout == mCurrentLayout)
     {
         const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
-        ASSERT(layoutData.memoryWriteType != MemoryWriteType::InvalidEnum);
         // No layout change, only memory barrier is required
-        barrier->mergeMemoryBarrier(layoutData.srcStageMask, layoutData.dstStageMask,
-                                    layoutData.srcAccessMask, layoutData.dstAccessMask);
-        barrierModified = true;
+        // This must be a writable layout. No barrier is needed if layout is for reads
+        ASSERT(layoutData.memoryWriteType != MemoryWriteType::InvalidEnum);
+
+        if (mCurrentLayout == ImageLayout::AllGraphicsShadersReadWrite)
+        {
+            constexpr std::array<MemoryWriteType, 4> kAllShadersWrite = {
+                MemoryWriteType::VertexShaderWrite,
+                MemoryWriteType::FragmentShaderWrite,
+                MemoryWriteType::ComputeShaderWrite,
+            };
+            for (const MemoryWriteType &writeType1 : kAllShadersWrite)
+            {
+                PipelineStage writeStage1 = kMemoryWriteTypePipelineStageMap[writeType1];
+                for (const MemoryWriteType &writeType2 : kAllShadersWrite)
+                {
+                    if (tracker->updateForWriteAfterWrite(writeStage1, writeType1,
+                                                          mCurrentWriteBarrierSerial, writeType2))
+                    {
+                        barrierModified = true;
+                    }
+                }
+            }
+        }
+        else if (mCurrentLayout == ImageLayout::ExternalShadersWrite)
+        {
+            tracker->reset();
+            barrierModified = true;
+        }
+        else
+        {
+            if (tracker->updateForWriteAfterWrite(
+                    layoutData.barrierIndex, layoutData.memoryWriteType, mCurrentWriteBarrierSerial,
+                    layoutData.memoryWriteType))
+            {
+                barrierModified = true;
+            }
+        }
+
+        if (barrierModified)
+        {
+            barrier->mergeMemoryBarrier(layoutData.srcStageMask, layoutData.dstStageMask,
+                                        layoutData.srcAccessMask, layoutData.dstAccessMask);
+        }
+        mCurrentWriteBarrierSerial = tracker->getCurrentSerial();
     }
     else
     {
@@ -3151,10 +3273,16 @@ ANGLE_INLINE bool ImageHelper::updateLayoutAndBarrier(VkImageAspectFlags aspectM
                 mLastNonShaderReadOnlyLayout = mCurrentLayout;
                 mCurrentShaderReadStageMask  = dstStageMask;
             }
+            else
+            {
+                mCurrentWriteBarrierSerial = tracker->getCurrentSerial();
+            }
         }
         mCurrentLayout = newLayout;
+
+        tracker->updateSrcPipelineStageMask(transitionFrom.barrierIndex);
+        barrierModified = true;
     }
-    mCurrentWriteBarrierSerial = tracker->getCurrentSerial();
     return barrierModified;
 }
 
