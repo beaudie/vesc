@@ -2669,7 +2669,7 @@ angle::Result ImageHelper::initImageView(Context *context,
                                          uint32_t levelCount)
 {
     return initLayerImageView(context, textureType, aspectMask, swizzleMap, imageViewOut,
-                              baseMipLevel, levelCount, 0, mLayerCount);
+                              baseMipLevel, levelCount, 0, mLayerCount, mFormat->vkImageFormat);
 }
 
 angle::Result ImageHelper::initLayerImageView(Context *context,
@@ -2680,22 +2680,8 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
                                               uint32_t baseMipLevel,
                                               uint32_t levelCount,
                                               uint32_t baseArrayLayer,
-                                              uint32_t layerCount) const
-{
-    return initLayerImageViewImpl(context, textureType, aspectMask, swizzleMap, imageViewOut,
-                                  baseMipLevel, levelCount, baseArrayLayer, layerCount,
-                                  mFormat->vkImageFormat);
-}
-angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
-                                                  gl::TextureType textureType,
-                                                  VkImageAspectFlags aspectMask,
-                                                  const gl::SwizzleState &swizzleMap,
-                                                  ImageView *imageViewOut,
-                                                  uint32_t baseMipLevel,
-                                                  uint32_t levelCount,
-                                                  uint32_t baseArrayLayer,
-                                                  uint32_t layerCount,
-                                                  VkFormat imageFormat) const
+                                              uint32_t layerCount,
+                                              VkFormat imageFormat) const
 {
     VkImageViewCreateInfo viewInfo = {};
     viewInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -4661,16 +4647,16 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
     {
         ANGLE_TRY(image.initLayerImageView(contextVk, viewType, VK_IMAGE_ASPECT_DEPTH_BIT,
                                            swizzleState, &getReadImageView(), baseLevel, levelCount,
-                                           baseLayer, layerCount));
-        ANGLE_TRY(image.initLayerImageView(contextVk, viewType, VK_IMAGE_ASPECT_STENCIL_BIT,
-                                           swizzleState, &mStencilReadImageView, baseLevel,
-                                           levelCount, baseLayer, layerCount));
+                                           baseLayer, layerCount, image.getFormat().vkImageFormat));
+        ANGLE_TRY(image.initLayerImageView(
+            contextVk, viewType, VK_IMAGE_ASPECT_STENCIL_BIT, swizzleState, &mStencilReadImageView,
+            baseLevel, levelCount, baseLayer, layerCount, image.getFormat().vkImageFormat));
     }
     else
     {
         ANGLE_TRY(image.initLayerImageView(contextVk, viewType, aspectFlags, swizzleState,
                                            &getReadImageView(), baseLevel, levelCount, baseLayer,
-                                           layerCount));
+                                           layerCount, image.getFormat().vkImageFormat));
     }
 
     if (viewType == gl::TextureType::CubeMap || viewType == gl::TextureType::_2DArray ||
@@ -4681,7 +4667,7 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
         // TODO(http://anglebug.com/4004): SwizzleState incorrect for CopyTextureCHROMIUM.
         ANGLE_TRY(image.initLayerImageView(contextVk, arrayType, aspectFlags, swizzleState,
                                            &getFetchImageView(), baseLevel, levelCount, baseLayer,
-                                           layerCount));
+                                           layerCount, image.getFormat().vkImageFormat));
     }
 
     return angle::Result::Continue;
@@ -4707,15 +4693,15 @@ angle::Result ImageViewHelper::initSRGBReadViews(ContextVk *contextVk,
 
     if (!mLinearReadImageView.valid())
     {
-        ANGLE_TRY(image.initLayerImageViewImpl(contextVk, viewType, aspectFlags, swizzleState,
-                                               &mLinearReadImageView, baseLevel, levelCount,
-                                               baseLayer, layerCount, linearFormat));
+        ANGLE_TRY(image.initLayerImageView(contextVk, viewType, aspectFlags, swizzleState,
+                                           &mLinearReadImageView, baseLevel, levelCount, baseLayer,
+                                           layerCount, linearFormat));
     }
     if (nonLinearOverrideFormat != VK_FORMAT_UNDEFINED && !mNonLinearReadImageView.valid())
     {
-        ANGLE_TRY(image.initLayerImageViewImpl(contextVk, viewType, aspectFlags, swizzleState,
-                                               &mNonLinearReadImageView, baseLevel, levelCount,
-                                               baseLayer, layerCount, nonLinearOverrideFormat));
+        ANGLE_TRY(image.initLayerImageView(contextVk, viewType, aspectFlags, swizzleState,
+                                           &mNonLinearReadImageView, baseLevel, levelCount,
+                                           baseLayer, layerCount, nonLinearOverrideFormat));
     }
 
     if (viewType == gl::TextureType::CubeMap || viewType == gl::TextureType::_2DArray ||
@@ -4727,15 +4713,15 @@ angle::Result ImageViewHelper::initSRGBReadViews(ContextVk *contextVk,
         if (!mLinearFetchImageView.valid())
         {
 
-            ANGLE_TRY(image.initLayerImageViewImpl(contextVk, arrayType, aspectFlags, swizzleState,
-                                                   &mLinearFetchImageView, baseLevel, levelCount,
-                                                   baseLayer, layerCount, linearFormat));
+            ANGLE_TRY(image.initLayerImageView(contextVk, arrayType, aspectFlags, swizzleState,
+                                               &mLinearFetchImageView, baseLevel, levelCount,
+                                               baseLayer, layerCount, linearFormat));
         }
         if (nonLinearOverrideFormat != VK_FORMAT_UNDEFINED && !mNonLinearFetchImageView.valid())
         {
-            ANGLE_TRY(image.initLayerImageViewImpl(contextVk, viewType, aspectFlags, swizzleState,
-                                                   &mNonLinearFetchImageView, baseLevel, levelCount,
-                                                   baseLayer, layerCount, nonLinearOverrideFormat));
+            ANGLE_TRY(image.initLayerImageView(contextVk, viewType, aspectFlags, swizzleState,
+                                               &mNonLinearFetchImageView, baseLevel, levelCount,
+                                               baseLayer, layerCount, nonLinearOverrideFormat));
         }
     }
 
@@ -4747,6 +4733,7 @@ angle::Result ImageViewHelper::getLevelDrawImageView(ContextVk *contextVk,
                                                      const ImageHelper &image,
                                                      uint32_t level,
                                                      uint32_t layer,
+                                                     VkFormat vkImageFormat,
                                                      const ImageView **imageViewOut)
 {
     retain(&contextVk->getResourceUseList());
@@ -4761,13 +4748,15 @@ angle::Result ImageViewHelper::getLevelDrawImageView(ContextVk *contextVk,
 
     // Create the view.  Note that storage images are not affected by swizzle parameters.
     return image.initLayerImageView(contextVk, viewType, image.getAspectFlags(), gl::SwizzleState(),
-                                    imageView, level, 1, layer, image.getLayerCount());
+                                    imageView, level, 1, layer, image.getLayerCount(),
+                                    vkImageFormat);
 }
 
 angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
                                                           const ImageHelper &image,
                                                           uint32_t level,
                                                           uint32_t layer,
+                                                          VkFormat vkImageFormat,
                                                           const ImageView **imageViewOut)
 {
     ASSERT(image.valid());
@@ -4798,7 +4787,7 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     // don't have swizzle.
     gl::TextureType viewType = Get2DTextureType(1, image.getSamples());
     return image.initLayerImageView(contextVk, viewType, image.getAspectFlags(), gl::SwizzleState(),
-                                    imageView, level, 1, layer, 1);
+                                    imageView, level, 1, layer, 1, vkImageFormat);
 }
 
 // SamplerHelper implementation.
