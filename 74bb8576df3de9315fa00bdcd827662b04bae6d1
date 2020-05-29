@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8507993e_40793eae",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-29T21:24:47Z",
+      "side": 1,
+      "message": "I thought about this, but I thought the general rule is we use reference for const and pointers for non-const? The expectation here is that caller will update the tracker, that is why I picked to return pointer.\n\nThe tracker pointer will never change during life time of context. I probably should add assertion in ContextVK::ContextVK when mMemoryBarrierTracker is assigned and make the pointer a const pointer.",
+      "parentUuid": "f488fe79_d70c34bc",
+      "revId": "74bb8576df3de9315fa00bdcd827662b04bae6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f54a0e3_dcd40817",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -30,6 +48,30 @@
       "writtenOn": "2020-05-29T06:04:07Z",
       "side": 1,
       "message": "I think what you want here is vk::GetImpl().\n\n    mMemoryBarrierTracker \u003d vk::GetImpl(getState().getShareGroup());",
+      "range": {
+        "startLine": 765,
+        "startChar": 0,
+        "endLine": 766,
+        "endChar": 99
+      },
+      "revId": "74bb8576df3de9315fa00bdcd827662b04bae6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5ef426a_e3702f15",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-29T21:24:47Z",
+      "side": 1,
+      "message": "Cool. Will fix.",
+      "parentUuid": "2f54a0e3_dcd40817",
       "range": {
         "startLine": 765,
         "startChar": 0,
