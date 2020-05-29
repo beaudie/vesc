@@ -16,6 +16,69 @@
       "revId": "f2d2f84c0f149b534969f34000dbfe4aa8d1e745",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "617bf49a_69c675bb",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-29T14:57:40Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be mHasComputeUniformBuffers?\nWe are in the if (isCompute()) branch.",
+      "range": {
+        "startLine": 254,
+        "startChar": 15,
+        "endLine": 254,
+        "endChar": 42
+      },
+      "revId": "f2d2f84c0f149b534969f34000dbfe4aa8d1e745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c98b03dd_13d379c0",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-29T14:57:40Z",
+      "side": 1,
+      "message": "mHasGraphicsUniformBuffers?",
+      "range": {
+        "startLine": 258,
+        "startChar": 15,
+        "endLine": 258,
+        "endChar": 40
+      },
+      "revId": "f2d2f84c0f149b534969f34000dbfe4aa8d1e745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c8e868e_6a30bc51",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-05-29T14:57:40Z",
+      "side": 1,
+      "message": "Would it be a little more efficient to have:\n\nreturn !getShaderStorageBlocks().empty() || (isCompute() ? mHasComputeStorageBuffers : mHasGraphicsStorageBuffers);\n\nThat would allow us to return immediately if !getShaderStorageBlocks().empty() is true, potentially save an if check.\nWould the compiler be smart enough to do that reordering for you?",
+      "revId": "f2d2f84c0f149b534969f34000dbfe4aa8d1e745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
