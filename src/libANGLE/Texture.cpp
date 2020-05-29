@@ -99,6 +99,7 @@ TextureState::TextureState(TextureType type)
       mBaseLevel(0),
       mMaxLevel(1000),
       mDepthStencilTextureMode(GL_DEPTH_COMPONENT),
+      mImageUnitMask(0),
       mImmutableFormat(false),
       mImmutableLevels(0),
       mUsage(GL_NONE),
@@ -2013,8 +2014,10 @@ angle::Result Texture::getTexImage(const Context *context,
                                  pixels);
 }
 
-void Texture::onBindAsImageTexture(ContextID contextID)
+void Texture::onBindAsImageTexture(ContextID contextID, size_t unit)
 {
+    mState.mImageUnitMask.set(unit);
+
     ContextBindingCount &bindingCount = mState.getBindingCount(contextID);
 
     ASSERT(bindingCount.imageBindingCount < std::numeric_limits<uint32_t>::max());
