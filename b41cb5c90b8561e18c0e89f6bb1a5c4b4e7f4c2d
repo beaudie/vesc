@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca0bd74d_7e7182a1",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T19:52:19Z",
+      "side": 1,
+      "message": "For consistency, use single quotes here too: \u0027Roll \u0027",
+      "range": {
+        "startLine": 44,
+        "startChar": 37,
+        "endLine": 44,
+        "endChar": 44
+      },
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf38558a_32dfee8b",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T19:52:19Z",
+      "side": 1,
+      "message": "As I mentioned in the bug, I think it would be better to just not allow any commit messages containing tabs and I suspect most code reviews would call it out to have them removed.\n\nMaybe the presubmit error message could indicate that the tabs can be replaced with ascii \u0027\\t\u0027 if it\u0027s really important to the change description?\n\nJamie/Cody - Any thoughts on not allowing tabs at all?",
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04aff882_6c407281",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T19:52:19Z",
+      "side": 1,
+      "message": "It may not be obvious what \u0027tags\u0027 means.   I suggest updating the error message to include some examples:\n\n    output_api.PresubmitError(\"Please ensure that there are tags (e.g., Bug:, Test:) in your description.\"))",
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "455cbf5f_348097b6",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T19:52:19Z",
+      "side": 1,
+      "message": "Can you add a comment that this is popping off the blank line between the tags and the description body?",
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8de0aaf8_ee879dd7",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T19:52:19Z",
+      "side": 1,
+      "message": "Why do we allow blank lines before the summary?   This seems like something we\u0027d want to reject.",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 36
+      },
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d98f63f_952b3e45",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T19:52:19Z",
+      "side": 1,
+      "message": "ref",
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5fa0877_03cfcb1f",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T19:52:19Z",
+      "side": 1,
+      "message": "Line 106 is assuming that the summary is only 1 line.   However, if we find a line that is not blank, that implies one of two things:\n\n1.) The summary is 2 lines long to get past the 70 char limit\n2.) There is no blank line between the summary and description\n\nIt\u0027s not really possible to know which they did wrong, so this error message should be a bit more vague to cover them both:\n\n        errors.append(\n            output_api.PresubmitError(\u0027Please ensure the summary is only 1 line and \u0027\n                                      \u0027 there is 1 blank line between the summary \u0027\n                                        and description body.\u0027))",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 91
+      },
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
