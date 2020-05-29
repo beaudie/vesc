@@ -448,19 +448,19 @@ class ContextVk : public ContextImpl, public vk::Context
 
     angle::Result onBufferTransferRead(vk::BufferHelper *buffer)
     {
-        return onBufferRead(VK_ACCESS_TRANSFER_READ_BIT, vk::PipelineStage::Transfer, buffer);
+        return onBufferRead(vk::MemoryReadType::TransferRead, buffer);
     }
     angle::Result onBufferTransferWrite(vk::BufferHelper *buffer)
     {
-        return onBufferWrite(VK_ACCESS_TRANSFER_WRITE_BIT, vk::PipelineStage::Transfer, buffer);
+        return onBufferWrite(vk::MemoryWriteType::TransferWrite, buffer);
     }
     angle::Result onBufferComputeShaderRead(vk::BufferHelper *buffer)
     {
-        return onBufferRead(VK_ACCESS_SHADER_READ_BIT, vk::PipelineStage::ComputeShader, buffer);
+        return onBufferRead(vk::MemoryReadType::ComputeShaderRead, buffer);
     }
     angle::Result onBufferComputeShaderWrite(vk::BufferHelper *buffer)
     {
-        return onBufferWrite(VK_ACCESS_SHADER_WRITE_BIT, vk::PipelineStage::ComputeShader, buffer);
+        return onBufferWrite(vk::MemoryWriteType::ComputeShaderWrite, buffer);
     }
 
     angle::Result onImageRead(VkImageAspectFlags aspectFlags,
@@ -534,6 +534,8 @@ class ContextVk : public ContextImpl, public vk::Context
     }
     // When worker thread completes, it releases command buffers back to context queue
     void recycleCommandBuffer(vk::CommandBufferHelper *commandBuffer);
+
+    vk::MemoryBarrierTimelineTracker *getMemoryBarrierTracker() { return &mMemoryBarrierTracker; }
 
   private:
     // Dirty bits.
@@ -790,12 +792,8 @@ class ContextVk : public ContextImpl, public vk::Context
 
     ANGLE_INLINE void onRenderPassFinished() { mRenderPassCommandBuffer = nullptr; }
 
-    angle::Result onBufferRead(VkAccessFlags readAccessType,
-                               vk::PipelineStage readStage,
-                               vk::BufferHelper *buffer);
-    angle::Result onBufferWrite(VkAccessFlags writeAccessType,
-                                vk::PipelineStage writeStage,
-                                vk::BufferHelper *buffer);
+    angle::Result onBufferRead(vk::MemoryReadType readType, vk::BufferHelper *buffer);
+    angle::Result onBufferWrite(vk::MemoryWriteType writeType, vk::BufferHelper *buffer);
 
     void initIndexTypeMap();
 
@@ -917,6 +915,9 @@ class ContextVk : public ContextImpl, public vk::Context
     // is otherwise unnecessary as the SyncVk objects don't actually outlive the renderer currently.
     // http://anglebug.com/2701
     vk::Shared<vk::Fence> mSubmitFence;
+
+    // Tracks memory barriers over the timeline so that redundant barriers would be avoided
+    vk::MemoryBarrierTimelineTracker mMemoryBarrierTracker;
 
     // When the command graph is disabled we record commands completely linearly. We have plans to
     //  reorder independent draws so that we can create fewer RenderPasses in some scenarios.

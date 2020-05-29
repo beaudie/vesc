@@ -22,12 +22,34 @@ namespace rx
 {
 namespace
 {
-constexpr gl::ShaderMap<vk::PipelineStage> kPipelineStageShaderMap = {
-    {gl::ShaderType::Vertex, vk::PipelineStage::VertexShader},
-    {gl::ShaderType::Fragment, vk::PipelineStage::FragmentShader},
-    {gl::ShaderType::Geometry, vk::PipelineStage::GeometryShader},
-    {gl::ShaderType::Compute, vk::PipelineStage::ComputeShader},
-};
+static constexpr vk::MemoryWriteType GetShaderWriteMemoryType(gl::ShaderType shaderType)
+{
+    static_assert(static_cast<int>(vk::MemoryWriteType::FragmentShaderWrite) ==
+                      static_cast<int>(gl::ShaderType::Fragment) +
+                          static_cast<int>(vk::MemoryWriteType::VertexShaderWrite),
+                  "ShaderType and ShaderWrite enum mismatch");
+    static_assert(static_cast<int>(vk::MemoryWriteType::ComputeShaderWrite) ==
+                      static_cast<int>(gl::ShaderType::Compute) +
+                          static_cast<int>(vk::MemoryWriteType::VertexShaderWrite),
+                  "ShaderType and ShaderWrite enum mismatch");
+    return static_cast<vk::MemoryWriteType>(
+        static_cast<int>(shaderType) + static_cast<int>(vk::MemoryWriteType::VertexShaderWrite));
+}
+
+static constexpr vk::MemoryReadType GetUniformReadMemoryType(gl::ShaderType shaderType)
+{
+    static_assert(static_cast<int>(vk::MemoryReadType::FragmentShaderUniformRead) ==
+                      static_cast<int>(gl::ShaderType::Fragment) +
+                          static_cast<int>(vk::MemoryReadType::VertexShaderUniformRead),
+                  "ShaderType and UniformRead enum mismatch");
+    static_assert(static_cast<int>(vk::MemoryReadType::ComputeShaderUniformRead) ==
+                      static_cast<int>(gl::ShaderType::Compute) +
+                          static_cast<int>(vk::MemoryReadType::VertexShaderUniformRead),
+                  "ShaderType and UniformRead enum mismatch");
+    return static_cast<vk::MemoryReadType>(
+        static_cast<int>(shaderType) +
+        static_cast<int>(vk::MemoryReadType::VertexShaderUniformRead));
+}
 
 VkDeviceSize GetShaderBufferBindingSize(const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding)
 {
@@ -944,15 +966,13 @@ void ProgramExecutableVk::updateBuffersDescriptorSet(ContextVk *contextVk,
 
         if (isStorageBuffer)
         {
-            // We set the SHADER_READ_BIT to be conservative.
-            VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-            commandBufferHelper->bufferWrite(resourceUseList, accessFlags,
-                                             kPipelineStageShaderMap[shaderType], &bufferHelper);
+            commandBufferHelper->bufferWrite(resourceUseList, GetShaderWriteMemoryType(shaderType),
+                                             &bufferHelper, contextVk->getMemoryBarrierTracker());
         }
         else
         {
-            commandBufferHelper->bufferRead(resourceUseList, VK_ACCESS_UNIFORM_READ_BIT,
-                                            kPipelineStageShaderMap[shaderType], &bufferHelper);
+            commandBufferHelper->bufferRead(resourceUseList, GetUniformReadMemoryType(shaderType),
+                                            &bufferHelper, contextVk->getMemoryBarrierTracker());
         }
 
         ++writeCount;
@@ -1022,10 +1042,8 @@ void ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
                                         info.binding, binding, requiredOffsetAlignment, &bufferInfo,
                                         &writeInfo);
 
-        // We set SHADER_READ_BIT to be conservative.
-        commandBufferHelper->bufferWrite(resourceUseList,
-                                         VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
-                                         kPipelineStageShaderMap[shaderType], &bufferHelper);
+        commandBufferHelper->bufferWrite(resourceUseList, GetShaderWriteMemoryType(shaderType),
+                                         &bufferHelper, contextVk->getMemoryBarrierTracker());
 
         writtenBindings.set(binding);
     }
