@@ -3388,11 +3388,11 @@ void State::setImageUnit(const Context *context,
 
     if (imageUnit.texture.get())
     {
-        imageUnit.texture->onUnbindAsImageTexture(mID);
+        imageUnit.texture->onUnbindAsImageTexture(mID, unit);
     }
     if (texture)
     {
-        texture->onBindAsImageTexture(mID);
+        texture->onBindAsImageTexture(mID, unit);
     }
     imageUnit.texture.set(context, texture);
     imageUnit.level   = level;
