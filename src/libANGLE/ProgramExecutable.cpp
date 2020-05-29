@@ -27,6 +27,7 @@ ProgramExecutable::ProgramExecutable()
       mActiveImagesMask(0),
       mCanDrawWith(false),
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
+      mDefaultUniformRange(0, 0),
       mSamplerUniformRange(0, 0),
       mImageUniformRange(0, 0),
       mHasGraphicsUniformBuffers(false),
@@ -34,7 +35,9 @@ ProgramExecutable::ProgramExecutable()
       mHasGraphicsStorageBuffers(false),
       mHasComputeStorageBuffers(false),
       mHasGraphicsAtomicCounterBuffers(false),
-      mHasComputeAtomicCounterBuffers(false)
+      mHasComputeAtomicCounterBuffers(false),
+      mHasGraphicsDefaultUniforms(false),
+      mHasComputeDefaultUniforms(false)
 {
     reset();
 }
@@ -63,6 +66,7 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mTransformFeedbackStrides(other.mTransformFeedbackStrides),
       mTransformFeedbackBufferMode(other.mTransformFeedbackBufferMode),
       mUniforms(other.mUniforms),
+      mDefaultUniformRange(other.mDefaultUniformRange),
       mSamplerUniformRange(other.mSamplerUniformRange),
       mUniformBlocks(other.mUniformBlocks),
       mAtomicCounterBuffers(other.mAtomicCounterBuffers),
@@ -73,7 +77,9 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mHasGraphicsStorageBuffers(other.mHasGraphicsStorageBuffers),
       mHasComputeStorageBuffers(other.mHasComputeStorageBuffers),
       mHasGraphicsAtomicCounterBuffers(other.mHasGraphicsAtomicCounterBuffers),
-      mHasComputeAtomicCounterBuffers(other.mHasComputeAtomicCounterBuffers)
+      mHasComputeAtomicCounterBuffers(other.mHasComputeAtomicCounterBuffers),
+      mHasGraphicsDefaultUniforms(other.mHasGraphicsDefaultUniforms),
+      mHasComputeDefaultUniforms(other.mHasComputeDefaultUniforms)
 {
     reset();
 }
@@ -110,6 +116,8 @@ void ProgramExecutable::reset()
     mHasComputeStorageBuffers        = false;
     mHasGraphicsAtomicCounterBuffers = false;
     mHasComputeAtomicCounterBuffers  = false;
+    mHasGraphicsDefaultUniforms      = false;
+    mHasComputeDefaultUniforms       = false;
 }
 
 void ProgramExecutable::load(gl::BinaryInputStream *stream)
@@ -131,6 +139,8 @@ void ProgramExecutable::load(gl::BinaryInputStream *stream)
     mHasComputeStorageBuffers        = stream->readBool();
     mHasGraphicsAtomicCounterBuffers = stream->readBool();
     mHasComputeAtomicCounterBuffers  = stream->readBool();
+    mHasGraphicsDefaultUniforms      = stream->readBool();
+    mHasComputeDefaultUniforms       = stream->readBool();
 }
 
 void ProgramExecutable::save(gl::BinaryOutputStream *stream) const
@@ -151,6 +161,8 @@ void ProgramExecutable::save(gl::BinaryOutputStream *stream) const
     stream->writeInt(static_cast<bool>(mHasComputeStorageBuffers));
     stream->writeInt(static_cast<bool>(mHasGraphicsAtomicCounterBuffers));
     stream->writeInt(static_cast<bool>(mHasComputeAtomicCounterBuffers));
+    stream->writeInt(static_cast<bool>(mHasGraphicsDefaultUniforms));
+    stream->writeInt(static_cast<bool>(mHasComputeDefaultUniforms));
 }
 
 const ProgramState *ProgramExecutable::getProgramState(ShaderType shaderType) const
@@ -223,16 +235,16 @@ AttributesMask ProgramExecutable::getAttributesMask() const
     return mAttributesMask;
 }
 
-// TODO: http://anglebug.com/4520: Needs  mDefaultUniformRange moved to ProgramExecutable
 bool ProgramExecutable::hasDefaultUniforms() const
 {
-    ASSERT(mProgramState || mProgramPipelineState);
-    if (mProgramState)
+    if (isCompute())
     {
-        return mProgramState->hasDefaultUniforms();
+        return mHasGraphicsDefaultUniforms || !getDefaultUniformRange().empty();
     }
-
-    return mProgramPipelineState->hasDefaultUniforms();
+    else
+    {
+        return mHasComputeDefaultUniforms || !getDefaultUniformRange().empty();
+    }
 }
 
 // TODO: http://anglebug.com/4520: Needs  mSamplerBindings moved to ProgramExecutable
