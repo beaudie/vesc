@@ -713,21 +713,32 @@ angle::Result TextureGL::copyImage(const gl::Context *context,
             ASSERT(nativegl::UseTexImage2D(getType()));
             stateManager->bindFramebuffer(GL_READ_FRAMEBUFFER,
                                           sourceFramebufferGL->getFramebufferID());
-            if (requiresInitialization)
-            {
-                ANGLE_GL_TRY(context, functions->copyTexSubImage2D(
-                                          ToGLenum(target), static_cast<GLint>(level), destOffset.x,
-                                          destOffset.y, clippedArea.x, clippedArea.y,
-                                          clippedArea.width, clippedArea.height));
-            }
-            else
-            {
-                ANGLE_GL_TRY_ALWAYS_CHECK(
-                    context, functions->copyTexImage2D(ToGLenum(target), static_cast<GLint>(level),
-                                                       copyTexImageFormat.internalFormat,
-                                                       clippedArea.x, clippedArea.y,
-                                                       clippedArea.width, clippedArea.height, 0));
-            }
+            // if (features.emulateCopyTexImage2DFromRenderbuffers.enabled && readBuffer &&
+            //     readBuffer->type() == GL_RENDERBUFFER)
+            // {
+            BlitGL *blitter = GetBlitGL(context);
+            ANGLE_TRY(blitter->blitColorBufferWithShader(
+                context, source, mTextureID, target, level, clippedArea,
+                gl::Rectangle(destOffset.x, destOffset.y, clippedArea.width, clippedArea.height),
+                GL_NEAREST, true));
+            // }
+            // else if (requiresInitialization)
+            // {
+            //     ANGLE_GL_TRY(context, functions->copyTexSubImage2D(
+            //                               ToGLenum(target), static_cast<GLint>(level),
+            //                               destOffset.x, destOffset.y, clippedArea.x,
+            //                               clippedArea.y, clippedArea.width, clippedArea.height));
+            // }
+            // else
+            // {
+            //     ANGLE_GL_TRY_ALWAYS_CHECK(
+            //         context, functions->copyTexImage2D(ToGLenum(target),
+            //         static_cast<GLint>(level),
+            //                                            copyTexImageFormat.internalFormat,
+            //                                            clippedArea.x, clippedArea.y,
+            //                                            clippedArea.width, clippedArea.height,
+            //                                            0));
+            // }
         }
         setLevelInfo(context, target, level, 1, levelInfo);
     }
@@ -781,10 +792,24 @@ angle::Result TextureGL::copySubImage(const gl::Context *context,
         if (nativegl::UseTexImage2D(getType()))
         {
             ASSERT(clippedOffset.z == 0);
-            ANGLE_GL_TRY(context, functions->copyTexSubImage2D(
-                                      ToGLenum(target), static_cast<GLint>(level), clippedOffset.x,
-                                      clippedOffset.y, clippedArea.x, clippedArea.y,
-                                      clippedArea.width, clippedArea.height));
+            // if (features.emulateCopyTexImage2DFromRenderbuffers.enabled &&
+            //     source->getReadColorAttachment() &&
+            //     source->getReadColorAttachment()->type() == GL_RENDERBUFFER)
+            // {
+            BlitGL *blitter = GetBlitGL(context);
+            ANGLE_TRY(blitter->blitColorBufferWithShader(
+                context, source, mTextureID, target, level, clippedArea,
+                gl::Rectangle(clippedOffset.x, clippedOffset.y, clippedArea.width,
+                              clippedArea.height),
+                GL_NEAREST, true));
+            // }
+            // else
+            // {
+            //     ANGLE_GL_TRY(context, functions->copyTexSubImage2D(
+            //                               ToGLenum(target), static_cast<GLint>(level),
+            //                               clippedOffset.x, clippedOffset.y, clippedArea.x,
+            //                               clippedArea.y, clippedArea.width, clippedArea.height));
+            // }
         }
         else
         {
