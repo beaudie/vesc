@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a76ae918_3e9afb7c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-29T17:19:20Z",
+      "side": 1,
+      "message": "is there a reason the const was removed?",
+      "revId": "6d405c9fb44eec35d1a4e3563c6ed03052e211d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8728b866_0e071697",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2020-05-29T17:19:20Z",
+      "side": 1,
+      "message": "memory",
+      "range": {
+        "startLine": 478,
+        "startChar": 42,
+        "endLine": 478,
+        "endChar": 48
+      },
+      "revId": "6d405c9fb44eec35d1a4e3563c6ed03052e211d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
