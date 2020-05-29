@@ -1083,6 +1083,17 @@ class ImageHelper final : public Resource, public angle::Subject
                                          uint32_t baseArrayLayer,
                                          uint32_t layerCount,
                                          VkFormat imageFormat) const;
+    angle::Result initAliasedLayerImageView(Context *context,
+                                            gl::TextureType textureType,
+                                            VkImageAspectFlags aspectMask,
+                                            const gl::SwizzleState &swizzleMap,
+                                            ImageView *imageViewOut,
+                                            uint32_t baseMipLevel,
+                                            uint32_t levelCount,
+                                            uint32_t baseArrayLayer,
+                                            uint32_t layerCount,
+                                            VkImageUsageFlags imageUsageFlags,
+                                            VkFormat imageViewFormat) const;
     angle::Result initImageView(Context *context,
                                 gl::TextureType textureType,
                                 VkImageAspectFlags aspectMask,
@@ -1568,6 +1579,14 @@ class ImageViewHelper : angle::NonCopyable
                                         uint32_t level,
                                         uint32_t layer,
                                         const ImageView **imageViewOut);
+    angle::Result getAliasedLevelDrawImageView(ContextVk *contextVk,
+                                               gl::TextureType viewType,
+                                               const ImageHelper &image,
+                                               uint32_t level,
+                                               uint32_t layer,
+                                               VkImageUsageFlags imageUsageFlags,
+                                               VkFormat vkImageFormat,
+                                               const ImageView **imageViewOut);
 
     // Creates a view with a single layer of the level.
     angle::Result getLevelLayerDrawImageView(ContextVk *contextVk,
