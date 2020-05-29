@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f488fe79_d70c34bc",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T06:04:07Z",
+      "side": 1,
+      "message": "To prevent each of these calls potentially segfaulting, getMemoryBarrierTracker() should be updated to do the dereference.   This way it can also assert that the pointer is non-null and prevent the crash (which helps with debugging in CQ).\n\n    vk::MemoryBarrierTimelineTracker \u0026getMemoryBarrierTracker() const\n    {\n        ASSERT(mMemoryBarrierTracker)\n        return *mMemoryBarrierTracker;\n    }",
+      "revId": "74bb8576df3de9315fa00bdcd827662b04bae6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f54a0e3_dcd40817",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T06:04:07Z",
+      "side": 1,
+      "message": "I think what you want here is vk::GetImpl().\n\n    mMemoryBarrierTracker \u003d vk::GetImpl(getState().getShareGroup());",
+      "range": {
+        "startLine": 765,
+        "startChar": 0,
+        "endLine": 766,
+        "endChar": 99
+      },
+      "revId": "74bb8576df3de9315fa00bdcd827662b04bae6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
