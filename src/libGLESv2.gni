@@ -167,6 +167,8 @@ libangle_includes = [
   "include/GLES3/gl31ext_explicit_context_autogen.inc",
   "include/GLES3/gl32.h",
   "include/GLES3/gl32ext_explicit_context_autogen.inc",
+  "include/GLSLANG/ShaderLang.h",
+  "include/GLSLANG/ShaderVars.h",
   "include/KHR/khrplatform.h",
   "include/WGL/wgl.h",
   "include/platform/Feature.h",
