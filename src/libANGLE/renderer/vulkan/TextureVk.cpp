@@ -1611,6 +1611,18 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         {
             mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
         }
+
+        const gl::State &glState = context->getState();
+        for (size_t imageUnitIndex : mState.getImageUnitMask())
+        {
+            const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+            const gl::Texture *texture     = imageUnit.texture.get();
+            ASSERT(texture && (this == vk::GetImpl(texture)));
+            if (imageUnit.format != mState.getBaseLevelDesc().format.info->sizedInternalFormat)
+            {
+                mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+            }
+        }
     }
 
     if (dirtyBits.test(gl::Texture::DIRTY_BIT_SRGB_OVERRIDE))
@@ -1766,20 +1778,22 @@ angle::Result TextureVk::getLevelLayerImageView(ContextVk *contextVk,
 }
 
 angle::Result TextureVk::getStorageImageView(ContextVk *contextVk,
-                                             bool allLayers,
-                                             size_t level,
-                                             size_t singleLayer,
+                                             const gl::ImageUnit &binding,
                                              const vk::ImageView **imageViewOut)
 {
-    if (!allLayers)
+    angle::FormatID formatID = angle::Format::InternalFormatToID(binding.format);
+    const vk::Format &format = contextVk->getRenderer()->getFormat(formatID);
+
+    if (binding.layered != GL_TRUE)
     {
-        return getLevelLayerImageView(contextVk, level, singleLayer, imageViewOut);
+        return getLevelLayerImageView(contextVk, binding.level, binding.layer, imageViewOut);
     }
 
-    uint32_t nativeLevel = getNativeImageLevel(static_cast<uint32_t>(level));
+    uint32_t nativeLevel = getNativeImageLevel(static_cast<uint32_t>(binding.level));
     uint32_t nativeLayer = getNativeImageLayer(0);
     return mImageViews.getLevelDrawImageView(contextVk, mState.getType(), *mImage, nativeLevel,
-                                             nativeLayer, imageViewOut);
+                                             nativeLayer, mImageUsageFlags, format.vkImageFormat,
+                                             imageViewOut);
 }
 
 angle::Result TextureVk::initImage(ContextVk *contextVk,
@@ -1833,7 +1847,7 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     {
         ANGLE_TRY(mImageViews.initSRGBReadViews(contextVk, mState.getType(), *mImage, format,
                                                 mappedSwizzle, baseLevel, levelCount, baseLayer,
-                                                layerCount));
+                                                layerCount, mImageUsageFlags));
     }
 
     return angle::Result::Continue;
