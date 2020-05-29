@@ -1739,6 +1739,14 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
         IsLinux() && isAMD && isMesa && mesaVersion < (std::array<int, 3>{19, 3, 5}));
 
     ANGLE_FEATURE_CONDITION(features, disableTimestampQueries, IsLinux() && isVMWare);
+
+    // anglebug.com/4674
+    // The (redundant) explicit exclusion of Windows AMD is because the workaround fails
+    // Texture2DRGTest.TextureRGUNormTest on that platform, and the test is skipped. If
+    // you'd like to enable the workaround on Windows AMD, please fix the test first.
+    ANGLE_FEATURE_CONDITION(
+        features, emulateCopyTexImage2DFromRenderbuffers,
+        IsApple() && functions->standard == STANDARD_GL_ES && !(isAMD && IsWindows()));
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
