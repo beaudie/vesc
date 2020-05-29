@@ -176,9 +176,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // seamful cube map emulation.
     const vk::ImageView &getFetchImageViewAndRecordUse(ContextVk *contextVk) const;
     angle::Result getStorageImageView(ContextVk *contextVk,
-                                      bool allLayers,
-                                      size_t level,
-                                      size_t singleLayer,
+                                      const gl::ImageUnit &binding,
                                       const vk::ImageView **imageViewOut);
 
     const vk::Sampler &getSampler() const
