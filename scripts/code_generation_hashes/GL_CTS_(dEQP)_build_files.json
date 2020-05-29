@@ -22,7 +22,7 @@
   "third_party/VK-GL-CTS/src/external/openglcts/modules/CMakeLists.txt":
     "9852754780cd9522f93644d2d99b271d",
   "third_party/VK-GL-CTS/src/external/openglcts/modules/common/CMakeLists.txt":
-    "6fac0f4254e7792284fb086547210811",
+    "e5f5eb5359e32f1f12cd1d6457edcd89",
   "third_party/VK-GL-CTS/src/external/openglcts/modules/common/subgroups/CMakeLists.txt":
     "bf71ce2d9756ccee7833a789737e6481",
   "third_party/VK-GL-CTS/src/external/openglcts/modules/gl/CMakeLists.txt":
@@ -110,7 +110,7 @@
   "third_party/VK-GL-CTS/src/external/vulkancts/modules/vulkan/tessellation/CMakeLists.txt":
     "bd315c04bf5adb9f63e8c991fbde1e34",
   "third_party/VK-GL-CTS/src/external/vulkancts/modules/vulkan/texture/CMakeLists.txt":
-    "e1a6c593990fbf68ada75efba89410fb",
+    "41bfe3629296269cd08631845599cf19",
   "third_party/VK-GL-CTS/src/external/vulkancts/modules/vulkan/transform_feedback/CMakeLists.txt":
     "e2e32f34bcd3cbbfce6c49a997f34934",
   "third_party/VK-GL-CTS/src/external/vulkancts/modules/vulkan/ubo/CMakeLists.txt":
