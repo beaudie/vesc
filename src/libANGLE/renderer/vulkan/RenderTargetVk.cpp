@@ -115,7 +115,7 @@ angle::Result RenderTargetVk::getImageView(ContextVk *contextVk,
 {
     ASSERT(mImage && mImage->valid() && mImageViews);
     return mImageViews->getLevelLayerDrawImageView(contextVk, *mImage, mLevelIndex, mLayerIndex,
-                                                   imageViewOut);
+                                                   mImage->getFormat().vkImageFormat, imageViewOut);
 }
 
 const vk::Format &RenderTargetVk::getImageFormat() const

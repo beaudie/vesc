@@ -167,6 +167,8 @@ class TextureState final : private angle::NonCopyable
     // Return the enabled mipmap level count.
     GLuint getEnabledLevelCount() const;
 
+    ImageUnitMask getImageUnitMask() const { return mImageUnitMask; }
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -225,6 +227,7 @@ class TextureState final : private angle::NonCopyable
 
     GLenum mDepthStencilTextureMode;
 
+    ImageUnitMask mImageUnitMask;
     std::vector<ContextBindingCount> mBindingCounts;
 
     bool mImmutableFormat;
@@ -455,11 +458,12 @@ class Texture final : public RefCountObject<TextureID>,
 
     angle::Result generateMipmap(Context *context);
 
-    void onBindAsImageTexture(ContextID contextID);
+    void onBindAsImageTexture(ContextID contextID, size_t unit);
 
-    ANGLE_INLINE void onUnbindAsImageTexture(ContextID contextID)
+    ANGLE_INLINE void onUnbindAsImageTexture(ContextID contextID, size_t unit)
     {
         ASSERT(mState.isBoundAsImageTexture(contextID));
+        mState.mImageUnitMask.reset(unit);
         mState.getBindingCount(contextID).imageBindingCount--;
     }
 
