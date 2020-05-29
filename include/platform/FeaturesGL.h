@@ -441,6 +441,11 @@ struct FeaturesGL : FeatureSetBase
     Feature disableTimestampQueries = {
         "disable_timestamp_queries", FeatureCategory::OpenGLWorkarounds,
         "Disable GL_EXT_disjoint_timer_query extension", &members, "https://crbug.com/811661"};
+
+    Feature emulateCopyTexImage2DFromRenderbuffers = {
+        "emulate_copyteximage2d_from_renderbuffers", FeatureCategory::OpenGLWorkarounds,
+        "CopyTexImage2D spuriously returns errors on iOS when copying from renderbuffers.",
+        &members, "https://anglebug.com/4674"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
