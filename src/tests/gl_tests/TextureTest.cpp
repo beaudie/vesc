@@ -6208,7 +6208,13 @@ TEST_P(ETC1CompressedTextureTest, ETC1ShrinkThenGrowMaxLevels)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST_ES2(Texture2DTest);
+#define ES2_EMULATE_COPY_TEX_IMAGE()                          \
+    WithEmulateCopyTexImage2DFromRenderbuffers(ES2_OPENGL()), \
+        WithEmulateCopyTexImage2DFromRenderbuffers(ES2_OPENGLES())
+#define ES3_EMULATE_COPY_TEX_IMAGE()                          \
+    WithEmulateCopyTexImage2DFromRenderbuffers(ES3_OPENGL()), \
+        WithEmulateCopyTexImage2DFromRenderbuffers(ES3_OPENGLES())
+ANGLE_INSTANTIATE_TEST(Texture2DTest, ANGLE_ALL_TEST_PLATFORMS_ES2, ES2_EMULATE_COPY_TEX_IMAGE());
 ANGLE_INSTANTIATE_TEST_ES2(TextureCubeTest);
 ANGLE_INSTANTIATE_TEST_ES2(Texture2DTestWithDrawScale);
 ANGLE_INSTANTIATE_TEST_ES2(Sampler2DAsFunctionParameterTest);
@@ -6233,7 +6239,11 @@ ANGLE_INSTANTIATE_TEST_ES3(TextureBorderClampTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(TextureBorderClampIntegerTestES3);
 ANGLE_INSTANTIATE_TEST_ES2(TextureLimitsTest);
 ANGLE_INSTANTIATE_TEST_ES3(Texture2DNorm16TestES3);
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(Texture2DRGTest);
+ANGLE_INSTANTIATE_TEST(Texture2DRGTest,
+                       ANGLE_ALL_TEST_PLATFORMS_ES2,
+                       ANGLE_ALL_TEST_PLATFORMS_ES3,
+                       ES2_EMULATE_COPY_TEX_IMAGE(),
+                       ES3_EMULATE_COPY_TEX_IMAGE());
 ANGLE_INSTANTIATE_TEST_ES3(Texture2DFloatTestES3);
 ANGLE_INSTANTIATE_TEST_ES2(Texture2DFloatTestES2);
 ANGLE_INSTANTIATE_TEST_ES3(TextureCubeTestES3);
