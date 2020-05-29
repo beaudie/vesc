@@ -7,8 +7,8 @@
 // utilities.cpp: Conversion functions and other utility routines.
 
 #include "common/utilities.h"
-#include <GLSLANG/ShaderVars.h>
 #include "GLES3/gl3.h"
+#include "GLSLANG/ShaderVars.h"
 #include "common/mathutil.h"
 #include "common/platform.h"
 
