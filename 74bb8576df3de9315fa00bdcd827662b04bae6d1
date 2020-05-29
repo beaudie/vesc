@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "4ebc834e_30b27714",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T21:50:57Z",
+      "side": 1,
+      "message": "Jamie can chime in for the final vote, but there is precedent:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2181447/12/src/libANGLE/Program.h#337\n\nI initially did what you\u0027re doing here, but Jamie suggested doing the following:\n    const ProgramExecutable \u0026getExecutable() const\n    {\n        ASSERT(mExecutable);\n        return *mExecutable;\n    }\n    ProgramExecutable \u0026getExecutable()\n    {\n        ASSERT(mExecutable);\n        return *mExecutable;\n    }\n\nI agree that this makes the code cleaner overall and easier to debug if the pointer does end up being null somehow, even if it does bend the rules a little.",
+      "parentUuid": "8507993e_40793eae",
+      "revId": "74bb8576df3de9315fa00bdcd827662b04bae6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f54a0e3_dcd40817",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
