@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "fc5da452_99cb1ef0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-05-29T17:15:45Z",
+      "side": 1,
+      "message": "Maybe I am not fully understand the problem here, so bear with me if I am wrong. My understanding is that you try to detect if the index buffer is current been used by XFB or not. If yes, you need to end RP, otherwise, these are unrelated buffer, so no need to end RP. Right now it walks through the unordered set of XFB buffers and compare serial number. I am wondering instead of serial number, why not a boolean flag (bool mCurrentInUseByXFB) is not enough? Whenever a buffer is been used by XFB, you set to true and when not used set to false. That way you will be checking this boolean instead of walk the unordered set. Will this not work?",
+      "range": {
+        "startLine": 984,
+        "startChar": 11,
+        "endLine": 984,
+        "endChar": 49
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66d75123_b4bf6bd3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 4
