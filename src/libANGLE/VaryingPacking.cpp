@@ -11,6 +11,7 @@
 
 #include "libANGLE/VaryingPacking.h"
 
+#include "GLSLANG/ShaderVars.h"
 #include "common/utilities.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Shader.h"
@@ -530,9 +531,8 @@ bool VaryingPacking::collectAndPackUserVaryings(gl::InfoLog &infoLog,
             }
             if (input->isStruct())
             {
-                GLuint fieldIndex = 0;
-                const sh::ShaderVariable *field =
-                    FindShaderVarField(*input, tfVarying, &fieldIndex);
+                GLuint fieldIndex               = 0;
+                const sh::ShaderVariable *field = input->findField(tfVarying, &fieldIndex);
                 if (field != nullptr)
                 {
                     ASSERT(!field->isStruct() && !field->isArray());
