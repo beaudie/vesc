@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <utility>
 
+#include "GLSLANG/ShaderVars.h"
 #include "common/bitset_utils.h"
 #include "common/debug.h"
 #include "common/platform.h"
@@ -425,7 +426,7 @@ const sh::ShaderVariable *FindOutputVaryingOrField(const ProgramMergedVaryings &
             break;
         }
         GLuint fieldIndex = 0;
-        var               = FindShaderVarField(*varying, name, &fieldIndex);
+        var               = varying->findShaderVarField(name, &fieldIndex);
         if (var != nullptr)
         {
             break;
@@ -4383,7 +4384,7 @@ void Program::gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyi
             else if (varying->isStruct())
             {
                 GLuint fieldIndex = 0;
-                const auto *field = FindShaderVarField(*varying, tfVaryingName, &fieldIndex);
+                const auto *field = varying->findShaderVarField(tfVaryingName, &fieldIndex);
                 if (field != nullptr)
                 {
                     mState.mExecutable->mLinkedTransformFeedbackVaryings.emplace_back(*field,

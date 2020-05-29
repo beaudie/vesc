@@ -15,6 +15,8 @@
 #include <string>
 #include <vector>
 
+#include "GLES/gl.h"
+
 // This type is defined here to simplify ANGLE's integration with glslang for SPIRv.
 using ShCompileOptions = uint64_t;
 
@@ -119,6 +121,11 @@ struct ShaderVariable
     bool findInfoByMappedName(const std::string &mappedFullName,
                               const ShaderVariable **leafVar,
                               std::string *originalFullName) const;
+
+    // Find the child field which matches 'fullName' == var.name + "." + field.name.
+    // Return nullptr if not found.
+    const sh::ShaderVariable *findShaderVarField(const std::string &fullName,
+                                                 GLuint *fieldIndexOut) const;
 
     bool isBuiltIn() const;
     bool isEmulatedBuiltIn() const;
