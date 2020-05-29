@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d63be33_39602825",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-29T20:44:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca0bd74d_7e7182a1",
+      "range": {
+        "startLine": 44,
+        "startChar": 37,
+        "endLine": 44,
+        "endChar": 44
+      },
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf38558a_32dfee8b",
         "filename": "PRESUBMIT.py",
         "patchSetId": 9
@@ -60,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "f03c0854_2600d937",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-29T20:44:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd58d98a_360b54c4",
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04aff882_6c407281",
         "filename": "PRESUBMIT.py",
         "patchSetId": 9
@@ -77,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "1c6d2390_92e875fb",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-29T20:44:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04aff882_6c407281",
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "455cbf5f_348097b6",
         "filename": "PRESUBMIT.py",
         "patchSetId": 9
@@ -91,6 +151,24 @@
       "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74bfac81_3edfb934",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-29T20:44:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "455cbf5f_348097b6",
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +195,30 @@
     },
     {
       "key": {
+        "uuid": "41cb8b79_06f70974",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-29T20:44:32Z",
+      "side": 1,
+      "message": "I find that git log -n 1 --pretty\u003dformat:%B will automatically remove blank line before and after. I will remove the pop then.",
+      "parentUuid": "8de0aaf8_ee879dd7",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 36
+      },
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d98f63f_952b3e45",
         "filename": "PRESUBMIT.py",
         "patchSetId": 9
@@ -131,6 +233,24 @@
       "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05e76c8a_6aea69ee",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-29T20:44:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d98f63f_952b3e45",
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -154,6 +274,30 @@
       "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ec1a7d1_a39ea744",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-05-29T20:44:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5fa0877_03cfcb1f",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 91
+      },
+      "revId": "b41cb5c90b8561e18c0e89f6bb1a5c4b4e7f4c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
