@@ -3321,6 +3321,19 @@ angle::Result ContextVk::memoryBarrierImpl(GLbitfield barriers, VkPipelineStageF
 
     commandBuffer->memoryBarrier(stageMask, stageMask, &memoryBarrier);
 
+    if (stageMask == VK_PIPELINE_STAGE_ALL_COMMANDS_BIT)
+    {
+        if ((barriers & kShaderWriteBarriers) != 0)
+        {
+            mMemoryBarrierTracker->reset();
+        }
+        else
+        {
+            mMemoryBarrierTracker->updateAllSrcPipelineStageMask();
+        }
+        mMemoryBarrierTracker->onBarriersExecute();
+    }
+
     return angle::Result::Continue;
 }
 
@@ -3784,6 +3797,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
         mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(
             VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_HOST_BIT, &memoryBarrier);
         mIsAnyHostVisibleBufferWritten = false;
+
+        mMemoryBarrierTracker->reset();
     }
 
     if (mGpuEventsEnabled)
@@ -4312,6 +4327,8 @@ angle::Result ContextVk::syncExternalMemory()
 
     commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, &memoryBarrier);
+
+    mMemoryBarrierTracker->reset();
     return angle::Result::Continue;
 }
 
