@@ -738,6 +738,21 @@ class MemoryBarrierTimelineTracker final : angle::NonCopyable
                                  Serial writeSerial,
                                  MemoryReadType readType)
     {
+        uint32_t index = getReadAfterWriteIndex(writeType, readType);
+
+        // If the write occurred before the barrier was issued, we do't need
+        // barrier. Or if they are equal, it means the same barrier already added.
+        if (writeSerial <= mRAWBarrierSerials[index])
+        {
+            return false;
+        }
+
+        // Serial is updated here to prevent the same type of barrier from being reissued
+        mRAWBarrierSerials[index] = getCurrentSerial();
+        mRAWBarrierDirtyIndices.push_back(index);
+
+        // For WriteAfterRead, record the stages we have waited here
+        mSrcPipelineStageMask.set(writeStage);
         return true;
     }
 
@@ -749,6 +764,23 @@ class MemoryBarrierTimelineTracker final : angle::NonCopyable
                                   Serial prevWriteSerial,
                                   MemoryWriteType writeType)
     {
+        // The tracked index can easily formed here
+        uint32_t index = getWriteAfterWriteIndex(prevWriteType, writeType);
+
+        // If the write occurred before the barrier was
+        // issued, we don't need barrier. Or if they are equal, it means the same barrier already
+        // added.
+        if (prevWriteSerial <= mWAWBarrierSerials[index])
+        {
+            return false;
+        }
+
+        // Serial is updated here to prevent the same type of barrier from being reissued
+        mWAWBarrierSerials[index] = getCurrentSerial();
+        mWAWBarrierDirtyIndices.push_back(index);
+
+        // For WriteAfterRead, record the stages we have waited here
+        mSrcPipelineStageMask.set(prevWriteStage);
         return true;
     }
 
@@ -758,8 +790,25 @@ class MemoryBarrierTimelineTracker final : angle::NonCopyable
     bool updateForWriteAfterRead(PipelineStage readStage,
                                  const PipelineStageSerialArray &readSerials)
     {
+        // If wait for the stage has already been covered, or the read occurred before the latest
+        // barrier, then no barrier is needed
+        if (mSrcPipelineStageMask[readStage] ||
+            readSerials[readStage] <= mSrcPipelineStageSerials[readStage])
+        {
+            return false;
+        }
+
+        mSrcPipelineStageMask.set(readStage);
         return true;
     }
+
+    void updateSrcPipelineStageMask(PipelineStage stage)
+    {
+        // For WriteAfterRead, record the stages we have waited here
+        mSrcPipelineStageMask.set(stage);
+    }
+
+    void updateAllSrcPipelineStageMask() { mSrcPipelineStageMask.set(); }
 
     // Barrier commands have been produced. We should update the tracker
     // so that the same type of barriers from different objects will be
@@ -774,6 +823,45 @@ class MemoryBarrierTimelineTracker final : angle::NonCopyable
   private:
     SerialFactory mSerialFactory;
     Serial mCurrentSerial;
+
+    static constexpr uint32_t getReadAfterWriteIndex(MemoryWriteType writeType,
+                                                     MemoryReadType readType)
+    {
+        uint32_t index =
+            (static_cast<uint32_t>(writeType) << static_cast<uint32_t>(MemoryReadType::BitCount)) |
+            static_cast<uint32_t>(readType);
+        return index;
+    }
+
+    static constexpr uint32_t getWriteAfterWriteIndex(MemoryWriteType writeType,
+                                                      MemoryWriteType newWriteType)
+    {
+        uint32_t index =
+            (static_cast<uint32_t>(writeType) << static_cast<uint32_t>(MemoryWriteType::BitCount)) |
+            static_cast<uint32_t>(newWriteType);
+        return index;
+    }
+
+    // For tracking read after write barrier needs: It tracks the latest serial number of each
+    // combination of ReadAfterWrite barrier
+    static constexpr uint32_t kRAWMemoryBarriersCount =
+        static_cast<uint32_t>(MemoryWriteType::EnumCount)
+        << static_cast<uint32_t>(MemoryReadType::BitCount);
+    angle::FixedVector<Serial, kRAWMemoryBarriersCount> mRAWBarrierSerials;
+    angle::FixedVector<uint32_t, kRAWMemoryBarriersCount> mRAWBarrierDirtyIndices;
+
+    // For tracking write after write barrier needs: It tracks the latest serial number for each
+    // combination of WriteAfterWrite barrier
+    static constexpr uint32_t kWAWMemoryBarriersCount =
+        static_cast<uint32_t>(MemoryWriteType::EnumCount)
+        << static_cast<uint32_t>(MemoryWriteType::BitCount);
+    angle::FixedVector<Serial, kWAWMemoryBarriersCount> mWAWBarrierSerials;
+    angle::FixedVector<uint32_t, kWAWMemoryBarriersCount> mWAWBarrierDirtyIndices;
+
+    // For tracking write after read barrier needs: It tracks the latest serial number of each
+    // srcStage that pipeline barrier has been waited for.
+    PipelineStageSerialArray mSrcPipelineStageSerials;
+    PipelineStagesMask mSrcPipelineStageMask;
 };
 
 class FramebufferHelper;
