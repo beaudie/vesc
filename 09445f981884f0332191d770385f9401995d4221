@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d5b794f_c15d9d9d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T16:50:57Z",
+      "side": 1,
+      "message": "I\u0027m concerned this could actually incur CPU overhead since it\u0027s in such a hot path. This can potentially trigger every draw call.",
+      "range": {
+        "startLine": 952,
+        "startChar": 4,
+        "endLine": 952,
+        "endChar": 60
+      },
+      "revId": "09445f981884f0332191d770385f9401995d4221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79789d0f_69f590a9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1944,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T16:50:57Z",
+      "side": 1,
+      "message": "This one seems too low-level, similar to the above. Is this necessary?",
+      "range": {
+        "startLine": 1944,
+        "startChar": 4,
+        "endLine": 1944,
+        "endChar": 61
+      },
+      "revId": "09445f981884f0332191d770385f9401995d4221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b3843e6_bf07d09a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T16:50:57Z",
+      "side": 1,
+      "message": "Same for the rest of the draw calls. It seems safer to keep these disabled by default in release builds.",
+      "range": {
+        "startLine": 1971,
+        "startChar": 48,
+        "endLine": 1971,
+        "endChar": 67
+      },
+      "revId": "09445f981884f0332191d770385f9401995d4221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec0aced6_b06f26e8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3795,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T16:50:57Z",
+      "side": 1,
+      "message": "this one should probably use a different macro, like TRACE_EVENT_INSTANT0. Since it\u0027s more of an instant record than a scoped thing. Might need to tweak the macros to get this to work.",
+      "range": {
+        "startLine": 3795,
+        "startChar": 8,
+        "endLine": 3795,
+        "endChar": 100
+      },
+      "revId": "09445f981884f0332191d770385f9401995d4221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64f46efc_1913814d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4327,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T16:50:57Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 4327,
+        "startChar": 24,
+        "endLine": 4327,
+        "endChar": 33
+      },
+      "revId": "09445f981884f0332191d770385f9401995d4221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0416b9dd_92b03143",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-05-29T16:50:57Z",
+      "side": 1,
+      "message": "same for the other barriers.",
+      "range": {
+        "startLine": 1634,
+        "startChar": 4,
+        "endLine": 1634,
+        "endChar": 22
+      },
+      "revId": "09445f981884f0332191d770385f9401995d4221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
