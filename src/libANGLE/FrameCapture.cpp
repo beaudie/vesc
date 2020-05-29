@@ -16,6 +16,7 @@
 
 #include "sys/stat.h"
 
+#include "common/mathutil.h"
 #include "common/system_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Fence.h"
@@ -61,6 +62,8 @@ constexpr char kAndroidCompression[]    = "debug.angle.capture.compression";
 constexpr int kStreamSize = 64;
 
 constexpr char kAndroidOutputSubdir[] = "/angle_capture/";
+
+constexpr size_t kBinaryAlignment = 16;
 
 // Call out to 'getprop' on a shell and return a string if the value was set
 std::string AndroidGetEnvFromProp(const char *key)
@@ -411,7 +414,8 @@ void WriteBinaryParamReplay(DataCounters *counters,
     else
     {
         // Store in binary file if data are not of type string or enum
-        size_t offset = binaryData->size();
+        // Round up to 16-byte boundary for cross ABI safety
+        size_t offset = rx::roundUp(binaryData->size(), kBinaryAlignment);
         binaryData->resize(offset + data.size());
         memcpy(binaryData->data() + offset, data.data(), data.size());
         out << "reinterpret_cast<" << ParamTypeToString(overrideType) << ">(&gBinaryData[" << offset
