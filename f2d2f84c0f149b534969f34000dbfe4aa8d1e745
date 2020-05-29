@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "919489d5_803edc5c",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-05-29T06:35:13Z",
+      "side": 1,
+      "message": "To remove the reliance on the Program[Pipeline]States, these now follow the pattern of:\n\nPPOs use: the \"has\" booleans (mHasGraphicsUniformBuffers)\nPrograms use: the real check (!getUniformBlocks().empty())\n\nExecutable can\u0027t treat Programs and PPOs differently since they won\u0027t be able to know which they are a part of, so they need to perform all of the relevant checks.\n\nProgram Executables don\u0027t want to update mHasGraphicsUniformBuffers everywhere a uniform block is added to it (duplicated data can get out of sync), so Executables in Programs still check the \u0027real\u0027 way.\n\nPPO Executables have to use the \"has\" booleans, since they don\u0027t have access to the underlying data structures for each Program (since these CLs are trying to remove the State pointers that differentiate Program vs PPO and give access to the Programs in the PPO).",
+      "revId": "f2d2f84c0f149b534969f34000dbfe4aa8d1e745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
