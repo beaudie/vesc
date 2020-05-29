@@ -1739,6 +1739,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
         IsLinux() && isAMD && isMesa && mesaVersion < (std::array<int, 3>{19, 3, 5}));
 
     ANGLE_FEATURE_CONDITION(features, disableTimestampQueries, IsLinux() && isVMWare);
+
+    // anglebug.com/4674
+    ANGLE_FEATURE_CONDITION(features, emulateCopyTexImage2DFromRenderbuffers,
+                            IsApple() && functions->standard == STANDARD_GL_ES);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
