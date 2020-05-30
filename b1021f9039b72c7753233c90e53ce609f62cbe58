@@ -252,6 +252,30 @@
     },
     {
       "key": {
+        "uuid": "24c25815_2365b6db",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-30T19:03:37Z",
+      "side": 1,
+      "message": "Please keep the ozone case, though, or do\n\n#if defined(ANGLE_USE_X11) \u0026\u0026 !defined(ANGLE_USE_OZONE)\n  return EGL_PLATFORM_X11_EXT;\n#else\n  return 0;\n#endif",
+      "parentUuid": "44efca57_aa47a3b9",
+      "range": {
+        "startLine": 226,
+        "startChar": 11,
+        "endLine": 226,
+        "endChar": 40
+      },
+      "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "40f1b47f_0ca3a990",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 7
