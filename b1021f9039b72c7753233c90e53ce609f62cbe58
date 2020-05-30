@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "41e35e51_f8e55585",
+        "filename": "extensions/EGL_ANGLE_platform_angle.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-30T18:52:14Z",
+      "side": 1,
+      "message": "I think in this case we should fall into DisplayEGL with an unspecified platform (eglGetDisplay()) and let native EGL figure it out.\n\nOr with vulkan, implementing a surfaceless display is a safe option.\n\nAgree with leaving this undocumented.",
+      "parentUuid": "fe1e8f39_91e758c1",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 49
+      },
+      "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a9062aed_11b1e569",
         "filename": "extensions/EGL_ANGLE_platform_angle.txt",
         "patchSetId": 7
@@ -134,6 +158,30 @@
     },
     {
       "key": {
+        "uuid": "79b9b5f9_88ddc858",
+        "filename": "extensions/EGL_ANGLE_platform_angle.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-30T18:52:14Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "e982a9f1_1ee6b79f",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 50
+      },
+      "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b16097cc_58133cbd",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 7
@@ -174,6 +222,52 @@
         "startChar": 53,
         "endLine": 59,
         "endChar": 59
+      },
+      "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44efca57_aa47a3b9",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-30T18:52:14Z",
+      "side": 1,
+      "message": "Unfortunately I suspect that not all drivers that have surfaceless behavior for eglGetDisplay() implement this extension, so we can\u0027t literally default to that value.\n\nThat\u0027s why the doc says \"SURFACELESS_MESA or equiavalent\" rather than SURFACELESS_MESA.\n\nI\u0027d just leave it zero and make sure we don\u0027t create a display that assumes a particular platform type unless we can prove the native display is of that type (e.g. with the display probing).",
+      "range": {
+        "startLine": 226,
+        "startChar": 11,
+        "endLine": 226,
+        "endChar": 40
+      },
+      "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40f1b47f_0ca3a990",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2020-05-30T18:52:14Z",
+      "side": 1,
+      "message": "I would just remove all the stuff about surfaceless_mesa or device_ext for now. ANGLE should check for those extensions in native EGL before using them, etc.\n\nThe doc is describing a rough end state which I don\u0027t expect will be reached with one change. There\u0027s no use to adding cases before they are working.",
+      "range": {
+        "startLine": 327,
+        "startChar": 0,
+        "endLine": 331,
+        "endChar": 17
       },
       "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
