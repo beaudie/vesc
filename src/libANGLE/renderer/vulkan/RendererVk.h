@@ -166,15 +166,24 @@ class RendererVk : angle::NonCopyable
         return mPriorities[priority];
     }
 
+    // Queue submit that originates from the main thread
     angle::Result queueSubmit(vk::Context *context,
                               egl::ContextPriority priority,
                               const VkSubmitInfo &submitInfo,
                               vk::ResourceUseList *resourceList,
                               const vk::Fence *fence,
                               Serial *serialOut);
+    // Queue submit that originates from the worker thread
+    angle::Result commandProcessorThreadQueueSubmit(vk::Context *context,
+                                                    egl::ContextPriority priority,
+                                                    const VkSubmitInfo &submitInfo,
+                                                    const vk::Fence *fence);
     angle::Result queueWaitIdle(vk::Context *context, egl::ContextPriority priority);
     angle::Result deviceWaitIdle(vk::Context *context);
     VkResult queuePresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
+    // Queue present through worker thread
+    VkResult commandProcessorThreadQueuePresent(egl::ContextPriority priority,
+                                                const VkPresentInfoKHR &presentInfo);
 
     // This command buffer should be submitted immediately via queueSubmitOneOff.
     angle::Result getCommandBufferOneOff(vk::Context *context,
@@ -187,6 +196,9 @@ class RendererVk : angle::NonCopyable
                                     egl::ContextPriority priority,
                                     const vk::Fence *fence,
                                     Serial *serialOut);
+    angle::Result commandProcessorThreadQueueSubmitOneOff(vk::Context *context,
+                                                          vk::PrimaryCommandBuffer &&primary,
+                                                          egl::ContextPriority priority);
 
     angle::Result newSharedFence(vk::Context *context, vk::Shared<vk::Fence> *sharedFenceOut);
     inline void resetSharedFence(vk::Shared<vk::Fence> *sharedFenceIn)
@@ -194,6 +206,13 @@ class RendererVk : angle::NonCopyable
         std::lock_guard<std::mutex> lock(mFenceRecyclerMutex);
         sharedFenceIn->resetAndRecycle(&mFenceRecycler);
     }
+    inline void resetNextSharedFence()
+    {
+        std::lock_guard<decltype(mNextSubmitFenceMutex)> lock(mNextSubmitFenceMutex);
+        resetSharedFence(&mNextSubmitFence);
+    }
+    angle::Result ensureSubmitFenceInitialized();
+    angle::Result getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOut);
 
     template <typename... ArgsT>
     void collectGarbageAndReinit(vk::SharedResourceUse *use, ArgsT... garbageIn)
@@ -222,6 +241,13 @@ class RendererVk : angle::NonCopyable
         }
     }
 
+    vk::Shared<vk::Fence> getLastSubmittedFence() const
+    {
+        return mCommandProcessor.getLastSubmittedFence();
+    }
+    bool hasInFlightCommandBuffers() { return mCommandProcessor.hasInFlightCommandBuffers(); }
+    void handleDeviceLost() { mCommandProcessor.handleDeviceLost(); }
+
     static constexpr size_t kMaxExtensionNames = 200;
     using ExtensionNameList = angle::FixedVector<const char *, kMaxExtensionNames>;
 
@@ -239,11 +265,20 @@ class RendererVk : angle::NonCopyable
 
     ANGLE_INLINE Serial getCurrentQueueSerial()
     {
+
+        if (getFeatures().enableCommandProcessingThread.enabled)
+        {
+            return mCommandProcessor.getCurrentQueueSerial();
+        }
         std::lock_guard<std::mutex> lock(mQueueSerialMutex);
         return mCurrentQueueSerial;
     }
     ANGLE_INLINE Serial getLastSubmittedQueueSerial()
     {
+        if (getFeatures().enableCommandProcessingThread.enabled)
+        {
+            return mCommandProcessor.getLastSubmittedSerial();
+        }
         std::lock_guard<std::mutex> lock(mQueueSerialMutex);
         return mLastSubmittedQueueSerial;
     }
@@ -262,11 +297,24 @@ class RendererVk : angle::NonCopyable
     vk::ActiveHandleCounter &getActiveHandleCounts() { return mActiveHandleCounts; }
 
     // Queue commands to worker thread for processing
-    void queueCommands(const vk::CommandProcessorTask &commands)
+    void queueCommand(vk::CommandProcessorTask *command)
     {
-        mCommandProcessor.queueCommands(commands);
+        mCommandProcessor.queueCommand(command);
     }
-    void waitForWorkerThreadIdle() { mCommandProcessor.waitForWorkComplete(); }
+    bool hasPendingError() const { return mCommandProcessor.hasPendingError(); }
+    void processPendingError(vk::Context *context)
+    {
+        if (hasPendingError())
+        {
+            vk::ErrorDetails error = getAndClearPendingError();
+            context->handleError(error.errorCode, error.file, error.function, error.line);
+        }
+    }
+    vk::ErrorDetails getAndClearPendingError()
+    {
+        return mCommandProcessor.getAndClearPendingError();
+    }
+    void waitForCommandProcessorIdle() { mCommandProcessor.waitForWorkComplete(); }
 
     bool getEnableValidationLayers() const { return mEnableValidationLayers; }
 
@@ -384,9 +432,13 @@ class RendererVk : angle::NonCopyable
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
 
-    // Worker Thread
+    // Command Processor Thread
     CommandProcessor mCommandProcessor;
     std::thread mCommandProcessorThread;
+    // mNextSubmitFence is the fence that's going to be signaled at the next submission.  This is
+    // used to support SyncVk objects, which may outlive the context (as EGLSync objects).
+    vk::Shared<vk::Fence> mNextSubmitFence;
+    std::mutex mNextSubmitFenceMutex;
 
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;

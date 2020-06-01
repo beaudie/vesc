@@ -17,46 +17,280 @@
 #include <thread>
 
 #include "common/vulkan/vk_headers.h"
+#include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
 {
+class RendererVk;
+class CommandProcessor;
+
 namespace vk
 {
 // CommandProcessorTask is used to queue a task to the worker thread when
 //  enableCommandProcessingThread feature is true.
-// The typical task includes pointers in all values and the worker thread will
-//  process the SecondaryCommandBuffer commands in cbh into the primaryCB.
-// There is a special task in which all of the pointers are null that will trigger
-//  the worker thread to exit, and is sent when the renderer instance shuts down.
-struct CommandProcessorTask
+// Issuing the CustomTask::Exit command will cause the worker thread to clean up it's resources and
+// shut down. This command is sent when the renderer instance shuts down. Custom tasks are:
+//  Flush:End the current command buffer and submit commands to the queue
+//  FinishToSerial:Finish queue commands up to given serial value
+//  FlushToPrimary: Process SecondaryCommandBuffer commands into the primary CommandBuffer.
+//  Present:Execute QueuePresent
+//  QueueWaitIdle:Execute QueueWaitIdle
+//  DeviceWaitIdle:Execute DeviceWaitIdle
+//  Exit:Exit the command processor thread
+enum CustomTask
 {
-    ContextVk *contextVk;
-    // TODO: b/153666475 Removed primaryCB in threading phase2.
-    vk::PrimaryCommandBuffer *primaryCB;
-    CommandBufferHelper *commandBuffer;
+    Invalid = 0,
+    FlushToPrimary,
+    FlushAndQueueSubmit,
+    OneOffQueueSubmit,
+    FinishToSerial,
+    Present,
+    ClearAllGarbage,
+    Exit,
 };
 
-static const CommandProcessorTask kEndCommandProcessorThread = {nullptr, nullptr, nullptr};
+// Save error details in worker thread to sync to main thread
+struct ErrorDetails
+{
+    VkResult errorCode;
+    const char *file;
+    const char *function;
+    unsigned int line;
+};
+
+class CommandProcessorTask
+{
+    friend class rx::CommandProcessor;
+
+  public:
+    CommandProcessorTask(CustomTask command)
+        : mContextVk(nullptr), mCommandBuffer(nullptr), mWorkerCommand(command), mSemaphore(nullptr)
+    {}
+    CommandProcessorTask(ContextVk *contextVk, CommandBufferHelper *commandBuffer)
+        : mContextVk(contextVk),
+          mCommandBuffer(commandBuffer),
+          mWorkerCommand(vk::CustomTask::FlushToPrimary),
+          mSemaphore(nullptr)
+    {}
+    CommandProcessorTask(egl::ContextPriority priority, VkPresentInfoKHR presentInfo)
+        : mContextVk(nullptr),
+          mCommandBuffer(nullptr),
+          mWorkerCommand(vk::CustomTask::Present),
+          mSemaphore(nullptr),
+          mPresentInfo(presentInfo),
+          mPriority(priority)
+    {}
+    CommandProcessorTask(Serial serial)
+        : mContextVk(nullptr),
+          mCommandBuffer(nullptr),
+          mWorkerCommand(vk::CustomTask::FinishToSerial),
+          mSerial(serial)
+    {}
+    CommandProcessorTask(std::vector<VkSemaphore> waitSemaphores,
+                         std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks,
+                         const vk::Semaphore *semaphore,
+                         egl::ContextPriority priority,
+                         vk::GarbageList &currentGarbage,
+                         vk::ResourceUseList &currentResources)
+        : mContextVk(nullptr),
+          mCommandBuffer(nullptr),
+          mWorkerCommand(vk::CustomTask::FlushAndQueueSubmit),
+          mWaitSemaphores(waitSemaphores),
+          mWaitSemaphoreStageMasks(waitSemaphoreStageMasks),
+          mSemaphore(semaphore),
+          mCurrentGarbage(std::move(currentGarbage)),
+          mResourceUseList(std::move(currentResources)),
+          mPriority(priority)
+    {}
+
+    CommandProcessorTask(VkCommandBuffer oneOffCommandBufferVk, egl::ContextPriority priority)
+        : mWorkerCommand(vk::CustomTask::OneOffQueueSubmit),
+          mOneOffCommandBufferVk(oneOffCommandBufferVk),
+          mPriority(priority)
+    {}
+
+    CommandProcessorTask &operator=(CommandProcessorTask &&rhs)
+    {
+        if (this != &rhs)
+        {
+            mContextVk     = rhs.mContextVk;
+            mCommandBuffer = rhs.mCommandBuffer;
+            std::swap(mWorkerCommand, rhs.mWorkerCommand);
+            std::swap(mWaitSemaphores, rhs.mWaitSemaphores);
+            std::swap(mWaitSemaphoreStageMasks, mWaitSemaphoreStageMasks);
+            mSemaphore = rhs.mSemaphore;
+            std::swap(mCurrentGarbage, rhs.mCurrentGarbage);
+            std::swap(mSerial, rhs.mSerial);
+            std::swap(mPresentInfo, rhs.mPresentInfo);
+            std::swap(mPriority, rhs.mPriority);
+            std::swap(mResourceUseList, rhs.mResourceUseList);
+            mOneOffCommandBufferVk = rhs.mOneOffCommandBufferVk;
+
+            // clear rhs now that everything has moved.
+            rhs.mCommandBuffer         = nullptr;
+            rhs.mOneOffCommandBufferVk = VK_NULL_HANDLE;
+            rhs.mSemaphore             = nullptr;
+        }
+        return *this;
+    }
+
+    CommandProcessorTask(CommandProcessorTask &&other) { *this = std::move(other); }
+
+  private:
+    ContextVk *mContextVk;
+    CommandBufferHelper *mCommandBuffer;
+    CustomTask mWorkerCommand;
+
+    // Flush data
+    std::vector<VkSemaphore> mWaitSemaphores;
+    std::vector<VkPipelineStageFlags> mWaitSemaphoreStageMasks;
+    const vk::Semaphore *mSemaphore;
+    vk::GarbageList mCurrentGarbage;
+    vk::ResourceUseList mResourceUseList;
+
+    // FinishToSerial & Flush command data
+    Serial mSerial;
+
+    // Present command data
+    VkPresentInfoKHR mPresentInfo;
+
+    // Used by OneOffQueueSubmit
+    VkCommandBuffer mOneOffCommandBufferVk;
+
+    // Flush, Present & QueueWaitIdle data
+    egl::ContextPriority mPriority;
+};
+
+struct CommandBatch final : angle::NonCopyable
+{
+    CommandBatch();
+    ~CommandBatch();
+    CommandBatch(CommandBatch &&other);
+    CommandBatch &operator=(CommandBatch &&other);
+
+    void destroy(VkDevice device);
+
+    vk::PrimaryCommandBuffer primaryCommands;
+    // commandPool is for secondary CommandBuffer allocation
+    vk::CommandPool commandPool;
+    vk::Shared<vk::Fence> fence;
+    Serial serial;
+};
 }  // namespace vk
+
+class CommandWorkQueue : public vk::Context
+{
+  public:
+    CommandWorkQueue(RendererVk *renderer);
+    ~CommandWorkQueue() override;
+
+    angle::Result init();
+    void destroy(VkDevice device);
+    void handleDeviceLost();
+    void handleError(VkResult result,
+                     const char *file,
+                     const char *function,
+                     unsigned int line) override;
+    VkDevice getDevice() const;
+    bool isRobustResourceInitEnabled() const override;
+
+    bool hasInFlightCommands() const;
+
+    angle::Result allocatePrimaryCommandBuffer(vk::PrimaryCommandBuffer *commandBufferOut);
+    angle::Result releasePrimaryCommandBuffer(vk::PrimaryCommandBuffer &&commandBuffer);
+
+    void clearAllGarbage(RendererVk *renderer);
+
+    angle::Result finishToSerial(RendererVk *renderer, Serial serial);
+
+    VkResult present(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
+
+    angle::Result submitFrame(RendererVk *renderer,
+                              egl::ContextPriority priority,
+                              const VkSubmitInfo &submitInfo,
+                              const vk::Shared<vk::Fence> &sharedFence,
+                              vk::GarbageList *currentGarbage,
+                              vk::CommandPool *commandPool,
+                              vk::PrimaryCommandBuffer &&commandBuffer,
+                              const Serial &queueSerial);
+
+    vk::Shared<vk::Fence> getLastSubmittedFence(const VkDevice device) const;
+
+    // Check to see which batches have finished completion (forward progress for
+    // mLastCompletedQueueSerial, for example for when the application busy waits on a query
+    // result). It would be nice if we didn't have to expose this for QueryVk::getResult.
+    angle::Result checkCompletedCommands(RendererVk *renderer);
+
+    Serial getLastCompletedSerial();
+
+    CommandWorkQueue *getPointer() { return this; }
+    bool hasError() const { return mErrorDetails.errorCode != VK_SUCCESS; }
+    vk::ErrorDetails getAndClearError();
+
+  private:
+    void resetError();
+    angle::Result releaseToCommandBatch(RendererVk *renderer,
+                                        vk::PrimaryCommandBuffer &&commandBuffer,
+                                        vk::CommandPool *commandPool,
+                                        vk::CommandBatch *batch);
+
+    vk::GarbageQueue mGarbageQueue;
+    std::vector<vk::CommandBatch> mInFlightCommands;
+
+    // Keeps a free list of reusable primary command buffers.
+    vk::PersistentCommandPool mPrimaryCommandPool;
+    std::mutex mErrorMutex;
+    vk::ErrorDetails mErrorDetails;
+};
 
 class CommandProcessor : angle::NonCopyable
 {
   public:
-    CommandProcessor();
+    CommandProcessor(RendererVk *renderer);
     ~CommandProcessor() = default;
 
-    // Main worker loop that should be launched in its own thread. The
-    //  loop waits for work to be submitted from a separate thread.
+    // Entry point for command processor thread, calls processCommandProcessorTasksImpl to do the
+    // work.
     void processCommandProcessorTasks();
-    // Called asynchronously from workLoop() thread to queue work that is
-    //  then processed by the workLoop() thread
-    void queueCommands(const vk::CommandProcessorTask &commands);
+
+    // Main worker loop called by processCommandProcessorTasks. The
+    //  loop waits for work to be submitted from a separate thread.
+    angle::Result processCommandProcessorTasksImpl(bool *exitThread);
+
+    // process a task
+    angle::Result processTask(vk::CommandProcessorTask &task);
+
+    // Called asynchronously from main thread to queue work that is
+    //  then processed by the worker thread
+    void queueCommand(vk::CommandProcessorTask *command);
     // Used by separate thread to wait for worker thread to complete all
     //  outstanding work.
     void waitForWorkComplete();
+    Serial getCurrentQueueSerial();
+    Serial getLastSubmittedSerial();
+
+    vk::Shared<vk::Fence> getLastSubmittedFence() const;
+    bool hasInFlightCommandBuffers()
+    {
+        // This is referencing worker thread data, need to lock.
+        return mCommandWorkQueue.hasInFlightCommands();
+    }
+    void handleDeviceLost()
+    {
+        // This is accessing worker thread data, need to lock. Probably need other stuff here as
+        // well to unstick worker thread.
+        mCommandWorkQueue.handleDeviceLost();
+    }
+    bool hasPendingError() const
+    {
+        // Accessing worker thread data, need to lock.
+        return mCommandWorkQueue.hasError();
+    }
+    vk::ErrorDetails getAndClearPendingError() { return mCommandWorkQueue.getAndClearError(); }
     // Stop the command processor loop
     void shutdown(std::thread *commandProcessorThread);
+    vk::Context *getContextPointer() { return &mCommandWorkQueue; }
 
   private:
     std::queue<vk::CommandProcessorTask> mCommandsQueue;
@@ -67,6 +301,18 @@ class CommandProcessor : angle::NonCopyable
     std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
+    // Command pool to allocate processor thread primary command buffers from
+    vk::CommandPool mCommandPool;
+    vk::PrimaryCommandBuffer mPrimaryCommandBuffer;
+    RendererVk *mRenderer;
+    CommandWorkQueue mCommandWorkQueue;
+    // Shared fence used for Queue submission
+    vk::Shared<vk::Fence> mFence;
+
+    AtomicSerialFactory mQueueSerialFactory;
+    std::mutex mCommandProcessorQueueSerialMutex;
+    Serial mCommandProcessorLastSubmittedSerial;
+    Serial mCommandProcessorCurrentQueueSerial;
 };
 
 }  // namespace rx
