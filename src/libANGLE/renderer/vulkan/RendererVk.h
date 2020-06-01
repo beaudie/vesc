@@ -175,14 +175,24 @@ class RendererVk : angle::NonCopyable
         return mPriorities[priority];
     }
 
+    // Queue submit that originates from the main thread
     angle::Result queueSubmit(vk::Context *context,
                               egl::ContextPriority priority,
                               const VkSubmitInfo &submitInfo,
                               const vk::Fence *fence,
                               Serial *serialOut);
+    // Queue submit that originates from the worker thread
+    angle::Result commandProcessorThreadQueueSubmit(vk::Context *context,
+                                                    egl::ContextPriority priority,
+                                                    const VkSubmitInfo &submitInfo,
+                                                    const vk::Fence *fence,
+                                                    Serial *serialOut);
     angle::Result queueWaitIdle(vk::Context *context, egl::ContextPriority priority);
     angle::Result deviceWaitIdle(vk::Context *context);
     VkResult queuePresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
+    // Queue present through worker thread
+    VkResult commandProcessorThreadQueuePresent(egl::ContextPriority priority,
+                                                const VkPresentInfoKHR &presentInfo);
 
     // This command buffer should be submitted immediately via queueSubmitOneOff.
     angle::Result getCommandBufferOneOff(vk::Context *context,
@@ -205,6 +215,7 @@ class RendererVk : angle::NonCopyable
     template <typename... ArgsT>
     void collectGarbageAndReinit(vk::SharedResourceUse *use, ArgsT... garbageIn)
     {
+        std::lock_guard<decltype(mGarbageMutex)> lock(mGarbageMutex);
         std::vector<vk::GarbageObject> sharedGarbage;
         CollectGarbage(&sharedGarbage, garbageIn...);
         if (!sharedGarbage.empty())
@@ -222,11 +233,27 @@ class RendererVk : angle::NonCopyable
 
     void collectGarbage(vk::SharedResourceUse &&use, std::vector<vk::GarbageObject> &&sharedGarbage)
     {
+        // TODO: Debug comment here
+        /*printf("Collecting garbage:\n");
+        for (auto &go : sharedGarbage)
+        {
+                printf("\tobject type:%d, handle:%p\n", go.getHandleType(), go.getHandle());
+        }*/
         if (!sharedGarbage.empty())
         {
             mSharedGarbage.emplace_back(std::move(use), std::move(sharedGarbage));
         }
     }
+
+    void clearAllGarbage() { mCommandProcessor.clearAllGarbage(); }
+    angle::Result checkCompletedCommands() { return mCommandProcessor.checkCompletedCommands(); }
+    angle::Result finishToSerial(Serial serial) { return mCommandProcessor.finishToSerial(serial); }
+    vk::Shared<vk::Fence> getLastSubmittedFence() const
+    {
+        return mCommandProcessor.getLastSubmittedFence();
+    }
+    bool hasInFlightCommandBuffers() { return mCommandProcessor.hasInFlightCommandBuffers(); }
+    void handleDeviceLost() { mCommandProcessor.handleDeviceLost(); }
 
     static constexpr size_t kMaxExtensionNames = 200;
     using ExtensionNameList = angle::FixedVector<const char *, kMaxExtensionNames>;
@@ -255,7 +282,7 @@ class RendererVk : angle::NonCopyable
     {
         mCommandProcessor.queueCommands(commands);
     }
-    void waitForWorkerThreadIdle() { mCommandProcessor.waitForWorkComplete(); }
+    void waitForCommandProcessorIdle() { mCommandProcessor.waitForWorkComplete(); }
 
     vk::BufferHelper &getNullBuffer() { return mTheNullBuffer; }
 
@@ -375,7 +402,7 @@ class RendererVk : angle::NonCopyable
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
 
-    // Worker Thread
+    // Command Processor Thread
     CommandProcessor mCommandProcessor;
     std::thread mCommandProcessorThread;
 
