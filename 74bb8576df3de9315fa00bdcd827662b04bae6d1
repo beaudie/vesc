@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "030c5993_7ea94e73",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:06:09Z",
+      "side": 1,
+      "message": "See the style guide (I\u0027ve linked it so many times, this time I\u0027ll let you Google it). The rule only applies to arguments not return values. Return values can be non-const \u0026 so that would make sense here.",
+      "parentUuid": "4ebc834e_30b27714",
+      "revId": "74bb8576df3de9315fa00bdcd827662b04bae6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f54a0e3_dcd40817",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
