@@ -1525,6 +1525,18 @@ void DescriptorSetLayoutDesc::update(uint32_t bindingIndex,
     SetBitField(packedBinding.stages, stages);
 }
 
+void DescriptorSetLayoutDesc::update(uint32_t bindingIndex,
+                                     VkDescriptorType type,
+                                     uint32_t count,
+                                     VkShaderStageFlags stages,
+                                     VkSampler immutableSampler)
+{
+    update(bindingIndex, type, count, stages);
+    PackedDescriptorSetBinding &packedBinding = mPackedDescriptorSetLayout[bindingIndex];
+
+    packedBinding.immutableSampler = immutableSampler;
+}
+
 void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *bindings) const
 {
     for (uint32_t bindingIndex = 0; bindingIndex < kMaxDescriptorSetLayoutBindings; ++bindingIndex)
@@ -1537,10 +1549,14 @@ void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *b
         binding.binding                      = bindingIndex;
         binding.descriptorCount              = packedBinding.count;
         binding.descriptorType               = static_cast<VkDescriptorType>(packedBinding.type);
-        binding.stageFlags         = static_cast<VkShaderStageFlags>(packedBinding.stages);
-        binding.pImmutableSamplers = nullptr;
+        binding.stageFlags = static_cast<VkShaderStageFlags>(packedBinding.stages);
+        if (packedBinding.immutableSampler != VK_NULL_HANDLE)
+        {
+            bindings->immutableSamplers.push_back(packedBinding.immutableSampler);
+            binding.pImmutableSamplers = &bindings->immutableSamplers.back();
+        }
 
-        bindings->push_back(binding);
+        bindings->bindings.push_back(binding);
     }
 }
 
@@ -2034,14 +2050,14 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     }
 
     // We must unpack the descriptor set layout description.
-    vk::DescriptorSetLayoutBindingVector bindings;
-    desc.unpackBindings(&bindings);
+    vk::DescriptorSetLayoutBindingVector bindingVector;
+    desc.unpackBindings(&bindingVector);
 
     VkDescriptorSetLayoutCreateInfo createInfo = {};
     createInfo.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     createInfo.flags        = 0;
-    createInfo.bindingCount = static_cast<uint32_t>(bindings.size());
-    createInfo.pBindings    = bindings.data();
+    createInfo.bindingCount = static_cast<uint32_t>(bindingVector.bindings.size());
+    createInfo.pBindings    = bindingVector.bindings.data();
 
     vk::DescriptorSetLayout newLayout;
     ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
