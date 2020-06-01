@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "49c9a8e2_a9d5b2bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-01T19:11:57Z",
+      "side": 1,
+      "message": "Think this should be: We should only need to block when we write to the swapchain image.\nWork that doesn\u0027t touch the visible buffer can proceed.",
+      "range": {
+        "startLine": 10,
+        "startChar": 37,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "1a3eedde83081cd18477a9651aea5fcc33923cd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e973c28_425d39a1",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
