@@ -2,6 +2,121 @@
   "comments": [
     {
       "key": {
+        "uuid": "b86eecca_7a922a18",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-01T20:04:44Z",
+      "side": 1,
+      "message": "records",
+      "range": {
+        "startLine": 14,
+        "startChar": 5,
+        "endLine": 14,
+        "endChar": 11
+      },
+      "revId": "18cf591173819bc20ec930bb9dc7d408408b194b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0215902_951cbb89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-01T20:04:44Z",
+      "side": 1,
+      "message": "This",
+      "range": {
+        "startLine": 14,
+        "startChar": 67,
+        "endLine": 14,
+        "endChar": 72
+      },
+      "revId": "18cf591173819bc20ec930bb9dc7d408408b194b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae9f66e0_68c8063f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-01T20:04:44Z",
+      "side": 1,
+      "message": "is",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "18cf591173819bc20ec930bb9dc7d408408b194b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "252d0686_5a4df802",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-01T20:04:44Z",
+      "side": 1,
+      "message": "sent",
+      "range": {
+        "startLine": 16,
+        "startChar": 60,
+        "endLine": 16,
+        "endChar": 64
+      },
+      "revId": "18cf591173819bc20ec930bb9dc7d408408b194b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0ca9560_2828302b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-01T20:04:44Z",
+      "side": 1,
+      "message": "minimizes",
+      "range": {
+        "startLine": 16,
+        "startChar": 28,
+        "endLine": 16,
+        "endChar": 36
+      },
+      "revId": "18cf591173819bc20ec930bb9dc7d408408b194b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b4d34d6a_8c640464",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 12
@@ -18,6 +133,75 @@
         "startChar": 6,
         "endLine": 2189,
         "endChar": 27
+      },
+      "revId": "18cf591173819bc20ec930bb9dc7d408408b194b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c00b7c6_7288e0a5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2208,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-01T20:04:44Z",
+      "side": 1,
+      "message": "Read this into local variable outside loop?",
+      "range": {
+        "startLine": 2208,
+        "startChar": 36,
+        "endLine": 2208,
+        "endChar": 62
+      },
+      "revId": "18cf591173819bc20ec930bb9dc7d408408b194b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22c0620b_dfb1fd10",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3185,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-01T20:04:44Z",
+      "side": 1,
+      "message": "I think this should be 3",
+      "range": {
+        "startLine": 3185,
+        "startChar": 50,
+        "endLine": 3185,
+        "endChar": 51
+      },
+      "revId": "18cf591173819bc20ec930bb9dc7d408408b194b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79c90377_1c8d926c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3284,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2020-06-01T20:04:44Z",
+      "side": 1,
+      "message": "If we are always setting barrierModified \u003d true here, probably don\u0027t need the other barrierModified\u0027s above.\nOr should this one go away now that the functionality has been filled out?",
+      "range": {
+        "startLine": 3284,
+        "startChar": 0,
+        "endLine": 3284,
+        "endChar": 31
       },
       "revId": "18cf591173819bc20ec930bb9dc7d408408b194b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
