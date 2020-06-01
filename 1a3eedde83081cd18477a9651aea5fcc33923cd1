@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e973c28_425d39a1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3734,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-01T18:32:01Z",
+      "side": 1,
+      "message": "I am wondering why we have two API here: insertWaitSemaphore and addWaitSemaphore at line 3852. Can we merge them into one API?",
+      "range": {
+        "startLine": 3734,
+        "startChar": 5,
+        "endLine": 3734,
+        "endChar": 35
+      },
+      "revId": "1a3eedde83081cd18477a9651aea5fcc33923cd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
