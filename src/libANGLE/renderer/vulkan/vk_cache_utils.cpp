@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/SamplerVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_google_filtering_precision.h"
@@ -1523,6 +1524,21 @@ void DescriptorSetLayoutDesc::update(uint32_t bindingIndex,
     SetBitField(packedBinding.type, type);
     SetBitField(packedBinding.count, count);
     SetBitField(packedBinding.stages, stages);
+#ifdef ANGLE_IS_64_BIT_CPU
+    packedBinding.pad = 0;
+#endif
+}
+
+void DescriptorSetLayoutDesc::update(uint32_t bindingIndex,
+                                     VkDescriptorType type,
+                                     uint32_t count,
+                                     VkShaderStageFlags stages,
+                                     const vk::Sampler *immutableSampler)
+{
+    update(bindingIndex, type, count, stages);
+    PackedDescriptorSetBinding &packedBinding = mPackedDescriptorSetLayout[bindingIndex];
+
+    packedBinding.immutableSampler = immutableSampler;
 }
 
 void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *bindings) const
@@ -1537,10 +1553,28 @@ void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *b
         binding.binding                      = bindingIndex;
         binding.descriptorCount              = packedBinding.count;
         binding.descriptorType               = static_cast<VkDescriptorType>(packedBinding.type);
-        binding.stageFlags         = static_cast<VkShaderStageFlags>(packedBinding.stages);
-        binding.pImmutableSamplers = nullptr;
+        binding.stageFlags = static_cast<VkShaderStageFlags>(packedBinding.stages);
+        if (packedBinding.immutableSampler != nullptr)
+        {
+            ASSERT(packedBinding.count == 1);
+            bindings->immutableSamplers.push_back(packedBinding.immutableSampler->getHandle());
+            binding.pImmutableSamplers = bindings->immutableSamplers.data();
+        }
 
-        bindings->push_back(binding);
+        bindings->bindings.push_back(binding);
+    }
+    if (!bindings->immutableSamplers.empty())
+    {
+        // Patch up pImmutableSampler addresses now that the vector is stable
+        int immutableIndex = 0;
+        for (VkDescriptorSetLayoutBinding &binding : bindings->bindings)
+        {
+            if (binding.pImmutableSamplers)
+            {
+                binding.pImmutableSamplers = &bindings->immutableSamplers[immutableIndex];
+                immutableIndex++;
+            }
+        }
     }
 }
 
@@ -2034,14 +2068,14 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     }
 
     // We must unpack the descriptor set layout description.
-    vk::DescriptorSetLayoutBindingVector bindings;
-    desc.unpackBindings(&bindings);
+    vk::DescriptorSetLayoutBindingVector bindingVector;
+    desc.unpackBindings(&bindingVector);
 
     VkDescriptorSetLayoutCreateInfo createInfo = {};
     createInfo.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     createInfo.flags        = 0;
-    createInfo.bindingCount = static_cast<uint32_t>(bindings.size());
-    createInfo.pBindings    = bindings.data();
+    createInfo.bindingCount = static_cast<uint32_t>(bindingVector.bindings.size());
+    createInfo.pBindings    = bindingVector.bindings.data();
 
     vk::DescriptorSetLayout newLayout;
     ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
