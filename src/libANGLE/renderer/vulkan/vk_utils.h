@@ -261,6 +261,8 @@ class GarbageObject
         return GarbageObject(HandleTypeHelper<DerivedT>::kHandleType,
                              (GarbageHandle)(object->release()));
     }
+    /*HandleType getHandleType() const { return mHandleType; }
+    void* getHandle() const { return mHandle; }*/
 
   private:
     VK_DEFINE_NON_DISPATCHABLE_HANDLE(GarbageHandle)
@@ -614,7 +616,11 @@ class Recycler final : angle::NonCopyable
   public:
     Recycler() = default;
 
-    void recycle(T &&garbageObject) { mObjectFreeList.emplace_back(std::move(garbageObject)); }
+    void recycle(T &&garbageObject)
+    {
+        // printf("Recycling garbageObject w/ handle %p\n", garbageObject.getHandle());
+        mObjectFreeList.emplace_back(std::move(garbageObject));
+    }
 
     void fetch(T *outObject)
     {
@@ -627,6 +633,7 @@ class Recycler final : angle::NonCopyable
     {
         for (T &object : mObjectFreeList)
         {
+            // printf("Destroying recycled object w/ handle %p\n", object.getHandle());
             object.destroy(device);
         }
     }
