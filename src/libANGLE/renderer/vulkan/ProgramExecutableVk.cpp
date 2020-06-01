@@ -454,9 +454,11 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramState &prog
     }
 }
 
-void ProgramExecutableVk::addTextureDescriptorSetDesc(const gl::ProgramState &programState,
-                                                      bool useOldRewriteStructSamplers,
-                                                      vk::DescriptorSetLayoutDesc *descOut)
+void ProgramExecutableVk::addTextureDescriptorSetDesc(
+    const gl::ProgramState &programState,
+    bool useOldRewriteStructSamplers,
+    vk::DescriptorSetLayoutDesc *descOut,
+    gl::ActiveTextureArray<VkSampler> *immutableSamplers)
 {
     const std::vector<gl::SamplerBinding> &samplerBindings = programState.getSamplerBindings();
     const std::vector<gl::LinkedUniform> &uniforms         = programState.getUniforms();
@@ -501,8 +503,13 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(const gl::ProgramState &pr
             ShaderInterfaceVariableInfo &info = mVariableInfoMap[shaderType][samplerName];
             VkShaderStageFlags activeStages   = gl_vk::kShaderStageMap[shaderType];
 
+            VkSampler immutableSampler = VK_NULL_HANDLE;
+            if (immutableSamplers)
+            {
+                immutableSampler = (*immutableSamplers)[info.binding];
+            }
             descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
-                            activeStages);
+                            activeStages, immutableSampler);
         }
     }
 }
@@ -618,7 +625,9 @@ angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,
     return shaderProgram->getComputePipeline(contextVk, getPipelineLayout(), pipelineOut);
 }
 
-angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glContext)
+angle::Result ProgramExecutableVk::createPipelineLayout(
+    const gl::Context *glContext,
+    gl::ActiveTextureArray<VkSampler> *immutableSamplers)
 {
     const gl::State &glState                   = glContext->getState();
     ContextVk *contextVk                       = vk::GetImpl(glContext);
@@ -700,7 +709,7 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
         const gl::ProgramState *programState = programStates[shaderType];
         ASSERT(programState);
         addTextureDescriptorSetDesc(*programState, contextVk->useOldRewriteStructSamplers(),
-                                    &texturesSetDesc);
+                                    &texturesSetDesc, immutableSamplers);
     }
 
     ANGLE_TRY(renderer->getDescriptorSetLayout(contextVk, texturesSetDesc,
@@ -1232,6 +1241,85 @@ void ProgramExecutableVk::updateTransformFeedbackDescriptorSetImpl(
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(glState.getCurrentTransformFeedback());
     transformFeedbackVk->updateDescriptorSet(contextVk, programState,
                                              mDescriptorSets[kUniformsAndXfbDescriptorSetIndex]);
+}
+
+angle::Result ProgramExecutableVk::updateImmutableSamplers(const gl::Context *glContext)
+{
+    ContextVk *contextVk                    = vk::GetImpl(glContext);
+    const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
+    ASSERT(executable);
+
+    if (!executable->hasTextures())
+    {
+        return angle::Result::Continue;
+    }
+
+    const gl::ActiveTextureArray<vk::TextureUnit> &activeTextures = contextVk->getActiveTextures();
+    bool haveImmutableSamplers                                    = false;
+    gl::ActiveTextureArray<VkSampler> immutableSamplers;
+    immutableSamplers.fill(VK_NULL_HANDLE);
+
+    gl::ShaderMap<const gl::ProgramState *> programStates;
+    fillProgramStateMap(contextVk, &programStates);
+
+    for (const gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    {
+        const gl::ProgramState *programState = programStates[shaderType];
+        ASSERT(programState);
+        for (uint32_t textureIndex = 0; textureIndex < programState->getSamplerBindings().size();
+             ++textureIndex)
+        {
+            const gl::SamplerBinding &samplerBinding =
+                programState->getSamplerBindings()[textureIndex];
+
+            ASSERT(!samplerBinding.unreferenced);
+
+            uint32_t uniformIndex = programState->getUniformIndexFromSamplerIndex(textureIndex);
+            const gl::LinkedUniform &samplerUniform = programState->getUniforms()[uniformIndex];
+
+            if (!samplerUniform.isActive(shaderType))
+            {
+                continue;
+            }
+
+            uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
+
+            for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
+            {
+                GLuint textureUnit   = samplerBinding.boundTextureUnits[arrayElement];
+                TextureVk *textureVk = activeTextures[textureUnit].texture;
+
+                if (textureVk->getImage().getExternalFormat() == 0)
+                {
+                    continue;
+                }
+
+                SamplerVk *samplerVk = activeTextures[textureUnit].sampler;
+
+                // Use bound sampler object if one present, otherwise use texture's sampler
+                const vk::Sampler &sampler =
+                    (samplerVk != nullptr) ? samplerVk->getSampler() : textureVk->getSampler();
+
+                ShaderInterfaceVariableInfoMap &variableInfoMap = mVariableInfoMap[shaderType];
+                const std::string samplerName =
+                    contextVk->getRenderer()->getFeatures().forceOldRewriteStructSamplers.enabled
+                        ? GetMappedSamplerNameOld(samplerUniform.name)
+                        : GlslangGetMappedSamplerName(samplerUniform.name);
+                ShaderInterfaceVariableInfo &info = variableInfoMap[samplerName];
+
+                immutableSamplers[info.binding] = sampler.getHandle();
+                haveImmutableSamplers           = true;
+            }
+        }
+    }
+
+    if (haveImmutableSamplers)
+    {
+        // Need to recreate the descriptor layouts and related state to use immutable samplers
+        ANGLE_TRY(createPipelineLayout(glContext, &immutableSamplers));
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(ContextVk *contextVk)
