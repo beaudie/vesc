@@ -123,6 +123,14 @@ class SharedGarbage
     SharedGarbage &operator=(SharedGarbage &&rhs);
 
     bool destroyIfComplete(RendererVk *renderer, Serial completedSerial);
+    /*void print() const
+    {
+            printf("Cleaning up garbage:\n");
+            for (const auto& go : mGarbage)
+            {
+                    printf("\tobject type:%d, handle:%p\n", go.getHandleType(), go.getHandle());
+            }
+    }*/
 
   private:
     SharedResourceUse mLifetime;

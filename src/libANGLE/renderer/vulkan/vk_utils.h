@@ -254,6 +254,8 @@ class GarbageObject
         return GarbageObject(HandleTypeHelper<DerivedT>::kHandleType,
                              (GarbageHandle)(object->release()));
     }
+    /*HandleType getHandleType() const { return mHandleType; }
+    void* getHandle() const { return mHandle; }*/
 
   private:
     VK_DEFINE_NON_DISPATCHABLE_HANDLE(GarbageHandle)
