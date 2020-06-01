@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f55a2a31_d268b43a",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T16:29:21Z",
+      "side": 1,
+      "message": "Can you add a check that the line has `:` in it. If the commit message is like this:\n\n    Title\n\n    Description\n    Tag: no-blank-line-after-description\n\nYou would exclude \"Description\" from the check.",
+      "revId": "d591f122a8a701a951221b2d34961235883a972e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f77f2af3_2513a13d",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T16:29:21Z",
+      "side": 1,
+      "message": "Redundant. The next `if` does the same after popping blank lines.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 21
+      },
+      "revId": "d591f122a8a701a951221b2d34961235883a972e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7af4bf8_23c1fda6",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T16:29:21Z",
+      "side": 1,
+      "message": "I\u0027m not sure we always want this. For example:\n\n    Vulkan: Enable passing end2end test\n\n    Bug: angleproject:12345\n\nThere is really no need for description here.",
+      "revId": "d591f122a8a701a951221b2d34961235883a972e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02930c65_8e68e234",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T16:29:21Z",
+      "side": 1,
+      "message": "Cannot happen. The `if` at line 109 is ensuring this.",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 96
+      },
+      "revId": "d591f122a8a701a951221b2d34961235883a972e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
