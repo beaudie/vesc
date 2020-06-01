@@ -661,6 +661,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TEXTURES);
+    mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_IMMUTABLE_SAMPLERS);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
@@ -679,6 +680,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_TEXTURES);
+    mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_IMMUTABLE_SAMPLERS);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS_BINDING);
@@ -693,6 +695,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsDefaultAttribs;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_PIPELINE] = &ContextVk::handleDirtyGraphicsPipeline;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_TEXTURES] = &ContextVk::handleDirtyGraphicsTextures;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_IMMUTABLE_SAMPLERS] =
+        &ContextVk::handleDirtyImmutableSamplers;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_VERTEX_BUFFERS] =
         &ContextVk::handleDirtyGraphicsVertexBuffers;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_INDEX_BUFFER] = &ContextVk::handleDirtyGraphicsIndexBuffer;
@@ -721,6 +725,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE] = &ContextVk::handleDirtyComputePipeline;
     mComputeDirtyBitHandlers[DIRTY_BIT_TEXTURES] = &ContextVk::handleDirtyComputeTextures;
+    mComputeDirtyBitHandlers[DIRTY_BIT_IMMUTABLE_SAMPLERS] =
+        &ContextVk::handleDirtyComputeImmutableSamplers;
     mComputeDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS] =
         &ContextVk::handleDirtyComputeDriverUniforms;
     mComputeDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS_BINDING] =
@@ -1338,16 +1344,43 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     return angle::Result::Continue;
 }
 
+ANGLE_INLINE angle::Result ContextVk::handleDirtyImmutableSamplersImpl(
+    const gl::Context *context,
+    vk::CommandBufferHelper *commandBufferHelper)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasTextures())
+    {
+        ANGLE_TRY(mExecutable->updateImmutableSamplers(context));
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::handleDirtyGraphicsTextures(const gl::Context *context,
                                                      vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyTexturesImpl(&mRenderPassCommands);
 }
 
+angle::Result ContextVk::handleDirtyImmutableSamplers(const gl::Context *context,
+                                                      vk::CommandBuffer *commandBuffer)
+{
+    return handleDirtyImmutableSamplersImpl(context, &mRenderPassCommands);
+}
+
 angle::Result ContextVk::handleDirtyComputeTextures(const gl::Context *context,
                                                     vk::CommandBuffer *commandBuffer)
 {
     return handleDirtyTexturesImpl(&mOutsideRenderPassCommands);
+}
+
+angle::Result ContextVk::handleDirtyComputeImmutableSamplers(const gl::Context *context,
+                                                             vk::CommandBuffer *commandBuffer)
+{
+    return handleDirtyImmutableSamplersImpl(context, &mOutsideRenderPassCommands);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(const gl::Context *context,
@@ -3125,8 +3158,10 @@ angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context)
     if (executable->hasTextures())
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_TEXTURES);
+        mGraphicsDirtyBits.set(DIRTY_BIT_IMMUTABLE_SAMPLERS);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
         mComputeDirtyBits.set(DIRTY_BIT_TEXTURES);
+        mComputeDirtyBits.set(DIRTY_BIT_IMMUTABLE_SAMPLERS);
         mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
 
         ANGLE_TRY(updateActiveTextures(context));

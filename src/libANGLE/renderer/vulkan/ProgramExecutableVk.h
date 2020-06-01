@@ -137,9 +137,11 @@ class ProgramExecutableVk
     angle::Result getComputePipeline(ContextVk *contextVk, vk::PipelineAndSerial **pipelineOut);
 
     const vk::PipelineLayout &getPipelineLayout() const { return mPipelineLayout.get(); }
-    angle::Result createPipelineLayout(const gl::Context *glContext);
+    angle::Result createPipelineLayout(const gl::Context *glContext,
+                                       gl::ActiveTextureArray<VkSampler> *immutableSamplers);
 
     angle::Result updateTexturesDescriptorSet(ContextVk *contextVk);
+    angle::Result updateImmutableSamplers(const gl::Context *glContext);
     angle::Result updateShaderResourcesDescriptorSet(ContextVk *contextVk,
                                                      vk::ResourceUseList *resourceUseList,
                                                      vk::CommandBufferHelper *commandBufferHelper);
@@ -183,7 +185,8 @@ class ProgramExecutableVk
                                    vk::DescriptorSetLayoutDesc *descOut);
     void addTextureDescriptorSetDesc(const gl::ProgramState &programState,
                                      bool useOldRewriteStructSamplers,
-                                     vk::DescriptorSetLayoutDesc *descOut);
+                                     vk::DescriptorSetLayoutDesc *descOut,
+                                     gl::ActiveTextureArray<VkSampler> *immutableSamplers);
 
     void updateDefaultUniformsDescriptorSet(
         const gl::ShaderType shaderType,

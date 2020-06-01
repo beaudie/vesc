@@ -88,7 +88,7 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext)
 
     ANGLE_TRY(transformShaderSpirV(glContext));
 
-    return mExecutable.createPipelineLayout(glContext);
+    return mExecutable.createPipelineLayout(glContext, nullptr);
 }
 
 angle::Result ProgramPipelineVk::transformShaderSpirV(const gl::Context *glContext)
