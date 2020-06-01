@@ -45,7 +45,7 @@ angle::Result Resource::waitForIdle(ContextVk *contextVk, const char *debugMessa
     }
 
     // Make sure the driver is done with the resource.
-    if (usedInRunningCommands(contextVk->getLastCompletedQueueSerial()))
+    if (isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
     {
         if (debugMessage)
         {
@@ -102,9 +102,20 @@ ResourceUseList::ResourceUseList()
     mResourceUses.reserve(kDefaultResourceUseCount);
 }
 
+ResourceUseList::ResourceUseList(ResourceUseList &&other)
+{
+    *this = std::move(other);
+}
+
 ResourceUseList::~ResourceUseList()
 {
     ASSERT(mResourceUses.empty());
+}
+
+ResourceUseList &ResourceUseList::operator=(ResourceUseList &&rhs)
+{
+    std::swap(mResourceUses, rhs.mResourceUses);
+    return *this;
 }
 
 void ResourceUseList::releaseResourceUses()
