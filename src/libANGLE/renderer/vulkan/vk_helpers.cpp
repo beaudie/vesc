@@ -3155,9 +3155,22 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context, VkDeviceSiz
 
     ANGLE_VK_TRY(context, commandBuffer.end());
 
+    // TODO: Need to submit via worker thread or have RendererVk::queueSubmit use same serials as
+    // worker.
     Serial serial;
-    ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer),
-                                          egl::ContextPriority::Medium, nullptr, &serial));
+    if (context->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+
+        ANGLE_TRY(renderer->commandProcessorThreadQueueSubmitOneOff(
+            context, std::move(commandBuffer), egl::ContextPriority::Medium, nullptr));
+        // TODO: return actual serial assigned to this submission.
+        serial = renderer->getLastSubmittedQueueSerial();
+    }
+    else
+    {
+        ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer),
+                                              egl::ContextPriority::Medium, nullptr, &serial));
+    }
 
     if (isCompressedFormat)
     {
