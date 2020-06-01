@@ -90,6 +90,13 @@ angle::Result SyncHelper::clientWait(Context *context,
         ANGLE_TRY(contextVk->flushImpl(nullptr));
     }
 
+    // If we're submitting on a separate thread, need to make sure worker is complete
+    //  to avoid a race condition here where we access fence in both threads
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        contextVk->getRenderer()->waitForCommandProcessorIdle();
+    }
+
     // Wait on the fence that's expected to be signaled on the first vkQueueSubmit after
     // `initialize` was called. The first fence is the fence created to signal this sync.
     ASSERT(mFence.get().valid());
