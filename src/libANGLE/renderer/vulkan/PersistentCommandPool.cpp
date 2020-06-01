@@ -106,6 +106,25 @@ angle::Result PersistentCommandPool::allocateCommandBuffer(vk::Context *context)
     return angle::Result::Continue;
 }
 
+angle::Result PersistentCommandPool::allocateCommandBuffer(VkDevice device)
+{
+    vk::PrimaryCommandBuffer commandBuffer;
+    {
+        // Only used for primary CommandBuffer allocation
+        VkCommandBufferAllocateInfo commandBufferInfo = {};
+        commandBufferInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        commandBufferInfo.commandPool        = mCommandPool.getHandle();
+        commandBufferInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        commandBufferInfo.commandBufferCount = 1;
+        // TODO: Need to wrap this in error detection, what to pass as first param to ANGLE_VK_TRY?
+        commandBuffer.init(device, commandBufferInfo);
+    }
+
+    mFreeBuffers.emplace_back(std::move(commandBuffer));
+
+    return angle::Result::Continue;
+}
+
 }  // namespace vk
 
 }  // namespace rx
