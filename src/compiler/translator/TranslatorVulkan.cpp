@@ -995,6 +995,7 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
         }
 
         {
+#ifdef OLD_CODE
             TIntermBinary *flipXY       = CreateDriverUniformRef(driverUniforms, kFlipXY);
             TVector<int> swizzleOffsetY = {1};
             TIntermSwizzle *flipY       = new TIntermSwizzle(flipXY, swizzleOffsetY);
@@ -1002,6 +1003,15 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
             {
                 return false;
             }
+#else   // OLD_CODE
+            TIntermBinary *flipXY       = CreateDriverUniformRef(driverUniforms, kFlipXY);
+            TIntermBinary *fragRotation = CreateDriverUniformRef(driverUniforms, kFragRotation);
+            if (!RewriteDfdy(this, root, getSymbolTable(), getShaderVersion(), flipXY,
+                             fragRotation))
+            {
+                return false;
+            }
+#endif  // OLD_CODE
         }
 
         EmitEarlyFragmentTestsGLSL(*this, sink);
