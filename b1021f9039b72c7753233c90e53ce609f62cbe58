@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "58eca3e8_b3e6bbf1",
+        "filename": "extensions/EGL_ANGLE_platform_angle.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-06-01T12:19:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41e35e51_f8e55585",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 49
+      },
+      "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9062aed_11b1e569",
         "filename": "extensions/EGL_ANGLE_platform_angle.txt",
         "patchSetId": 7
@@ -221,6 +245,30 @@
       "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aca57a36_3b5d9681",
+        "filename": "extensions/EGL_ANGLE_platform_angle.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2020-06-01T12:19:58Z",
+      "side": 1,
+      "message": "Done. Moved to Display.cpp",
+      "parentUuid": "79b9b5f9_88ddc858",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 50
+      },
+      "revId": "b1021f9039b72c7753233c90e53ce609f62cbe58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
