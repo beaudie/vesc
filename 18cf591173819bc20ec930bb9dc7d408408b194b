@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4d34d6a_8c640464",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:04:05Z",
+      "side": 1,
+      "message": "I believe you need to use {} braces to zero initialize arrays. You can double check that.",
+      "range": {
+        "startLine": 2189,
+        "startChar": 6,
+        "endLine": 2189,
+        "endChar": 27
+      },
+      "revId": "18cf591173819bc20ec930bb9dc7d408408b194b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
