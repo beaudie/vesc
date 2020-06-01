@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "47508905_7f355bd9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T20:26:16Z",
+      "side": 1,
+      "message": "You still need a way to go back and reset all the flags after you start a new RP. So you\u0027ll need a list of these buffers somewhere. I\u0027d express what the CL is doing is answering the question \"is there a WAW hazard that needs a barrier?\" This is more easily implemented via storing a list of buffers in the RP itself.\n\nI\u0027m thinking I should probably sketch up a design doc with a few examples.",
+      "parentUuid": "fc5da452_99cb1ef0",
+      "range": {
+        "startLine": 984,
+        "startChar": 11,
+        "endLine": 984,
+        "endChar": 49
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66d75123_b4bf6bd3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 4
