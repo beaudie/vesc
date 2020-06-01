@@ -8088,7 +8088,6 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
 
     mCurrentDrawSurface = drawSurface;
     mCurrentReadSurface = readSurface;
-
     if (drawSurface != nullptr)
     {
         ANGLE_TRY(drawSurface->makeCurrent(this));
