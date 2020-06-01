@@ -1255,7 +1255,28 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     mCurrentSwapHistoryIndex =
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
-    VkResult result = contextVk->getRenderer()->queuePresent(contextVk->getPriority(), presentInfo);
+    VkResult result;
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        vk::PresentData *presentData = new vk::PresentData();
+        presentData->priority        = contextVk->getPriority();
+        presentData->presentInfo     = presentInfo;
+
+        vk::CommandProcessorTask task;
+        task.contextVk     = nullptr;
+        task.workerCommand = vk::CustomTask::Present;
+        task.commandData   = static_cast<void *>(presentData);
+        contextVk->getRenderer()->queueCommands(task);
+        // TODO: Just stalling here for now, but really want to lead main thread continue
+        //   need to figure out how to handle work below off-thread and sync to main
+        //   Also, need to fix lifetime of presentInfo data when main thread continues.
+        result = VK_SUCCESS;
+        contextVk->getRenderer()->waitForCommandProcessorIdle();
+    }
+    else
+    {
+        result = contextVk->getRenderer()->queuePresent(contextVk->getPriority(), presentInfo);
+    }
 
     // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
     // continuing.
