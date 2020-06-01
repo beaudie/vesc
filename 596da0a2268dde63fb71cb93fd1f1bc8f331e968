@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1b6c10c_70c7e3e1",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "the current serial should be tracked elsewhere - would be nice to keep the API for the factory as simple as possible.",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 63
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dfd40ed_04c884f9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "use vk::GetImpl",
+      "range": {
+        "startLine": 765,
+        "startChar": 3,
+        "endLine": 765,
+        "endChar": 85
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a9cce0e_569e56f6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "nit: can be placed in the init list",
+      "range": {
+        "startLine": 766,
+        "startChar": 4,
+        "endLine": 766,
+        "endChar": 26
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a37235b_2c48edca",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "nit: can be in cpp to avoid binary size in some cases",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 31
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f864c0f_635f3c72",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "nit: static does nothing here, can omit it",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 7
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac8aebe8_e61913bf",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 7
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fb3e761_c97ada97",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "nit: for naming consistency, onExecuteBarriers",
+      "range": {
+        "startLine": 747,
+        "startChar": 42,
+        "endLine": 747,
+        "endChar": 59
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fee34f36_bec77fcc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "nit: can wrap to 100 characters",
+      "range": {
+        "startLine": 726,
+        "startChar": 0,
+        "endLine": 728,
+        "endChar": 34
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5301e94_b7fe58d8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "nit: can be final too",
+      "range": {
+        "startLine": 729,
+        "startChar": 6,
+        "endLine": 729,
+        "endChar": 34
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcf25f72_f6487dbf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "nit: style guide forbids non-const \u0026",
+      "range": {
+        "startLine": 759,
+        "startChar": 58,
+        "endLine": 759,
+        "endChar": 83
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8597f2de_8378e2fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "nit: with the full realization that this will add an additional Serial to every Context, can you instead store the current Serial from the factory on a generate call? This at least will make it consistent with the other ANGLE code. i.e. in the Renderer / Queue serial. Alternately we could audit the other points in the code to change those instances.",
+      "range": {
+        "startLine": 772,
+        "startChar": 11,
+        "endLine": 772,
+        "endChar": 27
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f36464f_21738a27",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-01T18:02:22Z",
+      "side": 1,
+      "message": "nit: mFactory or mSerialFactory",
+      "range": {
+        "startLine": 775,
+        "startChar": 18,
+        "endLine": 775,
+        "endChar": 25
+      },
+      "revId": "596da0a2268dde63fb71cb93fd1f1bc8f331e968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
