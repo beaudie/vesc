@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b8faa9d2_fa7a8048",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-01T17:30:15Z",
+      "side": 1,
+      "message": "Can you clarify what you mean? Right now, if there is no blank line between tag and description, I think git automatically adds a Change-id tag at the end of the message. In that case, this presubmit test will identify the change-id tag alone as the tag paragraph, and identify the description body and the user-defined tags as the description body. So it will pass the presubmit test.",
+      "parentUuid": "f55a2a31_d268b43a",
+      "revId": "d591f122a8a701a951221b2d34961235883a972e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f77f2af3_2513a13d",
         "filename": "PRESUBMIT.py",
         "patchSetId": 13
@@ -30,6 +48,30 @@
       "writtenOn": "2020-06-01T16:29:21Z",
       "side": 1,
       "message": "Redundant. The next `if` does the same after popping blank lines.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 21
+      },
+      "revId": "d591f122a8a701a951221b2d34961235883a972e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "101a349c_be702265",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-01T17:30:15Z",
+      "side": 1,
+      "message": "But if I don\u0027t check for length here, the program might crash if commit_msg_lines has no element in it.",
+      "parentUuid": "f77f2af3_2513a13d",
       "range": {
         "startLine": 68,
         "startChar": 0,
@@ -70,6 +112,30 @@
       "writtenOn": "2020-06-01T16:29:21Z",
       "side": 1,
       "message": "Cannot happen. The `if` at line 109 is ensuring this.",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 96
+      },
+      "revId": "d591f122a8a701a951221b2d34961235883a972e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e90d28fc_9e2a205d",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1423953
+      },
+      "writtenOn": "2020-06-01T17:30:15Z",
+      "side": 1,
+      "message": "I think there can be multiple blank lines between description summary and description body, so the conditional clause in line (114-118) actually pops all of the blank lines. After all the pops, the description body might not exist.",
+      "parentUuid": "02930c65_8e68e234",
       "range": {
         "startLine": 129,
         "startChar": 0,
