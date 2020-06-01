@@ -491,7 +491,25 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkInstance instance  = renderer->getInstance();
 
     // flush the pipe.
-    (void)renderer->deviceWaitIdle(displayVk);
+    if (renderer->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        vk::CommandProcessorTask task;
+        task.contextVk     = nullptr;
+        task.workerCommand = vk::CustomTask::DeviceWaitIdle;
+        task.commandData   = nullptr;
+        // Sync any outstanding worker thread error before submitting task
+        if (renderer->hasPendingError())
+        {
+            vk::ErrorDetails error = renderer->getAndClearPendingError();
+            displayVk->handleError(error.errorCode, error.file, error.function, error.line);
+        }
+        renderer->queueCommand(task);
+        renderer->waitForCommandProcessorIdle();
+    }
+    else
+    {
+        (void)renderer->deviceWaitIdle(displayVk);
+    }
 
     destroySwapChainImages(displayVk);
 
@@ -732,7 +750,24 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk,
         static constexpr size_t kMaxOldSwapchains = 5;
         if (mOldSwapchains.size() > kMaxOldSwapchains)
         {
-            ANGLE_TRY(contextVk->getRenderer()->queueWaitIdle(contextVk, contextVk->getPriority()));
+            if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+            {
+                vk::QueueWaitIdleData *waitData = new vk::QueueWaitIdleData();
+                waitData->priority              = contextVk->getPriority();
+
+                vk::CommandProcessorTask task;
+                task.contextVk     = nullptr;
+                task.workerCommand = vk::CustomTask::QueueWaitIdle;
+                task.commandData   = static_cast<void *>(waitData);
+                contextVk->syncAnyErrorAndQueueCommandToProcessorThread(task);
+                // Stall here for command thread to complete
+                contextVk->getRenderer()->waitForCommandProcessorIdle();
+            }
+            else
+            {
+                ANGLE_TRY(
+                    contextVk->getRenderer()->queueWaitIdle(contextVk, contextVk->getPriority()));
+            }
             for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
             {
                 oldSwapchain.destroy(contextVk->getDevice(), &mPresentSemaphoreRecycler);
@@ -1253,6 +1288,15 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     }
 
     // Update the swap history for this presentation
+    // TODO: If threading is enabled, then getLastSubmittedFence() will correctly pull fence from
+    // CommandWorkQueue
+    //  However, is there a potential race condition here if we hit this before work has been added
+    //  to mInFlightCommands in the command work queue? For now just stalling until worker thread
+    //  done.
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        contextVk->getRenderer()->waitForCommandProcessorIdle();
+    }
     swap.sharedFence = contextVk->getLastSubmittedFence();
     ASSERT(!mAcquireImageSemaphore.valid());
 
@@ -1260,7 +1304,28 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     mCurrentSwapHistoryIndex =
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
 
-    VkResult result = contextVk->getRenderer()->queuePresent(contextVk->getPriority(), presentInfo);
+    VkResult result;
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        vk::PresentData *presentData = new vk::PresentData();
+        presentData->priority        = contextVk->getPriority();
+        presentData->presentInfo     = presentInfo;
+
+        vk::CommandProcessorTask task;
+        task.contextVk     = nullptr;
+        task.workerCommand = vk::CustomTask::Present;
+        task.commandData   = static_cast<void *>(presentData);
+        contextVk->syncAnyErrorAndQueueCommandToProcessorThread(task);
+        // TODO: Just stalling here for now, but really want to let main thread continue
+        //   need to figure out how to handle work below off-thread and sync to main
+        //   Also, need to fix lifetime of presentInfo data when main thread continues.
+        result = VK_SUCCESS;
+        contextVk->getRenderer()->waitForCommandProcessorIdle();
+    }
+    else
+    {
+        result = contextVk->getRenderer()->queuePresent(contextVk->getPriority(), presentInfo);
+    }
 
     // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
     // continuing.
