@@ -48,7 +48,16 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
 
     DeviceScoped<Event> event(device);
     ANGLE_VK_TRY(contextVk, event.get().init(device, eventCreateInfo));
-    ANGLE_TRY(contextVk->getNextSubmitFence(&mFence));
+    // TODO: For now wait for worker thread to finish then get next fence from renderer
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        contextVk->getRenderer()->waitForCommandProcessorIdle();
+        ANGLE_TRY(contextVk->getRenderer()->getNextSubmitFence(&mFence));
+    }
+    else
+    {
+        ANGLE_TRY(contextVk->getNextSubmitFence(&mFence));
+    }
 
     mEvent = event.release();
 
@@ -90,9 +99,17 @@ angle::Result SyncHelper::clientWait(Context *context,
         ANGLE_TRY(contextVk->flushImpl(nullptr));
     }
 
+    // If we're submitting on a separate thread, need to make sure worker is complete
+    //  to avoid a race condition here where we access fence in both threads
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        contextVk->getRenderer()->waitForCommandProcessorIdle();
+    }
+
     // Wait on the fence that's expected to be signaled on the first vkQueueSubmit after
     // `initialize` was called. The first fence is the fence created to signal this sync.
     ASSERT(mFence.get().valid());
+    // TODO: Wait could be command to worker
     VkResult status = mFence.get().wait(renderer->getDevice(), timeout);
 
     // Check for errors, but don't consider timeout as such.
