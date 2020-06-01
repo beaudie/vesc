@@ -32,22 +32,6 @@ class ProgramExecutableVk;
 class RendererVk;
 class WindowSurfaceVk;
 
-struct CommandBatch final : angle::NonCopyable
-{
-    CommandBatch();
-    ~CommandBatch();
-    CommandBatch(CommandBatch &&other);
-    CommandBatch &operator=(CommandBatch &&other);
-
-    void destroy(VkDevice device);
-
-    vk::PrimaryCommandBuffer primaryCommands;
-    // commandPool is for secondary CommandBuffer allocation
-    vk::CommandPool commandPool;
-    vk::Shared<vk::Fence> fence;
-    Serial serial;
-};
-
 class CommandQueue final : angle::NonCopyable
 {
   public:
@@ -61,7 +45,6 @@ class CommandQueue final : angle::NonCopyable
     bool hasInFlightCommands() const;
 
     angle::Result allocatePrimaryCommandBuffer(vk::Context *context,
-                                               const vk::CommandPool &commandPool,
                                                vk::PrimaryCommandBuffer *commandBufferOut);
     angle::Result releasePrimaryCommandBuffer(vk::Context *context,
                                               vk::PrimaryCommandBuffer &&commandBuffer);
@@ -89,10 +72,10 @@ class CommandQueue final : angle::NonCopyable
     angle::Result releaseToCommandBatch(vk::Context *context,
                                         vk::PrimaryCommandBuffer &&commandBuffer,
                                         vk::CommandPool *commandPool,
-                                        CommandBatch *batch);
+                                        vk::CommandBatch *batch);
 
     vk::GarbageQueue mGarbageQueue;
-    std::vector<CommandBatch> mInFlightCommands;
+    std::vector<vk::CommandBatch> mInFlightCommands;
 
     // Keeps a free list of reusable primary command buffers.
     vk::PersistentCommandPool mPrimaryCommandPool;
@@ -565,7 +548,7 @@ class ContextVk : public ContextImpl, public vk::Context
     void updateOverlayOnPresent();
 
     // Submit commands to worker thread for processing
-    ANGLE_INLINE void queueCommandsToWorker(const vk::CommandProcessorTask &commands)
+    ANGLE_INLINE void queueCommandsToProcessorThread(const vk::CommandProcessorTask &commands)
     {
         mRenderer->queueCommands(commands);
     }
@@ -971,6 +954,7 @@ class ContextVk : public ContextImpl, public vk::Context
     // We use a single pool for recording commands. We also keep a free list for pool recycling.
     vk::CommandPool mCommandPool;
 
+    // TODO: This can be killed once threading is enabled b/153666475
     CommandQueue mCommandQueue;
     vk::GarbageList mCurrentGarbage;
 
