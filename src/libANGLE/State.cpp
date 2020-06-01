@@ -3371,7 +3371,7 @@ void State::setImageUnit(const Context *context,
 // Handle a dirty texture event.
 void State::onActiveTextureChange(const Context *context, size_t textureUnit)
 {
-    if (mProgram)
+    if (mExecutable)
     {
         TextureType type       = mExecutable->getActiveSamplerTypes()[textureUnit];
         Texture *activeTexture = (type != TextureType::InvalidEnum)
@@ -3383,7 +3383,7 @@ void State::onActiveTextureChange(const Context *context, size_t textureUnit)
 
 void State::onActiveTextureStateChange(const Context *context, size_t textureUnit)
 {
-    if (mProgram)
+    if (mExecutable)
     {
         TextureType type       = mExecutable->getActiveSamplerTypes()[textureUnit];
         Texture *activeTexture = (type != TextureType::InvalidEnum)
@@ -3396,7 +3396,7 @@ void State::onActiveTextureStateChange(const Context *context, size_t textureUni
 
 void State::onImageStateChange(const Context *context, size_t unit)
 {
-    if (mProgram)
+    if (mExecutable)
     {
         const ImageUnit &image = mImageUnits[unit];
 
