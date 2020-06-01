@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5f2bb9d_1705269e",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T20:19:18Z",
+      "side": 1,
+      "message": "Can you create a temporary and assign this to it? Then swizzle that temporary to avoid duplicating this expression.",
+      "range": {
+        "startLine": 166,
+        "startChar": 19,
+        "endLine": 166,
+        "endChar": 32
+      },
+      "revId": "e6a6426f428d0194396621f0ad0cd6f08f57621a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccaddf6a_de2a041a",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T20:19:18Z",
+      "side": 1,
+      "message": "nit: just `operand`, this is not the copy.",
+      "range": {
+        "startLine": 173,
+        "startChar": 18,
+        "endLine": 173,
+        "endChar": 29
+      },
+      "revId": "e6a6426f428d0194396621f0ad0cd6f08f57621a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f246a005_3fe7a508",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T20:19:18Z",
+      "side": 1,
+      "message": "Remove all deepCopy()s here, these were just created and there are no other users of them.",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 98
+      },
+      "revId": "e6a6426f428d0194396621f0ad0cd6f08f57621a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
