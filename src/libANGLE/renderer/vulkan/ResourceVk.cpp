@@ -80,6 +80,7 @@ bool SharedGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSeri
 
     for (GarbageObject &object : mGarbage)
     {
+        ASSERT(object.valid());
         object.destroy(renderer);
     }
 

@@ -461,6 +461,7 @@ RendererVk::RendererVk()
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
       mPipelineCacheDirty(false),
       mPipelineCacheInitialized(false),
+      mCommandProcessor(this),
       mGlslangInitialized(false)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
@@ -507,7 +508,7 @@ void RendererVk::onDestroy()
     }
 
     mOneOffCommandPool.destroy(mDevice);
-
+    mNextSubmitFence.reset(mDevice);
     mFenceRecycler.destroy(mDevice);
 
     mPipelineLayoutCache.destroy(mDevice);
@@ -1814,7 +1815,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
     ANGLE_FEATURE_CONDITION(&mFeatures, preferAggregateBarrierCalls, isNvidia || isAMD || isIntel);
 
     // Currently disabled by default: http://anglebug.com/4324
-    ANGLE_FEATURE_CONDITION(&mFeatures, enableCommandProcessingThread, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableCommandProcessingThread, true);
+
+    // Currently disabled by default: http://anglebug.com/4324
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableParallelCommandProcessing, false);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsYUVSamplerConversion,
                             mSamplerYcbcrConversionFeatures.samplerYcbcrConversion != VK_FALSE);
@@ -2096,6 +2100,29 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result RendererVk::commandProcessorThreadQueueSubmit(vk::Context *context,
+                                                            egl::ContextPriority priority,
+                                                            const VkSubmitInfo &submitInfo,
+                                                            const vk::Fence *fence,
+                                                            Serial *serialOut)
+{
+    ASSERT(getFeatures().enableCommandProcessingThread.enabled);
+
+    {
+        std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
+        VkFence handle = fence ? fence->getHandle() : VK_NULL_HANDLE;
+        ANGLE_VK_TRY(context, vkQueueSubmit(mQueues[priority], 1, &submitInfo, handle));
+    }
+
+    ANGLE_TRY(cleanupGarbage(false));
+
+    *serialOut                = mCurrentQueueSerial;
+    mLastSubmittedQueueSerial = mCurrentQueueSerial;
+    mCurrentQueueSerial       = mQueueSerialFactory.generate();
+
+    return angle::Result::Continue;
+}
+
 angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
                                             vk::PrimaryCommandBuffer &&primary,
                                             egl::ContextPriority priority,
@@ -2116,11 +2143,6 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 
 angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriority priority)
 {
-    if (getFeatures().enableCommandProcessingThread.enabled)
-    {
-        // First make sure command processor is complete when waiting for queue idle.
-        mCommandProcessor.waitForWorkComplete();
-    }
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueues[priority]));
@@ -2133,11 +2155,6 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context, egl::ContextPriori
 
 angle::Result RendererVk::deviceWaitIdle(vk::Context *context)
 {
-    if (getFeatures().enableCommandProcessingThread.enabled)
-    {
-        // First make sure command processor is complete when waiting for device idle.
-        mCommandProcessor.waitForWorkComplete();
-    }
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
         ANGLE_VK_TRY(context, vkDeviceWaitIdle(mDevice));
@@ -2168,6 +2185,20 @@ VkResult RendererVk::queuePresent(egl::ContextPriority priority,
     }
 }
 
+VkResult RendererVk::commandProcessorThreadQueuePresent(egl::ContextPriority priority,
+                                                        const VkPresentInfoKHR &presentInfo)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::commandProcessorThreadQueuePresent");
+    ASSERT(getFeatures().enableCommandProcessingThread.enabled);
+
+    std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
+
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "vkQueuePresentKHR");
+        return vkQueuePresentKHR(mQueues[priority], &presentInfo);
+    }
+}
+
 angle::Result RendererVk::newSharedFence(vk::Context *context,
                                          vk::Shared<vk::Fence> *sharedFenceOut)
 {
@@ -2178,6 +2209,7 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
         fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceCreateInfo.flags             = 0;
         ANGLE_VK_TRY(context, fence.init(mDevice, fenceCreateInfo));
+        // printf("Created new fence %p\n", fence.getHandle());
     }
     else
     {
@@ -2185,6 +2217,29 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
         ANGLE_VK_TRY(context, fence.reset(mDevice));
     }
     sharedFenceOut->assign(mDevice, std::move(fence));
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::ensureSubmitFenceInitialized()
+{
+    std::lock_guard<decltype(mNextSubmitFenceMutex)> lock(mNextSubmitFenceMutex);
+    if (mNextSubmitFence.isReferenced())
+    {
+        // printf("In ContextVk::ensureSubmitFenceInitialized(), using existing mSubmitFence\n");
+        return angle::Result::Continue;
+    }
+    // printf("In ContextVk::ensureSubmitFenceInitialized(), creating new mSubmitFence\n");
+    return newSharedFence(mCommandProcessor.getContextPointer(), &mNextSubmitFence);
+}
+
+angle::Result RendererVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOut)
+{
+    ANGLE_TRY(ensureSubmitFenceInitialized());
+    std::lock_guard<decltype(mNextSubmitFenceMutex)> lock(mNextSubmitFenceMutex);
+    ASSERT(!sharedFenceOut->isReferenced());
+    /*printf("In ContextVk::getNextSubmitFence(), copying mSubmitFence to sharedFence out %p\n",
+               sharedFenceOut);*/
+    sharedFenceOut->copy(getDevice(), mNextSubmitFence);
     return angle::Result::Continue;
 }
 
@@ -2226,6 +2281,7 @@ bool RendererVk::hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlag
 
 angle::Result RendererVk::cleanupGarbage(bool block)
 {
+    // TODO: Debug comments here
     std::lock_guard<decltype(mGarbageMutex)> lock(mGarbageMutex);
 
     for (auto garbageIter = mSharedGarbage.begin(); garbageIter != mSharedGarbage.end();)
@@ -2234,6 +2290,7 @@ angle::Result RendererVk::cleanupGarbage(bool block)
         vk::SharedGarbage &garbage = *garbageIter;
         if (garbage.destroyIfComplete(this, mLastCompletedQueueSerial))
         {
+            // garbage.print();
             garbageIter = mSharedGarbage.erase(garbageIter);
         }
         else
