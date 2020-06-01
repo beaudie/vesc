@@ -1233,6 +1233,8 @@ class RenderPassCache final : angle::NonCopyable
             ASSERT(!innerCache.empty());
 
             // Find the first element and return it.
+            // TODO: https://issuetracker.google.com/issues/169788986: Need to change this so that
+            // we get the actual serial used when this work is submitted.
             innerCache.begin()->second.updateSerial(serial);
             *renderPassOut = &innerCache.begin()->second.get();
             return angle::Result::Continue;
