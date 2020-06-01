@@ -45,6 +45,30 @@
       "revId": "1a3eedde83081cd18477a9651aea5fcc33923cd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4368be41_065f4cd4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3734,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T19:05:55Z",
+      "side": 1,
+      "message": "Looks like the two CLs that added these were written almost at the same and did the same thing:\n\nJuly 4 2019: https://chromium-review.googlesource.com/c/angle/angle/+/1688505\nJuly 6 2019: https://chromium-review.googlesource.com/c/angle/angle/+/1688435\n\nDefinitely unify them. You can take the stage as a parameter.",
+      "parentUuid": "9e973c28_425d39a1",
+      "range": {
+        "startLine": 3734,
+        "startChar": 5,
+        "endLine": 3734,
+        "endChar": 35
+      },
+      "revId": "1a3eedde83081cd18477a9651aea5fcc33923cd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
