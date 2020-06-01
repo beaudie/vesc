@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f56117dd_633ff8b6",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T20:24:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b8faa9d2_fa7a8048",
+      "revId": "d591f122a8a701a951221b2d34961235883a972e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f77f2af3_2513a13d",
         "filename": "PRESUBMIT.py",
         "patchSetId": 13
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "But if I don\u0027t check for length here, the program might crash if commit_msg_lines has no element in it.",
       "parentUuid": "f77f2af3_2513a13d",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 21
+      },
+      "revId": "d591f122a8a701a951221b2d34961235883a972e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c1823d7_4767bfb9",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T20:24:13Z",
+      "side": 1,
+      "message": "You can do this then in the line below:\n\n    # pop the blank line between tag paragraph and description body\n    if len(commit_msg_lines) \u003e 0:\n        commit_msg_lines.pop()",
+      "parentUuid": "101a349c_be702265",
       "range": {
         "startLine": 68,
         "startChar": 0,
@@ -136,6 +178,30 @@
       "side": 1,
       "message": "I think there can be multiple blank lines between description summary and description body, so the conditional clause in line (114-118) actually pops all of the blank lines. After all the pops, the description body might not exist.",
       "parentUuid": "02930c65_8e68e234",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 96
+      },
+      "revId": "d591f122a8a701a951221b2d34961235883a972e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9881e5e1_99789e5a",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-01T20:24:13Z",
+      "side": 1,
+      "message": "Ok I see. The condition at line 114 can become:\n\n    if len(commit_msg_lines) \u003e 0 and _IsLineBlank(commit_msg_lines[0]):\n\nI\u0027m just trying to simplify this a bit, so multiple locations don\u0027t produce the same message.",
+      "parentUuid": "e90d28fc_9e2a205d",
       "range": {
         "startLine": 129,
         "startChar": 0,
