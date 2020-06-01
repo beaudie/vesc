@@ -540,6 +540,7 @@ class ContextVk : public ContextImpl, public vk::Context
     enum DirtyBitType : size_t
     {
         DIRTY_BIT_DEFAULT_ATTRIBS,
+        DIRTY_BIT_IMMUTABLE_SAMPLERS,  // must run before PIPELINE
         DIRTY_BIT_PIPELINE,
         DIRTY_BIT_TEXTURES,
         DIRTY_BIT_VERTEX_BUFFERS,
@@ -713,6 +714,8 @@ class ContextVk : public ContextImpl, public vk::Context
                                               vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsTextures(const gl::Context *context,
                                               vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyImmutableSamplers(const gl::Context *context,
+                                               vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsVertexBuffers(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsIndexBuffer(const gl::Context *context,
@@ -739,6 +742,8 @@ class ContextVk : public ContextImpl, public vk::Context
                                              vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyComputeTextures(const gl::Context *context,
                                              vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyComputeImmutableSamplers(const gl::Context *context,
+                                                      vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyComputeDriverUniforms(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyComputeDriverUniformsBinding(const gl::Context *context,
@@ -748,6 +753,8 @@ class ContextVk : public ContextImpl, public vk::Context
 
     // Common parts of the common dirty bit handlers.
     angle::Result handleDirtyTexturesImpl(vk::CommandBufferHelper *commandBufferHelper);
+    angle::Result handleDirtyImmutableSamplersImpl(const gl::Context *context,
+                                                   vk::CommandBufferHelper *commandBufferHelper);
     angle::Result handleDirtyShaderResourcesImpl(const gl::Context *context,
                                                  vk::CommandBufferHelper *commandBufferHelper);
     void handleDirtyDriverUniformsBindingImpl(vk::CommandBuffer *commandBuffer,
