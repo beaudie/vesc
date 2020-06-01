@@ -393,7 +393,8 @@ void ProgramExecutableVk::addInterfaceBlockDescriptorSetDesc(
         const std::string blockName             = block.mappedName;
         const ShaderInterfaceVariableInfo &info = mVariableInfoMap[shaderType][blockName];
 
-        descOut->update(info.binding, descType, arraySize, gl_vk::kShaderStageMap[shaderType]);
+        descOut->update(info.binding, descType, arraySize, gl_vk::kShaderStageMap[shaderType],
+                        nullptr);
     }
 }
 
@@ -418,7 +419,7 @@ void ProgramExecutableVk::addAtomicCounterBufferDescriptorSetDesc(
     // A single storage buffer array is used for all stages for simplicity.
     descOut->update(info.binding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
                     gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS,
-                    gl_vk::kShaderStageMap[shaderType]);
+                    gl_vk::kShaderStageMap[shaderType], nullptr);
 }
 
 void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramState &programState,
@@ -448,8 +449,8 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramState &prog
             GetImageNameWithoutIndices(&name);
             ShaderInterfaceVariableInfo &info = mVariableInfoMap[shaderType][name];
             VkShaderStageFlags activeStages   = gl_vk::kShaderStageMap[shaderType];
-            descOut->update(info.binding, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, arraySize,
-                            activeStages);
+            descOut->update(info.binding, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, arraySize, activeStages,
+                            nullptr);
         }
     }
 }
@@ -501,8 +502,25 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(const gl::ProgramState &pr
             ShaderInterfaceVariableInfo &info = mVariableInfoMap[shaderType][samplerName];
             VkShaderStageFlags activeStages   = gl_vk::kShaderStageMap[shaderType];
 
-            descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
-                            activeStages);
+            // TODO: https://b.corp.google.com/issues/158215272: how do we handle array of immutable
+            // samplers?
+            GLuint textureUnit = samplerBinding.boundTextureUnits[0];
+            if (activeTextures &&
+                ((*activeTextures)[textureUnit].texture->getImage().hasImmutableSampler()))
+            {
+                ASSERT(samplerBinding.boundTextureUnits.size() == 1);
+                // Always take the texture's sampler, that's only way to get to yuv conversion for
+                // externalFormat
+                const vk::Sampler &immutableSampler =
+                    (*activeTextures)[textureUnit].texture->getSampler();
+                descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
+                                activeStages, &immutableSampler);
+            }
+            else
+            {
+                descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
+                                activeStages, nullptr);
+            }
         }
     }
 }
@@ -646,7 +664,7 @@ angle::Result ProgramExecutableVk::createPipelineLayout(const gl::Context *glCon
         }
 
         uniformsAndXfbSetDesc.update(info.binding, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1,
-                                     gl_vk::kShaderStageMap[shaderType]);
+                                     gl_vk::kShaderStageMap[shaderType], nullptr);
         mNumDefaultUniformDescriptors++;
     }
     bool hasVertexShader = glExecutable.hasLinkedShaderStage(gl::ShaderType::Vertex);
