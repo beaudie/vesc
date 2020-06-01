@@ -44,6 +44,10 @@ angle::Result Resource::waitForIdle(ContextVk *contextVk)
     {
         ANGLE_TRY(finishRunningCommands(contextVk));
     }
+    if (contextVk->getRenderer()->getFeatures().enableCommandProcessingThread.enabled)
+    {
+        contextVk->getRenderer()->waitForCommandProcessorIdle();
+    }
 
     ASSERT(!isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()));
 
