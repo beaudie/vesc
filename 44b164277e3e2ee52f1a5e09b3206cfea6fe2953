@@ -22,6 +22,30 @@
       "revId": "44b164277e3e2ee52f1a5e09b3206cfea6fe2953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "696c11bc_89de0cc7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2020-06-02T03:22:33Z",
+      "side": 1,
+      "message": "I agree with you. The problem is that at the call stack where createSwapChain is called, I don\u0027t have access to contextVK. The overlay information is with contextVk. That is why I end up with this dynamic way.\n\nIdeally we should make the overlay thing a compile/gni flag so that I don\u0027t need to worry about context/surface accessibility at all.",
+      "parentUuid": "de06ad6a_bd3d1519",
+      "range": {
+        "startLine": 872,
+        "startChar": 8,
+        "endLine": 872,
+        "endChar": 30
+      },
+      "revId": "44b164277e3e2ee52f1a5e09b3206cfea6fe2953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
