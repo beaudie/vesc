@@ -1779,6 +1779,7 @@ angle::Result Renderer11::drawElements(const gl::Context *context,
         {
             mDeviceContext->DrawIndexedInstanced(indexCount, adjustedInstanceCount, 0,
                                                  baseVertexAdjusted, baseInstance);
+            //  baseVertexAdjusted, 0);
         }
         return angle::Result::Continue;
     }
@@ -3843,6 +3844,7 @@ angle::Result Renderer11::getVertexSpaceRequired(const gl::Context *context,
                                                  const gl::VertexBinding &binding,
                                                  size_t count,
                                                  GLsizei instances,
+                                                 GLuint baseInstance,
                                                  unsigned int *bytesRequiredOut) const
 {
     if (!attrib.enabled)
@@ -3861,7 +3863,10 @@ angle::Result Renderer11::getVertexSpaceRequired(const gl::Context *context,
     else
     {
         // Round up to divisor, if possible
-        elementCount = UnsignedCeilDivide(static_cast<unsigned int>(instances), divisor);
+        // elementCount = UnsignedCeilDivide(static_cast<unsigned int>(instances), divisor);
+        // elementCount = UnsignedCeilDivide(static_cast<unsigned int>(count), divisor);
+        elementCount =
+            UnsignedCeilDivide(static_cast<unsigned int>(instances + baseInstance), divisor);
     }
 
     ASSERT(elementCount > 0);
