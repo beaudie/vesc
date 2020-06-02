@@ -22,6 +22,52 @@
       "revId": "0ac9a0558c11906020c9cd0c15dcd98872af05c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b405319_ed399d70",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T02:44:03Z",
+      "side": 1,
+      "message": "Since these are only valid for pipeline objects, I\u0027d make that specific in the name. As in `s/mHas/mPipelineHas`.",
+      "range": {
+        "startLine": 361,
+        "startChar": 9,
+        "endLine": 361,
+        "endChar": 13
+      },
+      "revId": "0ac9a0558c11906020c9cd0c15dcd98872af05c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbf5d293_54a3d07d",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T02:44:03Z",
+      "side": 1,
+      "message": "Shouldn\u0027t these be reset to false at the top of the function?\n\nAlso, might be simpler to turn all these `if` blocks to something like:\n\n    mState.mExecutable-\u003emHasGraphicsUniformBuffers |\u003d executable.hasUniformBuffers();",
+      "range": {
+        "startLine": 301,
+        "startChar": 16,
+        "endLine": 301,
+        "endChar": 70
+      },
+      "revId": "0ac9a0558c11906020c9cd0c15dcd98872af05c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
