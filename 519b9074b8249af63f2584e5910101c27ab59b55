@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2bb6563_453461a1",
+        "filename": "src/libANGLE/renderer/d3d/VertexBuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-06-02T19:53:16Z",
+      "side": 1,
+      "message": "Tried to adjust the alignment (the data in test case for each copy is 8 byte) Not seeing difference in render result.",
+      "revId": "519b9074b8249af63f2584e5910101c27ab59b55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb23a26a_e2de53ac",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/VertexBuffer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-06-02T19:53:16Z",
+      "side": 1,
+      "message": "The `start` seemed only assigned at GLint firstVertexIndex \u003d (binding.getDivisor() \u003e 0 ? 0 : start);\nhttps://source.chromium.org/chromium/chromium/src/+/master:third_party/angle/src/libANGLE/renderer/d3d/VertexDataManager.cpp;l\u003d505-536?q\u003dfirstVertexIndex%20f:angle\u0026ss\u003dchromium%2Fchromium%2Fsrc\u0026originalUrl\u003dhttps:%2F%2Fcs.chromium.org%2F\n\nI\u0027ve assigned it with GLint firstVertexIndex \u003d (binding.getDivisor() \u003e 0 ? baseInstance * binding.getDivisor() : start); The `start` here (passed in by `firstVertexIndex`) seems need applied to input in all circumstances now.\n\nBy looking at the src data getting copied from input into output later (line 129), it\u0027s correct to apply such offset (regardless of the alignment in output for now)",
+      "revId": "519b9074b8249af63f2584e5910101c27ab59b55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45f11030_52646347",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2020-06-02T19:53:16Z",
+      "side": 1,
+      "message": "vInstanceID is the data being used in the test case. It\u0027s from the instanceIDBuffer {0, 1, 2, ..., 7} divisor \u003d 1; It\u0027s affecting the x pos and color of the quad in rendering result (causing it\u0027s missing).\nI already verified the missing quad is not due to index buffer accessing.",
+      "revId": "519b9074b8249af63f2584e5910101c27ab59b55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
