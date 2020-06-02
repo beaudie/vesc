@@ -104,6 +104,7 @@ angle::Result VertexBufferInterface::getSpaceRequired(const gl::Context *context
 
     // Align to 16-byte boundary
     unsigned int alignedSpaceRequired = roundUpPow2(spaceRequired, 16u);
+    // unsigned int alignedSpaceRequired = roundUpPow2(spaceRequired, 8u);
     ANGLE_CHECK_GL_ALLOC(GetImplAs<ContextD3D>(context), alignedSpaceRequired >= spaceRequired);
 
     *spaceInBytesOut = alignedSpaceRequired;
@@ -176,6 +177,13 @@ angle::Result StreamingVertexBufferInterface::storeDynamicAttribute(
 {
     unsigned int spaceRequired = 0;
     ANGLE_TRY(getSpaceRequired(context, attrib, binding, count, instances, &spaceRequired));
+
+    if (binding.getDivisor() > 0)
+    {
+        // spaceRequired = 8u; //temp
+        // mWritePosition += start * static_cast<int>(ComputeVertexAttributeStride(attrib,
+        // binding));
+    }
 
     // Protect against integer overflow
     angle::CheckedNumeric<unsigned int> checkedPosition(mWritePosition);

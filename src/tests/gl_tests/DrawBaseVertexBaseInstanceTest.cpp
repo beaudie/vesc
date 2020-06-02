@@ -63,8 +63,14 @@ enum class BaseInstanceOption
     UseBaseInstance
 };
 
-using DrawBaseVertexBaseInstanceTestParams =
-    std::tuple<angle::PlatformParameters, BaseVertexOption, BaseInstanceOption>;
+enum class BufferDataUsageOption
+{
+    StaticDraw,
+    DynamicDraw
+};
+
+using DrawBaseVertexBaseInstanceTestParams = std::
+    tuple<angle::PlatformParameters, BaseVertexOption, BaseInstanceOption, BufferDataUsageOption>;
 
 struct PrintToStringParamName
 {
@@ -72,7 +78,9 @@ struct PrintToStringParamName
         const ::testing::TestParamInfo<DrawBaseVertexBaseInstanceTestParams> &info) const
     {
         ::std::stringstream ss;
-        ss << (std::get<2>(info.param) == BaseInstanceOption::UseBaseInstance ? "UseBaseInstance_"
+        ss << (std::get<3>(info.param) == BufferDataUsageOption::StaticDraw ? "StaticDraw_"
+                                                                            : "DynamicDraw_")
+           << (std::get<2>(info.param) == BaseInstanceOption::UseBaseInstance ? "UseBaseInstance_"
                                                                               : "")
            << (std::get<1>(info.param) == BaseVertexOption::UseBaseVertex ? "UseBaseVertex_" : "")
            << std::get<0>(info.param);
@@ -149,6 +157,12 @@ class DrawBaseVertexBaseInstanceTest
     bool useBaseInstanceBuiltin() const
     {
         return std::get<2>(GetParam()) == BaseInstanceOption::UseBaseInstance;
+    }
+
+    GLenum getBufferDataUsage() const
+    {
+        return std::get<3>(GetParam()) == BufferDataUsageOption::StaticDraw ? GL_STATIC_DRAW
+                                                                            : GL_DYNAMIC_DRAW;
     }
 
     std::string vertexShaderSource300(bool isDrawArrays, bool isMultiDraw, bool divisorTest)
@@ -243,10 +257,12 @@ void main()
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mVertices.size(), mVertices.data(),
                      GL_STATIC_DRAW);
+        //  GL_DYNAMIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * mIndices.size(), mIndices.data(),
-                     GL_STATIC_DRAW);
+                     //  GL_STATIC_DRAW);
+                     GL_DYNAMIC_DRAW);
 
         ASSERT_GL_NO_ERROR();
     }
@@ -255,7 +271,10 @@ void main()
     {
         glBindBuffer(GL_ARRAY_BUFFER, instanceIDBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mInstancedArrayId.size(),
-                     mInstancedArrayId.data(), GL_STATIC_DRAW);
+                     //  mInstancedArrayId.data(), GL_STATIC_DRAW);
+                     mInstancedArrayId.data(),
+                     //  GL_DYNAMIC_DRAW);
+                     getBufferDataUsage());
 
         ASSERT_GL_NO_ERROR();
     }
@@ -336,6 +355,8 @@ void main()
                 glDrawElementsInstancedBaseVertexBaseInstanceANGLE(
                     GL_TRIANGLES, countPerDraw, GL_UNSIGNED_SHORT,
                     reinterpret_cast<GLvoid *>(static_cast<uintptr_t>(0)), 2, v * 4, i);
+
+                swapBuffers();
             }
         }
     }
@@ -612,6 +633,8 @@ TEST_P(DrawBaseVertexBaseInstanceTest, DrawElementsInstancedBaseVertexBaseInstan
 {
     ANGLE_SKIP_TEST_IF(!requestExtensions());
 
+    setWindowVisible(getOSWindow(), true);
+
     GLProgram program;
     setupProgram(program, false);
 
@@ -629,12 +652,18 @@ TEST_P(DrawBaseVertexBaseInstanceTest, DrawElementsInstancedBaseVertexBaseInstan
 
     doDrawElementsInstancedBaseVertexBaseInstance();
     EXPECT_GL_NO_ERROR();
-    checkDrawResult(true);
+    // checkDrawResult(true);
 
-    setupRegularIndexedBuffer(indexBuffer);
-    doDrawElementsBaseVertexBaseInstanceReset();
-    EXPECT_GL_NO_ERROR();
-    checkDrawResult(true, true);
+    swapBuffers();
+    // while(true)
+    // {
+
+    // }
+
+    // setupRegularIndexedBuffer(indexBuffer);
+    // doDrawElementsBaseVertexBaseInstanceReset();
+    // EXPECT_GL_NO_ERROR();
+    // checkDrawResult(true, true);
 }
 
 // Tests basic functionality of glMultiDrawElementsInstancedBaseVertexBaseInstance
@@ -680,7 +709,8 @@ INSTANTIATE_TEST_SUITE_P(
     testing::Combine(
         testing::ValuesIn(::angle::FilterTestParams(platforms, ArraySize(platforms))),
         testing::Values(BaseVertexOption::NoBaseVertex, BaseVertexOption::UseBaseVertex),
-        testing::Values(BaseInstanceOption::NoBaseInstance, BaseInstanceOption::UseBaseInstance)),
+        testing::Values(BaseInstanceOption::NoBaseInstance, BaseInstanceOption::UseBaseInstance),
+        testing::Values(BufferDataUsageOption::StaticDraw, BufferDataUsageOption::DynamicDraw)),
     PrintToStringParamName());
 
 }  // namespace

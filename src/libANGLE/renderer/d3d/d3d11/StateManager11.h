@@ -239,7 +239,8 @@ class StateManager11 final : angle::NonCopyable
                               gl::DrawElementsType indexTypeOrInvalid,
                               const void *indices,
                               GLsizei instanceCount,
-                              GLint baseVertex);
+                              GLint baseVertex,
+                              GLuint baseInstance);
 
     void setShaderResourceShared(gl::ShaderType shaderType,
                                  UINT resourceSlot,

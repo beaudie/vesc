@@ -116,7 +116,7 @@ angle::Result VertexBuffer11::storeVertexAttributes(const gl::Context *context,
 
     const uint8_t *input = sourceData;
 
-    if (instances == 0 || binding.getDivisor() == 0)
+    // if (instances == 0 || binding.getDivisor() == 0)
     {
         input += inputStride * start;
     }

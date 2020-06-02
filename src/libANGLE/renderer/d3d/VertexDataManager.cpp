@@ -312,8 +312,9 @@ angle::Result VertexDataManager::prepareVertexData(
         return angle::Result::Continue;
     }
 
+    // prepareVertexData is only called by Renderer9 which don't support baseInstance
     ANGLE_TRY(storeDynamicAttribs(context, translatedAttribs, mDynamicAttribsMaskCache, start,
-                                  count, instances));
+                                  count, instances, 0u));
 
     PromoteDynamicAttribs(context, *translatedAttribs, mDynamicAttribsMaskCache, count);
 
@@ -418,7 +419,8 @@ angle::Result VertexDataManager::storeDynamicAttribs(
     const gl::AttributesMask &dynamicAttribsMask,
     GLint start,
     size_t count,
-    GLsizei instances)
+    GLsizei instances,
+    GLuint baseInstance)
 {
     // Instantiating this class will ensure the streaming buffer is never left mapped.
     class StreamingBufferUnmapper final : NonCopyable
@@ -442,14 +444,16 @@ angle::Result VertexDataManager::storeDynamicAttribs(
     for (auto attribIndex : dynamicAttribsMask)
     {
         const auto &dynamicAttrib = (*translatedAttribs)[attribIndex];
-        ANGLE_TRY(reserveSpaceForAttrib(context, dynamicAttrib, start, count, instances));
+        ANGLE_TRY(
+            reserveSpaceForAttrib(context, dynamicAttrib, start, count, instances, baseInstance));
     }
 
     // Store dynamic attributes
     for (auto attribIndex : dynamicAttribsMask)
     {
         auto *dynamicAttrib = &(*translatedAttribs)[attribIndex];
-        ANGLE_TRY(storeDynamicAttrib(context, dynamicAttrib, start, count, instances));
+        ANGLE_TRY(
+            storeDynamicAttrib(context, dynamicAttrib, start, count, instances, baseInstance));
     }
 
     return angle::Result::Continue;
@@ -482,7 +486,8 @@ angle::Result VertexDataManager::reserveSpaceForAttrib(const gl::Context *contex
                                                        const TranslatedAttribute &translatedAttrib,
                                                        GLint start,
                                                        size_t count,
-                                                       GLsizei instances)
+                                                       GLsizei instances,
+                                                       GLuint baseInstance)
 {
     ASSERT(translatedAttrib.attribute && translatedAttrib.binding);
     const auto &attrib  = *translatedAttrib.attribute;
@@ -502,7 +507,8 @@ angle::Result VertexDataManager::reserveSpaceForAttrib(const gl::Context *contex
     {
         // Vertices do not apply the 'start' offset when the divisor is non-zero even when doing
         // a non-instanced draw call
-        GLint firstVertexIndex = binding.getDivisor() > 0 ? 0 : start;
+        GLint firstVertexIndex =
+            binding.getDivisor() > 0 ? baseInstance * binding.getDivisor() : start;
         int64_t maxVertexCount =
             static_cast<int64_t>(firstVertexIndex) + static_cast<int64_t>(totalCount);
 
@@ -520,7 +526,8 @@ angle::Result VertexDataManager::storeDynamicAttrib(const gl::Context *context,
                                                     TranslatedAttribute *translated,
                                                     GLint start,
                                                     size_t count,
-                                                    GLsizei instances)
+                                                    GLsizei instances,
+                                                    GLuint baseInstance)
 {
     ASSERT(translated->attribute && translated->binding);
     const auto &attrib  = *translated->attribute;
@@ -533,7 +540,9 @@ angle::Result VertexDataManager::storeDynamicAttrib(const gl::Context *context,
     BufferD3D *storage = buffer ? GetImplAs<BufferD3D>(buffer) : nullptr;
 
     // Instanced vertices do not apply the 'start' offset
-    GLint firstVertexIndex = (binding.getDivisor() > 0 ? 0 : start);
+    GLint firstVertexIndex =
+        (binding.getDivisor() > 0 ? baseInstance * binding.getDivisor() : start);
+    // GLint firstVertexIndex = (binding.getDivisor() > 0 ? 0 : start);
 
     // Compute source data pointer
     const uint8_t *sourceData = nullptr;
@@ -549,6 +558,12 @@ angle::Result VertexDataManager::storeDynamicAttrib(const gl::Context *context,
         // https://www.opengl.org/registry/specs/ARB/vertex_attrib_binding.txt
         sourceData = static_cast<const uint8_t *>(attrib.pointer);
     }
+
+    // if (binding.getDivisor() > 0)
+    // {
+    //     sourceData += static_cast<int>(
+    //         baseInstance * binding.getDivisor() * 4);   //temp, format byte
+    // }
 
     unsigned int streamOffset = 0;
 
