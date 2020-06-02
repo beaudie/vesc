@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b54908bf_55709509",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T04:06:55Z",
+      "side": 1,
+      "message": "`binding.layered !\u003d GL_TRUE`",
+      "range": {
+        "startLine": 1653,
+        "startChar": 8,
+        "endLine": 1653,
+        "endChar": 37
+      },
+      "revId": "902f58f574840828e50ecc48343685bf54d37b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff36d00e_2001bb83",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T04:06:55Z",
+      "side": 1,
+      "message": "Huh, was it this simple? I vaguely remember there was more to it than this, like Vulkan having some restrictions on reinterpretation that GL didn\u0027t have.",
+      "range": {
+        "startLine": 382,
+        "startChar": 31,
+        "endLine": 382,
+        "endChar": 65
+      },
+      "revId": "902f58f574840828e50ecc48343685bf54d37b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
