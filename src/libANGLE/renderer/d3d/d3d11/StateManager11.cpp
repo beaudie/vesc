@@ -541,9 +541,10 @@ void ShaderConstants11::onViewportChange(const gl::Rectangle &glViewport,
 }
 
 // Update the ShaderConstants with a new first vertex and return whether the update dirties them.
-ANGLE_INLINE bool ShaderConstants11::onFirstVertexChange(GLint firstVertex, GLint baseVertex)
+ANGLE_INLINE bool ShaderConstants11::onFirstVertexChange(GLint firstVertex)
 {
-    uint32_t newFirstVertex = static_cast<uint32_t>(firstVertex + baseVertex);
+    // firstVertex should already include baseVertex, if any.
+    uint32_t newFirstVertex = static_cast<uint32_t>(firstVertex);
 
     bool firstVertexDirty = (mVertex.firstVertex != newFirstVertex);
     if (firstVertexDirty)
@@ -2167,9 +2168,21 @@ angle::Result StateManager11::updateState(const gl::Context *context,
                                           gl::DrawElementsType indexTypeOrInvalid,
                                           const void *indices,
                                           GLsizei instanceCount,
-                                          GLint baseVertex)
+                                          GLint baseVertex,
+                                          GLuint baseInstance)
 {
     const gl::State &glState = context->getState();
+
+    GLint firstVertexOnChange = firstVertex + baseVertex;
+
+    VertexArray11 *vertexArray11 = GetImplAs<VertexArray11>(context->getState().getVertexArray());
+    ASSERT(vertexArray11);
+    if (vertexArray11->hasActiveDynamicAttrib(context) &&
+        indexTypeOrInvalid != gl::DrawElementsType::InvalidEnum)
+    {
+        // drawElements with Dynamic attribute
+        firstVertexOnChange = firstVertex;
+    }
 
     // TODO(jmadill): Use dirty bits.
     if (mRenderTargetIsDirty)
@@ -2211,7 +2224,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
 
     ANGLE_TRY(mVertexArray11->syncStateForDraw(context, firstVertex, vertexOrIndexCount,
                                                indexTypeOrInvalid, indices, instanceCount,
-                                               baseVertex));
+                                               baseVertex, baseInstance));
 
     // Changes in the draw call can affect the vertex buffer translations.
     if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != firstVertex)
@@ -2223,7 +2236,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
     // The ShaderConstants only need to be updated when the program uses vertexID
     if (mProgramD3D->usesVertexID())
     {
-        if (mShaderConstants.onFirstVertexChange(firstVertex, baseVertex))
+        if (mShaderConstants.onFirstVertexChange(firstVertexOnChange))
         {
             mInternalDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
         }

@@ -118,6 +118,7 @@ angle::Result VertexBuffer11::storeVertexAttributes(const gl::Context *context,
 
     if (instances == 0 || binding.getDivisor() == 0)
     {
+        // Or subtract baseVertex and baseInstance
         input += inputStride * start;
     }
 
