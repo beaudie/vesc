@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ec6456e_1da27ab7",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2020-06-02T20:06:40Z",
+      "side": 1,
+      "message": "Does this ensure the target texture is initialized (requiresInitialization \u003d\u003d true)? Same question for the new code path below.",
+      "range": {
+        "startLine": 724,
+        "startChar": 20,
+        "endLine": 724,
+        "endChar": 30
+      },
+      "revId": "55e9e6b65777b1d82d58333a13d77383bb55ae5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
