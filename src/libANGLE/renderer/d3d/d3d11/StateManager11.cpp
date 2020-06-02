@@ -543,7 +543,8 @@ void ShaderConstants11::onViewportChange(const gl::Rectangle &glViewport,
 // Update the ShaderConstants with a new first vertex and return whether the update dirties them.
 ANGLE_INLINE bool ShaderConstants11::onFirstVertexChange(GLint firstVertex, GLint baseVertex)
 {
-    uint32_t newFirstVertex = static_cast<uint32_t>(firstVertex + baseVertex);
+    // uint32_t newFirstVertex = static_cast<uint32_t>(firstVertex + baseVertex);
+    uint32_t newFirstVertex = static_cast<uint32_t>(baseVertex);  // unsafe
 
     bool firstVertexDirty = (mVertex.firstVertex != newFirstVertex);
     if (firstVertexDirty)
@@ -2167,7 +2168,8 @@ angle::Result StateManager11::updateState(const gl::Context *context,
                                           gl::DrawElementsType indexTypeOrInvalid,
                                           const void *indices,
                                           GLsizei instanceCount,
-                                          GLint baseVertex)
+                                          GLint baseVertex,
+                                          GLuint baseInstance)
 {
     const gl::State &glState = context->getState();
 
@@ -2211,7 +2213,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
 
     ANGLE_TRY(mVertexArray11->syncStateForDraw(context, firstVertex, vertexOrIndexCount,
                                                indexTypeOrInvalid, indices, instanceCount,
-                                               baseVertex));
+                                               baseVertex, baseInstance));
 
     // Changes in the draw call can affect the vertex buffer translations.
     if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != firstVertex)
