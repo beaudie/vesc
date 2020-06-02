@@ -724,6 +724,8 @@ libangle_gl_sources = [
   "src/libANGLE/renderer/gl/DispatchTableGL_autogen.h",
   "src/libANGLE/renderer/gl/DisplayGL.cpp",
   "src/libANGLE/renderer/gl/DisplayGL.h",
+  "src/libANGLE/renderer/gl/EGLSyncGL.cpp",
+  "src/libANGLE/renderer/gl/EGLSyncGL.h",
   "src/libANGLE/renderer/gl/FenceNVGL.cpp",
   "src/libANGLE/renderer/gl/FenceNVGL.h",
   "src/libANGLE/renderer/gl/FramebufferGL.cpp",
