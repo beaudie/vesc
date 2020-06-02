@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b2afa4e_b839f029",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T02:12:56Z",
+      "side": 1,
+      "message": "Can be moved outside the lambda, and called once. The `glBindTexture` call is the only one taking a parameter, but it\u0027s taking the same parameter everywhere.",
+      "range": {
+        "startLine": 2051,
+        "startChar": 0,
+        "endLine": 2087,
+        "endChar": 67
+      },
+      "revId": "8978f0827a4ecebe5a957fcec3666fb22e762dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bc4bfce_2112e420",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2091,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T02:12:56Z",
+      "side": 1,
+      "message": "With only these two calls left, you might as well inline these and get rid of the lambda.",
+      "range": {
+        "startLine": 2089,
+        "startChar": 0,
+        "endLine": 2091,
+        "endChar": 62
+      },
+      "revId": "8978f0827a4ecebe5a957fcec3666fb22e762dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aafbf19e_e07f4b9e",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2094,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T02:12:56Z",
+      "side": 1,
+      "message": "nit: This made sense in the previous tests, because it\u0027s called multiple times. If you don\u0027t intend to call this with different parameters, I suggest to just put the body where the call is (like how most of our tests are).",
+      "range": {
+        "startLine": 2094,
+        "startChar": 4,
+        "endLine": 2094,
+        "endChar": 17
+      },
+      "revId": "8978f0827a4ecebe5a957fcec3666fb22e762dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03c5330e_adc8b435",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T02:12:56Z",
+      "side": 1,
+      "message": "We have named constants for these colors.",
+      "range": {
+        "startLine": 2107,
+        "startChar": 32,
+        "endLine": 2107,
+        "endChar": 66
+      },
+      "revId": "8978f0827a4ecebe5a957fcec3666fb22e762dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
