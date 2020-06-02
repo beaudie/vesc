@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de06ad6a_bd3d1519",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T02:24:03Z",
+      "side": 1,
+      "message": "I would make the change simpler. There is no point in building with Overlay if it\u0027s not going to have any widgets enabled. Besides, at least for the time being we don\u0027t have the option to enable/disable widgets on the fly, so you either run with or without certain widgets throughout the whole program execution.\n\nSo, how about foregoing all these tracking and dynamically recreating the swapchain on change, and instead simply change this `if` to either:\n\n- `if (contextVk-\u003egetOverlay() !\u003d nullptr)`: this is true if overlay is built, regardless of used or not, or\n- `if (overlayHasEnabledWidget())`\n\nThe former disallows this optimization if overlay is built but not used, which honestly I don\u0027t think we should care about. The latter supports this use case, but will break if we dynamically toggle widgets, which we can address when time comes.\n\nI\u0027d just go with the former.",
+      "range": {
+        "startLine": 872,
+        "startChar": 8,
+        "endLine": 872,
+        "endChar": 30
+      },
+      "revId": "44b164277e3e2ee52f1a5e09b3206cfea6fe2953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
