@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5f1c70d0_bd8b4ce0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4320,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:10:22Z",
+      "side": 1,
+      "message": "Why is this necessary?   Why don\u0027t any of the other reset()\u0027s get hit instead?",
+      "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bdce5378_e198ae80",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -13,6 +30,178 @@
       "writtenOn": "2020-06-02T03:44:49Z",
       "side": 1,
       "message": "Please add comments inside each `if` block below as to why the calls are made the way they are.",
+      "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edea879e_a8fe3f18",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3188,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:10:22Z",
+      "side": 1,
+      "message": "Did Samsung ever land their CLs to add Geometry shader support in the vulkan backend?   I can\u0027t remember the context of them adding it (emulation for some GLES feature, but I can\u0027t remember which, or if that code is even being used).\n\nRegardless, this looks like an easy place for someone to lose a couple hours tracking down that GeometryShaderWrite is missing, when support is officially added in the future.   Should it be added now?   It\u0027ll obviously hurt the O(n^2) looping here, but the numbers should be small enough for it not to matter.",
+      "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60bd2e78_53c875dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3218,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:10:22Z",
+      "side": 1,
+      "message": "Can be simplified to:\n\n        barrierModified \u003d tracker-\u003eupdateForWriteAfterWrite(\n            layoutData.barrierIndex, layoutData.memoryWriteType, mCurrentWriteBarrierSerial,\n            layoutData.memoryWriteType);",
+      "range": {
+        "startLine": 3213,
+        "startChar": 0,
+        "endLine": 3218,
+        "endChar": 13
+      },
+      "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a601afa_b2077258",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:10:22Z",
+      "side": 1,
+      "message": "typo: don\u0027t",
+      "range": {
+        "startLine": 743,
+        "startChar": 67,
+        "endLine": 743,
+        "endChar": 71
+      },
+      "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "543b4b39_4a71468a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:10:22Z",
+      "side": 1,
+      "message": "Can you clarify this comment?",
+      "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba6d2171_2a2dcbb9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:10:22Z",
+      "side": 1,
+      "message": "nit: reformat this a bit better.",
+      "range": {
+        "startLine": 770,
+        "startChar": 0,
+        "endLine": 772,
+        "endChar": 17
+      },
+      "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bec14e6c_7a421399",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:10:22Z",
+      "side": 1,
+      "message": "Can you add a comment describing what this is doing and what the result means?\n\nThere should also be some kind of ASSERT that does bounds checking either here or where it\u0027s called before indexing into the array.",
+      "range": {
+        "startLine": 830,
+        "startChar": 0,
+        "endLine": 832,
+        "endChar": 44
+      },
+      "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffc7cef5_edacbba7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:10:22Z",
+      "side": 1,
+      "message": "This is a lot of entries:\n\nMemoryWriteType::EnumCount \u003d 9\nMemoryReadType::BitCount \u003d 4\n9 \u003c\u003c 4 \u003d 144\n\nmRAWBarrierSerials \u003d sizeof(Serial) \u003d 1152\nmRAWBarrierDirtyIndices \u003d 4 * 144 \u003d 576\n\n * 4 \u003d 576 bytes\n9 \u003c\u003c 4 \u003d 144 * 4 \u003d 576 bytes\n\nThat\u0027s a total of 1728 bytes for these 2 arrays, which feels like we\u0027re starting to cross a threshold.   Is there a way to reduce the memory usage here?   \n\nmRAWBarrierSerials:\nSince the indexes are guaranteed to be unique, can those be used to index into an unordered_map instead?   Presumably we won\u0027t have more than a handful of Serials at a time, so it should be able to remain relatively small.\n\nmRAWBarrierDirtyIndices:\nThis is just a list of indexes, and should be able to be a normal std::vector that grows with usage rather than having all of the memory preallocated.",
+      "range": {
+        "startLine": 847,
+        "startChar": 0,
+        "endLine": 851,
+        "endChar": 82
+      },
+      "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cad3dd3d_88f625b4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:10:22Z",
+      "side": 1,
+      "message": "Same as above, this is another 1728 bytes being allocated, giving 3456 bytes total for this feature.",
+      "range": {
+        "startLine": 858,
+        "startChar": 0,
+        "endLine": 859,
+        "endChar": 82
+      },
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
