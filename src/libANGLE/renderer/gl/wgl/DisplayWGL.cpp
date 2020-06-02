@@ -14,6 +14,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/gl/ContextGL.h"
+#include "libANGLE/renderer/gl/EGLSyncGL.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 #include "libANGLE/renderer/gl/wgl/ContextWGL.h"
@@ -472,6 +473,11 @@ rx::ContextImpl *DisplayWGL::createContext(const gl::State &state,
     return new ContextWGL(state, errorSet, mRenderer);
 }
 
+EGLSyncImpl *DisplayWGL::createSync(const egl::AttributeMap &attribs)
+{
+    return new EGLSyncGL(attribs, mRenderer->getFunctions());
+}
+
 DeviceImpl *DisplayWGL::createDevice()
 {
     UNREACHABLE();
@@ -655,6 +661,10 @@ void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->displayTextureShareGroup = true;
 
     outExtensions->surfacelessContext = true;
+
+    const FunctionsGL *functionsGL = mRenderer->getFunctions();
+    outExtensions->fenceSync       = EGLSyncGL::Supported(functionsGL);
+    outExtensions->waitSync        = outExtensions->fenceSync;
 
     DisplayGL::generateExtensions(outExtensions);
 }
