@@ -46,6 +46,30 @@
       "revId": "44b164277e3e2ee52f1a5e09b3206cfea6fe2953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de649481_a9e1f1ec",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T04:11:15Z",
+      "side": 1,
+      "message": "If absolutely impossible to access ContextVk, you can always do this:\n\n    #if ANGLE_ENABLE_OVERLAY\n        ...\n    #endif\n\nIt\u0027s a gni flag already by the way.",
+      "parentUuid": "696c11bc_89de0cc7",
+      "range": {
+        "startLine": 872,
+        "startChar": 8,
+        "endLine": 872,
+        "endChar": 30
+      },
+      "revId": "44b164277e3e2ee52f1a5e09b3206cfea6fe2953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
