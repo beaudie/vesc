@@ -467,7 +467,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mCurrentSwapHistoryIndex(0),
       mCurrentSwapchainImageIndex(0),
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
-      mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex)
+      mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
+      mStorageImageAllowed(false)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -655,7 +656,7 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     ANGLE_VK_CHECK(displayVk, (mSurfaceCaps.supportedCompositeAlpha & mCompositeAlpha) != 0,
                    VK_ERROR_INITIALIZATION_FAILED);
 
-    ANGLE_TRY(createSwapChain(displayVk, extents, VK_NULL_HANDLE));
+    ANGLE_TRY(createSwapChain(displayVk, false, extents, VK_NULL_HANDLE));
 
     VkResult vkResult = nextSwapchainImage(displayVk);
     // VK_SUBOPTIMAL_KHR is ok since we still have an Image that can be presented successfully
@@ -668,6 +669,7 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 }
 
 angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk,
+                                                 bool willUseForStorageImage,
                                                  const gl::Extents &extents,
                                                  uint32_t swapHistoryIndex)
 {
@@ -749,7 +751,8 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk,
 
     releaseSwapchainImages(contextVk);
 
-    angle::Result result = createSwapChain(contextVk, extents, lastSwapchain);
+    angle::Result result =
+        createSwapChain(contextVk, willUseForStorageImage, extents, lastSwapchain);
 
     // If the most recent swapchain was never used, destroy it right now.
     if (swapchainToDestroy)
@@ -835,6 +838,7 @@ angle::Result WindowSurfaceVk::resizeSwapchainImages(vk::Context *context, uint3
 }
 
 angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
+                                               bool willUseForStorageImage,
                                                const gl::Extents &extents,
                                                VkSwapchainKHR lastSwapchain)
 {
@@ -864,12 +868,19 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     // We need transfer src for reading back from the backbuffer.
     VkImageUsageFlags imageUsageFlags = kSurfaceVKColorImageUsageFlags;
 
-    // We need storage image for compute writes (debug overlay output).
-    VkFormatFeatureFlags featureBits =
-        renderer->getImageFormatFeatureBits(nativeFormat, VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT);
-    if ((featureBits & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT) != 0)
+    mStorageImageAllowed = false;
+    if (willUseForStorageImage)
     {
-        imageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
+        // We need storage image for compute writes (debug overlay output).
+        VkFormatFeatureFlags featureBits =
+            renderer->getImageFormatFeatureBits(nativeFormat, VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT);
+        if ((featureBits & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT) != 0)
+        {
+            imageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
+        }
+        // If driver doesn't support it we still set it to true so that we won't keep recreating
+        // swapchain.
+        mStorageImageAllowed = true;
     }
 
     VkSwapchainCreateInfoKHR swapchainInfo = {};
@@ -969,9 +980,12 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
                                                           bool presentOutOfDate)
 {
     bool swapIntervalChanged = mSwapchainPresentMode != mDesiredSwapchainPresentMode;
+    // overlay requires storageImage usage bit
+    bool willUseForStorageImage = overlayHasEnabledWidget(contextVk);
+    bool ImageUsageChanged      = mStorageImageAllowed != willUseForStorageImage;
 
     // If anything has changed, recreate the swapchain.
-    if (swapIntervalChanged || presentOutOfDate ||
+    if (swapIntervalChanged || presentOutOfDate || ImageUsageChanged ||
         contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled)
     {
         gl::Extents swapchainExtents(getWidth(), getHeight(), 1);
@@ -1006,9 +1020,11 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
 
         // Check for window resize and recreate swapchain if necessary.
         // Work-around for some device which does not return OUT_OF_DATE after window resizing
-        if (swapIntervalChanged || presentOutOfDate || currentExtents != swapchainExtents)
+        if (swapIntervalChanged || presentOutOfDate || ImageUsageChanged ||
+            currentExtents != swapchainExtents)
         {
-            ANGLE_TRY(recreateSwapchain(contextVk, currentExtents, swapHistoryIndex));
+            ANGLE_TRY(recreateSwapchain(contextVk, willUseForStorageImage, currentExtents,
+                                        swapHistoryIndex));
         }
     }
 

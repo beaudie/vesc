@@ -256,9 +256,11 @@ class WindowSurfaceVk : public SurfaceVk
 
     angle::Result initializeImpl(DisplayVk *displayVk);
     angle::Result recreateSwapchain(ContextVk *contextVk,
+                                    bool willUseForStorageImage,
                                     const gl::Extents &extents,
                                     uint32_t swapHistoryIndex);
     angle::Result createSwapChain(vk::Context *context,
+                                  bool willUseForStorageImage,
                                   const gl::Extents &extents,
                                   VkSwapchainKHR oldSwapchain);
     angle::Result checkForOutOfDateSwapchain(ContextVk *contextVk,
@@ -323,6 +325,8 @@ class WindowSurfaceVk : public SurfaceVk
     vk::ImageViewHelper mColorImageMSViews;
     angle::ObserverBinding mColorImageMSBinding;
     vk::Framebuffer mFramebufferMS;
+
+    bool mStorageImageAllowed;
 };
 
 }  // namespace rx
