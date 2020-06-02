@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ac42d6cd_594225dd",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:54:45Z",
+      "side": 1,
+      "message": "mUniformBlocks is Program-specific and that data isn\u0027t copied into the ProgramPipeline\u0027s executable (yet, anyway).\n\nCurrently, this is one of the reasons that fillProgramStateMap() still needs to stick around (e.g., ProgramExecutableVk::updateShaderResourcesDescriptorSet()).   Copying each Program\u0027s mUniformBlocks into the PPO\u0027s executable (mapped per shader stage) likely warrants its own CL.\n\nI\u0027ll mark this (and the variable declarations) with a TODO to match fillProgramStateMap():\n\n\t// TODO: http://anglebug.com/3570: Move/Copy all of the necessary information into\n\t// the ProgramExecutable, so this function can be removed.\n\tvoid ProgramExecutableVk::fillProgramStateMap(\n\t    const ContextVk *contextVk,\n\t    gl::ShaderMap\u003cconst gl::ProgramState *\u003e *programStatesOut)",
+      "parentUuid": "5ceea9fd_26591a88",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 82
+      },
+      "revId": "0ac9a0558c11906020c9cd0c15dcd98872af05c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6b405319_ed399d70",
         "filename": "src/libANGLE/ProgramExecutable.h",
         "patchSetId": 9
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "cfbefcab_29595b86",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:54:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b405319_ed399d70",
+      "range": {
+        "startLine": 361,
+        "startChar": 9,
+        "endLine": 361,
+        "endChar": 13
+      },
+      "revId": "0ac9a0558c11906020c9cd0c15dcd98872af05c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbf5d293_54a3d07d",
         "filename": "src/libANGLE/ProgramPipeline.cpp",
         "patchSetId": 9
@@ -65,6 +113,47 @@
         "endLine": 301,
         "endChar": 70
       },
+      "revId": "0ac9a0558c11906020c9cd0c15dcd98872af05c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eebfab9_ff51cfca",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:54:45Z",
+      "side": 1,
+      "message": "I had that initially, but removed it since that work is being done in ProgramExecutable::reset() (which is called at the start of ProgramPipeline::updateExecutable(), see ref) to skip the duplicate work.",
+      "parentUuid": "fbf5d293_54a3d07d",
+      "range": {
+        "startLine": 301,
+        "startChar": 16,
+        "endLine": 301,
+        "endChar": 70
+      },
+      "revId": "0ac9a0558c11906020c9cd0c15dcd98872af05c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f40eef12_a6039ac2",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2020-06-02T20:54:45Z",
+      "side": 1,
+      "message": "ref",
       "revId": "0ac9a0558c11906020c9cd0c15dcd98872af05c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
