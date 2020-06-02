@@ -117,6 +117,30 @@
       "revId": "7145157f32554beaf3824dc07c993347348337f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "180a79eb_90f4cf73",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2020-06-02T18:37:48Z",
+      "side": 1,
+      "message": "Also since this is a larger discussion if it spins off we should host it in a better place.",
+      "parentUuid": "1c2a290b_98408a3f",
+      "range": {
+        "startLine": 912,
+        "startChar": 0,
+        "endLine": 913,
+        "endChar": 45
+      },
+      "revId": "7145157f32554beaf3824dc07c993347348337f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
