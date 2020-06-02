@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "07f0cf2b_cb77ed17",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-02T17:29:04Z",
+      "side": 1,
+      "message": "This is true, but this is the same thing that\u0027s done in multiple tests, namely ES3UnormFormats, ES3FloatFormats, and ES3UintFormats. I prefer to keep the same pattern.",
+      "parentUuid": "1b2afa4e_b839f029",
+      "range": {
+        "startLine": 2051,
+        "startChar": 0,
+        "endLine": 2087,
+        "endChar": 67
+      },
+      "revId": "8978f0827a4ecebe5a957fcec3666fb22e762dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6bc4bfce_2112e420",
         "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
         "patchSetId": 1
@@ -59,6 +83,30 @@
       "writtenOn": "2020-06-02T02:12:56Z",
       "side": 1,
       "message": "With only these two calls left, you might as well inline these and get rid of the lambda.",
+      "range": {
+        "startLine": 2089,
+        "startChar": 0,
+        "endLine": 2091,
+        "endChar": 62
+      },
+      "revId": "8978f0827a4ecebe5a957fcec3666fb22e762dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d5dfe81_49131c9b",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2091,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-02T17:29:04Z",
+      "side": 1,
+      "message": "As stated above, I think we should keep the lambda as is done in the other 3 tests.",
+      "parentUuid": "6bc4bfce_2112e420",
       "range": {
         "startLine": 2089,
         "startChar": 0,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "8178b98d_9099f691",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2094,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-02T17:29:04Z",
+      "side": 1,
+      "message": "I had it inlined initially, but it\u0027s easier to see that we\u0027re testing the \"GL_RGB9_E5, GL_RGB, GL_FLOAT\" triplet when it passed as args to \u0027testCopy\u0027. Also, although I don\u0027t think it\u0027s the case today, perhaps there are more cases to be added in the future.",
+      "parentUuid": "aafbf19e_e07f4b9e",
+      "range": {
+        "startLine": 2094,
+        "startChar": 4,
+        "endLine": 2094,
+        "endChar": 17
+      },
+      "revId": "8978f0827a4ecebe5a957fcec3666fb22e762dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "03c5330e_adc8b435",
         "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
         "patchSetId": 1
@@ -114,6 +186,30 @@
       "revId": "8978f0827a4ecebe5a957fcec3666fb22e762dc9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f27182f7_bbcc477c",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2107,
+      "author": {
+        "id": 1369468
+      },
+      "writtenOn": "2020-06-02T17:29:04Z",
+      "side": 1,
+      "message": "Ah, I looked and missed kFloatRed, etc. because they are defined outside of the GLColor32F struct, while the GLColor constants are defined as static members of that latter struct. I\u0027ll use these, and even add a new kFloatBlack constant. Thanks.",
+      "parentUuid": "03c5330e_adc8b435",
+      "range": {
+        "startLine": 2107,
+        "startChar": 32,
+        "endLine": 2107,
+        "endChar": 66
+      },
+      "revId": "8978f0827a4ecebe5a957fcec3666fb22e762dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
