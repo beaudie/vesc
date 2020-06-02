@@ -19,6 +19,52 @@
     },
     {
       "key": {
+        "uuid": "9f0072aa_fb254e05",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T03:03:08Z",
+      "side": 1,
+      "message": "Suggest `find` instead of `count`.",
+      "range": {
+        "startLine": 3215,
+        "startChar": 44,
+        "endLine": 3215,
+        "endChar": 49
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2027f03d_705f7c6a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T03:03:08Z",
+      "side": 1,
+      "message": "Suggest find instead of count",
+      "range": {
+        "startLine": 971,
+        "startChar": 51,
+        "endLine": 971,
+        "endChar": 56
+      },
+      "revId": "1127c66de9797481d9b47c15b2c6fca739f676d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc5da452_99cb1ef0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 4
