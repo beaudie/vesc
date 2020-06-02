@@ -16,6 +16,24 @@
       "revId": "565b2255f79fd3d3ba19127d8d834a259b88fab1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11c5974d_b2869ed2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1540,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T14:30:40Z",
+      "side": 1,
+      "message": "`class Texture` has:\n\n    void onBindAsImageTexture(ContextID contextID);\n    void onUnbindAsImageTexture(ContextID contextID);\n\nMaybe we can make it track the actual images, then walk those. Looking at the executable when syncing the texture can\u0027t be right, unless we sync textures after every executable change.",
+      "parentUuid": "53b83f3e_e72f8570",
+      "revId": "565b2255f79fd3d3ba19127d8d834a259b88fab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
