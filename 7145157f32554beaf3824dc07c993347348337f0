@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc5b40ba_63e037e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T03:25:59Z",
+      "side": 1,
+      "message": "Suggest making a struct with VkAccessFlags and PipelineStage, and then create a map to this struct.\n\nWhen you need to get both access mask and stage, the same cache line would contain both data then.",
+      "range": {
+        "startLine": 50,
+        "startChar": 48,
+        "endLine": 50,
+        "endChar": 61
+      },
+      "revId": "7145157f32554beaf3824dc07c993347348337f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcfde625_444a0e3e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2020-06-02T03:25:59Z",
+      "side": 1,
+      "message": "Can\u0027t these be inferred from `mCurrent*Type*`, so you could eliminate them?",
+      "range": {
+        "startLine": 912,
+        "startChar": 0,
+        "endLine": 913,
+        "endChar": 45
+      },
+      "revId": "7145157f32554beaf3824dc07c993347348337f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
